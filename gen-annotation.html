@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap Table Examples</title>
+    <link href="assets/bootstrap/less/bootstrap.less" rel="stylesheet/less">
+     <script src="assets/less-1.7.0.js"></script>
+     
+    <link rel="stylesheet" href="assets/bootstrap-table/src/bootstrap-table.css">
+<!--     <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css"> -->
+    <link rel="stylesheet" href="assets/examples.css">
+    <script src="assets/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/bootstrap-table/src/bootstrap-table.js"></script>
+<!--
+    <script src="assets/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
+     <script src="assets/bootstrap-table/src/extensions/filter/bootstrap-table-filter.js"></script>
+-->
+     <script src="../assets/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+<!--
+    <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+    <script src="assets/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
+-->
+<!--     <script src="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script> -->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+     <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Genetic App</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+<!--
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            
+          </ul>
+-->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown dropdown-profile">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="material-icons">account_circle</i>Account <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#"><i class="material-icons">perm_contact_calendar</i>Profile</a></li>
+                <li><a href="#"><i class="material-icons">credit_card</i>Billing</a></li>
+                
+                <li><a href="#"><i class="material-icons">message</i>Messages</a></li>
+                <li role="separator" class="divider"></li>
+                
+                <li><a href="#"><i class="material-icons">view_module</i>Gen Panels</a></li>
+                <li><a href="#"><i class="material-icons">group</i> Sharing</a></li>
+                <li><a href="#"><i class="material-icons">assignment</i>Reports</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+  
+<div class="container">
+ <div id="custom-toolbar" class="btn-toolbal">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default">Upload sample</button>
+    </div>
+</div>
+
+  
+  <table id="table"
+                data-toggle="table"
+                data-flat="true"
+                data-search="true"
+                data-show-columns="true"
+                data-show-multi-sort="true"
+                data-filter-control="true" 
+                data-sort-priority='[{"sortName": "github.count.forks","sortOrder":"desc"},{"sortName":"github.count.stargazers","sortOrder":"desc"}]'
+                data-url="../json/data3.json"
+                data-filter-control="true">
+            <thead>
+            <tr>
+                <th data-field="github.name" data-sortable="true" data-filter-control="input">Name</th>
+                <th data-field="github.count.stargazers" data-sortable="true" data-filter-control="input">Stargazers</th>
+                <th data-field="github.count.forks" data-sortable="true" data-filter-control="select">Forks</th>
+                <th data-field="github.description" data-sortable="true">Description</th>
+            </tr>
+            </thead>
+        </table>
+        
+        
+        </body>
+</html>
