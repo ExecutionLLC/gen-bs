@@ -16,6 +16,7 @@
      <script src="assets/bootstrap-table/src/extensions/filter/bootstrap-table-filter.js"></script>
 -->
      <script src="../assets/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+     <script src="../assets/bootstrap-table/src/extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
 <!--
     <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
     <script src="assets/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
@@ -33,7 +34,7 @@
 </head>
 <body>
      <nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
@@ -72,34 +73,61 @@
       </div>
     </nav>
   
-<div class="container">
- <div id="custom-toolbar" class="btn-toolbal">
-    <div class="btn-group">
-        <button type="button" class="btn btn-default">Upload sample</button>
+<div class="container-fluid">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <div class="btn-toolbar">
+        <div class="navbar-header"><h4>ATCC HCC1187 TumorBL</h4></div>
+        <ul class="nav nav-pills navbar-right">
+        <li role="presentation" class="active"><a href="#">Variants</a></li>
+        <li role="presentation"><a href="#">Analize</a></li>
+        <li role="presentation"><a href="#">Reports</a></li>
+      </ul>
+      </div>
+      
     </div>
+
+   <div id="custom-toolbar" class="btn-toolbal">
+    
 </div>
 
   
-  <table id="table"
-                data-toggle="table"
-                data-flat="true"
-                data-search="true"
-                data-show-columns="true"
-                data-show-multi-sort="true"
-                data-filter-control="true" 
-                data-sort-priority='[{"sortName": "github.count.forks","sortOrder":"desc"},{"sortName":"github.count.stargazers","sortOrder":"desc"}]'
-                data-url="../json/data3.json"
-                data-filter-control="true">
+ <table id="table"
+      data-toolbar="#custom-toolbar"
+      data-search="true"
+      data-show-refresh="true"
+      data-show-toggle="true"
+      data-show-columns="true"
+      data-show-export="true"
+      data-pagination="true"
+      data-toggle="table"
+      data-flat="true"
+      data-search="true"
+      data-show-columns="true"
+      data-show-multi-sort="true" 
+      data-sort-priority='[{"sortName": "variantSummary.geneDetails.function","sortOrder":"desc"},{"sortName":"variantSummary.physicalPosition.chromosome","sortOrder":"desc"}]'
+      data-url="../json/data-variants.json"
+      data-filter-control="true">
             <thead>
             <tr>
-                <th data-field="github.name" data-sortable="true" data-filter-control="input">Name</th>
-                <th data-field="github.count.stargazers" data-sortable="true" data-filter-control="input">Stargazers</th>
-                <th data-field="github.count.forks" data-sortable="true" data-filter-control="select">Forks</th>
-                <th data-field="github.description" data-sortable="true">Description</th>
+            <th data-field="state" data-checkbox="true">Details</th>
+            <th data-field="variantSummary.geneDetails.function">Funtion</th>
+            <th data-field="variantSummary.geneDetails.gene" data-filter-control="input" data-sortable="true">Gene</th>
+            <th data-field="variantSummary.physicalPosition.chromosome" data-filter-control="input" data-sortable="true">Chromosome</th>
+            <th data-field="variantSummary.physicalPosition.endCoordinate" data-filter-control="input">End Coordinate</th>
+            <th data-field="variantSummary.physicalPosition.cytogeneticBand" data-filter-control="input">Cytogenetic Band</th>
+            <th data-field="variantSummary.physicalPosition.startCoordinate" data-filter-control="input">Start Coordinate</th>
+            <th data-field="variantSummary.proteinDetails.affectedAminoAcid" data-filter-control="input">Affected Amino Acid</th>
+            <th data-field="variantSummary.proteinDetails.proteinChange" data-filter-control="input">Protein Change</th>
+            <th data-field="variantSummary.proteinDetails.granthamScore" data-filter-control="input">Grantham Score</th>
+            <th data-field="variantSummary.mRNADetails.functionalConsequence" data-filter-control="input">Functional Consequence</th>
+            <th data-field="variantSummary.mRNADetails.transcript" data-filter-control="input" >Transcript</th>
+            <th data-field="variantSummary.mRNADetails.nucleotideChange" data-filter-control="input">Nucleotide Change</th>
+              
             </tr>
             </thead>
-        </table>
-        
-        
+        </table>        
+  </div>
+</div>        
         </body>
 </html>

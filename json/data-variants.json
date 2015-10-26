@@ -1,0 +1,98 @@
+[
+    {
+        "variantSummary": {
+            "geneDetails": {
+                "function": "exonic",
+                "gene": "A1BG"
+            },
+            "physicalPosition": {
+                "chromosome": 19,
+                "endCoordinate": 58864479,
+                "cytogeneticBand": 19,
+                "startCoordinate": 58864479
+            },
+            "proteinDetails": {
+                "affectedAminoAcid": "A1BG:NM_130786.3:ex",
+                "proteinChange": "p.H52R",
+                "granthamScore": 29
+            },
+            "mRNADetails": {
+                "functionalConsequence": "missense",
+                "transcript": "NM_130786.3",
+                "nucleotideChange": "c.155A>G"
+            }
+        }
+    },
+    {
+        "variantSummary": {
+            "geneDetails": {
+                "function": "exonic",
+                "gene": "A1BG"
+            },
+            "physicalPosition": {
+                "chromosome": 19,
+                "endCoordinate": 58864479,
+                "cytogeneticBand": 19,
+                "startCoordinate": 58864479
+            },
+            "proteinDetails": {
+                "affectedAminoAcid": "A1BG:NM_130786.3:ex",
+                "proteinChange": "p.H52R",
+                "granthamScore": 29
+            },
+            "mRNADetails": {
+                "functionalConsequence": "missense",
+                "transcript": "NM_130786.3",
+                "nucleotideChange": "c.155A>G"
+            }
+        }
+    },
+    {
+        "variantSummary": {
+            "geneDetails": {
+                "function": "exonic",
+                "gene": "A1BG"
+            },
+            "physicalPosition": {
+                "chromosome": 19,
+                "endCoordinate": 58864479,
+                "cytogeneticBand": 19,
+                "startCoordinate": 58864479
+            },
+            "proteinDetails": {
+                "affectedAminoAcid": "A1BG:NM_130786.3:ex",
+                "proteinChange": "p.H52R",
+                "granthamScore": 29
+            },
+            "mRNADetails": {
+                "functionalConsequence": "missense",
+                "transcript": "NM_130786.3",
+                "nucleotideChange": "c.155A>G"
+            }
+        }
+    },
+    {
+        "variantSummary": {
+            "geneDetails": {
+                "function": "exonic",
+                "gene": "A1BG"
+            },
+            "physicalPosition": {
+                "chromosome": 19,
+                "endCoordinate": 58864479,
+                "cytogeneticBand": 19,
+                "startCoordinate": 58864479
+            },
+            "proteinDetails": {
+                "affectedAminoAcid": "A1BG:NM_130786.3:ex",
+                "proteinChange": "p.H52R",
+                "granthamScore": 29
+            },
+            "mRNADetails": {
+                "functionalConsequence": "missense",
+                "transcript": "NM_130786.3",
+                "nucleotideChange": "c.155A>G"
+            }
+        }
+    }    
+]

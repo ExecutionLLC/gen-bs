@@ -14,9 +14,38 @@
 @gray-light:             lighten(@gray-base, 46.7%); // #777
 @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
 
-@brand-primary:         darken(#03A9F4, 6.5%); // #337ab7
+/*
+@darkPrimaryColor:   #689F38;
+@primaryColor:       #8BC34A;
+@lightPrimaryColor:  #DCEDC8;
+@textPrimaryColor:   #212121;
+@accentColor:        #795548;
+@primaryTextColor:   #212121;
+@secondaryTextColor: #727272;
+@dividerColor:       #B6B6B6;
+*/
+/*
+@darkPrimaryColor:   #FFA000;
+@primaryColor:       #FFC107;
+@lightPrimaryColor:  #FFECB3;
+@textPrimaryColor:   #212121;
+@accentColor:        #4CAF50;
+@primaryTextColor:   #212121;
+@secondaryTextColor: #727272;
+@dividerColor:       #B6B6B6;
+*/
+@darkPrimaryColor:   #303F9F;
+@primaryColor:       #3F51B5;
+@lightPrimaryColor:  #C5CAE9;
+@textPrimaryColor:   #FFFFFF;
+@accentColor:        #03A9F4;
+@primaryTextColor:   #212121;
+@secondaryTextColor: #727272;
+@dividerColor:       #B6B6B6;
+
+@brand-primary:         @primaryColor; // #337ab7
 @brand-success:         #5cb85c;
-@brand-info:            #5bc0de;
+@brand-info:            @accentColor;
 @brand-warning:         #f0ad4e;
 @brand-danger:          #d9534f;
 
@@ -26,7 +55,7 @@
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-@body-bg:               #f9f9f9;
+@body-bg:               #fafafa;
 //** Global text color on `<body>`.
 @text-color:            @gray-dark;
 
