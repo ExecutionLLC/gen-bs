@@ -244,5 +244,26 @@ table {
     color:  @table-primary-th-color;
   }
 }
-  
+  > thead > tr > th.fcontrol { 
+    .fht-cell { 
+      .filterControl { 
+        position: relative;
+            &:before { 
+      
+        .glyphicon();
+        content: "\e003";
+        opacity: 0.4;
+    position: absolute;
+        z-index: 1;
+    right: 5px;
+    top: 10px;
+         }
+        input[type="text"] { 
+          padding-right: .20px;
+      
+        }
+      }
+      
+  }
+   }
 }

@@ -300,3 +300,21 @@
     }
   }
 }
+
+//custom
+
+.drop-area { 
+  margin: 0 0 @line-height-computed;
+  border-radius: (@panel-border-radius*2);
+  border-width: 2px;
+  border-style: dashed;
+  background: #fff;
+  border-color: @gray-lighter;
+  padding: @padding-base-vertical @padding-base-horizontal;
+  text-align: center;
+  > div { 
+    + div { 
+      margin:@line-height-computed/2;
+    }
+  }
+}

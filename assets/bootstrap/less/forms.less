@@ -33,7 +33,7 @@ label {
   display: inline-block;
   max-width: 100%; // Force IE8 to wrap long content (see https://github.com/twbs/bootstrap/issues/13141)
   margin-bottom: 5px;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 
@@ -607,6 +607,16 @@ input[type="checkbox"] {
       .control-label {
         padding-top: (@padding-small-vertical + 1);
         font-size: @font-size-small;
+      }
+    }
+  }
+}
+.form-horizontal { 
+  &.form-horizontal-rows  { 
+    .row { 
+      .form-group { 
+        margin-left: 0;
+        margin-right: 0;
       }
     }
   }

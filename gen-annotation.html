@@ -6,21 +6,32 @@
      <script src="assets/less-1.7.0.js"></script>
      
     <link rel="stylesheet" href="assets/bootstrap-table/src/bootstrap-table.css">
-<!--     <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css"> -->
-    <link rel="stylesheet" href="assets/examples.css">
-    <script src="assets/jquery.min.js"></script>
+<!-- <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css"> -->
+ <link rel="stylesheet" href="assets/examples.css">
+     <script src="assets/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/bootstrap-table/src/bootstrap-table.js"></script>
-<!--
+     <script src="assets/bootstrap-table/src/bootstrap-table.js"></script>
+    
+    	<script src="assets/bootstrap-table-filter/extension/bootstrap-table-filter.js"></script>
+		  <script src="assets/bootstrap-table-filter/bootstrap-table-filter.js"></script>
+		  <script src="assets/bootstrap-table-filter/bs-table.js"></script>
+    
+    <script src="assets/bootstrap/js/select2-3.4.6/select2.min.js"></script>
+
     <script src="assets/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
      <script src="assets/bootstrap-table/src/extensions/filter/bootstrap-table-filter.js"></script>
--->
-     <script src="../assets/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js"></script>
-     <script src="../assets/bootstrap-table/src/extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
-<!--
-    <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
-    <script src="assets/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
--->
+
+
+     <script src="assets/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+    <script src="assets/bootstrap-table/src/extensions/multiple-sort/bootstrap-table-multiple-sort.js"></script>
+
+ 
+ 
+
+ <script src="assets/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script> 
+     <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+     
+	
 <!--     <script src="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script> -->
      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
      
@@ -33,7 +44,7 @@
     <![endif]-->
 </head>
 <body>
-     <nav class="navbar navbar-default navbar-static-top">
+     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -54,6 +65,8 @@
           </ul>
 -->
           <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">Samples</a></li>
+             <li><a href="">Analises</a></li>
             <li class="dropdown dropdown-profile">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="material-icons">account_circle</i>Account <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -74,60 +87,110 @@
     </nav>
   
 <div class="container-fluid">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
+<ol class="breadcrumb">
+  <li><a href="#">Samples</a></li>
+  <li class="active">ATCC HCC1187 TumorB</li>
+</ol>
       <div class="btn-toolbar">
         <div class="navbar-header"><h4>ATCC HCC1187 TumorBL</h4></div>
         <ul class="nav nav-pills navbar-right">
+        <li role="presentation"><a href="#">Dashboard</a></li>
         <li role="presentation" class="active"><a href="#">Variants</a></li>
-        <li role="presentation"><a href="#">Analize</a></li>
         <li role="presentation"><a href="#">Reports</a></li>
       </ul>
       </div>
       
-    </div>
-
-   <div id="custom-toolbar" class="btn-toolbal">
     
-</div>
 
-  
+   <div id="custom-toolbar"> </div>
+<!-- 
+    -->
+
  <table id="table"
-      data-toolbar="#custom-toolbar"
-      data-search="true"
-      data-show-refresh="true"
-      data-show-toggle="true"
-      data-show-columns="true"
-      data-show-export="true"
-      data-pagination="true"
-      data-toggle="table"
-      data-flat="true"
-      data-search="true"
-      data-show-columns="true"
-      data-show-multi-sort="true" 
-      data-sort-priority='[{"sortName": "variantSummary.geneDetails.function","sortOrder":"desc"},{"sortName":"variantSummary.physicalPosition.chromosome","sortOrder":"desc"}]'
-      data-url="../json/data-variants.json"
-      data-filter-control="true">
+
+           data-toggle="table"
+           data-toolbar="#custom-toolbar"
+              
+           data-show-toggle="true"
+           data-show-columns="true"
+            data-show-export="true" 
+            data-search="true"         
+            data-url="../json/data-variants.json"
+            data-filter-control="true"
+
+>
             <thead>
             <tr>
             <th data-field="state" data-checkbox="true">Details</th>
-            <th data-field="variantSummary.geneDetails.function">Funtion</th>
-            <th data-field="variantSummary.geneDetails.gene" data-filter-control="input" data-sortable="true">Gene</th>
-            <th data-field="variantSummary.physicalPosition.chromosome" data-filter-control="input" data-sortable="true">Chromosome</th>
-            <th data-field="variantSummary.physicalPosition.endCoordinate" data-filter-control="input">End Coordinate</th>
-            <th data-field="variantSummary.physicalPosition.cytogeneticBand" data-filter-control="input">Cytogenetic Band</th>
-            <th data-field="variantSummary.physicalPosition.startCoordinate" data-filter-control="input">Start Coordinate</th>
-            <th data-field="variantSummary.proteinDetails.affectedAminoAcid" data-filter-control="input">Affected Amino Acid</th>
-            <th data-field="variantSummary.proteinDetails.proteinChange" data-filter-control="input">Protein Change</th>
-            <th data-field="variantSummary.proteinDetails.granthamScore" data-filter-control="input">Grantham Score</th>
-            <th data-field="variantSummary.mRNADetails.functionalConsequence" data-filter-control="input">Functional Consequence</th>
-            <th data-field="variantSummary.mRNADetails.transcript" data-filter-control="input" >Transcript</th>
-            <th data-field="variantSummary.mRNADetails.nucleotideChange" data-filter-control="input">Nucleotide Change</th>
+            <th data-field="function" data-filter-control="select" data-sortable="true">Funtion</th>
+            <th data-field="gene" data-filter-control="input" data-sortable="true" class="fcontrol">Gene</th>
+            <th data-field="chromosome" data-filter-control="select" data-sortable="true" class="fcontrol finput">Chromosome</th>
+            <th data-field="endCoordinate" data-filter-control="input" data-sortable="true" class="fcontrol finput"> End Coordinate</th>
+            <th data-field="cytogeneticBand" data-filter-control="input" data-sortable="true" class="fcontrol finput">Cytogenetic Band</th>
+            <th data-field="startCoordinate" data-filter-control="input" data-sortable="true" class="fcontrol finput">Start Coordinate</th>
+            <th data-field="affectedAminoAcid" data-filter-control="input" data-sortable="true" class="fcontrol finput">Affected Amino Acid</th>
+            <th data-field="proteinChange" data-filter-control="input" data-sortable="true" class="fcontrol finput">Protein Change</th>
+            <th data-field="granthamScore" data-filter-control="input" data-sortable="true" class="fcontrol finput">Grantham Score</th>
+            <th data-field="functionalConsequence" data-filter-control="input" data-sortable="true" class="fcontrol finput">Functional Consequence</th>
+            <th data-field="transcript" data-filter-control="input" data-sortable="true" class="fcontrol finput">Transcript</th>
+            <th data-field="nucleotideChange" data-filter-control="input" data-sortable="true" class="fcontrol finput">Nucleotide Change</th>
               
             </tr>
             </thead>
         </table>        
   </div>
-</div>        
+   <script>
+
+/*
+  $(function() {
+
+			$('#custom-toolbar').bootstrapTableFilter({
+				connectTo: '#table',
+				onAll: function(name, args) {
+					var d = new Date();
+					$('#log').prepend(d.toLocaleString() + ': ' + name + "\n");
+				},
+				onSubmit: function(data) {
+					var data = $('#filter-bar').bootstrapTableFilter('getData');
+					var d = new Date();
+					$('#log').prepend(d.toLocaleString() + ': ' + JSON.stringify(data) + "\n");
+				}
+			});
+		});
+		
+*/
+
+$(function() {
+        $('#custom-toolbar').bootstrapTableFilter({
+            filters:[
+                {
+                    field: 'gene',    // field identifier
+                    label: 'Gene',
+                    type: 'range',   // filter label
+                     enabled: true
+                },
+                {
+                    field: 'chromosome',
+                    label: 'Chromosome',
+                    type: 'select',
+                    values: [
+                        {id: 'Chromosome19', label: '19'},
+                        {id: 'Chromosome10', label: '10'},
+                        {id: 'Chromosome12', label: '12'}
+                    ],
+                    enabled: true   // filter is visible by default
+                }
+            ],
+            onSubmit: function() {
+                var data = $('#custom-toolbar').bootstrapTableFilter('getData');
+                console.log(data);
+            }
+        });
+    });
+
+		  $("select").select2({
+        minimumResultsForSearch: Infinity
+      });
+</script>     
         </body>
 </html>

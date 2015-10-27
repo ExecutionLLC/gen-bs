@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap Table Examples</title>
+    <link href="assets/bootstrap/less/bootstrap.less" rel="stylesheet/less">
+     <script src="assets/less-1.7.0.js"></script>
+     
+
+<!--     <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css"> -->
+    <link rel="stylesheet" href="assets/examples.css">
+    <script src="assets/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/bootstrap/js/select2-3.4.6/select2.min.js"></script>
+<!--
+    <script src="assets/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
+     <script src="assets/bootstrap-table/src/extensions/filter/bootstrap-table-filter.js"></script>
+-->
+     <script src="../assets/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+      <script src="../assets/bootstrap-select/bootstrap-select.min.js"></script>
+<!--
+    <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+    <script src="assets/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
+-->
+<!--     <script src="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script> -->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Genetic App</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+<!--
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            
+          </ul>
+-->
+          <ul class="nav navbar-nav navbar-right">
+             <li class="active"><a href="#">Samples</a></li>
+             <li><a href="">Analises</a></li>
+            <li class="dropdown dropdown-profile">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="material-icons">account_circle</i>Account <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#"><i class="material-icons">perm_contact_calendar</i>Profile</a></li>
+                <li><a href="#"><i class="material-icons">credit_card</i>Billing</a></li>
+                
+                <li><a href="#"><i class="material-icons">message</i>Messages</a></li>
+                <li role="separator" class="divider"></li>
+                
+                <li><a href="#"><i class="material-icons">view_module</i>Gen Panels</a></li>
+                <li><a href="#"><i class="material-icons">group</i> Sharing</a></li>
+                <li><a href="#"><i class="material-icons">assignment</i>Reports</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+  
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-3">
+<div class="drop-area">
+   <div class="text-muted">Drag and drop your files here or manually select them.</div>
+   <div>
+    <button class="btn btn-warning">
+      Выбрать файлы
+    </button>
+  </div>
+  <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
+</div>
+    </div>
+   <div class="col-lg-9">   
+<div class="panel-group">
+
+ 
+  <div class="panel panel-info">
+    <div class="panel-heading">
+    <h4 class="panel-title">sample_db_in_vcf_format1.vcf</h4>
+    </div>
+    
+      <form class="form-horizontal form-horizontal-rows">
+        <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Name*</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+               <label>Project*  <a href="">Select Existing</a></label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Family ID</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+             <div class="col-sm-3">
+            <div class="form-group">
+              <label>Subject ID</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Genome Build</label>
+             <select class="form-control">
+                <option>hg13</option>
+                <option>hg14</option>
+                <option>hg15</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+               <label>Gender</a></label>
+              <select class="form-control">
+                <option>Male</option>
+                <option>Female</option>
+                 <option>Unknown</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Phenotype</label>
+              <select multiple="" class="form-control select2">
+                <option>11p partial monosomy syndrome</option><option>12p12.1 microdeletion syndrome</option><option>12q14 microdeletion syndrome</option><option>14q11.2 microduplication syndrome
+14q12 microdeletion syndrome</option><option>14q22q23 microdeletion syndrome</option><option>15q13.3 microdeletion syndrome</option><option>16q24.3 microdeletion syndrome
+17p11.2 microduplication syndrome</option><option>17p13.3 microduplication syndrome</option><option>17q11.2 microduplication syndrome
+17q11 microdeletion syndrome</option><option>17q12 microdeletion syndrome</option><option>17q21.31 microdeletion syndrome</option><option>17q23.1q23.2 microdeletion syndrome</option><option>1p21.3 microdeletion syndrome</option><option>1p36 deletion syndrome</option><option>20p12.3 microdeletion syndrome</option><option>21-hydroxylase deficiency</option><option>22q11.2 deletion syndrome</option>
+
+                
+                
+              </select>
+            </div>
+          </div>
+             
+        </div>
+         <div class="row">
+          <div class="col-sm-3">
+            <div class="btn-toolbar">
+              <label class="btn btn-link wrapnormal text-left"  data-toggle="collapse" data-target="#multisampleOpts1" id="multisample1" type="buuton"><input type="checkbox"> Multi-sample VCF file</label>
+            </div>
+             <div class="collapse" id="multisampleOpts1">
+              <div class="well well-sm">
+                <div class="radio">
+                  <label><input type="radio"> Compile allele frequency</label>
+                </div>
+                <div class="radio">
+                  <label><input type="radio"> Extract all samples</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="btn-toolbar">
+              <label class="btn btn-link wrapnormal text-left"  data-toggle="collapse" data-target="#emailOpts1" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
+            </div>
+            <div class="collapse" id="emailOpts1">
+              <div class="well well-sm">
+               
+                <div class="form-group">
+                 <input type="text" class="form-control" placeholder="email"> 
+                 
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control"></textarea>
+            </div>
+          </div>
+            
+        </div>
+          </div>
+          <div class="panel-footer text-right">
+            <div class="pull-left text-muted"><strong>3.5MB</strong></div>
+            <button class="btn btn-default">Cancel sample</button>
+            <button class="btn btn-primary">Save sample</button>
+          </div> 
+      </form>
+      
+   
+  </div>      
+    
+      <div class="panel panel-info">
+    <div class="panel-heading">
+    <h4 class="panel-title">sample_db_in_vcf_format1.vcf</h4>
+    </div>
+    
+      <form class="form-horizontal form-horizontal-rows">
+        <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Name*</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+               <label>Project*  <a href="">Select Existing</a></label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Family ID</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+             <div class="col-sm-3">
+            <div class="form-group">
+              <label>Subject ID</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label>Genome Build</label>
+             <select class="form-control">
+                <option>hg13</option>
+                <option>hg14</option>
+                <option>hg15</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="form-group">
+               <label>Gender</a></label>
+              <select class="form-control">
+                <option>Male</option>
+                <option>Female</option>
+                 <option>Unknown</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Phenotype</label>
+              <select multiple="" class="form-control select2">
+                <option>11p partial monosomy syndrome</option><option>12p12.1 microdeletion syndrome</option><option>12q14 microdeletion syndrome</option><option>14q11.2 microduplication syndrome
+14q12 microdeletion syndrome</option><option>14q22q23 microdeletion syndrome</option><option>15q13.3 microdeletion syndrome</option><option>16q24.3 microdeletion syndrome
+17p11.2 microduplication syndrome</option><option>17p13.3 microduplication syndrome</option><option>17q11.2 microduplication syndrome
+17q11 microdeletion syndrome</option><option>17q12 microdeletion syndrome</option><option>17q21.31 microdeletion syndrome</option><option>17q23.1q23.2 microdeletion syndrome</option><option>1p21.3 microdeletion syndrome</option><option>1p36 deletion syndrome</option><option>20p12.3 microdeletion syndrome</option><option>21-hydroxylase deficiency</option><option>22q11.2 deletion syndrome</option>
+
+                
+                
+              </select>
+            </div>
+          </div>
+        
+        </div>
+         <div class="row">
+          <div class="col-sm-3">
+            <div class="btn-toolbar">
+              <label class="btn btn-link wrapnormal  text-left" data-toggle="collapse" data-target="#multisampleOpts2" id="multisample2"><input type="checkbox"> Multi-sample VCF file</label>
+            </div>
+             <div class="collapse" id="multisampleOpts2">
+              <div class="well well-sm">
+                <div class="radio">
+                  <label><input type="radio"> Compile allele frequency</label>
+                </div>
+                <div class="radio">
+                  <label><input type="radio"> Extract all samples</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="btn-toolbar">
+              <label class="btn btn-link wrapnormal  text-left" data-toggle="collapse" data-target="#emailOpts2" id="emailSend2"><input type="checkbox"> Notify By Email After Complete</label>
+            </div>
+            <div class="collapse" id="emailOpts2">
+              <div class="well well-sm">
+               
+                <div class="form-group">
+                 <input type="text" class="form-control" placeholder="email"> 
+                 
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control"></textarea>
+            </div>
+          </div>
+     
+        </div>
+          </div>
+          <div class="panel-footer text-right">
+            <div class="pull-left text-muted"><strong>13.5MB</strong></div>
+            <button class="btn btn-default">Cancel sample</button>
+            <button class="btn btn-primary">Save sample</button>
+          </div>
+      </form>
+      
+   
+  </div>     
+  
+</div>
+</div>
+</div>
+
+   
+</div>
+<script>
+  $("select").select2({
+    minimumResultsForSearch: Infinity
+  });
+  
+</script>   
+     </body>
+</html>

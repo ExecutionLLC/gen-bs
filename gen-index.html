@@ -11,6 +11,7 @@
     <script src="assets/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/bootstrap-table/src/bootstrap-table.js"></script>
+      <script src="assets/bootstrap/js/select2-3.4.6/select2.min.js"></script>
 <!--
     <script src="assets/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
      <script src="assets/bootstrap-table/src/extensions/filter/bootstrap-table-filter.js"></script>
@@ -33,7 +34,7 @@
     <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-inverse navbar-static-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -57,7 +58,7 @@
              <li class="active"><a href="#">Samples</a></li>
              <li><a href="">Analises</a></li>
             <li class="dropdown dropdown-profile">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="material-icons">account_circle</i>Account <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="material-icons">account_circle</i>Username's Account<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="#"><i class="material-icons">perm_contact_calendar</i>Profile</a></li>
                 <li><a href="#"><i class="material-icons">credit_card</i>Billing</a></li>
@@ -78,7 +79,7 @@
 <div class="container-fluid">
  <div id="custom-toolbar" class="btn-toolbal">
     <div class="btn-group">
-        <button type="button" class="btn btn-default">Upload sample</button>
+        <a href="gen-upload.html" type="button" class="btn btn-default">Upload sample</a>
     </div>
 </div>
 <section class="primary-filter-control-table">
@@ -88,18 +89,18 @@
            data-classes="table table-condensed table-hover"
            data-url="../json/data-samples.json"
            data-filter-control="true"
-             data-sort-name="name"
-               data-sort-order="desc">
+           data-sort-name="name"
+           data-sort-order="desc">
         <thead>
         <tr>
           <th data-field="state" data-checkbox="true"></th>
            
-            <th data-field="name" data-filter-control="input" data-sortable="true">Name</th>
-            <th data-field="version" data-filter-control="select" data-sortable="true">Version</th>
-            <th data-field="description" data-filter-control="input" data-sortable="true">Description</th>
-            <th data-field="familyID" data-filter-control="select" data-sortable="true">Family ID</th>
-            <th data-field="subjectID" data-filter-control="select" data-sortable="true">Subject ID</th>
-            <th data-field="annotatedOn" data-filter-control="select" data-sortable="true">Annotated On</th>
+            <th data-field="name" data-filter-control="input" data-sortable="true class="fcontrol"">Name</th>
+            <th data-field="version" data-filter-control="select" data-sortable="true" class="fcontrol">Version</th>
+            <th data-field="description" data-filter-control="input" data-sortable="true" class="fcontrol">Description</th>
+            <th data-field="familyID" data-filter-control="select" data-sortable="true" class="fcontrol">Family ID</th>
+            <th data-field="subjectID" data-filter-control="select" data-sortable="true" class="fcontrol">Subject ID</th>
+            <th data-field="annotatedOn" data-filter-control="select" data-sortable="true" class="fcontrol">Annotated On</th>
             <th data-field="size" data-sortable="true">Size</th>
             <th data-field="variants" data-sortable="true">Variants</th>
             <th data-field="operate" data-events="operateEvents" data-formatter="operateFormatter"></th>
@@ -114,21 +115,29 @@
         selections = [];
       function operateFormatter(value, row, index) {
         return [
-            '<a class="btn btn-default annotation" href="javascript:void(0)" title="Remove">',
+            '<a class="btn btn-default annotation" href="gen-annotation.html" title="View Annotation">',
             '<i class="glyphicon glyphicon-search"></i> View Annotation',
             '</a>'
         ].join('');
     }
        window.operateEvents = {
-        'click .remove': function (e, value, row, index) {
-            $table.bootstrapTable('remove', {
+        'click .annotation': function (e, value, row, index) {
+            /*
+$table.bootstrapTable('remove', {
                 field: 'id',
                 values: [row.id]
             });
+*/
         }
     };
       //$('select').selectpicker();
       
-      </script>        
+      </script>
+      <script>
+  $("select").select2({
+    minimumResultsForSearch: Infinity
+  });
+  
+</script>         
      </body>
 </html>
