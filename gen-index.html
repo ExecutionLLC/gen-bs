@@ -16,8 +16,8 @@
     <script src="assets/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
      <script src="assets/bootstrap-table/src/extensions/filter/bootstrap-table-filter.js"></script>
 -->
-     <script src="../assets/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js"></script>
-      <script src="../assets/bootstrap-select/bootstrap-select.min.js"></script>
+     <script src="assets/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+      <script src="assets/bootstrap-select/bootstrap-select.min.js"></script>
 <!--
     <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
     <script src="assets/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
@@ -77,13 +77,13 @@
     </nav>
   
 <div class="container-fluid">
- <div id="custom-toolbar" class="btn-toolbal">
+ <div id="custom-toolbar" class="btn-toolbar">
     <div class="btn-group">
         <a href="gen-upload.html" type="button" class="btn btn-default">Upload sample</a>
     </div>
 </div>
 <section class="primary-filter-control-table">
- <table id="table" 
+<table id="table" 
            data-toggle="table"
            data-click-to-select="true"
            data-classes="table table-condensed table-hover"
@@ -134,9 +134,9 @@ $table.bootstrapTable('remove', {
       
       </script>
       <script>
-  $("select").select2({
-    minimumResultsForSearch: Infinity
-  });
+      $("select").select2({
+       minimumResultsForSearch: Infinity
+      });
   
 </script>         
      </body>
