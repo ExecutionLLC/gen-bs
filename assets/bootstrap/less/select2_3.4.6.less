@@ -45,20 +45,23 @@
             width: auto;
         }
         abbr {
-            display: none;
-            width: 12px;
-            height: 12px;
-            position: absolute;
-            right: 24px;
-            top: 8px;
-            font-size: 1px;
-            text-decoration: none;
-            border: 0;
-            background: url('select2.png') right top no-repeat;
-            cursor: pointer;
-            outline: 0;
+            border: 1px solid;
+    border-radius: 3px;
+    cursor: pointer;
+    display: none;
+    font-size: 1px;
+    height: 21px;
+    opacity: 0.4;
+    outline: 0 none;
+    padding: 0;
+    position: absolute;
+    right: 25px;
+    text-align: center;
+    text-decoration: none;
+    top: 6px;
+    width: 20px;
             &:hover {
-                background-position: right -11px;
+                opacity: .8;
                 cursor: pointer;
             }
         }
@@ -540,19 +543,15 @@ html[dir="rtl"] {
     color: #999 !important;
 }
 .select2-search-choice-close {
-    display: block;
-    width: 12px;
-    height: 13px;
-    position: absolute;
-    right: 3px;
-    top: 4px;
-    font-size: 1px;
+
     outline: none;
      &:before { 
-       font-family: 'WebHostingHub-Glyphs';
-       content: "\00d7";
-       right: 14px;
-       top: 11px;
+       font-family: 'Glyphicons Halflings';
+       content: "\e014";
+     
+     line-height: .1;
+     vertical-align: text-top;
+     
 }
 
 }
@@ -677,4 +676,21 @@ html[dir="rtl"] {
 .control-group.success .select2-container .select2-choice div {
     border-left: 1px solid @brand-success !important;
     background: @brand-success !important;
+}
+
+.select2-container.navbar-btn {
+        display: inline-block;
+    margin: 10px 30px 10px 50px;
+    width: 25% !important;
+    &.select2-dropdown-open .select2-choice { 
+      background: #fff;
+    }
+    .select2-choice .select2-arrow b { 
+      border: none;  
+        &:before { 
+          font-family: 'Glyphicons Halflings';
+          content: "\e003";
+        }
+      }
+    
 }

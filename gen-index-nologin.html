@@ -35,44 +35,7 @@
     <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a href="#" class="navbar-brand">Genetic App</a>
-        </div>
-        <div class="navbar-collapse collapse" id="navbar">
-<!--
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            
-          </ul>
-          
--->       
-<div style="margin-right: 20px;" class="btn-group navbar-btn navbar-right">
-    <a href="#" class="btn btn-default  btn-add-account" data-toggle="modal" type="button">Create account</a>
-   </div>
-<div style="margin-left: 20px;margin-right: 5px " class="btn-group navbar-btn navbar-right">
-        <a href="#" class="btn btn-primary " data-toggle="modal" type="button" data-target="#login">Sign In</a>
-</div>
-          <ul class="nav navbar-nav navbar-right">
-             <li class="active"><a href="#">Samples</a></li>
-             <li><a href="">Analises</a></li>
-            
-         
-            
-            </ul>
-          
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+
   
 <div class="container-fluid">
  <div id="custom-toolbar" class="btn-toolbal">
@@ -94,7 +57,7 @@
           <th data-field="state" data-checkbox="true"></th>
            
             <th data-field="name" data-filter-control="input" data-sortable="true class="fcontrol"">Name</th>
-            <th data-field="version" data-filter-control="select" data-sortable="true" class="fcontrol">Version</th>
+            <th data-field="version" data-filter-control="select" data-sortable="true" class="">Version</th>
             <th data-field="description" data-filter-control="input" data-sortable="true" class="fcontrol">Description</th>
             <th data-field="familyID" data-filter-control="select" data-sortable="true" class="fcontrol">Family ID</th>
             <th data-field="subjectID" data-filter-control="select" data-sortable="true" class="fcontrol">Subject ID</th>
@@ -109,42 +72,6 @@
 </section> 
 <!-- Button trigger modal -->
 
-<!-- Modal -->
-<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel">
-  <div class="modal-dialog modal-dialog-sm modal-dialog-primary" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="loginLabel">Sign In</h4>
-      </div>
-      <div class="modal-body">
-       <form class="form-horizontal">
-         <div class="form-group has-feedback">
-           <label class="control-label col-sm-3">Login</label>
-  	<div class="col-sm-6">
-           <input type="text" class="form-control">
-    <div class="help-text hidden">No this login</div>
-  </div>
-           
-         </div>
-         
- <div class="form-group has-feedback">
-           <label class="control-label col-sm-3">Password</label>
-  	<div class="col-sm-6">
-           <input type="password" class="form-control">
-        <div class="help-text hidden">No this login</div>
-  </div>
-           
-         </div>
-
-      </form></div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Sign In</button>
-      </div>
-    </div>
-  </div>
-</div>
    
     <script>
       var $table = $('#table'),

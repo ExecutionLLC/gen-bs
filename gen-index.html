@@ -7,7 +7,7 @@
      
 
 <!--     <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css"> -->
-    <link rel="stylesheet" href="assets/examples.css">
+
     <script src="assets/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/bootstrap-table/src/bootstrap-table.js"></script>
@@ -34,52 +34,11 @@
     <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Genetic App</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-<!--
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            
-          </ul>
--->
-          <ul class="nav navbar-nav navbar-right">
-             <li class="active"><a href="#">Samples</a></li>
-             <li><a href="">Analises</a></li>
-            <li class="dropdown dropdown-profile">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="material-icons">account_circle</i>Username's Account<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#"><i class="material-icons">perm_contact_calendar</i>Profile</a></li>
-                <li><a href="#"><i class="material-icons">credit_card</i>Billing</a></li>
-                
-                <li><a href="#"><i class="material-icons">message</i>Messages</a></li>
-                <li role="separator" class="divider"></li>
-                
-                <li><a href="#"><i class="material-icons">view_module</i>Gen Panels</a></li>
-                <li><a href="#"><i class="material-icons">group</i> Sharing</a></li>
-                <li><a href="#"><i class="material-icons">assignment</i>Reports</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
   
 <div class="container-fluid">
  <div id="custom-toolbar" class="btn-toolbar">
     <div class="btn-group">
-        <a href="gen-upload.html" type="button" class="btn btn-default">Upload sample</a>
+        <a href="gen-upload.html" type="button" class="btn btn-warning">Upload sample</a>
     </div>
 </div>
 <section class="primary-filter-control-table">
@@ -96,11 +55,11 @@
           <th data-field="state" data-checkbox="true"></th>
            
             <th data-field="name" data-filter-control="input" data-sortable="true class="fcontrol"">Name</th>
-            <th data-field="version" data-filter-control="select" data-sortable="true" class="fcontrol">Version</th>
+            <th data-field="version" data-filter-control="select" data-sortable="true" class="">Version</th>
             <th data-field="description" data-filter-control="input" data-sortable="true" class="fcontrol">Description</th>
-            <th data-field="familyID" data-filter-control="select" data-sortable="true" class="fcontrol">Family ID</th>
-            <th data-field="subjectID" data-filter-control="select" data-sortable="true" class="fcontrol">Subject ID</th>
-            <th data-field="annotatedOn" data-filter-control="select" data-sortable="true" class="fcontrol">Annotated On</th>
+            <th data-field="familyID" data-filter-control="select" data-sortable="true" class="">Family ID</th>
+            <th data-field="subjectID" data-filter-control="select" data-sortable="true" class="">Subject ID</th>
+            <th data-field="annotatedOn" data-filter-control="select" data-sortable="true" class="">Annotated On</th>
             <th data-field="size" data-sortable="true">Size</th>
             <th data-field="variants" data-sortable="true">Variants</th>
             <th data-field="operate" data-events="operateEvents" data-formatter="operateFormatter"></th>
@@ -130,12 +89,20 @@ $table.bootstrapTable('remove', {
 */
         }
     };
-      //$('select').selectpicker();
+     
       
-  
-      $("select").select2({
-        minimumResultsForSearch: Infinity
-      });
+		      $table.on('all.bs.table', function (e, row, $element) {
+     
+          $('select').select2({
+            allowClear: true,
+            placeholder: "No filter",
+            minimumResultsForSearch: Infinity
+          });
+
+          });
+ 
+      
+      
   
    </script>         
      </body>

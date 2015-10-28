@@ -178,22 +178,7 @@
 
 
 .bootstrap-select.btn-group .dropdown-menu li a,
-.filter-option  { 
-  .dbl {
-     vertical-align: middle;
-    color: fade(@text-color, 60%);
-    float: left;
-  }
- [class*="dbl-payment"] { 
-    font-size: 32px;
-    margin: -4px 0;
-  }
-  [class*="dbl-delivery"]{ 
-    font-size: 24px;
-    margin: 0 5px 0 0;
-  }
 
-}
 .bootstrap-select.btn-group .dropdown-menu li a .check-mark {
     display: none;
     font-size: 18px;
@@ -364,46 +349,13 @@
 }
 .bootstrap-select > .btn-default { 
   background-color: #fff;
-  border-color: @light;
+  border-color: @gray-lighter;
   color: @input-color;
 
   &:hover,
   &:focus,
   &:active { 
-   background-color: @lighter-default1;  
+   background-color: @gray-lighter;  
   }
 }
 
-
-.btn-toolbar { 
-  .btn-group-sm .bootstrap-select { 
-    margin-top: 4px;
-    margin-left: 4px;
-    margin-right: 4px;
-  }
-}
-.btn-toolbar-backlink { 
-  .dbl-chevron-down { 
-    .rotate(90deg);
-  }
-}
-.settings-item { 
-  position: relative;
-   &:after { 
-     .dbl-base(); 
-     content: "\e05c";
-     position: absolute;
-     right: 10px;
-     top:10px;
-     font-size: 18px;
-     opacity: .5;
-   }
-   .check-mark { 
-     display: none!important;
-   }
-   &:hover { 
-     &:after {  
-       opacity: .99;
-     }
-   }
-}

@@ -44,54 +44,10 @@
     <![endif]-->
 </head>
 <body>
-     <nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Genetic App</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-<!--
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            
-          </ul>
--->
-          <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="#">Samples</a></li>
-             <li><a href="">Analises</a></li>
-            <li class="dropdown dropdown-profile">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="material-icons">account_circle</i>Account <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#"><i class="material-icons">perm_contact_calendar</i>Profile</a></li>
-                <li><a href="#"><i class="material-icons">credit_card</i>Billing</a></li>
-                
-                <li><a href="#"><i class="material-icons">message</i>Messages</a></li>
-                <li role="separator" class="divider"></li>
-                
-                <li><a href="#"><i class="material-icons">view_module</i>Gen Panels</a></li>
-                <li><a href="#"><i class="material-icons">group</i> Sharing</a></li>
-                <li><a href="#"><i class="material-icons">assignment</i>Reports</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-  
+
 <div class="container-fluid">
 
-<ol class="breadcrumb">
-  <li><a href="#">Samples</a></li>
-  <li class="active">ATCC HCC1187 TumorB</li>
-</ol>
+
 
       <div class="btn-toolbar">
         <div class="navbar-header"><h4>ATCC HCC1187 TumorBL</h4></div>
@@ -119,16 +75,16 @@
             <th data-field="state" data-checkbox="true">Details</th>
             <th data-field="function" data-filter-control="select" data-sortable="true">Funtion</th>
             <th data-field="gene" data-filter-control="input" data-sortable="true" class="fcontrol">Gene</th>
-            <th data-field="chromosome" data-filter-control="select" data-sortable="true" class="fcontrol finput">Chromosome</th>
-            <th data-field="endCoordinate" data-filter-control="input" data-sortable="true" class="fcontrol finput"> End Coordinate</th>
+            <th data-field="chromosome" data-filter-control="select" data-sortable="true" class="">Chromosome</th>
+            <th data-field="endCoordinate" data-filter-control="input" data-sortable="true" class="fcontrol"> End Coordinate</th>
             <th data-field="cytogeneticBand" data-filter-control="input" data-sortable="true" class="fcontrol finput">Cytogenetic Band</th>
             <th data-field="startCoordinate" data-filter-control="input" data-sortable="true" class="fcontrol finput">Start Coordinate</th>
-            <th data-field="affectedAminoAcid" data-filter-control="input" data-sortable="true" class="fcontrol finput">Affected Amino Acid</th>
+            <th data-field="affectedAminoAcid" data-filter-control="input" data-sortable="true" class="fcontrol">Affected Amino Acid</th>
             <th data-field="proteinChange" data-filter-control="input" data-sortable="true" class="fcontrol finput">Protein Change</th>
             <th data-field="granthamScore" data-filter-control="input" data-sortable="true" class="fcontrol finput">Grantham Score</th>
             <th data-field="functionalConsequence" data-filter-control="input" data-sortable="true" class="fcontrol finput">Functional Consequence</th>
-            <th data-field="transcript" data-filter-control="input" data-sortable="true" class="fcontrol finput">Transcript</th>
-            <th data-field="nucleotideChange" data-filter-control="input" data-sortable="true" class="fcontrol finput">Nucleotide Change</th>
+            <th data-field="transcript" data-filter-control="input" data-sortable="true" class="fcontrol">Transcript</th>
+            <th data-field="nucleotideChange" data-filter-control="input" data-sortable="true" class="fcontrol">Nucleotide Change</th>
               
             </tr>
             </thead>
@@ -165,10 +121,20 @@
             }
         });
     });
+        var $table = $('#table')
+		      $table.on('all.bs.table', function (e, row, $element) {
+     
+          $('select').select2({
+            allowClear: true,
+            placeholder: "No filter",
+            minimumResultsForSearch: Infinity
+          });
 
-		  $("select").select2({
-        minimumResultsForSearch: Infinity
-      });
+          });
+    $('#btnOpenid').on('click', function (e) {
+      $('.dropdown-profile').removeClass("hidden");
+      $(this).addClass("hidden");
+     });
 </script>     
 
 </body>
