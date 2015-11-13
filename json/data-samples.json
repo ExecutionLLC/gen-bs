@@ -1,42 +1,45 @@
-[
-    {
-        "name": "ATCC HCC1187 TumorBL",
-        "version": "v1.6",
-        "description": "Demo data - Case cancer data from Illumina",
-        "familyID": "0",
-        "subjectID": "ATCC_HCC1187_TumorBL",
-        "annotatedOn": "N/A",
-        "size": "157.3 MB",
-        "variants": "3,847,289"
-    },
-    {
-        "name": "ATCC HCC1187 TumorC",
-        "version": "v1.6",
-        "description": "Demo data - Control cancer data from Illumina",
-        "familyID": "0",
-        "subjectID": "ATCC_HCC1187_TumorC",
-        "annotatedOn": "N/A",
-        "size": "127.77 MB",
-        "variants": "3,137,975"
-    },
-    {
-        "name": "iha1",
-        "version": "v1.6",
-        "description": "Demo data - ihafamily1 affected child, hemolytic anemia",
-        "familyID": "ihafamily",
-        "subjectID": "iha1",
-        "annotatedOn": "N/A",
-        "size": "3 MB",
-        "variants": "36,561"
-    },
-    {
-        "name": "Ogden syndrome",
-        "version": "v1.6",
-        "description": "Demo data - Ogden syndrome",
-        "familyID": "Ogden",
-        "subjectID": "ogden1",
-        "annotatedOn": "N/A",
-        "size": "67.12 KB",
-        "variants": "1,475"
-    }
-]
+{
+  "items":
+    [
+        {
+            "name": "ATCC HCC1187 TumorBL",
+            "version": "v1.6",
+            "description": "Demo data - Case cancer data from Illumina",
+            "subjectID": "0",
+            "subjectID": "ATCC_HCC1187_TumorBL",
+            "annotatedOn": "N/A",
+            "size": "157.3 MB",
+            "variants": "3,847,289"
+        },
+        {
+            "name": "ATCC HCC1187 TumorC",
+            "version": "v1.6",
+            "description": "Demo data - Control cancer data from Illumina",
+            "familyID": "0",
+            "subjectID": "ATCC_HCC1187_TumorC",
+            "annotatedOn": "N/A",
+            "size": "127.77 MB",
+            "variants": "3,137,975"
+        },
+        {
+            "name": "iha1",
+            "version": "v1.6",
+            "description": "Demo data - ihafamily1 affected child, hemolytic anemia",
+            "familyID": "ihafamily",
+            "subjectID": "iha1",
+            "annotatedOn": "N/A",
+            "size": "3 MB",
+            "variants": "36,561"
+        },
+        {
+            "name": "Ogden syndrome",
+            "version": "v1.6",
+            "description": "Demo data - Ogden syndrome",
+            "familyID": "Ogden",
+            "subjectID": "ogden1",
+            "annotatedOn": "N/A",
+            "size": "67.12 KB",
+            "variants": "1,475"
+        }
+  ]
+}

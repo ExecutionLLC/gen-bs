@@ -36,6 +36,7 @@
 <body>
   
 <div class="container-fluid">
+  <h4>Samples</h4>
  <div id="custom-toolbar" class="btn-toolbar">
     <div class="btn-group">
         <a href="gen-upload.html" type="button" class="btn btn-warning">Upload sample</a>
@@ -53,15 +54,15 @@
         <thead>
         <tr>
           <th data-field="state" data-checkbox="true"></th>
-           
+       <th data-field="details" data-events="operateEvents" data-formatter="operateFormatter0"></th>
             <th data-field="name" data-filter-control="input" data-sortable="true class="fcontrol"">Name</th>
             <th data-field="version" data-filter-control="select" data-sortable="true" class="">Version</th>
             <th data-field="description" data-filter-control="input" data-sortable="true" class="fcontrol">Description</th>
             <th data-field="familyID" data-filter-control="select" data-sortable="true" class="">Family ID</th>
             <th data-field="subjectID" data-filter-control="select" data-sortable="true" class="">Subject ID</th>
             <th data-field="annotatedOn" data-filter-control="select" data-sortable="true" class="">Annotated On</th>
-            <th data-field="size" data-sortable="true">Size</th>
-            <th data-field="variants" data-sortable="true">Variants</th>
+            <th data-field="size" data-filter-control="input" data-sortable="true">Size</th>
+            <th data-field="variants" data-filter-control="input" data-sortable="true">Variants</th>
             <th data-field="operate" data-events="operateEvents" data-formatter="operateFormatter"></th>
           
         </tr>
@@ -72,6 +73,14 @@
       var $table = $('#table'),
         $remove = $('#annotation'),
         selections = [];
+        
+        function operateFormatter0(value, row, index) {
+        return [
+            '<a class="btn btn-link file" href="gen-annotation.html" title="View Annotation">',
+            '<i class="glyphicon glyphicon-file"></i>',
+            '</a>'
+        ].join('');
+    }
       function operateFormatter(value, row, index) {
         return [
             '<a class="btn btn-default annotation" href="gen-annotation.html" title="View Annotation">',
@@ -80,7 +89,7 @@
         ].join('');
     }
        window.operateEvents = {
-        'click .annotation': function (e, value, row, index) {
+        'click .file': function (e, value, row, index) {
             /*
 $table.bootstrapTable('remove', {
                 field: 'id',

@@ -18,7 +18,7 @@ $(function () {
        
     });
 
-    var href = location.hash.substring(1) || 'gen-index.html';
+    var href = location.hash.substring(1) || 'gen-annotation.html';
     $('iframe').attr('src', href);
     //initNavigation(href);
 
@@ -29,21 +29,7 @@ $(function () {
 */
  
 
- var countries = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.whitespace,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  // url points to a json file that contains an array of country names, see
-  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-  prefetch: '../json/samples1.json'
-});
 
-// passing in `null` for the `options` arguments will result in the default
-// options being used
-$('#prefetch .typeahead').typeahead(null, {
-  name: 'countries',
-  source: countries,
-  
-});
 /*
       $('#samplesSelect').select2({
             placeholder: "Find sample",
@@ -53,12 +39,23 @@ $('#prefetch .typeahead').typeahead(null, {
 */
   
 
-    $('#btnOpenid').on('click', function (e) {
-      $('.dropdown-profile').removeClass("hidden");
-      $(this).addClass("hidden");
+    $('#btnLogin').on('click', function (e) {
+      $('#guest').addClass("hidden");
+      $('#user').removeClass("hidden");
+     });
+      $('#btnLogout').on('click', function (e) {
+      $('#user').addClass("hidden");
+      $('#guest').removeClass("hidden");
      });
      
-   
+
+/*
+    $('select').select2({
+      allowClear: true,
+      placeholder: "No selected",
+      minimumResultsForSearch: Infinity
+    });
+*/
      
 });
 
