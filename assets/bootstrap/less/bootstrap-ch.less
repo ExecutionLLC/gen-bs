@@ -5,7 +5,7 @@
  */
 
 // Core variables and mixins
-@import "variables.less";
+@import "variables-ch.less";
 @import "mixins.less";
 
 // Reset and dependencies
@@ -62,3 +62,9 @@
 
 //
 @import "app.less";
+
+.fixed-table-toolbar { 
+  .glyphicon-export:after { 
+    content: "导出";
+  }
+}

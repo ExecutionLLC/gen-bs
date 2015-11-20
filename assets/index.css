@@ -114,7 +114,7 @@ a.toggle .glyphicon-chevron-right,
 .content {
     position: fixed;
     width: 100%;
-    top: 51px;
+    top: 0px;
     bottom: 0;
 }
 

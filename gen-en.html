@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bootstrap Table Examples</title>
-    
-        <link rel="stylesheet" href="assets/bootstrap-table/src/bootstrap-table.css">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Genomics</title>
+    <link rel="stylesheet" href="assets/bootstrap-table/src/bootstrap-table.css">
     <link href="assets/bootstrap/less/bootstrap.less" rel="stylesheet/less">
     
      <script src="assets/less-1.7.0.js"></script>
      
-
     <link rel="stylesheet" href="assets/jQuery-QueryBuilder-master/dist/css/query-builder.default.min.css">
+    <link rel="stylesheet" href="assets/font-awesome-4.4.0/css/font-awesome.min.css">
+  
 <!--      <link rel="stylesheet" href="assets/select2-4.0.1-rc.1/dist/css/select2.min.css"> -->
 <!-- <link rel="stylesheet" href="//rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css"> -->
 
@@ -51,180 +54,107 @@
     <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-inverse navbar-static-top" id="navbg"></nav>
+<nav class="navbar navbar-inverse navbar-fixed-top" id="mainnav">
+
+  <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+   
+           </div>
+        <button type="button" class="btn btn-link btn-toogle-tools" data-toggle="collapse" data-target="#subnav" id="btnToggle">Advanced Search <i class="fa fa-long-arrow-down"></i></button>
+        <div id="navbar" class="navbar-collapse collapse">
+               <a class="navbar-brand" href="/">AGx</a>
+              <ul id="user" class="nav navbar-nav navbar-right">
+  <li class="dropdown">
+                <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa  fa-lg fa-user"></i> <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a data-target="#login" type="button" data-toggle="modal" href="">Login</a></li>
+                <li><a href="">Register for free</a></li>
+                
+              </ul>
+            </li>
+  
+                     
+  <li><a href="#"><i class="fa  fa-lg fa-question-circle"></i></a></li>
+             <li><a href="#"><i class="fa fa-lg fa-info-circle"></i></a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Eng <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/">Eng</a></li>
+                <li><a href="gen-ch.html">中文</a></li>
+                
+              </ul>
+            
+            
+
+
+             </li>  
+              </ul>
+              <ul class="nav navbar-nav navbar-right hidden" id="guest">
+              <li><span class="navbar-text"></span></li>
+                <li><a href="">Name Lastname: <span>789 Queries Left</span></a></li>
+               <li><a href="">Logout</a></li>
+              </ul>
+        
+        </div>
+      </div>
+</nav>
+<div class="collapse" id="subnav">
+  <nav class="navbar navbar-default">
  <div class="container-fluid">
   <div class="row grid-toolbar">
-    <div class="col-sm-6 btn-group-select2">
+    <div class="col-sm-4 btn-group-select2">
 
-     <div class="btn-group">
-      <a href="#" class="btn btn-warning" data-toggle="modal" type="button" data-target="#upload">Upload Sample</a>
+     <div class="btn-group" data-toggle="tooltip" data-placement="right" data-container="body"  title="Upload .vfc file of sample">
+       <a href="#" class="btn btn-warning" data-toggle="modal" type="button" data-target="#upload">Samples</a>
     </div>
-  <!--   <div class="dropdown btn-group btn-group-full-width" id="dropdownSamples">
-      
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Ogden syndrome <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-rows">
-    <li>
-    <form>
-    <div class="row">
-            <div class="col-sm-12">
-                 <div class="form-group has-feedback">
-           
-           <input type="text" class="form-control" id="sample-search">
-           <span class="form-control-feedback">
-            <span class="glyphicon glyphicon-search"></span>
-           
-         </span></div>
-            </div>
-            
-          </div>
-    </form>
-          </li>
-    <li class="sample-res hidden">
-  <div class="row">
-        <div class="col-sm-7">
-          <div class="s-name"><a href="#">Ogden syndrome</a></div>
-          <div class="s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-5">
-            <div class="s-familyID">Family ID <span>Ogden</span></div>
-          <div class="s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-        
-      </div>
-   </li>
-    <li class="sample-res hidden"> <div class="row">
-        <div class="col-sm-7">
-          <div class="s-name"><a href="#">Ogden syndrome</a></div>
-          <div class="s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-5">
-            <div class="s-familyID">Family ID <span>Ogden</span></div>
-          <div class="s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-        
-      </div>
-</li>
-    <li class="sample-res hidden"> <div class="row">
-        <div class="col-sm-7">
-          <div class="s-name"><a href="#">Ogden syndrome</a></div>
-          <div class="s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-5">
-            <div class="s-familyID">Family ID <span>Ogden</span></div>
-          <div class="s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-        
-      </div>
-</li>
-
-    <li class="sample-res hidden"> <div class="row">
-        <div class="col-sm-7">
-          <div class="s-name"><a href="#">Ogden syndrome</a></div>
-          <div class="s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-5">
-            <div class="s-familyID">Family ID <span>Ogden</span></div>
-          <div class="s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-        
-      </div>
-</li>
-  </ul>
-
-       
-      
-
-
-<!--
- <select class="sample-select-ajax form-control">
-      <option value="3620194" selected="selected">select2/select2</option>
-    </select>
--->
-
-
- <!-- samples local data -->
-<!--   <select class="sample-select"></select> -->
-  
-
-<div class="btn-group">
+   <div class="btn-group"  data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples">
    <select class="sample-select-ajax">
-     <option value="3620194" selected="selected">Search and Select Sample</option>
+     <option value="3620194" selected="selected">mental retardation patient12</option>
    </select> 
 </div>
 
     </div>
-
-<div class="col-sm-6 btn-group-select2">
-     <div class="btn-group">
-      <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filter">
-          <i class="glyphicon glyphicon-filter"></i> 
-      </button>
-    </div>
-    <div class="btn-group">
+    <div class="col-sm-4 btn-group-select2">
+    <div class="dropdown btn-group" data-toggle="tooltip" data-placement="left"  data-container="body" title="Setup and create custom new filters or combine default">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Filters <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="#" type="button" data-toggle="modal" data-target="#filter">Setup Filters</a></li>
+    <li><a href="#" type="button" data-toggle="modal" data-target="#combinefilter">Combine Filters</a></li>
+    
+  </ul>
+</div>
+    <div class="btn-group" data-toggle="tooltip" data-placement="right"  data-container="body" title="Select one or more from available filters">
     <select class="select2" multiple="">
-        
-          <option selected>Filter: Eye Cancer Diagnostics</option>
-          <option>Filter: User Custom View 1</option>
-          <option>Filter: User Custom View 2</option>
-          <option>Filter: User Custom View 3</option>
+           <option selected value="eye">Eye Cancer Diagnostics</option>            
+            <option value="cust1">Breast cancer</option>
+            <option value="cust2">Lung cancer</option>
+            <option value="cust3">Autism</option>
+            <option value="cust4">Retinoblastoma</option>
+            <option value="cust5">Mental retardation</option>
+<!--
+          <option selected>mental retardation variant filter</option>
+          <option>lung cancer variant filter</option>
+          <option>high quality SNP variants</option>
+          <option>exon variants</option>
+-->
         </select>
      </div>
-    <div class="btn-group">
-      <button class="btn btn-primary" type="button">
-         Load
-      </button>
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-default" type="button" data-toggle="modal" data-target="#history"><i class="glyphicon glyphicon-time"></i></button>
-      
-    </div>
+    
+   
 
 </div>   
-    
-  </div>
- </div>
-</nav>
-
-<!--
-  <nav class="pager-nav">
-  <ul class="pager">
-    <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Previous Sample</a></li>
-    <li class="next"><a href="#">Next Sample <span aria-hidden="true">&rarr;</span></a></li>
-  </ul>
-</nav>
--->
-
-<!--
-
-      <div class="btn-toolbar">
-        <div class="navbar-header"><h4>ATCC HCC1187 TumorBL</h4></div>
-        <ul class="nav nav-pills navbar-right">
-        <li role="presentation"><a href="#">Dashboard</a></li>
-        <li role="presentation" class="active"><a href="#">Variants</a></li>
-        <li role="presentation"><a href="gen-report.html">Reports</a></li>
-      </ul>
-      </div>
--->
-<div class="container-fluid">
-  <div class="row grid-toolbar relative">
-    
-    <div class="col-sm-3 btn-group-select2">
+     <div class="col-sm-4 btn-group-select2">
         <!-- <div class="custom-view-btns-message"><em class="text-warning"><i class="glyphicon glyphicon-exclamation-sign"></i> Current view changed</em></div> -->
-        <div class="btn-group">
+        <div class="btn-group" data-toggle="tooltip" data-placement="left" data-container="body" title="Setup custom new views, select colunms, colunm order, sorting and colunm filter">
            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns"><i class="fa fa-columns"></i></button>
         </div>
         <div class="btn-group">
@@ -238,27 +168,35 @@
           <option value="6">User Custom View 3</option>
         </select>
         </div>
+         
+<div class="btn-group">
+      <button class="btn btn-primary" type="button">
+         Load
+      </button>
     </div>
-    <div class="col-sm-3">
-      <div id="customViewBtns" class="custom-view-btns hidden">
-       <button class="btn btn-default">Save view</button>
-      <!--  <button class="btn-link">Reset View</button> -->
-      </div>
-     </div>    
+        <div class="btn-group"  data-toggle="tooltip" data-placement="bottom" data-container="body"   title="History of queries, saved query settings">
+      <button class="btn btn-default" type="button" data-toggle="modal" data-target="#history"><i class="glyphicon glyphicon-time"></i></button>
+      
+    </div>
+    </div>
   </div>
+ </div>
+</nav>
+</div>
+<div class="container-fluid" id="maintable">
+
   <div class="table-with-toolbar">
-   <div id="custom-toolbar"></div>
+     <div class="btn-group exporthistory" data-toggle="tooltip" data-placement="bottom" title="Export of results to file" data-container="body" data-trigger="click">
+       <button class="btn btn-primary" data-toggle="modal" data-target="#exporthistory">
+          <i class="fa fa-cloud-download"></i>
+       </button>
+    </div>
     <table id="table"
 
             data-toggle="table"
-            data-toolbar="#custom-toolbar"
+            data-show-export="true"
             data-classes="table table-condensed table-hover"
-            data-click-to-select="true"
-             data-show-pagination-switch="true"
-             data-pagination="true"
-             data-id-field="id"
-             data-page-list="[10, 25, 50, 100, ALL]"
-
+            data-id-field="id"
             data-show-export="true"
             data-search="true" 
             data-show-multi-sort="true" 
@@ -267,7 +205,7 @@
             data-filter-control="true">
             <thead>
             <tr>
-           <!--  <th data-field="state" data-checkbox="true" ></th> -->
+             <th data-field="view" data-events="operateEvents" data-formatter="operateFormatter1"></th>
             <th data-field="view" data-events="operateEvents" data-formatter="operateFormatter"></th>
             <th data-field="function" data-filter-control="select" data-sortable="true">Funсtion</th>
             <th data-field="gene" data-filter-control="input" data-sortable="true" class="fcontrol">Gene</th>
@@ -288,6 +226,11 @@
   </div>
   
 
+</div>
+<div id="fav-message" class="hidden">
+  You can export these items to file
+  
+</div>
 </div>
 
 <div class="modal fade" id="selectColumns"  role="dialog" aria-labelledby="selectColumnsLabel">
@@ -790,49 +733,57 @@
       <div class="modal-header">
         
      <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h5> Setup Filters</h5>
+      <h5>Setup Filters</h5>
       </div>
       <div class="modal-body">
-        
-        <div class="row grid-toolbar">
-         <div class="col-sm-6">
-
-          <select class="select2">
-  
-             <option selected>Eye Cancer Diagnostics</option>
-             <option>Copy of Eye Cancer Diagnostics</option>
-            <option>User Custom View 1</option>
-            <option>User Custom View 2</option>
-            <option>User Custom View 3</option>
-            <option>Custom filter set</option>
-        </select>
-        </div>
-  
-         <div class="col-sm-6">
-            <button class="btn btn-default collapse in copyfilter">Reset Filter</button>
-            <button type="button" class="btn btn-default collapse in copyfilter" data-toggle="collapse" data-target=".copyfilter">Create Copy</button>   
-            <button type="button" class="btn btn-link collapse in copyfilter">Delete Filter</button>  
-         </div>
-         
-    </div>
-        <div class="collapse copyfilter">
-        <div class="row grid-toolbar">
-         <div class="col-sm-6 input-group">
-
-         <input type="text" class="form-control" placeholder="Set filter name a copy">
-         <span class="input-group-btn">
-         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".copyfilter">Save</button>
-         </span>
-            
-        </div>
-          <div class="col-sm-6">
-            <button type="button" class="btn btn-link delete-copy" type="button" data-toggle="collapse" data-target=".copyfilter">Delete View</button> 
+         <div class="collapse in copyfilter" id="newfilterField">
+           <div class="row grid-toolbar">
+            <div class="col-sm-6">
+              <label>Available Filters</label>
+            </div>
           </div>
-        </div>
-  
-        </div>
-        <div class="row">
-         <div class="col-lg-12">
+           <div class="row grid-toolbar">
+           <div class="col-sm-6">
+         
+          <select class="select2" id="filterSelector">
+             <option selected value="eye">Eye Cancer Diagnostics</option>            
+            <option value="cust1">Breast cancer</option>
+            <option value="cust2">Lung cancer</option>
+            <option value="cust3">Autism</option>
+            <option value="cust4">Retinoblastoma</option>
+            <option value="cust5">Mental retardation</option>
+        </select>
+          </div>
+           <div class="col-sm-6">
+           <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Copy this filter to new">
+                 <button class="btn btn-default" type="button" data-toggle="collapse" data-target=".copyfilter">Dublicate</button>
+              </div>
+              <div class="btn-group hidden" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Delete filter">
+                 <button class="btn btn-link">Delete</button>
+              </div>  
+            </div>
+           </div>
+         </div>
+         <div class="collapse copyfilter" id="copyfilterField"> 
+           <div class="row grid-toolbar">
+            <div class="col-sm-6">
+              <label>New Filter</label>
+            </div>
+          </div>      
+           <div class="row grid-toolbar">
+             <div class="col-sm-6">    
+               <input type="text" class="form-control text-primary" placeholder="Set filter name a copy" value="Copy of Eye Cancer Diagnostics">
+            </div>
+             <div class="col-sm-6">
+              <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Delete filter">
+                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target=".copyfilter">Cancel</button>
+           </div>             
+               
+            </div>
+          </div>
+         </div>
+         <div class="row">
+            <div class="col-lg-12">
            
     <div id="builder-basic" class="query-builder form-inline">
 	<dl id="builder-basic_group_0" class="rules-group-container">
@@ -1267,18 +1218,201 @@
 </div>
     
   </div>
-       </div>
-  
-         
-             
-          
- 
-          
-       </div>
+          </div> 
+    </div>
+       
       <div class="modal-footer">
+        <div class="btn-group pull-left">
+          <button type="button" class="btn btn-default hidden" data-dismiss="modal">Reset Filter</button>
+        </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         
         <button type="button" class="btn btn-primary" data-dismiss="modal">Save and Apply</button>
+        
+       
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="combinefilter"  role="dialog" aria-labelledby="filterLabel">
+  <div class="modal-dialog modal-dialog-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+     <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h5>Combine Filters</h5>
+      </div>
+      <div class="modal-body">
+          <div class="row grid-toolbar">
+            <div class="col-sm-6">
+              <label>New name for combined filter</label>
+            </div>
+          </div>      
+           <div class="row grid-toolbar">
+             <div class="col-sm-6">    
+               <input type="text" class="form-control text-primary" placeholder="New name of combined filter" value="">
+            </div>
+                          
+               
+            </div>
+        
+           <div class="row grid-toolbar">
+            <div class="col-sm-6">
+              <label>Available Filters for combine</label>
+            </div>
+          </div>
+           
+             <div class="row">
+            <div class="col-lg-12">
+           
+    <div id="builder-basic-filters" class="query-builder builder-basic-filters form-inline">
+	<dl id="builder-basic_group_0" class="rules-group-container">
+		<dt class="rules-group-header">
+		 
+		<div class="btn-group pull-right group-actions">
+			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="glyphicon glyphicon-plus"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="glyphicon glyphicon-plus-sign"></i> Add group </button>
+		</div>
+		<div class="btn-group group-conditions">
+			<label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_0_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_0_cond" value="OR"> OR </label>
+		</div>
+		<div class="error-container" data-toggle="tooltip">
+			<i class="glyphicon glyphicon-warning-sign"></i>
+		</div>
+		</dt>
+		<dd class="rules-group-body">
+		<ul class="rules-list">
+			<li id="builder-basic_rule_0" class="rule-container">
+			<div class="rule-header">
+				<div class="btn-group pull-right rule-actions">
+					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+				</div>
+			</div>
+			<div class="error-container">
+				<i class="glyphicon glyphicon-warning-sign"></i>
+			</div>
+			<div class="rule-filter-container hidden">
+				<select class="selectTree" >
+          <option selected="">Filter</option>
+  			</select>
+			</div>
+			<div class="rule-operator-container hidden">
+				<select class="form-control select2" name="builder-basic_rule_0_operator">
+					<option value="equal">equal</option>
+					
+				</select>
+			</div>
+			<div class="rule-value-container">
+				<select class="select2" id="filterSelector">
+             <option selected value="eye">Eye Cancer Diagnostics</option>            
+            <option value="cust1">Breast cancer</option>
+            <option value="cust2">Lung cancer</option>
+            <option value="cust3">Autism</option>
+            <option value="cust4">Retinoblastoma</option><option value="cust5">Mental retardation</option>
+        </select>
+			</div>
+			</li>
+			<li id="builder-basic_rule_0" class="rule-container">
+			<div class="rule-header">
+				<div class="btn-group pull-right rule-actions">
+					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+				</div>
+			</div>
+			<div class="error-container">
+				<i class="glyphicon glyphicon-warning-sign"></i>
+			</div>
+			<div class="rule-filter-container hidden">
+				<select class="selectTree" >
+          <option selected="">Filter</option>
+  			</select>
+			</div>
+			<div class="rule-operator-container hidden">
+				<select class="form-control select2" name="builder-basic_rule_0_operator">
+					<option value="equal">equal</option>
+					
+				</select>
+			</div>
+			<div class="rule-value-container">
+				<select class="select2" id="filterSelector">
+             <option value="eye">Eye Cancer Diagnostics</option>            
+            <option selected value="cust1">Breast cancer</option>
+            <option value="cust2">Lung cancer</option>
+            <option value="cust3">Autism</option>
+            <option value="cust4">Retinoblastoma</option>
+            <option value="cust5">Mental retardation</option>
+        </select>
+			</div>
+			</li>
+			<dl id="builder-basic_group_1" class="rules-group-container">
+	<dt class="rules-group-header">
+	<div class="btn-group pull-right group-actions">
+		<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="glyphicon glyphicon-plus"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="glyphicon glyphicon-plus-sign"></i> Add group </button><button type="button" class="btn btn-xs btn-danger" data-delete="group"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+	</div>
+	<div class="btn-group group-conditions">
+		<label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_1_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_1_cond" value="OR"> OR </label>
+	</div>
+	<div class="error-container" data-toggle="tooltip">
+		<i class="glyphicon glyphicon-warning-sign"></i>
+	</div>
+	</dt>
+	<dd class="rules-group-body">
+	<ul class="rules-list">
+		<li id="builder-basic_rule_0" class="rule-container">
+			<div class="rule-header">
+				<div class="btn-group pull-right rule-actions">
+					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+				</div>
+			</div>
+			<div class="error-container">
+				<i class="glyphicon glyphicon-warning-sign"></i>
+			</div>
+			<div class="rule-filter-container hidden">
+				<select class="selectTree" >
+          <option selected="">Filter</option>
+  			</select>
+			</div>
+			<div class="rule-operator-container hidden">
+				<select class="form-control select2" name="builder-basic_rule_0_operator">
+					<option value="equal">equal</option>
+					
+				</select>
+			</div>
+			<div class="rule-value-container">
+				<select class="select2" id="filterSelector">
+             <option value="eye">Eye Cancer Diagnostics</option>            
+            <option value="cust1">Breast cancer</option>
+            <option value="cust2">Lung cancer</option>
+            <option value="cust3">Autism</option>
+            <option  selected value="cust4">Retinoblastoma</option>
+            <option value="cust5">Mental retardation</option>
+        </select>
+			</div>
+			</li>	</ul>
+	</dd>
+</dl>
+				</ul>
+		
+	
+
+		</dd>
+	</dl>
+</div>
+    
+  </div>
+          </div> 
+           
+           
+           
+           
+         </div>
+   
+       
+      <div class="modal-footer">
+        <div class="btn-group pull-left">
+          <button type="button" class="btn btn-default hidden" data-dismiss="modal">Reset Filter</button>
+        </div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Combine</button>
         
        
       </div>
@@ -1290,7 +1424,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h5>Comment for var. [... ]</h5>
+       <h5>Comment for variant</h5>
       </div>
       <form class="form-horisontal">
        <div class="modal-body">
@@ -1320,57 +1454,44 @@
    <div class="text-muted">Drag and drop your files here or manually select them.</div>
    <div>
     <button class="btn btn-success">
-      Выбрать файлы
+      Chose files
     </button>
   </div>
   <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
 </div>
-       <div class="panel panel-default ">
       
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-sm-12">
-                 <div class="form-group has-feedback">
-           
-           <input type="text" class="form-control">
-           <span class="form-control-feedback">
-            <span class="glyphicon glyphicon-search"></span>
-           
-         </span></div>
-            </div>
-            
-          </div>
-          <div class="responsive-tablegrid">
-              <div class="row row-warning">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-success">
+    <div class="panel-heading" role="tab" id="headingOne">
+      
+       <div class="row">
         <div class="col-sm-6">
-          <div class="metadata s-name">Ogden syndrome</div>
-          <div class="metadata s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-4">
-            <div class="metadata s-familyID">Family ID <span>Ogden</span></div>
-            <div class="metadata s-subjectID">Subject ID <span>	ogden1</span></div>
-            
-         </div>
-          <div class="col-sm-2">
-            <i class="fa fa-2x fa-exclamation-circle text-warning"></i>
+          <span class="metadata s-name">Ogden syndrome</span>, <span class="metadata s-versia">V.1.6</span>, <span class="metadata s-size">56 KB</span>
+          <span class="metadata s-descr">Demo data - Ogden syndrome</span>
           </div>
-      </div>
-       
-        <div class="alert alert-warning">
-      <i class="fa fa-4x fa-exclamation-triangle pull-right"></i>
-      <p><strong>Ogden syndrome.vcf  metadata not complete!</strong> Fill file field of metadata now
-        </p><p> <strong>Warning!</strong>Fill these fields now. You can't fill these fields later</p>
-    </div>
-        <div class="form-horizontal form-horizontal-rows">
+         <div class="col-sm-6">
+           <div class="btn-group pull-right" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Edit sample">
+       <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <i class="fa fa-pencil"></i>
+        </a>
+       </div>
+            <span class="metadata s-familyID">Family ID <span>Ogden</span></span>
+            <span class="metadata s-subjectID">Subject ID <span>	ogden1</span></span>
+            <span class="metadata s-subjectID">Annotated on<span>	24.09.2015 34:45</span>
+            </div>
+         </div>
+      </div>      
+    
+    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body form-horizontal form-horizontal-rows">
+      
           <h5>Ogden syndrome.vcf metadata</h5>
      
        <div class="row">
           <div class="col-sm-4">
             <div class="form-group">
               <label>Name*</label>
-              <input type="text" class="form-control" value="Ogden syndrome" readonly="">
+              <input type="text" class="form-control" value="Ogden syndrome">
             </div>
           </div>
           
@@ -1458,103 +1579,280 @@
           <div class="btn-group pull-right">
             <button class="btn btn-success">Save sample</button>
          </div>
-         <div class="btn-group pull-right">
-            <button class="btn btn-default">Cancel sample</button>
+         <div class="btn-group pull-left">
+            <button class="btn btn-link"><small>Delete sample</small></button>
          </div>
         
           </div> 
-      </div>
-        <div class="row row-success">
+      
+       </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <div class="row">
         <div class="col-sm-6">
-          <div class="metadata s-name">Ogden syndrome</div>
-          <div class="metadata s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
+          <span class="metadata s-name">Ogden syndrome</span>, <span class="metadata s-versia">V.1.6</span>, <span class="metadata s-size">56 KB</span>
+          <span class="metadata s-descr">Demo data - Ogden syndrome</span>
+          </div>
+          
+    
+         <div class="col-sm-6">
+          <div class="btn-group pull-right" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Edit sample">
+        <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+         <i class="fa fa-pencil"></i>
+        </a>
         </div>
-         <div class="col-sm-4">
-            <div class="metadata s-familyID">Family ID <span>Ogden</span></div>
-          <div class="metadata s-subjectID">Subject ID <span>	ogden1</span></div>
-            
+
+            <span class="metadata s-familyID">Family ID <span>Ogden</span></span>
+            <span class="metadata s-subjectID">Subject ID <span>	ogden1</span></span>
+            <span class="metadata s-subjectID">Annotated on<span>	24.09.2015 34:45</span>
+            </div>
          </div>
-          <div class="col-sm-2"><i class="fa fa-2x fa-check-circle text-success"></i></div>
-      </div>
-         
-         
+     
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+     <div class="panel-body form-horizontal form-horizontal-rows">
+      
+          <h5>Ogden syndrome.vcf metadata</h5>
+     
        <div class="row">
-        <div class="col-sm-6">
-          <div class="metadata s-name">Ogden syndrome</div>
-          <div class="metadata s-descr">Demo data - Ogden syndrome</div>
-          <div class="metadata s-versia">V.1.6</div>
-          <div class="metadata s-size">56 KB</div>
-        </div>
-         <div class="col-sm-4">
-            <div class="metadata s-familyID">Family ID <span>Ogden</span></div>
-          <div class="metadata s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="metadata s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-          <div class="col-sm-2"></div>
-      </div>
-       <div class="row">
-        <div class="col-sm-6">
-          <div class="s-name">Ogden syndrome</div>
-          <div class="s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-4">
-            <div class="s-familyID">Family ID <span>Ogden</span></div>
-          <div class="s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-          <div class="col-sm-2"></div>
-      </div>
-       <div class="row">
-        <div class="col-sm-6">
-          <div class="s-name">Ogden syndrome</div>
-          <div class="s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-4">
-            <div class="s-familyID">Family ID <span>Ogden</span></div>
-          <div class="s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-          <div class="col-sm-2"></div>
-      </div>
-       <div class="row">
-        <div class="col-sm-6">
-          <div class="s-name">Ogden syndrome</div>
-          <div class="s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-4">
-            <div class="s-familyID">Family ID <span>Ogden</span></div>
-          <div class="s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-          <div class="col-sm-2"></div>
-      </div>
-       <div class="row">
-        <div class="col-sm-6">
-          <div class="s-name">Ogden syndrome</div>
-          <div class="s-descr">Demo data - Ogden syndrome</div>
-          <div class="s-versia">V.1.6</div>
-          <div class="s-size">56 KB</div>
-        </div>
-         <div class="col-sm-4">
-            <div class="s-familyID">Family ID <span>Ogden</span></div>
-          <div class="s-subjectID">Subject ID <span>	ogden1</span></div>
-            <div class="s-subjectID">Annotated on<span>	24.09.2015 34:45</span></div>
-         </div>
-          <div class="col-sm-2"></div>
-      </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Name*</label>
+              <input type="text" class="form-control" value="Ogden syndrome">
+            </div>
+          </div>
+          
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Family ID</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+             <div class="col-sm-4">
+            <div class="form-group">
+              <label>Subject ID</label>
+              <input type="text" class="form-control">
+            </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Genome Build</label>
+              <div>
+             <select class="select2 form-control">
+                <option>hg13</option>
+                <option>hg14</option>
+                <option>hg15</option>
+              </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+               <label>Gender</a></label>
+               <div>
+              <select class="select2 form-control">
+                <option>Male</option>
+                <option>Female</option>
+                 <option>Unknown</option>
+              </select>
+               </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Phenotype</label>
+              <div>
+              <select multiple="" class="form-control select2">
+                <option>11p partial monosomy syndrome</option><option>12p12.1 microdeletion syndrome</option><option>12q14 microdeletion syndrome</option><option>14q11.2 microduplication syndrome
+14q12 microdeletion syndrome</option><option>14q22q23 microdeletion syndrome</option><option>15q13.3 microdeletion syndrome</option><option>16q24.3 microdeletion syndrome
+17p11.2 microduplication syndrome</option><option>17p13.3 microduplication syndrome</option><option>17q11.2 microduplication syndrome
+17q11 microdeletion syndrome</option><option>17q12 microdeletion syndrome</option><option>17q21.31 microdeletion syndrome</option><option>17q23.1q23.2 microdeletion syndrome</option><option>1p21.3 microdeletion syndrome</option><option>1p36 deletion syndrome</option><option>20p12.3 microdeletion syndrome</option><option>21-hydroxylase deficiency</option><option>22q11.2 deletion syndrome</option>
+
+                
+                
+              </select>
+              </div>
+            </div>
+          </div>
+             
+        </div>
+         <div class="row">
+     
+          <div class="col-sm-4">
+            <div class="btn-toolbar">
+              <label class="btn btn-link wrapnormal text-left"  data-toggle="collapse" data-target="#emailOpts1" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
+            </div>
+            <div class="collapse" id="emailOpts1">
+                            
+                <div class="form-group">
+                 <input type="text" class="form-control" placeholder="email"> 
+                 
+             
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div class="form-group">
+              <label>Description</label>
+              <input class="form-control" type="text">
+             </div>
+          </div>
+            
+        </div>
+         <div class="btn-toolbar">
+          <div class="btn-group pull-right">
+            <button class="btn btn-success">Save sample</button>
+         </div>
+         <div class="btn-group pull-left">
+            <button class="btn btn-link"><small>Delete sample</small></button>
+         </div>
+        
+          </div> 
+      
+       </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+        <div class="row">
+        <div class="col-sm-6">
+          <span class="metadata s-name">Ogden syndrome</span>, <span class="metadata s-versia">V.1.6</span>, <span class="metadata s-size">56 KB</span>
+          <span class="metadata s-descr">Demo data - Ogden syndrome</span>
+          </div>
+          
+    
+         <div class="col-sm-6">
+          <div class="btn-group pull-right" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Edit sample">
+           <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+         <i class="fa fa-pencil"></i>
+        </a>
+        </div>
+
+            <span class="metadata s-familyID">Family ID <span>Ogden</span></span>
+            <span class="metadata s-subjectID">Subject ID <span>	ogden1</span></span>
+            <span class="metadata s-subjectID">Annotated on<span>	24.09.2015 34:45</span>
+            </div>
+         </div>
+     
+         
+     
+         </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body form-horizontal form-horizontal-rows">
+      
+          <h5>Ogden syndrome.vcf metadata</h5>
+     
+       <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Name*</label>
+              <input type="text" class="form-control" value="Ogden syndrome">
+            </div>
+          </div>
+          
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Family ID</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+             <div class="col-sm-4">
+            <div class="form-group">
+              <label>Subject ID</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Genome Build</label>
+              <div>
+             <select class="select2 form-control">
+                <option>hg13</option>
+                <option>hg14</option>
+                <option>hg15</option>
+              </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+               <label>Gender</a></label>
+               <div>
+              <select class="select2 form-control">
+                <option>Male</option>
+                <option>Female</option>
+                 <option>Unknown</option>
+              </select>
+               </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label>Phenotype</label>
+              <div>
+              <select multiple="" class="form-control select2">
+                <option>11p partial monosomy syndrome</option><option>12p12.1 microdeletion syndrome</option><option>12q14 microdeletion syndrome</option><option>14q11.2 microduplication syndrome
+14q12 microdeletion syndrome</option><option>14q22q23 microdeletion syndrome</option><option>15q13.3 microdeletion syndrome</option><option>16q24.3 microdeletion syndrome
+17p11.2 microduplication syndrome</option><option>17p13.3 microduplication syndrome</option><option>17q11.2 microduplication syndrome
+17q11 microdeletion syndrome</option><option>17q12 microdeletion syndrome</option><option>17q21.31 microdeletion syndrome</option><option>17q23.1q23.2 microdeletion syndrome</option><option>1p21.3 microdeletion syndrome</option><option>1p36 deletion syndrome</option><option>20p12.3 microdeletion syndrome</option><option>21-hydroxylase deficiency</option><option>22q11.2 deletion syndrome</option>
+
+                
+                
+              </select>
+              </div>
+            </div>
+          </div>
+             
+        </div>
+         <div class="row">
+     
+          <div class="col-sm-4">
+            <div class="btn-toolbar">
+              <label class="btn btn-link wrapnormal text-left"  data-toggle="collapse" data-target="#emailOpts1" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
+            </div>
+            <div class="collapse" id="emailOpts1">
+                            
+                <div class="form-group">
+                 <input type="text" class="form-control" placeholder="email"> 
+                 
+             
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div class="form-group">
+              <label>Description</label>
+              <input class="form-control" type="text">
+             </div>
+          </div>
+            
+        </div>
+         <div class="btn-toolbar">
+          <div class="btn-group pull-right">
+            <button class="btn btn-success">Save sample</button>
+         </div>
+         <div class="btn-group pull-left">
+            <button class="btn btn-link"><small>Delete sample</small></button>
+         </div>
+        
+          </div> 
+      
+       </div>
+    </div>
+  </div>
+</div>
       
       
-      </div>
+      
+      
              
        </div>
  
@@ -1609,17 +1907,115 @@
     </div>
   </div>
 </div>   
-
+<div class="modal fade" id="exporthistory" tabindex="-1" role="dialog" aria-labelledby="exportLabel">
+  <div class="modal-dialog modal-lg modal-dialog-primary" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h5 class="modal-title" id="historyLabel">Saved files</h5>
+        </div>
+        <div class="modal-body">
+         <div class="panel panel-default ">
+          <div class="panel-body">
+           <div class="row thumbnails">
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <div class="head-icon">
+          <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-file-excel-o fa-stack-1x fa-inverse"></i>
+  </span>
+        </div>
+             <div class="caption">
+          <h4>Saved file name.xls</h4>
+          <p><strong>Samples:</strong> iha1</p>
+          <p><strong>Filters: </strong> Eye Cancer Diagnostics</p>
+          <p><strong>View: </strong> Default view</p>
+          <p><strong>Searched variants: </strong> 789</p>
+          <p><a href="#" class="btn btn-primary" role="button">Download</a></p>
+        </div>
+      </div>
+    </div>
+      <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <div class="head-icon">
+          <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-file-code-o fa-stack-1x fa-inverse"></i>
+  </span>
+        </div>
+             <div class="caption">
+          <h4>Saved file name.json</h4>
+          
+          <p><strong>Samples:</strong> iha1</p>
+          <p><strong>Filters: </strong> Eye Cancer Diagnostics</p>
+          <p><strong>View: </strong> Default view</p>
+          <p><strong>Searched variants: </strong> 789</p>
+          <p><a href="#" class="btn btn-primary" role="button">Download</a></p>
+        </div>
+      </div>
+    </div>
+      <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <div class="head-icon">
+          <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-file-pdf-o fa-stack-1x fa-inverse"></i>
+  </span>
+        </div>
+             <div class="caption">
+          <h4>Saved file name.pdf</h4>
+          <p><strong>Samples:</strong> iha1</p>
+          <p><strong>Filters: </strong> Eye Cancer Diagnostics</p>
+          <p><strong>View: </strong> Default view</p>
+          <p><strong>Searched variants: </strong> 789</p>
+          <p><a href="#" class="btn btn-primary" role="button">Download</a></p>
+        </div>
+      </div>
+    </div>
+      <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <div class="head-icon">
+          <span class="fa-stack fa-lg">
+    <i class="fa fa-circle fa-stack-2x"></i>
+    <i class="fa fa-file-excel-o fa-stack-1x fa-inverse"></i>
+  </span>
+        </div>
+             <div class="caption">
+          <h4>Saved file name.xls</h4>
+          <p><strong>Samples:</strong> iha1</p>
+          <p><strong>Filters: </strong> Eye Cancer Diagnostics</p>
+          <p><strong>View: </strong> Default view</p>
+          <p><strong>Searched variants: </strong> 789</p>
+          <p><a href="#" class="btn btn-primary" role="button">Download</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+          </div>
+        </div>
+               
+         </div>
+   
+      </div>
+    </div>
+</div>  
 <script>
  
        function operateFormatter(value, row, index) {
         return [
-            '<a type="button" class="btn btn-link variant" data-toggle="modal" data-target="#comment">',
+            '<div class="btn-group" data-toggle="modal" data-target="#comment" data-whatever="Text of comment to this variant"><a type="button" class="btn btn-link variant" data-toggle="popover" data-placement="right" data-container="body" data-trigger="hover" data-content="Text of comment to this variant">',
             '<i class="fa fa-comment-o"></i>',
-            '</a>'
+            '</a></div>'
         ].join('');
     }
-      
+       function operateFormatter1(value, row, index) {
+        return [
+            '<div class="btn-group"><a type="button" id="fav' + index + '" class="btn btn-link fav" data-toggle="button">',
+            '<i class="fa fa-star-o"></i>',
+            '</a></div>'
+        ].join('');
+      }
 
      
         var $table = $('#table')
@@ -1630,7 +2026,21 @@
             placeholder: "Not chosen",
             minimumResultsForSearch: Infinity
           });
-
+            $('[data-index="1"] .variant').popover();
+            $('[data-index="4"] .variant').popover();
+            $('[data-index="7"] .variant').popover();
+            $('[data-index="8"] .variant').popover();
+            $('[data-index="2"] .fav').addClass("active");
+            $('[data-index="3"] .fav').addClass("active");
+            $('[data-index="4"] .fav').addClass("active");
+            
+            $('.fav').each(function () {
+                  var button = $(this);
+                  button.on('click', function() {
+                   $('#fav-message').removeClass("hidden");
+                });
+            });
+            
           });
           
          
@@ -1643,162 +2053,6 @@
 
           $('.selectTree').select2();
 
-//smaples local data
-
-
-/*
-
-    function formatState (state) {
-      if (!state.id) { return state.text; }
-      var $state = $(
-        '<span><i class="glyphicon glyphicon-file"></i>' + state.text + '</span>'
-      );
-      return $state;
-    };
-
-        var samples = [{ id: 0, text: 'ATCC HCC1187 TumorBL' }, { id: 1, text: 'ATCC HCC1187 TumorC' }, { id: 2, text: 'iha1' }, { id: 3, text: 'iha2' }, { id: 4, text: 'iha3' }];
-         
-        $(".sample-select").select2({
-          data: samples,
-          templateResult: formatState
-        })         
-         
-*/
-
-
-  //samples remote date
-
-/*
-$(function(){
-            $('#appbundle_marketplace_product_ingredient_barcode').select2({
-                minimumInputLength: 5,
-                closeOnSelect: false,
-                multiple: false,
-                allowClear: true,
-                quietMillis: 250,
-                placeholder: 'Commencez à taper le code barre ici',
-                ajax: {
-                    data: function (term) {
-                        return {
-                            q: term // search term
-                        };
-                    },
-                    url: function(term) {
-                        url="http://fr.openfoodfacts.org/api/v0/produit/" + term +".json";
-                        return url;
-                    },
-                    dataType: 'json',
-                    results: function(data) {
-                        if (data.status!=1) {return;}
-                        if (data.product.complete!=1) {return;}
-
-//                        return {results : [data]};
-                        return {
-                            results: $.map([data], function (item) {
-                                return {
-                                    text: item.product.product_name,
-                                    id: item.code,
-                                    data: item
-                                }
-                            })
-                        };
-                    }
-                },
-                formatResult : function(response)
-                {
-                    data=response.data;
-                    console.log(data);
-                    this.description =
-                        '<div id="fmu_select2_ajax_result">' +
-                            "<div>Nom du produit : " + data.product.product_name + "</div>" +
-                            "<div>"+
-                                "<img src='"+data.product.image_small_url+"'>"+
-                                "<ul>" +
-                                    "<li><span>Catégories</span> : " + data.product.categories + "</li>" +
-                                    "<li><span>Quantité</span> : " + data.product.quantity + " - " + data.product.serving_quantity + "</li>" +
-                                "</ul>" +
-                                "<div>" + data.product.brands + "</div>" +
-                        "</div>" +
-                        '</div>'
-                    ;
-                    return this.description;
-                },
-                formatSelection: function(response)
-                {
-                    data=response.data;
-                    return data.code + " - " + data.product.product_name;
-                },
-                escapeMarkup: function (m) { return m; },
-                dropdownCssClass: "bigdrop"
-            });
-*/
-
-
-/*
-var $ajax = $(".sample-select-ajax"); 
-         
- function formatRepo (repo) {
-      if (repo.loading) return repo.text;
-
-      var markup = "<div class='select2-result-repository clearfix'>" +
-        "<div class='select2-result-repository__avatar'><img src='" + repo.owner.avatar_url + "' /></div>" +
-        "<div class='select2-result-repository__meta'>" +
-          "<div class='select2-result-repository__title'>" + repo.full_name + "</div>";
-
-      if (repo.description) {
-        markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
-      }
-
-      markup += "<div class='select2-result-repository__statistics'>" +
-        "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
-        "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
-        "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
-      "</div>" +
-      "</div></div>";
-
-      return markup;
-    }
-   function formatRepoSelection (repo) {
-      return repo.full_name || repo.text;
-    }
- 
-         
-  $ajax.select2({
-      ajax: {
-        url: "https://api.github.com/search/repositories",
-        dataType: 'json',
-        delay: 250,
-        data: function (params) {
-          return {
-            q: params.term, // search term
-            page: params.page
-          };
-        },
-        processResults: function (data, params) {
-          // parse the results into the format expected by Select2
-          // since we are using custom formatting functions we do not need to
-          // alter the remote JSON data, except to indicate that infinite
-          // scrolling can be used
-          params.page = params.page || 1;
-
-          return {
-            results: data.items,
-            pagination: {
-              more: (params.page * 30) < data.total_count
-            }
-          };
-        },
-        cache: true
-      },
-      escapeMarkup: function (markup) { return markup; },
-      minimumInputLength: 1,
-      templateResult: formatRepo,
-      templateSelection: formatRepoSelection
-    });
-       
-*/
-         
-       
 
 var $ajax = $(".sample-select-ajax"); 
          
@@ -1872,125 +2126,85 @@ var $ajax = $(".sample-select-ajax");
       $(this).addClass("hidden");
      });
      
-            
-   /*
- $('.responsive-tablegrid .row').on('click', function (e) {
-       $('#upload').modal('hide')
-     });
-*/
-     
+
      $('[data-toggle="tooltip"]').tooltip();
+     
    
      $('.dropdown-menu-rows').find('form').click(function (e) {
       e.stopPropagation();
      });       
 
+     /*
+ $('#btnDel').click(function () {
+       alert("jr");
+        //$("#filterSelector").val(["eye"]).trigger("change");
+      )};
+*/
+
+      $('#builder-basic .selectTree').each(function () {
+                  var button = $(this);
+                  button.select2().on('change', function(e) {
+                   
+                   $("#copyfilterField").collapse("show");
+                   $("#newfilterField").collapse("show");
+                });
+            });
+
+     $('#builder-basic .selectTree').select2()
+        .on("change", function(e) {
+           $(".copyfilter").collapse();
+           //$("#filterSelector").val(null).trigger("change");
+      });
+    
+
+
+/*
 $( "#sample-search" ).keypress(function() {
  $('.sample-res').removeClass('hidden')
 });
 $( "#sample-search" ).focusout(function() {
  $('.sample-res').addClass('hidden')
 });
+*/
+/*
+
+*/
+/*
+$('#fav4').on('click', function () {
+  alert("kj");
+   $('#fav-message').removeClass("hidden");
+});
+*/
+
+/*
+
+
+*/
+
 
 $('#dropdownSamples').on('show.bs.dropdown', function () {
  $('.sample-res').addClass('hidden')
 })
    
    
-   
- /*
-    $('#cCh1').click(function() {     
-         if($('#cCh1').attr("checked") != 'checked') { 
-            $('#cFl1').prop('disabled', true);
-        }
-     }
-*/
+$('#comment').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-body textarea').val(recipient)
+})
+ $('#btnLogin').on('click', function (e) {
+      $('#guest').addClass("hidden");
+      $('#user').removeClass("hidden");
+     });
+ $('#btnLogout').on('click', function (e) {
+      $('#user').addClass("hidden");
+      $('#guest').removeClass("hidden");
+     });
 
-  
-   
-  /*
- $('.input-group input[type="checkbox"]').checked() {
-     
-   });
-*/
-     
-     /// select sample
-    
-    
-    
-    
-/*
-   function format(item) { return item.text; }
-    var jresults;
-    $(document).ready(function() {
-        $.getJSON("data-samples1.json").done(
-            function( data ) {
-                $.jresults = data;
-                $("#parent").select2(
-                    {formatResult: format,
-                     formatSelection: format,
-                     data: $.jresults }
-                );
-            }
-        )
-});
-*/
-     
-/*
 
-$(".js-data-example-ajax").select2({
-  ajax: {
-    url: "https://api.github.com/search/repositories",
-    dataType: 'json',
-    delay: 250,
-    data: function (params) {
-      return {
-        q: params.term, // search term
-        page: params.page
-      };
-    },
-    processResults: function (data, page) {
-      // parse the results into the format expected by Select2.
-      // since we are using custom formatting functions we do not need to
-      // alter the remote JSON data
-      return {
-        results: data.items
-      };
-    },
-    cache: true
-  },
-  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-  minimumInputLength: 1,
-  templateResult: formatRepo, // omitted for brevity, see the source of this page
-  templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-});
-*/
-
-    
-     
-     /*
- var countries = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.whitespace,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  // url points to a json file that contains an array of country names, see
-  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-  prefetch: '../json/samples1.json'
-});
-
-// passing in `null` for the `options` arguments will result in the default
-// options being used
-$('#prefetch .typeahead').typeahead(null, {
-  name: 'countries',
-  source: countries,
-  
-});
-*/
-
-/*
-$('.responsive-tablegrid .row').click(function){
-  $('#upload').modal('hide')
-}
-*/
 </script>     
 
 </body>

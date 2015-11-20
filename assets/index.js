@@ -18,7 +18,7 @@ $(function () {
        
     });
 
-    var href = location.hash.substring(1) || 'gen-annotation.html';
+    var href = location.hash.substring(1) || 'gen-en.html';
     $('iframe').attr('src', href);
     //initNavigation(href);
 
