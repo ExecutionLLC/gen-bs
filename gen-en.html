@@ -1696,12 +1696,79 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <ul class="nav nav-tabs pull-right" role="tablist">
+               <a type="button" class="btn btn-default active" data-toggle="tab" href=".table-list"><i class="fa fa-list"></i></a>
+               <a type="button" class="btn btn-default" data-toggle="tab" href=".thumbnails"><i class="fa fa-th"></i></a>
+             </ul>
+          
           <h5 class="modal-title" id="historyLabel">Saved files</h5>
         </div>
-        <div class="modal-body">
-         <div class="panel panel-default ">
-          <div class="panel-body">
-           <div class="row thumbnails">
+        <div class="modal-body tab-content">
+           
+            <div class="tab-pane table-list active">
+              <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th>
+                      File Name
+                    </th>
+                   
+                    <th>Samples</th>
+                    <th>Filters</th>
+                    <th>View</th>
+                    <th>Searched variants</th>
+                     <th>
+                    </th>
+
+                  </tr>
+                  
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      Saved file name.xls
+                    </td>
+                    <td>iha1</td>
+                    <td>Eye Cancer Diagnostics</td>
+                    <td>Default view</td>
+                    <td>789</td>
+                    <td><a href="#" class="btn btn-primary" role="button">Download</a></td>
+                  </tr>
+                   <tr>
+                    <td>
+                      Saved file name.json
+                    </td>
+                    <td>iha1</td>
+                    <td>Eye Cancer Diagnostics</td>
+                    <td>Default view</td>
+                    <td>789</td>
+                    <td><a href="#" class="btn btn-primary" role="button">Download</a></td>
+                  </tr>
+                   <tr>
+                    <td>
+                      Saved file name.pdf
+                    </td>
+                    <td>iha1</td>
+                    <td>Eye Cancer Diagnostics</td>
+                    <td>Default view</td>
+                    <td>789</td>
+                    <td><a href="#" class="btn btn-primary" role="button">Download</a></td>
+                  </tr>
+                   <tr>
+                    <td>
+                      Saved file name.xls
+                    </td>
+                    <td>iha1</td>
+                    <td>Eye Cancer Diagnostics</td>
+                    <td>Default view</td>
+                    <td>789</td>
+                    <td><a href="#" class="btn btn-primary" role="button">Download</a></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+            </div>
+            <div class="tab-pane row thumbnails">
     <div class="col-sm-6 col-md-4">
       <div class="thumbnail">
         <div class="head-icon">
@@ -1776,14 +1843,14 @@
       </div>
     </div>
   </div>
-          </div>
+           
+          
         </div>
                
          </div>
    
       </div>
     </div>
-</div>  
 <script>
  
        function operateFormatter(value, row, index) {
