@@ -12,12 +12,12 @@
   },
   "keywords": [],
   "author": "Execution LLC",
-  "license": "proprietary",
+  "license": "LicenseRef-LICENSE",
   "bugs": {
     "url": "https://github.com/ExecutionLLC/gen-bs/issues"
   },
   "homepage": "https://github.com/ExecutionLLC/gen-bs#readme",
-  "engines" : {
+  "engines": {
     "node": "0.12.7"
   }
 }
