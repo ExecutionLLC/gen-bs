@@ -1,0 +1,27 @@
+{
+  "name": "genomix-web",
+  "version": "1.0.0",
+  "description": "Genomix Application WebServer Node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExecutionLLC/gen-bs.git"
+  },
+  "keywords": [],
+  "author": "Execution LLC",
+  "license": "LicenseRef-LICENSE",
+  "bugs": {
+    "url": "https://github.com/ExecutionLLC/gen-bs/issues"
+  },
+  "homepage": "https://github.com/ExecutionLLC/gen-bs#readme",
+  "engines": {
+    "node": "0.12.7"
+  },
+  "dependencies": {
+    "express": "4.13.3"
+  }
+}
