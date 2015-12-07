@@ -1,7 +1,9 @@
 'use strict';
 
 class ViewService {
-  constructor() {}
+  constructor(services) {
+    this.services = services;
+  }
 
   findByUser(user, callback) {
     if (user) {
