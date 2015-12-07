@@ -270,20 +270,20 @@
 //## Dropdown menu container and contents.
 
 //** Background for the dropdown menu.
-@dropdown-bg:                    #fff;
+@dropdown-bg:                    #3b444c;
 //** Dropdown menu `border-color`.
-@dropdown-border:                rgba(0,0,0,.15);
+@dropdown-border:                #3b444c;
 //** Dropdown menu `border-color` **for IE8**.
 @dropdown-fallback-border:       #ccc;
 //** Divider color for between dropdown items.
 @dropdown-divider-bg:            #e5e5e5;
 
 //** Dropdown link text color.
-@dropdown-link-color:            @gray-dark;
+@dropdown-link-color:            fade(#fff, 70%);
 //** Hover color for dropdown links.
-@dropdown-link-hover-color:      darken(@gray-dark, 5%);
+@dropdown-link-hover-color:      #fff;
 //** Hover background for dropdown links.
-@dropdown-link-hover-bg:         #f5f5f5;
+@dropdown-link-hover-bg:         transparent;
 
 //** Active dropdown menu item text color.
 @dropdown-link-active-color:     @component-active-color;
@@ -330,7 +330,7 @@
 
 // Small screen / tablet
 //** Deprecated `@screen-sm` as of v3.0.1
-@screen-sm:                  768px;
+@screen-sm:                  800px;
 @screen-sm-min:              @screen-sm;
 //** Deprecated `@screen-tablet` as of v3.0.1
 @screen-tablet:              @screen-sm-min;
@@ -403,8 +403,8 @@
 @navbar-collapse-max-height:       340px;
 
 @navbar-default-color:             #777;
-@navbar-default-bg:                #fff;
-@navbar-default-border:            darken(@navbar-default-bg, 6.5%);
+@navbar-default-bg:                #f0f0f0;
+@navbar-default-border:            @navbar-default-bg;
 
 // Navbar links
 @navbar-default-link-color:                #777;
@@ -428,12 +428,12 @@
 
 //=== Inverted navbar
 // Reset inverted navbar basics
-@navbar-inverse-color:                      lighten(@brand-primary, 35%);
+@navbar-inverse-color:                      @lightPrimaryColor;
 @navbar-inverse-bg:                         @brand-primary;
 @navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
 
 // Inverted navbar links
-@navbar-inverse-link-color:                 lighten(@brand-primary, 35%);
+@navbar-inverse-link-color:                 @lightPrimaryColor;
 @navbar-inverse-link-hover-color:           #fff;
 @navbar-inverse-link-hover-bg:              transparent;
 @navbar-inverse-link-active-color:          @navbar-inverse-link-hover-color;
@@ -458,7 +458,7 @@
 
 //=== Shared nav styles
 @nav-link-padding:                          10px 15px;
-@nav-link-hover-bg:                         @gray-lighter;
+@nav-link-hover-bg:                         transparent;
 
 @nav-disabled-link-color:                   @gray-light;
 @nav-disabled-link-hover-color:             @gray-light;
@@ -558,10 +558,10 @@
 //** Tooltip max width
 @tooltip-max-width:           200px;
 //** Tooltip text color
-@tooltip-color:               #fff;
+@tooltip-color:               fade(#fff, 70%);
 //** Tooltip background color
-@tooltip-bg:                  #000;
-@tooltip-opacity:             .9;
+@tooltip-bg:                  #3b444c;
+@tooltip-opacity:             1;
 
 //** Tooltip arrow width
 @tooltip-arrow-width:         5px;
