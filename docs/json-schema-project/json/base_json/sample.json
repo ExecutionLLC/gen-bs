@@ -1,0 +1,39 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "number"
+		},
+		"hash": {
+			"type": "string"
+		},
+		"metadata": {
+			"$ref": "file:///C:/genom/data/json/base_json/sample_metadata.json#"
+		},
+		"analysis_date": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"vcf_fields": {
+			"type": "array",
+			"items": {
+				"$ref": "file:///C:/genom/data/json/base_json/vcf_field.json#"
+			}
+		},
+		"is_analysed": {
+			"type": "boolean"
+		},
+		"commentaries": {
+			"type": "array",
+			"items": {
+				"$ref": "file:///C:/genom/data/json/base_json/commentary.json#"
+			}
+		}
+	},
+	"required": [
+		"id",
+		"hash",
+		"is_analysed"
+	]
+}

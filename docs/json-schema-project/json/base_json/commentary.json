@@ -1,0 +1,30 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"chrom": {
+			"type": "string"
+		},
+		"pos": {
+			"type": "integer"
+		},
+		"alt": {
+			"type": "string"
+		},
+		"ref": {
+			"type": "string"
+		},
+		"commentary": {
+			"type": "string"
+		},
+		"editable": {
+			"type": "boolean"
+		}
+	},
+	"required": [
+		"chrom",
+		"pos",
+		"ref",
+		"commentary"
+	]
+}

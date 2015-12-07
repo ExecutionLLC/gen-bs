@@ -1,0 +1,71 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Vcf Filed Name",
+	"type": "object",
+	"properties": {
+		"id": {
+			"description": "The unique identifier for a field",
+			"type": "number"
+		},
+		"name": {
+			"description": "Text Label",
+			"type": "string"
+		},
+		"description": {
+			"description": "Text description for tooltip",
+			"type": "string"
+		},
+		"group": {
+			"type": "string"
+		},
+		"keywords": {
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$ref": "file:///C:/genom/data/json/base_json/keyword.json#"
+			}
+		},
+		"operators": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"enum": [
+					"equal",
+					"not equal",
+					"in",
+					"not in",
+					"less",
+					"less or equal",
+					"greater",
+					"greater or equal",
+					"between",
+					"not between",
+					"is null",
+					"is not null"
+				]
+			}
+		},
+		"filter_conrol_enable": {
+			"type": "boolean"
+		},
+		"value_type": {
+			"type": "string",
+			"enum": [
+				"float",
+				"integer",
+				"char",
+				"string",
+				"boolean"
+			]
+		},
+		"editable": {
+			"type": "boolean"
+		}
+	},
+	"required": [
+		"id",
+		"name",
+		"description",
+		"filter_conrol_enable"
+	]
+}

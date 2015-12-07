@@ -1,0 +1,44 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"sizeKB": {
+			"type": "number"
+		},
+		"version": {
+			"type": "number"
+		},
+		"familyID": {
+			"type": "number"
+		},
+		"subjectID": {
+			"type": "string"
+		},
+		"genome_build": {
+			"type": "string"
+		},
+		"gender": {
+			"type": "string"
+		},
+		"phenotype": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
+		"email": {
+			"type": "string",
+			"format": "email"
+		},
+		"annotatedOn": {
+			"type": "string",
+			"format": "date-time"
+		}
+	},
+	"required": [
+		"name"
+	]
+}

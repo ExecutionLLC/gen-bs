@@ -1,0 +1,42 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"file_name": {
+			"type": "string"
+		},
+		"sample": {
+			"$ref": "file:///C:/genom/data/json/base_json/sample.json#"
+		},
+		"filters": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"$ref": "file:///C:/genom/data/json/base_json/filter.json#"
+			}
+		},
+		"view": {
+			"$ref": "file:///C:/genom/data/json/base_json/view.json#"
+		},
+		"url": {
+			"type": "string",
+			"format": "uri"
+		},
+		"description": {
+			"type": "string"
+		},
+		"start_number": {
+			"type": "integer"
+		},
+		"expected_number": {
+			"type": "integer"
+		}
+	},
+	"required": [
+		"file_name",
+		"sample",
+		"filters",
+		"view",
+		"url"
+	]
+}

@@ -1,0 +1,28 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "One filter",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "number"
+		},
+		"name": {
+			"type": "string"
+		},
+		"rules": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
+		"is_default": {
+			"type": "boolean"
+		}
+	},
+	"required": [
+		"id",
+		"name",
+		"rules",
+		"is_default"
+	]
+}

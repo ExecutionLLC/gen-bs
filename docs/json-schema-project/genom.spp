@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+	<Folder FolderName="as_ws">
+		<File FilePath="json\AS_WS\get_filter_filelds.json" HomeFolder="Yes"/>
+		<File FilePath="json\AS_WS\get_user_data.json" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="ws_as">
+		<File FilePath="json\WS_AS\get_data_to_table.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\query_history.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS_AS\save_combine_filter.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS_AS\save_file.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS_AS\save_sample_metadata.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS_AS\save_user_metadata.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS_AS\save_view.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS_AS\search_in_results.json" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="base_json">
+		<File FilePath="json\base_json\commentary.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\filter.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\group.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\keyword.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\role.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\sample.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\vcf_field.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\view.json" HomeFolder="Yes"/>
+		<File FilePath="json\base_json\view_list_item.json" HomeFolder="Yes"/>
+	</Folder>
+</Project>

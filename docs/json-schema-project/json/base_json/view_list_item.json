@@ -1,0 +1,33 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"id": {
+			"description": "The unique identifier for a settings row",
+			"type": "number"
+		},
+		"order": {
+			"description": "The order of column in list",
+			"type": "integer"
+		},
+		"sort_order": {
+			"description": "The order of column in multi_sort_settings",
+			"type": "integer"
+		},
+		"sort_direction": {
+			"description": "Desc/acs",
+			"type": "string"
+		},
+		"keywords_selected": {
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$ref": "file:///C:/genom/data/json/base_json/keyword.json#"
+			}
+		}
+	},
+	"required": [
+		"id",
+		"order"
+	]
+}
