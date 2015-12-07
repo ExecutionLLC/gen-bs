@@ -1,24 +1,23 @@
 //layout// sidebar  
-    $('#sidebar').on('hide.bs.collapse', function () {
-        $('body').addClass("sidebar-closed");
-    })
-
-    $('#sidebar').on('shown.bs.collapse', function () {
-        $('body').removeClass("sidebar-closed");
-    })
-    $('.user-view').on('hide.bs.collapse', function () {
-        $('body').removeClass("sidebar-closed");
-    })
-
-    $('.user-view').on('show.bs.collapse', function () {
-        $('body').removeClass("sidebar-closed");
-    })    
+   
+    
     $('#subnav').on('hide.bs.collapse', function () {
       $('body').addClass("subnav-closed");
     });
-    $('#subnav').on('show.bs.collapse', function () {  
+   $('#subnav').on('shown.bs.collapse', function () {  
       $('body').removeClass("subnav-closed");
-    }); 
+   });  
+   
+    $('#sidebar').on('hide.bs.collapse', function () {
+        $('body').addClass("sidebar-closed");
+    });
+
+    $('#sidebar').on('shown.bs.collapse', function () {
+        $('body').removeClass("sidebar-closed");
+    });
+ 
+  
+    
  //bootatrap table   
   var $table = $('#table');
       selections = [];
@@ -29,14 +28,12 @@
             height: getHeight(),
             columns: [
                 {
-                    field: 'state',
-                    checkbox: true
+                    field: 'star',
+                    formatter: operateFormatter1
                 },
                 {
                     field: 'comment',
-                    title: "Comment",
-                    formatter: operateFormatter2,
-                    filterControl: 'input'
+                    formatter: operateFormatter
                 },
                 {
                     field: 'function',
@@ -167,11 +164,6 @@ function responseHandler(res) {
       '</a></div>'
   ].join('');
 }
- function operateFormatter2(value, row, index) {
-  return [
-      '<input type="text" class="form-control elipsis" value="' + value + '">'
-  ].join('');
-}
 /*
  function totalTextFormatter(data) {
     return 'Total';
@@ -196,41 +188,39 @@ function totalPriceFormatter(data) {
           
            
 $('.select2').select2({
-  placeholder: "Not chosen",
-  minimumResultsForSearch: Infinity
+placeholder: "Not chosen",
+minimumResultsForSearch: Infinity
 });
 
 $('.selectTree').select2();
 
 
- var $ajax = $(".sample-select-ajax"); 
+var $ajax = $(".sample-select-ajax"); 
          
  function formatRepo (repo) {
       if (repo.loading) return repo.text;
 
       var markup = "<div class='row'>" +
         "<div class='col-sm-6'>" +
-          "<span class='metadata s-name'>" + repo.full_name + "</span>" +
-          "<span class='s-versia'> V. " + repo.forks_count + "</span>" +
-          "<span class='s-size'>" + repo.stargazers_count + " KB</span>";
+          "<div class='metadata s-name'>" + repo.full_name + "</div>";
           
 
       if (repo.description) {
-        markup += "<span class='metadata s-descr'>" + repo.description + "</span>";
+        markup += "<div class='metadata s-descr'>" + repo.description + "</div>";
       }
 
-      markup += "</div>" +
+      markup += "<div class='s-versia'>V. " + repo.forks_count + "</div>" +
+        "<div class='s-size'>" + repo.stargazers_count + " KB</div>" +
+        "</div>" +
         "<div class='col-sm-6'>" +
-        "<span class='metadata s-familyID'>Family ID: <span>" + repo.watchers_count + "</span></span>" +
-        "<span class='metadata s-subjectID'>Subject ID: <span>" + repo.forks_count + "</span></span>" ;
-        if (repo.commits_url) {
-         markup += "<span class='metadata s-analises'><i class='fa fa-check'></i> Analyzed <span> 24.09.2015 34:45</span>";
-        }
-         markup +="</div></div>";
+        "<div class='metadata s-familyID'>Family ID:" + repo.watchers_count + " </div>" +
+        "<div class='metadata s-subjectIDD'>Subject ID:" + repo.forks_count + " </div>" +
+         "<div class='metadata s-date'>Annotated on:" + repo.created_at + " </div>" +
+        "</div></div>";
 
       return markup;
     }
- function formatRepoSelection (repo) {
+   function formatRepoSelection (repo) {
       return repo.full_name || repo.text;
     }
  

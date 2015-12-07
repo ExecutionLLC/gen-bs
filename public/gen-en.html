@@ -192,14 +192,37 @@
        </button>
     </div>
     <table id="table"
+
+            data-toggle="table"
             data-show-export="true"
+            data-classes="table table-condensed table-hover"
             data-id-field="id"
             data-show-export="true"
             data-search="true" 
             data-show-multi-sort="true" 
             data-sort-priority='[{"sortName": "gene","sortOrder":"desc"},{"sortName":"chromosome","sortOrder":"desc"}]'        
+            data-url="../json/data-variants.json"
             data-filter-control="true">
-    </table>        
+            <thead>
+            <tr>
+             <th data-field="view" data-events="operateEvents" data-formatter="operateFormatter1"></th>
+            <th data-field="view" data-events="operateEvents" data-formatter="operateFormatter"></th>
+            <th data-field="function" data-filter-control="select" data-sortable="true">Funсtion</th>
+            <th data-field="gene" data-filter-control="input" data-sortable="true" class="fcontrol">Gene</th>
+            <th data-field="chromosome" data-filter-control="select" data-sortable="true" class="">Chromosome</th>
+            <th data-field="endCoordinate" data-filter-control="input" data-sortable="true" class="fcontrol"> End Coordinate</th>
+            <th data-field="cytogeneticBand" data-filter-control="input" data-sortable="true" class="fcontrol finput">Cytogenetic Band</th>
+            <th data-field="startCoordinate" data-filter-control="input" data-sortable="true" class="fcontrol finput">Start Coordinate</th>
+            <th data-field="affectedAminoAcid" data-filter-control="input" data-sortable="true" class="fcontrol">Affected Amino Acid</th>
+            <th data-field="proteinChange" data-filter-control="input" data-sortable="true" class="fcontrol finput">Protein Change</th>
+            <th data-field="granthamScore" data-filter-control="input" data-sortable="true" class="fcontrol finput">Grantham Score</th>
+            <th data-field="functionalConsequence" data-filter-control="input" data-sortable="true" class="fcontrol finput">Functional Consequence</th>
+            <th data-field="transcript" data-filter-control="input" data-sortable="true" class="fcontrol">Transcript</th>
+            <th data-field="nucleotideChange" data-filter-control="input" data-sortable="true" class="fcontrol">Nucleotide Change</th>
+              
+            </tr>
+            </thead>
+        </table>        
   </div>
   
 
@@ -208,7 +231,7 @@
   You can export these items to file
   
 </div>
-
+</div>
 
 <div class="modal fade" id="selectColumns"  role="dialog" aria-labelledby="selectColumnsLabel">
   <div class="modal-dialog modal-dialog-primary modal-lg" role="document">
@@ -259,6 +282,202 @@
         </div>
         
       
+
+
+
+      <!--
+
+         <div class="panel">
+          <div class="panel-body">
+             
+            <div class="row">
+<div class="col-sm-4">
+
+  <ul class="nav nav-pills nav-stacked" role="tablist">
+<li role="presentation" class="active"><a href="#t7" aria-controls="t7" role="tab" data-toggle="tab">Last Variant</a></li>
+<li role="presentation"><a href="#t8" aria-controls="t8" role="tab" data-toggle="tab">Frequently Used Variant </a></li>
+    
+<li role="presentation"><a href="#t1" aria-controls="t1" role="tab" data-toggle="tab">Analysis Summary</a></li>
+<li role="presentation"><a href="#t2" aria-controls="t2" role="tab" data-toggle="tab">Cancer Annotations</a></li>
+<li role="presentation"><a href="#t3" aria-controls="t3" role="tab" data-toggle="tab">Disease Association</a></li>
+<li role="presentation"><a href="#t4" aria-controls="t4" role="tab" data-toggle="tab">External Databases</a></li>
+<li role="presentation"><a href="#t5" aria-controls="t5" role="tab" data-toggle="tab">Functional Prediction</a></li>
+<li role="presentation"><a href="#t6" aria-controls="t6" role="tab" data-toggle="tab">Population Frequencies</a></li>
+
+  </ul>
+</div>
+<div class="col-sm-8">
+
+  <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="t7">
+      <h5>Analysis Information</h5>
+      <div class="row">
+        <div class="col-sm-6">
+          
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="" checked="">
+              Family ID <button type="button" class="btn-link" data-toggle="tooltip" data-placement="right" title="Family ID, Sample ID, and the zygosity (heterozygous,homozygous) for controls carrying this mutation"><i class="glyphicon glyphicon-info-sign text-muted"></i></button>
+            </label>
+          </div>
+        </div>
+          <div class="col-sm-6">
+          <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="">
+              Subject ID <button type="button" class="btn-link" data-toggle="tooltip" data-placement="right" title="Family ID, Sample ID, and the zygosity (heterozygous,homozygous) for controls carrying this mutation"><i class="glyphicon glyphicon-info-sign text-muted"></i></button>
+            </label>
+          </div>
+          </div>
+          
+        </div>
+      
+      <h5>VCF File Details</h5>
+       <div class="row">
+        <div class="col-sm-6">
+          
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="" disabled>
+              <span>Adjusted P-value</span>
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="" checked="">
+                <span>Allele Frequency</span>
+            </label>
+          </div>
+         
+          <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+              <span>Average Base Quality</span>
+            </label>
+          </div>
+           <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+              <span>Forward Strand Read Depth</span>
+            </label>
+          </div>
+
+ <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" checked="">
+              <span>Reference Allele</span>
+            </label>
+          </div>
+
+ <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+              <span>Sample Counts</span>
+            </label>
+          </div>
+
+ <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+             <span>Strand Bias</span>
+            </label>
+          </div>
+<div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+             <span>Variant Quality</span>
+            </label>
+          </div>
+          
+        </div>
+          <div class="col-sm-6">
+          
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="" disabled>
+              <span>Allele Depth</span>
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="" disabled>
+               <span>Alternate Allele</span>
+            </label>
+          </div>
+         
+          <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+            <span>Average Quality</span>
+            </label>
+          </div>
+           <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+             <span>Genotype</span>
+            </label>
+          </div>
+
+ <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" checked="">
+            <span>Reverse Strand Read Depth</span>
+            </label>
+          </div>
+
+ <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+              <span>Sample Frequency</span>
+            </label>
+          </div>
+
+ <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+             <span>Zygosity</span>
+            </label>
+          </div>
+          
+        </div>
+      </div>
+      </div>
+    <div role="tabpanel" class="tab-pane" id="t8">...</div>
+    <div role="tabpanel" class="tab-pane" id="t1">
+      <h5>Analysis Information</h5>
+      <div class="row">
+        <div class="col-sm-6">
+          
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" value="">
+              Case Information
+            </label>
+          </div>
+          <div class="checkbox disabled">
+            <label>
+              <input type="checkbox" value="" disabled>
+              Option two is disabled
+            </label>
+          </div>
+          
+          
+        </div>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="t2">...</div>
+    <div role="tabpanel" class="tab-pane" id="t3">...</div>
+    <div role="tabpanel" class="tab-pane" id="t4">...</div>
+    <div role="tabpanel" class="tab-pane" id="t5">...</div>
+    <div role="tabpanel" class="tab-pane" id="t6">...</div>
+
+  </div>
+</div>
+      </div>
+          </div>
+            </div>
+         
+-->
        
    
           <div class="sort-setting">
@@ -478,6 +697,15 @@
         </div>
           
           <div class="btn-toolbar">
+              <!--
+<div class="btn-group">
+                <button class="btn btn-link btn-multi-label">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+              </div>
+-->
              <div class="btn-group"><small class="text-muted">Drag-and-drop nested list item for multisort order</small></div>
               <div
             </div>
@@ -486,7 +714,12 @@
       </div>
       
     </div>
-      <div class="modal-footer">         
+      <div class="modal-footer">
+       
+  <!--   <button class="btn btn-info collapse in copyview pull-left">Save View</button> -->
+  
+        
+         
          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
          <button type="button" class="btn btn-primary">Save And Apply</button>
       </div>
@@ -1021,13 +1254,15 @@
             </div>
                           
                
-            </div>        
+            </div>
+        
            <div class="row grid-toolbar">
             <div class="col-sm-6">
               <label>Available Filters for combine</label>
             </div>
           </div>
-           <div class="row">
+           
+             <div class="row">
             <div class="col-lg-12">
            
     <div id="builder-basic-filters" class="query-builder builder-basic-filters form-inline">
@@ -1164,6 +1399,10 @@
     
   </div>
           </div> 
+           
+           
+           
+           
          </div>
    
        
@@ -1207,7 +1446,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h5 class="modal-title" id="uploadLabel">Upload sample</h5>
+        <h5 class="modal-title" id="loginLabel">Upload sample</h5>
       </div>
       <div class="modal-body">
   
@@ -1673,79 +1912,12 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <ul class="nav nav-tabs pull-right" role="tablist">
-               <a type="button" class="btn btn-default active" data-toggle="tab" href=".table-list"><i class="fa fa-list"></i></a>
-               <a type="button" class="btn btn-default" data-toggle="tab" href=".thumbnails"><i class="fa fa-th"></i></a>
-             </ul>
-          
           <h5 class="modal-title" id="historyLabel">Saved files</h5>
         </div>
-        <div class="modal-body tab-content">
-           
-            <div class="tab-pane table-list active">
-              <table class="table table-condensed">
-                <thead>
-                  <tr>
-                    <th>
-                      File Name
-                    </th>
-                   
-                    <th>Samples</th>
-                    <th>Filters</th>
-                    <th>View</th>
-                    <th>Searched variants</th>
-                     <th>
-                    </th>
-
-                  </tr>
-                  
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      Saved file name.xls
-                    </td>
-                    <td>iha1</td>
-                    <td>Eye Cancer Diagnostics</td>
-                    <td>Default view</td>
-                    <td>789</td>
-                    <td><a href="#" class="btn btn-primary" role="button">Download</a></td>
-                  </tr>
-                   <tr>
-                    <td>
-                      Saved file name.json
-                    </td>
-                    <td>iha1</td>
-                    <td>Eye Cancer Diagnostics</td>
-                    <td>Default view</td>
-                    <td>789</td>
-                    <td><a href="#" class="btn btn-primary" role="button">Download</a></td>
-                  </tr>
-                   <tr>
-                    <td>
-                      Saved file name.pdf
-                    </td>
-                    <td>iha1</td>
-                    <td>Eye Cancer Diagnostics</td>
-                    <td>Default view</td>
-                    <td>789</td>
-                    <td><a href="#" class="btn btn-primary" role="button">Download</a></td>
-                  </tr>
-                   <tr>
-                    <td>
-                      Saved file name.xls
-                    </td>
-                    <td>iha1</td>
-                    <td>Eye Cancer Diagnostics</td>
-                    <td>Default view</td>
-                    <td>789</td>
-                    <td><a href="#" class="btn btn-primary" role="button">Download</a></td>
-                  </tr>
-                </tbody>
-              </table>
-              
-            </div>
-            <div class="tab-pane row thumbnails">
+        <div class="modal-body">
+         <div class="panel panel-default ">
+          <div class="panel-body">
+           <div class="row thumbnails">
     <div class="col-sm-6 col-md-4">
       <div class="thumbnail">
         <div class="head-icon">
@@ -1820,15 +1992,220 @@
       </div>
     </div>
   </div>
-           
-          
+          </div>
         </div>
                
          </div>
    
       </div>
     </div>
-<script src="assets/app.js"></script>     
+</div>  
+<script>
+ 
+       function operateFormatter(value, row, index) {
+        return [
+            '<div class="btn-group" data-toggle="modal" data-target="#comment" data-whatever="Text of comment to this variant"><a type="button" class="btn btn-link variant" data-toggle="popover" data-placement="right" data-container="body" data-trigger="hover" data-content="Text of comment to this variant">',
+            '<i class="fa fa-comment-o"></i>',
+            '</a></div>'
+        ].join('');
+    }
+       function operateFormatter1(value, row, index) {
+        return [
+            '<div class="btn-group"><a type="button" id="fav' + index + '" class="btn btn-link fav" data-toggle="button">',
+            '<i class="fa fa-star-o"></i>',
+            '</a></div>'
+        ].join('');
+      }
+
+     
+        var $table = $('#table')
+		      $table.on('all.bs.table', function (e, row, $element) {
+     
+              
+          $('.filterControl select').select2({
+            placeholder: "Not chosen",
+            minimumResultsForSearch: Infinity
+          });
+            $('[data-index="1"] .variant').popover();
+            $('[data-index="4"] .variant').popover();
+            $('[data-index="7"] .variant').popover();
+            $('[data-index="8"] .variant').popover();
+            $('[data-index="2"] .fav').addClass("active");
+            $('[data-index="3"] .fav').addClass("active");
+            $('[data-index="4"] .fav').addClass("active");
+            
+            $('.fav').each(function () {
+                  var button = $(this);
+                  button.on('click', function() {
+                   $('#fav-message').removeClass("hidden");
+                });
+            });
+            
+          });
+          
+         
+           
+           
+           $('.select2').select2({
+            placeholder: "Not chosen",
+            minimumResultsForSearch: Infinity
+          });
+
+          $('.selectTree').select2();
+
+
+var $ajax = $(".sample-select-ajax"); 
+         
+ function formatRepo (repo) {
+      if (repo.loading) return repo.text;
+
+      var markup = "<div class='row'>" +
+        "<div class='col-sm-6'>" +
+          "<div class='metadata s-name'>" + repo.full_name + "</div>";
+          
+
+      if (repo.description) {
+        markup += "<div class='metadata s-descr'>" + repo.description + "</div>";
+      }
+
+      markup += "<div class='s-versia'>V. " + repo.forks_count + "</div>" +
+        "<div class='s-size'>" + repo.stargazers_count + " KB</div>" +
+        "</div>" +
+        "<div class='col-sm-6'>" +
+        "<div class='metadata s-familyID'>Family ID:" + repo.watchers_count + " </div>" +
+        "<div class='metadata s-subjectIDD'>Subject ID:" + repo.forks_count + " </div>" +
+         "<div class='metadata s-date'>Annotated on:" + repo.created_at + " </div>" +
+        "</div></div>";
+
+      return markup;
+    }
+   function formatRepoSelection (repo) {
+      return repo.full_name || repo.text;
+    }
+ 
+     
+               
+  $ajax.select2({
+      ajax: {
+        url: "https://api.github.com/search/repositories",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+          return {
+            q: params.term, // search term
+            page: params.page
+          };
+        },
+        processResults: function (data, params) {
+          // parse the results into the format expected by Select2
+          // since we are using custom formatting functions we do not need to
+          // alter the remote JSON data, except to indicate that infinite
+          // scrolling can be used
+          params.page = params.page || 1;
+
+          return {
+            results: data.items,
+            pagination: {
+              more: (params.page * 30) < data.total_count
+            }
+          };
+        },
+        cache: true
+      },
+      escapeMarkup: function (markup) { return markup; },
+      minimumInputLength: 1,
+      templateResult: formatRepo,
+      templateSelection: formatRepoSelection
+    });
+  
+   ///
+         
+          
+    $('#btnOpenid').on('click', function (e) {
+      $('.dropdown-profile').removeClass("hidden");
+      $(this).addClass("hidden");
+     });
+     
+
+     $('[data-toggle="tooltip"]').tooltip();
+     
+   
+     $('.dropdown-menu-rows').find('form').click(function (e) {
+      e.stopPropagation();
+     });       
+
+     /*
+ $('#btnDel').click(function () {
+       alert("jr");
+        //$("#filterSelector").val(["eye"]).trigger("change");
+      )};
+*/
+
+      $('#builder-basic .selectTree').each(function () {
+                  var button = $(this);
+                  button.select2().on('change', function(e) {
+                   
+                   $("#copyfilterField").collapse("show");
+                   $("#newfilterField").collapse("show");
+                });
+            });
+
+     $('#builder-basic .selectTree').select2()
+        .on("change", function(e) {
+           $(".copyfilter").collapse();
+           //$("#filterSelector").val(null).trigger("change");
+      });
+    
+
+
+/*
+$( "#sample-search" ).keypress(function() {
+ $('.sample-res').removeClass('hidden')
+});
+$( "#sample-search" ).focusout(function() {
+ $('.sample-res').addClass('hidden')
+});
+*/
+/*
+
+*/
+/*
+$('#fav4').on('click', function () {
+  alert("kj");
+   $('#fav-message').removeClass("hidden");
+});
+*/
+
+/*
+
+
+*/
+
+
+$('#dropdownSamples').on('show.bs.dropdown', function () {
+ $('.sample-res').addClass('hidden')
+})
+   
+   
+$('#comment').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-body textarea').val(recipient)
+})
+ $('#btnLogin').on('click', function (e) {
+      $('#guest').addClass("hidden");
+      $('#user').removeClass("hidden");
+     });
+ $('#btnLogout').on('click', function (e) {
+      $('#user').addClass("hidden");
+      $('#guest').removeClass("hidden");
+     });
+
+
+</script>     
 
 </body>
 </html>

@@ -18,7 +18,7 @@ $(function () {
        
     });
 
-    var href = location.hash.substring(1) || 'gen-en.html';
+    var href = location.hash.substring(1) || 'index.html';
     $('iframe').attr('src', href);
     //initNavigation(href);
 
@@ -38,6 +38,7 @@ $(function () {
       });
 */
   
+/*
 
     $('#btnLogin').on('click', function (e) {
       $('#guest').addClass("hidden");
@@ -48,6 +49,7 @@ $(function () {
       $('#guest').removeClass("hidden");
      });
      
+*/
 
 /*
     $('select').select2({
@@ -65,7 +67,7 @@ function initNavigation(href) {
         $prev, $next;
 
     $('.ribbon a').attr('href',
-        'https://github.com/wenzhixin/bootstrap-table-examples/blob/master/' + href);
+        '' + href);
 
     if (!$el.length) {
         return;
