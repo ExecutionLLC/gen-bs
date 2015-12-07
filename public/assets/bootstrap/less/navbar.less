@@ -341,7 +341,10 @@
 // Vertically center a button within a navbar (when *not* in a form).
 
 .navbar-btn {
-  .navbar-vertical-align(@input-height-base);
+  .navbar-vertical-align(@line-height-computed);
+  border-radius: 0;
+  border: none;
+  
 
   &.btn-sm {
     .navbar-vertical-align(@input-height-small);
@@ -521,6 +524,9 @@
         color: @navbar-default-link-disabled-color;
       }
     }
+  }
+  .btn-default { 
+    //border-color: #fff; 
   }
 }
 

@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "User",
+	"type": "object",
+	"properties": {
+		"metadata": {
+			"$ref": "../base_json/user_metadata.json#"
+		},
+		"date": {
+			"type": "string",
+			"format": "date-time"
+		}
+	}
+}

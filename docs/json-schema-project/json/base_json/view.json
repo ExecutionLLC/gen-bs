@@ -1,0 +1,53 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "One view",
+	"type": "object",
+	"properties": {
+		"id": {
+			"description": "The unique identifier for a view",
+			"type": "integer"
+		},
+		"name": {
+			"type": "string"
+		},
+		"view_list": {
+			"title": "Row list of settings fields",
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"view_list_items": {
+					"type": "array",
+					"minItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"$ref": "file:///C:/genom/data/json/base_json/view_list_item.json#"
+					}
+				}
+			},
+			"required": [
+				"id",
+				"view_list_items"
+			]
+		},
+		"description": {
+			"type": "string"
+		},
+		"start_number": {
+			"type": "integer"
+		},
+		"total_number": {
+			"type": "integer"
+		},
+		"is_default": {
+			"type": "boolean"
+		}
+	},
+	"required": [
+		"id",
+		"name",
+		"view_list",
+		"is_default"
+	]
+}

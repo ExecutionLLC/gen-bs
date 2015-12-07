@@ -1,0 +1,20 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Keyword Title",
+	"type": "object",
+	"properties": {
+		"id": {
+			"description": "The unique identifier for a keyword",
+			"type": "integer"
+		},
+		"name": {
+			"type": "string"
+		},
+		"synonym": {
+			"type": "string"
+		}
+	},
+	"required": [
+		"id"
+	]
+}

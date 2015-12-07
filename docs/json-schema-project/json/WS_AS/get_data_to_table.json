@@ -1,0 +1,49 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"curent_sample": {
+			"$ref": "file:///C:/genom/data/json/base_json/sample.json#"
+		},
+		"current_view": {
+			"$ref": "file:///C:/genom/data/json/base_json/view.json#"
+		},
+		"current_filters": {
+			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
+			"items": {
+				"$ref": "file:///C:/genom/data/json/base_json/filter.json#"
+			}
+		},
+		"current_search_value": {
+			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
+			"items": {
+				"type": "string"
+			}
+		},
+		"current_field_controls": {
+			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
+			"items": {
+				"$ref": "file:///C:/genom/data/json/base_json/keyword.json#"
+			}
+		},
+		"expected_number": {
+			"type": "integer"
+		},
+		"start_number": {
+			"type": "integer"
+		}
+	},
+	"required": [
+		"curent_sample",
+		"current_view",
+		"current_filters",
+		"current_search_value",
+		"current_field_controls"
+	]
+}
