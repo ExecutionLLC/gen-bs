@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "bash ./scripts/heroku-deploy.sh",
     "start": "node index.js"
   },
   "repository": {
@@ -19,7 +20,7 @@
   },
   "homepage": "https://github.com/ExecutionLLC/gen-bs#readme",
   "engines": {
-    "node": "0.12.7"
+    "node": "4.2.2"
   },
   "dependencies": {
     "express": "4.13.3"

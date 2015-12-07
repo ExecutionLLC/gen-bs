@@ -4,6 +4,19 @@ Genomix Application is intended to do great things for genetics all over the wor
 
 Be proud feeling yourself a part of it!
 
+# GIT Workflow
+
+* Feature development and bug fixing should be done in a separate branch with pull request creation when finished.
+* Do your best to avoid large pull requests, as they are very time-consuming.
+
+# Organization
+
+WebServer consists of:
+
+- controllers, the topmost level. This layer is parsing and producing JSON from the actual data.
+- services. This is where business logic lives. The services form the actual data. Also access rights are checked here.
+- models, which are the data access layer abstraction. Models do actual requests for accessing data sources, such as DB or application service.
+
 # Installation
 
 Currently, Node v4.2.2 is using. To be able to switch node versions easily in future it is recommended to use Node version manager (NVM), which is downloadable by the link below:
@@ -24,3 +37,4 @@ Currently, we have two jQuery plugins installed as submodules. To initialize the
     git submodule update
 
 Then, use `npm start` to launch the frontend with WS.
+
