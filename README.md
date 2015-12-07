@@ -4,6 +4,11 @@ Genomix Application is intended to do great things for genetics all over the wor
 
 Be proud feeling yourself a part of it!
 
+# GIT Workflow
+
+* Feature development and bug fixing should be done in a separate branch with pull request creation when finished.
+* Do your best to avoid large pull requests, as they are very time-consuming.
+
 # Organization
 
 WebServer consists of:
