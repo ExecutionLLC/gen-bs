@@ -8,7 +8,7 @@ Be proud feeling yourself a part of it!
 
 Currently, Node v4.2.2 is using. To be able to switch node versions easily in future it is recommended to use Node version manager (NVM), which is downloadable by the link below:
 
-TODO: link
+https://github.com/creationix/nvm
 
 After `nvm` is installed and the terminal is relaunched, as `nvm` wants, please type the following:
 
