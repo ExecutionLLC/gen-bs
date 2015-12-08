@@ -10,26 +10,13 @@
 		"name": {
 			"type": "string"
 		},
-		"view_list": {
-			"title": "Row list of settings fields",
-			"type": "object",
-			"properties": {
-				"id": {
-					"type": "integer"
-				},
-				"view_list_items": {
-					"type": "array",
-					"minItems": 1,
-					"uniqueItems": true,
-					"items": {
-						"$ref": "file:///C:/genom/data/json/base_json/view_list_item.json#"
-					}
-				}
-			},
-			"required": [
-				"id",
-				"view_list_items"
-			]
+		"view_list_items": {
+			"type": "array",
+			"minItems": 1,
+			"uniqueItems": true,
+			"items": {
+				"$ref": "./view_list_item.json#"
+			}
 		},
 		"description": {
 			"type": "string"
@@ -42,12 +29,15 @@
 		},
 		"is_default": {
 			"type": "boolean"
+		},
+		"is_advanced": {
+			"type": "boolean"
 		}
 	},
 	"required": [
 		"id",
 		"name",
-		"view_list",
+		"view_list_items",
 		"is_default"
 	]
 }

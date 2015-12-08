@@ -5,18 +5,15 @@
 		"file_name": {
 			"type": "string"
 		},
-		"sample": {
-			"$ref": "file:///C:/genom/data/json/base_json/sample.json#"
-		},
 		"filters": {
 			"type": "array",
 			"minItems": 1,
 			"items": {
-				"$ref": "file:///C:/genom/data/json/base_json/filter.json#"
+				"$ref": "../base_json/filter.json#"
 			}
 		},
 		"view": {
-			"$ref": "file:///C:/genom/data/json/base_json/view.json#"
+			"$ref": "../base_json/view.json#"
 		},
 		"url": {
 			"type": "string",
@@ -30,13 +27,28 @@
 		},
 		"expected_number": {
 			"type": "integer"
+		},
+		"vcf_link": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"name": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"id",
+				"name"
+			]
 		}
 	},
 	"required": [
 		"file_name",
-		"sample",
 		"filters",
 		"view",
-		"url"
+		"url",
+		"vcf_link"
 	]
 }

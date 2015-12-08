@@ -10,8 +10,19 @@
 		"name": {
 			"type": "string"
 		},
-		"synonym": {
-			"type": "string"
+		"synonyms": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"name": {
+						"type": "string"
+					}
+				}
+			}
 		}
 	},
 	"required": [

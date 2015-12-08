@@ -6,19 +6,10 @@
 		"id": {
 			"type": "number"
 		},
-		"profile_metadata": {
-			"$ref": "../base_json/user_metadata.json#"
-		},
 		"samples": {
 			"type": "array",
 			"items": {
 				"$ref": "../base_json/sample_metadata.json#"
-			}
-		},
-		"mutation_comments": {
-			"type": "array",
-			"items": {
-				"$ref": "../base_json/commentary.json#"
 			}
 		},
 		"filters": {
@@ -36,26 +27,9 @@
 			"items": {
 				"$ref": "../base_json/view.json#"
 			}
-		},
-		"saved_files": {
-			"type": "array",
-			"items": {
-				"$ref": "../WS_AS/save_file.json#"
-			}
-		},
-		"queries_history": {
-			"type": "array",
-			"uniqueItems": true,
-			"items": {
-				"$ref": "../base_json/query_history.json#"
-			}
-		},
-		"number_paid_samples": {
-			"type": "integer"
 		}
 	},
 	"required": [
-		"id",
-		"number_paid_samples"
+		"id"
 	]
 }

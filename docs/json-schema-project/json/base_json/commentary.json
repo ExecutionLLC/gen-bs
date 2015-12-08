@@ -2,6 +2,9 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
+		"reference": {
+			"type": "string"
+		},
 		"chrom": {
 			"type": "string"
 		},
@@ -11,20 +14,14 @@
 		"alt": {
 			"type": "string"
 		},
-		"ref": {
-			"type": "string"
-		},
 		"commentary": {
 			"type": "string"
-		},
-		"editable": {
-			"type": "boolean"
 		}
 	},
 	"required": [
+		"reference",
 		"chrom",
 		"pos",
-		"ref",
 		"commentary"
 	]
 }

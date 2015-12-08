@@ -3,17 +3,25 @@
 	"type": "object",
 	"properties": {
 		"curent_sample": {
-			"$ref": "file:///C:/genom/data/json/base_json/sample.json#"
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"name": {
+					"type": "string"
+				}
+			}
 		},
 		"current_view": {
-			"$ref": "file:///C:/genom/data/json/base_json/view.json#"
+			"$ref": "../base_json/view.json#"
 		},
 		"current_filters": {
 			"type": "array",
 			"minItems": 1,
 			"uniqueItems": true,
 			"items": {
-				"$ref": "file:///C:/genom/data/json/base_json/filter.json#"
+				"$ref": "../base_json/filter.json#"
 			}
 		},
 		"current_search_value": {
@@ -29,7 +37,7 @@
 			"minItems": 1,
 			"uniqueItems": true,
 			"items": {
-				"$ref": "file:///C:/genom/data/json/base_json/keyword.json#"
+				"$ref": "../base_json/keyword.json#"
 			}
 		},
 		"expected_number": {

@@ -2,43 +2,35 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
-		"name": {
-			"type": "string"
-		},
-		"sizeKB": {
-			"type": "number"
-		},
-		"version": {
-			"type": "number"
-		},
-		"familyID": {
-			"type": "number"
-		},
-		"subjectID": {
-			"type": "string"
-		},
-		"genome_build": {
-			"type": "string"
-		},
-		"gender": {
-			"type": "string"
-		},
-		"phenotype": {
-			"type": "string"
-		},
-		"description": {
-			"type": "string"
-		},
-		"email": {
-			"type": "string",
-			"format": "email"
-		},
-		"annotatedOn": {
+		"timestamp": {
 			"type": "string",
 			"format": "date-time"
+		},
+		"id": {
+			"type": "number"
+		},
+		"hash": {
+			"type": "string"
+		},
+		"vcf_fields": {
+			"type": "array",
+			"items": {
+				"$ref": "../base_json/field_metadata.json#"
+			}
+		},
+		"is_analysed": {
+			"type": "boolean"
+		},
+		"is_default": {
+			"type": "boolean"
+		},
+		"is_advanced": {
+			"type": "boolean"
 		}
 	},
 	"required": [
-		"name"
+		"id",
+		"hash",
+		"is_analysed"
 	]
 }

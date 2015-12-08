@@ -3,12 +3,21 @@
 	"title": "User",
 	"type": "object",
 	"properties": {
-		"metadata": {
-			"$ref": "../base_json/user_metadata.json#"
+		"name": {
+			"type": "string"
 		},
-		"date": {
+		"last_name": {
+			"type": "string"
+		},
+		"email": {
 			"type": "string",
-			"format": "date-time"
+			"format": "email"
+		},
+		"specialization": {
+			"type": "string"
+		},
+		"language": {
+			"type": "string"
 		}
 	}
 }
