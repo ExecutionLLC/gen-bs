@@ -3,14 +3,16 @@ var $ = require('jquery');
 window.jQuery = $;
 window.$ = $;
 
-require('./assets/css/bootstrap/less/bootstrap.less');
-require('./assets/css/bootstrap/js/bootstrap.js');
+//require('./assets/css/bootstrap/less/bootstrap.less');
 require('./assets/css/font-awesome-4.4.0/css/font-awesome.min.css');
 require('./assets/vendor/select2-4.0.1-rc.1/dist/css/select2.min.css');
 require('../node_modules/bootstrap-table/src/bootstrap-table.css');
 require('./assets/vendor/jQuery-QueryBuilder-master/dist/css/query-builder.default.min.css');
 
+//require('./assets/css/bootstrap/less/app.less');
+require('./assets/css/index.less');
 
+require('./assets/css/bootstrap/js/bootstrap.js');
 require('../node_modules/bootstrap-table/dist/bootstrap-table.js');
 require('../node_modules/bootstrap-table/dist/extensions/export/bootstrap-table-export.js');
 require('../node_modules/bootstrap-table/dist/extensions/filter/bootstrap-table-filter.js');
@@ -18,7 +20,6 @@ require('../node_modules/bootstrap-table/dist/extensions/filter-control/bootstra
 require('../node_modules/bootstrap-table/dist/extensions/multiple-sort/bootstrap-table-multiple-sort.js');
 require('./assets/vendor/select2-4.0.1-rc.1/dist/js/select2.full.min.js');
 //require('bootstrap-table');
-require('./assets/css/index.css');
 
 var $table = $('#table');
 
@@ -53,9 +54,9 @@ console.log('hello from app.js');
  //bootatrap table   
   var $table = $('#table');
       selections = [];
-   $(function () {
-        $table.bootstrapTable({
-            url: '../json/data-variants.json',
+
+      var tableProps = {
+            url: './json/data-variants.json',
             classes: 'table table-condensed table-hover',
             height: getHeight(),
             columns: [
@@ -130,7 +131,13 @@ console.log('hello from app.js');
                     filterControl: 'input'
                 }
               ]
-          });  
+          };  
+  
+
+
+   $(function () {
+
+        $table.bootstrapTable(tableProps);  
         /*
 setTimeout(function () {
             $table.bootstrapTable('resetView');
