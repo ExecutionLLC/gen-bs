@@ -4,7 +4,10 @@ deploy.sh
 *.iml
 .idea/misc.xml
 *.xml
-node_modules
+*node_modules*
+
+*.swp
+*.swo
 
 .DS_Store
 npm-debug.log
