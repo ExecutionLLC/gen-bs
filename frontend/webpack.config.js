@@ -49,12 +49,23 @@ module.exports = {
       {
           test: /\.less$/,
           loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
-      }
+      },
+
+      //{ test: /\.js$/, loader: 'expose?$' },
+      //{ test: /\.js$/, loader: 'expose?jQuery' }
     ]
   },
-resolve: {
-        extensions: ['', '.js', '.jsx','.css']
-    },
+
+  resolve: {
+    extensions: ['', '.js', '.jsx','.css', 'less']
+  },
+  
+  //resolve: {
+  //  alias: {
+  //    'bootstrap-table': node_dir + '/bootstrap-table/dist/bootstrap-table.js',
+  //  }
+  //},
+
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin("app.css", {
@@ -64,7 +75,7 @@ resolve: {
     new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
-        "window.jQuery": "jquery",
+        "window.jQuery": "jquery"
     }),
 
     new webpack.DefinePlugin({
