@@ -664,3 +664,19 @@
     }
   }
 }
+//custrom styles
+.navbar-inverse {
+  .nav-inner { 
+  > div {
+     > a {
+      color: @navbar-inverse-link-color;
+
+      &:hover,
+      &:focus {
+        color: @navbar-inverse-link-hover-color;
+        background-color: @navbar-inverse-link-hover-bg;
+      }
+    } 
+}
+}
+}

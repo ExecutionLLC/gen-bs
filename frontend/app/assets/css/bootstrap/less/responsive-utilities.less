@@ -25,6 +25,7 @@
 
 // Visibility utilities
 // Note: Deprecated .visible-xs, .visible-sm, .visible-md, and .visible-lg as of v3.2.0
+.visible-xxs,
 .visible-xs,
 .visible-sm,
 .visible-md,
@@ -45,6 +46,12 @@
 .visible-lg-inline,
 .visible-lg-inline-block {
   display: none !important;
+}
+
+.visible-xxs {
+  @media (max-width: @screen-xss-max) {
+    .responsive-visibility();
+  }
 }
 
 .visible-xs {
@@ -131,6 +138,12 @@
   }
 }
 
+
+.hidden-xxs {
+  @media (max-width: @screen-xss-max) {
+    .responsive-invisibility();
+  }
+}
 .hidden-xs {
   @media (max-width: @screen-xs-max) {
     .responsive-invisibility();

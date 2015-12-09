@@ -1,200 +1,56 @@
-//layout// sidebar  
-    $('#sidebar').on('hide.bs.collapse', function () {
-        $('body').addClass("sidebar-closed");
+//layout// sidebar 
+// media query event handler
+if (matchMedia) {
+	var mq = window.matchMedia("(min-width: 768px)");
+	mq.addListener(WidthChange);
+	WidthChange(mq);
+}
+
+// media query change
+function WidthChange(mq) {
+
+	if (mq.matches) {
+		// window width is at least 500px
+		$('[data-toggle="tooltip"]').tooltip();
+	}
+	else {
+		// window width is less than 500px
+	}
+
+}
+
+     
+    $('#sidebarLeft').on('hide.bs.collapse', function () {
+        $('body').addClass("sidebar-left-closed");
     })
 
-    $('#sidebar').on('shown.bs.collapse', function () {
-        $('body').removeClass("sidebar-closed");
+    $('#sidebarLeft').on('shown.bs.collapse', function () {
+        $('body').removeClass("sidebar-left-closed");
     })
-    $('.user-view').on('hide.bs.collapse', function () {
-        $('body').removeClass("sidebar-closed");
+   $('#sidebarRight').on('hide.bs.collapse', function () {
+     $('body').addClass("sidebar-right-closed");
     })
 
-    $('.user-view').on('show.bs.collapse', function () {
-        $('body').removeClass("sidebar-closed");
-    })    
+    $('#sidebarRight').on('shown.bs.collapse', function () {
+        $('body').removeClass("sidebar-right-closed");
+    })
+    
+   
     $('#subnav').on('hide.bs.collapse', function () {
       $('body').addClass("subnav-closed");
     });
     $('#subnav').on('show.bs.collapse', function () {  
       $('body').removeClass("subnav-closed");
     }); 
- //bootatrap table   
-  var $table = $('#table');
-      selections = [];
-   $(function () {
-        $table.bootstrapTable({
-            url: '../json/data-variants.json',
-            classes: 'table table-condensed table-hover',
-            height: getHeight(),
-            columns: [
-                {
-                    field: 'state',
-                    checkbox: true
-                },
-                {
-                    field: 'comment',
-                    title: "Comment",
-                    formatter: operateFormatter2,
-                    filterControl: 'input'
-                },
-                {
-                    field: 'function',
-                    title: "Function",
-                    filterControl: 'input'
-                },
-                {
-                    field: 'gene',
-                    title: "Gene",
-                    filterControl: 'input'
-                },
-                {
-                    field: 'chromosome',
-                    title: "Chromosome",
-                    filterControl: 'input'
-                },
-                {
-                    field: 'startCoordinate',
-                    title: "StartCoordinate",
-                    filterControl: 'input'
-                },
-                {
-                    field: 'endCoordinate',
-                    title: 'End Coordinate',
-                    filterControl: 'input'
-                },
-                {
-                    field: 'cytogeneticBand',
-                    title: 'Cytogenetic Band',
-                    filterControl: 'input'
-                },
-                {
-                    field: 'affectedAminoAcid',
-                    title: 'Affected Amino Acid',
-                    filterControl: 'input'
-                },
-                {
-                    field: 'proteinChange',
-                    title: 'Protein Change',
-                    filterControl: 'input'
-                },
-                {
-                    field: 'granthamScore',
-                    title: 'GranthamScore',
-                    filterControl: 'input'
-                },
-                {
-                    field: 'functionalConsequence',
-                    title: 'Functional Consequence',
-                    filterControl: 'input'
-                },
-                {
-                    field: 'transcript',
-                    title: 'Transcript',
-                    filterControl: 'input'
-                },
-                {
-                    field: 'nucleotideChange',
-                    title: 'Nucleotide Change',
-                    filterControl: 'input'
-                }
-              ]
-          });  
-        /*
-setTimeout(function () {
-            $table.bootstrapTable('resetView');
-        }, 200); 
-*/      
-		    $table.on('all.bs.table', function (e, row, $element) {
-             //$(".fht-cell").collapse("hide"); 
-              
-            /*
-$('.filterControl select').select2({
-            placeholder: "Not chosen"
-             });
-*/
-            $('[data-index="1"] .variant').popover();
-            $('[data-index="4"] .variant').popover();
-            $('[data-index="7"] .variant').popover();
-            $('[data-index="8"] .variant').popover();
-            $('[data-index="2"] .fav').addClass("active");
-            $('[data-index="3"] .fav').addClass("active");
-            $('[data-index="4"] .fav').addClass("active");
-            
-            $('.fav').each(function () {
-                  var button = $(this);
-                  button.on('click', function() {
-                   $('#fav-message').removeClass("hidden");
-                });
-            });
-            
-          });
-		    $table.on('all.bs.table', function (e, name, args) {
-            console.log(name, args);
-        });
-		    $(window).resize(function () {
-            $table.bootstrapTable('resetView', {
-                height: getHeight()
-            });
-        });
-        });   
-/*
-function getIdSelections() {
-    return $.map($table.bootstrapTable('getSelections'), function (row) {
-        return row.id
-    });
-}
-
-function responseHandler(res) {
-    $.each(res.rows, function (i, row) {
-        row.state = $.inArray(row.id, selections) !== -1;
-    });
-    return res;
-}
-*/
   
- function operateFormatter(value, row, index) {
-  return [
-      '<div class="btn-group" data-toggle="modal" data-target="#comment" data-whatever="Text of comment to this variant"><a type="button" class="btn btn-link variant" data-toggle="popover" data-placement="right" data-container="body" data-trigger="hover" data-content="Text of comment to this variant">',
-      '<i class="fa fa-comment-o"></i>',
-      '</a></div>'
-  ].join('');
-}
- function operateFormatter1(value, row, index) {
-  return [
-      '<div class="btn-group"><a type="button" id="fav' + index + '" class="btn btn-link fav" data-toggle="button">',
-      '<i class="fa fa-star-o"></i>',
-      '</a></div>'
-  ].join('');
-}
- function operateFormatter2(value, row, index) {
-  return [
-      '<input type="text" class="form-control elipsis" value="' + value + '">'
-  ].join('');
-}
-/*
- function totalTextFormatter(data) {
-    return 'Total';
-}
+   $('#searchToggle').on('click', function (e) {
+      $('.navbar-main').addClass("search-expand");
+      $(this).addClass("hidden");
+     });        
 
-function totalNameFormatter(data) {
-    return data.length;
-}
 
-function totalPriceFormatter(data) {
-    var total = 0;
-    $.each(data, function (i, row) {
-        total += +(row.price.substring(1));
-    });
-    return '$' + total;
-}
-*/
-
- function getHeight() {
-  return $(window).height() - $('#mainnav').outerHeight(true);
-  }
-          
-           
+////components     
+//select2      
 $('.select2').select2({
   placeholder: "Not chosen",
   minimumResultsForSearch: Infinity
@@ -278,7 +134,7 @@ $('.selectTree').select2();
      });
      
 
-     $('[data-toggle="tooltip"]').tooltip();
+   
      
    
      $('.dropdown-menu-rows').find('form').click(function (e) {
@@ -333,19 +189,9 @@ $('#fav4').on('click', function () {
 */
 
 
-$('#dropdownSamples').on('show.bs.dropdown', function () {
- $('.sample-res').addClass('hidden')
-})
    
    
-$('#comment').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find('.modal-body textarea').val(recipient)
-})
+
  $('#btnLogin').on('click', function (e) {
       $('.guest').addClass("hidden");
       $('.user').removeClass("hidden");

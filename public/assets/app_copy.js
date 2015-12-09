@@ -1,46 +1,4 @@
-
-const $ = require('jquery');
-window.jQuery = $;
-window.$ = $;
-
-import './assets/css/font-awesome-4.4.0/css/font-awesome.min.css';
-import './assets/vendor/select2-4.0.1-rc.1/dist/css/select2.min.css';
-import '../node_modules/bootstrap-table/src/bootstrap-table.css';
-import './assets/vendor/jQuery-QueryBuilder-master/dist/css/query-builder.default.min.css';
-import './assets/css/index.less';
-import './assets/css/bootstrap/js/bootstrap.js';
-import './assets/vendor/select2-4.0.1-rc.1/dist/js/select2.full.min.js';
-
-import './assets/vendor/matchMedia/matchMedia.js';
-import './assets/vendor/matchMedia/matchMedia.addListener.js';
-
-//import './components/SamplesTable/SamplesTable';
-
-
-console.log('hello from app.js');
-
-
 //layout// sidebar  
-// media query event handler
-if (matchMedia) {
-	var mq = window.matchMedia("(min-width: 768px)");
-	mq.addListener(WidthChange);
-	WidthChange(mq);
-}
-
-// media query change
-function WidthChange(mq) {
-  console.log('widtch change',mq);
-
-	if (mq.matches) {
-		// window width is at least 500px
-		$('[data-toggle="tooltip"]').tooltip();
-	}
-	else {
-		// window width is less than 500px
-	}
-
-}
     $('#sidebar').on('hide.bs.collapse', function () {
         $('body').addClass("sidebar-closed");
     })
@@ -61,7 +19,125 @@ function WidthChange(mq) {
     $('#subnav').on('show.bs.collapse', function () {  
       $('body').removeClass("subnav-closed");
     }); 
-
+ //bootatrap table   
+  var $table = $('#table');
+      selections = [];
+   $(function () {
+        $table.bootstrapTable({
+            url: '../json/data-variants.json',
+            classes: 'table table-condensed table-hover',
+            height: getHeight(),
+            columns: [
+                {
+                    field: 'state',
+                    checkbox: true
+                },
+                {
+                    field: 'comment',
+                    title: "Comment",
+                    formatter: operateFormatter2,
+                    filterControl: 'input'
+                },
+                {
+                    field: 'function',
+                    title: "Function",
+                    filterControl: 'input'
+                },
+                {
+                    field: 'gene',
+                    title: "Gene",
+                    filterControl: 'input'
+                },
+                {
+                    field: 'chromosome',
+                    title: "Chromosome",
+                    filterControl: 'input'
+                },
+                {
+                    field: 'startCoordinate',
+                    title: "StartCoordinate",
+                    filterControl: 'input'
+                },
+                {
+                    field: 'endCoordinate',
+                    title: 'End Coordinate',
+                    filterControl: 'input'
+                },
+                {
+                    field: 'cytogeneticBand',
+                    title: 'Cytogenetic Band',
+                    filterControl: 'input'
+                },
+                {
+                    field: 'affectedAminoAcid',
+                    title: 'Affected Amino Acid',
+                    filterControl: 'input'
+                },
+                {
+                    field: 'proteinChange',
+                    title: 'Protein Change',
+                    filterControl: 'input'
+                },
+                {
+                    field: 'granthamScore',
+                    title: 'GranthamScore',
+                    filterControl: 'input'
+                },
+                {
+                    field: 'functionalConsequence',
+                    title: 'Functional Consequence',
+                    filterControl: 'input'
+                },
+                {
+                    field: 'transcript',
+                    title: 'Transcript',
+                    filterControl: 'input'
+                },
+                {
+                    field: 'nucleotideChange',
+                    title: 'Nucleotide Change',
+                    filterControl: 'input'
+                }
+              ]
+          });  
+        /*
+setTimeout(function () {
+            $table.bootstrapTable('resetView');
+        }, 200); 
+*/      
+		    $table.on('all.bs.table', function (e, row, $element) {
+             //$(".fht-cell").collapse("hide"); 
+              
+            /*
+$('.filterControl select').select2({
+            placeholder: "Not chosen"
+             });
+*/
+            $('[data-index="1"] .variant').popover();
+            $('[data-index="4"] .variant').popover();
+            $('[data-index="7"] .variant').popover();
+            $('[data-index="8"] .variant').popover();
+            $('[data-index="2"] .fav').addClass("active");
+            $('[data-index="3"] .fav').addClass("active");
+            $('[data-index="4"] .fav').addClass("active");
+            
+            $('.fav').each(function () {
+                  var button = $(this);
+                  button.on('click', function() {
+                   $('#fav-message').removeClass("hidden");
+                });
+            });
+            
+          });
+		    $table.on('all.bs.table', function (e, name, args) {
+            console.log(name, args);
+        });
+		    $(window).resize(function () {
+            $table.bootstrapTable('resetView', {
+                height: getHeight()
+            });
+        });
+        });   
 /*
 function getIdSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
@@ -77,6 +153,25 @@ function responseHandler(res) {
 }
 */
   
+ function operateFormatter(value, row, index) {
+  return [
+      '<div class="btn-group" data-toggle="modal" data-target="#comment" data-whatever="Text of comment to this variant"><a type="button" class="btn btn-link variant" data-toggle="popover" data-placement="right" data-container="body" data-trigger="hover" data-content="Text of comment to this variant">',
+      '<i class="fa fa-comment-o"></i>',
+      '</a></div>'
+  ].join('');
+}
+ function operateFormatter1(value, row, index) {
+  return [
+      '<div class="btn-group"><a type="button" id="fav' + index + '" class="btn btn-link fav" data-toggle="button">',
+      '<i class="fa fa-star-o"></i>',
+      '</a></div>'
+  ].join('');
+}
+ function operateFormatter2(value, row, index) {
+  return [
+      '<input type="text" class="form-control elipsis" value="' + value + '">'
+  ].join('');
+}
 /*
  function totalTextFormatter(data) {
     return 'Total';
@@ -95,6 +190,10 @@ function totalPriceFormatter(data) {
 }
 */
 
+ function getHeight() {
+  return $(window).height() - $('#mainnav').outerHeight(true);
+  }
+          
            
 $('.select2').select2({
   placeholder: "Not chosen",
