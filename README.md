@@ -6,8 +6,9 @@ Be proud feeling yourself a part of it!
 
 # GIT Workflow
 
-* Feature development and bug fixing should be done in a separate branch with pull request creation when finished.
-* Do your best to avoid large pull requests, as they are very time-consuming.
+Please see the interactive workflow description here:
+
+https://guides.github.com/introduction/flow/
 
 # Organization
 
@@ -37,4 +38,3 @@ Currently, we have two jQuery plugins installed as submodules. To initialize the
     git submodule update
 
 Then, use `npm start` to launch the frontend with WS.
-
