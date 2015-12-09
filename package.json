@@ -25,5 +25,8 @@
   "dependencies": {
     "express": "4.13.3",
     "jquery": "^2.1.4"
+  },
+  "devDependencies": {
+    "handlebars": "^4.0.5"
   }
 }

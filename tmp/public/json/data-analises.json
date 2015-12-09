@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Analises345",
+        "version": "v1.6",
+        "description": "Tumor as case and normal as control",
+        "sampleCollection": "1 Case/ 1 Control",
+        "created": "2015-10-30",
+        "variants": "725",
+        "genes": "598",
+        "status": "Ready"
+    },
+    {
+        "name": "Illumina tumor normal pair",
+        "version": "v1.5",
+        "description": "Tumor as case and normal as control",
+        "sampleCollection": "1 Case/ 1 Control",
+        "created": "N/A",
+        "variants": "24,112",
+        "genes": "9,857",
+        "status": "Ready"
+    },
+    {
+        "name": "Quartet analysis: hemolytic anemia data ",
+        "version": "v1.6",
+        "description": "ihafamily1, affected child, hemolytic anemia ihafamily2, unaffected child ihafamily3, unaffected-mother ihafamily4, unaffected-father",
+        "sampleCollection": "1 family (4 members)",
+        "created":"N/A",
+        "variants": "36,561",
+        "genes": "12,134",
+        "status": "Ready"
+    },
+    {
+        "name": "Analises345",
+        "version": "v1.6",
+        "description": "Tumor as case and normal as control",
+        "sampleCollection": "1 Case/ 1 Control",
+        "created": "2015-10-30",
+        "variants": "725",
+        "genes": "598",
+        "status": "Ready"
+    }
+]

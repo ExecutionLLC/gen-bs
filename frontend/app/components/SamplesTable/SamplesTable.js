@@ -1,4 +1,4 @@
-
+var json = require('../../../json/data-variants.json');
 import 'datatables.net-bs';
 import 'datatables.net-bs/css/dataTables.bootstrap.css';
 import 'datatables.net-responsive';
@@ -12,7 +12,7 @@ const dtConfig = {
   responsive: true,
   "scrollX": true,
   "ajax": {
-    "url": '../../../json/data-variants.json',
+    "url": json,
     "dataSrc": "",
   },
   "columns": [
