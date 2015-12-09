@@ -1,0 +1,39 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "Answer to API request for the main table",
+	"type": "object",
+	"properties": {
+		"total": {
+			"type": "integer",
+			"description": "Total row count on the server",
+			"minimum": 0
+		},
+		"start": {
+			"type": "integer",
+			"description": "Start index of the first item in current selection",
+			"minimum": 0
+		},
+		"items":{
+			"type": "array",
+			"items": {
+				"type": "array",
+				"description": "Row data",
+				"minItems": 0,
+				"items": {
+					"type": "object",
+					"description": "Column data in the specific row",
+					"properties": {
+						"columnId": {
+							"type": "string",
+							"description": "Column identifier"
+						},
+						"value": {
+							"type": "string",
+							"description": "Value in the specific column of the specific row."
+						}
+					}
+				}
+			}
+		}
+	}
+}
