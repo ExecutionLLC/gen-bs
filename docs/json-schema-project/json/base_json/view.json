@@ -27,10 +27,13 @@
 		"total_number": {
 			"type": "integer"
 		},
-		"is_default": {
+		"is_standard": {
 			"type": "boolean"
 		},
 		"is_advanced": {
+			"type": "boolean"
+		},
+		"is_disabled_4copy": {
 			"type": "boolean"
 		}
 	},
@@ -38,6 +41,8 @@
 		"id",
 		"name",
 		"view_list_items",
-		"is_default"
+		"is_standard",
+		"is_advanced",
+		"is_disabled_4copy"
 	]
 }

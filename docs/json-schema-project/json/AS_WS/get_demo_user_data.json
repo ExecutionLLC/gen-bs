@@ -27,9 +27,32 @@
 			"items": {
 				"$ref": "../base_json/view.json#"
 			}
+		},
+		"defaults": {
+			"type": "object",
+			"properties": {
+				"default_sample": {
+					"type": "integer"
+				},
+				"default_filters": {
+					"type": "array",
+					"items": {
+						"type": "integer"
+					}
+				},
+				"default_view": {
+					"type": "integer"
+				}
+			},
+			"required": [
+				"default_sample",
+				"default_filters",
+				"default_view"
+			]
 		}
 	},
 	"required": [
-		"id"
+		"id",
+		"defaults"
 	]
 }
