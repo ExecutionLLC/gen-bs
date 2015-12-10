@@ -10,13 +10,13 @@ const LoginController = require('./LoginController');
 const SearchController = require('./SearchController');
 
 class ControllersFacade {
-    constructor() {
-        this.userDataController = new UserDataController(this);
-        this.demoUserDataController = new DemoUserDataController(this);
-        this.viewController = new ViewController(this);
-        this.filterController = new FilterController(this);
-        this.loginController = new LoginController(this);
-        this.searchController = new SearchController(this);
+    constructor(services) {
+        this.userDataController = new UserDataController(services);
+        this.demoUserDataController = new DemoUserDataController(services);
+        this.viewController = new ViewController(services);
+        this.filterController = new FilterController(services);
+        this.loginController = new LoginController(services);
+        this.searchController = new SearchController(services);
     }
 }
 

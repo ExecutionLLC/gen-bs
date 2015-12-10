@@ -2,51 +2,73 @@
 
 const Express = require('express');
 
-class DemoUserDataController {
+const ControllerBase = require('./ControllerBase');
+const getUserDataResult = require('../test_data/get_user_data-result.json');
+
+class DemoUserDataController extends ControllerBase {
     constructor(services) {
-        this.services = services;
+        super(services);
 
         this.getDemoUserData = this.getDemoUserData.bind(this);
-        this.initUserParamById = this.initUserParamById.bind(this);
+        this.getFieldsMetadata = this.getFieldsMetadata.bind(this);
+        this.initDemoUser = this.initDemoUser.bind(this);
     }
 
-    initUserParamById(request, response, next, id) {
-        this.services.users.findById(id, (error, user) => {
+    initDemoUser(request, response, next) {
+        this.services.users.findDemoUser((error, user) => {
             if (error) {
                 next(error);
-            } else if (user) {
+            } else {
                 request.user = user;
                 next();
-            } else {
-                next(new Error('User is not found: ' + id));
             }
         });
     }
 
     getDemoUserData(request, response) {
-       //this.services.userService.getTestUserData();
+        if (!this._checkUserIsSet(request, response)) {
+            return;
+        }
+
+        // TODO: Combine and send back the demo user data.
+        response.json(getUserDataResult);
     }
 
-    //getUserMetadata(request, response) {
-    //    response.json({
-    //        user: request.user,
-    //        meta: 'data'
-    //    });
-    //}
+    getFieldsMetadata(request, response) {
+        if (!this._checkUserIsSet(request, response)) {
+            return;
+        }
+
+        const user = request.user;
+        this.services.applicationServer.getFieldsMetadata(user, (error, fieldsMetadata) => {
+            if (error) {
+                this.sendError(response, error);
+            } else {
+                response.json(fieldsMetadata);
+            }
+        });
+    }
 
     createRouter(viewController, filtersController) {
         const router = new Express();
         const viewRouter = viewController.createRouter();
         const filtersRouter = filtersController.createRouter();
 
-        // TODO: middleware initializing demo user data, something like that:
-        // request.user = getDemoUserData();
+        router.use(this.initDemoUser);
 
-        router.get('/', this.getUserMetadata);
+        router.get('/', this.getDemoUserData);
         router.use('/views', viewRouter);
         router.use('/filters', filtersRouter);
 
         return router;
+    }
+
+    _checkUserIsSet(request, response) {
+        if (!request.user) {
+            this.sendError(response, 'Demo user property is not initialized.');
+            return false;
+        }
+        return true;
     }
 }
 

@@ -2,15 +2,19 @@
 
 const Express = require('express');
 
+const ControllerBase = require('./ControllerBase');
+
 class UserDataController {
   constructor(services) {
-    this.services = services;
+    super(services);
 
     this.getUserMetadata = this.getUserMetadata.bind(this);
-    this.initUserParamById = this.initUserParamById.bind(this);
   }
 
-  initUserParamById(request, response, next, id) {
+  initUserByToken(request, response, next) {
+    // TODO: here we should get token from the request.
+    // TODO: check token is valid on external auth service and is not expired
+    // TODO: get user by token from the database
     this.services.users.findById(id, (error, user) => {
       if (error) {
         next(error);
@@ -35,9 +39,9 @@ class UserDataController {
     const viewRouter = viewController.createRouter();
     const filtersRouter = filtersController.createRouter();
 
-    router.param('userId', this.initUserParamById);
-    router.get('/:userId', this.getUserMetadata);
-    router.use('/:userId/views', viewRouter);
+    router.use(this.initUserByToken);
+    router.get('/', this.getUserMetadata);
+    router.use('/views', viewRouter);
 
     return router;
   }

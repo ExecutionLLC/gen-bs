@@ -2,9 +2,11 @@
 
 const Express = require('express');
 
-class ViewController {
+const ControllerBase = require('./ControllerBase');
+
+class ViewController extends ControllerBase {
   constructor(services) {
-    this.services = services;
+    super(services);
 
     this.getUserViews = this.getUserViews.bind(this);
   }
@@ -15,26 +17,19 @@ class ViewController {
     if (user) {
       this.services.views.findByUser(user, (error, views) => {
         if (error) {
-          response
-            .status(500)
-            .json({
-              code: 500,
-              message: error
-            })
-            .end();
+          this.sendError(response, {
+            httpError: 500,
+            message: error
+          })
         } else {
           response.json(views);
         }
       });
     } else {
-      response
-        .status(500)
-        .json({
-          code: 500,
-          // TODO: i18n
-          message: 'User should not be undefined'
-        })
-        .end();
+      this.sendError(response, {
+        httpError: 500,
+        message: 'User is undefined.'
+      });
     }
   }
 

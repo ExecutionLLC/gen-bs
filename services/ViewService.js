@@ -1,8 +1,10 @@
 'use strict';
 
-class ViewService {
+const ServiceBase = require('./ServiceBase');
+
+class ViewService extends ServiceBase {
   constructor(services) {
-    this.services = services;
+    super(services);
   }
 
   findByUser(user, callback) {
