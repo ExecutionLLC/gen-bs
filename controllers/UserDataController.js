@@ -2,19 +2,12 @@
 
 const Express = require('express');
 
-class UserController {
+class UserDataController {
   constructor(services) {
     this.services = services;
 
-    this.home = this.home.bind(this);
     this.getUserMetadata = this.getUserMetadata.bind(this);
     this.initUserParamById = this.initUserParamById.bind(this);
-  }
-
-  home(request, response) {
-    response.json({
-      hello: 'world'
-    });
   }
 
   initUserParamById(request, response, next, id) {
@@ -37,12 +30,12 @@ class UserController {
     });
   }
 
-  createRouter(viewController) {
+  createRouter(viewController, filtersController) {
     const router = new Express();
     const viewRouter = viewController.createRouter();
+    const filtersRouter = filtersController.createRouter();
 
     router.param('userId', this.initUserParamById);
-    router.get('/', this.home);
     router.get('/:userId', this.getUserMetadata);
     router.use('/:userId/views', viewRouter);
 
@@ -50,4 +43,4 @@ class UserController {
   }
 }
 
-module.exports = UserController;
+module.exports = UserDataController;

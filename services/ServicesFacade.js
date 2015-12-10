@@ -5,8 +5,8 @@ const ViewService = require('./ViewService');
 
 class ServiceFacade {
   constructor() {
-    this.views = new ViewService(this);
-    this.users = new UserService(this);
+    this.viewService = new ViewService(this);
+    this.userService = new UserService(this);
   }
 }
 

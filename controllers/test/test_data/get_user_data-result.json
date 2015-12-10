@@ -1,0 +1,350 @@
+{
+  "id": 75461602.32428475,
+  "number_paid_samples": -39965498,
+  "views": [
+    {
+      "id": -51658101,
+      "name": "voluptatem quibusdam ducimus",
+      "view_list_items": [
+        {
+          "id": -33959307,
+          "order": -20037825,
+          "keywords_selected": [
+            {
+              "id": 81902479,
+              "synonyms": [
+                {},
+                {}
+              ],
+              "name": "et"
+            },
+            {
+              "id": -74842193,
+              "synonyms": [
+                {
+                  "name": "quo ipsum"
+                },
+                {},
+                {
+                  "name": "iste",
+                  "id": -26655358.67742419
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 79221747,
+          "order": -60406235,
+          "sort_order": 65771729
+        },
+        {
+          "id": -57225883,
+          "order": 35282622
+        },
+        {
+          "id": 18051308.72979985,
+          "order": 16492228,
+          "sort_order": 99372581,
+          "keywords_selected": [
+            {
+              "id": 7471507,
+              "name": "aperiam",
+              "synonyms": [
+                {},
+                {
+                  "id": 51793121.613678664
+                },
+                {},
+                {
+                  "id": 58634406.344106995,
+                  "name": "unde ullam"
+                },
+                {}
+              ]
+            }
+          ]
+        }
+      ],
+      "is_default": false
+    },
+    {
+      "id": 33519476,
+      "name": "dolorum consequatur",
+      "view_list_items": [
+        {
+          "id": -1909402,
+          "order": -31690048,
+          "sort_order": -76197544
+        },
+        {
+          "id": -48953185,
+          "order": 15719220,
+          "sort_direction": "vero unde veritatis fuga cumque"
+        }
+      ],
+      "is_default": false,
+      "total_number": 30402688,
+      "start_number": 23758502
+    },
+    {
+      "id": -23241775,
+      "name": "dolore nihil est debitis recusandae",
+      "view_list_items": [
+        {
+          "id": 54295343,
+          "order": 17493201,
+          "sort_order": -78645829,
+          "sort_direction": "eum corrupti nihil est",
+          "keywords_selected": [
+            {
+              "id": 36206786
+            },
+            {
+              "id": 36694857
+            },
+            {
+              "id": 59062501,
+              "name": "et",
+              "synonyms": [
+                {},
+                {
+                  "id": 17201973,
+                  "name": "non id"
+                },
+                {
+                  "id": -45444893,
+                  "name": "commodi eaque"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 19700105,
+          "order": -20039877,
+          "sort_order": -55510665,
+          "keywords_selected": [
+            {
+              "id": 70273132,
+              "name": "sunt sed quas ut"
+            },
+            {
+              "id": 57668130
+            },
+            {
+              "id": -40149305,
+              "name": "et voluptas sed doloribus vel"
+            },
+            {
+              "id": -231218,
+              "synonyms": [
+                {},
+                {
+                  "id": 10141519
+                },
+                {},
+                {
+                  "id": 65178982,
+                  "name": "molestiae ducimus consequuntur voluptatem maxime"
+                },
+                {
+                  "name": "et ut",
+                  "id": 57928992.57445979
+                }
+              ]
+            }
+          ],
+          "sort_direction": "doloremque nostrum a temporibus"
+        }
+      ],
+      "is_default": true,
+      "is_advanced": false,
+      "description": "non"
+    },
+    {
+      "id": -94501000,
+      "name": "aut",
+      "view_list_items": [
+        {
+          "id": 52230039.92263965,
+          "order": 56198499,
+          "keywords_selected": [
+            {
+              "id": -461653,
+              "name": "ut nihil"
+            },
+            {
+              "id": 33611438
+            },
+            {
+              "id": 65922668,
+              "name": "sapiente minima",
+              "synonyms": [
+                {
+                  "name": "repellendus sunt deserunt minima est",
+                  "id": -90624809
+                }
+              ]
+            },
+            {
+              "id": 53413172,
+              "synonyms": [
+                {
+                  "name": "enim eius dicta molestiae quas"
+                }
+              ]
+            },
+            {
+              "id": 40387012,
+              "name": "quis"
+            }
+          ],
+          "sort_direction": "illum voluptatem tenetur ab",
+          "sort_order": 75317740
+        }
+      ],
+      "is_default": true,
+      "is_advanced": true,
+      "start_number": -31232266
+    },
+    {
+      "id": 44485927,
+      "name": "dolorum",
+      "view_list_items": [
+        {
+          "id": -19965281.122064117,
+          "order": -22373279,
+          "keywords_selected": [
+            {
+              "id": 34845801
+            },
+            {
+              "id": 70332287,
+              "synonyms": [
+                {
+                  "id": 39346101
+                },
+                {
+                  "name": "tempore",
+                  "id": 9449066
+                }
+              ],
+              "name": "et explicabo velit adipisci"
+            },
+            {
+              "id": 82887811,
+              "synonyms": [
+                {
+                  "id": -61365008.911222085
+                },
+                {}
+              ]
+            }
+          ],
+          "sort_direction": "nemo ad"
+        },
+        {
+          "id": -70614563.37729935,
+          "order": -74347605,
+          "sort_direction": "cupiditate consequatur odit",
+          "sort_order": 86900578
+        },
+        {
+          "id": -78375184,
+          "order": 63548593,
+          "sort_direction": "omnis et"
+        },
+        {
+          "id": -90046888.13375035,
+          "order": 48810718,
+          "sort_direction": "et atque non",
+          "keywords_selected": [
+            {
+              "id": -16965713,
+              "name": "itaque et explicabo odit"
+            }
+          ],
+          "sort_order": -95134648
+        },
+        {
+          "id": 72612546.6776937,
+          "order": -9009200,
+          "sort_order": 86253534
+        }
+      ],
+      "is_default": false,
+      "description": "eveniet dicta consequatur itaque",
+      "total_number": -86871683,
+      "is_advanced": true
+    }
+  ],
+  "mutation_comments": [
+    {
+      "reference": "voluptate quae",
+      "chrom": "sed",
+      "pos": 43138222,
+      "commentary": "eaque modi",
+      "alt": "necessitatibus deleniti"
+    },
+    {
+      "reference": "necessitatibus error",
+      "chrom": "iusto",
+      "pos": 34995390,
+      "commentary": "soluta est"
+    },
+    {
+      "reference": "velit culpa error quidem",
+      "chrom": "sed",
+      "pos": 51289913,
+      "commentary": "tempora eum voluptas ea consequatur"
+    },
+    {
+      "reference": "eaque et aut",
+      "chrom": "et nisi",
+      "pos": 30129644,
+      "commentary": "ratione corporis delectus doloremque"
+    }
+  ],
+  "profile_metadata": {
+    "last_name": "illo",
+    "email": "lVUAfKaWJEBaW@zxZEbsGXiqGLUUGrDAfLeP.xp",
+    "name": "et quis alias",
+    "specialization": "perspiciatis voluptatum dolores quibusdam",
+    "language": "dolorum corrupti"
+  },
+  "filters": [
+    {
+      "id": 2781050,
+      "name": "eveniet eligendi dicta porro",
+      "rules": "voluptas",
+      "is_standard": false,
+      "description": "quasi",
+      "is_disabled_4copy": true
+    },
+    {
+      "id": 3842118.254022495,
+      "name": "consequuntur labore dicta pariatur",
+      "rules": "sint",
+      "is_standard": false,
+      "is_advanced": false,
+      "is_disabled_4copy": true,
+      "description": "accusantium distinctio eaque ipsam"
+    },
+    {
+      "id": 39561605,
+      "name": "quo qui",
+      "rules": "eveniet qui at esse",
+      "is_standard": false,
+      "is_disabled_4copy": false,
+      "is_advanced": true,
+      "description": "debitis esse nam sequi non"
+    },
+    {
+      "id": -12045415,
+      "name": "maiores consequatur ducimus ut minima",
+      "rules": "sint ad rerum",
+      "is_standard": false
+    }
+  ]
+}

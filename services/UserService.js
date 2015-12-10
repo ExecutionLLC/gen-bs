@@ -23,6 +23,11 @@ class UserService {
       callback(null, user);
     }
   }
+
+  getTestUserData(userId, callback) {
+
+    callback(null, );
+  }
 }
 
 module.exports = UserService;
