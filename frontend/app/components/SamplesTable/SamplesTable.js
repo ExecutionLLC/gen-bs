@@ -9,7 +9,8 @@ import 'datatables.net-responsive-bs/css/responsive.bootstrap.css';
 const $table = $('#table');
 
 const dtConfig = {
-  responsive: true,
+  "paging": false,
+  "responsive": true,
   "scrollX": true,
   "ajax": {
     "url": json,
