@@ -1,0 +1,89 @@
+
+<div class="sidebar sidebar-right collapse width" id="sidebarRight">
+  <div class="sidebar-inner">
+  
+    <div class="btn-toolbar sidebar-top">
+    <div class="btn-group"><h5>Сreate a Query </h5></div>
+    <div class="btn-group pull-right"><button data-target="#sidebarRight" data-toggle="collapse" class="btn navbar-btn sidebarToggle" href="#" type="button"><i class="fa fa-lg fa-close text-muted"></i></button>
+      
+    </div>
+   </div>
+    <div class="row grid-toolbar">
+    <div class="col-xs-12 col-sm-4 btn-group-select2">
+
+     <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body"  title="Upload .vfc file of sample">
+       <a href="#" class="btn btn-warning" data-toggle="modal" type="button" data-target="#upload">Upload</a>
+    </div>
+    <div class="btn-group"  data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples">
+   <select class="sample-select-ajax">
+     <option value="3620194" selected="selected">mental retardation patient12</option>
+   </select> 
+</div>
+
+    </div>
+    <div class="col-xs-12 col-sm-4 btn-group-select2">
+    <div class="dropdown btn-group"  data-toggle="tooltip" data-placement="right" data-container="body" title="Setup, combine, create custom new filters or combine default">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      Filters <span class="caret"></span>
+    </button>
+  <ul class="dropdown-menu dropdown-menu-item-template">
+    <li><a href="#" type="button" data-toggle="modal" data-target="#filter">Setup Filters</a></li>
+    <li><a href="#" type="button" data-toggle="modal" data-target="#combinefilter">Combine Filters</a></li>
+    
+  </ul>
+</div>
+    <div class="btn-group" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
+    <select class="select2" multiple="">
+           <option selected value="eye">Eye Cancer Diagnostics</option>            
+            <option value="cust1">Breast cancer</option>
+            <option value="cust2">Lung cancer</option>
+            <option value="cust3">Autism</option>
+            <option value="cust4">Retinoblastoma</option>
+            <option value="cust5">Mental retardation</option>
+<!--
+          <option selected>mental retardation variant filter</option>
+          <option>lung cancer variant filter</option>
+          <option>high quality SNP variants</option>
+          <option>exon variants</option>
+-->
+        </select>
+     </div>
+    
+   
+
+</div>   
+     <div class="col-xs-12 col-sm-4 btn-group-select2">
+        <!-- <div class="custom-view-btns-message"><em class="text-warning"><i class="glyphicon glyphicon-exclamation-sign"></i> Current view changed</em></div> -->
+           <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Setup custom new views, select colunms, colunm order, sorting and colunm filter">
+           <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns">Views</button>
+           </div>
+           
+        
+        <div class="btn-group btn-group-select100" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available views">
+        
+        <select class="select2" is="view">
+          <option value="1" selected>Default View</option>
+          <option value="2">Default View Copy</option>
+          <option value="3">Custom View</option>
+          <option value="4">User Custom View 1</option>
+          <option value="5">User Custom View 2</option>
+          <option value="6">User Custom View 3</option>
+        </select>
+        </div>
+         
+    <div class="btn-group btn-group-submit" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Analyze current sample with current filters and view">
+      <button class="btn btn-primary" type="button">
+         Analyze
+      </button>
+    </div>
+    
+   
+     <div class="btn-group btn-group-history"  data-toggle="tooltip" data-placement="bottom" data-container="body" title="History of queries, saved query settings">
+      <button data-target="#history" data-toggle="modal" type="button" class="btn btn-default"><span class="">Load history</span></button>
+    </div>
+   
+    </div>
+  </div>
+  </div>
+  
+</div>

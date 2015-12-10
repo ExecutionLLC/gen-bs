@@ -103,7 +103,9 @@ module.exports = {
       entry: path.join(process.cwd(), "app", "index.hbs"),
       output: path.join(process.cwd(), "../public", "index.html"),
       partials: [
-          path.join(process.cwd(), "app", "templates", "*", "*.hbs")
+          path.join(process.cwd(), "app", "templates", "*", "*.hbs"),
+          path.join(process.cwd(), "app", "templates", "*", "*", "*.hbs"),
+          path.join(process.cwd(), "app", "templates", "*", "*", "*", "*.hbs")
       ],
     })
 

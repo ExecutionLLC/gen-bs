@@ -110,7 +110,9 @@ module.exports = {
 
       // globbed path to partials, where folder/filename is unique
       partials: [
-          path.join(process.cwd(), "app", "templates", "*", "*.hbs")
+          path.join(process.cwd(), "app", "templates", "*", "*.hbs"),
+          path.join(process.cwd(), "app", "templates", "*", "*", "*.hbs"),
+          path.join(process.cwd(), "app", "templates", "*", "*", "*", "*.hbs")
       ],
 
       // register custom helpers
