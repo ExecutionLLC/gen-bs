@@ -9,7 +9,6 @@ if (matchMedia) {
 
 // media query change
 function WidthChange(mq) {
-  console.log('widtch change',mq);
 
 	if (mq.matches) {
 		// window width is at least 500px
@@ -36,7 +35,6 @@ function WidthChange(mq) {
     })    
     $('#subnav').on('hide.bs.collapse', function () {
       $('body').addClass("subnav-closed");
-        console.log('shown.bs.collapse');
     });
     $('#subnav').on('show.bs.collapse', function () {  
       $('body').removeClass("subnav-closed");

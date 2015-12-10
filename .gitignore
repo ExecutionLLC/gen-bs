@@ -10,4 +10,4 @@ deploy.sh
 *.swo
 
 .DS_Store
-npm-debug.log
+*npm-debug.log*

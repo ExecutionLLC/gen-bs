@@ -100,33 +100,12 @@ module.exports = {
     }),
 
     new HandlebarsPlugin({
-      // path to main hbs template
       entry: path.join(process.cwd(), "app", "index.hbs"),
-      // filepath to result
-      output: path.join(process.cwd(), "app", "index.html"),
-
-      // data passed to main hbs template: `main-template(data)`
-      //data: require("./app/data/project.json"),
-
-      // globbed path to partials, where folder/filename is unique
+      output: path.join(process.cwd(), "../public", "index.html"),
       partials: [
           path.join(process.cwd(), "app", "templates", "*", "*.hbs")
       ],
-
-      // register custom helpers
-      //helpers: {
-      //    nameOfHbsHelper: Function.prototype,
-      //    path.join(process.cwd(), "app", "helpers", "*.helper.js")
-      //},
-
-      // hooks
-      onBeforeSetup: function (Handlebars) {},
-      onBeforeAddPartials: function (Handlebars, partialsMap) {},
-      onBeforeCompile: function (Handlebars, templateContent) {},
-      onBeforeRender: function (Handlebars, data) {},
-      onBeforeSave: function (Handlebars, resultHtml) {},
-      onDone: function (Handlebars) {}
-    }),
+    })
 
   ]
 
