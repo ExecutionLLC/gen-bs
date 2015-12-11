@@ -1,0 +1,19 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "v1.get_compatable_sources",
+	"title": "Получить список источников подходящих для поиска пользовательскому файлу",
+	"description": "Возвращает список источников в json формате, для которых система координат совпадает с системой координат в пользовательском файле.",
+	"type": "object",
+	"properties": {
+		"params": {
+			"description": "VCF файл",
+			"type": "string",
+			"example": "user.vcf.gz"
+		},
+		"result": {
+			"description": "HDF5 файлы",
+			"type": "array",
+			"example": [ "db1.h5", "db2.h5" ]
+		}
+	}
+}
