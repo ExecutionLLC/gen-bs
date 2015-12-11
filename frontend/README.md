@@ -10,6 +10,8 @@ App consists of:
 
 - Html handlebars templates for html devs.
 - Flux like architecture for js app with actions and stores.
+- jQuery for DOM manipulation.
+- jQuery plugins and components for rapid prototyping.
 
 # Installation
 
