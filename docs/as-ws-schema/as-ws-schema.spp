@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+	<Folder FolderName="Functions"/>
+	<File FilePath="get_compatable_sources.json" HomeFolder="Yes"/>
+	<File FilePath="get_sample_metadata.json" HomeFolder="Yes"/>
+	<File FilePath="get_session_state.json" HomeFolder="Yes"/>
+	<File FilePath="get_source_metadata.json" HomeFolder="Yes"/>
+	<File FilePath="F:\GEN-BS\DOCS\JSON-SCHEMA-PROJECT\get_sources.json" HomeFolder="Yes"/>
+	<File FilePath="open_session.json" HomeFolder="Yes"/>
+	<File FilePath="F:\gen-bs\docs\json-schema-project\root.json" HomeFolder="Yes"/>
+	<File FilePath="set_sources.json" HomeFolder="Yes"/>
+	<File FilePath="start_session.json" HomeFolder="Yes"/>
+</Project>

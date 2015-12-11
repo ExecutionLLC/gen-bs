@@ -2,13 +2,6 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "timestamp": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "description": {
-      "type": "string"
-    },
     "curent_sample": {
       "type": "object",
       "properties": {
@@ -31,7 +24,15 @@
         "$ref": "../base_json/filter.json#"
       }
     },
-    "current_keywords": {
+    "current_search_value": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "current_field_controls": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
@@ -39,17 +40,20 @@
         "$ref": "../base_json/keyword.json#"
       }
     },
-    "current_fields_metadata": {
-      "type": "array",
-      "items": {
-        "$ref": "../base_json/field_metadata.json#"
-      }
+    "limit": {
+      "type": "integer"
+    },
+    "offset": {
+      "type": "integer"
     }
   },
   "required": [
     "curent_sample",
     "current_view",
     "current_filters",
-    "current_keywords"
+    "current_search_value",
+    "current_field_controls",
+    "limit",
+    "offset"
   ]
 }
