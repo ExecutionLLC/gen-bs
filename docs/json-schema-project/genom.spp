@@ -7,6 +7,7 @@
 	</Folder>
 	<Folder FolderName="ws_as">
 		<File FilePath="json\WS_AS\get_data_to_table.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS_AS\get_data_to_table_answer.json" HomeFolder="Yes"/>
 		<File FilePath="json\WS_AS\save_file.json" HomeFolder="Yes"/>
 		<File FilePath="json\WS_AS\save_filter.json" HomeFolder="Yes"/>
 		<File FilePath="json\WS_AS\save_query_history.json" HomeFolder="Yes"/>
