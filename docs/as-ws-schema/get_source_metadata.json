@@ -6,13 +6,38 @@
 	"type": "object",
 	"properties": {
 		"params": {
-			"description": "HDF5 файл",
 			"type": "string",
+			"description": "name of the source DB",
 			"example": "db_1.h5"
 		},
 		"result": {
-			"description": "HZ",
-			"type": "object"
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties" : {
+					"name": { 
+						"type": "string",
+						"description": "name of the column"
+					},
+					"is_mandatory": {
+						"type": "boolean",
+						"description": "true - column is mandatory for VCF format, false - column is part of INFO field"
+					},
+					"num" : { 
+						"type": "integer",
+						"description": "number of values per row"
+					},
+                    "type" : {
+						"type": "string",
+                        "description": "type of the column data"
+                    },
+                    "desc" : { 
+						"type": "string",
+                        "description": "short description from VCF file"
+                    }
+                }
+			},
+			"description": "list of columns metadata"
 		}
-	}
+    }
 }
