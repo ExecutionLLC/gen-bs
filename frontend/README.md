@@ -1,4 +1,4 @@
-# Welcome to Genomix FrontEnd Application.
+# Welcome to Genomix FrontEnd Browser Application.
 
 Genomix Frontend Application is intended to do great things for genetics all over the world.
 
@@ -8,9 +8,8 @@ Genomix Frontend Application is intended to do great things for genetics all ove
 
 App consists of:
 
-- controllers, the topmost level. This layer is parsing and producing JSON from the actual data.
-- services. This is where business logic lives. The services form the actual data. Also access rights are checked here.
-- models, which are the data access layer abstraction. Models do actual requests for accessing data sources, such as DB or application service.
+- Html handlebars templates for html devs.
+- Flux like architecture for js app with actions and stores.
 
 # Installation
 
@@ -37,3 +36,4 @@ App consists of:
 - After running `npm start` at `../` folder ( at root of WS ) you wil see app at `http://localhost:5000/`
 
    Result of the build webserver wil see at `../public` folder.
+
