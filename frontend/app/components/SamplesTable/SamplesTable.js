@@ -3,19 +3,25 @@ import 'datatables.net-bs';
 import 'datatables.net-bs/css/dataTables.bootstrap.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs/css/responsive.bootstrap.css';
+import 'datatables.net-scroller';
+import 'datatables.net-scroller-bs/css/scroller.bootstrap.css';
 
 
 //datatables.net Samples table   
 const $table = $('#table');
 
 const dtConfig = {
-  "paging": false,
-  "responsive": true,
-  "scrollX": false,
-  "scrollY": false,
-  "ajax": {
-    "url": json,
-    "dataSrc": "",
+  paging: true,
+  responsive: true,
+  scrollX: false,
+  scrollY: true,
+  scrollY: 400,
+  scrollCollapse: true,
+  deferRender:    true,
+  scroller:       true,
+  ajax: {
+    url: json,
+    dataSrc: "",
   },
   "columns": [
     { "data": "comment", "title": "Comment", "visible": true},
