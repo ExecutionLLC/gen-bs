@@ -11,25 +11,26 @@ const $table = $('#table');
 const dtConfig = {
   "paging": false,
   "responsive": true,
-  "scrollX": true,
+  "scrollX": false,
+  "scrollY": false,
   "ajax": {
     "url": json,
     "dataSrc": "",
   },
   "columns": [
-    { "data": "comment" },
-    { "data": "function" },
-    { "data": "gene" },
-    { "data": "chromosome" },
-    { "data": "endCoordinate" },
-    { "data": "cytogeneticBand" },
-    { "data": "startCoordinate" },
-    { "data": "affectedAminoAcid" },
-    { "data": "proteinChange" },
-    { "data": "granthamScore" },
-    { "data": "functionalConsequence" },
-    { "data": "transcript" },
-    { "data": "nucleotideChange" }
+    { "data": "comment", "title": "Comment", "visible": true},
+    { "data": "function", "title": "Function", "visible": true },
+    { "data": "gene", "title": "Gene", "visible": true },
+    { "data": "chromosome", "title": "Chromosome", "visible": true },
+    { "data": "endCoordinate", "title": "EndCoordinate", "visible": true },
+    { "data": "cytogeneticBand", "title": "CytogeneticBand", "visible": true },
+    { "data": "startCoordinate", "title": "StartCoordinate", "visible": true },
+    { "data": "affectedAminoAcid", "title": "AffectedAminoAcid", "visible": true },
+    { "data": "proteinChange", "title": "ProteinChange", "visible": true },
+    { "data": "granthamScore", "title": "GranthamScore", "visible": false },
+    { "data": "functionalConsequence", "title": "FunctionalConsequence", "visible": false },
+    { "data": "transcript", "title": "Transcript", "visible": false },
+    { "data": "nucleotideChange", "title": "NucleotideChange", "visible": false }
   ]
 };
 
