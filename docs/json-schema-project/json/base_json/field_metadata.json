@@ -65,16 +65,31 @@
 			"type": "boolean"
 		},
 		"available_values": {
-			"type": "array",
-			"items": {
-				"type": "object",
-				"properties": {
-					"id": {
-						"type": "number"
-					},
-					"name": {
-						"type": "string"
+			"type": "object",
+			"properties": {
+				"available_items": {
+					"type": "array",
+					"uniqueItems": true,
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "number"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
 					}
+				},
+				"selected_items": {
+					"type": "array",
+					"items": {
+						"type": "integer"
+					}
+				},
+				"multi_select": {
+					"type": "boolean"
 				}
 			}
 		}

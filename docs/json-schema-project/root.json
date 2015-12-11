@@ -1,0 +1,11 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Запрос списка источников",
+	"description": "Запросы делаются по JSON-RPC. post: http://base_url/rpc/,  ws: ws://base_url/ws/",
+	"type": "object",
+	"properties": {
+		"params": {},
+		"result": {},
+		"error": {}
+	}
+}

@@ -1,0 +1,33 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"top_search": {
+			"description": "value of main search",
+			"type": "string"
+		},
+		"search": {
+			"description": "value in every filter control",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"description": "column id",
+						"type": "number"
+					},
+					"value": {
+						"description": "value in filter control",
+						"type": "string"
+					}
+				}
+			}
+		},
+		"expected_number": {
+			"type": "integer"
+		},
+		"start_number": {
+			"type": "number"
+		}
+	}
+}

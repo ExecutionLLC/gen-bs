@@ -11,3 +11,8 @@ deploy.sh
 
 .DS_Store
 *npm-debug.log*
+
+.settings/
+.project
+.pydevproject
+

@@ -1,43 +1,42 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "One view",
-	"type": "object",
-	"properties": {
-		"id": {
-			"description": "The unique identifier for a view",
-			"type": "integer"
-		},
-		"name": {
-			"type": "string"
-		},
-		"view_list_items": {
-			"type": "array",
-			"minItems": 1,
-			"uniqueItems": true,
-			"items": {
-				"$ref": "./view_list_item.json#"
-			}
-		},
-		"description": {
-			"type": "string"
-		},
-		"start_number": {
-			"type": "integer"
-		},
-		"total_number": {
-			"type": "integer"
-		},
-		"is_default": {
-			"type": "boolean"
-		},
-		"is_advanced": {
-			"type": "boolean"
-		}
-	},
-	"required": [
-		"id",
-		"name",
-		"view_list_items",
-		"is_default"
-	]
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One view",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a view",
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "view_list_items": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "./view_list_item.json#"
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "is_standard": {
+      "type": "boolean"
+    },
+    "is_advanced": {
+      "type": "boolean"
+    },
+    "is_disabled_4copy": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "view_list_items",
+    "is_standard",
+    "is_advanced",
+    "is_disabled_4copy"
+  ]
 }

@@ -1,0 +1,11 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "v1.close_session",
+	"title": "Закрыть сессию работы с файлом",
+	"description": "Сервер останавливает все задачи в рамках сессии, сбрасывает данные кэша в redis и удаляет сессию из собственного кэша",
+	"type": "object",
+	"properties": {
+		"params": {},
+		"result": {}
+	}
+}

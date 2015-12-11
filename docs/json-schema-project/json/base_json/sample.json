@@ -9,7 +9,7 @@
 			"type": "string"
 		},
 		"metadata": {
-			"$ref": "file:///C:/genom/data/json/base_json/sample_metadata.json#"
+			"$ref": "./sample_metadata.json#"
 		},
 		"analysis_date": {
 			"type": "string",
@@ -18,7 +18,7 @@
 		"vcf_fields": {
 			"type": "array",
 			"items": {
-				"$ref": "file:///C:/genom/data/json/base_json/vcf_field.json#"
+				"$ref": "./vcf_field.json#"
 			}
 		},
 		"is_analysed": {
@@ -27,7 +27,7 @@
 		"commentaries": {
 			"type": "array",
 			"items": {
-				"$ref": "file:///C:/genom/data/json/base_json/commentary.json#"
+				"$ref": "./commentary.json#"
 			}
 		}
 	},
