@@ -20,7 +20,9 @@ app.use('/api/demo/data', controllers.demoUserDataController.createRouter(contro
 app.use('/api/login', controllers.loginController.createRouter());
 
 app.use('/api/search', controllers.searchController.createRouter());
-app.use('/api/demo/search', controllers.searchController.createRouter());
+app.use('/api/demo/',
+    controllers.demoUserDataController.createRouter(
+        controllers.viewController, controllers.filterController));
 
 
 const server = app.listen(app.get('port'), function() {

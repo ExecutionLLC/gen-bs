@@ -4,7 +4,7 @@ const Express = require('express');
 
 const ControllerBase = require('./ControllerBase');
 
-class UserDataController {
+class UserDataController extends ControllerBase {
   constructor(services) {
     super(services);
 

@@ -12,25 +12,18 @@ class ViewController extends ControllerBase {
   }
 
   getUserViews(request, response) {
-    const user = request.user;
-
-    if (user) {
-      this.services.views.findByUser(user, (error, views) => {
-        if (error) {
-          this.sendError(response, {
-            httpError: 500,
-            message: error
-          })
-        } else {
-          response.json(views);
-        }
-      });
-    } else {
-      this.sendError(response, {
-        httpError: 500,
-        message: 'User is undefined.'
-      });
+    if (!this.checkUserIsDefined(request, response)) {
+      return;
     }
+
+    const user = request.user;
+    this.services.views.findByUser(user, (error, views) => {
+      if (error) {
+        this.sendInternalError(response, error);
+      } else {
+        response.json(views);
+      }
+    });
   }
 
   createRouter() {

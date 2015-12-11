@@ -56,7 +56,7 @@ class DemoUserDataController extends ControllerBase {
 
         router.use(this.initDemoUser);
 
-        router.get('/', this.getDemoUserData);
+        router.get('/data', this.getDemoUserData);
         router.use('/views', viewRouter);
         router.use('/filters', filtersRouter);
 

@@ -4,7 +4,11 @@
  * Base class for all controllers.
  * */
 class ControllerBase {
-    sendError(response, message) {
+    constructor(services) {
+        this.services = services;
+    }
+
+    sendInternalError(response, message) {
         this.sendError(response, 500, message);
     }
 
@@ -16,6 +20,14 @@ class ControllerBase {
                 message
             })
             .end();
+    }
+
+    checkUserIsDefined(request, response) {
+        if (!request.user) {
+            this.sendInternalError(response, 'User is undefined.');
+            return false;
+        }
+        return true;
     }
 }
 
