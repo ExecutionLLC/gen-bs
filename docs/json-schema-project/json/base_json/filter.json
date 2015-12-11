@@ -29,6 +29,8 @@
 		"id",
 		"name",
 		"rules",
-		"is_standard"
+		"is_standard",
+		"is_advanced",
+		"is_disabled_4copy"
 	]
 }

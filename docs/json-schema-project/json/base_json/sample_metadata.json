@@ -21,7 +21,7 @@
 		"is_analysed": {
 			"type": "boolean"
 		},
-		"is_default": {
+		"is_standard": {
 			"type": "boolean"
 		},
 		"is_advanced": {
@@ -31,6 +31,8 @@
 	"required": [
 		"id",
 		"hash",
-		"is_analysed"
+		"is_analysed",
+		"is_standard",
+		"is_advanced"
 	]
 }
