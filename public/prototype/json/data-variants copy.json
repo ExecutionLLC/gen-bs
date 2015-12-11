@@ -1,0 +1,15 @@
+    {
+        "sampleSummary": {
+            "userDefined": {
+                "familyID": "",
+                "subjectID": ""
+                },
+            "vcfFileDetails": {
+                "adjustedP-value": "",
+                "alleleFrequency": "",
+                "average Base Quality": "",
+                "forward Strand Read Depth": ""
+            }
+            
+        }
+    }

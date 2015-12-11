@@ -1,0 +1,24 @@
+<nav class="navbar navbar-fixed-top navbar-default">
+    <div class="container-fluid">
+        <div class="row grid-toolbar">
+
+            <div class="col-xs-12 col-sm-4 btn-group-select2">
+                {{> create_query/upload }}
+                {{> create_query/metadata_search }}
+            </div>
+
+            <div class="col-xs-12 col-sm-4 btn-group-select2">
+                {{> create_query/filters}}
+            </div>   
+
+            <div class="col-xs-12 col-sm-4 btn-group-select2">
+                {{> create_query/views }}
+                 
+                {{> create_query/analize }}
+
+                {{> create_query/load_history }}
+            </div>
+
+        </div>
+    </div>
+</nav>
