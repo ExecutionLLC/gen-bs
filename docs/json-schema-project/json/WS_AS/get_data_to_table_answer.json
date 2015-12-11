@@ -8,7 +8,7 @@
 			"description": "Total row count on the server",
 			"minimum": 0
 		},
-		"start": {
+		"offset": {
 			"type": "integer",
 			"description": "Start index of the first item in current selection",
 			"minimum": 0
