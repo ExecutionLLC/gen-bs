@@ -17,6 +17,7 @@ const dtConfig = {
     "dataSrc": "",
   },
   "columns": [
+    { "data": "comment" },
     { "data": "function" },
     { "data": "gene" },
     { "data": "chromosome" },
@@ -28,8 +29,7 @@ const dtConfig = {
     { "data": "granthamScore" },
     { "data": "functionalConsequence" },
     { "data": "transcript" },
-    { "data": "nucleotideChange" },
-    { "data": "comment" }
+    { "data": "nucleotideChange" }
   ]
 };
 
