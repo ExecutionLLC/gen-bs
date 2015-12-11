@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
-	<Folder FolderName="as_ws">
-		<File FilePath="json\AS_WS\get_demo_user_data.json" HomeFolder="Yes"/>
-		<File FilePath="json\AS_WS\get_filelds_metadata.json" HomeFolder="Yes"/>
-		<File FilePath="json\AS_WS\get_user_data.json" HomeFolder="Yes"/>
+    <Folder FolderName="WS-UI">
+		<File FilePath="json\WS-UI\get_demo_user_data.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS-UI\get_filelds_metadata.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS-UI\get_filter_filelds.json" HomeFolder="Yes"/>
+		<File FilePath="json\WS-UI\get_user_data.json" HomeFolder="Yes"/>
 	</Folder>
-	<Folder FolderName="ws_as">
-		<File FilePath="json\WS_AS\get_data_to_table.json" HomeFolder="Yes"/>
-		<File FilePath="json\WS_AS\get_data_to_table_answer.json" HomeFolder="Yes"/>
-		<File FilePath="json\WS_AS\save_file.json" HomeFolder="Yes"/>
-		<File FilePath="json\WS_AS\save_filter.json" HomeFolder="Yes"/>
-		<File FilePath="json\WS_AS\save_query_history.json" HomeFolder="Yes"/>
-		<File FilePath="json\WS_AS\save_user_metadata.json" HomeFolder="Yes"/>
-		<File FilePath="json\WS_AS\save_view.json" HomeFolder="Yes"/>
-		<File FilePath="json\WS_AS\search_in_results.json" HomeFolder="Yes"/>
+	<Folder FolderName="UI-WS">
+		<File FilePath="json\UI-WS\get_data_to_table.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\get_data_to_table_answer.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\save_combine_filter.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\save_commentary.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\save_file.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\save_filter.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\save_query_history.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\save_sample_metadata.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\save_user_metadata.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\save_view.json" HomeFolder="Yes"/>
+		<File FilePath="json\UI-WS\search_in_results.json" HomeFolder="Yes"/>
 	</Folder>
 	<Folder FolderName="base_json">
 		<File FilePath="json\base_json\commentary.json" HomeFolder="Yes"/>
