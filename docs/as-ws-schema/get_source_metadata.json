@@ -1,43 +1,43 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "v1.get_source_metadata",
-	"title": "Получить метаданные источника",
-	"description": "В запросе должен быть указан идентификатор источника. Данные возвращаются из кеша backend сервера, если в кэше не найденны данные для данного источника, то проверяется наличие источника в хранилеще по данным кэша (само хранилище не сканируется). Если источник не был найден, то backend сервер возвращает ошибку. Если источник был найден, то сервер читает метаданные, записывает их в кэш и отправляет данные клиенту.",
-	"type": "object",
-	"properties": {
-		"params": {
-			"type": "string",
-			"description": "name of the source DB",
-			"example": "db_1.h5"
-		},
-		"result": {
-			"type": "array",
-			"items": {
-				"type": "object",
-				"properties" : {
-					"name": { 
-						"type": "string",
-						"description": "name of the column"
-					},
-					"is_mandatory": {
-						"type": "boolean",
-						"description": "true - column is mandatory for VCF format, false - column is part of INFO field"
-					},
-					"num" : { 
-						"type": "integer",
-						"description": "number of values per row"
-					},
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "v1.get_source_metadata",
+    "title": "get_source_metadata - backend API function",
+    "description": "returns source metadata by source name",
+    "type": "object",
+    "properties": {
+        "params": {
+            "type": "string",
+            "description": "name of the source DB",
+            "example": "db_1.h5"
+        },
+        "result": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties" : {
+                    "name": { 
+                        "type": "string",
+                        "description": "name of the column"
+                    },
+                    "is_mandatory": {
+                        "type": "boolean",
+                        "description": "true - column is mandatory for VCF format, false - column is part of INFO field"
+                    },
+                    "num" : { 
+                        "type": "integer",
+                        "description": "number of values per row"
+                    },
                     "type" : {
-						"type": "string",
+                        "type": "string",
                         "description": "type of the column data"
                     },
                     "desc" : { 
-						"type": "string",
+                        "type": "string",
                         "description": "short description from VCF file"
                     }
                 }
-			},
-			"description": "list of columns metadata"
-		}
+            },
+            "description": "list of columns metadata"
+        }
     }
 }
