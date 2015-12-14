@@ -23,9 +23,7 @@
     "node": "4.2.2"
   },
   "dependencies": {
-    "express": "4.13.3"
-  },
-  "devDependencies": {
-    "lodash": "^3.10.1"
+    "express": "4.13.3",
+    "lodash": "3.10.1"
   }
 }
