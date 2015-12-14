@@ -12,7 +12,7 @@
       }
     },
     "result": {
-      "$ref": "base_json/session_status.json#"
+      "$ref": "base_json/session_state.json#"
     }
   }
 }
