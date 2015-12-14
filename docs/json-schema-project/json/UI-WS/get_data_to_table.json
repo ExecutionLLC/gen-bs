@@ -1,22 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Describes request to WS for main table data.",
   "type": "object",
   "properties": {
-    "curent_sample": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
+    "sample_id": {
+      "type": "string",
+      "description": "Sample id"
     },
-    "current_view": {
+    "view": {
       "$ref": "../base_json/view.json#"
     },
-    "current_filters": {
+    "filters": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
@@ -24,7 +18,7 @@
         "$ref": "../base_json/filter.json#"
       }
     },
-    "current_search_value": {
+    "search_value": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
@@ -32,7 +26,7 @@
         "type": "string"
       }
     },
-    "current_field_controls": {
+    "field_controls": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
@@ -48,11 +42,11 @@
     }
   },
   "required": [
-    "curent_sample",
-    "current_view",
-    "current_filters",
-    "current_search_value",
-    "current_field_controls",
+    "sample_id",
+    "view",
+    "filters",
+    "search_value",
+    "field_controls",
     "limit",
     "offset"
   ]
