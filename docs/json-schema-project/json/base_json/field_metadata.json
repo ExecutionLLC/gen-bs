@@ -5,17 +5,40 @@
 	"properties": {
 		"id": {
 			"description": "The unique identifier for a field",
-			"type": "number"
+			"type": "string"
 		},
 		"name": {
 			"description": "Text Label",
 			"type": "string"
 		},
+		"source_name": {
+			"type": "string",
+			"description": "Name of the source. Should be equal to id for user-uploaded samples."
+		},
+		"value_type": {
+			"type": "string",
+			"description": "Value type which is got from the VCF file.",
+			"enum": [
+				"float",
+				"integer",
+				"string",
+				"boolean"
+			]
+		},
+		"filter_control_enable": {
+			"type": "boolean"
+		},
+		"is_mandatory": {
+			"type": "boolean"
+		},
+		"editable": {
+			"type": "boolean"
+		},
+		"is_invisible": {
+			"type": "boolean"
+		},
 		"description": {
 			"description": "Text description for tooltip",
-			"type": "string"
-		},
-		"group": {
 			"type": "string"
 		},
 		"keywords": {
@@ -25,73 +48,24 @@
 				"$ref": "../base_json/keyword.json#"
 			}
 		},
-		"operators": {
-			"type": "array",
-			"items": {
-				"type": "string",
-				"enum": [
-					"equal",
-					"not equal",
-					"in",
-					"not in",
-					"less",
-					"less or equal",
-					"greater",
-					"greater or equal",
-					"between",
-					"not between",
-					"is null",
-					"is not null"
-				]
-			}
-		},
-		"filter_control_enable": {
-			"type": "boolean"
-		},
-		"value_type": {
-			"type": "string",
-			"enum": [
-				"float",
-				"integer",
-				"char",
-				"string",
-				"boolean"
-			]
-		},
-		"editable": {
-			"type": "boolean"
-		},
-		"tech": {
-			"type": "boolean"
-		},
 		"available_values": {
-			"type": "object",
-			"properties": {
-				"available_items": {
-					"type": "array",
-					"uniqueItems": true,
-					"items": {
-						"type": "object",
-						"properties": {
-							"id": {
-								"type": "number"
-							},
-							"name": {
-								"type": "string"
-							}
-						}
+			"type": "array",
+			"description": "Values for enum-like fields",
+
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
 					}
-				},
-				"selected_items": {
-					"type": "array",
-					"items": {
-						"type": "integer"
-					}
-				},
-				"multi_select": {
-					"type": "boolean"
 				}
 			}
+		},
+		"multi_select": {
+			"type": "boolean"
 		}
 	},
 	"required": [

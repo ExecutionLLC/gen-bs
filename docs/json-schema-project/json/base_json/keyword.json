@@ -4,11 +4,16 @@
 	"type": "object",
 	"properties": {
 		"id": {
-			"description": "The unique identifier for a keyword",
-			"type": "integer"
+			"description": "UUID, the unique identifier for a keyword",
+			"type": "string"
+		},
+		"field_id": {
+			"type": "string",
+			"description": "UUID of the corresponding field."
 		},
 		"name": {
-			"type": "string"
+			"type": "string",
+			"maxLength": 50
 		},
 		"synonyms": {
 			"type": "array",
@@ -16,10 +21,15 @@
 				"type": "object",
 				"properties": {
 					"id": {
-						"type": "number"
+						"type": "string"
+					},
+					"keyword_id": {
+						"type": "string",
+						"description": "UUID of the keyword for this synonym"
 					},
 					"name": {
-						"type": "string"
+						"type": "string",
+						"maxLength": 50
 					}
 				}
 			}
