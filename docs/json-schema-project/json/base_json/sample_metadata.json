@@ -2,12 +2,12 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
-		"timestamp": {
+		"modifiedTimestamp": {
 			"type": "string",
 			"format": "date-time"
 		},
 		"id": {
-			"type": "number"
+			"type": "string"
 		},
 		"hash": {
 			"type": "string"
@@ -18,13 +18,15 @@
 				"$ref": "../base_json/field_metadata.json#"
 			}
 		},
+		"sample_type": {
+			"type": "string",
+			"enum": [
+				"standard",
+				"advanced",
+				"user"
+			]
+		},
 		"is_analysed": {
-			"type": "boolean"
-		},
-		"is_standard": {
-			"type": "boolean"
-		},
-		"is_advanced": {
 			"type": "boolean"
 		}
 	},

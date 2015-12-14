@@ -13,11 +13,15 @@
 			"type": "string",
 			"format": "email"
 		},
-		"specialization": {
+		"speciality": {
 			"type": "string"
 		},
 		"language": {
-			"type": "string"
+			"type": "string",
+			"maxLength": 2
+		},
+		"number_paid_samples": {
+			"type": "integer"
 		}
 	}
 }
