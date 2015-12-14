@@ -2,40 +2,28 @@
 
 const Express = require('express');
 
-class ViewController {
+const ControllerBase = require('./ControllerBase');
+
+class ViewController extends ControllerBase {
   constructor(services) {
-    this.services = services;
+    super(services);
 
     this.getUserViews = this.getUserViews.bind(this);
   }
 
   getUserViews(request, response) {
-    const user = request.user;
-
-    if (user) {
-      this.services.views.findByUser(user, (error, views) => {
-        if (error) {
-          response
-            .status(500)
-            .json({
-              code: 500,
-              message: error
-            })
-            .end();
-        } else {
-          response.json(views);
-        }
-      });
-    } else {
-      response
-        .status(500)
-        .json({
-          code: 500,
-          // TODO: i18n
-          message: 'User should not be undefined'
-        })
-        .end();
+    if (!this.checkUserIsDefined(request, response)) {
+      return;
     }
+
+    const user = request.user;
+    this.services.views.findByUser(user, (error, views) => {
+      if (error) {
+        this.sendInternalError(response, error);
+      } else {
+        response.json(views);
+      }
+    });
   }
 
   createRouter() {

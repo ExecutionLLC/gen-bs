@@ -2,22 +2,19 @@
 
 const Express = require('express');
 
-class UserController {
+const ControllerBase = require('./ControllerBase');
+
+class UserDataController extends ControllerBase {
   constructor(services) {
-    this.services = services;
+    super(services);
 
-    this.home = this.home.bind(this);
     this.getUserMetadata = this.getUserMetadata.bind(this);
-    this.initUserParamById = this.initUserParamById.bind(this);
   }
 
-  home(request, response) {
-    response.json({
-      hello: 'world'
-    });
-  }
-
-  initUserParamById(request, response, next, id) {
+  initUserByToken(request, response, next) {
+    // TODO: here we should get token from the request.
+    // TODO: check token is valid on external auth service and is not expired
+    // TODO: get user by token from the database
     this.services.users.findById(id, (error, user) => {
       if (error) {
         next(error);
@@ -37,17 +34,17 @@ class UserController {
     });
   }
 
-  createRouter(viewController) {
+  createRouter(viewController, filtersController) {
     const router = new Express();
     const viewRouter = viewController.createRouter();
+    const filtersRouter = filtersController.createRouter();
 
-    router.param('userId', this.initUserParamById);
-    router.get('/', this.home);
-    router.get('/:userId', this.getUserMetadata);
-    router.use('/:userId/views', viewRouter);
+    router.use(this.initUserByToken);
+    router.get('/', this.getUserMetadata);
+    router.use('/views', viewRouter);
 
     return router;
   }
 }
 
-module.exports = UserController;
+module.exports = UserDataController;
