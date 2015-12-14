@@ -23,7 +23,6 @@ const dtConfig = {
     dataSrc: "",
   },
   "columns": [
-    //{ "data": "comment", "title": "Comment", "visible": true, "orderable": false},
     { "data": "comment", "title": "Comment", "visible": true},
     { "data": "function", "title": "Function", "visible": true },
     { "data": "gene", "title": "Gene", "visible": true },
@@ -45,7 +44,6 @@ $( function() {
 
   const table = new DTable($tableEl, dtConfig ).table;
 
-  //$("div.toolbar").html('<b>Custom tool bar! Text/images etc.</b>');
 
   table.columns().flatten().each( function ( colIdx ) {
     const input = $('<input type="text" placeholder="Search" />')
