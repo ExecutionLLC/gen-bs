@@ -10,7 +10,7 @@
       "properties": {
         "filename": {
           "type": "string",
-          "description": "name of the uploaded sample"
+          "description": "Full path of the uploaded sample"
         }
       }
     },
@@ -20,7 +20,8 @@
         "status": {
           "enum": [
             "converting",
-            "uploading"
+            "uploading",
+            "ready"
           ]
         },
         "progress": {
