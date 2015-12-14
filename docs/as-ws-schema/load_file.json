@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "v1.load_file",
+  "title": "load_file - backend API function",
+  "description": "converts user VCF to HDF5 format and pull both files on storage",
+  "type": "object",
+  "properties": {
+    "params": {
+      "type": "object",
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "name of the uploaded sample"
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "converting",
+            "uploading"
+          ]
+        },
+        "progress": {
+          "type": "integer",
+          "description": "progress of operation in %. Operation correspond to enum value in status."
+        }
+      }
+    }
+  }
+}
