@@ -1,4 +1,4 @@
- @border-radius: 3px;
+ @border-radius: 0px;
 .select2-selection--multiple {
   background-color: white;
   border: 1px solid @btn-default-border;
@@ -40,7 +40,7 @@
 
     margin-right: 5px;
     margin-top: 5px;
-    padding: 0 5px;
+    padding: 2px 5px;
   }
 
   .select2-selection__choice__remove {
@@ -78,7 +78,7 @@
 
 &.select2-container--focus {
   .select2-selection--multiple {
-    border: solid black 1px;
+    border: solid @input-border-focus 1px;
     outline: 0;
   }
 }
