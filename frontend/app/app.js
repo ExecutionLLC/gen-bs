@@ -1,6 +1,4 @@
-//require('../build/index.html');
-//require('./assets/images/flags/us.svg');
-//require('./assets/images/flags/ch.svg');
+import 'babel-polyfill'
 
 
 const $ = require('jquery');

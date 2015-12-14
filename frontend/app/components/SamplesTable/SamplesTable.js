@@ -1,7 +1,7 @@
 import json from '../../../json/data-variants.json';
 import DTable from '../shared/DataTable.js';
 
-import { setColumnFilter } from '../../actions'
+import { initializeTable, setColumnFilter } from '../../actions'
 
 import store from '../../containers/App'
 
@@ -48,46 +48,29 @@ const dtConfig = {
 $( function() {
 
   const table = new DTable($tableEl, dtConfig ).table;
-  window.table = table;
 
-
-  console.log('Hello from Genomix app!');
-
+  store.dispatch(initializeTable(table));
 
   let unsubscribe = store.subscribe(() => {
-    console.log('state', store.getState());
-    var filteredTable = store.getState().filteredTable;
-    table.data(filteredTable).draw();
+    store.getState().samplesTable.draw();
   })
 
 
   table.columns().flatten().each( function ( colIdx ) {
     const input = $('<input type="text" placeholder="Search" />')
       .width( $(table.column(colIdx).header()).width() - 10 )
-      .on( 'click', function (e) {
-        e.stopPropagation(e);
-      })
-      .on( 'change keyup', function() { store.dispatch(setColumnFilter(table, colIdx, $(this).val())) });
+      .on( 'click', (e) => e.stopPropagation(e) )
+      .on( 'change keyup', (e) => {
+        store.dispatch( setColumnFilter(table, colIdx, $(e.currentTarget).val()) )
+      });
   
-      //.on( 'change keyup', function () {
-      //  table
-      //    .column( colIdx )
-      //    .search( $(this).val() )
-      //    .draw();
-      //});
     const row = $('<div></div>');
     input.appendTo(row);
     row.appendTo(table.column(colIdx).header());
   });
 
-  
-
-  //store.dispatch(setColumnFilter(4, '58'));
-  //store.dispatch(setColumnFilter(4, ''));
-
-  //unsubscribe();
-
-
 });
+
+//unsubscribe();
 
 
