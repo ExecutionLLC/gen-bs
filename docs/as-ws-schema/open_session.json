@@ -1,31 +1,30 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "v1.open_session",
-	"title": "Загрузить данные пользовательского файла в redis.",
-	"description": "В запросе должны быть указаны:\nИмя файла\nСписок источников для поиска пересекающихся данных\nСписок полей для загрузки в кеш (для каждого источника + для пользовательского файла).\nНачальный фильтр.\nНачальный порядок сортировки.\nСервер возвращает уникальный идентификатор сессий работы с файлом. По этому идентификатору можно получить текущее состояние данных и задач в сессий, также можно отменить текущую задачу и назначить новую.",
-	"type": "object",
-	"properties": {
-		"params": {
-			"description": "VCF файл, Список источников для поиска",
-			"type": "object",
-			"example": {
-				"sample":  {
-					"name": "user.vcf.gz",
-					"fields": ["f1", "f2"]
-				},
-				"sources": [
-					{
-						"name": "db_1.h5", 
-						"fields": ["f3", "f4"]
-					}, {
-						"name": "db_2.h5", 
-						"fields": ["f4", "f5"]
-					}
-				],
-				"filter": "HZ",
-				"sort": "HZ"
-			}
-		},
-		"result": {}
-	}
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "v1.open_session",
+  "title": "open_session - backend API function",
+  "description": "apply complex filter and load data in redis",
+  "type": "object",
+  "properties": {
+    "params": {
+      "type": "object",
+      "user_filename": {
+        "type": "string",
+        "description": "name of the user file"
+      },
+      "filter": {
+        "type": "object",
+        "params": {
+          "type": "object",
+          "description": "filter for loading (should be simulare to the fronted filter, but has addition field 'source_name')"
+        }
+      },
+      "view": {
+        "type": "object",
+        "description": "view for loading (should be simulare to the fronted view, but has addition field 'source_name')"
+      }
+    },
+    "result": {
+      "$ref": "base_json/session_status.json#"
+    }
+  }
 }
