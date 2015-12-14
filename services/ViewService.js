@@ -1,16 +1,17 @@
 'use strict';
 
-class ViewService {
+const ServiceBase = require('./ServiceBase');
+
+const VIEWS = require('../test_data/views.json');
+
+class ViewService extends ServiceBase {
   constructor(services) {
-    this.services = services;
+    super(services);
   }
 
   findByUser(user, callback) {
     if (user) {
-      const view = {
-        view: 'goes here'
-      };
-      callback(null, view);
+      callback(null, VIEWS);
     } else {
       callback(new Error('User cannot be undefined here.'));
     }
