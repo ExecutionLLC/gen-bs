@@ -11,7 +11,7 @@
       "example": "db_1.h5"
     },
     "result": {
-      "$ref": "../base_json/file_metadata.json#"
+      "$ref": "base_json/file_metadata.json#"
     }
   }
 }
