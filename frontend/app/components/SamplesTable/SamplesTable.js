@@ -8,6 +8,7 @@ const $tableEl = $('#samples_table');
 const $tableHeaderEl = $('#samples_table_wrapper thead');
 
 const dtConfig = {
+  dom: '<"toolbar">frtip',
   orderCellsTop: true,
   paging: true,
   responsive: true,
@@ -43,6 +44,8 @@ const dtConfig = {
 $( function() {
 
   const table = new DTable($tableEl, dtConfig ).table;
+
+  //$("div.toolbar").html('<b>Custom tool bar! Text/images etc.</b>');
 
   table.columns().flatten().each( function ( colIdx ) {
     const input = $('<input type="text" placeholder="Search" />')
