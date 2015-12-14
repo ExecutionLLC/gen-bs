@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "one column filter",
+  "type": "object",
+  "properties": {
+    "column_name": {
+      "type": "string",
+      "description": "name of the filtered column"
+    },
+    "column_filter": {
+      "type": "string",
+      "description": "filter string"
+    }
+  }
+}

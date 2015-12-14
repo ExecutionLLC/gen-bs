@@ -52,17 +52,7 @@
           "type": "array",
           "description": "list of column filters",
           "items": {
-            "type": "object",
-            "properties": {
-              "column_name": {
-                "type": "string",
-                "description": "name of the filtered column"
-              },
-              "column_filter": {
-                "type": "string",
-                "description": "filter string"
-              }
-            }
+            "$ref": "column_filter.json#"
           }
         }
       }
@@ -86,17 +76,7 @@
           "type": "array",
           "description": "ordered list of the columns for sorting",
           "items": {
-            "type": "object",
-            "properties": {
-              "column_name": {
-                "type": "string",
-                "description": "name of the column"
-              },
-              "is_ascending_order": {
-                "type": "string",
-                "description": "true for ascending order, false for descending order"
-              }
-            }
+            "$ref": "sort_order.json#"
           }
         }
       }
