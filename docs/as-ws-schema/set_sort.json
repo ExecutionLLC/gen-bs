@@ -1,16 +1,26 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "v1.set_sort",
-	"title": "Применить сортировку к данным",
-	"description": "Данные сортировки представляют собой упорядоченный список колонок и порядок сортировки в каждой колонке. Допускается сортировка не более чем по 2 колонкам.",
-	"type": "object",
-	"properties": {
-		"params": {
-			"fileds": [
-				{"f1": "HZ"},
-				{"f2": "HZ"}
-			]
-		},
-		"result": {}
-	}
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "v1.set_sort",
+  "title": "set_sort - backend API function",
+  "description": "updates column sort order",
+  "type": "object",
+  "properties": {
+    "params": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "description": "GUID of the file session"
+        },
+        "filters": {
+          "type": "array",
+          "description": "list of filters",
+          "items": {
+            "$ref": "base_json/sort_order.json#"
+          }
+        }
+      }
+    },
+    "result": {}
+  }
 }
