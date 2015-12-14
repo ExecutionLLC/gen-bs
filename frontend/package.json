@@ -41,6 +41,7 @@
     "webpack-dev-server": "1.14.0"
   },
   "dependencies": {
+    "babel-polyfill": "6.3.14",
     "datatables.net": "1.10.10",
     "datatables.net-bs": "1.10.10",
     "datatables.net-responsive": "2.0.0",

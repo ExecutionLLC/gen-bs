@@ -1,6 +1,11 @@
 import json from '../../../json/data-variants.json';
 import DTable from '../shared/DataTable.js';
 
+import { setColumnFilter } from '../../actions'
+
+import store from '../../containers/App'
+
+
 //datatables.net Gen Samples table   
 //
 
@@ -46,23 +51,43 @@ $( function() {
   window.table = table;
 
 
+  console.log('Hello from Genomix app!');
+
+
+  let unsubscribe = store.subscribe(() => {
+    console.log('state', store.getState());
+    var filteredTable = store.getState().filteredTable;
+    table.data(filteredTable).draw();
+  })
+
+
   table.columns().flatten().each( function ( colIdx ) {
     const input = $('<input type="text" placeholder="Search" />')
       .width( $(table.column(colIdx).header()).width() - 10 )
       .on( 'click', function (e) {
         e.stopPropagation(e);
       })
-      .on( 'change keyup', function () {
-        table
-          .column( colIdx )
-          .search( $(this).val() )
-          .draw();
-      });
+      .on( 'change keyup', function() { store.dispatch(setColumnFilter(table, colIdx, $(this).val())) });
+  
+      //.on( 'change keyup', function () {
+      //  table
+      //    .column( colIdx )
+      //    .search( $(this).val() )
+      //    .draw();
+      //});
     const row = $('<div></div>');
     input.appendTo(row);
     row.appendTo(table.column(colIdx).header());
   });
 
+  
+
+  //store.dispatch(setColumnFilter(4, '58'));
+  //store.dispatch(setColumnFilter(4, ''));
+
+  //unsubscribe();
+
 
 });
+
 

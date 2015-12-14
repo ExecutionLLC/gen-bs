@@ -22,6 +22,5 @@ import './components/SamplesTable/SamplesTable';
 import './components/Old/old';
 
 
-console.log('Hello from Genomix app!');
 
 
