@@ -43,6 +43,7 @@ const dtConfig = {
 $( function() {
 
   const table = new DTable($tableEl, dtConfig ).table;
+  window.table = table;
 
 
   table.columns().flatten().each( function ( colIdx ) {
