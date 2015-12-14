@@ -3,6 +3,7 @@
   "title": "list of possible errors",
   "properties": {
     "errors": {
+      "0": "Success",
       "-32000": "Server error",
       "-32001": "Invalid session id: '%s'",
       

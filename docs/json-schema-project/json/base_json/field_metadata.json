@@ -21,6 +21,7 @@
 			"enum": [
 				"float",
 				"integer",
+				"char",
 				"string",
 				"boolean"
 			]
