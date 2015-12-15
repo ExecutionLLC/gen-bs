@@ -13,7 +13,12 @@ const $tableEl = $('#samples_table');
 const $tableHeaderEl = $('#samples_table_wrapper thead');
 
 const dtConfig = {
-  dom: '<"toolbar">frtip',
+  dom: '<"toolbar">Btr',
+  buttons: [
+            'excelHtml5',
+            'csvHtml5',
+            'copyHtml5'
+  ],
   orderCellsTop: true,
   paging: true,
   responsive: true,
@@ -48,6 +53,7 @@ const dtConfig = {
 $( function() {
 
   const table = new DTable($tableEl, dtConfig ).table;
+  window.table = table;
 
   store.dispatch(initializeTable(table));
 

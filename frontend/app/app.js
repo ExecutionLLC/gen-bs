@@ -1,7 +1,10 @@
 import 'babel-polyfill'
+import 'jszip'
 
 
 const $ = require('jquery');
+const JSZip = require('jszip');
+window.JSZip = JSZip;
 window.jQuery = $;
 window.$ = $;
 
