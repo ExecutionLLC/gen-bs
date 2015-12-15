@@ -19,19 +19,19 @@ class DataController extends ControllerBase {
     this.services.fieldsMetadata.findForUserBySampleId(user, sampleId, (error, fieldMetadata) => {
       // Get field metadata for sample.
       if (error) {
-        this.sendError(response, 500, error);
+        this.sendInternalError(response, error);
       } else {
         this.services.views.findByUser(user, (error, views) => {
           if (error) {
-            this.sendError(response, 500, error);
+            this.sendInternalError(response, error);
           } else {
             this.services.filters.findByUser(user, (error, filters) => {
               if (error) {
-                this.sendError(response, 500, error);
+                this.sendInternalError(response, error);
               } else {
                 this.services.samples.findAllForUser(user, (error, samples) => {
                   if (error) {
-                    this.sendError(response, 500, error);
+                    this.sendInternalError(response, error);
                   } else {
                     const dataObject = this._mergeDataResponse(user, views, filters, samples);
                     response.json(dataObject);
