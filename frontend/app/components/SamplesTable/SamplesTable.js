@@ -15,9 +15,9 @@ const $tableHeaderEl = $('#samples_table_wrapper thead');
 const dtConfig = {
   dom: '<"toolbar">Btr',
   buttons: [
-            'excelHtml5',
-            'csvHtml5',
-            'copyHtml5'
+    'excel',
+    'csv',
+    'copy'
   ],
   orderCellsTop: true,
   paging: true,
@@ -57,17 +57,48 @@ $( function() {
 
   store.dispatch(initializeTable(table));
 
-  let unsubscribe = store.subscribe(() => {
-    store.getState().samplesTable.draw();
-  })
+  //let unsubscribe = store.subscribe(() => {
+  //  console.log('state from table', store.getState());
+  //  store.getState().samplesTable.draw();
+  //})
 
+    function select(key) {
+      return function(state) {
+        return state[key]
+      }
+    }
+
+    let currentValueSamplesTable;
+    let currentValueExportFileType = null;
+
+    function handleChange() {
+      let previousValueSamplesTable = currentValueSamplesTable
+      let previousValueExportFileType = currentValueExportFileType
+
+      currentValueSamplesTable  = select( 'samplesTable' )( store.getState() )
+      currentValueExportFileType = select( 'exportFileType' )( store.getState() )
+
+      currentValueSamplesTable  = select( 'samplesTable' )( store.getState() )
+      currentValueExportFileType = select( 'exportFileType' )( store.getState() )
+
+        if (previousValueSamplesTable !== currentValueSamplesTable) {
+          console.log('State changed from', previousValueSamplesTable, 'to ', currentValueSamplesTable)
+          store.getState().samplesTable.draw();
+        }
+        if (previousValueExportFileType !== currentValueExportFileType) {
+          console.log('State exportFileType changed from', previousValueExportFileType, 'to ', currentValueExportFileType)
+          $('.buttons-excel').trigger('click')
+        }
+    }
+
+    let unsubscribe = store.subscribe(handleChange);
 
   table.columns().flatten().each( function ( colIdx ) {
     const input = $('<input type="text" placeholder="Search" />')
       .width( $(table.column(colIdx).header()).width() - 10 )
       .on( 'click', (e) => e.stopPropagation(e) )
       .on( 'change keyup', (e) => {
-        store.dispatch( setColumnFilter(table, colIdx, $(e.currentTarget).val()) )
+        store.dispatch(setColumnFilter(colIdx, $(e.currentTarget).val()));
       });
   
     const row = $('<div></div>');
