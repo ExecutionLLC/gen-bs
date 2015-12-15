@@ -4,15 +4,19 @@
 	"properties": {
 		"modifiedTimestamp": {
 			"type": "string",
-			"format": "date-time"
+			"description": "Timestamp indicating the time this exact version has been created."
 		},
 		"id": {
 			"type": "string"
 		},
+		"file_name": {
+			"type": "string",
+			"description": "Name of the file as it was during upload"
+		},
 		"hash": {
 			"type": "string"
 		},
-		"vcf_fields": {
+		"fields": {
 			"type": "array",
 			"items": {
 				"$ref": "../base_json/field_metadata.json#"
@@ -28,6 +32,9 @@
 		},
 		"is_analysed": {
 			"type": "boolean"
+		},
+		"analyzed_timestamp": {
+			"type": "string"
 		}
 	},
 	"required": [
