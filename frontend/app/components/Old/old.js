@@ -41,7 +41,7 @@ function WidthChange(mq) {
     $('.user-view').on('show.bs.collapse', function () {
         $('body').removeClass("sidebar-closed");
     })    
-    $('#subnav').on('hide.bs.collapse', function () {
+    $('#subnav').on('hidden.bs.collapse', function () {
       $('body').addClass("subnav-closed");
     });
     $('#subnav').on('show.bs.collapse', function () {  

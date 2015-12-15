@@ -369,9 +369,9 @@
                           
                              <!--   <li><a href="/"><i class="fa fa-lg fa-home"></i><span class="hidden">AGx</span></a></li> -->
                         
-                             <li><a href="#"><i class="fa fa-lg fa-question-circle"></i><span class="hidden">Help</span></a></li>
+                             <li><a href="#" class="btn btn-link"><i class="fa fa-lg fa-question-circle"></i><span class="hidden">Help</span></a></li>
                         
-                             <li><a href="#"><i class="fa fa-lg fa-info-circle"></i><span class="hidden">Info</span></a></li>               
+                             <li><a href="#" class="btn btn-link"><i class="fa fa-lg fa-info-circle"></i><span class="hidden">Info</span></a></li>               
                              <li class="guest"><a type="button" href="#" сlass="sidebarToggle" data-toggle="collapse" data-target="#sidebarLeft">Sign in</a></li>
                         
                              <li class="guest"><a type="button" href="#" сlass="sidebarToggle" data-toggle="collapse" data-target="#sidebarLeft" id="">Register for free</a></li>
@@ -386,18 +386,23 @@
                     
                         
                         <div class="language dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><img src="assets/images/flags/us.svg"><span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><img src="assets/images/flags/us.svg" class="visible-xs"><span class="hidden-xs">English</span><span class="caret"></span></a>
                         
                             <ul class="dropdown-menu">
-                              <li><a href="/"><img src="assets/images/flags/us.svg"></a></li>
-                              <li><a href="index-ch.html"><img src="assets/images/flags/ch.svg"></a></li>
+                              <li><a href="/">English</a></li>
+                              <li><a href="index-ch.html">中国</a></li>
                             </ul>
                          </div>
+                        
+                       
+                     
                     
                         
+                        <!--
                         <div class="navbar-search-toogle"><a class="btn navbar-btn btn-link" id="searchToggle"><i class="fa fa-search"></i></a></div>
                           
                         <div class="navbar-search"><div class="navbar-search-field width"><input type="text" class="form-control" placeholder="Search for 912345 variants current sample analises"></div></div> 
+                        -->
                     
                         
                         <div class="dropdown" data-toggle="tooltip" data-placement="bottom" title="Export of results to file" data-container="body" data-trigger="hover">
@@ -429,22 +434,21 @@
                             <a class="btn navbar-btn btn-primary" data-toggle="modal" data-target="#exporthistory"><i class="fa fa-lg fa-cloud"></i></a>
                         </div>            
                     
-                        
-                         <div class="hidden-xxs" data-toggle="tooltip" data-placement="bottom" title="Create custom analysis" data-container="body" data-trigger="hover">
-                        
-                            <button id="btnToggle" data-target="#subnav" data-toggle="collapse" class="btn btn-primary navbar-btn" type="button">
+                        <div class="hidden-xxs" data-toggle="tooltip" data-placement="bottom" title="Create custom analysis" data-container="body" data-trigger="hover">
+                          <button id="btnToggle" data-target="#subnav" data-toggle="collapse" class="btn btn-primary navbar-btn" type="button">
                             <span class="hidden-xxs">Сreate a Query <i class="fa fa-caret-down"></i></span>
                           </button>
-                          
-                         
+                        </div>
+                        
+                        <div class="visible-xxs">
+                          <a type="button" href="#" class="btn btn-primary navbar-btn" data-toggle="collapse" data-target="#sidebarRight"></a>
                         </div>
                     
-                       
-                        <div class="visible-xxs"><a type="button" href="#" class="btn btn-primary navbar-btn" data-toggle="collapse" data-target="#sidebarRight"><i class="fa fa-lg fa-cog"></i><i class="fa fa-caret-right"></i></a>
                         </div>
+                     </nav>
+                      
                        
-                      </div>
-                    </nav>
+                    
                         <div class="collapse collapse-subnav" id="subnav">
                             <nav class="navbar navbar-fixed-top navbar-default">
                                 <div class="container-fluid">
@@ -535,8 +539,8 @@
                             </nav>
                         </div>    
                     
-                    <div class="samples-table-wrapper">
-                      <table class="samples table table-condensed table-hover table-bordered responsive" id="samples_table" cellspacing="0" width="100%" >
+                    <div class="table-variants-wrapper">
+                      <table class="table table-condensed table-hover table-bordered table-variants responsive" id="samples_table">
                       </table>        
                     </div>
                 </div>

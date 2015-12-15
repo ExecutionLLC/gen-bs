@@ -176,4 +176,27 @@ input[type="button"] {
     border: 1px solid @navbar-inverse-border;
     height: 34px;
     width: 180px
+ }
+ //
+ 
+ .btn-group-select2 { 
+ 
+  .btn-group { 
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 5px;
+    width: 1%;
+    +.btn-group { 
+      width: 100%;
+      .select2-container { 
+        width: 100% !important;
+      }
     }
+    +.btn-group +.btn-group { 
+      width: 1%;
+     } 
+    &.btn-group-select100 { 
+      width: 100% !important;
+    }
+  }
+}

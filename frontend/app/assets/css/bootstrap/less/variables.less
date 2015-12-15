@@ -218,7 +218,7 @@
 
 //** Placeholder text color
 @input-color-placeholder:        #999;
-
+@placeholder-inverse:            fade(#fff, 40%);
 //** Default `.form-control` height
 @input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 2);
 //** Large `.form-control` height
@@ -405,12 +405,12 @@
 
 //=== Inverted navbar
 // Reset inverted navbar basics
-@navbar-inverse-color:                      @lightPrimaryColor;
+@navbar-inverse-color:                      @light-primary-color;
 @navbar-inverse-bg:                         @brand-primary;
 @navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
 
 // Inverted navbar links
-@navbar-inverse-link-color:                 @lightPrimaryColor;
+@navbar-inverse-link-color:                 @light-primary-color;
 @navbar-inverse-link-hover-color:           #fff;
 @navbar-inverse-link-hover-bg:              transparent;
 @navbar-inverse-link-active-color:          @navbar-inverse-link-hover-color;
@@ -892,3 +892,10 @@
 @dl-horizontal-breakpoint:    @grid-float-breakpoint;
 //** Horizontal line color.
 @hr-border:                   @gray-lighter;
+
+
+//layout 
+@sidebar-closed-width: 0;
+@sidebar-opened-width: 240px;
+@width-wrapper-main-max: 100%;
+@width-wrapper-main-min: 100%;
