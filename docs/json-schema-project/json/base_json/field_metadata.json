@@ -35,9 +35,6 @@
 		"editable": {
 			"type": "boolean"
 		},
-		"is_invisible": {
-			"type": "boolean"
-		},
 		"description": {
 			"description": "Text description for tooltip",
 			"type": "string"
