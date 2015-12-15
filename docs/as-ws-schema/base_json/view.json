@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "View representation",
+  "description": "Ordered list of columns of the view.",
+  "type": "array",
+  "items": {
+    "$ref": "./view_column.json#"
+  }
+}
