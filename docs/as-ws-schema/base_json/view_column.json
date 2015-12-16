@@ -8,8 +8,12 @@
       "description": "Column name."
     },
     "filter": {
-      "type": "string",
-      "description": "Text for filtering."
+      "type": "array",
+      "description": "List of filters with 'or' condition.",
+      "items": {
+        "type": "string",
+        "description": "Text for filtering."
+      }
     }
   }
 }
