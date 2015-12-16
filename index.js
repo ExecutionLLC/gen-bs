@@ -1,10 +1,14 @@
 'use strict';
 const Express = require('express');
+const bodyParser = require('body-parser');
 
 const ControllersFacade = require('./controllers/ControllersFacade');
 const ServicesFacade = require('./services/ServicesFacade');
 
 const app = new Express();
+
+app.use(bodyParser.json());
+
 app.set('port', process.env.PORT || 5000);
 app.use('/', Express.static('public'));
 
