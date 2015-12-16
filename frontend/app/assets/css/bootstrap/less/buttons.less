@@ -66,6 +66,10 @@
 .btn-default {
   .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
 }
+.btn-dark-default {
+  .button-variant(@btn-dark-default-color; @btn-dark-default-bg; @btn-dark-default-border);
+}
+
 .btn-primary {
   .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
 }
@@ -199,4 +203,14 @@ input[type="button"] {
       width: 100% !important;
     }
   }
+}
+.btn.active { 
+  .fa-star-o:before {
+    content: "\f005";
+    color: @brand-warning;
+  }
+}
+.btn-sm-h-paddings { 
+  padding-left: @padding-small-horizontal;
+  padding-right: @padding-small-horizontal;
 }

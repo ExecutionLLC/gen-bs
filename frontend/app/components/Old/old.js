@@ -33,7 +33,14 @@ function WidthChange(mq) {
     $('#sidebarRight').on('shown.bs.collapse', function () {
         $('body').removeClass("sidebar-right-closed");
     })
-    
+    $('#regBtn').on('click', function (e) {
+     $('#registration').removeClass('hidden') ;
+     $('#signin').addClass('hidden');
+   });
+    $('#signInBtn').on('click', function (e) {
+     $('#registration').addClass('hidden') ;
+     $('#signin').removeClass('hidden');
+   });
     $('.user-view').on('hide.bs.collapse', function () {
         $('body').removeClass("sidebar-closed");
     })
@@ -47,6 +54,7 @@ function WidthChange(mq) {
     $('#subnav').on('show.bs.collapse', function () {  
       $('body').removeClass("subnav-closed");
     }); 
+
 
 
            

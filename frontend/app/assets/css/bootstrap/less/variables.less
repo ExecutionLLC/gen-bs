@@ -7,7 +7,7 @@
 //
 //## Gray and brand colors for use across Bootstrap.
 
-@gray-base:              #000;
+@gray-base:              #222;
 @gray-darker:            lighten(@gray-base, 13.5%); // #222
 @gray-dark:              lighten(@gray-base, 20%);   // #333
 @gray:                   lighten(@gray-base, 33.5%); // #555
@@ -53,13 +53,13 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-@font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:  "Lato", Helvetica, Arial, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
-@font-size-base:          13px;
+@font-size-base:          14px;
 @font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
 @font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
 
@@ -105,7 +105,7 @@
 @padding-large-horizontal:  16px;
 
 @padding-small-vertical:    5px;
-@padding-small-horizontal:  10px;
+@padding-small-horizontal:  9px;
 
 @padding-xs-vertical:       1px;
 @padding-xs-horizontal:     5px;
@@ -140,14 +140,14 @@
 //** Default background color used for all tables.
 @table-bg:                      #fff;
 //** Background color used for `.table-striped`.
-@table-bg-accent:               #f9f9f9;
+@table-bg-accent:               #fcfcfc;
 //** Background color used for `.table-hover`.
 @table-bg-hover:                #f5f5f5;
-@table-bg-active:               @table-bg-hover;
+@table-bg-active:               #eee;
 
 //** Border color for table and cell borders.
-@table-border-color:            #ddd;
-@table-th-bg:                 #f9f9f9;
+@table-border-color:            #f5f5f5;
+@table-th-bg:                   #f6f6f6;
 @table-primary-border-color:   @brand-primary;
 @table-primary-th-bg:     darken(@brand-primary, 5%);
 @table-primary-th-color: #fff;
@@ -160,6 +160,10 @@
 @btn-default-color:              #333;
 @btn-default-bg:                 #fff;
 @btn-default-border:             #e5e5e5;
+
+@btn-dark-default-color:              #333;
+@btn-dark-default-bg:                 #e5e5e5;
+@btn-dark-default-border:             #e5e5e5;
 
 @btn-primary-color:              #fff;
 @btn-primary-bg:                 @brand-primary;
@@ -722,8 +726,8 @@
 //##
 
 @panel-bg:                    #fff;
-@panel-body-padding:          15px;
-@panel-heading-padding:       10px 15px;
+@panel-body-padding:          20px;
+@panel-heading-padding:       10px 20px;
 @panel-icon-font-family:     "FontAwesome";      
 @panel-footer-padding:        @panel-heading-padding;
 @panel-border-radius:         @border-radius-base;
@@ -796,7 +800,7 @@
 @badge-color:                 #fff;
 //** Linked badge text color on hover
 @badge-link-hover-color:      #fff;
-@badge-bg:                    @gray-light;
+@badge-bg:                    @brand-warning;
 
 //** Badge text color in active nav link
 @badge-active-color:          @link-color;
@@ -896,6 +900,13 @@
 
 //layout 
 @sidebar-closed-width: 0;
-@sidebar-opened-width: 240px;
+@sidebar-opened-width: 260px;
 @width-wrapper-main-max: 100%;
 @width-wrapper-main-min: 100%;
+
+//sidebar
+@sidebar-default-bg:  #f6f6f6;
+@sidebar-default-color: @text-color; 
+
+@sidebar-inverse-bg:  #454548;
+@sidebar-inverse-color: #ccc;

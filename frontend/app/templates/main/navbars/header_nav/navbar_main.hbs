@@ -1,25 +1,21 @@
 
 <nav class="navbar navbar-inverse navbar-fixed-top navbar-main">
-  <div class="nav-inner">
+  <div class="navbar-inner">
 
-    <div class="visible-xs"><a type="button" href="#" class="btn btn-primary navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i class="fa fa-lg fa-bars"></i></a></div>
-
-    <div><a class="brand">AGx</a></div>
-
-    {{> header_nav/auth }}
-
-    {{> header_nav/language }}
-    
+    <div data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand">AGx<sup>i</sup></a></div>
    
- 
-
+    {{> header_nav/create_query}}
+   
     {{> header_nav/search}}
-
+  
     {{> header_nav/export_dropdown}}
 
     {{> header_nav/saved_files}}
 
-    {{> header_nav/create_query}}
+     {{> header_nav/language }}
+ 
+     {{> header_nav/auth }}
+
 
 
     </div>
