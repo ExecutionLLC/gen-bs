@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One column of the view.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Column name."
+    },
+    "filter": {
+      "type": "string",
+      "description": "Text for filtering."
+    }
+  }
+}
