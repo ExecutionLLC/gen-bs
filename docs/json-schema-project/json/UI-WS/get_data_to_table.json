@@ -7,31 +7,38 @@
       "type": "string",
       "description": "Sample id"
     },
-    "view": {
-      "$ref": "../base_json/view.json#"
+    "view_id": {
+      "type": "string",
+      "description": "Id of the chosen view."
     },
-    "filters": {
+    "filter_ids": {
       "type": "array",
-      "minItems": 1,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "../base_json/filter.json#"
-      }
-    },
-    "search_value": {
-      "type": "array",
+      "description": "One or more filters. User is expected to choose at least one.",
       "minItems": 1,
       "uniqueItems": true,
       "items": {
         "type": "string"
       }
     },
-    "field_controls": {
+    "global_search_value": {
+      "type": "string"
+    },
+    "field_search_values": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
       "items": {
-        "$ref": "../base_json/keyword.json#"
+        "type": "object",
+        "parameters": {
+          "field_id": {
+            "type": "string",
+            "description": "Id of the field"
+          },
+          "value": {
+            "type":"string",
+            "description": "Text in the search control."
+          }
+        }
       }
     },
     "limit": {
