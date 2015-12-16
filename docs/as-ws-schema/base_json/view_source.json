@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One source of the view.",
+  "type": "object",
+  "properties": {
+    "source_name": {
+      "type": "string",
+      "description": "Name of the source file. If source_name is empty, then current source is the sample file."
+    },
+    "columns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Name of the column."
+      }
+    }
+  },
+  "required": [
+    "source_name",
+    "columns"
+  ]
+}
