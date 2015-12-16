@@ -34,7 +34,7 @@ class DataController extends ControllerBase {
                     this.sendInternalError(response, error);
                   } else {
                     const dataObject = this._mergeDataResponse(user, views, filters, samples);
-                    response.json(dataObject);
+                    this.sendJson(dataObject);
                   }
                 });
               }
@@ -47,7 +47,7 @@ class DataController extends ControllerBase {
 
   _mergeDataResponse(user, views, filters, samples) {
     return {
-      profile_metadata: user,
+      profileMetadata: user,
       views: views,
       filters: filters,
       samples: samples

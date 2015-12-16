@@ -4,6 +4,7 @@ const Express = require('express');
 const _ = require('lodash');
 
 const ControllerBase = require('./ControllerBase');
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 class SearchController extends ControllerBase {
     constructor(services) {
@@ -18,18 +19,26 @@ class SearchController extends ControllerBase {
             return;
         }
 
-        const jsonBody = request.body;
+        const jsonBody = ChangeCaseUtil.convertKeysToCamelCase(request.body);
         if (!jsonBody) {
             this.sendInternalError(response, 'Body is empty');
             return;
         }
-        const sessionId = 'session-id-should-be-loaded-here';
-        const viewId = jsonBody.view_id;
-        const filterIds = jsonBody.filter_ids;
-        const globalSearchValue = jsonBody.global_search_value;
-        const fieldSearchValues = jsonBody.field_search_values;
+
+        const viewId = jsonBody.viewId;
+        const filterIds = jsonBody.filterIds;
+        const globalSearchValue = jsonBody.globalSearchValue;
+        const fieldSearchValues = jsonBody.fieldSearchValues;
         const limit = jsonBody.limit;
         const offset = jsonBody.offset;
+
+        this.services.search
+          .sendSearchRequest(viewId, filterIds, globalSearchValue,
+          fieldSearchValues, limit, offset, (error, operationId) => {
+            this.sendJson({
+              operationId: operationId
+            });
+          });
     };
 
     createRouter() {

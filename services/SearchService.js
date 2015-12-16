@@ -7,7 +7,11 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    registerSearchRequest() {
-
+    sendSearchRequest(viewId, filterIds, globalSearchValue,
+       fieldSearchValues, limit, offset, callback) {
+         // TODO: Implement search
+         // 1. Get session id
+         // 2. Load filters and views by id
+         // 3. Form and send request
     }
 }
