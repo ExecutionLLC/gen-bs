@@ -19,12 +19,12 @@
         }
       },
       "view": {
-        "type": "object",
-        "description": "view for loading (should be simulare to the fronted view, but has addition field 'source_name')"
+        "$ref": "base_json/view.json#",
+        "description": "view for loading"
       }
     },
     "result": {
-      "$ref": "base_json/session_status.json#"
+      "$ref": "base_json/session_state.json#"
     }
   }
 }

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "id": "v1.set_filter",
   "title": "set_filter - backend API function",
-  "description": "updates column filter",
+  "description": "updates column filter. Full set of filters is always overwritten",
   "type": "object",
   "properties": {
     "params": {

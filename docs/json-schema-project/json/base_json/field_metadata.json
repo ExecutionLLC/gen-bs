@@ -21,6 +21,7 @@
 			"enum": [
 				"float",
 				"integer",
+				"char",
 				"string",
 				"boolean"
 			]
@@ -32,9 +33,6 @@
 			"type": "boolean"
 		},
 		"editable": {
-			"type": "boolean"
-		},
-		"is_invisible": {
 			"type": "boolean"
 		},
 		"description": {

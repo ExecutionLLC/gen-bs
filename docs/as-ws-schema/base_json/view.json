@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "View representation",
+  "type": "object",
+  "properties": {
+    "sample_columns": {
+      "$ref": "./view_column.json#"
+    },
+    "sources": {
+      "name": {
+        "type": "string",
+        "description": "Source name."
+      },
+      "columns": {
+        "type": "array",
+        "items": {
+            "$ref": "./view_column.json#"
+        }
+      }
+    }
+  }
+}

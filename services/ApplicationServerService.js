@@ -1,7 +1,7 @@
 'use strict';
 
 const ServiceBase = require('./ServiceBase');
-const fieldsMetadata = require('../test_data/get_filelds_metadata-result.json');
+const FIELDS_METADATA = require('../test_data/fields_metadata.json');
 
 class ApplicationServerService extends ServiceBase {
     constructor(services) {
@@ -9,7 +9,7 @@ class ApplicationServerService extends ServiceBase {
     }
 
     getFieldsMetadata(user, callback) {
-        callback(null, fieldsMetadata);
+        callback(null, FIELDS_METADATA);
     }
 }
 

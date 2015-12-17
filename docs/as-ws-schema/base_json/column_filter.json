@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "one column filter",
+  "description": "Column filter. When sending column filter before the previous one is completed, the old results will be dropped.",
   "type": "object",
   "properties": {
     "column_name": {

@@ -4,7 +4,7 @@ const ServiceBase = require('./ServiceBase');
 
 const VIEWS = require('../test_data/views.json');
 
-class ViewService extends ServiceBase {
+class ViewsService extends ServiceBase {
   constructor(services) {
     super(services);
   }
@@ -18,4 +18,4 @@ class ViewService extends ServiceBase {
   }
 }
 
-module.exports = ViewService;
+module.exports = ViewsService;

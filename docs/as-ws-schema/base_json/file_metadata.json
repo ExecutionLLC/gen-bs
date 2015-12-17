@@ -27,7 +27,14 @@
           },
           "type": {
             "type": "string",
-            "description": "type of the column data"
+            "description": "type of the column data",
+            "enum": [
+              "float",
+              "char",
+              "integer",
+              "string",
+              "boolean"
+            ]
           },
           "desc": {
             "type": "string",
