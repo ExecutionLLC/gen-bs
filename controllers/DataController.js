@@ -34,7 +34,7 @@ class DataController extends ControllerBase {
                     this.sendInternalError(response, error);
                   } else {
                     const dataObject = this._mergeDataResponse(user, views, filters, samples);
-                    this.sendJson(dataObject);
+                    this.sendJson(response, dataObject);
                   }
                 });
               }
@@ -55,7 +55,7 @@ class DataController extends ControllerBase {
   }
 
   getUserMetadata(request, response) {
-    response.json(USER_METADATA);
+    this.sendJson(response, USER_METADATA);
   }
 
   createRouter() {
