@@ -14,9 +14,11 @@ https://guides.github.com/introduction/flow/
 
 WebServer consists of:
 
-- controllers, the topmost level. This layer is parsing and producing JSON from the actual data.
-- services. This is where business logic lives. The services form the actual data. Also access rights are checked here.
+- controllers, the topmost level. This layer is parsing and producing JSON from the actual data which is got from the underlying logic.
+- services. This is where business logic lives. The services form the actual data. Also access rights are checked here. The services should know nothing about the outer world.
 - models, which are the data access layer abstraction. Models do actual requests for accessing data sources, such as DB or application service.
+- utils, where helper methods are placed, such as snake-to-camel case conversion utility.
+- startup contains scripts executing at service start, such as database creation, AS data retrieval, etc.
 
 # Installation
 
