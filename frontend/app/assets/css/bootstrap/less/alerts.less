@@ -11,7 +11,7 @@
   margin-bottom: @line-height-computed;
   border: 1px solid transparent;
   border-radius: @alert-border-radius;
-
+  position: relative;
   // Headings for larger alerts
   h4 {
     margin-top: 0;
@@ -74,7 +74,9 @@
 .alert-inverse {
   .alert-variant(@alert-inverse-bg; @alert-inverse-border; @alert-inverse-text);
 }
-
+.alert-help { 
+  .alert-variant(@alert-help-bg; @alert-help-border; @alert-help-text; @alert-help-state-icon); 
+}
 .alert-fixed { 
   position: fixed; 
   z-index: @zindex-alert-fixed;
