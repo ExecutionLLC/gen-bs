@@ -9,6 +9,8 @@ const FilterController = require('./FilterController');
 const LoginController = require('./LoginController');
 const SearchController = require('./SearchController');
 
+const WSController = require('./WSController');
+
 class ControllersFacade {
     constructor(services) {
         this.userDataController = new UserDataController(services);
@@ -17,6 +19,7 @@ class ControllersFacade {
         this.filterController = new FilterController(services);
         this.loginController = new LoginController(services);
         this.searchController = new SearchController(services);
+        this.wsController = new WSController(services);
     }
 }
 
