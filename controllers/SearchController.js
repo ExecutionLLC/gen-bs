@@ -35,7 +35,7 @@ class SearchController extends ControllerBase {
         this.services.search
           .sendSearchRequest(viewId, filterIds, globalSearchValue,
           fieldSearchValues, limit, offset, (error, operationId) => {
-            this.sendJson({
+            this.sendJson(response, {
               operationId: operationId
             });
           });
