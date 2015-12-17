@@ -15,3 +15,5 @@ class SearchService extends ServiceBase {
          // 3. Form and send request
     }
 }
+
+module.exports = SearchService;
