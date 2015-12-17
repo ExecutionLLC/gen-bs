@@ -17,33 +17,32 @@ class DatabaseCreator {
         this.databaseName = databaseName;
     }
 
-    process() {
+    create() {
         const postgresConfig = this._createKnexConfigForDatabaseName('postgres');
 
-        const postgesKnex = new Knex(postgresConfig);
+        const postgresKnex = new Knex(postgresConfig);
 
-        return this._isDatabaseExists(postgesKnex)
+        return this._isDatabaseExists(postgresKnex)
         .then(isDatabaseExists => {
             if (!isDatabaseExists) {
-                return this._createEmptyDatabase(postgesKnex)
+                return this._createEmptyDatabase(postgresKnex)
                 .then(() => {
-                    console.log('Destroying Knex instance...')
-                    // Destroy instance, we don't need it anymore.
-                    postgesKnex.destroy();
-
                     console.log('Connecting to database...');
                     const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
                     const databaseKnex = new Knex(databaseConfig);
 
-                    return this._createTables(databaseKnex);
+                    return this._createTables(databaseKnex)
+                        .then(() => {
+                            databaseKnex.destroy();
+                        });
                 });
             } else {
                 console.log('Database is found.');
                 return true;
             }
-        }).catch(error => {
-            console.error('Error creating database: ' + error);
-        });
+        }).then(() => {
+                postgresKnex.destroy();
+            });
     }
 
     _createTables(databaseKnex) {
@@ -51,25 +50,69 @@ class DatabaseCreator {
 
             // Language
             .createTable('langu', (table) => {
-                table.uuid('id');
+                table.string('id', 2)
+                    .primary();
                 table.string('description', 20);
             })
 
             // Users
-            .createTable('users', (table) => {
-                table.uuid('id');
+            .createTable('user', (table) => {
+                table.uuid('id')
+                    .primary();
                 table.string('email', 50);
                 table.integer('number_paid_samples');
             })
 
             .createTable('user_text', table => {
-                table.uuid('user_id');
-                table.string('name', 50);
+                table.uuid('user_id')
+                    .references('id')
+                    .inTable('user');
+                table.string('name', 50)
+                    .notNullable();
                 table.string('last_name', 50);
                 table.string('speciality', 50);
             })
 
+            // Filters
+            .createTable('filter', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('original_filter_id')
+                    .references('id')
+                    .inTable('filter');
+                table.string('name', 50)
+                    .notNullable();
+                table.json('rules');
+                table.string('filter_type', 50)
+                    .notNullable();
+                table.boolean('is_disabled_4copy');
+                table.timestamp('timestamp');
+                table.uuid('creator')
+                    .references('id')
+                    .inTable('user');
+            })
 
+            .createTable('filter_text', table => {
+                table.uuid('filter_id')
+                    .references('id')
+                    .inTable('filter')
+                    .notNullable();
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu')
+                    .notNullable();
+                table.string('description', 100);
+            })
+
+            .createTable('filter_assignment', table => {
+                table.uuid('user_id')
+                    .references('id')
+                    .inTable('user');
+                table.uuid('filter_id')
+                    .references('id')
+                    .inTable('filter');
+                table.enu('access_rights', ['r', 'rw']);
+            })
 
             .then(() => {
                 console.log('Tables created successfully.')
@@ -84,47 +127,7 @@ class DatabaseCreator {
     _createEmptyDatabase(postgresKnex) {
         // Create database
         console.log('Creating database ' + this.databaseName);
-        return postgresKnex.raw('CREATE DATABASE ' + this.databaseName)
-            .then(() => {
-                console.log('Connecting to database...');
-
-                // Recreate knex with different config.
-                knex.destroy();
-                knexConfig.connection.database = DATABASE_NAME;
-
-                return new Knex(knexConfig);
-            }).then((knex) => {
-                console.log('Creating tables...');
-
-                return knex.schema
-
-                    // Language
-                    .createTable('langu', (table) => {
-                        table.uuid('id');
-                        table.string('description', 20);
-                    })
-
-                    // Users
-                    .createTable('users', (table) => {
-                        table.uuid('id');
-                        table.string('email', 50);
-                        table.integer('number_paid_samples');
-                    })
-
-                    .createTable('user_text', table => {
-                        table.uuid('user_id');
-                        table.string('name', 50);
-                        table.string('last_name', 50);
-                        table.string('speciality', 50);
-                    })
-
-                    .then(() => {
-                        console.log('Tables should be created.')
-                    });
-            })
-            .catch((error) => {
-                console.error('Error creating database: ' + error);
-            });
+        return postgresKnex.raw('CREATE DATABASE ' + this.databaseName);
     }
 
     /**

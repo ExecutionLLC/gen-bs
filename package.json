@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "bash ./scripts/heroku-deploy.sh",
+    "db": "node startup/create-database.js",
     "start": "node index.js"
   },
   "repository": {

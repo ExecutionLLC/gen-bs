@@ -4,11 +4,7 @@ const bodyParser = require('body-parser');
 
 const ControllersFacade = require('./controllers/ControllersFacade');
 const ServicesFacade = require('./services/ServicesFacade');
-const Startup = require('./startup/Startup');
-
-// Execute startup tasks
-const startup = new Startup();
-startup.process();
+const Startup = require('./startup/create-database');
 
 // Create service.
 const app = new Express();
