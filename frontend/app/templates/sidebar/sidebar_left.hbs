@@ -1,242 +1,114 @@
+<div class="sidebar sidebar-default sidebar-left collapse width" id="sidebarLeft">
 
-<div class="sidebar sidebar-left collapse width" id="sidebarLeft"> 
 
-  <div class="sidebar-inner"> 
-    <div class="btn-toolbar sidebar-top">
-    <div class="btn-group"><h5>Profile</h5></div>
-    <div class="btn-group pull-right"><button data-target="#sidebarLeft" data-toggle="collapse" class="btn navbar-btn sidebarToggle" href="#" type="button"><i class="fa fa-lg fa-close text-muted"></i></button>
-      
+
+    <div class="sidebar-top btn-toolbar">
+     <div class="btn-group"><h5>Analize Sample <a href="#"data-toggle="tooltip" data-placement="right" data-container="body" title="Analyze current sample with current filters and view"><i class="fa fa-info-circle text-muted"></i></a></h5></div>
+     <div class="btn-group pull-right"><button data-target="#sidebarLeft" data-toggle="collapse" class="btn navbar-btn sidebarToggle" href="#" type="button"><i class="fa fa-close"></i></button>     
     </div>
    </div>
-      <div class="guest">
-        <form>
-             <div class="form-group has-feedback">
-           <label>Sign in</label>
-           
-             <input type="text" class="form-control">
-             <div class="help-text hidden">No this login</div>
-             </div>
-             <div class="form-group has-feedback">
-           <label>Password</label>
- 
-           <input type="password" class="form-control">
-         <div class="help-text hidden">No this login</div>
-
-           
-         </div>
-             <div class="form-group">
-               <a href="" class="btb btn-link">Remember password</a>
-             </div>
-             <div class="form-group">
-             <button type="button" class="btn btn-block btn-primary" id="btnLogin">Sign in</button>
-            <!-- <button class="btn btn-block btn-openid"></button> -->
-         </div>
-             <!--
-<div class="form-group">
-               <a class="btb btn-link" href="">Register for free</a>
-             </div>
--->
-             
-            <!--
- <div class="form-group">
-               By clicking Submit, you agree to <a href="">our terms and conditions</a>
-             </div>
--->
-
-          </form> 
-            </div>
-            
-        
-         <div class="user hidden">
+      <div class="sidebar-wrap">
+      <div class="sidebar-scroll sidebar-filter">
+     
+     
+     
+        <section>
+       <h5>
+       <div class="btn-group pull-right">
+        <a href="#" class="btn btn-warning btn-block" data-toggle="modal" type="button" data-target="#upload">Upload</a>
+       </div>
+         Choose sample  <a class="btn btn-link" type="button" data-toggle="tooltip"data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples"><i class="fa fa-info-circle text-muted"></i></a>
+      </h5>
        
-         
-         
-          <div class="user-view">
-            <button type="button" class="btn btn-link pull-right" id="userEditBtn"><i class="fa fa-pencil"></i></button> 
-             <h4>Name Lastname</h4>
-            <ul class="list-unstyled">
-           <li>
-          <strong>
-           Email: 
-          </strong>
-          <span>
-            <a href="maito:user@domain.com">user@domain.com</a>
-          </span>
-        </li> 
+      
+      
+     
+     <div class="btn-group btn-group-select2-wrap">
+     <select class="sample-select-ajax">
+     <option value="3620194" selected="selected">mental retardation patient12</option>
+     </select> 
+     </div>
 
-       <li>
-          <strong>
-           Specialization: 
-          </strong>
-          <span>
-            Doctor
-          </span>
-        </li> 
-        <li>
-          <strong>
-           Balance: 
-          </strong>
-          <span>
-         <a href="">789 Queries Left</a>
-          </span>
-        </li>
-  		<li>
-          <strong>
-           Language: 
-          </strong>
-          <span>
-           English
-          </span>
-        </li>
-       
-        
-    </ul>
-            </div>
-          <div class="user-view hidden">
-            
-           <form>
+   
+    
+          </section>
+        <section>
+     <h5>
+       <div class="btn-group pull-right">
+        <button class="btn btn-dark-default" data-toggle="modal" data-target="#filter">
+          Setup
+        </button>
   
-        
-            <div class="form-group has-feedback">
-              <label>Name</label>
-             <input type="text" class="form-control">
-               <div class="help-text hidden">No this login</div>
-             </div>
-             <div class="form-group has-feedback">
-             <label>Last Name</label>
- 
-             <input type="text" class="form-control">
-             <div class="help-text hidden">No this login</div>
-           
-         </div>
-             <div class="form-group has-feedback">
-             <label>Email</label>
- 
-             <input type="email" class="form-control">
-             <div class="help-text hidden">No this login</div>
-           
-         </div>
-             <div class="form-group has-feedback">
-             <label>Specialization</label>
- 
-             <input type="text" class="form-control">
-             <div class="help-text hidden">No this login</div>
-           
-         </div>
-             <div class="form-group has-feedback">
-             <label>Language</label>
- <div class="select-wrap">
-             <select class="select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-               <option>
-                English
-               </option>
-               <option>
-                中文
-               </option>
-
-             </select>
- </div>
-             <div class="help-text hidden">No this login</div>
-           
-         </div>
-             <div class="row form-action">
-               <div class="col-xs-6 col-sm-6">
-               <button class="btn btn-block  btn-default usrViewActBtn" type="button">Cancel</button>
-               </div>
-               <div class="col-xs-6 col-sm-6"> 
-              <button class="btn btn-block  btn-primary usrViewActBtn" type="button">Save</button>
-               </div>
-         </div>
-          </form> 
-          </div>
+       </div>
+       Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
+       </h5>
        
-                 
-         <div class="panel panel-default">
-           <div class="panel-heading">
-           <h4> <a href="">Latest Analised Samples</a></h4>
-           </div>
-           <ul class="list-group">
-             <li>
-  <div class="list-group-item">
-    <h5 class="list-group-item-heading">#456</h5>
-    <ul class="list-unstyled">
-        
-        <li>
-          <strong>
-           Gender: 
-          </strong>
-          <span>
-           Male
-          </span>
-        </li>
-  		<li>
-          <strong>
-           Phenotype: 
-          </strong>
-          <span>
-           11p partial monosomy syndrome
-          </span>
-        </li>
-        <li>
-          <strong>           Sample:            </strong>
-          <span>            ATCC HCC1187 TumorBL</span>
-        </li>
-<li>
-<strong>
-          Description: 
-          </strong>
-   <span>
-           Custom text
-          </span>
-</li>
-        
-    </ul>
-    
-  </div>
-             
-</li>
-<li>
-  <div class="list-group-item">
-    <h5 class="list-group-item-heading">#56</h5>
-    <ul class="list-unstyled">
-        
-        <li>
-          <strong>
-           Gender: 
-          </strong>
-          <span>
-           Male
-          </span>
-        </li>
-  		<li>
-          <strong>
-           Phenotype: 
-          </strong>
-          <span>
-           11p partial monosomy syndrome
-          </span>
-        </li>
-        <li>
-          <strong>           Sample:            </strong>
-          <span>       iha1           </span>
-        </li>
-<li>
-<strong>
-          Description: 
-          </strong>
-   <span>
-           Custom text
-          </span>
-</li>
-        
-    </ul>
-    
-  </div>
-             
-</li>
-           </ul>
-         </div>
-         </div>
-       </div>   
-</div>
 
+          
+        <div class="btn-group btn-group-select2-wrap">
+       <select class="select2" multiple="">
+           <option selected value="eye">Eye Cancer Diagnostics</option>            
+            <option value="cust1">Breast cancer</option>
+            <option value="cust2">Lung cancer</option>
+            <option value="cust3">Autism</option>
+            <option value="cust4">Retinoblastoma</option>
+            <option value="cust5">Mental retardation</option>
+
+        </select>
+     
+      </div>
+        </section>
+     
+        <section>
+     <h5>
+       <div class="btn-group pull-right">
+      <button class="btn btn-dark-default" type="button" data-toggle="modal" data-target="#selectColumns">Setup</button>
+     </div>
+       Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a> </h5>
+  
+           
+        
+        <div class="btn-group btn-group-select2-wrap">
+        
+        <select class="select2" is="view">
+          <option value="1" selected>Default View</option>
+          <option value="2">Default View Copy</option>
+          <option value="3">Custom View</option>
+          <option value="4">User Custom View 1</option>
+          <option value="5">User Custom View 2</option>
+          <option value="6">User Custom View 3</option>
+        </select>
+        
+        </div>  
+     </section>
+        <section>      
+
+          <button class="btn btn-block btn-primary" type="button">
+         Analyze
+      </button>
+        
+
+     </section>
+      <section>
+       
+        <button data-target="#history" data-toggle="modal" type="button" class="btn btn-block btn-default"><span class="">History analysis</span></button>
+       
+
+    
+      </section>
+       <section>
+         <hr>
+       <small>Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited</small>
+       
+     </section>
+       </div>
+      </div>
+   <!--
+  <div class="sidebar-bottom  btn-toolbar">
+      
+    </div>
+-->
+
+
+   
+</div>
