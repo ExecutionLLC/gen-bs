@@ -1,11 +1,16 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "v1.close_session",
-	"title": "Закрыть сессию работы с файлом",
-	"description": "Сервер останавливает все задачи в рамках сессии, сбрасывает данные кэша в redis и удаляет сессию из собственного кэша",
-	"type": "object",
-	"properties": {
-		"params": {},
-		"result": {}
-	}
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "v1.close_session",
+  "title": "close_session - backend API function",
+  "description": "closes file session on backend side",
+  "type": "object",
+  "properties": {
+    "params": {
+      "session_id": {
+        "type": "string",
+        "description": "GUID of the file session"
+      }
+    },
+    "result": {}
+  }
 }

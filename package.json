@@ -32,5 +32,6 @@
     "ws": "*"
   },
   "devDependencies": {
+    "guid": "0.0.12"
   }
 }

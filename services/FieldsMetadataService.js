@@ -2,19 +2,21 @@
 
 const ServiceBase = require('./ServiceBase');
 
-const FIELD_METADATA = require('../test_data/field_metadata.json');
+const FIELDS_METADATA = require('../test_data/fields_metadata.json');
 
-class FieldMetadataService extends ServiceBase {
+class FieldsMetadataService extends ServiceBase {
     constructor(services) {
         super(services);
     }
 
     findForUserBySampleId(user, sampleId, callback) {
         if (user) {
-            callback(null, FIELD_METADATA);
+            callback(null, FIELDS_METADATA);
         } else {
             callback(new Error('User is undefined'));
         }
 
     }
 }
+
+module.exports = FieldsMetadataService;

@@ -44,6 +44,8 @@
     "datatables.net-bs": "1.10.10",
     "datatables.net-responsive": "2.0.0",
     "datatables.net-responsive-bs": "2.0.0",
+    "datatables.net-scroller": "1.4.0",
+    "datatables.net-scroller-bs": "1.4.0",
     "jquery": "2.1.4"
   }
 }

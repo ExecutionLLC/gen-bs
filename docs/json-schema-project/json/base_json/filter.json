@@ -4,33 +4,38 @@
 	"type": "object",
 	"properties": {
 		"id": {
-			"type": "number"
+			"type": "string",
+			"description": "UUID, the unique identifier for the filter"
 		},
 		"name": {
 			"type": "string"
+		},
+		"filter_type": {
+			"type": "string",
+			"description": "Standard - available for demo-user, advanced - only for registered.",
+			"enum": [
+				"standard",
+				"advanced",
+				"user"
+			]
 		},
 		"description": {
 			"type": "string"
 		},
 		"rules": {
-			"type": "string"
-		},
-		"is_standard": {
-			"type": "boolean"
-		},
-		"is_advanced": {
-			"type": "boolean"
+			"type": "string",
+			"description": "A JSON object with rules needed by the UI for this filter."
 		},
 		"is_disabled_4copy": {
-			"type": "boolean"
+			"type": "boolean",
+			"description": "If true, user should not be allowed to copy the view on UI."
 		}
 	},
 	"required": [
 		"id",
 		"name",
+		"filter_type",
 		"rules",
-		"is_standard",
-		"is_advanced",
 		"is_disabled_4copy"
 	]
 }

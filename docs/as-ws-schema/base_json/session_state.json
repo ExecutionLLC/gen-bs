@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "file session status",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "GUID of the file session"
+    },
+    "session_state": {
+      "type": "object",
+      "description": "When state is ready, the data is available in Redis",
+      "parameters": {
+        "status": {
+          "enum": [
+            "loading",
+            "filtering",
+            "ready"
+          ]
+        },
+        "progress": {
+          "type": "integer",
+          "description": "progress of operation in %"
+        },
+        "redis_db": {
+          "type": "object",
+          "description": "Available only when state is ready",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "url of the redis"
+            },
+            "number": {
+              "type": "integer",
+              "description": "redis DB number"
+            }
+          },
+          "column_filter": {
+            "type": "object",
+            "description": "contains state of the column filter. Exists when the state is ready.",
+            "properties": {
+              "index": {
+                "type": "string",
+                "description": "name of the redis key which contains the array of keys passed column filtering (inside they are numbers of rows in VCF file actually)"
+              },
+              "status": {
+                "type": "object",
+                "properties": {
+                  "passed": {
+                    "type": "integer",
+                    "description": "number of elements, which passed filters condition and are available in Redis"
+                  },
+                  "progress": {
+                    "type": "integer",
+                    "description": "progress of operation in %. If the state is ready and no column filters applied, contains 100%."
+                  }
+                }
+              },
+              "filters": {
+                "type": "array",
+                "description": "list of column filters",
+                "items": {
+                  "$ref": "column_filter.json#"
+                }
+              }
+            }
+          }
+        },
+        "sort": {
+          "type": "object",
+          "description": "contains state of the sort order of all entries (even ones that not passed column filtering, so the indexes should be intersected). Available when the state is ready.",
+          "properties": {
+            "index": {
+              "type": "string",
+              "description": "name of the redis key"
+            },
+            "status": {
+              "enum": [
+                "running",
+                "ready"
+              ],
+              "description": "status of the sort operation"
+            },
+            "sort_order": {
+              "type": "array",
+              "description": "ordered list of the columns for sorting",
+              "items": {
+                "$ref": "sort_order.json#"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

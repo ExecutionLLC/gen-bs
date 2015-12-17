@@ -3,7 +3,10 @@
 const _ = require('lodash');
 
 const ServiceBase = require('./ServiceBase');
+
 const RPCProxy = require('../utils/RPCProxy');
+
+const FIELDS_METADATA = require('../test_data/fields_metadata.json');
 
 class ApplicationServerService extends ServiceBase {
     constructor(services) {
@@ -79,16 +82,21 @@ class ApplicationServerService extends ServiceBase {
         this.rpcSend(operationId, 'v1.get_session_state', {session_id: operationId}, callback);
     }
 
+    // TODO:
     requestOperations() {
         var self = this;
         const sessions = this.services.sessionServices.sessions;
-        _.each(sessions, function(session) {
-            _.each(session, function(operation, operationId) {
-                self.requestOperationState(operationId, function(err, res) {
+        _.each(sessions, function (session) {
+            _.each(session, function (operation, operationId) {
+                self.requestOperationState(operationId, function (err, res) {
                     console.log('Check operation: ' + res);
                 })
             });
         });
+    }
+
+    getFieldsMetadata(user, callback) {
+        callback(null, FIELDS_METADATA);
     }
 }
 

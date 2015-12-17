@@ -1,0 +1,31 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"reference": {
+			"type": "string",
+			"maxLength": 50
+		},
+		"chrom": {
+			"type": "string",
+			"maxLength": 50
+		},
+		"pos": {
+			"type": "integer"
+		},
+		"alt": {
+			"type": "string",
+			"maxLength": 50
+		},
+		"comment": {
+			"type": "string",
+			"maxLength": 1000
+		}
+	},
+	"required": [
+		"reference",
+		"chrom",
+		"pos",
+		"commentary"
+	]
+}
