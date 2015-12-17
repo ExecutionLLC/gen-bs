@@ -1,6 +1,6 @@
 'use strict';
 
-const ChangeCaseUtil = require('../util/ChangeCaseUtil');
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 /**
  * Base class for all controllers.

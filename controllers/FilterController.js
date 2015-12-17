@@ -18,9 +18,7 @@ class FilterController extends ControllerBase {
             return;
         }
 
-        response
-            .json(FILTERS)
-            .end();
+        this.sendJson(response, FILTERS);
     }
 
     createRouter() {
