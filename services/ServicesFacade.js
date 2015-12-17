@@ -6,6 +6,7 @@ const FiltersService = require('./FiltersService');
 const SamplesService = require('./SamplesService');
 const FieldsMetadataService = require('./FieldsMetadataService');
 const ApplicationServerService = require('./ApplicationServerService');
+const SearchService = require('./SearchService');
 
 class ServiceFacade {
   constructor() {
@@ -15,6 +16,7 @@ class ServiceFacade {
     this.samples = new SamplesService(this);
     this.applicationServer = new ApplicationServerService(this);
     this.fieldsMetadata = new FieldsMetadataService(this);
+    this.search = new SearchService(this);
   }
 }
 

@@ -22,7 +22,7 @@ class FieldsMetadataController extends ControllerBase {
             if (error) {
                 this.sendInternalError(response, error);
             } else {
-                response.json(fieldsMetadata);
+                this.sendJson(response, fieldsMetadata);
             }
         });
     }

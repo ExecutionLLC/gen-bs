@@ -1,5 +1,7 @@
 'use strict';
 
+const ChangeCaseUtil = require('../util/ChangeCaseUtil');
+
 /**
  * Base class for all controllers.
  * */
@@ -20,6 +22,13 @@ class ControllerBase {
                 message
             })
             .end();
+    }
+
+    sendJson(response, obj) {
+      const snakeCasedObj = ChangeCaseUtil.convertKeysToSnakeCase(obj);
+      response
+        .json(snakeCasedObj)
+        .end();
     }
 
     checkUserIsDefined(request, response) {
