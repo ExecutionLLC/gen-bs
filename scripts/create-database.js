@@ -6,7 +6,7 @@
 
 const _ = require('lodash');
 
-const DatabaseCreator = require('./DatabaseCreator');
+const DatabaseCreator = require('./../startup/DatabaseCreator');
 
 // TODO: Load values from the config file.
 const SERVER_HOST = process.env.GMX_DATABASE_SERVER || '172.17.0.2';
