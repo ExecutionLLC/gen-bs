@@ -19,6 +19,9 @@ function WidthChange(mq) {
 	}
 
 }
+
+
+//layout
     $('#sidebarLeft').on('hide.bs.collapse', function () {
         $('body').addClass("sidebar-left-closed");
     })
@@ -26,7 +29,7 @@ function WidthChange(mq) {
     $('#sidebarLeft').on('shown.bs.collapse', function () {
         $('body').removeClass("sidebar-left-closed");
     })
-   $('#sidebarRight').on('hide.bs.collapse', function () {
+    $('#sidebarRight').on('hide.bs.collapse', function () {
      $('body').addClass("sidebar-right-closed");
     })
 
@@ -57,15 +60,14 @@ function WidthChange(mq) {
 
 
 
-           
+//select2        
 $('.select2').select2({
   placeholder: "Not chosen",
   minimumResultsForSearch: Infinity
 });
-
 $('.selectTree').select2();
 
-
+//ajax select2
  var $ajax = $(".sample-select-ajax"); 
          
  function formatRepo (repo) {
@@ -95,11 +97,8 @@ $('.selectTree').select2();
     }
  function formatRepoSelection (repo) {
       return repo.full_name || repo.text;
-    }
- 
-     
-               
-  $ajax.select2({
+    }               
+$ajax.select2({
       ajax: {
         url: "https://api.github.com/search/repositories",
         dataType: 'json',
@@ -131,89 +130,31 @@ $('.selectTree').select2();
       templateResult: formatRepo,
       templateSelection: formatRepoSelection
     });
-  
-   ///
-         
-          
-    $('#btnOpenid').on('click', function (e) {
-      $('.dropdown-profile').removeClass("hidden");
-      $(this).addClass("hidden");
-     });
      
 
-     $('[data-toggle="tooltip"]').tooltip();
-     
-   
-     $('.dropdown-menu-rows').find('form').click(function (e) {
-      e.stopPropagation();
-     });       
-
-     /*
- $('#btnDel').click(function () {
-       alert("jr");
-        //$("#filterSelector").val(["eye"]).trigger("change");
-      )};
-*/
-
-      $('#builder-basic .selectTree').each(function () {
-                  var button = $(this);
-                  button.select2().on('change', function(e) {
-                   
-                   $("#copyfilterField").collapse("show");
-                   $("#newfilterField").collapse("show");
-                });
-            });
-
-     $('#builder-basic .selectTree').select2()
-        .on("change", function(e) {
-           $(".copyfilter").collapse();
-           //$("#filterSelector").val(null).trigger("change");
+       
+//jquery builder selects
+$('#builder-basic .selectTree').each(function () {
+            var button = $(this);
+            button.select2().on('change', function(e) {
+             
+             $("#copyfilterField").collapse("show");
+             $("#newfilterField").collapse("show");
+          });
       });
-    
 
-
-/*
-$( "#sample-search" ).keypress(function() {
- $('.sample-res').removeClass('hidden')
+$('#builder-basic .selectTree').select2()
+  .on("change", function(e) {
+     $(".copyfilter").collapse();
+     //$("#filterSelector").val(null).trigger("change");
 });
-$( "#sample-search" ).focusout(function() {
- $('.sample-res').addClass('hidden')
-});
-*/
-/*
-
-*/
-/*
-$('#fav4').on('click', function () {
-  alert("kj");
-   $('#fav-message').removeClass("hidden");
-});
-*/
-
-/*
-
-
-*/
-
-
-$('#dropdownSamples').on('show.bs.dropdown', function () {
- $('.sample-res').addClass('hidden')
-})
-   
-   
-$('#comment').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var recipient = button.data('whatever') // Extract info from data-* attributes
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find('.modal-body textarea').val(recipient)
-})
- $('#btnLogin').on('click', function (e) {
+  
+//profile temp actions
+$('#btnLogin').on('click', function (e) {
       $('.guest').addClass("hidden");
       $('.user').removeClass("hidden");
      });
- $('#btnLogout').on('click', function (e) {
+$('#btnLogout').on('click', function (e) {
       $('user').addClass("hidden");
       $('#guest').removeClass("hidden");
      });
@@ -224,3 +165,11 @@ $('#userEditBtn').on('click', function (e) {
 $('.usrViewActBtn').on('click', function (e) {
    $('.user-view').toggleClass('hidden')
   });
+
+//custom scrollbar
+/*
+$('#info').on('shown.bs.modal', function (e) {
+          $(".modal-lg-scroll").mCustomScrollbar();
+     })         
+});
+*/

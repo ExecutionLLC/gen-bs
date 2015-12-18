@@ -1,10 +1,18 @@
 // Alerts
 
-.alert-variant(@background; @border; @text-color) {
-  background-color: @background;
+.alert-variant(@background; @border; @text-color; @icon-content) {
+  background-color:@background;
   border-color: @border;
   color: @text-color;
-
+  padding-left: 36px;
+  &:before { 
+    font-family: @alert-icon-font-family;
+    content: @icon-content;
+    color: @text-color;
+    left: 13px;
+    top: 13px;
+    position: absolute;
+  }
   hr {
     border-top-color: darken(@border, 5%);
   }

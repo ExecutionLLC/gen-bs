@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h5 class="modal-title" id="uploadLabel">Upload sample</h5>
+        <h4 class="modal-title" id="uploadLabel">Upload sample</h4>
       </div>
       <div class="modal-body">
   
@@ -17,88 +17,127 @@
   </div>
   <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
 </div>
-     <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>
-     
+   <div class="drop-area">
+    <div class="progress">
+<div class="progress progress-striped">
+      <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-primary  progress-bar-primary">
+        <span class="sr-only">40% Complete (success)</span>
+      </div>
+    </div>
+</div>
+   </div>
+    <div class="alert alert-danger">
+      <p><strong>Error!</strong>You trying to load zip file format <span class="text-normal">Application is supported vcf and vcf.gz</span></p>    
+    </div>
+    <div class="alert alert-danger">
+      <p><strong>Error!</strong>The file is damaged or unreadable</p>    
+    </div>
+
+     <div class="alert alert-warning">
+      <p><strong>Warning!</strong>The file not uploaded successfully but metadata is not complete <span class="text-normal">Fill required fields necessary for analysis</span></p>    
+    </div>
+    <div class="alert alert-success">
+      <p><strong>Success!</strong>The file is not loaded, the metadata correctly filled <span class="text-normal">You can choose it for analysis</span></p>    
+    </div>
+    
+    <h4>Searh for available samples</h4>
+     <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>    
      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-defualt">
+   <div class="panel panel-success panel-state-sign">
     <div class="panel-heading" role="tab" id="headingOne">
-      
-       <div class="row">
-        <div class="col-sm-6">
-          <span class="metadata s-name">Ogden syndrome</span>, <span class="metadata s-versia">V.1.6</span>, <span class="metadata s-size">56 KB</span>
-          <span class="metadata s-descr">Demo data - Ogden syndrome</span>
-          
-         
-          </div>
-         <div class="col-sm-6">
-           <div class="btn-group pull-right" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Edit sample">
+       <div class="btn-group pull-right" >
+      <a class="btn btn-default btn-choose" role="button">
+              Select for analisis
+            </a>
        <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
           <i class="fa fa-pencil"></i>
         </a>
        </div>
-            <span class="metadata s-familyID">Family ID <span>Ogden</span></span>
-            <span class="metadata s-subjectID">Subject ID <span>	ogden1</span></span>
-            
-            </div>
-         </div>
-      </div>      
-    
+       <div class="flex">
+          
+          <dl>
+            <dt>Name</dt>
+            <dd>Ogden syndrome</dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd>V.1.6</dd>
+           </dl>
+            <dl>
+            <dt>Size</dt>
+            <dd>56 KB</dd>
+           </dl>
+          
+        
+           <dl>
+            <dt>Description</dt>
+            <dd>Demo data - Ogden syndrome</dd>
+            </dl>
+           <dl>
+            <dt>Family ID</dt>
+            <dd>Ogden</dd>
+           </dl>
+           <dl>
+            <dt>Subject ID</dt>
+            <dd>345</dd>
+           </dl>
+            <dl>
+            <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analized</dt>
+            <dd>24.09.2015 34:45</dd>
+           </dl>
+        </div>
+ 
+       </div>
     <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
       <div class="panel-body form-horizontal form-horizontal-rows">
       
+       <div class="flex">
           
-     
-       <div class="row">
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Name*</label>
-              <input type="text" class="form-control" value="Ogden syndrome">
-            </div>
-          </div>
+          <dl>
+            <dt>Name</dt>
+            <dd><input type="text" class="form-control" value="Ogden syndrome"></dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd><select class="select2"><option>1.2</option><option>1.3</option><option>1.4</option></select></dd>
+           </dl>
+            <dl>
+            <dt>Size, KB</dt>
+            <dd><input type="text" class="form-control" value="56" readonly=""></dd>
+           </dl>
           
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Family ID</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-             <div class="col-sm-4">
-            <div class="form-group">
-              <label>Subject ID</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Genome Build</label>
-              <div>
-             <select class="select2 form-control">
+        
+           <dl>
+            <dt>Description</dt>
+            <dd>  <textarea type="text" class="form-control" value="Demo data - Ogden syndrome"></textarea></dd>
+            </dl>
+           <dl>
+            <dt>Family ID</dt>
+            <dd><input type="text" class="form-control" value="Ogden"></dd>
+           </dl>
+           <dl>
+            <dt>Subject ID</dt>
+            <dd><input type="text" class="form-control" value="345"></dd>
+           </dl>
+           <dl>
+            <dt>Genome Build</dt>
+            <dd><select class="select2 form-control">
                 <option>hg13</option>
                 <option>hg14</option>
                 <option>hg15</option>
-              </select>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="form-group">
-               <label>Gender</a></label>
-               <div>
-              <select class="select2 form-control">
+              </select></dd>
+           </dl>
+           <dl>
+            <dt>Gender</dt>
+            <dd><select class="select2 form-control">
                 <option>Male</option>
                 <option>Female</option>
                  <option>Unknown</option>
-              </select>
-               </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Phenotype</label>
-              <div>
-              <select multiple="" class="form-control select2">
+              </select></dd>
+           </dl>
+           <dl>
+            <dt>Phenotype</dt>
+            <dd><select multiple="" class="form-control select2">
                 <option>11p partial monosomy syndrome</option><option>12p12.1 microdeletion syndrome</option><option>12q14 microdeletion syndrome</option><option>14q11.2 microduplication syndrome
 14q12 microdeletion syndrome</option><option>14q22q23 microdeletion syndrome</option><option>15q13.3 microdeletion syndrome</option><option>16q24.3 microdeletion syndrome
 17p11.2 microduplication syndrome</option><option>17p13.3 microduplication syndrome</option><option>17q11.2 microduplication syndrome
@@ -106,135 +145,146 @@
 
                 
                 
-              </select>
-              </div>
-            </div>
-          </div>
-             
+              </select></dd>
+           </dl>
+            <dl>
+            <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analized</dt>
+            <dd><input type="text" class="form-control" value="24.09.2015 34:45"></dd>
+           </dl>
         </div>
-         <div class="row">
-     
-          
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Description</label>
-              <textarea type="text" class="form-control"></textarea>
-             </div>
-          </div>
-            <div class="col-sm-4">
-            <div class="btn-toolbar">
-              <label class="btn btn-link wrapnormal text-left"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend1" type="buuton"><input type="checkbox"><span class="link-toggle"> Notify By Email After Complete</span></label>
-            </div>
-            <div class="collapse" id="emailOpts3">
+       <div class="flex"> 
+        <dl>
+          <dt><label class="btn btn-wrapnormal"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
+          </dt>
+          <dd><div class="collapse" id="emailOpts3">
                             
-                <div class="form-group">
+               
                  <input type="text" class="form-control" placeholder="email"> 
                  
              
                 
               </div>
-            </div>
-          </div>
-        </div>
-         <hr>
-         <div class="btn-toolbar">
-          <div class="btn-group pull-right">
-            <button class="btn btn-success">Save sample</button>
-         </div>
-         <div class="btn-group pull-right">
-            <button class="btn btn-default">Cancel</button>
-         </div>
-         <div class="btn-group pull-left">
-            <button class="btn btn-link"><small>Delete sample</small></button>
-         </div>
+              </dd>
+        </dl>
+        <dl>
+          <dt><div class="btn-group pull-right">
+             <button class="btn btn-link"><small>Delete sample</small></button>
+              </div>
+          </dt>
+          <dd>
+          <div class="btn-group btn-group-justified">
+             <div class="btn-group" role="group"><button class="btn btn-default">Cancel</button></div>
+             <div class="btn-group" role="group"><button class="btn btn-success">Save sample</button></div>
         
-          </div> 
-      
+            
+         </div></dd>
+        </dl>
+        </div>
+    
+            </div>
+         </div>
        </div>
-    </div>
-  </div>
+ 
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingTwo">
-      <div class="row">
-        <div class="col-sm-6">
-          <span class="metadata s-name">Ogden syndrome</span>, <span class="metadata s-versia">V.1.6</span>, <span class="metadata s-size">56 KB</span>
-          <span class="metadata s-descr">Demo data - Ogden syndrome</span>
-          </div>
-          
-    
-         <div class="col-sm-6">
-          <div class="btn-group pull-right" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Edit sample">
-        <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-         <i class="fa fa-pencil"></i>
+      <div class="btn-group pull-right" >
+      <a class="btn btn-default btn-choose" role="button">
+              Select for analisis
+            </a>
+       <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <i class="fa fa-pencil"></i>
         </a>
+       </div>
+       <div class="flex">
+          
+          <dl>
+            <dt>Name</dt>
+            <dd>Ogden syndrome</dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd>V.1.6</dd>
+           </dl>
+            <dl>
+            <dt>Size</dt>
+            <dd>56 KB</dd>
+           </dl>
+          
+        
+           <dl>
+            <dt>Description</dt>
+            <dd>Demo data - Ogden syndrome</dd>
+            </dl>
+           <dl>
+            <dt>Family ID</dt>
+            <dd>Ogden</dd>
+           </dl>
+           <dl>
+            <dt>Subject ID</dt>
+            <dd>345</dd>
+           </dl>
+            <dl>
+            <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analized</dt>
+            <dd>24.09.2015 34:45</dd>
+           </dl>
         </div>
-
-            <span class="metadata s-familyID">Family ID <span>Ogden</span></span>
-            <span class="metadata s-subjectID">Subject ID <span>	ogden1</span></span>
-            <span class="metadata s-analises"><i class="fa fa-check"></i> Analyzed <span>24.09.2015 34:45</span></span>
-            </div>
-         </div>
      
     </div>
     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
      <div class="panel-body form-horizontal form-horizontal-rows">
       
          <div class="alert alert-warning">
-   <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>
-  <p><strong>Warning!</strong> Sample is analized. If you change ..</p>
-</div> 
+         <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>
+         <p><strong>Warning!</strong> Sample is analized. If you change ..</p>
+         </div> 
      
-       <div class="row">
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Name*</label>
-              <input type="text" class="form-control" value="Ogden syndrome">
-            </div>
-          </div>
+        <div class="flex">
           
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Family ID</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-             <div class="col-sm-4">
-            <div class="form-group">
-              <label>Subject ID</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Genome Build</label>
-              <div>
-             <select class="select2 form-control">
+          <dl>
+            <dt>Name</dt>
+            <dd><input type="text" class="form-control" value="Ogden syndrome"></dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd><select class="select2"><option>1.2</option><option>1.3</option><option>1.4</option></select></dd>
+           </dl>
+            <dl>
+            <dt>Size, KB</dt>
+            <dd><input type="text" class="form-control" value="56" readonly=""></dd>
+           </dl>
+          
+        
+           <dl>
+            <dt>Description</dt>
+            <dd>  <textarea type="text" class="form-control" value="Demo data - Ogden syndrome"></textarea></dd>
+            </dl>
+           <dl>
+            <dt>Family ID</dt>
+            <dd><input type="text" class="form-control" value="Ogden"></dd>
+           </dl>
+           <dl>
+            <dt>Subject ID</dt>
+            <dd><input type="text" class="form-control" value="345"></dd>
+           </dl>
+           <dl>
+            <dt>Genome Build</dt>
+            <dd><select class="select2 form-control">
                 <option>hg13</option>
                 <option>hg14</option>
                 <option>hg15</option>
-              </select>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="form-group">
-               <label>Gender</a></label>
-               <div>
-              <select class="select2 form-control">
+              </select></dd>
+           </dl>
+           <dl>
+            <dt>Gender</dt>
+            <dd><select class="select2 form-control">
                 <option>Male</option>
                 <option>Female</option>
                  <option>Unknown</option>
-              </select>
-               </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Phenotype</label>
-              <div>
-              <select multiple="" class="form-control select2">
+              </select></dd>
+           </dl>
+           <dl>
+            <dt>Phenotype</dt>
+            <dd><select multiple="" class="form-control select2">
                 <option>11p partial monosomy syndrome</option><option>12p12.1 microdeletion syndrome</option><option>12q14 microdeletion syndrome</option><option>14q11.2 microduplication syndrome
 14q12 microdeletion syndrome</option><option>14q22q23 microdeletion syndrome</option><option>15q13.3 microdeletion syndrome</option><option>16q24.3 microdeletion syndrome
 17p11.2 microduplication syndrome</option><option>17p13.3 microduplication syndrome</option><option>17q11.2 microduplication syndrome
@@ -242,77 +292,88 @@
 
                 
                 
-              </select>
-              </div>
-            </div>
-          </div>
-             
+              </select></dd>
+           </dl>
+            <dl>
+            <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analized</dt>
+            <dd><input type="text" class="form-control" value="24.09.2015 34:45"></dd>
+           </dl>
         </div>
-         <div class="row">
-         <div class="col-sm-4">
-            <div class="form-group">
-              <label>Description</label>
-              <textarea type="text" class="form-control"></textarea>
-             </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="btn-toolbar">
-              <label class="btn btn-link wrapnormal text-left"  data-toggle="collapse" data-target="#emailOpts1" id="emailSend1" type="buuton"><input type="checkbox"><span class="link-toggle"> Notify By Email After Complete</span></label>
-            </div>
-            <div class="collapse" id="emailOpts1">
+       <div class="flex"> 
+        <dl>
+          <dt><label class="btn btn-wrapnormal"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
+          </dt>
+          <dd><div class="collapse" id="emailOpts3">
                             
-                <div class="form-group">
+               
                  <input type="text" class="form-control" placeholder="email"> 
                  
              
                 
               </div>
-            </div>
-          </div>
-          
-            
-        </div>
-         <hr>
-         <div class="btn-toolbar">
-          <div class="btn-group pull-right">
-            <button class="btn btn-success">Save sample</button>
-         </div>
-         <div class="btn-group pull-right">
-            <button class="btn btn-default">Cancel</button>
-         </div>
-         <div class="btn-group pull-left">
-            <button class="btn btn-link"><small>Delete sample</small></button>
-         </div>
+              </dd>
+        </dl>
+        <dl>
+          <dt><div class="btn-group pull-right">
+             <button class="btn btn-link"><small>Delete sample</small></button>
+              </div>
+          </dt>
+          <dd>
+          <div class="btn-group btn-group-justified">
+             <div class="btn-group" role="group"><button class="btn btn-default">Cancel</button></div>
+             <div class="btn-group" role="group"><button class="btn btn-success">Save sample</button></div>
         
-          </div> 
+            
+         </div></dd>
+        </dl>
+        </div>
       
        </div>
     </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingThree">
-        <div class="row">
-        <div class="col-sm-6">
-          <span class="metadata s-name">Ogden syndrome</span>, <span class="metadata s-versia">V.1.6</span>, <span class="metadata s-size">56 KB</span>
-          <span class="metadata s-descr">Demo data - Ogden syndrome</span>
-          </div>
-          
-    
-         <div class="col-sm-6">
-          <div class="btn-group pull-right" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Edit sample">
-           <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-         <i class="fa fa-pencil"></i>
+         <div class="btn-group pull-right" >
+      <a class="btn btn-default btn-choose" role="button">
+              Select for analisis
+            </a>
+       <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseTree">
+          <i class="fa fa-pencil"></i>
         </a>
-        </div>
-
-            <span class="metadata s-familyID">Family ID <span>Ogden</span></span>
-            <span class="metadata s-subjectID">Subject ID <span>	ogden1</span></span>
-            <span class="metadata s-analises"><i class="fa fa-check"></i> Analyzed <span>24.09.2015 34:45</span></span>
-            
-            </div>
-         </div>
-     
-         
+       </div>
+       <div class="flex">
+          
+          <dl>
+            <dt>Name</dt>
+            <dd>Ogden syndrome</dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd>V.1.6</dd>
+           </dl>
+            <dl>
+            <dt>Size</dt>
+            <dd>56 KB</dd>
+           </dl>
+          
+        
+           <dl>
+            <dt>Description</dt>
+            <dd>Demo data - Ogden syndrome</dd>
+            </dl>
+           <dl>
+            <dt>Family ID</dt>
+            <dd>Ogden</dd>
+           </dl>
+           <dl>
+            <dt>Subject ID</dt>
+            <dd>345</dd>
+           </dl>
+            <dl>
+            <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analized</dt>
+            <dd>24.09.2015 34:45</dd>
+           </dl>
+        </div>         
      
          </div>
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
@@ -323,57 +384,53 @@
   <p><strong>Warning!</strong> Sample is analized. If you change ..</p>
 </div>
      
-       <div class="row">
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Name*</label>
-              <input type="text" class="form-control" value="Ogden syndrome">
-            </div>
-          </div>
+       <div class="flex">
           
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Family ID</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-             <div class="col-sm-4">
-            <div class="form-group">
-              <label>Subject ID</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Genome Build</label>
-              <div>
-             <select class="select2 form-control">
+          <dl>
+            <dt>Name</dt>
+            <dd><input type="text" class="form-control" value="Ogden syndrome"></dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd><select class="select2"><option>1.2</option><option>1.3</option><option>1.4</option></select></dd>
+           </dl>
+            <dl>
+            <dt>Size, KB</dt>
+            <dd><input type="text" class="form-control" value="56" readonly=""></dd>
+           </dl>
+          
+        
+           <dl>
+            <dt>Description</dt>
+            <dd>  <textarea type="text" class="form-control" value="Demo data - Ogden syndrome"></textarea></dd>
+            </dl>
+           <dl>
+            <dt>Family ID</dt>
+            <dd><input type="text" class="form-control" value="Ogden"></dd>
+           </dl>
+           <dl>
+            <dt>Subject ID</dt>
+            <dd><input type="text" class="form-control" value="345"></dd>
+           </dl>
+           <dl>
+            <dt>Genome Build</dt>
+            <dd><select class="select2 form-control">
                 <option>hg13</option>
                 <option>hg14</option>
                 <option>hg15</option>
-              </select>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="form-group">
-               <label>Gender</a></label>
-               <div>
-              <select class="select2 form-control">
+              </select></dd>
+           </dl>
+           <dl>
+            <dt>Gender</dt>
+            <dd><select class="select2 form-control">
                 <option>Male</option>
                 <option>Female</option>
                  <option>Unknown</option>
-              </select>
-               </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Phenotype</label>
-              <div>
-              <select multiple="" class="form-control select2">
+              </select></dd>
+           </dl>
+           <dl>
+            <dt>Phenotype</dt>
+            <dd><select multiple="" class="form-control select2">
                 <option>11p partial monosomy syndrome</option><option>12p12.1 microdeletion syndrome</option><option>12q14 microdeletion syndrome</option><option>14q11.2 microduplication syndrome
 14q12 microdeletion syndrome</option><option>14q22q23 microdeletion syndrome</option><option>15q13.3 microdeletion syndrome</option><option>16q24.3 microdeletion syndrome
 17p11.2 microduplication syndrome</option><option>17p13.3 microduplication syndrome</option><option>17q11.2 microduplication syndrome
@@ -381,49 +438,41 @@
 
                 
                 
-              </select>
-              </div>
-            </div>
-          </div>
-             
+              </select></dd>
+           </dl>
+            <dl>
+            <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analized</dt>
+            <dd><input type="text" class="form-control" value="24.09.2015 34:45"></dd>
+           </dl>
         </div>
-         <div class="row">
-     
-          
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>Description</label>
-              <textarea type="text" class="form-control"></textarea>
-             </div>
-          </div>
-           <div class="col-sm-4">
-            <div class="btn-toolbar">
-              <label class="btn btn-link wrapnormal text-left"  data-toggle="collapse" data-target="#emailOpts2" id="emailSend1" type="buuton"><input type="checkbox"><span class="link-toggle"> Notify By Email After Complete</span></label>
-            </div>
-            <div class="collapse" id="emailOpts2">
+       <div class="flex"> 
+        <dl>
+          <dt><label class="btn btn-wrapnormal"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
+          </dt>
+          <dd><div class="collapse" id="emailOpts3">
                             
-                <div class="form-group">
+               
                  <input type="text" class="form-control" placeholder="email"> 
                  
              
                 
               </div>
-            </div>
-          </div> 
-        </div>
-        <hr>
-         <div class="btn-toolbar">
-          <div class="btn-group pull-right">
-            <button class="btn btn-success">Save sample</button>
-         </div>
-         <div class="btn-group pull-right">
-            <button class="btn btn-default">Cancel</button>
-         </div>
-         <div class="btn-group pull-left">
-            <button class="btn btn-link"><small>Delete sample</small></button>
-         </div>
+              </dd>
+        </dl>
+        <dl>
+          <dt><div class="btn-group pull-right">
+             <button class="btn btn-link"><small>Delete sample</small></button>
+              </div>
+          </dt>
+          <dd>
+          <div class="btn-group btn-group-justified">
+             <div class="btn-group" role="group"><button class="btn btn-default">Cancel</button></div>
+             <div class="btn-group" role="group"><button class="btn btn-success">Save sample</button></div>
         
-          </div> 
+            
+         </div></dd>
+        </dl>
+        </div> 
       
        </div>
     </div>
