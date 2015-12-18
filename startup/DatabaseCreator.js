@@ -208,7 +208,7 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('langu');
                 table.uuid('keyword_id')
-                    .references('keyword_id')
+                    .references('id')
                     .inTable('keyword');
                 table.string('value', 50);
 
@@ -233,7 +233,7 @@ class DatabaseCreator {
             })
             .createTable('view_assignment', table => {
                 table.uuid('user_id')
-                    .references('user_id')
+                    .references('id')
                     .inTable('user');
                 table.uuid('view_id')
                     .references('id')
