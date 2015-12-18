@@ -3,23 +3,12 @@
 class ConfigWrapper {
     constructor() {
         var ENV = process.env;
-        var defaultSettings = this.defaultSettings();
 
         this.settings = {
-            port: ENV.PORT || defaultSettings.port,
-            rpc: {
-                host: ENV.WSHOST || defaultSettings.rpc.host,
-                port: ENV.WSPORT || defaultSettings.rpc.port
-            }
-        }
-    }
-
-    defaultSettings() {
-        return {
-            port: 5000,
-            rpc: {
-                host: '192.168.1.102',
-                port: 8888
+            port: ENV.PORT || 5000,
+            applicationServer: {
+                host: ENV.AS_HOST || '192.168.1.102',
+                port: ENV.AS_WS_PORT || 8888
             }
         }
     }
