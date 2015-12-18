@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * NPM script used to create database, if it doesn't exist.
+ * */
+
 const _ = require('lodash');
 
 const DatabaseCreator = require('./DatabaseCreator');
@@ -14,7 +18,7 @@ const databaseCreator = new DatabaseCreator(SERVER_HOST, USER_NAME, PASSWORD, DA
 
 databaseCreator.create()
 .then(() => {
-    console.log('Database is successfully created');
+    console.log('Success.');
 }).catch(error => {
     console.error('Error creating database: ' + error);
     // Indicate failure to the caller.
