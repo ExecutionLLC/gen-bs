@@ -238,6 +238,8 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('view');
                 table.enu('access_rights', accessRightsEnumValues);
+
+                table.primary(['user_id', 'view_id']);
             })
             .createTable('view_item', table => {
                 table.uuid('id')
@@ -268,6 +270,9 @@ class DatabaseCreator {
                 table.integer('pos');
                 table.string('alt', 50);
                 table.bigInteger('search_key');
+                table.uuid('creator')
+                    .references('id')
+                    .inTable('user');
             })
             .createTable('comment_text', table => {
                 table.uuid('comment_id')
@@ -298,6 +303,11 @@ class DatabaseCreator {
                 table.string('hash', 50);
                 table.enu('sample_type', entityTypeEnumValues);
                 table.enu('status', sampleStatusEnumValues);
+                table.boolean('is_analyzed');
+                table.timestamp('timestamp');
+                table.uuid('creator')
+                    .references('id')
+                    .inTable('user');
             })
             .createTable('vcf_file_sample_assignment', table => {
                 table.uuid('vcf_file_sample_id')
@@ -318,7 +328,7 @@ class DatabaseCreator {
                     .inTable('vcf_file_sample');
                 table.timestamp('timestamp');
             })
-            .createTable('vcf_file_sample_values', table => {
+            .createTable('vcf_file_sample_value', table => {
                 table.uuid('vcf_file_sample_version_id')
                     .references('id')
                     .inTable('vcf_file_sample_version');
@@ -334,12 +344,12 @@ class DatabaseCreator {
             .createTable('saved_file', table => {
                 table.uuid('id')
                     .primary();
-                table.uuid('view_id')
-                    .references('id')
-                    .inTable('view');
                 table.uuid('vcf_file_sample_version_id')
                     .references('id')
                     .inTable('vcf_file_sample_version');
+                table.uuid('view_id')
+                    .references('id')
+                    .inTable('view');
                 table.string('name', 50);
                 table.string('url', 2048);
                 table.integer('total_results');
@@ -381,6 +391,31 @@ class DatabaseCreator {
             })
 
             // Query history
+            .createTable('query_history', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('vcf_file_sample_version_id')
+                    .references('id')
+                    .inTable('vcf_file_sample_version');
+                table.uuid('view_id')
+                    .references('id')
+                    .inTable('view');
+                table.integer('total_results');
+                table.timestamp('timestamp');
+                table.uuid('creator')
+                    .references('id')
+                    .inTable('user');
+            })
+            .createTable('query_history_filter', table => {
+                table.uuid('query_history_id')
+                    .references('id')
+                    .inTable('query_history');
+                table.uuid('filter_id')
+                    .references('id')
+                    .inTable('filter');
+
+                table.primary(['query_history_id', 'filter_id']);
+            })
 
             .then(() => {
                 console.log('Tables created successfully.')
