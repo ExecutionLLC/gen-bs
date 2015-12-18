@@ -23,29 +23,63 @@ class DatabaseCreator {
         const postgresKnex = new Knex(postgresConfig);
 
         return this._isDatabaseExists(postgresKnex)
-        .then(isDatabaseExists => {
-            if (!isDatabaseExists) {
-                return this._createEmptyDatabase(postgresKnex)
-                .then(() => {
-                    console.log('Connecting to database...');
-                    const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
-                    const databaseKnex = new Knex(databaseConfig);
-
-                    return this._createTables(databaseKnex)
+            .then(isDatabaseExists => {
+                if (!isDatabaseExists) {
+                    return this._createEmptyDatabase(postgresKnex)
                         .then(() => {
-                            databaseKnex.destroy();
+                            console.log('Connecting to database...');
+                            const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
+                            const databaseKnex = new Knex(databaseConfig);
+
+                            return this._createTables(databaseKnex)
+                                .then(() => {
+                                    databaseKnex.destroy();
+                                });
                         });
-                });
-            } else {
-                console.log('Database is found.');
-                return true;
-            }
-        }).then(() => {
+                } else {
+                    console.log('Database is found.');
+                    return true;
+                }
+            }).then(() => {
                 postgresKnex.destroy();
             });
     }
 
     _createTables(databaseKnex) {
+        // Possible values for entity types, such as filters and views.
+        const entityTypeEnumValues = [
+            'standard', // Available for demo user
+            'advanced', // Shown in demo, but locked. Available for registered users.
+            'user' // Created by user.
+        ];
+
+        // Entity access rights, allowing users to share things like filters and views
+        const accessRightsEnumValues = [
+            'r', // Share as read-only
+            'rw' // Share as read-write
+        ];
+
+        // Types of fields as they are got from VCF.
+        const fieldValueTypesEnumValues = [
+            'float',
+            'integer',
+            'char',
+            'string',
+            'boolean'
+        ];
+
+        const sortDirectionEnumValues = [
+            'asc',
+            'desc'
+        ];
+
+        // Status of the sample upload process. Pending samples will
+        // be removed when the service starts.
+        const sampleStatusEnumValues = [
+            'pending',  // The sample is somewhere in the middle.
+            'ready'     // Sample is ready for search requests.
+        ];
+
         return databaseKnex.schema
 
             // Language
@@ -62,15 +96,19 @@ class DatabaseCreator {
                 table.string('email', 50);
                 table.integer('number_paid_samples');
             })
-
             .createTable('user_text', table => {
                 table.uuid('user_id')
                     .references('id')
                     .inTable('user');
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
                 table.string('name', 50)
                     .notNullable();
                 table.string('last_name', 50);
                 table.string('speciality', 50);
+
+                table.primary(['user_id', 'langu_id']);
             })
 
             // Filters
@@ -83,27 +121,25 @@ class DatabaseCreator {
                 table.string('name', 50)
                     .notNullable();
                 table.json('rules');
-                table.string('filter_type', 50)
-                    .notNullable();
-                table.boolean('is_disabled_4copy');
+                table.enu('filter_type', entityTypeEnumValues);
+                table.boolean('is_disabled_4copy')
+                    .defaultTo(false);
                 table.timestamp('timestamp');
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
             })
-
             .createTable('filter_text', table => {
                 table.uuid('filter_id')
                     .references('id')
-                    .inTable('filter')
-                    .notNullable();
+                    .inTable('filter');
                 table.string('langu_id', 2)
                     .references('id')
-                    .inTable('langu')
-                    .notNullable();
+                    .inTable('langu');
                 table.string('description', 100);
-            })
 
+                table.primary(['filter_id', 'langu_id']);
+            })
             .createTable('filter_assignment', table => {
                 table.uuid('user_id')
                     .references('id')
@@ -111,17 +147,246 @@ class DatabaseCreator {
                 table.uuid('filter_id')
                     .references('id')
                     .inTable('filter');
-                table.enu('access_rights', ['r', 'rw']);
+                table.enu('access_rights', accessRightsEnumValues);
+
+                table.primary(['user_id', 'filter_id']);
             })
+
+            // Fields
+            .createTable('field_metadata', table => {
+                table.uuid('id')
+                    .primary();
+                table.string('name', 50);
+                table.string('source_name', 128);
+                table.enu('value_type', fieldValueTypesEnumValues);
+                table.boolean('filter_control_enable');
+                table.boolean('is_mandatory');
+                table.boolean('is_editable');
+                table.boolean('is_invisible');
+                table.boolean('multi_select');
+            })
+            .createTable('field_text', table => {
+                table.uuid('field_id')
+                    .references('id')
+                    .inTable('field_metadata');
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
+                table.string('description', 100);
+
+                table.primary(['field_id', 'langu_id']);
+            })
+            .createTable('field_available_value', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('field_id')
+                    .references('id')
+                    .inTable('field_metadata');
+            })
+            .createTable('field_available_value_text', table => {
+                table.uuid('available_value_id')
+                    .references('id')
+                    .inTable('field_available_value');
+                table.string('langu_id', 2);
+                table.string('value', 100);
+
+                table.primary(['available_value_id', 'langu_id']);
+            })
+
+            // Keywords
+            .createTable('keyword', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('field_id')
+                    .references('id')
+                    .inTable('field_metadata');
+                table.string('value', 50);
+            })
+            .createTable('synonym_text', table => {
+                table.uuid('id');
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
+                table.uuid('keyword_id')
+                    .references('keyword_id')
+                    .inTable('keyword');
+                table.string('value', 50);
+
+                table.primary(['id', 'langu_id']);
+            })
+
+            // Views
+            .createTable('view', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('original_view_id')
+                    .references('id')
+                    .inTable('view');
+                table.string('name', 50);
+                table.enu('view_type', entityTypeEnumValues);
+                table.boolean('is_disabled_4copy')
+                    .defaultTo(false);
+                table.timestamp('timestamp');
+                table.uuid('creator')
+                    .references('id')
+                    .inTable('user');
+            })
+            .createTable('view_assignment', table => {
+                table.uuid('user_id')
+                    .references('user_id')
+                    .inTable('user');
+                table.uuid('view_id')
+                    .references('id')
+                    .inTable('view');
+                table.enu('access_rights', accessRightsEnumValues);
+            })
+            .createTable('view_item', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('view_id')
+                    .references('id')
+                    .inTable('view');
+                table.uuid('field_id')
+                    .references('id')
+                    .inTable('field_metadata');
+                table.integer('order');
+                table.integer('sort_order');
+                table.enu('sort_direction', sortDirectionEnumValues);
+            })
+            .createTable('view_item_keyword', table => {
+                table.uuid('keyword_id');
+                table.uuid('view_item_id');
+
+                table.primary(['keyword_id', 'view_item_id']);
+            })
+
+            // Comments
+            .createTable('comment', table => {
+                table.uuid('id')
+                    .primary();
+                table.string('reference', 50);
+                table.string('chrom', 50);
+                table.integer('pos');
+                table.string('alt', 50);
+                table.bigInteger('search_key');
+            })
+            .createTable('comment_text', table => {
+                table.uuid('comment_id')
+                    .references('id')
+                    .inTable('comment');
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
+                table.string('comment', 1024);
+            })
+            .createTable('comment_assignment', table => {
+                table.uuid('user_id')
+                    .references('id')
+                    .inTable('user');
+                table.uuid('comment_id')
+                    .references('id')
+                    .inTable('comment');
+                table.enu('access_rights', accessRightsEnumValues);
+
+                table.primary(['user_id', 'comment_id']);
+            })
+
+            // Samples
+            .createTable('vcf_file_sample', table => {
+                table.uuid('id')
+                    .primary();
+                table.string('file_name', 50);
+                table.string('hash', 50);
+                table.enu('sample_type', entityTypeEnumValues);
+                table.enu('status', sampleStatusEnumValues);
+            })
+            .createTable('vcf_file_sample_assignment', table => {
+                table.uuid('vcf_file_sample_id')
+                    .references('id')
+                    .inTable('vcf_file_sample');
+                table.uuid('user_id')
+                    .references('id')
+                    .inTable('user');
+                table.enu('access_rights', accessRightsEnumValues);
+
+                table.primary(['vcf_file_sample_id', 'user_id']);
+            })
+            .createTable('vcf_file_sample_version', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('vcf_file_sample_id')
+                    .references('id')
+                    .inTable('vcf_file_sample');
+                table.timestamp('timestamp');
+            })
+            .createTable('vcf_file_sample_values', table => {
+                table.uuid('vcf_file_sample_version_id')
+                    .references('id')
+                    .inTable('vcf_file_sample_version');
+                table.uuid('field_id')
+                    .references('id')
+                    .inTable('field_metadata');
+                table.string('values', 100);
+
+                table.primary(['vcf_file_sample_version_id', 'field_id']);
+            })
+
+            // Saved files
+            .createTable('saved_file', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('view_id')
+                    .references('id')
+                    .inTable('view');
+                table.uuid('vcf_file_sample_version_id')
+                    .references('id')
+                    .inTable('vcf_file_sample_version');
+                table.string('name', 50);
+                table.string('url', 2048);
+                table.integer('total_results');
+                table.timestamp('timestamp');
+                table.uuid('creator')
+                    .references('id')
+                    .inTable('user');
+            })
+            .createTable('saved_file_assignment', table => {
+                table.uuid('saved_file_id')
+                    .references('id')
+                    .inTable('saved_file');
+                table.uuid('user_id')
+                    .references('id')
+                    .inTable('user');
+                table.enu('access_rights', accessRightsEnumValues);
+
+                table.primary(['saved_file_id', 'user_id']);
+            })
+            .createTable('saved_file_filter', table => {
+                table.uuid('saved_file_id')
+                    .references('id')
+                    .inTable('saved_file');
+                table.uuid('filter_id')
+                    .references('id')
+                    .inTable('filter');
+
+            })
+            .createTable('saved_file_text', table => {
+                table.uuid('saved_file_id')
+                    .references('id')
+                    .inTable('saved_file');
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
+                table.string('description', 100);
+
+                table.primary(['saved_file_id', 'langu_id']);
+            })
+
+            // Query history
 
             .then(() => {
                 console.log('Tables created successfully.')
             })
-
-            .catch((error) => {
-                console.log('Error creating tables: ' + error);
-            })
-        ;
+            ;
     }
 
     _createEmptyDatabase(postgresKnex) {
@@ -139,9 +404,9 @@ class DatabaseCreator {
             .where({
                 datname: this.databaseName
             })
-        .then((databases) => {
-            return databases.length > 0;
-        });
+            .then((databases) => {
+                return databases.length > 0;
+            });
     }
 
     _createKnexConfigForDatabaseName(databaseName) {
