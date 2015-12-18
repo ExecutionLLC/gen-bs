@@ -1,7 +1,3 @@
-TODO:
-    * Database is kept as it is (inconsistent) when failed to create
-    * Creation errors don't trigger process.exit(1)
-
 # Welcome to Genomix Application WebServer Node
 
 Genomix Application is intended to do great things for genetics all over the world.
