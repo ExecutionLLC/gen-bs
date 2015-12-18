@@ -16,16 +16,16 @@ class RPCProxy {
     }
 
     _address() {
-        return 'ws://' + this.host + ':' + this.port;
+        return 'ws://' + this.host + ':' + this.port + '/ws';
     }
 
     _replyResult(message, flags) {
         if (this.replyCallback){
             const msg = JSON.parse(message);
             if(msg.error) {
-                this.replyCallback(msg.error, {operation_id: msg.operation_id});
+                this.replyCallback(msg.error, {id: msg.id});
             } else {
-                this.replyCallback(null, {operation_id: msg.operation_id, result: msg.result});
+                this.replyCallback(null, {id: msg.id, result: msg.result});
             }
         }
     }
@@ -82,14 +82,12 @@ class RPCProxy {
     }
 
     _formatJson(operationId, method, params) {
-        return JSON.stringify({operation_id: operationId, method: method, params: [params]});
+        return JSON.stringify({id: operationId, method: method, params: [params]});
     }
 
     send(operationId, method, params) {
         var self = this;
-        self.ws.on('open', function open() {
-            self.ws.send(self._formatJson(operationId, method, params));
-        });
+        self.ws.send(self._formatJson(operationId, method, params));
     }
 }
 

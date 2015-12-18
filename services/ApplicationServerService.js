@@ -1,9 +1,9 @@
 'use strict';
 
 const _ = require('lodash');
+const uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
-
 const RPCProxy = require('../utils/RPCProxy');
 
 const FIELDS_METADATA = require('../test_data/fields_metadata.json');
@@ -13,15 +13,28 @@ class ApplicationServerService extends ServiceBase {
         super(services);
 
         this.registeredCallbacks = {};
+        this.registerCallbacks();
 
         this._requestOperations = this._requestOperations.bind(this);
         this._requestOperationState = this._requestOperationState.bind(this);
+
+        this._rpcCall = this._rpcCall.bind(this);
         this.rpcReply = this.rpcReply.bind(this);
+
+        this.test = this.test.bind(this);
 
         this.host = this.services.config.settings.rpc.host;
         this.port = this.services.config.settings.rpc.port;
 
-        this.rpcProxy = new RPCProxy(this.host, this.port, null, this._requestOperations, this.rpcReply);
+        this.rpcProxy = new RPCProxy(this.host, this.port, this._requestOperations, null, this.rpcReply);
+    }
+
+    registerCallbacks() {
+        var self = this;
+        this.registerCallback('v1.get_sources', function(err, res) {
+            console.log(err, res);
+            console.log(self.services.sessionService.sessions);
+        });
     }
 
     registerCallback(method, callback) {
@@ -35,7 +48,7 @@ class ApplicationServerService extends ServiceBase {
     }
 
     rpcReply(err, message) {
-        const operationId = message.operation_id;
+        const operationId = message.id;
         const operation = this.services.sessionService.findOperation(operationId);
 
         if (operation) {
@@ -43,6 +56,9 @@ class ApplicationServerService extends ServiceBase {
             if (callback) {
                 // TODO: add log event
                 console.log('RPC REPLY: ', err, message);
+                // Remove operation from operations list
+                this.services.sessionService.removeOperation(operationId);
+                // Callback call
                 callback(err, message);
             } else {
                 // TODO: add log event
@@ -52,9 +68,11 @@ class ApplicationServerService extends ServiceBase {
             // TODO: add log event
             console.log('Undefined operation: ' + operationId);
         }
+    }
 
-        // Remove operation from operations list
-        this.services.sessionService.removeOperation(operationId);
+    test(callback) {
+        //this._rpcCall(uuid.v4(), 'v1.get_sources', null, callback);
+        this._rpcCall(uuid.v4(), 'v1.get_sources', {reference: 'ASDF'}, callback);
     }
 
     _rpcCall(sessionId, method, params, callback) {

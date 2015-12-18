@@ -54,7 +54,7 @@ class SessionService extends ServiceBase {
             // TODO: add log event here
         } else {
             const msg = JSON.parse(message);
-            const operationId = msg.operation_id;
+            const operationId = msg.id;
             const operationState = msg.result.session_state.status;
 
         }

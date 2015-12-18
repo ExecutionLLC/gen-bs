@@ -5,7 +5,7 @@ var WebSocketServer = require('ws').Server;
 class RPCServer {
     constructor() {
         var self = this;
-        const port = 5050;
+        const port = 8888;
         self.listenWs(port);
     }
 

@@ -22,7 +22,7 @@ const controllers = new ControllersFacade(services);
 app.use('/api/ws', controllers.wsController.createRouter());
 
 const mainRouter = controllers.apiController.createRouter(controllers);
-app.use('/api', mrpcainRouter);
+app.use('/api', mainRouter);
 
 const server = app.listen(app.get('port'), function() {
   const host = server.address().address;

@@ -18,8 +18,8 @@ class ConfigWrapper {
         return {
             port: 5000,
             rpc: {
-                host: 'localhost',
-                port: 5050
+                host: '192.168.1.102',
+                port: 8888
             }
         }
     }
