@@ -5,7 +5,6 @@ deploy.sh
 .idea/misc.xml
 *.xml
 *node_modules*
-*logs*
 
 *.swp
 *.swo
