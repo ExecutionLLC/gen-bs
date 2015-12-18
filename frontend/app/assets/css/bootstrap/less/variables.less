@@ -7,38 +7,12 @@
 //
 //## Gray and brand colors for use across Bootstrap.
 
-@gray-base:              #000;
+@gray-base:              #222;
 @gray-darker:            lighten(@gray-base, 13.5%); // #222
 @gray-dark:              lighten(@gray-base, 20%);   // #333
 @gray:                   lighten(@gray-base, 33.5%); // #555
 @gray-light:             lighten(@gray-base, 46.7%); // #777
 @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
-
-/*
-@darkPrimaryColor:   #689F38;
-@primaryColor:       #8BC34A;
-@lightPrimaryColor:  #DCEDC8;
-@textPrimaryColor:   #212121;
-@accentColor:        #795548;
-@primaryTextColor:   #212121;
-@secondaryTextColor: #727272;
-@dividerColor:       #B6B6B6;
-*/
-
-
-
-/*
-@darkPrimaryColor:   #FFA000;
-@primaryColor:       #FFC107;
-@lightPrimaryColor:  #FFECB3;
-@textPrimaryColor:   #212121;
-@accentColor:        #4CAF50;
-@primaryTextColor:   #212121;
-@secondaryTextColor: #727272;
-@dividerColor:       #B6B6B6;
-*/
-
-
 
 @darkPrimaryColor:   #303F9F;
 @primaryColor:       #3F51B5;
@@ -50,11 +24,12 @@
 @dividerColor:       #B6B6B6;
 
 
-@brand-primary:         @primaryColor; // #337ab7
-@brand-success:         #5cb85c;
-@brand-info:            lighten(@primaryColor, 10%);
-@brand-warning:         #f0ad4e;
-@brand-danger:          #d9534f;
+@brand-primary:         #2363a1; // #337ab7
+@brand-success:         #388E3C;
+@brand-info:            #03A9F4;
+@brand-warning:         #f5c338;
+@brand-danger:          #F44336;
+@light-primary-color:   #d8e5f1;
 
 
 //== Scaffolding
@@ -78,13 +53,13 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-@font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:  "Lato", Helvetica, Arial, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
-@font-size-base:          13px;
+@font-size-base:          14px;
 @font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
 @font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
 
@@ -123,14 +98,14 @@
 //
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
-@padding-base-vertical:     6px;
-@padding-base-horizontal:   12px;
+@padding-base-vertical:     8px;
+@padding-base-horizontal:   13px;
 
 @padding-large-vertical:    10px;
 @padding-large-horizontal:  16px;
 
 @padding-small-vertical:    5px;
-@padding-small-horizontal:  10px;
+@padding-small-horizontal:  9px;
 
 @padding-xs-vertical:       1px;
 @padding-xs-horizontal:     5px;
@@ -138,9 +113,9 @@
 @line-height-large:         1.3333333; // extra decimals for Win 8.1 Chrome
 @line-height-small:         1.5;
 
-@border-radius-base:        3px;
-@border-radius-large:       3px;
-@border-radius-small:       2px;
+@border-radius-base:        0px;
+@border-radius-large:       0px;
+@border-radius-small:       0px;
 
 //** Global color for active items (e.g., navs or dropdowns).
 @component-active-color:    #fff;
@@ -165,14 +140,14 @@
 //** Default background color used for all tables.
 @table-bg:                      #fff;
 //** Background color used for `.table-striped`.
-@table-bg-accent:               #f9f9f9;
+@table-bg-accent:               #fcfcfc;
 //** Background color used for `.table-hover`.
 @table-bg-hover:                #f5f5f5;
-@table-bg-active:               @table-bg-hover;
+@table-bg-active:               #eee;
 
 //** Border color for table and cell borders.
-@table-border-color:            #ddd;
-@table-th-bg:                 #f9f9f9;
+@table-border-color:            #f5f5f5;
+@table-th-bg:                   #f6f6f6;
 @table-primary-border-color:   @brand-primary;
 @table-primary-th-bg:     darken(@brand-primary, 5%);
 @table-primary-th-color: #fff;
@@ -184,27 +159,32 @@
 
 @btn-default-color:              #333;
 @btn-default-bg:                 #fff;
-@btn-default-border:             #ccc;
+@btn-default-border:             #e5e5e5;
+
+@btn-dark-default-color:              #333;
+@btn-dark-default-bg:                 #e5e5e5;
+@btn-dark-default-border:             #e5e5e5;
 
 @btn-primary-color:              #fff;
-@btn-primary-bg:                 lighten(@brand-primary, 10%);
-@btn-primary-border:             darken(@brand-primary, 5%);
+@btn-primary-bg:                 @brand-primary;
+@btn-primary-border:             @btn-primary-bg;
 
 @btn-success-color:              #fff;
 @btn-success-bg:                 @brand-success;
-@btn-success-border:             darken(@btn-success-bg, 5%);
+@btn-success-border:             @btn-success-bg;
 
 @btn-info-color:                 #fff;
 @btn-info-bg:                    @brand-info;
-@btn-info-border:                darken(@btn-info-bg, 5%);
+@btn-info-border:                @btn-info-bg;
 
 @btn-warning-color:              #fff;
 @btn-warning-bg:                 @brand-warning;
-@btn-warning-border:             darken(@btn-warning-bg, 5%);
+@btn-warning-border:             @btn-warning-bg;
 
 @btn-danger-color:               #fff;
 @btn-danger-bg:                  @brand-danger;
-@btn-danger-border:              darken(@btn-danger-bg, 5%);
+@btn-danger-border:              @btn-danger-bg;
+
 
 @btn-link-disabled-color:        @gray-light;
 
@@ -226,7 +206,7 @@
 //** Text color for `<input>`s
 @input-color:                    @gray;
 //** `<input>` border color
-@input-border:                   #ccc;
+@input-border:                   #e5e5e5;
 
 // TODO: Rename `@input-border-radius` to `@input-border-radius-base` in v4
 //** Default `.form-control` border radius
@@ -238,11 +218,11 @@
 @input-border-radius-small:      @border-radius-small;
 
 //** Border color for inputs on focus
-@input-border-focus:             #66afe9;
+@input-border-focus:             darken(@input-border, 10%);
 
 //** Placeholder text color
 @input-color-placeholder:        #999;
-
+@placeholder-inverse:            fade(#fff, 40%);
 //** Default `.form-control` height
 @input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 2);
 //** Large `.form-control` height
@@ -270,20 +250,20 @@
 //## Dropdown menu container and contents.
 
 //** Background for the dropdown menu.
-@dropdown-bg:                    #3b444c;
+@dropdown-bg:                    #fff;
 //** Dropdown menu `border-color`.
-@dropdown-border:                #3b444c;
+@dropdown-border:                #e5e5e5;
 //** Dropdown menu `border-color` **for IE8**.
 @dropdown-fallback-border:       #ccc;
 //** Divider color for between dropdown items.
 @dropdown-divider-bg:            #e5e5e5;
 
 //** Dropdown link text color.
-@dropdown-link-color:            fade(#fff, 70%);
+@dropdown-link-color:            @text-color;
 //** Hover color for dropdown links.
 @dropdown-link-hover-color:      #fff;
 //** Hover background for dropdown links.
-@dropdown-link-hover-bg:         transparent;
+@dropdown-link-hover-bg:         lighten(@brand-primary, 10%);
 
 //** Active dropdown menu item text color.
 @dropdown-link-active-color:     @component-active-color;
@@ -314,7 +294,7 @@
 @zindex-navbar-fixed:      1030;
 @zindex-modal-background:  1040;
 @zindex-modal:             1050;
-
+@zindex-alert-fixed:       1060;
 
 //== Media queries breakpoints
 //
@@ -429,12 +409,12 @@
 
 //=== Inverted navbar
 // Reset inverted navbar basics
-@navbar-inverse-color:                      @lightPrimaryColor;
+@navbar-inverse-color:                      @light-primary-color;
 @navbar-inverse-bg:                         @brand-primary;
 @navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
 
 // Inverted navbar links
-@navbar-inverse-link-color:                 @lightPrimaryColor;
+@navbar-inverse-link-color:                 @light-primary-color;
 @navbar-inverse-link-hover-color:           #fff;
 @navbar-inverse-link-hover-bg:              transparent;
 @navbar-inverse-link-active-color:          @navbar-inverse-link-hover-color;
@@ -660,25 +640,33 @@
 //## Define alert colors, border radius, and padding.
 
 @alert-padding:               15px;
+@alert-icon-font-family:     "FontAwesome";  
 @alert-border-radius:         @border-radius-base;
 @alert-link-font-weight:      bold;
 
 @alert-success-bg:            @state-success-bg;
 @alert-success-text:          @state-success-text;
 @alert-success-border:        @state-success-border;
+@alert-success-state-icon:    "\f00c"; 
 
 @alert-info-bg:               @state-info-bg;
 @alert-info-text:             @state-info-text;
 @alert-info-border:           @state-info-border;
+@alert-info-state-icon:       "\f059"; 
 
 @alert-warning-bg:            @state-warning-bg;
 @alert-warning-text:          @state-warning-text;
 @alert-warning-border:        @state-warning-border;
+@alert-warning-state-icon:    "\f071"; 
 
 @alert-danger-bg:             @state-danger-bg;
 @alert-danger-text:           @state-danger-text;
 @alert-danger-border:         @state-danger-border;
+@alert-danger-state-icon:   "\f05e";
 
+@alert-inverse-bg:      fade(#000, 20%);
+@alert-inverse-border:  fade(#000, 20%);
+@alert-inverse-text:    @gray-lighter;
 
 //== Progress bars
 //
@@ -742,8 +730,9 @@
 //##
 
 @panel-bg:                    #fff;
-@panel-body-padding:          15px;
-@panel-heading-padding:       10px 15px;
+@panel-body-padding:          20px;
+@panel-heading-padding:       10px 20px;
+@panel-icon-font-family:     "FontAwesome";      
 @panel-footer-padding:        @panel-heading-padding;
 @panel-border-radius:         @border-radius-base;
 
@@ -754,27 +743,32 @@
 @panel-default-text:          @gray-dark;
 @panel-default-border:        #ddd;
 @panel-default-heading-bg:    #fff;
+@panel-default-state-icon:     " "; 
 
 @panel-primary-text:          #fff;
-@panel-primary-border:        @brand-primary;
-@panel-primary-heading-bg:    @brand-primary;
+@panel-primary-border:        darken(@brand-primary, 10%);
+@panel-primary-heading-bg:    lighten(@brand-primary, 10%);
+@panel-primary-state-icon:    "\f061"; 
 
 @panel-success-text:          @state-success-text;
-@panel-success-border:        @state-success-border;
+@panel-success-border:        darken(@state-success-bg, 5%);
 @panel-success-heading-bg:    @state-success-bg;
+@panel-success-state-icon:    "\f00c"; 
 
 @panel-info-text:             @state-info-text;
-@panel-info-border:           @state-info-border;
+@panel-info-border:           darken(@state-info-bg, 5%);
 @panel-info-heading-bg:       @state-info-bg;
+@panel-info-state-icon:       "\f059"; 
 
 @panel-warning-text:          @state-warning-text;
-@panel-warning-border:        @state-warning-border;
+@panel-warning-border:        darken(@state-warning-bg, 5%);
 @panel-warning-heading-bg:    @state-warning-bg;
+@panel-warning-state-icon:    "\f071"; 
 
 @panel-danger-text:           @state-danger-text;
-@panel-danger-border:         @state-danger-border;
+@panel-danger-border:         darken(@state-danger-bg, 5%);
 @panel-danger-heading-bg:     @state-danger-bg;
-
+@panel-danger-state-icon:     "\f05e";
 
 //== Thumbnails
 //
@@ -810,7 +804,7 @@
 @badge-color:                 #fff;
 //** Linked badge text color on hover
 @badge-link-hover-color:      #fff;
-@badge-bg:                    @gray-light;
+@badge-bg:                    @brand-warning;
 
 //** Badge text color in active nav link
 @badge-active-color:          @link-color;
@@ -906,3 +900,17 @@
 @dl-horizontal-breakpoint:    @grid-float-breakpoint;
 //** Horizontal line color.
 @hr-border:                   @gray-lighter;
+
+
+//layout 
+@sidebar-closed-width: 0;
+@sidebar-opened-width: 260px;
+@width-wrapper-main-max: 100%;
+@width-wrapper-main-min: 100%;
+
+//sidebar
+@sidebar-default-bg:  #f6f6f6;
+@sidebar-default-color: @text-color; 
+
+@sidebar-inverse-bg:  #454548;
+@sidebar-inverse-color: #ccc;

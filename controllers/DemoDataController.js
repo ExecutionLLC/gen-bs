@@ -23,7 +23,7 @@ class DemoDataController extends ControllerBase {
         }
 
         // TODO: Combine and send back the demo user data.
-        response.json(getUserDataResult);
+        this.sendJson(response, getUserDataResult);
     }
 
     getFieldsMetadata(request, response) {
@@ -36,7 +36,7 @@ class DemoDataController extends ControllerBase {
             if (error) {
                 this.sendError(response, error);
             } else {
-                response.json(fieldsMetadata);
+                this.sendJson(response, fieldsMetadata);
             }
         });
     }

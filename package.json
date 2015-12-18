@@ -24,14 +24,15 @@
     "node": "4.2.2"
   },
   "dependencies": {
-    "bunyan": "*",
+    "body-parser": "1.14.1",
+    "change-case": "2.3.1",
     "domain": "*",
     "express": "4.13.3",
     "lodash": "^3.10.1",
     "node-uuid": "*",
+    "multer": "1.1.0",
     "ws": "*"
   },
   "devDependencies": {
-    "guid": "0.0.12"
   }
 }

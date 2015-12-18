@@ -8,6 +8,7 @@ const SessionService = require('./SessionService');
 const WSService = require('./WSService');
 const FieldsMetadataService = require('./FieldsMetadataService');
 const ApplicationServerService = require('./ApplicationServerService');
+const SearchService = require('./SearchService');
 
 class ServiceFacade {
   constructor(config) {
@@ -20,6 +21,7 @@ class ServiceFacade {
     this.wsService = new WSService(this);
     this.applicationServer = new ApplicationServerService(this);
     this.fieldsMetadata = new FieldsMetadataService(this);
+    this.search = new SearchService(this);
   }
 }
 

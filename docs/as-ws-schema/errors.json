@@ -3,9 +3,10 @@
   "title": "list of possible errors",
   "properties": {
     "errors": {
-      "0": "Success",
       "-32000": "Server error",
       "-32001": "Invalid session id: '%s'",
+      "-32002": "Invalid reference",
+      "-32003": "Invalid source",
       
       "-32600": "Invalid Request",
       "-32601": "Method not found: '%s'",

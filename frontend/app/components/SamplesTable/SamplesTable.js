@@ -46,8 +46,8 @@ $( function() {
 
 
   table.columns().flatten().each( function ( colIdx ) {
-    const input = $('<input type="text" placeholder="Search" />')
-      .width( $(table.column(colIdx).header()).width() - 10 )
+    const input = $('<input type="text" class="form-control" placeholder="Search" />')
+      //.width( $(table.column(colIdx).header()).width() - 10 )
       .on( 'click', function (e) {
         e.stopPropagation(e);
       })
