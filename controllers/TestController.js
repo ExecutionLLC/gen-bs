@@ -2,34 +2,13 @@
 
 const Express = require('express');
 
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const ControllerBase = require('./ControllerBase');
 
-class TestController {
+class TestController extends ControllerBase {
     constructor(services) {
-        this.services = services;
+        super(services);
 
         this.test = this.test.bind(this);
-    }
-
-    sendInternalError(response, message) {
-        this.sendError(response, 500, message);
-    }
-
-    sendError(response, httpError, message) {
-        response
-            .status(httpError)
-            .json({
-                code: httpError,
-                message
-            })
-            .end();
-    }
-
-    sendJson(response, obj) {
-        const snakeCasedObj = ChangeCaseUtil.convertKeysToSnakeCase(obj);
-        response
-            .json(snakeCasedObj)
-            .end();
     }
 
     test(request, response) {
