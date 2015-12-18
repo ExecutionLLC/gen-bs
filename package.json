@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "bash ./scripts/heroku-deploy.sh",
-    "start": "node index.js"
+    "start": "node index.js",
+    "rpcserver": "node ./test/utils/RPCServer.js"
   },
   "repository": {
     "type": "git",
@@ -25,9 +26,13 @@
   "dependencies": {
     "body-parser": "1.14.1",
     "change-case": "2.3.1",
+    "domain": "*",
     "express": "4.13.3",
-    "guid": "0.0.12",
-    "lodash": "3.10.1",
-    "multer": "1.1.0"
+    "lodash": "^3.10.1",
+    "node-uuid": "*",
+    "multer": "1.1.0",
+    "ws": "*"
+  },
+  "devDependencies": {
   }
 }
