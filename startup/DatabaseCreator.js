@@ -163,7 +163,7 @@ class DatabaseCreator {
                 table.boolean('is_mandatory');
                 table.boolean('is_editable');
                 table.boolean('is_invisible');
-                table.boolean('multi_select');
+                table.boolean('is_multi_select');
             })
             .createTable('field_text', table => {
                 table.uuid('field_id')
@@ -224,8 +224,7 @@ class DatabaseCreator {
                     .inTable('view');
                 table.string('name', 50);
                 table.enu('view_type', entityTypeEnumValues);
-                table.boolean('is_disabled_4copy')
-                    .defaultTo(false);
+                table.boolean('is_disabled_4copy');
                 table.timestamp('timestamp');
                 table.uuid('creator')
                     .references('id')
