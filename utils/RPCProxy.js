@@ -2,6 +2,11 @@
 
 const WebSocket = require('ws');
 
+const SocketState = {
+    CONNECTED: 1,
+    CLOSED: 3
+};
+
 class RPCProxy {
     constructor(host, port, connectCallback, disconnectCallback, replyCallback) {
         this.connectCallback = connectCallback;
@@ -32,27 +37,24 @@ class RPCProxy {
 
     _close(event) {
         if (event.wasClean) {
-            // TODO: add logger event here
             console.log('Socket closed (clear)', event);
         } else {
-            // TODO: add logger event here
             console.log('Socket closed (unclear)', event);
         }
         if (this.disconnectCallback) {
             this.disconnectCallback();
         }
-        if (!this.ws || this.ws.readyState == 3) {  // CLOSED
+        if (!this.ws || this.ws.readyState == SocketState.CLOSED) {
             this.connected = false;
             this._connect();
         }
     }
 
     _error(event) {
-        if (this.ws.readyState !=1 ) {
+        if (this.ws.readyState != SocketState.CONNECTED) {
             this.connected = false;
         }
-        // TODO: add logger event here
-        console.log('Socket error', event, this.wsreadyState);
+        console.log('Socket error', event, this.ws.readyState);
     }
 
     _connect() {
