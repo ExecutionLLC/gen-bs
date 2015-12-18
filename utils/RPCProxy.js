@@ -12,7 +12,7 @@ class RPCProxy {
         this.port = port;
 
         this.connected = false;
-        setInterval(() => this.connect(), 1000);
+        setInterval(() => this._connect(), 1000);
     }
 
     _address() {
@@ -43,7 +43,7 @@ class RPCProxy {
         }
         if (!this.ws || this.ws.readyState == 3) {  // CLOSED
             this.connected = false;
-            this.connect();
+            this._connect();
         }
     }
 
@@ -55,12 +55,12 @@ class RPCProxy {
         console.log('Socket error', event, this.wsreadyState);
     }
 
-    connect() {
+    _connect() {
         if (this.connected) return;
 
         const address = this._address();
         this.ws = new WebSocket(address);
-        console.log('Socket server is started on ' + address);
+        console.log('Connecting to the socket server on ' + address);
 
         this.connected = true;
 
