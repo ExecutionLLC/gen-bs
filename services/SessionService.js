@@ -36,7 +36,7 @@ class SessionService extends ServiceBase {
 
     findOperation(operationId) {
         const session = this.findSessionByOperationId(operationId);
-        if (session && session !== undefined) {
+        if (session) {
             return session[operationId];
         }
         return null;

@@ -3,78 +3,94 @@
 const WebSocket = require('ws');
 
 class RPCProxy {
-    constructor(host, port, replyCallback) {
+    constructor(host, port, connectCallback, disconnectCallback, replyCallback) {
+        this.connectCallback = connectCallback;
+        this.disconnectCallback = disconnectCallback;
         this.replyCallback = replyCallback;
+
         this.host = host;
         this.port = port;
-        this.connect();
+
+        this.connected = false;
+        setInterval(() => this.connect(), 1000);
     }
 
-    replyResult(message, flags) {
-        var msg = JSON.parse(message);
-        if(msg.error && (error !== undefined)) {
-            this.replyCallback(msg.error, {operation_id: msg.operation_id});
-        } else {
-            this.replyCallback(null, {operation_id: msg.operation_id, result: msg.result});
-        }
-    }
-
-    wsUrl() {
+    _address() {
         return 'ws://' + this.host + ':' + this.port;
     }
 
-    connect() {
-        this.ws = new WebSocket(this.wsUrl());
-
-        // TODO: add initial callback (applicationServer.requestOperations()) here
-
-        this.ws.on('message', (message, flags) => {
-            this.replyResult(message, flags);
-        });
-
-        this.ws.on('close', (event) => {
-            if (event.wasClean) {
-                // TODO: add logger event here
-                console.log('Socket closed (clear)', event);
+    _replyResult(message, flags) {
+        if (this.replyCallback){
+            const msg = JSON.parse(message);
+            if(msg.error) {
+                this.replyCallback(msg.error, {operation_id: msg.operation_id});
             } else {
-                // TODO: add logger event here
-                console.log('Socket closed (unclear)', event);
+                this.replyCallback(null, {operation_id: msg.operation_id, result: msg.result});
             }
-            this.reconnect();
-        });
-
-        // TODO: что здесь? Как обрабатываем?
-        this.ws.on('error', (error) => {
-            // TODO: посмотреть как работает
-            console.log('Socket error', error);
-            this.reconnect();
-        });
-    }
-
-    disconnect() {
-        if (this.ws) {
-            // TODO: посмотреть как работает и к чему приводит
-            this.ws = null;
         }
     }
 
-    reconnect() {
-        // TODO: try reconnect? количество попыток соединения = ?
-        this.disconnect();
-        this.connect();
+    _close(event) {
+        if (event.wasClean) {
+            // TODO: add logger event here
+            console.log('Socket closed (clear)', event);
+        } else {
+            // TODO: add logger event here
+            console.log('Socket closed (unclear)', event);
+        }
+        if (this.disconnectCallback) {
+            this.disconnectCallback();
+        }
+        if (!this.ws || this.ws.readyState == 3) {  // CLOSED
+            this.connected = false;
+            this.connect();
+        }
     }
 
-    formatJson(operationId, method, params) {
+    _error(event) {
+        if (this.ws.readyState !=1 ) {
+            this.connected = false;
+        }
+        // TODO: add logger event here
+        console.log('Socket error', event, this.wsreadyState);
+    }
+
+    connect() {
+        if (this.connected) return;
+
+        const address = this._address();
+        this.ws = new WebSocket(address);
+        console.log('Socket server is started on ' + address);
+
+        this.connected = true;
+
+        this.ws.on('message', (message, flags) => {
+            this._replyResult(message, flags);
+        });
+
+        this.ws.on('close', (event) => {
+            this._close(event);
+        });
+
+        this.ws.on('error', (event) => {
+            this._error(event);
+        });
+
+        if (this.connectCallback) {
+            this.connectCallback();
+        }
+    }
+
+    _formatJson(operationId, method, params) {
         return JSON.stringify({operation_id: operationId, method: method, params: [params]});
     }
 
     send(operationId, method, params) {
         var self = this;
         self.ws.on('open', function open() {
-            self.ws.send(self.formatJson(operationId, method, params));
+            self.ws.send(self._formatJson(operationId, method, params));
         });
     }
-
 }
 
 module.exports = RPCProxy;
