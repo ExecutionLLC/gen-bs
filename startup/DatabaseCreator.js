@@ -22,27 +22,45 @@ class DatabaseCreator {
 
         const postgresKnex = new Knex(postgresConfig);
 
-        return this._isDatabaseExists(postgresKnex)
-            .then(isDatabaseExists => {
-                if (!isDatabaseExists) {
-                    return this._createEmptyDatabase(postgresKnex)
-                        .then(() => {
-                            console.log('Connecting to database...');
-                            const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
-                            const databaseKnex = new Knex(databaseConfig);
+        return new Promise((resolve, reject) => {
+            this._isDatabaseExists(postgresKnex)
+                .then(isDatabaseExists => {
+                    if (!isDatabaseExists) {
+                        return this._createEmptyDatabase(postgresKnex)
+                            .then(() => {
+                                console.log('Connecting to database...');
+                                const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
+                                const databaseKnex = new Knex(databaseConfig);
 
-                            return this._createTables(databaseKnex)
-                                .then(() => {
-                                    databaseKnex.destroy();
-                                });
-                        });
-                } else {
-                    console.log('Database is found.');
-                    return true;
-                }
-            }).then(() => {
+                                return this._createTables(databaseKnex)
+                                    .finally(() => {
+                                        console.log('Destroying database context...');
+                                        databaseKnex.destroy();
+                                    })
+                                    ;
+                            });
+                    } else {
+                        console.log('Database is found.');
+                    }
+                }).then(() => {
+                resolve();
+            })
+            .catch((error) => {
+                console.log('Caught error, dropping database ' + this.databaseName);
+                postgresKnex.raw('DROP DATABASE ' + this.databaseName)
+                    .then(() => {
+                        reject(error);
+                    }).catch((dropError) => {
+                        console.error('Failed to drop database: ' + dropError);
+                        reject(error);
+                    });
+                reject(error);
+            })
+            .finally(() => {
+                console.log('Destroying postgres database context..');
                 postgresKnex.destroy();
             });
+        });
     }
 
     _createTables(databaseKnex) {
