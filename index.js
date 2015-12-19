@@ -7,6 +7,7 @@ const ConfigWrapper = require('./utils/ConfigWrapper');
 const ControllersFacade = require('./controllers/ControllersFacade');
 const ServicesFacade = require('./services/ServicesFacade');
 
+// Create service.
 const app = new Express();
 
 const config = new ConfigWrapper();
