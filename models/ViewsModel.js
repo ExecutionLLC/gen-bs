@@ -9,13 +9,16 @@ class ViewsModel extends ModelBase {
         super(models);
     }
 
-    add(user, view, callback) {
-        this._addView(user, view, (error, insertedView) => {
+    findUserViews(userId, languId, callback) {
+        this.knex.raw('select * from view')
+    }
+
+    add(userId, languId, view, callback) {
+        this._addView(userId, view, (error, insertedView) => {
             if (error) {
                 callback(error);
             } else {
                 const viewId = insertedView.id;
-                const languId = user.defaultLanguId;
                 this._addViewDescription(viewId, languId, view.description, (error) => {
                     if (error) {
                         callback(error);
@@ -33,8 +36,7 @@ class ViewsModel extends ModelBase {
         });
     }
 
-    _addView(user, view, callback) {
-        const userId = user.id;
+    _addView(userId, view, callback) {
         const id = super._generateId();
         const dataToInsert = {
             id: id,
