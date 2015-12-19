@@ -3,7 +3,7 @@
 const Express = require('express');
 const bodyParser = require('body-parser');
 
-const Config = require('./utils/ConfigWrapper');
+const Config = require('./utils/Config');
 const ControllersFacade = require('./controllers/ControllersFacade');
 const ServicesFacade = require('./services/ServicesFacade');
 
