@@ -10,32 +10,30 @@ class ViewsModel extends ModelBase {
     }
 
     add(user, view, callback) {
-        this._addView(user, view)
-            .then(insertedView => {
+        this._addView(user, view, (error, insertedView) => {
+            if (error) {
+                callback(error);
+            } else {
                 const viewId = insertedView.id;
                 const languId = user.defaultLanguId;
-                return new Promise((resolve, reject) => {
-                    this._addViewDescription(viewId, languId, view.description)
-                        .then(() => {
-                            this._addViewItems(viewId, view.viewListItems);
-                        })
-                        .then(() => {
-                            resolve(insertedView.id);
-                        })
-                        .catch((error) => {
-                            reject(error);
+                this._addViewDescription(viewId, languId, view.description, (error) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        this._addViewItems(viewId, view.viewListItems, (error) => {
+                            if (error) {
+                                callback(error);
+                            } else {
+                                callback(null, viewId);
+                            }
                         });
+                    }
                 });
-            })
-            .then((viewId) => {
-                callback(null, viewId);
-            })
-            .catch(error => {
-                callback(error);
-            });
+            }
+        });
     }
 
-    _addView(user, view) {
+    _addView(user, view, callback) {
         return new Promise((resolve, reject) => {
             const userId = user.id;
             const id = super._generateId();
@@ -57,17 +55,23 @@ class ViewsModel extends ModelBase {
         });
     }
 
-    _addViewDescription(viewId, languId, description) {
+    _addViewDescription(viewId, languId, description, callback) {
         const dataToInsert = {
             view_id: viewId,
             langu_id: languId,
             description: description
         };
-        return this.knex('view_text')
-            .insert(dataToInsert);
+        this.knex('view_text')
+            .insert(dataToInsert)
+            .then(() => {
+                callback(null, dataToInsert);
+            })
+            .catch(error => {
+                callback(error);
+            });
     }
 
-    _addViewItems(viewId, viewItems) {
+    _addViewItems(viewId, viewItems, callback) {
         const promises = _.map(viewItems, viewItem => {
             const id = super._generateId();
             const itemToInsert = {
@@ -83,17 +87,30 @@ class ViewsModel extends ModelBase {
                 .then(() => {
                     _.map(viewItem.selectedKeywords,
                         keywordId => this._addViewItemKeywords(itemToInsert.id, keywordId));;
+                    return itemToInsert.id;
                 });
         });
-        return Promise.all(promises);
+        Promise.all(promises)
+            .then((itemIds) => {
+                callback(null, itemIds);
+            })
+            .catch((error) => {
+                callback(error);
+            });
     }
 
-    _addViewItemKeywords(viewItemId, keywordId) {
+    _addViewItemKeywords(viewItemId, keywordId, callback) {
         const dataToInsert = {
             view_item_id: viewItemId,
             keyword_id: keywordId
         };
-        return this.knex('view_item_keywords')
-            .insert(dataToInsert);
+        this.knex('view_item_keywords')
+            .insert(dataToInsert)
+            .then(() => {
+                callback(null, dataToInsert);
+            })
+            .catch((error) => {
+                callback(error);
+            });
     }
 }
