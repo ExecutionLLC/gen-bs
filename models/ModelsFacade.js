@@ -2,9 +2,11 @@
 
 const ViewsModel = require('./ViewsModel');
 
+const Config = require('../utils/Config');
+
 class ModelsFacade {
-    constructor(config) {
-        this.config = config;
+    constructor() {
+        this.config = Config;
 
         this.views = new ViewsModel(this);
     }
