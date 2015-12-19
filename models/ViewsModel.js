@@ -34,25 +34,23 @@ class ViewsModel extends ModelBase {
     }
 
     _addView(user, view, callback) {
-        return new Promise((resolve, reject) => {
-            const userId = user.id;
-            const id = super._generateId();
-            const dataToInsert = {
-                id: id,
-                name: view.name,
-                view_type: 'user',
-                creator: userId
-            };
+        const userId = user.id;
+        const id = super._generateId();
+        const dataToInsert = {
+            id: id,
+            name: view.name,
+            view_type: 'user',
+            creator: userId
+        };
 
-            this.knex('view')
-                .insert(dataToInsert)
-                .then(() => {
-                    resolve(dataToInsert);
-                })
-                .catch(error => {
-                    reject(error);
-                });
-        });
+        this.knex('view')
+            .insert(dataToInsert)
+            .then(() => {
+                callback(null, dataToInsert);
+            })
+            .catch(error => {
+                callback(error);
+            });
     }
 
     _addViewDescription(viewId, languId, description, callback) {
