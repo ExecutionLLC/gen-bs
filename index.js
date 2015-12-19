@@ -3,21 +3,19 @@
 const Express = require('express');
 const bodyParser = require('body-parser');
 
-const ConfigWrapper = require('./utils/ConfigWrapper');
+const Config = require('./utils/Config');
 const ControllersFacade = require('./controllers/ControllersFacade');
 const ServicesFacade = require('./services/ServicesFacade');
 
 // Create service.
 const app = new Express();
 
-const config = new ConfigWrapper();
-
-app.set('port', config.settings.port);
+app.set('port', Config.port);
 
 app.use(bodyParser.json());
 app.use('/', Express.static('public'));
 
-const services = new ServicesFacade(config);
+const services = new ServicesFacade(Config);
 const controllers = new ControllersFacade(services);
 
 app.use('/api/ws', controllers.wsController.createRouter());
