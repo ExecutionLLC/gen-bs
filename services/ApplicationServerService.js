@@ -23,8 +23,8 @@ class ApplicationServerService extends ServiceBase {
 
         this.test = this.test.bind(this);
 
-        this.host = this.services.config.settings.applicationServer.host;
-        this.port = this.services.config.settings.applicationServer.port;
+        this.host = this.services.config.applicationServer.host;
+        this.port = this.services.config.applicationServer.port;
 
         this.rpcProxy = new RPCProxy(this.host, this.port, this._requestOperations, null, this.rpcReply);
     }
