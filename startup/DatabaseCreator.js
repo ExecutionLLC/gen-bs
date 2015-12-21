@@ -112,6 +112,9 @@ class DatabaseCreator {
                 table.uuid('id')
                     .primary();
                 table.string('email', 50);
+                table.string('default_langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
                 table.integer('number_paid_samples');
             })
             .createTable('user_text', table => {
@@ -142,7 +145,8 @@ class DatabaseCreator {
                 table.enu('filter_type', entityTypeEnumValues);
                 table.boolean('is_disabled_4copy')
                     .defaultTo(false);
-                table.timestamp('timestamp');
+                table.timestamp('timestamp')
+                    .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
@@ -243,7 +247,8 @@ class DatabaseCreator {
                 table.string('name', 50);
                 table.enu('view_type', entityTypeEnumValues);
                 table.boolean('is_disabled_4copy');
-                table.timestamp('timestamp');
+                table.timestamp('timestamp')
+                    .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
@@ -322,7 +327,8 @@ class DatabaseCreator {
                 table.enu('sample_type', entityTypeEnumValues);
                 table.enu('status', sampleStatusEnumValues);
                 table.boolean('is_analyzed');
-                table.timestamp('timestamp');
+                table.timestamp('timestamp')
+                    .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
@@ -344,7 +350,8 @@ class DatabaseCreator {
                 table.uuid('vcf_file_sample_id')
                     .references('id')
                     .inTable('vcf_file_sample');
-                table.timestamp('timestamp');
+                table.timestamp('timestamp')
+                    .defaultTo(databaseKnex.fn.now());
             })
             .createTable('vcf_file_sample_value', table => {
                 table.uuid('vcf_file_sample_version_id')
@@ -371,7 +378,8 @@ class DatabaseCreator {
                 table.string('name', 50);
                 table.string('url', 2048);
                 table.integer('total_results');
-                table.timestamp('timestamp');
+                table.timestamp('timestamp')
+                    .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
@@ -419,7 +427,8 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('view');
                 table.integer('total_results');
-                table.timestamp('timestamp');
+                table.timestamp('timestamp')
+                    .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
