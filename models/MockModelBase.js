@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Uuid = require('node-uuid');
 
 class MockModelBase {
     constructor(defaultData, mockUserId) {
@@ -58,7 +59,7 @@ class MockModelBase {
         callback(null, item);
     }
 
-    findById(userId, itemId, callback) {
+    find(userId, itemId, callback) {
         if (!this._checkUserIdSet(userId, callback)) {
             return;
         }
