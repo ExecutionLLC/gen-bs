@@ -8,16 +8,16 @@ class ViewController extends ControllerBase {
   constructor(services) {
     super(services);
 
-    this.getUserViews = this.getUserViews.bind(this);
+    this.findAll = this.findAll.bind(this);
   }
 
-  getUserViews(request, response) {
+  findAll(request, response) {
     if (!this.checkUserIsDefined(request, response)) {
       return;
     }
 
     const user = request.user;
-    this.services.views.findByUser(user, (error, views) => {
+    this.services.views.findAll(user, (error, views) => {
       if (error) {
         this.sendInternalError(response, error);
       } else {
@@ -26,10 +26,44 @@ class ViewController extends ControllerBase {
     });
   }
 
+  update(request, response) {
+    if (!this.checkUserIsDefined(request)) {
+      return;
+    }
+
+    const user = request.user;
+    const viewId = request.query.viewId;
+    const view = request.body;
+
+    view.id = viewId;
+
+    this.services.views.update(user, view, (error, updatedView) => {
+      this.sendJson(response, updatedView);
+    });
+  }
+
+  add(request, response) {
+    if (!this.checkUserIsDefined(request, response)) {
+      return;
+    }
+
+    const user = request.user;
+    const view = request.body;
+    this.services.views.addForUser(user, view, (error, insertedView) => {
+      if (error) {
+        this.sendInternalError(response, error);
+      } else {
+        this.sendJson(response, insertedView);
+      }
+    });
+  }
+
   createRouter() {
     const router = new Express();
 
-    router.get('/', this.getUserViews);
+    router.get('/', this.findAll);
+    router.put('/', this.update);
+    router.post('/:viewId', this.add);
 
     return router;
   }

@@ -2,16 +2,23 @@
 
 const ServiceBase = require('./ServiceBase');
 
-const VIEWS = require('../test_data/views.json');
-
 class ViewsService extends ServiceBase {
-  constructor(services) {
-    super(services);
+  constructor(services, models) {
+    super(services, models);
   }
 
-  findByUser(user, callback) {
+  add(user, view, callback) {
+    // TODO: Check view format.
+    this.models.views.add(user.id, view, callback);
+  }
+
+  update(user, view, callback) {
+    this.models.views.update(user.id, view, callback);
+  }
+
+  findAll(user, callback) {
     if (user) {
-      callback(null, VIEWS);
+      this.models.views.findAll(user.id, callback);
     } else {
       callback(new Error('User cannot be undefined here.'));
     }

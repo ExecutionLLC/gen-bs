@@ -11,17 +11,17 @@ const ApplicationServerService = require('./ApplicationServerService');
 const SearchService = require('./SearchService');
 
 class ServiceFacade {
-  constructor(config) {
+  constructor(config, models) {
     this.config = config;
-    this.views = new ViewsService(this);
-    this.filters = new FiltersService(this);
-    this.users = new UsersService(this);
-    this.samples = new SamplesService(this);
-    this.sessionService = new SessionService(this);
-    this.wsService = new WSService(this);
-    this.applicationServer = new ApplicationServerService(this);
-    this.fieldsMetadata = new FieldsMetadataService(this);
-    this.search = new SearchService(this);
+    this.views = new ViewsService(this, models);
+    this.filters = new FiltersService(this, models);
+    this.users = new UsersService(this, models);
+    this.samples = new SamplesService(this, models);
+    this.sessionService = new SessionService(this, models);
+    this.wsService = new WSService(this, models);
+    this.applicationServer = new ApplicationServerService(this, models);
+    this.fieldsMetadata = new FieldsMetadataService(this, models);
+    this.search = new SearchService(this, models);
   }
 }
 

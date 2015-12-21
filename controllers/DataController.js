@@ -21,7 +21,7 @@ class DataController extends ControllerBase {
       if (error) {
         this.sendInternalError(response, error);
       } else {
-        this.services.views.findByUser(user, (error, views) => {
+        this.services.views.findAll(user, (error, views) => {
           if (error) {
             this.sendInternalError(response, error);
           } else {
