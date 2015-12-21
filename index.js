@@ -1,15 +1,24 @@
 'use strict';
-const Express = require('express');
 
+const Express = require('express');
+const bodyParser = require('body-parser');
+
+const Config = require('./utils/Config');
 const ControllersFacade = require('./controllers/ControllersFacade');
 const ServicesFacade = require('./services/ServicesFacade');
 
+// Create service.
 const app = new Express();
-app.set('port', process.env.PORT || 5000);
+
+app.set('port', Config.port);
+
+app.use(bodyParser.json());
 app.use('/', Express.static('public'));
 
-const services = new ServicesFacade();
+const services = new ServicesFacade(Config);
 const controllers = new ControllersFacade(services);
+
+app.use('/api/ws', controllers.wsController.createRouter());
 
 const mainRouter = controllers.apiController.createRouter(controllers);
 app.use('/api', mainRouter);

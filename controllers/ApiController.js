@@ -37,6 +37,8 @@ class ApiController extends ControllerBase {
         const demoDataRouter = controllersFacade.demoDataController.createRouter();
         const dataRouter = controllersFacade.dataController.createRouter();
 
+        const testRouter = controllersFacade.testController.createRouter();
+
         const router = new Express();
 
         // Install Express middleware
@@ -48,6 +50,8 @@ class ApiController extends ControllerBase {
         router.use('/filters', filtersRouter);
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);
+
+        router.use('/test', testRouter);
 
         return router;
     }

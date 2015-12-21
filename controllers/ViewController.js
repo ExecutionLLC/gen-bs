@@ -21,7 +21,7 @@ class ViewController extends ControllerBase {
       if (error) {
         this.sendInternalError(response, error);
       } else {
-        response.json(views);
+        this.sendJson(response, views);
       }
     });
   }
