@@ -11,52 +11,87 @@ class SessionService extends ServiceBase {
         this.sessions = {};
     }
 
-    removeSession(sessionId) {
+    startSessionForUser(userId) {
+        let sessionId = _.findKey(this.sessions, {'userId': userId});
+        if (!sessionId) {
+            sessionId = uuid.v4();
+        }
+        this.sessions[sessionId] = {
+            lastActivity: Date.now(),
+            userId: userId,
+            searchOperations: {},
+            uploadOperations: {}
+        }
+    }
+
+    _sessionByUser(userId) {
+        return _.find(this.sessions, function(session) {
+            return session.userId == userId;
+        });
+    }
+
+    _checkSession(sessionId) {
+        if (!this.sessions[sessionId]) {
+            // throw new exception
+        }
+    }
+
+    deleteSession(sessionId) {
         if (this.sessions[sessionId]) {
             delete this.sessions[sessionId];
         }
     }
 
-    addOperation(sessionId, method) {
-        if (!this.sessions[sessionId]) {
-            this.sessions[sessionId] = {};
-        }
+    addSearchOperation(sessionId, method) {
+        this.checkSession(sessionId);
+
         let session = this.sessions[sessionId];
+        session.lastActivity = Date.now();
+        session.searchOperations = {};
 
         const operationId = uuid.v4();
-        session[operationId] = {'method': method};
+        session.searchOperations[operationId] = {'progress': 0, 'method': method};
         return operationId;
     }
 
-    findSessionByOperationId(operationId) {
-        return _.find(this.sessions, function(session) {
-            return session[operationId];
-        })
+    addUploadOperation(sessionId, method) {
+        this.checkSession(sessionId);
+
+        const operationId = uuid.v4();
+        let session = this.sessions[sessionId];
+        session.uploadOperations[operationId] = {'progress': 0, 'method': method};
+        session.lastActivity = Date.now();
+        return operationId;
     }
 
     findOperation(operationId) {
-        const session = this.findSessionByOperationId(operationId);
-        if (session) {
-            return session[operationId];
-        }
-        return null;
+
     }
 
-    removeOperation(operationId) {
-        let session = this.findSessionByOperationId(operationId);
-        if (session) {
-            delete session[operationId];
-        }
+    _findSessionForSearchOperation(operationId) {
+
     }
 
-    updateOperation(err, message) {
-        if (err) {
-            // TODO: add log event here
-        } else {
-            const msg = JSON.parse(message);
-            const operationId = msg.id;
-            const operationState = msg.result.session_state.status;
+    _findSessionForUploadOperation(operationId) {
 
+    }
+
+    //_findSearchOperation(operationId) {
+    //    _.each(this.sessions, function(session, sessionId) {
+    //        return session.searchOperations[operationId];
+    //    });
+    //}
+    //
+    //_findUploadOperation(operationId) {
+    //    _.each(this.sessions, function(session, sessionId) {
+    //        return session.uploadOperations[operationId];
+    //    });
+    //}
+
+    deleteUploadOperation(operationId) {
+        let session = this._findSessionForUploadOperation(operationId);
+        if (session) {
+            delete session.uploadOperations[operationId];
         }
     }
 }

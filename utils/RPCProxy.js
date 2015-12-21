@@ -3,7 +3,9 @@
 const WebSocket = require('ws');
 
 const SocketState = {
+    CONNECTING: 0,
     CONNECTED: 1,
+    CLOSING: 2,
     CLOSED: 3
 };
 
@@ -16,6 +18,7 @@ class RPCProxy {
         this.host = host;
         this.port = port;
 
+        // Try to reconnect automatically if connection is closed
         this.connected = false;
         setInterval(() => this._connect(), 1000);
     }
