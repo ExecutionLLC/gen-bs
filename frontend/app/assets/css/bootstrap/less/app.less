@@ -477,6 +477,7 @@ body {
      left: @sidebar-opened-width;
      right: @sidebar-opened-width;
       .transition(all .35s linear);
+      z-index: 1;
 
   }
   @media (max-width: @screen-xs) {
@@ -679,7 +680,7 @@ body {
       position: absolute;
       top:0;
       left: 25%;
-      margin-left: 125px;
+      margin-left: 127px;
       height: 50px;
       z-index: 3;
       }
@@ -700,12 +701,14 @@ body {
       position: absolute;
       left: 17px;
       top: 17px;
+      z-index: 1;
+      opacity: .7;
       }
     } 
     div.dataTables_wrapper div.dataTables_filter { 
       position: absolute;
       top:0;
-      left:125px;
+      left:126px;
       width: 25%;
       height: 50px;
       z-index: 3;

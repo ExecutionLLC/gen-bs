@@ -4,6 +4,8 @@
 
 
 //== Colors
+
+@import "colors/colors-yellow.less";
 //
 //## Gray and brand colors for use across Bootstrap.
 
@@ -14,22 +16,6 @@
 @gray-light:             lighten(@gray-base, 46.7%); // #777
 @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
 
-@darkPrimaryColor:   #303F9F;
-@primaryColor:       #3F51B5;
-@lightPrimaryColor:  #C5CAE9;
-@textPrimaryColor:   #FFFFFF;
-@accentColor:        #03A9F4;
-@primaryTextColor:   #212121;
-@secondaryTextColor: #727272;
-@dividerColor:       #B6B6B6;
-
-
-@brand-primary:         #2363a1; // #337ab7
-@brand-success:         #388E3C;
-@brand-info:            #03A9F4;
-@brand-warning:         #f5c338;
-@brand-danger:          #F44336;
-@light-primary-color:   #d8e5f1;
 
 
 //== Scaffolding
@@ -185,7 +171,9 @@
 @btn-danger-color:               #fff;
 @btn-danger-bg:                  @brand-danger;
 @btn-danger-border:              @btn-danger-bg;
-
+@btn-alt-primary-color:          #fff; 
+@btn-alt-primary-bg:             @brand-alt-primary;
+@btn-alt-primary-border:         @btn-alt-primary-bg;
 
 @btn-link-disabled-color:        @gray-light;
 
@@ -411,7 +399,7 @@
 //=== Inverted navbar
 // Reset inverted navbar basics
 @navbar-inverse-color:                      @light-primary-color;
-@navbar-inverse-bg:                         @brand-primary;
+@navbar-inverse-bg:                         @brand-primary-navbar;
 @navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
 
 // Inverted navbar links
@@ -512,25 +500,7 @@
 @jumbotron-heading-font-size:    ceil((@font-size-base * 4.5));
 
 
-//== Form states and alerts
-//
-//## Define colors for form feedback states and, by default, alerts.
 
-@state-success-text:             @brand-success;
-@state-success-bg:               #C8E6C9;
-@state-success-border:           @state-success-bg;
-
-@state-info-text:                darken(@brand-info,15%);
-@state-info-bg:                  #B3E5FC;
-@state-info-border:              @state-info-bg;
-
-@state-warning-text:             darken(@brand-warning, 15%);
-@state-warning-bg:               #fcf0ca;
-@state-warning-border:           @state-warning-bg;
-
-@state-danger-text:              @brand-danger;
-@state-danger-bg:                #ffddd2;
-@state-danger-border:            @state-danger-bg;
 
 
 //== Tooltips

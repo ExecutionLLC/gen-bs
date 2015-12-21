@@ -16,7 +16,7 @@
       background-color: @heading-text-color;
     }
     button, .btn-link, .btn-default { 
-       .button-variant(@heading-text-color; @heading-border; @heading-border);
+       .button-variant(@heading-text-color; @heading-border; @heading-text-color);
     }
   }
   & > .panel-footer {
@@ -33,7 +33,6 @@
         font-family: @panel-icon-font-family;
         content: @icon-content;
         color: @heading-text-color;
-     
         right: 0;
         bottom: 0;
         height: 60px;
@@ -42,7 +41,7 @@
         position: absolute;
         text-align: center;
         font-size: 25px;
-      } 
+       } 
       }
   }
 }

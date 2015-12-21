@@ -25,11 +25,12 @@
 // Outer container
 .progress {
   overflow: hidden;
-  height: @line-height-computed;
+  height: @progress-bar-height;
   margin-bottom: 0;
   background-color: @progress-bg;
   border-radius: @progress-border-radius;
   .box-shadow(inset 0 1px 2px rgba(0,0,0,.1));
+  border-radius: 10px;
 }
 
 // Bar of progress
@@ -53,7 +54,7 @@
 // `.progress-bar`.
 .progress-striped .progress-bar,
 .progress-bar-striped {
-  #gradient > .striped();
+  #gradient > .striped-thin();
   background-size: 40px 40px;
 }
 
