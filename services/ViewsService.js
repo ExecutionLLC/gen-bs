@@ -1,20 +1,10 @@
 'use strict';
 
-const ServiceBase = require('./ServiceBase');
+const UserEntityServiceBase = require('./UserEntityServiceBase');
 
-const VIEWS = require('../test_data/views.json');
-
-class ViewsService extends ServiceBase {
-  constructor(services) {
-    super(services);
-  }
-
-  findByUser(user, callback) {
-    if (user) {
-      callback(null, VIEWS);
-    } else {
-      callback(new Error('User cannot be undefined here.'));
-    }
+class ViewsService extends UserEntityServiceBase {
+  constructor(services, models) {
+    super(services, models, models.views);
   }
 }
 

@@ -1,32 +1,10 @@
 'use strict';
 
-const Express = require('express');
+const UserEntityControllerBase = require('./UserEntityControllerBase');
 
-const ControllerBase = require('./ControllerBase');
-
-const FILTERS = require('../test_data/filters.json');
-
-class FilterController extends ControllerBase {
+class FilterController extends UserEntityControllerBase {
     constructor(services) {
-        super(services);
-
-        this.getFilters = this.getFilters.bind(this);
-    }
-
-    getFilters(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        this.sendJson(response, FILTERS);
-    }
-
-    createRouter() {
-        const router = new Express();
-
-        router.get('/', this.getFilters);
-
-        return router;
+        super(services, services.filters);
     }
 }
 
