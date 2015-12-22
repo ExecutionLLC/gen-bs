@@ -648,3 +648,69 @@ input[type="checkbox"] {
   color: @brand-primary;
   font-weight: bold;
 }
+.form-horizontal-rows { 
+      background: #f4f4f4;
+      padding: 10px 15px;
+       label, a, .btn-link {
+       //color: @state-warning-text;
+       }
+       a, .btn-link { 
+         //text-decoration: underline;
+         }
+       .select2-container { 
+         width: 100%!important;
+       }
+     hr {
+   margin:10px 0; 
+ }
+     
+     .flex dl { 
+      margin-bottom: 10px; 
+     }
+ }
+
+.row.grid-toolbar { 
+   margin: 0;
+    > div { 
+      padding:20px 5px 20px 10px;
+      .select2-container { 
+      width: 100%!important;
+    }
+      + div { 
+        padding-top: 0;
+      }
+      &.btn-group-select2 .btn-group { 
+        &:first-child { 
+          min-width: 40px;
+          .btn { 
+            width: 100%;
+          }
+        }
+      }
+    }
+    + .help-text { 
+      margin-bottom: 10px;
+     }  
+    + .alert { 
+      margin-top: 10px;
+    } 
+   
+  @media (min-width: @screen-sm) {
+    margin:0;
+  > div { 
+    padding: 0 5px 0 0;
+    .select2-container { 
+      width: 100%!important;
+    }
+    + div { 
+      padding-left: 5px;
+      margin: 0 0 5px;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+    
+    
+  }
+}

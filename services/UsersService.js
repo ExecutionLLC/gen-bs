@@ -5,9 +5,7 @@ const USER_METADATA = require('../test_data/user_metadata.json');
 
 class UserService {
   constructor() {
-    this.users = [
-        USER_METADATA
-    ];
+    this.users = USER_METADATA;
   }
 
   findByToken(userToken, callback) {

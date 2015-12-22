@@ -6,6 +6,11 @@ const bodyParser = require('body-parser');
 const Config = require('./utils/Config');
 const ControllersFacade = require('./controllers/ControllersFacade');
 const ServicesFacade = require('./services/ServicesFacade');
+const ModelsFacade = require('./models/ModelsFacade');
+
+const models = new ModelsFacade();
+const services = new ServicesFacade(Config, models);
+const controllers = new ControllersFacade(services);
 
 // Create service.
 const app = new Express();
@@ -14,9 +19,6 @@ app.set('port', Config.port);
 
 app.use(bodyParser.json());
 app.use('/', Express.static('public'));
-
-const services = new ServicesFacade(Config);
-const controllers = new ControllersFacade(services);
 
 app.use('/api/ws', controllers.wsController.createRouter());
 

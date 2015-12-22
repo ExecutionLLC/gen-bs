@@ -176,7 +176,7 @@
     left: auto;
   }
 
-  @media (min-width: @screen-sm-min) {
+
     > li {
       display: table-cell;
       width: 1%;
@@ -184,7 +184,7 @@
         margin-bottom: 0;
       }
     }
-  }
+  
 }
 
 // Move borders to anchors instead of bottom of list
@@ -255,11 +255,14 @@
     margin:-5px 15px;
     }
   } 
-.modal { 
+.modal {
+  .nav-tabs { 
+   margin:0 -(@modal-inner-padding);
+  } 
   .tab-content { 
     background: #fff; 
-    table { 
-      margin-bottom: 0;
-    }
+    margin:0 -(@modal-inner-padding) -(@modal-inner-padding);
+    padding:@modal-inner-padding;
   }
 }
+
