@@ -58,7 +58,7 @@ class ApplicationServerService extends ServiceBase {
         let sessions = this.services.sessionService;
         const sessionId = sessions.startSessionForUser(SYSTEM_USER_ID);
         const operationId = sessions.addSearchOperation(sessionId, method);
-        this._rpcSend(operationId, method, null, callback);
+        this._rpcSend(operationId, method, source, callback);
     }
 
     _onData(operation, data) {
