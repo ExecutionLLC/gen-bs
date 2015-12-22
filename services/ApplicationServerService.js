@@ -63,10 +63,14 @@ class ApplicationServerService extends ServiceBase {
         this._rpcSend(operationId, method, source, callback);
     }
 
-    requestOpenSession(filters, callback) {
+    requestOpenSearchSession(filters, views, callback) {
         const method = 'v1.open_session';
         const operationId = this.services.sessionService.addSearchOperation(method);
-        this._rpcSend(operationId, method, filters, callback);
+        const params = {
+            filters: filters,
+            views: views
+        };
+        this._rpcSend(operationId, method, params, callback);
     }
 
     requestCloseSession(callback) {
