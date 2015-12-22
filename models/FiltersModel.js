@@ -13,3 +13,5 @@ class FiltersModel extends MockModelBase {
         super(FILTERS, userId);
     }
 }
+
+module.exports = FiltersModel;
