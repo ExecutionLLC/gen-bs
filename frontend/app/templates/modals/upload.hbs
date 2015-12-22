@@ -6,7 +6,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="uploadLabel">Upload sample</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body ">
   
     <div class="drop-area">
    <div class="text-muted">Drag and drop your files here or manually select them.</div>
@@ -15,35 +15,34 @@
       Chose files
     </button>
   </div>
-  <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
-</div>
-   <div class="drop-area">
-    <div class="progress">
+   <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
+   <div class="progress hidden">
 <div class="progress progress-striped">
       <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-primary  progress-bar-primary">
         <span class="sr-only">40% Complete (success)</span>
       </div>
     </div>
 </div>
-   </div>
-    <div class="alert alert-danger">
+</div>
+  
+    <div class="alert alert-danger hidden">
       <p><strong>Error!</strong>You trying to load zip file format.</p>    
     </div>
-    <div class="alert alert-danger">
+    <div class="alert alert-danger hidden">
       <p><strong>Error!</strong>The file is damaged or unreadable</p>    
     </div>
 
-     <div class="alert alert-warning">
+     <div class="alert alert-warning hidden">
       <p><strong>Warning!</strong>The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</p>    
     </div>
-    <div class="alert alert-success">
+    <div class="alert alert-success hidden">
       <p><strong>Success!</strong>The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
     </div>
     
     <h4>Searh for available samples</h4>
      <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>    
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-   <div class="panel panel-success">
+    <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingOne">
        <div class="btn-group pull-right" >
       <a class="btn btn-default btn-choose" role="button">
@@ -181,8 +180,7 @@
             </div>
          </div>
        </div>
- 
-  <div class="panel panel-warning">
+    <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingTwo">
       <div class="btn-group pull-right" >
       <a class="btn btn-default btn-choose" role="button">
@@ -322,7 +320,7 @@
        </div>
     </div>
   </div>
-  <div class="panel panel-default">
+   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingThree">
          <div class="btn-group pull-right" >
       <a class="btn btn-default btn-choose" role="button">

@@ -8,13 +8,14 @@
        <h4 class="modal-title">Setup Filters</h4>
       </div>
       <div class="modal-body">
+        <div class="alert alert-help">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</div>
          <div class="collapse in copyfilter" id="newfilterField">
            <div class="row grid-toolbar">
             <div class="col-sm-6">
               <label>Available Filters</label>
             </div>
           </div>
-           <div class="alert alert-help">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</div>
+           
            <div class="row grid-toolbar">
              <div class="col-sm-6">
               <select class="select2" id="filterSelector">
@@ -41,24 +42,22 @@
                    
               </div>
            </div>
-          
          </div>
          <div class="collapse copyfilter" id="copyfilterField"> 
            
             
            <div class="row grid-toolbar">
              <div class="col-sm-6"> 
-                  <label>New Filter</label>  
+               <label>New Filter</label>  
                <input value="Copy of Eye Cancer Diagnostics" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
             </div>
-<div class="col-sm-5">
-   <label>Description</label>
-<input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
-</div>
-<div class="col-sm-1">
-  
-<button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent">Cancel</button>
-  </div>
+            <div class="col-sm-5">
+               <label>Description</label>
+            <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
+            </div>
+            <div class="col-sm-1">
+               <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent">Cancel</button>
+            </div>
              
           </div>
             <div class="help-text text-danger">Name can not be empty</div>
@@ -93,7 +92,7 @@
 				<i class="glyphicon glyphicon-warning-sign"></i>
 			</div>
 			<div class="rule-filter-container">
-				<select class="selectTree" disabled="">
+				<select class="selectTree">
   			<optgroup label="General">	
           <option>View</option>
           <option>Chromosome</option>
@@ -165,7 +164,7 @@
 </select>
 			</div>
 			<div class="rule-operator-container">
-				<select class="form-control select2" name="builder-basic_rule_0_operator" disabled="">
+				<select class="form-control select2" name="builder-basic_rule_0_operator">
 					<option value="equal">equal</option>
 					<option value="not_equal">not equal</option>
 					<option value="in">in</option>
@@ -498,6 +497,17 @@
   </div>
           </div> 
          <div class="alert alert-help">Lock filter options not available with selected sample</div>
+        <div class="alert alert-danger">
+          <button type="button" class="close hidden" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <div class="btn-group pull-right ">
+            <a class="btn btn-danger" href="">Delete</a></div>
+          <div class="btn-group pull-right">
+            <a class="btn btn-default" href="">Cancel</a>
+          </div>
+          Are you sure you want to delete this filter?  It can not recover.
+       </div>
      </div>
       <div class="modal-footer">
         <div class="btn-group pull-left">
