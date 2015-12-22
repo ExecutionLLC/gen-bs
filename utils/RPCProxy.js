@@ -27,7 +27,7 @@ class RPCProxy {
         return 'ws://' + this.host + ':' + this.port + '/ws';
     }
 
-    _replyResult(message, flags) {
+    _replyResult(message) {
         if (this.replyCallback){
             const msg = JSON.parse(message);
             if(msg.error) {
