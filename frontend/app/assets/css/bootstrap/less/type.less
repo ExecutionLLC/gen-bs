@@ -106,7 +106,7 @@ mark,
   .text-emphasis-variant(@brand-primary);
 }
 .text-success {
-  .text-emphasis-variant(@state-success-text);
+  .text-emphasis-variant(@brand-success);
 }
 .text-info {
   .text-emphasis-variant(@state-info-text);
@@ -117,7 +117,9 @@ mark,
 .text-danger {
   .text-emphasis-variant(@state-danger-text);
 }
-
+.text-normal { 
+  color: @text-color;
+}
 // Contextual backgrounds
 // For now we'll leave these alongside the text classes until v4 when we can
 // safely shift things around (per SemVer rules).

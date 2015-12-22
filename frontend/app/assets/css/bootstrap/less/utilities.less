@@ -67,3 +67,54 @@
     white-space: nowrap;
     width: 8em;
 }
+//todo flex later
+
+
+.flex {
+  display: block;
+  -moz-columns: 2;
+  -webkit-columns: 2;
+  columns: 2;
+  dl {
+    overflow: hidden;
+    margin-bottom: 0;
+     dd {
+    &:extend(.clearfix all); // Clear the floated `dt` if an empty `dd` is present
+  }
+
+  @media (min-width: @dl-flex-horizontal-breakpoint) {
+    dt {
+      float: left;
+      width: @dl-flex-horizontal-offset;
+      padding-right: 20px;
+      clear: left;
+      text-align: right;
+      .text-overflow();
+    }
+    dd {
+      margin-left: @dl-flex-horizontal-offset;
+    }
+  }
+  }
+} 
+/*
+.flex-2col { 
+  align-items: center;
+  dl { 
+    width: 50%;
+  }
+}
+*/
+.text-order { 
+   display: inline-block;
+    line-height: 1;
+    margin-right: 2rem;
+    max-width: 3rem;
+    text-align: center;
+}
+.select-wrap  { 
+  .select2 { 
+    width: 100%!important;
+  }
+}
+

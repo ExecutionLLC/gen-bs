@@ -56,4 +56,9 @@
     background-image: -o-linear-gradient(@angle, @color 25%, transparent 25%, transparent 50%, @color 50%, @color 75%, transparent 75%, transparent);
     background-image: linear-gradient(@angle, @color 25%, transparent 25%, transparent 50%, @color 50%, @color 75%, transparent 75%, transparent);
   }
+  .striped-thin(@color: rgba(255,255,255,.15); @angle: 33deg) {
+    background-image: -webkit-linear-gradient(@angle, @color 10%, transparent 10%, transparent 20%, @color 20%, @color 30%, transparent 30%, transparent 40%, @color 40%, @color 50%, transparent 50%, transparent 60%, @color 60%, @color 70%, transparent 70%, transparent 80%, @color 80%, @color 90%, transparent 90%, transparent);
+    background-image: -o-linear-gradient(@angle, @color 10%, transparent 10%, transparent 20%, @color 20%, @color 30%, transparent 30%, transparent 40%, @color 40%, @color 50%, transparent 50%, transparent 60%, @color 60%, @color 70%, transparent 70%, transparent 80%, @color 80%, @color 90%, transparent 90%, transparent);
+    background-image: linear-gradient(@angle, @color 10%, transparent 10%, transparent 20%, @color 20%, @color 30%, transparent 30%, transparent 40%, @color 40%, @color 50%, transparent 50%, transparent 60%, @color 60%, @color 70%, transparent 70%, transparent 80%, @color 80%, @color 90%, transparent 90%, transparent);
+  }
 }
