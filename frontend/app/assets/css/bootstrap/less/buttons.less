@@ -59,7 +59,9 @@
   }
 }
 
-
+.btn-rounded {
+   .border-radius(4px);
+}
 // Alternate buttons
 // --------------------------------------------------
 
@@ -89,7 +91,9 @@
 .btn-danger {
   .button-variant(@btn-danger-color; @btn-danger-bg; @btn-danger-border);
 }
-
+.btn-alt-primary{ 
+   .button-variant(@btn-alt-primary-color; @btn-alt-primary-bg; @btn-alt-primary-border); 
+}
 
 // Link buttons
 // -------------------------
@@ -99,7 +103,10 @@
   color: @link-color;
   font-weight: normal;
   border-radius: 0;
-
+  text-decoration: none;
+  padding-left: 0;
+  padding-right: 0;
+  
   &,
   &:active,
   &.active,
@@ -128,9 +135,24 @@
       text-decoration: none;
     }
   }
+
+  small { 
+    color: @text-muted;
+    text-decoration: underline;
+  }
 }
-
-
+label.btn-link { 
+  text-decoration: none;
+  span { 
+    text-decoration: none;
+  }
+}
+.link-toggle { 
+  display: inline-block;
+    max-width: 160px;
+    padding-left: 5px;
+    vertical-align: top;
+  font-weight: bold; color: @text-muted; font-size: @font-size-small }
 // Button Sizes
 // --------------------------------------------------
 
@@ -213,4 +235,159 @@ input[type="button"] {
 .btn-sm-h-paddings { 
   padding-left: @padding-small-horizontal;
   padding-right: @padding-small-horizontal;
+}
+.btn-wrapnormal { 
+font-size: @font-size-small;
+    font-weight: bold;
+    line-height: 1.2;
+    padding-left: 24px;
+    position: relative;
+    text-align: left;
+    white-space: normal;
+  color: @text-muted;
+  input { 
+    position: absolute;
+    left: 0;
+    top: .25em;
+  }
+}
+.icon-bar {
+    background-color: #ddd;
+    border-radius: 1px;
+    display: block;
+    height: 2px;
+    width: 22px;
+    margin-bottom: 3px;
+}
+.sort-setting {
+     margin-top: 30px; 
+   .grid-toolbar { 
+    background: rgba(255, 255, 255, 0.6);
+    margin: 0 0 2px;
+    padding: 8px 10px;
+  
+   .btnSort { 
+      position: relative;
+      &:after { 
+          
+    background: lighten(@brand-primary, 20%);
+      border-radius: 8px;
+    color: #fff;
+    display: none;
+    font-size: 10px;
+    font-weight: bold;
+    height: 12px;
+    line-height: 11px;
+    position: absolute;
+    right: 1px;
+    text-transform: capitalize;
+    top: 1px;
+    width: 12px;
+          }
+     }
+     &.level1 { 
+    
+   .btnSort {  
+      &:after { 
+          display: block; 
+            content: "1";
+
+        }
+      
+    }
+   }
+     &.level2 { 
+       > div:first-child { 
+        //padding-left: 20px;   
+      }
+       .btnSort { 
+         position: relative;
+          &:after { 
+            display: block; 
+              content: "2";
+  
+          }
+      }
+     }
+  }
+   .grid-toolbar.nobg { background: none; }  
+}
+.btnSort { 
+
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 33px;
+    width: 33px;
+    position: relative;
+    &:before { 
+      .fa(); 
+      position: absolute;
+       top: 10px;
+       left: 8px;
+
+    content: "\f0ec";
+    opacity: .2;
+    .rotate(-90deg);
+   }
+   
+  }
+.btnSort.asc {
+   &:before { 
+   content: "\f160";
+    opacity: 1;
+    .rotate(0);
+   }
+            }
+.btnSort.desc {
+   &:before { 
+    content: "\f161";
+      opacity: 1;
+     .rotate(0);
+   }
+  }
+
+.btn-multi-label { 
+  > span { 
+    position: relative;
+  
+  }
+    > span { 
+      margin-bottom: 5px;
+      &:before { 
+        color: #888;
+    font-size: 9px;
+    left: -10px;
+    position: absolute;
+    top: 0;
+        
+      }
+    }
+  > span:first-child { 
+    width: 20px;
+    
+    &:before{ 
+      content: "1";
+    }
+  }
+    > span:first-child + span { 
+        width: 15px;
+         margin-left: 10px;
+    &:before{ 
+      content: "2";
+    }
+  }
+    > span:first-child + span + span { 
+       width: 10px;
+       margin-left: 20px;
+    &:before{ 
+      content: "3";
+    }
+  }
+}
+
+.btn.collapse.in { 
+  display: inline-block;
+}
+.btn-label-indent { 
+  margin-top: 1.72em;
 }
