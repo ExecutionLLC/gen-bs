@@ -2,30 +2,39 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
-		"timestamp": {
+		"modifiedTimestamp": {
 			"type": "string",
-			"format": "date-time"
+			"description": "Timestamp indicating the time this exact version has been created."
 		},
 		"id": {
-			"type": "number"
+			"type": "string"
+		},
+		"file_name": {
+			"type": "string",
+			"description": "Name of the file as it was during upload"
 		},
 		"hash": {
 			"type": "string"
 		},
-		"vcf_fields": {
+		"fields": {
 			"type": "array",
 			"items": {
 				"$ref": "../base_json/field_metadata.json#"
 			}
 		},
+		"sample_type": {
+			"type": "string",
+			"enum": [
+				"standard",
+				"advanced",
+				"user"
+			]
+		},
 		"is_analysed": {
 			"type": "boolean"
 		},
-		"is_standard": {
-			"type": "boolean"
-		},
-		"is_advanced": {
-			"type": "boolean"
+		"analyzed_timestamp": {
+			"type": "string"
 		}
 	},
 	"required": [

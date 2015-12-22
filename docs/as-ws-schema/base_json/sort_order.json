@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "sort order for column",
+  "type": "object",
+  "properties": {
+    "column_name": {
+      "type": "string",
+      "description": "name of the column"
+    },
+    "is_ascending_order": {
+      "type": "string",
+      "description": "true for ascending order, false for descending order"
+    }
+  }
+}

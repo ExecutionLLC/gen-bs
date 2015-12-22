@@ -25,6 +25,9 @@
         text-decoration: none;
         background-color: @nav-link-hover-bg;
       }
+      img {
+      max-width: 100%;
+     }
     }
 
     // Disabled state sets text to gray and nukes hover/tab effects
@@ -239,4 +242,24 @@
   margin-top: -1px;
   // Remove the top rounded corners here since there is a hard edge above the menu
   .border-top-radius(0);
+}
+.panel-heading,
+.modal-header  { 
+  .nav-tabs { 
+    border-bottom: none;
+    margin: 0;
+  }
+}
+.modal-header  { 
+  .nav-tabs {
+    margin:-5px 15px;
+    }
+  } 
+.modal { 
+  .tab-content { 
+    background: #fff; 
+    table { 
+      margin-bottom: 0;
+    }
+  }
 }

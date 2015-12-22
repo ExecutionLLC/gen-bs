@@ -23,11 +23,11 @@
 					"type": "object",
 					"description": "Column data in the specific row",
 					"properties": {
-						"columnId": {
+						"field_id": {
 							"type": "string",
-							"description": "Column identifier"
+							"description": "Column field identifier"
 						},
-						"value": {
+						"field_value": {
 							"type": "string",
 							"description": "Value in the specific column of the specific row."
 						}

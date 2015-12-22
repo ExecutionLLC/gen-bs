@@ -1,16 +1,26 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"id": "v1.set_filter",
-	"title": "Наложить поколоночный фильтр на данные",
-	"description": "Данные фильтра представляют собой список колонок и текст для поиска по соответствующим колонкам. При наложении фильтра старые фильтры не обнуляются, если в списке присутствуют колонки из ранее наложенных фильтров, то фильтр по соответствующим колонкам заменяются новыми, если фильтр совпал с ранее наложенным, то он будет пропущен. Для того чтобы сбросить фильтр по одной из колонок необходимо вставить пустой текст для фильтрации",
-	"type": "object",
-	"properties": {
-		"params": {
-			"fields": {
-				"f1": "HZ",
-				"f2": "HZ"
-			}
-		},
-		"result": {}
-	}
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "v1.set_filter",
+  "title": "set_filter - backend API function",
+  "description": "updates column filter. Full set of filters is always overwritten",
+  "type": "object",
+  "properties": {
+    "params": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "description": "GUID of the file session"
+        },
+        "filters": {
+          "type": "array",
+          "description": "list of filters",
+          "items": {
+            "$ref": "base_json/column_filter.json#"
+          }
+        }
+      }
+    },
+    "result": {}
+  }
 }

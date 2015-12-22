@@ -94,6 +94,7 @@ $( function() {
     let unsubscribe = store.subscribe(handleChange);
 
   table.columns().flatten().each( function ( colIdx ) {
+
     const input = $('<input type="text" placeholder="Search" />')
       .width( $(table.column(colIdx).header()).width() - 10 )
       .on( 'click', (e) => e.stopPropagation(e) )

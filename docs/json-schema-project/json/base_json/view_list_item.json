@@ -6,6 +6,10 @@
 			"description": "The unique identifier for a settings row",
 			"type": "number"
 		},
+		"field_id": {
+			"type": "string",
+			"description": "UUID, id of the corresponding field metadata object."
+		},
 		"order": {
 			"description": "The order of column in list",
 			"type": "integer"
@@ -15,10 +19,14 @@
 			"type": "integer"
 		},
 		"sort_direction": {
-			"description": "Desc/acs",
-			"type": "string"
+			"description": "Sort direction",
+			"type": "string",
+			"enum": [
+				"asc",
+				"desc"
+			]
 		},
-		"keywords_selected": {
+		"selected_keywords": {
 			"type": "array",
 			"uniqueItems": true,
 			"items": {
