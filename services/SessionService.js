@@ -5,7 +5,10 @@ const uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 
+const SYSTEM_USER_ID = '9c952e80-c2db-4a09-a0b0-6ea667d254a1';
+
 const OPERATION_TYPES = {
+    SYSTEM: 'system',
     SEARCH: 'search',
     UPLOAD: 'upload'
 }
@@ -16,7 +19,11 @@ class SessionService extends ServiceBase {
         this.sessions = {};
     }
 
-    static operationTypes() {
+    systemUserId() {
+        return SYSTEM_USER_ID;
+    }
+
+    operationTypes() {
         return OPERATION_TYPES;
     }
 
@@ -24,11 +31,11 @@ class SessionService extends ServiceBase {
         let sessionId = _.findKey(this.sessions, {'userId': userId});
         if (!sessionId) {
             sessionId = uuid.v4();
-        }
-        this.sessions[sessionId] = {
-            lastActivity: Date.now(),
-            userId: userId,
-            operations: {}
+            this.sessions[sessionId] = {
+                lastActivity: Date.now(),
+                userId: userId,
+                operations: {}
+            }
         }
         return sessionId;
     }
@@ -57,10 +64,20 @@ class SessionService extends ServiceBase {
         return operationId;
     }
 
-    _deleteOperation(session, operationId) {
-        if (session.operations[operationId]) {
-            delete session.operations[operationId];
+    deleteOperation(operationId) {
+        let session = this._findSession(operationId);
+        if (session) {
+            this._deleteOperation(session, operationId);
         }
+    }
+
+    _deleteOperation(session, operationId) {
+        delete session.operations[operationId];
+    }
+
+    addSystemOperation(method) {
+        const sessionId = this.startSessionForUser(SYSTEM_USER_ID);
+        return this._addOperation(this.sessions[sessionId], OPERATION_TYPES.SYSTEM, method);
     }
 
     addSearchOperation(sessionId, method) {
@@ -89,11 +106,14 @@ class SessionService extends ServiceBase {
         });
     }
 
-    findOperation(operationId) {
-        let session = _.find(this.sessions, (session) => {
+    _findSession(operationId) {
+        return _.find(this.sessions, (session) => {
             return _.findKey(session.operations, {id: operationId});
         });
+    }
 
+    findOperation(operationId) {
+        const session = this._findSession(operationId);
         if (session) {
             return session.operations[operationId];
         }

@@ -1,8 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const uuid = require('node-uuid');
-
 var events = require('events');
 
 const ServiceBase = require('./ServiceBase');
@@ -18,10 +16,20 @@ const REGISTERED_EVENTS = {
     sourceMetadata: {
         event: 'sourceMetadataRecieved',
         error: 'sourceMetadataError'
+    },
+    openSearchSession: {
+        event: 'openSearchSessionRecieved',
+        error: 'openSearchSessionError'
+    },
+    searchInResults: {
+        event: 'searchInResultsRecieved',
+        error: 'searchInResultsError'
+    },
+    uploadFile: {
+        event: 'uploadFileRecieved',
+        error: 'uploadFileError'
     }
 };
-
-const SYSTEM_USER_ID = '9c952e80-c2db-4a09-a0b0-6ea667d254a1';
 
 class ApplicationServerService extends ServiceBase {
     constructor(services) {
@@ -45,20 +53,32 @@ class ApplicationServerService extends ServiceBase {
 
     requestSourcesList(callback) {
         const method = 'v1.get_sources';
-
-        let sessions = this.services.sessionService;
-        const sessionId = sessions.startSessionForUser(SYSTEM_USER_ID);
-        const operationId = sessions.addSearchOperation(sessionId, method);
+        const operationId = this.services.sessionService.addSystemOperation(method);
         this._rpcSend(operationId, method, null, callback);
     }
 
     requestSourceMetadata(source, callback) {
         const method = 'v1.get_source_metadata';
-
-        let sessions = this.services.sessionService;
-        const sessionId = sessions.startSessionForUser(SYSTEM_USER_ID);
-        const operationId = sessions.addSearchOperation(sessionId, method);
+        const operationId = this.services.sessionService.addSystemOperation(method);
         this._rpcSend(operationId, method, source, callback);
+    }
+
+    requestOpenSession(filters, callback) {
+        const method = 'v1.open_session';
+        const operationId = this.services.sessionService.addSearchOperation(method);
+        this._rpcSend(operationId, method, filters, callback);
+    }
+
+    requestCloseSession(callback) {
+        const method = 'v1.close_session';
+        const operationId = this.services.sessionService.addSearchOperation(method);
+        this._rpcSend(operationId, method, null, callback);
+    }
+
+    requestSearchInResults(filters, callback) {
+        const method = 'v1.set_filter';
+        const operationId = this.services.sessionService.addSearchOperation(method);
+        this._rpcSend(operationId, method, filters, callback);
     }
 
     _onData(operation, data) {
@@ -103,6 +123,7 @@ class ApplicationServerService extends ServiceBase {
             } else {
                 this._onData(operation, message.result);
             }
+            this.services.sessionService.deleteOperation(operationId);
         } else {
             // TODO: add log event
             console.log('Operation not found: ' + operationId, error, message);
