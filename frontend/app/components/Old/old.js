@@ -68,30 +68,24 @@ $('.select2').select2({
 $('.selectTree').select2();
 
 //ajax select2
- var $ajax = $(".sample-select-ajax"); 
+ var $ajax = $(".sample-search"); 
          
  function formatRepo (repo) {
       if (repo.loading) return repo.text;
 
-      var markup = "<div class='row'>" +
-        "<div class='col-sm-6'>" +
-          "<span class='metadata s-name'>" + repo.full_name + "</span>" +
-          "<span class='s-versia'> V. " + repo.forks_count + "</span>" +
-          "<span class='s-size'>" + repo.stargazers_count + " KB</span>";
-          
+      var markup = "<div class='flex'>" +
+          "<dl><dt>Name: </dt><dd>" + repo.full_name + "</dd></dl>" +
+          "<dl><dt>Versia: </dt><dd>V." + repo.forks_count + "</dd></dl>" +
+          "<dl><dt>Size: </dt><dd>" + repo.stargazers_count + "</dd></dl>";          
 
       if (repo.description) {
-        markup += "<span class='metadata s-descr'>" + repo.description + "</span>";
+        markup += "<dl><dt>Description: </dt><dd>" + repo.description + "</dd></dl>";
       }
 
-      markup += "</div>" +
-        "<div class='col-sm-6'>" +
-        "<span class='metadata s-familyID'>Family ID: <span>" + repo.watchers_count + "</span></span>" +
-        "<span class='metadata s-subjectID'>Subject ID: <span>" + repo.forks_count + "</span></span>" ;
-        if (repo.commits_url) {
-         markup += "<span class='metadata s-analises'><i class='fa fa-check'></i> Analyzed <span> 24.09.2015 34:45</span>";
-        }
-         markup +="</div></div>";
+      markup += "<dl><dt>Name: </dt><dd>" + repo.watchers_count + "</dd></dl>" +
+        "<dl><dt>Subject ID: </dt><dd>" + repo.forks_count +  "</dd></dl>" +
+        "<dl><dt><span class='text-success'>Analyzed</span> </dt><dd>12.12.2015 23:34</dd></dl>" +
+        "</div>";
 
       return markup;
     }
@@ -145,9 +139,11 @@ $('#builder-basic .selectTree').each(function () {
 
 $('#builder-basic .selectTree').select2()
   .on("change", function(e) {
-     $(".copyfilter").collapse();
+     //$(".copyfilter").collapse();
      //$("#filterSelector").val(null).trigger("change");
 });
+
+
   
 //profile temp actions
 $('#btnLogin').on('click', function (e) {
@@ -165,7 +161,13 @@ $('#userEditBtn').on('click', function (e) {
 $('.usrViewActBtn').on('click', function (e) {
    $('.user-view').toggleClass('hidden')
   });
-
+$('#dblBtn').on('click', function (e) {
+   $('#view1Sett').toggleClass('hidden');
+   $('#view2Sett').toggleClass('hidden');
+});
+$('.btnSort.active').on('click', function (e) { 
+   $(this).toggleClass('asc').toggleClass('desc');
+});
 //custom scrollbar
 /*
 $('#info').on('shown.bs.modal', function (e) {

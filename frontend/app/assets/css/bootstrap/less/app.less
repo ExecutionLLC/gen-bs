@@ -295,7 +295,9 @@ body {
           color: darken(@sidebar-inverse-color, 10%);
         }
      }
-     .btn-link {
+     .btn-link, 
+     &:hover,
+     &:active {
        text-decoration: underline;
         font-size: ceil((@font-size-base * 0.9));}
      .panel-default { 
@@ -860,7 +862,13 @@ body {
    color: #fff; 
   }
 }
-
+.select2-container--open {
+  .flex { 
+    border-top: solid 1px #eee;
+    margin: -6px;
+    padding: 10px;
+  }
+}
 
 //query-builder overwriting
 .query-builder .drag-handle,

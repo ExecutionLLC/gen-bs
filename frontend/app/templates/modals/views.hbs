@@ -9,49 +9,63 @@
      <form>
       <div class="modal-body">
         <div class="collapse in copyview">
-        <div class="row grid-toolbar">
-         <div class="col-sm-6">
-
-          <select class="select2">
-  
-          <option value="1" selected>Default View</option>
-          <option value="2" >Copy of Default View</option>
-          <option value="3" >User Custom View 1</option>
-          <option value="4" >User Custom View 2</option>
-          <option value="5" >User Custom View 3</option>
-        </select>
-        </div>
-  
-         <div class="col-sm-6">
-           <!--  <button class="btn btn-default collapse in copyview">Reset View</button> -->
-             <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview">Duplicate</button>   
-             <!-- <button type="button" class="btn btn-link collapse in copyview">Delete View</button>  --> 
-             <div class="inline alert alert-help">Standard view are not edited, dublicate it for custom</div>
-         </div>
-         
-    </div>
-        </div>
+          <div class="row grid-toolbar">
+            <div class="col-sm-6">
+              <label>Available Filters</label>
+            </div>
+          </div>
+            <div class="alert alert-help">Standard view are not edited, duplicate it for custom</div>
+            <div class="row grid-toolbar">
+           <div class="col-sm-6">  
+            <select class="select2">
+    
+            <option value="1" selected>Default View</option>
+            <option value="2" >Copy of Default View</option>
+            <option value="3" >User Custom View 1</option>
+            <option value="4" >User Custom View 2</option>
+            <option value="5" >User Custom View 3</option>
+          </select>
+          </div>    
+           <div class="col-sm-6">
+             <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
+               <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn">Duplicate</button> 
+             </div>
+               <!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
+                <div class="btn-group hidden">
+                  <button class="btn btn-default">Reset View</button> 
+                </div>
+                <div class="btn-group hidden">
+                  <button type="button" class="btn btn-link">Delete View</button> 
+                </div>
+              <!-- / --> 
+                               
+           </div>
+           
+      </div>        
+    
+    
+            </div>
         <div class="collapse copyview">
         <div class="row grid-toolbar">
          <div class="col-sm-6">
-
-         <input type="text" class="form-control" placeholder="Set view name a copy">
-        
+         <label>New Filter</label> 
+         <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
+          <div class="help-text text-danger">Name can not be empty</div>
             
         </div>
          <div class="col-sm-5">
-
+         <label>Description</label>
          <input type="text" class="form-control" placeholder="Set view description (optional)">
         
             
         </div>
           <div class="col-sm-1">
-            <button type="button" class="btn btn-default delete-copy" type="button" data-toggle="collapse" data-target=".copyview">Cancel</button> 
+            <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview">Cancel</button> 
           </div>
         </div>
   
         </div>   
-          <div class="sort-setting" id="view1Sett">
+          <div class="sort-setting hidden" id="view1Sett">
              <h5>Table Columns</h5>
             <div class="row grid-toolbar nobg">
             
@@ -77,21 +91,21 @@
                   <option>Subject ID</option>
                   </optgroup>
                   <optgroup label="VCF File Details">
-                  <option disabled>Adjusted P-value</option>
+                  <option>Adjusted P-value</option>
                  <option>Allele Frequency</option>
-                 <option disabled>Average Base Quality</option>
-                 <option disabled>Forward Strand Read Depth</option>
+                 <option>Average Base Quality</option>
+                 <option>Forward Strand Read Depth</option>
                  <option>Reference Allele</option>
-                 <option disabled>Sample Counts</option>
-                 <option disabled>Strand Bias</option>
-                 <option disabled>Variant Quality </option>
-                 <option disabled>Allele Depth</option>
-                  <option disabled>Alternate Allele</option>
-                  <option disabled>Average Quality</option>
-                  <option disabled>Genotype</option>
+                 <option>Sample Counts</option>
+                 <option>Strand Bias</option>
+                 <option>Variant Quality </option>
+                 <option>Allele Depth</option>
+                  <option>Alternate Allele</option>
+                  <option>Average Quality</option>
+                  <option>Genotype</option>
                   <option>Reverse Strand Read Depth</option>
-                  <option disabled>Sample Frequency</option>
-                  <option disabled>Zygosity </option>
+                  <option>Sample Frequency</option>
+                  <option>Zygosity </option>
                   </optgroup>
                 </select>
                 </div>
@@ -129,21 +143,21 @@
                   <option selected>Subject ID</option>
                   </optgroup>
                   <optgroup label="VCF File Details">
-                  <option disabled>Adjusted P-value</option>
+                  <option>Adjusted P-value</option>
                  <option>Allele Frequency</option>
-                 <option disabled>Average Base Quality</option>
-                 <option disabled>Forward Strand Read Depth</option>
+                 <option>Average Base Quality</option>
+                 <option>Forward Strand Read Depth</option>
                  <option>Reference Allele</option>
-                 <option disabled>Sample Counts</option>
-                 <option disabled>Strand Bias</option>
+                 <option>Sample Counts</option>
+                 <option>Strand Bias</option>
                  <option  disabled>Variant Quality </option>
-                 <option disabled>Allele Depth</option>
-                  <option disabled>Alternate Allele</option>
-                  <option disabled>Average Quality</option>
-                  <option disabled>Genotype</option>
+                 <option>Allele Depth</option>
+                  <option>Alternate Allele</option>
+                  <option>Average Quality</option>
+                  <option>Genotype</option>
                   <option>Reverse Strand Read Depth</option>
-                  <option disabled>Sample Frequency</option>
-                  <option disabled>Zygosity </option>
+                  <option>Sample Frequency</option>
+                  <option>Zygosity </option>
                   </optgroup>
                 </select>
                 </div>
@@ -181,21 +195,21 @@
                   <option >Subject ID</option>
                   </optgroup>
                   <optgroup label="VCF File Details">
-                  <option disabled>Adjusted P-value</option>
+                  <option>Adjusted P-value</option>
                  <option>Allele Frequency</option>
-                 <option disabled>Average Base Quality</option>
-                 <option disabled>Forward Strand Read Depth</option>
+                 <option>Average Base Quality</option>
+                 <option>Forward Strand Read Depth</option>
                  <option>Reference Allele</option>
-                 <option disabled>Sample Counts</option>
-                 <option disabled>Strand Bias</option>
+                 <option>Sample Counts</option>
+                 <option>Strand Bias</option>
                  <option  disabled>Variant Quality </option>
-                 <option disabled>Allele Depth</option>
-                  <option disabled>Alternate Allele</option>
-                  <option disabled>Average Quality</option>
-                  <option disabled>Genotype</option>
+                 <option>Allele Depth</option>
+                  <option>Alternate Allele</option>
+                  <option>Average Quality</option>
+                  <option>Genotype</option>
                   <option selected>Reverse Strand Read Depth</option>
-                  <option disabled>Sample Frequency</option>
-                  <option disabled>Zygosity </option>
+                  <option>Sample Frequency</option>
+                  <option>Zygosity </option>
                   </optgroup>
                 </select>
                 </div>
@@ -231,21 +245,21 @@
                   <option>Subject ID</option>
                   </optgroup>
                   <optgroup label="VCF File Details">
-                  <option disabled>Adjusted P-value</option>
+                  <option>Adjusted P-value</option>
                  <option selected>Allele Frequency</option>
-                 <option disabled>Average Base Quality</option>
-                 <option disabled>Forward Strand Read Depth</option>
+                 <option>Average Base Quality</option>
+                 <option>Forward Strand Read Depth</option>
                  <option>Reference Allele</option>
-                 <option disabled>Sample Counts</option>
-                 <option disabled>Strand Bias</option>
-                 <option disabled>Variant Quality </option>
-                 <option disabled>Allele Depth</option>
-                  <option disabled>Alternate Allele</option>
-                  <option disabled>Average Quality</option>
-                  <option disabled>Genotype</option>
+                 <option>Sample Counts</option>
+                 <option>Strand Bias</option>
+                 <option>Variant Quality </option>
+                 <option>Allele Depth</option>
+                  <option>Alternate Allele</option>
+                  <option>Average Quality</option>
+                  <option>Genotype</option>
                   <option>Reverse Strand Read Depth</option>
-                  <option disabled>Sample Frequency</option>
-                  <option disabled>Zygosity </option>
+                  <option>Sample Frequency</option>
+                  <option>Zygosity </option>
                   </optgroup>
                 </select>
                 </div>
@@ -267,7 +281,7 @@
                  </div>
             </div>
         </div>
-          <div class="sort-setting hidden" id="view2Sett">
+          <div class="sort-setting" id="view2Sett">
              <h5>Table Columns</h5>
             <div class="row grid-toolbar nobg">
             
@@ -293,21 +307,21 @@
                   <option>Subject ID</option>
                   </optgroup>
                   <optgroup label="VCF File Details">
-                  <option disabled>Adjusted P-value</option>
+                  <option>Adjusted P-value</option>
                  <option>Allele Frequency</option>
-                 <option disabled>Average Base Quality</option>
-                 <option disabled>Forward Strand Read Depth</option>
+                 <option>Average Base Quality</option>
+                 <option>Forward Strand Read Depth</option>
                  <option>Reference Allele</option>
-                 <option disabled>Sample Counts</option>
-                 <option disabled>Strand Bias</option>
-                 <option disabled>Variant Quality </option>
-                 <option disabled>Allele Depth</option>
-                  <option disabled>Alternate Allele</option>
-                  <option disabled>Average Quality</option>
-                  <option disabled>Genotype</option>
+                 <option>Sample Counts</option>
+                 <option>Strand Bias</option>
+                 <option>Variant Quality </option>
+                 <option>Allele Depth</option>
+                  <option>Alternate Allele</option>
+                  <option>Average Quality</option>
+                  <option>Genotype</option>
                   <option>Reverse Strand Read Depth</option>
-                  <option disabled>Sample Frequency</option>
-                  <option disabled>Zygosity </option>
+                  <option>Sample Frequency</option>
+                  <option>Zygosity </option>
                   </optgroup>
                 </select>
                 </div>
@@ -345,21 +359,21 @@
                   <option selected>Subject ID</option>
                   </optgroup>
                   <optgroup label="VCF File Details">
-                  <option disabled>Adjusted P-value</option>
+                  <option>Adjusted P-value</option>
                  <option>Allele Frequency</option>
-                 <option disabled>Average Base Quality</option>
-                 <option disabled>Forward Strand Read Depth</option>
+                 <option>Average Base Quality</option>
+                 <option>Forward Strand Read Depth</option>
                  <option>Reference Allele</option>
-                 <option disabled>Sample Counts</option>
-                 <option disabled>Strand Bias</option>
+                 <option>Sample Counts</option>
+                 <option>Strand Bias</option>
                  <option  disabled>Variant Quality </option>
-                 <option disabled>Allele Depth</option>
-                  <option disabled>Alternate Allele</option>
-                  <option disabled>Average Quality</option>
-                  <option disabled>Genotype</option>
+                 <option>Allele Depth</option>
+                  <option>Alternate Allele</option>
+                  <option>Average Quality</option>
+                  <option>Genotype</option>
                   <option>Reverse Strand Read Depth</option>
-                  <option disabled>Sample Frequency</option>
-                  <option disabled>Zygosity </option>
+                  <option>Sample Frequency</option>
+                  <option>Zygosity </option>
                   </optgroup>
                 </select>
                 </div>
@@ -397,21 +411,21 @@
                   <option >Subject ID</option>
                   </optgroup>
                   <optgroup label="VCF File Details">
-                  <option disabled>Adjusted P-value</option>
+                  <option>Adjusted P-value</option>
                  <option>Allele Frequency</option>
-                 <option disabled>Average Base Quality</option>
-                 <option disabled>Forward Strand Read Depth</option>
+                 <option>Average Base Quality</option>
+                 <option>Forward Strand Read Depth</option>
                  <option>Reference Allele</option>
-                 <option disabled>Sample Counts</option>
-                 <option disabled>Strand Bias</option>
+                 <option>Sample Counts</option>
+                 <option>Strand Bias</option>
                  <option  disabled>Variant Quality </option>
-                 <option disabled>Allele Depth</option>
-                  <option disabled>Alternate Allele</option>
-                  <option disabled>Average Quality</option>
-                  <option disabled>Genotype</option>
+                 <option>Allele Depth</option>
+                  <option>Alternate Allele</option>
+                  <option>Average Quality</option>
+                  <option>Genotype</option>
                   <option selected>Reverse Strand Read Depth</option>
-                  <option disabled>Sample Frequency</option>
-                  <option disabled>Zygosity </option>
+                  <option>Sample Frequency</option>
+                  <option>Zygosity </option>
                   </optgroup>
                 </select>
                 </div>
@@ -447,21 +461,21 @@
                   <option>Subject ID</option>
                   </optgroup>
                   <optgroup label="VCF File Details">
-                  <option disabled>Adjusted P-value</option>
+                  <option>Adjusted P-value</option>
                  <option selected>Allele Frequency</option>
-                 <option disabled>Average Base Quality</option>
-                 <option disabled>Forward Strand Read Depth</option>
+                 <option>Average Base Quality</option>
+                 <option>Forward Strand Read Depth</option>
                  <option>Reference Allele</option>
-                 <option disabled>Sample Counts</option>
-                 <option disabled>Strand Bias</option>
-                 <option disabled>Variant Quality </option>
-                 <option disabled>Allele Depth</option>
-                  <option disabled>Alternate Allele</option>
-                  <option disabled>Average Quality</option>
-                  <option disabled>Genotype</option>
+                 <option>Sample Counts</option>
+                 <option>Strand Bias</option>
+                 <option>Variant Quality </option>
+                 <option>Allele Depth</option>
+                  <option>Alternate Allele</option>
+                  <option>Average Quality</option>
+                  <option>Genotype</option>
                   <option>Reverse Strand Read Depth</option>
-                  <option disabled>Sample Frequency</option>
-                  <option disabled>Zygosity </option>
+                  <option>Sample Frequency</option>
+                  <option>Zygosity </option>
                   </optgroup>
                 </select>
                 </div>
@@ -483,6 +497,17 @@
                  </div>
             </div>
         </div>
+          <div class="alert alert-danger">
+          <button type="button" class="close hidden" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <div class="btn-group pull-right ">
+            <a class="btn btn-danger" href="">Delete</a></div>
+          <div class="btn-group pull-right">
+            <a class="btn btn-default" href="">Cancel</a>
+          </div>
+          Are you sure you want to delete this view?
+       </div>
           <div class="alert alert-help">Add/remove by click plus and minus column new setting row. Drag row for set table column order. You can sort the same time only two fields. Set checkbox for available table column filert. Add keywords by substitution dictionary for download already filtered results</div>
         </div>
       <div class="modal-footer">         

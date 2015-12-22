@@ -1,16 +1,16 @@
 // Alerts
 
 .alert-variant(@background; @border; @text-color; @icon-content) {
-  background-color:@background;
-  border-color: @border;
+  //background-color:@background;
+  border-bottom-color: @border;
   color: @text-color;
-  padding-left: 36px;
+  padding-left: 20px;
   &:before { 
     font-family: @alert-icon-font-family;
     content: @icon-content;
     color: @text-color;
-    left: 13px;
-    top: 13px;
+    left: 0px;
+    top: 10px;
     position: absolute;
   }
   hr {

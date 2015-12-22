@@ -310,11 +310,7 @@ font-size: @font-size-small;
       }
      }
   }
- .grid-toolbar.nobg { background: none;} 
-   + .btn-toolabar { 
-     margin: 5px 0 10px;
-   } 
- 
+   .grid-toolbar.nobg { background: none; }  
 }
 .btnSort { 
 
@@ -344,8 +340,8 @@ font-size: @font-size-small;
             }
 .btnSort.desc {
    &:before { 
-    content: "\f0dd";
     content: "\f161";
+      opacity: 1;
      .rotate(0);
    }
   }
@@ -391,4 +387,7 @@ font-size: @font-size-small;
 
 .btn.collapse.in { 
   display: inline-block;
+}
+.btn-label-indent { 
+  margin-top: 1.72em;
 }
