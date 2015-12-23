@@ -7,7 +7,8 @@ const SETTINGS = {
     applicationServer: {
         host: ENV.AS_HOST || '192.168.1.102',
         port: ENV.AS_WS_PORT || 8888,
-        auth_token_header: ENV.WS_AUTH_TOKEN_HEADER || 'X-Auth-Token'
+        authTokenHeader: ENV.WS_AUTH_TOKEN_HEADER || 'X-Auth-Token',
+        sessionHeader: ENV.WS_SESSION_HEADER || 'X-Session-Id'
     },
     database: {
         host: ENV.WS_DATABASE_SERVER || '172.17.0.2',
