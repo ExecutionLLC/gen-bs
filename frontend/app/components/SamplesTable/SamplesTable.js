@@ -56,18 +56,20 @@ const dtConfig = {
     { "data": "chromosome", "title": "Chromosome", "visible": true },
     { "data": "endCoordinate", "title": "EndCoordinate", "visible": true },
     { "data": "cytogeneticBand", "title": "CytogeneticBand", "visible": true },
-    { "data": "startCoordinate", "title": "StartCoordinate", "visible": false},
-    { "data": "affectedAminoAcid", "title": "AffectedAminoAcid", "visible": false},
-    { "data": "proteinChange", "title": "ProteinChange", "visible": false},
-    { "data": "granthamScore", "title": "GranthamScore", "visible": false },
-    { "data": "functionalConsequence", "title": "FunctionalConsequence", "visible": false },
-    { "data": "transcript", "title": "Transcript", "visible": false },
-    { "data": "nucleotideChange", "title": "NucleotideChange", "visible": false }
+    { "data": "startCoordinate", "title": "StartCoordinate", "visible": true},
+    { "data": "affectedAminoAcid", "title": "AffectedAminoAcid", "visible": true},
+    { "data": "proteinChange", "title": "ProteinChange", "visible": true},
+    { "data": "granthamScore", "title": "GranthamScore", "visible": true},
+    { "data": "functionalConsequence", "title": "FunctionalConsequence", "visible": true},
+    { "data": "transcript", "title": "Transcript", "visible": true},
+    { "data": "nucleotideChange", "title": "NucleotideChange", "visible": true}
   ]
 };
 
 
 $( function() {
+
+  //const editor = new $.fn.dataTable.Editor( {} )
 
 
   const table = new DTable($tableEl, dtConfig ).table;
