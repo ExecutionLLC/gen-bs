@@ -9,6 +9,7 @@ const WSService = require('./WSService');
 const FieldsMetadataService = require('./FieldsMetadataService');
 const ApplicationServerService = require('./ApplicationServerService');
 const SearchService = require('./SearchService');
+const TokenService = require('./TokenService');
 
 class ServiceFacade {
   constructor(config, models) {
@@ -22,6 +23,7 @@ class ServiceFacade {
     this.applicationServer = new ApplicationServerService(this, models);
     this.fieldsMetadata = new FieldsMetadataService(this, models);
     this.search = new SearchService(this, models);
+    this.tokens = new TokenService(this, models);
   }
 }
 

@@ -33,8 +33,8 @@ class UserService extends ServiceBase {
         }
     }
 
-    findByToken(userToken, callback) {
-        if (userToken) {
+    findBySession(session, callback) {
+        if (session) {
             const tokenDescriptor = this.tokens[userToken];
             if (tokenDescriptor) {
                 const user = _.find(this.users, u => u.id === tokenDescriptor.userId);

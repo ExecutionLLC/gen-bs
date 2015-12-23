@@ -14,8 +14,9 @@ class ApiController extends ControllerBase {
     }
 
     _initUserMiddleware(request, reponse, next) {
-        const tokenHeaderName = this.services.config.applicationServer.authTokenHeader;
-        const token = request.get(tokenHeaderName);
+        const sessionHeaderName = this.services.config.applicationServer.sessionHeader;
+
+        const session = request.get(sessionHeaderName);
         this.services.users.findByToken(token, (error, user) => {
             if (error) {
                 next(error);
