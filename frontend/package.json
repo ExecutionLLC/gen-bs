@@ -50,6 +50,7 @@
     "datatables.net-responsive-bs": "2.0.0",
     "datatables.net-scroller": "1.4.0",
     "datatables.net-scroller-bs": "1.4.0",
+    "datatables.net-select-bs": "1.1.0",
     "jquery": "2.1.4",
     "jszip": "2.5.0",
     "redux": "3.0.5"

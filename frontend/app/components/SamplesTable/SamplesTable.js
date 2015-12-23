@@ -13,6 +13,12 @@ const $tableEl = $('#samples_table');
 const $tableHeaderEl = $('#samples_table_wrapper thead');
 
 const dtConfig = {
+  //select: {
+  //  style:    'os',
+  //  selector: 'td:first-child'
+  //},
+  order: [[ 1, 'asc' ]],
+
   dom: '<"toolbar">Btr',
 
   buttons: [
@@ -40,14 +46,18 @@ const dtConfig = {
     dataSrc: "",
   },
   "columns": [
-    { "data": "comment", "title": "Comment", "visible": true},
+    {"orderable": false, "targets": 0,
+      "render": function(data, type, full, meta) {
+        return '<input type="checkbox">';
+    }},
+    { "data": "comment", "title": "Comment", "visible": true, "className": 'variants-comment'},
     { "data": "function", "title": "Function", "visible": true },
     { "data": "gene", "title": "Gene", "visible": true },
     { "data": "chromosome", "title": "Chromosome", "visible": true },
     { "data": "endCoordinate", "title": "EndCoordinate", "visible": true },
     { "data": "cytogeneticBand", "title": "CytogeneticBand", "visible": true },
-    { "data": "startCoordinate", "title": "StartCoordinate", "visible": true },
-    { "data": "affectedAminoAcid", "title": "AffectedAminoAcid", "visible": true },
+    { "data": "startCoordinate", "title": "StartCoordinate", "visible": false},
+    { "data": "affectedAminoAcid", "title": "AffectedAminoAcid", "visible": false},
     { "data": "proteinChange", "title": "ProteinChange", "visible": false},
     { "data": "granthamScore", "title": "GranthamScore", "visible": false },
     { "data": "functionalConsequence", "title": "FunctionalConsequence", "visible": false },
@@ -59,10 +69,19 @@ const dtConfig = {
 
 $( function() {
 
+
   const table = new DTable($tableEl, dtConfig ).table;
   window.table = table;
 
   store.dispatch(initializeTable(table));
+
+  $(document).on("click", ".variants-comment", (e) => {
+    console.log('click',e);
+
+    const $commentContent = $(e.currentTarget).html(); 
+    $(e.currentTarget).html('<input type="text" class="form-control input-sm" ' + 'value="' + $commentContent + '"' + '/>')
+    
+  }); 
 
   //let unsubscribe = store.subscribe(() => {
   //  console.log('state from table', store.getState());
@@ -102,7 +121,7 @@ $( function() {
 
   table.columns().flatten().each( function ( colIdx ) {
 
-    const input = $('<input type="text" placeholder="Search" class="form-control"/>')
+    const input = $('<input type="text" placeholder="Search" class="form-control input-sm"/>')
       .width( $(table.column(colIdx).header()).width() - 10 )
       .on( 'click', (e) => e.stopPropagation(e) )
       .on( 'change keyup', (e) => {
