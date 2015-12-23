@@ -4,6 +4,8 @@ Genomix Application is intended to do great things for genetics all over the wor
 
 Be proud feeling yourself a part of it!
 
+See general information about the project [here](docs/general-info.md)
+
 # GIT Workflow
 
 Please see the interactive workflow description here:
