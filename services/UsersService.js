@@ -43,7 +43,7 @@ class UserService extends ServiceBase {
                 callback(new Error('Token is not found'));
             }
         } else {
-            console.log('Token is null, consider the first user for testing.');
+            console.error('Token is null, consider the first user for testing.');
             const user = this.users[0];
             callback(null, user);
         }
