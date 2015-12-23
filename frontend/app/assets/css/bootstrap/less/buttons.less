@@ -104,7 +104,7 @@
   text-decoration: none;
   padding-left: 0;
   padding-right: 0;
-  
+  vertical-align: middle;
   &,
   &:active,
   &.active,
@@ -234,15 +234,17 @@ input[type="button"] {
   padding-left: @padding-small-horizontal;
   padding-right: @padding-small-horizontal;
 }
-.btn-wrapnormal { 
-font-size: @font-size-small;
+.btn-wrapnormal {  
+    white-space: normal;
+   
+  &.btn-sm { 
     font-weight: bold;
     line-height: 1.2;
     padding-left: 24px;
     position: relative;
     text-align: left;
-    white-space: normal;
-  color: @text-muted;
+    color: @text-muted;
+  }
   input { 
     position: absolute;
     left: 0;

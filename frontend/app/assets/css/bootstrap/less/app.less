@@ -265,101 +265,118 @@ body {
       background: darken(@sidebar-inverse-bg, 3%); 
       color:darken(@sidebar-inverse-color, 20%); 
     }
-     .sidebarToggle {
-        background: darken(@sidebar-inverse-bg, 5%);
-     }
-     .text-muted { 
-       color:  lighten(@sidebar-default-bg, 12%);
-     }
-     .form-control { 
-       background: transparent;
-       border-width: 0;
-       border-bottom-width:1px;
-       border-bottom-color: darken(@sidebar-inverse-color, 30%);
-       padding-left: 0;
-       padding-right: 0;
-       font-size: ceil((@font-size-base * 1.1)); 
-       color: @sidebar-inverse-color;
-     }
-     label { 
-        color:  darken(@sidebar-inverse-color, 10%);
-        font-size:  ceil((@font-size-base * 0.9));
-        position: relative; top:1rem;
-     }
-     hr { 
-       border-top-color: darken(@sidebar-inverse-color, 30%);
-     }
-     a, .btn-link { 
-        color: darken(@sidebar-inverse-color, 20%);
-        &:hover {
-          color: darken(@sidebar-inverse-color, 10%);
-        }
-     }
-     .btn-link, 
-     &:hover,
-     &:active {
-       text-decoration: underline;
-        font-size: ceil((@font-size-base * 0.9));}
-     .panel-default { 
-        background: transparent;
-        border: none;
-        padding-left: 0;
-        padding-right: 0;
-      .panel-heading { 
-          background: transparent;
-          border-bottom-color: darken(@sidebar-inverse-color, 30%);
-          margin: 0 20px;
-          padding: 20px 0;
-          color: darken(@sidebar-inverse-color, 20%);
-        }
-  
-       .select-wrap { 
-         margin-top: 15px;
-         
-       }
-       .select2-container--default .select2-selection--single {
-          background-color: transparent;
-          border: 1px solid darken(@sidebar-inverse-color, 20%);
-          border-radius: 0;
-          color: darken(@sidebar-inverse-color, 20%);
-          margin-top: 15px;
-           position: relative;
+   .sidebarToggle {
+      background: darken(@sidebar-inverse-bg, 5%);
+   }
+   .text-muted { 
+     color:  lighten(@sidebar-default-bg, 12%);
+   }
+   .form-control { 
+     background: transparent;
+     border-width: 0;
+     border-bottom-width:1px;
+     border-bottom-color: darken(@sidebar-inverse-color, 30%);
+     padding-left: 0;
+     padding-right: 0;
+     font-size: ceil((@font-size-base * 1.1)); 
+     color: @sidebar-inverse-color;
+   }
+   label { 
+      color:  darken(@sidebar-inverse-color, 10%);
+      font-size:  ceil((@font-size-base * 0.9));
+      position: relative; top:1rem;
+   }
+    hr { 
+     border-top-color: darken(@sidebar-inverse-color, 30%);
+   }
+    dl a, .btn-link { 
+      color: darken(@sidebar-inverse-color, 20%);
+      &:hover {
+        color: darken(@sidebar-inverse-color, 10%);
       }
-       .select2-container--default .select2-selection--single .select2-selection__rendered { 
-        color: darken(@sidebar-inverse-color, 20%); 
-       }
-       .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:hover, .nav-tabs.nav-justified > .active > a:focus { 
-        border-color: darken(@sidebar-inverse-color, 20%);
+   }
+   .btn-link, 
+   .btn-link:hover,
+   .btn-link:active {
+     text-decoration: underline;
+      font-size: ceil((@font-size-base * 0.9));
+      &.text-warning { 
+        color: @brand-warning;
+      }
+    }
+   .btn-default { 
+     color: darken(@sidebar-inverse-color, 20%);
+     border-color:  darken(@sidebar-inverse-color, 30%);
+    background: transparent ;
+           &:hover,
+           &:focus,
+           &:active { 
+            border-color: transparent; 
+            border-color: darken(@sidebar-inverse-color, 20%);
+            color: darken(@sidebar-inverse-color, 10%);
+             background: transparent ;
+        }
+   }
+   .panel-default { 
+      background: transparent;
+      border: none;
+      padding-left: 0;
+      padding-right: 0;
+    .panel-heading { 
         background: transparent;
-       }
-       .nav-tabs.nav-justified > li > a {  border-bottom-color: darken(@sidebar-inverse-color, 20%);}
-       .nav-tabs { 
-         margin-top: 20px;
-           border-bottom-color: darken(@sidebar-inverse-color, 20%);
-         > li {
-           > a { 
-             color: darken(@sidebar-inverse-color, 20%);
-             &:hover { 
-              border-color: transparent; 
-              border-bottom-color: darken(@sidebar-inverse-color, 20%);
-              color: darken(@sidebar-inverse-color, 10%);
-             }
-            }
-           }
-       
-         
-       }
+        border-bottom-color: darken(@sidebar-inverse-color, 30%);
+        margin: 0 20px;
+        padding: 20px 0;
+        color: darken(@sidebar-inverse-color, 20%);
+      }
+      }
+     .select-wrap { 
+       margin-top: 15px;
        
      }
-     .list-group-item { 
-       background: transparent;
-     } 
-
-    .panel-default .panel-heading .btn-link { 
-      background: transparent;
-      border: transparent;
-      color: #fff;
+     .select2-container--default .select2-selection--single {
+        background-color: transparent;
+        border: 1px solid darken(@sidebar-inverse-color, 20%);
+        border-radius: 0;
+        color: darken(@sidebar-inverse-color, 20%);
+        margin-top: 15px;
+         position: relative;
     }
+     .select2-container--default .select2-selection--single .select2-selection__rendered { 
+      color: darken(@sidebar-inverse-color, 20%); 
+     }
+     .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:hover, .nav-tabs.nav-justified > .active > a:focus { 
+      border-color: darken(@sidebar-inverse-color, 20%);
+      background: transparent;
+     }
+     .nav-tabs.nav-justified > li > a {  border-bottom-color: darken(@sidebar-inverse-color, 20%);}
+     .nav-tabs { 
+       margin-top: 20px;
+         border-bottom-color: darken(@sidebar-inverse-color, 20%);
+       > li {
+         > a { 
+           color: darken(@sidebar-inverse-color, 20%);
+           &:hover { 
+            border-color: transparent; 
+            border-bottom-color: darken(@sidebar-inverse-color, 20%);
+            color: darken(@sidebar-inverse-color, 10%);
+           }
+          }
+         }
+     
+       
+     }
+     
+   
+   .list-group-item { 
+     background: transparent;
+   } 
+   .panel-default .panel-heading .btn-link { 
+    background: transparent;
+    border: transparent;
+    color: #fff;
+  }
+
 }
 .sidebar.collapsing { 
   position: fixed;
@@ -381,6 +398,35 @@ body {
          padding:0 15px;
   
   }   
+}
+.sidebar-right { 
+   .flex {
+     -moz-columns: 1;
+     -webkit-columns: 1;
+     columns: 1;
+     padding: 20px 20px 0;
+    
+     dl {
+    display: inline-block;
+    margin-right: 0.25em; 
+       dt { 
+         display: none;
+       }
+       dd {
+         margin-left:0;
+       }
+       &:first-child { 
+         dd { 
+           font-weight: bold;
+         }
+       }
+       
+        &:last-child { 
+          display: block;
+      
+        }
+     }
+   }
 }
 .sidebar-filter {  
    
@@ -411,6 +457,7 @@ body {
   bottom: 0px; // for sidebar-bottom (bottom: 50px;)
   left: 0;
  right: 0;
+ .transition(none);
 
 }
 

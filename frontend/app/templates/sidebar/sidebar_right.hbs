@@ -34,13 +34,13 @@
            <label>Login</label>
            
              <input type="text" class="form-control">
-             <div class="help-text hidden">No this login</div>
+             <div class="help-text text-danger hidden">No this login</div>
              </div>
              <div class="form-group has-feedback">
            <label>Password</label>
  
            <input type="password" class="form-control">
-         <div class="help-text hidden">No this login</div>
+         <div class="help-text text-danger hidden">No this login</div>
 
            
          </div>
@@ -52,11 +52,13 @@
             <!-- <button class="btn btn-block btn-openid"></button> -->
              </div>
             <hr>
-<div class="form-group">
+         <div class="form-group">
               If you do not already have an account <a class="btb btn-link" href="">register for free</a>
              </div>
 
-         
+            <div class="form-group">
+                <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+             </div>
           </form> 
         </div>
     <div role="tabpanel" class="tab-pane" id="register">  
@@ -65,8 +67,8 @@
              <div class="form-group has-feedback">
            <label>Email</label>
            
-             <input type="email" class="form-control">
-               <div class="help-text hidden">Error</div>
+              <input type="email" class="form-control">
+              <div class="help-text text-danger hidden">Error</div>
              </div>
              <div class="form-group">
              <button type="button" class="btn btn-block btn-primary" id="btnLogin">Sign up for free</button>
@@ -80,8 +82,10 @@
             <div class="form-group">
                Already have an account?<a href="" class="btb btn-link"> Sign in</a>
              </div> 
-
-          </form> 
+             <div class="form-group">
+                <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+             </div>
+            </form> 
             </div>
   </div>
 
@@ -106,7 +110,7 @@
           </d>
         </dl> 
 
-        <dl>
+           <dl>
           <dt>
            Specialization: 
           </dt>
@@ -114,31 +118,40 @@
             Doctor
           </d>
         </dl> 
-        <dl>
-          <dt>
-           Balance: 
-          </dt>
-          <dd>
-         <a href="">789 Queries Left</a>
-          </d>
-        </dl>
-  		  <dl>
+          
+           <dl>
           <dt>
            Language: 
           </dt>
           <dd>
            English
           </dd>
-        </dl>
-       
-        
-   
+        </dl>         
+           <dl>
+          <dt>
+           Balance: 
+          </dt>
+             <!--if paid sample analises, not a zero balance -->
+          <dd>
+             <span  class="text-success">789 paid analises left</span>
+             <!--  If zero balance  -->
+             <span  class="text-warning hidden">0 paid analises left</span>
+          </dd>
+          </dl>
+          
+          <!--  If no paid options, to use remove class hidden  -->
+             <p class="hidden">
+                <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+             </p>
+        <!--if paid sample analises, zero balance, to use remove classes hidden  -->
+              <p class="hidden">
+                <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy">Buy access to continue to use the advanced features of App Genomix</a>
+              </p>
+          
             </div>
               <div class="user-view hidden">
             
            <form>
-  
-        
             <div class="form-group has-feedback">
               <label>Name</label>
              <input type="text" class="form-control">
@@ -148,27 +161,26 @@
              <label>Last Name</label>
  
              <input type="text" class="form-control">
-             <div class="help-text hidden">No this login</div>
-           
-         </div>
+             <div class="help-text hidden">No this login</div>           
+            </div>
              <div class="form-group has-feedback">
              <label>Email</label>
  
-             <input type="email" class="form-control">
+             <input type="email" class="form-control" value="user@domain.com">
              <div class="help-text hidden">No this login</div>
            
-         </div>
+             </div>
              <div class="form-group has-feedback">
              <label>Specialization</label>
  
              <input type="text" class="form-control">
              <div class="help-text hidden">No this login</div>
            
-         </div>
+            </div>
              <div class="form-group has-feedback">
              <label>Language</label>
- <div class="select-wrap">
-             <select class="select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+             <div class="select-wrap">
+              <select class="select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                <option>
                 English
                </option>
@@ -177,7 +189,7 @@
                </option>
 
              </select>
- </div>
+             </div>
              <div class="help-text hidden">No this login</div>
            
          </div>
@@ -189,97 +201,100 @@
               <button class="btn btn-block  btn-primary usrViewActBtn" type="button">Save</button>
                </div>
          </div>
+             
+             
+             
           </form> 
+           
           </div>
          </div>
-    </div>
+        </div>
           <div class="panel panel-default">
            <div class="panel-heading">
            <h4 class="panel-title"> <a href="">Latest Paid Analises</a></h4>
            </div>
-           <ul class="list-group">
-             <li>
-  <div class="list-group-item">
-    <h5 class="list-group-item-heading">#456</h5>
-    <ul class="list-unstyled">
-        
-        <li>
-          <strong>
-           Gender: 
-          </strong>
-          <span>
-           Male
-          </span>
-        </li>
-  		<li>
-          <strong>
-           Phenotype: 
-          </strong>
-          <span>
-           11p partial monosomy syndrome
-          </span>
-        </li>
-        <li>
-          <strong>           Sample:            </strong>
-          <span>            ATCC HCC1187 TumorBL</span>
-        </li>
-<li>
-<strong>
-          Description: 
-          </strong>
-   <span>
-           Custom text
-          </span>
-</li>
-        
-    </ul>
-    
-  </div>
-             
-</li>
-<li>
-  <div class="list-group-item">
-    <h5 class="list-group-item-heading">#56</h5>
-    <ul class="list-unstyled">
-        
-        <li>
-          <strong>
-           Gender: 
-          </strong>
-          <span>
-           Male
-          </span>
-        </li>
-  		<li>
-          <strong>
-           Phenotype: 
-          </strong>
-          <span>
-           11p partial monosomy syndrome
-          </span>
-        </li>
-        <li>
-          <strong>           Sample:            </strong>
-          <span>       iha1           </span>
-        </li>
-<li>
-<strong>
-          Description: 
-          </strong>
-   <span>
-           Custom text
-          </span>
-</li>
-        
-    </ul>
-    
-  </div>
-             
-</li>
-           </ul>
+                 
+             <!----- samples -->
+            <div class="flex">
+           <dl>
+            <dt>Name</dt>
+            <dd>Ogden syndrome</dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd>V.1.6</dd>
+           </dl>
+           <dl>
+            <dt>Size</dt>
+            <dd>56 KB</dd>
+           </dl>
+           <dl>
+            <dt>Datetime</dt>
+            <dd><a href="">02.12.2015 21:32:21</a></dd>
+           </dl> 
+        </div>
+            <div class="flex">
+           <dl>
+            <dt>Name</dt>
+            <dd>Ogden syndrome</dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd>V.1.6</dd>
+           </dl>
+           <dl>
+            <dt>Size</dt>
+            <dd>56 KB</dd>
+           </dl>
+           <dl>
+            <dt>Analized</dt>
+            <dd><a href="">02.12.2015 21:32:21</a></dd>
+           </dl> 
+        </div>
+            <div class="flex">
+           <dl>
+            <dt>Name</dt>
+            <dd>Ogden syndrome</dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd>V.1.6</dd>
+           </dl>
+           <dl>
+            <dt>Size</dt>
+            <dd>56 KB</dd>
+           </dl>
+           <dl>
+            <dt>Analized</dt>
+            <dd><a href="">02.12.2015 21:32:21</a></dd>
+           </dl> 
+        </div>
+            <div class="flex">
+           <dl>
+            <dt>Name</dt>
+            <dd>Ogden syndrome</dd>
+          </dl>
+           <dl>
+            <dt>Versia</dt>
+            <dd>V.1.6</dd>
+           </dl>
+           <dl>
+            <dt>Size</dt>
+            <dd>56 KB</dd>
+           </dl>
+           <dl>
+            <dt>Analized</dt>
+            <dd><a href="">02.12.2015 21:32:21</a></dd>
+           </dl> 
+        </div>
+            
          </div>
-        
-       </div> 
+          <div class="panel panel-default">
+              <div class="panel-body">
+              <a class="btn btn-block btn-default" href="#">Logout</a>
+              </div>
+             </div>
+           </div> 
       </div>  
 </div>
 
