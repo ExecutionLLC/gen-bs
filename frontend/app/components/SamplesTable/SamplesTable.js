@@ -14,10 +14,17 @@ const $tableHeaderEl = $('#samples_table_wrapper thead');
 
 const dtConfig = {
   dom: '<"toolbar">Btr',
+
   buttons: [
-    'excel',
-    'csv',
-    'copy'
+    {
+      extend: 'collection',
+      text: 'Export',
+      buttons: [
+        'excel',
+        'csv',
+        'copy'
+      ]
+    }
   ],
   orderCellsTop: true,
   paging: true,
@@ -95,7 +102,7 @@ $( function() {
 
   table.columns().flatten().each( function ( colIdx ) {
 
-    const input = $('<input type="text" placeholder="Search" />')
+    const input = $('<input type="text" placeholder="Search" class="form-control"/>')
       .width( $(table.column(colIdx).header()).width() - 10 )
       .on( 'click', (e) => e.stopPropagation(e) )
       .on( 'change keyup', (e) => {

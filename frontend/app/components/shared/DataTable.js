@@ -6,7 +6,7 @@ import 'datatables.net-responsive';
 import 'datatables.net-scroller';
 
 import 'datatables.net-scroller-bs/css/scroller.bootstrap.css';
-import 'datatables.net-buttons-bs';
+import 'datatables.net-buttons-bs/js/buttons.bootstrap';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.flash';
 import 'datatables.net-buttons-bs/css/buttons.bootstrap.css';
