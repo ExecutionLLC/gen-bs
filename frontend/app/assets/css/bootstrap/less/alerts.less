@@ -78,6 +78,12 @@
 }
 .alert-inverse {
   .alert-variant(@alert-inverse-bg; @alert-inverse-border; @alert-inverse-text; @alert-inverse-state-icon);
+    margin: 0;
+    padding: 15px 15px 15px 30px;
+    &:before {
+      top:16px;
+      left:10px;
+    }
   .close { 
     color: @alert-inverse-text;
     .opacity(.6);
@@ -89,12 +95,13 @@
   .text-success { 
     color: @brand-success;
   }
-   .text-warning { 
+  .text-warning { 
     color: @brand-warning;
   }
-   .text-danger { 
-    color: @brand-danger;
+  .text-danger { 
+    color: lighten(saturate(@brand-danger, 10%), 10%);
   }
+  
 }
 .alert-help { 
   .alert-variant(@alert-help-bg; @alert-help-border; @alert-help-text; @alert-help-state-icon); 
@@ -112,6 +119,7 @@
   top:15px;
   right: 15px;
   max-width: 260px;
+  min-width: 200px;
 }
 #fav-message { 
     background: @brand-warning;
