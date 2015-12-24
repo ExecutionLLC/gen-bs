@@ -13,10 +13,7 @@ const $tableEl = $('#samples_table');
 const $tableHeaderEl = $('#samples_table_wrapper thead');
 
 const dtConfig = {
-  //select: {
-  //  style:    'os',
-  //  selector: 'td:first-child'
-  //},
+
   order: [[ 1, 'asc' ]],
 
   dom: '<"toolbar">Btr',

@@ -13,9 +13,6 @@ import 'datatables.net-buttons-bs/css/buttons.bootstrap.css';
 import 'datatables.net-select';
 import 'datatables.net-select-bs/css/select.bootstrap.css';
 
-import '../../assets/vendor/datatablesEditorTrial/js/editor.bootstrap'
-
-//import 'datatables.net-scroller-bs/css/scroller.bootstrap.css';
 
 export default class DTable {
   constructor(domNode, dtConfig) {
