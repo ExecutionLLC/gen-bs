@@ -9,9 +9,9 @@ const SETTINGS = {
         port: ENV.AS_WS_PORT || 8888
     },
     database: {
-        host: ENV.WS_DATABASE_SERVER || '172.17.0.2',
+        host: ENV.WS_DATABASE_SERVER || 'localhost',
         user: ENV.WS_DATABASE_USER || 'postgres',
-        password: ENV.WS_DATABASE_PASSWORD || 'zxcasdqwe',
+        password: ENV.WS_DATABASE_PASSWORD || 'postgres',
         databaseName: ENV.WS_DATABASE_NAME || 'genomixdb'
     }
 };

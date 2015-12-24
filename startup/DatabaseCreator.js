@@ -246,12 +246,24 @@ class DatabaseCreator {
                     .inTable('view');
                 table.string('name', 50);
                 table.enu('view_type', entityTypeEnumValues);
-                table.boolean('is_disabled_4copy');
+                table.boolean('is_disabled_4copy')
+                    .defaultTo(false);
+                table.boolean('is_deleted')
+                    .defaultTo(false);
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
+            })
+            .createTable('view_text', table => {
+                table.uuid('view_id')
+                    .references('id')
+                    .inTable('view');
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
+                table.string('description', 100);
             })
             .createTable('view_assignment', table => {
                 table.uuid('user_id')
