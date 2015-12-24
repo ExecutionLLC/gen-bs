@@ -63,14 +63,20 @@ class ApplicationServerService extends ServiceBase {
         this._rpcSend(operationId, method, source, callback);
     }
 
-    requestOpenSearchSession(filters, views, callback) {
+    /**
+     * Opens a new search session.
+     * @param operationId Id of the search operation which will be used as AS session id.
+     * @param params All the params necessary to open search session.
+     * */
+    requestOpenSearchSession(operationId, params, callback) {
         const method = 'v1.open_session';
-        const operationId = this.services.sessionService.addSearchOperation(method);
-        const params = {
-            filters: filters,
-            views: views
+        const searchSessionRequest = {
+            view: params.view,
+            filters: params.filters,
+            globalSearchValue: params.globalSearchValue,
+            fieldSearchValues: params.fieldSearchValues
         };
-        this._rpcSend(operationId, method, params, callback);
+        this._rpcSend(operationId, method, searchSessionRequest, callback);
     }
 
     requestCloseSession(callback) {
