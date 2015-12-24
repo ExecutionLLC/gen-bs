@@ -32,6 +32,11 @@ function variantsTable(state = {}, action) {
         lastUpdated: action.receivedAt
       })
 
+    case ActionTypes.SORT_VARIANTS:
+      return Object.assign({}, state, {
+        variants: action.variants
+      })
+
     default:
       return state
   }

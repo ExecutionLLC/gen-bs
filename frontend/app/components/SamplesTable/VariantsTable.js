@@ -12,44 +12,46 @@ function selectVariants(state) {
   return state.variantsTable.variants
 }
 
+function fillTableHead(labels) {
+  var head = [];
+  head.push('<thead><tr>');
 
+  labels.map( (label) => {
+    head.push(`<th>${label}</th>`);
+  })
+  head.push('</tr></thead>');
+  return head.join('');
+}
 
+function fillRows(tData) {
+    var row = [fillTableHead(Object.keys(tData[0]))];
+    tData.map( (rowData) => {
 
-$( () => {
-
-  function fillRows(tData) {
-      return tData.map( (rowData) => {
-        var row = [];
-
-        row.push('<tr>');
-        for(var key in rowData) {
-          row.push(`<td>${rowData[key]}</td>`);
-        }
-        row.push('</tr>');
-
-        return row.join();
-      });
-  }
-
-
-  function getInitialState() {
-    store.dispatch(fetchVariants());
-    observeStore(store, selectVariants, () => {
-      const variants = store.getState().variantsTable.variants;
-      const isFetching = store.getState().variantsTable.isFetching;
-      if(!isFetching) {
-        render(fillRows(variants));
+      row.push('<tbody><tr>');
+      for(var key in rowData) {
+        row.push(`<td>${rowData[key]}</td>`);
       }
+      row.push('</tr></tbody>');
+
     });
-  }
+    return row.join('');
+}
 
-  function render(tableRows) {
-    $tableElement.append(tableRows)
-  }
+function getInitialState() {
+  store.dispatch(fetchVariants());
+  observeStore(store, selectVariants, () => {
+    const variants = store.getState().variantsTable.variants;
+    const isFetching = store.getState().variantsTable.isFetching;
+    if(!isFetching) {
+      render(fillRows(variants));
+    }
+  });
+}
 
-  getInitialState();
+function render(tableRows) {
+  $tableElement.append(tableRows)
+}
 
 
-
-});
+$( () => { getInitialState() })
 
