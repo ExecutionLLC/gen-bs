@@ -1,10 +1,19 @@
 import json from '../../../json/data-variants.json';
 
-import { initializeTable, setColumnFilter } from '../../actions'
+import { fetchVariants } from '../../actions'
 
 import store from '../../containers/App'
+import observeStore from '../../utils/observeStore'
 
 const $tableElement = $('#variants_table');
+
+
+function selectVariants(state) {
+  return state.variantsTable.variants
+}
+
+
+
 
 $( () => {
 
@@ -24,9 +33,14 @@ $( () => {
 
 
   function getInitialState() {
-    $.get(json, function(data) {
-      render(fillRows(data));
-    })
+    store.dispatch(fetchVariants());
+    observeStore(store, selectVariants, () => {
+      const variants = store.getState().variantsTable.variants;
+      const isFetching = store.getState().variantsTable.isFetching;
+      if(!isFetching) {
+        render(fillRows(variants));
+      }
+    });
   }
 
   function render(tableRows) {

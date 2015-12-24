@@ -17,6 +17,26 @@ function samplesTable(state = {}, action) {
   }
 }
 
+function variantsTable(state = {}, action) {
+  switch (action.type) {
+
+    case ActionTypes.REQUEST_VARIANTS:
+      return Object.assign({}, state, {
+        isFetching: true
+      })
+
+    case ActionTypes.RECEIVE_VARIANTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        variants: action.variants,
+        lastUpdated: action.receivedAt
+      })
+
+    default:
+      return state
+  }
+}
+
 function exportFileType (state = ActionTypes.fileTypes.NONE, action) {
   switch (action.type) {
     case ActionTypes.SET_EXPORT_FILE_TYPE:
@@ -28,7 +48,8 @@ function exportFileType (state = ActionTypes.fileTypes.NONE, action) {
 }
 
 const genApp = combineReducers({
-  samplesTable,
+  //samplesTable,
+  variantsTable,
   exportFileType
 })
 
