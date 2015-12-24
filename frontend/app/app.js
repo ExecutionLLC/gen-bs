@@ -25,7 +25,7 @@ import './assets/vendor/matchMedia/matchMedia.addListener.js';
 
 import './assets/css/index.less';
 
-import './components/SamplesTable/SamplesTable';
+import './components/SamplesTable/VariantsTable';
 import './components/Old/old';
 
 
