@@ -48,6 +48,14 @@ class SearchService extends ServiceBase {
     }
 
     searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, callback) {
+        const sessions = this.services.sessions;
+        sessions.checkOperationType(sessionId, operationId, sessions.operationTypes().SEARCH, (error) => {
+            if (error) {
+                callback(error);
+            } else {
+                this.services.applicationServer.asdasdasd
+            }
+        });
     }
 }
 

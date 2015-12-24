@@ -79,16 +79,18 @@ class ApplicationServerService extends ServiceBase {
         this._rpcSend(operationId, method, searchSessionRequest, callback);
     }
 
-    requestCloseSession(callback) {
+    requestCloseSession(operationId, callback) {
         const method = 'v1.close_session';
-        const operationId = this.services.sessionService.addSearchOperation(method);
         this._rpcSend(operationId, method, null, callback);
     }
 
-    requestSearchInResults(filters, callback) {
-        const method = 'v1.set_filter';
-        const operationId = this.services.sessionService.addSearchOperation(method);
-        this._rpcSend(operationId, method, filters, callback);
+    requestSearchInResults(operationId, params, callback) {
+        const method = 'v1.set_filters';
+        const searchInResultsRequest = {
+            globalSearchValue: params.globalSearchValue,
+            fieldSearchValues: params.fieldSearchValues
+        };
+        this._rpcSend(operationId, method, searchInResultsRequest, callback);
     }
 
     _onData(operation, data) {
