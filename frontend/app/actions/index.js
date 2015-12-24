@@ -25,12 +25,13 @@ export const fileTypes = {
  * action creators
  */
 
-export const SORT_VARIANTS = 'REQUEST_VARIANTS'
-function sortVariants(columnKey, sortOrder) {
+export const SORT_VARIANTS = 'SORT_VARIANTS'
+export function sortVariants(variants, columnKey, sortOrder) {
   return {
-    type: REQUEST_VARIANTS,
-    columnKey,
-    sortOrder
+    type: SORT_VARIANTS,
+    variants: variants,
+    columnKey: columnKey,
+    sortOrder: sortOrder
   }
 }
 

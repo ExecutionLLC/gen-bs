@@ -34,7 +34,10 @@ function variantsTable(state = {}, action) {
 
     case ActionTypes.SORT_VARIANTS:
       return Object.assign({}, state, {
-        variants: action.variants
+        variants: _.sortByOrder(action.variants, [action.columnKey], [action.sortOrder]),
+        sortOrder: Object.assign({}, state.sortOrder, {
+          [action.columnKey]: action.sortOrder
+        })
       })
 
     default:

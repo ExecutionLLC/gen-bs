@@ -1,11 +1,12 @@
 import json from '../../../json/data-variants.json';
 
-import { fetchVariants } from '../../actions'
+import { fetchVariants, sortVariants } from '../../actions'
 
 import store from '../../containers/App'
 import observeStore from '../../utils/observeStore'
 
 const $tableElement = $('#variants_table');
+const tableHeaderElement = '#variants_table thead tr th';
 
 
 function selectVariants(state) {
@@ -17,7 +18,7 @@ function fillTableHead(labels) {
   head.push('<thead><tr>');
 
   labels.map( (label) => {
-    head.push(`<th>${label}</th>`);
+    head.push(`<th data-label="${label}">${label}</th>`);
   })
   head.push('</tr></thead>');
   return head.join('');
@@ -49,9 +50,28 @@ function getInitialState() {
 }
 
 function render(tableRows) {
-  $tableElement.append(tableRows)
+  $tableElement.html(tableRows)
 }
 
 
-$( () => { getInitialState() })
+
+$( () => { 
+  getInitialState();
+  $(document).on('click', tableHeaderElement, (e) => {
+    var sortOrder;
+    if(store.getState().variantsTable.sortOrder) {
+      sortOrder = store.getState().variantsTable.sortOrder[$(e.currentTarget).data('label')] || 'asc';
+    } else {
+      sortOrder = 'asc';
+    }
+    store.dispatch(
+      sortVariants(
+        store.getState().variantsTable.variants,
+        $(e.currentTarget).data('label'),
+        (sortOrder === 'asc') ? ('desc'):('asc')
+    ))
+     
+
+  });
+});
 
