@@ -89,6 +89,21 @@ class SessionService extends ServiceBase {
         });
     }
 
+    checkOperationType(sessionId, operationId, operationType, callback) {
+        this.findById(sessionId, (error, session) => {
+            if (error) {
+                callback(error);
+            } else {
+                const operation = session.operations[operationId];
+                if (operation.type !== operationType) {
+                    callback(new Error('The specified operation id is not of the specified type. Operation type: ' + operation.type + ', desired: ' + operationType));
+                } else {
+                    callback(null);
+                }
+            }
+        });
+    }
+
     _deleteSearchOperationIfAny(session, callback) {
         const operationId = _.findKey(session.operations, {type: OPERATION_TYPES.SEARCH});
         if (operationId) {
