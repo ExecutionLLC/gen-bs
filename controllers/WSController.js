@@ -7,13 +7,19 @@ const ControllerBase = require('./ControllerBase');
 class WSController extends ControllerBase {
     constructor(services) {
         super(services);
-
     }
 
-    createRouter() {
-        const router = new Express();
-
-        return router;
+    addWebSocketServerCallbacks(webSocketServer) {
+        webSocketServer.on('connection', (ws) => {
+            ws.on('message', (message) => {
+                console.log('Received: ' + message);
+                ws.send(message, (error) => {
+                    if (error) {
+                        console.error('Client WS send error', error);
+                    }
+                });
+            });
+        });
     }
 }
 

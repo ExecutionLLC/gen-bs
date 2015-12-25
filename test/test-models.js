@@ -4,19 +4,24 @@ const _ = require('lodash');
 const uuid = require('node-uuid');
 
 const LanguModel = require('../models/LanguModel');
-const ViewsModel = require('../models/ViewsModel');
 const UserModel = require('../models/UserModel');
+const ViewsModel = require('../models/ViewsModel');
+const KeywordsModel = require('../models/KeywordsModel');
+const FiltersModel = require('../models/FiltersModel');
 
 const Config = require('../utils/Config');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 const VIEWS = require('../test_data/views.json');
+const FILTERS = require('../test_data/filters.json');
+const userId = require('../test_data/user_metadata.json')[0].id;
+
 const DEFAULT_LANG = {
     id: 'RU',
     description: 'Russian'
 }
 
-class TestViewsModel {
+class TestModels {
     constructor() {
         this.config = Config;
         this.langu = new LanguModel(this);
@@ -24,23 +29,71 @@ class TestViewsModel {
         this.user = new UserModel(this);
     }
 
-    add() {
-        this.addLang((error, lang) => {
-            console.log('LANG:');
+    process() {
+        this.testViewsModel((error, result) => {
             if (error) {
                 console.log(error);
             } else {
+
+            }
+            process.exit(1);
+        });
+    }
+
+    testViewsModel(callback) {
+        this._addLang((error, lang) => {
+            if (error) {
+                callback(error);
+            } else {
+                console.log('LANG');
                 console.log(lang);
 
-                this.addUser((error, user) => {
-                    console.log('USER:');
+                this._addUser((error, user) => {
                     if (error) {
-                        console.log(error);
+                        callback(error);
                     } else {
+                        console.log('USER');
                         console.log(user);
 
-                        this.addViews(user, lang, () => {
-                            console.log('VIEWS:')
+                        // ok
+                        this._addViews(user, lang, (error, viewsData) => {
+                            if (error) {
+                                callback(error);
+                            } else {
+                                console.log('VIEWS');
+                                console.log(viewsData);
+
+                                // ok
+                                this.views.find(user.id, viewsData[0], (error, view) => {
+                                    if (error) {
+                                        callback(error);
+                                    } else {
+                                        console.log('Inserted view:');
+                                        console.log(view);
+
+                                        //
+                                        this.views.update(user.id, viewsData[0], view, (error, updatedViewId) => {
+                                            if (error) {
+                                                callback(error);
+                                            } else {
+                                                console.log('UPDATE view: ' + updatedViewId);
+
+                                                //
+                                                // TODO: можем ли так удалять? Предварительно - да
+                                                this.views.remove(user.id, viewsData[0], (error, viewId) => {
+                                                    if (error) {
+                                                        callback(error);
+                                                    } else {
+                                                        console.log('DELETE view: ' + viewId);
+
+                                                        callback();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         });
                     }
                 });
@@ -48,27 +101,12 @@ class TestViewsModel {
         });
     }
 
-    get() {
-        //this.views._getView('f31c3475-55db-4015-b1cc-ec620ca47950', DEFAULT_LANG.id, '999bd545-1b30-45a2-bdc5-559620c85575', (error, viewData) => {
-        //    console.log(error, viewData);
-        //});
+    testFiltersModel(callback) {
 
-
-        this.views._getUserViews('f31c3475-55db-4015-b1cc-ec620ca47950', DEFAULT_LANG.id, (error, viewsData) => {
-            console.log('VIEWS:');
-            console.log(error, viewsData);
-
-            _.each(viewsData, (viewData) => {
-                this.views._getViewItems(viewData.id, (error, viewItemsData) => {
-                    console.log('VIEW ITEMS:');
-                    console.log(error, viewItemsData);
-                });
-            });
-        });
     }
 
-    addLang(callback) {
-        this.langu.get(DEFAULT_LANG.id, (error, lang) => {
+    _addLang(callback) {
+        this.langu.find(DEFAULT_LANG.id, (error, lang) => {
             if (error) {
                 callback(error);
             } else {
@@ -83,41 +121,53 @@ class TestViewsModel {
         });
     }
 
-    addUser(callback) {
-        const user = {
+    _addUser(callback) {
+        const _user = {
             id: uuid.v4(),
             email: 'test@domain.com',
             default_langu_id: DEFAULT_LANG.id,
             number_paid_samples: 0
         };
-        this.user.add(user, (error, result) => {
-            if(error) {
+        this.user.find(_user.id, (error, userData) => {
+            if (error) {
                 callback(error);
             } else {
-                callback(null, result);
+                if (!userData) {
+                    this.user.add(_user, (error, user) => {
+                        if(error) {
+                            callback(error);
+                        } else {
+                            callback(null, user);
+                        }
+                    });
+                } else {
+                    callback(null, userData);
+                }
+
             }
         });
     }
 
-    addViews(user, lang, callback) {
+    _addViews(user, lang, callback) {
+        let _count = VIEWS.length;
+        let _views = [];
         _.each(VIEWS, (view) => {
             const _view = ChangeCaseUtil.convertKeysToCamelCase(view);
-            this.views.add(user.id, lang.id, _view, (error, result) => {
+            this.views.add(user.id, lang.id, _view, (error, viewData) => {
                 if(error) {
-                    console.log(error);
-                    //callback(error);
+                    callback(error);
                 } else {
-                    console.log(result);
+                    _views.push(viewData);
+                    _count--;
+                }
+                if (_count == 0) {
+                    callback(null, _views);
                 }
             });
         });
-
-        callback();
     }
 
 }
 
-var model = new TestViewsModel();
-
-model.add();
-model.get();
+var testModels = new TestModels();
+testModels.process();

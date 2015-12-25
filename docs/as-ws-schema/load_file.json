@@ -27,6 +27,9 @@
         "progress": {
           "type": "integer",
           "description": "progress of operation in %. Operation correspond to enum value in status."
+        },
+        "metadata": {
+          "$ref": "base_json/file_metadata.json#"
         }
       }
     }

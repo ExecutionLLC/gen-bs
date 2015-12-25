@@ -20,8 +20,9 @@ const knexConfig = {
 const knexSingleton = new Knex(knexConfig);
 
 class ModelBase {
-    constructor(models) {
+    constructor(models, baseTable) {
         this.models = models;
+        this.baseTable = baseTable;
 
         this.knex = knexSingleton;
     }

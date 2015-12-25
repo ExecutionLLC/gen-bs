@@ -3,6 +3,10 @@
 const _ = require('lodash');
 
 const ModelBase = require('./ModelBase');
+const MockModelBase = require('./MockModelBase');
+
+const VIEWS = require('../test_data/views.json');
+const userId = require('../test_data/user_metadata.json')[0].id;
 
 const mappedColumns = {
     view: ['id', 'name', 'description', 'is_disabled_4copy'],
@@ -11,26 +15,11 @@ const mappedColumns = {
 
 class ViewsModel extends ModelBase {
     constructor(models) {
-        super(models);
+        super(models, 'view');
     }
 
     add(userId, languId, view, callback) {
-        this.knex.transaction((trx) => {
-                return this._addView(userId, view, trx)
-                    .then((insertedView) => {
-                        const viewId = insertedView.id;
-                        return this._addViewDescription(viewId, languId, view.description, trx)
-                            .then(() => {
-                                return this._addViewItems(viewId, view.viewListItems, trx);
-                            });
-                    });
-            })
-            .then((res) => {
-                callback(null, res);
-            })
-            .catch((error) => {
-                callback(error)
-            });
+        this._add(userId, languId, view, callback);
     }
 
     find(userId, viewId, callback) {
@@ -42,7 +31,12 @@ class ViewsModel extends ModelBase {
                    if (error) {
                        callback(error);
                    } else {
-                        callback(null, this._compileView(viewData, viewItemsData));
+                        if (viewData) {
+                           callback(null, this._compileView(viewData, viewItemsData));
+                        }
+                        else {
+                            callback();
+                        }
                    }
                });
             }
@@ -57,11 +51,14 @@ class ViewsModel extends ModelBase {
             } else {
                 const viewIds = _.pluck(viewsData, 'id');
                 this._getViewItemsByIds(viewIds, (error, viewItemsData) => {
-                    const viewItems = _.groupBy(viewItemsData, (viewItem) => {
-                        return viewItem.view_id;
-                    });
-
-                    callback(null, this._compileViews(viewsData, viewItems));
+                    if (error) {
+                        callback(error);
+                    } else {
+                        const viewItems = _.groupBy(viewItemsData, (viewItem) => {
+                            return viewItem.view_id;
+                        });
+                        callback(null, this._compileViews(viewsData, viewItems));
+                    }
                 });
             }
         });
@@ -74,14 +71,14 @@ class ViewsModel extends ModelBase {
                 callback(error);
             } else {
                 view.originalViewId = viewData.original_view_id || viewData.id;
-                thid.add(userId, viewData.langu_id, view, callback);
+                this._add(userId, viewData.langu_id, view, callback);
             }
         });
     }
 
     // Set is_deleted = true
-    delete(userId, viewId, callback) {
-        this.knex('view')
+    remove(userId, viewId, callback) {
+        this.knex(this.baseTable)
             .where('creator', userId)
             .andWhere('id', viewId)
             .update({
@@ -106,7 +103,7 @@ class ViewsModel extends ModelBase {
             memo[column] = viewData[column];
             return memo;
         }, {});
-        view.view_list_items = this._compileViewItems(viewItemsData);
+        view['view_list_items'] = this._compileViewItems(viewItemsData);
         return view;
     }
 
@@ -121,19 +118,20 @@ class ViewsModel extends ModelBase {
             memo[column] = viewItemData[column];
             return memo;
         }, {});
-        //viewItem.keywords = _compileViewItemKeywords();
+        //viewItem['keywords'] = _compileViewItemKeywords();
         return viewItem;
     }
 
-    // TODO: доделать!
-    _compileViewItemKeywords(keywordsData) {
-        return [];
-    }
-
     _getUserViews(userId, callback) {
-        this.knex.raw('SELECT * FROM (SELECT ROW_NUMBER() OVER (PARTITION BY ISNULL(original_view_id, id) ORDER BY timestamp DESC) AS RN, * FROM view WHERE creator = ' + userId + ') T WHERE T.RN = 1')
+        const _query = 'SELECT * FROM ' +
+            '(SELECT ROW_NUMBER() OVER (' +
+            'PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC) AS RN, * ' +
+            'FROM ' + this.baseTable + ' ' +
+            'INNER JOIN view_text ON view_text.view_id = view.id ' +
+            'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
+        this.knex.raw(_query)
         .then((viewsData) => {
-            callback(null, viewsData);
+            callback(null, viewsData.rows);
         })
         .catch((error) => {
             callback(error);
@@ -142,12 +140,16 @@ class ViewsModel extends ModelBase {
 
     _getView(userId, viewId, callback) {
         this.knex.select()
-            .from('view')
+            .from(this.baseTable)
             .innerJoin('view_text', 'view_text.view_id', 'view.id')
             .where('creator', userId)
             .andWhere('id', viewId)
             .then((viewData) => {
-                callback(null, viewData[0]);
+                if (viewData.length > 0) {
+                    callback(null, viewData[0]);
+                } else {
+                    callback();
+                }
             })
             .catch((error) => {
                 callback(error);
@@ -155,12 +157,9 @@ class ViewsModel extends ModelBase {
     }
 
     _getViewItemsByIds(viewIds, callback) {
-        if (!_.isArray(viewIds)) {
-            viewIds = [viewIds];
-        }
         this.knex.select()
             .from('view_item')
-            .whereIn('viewId', viewIds)
+            .whereIn('view_id', viewIds)
             .orderBy('view_id', 'asc')
             .then((viewItemsData) => {
                 callback(null, viewItemsData);
@@ -183,9 +182,23 @@ class ViewsModel extends ModelBase {
             });
     }
 
-    // TODO: привязать к viewS. Посмотреть по ходу реализации!
-    _getViewItemKeywords() {
-
+    _add(userId, languId, view, callback) {
+        this.knex.transaction((trx) => {
+            let viewId;
+            return this._addView(userId, view, trx)
+                .then((insertedView) => {
+                    viewId = insertedView.id;
+                    return this._addViewDescription(viewId, languId, view.description, trx)
+                        .then(() => {
+                            return this._addViewItems(viewId, view.viewListItems, trx);
+                        });
+                })
+                .then(() => {
+                    trx.commit;
+                    callback(null, viewId);
+                })
+                .catch(trx.rollback)
+        });
     }
 
     _addView(userId, view, trx) {
@@ -199,7 +212,7 @@ class ViewsModel extends ModelBase {
         if (view.originalViewId) {
             dataToInsert.original_view_id = view.originalViewId;
         }
-        return this.knex('view')
+        return this.knex(this.baseTable)
             .transacting(trx)
             .insert(dataToInsert)
             .then(() => {
@@ -236,8 +249,8 @@ class ViewsModel extends ModelBase {
                 .transacting(trx)
                 .insert(itemToInsert)
                 .then(() => {
-                    _.map(viewItem.selectedKeywords,
-                        keywordId => this._addViewItemKeywords(itemToInsert.id, keywordId, trx));
+                    _.map(viewItem.keywords,
+                        keyword => this._addViewItemKeywords(itemToInsert.id, keyword.id, trx));
                     return itemToInsert.id;
                 });
         });
@@ -252,7 +265,7 @@ class ViewsModel extends ModelBase {
             view_item_id: viewItemId,
             keyword_id: keywordId
         };
-        return this.knex('view_item_keywords')
+        return this.knex('view_item_keyword')
             .transacting(trx)
             .insert(dataToInsert)
             .then(() => {

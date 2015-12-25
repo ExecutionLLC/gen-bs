@@ -4,13 +4,15 @@ const _ = require('lodash');
 
 const ModelBase = require('./ModelBase');
 
+const mappedColumns = ['id', 'description'];
+
 class LanguModel extends ModelBase {
     constructor(models) {
-        super(models);
+        super(models, 'langu');
     }
 
     add(langu, callback) {
-        this.knex('langu').insert(langu)
+        this.knex(this.baseTable).insert(langu)
             .then(() => {
                 callback(null, langu);
             })
@@ -19,10 +21,24 @@ class LanguModel extends ModelBase {
             });
     }
 
-    get(id, callback) {
-        this.knex.select('id', 'description')
-            .from('langu')
-            .where({id: id})
+    find(languId, callback) {
+        this._getLangu(languId, (error, languData) => {
+            if (error) {
+                callback(error);
+            } else {
+                if (languData) {
+                    callback(null, this._compileLangu(languData));
+                } else {
+                    callback();
+                }
+            }
+        });
+    }
+
+    _getLangu(languId, callback) {
+        this.knex.select()
+            .from(this.baseTable)
+            .where({id: languId})
             .then((rows) => {
                 if (rows.length > 0) {
                     callback(null, rows[0]);
@@ -35,6 +51,12 @@ class LanguModel extends ModelBase {
             });
     }
 
+    _compileLangu(languData) {
+        return _.reduce(mappedColumns, (memo, column) => {
+            memo[column] = languData[column];
+            return memo;
+        }, {});
+    }
 }
 
 module.exports = LanguModel;

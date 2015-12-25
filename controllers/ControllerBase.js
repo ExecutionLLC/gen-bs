@@ -31,6 +31,11 @@ class ControllerBase {
         .end();
     }
 
+    getRequestBody(request) {
+        const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(request.body);
+        return camelCasedBody;
+    }
+
     checkUserIsDefined(request, response) {
         if (!request.user) {
             this.sendInternalError(response, 'User is undefined.');

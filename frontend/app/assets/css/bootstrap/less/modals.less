@@ -173,3 +173,36 @@
     margin: 0;
   }
 }
+.modal-lg-scroll{  
+  max-height: 600px;
+}
+.modal {
+ .table-content { 
+    background: #fff; 
+    padding:0;
+  .table { 
+    margin-bottom: 0;
+    > thead,
+    > tbody,
+    > tfoot { 
+      > tr { 
+        > td, th, tf { 
+          &:first-child { 
+            padding-left: @table-cell-padding *3;
+          }
+          &:last-child { 
+            padding-left: @table-cell-padding *4;
+          }
+        }
+      }
+    }
+     > thead { 
+       > tr { 
+         th { 
+           white-space: nowrap;
+         }
+       }
+     }
+   }
+ } 
+}

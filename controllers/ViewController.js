@@ -1,37 +1,10 @@
 'use strict';
 
-const Express = require('express');
+const UserEntityControllerBase = require('./UserEntityControllerBase');
 
-const ControllerBase = require('./ControllerBase');
-
-class ViewController extends ControllerBase {
+class ViewController extends UserEntityControllerBase {
   constructor(services) {
-    super(services);
-
-    this.getUserViews = this.getUserViews.bind(this);
-  }
-
-  getUserViews(request, response) {
-    if (!this.checkUserIsDefined(request, response)) {
-      return;
-    }
-
-    const user = request.user;
-    this.services.views.findByUser(user, (error, views) => {
-      if (error) {
-        this.sendInternalError(response, error);
-      } else {
-        this.sendJson(response, views);
-      }
-    });
-  }
-
-  createRouter() {
-    const router = new Express();
-
-    router.get('/', this.getUserViews);
-
-    return router;
+    super(services, services.views);
   }
 }
 

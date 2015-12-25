@@ -246,10 +246,8 @@ class DatabaseCreator {
                     .inTable('view');
                 table.string('name', 50);
                 table.enu('view_type', entityTypeEnumValues);
-                table.boolean('is_disabled_4copy')
-                    .defaultTo(false);
-                table.boolean('is_deleted')
-                    .defaultTo(false);
+                table.boolean('is_disabled_4copy');
+                table.boolean('is_deleted');
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')

@@ -1,83 +1,145 @@
 'use strict';
 
 const _ = require('lodash');
-const uuid = require('node-uuid');
+var events = require('events');
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
 
 const FIELDS_METADATA = require('../test_data/fields_metadata.json');
 
+const REGISTERED_EVENTS = {
+    sourcesList: {
+        event: 'sourcesListRecieved',
+        error: 'sourcesListError'
+    },
+    sourceMetadata: {
+        event: 'sourceMetadataRecieved',
+        error: 'sourceMetadataError'
+    },
+    openSearchSession: {
+        event: 'openSearchSessionRecieved',
+        error: 'openSearchSessionError'
+    },
+    searchInResults: {
+        event: 'searchInResultsRecieved',
+        error: 'searchInResultsError'
+    },
+    uploadFile: {
+        event: 'uploadFileRecieved',
+        error: 'uploadFileError'
+    }
+};
+
 class ApplicationServerService extends ServiceBase {
     constructor(services) {
         super(services);
 
-        this.registeredCallbacks = {};
-        this.registerCallbacks();
-
         this._requestOperations = this._requestOperations.bind(this);
         this._requestOperationState = this._requestOperationState.bind(this);
 
-        this._rpcCall = this._rpcCall.bind(this);
-        this.rpcReply = this.rpcReply.bind(this);
-
-        this.test = this.test.bind(this);
+        this._rpcReply = this._rpcReply.bind(this);
 
         this.host = this.services.config.applicationServer.host;
         this.port = this.services.config.applicationServer.port;
 
-        this.rpcProxy = new RPCProxy(this.host, this.port, this._requestOperations, null, this.rpcReply);
+        this.eventEmitter = new events.EventEmitter();
+        this.rpcProxy = new RPCProxy(this.host, this.port, this._requestOperations, null, this._rpcReply);
     }
 
-    registerCallbacks() {
-        var self = this;
-        this.registerCallback('v1.get_sources', function(err, res) {
-            console.log(err, res);
-            console.log(self.services.sessionService.sessions);
-        });
+    registeredEvents() {
+        return REGISTERED_EVENTS;
     }
 
-    registerCallback(method, callback) {
-        this.registeredCallbacks[method] = callback;
+    requestSourcesList(callback) {
+        const method = 'v1.get_sources';
+        const operationId = this.services.sessionService.addSystemOperation(method);
+        this._rpcSend(operationId, method, null, callback);
     }
 
-    unregisterCallback(method) {
-        if (this.registeredCallbacks[method]) {
-            delete this.registeredCallbacks[method];
+    requestSourceMetadata(source, callback) {
+        const method = 'v1.get_source_metadata';
+        const operationId = this.services.sessionService.addSystemOperation(method);
+        this._rpcSend(operationId, method, source, callback);
+    }
+
+    requestOpenSearchSession(filters, views, callback) {
+        const method = 'v1.open_session';
+        const operationId = this.services.sessionService.addSearchOperation(method);
+        const params = {
+            filters: filters,
+            views: views
+        };
+        this._rpcSend(operationId, method, params, callback);
+    }
+
+    requestCloseSession(callback) {
+        const method = 'v1.close_session';
+        const operationId = this.services.sessionService.addSearchOperation(method);
+        this._rpcSend(operationId, method, null, callback);
+    }
+
+    requestSearchInResults(filters, callback) {
+        const method = 'v1.set_filter';
+        const operationId = this.services.sessionService.addSearchOperation(method);
+        this._rpcSend(operationId, method, filters, callback);
+    }
+
+    _onData(operation, data) {
+        const methodName = operation.method;
+        switch (methodName) {
+            case 'v1.get_sources':
+                this.eventEmitter.emit(REGISTERED_EVENTS.sourcesList.event, data);
+                break;
+            case 'v1.get_source_metadata':
+                this.eventEmitter.emit(REGISTERED_EVENTS.sourceMetadata.event, data);
+                break;
+            default:
+                console.log('Unknown method call: ' + methodName, data);
+                break;
         }
     }
 
-    rpcReply(err, message) {
+    _onError(operation, error) {
+        const methodName = operation.method;
+        switch (methodName) {
+            case 'v1.get_sources':
+                this.eventEmitter.emit(REGISTERED_EVENTS.sourcesList.error, error);
+                break;
+            case 'v1.get_source_metadata':
+                this.eventEmitter.emit(REGISTERED_EVENTS.sourceMetadata.error, error);
+                break;
+            default:
+                console.log('Unknown method call: ' + methodName, error);
+                break;
+        }
+    }
+
+    _rpcReply(error, message) {
+        // TODO: add log event here
+        console.log('RPC REPLY: ', error, message);
+
         const operationId = message.id;
         const operation = this.services.sessionService.findOperation(operationId);
-
         if (operation) {
-            const callback = this.registeredCallbacks[operation['method']];
-            if (callback) {
-                // TODO: add log event
-                console.log('RPC REPLY: ', err, message);
-                // Remove operation from operations list
-                this.services.sessionService.removeOperation(operationId);
-                // Callback call
-                callback(err, message);
+            if (error) {
+                this._onError(operation, error)
             } else {
-                // TODO: add log event
-                console.log('Unregistered callback: ' + operation['method']);
+                this._onData(operation, message.result);
             }
+            this.services.sessionService.deleteOperation(operationId);
         } else {
             // TODO: add log event
-            console.log('Undefined operation: ' + operationId);
+            console.log('Operation not found: ' + operationId, error, message);
         }
     }
 
-    test(callback) {
-        //this._rpcCall(uuid.v4(), 'v1.get_sources', null, callback);
-        this._rpcCall(uuid.v4(), 'v1.get_sources', {reference: 'ASDF'}, callback);
+    registerEvent(event, callback) {
+        this.eventEmitter.on(event, callback);
     }
 
-    _rpcCall(sessionId, method, params, callback) {
-        const operationId = this.services.sessionService.addOperation(sessionId, method);
-        this._rpcSend(operationId, method, params, callback);
+    unregisterEvent(event, callback) {
+        this.eventEmitter.removeListener(event, callback);
     }
 
     _rpcSend(operationId, method, params, callback) {
@@ -92,12 +154,11 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _requestOperations() {
-        var self = this;
         console.log('Requesting operations...');
         const sessions = this.services.sessionService.sessions;
-        _.each(sessions, function (session) {
-            _.each(session, function (operation, operationId) {
-                self._requestOperationState(operationId, function (err, res) {
+        _.each(sessions, (session) => {
+            _.each(session, (operation, operationId) => {
+                this._requestOperationState(operationId, (err, res) => {
                     console.log('Requesting operation ' + res);
                 });
             });
