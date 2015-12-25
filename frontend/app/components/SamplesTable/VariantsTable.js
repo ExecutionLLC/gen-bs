@@ -53,10 +53,7 @@ function render(tableRows) {
   $tableElement.html(tableRows)
 }
 
-
-
-$( () => { 
-  getInitialState();
+function subscribeToSort() {
   $(document).on('click', tableHeaderElement, (e) => {
     var sortOrder;
     if(store.getState().variantsTable.sortOrder) {
@@ -70,8 +67,13 @@ $( () => {
         $(e.currentTarget).data('label'),
         (sortOrder === 'asc') ? ('desc'):('asc')
     ))
-     
-
   });
+}
+
+
+
+$( () => { 
+  getInitialState();
+  subscribeToSort();
 });
 
