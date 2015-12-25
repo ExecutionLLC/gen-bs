@@ -31,19 +31,18 @@
           <div class="sidebar-wrap">
           <div class="sidebar-scroll sidebar-filter">
          
-         
-         
-            <section>
-           <h5>
-           <div class="btn-group pull-right">
-            <a href="#" class="btn btn-warning btn-block" data-toggle="modal" type="button" data-target="#upload">Upload</a>
-           </div>
+         <section>
+          <div class="btn-group btn-block">
+                <a data-target="#upload" type="button" data-toggle="modal" class="btn btn-warning btn-block" href="#">Upload sample</a>
+               </div>
+         </section>
+          <section>
+         <h5>
              Choose sample  <a class="btn btn-link" type="button" data-toggle="tooltip"data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples"><i class="fa fa-info-circle text-muted"></i></a>
           </h5>
-           
-          
-          
          
+           
+           
          <div class="btn-group btn-group-select2-wrap">
          <select class="sample-search">
          <option value="3620194" selected="selected">mental retardation patient12</option>
@@ -54,17 +53,27 @@
         
               </section>
             <section>
-         <h5>
-           <div class="btn-group pull-right">
-            <button class="btn btn-dark-default" data-toggle="modal" data-target="#filter">
-              Setup
-            </button>
+            <h5>
       
-           </div>
-           Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
-           </h5>
            
-    
+             <div class="btn-group dropdown pull-right">
+              <button class="btn btn-default dropdown-toggle caret-abs-pos" type="button" data-toggle="dropdown"><i class="fa fa-cog"></i> <span class="caret"></a></button>
+              <ul class="dropdown-menu">
+              <li> 
+              <a data-toggle="modal" data-target="#filter" href="#">
+               Setup filter
+              </a>
+            </li>
+            <li>
+              <a data-toggle="modal" data-target="#combinefilter" href="#">
+                Combine filter
+              </a>
+            </li>
+          </ul>
+            </div>
+             
+             Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
+           </h5>
               
             <div class="btn-group btn-group-select2-wrap">
            <select class="select2" multiple="">
@@ -83,9 +92,10 @@
             <section>
          <h5>
            <div class="btn-group pull-right">
-          <button class="btn btn-dark-default" type="button" data-toggle="modal" data-target="#selectColumns">Setup</button>
-         </div>
-           Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a> </h5>
+            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns"><i class="fa fa-cog"></i></button>
+          </div>
+           Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a>
+             </h5>
       
                
             
@@ -103,10 +113,9 @@
             </div>  
          </section>
             <section>      
-    
               <button class="btn btn-block btn-primary" type="button">
-             Analyze
-          </button>
+              Analyze
+             </button>
             
     
          </section>
@@ -118,7 +127,7 @@
         
           </section>
            <section>
-             <hr>
+            
            <small>Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited</small>
            
          </section>
@@ -447,7 +456,7 @@
                     
                         <div data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand" data-toggle="modal" data-target="#info">AGx<sup>i</sup></a></div>
                        
-                         <div class="visible-xs" data-toggle="tooltip" data-placement="right" title="Open sidebar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i class="fa fa-lg fa-filter"></i></a></div>
+                         <div class="visible-xs"><a type="button" href="#" class="btn navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i class="fa fa-lg fa-filter"></i></a></div>
                          
                           <div class="hidden-xs" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i class="fa fa-lg fa-filter"></i></a></div>   
                         <!-- Need for reserve width for table search -->
@@ -474,8 +483,8 @@
                         </div>
                         
                         </div>
-                         <div data-toggle="tooltip" data-placement="left" title="History of saved file" data-container="body" data-trigger="hover" class="hidden-xs">
-                         <button class="btn navbar-btn" data-toggle="modal" data-target="#exporthistory"><span class="hidden-xxs">Saved files</span><span class="visible-xxs"><i class="fa fa-lg fa-cloud"></i></span></button>       
+                         <div class="hidden-xxs" data-toggle="tooltip" data-placement="left" title="History of saved file" data-container="body" data-trigger="hover">
+                           <button class="btn navbar-btn" data-toggle="modal" data-target="#exporthistory">Saved files</button>       
                         </div>  
                     
                          <div data-toggle="tooltip" data-placement="left" title="Change interface language" data-container="body" data-trigger="hover">
@@ -489,10 +498,10 @@
                           </div>
                          </div> 
                          <div data-toggle="tooltip" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs"><a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy">Buy</a></div> 
-                         <div data-toggle="tooltip" data-placement="left" title="Register or sigh for access to featured options" data-container="body" data-trigger="hover"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight" id="signInBtn"><span class="guest">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden">Name Lastname</span></a></div>
+                         <div data-toggle="tooltip" data-placement="left" title="Register or sigh for access to featured options" data-container="body" data-trigger="hover" class="hidden-xs hidden-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden">Name Lastname</span></a></div>
                          
                          
-                        </div>
+                         <div class="visible-xs visible-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight" ><span class="guest">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden">Name Lastname</span></a></div>    </div>
                      </nav>
                       
                        

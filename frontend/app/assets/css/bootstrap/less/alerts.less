@@ -105,7 +105,7 @@
 }
 .alert-help { 
   .alert-variant(@alert-help-bg; @alert-help-border; @alert-help-text; @alert-help-state-icon); 
-  padding:  0 0 0 20px;
+   padding:  0 0 0 20px;
   &:before { 
     top:0;
   }
@@ -140,10 +140,15 @@
   margin-top: -10px;
 }
 .alert { 
-  .btn-group { 
-    margin-top: -10px;
+  btn-group.pull-right { 
+    margin: 0 5px 0 0;
+  }
+    @media (min-width: @screen-sm) {
+   .btn-group { 
+     margin: -10px 0px 0 0;
     &.pull-right { 
       margin-left: 5px;
+    }
     }
   }
 }
