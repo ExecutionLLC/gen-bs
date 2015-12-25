@@ -7,7 +7,7 @@ const SETTINGS = {
     sessionHeader: ENV.WS_SESSION_HEADER || 'X-Session-Id',
     applicationServer: {
         host: ENV.AS_HOST || 'localhost',
-        port: ENV.AS_WS_PORT || 8888
+        port: ENV.AS_PORT || 8888
     },
     database: {
         host: ENV.WS_DATABASE_SERVER || 'localhost',
