@@ -2,14 +2,34 @@
 
 const Express = require('express');
 
-class LoginController {
+const ControllerBase = require('./ControllerBase');
+
+class LoginController extends ControllerBase {
     constructor(services) {
-        this.services = services;
+        super(services);
+
+        this.login = this.login.bind(this);
+        this.checkToken = this.checkToken.bind(this);
+    }
+
+    login(request, response) {
+        const body = this.getRequestBody(request);
+        const userName = body.userName;
+        const password = body.password;
+        this.services.users.login(userName, password, (error, user) => {
+
+        });
+    }
+
+    checkToken(request, response) {
 
     }
 
     createRouter() {
         const router = new Express();
+
+        router.get('/', this.login);
+        router.post('/', this.checkToken);
 
         return router;
     }

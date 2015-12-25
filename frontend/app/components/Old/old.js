@@ -54,6 +54,7 @@ function WidthChange(mq) {
     });
     $('#subnav').on('show.bs.collapse', function () {  
       $('body').removeClass("subnav-closed");
+      console.log('show.bs.collapse');
     }); 
 
 //select2        

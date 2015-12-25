@@ -1,9 +1,10 @@
-//require('../build/index.html');
-//require('./assets/images/flags/us.svg');
-//require('./assets/images/flags/ch.svg');
+import 'babel-polyfill'
+import 'jszip'
 
 
 const $ = require('jquery');
+const JSZip = require('jszip');
+window.JSZip = JSZip;
 window.jQuery = $;
 window.$ = $;
 
@@ -20,5 +21,4 @@ import './components/SamplesTable/SamplesTable';
 import './components/Old/old';
 
 
-console.log('Hello from Genomix app!');
 

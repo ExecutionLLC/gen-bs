@@ -8215,12 +8215,21 @@ border-left: 1px solid rgba(255, 255, 255, 0.4);
   white-space: normal;
 }
 .samples-table-wrapper {
-  margin-top: 120px;
+  margin-top: 100px;
 }
 div.dataTables_wrapper {
-  margin-top: 74px;
   width: 95%;
   margin: 0 auto;
+}
+table.samples td {
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+table.samples th {
+  padding: 0;
+  font-size: 8pt;
 }
 table.dataTable {
   clear: both;
@@ -8586,4 +8595,23 @@ div.dtr-modal div.dtr-modal-background {
   div.dtr-modal div.dtr-modal-display {
     width: 95%;
   }
+}
+div.DTS tbody th,
+div.DTS tbody td {
+  white-space: nowrap;
+}
+div.DTS tbody tr.even {
+  background-color: white;
+}
+div.DTS div.DTS_Loading {
+  z-index: 1;
+}
+div.DTS div.dataTables_scrollBody {
+  background: repeating-linear-gradient(45deg, #edeeff, #edeeff 10px, white 10px, white 20px);
+}
+div.DTS div.dataTables_scrollBody table {
+  z-index: 2;
+}
+div.DTS div.dataTables_paginate {
+  display: none;
 }

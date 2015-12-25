@@ -1,8 +1,9 @@
 'use strict';
 
 class ServiceBase {
-    constructor(services) {
+    constructor(services, models) {
         this.services = services;
+        this.models = models;
     }
 
     _checkUserIsSet(user, errorCallback) {
