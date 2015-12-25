@@ -31,23 +31,32 @@ class SessionService extends ServiceBase {
      * Creates a new session for the specified user with token.
      * Currently, also destroys existing sessions of the same user, if any.
      * */
-    startForUser(userId, token, callback) {
-        // Check and remove existing user session.
-        let existingSessionId = _.findKey(this.sessions, {'userId': userId});
-        if (existingSessionId) {
-            this._destroySession(existingSessionId, (error) => {
-                if (error) {
-                    console.error('Error destroying existing session: %s', error);
-                }
-            });
-        }
+    startForUser(userName, password, callback) {
+        this.sessions.tokens.login(userName, password, (error, tokenDescriptor) => {
+            if (error) {
+                callback(error);
+            } else {
+                const token = tokenDescriptor.token;
+                const userId = tokenDescriptor.userId;
 
-        this._createSession(userId, token, callback);
+                // Check and remove existing user session.
+                let existingSessionId = _.findKey(this.sessions, {'userId': userId});
+                if (existingSessionId) {
+                    this._destroySession(existingSessionId, (error) => {
+                        if (error) {
+                            console.error('Error destroying existing session: %s', error);
+                        }
+                    });
+                }
+
+                this._createSession(userId, token, callback);
+            }
+        });
     }
 
     /**
      * Starts demo user session.
-     * There can be only few active demo sessions at one time.
+     * There should be only few active demo sessions at one time.
      * */
     start(callback) {
         this._createSession(null, callback);

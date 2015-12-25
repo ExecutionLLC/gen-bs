@@ -16,13 +16,11 @@ class LoginController extends ControllerBase {
         const body = this.getRequestBody(request);
         const userName = body.userName;
         const password = body.password;
-        this.services.users.login(userName, password, (error, user) => {
-
+        this.services.users.login(userName, password, (error, token) => {
+            this.sendJson(response, {
+                token: token
+            });
         });
-    }
-
-    checkToken(request, response) {
-
     }
 
     createRouter() {

@@ -8,24 +8,44 @@ class SessionsController extends ControllerBase {
     }
 
     /**
-     * Opens new session, either demo or user, depending on the token presence in the request.
+     * Opens new session, either demo or user, depending on the user name and password presence in the request.
      * */
     open(request, response) {
-        const tokenHeaderName = this.services.config.applicationServer.authTokenHeader;
-        const token = request.get(tokenHeaderName);
+        const body = this.getRequestBody(request);
+        const userName = body.userName;
+        const password = body.password;
 
-        if (token) {
-            // Open session for the corresponding user.
-            this.services.tokens.findUserIdByToken(token, (error, userId) => {
-                // TODO: Add a new session.
-                // TODO: Assign token to the session.
+        if (userName && password) {
+            this._openUserSession(userName, password, (error, sessionId) => {
+                if (error) {
+
+                }
             });
         } else {
-            // TODO: Open demo session.
+            // open demo session
         }
     }
 
     check(request, response) {
+        const body = this.getRequestBody(request);
+        const userName = body.userName;
+        const password = body.password;
+        this.services.users.login(userName, password, (error, tokenDescriptor) => {
+            this.sendJson(response, {
+                token: tokenDescriptor.token
+            });
+        });
+    }
 
+    close(request, response) {
+
+    }
+
+    _openUserSession(userName, password, callback) {
+        this.services.tokens.login(userName, password, (error, token) => {
+            if (error) {
+
+            }
+        });
     }
 }
