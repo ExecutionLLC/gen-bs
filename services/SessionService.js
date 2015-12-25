@@ -16,6 +16,7 @@ const OPERATION_TYPES = {
 class SessionService extends ServiceBase {
     constructor(services) {
         super(services);
+
         this.sessions = {};
     }
 
@@ -59,16 +60,40 @@ class SessionService extends ServiceBase {
      * There should be only few active demo sessions at one time.
      * */
     startDemo(callback) {
-        this._createSession(null, callback);
+        this.services.users.findDemoUser((error, demoUser) => {
+            if (error) {
+                callback(error);
+            } else {
+                this._createSession(null, demoUser.id, (error, session) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, session.id);
+                    }
+                });
+            }
+        });
     }
 
     findById(sessionId, callback) {
+        // TODO: Do dead sessions cleanup here.
         const session = this.sessions[sessionId];
         if (session) {
             callback(null, session.id);
         } else {
             callback(new Error('Session is not found.'));
         }
+    }
+
+    findSessionUserId(sessionId, callback) {
+        this.findById(sessionId, (error, sessionId) => {
+            if (error) {
+                callback(error);
+            } else {
+                const session = this.sessions[sessionId];
+                callback(null, session.userId);
+            }
+        })
     }
 
     /**
@@ -128,6 +153,26 @@ class SessionService extends ServiceBase {
         }
     }
 
+    /**
+     * Returns all session ids.
+     * */
+    findAll(callback) {
+        const sessionIds = _.keys(this.sessions);
+        callback(null, sessionIds);
+    }
+
+    findOperationIds(sessionId, callback) {
+       this.findById(sessionId, (error, sessionId) => {
+           if (error) {
+               callback(error);
+           } else {
+               const session = this.sessions[sessionId];
+               const operationIds = _.keys(session.operations);
+               callback(null, operationIds);
+           }
+       });
+    }
+
     _deleteSearchOperationIfAny(session, callback) {
         const operationId = _.findKey(session.operations, {type: OPERATION_TYPES.SEARCH});
         if (operationId) {
@@ -156,7 +201,6 @@ class SessionService extends ServiceBase {
     }
 
     _createSession(token, userId, callback) {
-        // TODO: Do dead sessions cleanup here.
         const sessionId = Uuid.v4();
         const session = {
             id: sessionId,

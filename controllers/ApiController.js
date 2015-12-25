@@ -14,20 +14,39 @@ class ApiController extends ControllerBase {
     }
 
     _initUserMiddleware(request, reponse, next) {
-        const sessionHeaderName = this.services.config.applicationServer.sessionHeader;
+        const sessionHeaderName = this.services.config.sessionHeader;
+        const sessions = this.services.sessions;
 
-        const session = request.get(sessionHeaderName);
-        this.services.users.findByToken(token, (error, user) => {
-            if (error) {
-                next(error);
-            } else if (user) {
-                request.user = user;
-                next();
-            } else {
-                // TODO: load demo user here if there is no token.
-                next(new Error('User is not found by token'));
-            }
-        });
+        const setUserBySessionFunc = (sessionId) => {
+            sessions.findSessionUserId(sessionId, (error, userId) => {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    this.services.users.find(userId, (error, user) => {
+                        if (error) {
+                            next(new Error(error));
+                        } else {
+                            request.user = user;
+                            next();
+                        }
+                    });
+                }
+            });
+        };
+
+        const sessionId = request.get(sessionHeaderName);
+        if (sessionId) {
+            setUserBySessionFunc(sessionId);
+        } else {
+            console.error('Automatically open demo session for testing');
+            sessions.startDemo((error, sessionId) => {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    setUserBySessionFunc(sessionId);
+                }
+            });
+        }
     }
 
     createRouter(controllersFacade) {

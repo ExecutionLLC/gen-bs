@@ -56,3 +56,5 @@ class TokenService extends ServiceBase {
         callback(null, tokenDescriptor.token);
     }
 }
+
+module.exports = TokenService;

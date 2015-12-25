@@ -158,16 +158,21 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _requestOperationState(operationId, callback) {
-        this.rpcSend(operationId, 'v1.get_session_state', {session_id: operationId}, callback);
+        this._rpcSend(operationId, 'v1.get_session_state', {session_id: operationId}, callback);
     }
 
     _requestOperations() {
         console.log('Requesting operations...');
-        const sessions = this.services.sessionService.sessions;
-        _.each(sessions, (session) => {
-            _.each(session, (operation, operationId) => {
-                this._requestOperationState(operationId, (err, res) => {
-                    console.log('Requesting operation ' + res);
+        this.services.sessions.findAll((error, sessionIds) => {
+            _.each(sessionIds, sessionId => {
+                this.services.sessions.findOperationIds(sessionId, (error, operationIds) => {
+                    _.each(operationIds, operationId => {
+                        this._requestOperationState(operationId, (error) => {
+                            if (error) {
+                                console.error('Error requesting operation state: ' + error);
+                            }
+                        });
+                    });
                 });
             });
         });

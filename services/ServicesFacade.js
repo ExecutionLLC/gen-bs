@@ -18,7 +18,7 @@ class ServiceFacade {
     this.filters = new FiltersService(this, models);
     this.users = new UsersService(this, models);
     this.samples = new SamplesService(this, models);
-    this.sessionService = new SessionService(this, models);
+    this.sessions = new SessionService(this, models);
     this.wsService = new WSService(this, models);
     this.applicationServer = new ApplicationServerService(this, models);
     this.fieldsMetadata = new FieldsMetadataService(this, models);
