@@ -58,13 +58,13 @@ class SessionService extends ServiceBase {
      * Starts demo user session.
      * There should be only few active demo sessions at one time.
      * */
-    start(callback) {
+    startDemo(callback) {
         this._createSession(null, callback);
     }
 
-    findById(sessionId, userId, callback) {
+    findById(sessionId, callback) {
         const session = this.sessions[sessionId];
-        if (session && session.userId === userId) {
+        if (session) {
             callback(null, session.id);
         } else {
             callback(new Error('Session is not found.'));
@@ -113,6 +113,21 @@ class SessionService extends ServiceBase {
         });
     }
 
+    destroySession(sessionId, callback) {
+        const sessionDescriptor = this.sessions[sessionId];
+        if (!sessionDescriptor) {
+            callback(new Error('Session is not found'));
+        } else {
+            // Destroy the local session information.
+            delete this.sessions[sessionId];
+
+            if (sessionDescriptor.token) {
+                // Destroy the associated user token without processing errors.
+                this.services.tokens.logout(sessionDescriptor.token, callback);
+            }
+        }
+    }
+
     _deleteSearchOperationIfAny(session, callback) {
         const operationId = _.findKey(session.operations, {type: OPERATION_TYPES.SEARCH});
         if (operationId) {
@@ -153,24 +168,6 @@ class SessionService extends ServiceBase {
 
         this.sessions[sessionId] = session;
         callback(null, session);
-    }
-
-    _destroySession(sessionId, callback) {
-        const sessionDescriptor = this.sessions[sessionId];
-
-        if (sessionDescriptor.token) {
-            // Destroy the associated user token without processing errors.
-            this.services.tokens.logout(sessionDescriptor.token, (error) => {
-                if (error) {
-                    console.error('Error logging out token: %s', error);
-                }
-            });
-        }
-
-        // Destroy the local session information.
-        delete this.sessions[sessionId];
-
-        callback(null);
     }
 }
 

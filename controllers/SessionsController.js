@@ -1,5 +1,7 @@
 'use strict';
 
+const Express = require('express');
+
 const ControllerBase = require('./ControllerBase');
 
 class SessionsController extends ControllerBase {
@@ -15,37 +17,62 @@ class SessionsController extends ControllerBase {
         const userName = body.userName;
         const password = body.password;
 
-        if (userName && password) {
-            this._openUserSession(userName, password, (error, sessionId) => {
-                if (error) {
+        const createSessionCallback = (error, sessionId) => {
+            if (error) {
+                this.sendInternalError(response, error);
+            } else {
+                this.sendJson(response, {
+                    sessionId: sessionId
+                });
+            }
+        };
 
-                }
-            });
+        if (userName && password) {
+            this.services.sessions.startForUser(userName, password, createSessionCallback);
         } else {
             // open demo session
+            this.services.sessions.startDemo(createSessionCallback);
         }
     }
 
     check(request, response) {
-        const body = this.getRequestBody(request);
-        const userName = body.userName;
-        const password = body.password;
-        this.services.users.login(userName, password, (error, tokenDescriptor) => {
-            this.sendJson(response, {
-                token: tokenDescriptor.token
-            });
-        });
+        const sessionId = this._getSessionId(request);
+
+        this.services.sessions.findById(sessionId, (error, sessionId) => {
+            if (error) {
+                this.sendInternalError(response, error);
+            } else {
+                this.sendJson(response, {
+                    sessionId: sessionId
+                });
+            }
+        })
     }
 
     close(request, response) {
-
-    }
-
-    _openUserSession(userName, password, callback) {
-        this.services.tokens.login(userName, password, (error, token) => {
+        const sessionId = this._getSessionId(request);
+        this.services.sessions.destroySession(sessionId, (error) => {
             if (error) {
-
+                this.sendInternalError(response, error);
+            } else {
+                this.sendJson(response, {});
             }
         });
     }
+
+    _getSessionId(request) {
+        return request.get(this.services.config.sessionHeaderName);
+    }
+
+    createRouter() {
+        const router = new Express();
+
+        router.post('/', this.open);
+        router.put('/', this.check);
+        router.delete('/', this.close);
+
+        return router;
+    }
 }
+
+module.exports = SessionsController;
