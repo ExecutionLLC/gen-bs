@@ -8,8 +8,8 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, sessionId, viewId, filterIds, globalSearchValue, fieldSearchValues, callback) {
-        // Check that session id is valid.
-        this.services.sessions.findById(sessionId, (error) => {
+        // Check that session id is valid and belongs to the specified user.
+        this.services.sessions.findById(sessionId, user.id, (error) => {
             if (error) {
                 callback(error);
             } else {
@@ -40,7 +40,7 @@ class SearchService extends ServiceBase {
                                     });
                                 });
                             }
-                        })
+                        });
                     }
                 });
             }
@@ -49,12 +49,29 @@ class SearchService extends ServiceBase {
 
     searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, callback) {
         const sessions = this.services.sessions;
-        sessions.checkOperationType(sessionId, operationId, sessions.operationTypes().SEARCH, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.services.applicationServer.asdasdasd
-            }
+        sessions.findById(sessionId, user.id, (error) => {
+           if (error) {
+               callback(error);
+           } else {
+               sessions.checkOperationType(sessionId, operationId, sessions.operationTypes().SEARCH, (error) => {
+                   if (error) {
+                       callback(error);
+                   } else {
+                       const params = {
+                           globalSearchValue: globalSearchValue,
+                           fieldSearchValues: fieldSearchValues
+                       };
+
+                       this.services.applicationServer.requestSearchInResults(operationId, params, (error) => {
+                           if (error) {
+                               callback(error);
+                           } else {
+                               callback(null, operationId);
+                           }
+                       });
+                   }
+               });
+           }
         });
     }
 }

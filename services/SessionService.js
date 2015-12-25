@@ -53,9 +53,9 @@ class SessionService extends ServiceBase {
         this._createSession(null, callback);
     }
 
-    findById(sessionId, callback) {
+    findById(sessionId, userId, callback) {
         const session = this.sessions[sessionId];
-        if (session) {
+        if (session && session.userId === userId) {
             callback(null, session.id);
         } else {
             callback(new Error('Session is not found.'));
