@@ -18,7 +18,12 @@ function fillTableHead(labels) {
   head.push('<thead><tr>');
 
   labels.map( (label) => {
-    head.push(`<th data-label="${label}">${label}</th>`);
+    head.push(
+        `<th data-label="${label}">
+          ${label.charAt(0).toUpperCase() + label.slice(1)}
+          <button class="btn btn-default btnSort"></button>
+          <div><input type=""></div>
+        </th>`);
   })
   head.push('</tr></thead>');
   return head.join('');
