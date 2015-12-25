@@ -96,12 +96,12 @@ table.dataTable thead .sorting_desc_disabled:after {
   right: 8px;
   display: block;
   font-family: 'FontAwesome';
-  opacity: 0.5;
+  opacity: 0.8;
   font-weight: normal;
   font-size: 12px;
 }
 table.dataTable thead .sorting:after {
-  opacity: 0.2;
+  opacity: 0;
   content: "\f0ec";
   .rotate(-90deg);
   margin: -38px -38px 0 0;
@@ -145,7 +145,7 @@ div.dataTables_scrollFoot table {
   border-top: none;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: @screen-xs-max) {
   div.dataTables_wrapper div.dataTables_length,
   div.dataTables_wrapper div.dataTables_filter,
   div.dataTables_wrapper div.dataTables_info,

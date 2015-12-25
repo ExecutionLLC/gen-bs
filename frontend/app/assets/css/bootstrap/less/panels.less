@@ -9,7 +9,6 @@
   background-color: @panel-bg;
   //border: 1px solid transparent;
   border-radius: @panel-border-radius;
-  .box-shadow(0 1px 1px rgba(0,0,0,.05));
 }
 
 // Panel contents
@@ -228,7 +227,7 @@
     border-radius: @panel-border-radius;
 
     + .panel {
-      margin-top: 5px;
+      margin-top: 2px;
     }
   }
 
@@ -315,12 +314,9 @@
 //custom
 
 .drop-area { 
-  margin: 0 0 @line-height-computed;
-  border-radius: (@panel-border-radius*2);
-  border-width: 2px;
-  border-style: dashed;
   background: #fff;
-  border-color: @gray-lighter;
+  border-bottom: solid 2px #e5e5e5;
+  margin: 0 0 @line-height-computed;
   padding: @padding-base-vertical @padding-base-horizontal;
   text-align: center;
   > div { 

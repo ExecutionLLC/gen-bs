@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="filter"  role="dialog" aria-labelledby="filterLabel">
   <div class="modal-dialog modal-dialog-primary modal-lg" role="document">
     <div class="modal-content">
@@ -8,13 +7,14 @@
        <h4 class="modal-title">Setup Filters</h4>
       </div>
       <div class="modal-body">
+        <div class="alert alert-help">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</div>
          <div class="collapse in copyfilter" id="newfilterField">
            <div class="row grid-toolbar">
             <div class="col-sm-6">
               <label>Available Filters</label>
             </div>
           </div>
-           <div class="alert alert-help">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</div>
+           
            <div class="row grid-toolbar">
              <div class="col-sm-6">
               <select class="select2" id="filterSelector">
@@ -41,24 +41,22 @@
                    
               </div>
            </div>
-          
          </div>
          <div class="collapse copyfilter" id="copyfilterField"> 
            
             
            <div class="row grid-toolbar">
              <div class="col-sm-6"> 
-                  <label>New Filter</label>  
+               <label>New Filter</label>  
                <input value="Copy of Eye Cancer Diagnostics" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
             </div>
-<div class="col-sm-5">
-   <label>Description</label>
-<input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
-</div>
-<div class="col-sm-1">
-  
-<button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent">Cancel</button>
-  </div>
+            <div class="col-sm-5">
+               <label>Description</label>
+            <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
+            </div>
+            <div class="col-sm-1">
+               <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent">Cancel</button>
+            </div>
              
           </div>
             <div class="help-text text-danger">Name can not be empty</div>
@@ -72,13 +70,13 @@
 		<dt class="rules-group-header">
 		 
 		<div class="btn-group pull-right group-actions">
-			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="fa fa-plus"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-lg fa-plus-circle"></i> Add group </button>
+			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button>
 		</div>
 		<div class="btn-group group-conditions">
 			<label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_0_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_0_cond" value="OR"> OR </label>
 		</div>
 		<div class="error-container" data-toggle="tooltip">
-			<i class="glyphicon glyphicon-warning-sign"></i>
+			<i class="fa fa-warning"></i>
 		</div>
 		</dt>
 		<dd class="rules-group-body">
@@ -86,14 +84,14 @@
 			<li id="builder-basic_rule_0" class="rule-container">
 			<div class="rule-header">
 				<div class="btn-group pull-right rule-actions">
-					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
 				</div>
 			</div>
 			<div class="error-container">
-				<i class="glyphicon glyphicon-warning-sign"></i>
+				<i class="fa fa-warning"></i>
 			</div>
 			<div class="rule-filter-container">
-				<select class="selectTree" disabled="">
+				<select class="selectTree">
   			<optgroup label="General">	
           <option>View</option>
           <option>Chromosome</option>
@@ -165,7 +163,7 @@
 </select>
 			</div>
 			<div class="rule-operator-container">
-				<select class="form-control select2" name="builder-basic_rule_0_operator" disabled="">
+				<select class="form-control select2" name="builder-basic_rule_0_operator">
 					<option value="equal">equal</option>
 					<option value="not_equal">not equal</option>
 					<option value="in">in</option>
@@ -181,17 +179,33 @@
 				</select>
 			</div>
 			<div class="rule-value-container">
-				<input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0" disabled="">
+				<select class="select2 form-control">
+  				<option>
+  				 Value1
+  				</option>
+  				<option>
+  				 Value2
+  				</option>
+  				<option>
+  				 Value3
+  				</option>
+  				<option>
+  				 Value4
+  				</option>
+  				<option>
+  				 Value5
+  				</option>
+				</select>
 			</div>
 			</li>
 			<li id="builder-basic_rule_0" class="rule-container">
 			<div class="rule-header">
 				<div class="btn-group pull-right rule-actions">
-					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
 				</div>
 			</div>
 			<div class="error-container">
-				<i class="glyphicon glyphicon-warning-sign"></i>
+				<i class="fa fa-warning"></i>
 			</div>
 			<div class="rule-filter-container">
 				<select class="selectTree" >
@@ -275,24 +289,24 @@
 					<option value="less_or_equal">less or equal</option>
 					<option value="greater">greater</option>
 					<option value="greater_or_equal">greater or equal</option>
-					<option value="between">between</option>
+					<option value="between" selected>between</option>
 					<option value="not_between">not between</option>
 					<option value="is_null">is null</option>
 					<option value="is_not_null">is not null</option>
 				</select>
 			</div>
 			<div class="rule-value-container">
-				<input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0">
+				<input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0">, <input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0">
 			</div>
 			</li>
 			<li id="builder-basic_rule_0" class="rule-container">
 			<div class="rule-header">
 				<div class="btn-group pull-right rule-actions">
-					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
 				</div>
 			</div>
 			<div class="error-container">
-				<i class="glyphicon glyphicon-warning-sign"></i>
+				<i class="fa fa-warning"></i>
 			</div>
 			<div class="rule-filter-container">
 				<select class="selectTree" >
@@ -329,22 +343,22 @@
   			</optgroup>
   			<optgroup label="Variant Functional Score">
   			  <option>SIFT</option>
-<option>SIFT Prediction</option>
-<option>PolyPhen 2</option>
-<option>PolyPhen 2 Prediction</option>
-<option>LRT</option>
-<option>LRT Prediction</option>
-<option>MutationTaster</option>
-<option>MutationTaster Prediction</option>
-<option>MutationAssessor</option>
-<option>MutationAssessor Prediction</option>
-<option>FATHMM</option>
-<option>FATHMM Prediction</option>
-<option>Tute Variant Score</option>
-<option>Tute Prediction</option>
-<option>GERP++</option>
-<option>PhyloP</option>
-<option>SiPhy</option>
+          <option>SIFT Prediction</option>
+          <option>PolyPhen 2</option>
+          <option>PolyPhen 2 Prediction</option>
+          <option>LRT</option>
+          <option>LRT Prediction</option>
+          <option>MutationTaster</option>
+          <option>MutationTaster Prediction</option>
+          <option>MutationAssessor</option>
+          <option>MutationAssessor Prediction</option>
+          <option>FATHMM</option>
+          <option>FATHMM Prediction</option>
+          <option>Tute Variant Score</option>
+          <option>Tute Prediction</option>
+          <option>GERP++</option>
+          <option>PhyloP</option>
+          <option>SiPhy</option>
   			</optgroup>
   			<optgroup label="Known Disease Association">
   	
@@ -372,7 +386,7 @@
 			<div class="rule-operator-container">
 				<select class="form-control select2" name="builder-basic_rule_0_operator">
 					<option value="equal">equal</option>
-					<option value="not_equal">not equal</option>
+					<option value="not_equal" selected>not equal</option>
 					<option value="in">in</option>
 					<option value="not_in">not in</option>
 					<option value="less">less</option>
@@ -380,7 +394,7 @@
 					<option value="greater">greater</option>
 					<option value="greater_or_equal">greater or equal</option>
 					<option value="between">between</option>
-					<option value="not_between" selected>not between</option>
+					<option value="not_between">not between</option>
 					<option value="is_null">is null</option>
 					<option value="is_not_null">is not null</option>
 				</select>
@@ -392,11 +406,11 @@
 				<li id="builder-basic_rule_0" class="rule-container">
 			<div class="rule-header">
 				<div class="btn-group pull-right rule-actions">
-					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
 				</div>
 			</div>
 			<div class="error-container">
-				<i class="glyphicon glyphicon-warning-sign"></i>
+				<i class="fa fa-warning"></i>
 			</div>
 			<div class="rule-filter-container">
 				<select class="selectTree" >
@@ -487,7 +501,19 @@
 				</select>
 			</div>
 			<div class="rule-value-container">
-				<input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0">
+				<select class="select2">
+  				<option>1</option>
+  				<option>2</option>
+  				<option>3</option>
+  				<option>4</option>
+				</select>, 
+				
+				<select class="select2">
+  				<option>1</option>
+  				<option>2</option>
+  				<option>3</option>
+  				<option>4</option>
+				</select>
 			</div>
 			</li>
 		</ul>
@@ -498,6 +524,17 @@
   </div>
           </div> 
          <div class="alert alert-help">Lock filter options not available with selected sample</div>
+        <div class="alert alert-danger">
+          <button type="button" class="close hidden" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <div class="btn-group pull-right ">
+            <a class="btn btn-danger" href="">Delete</a></div>
+          <div class="btn-group pull-right">
+            <a class="btn btn-default" href="">Cancel</a>
+          </div>
+          Are you sure you want to delete this filter?  It can not recover.
+       </div>
      </div>
       <div class="modal-footer">
         <div class="btn-group pull-left">
