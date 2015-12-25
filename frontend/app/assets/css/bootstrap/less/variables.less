@@ -86,12 +86,12 @@
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
 @padding-base-vertical:     8px;
-@padding-base-horizontal:   13px;
+@padding-base-horizontal:   12px;
 
 @padding-large-vertical:    10px;
 @padding-large-horizontal:  16px;
 
-@padding-small-vertical:    5px;
+@padding-small-vertical:    6px;
 @padding-small-horizontal:  9px;
 
 @padding-xs-vertical:       1px;
@@ -515,11 +515,16 @@
 @tooltip-bg:                  #3b444c;
 @tooltip-opacity:             1;
 
+
+
 //** Tooltip arrow width
 @tooltip-arrow-width:         5px;
 //** Tooltip arrow color
 @tooltip-arrow-color:         @tooltip-bg;
 
+//color tooltip
+@tooltip-warning-bg:          @brand-warning;
+@tooltip-warning-color:       #fff;
 
 //== Popovers
 //
@@ -615,29 +620,29 @@
 @alert-border-radius:         @border-radius-base;
 @alert-link-font-weight:      bold;
 
-@alert-success-bg:            #fff;
+@alert-success-bg:            transparent;
 @alert-success-text:          @state-success-text;
 @alert-success-border:        @brand-success;
 @alert-success-state-icon:    "\f00c"; 
 
-@alert-info-bg:               #fff;
+@alert-info-bg:               transparent;
 @alert-info-text:             @state-info-text;
 @alert-info-border:           @brand-info;
 @alert-info-state-icon:       "\f059"; 
 
-@alert-warning-bg:            #fff;
+@alert-warning-bg:            transparent;
 @alert-warning-text:          @state-warning-text;
 @alert-warning-border:        @brand-warning;
 @alert-warning-state-icon:    "\f071"; 
 
-@alert-danger-bg:            #fff;
+@alert-danger-bg:             transparent;
 @alert-danger-text:           @state-danger-text;
 @alert-danger-border:        @brand-danger;
 @alert-danger-state-icon:   "\f05e";
 
-@alert-inverse-bg:          fade(#000, 70%);
-@alert-inverse-border:      fade(#000, 70%);
-@alert-inverse-text:        @gray-lighter;
+@alert-inverse-bg:           fade(#000, 70%);
+@alert-inverse-border:       fade(#000, 70%);
+@alert-inverse-text:         @gray-lighter;
 @alert-inverse-state-icon:     "\f05a";
 
 @alert-help-bg:                transparent;
@@ -888,7 +893,7 @@
 @width-wrapper-main-min: 100%;
 
 //sidebar
-@sidebar-default-bg:  #f6f6f6;
+@sidebar-default-bg:  #f9f9f9;
 @sidebar-default-color: @text-color; 
 
 @sidebar-inverse-bg:  #454548;

@@ -18,6 +18,7 @@
 </head>
 <body class="sidebar-left-closed sidebar-right-closed subnav-closed">
 
+<div class="loader hidden"></div>
     <div class="sidebar sidebar-default sidebar-left collapse width" id="sidebarLeft">
     
     
@@ -30,21 +31,20 @@
           <div class="sidebar-wrap">
           <div class="sidebar-scroll sidebar-filter">
          
-         
-         
-            <section>
-           <h5>
-           <div class="btn-group pull-right">
-            <a href="#" class="btn btn-warning btn-block" data-toggle="modal" type="button" data-target="#upload">Upload</a>
-           </div>
+         <section>
+          <div class="btn-group btn-block">
+                <a data-target="#upload" type="button" data-toggle="modal" class="btn btn-warning btn-block" href="#">Upload sample</a>
+               </div>
+         </section>
+          <section>
+         <h5>
              Choose sample  <a class="btn btn-link" type="button" data-toggle="tooltip"data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples"><i class="fa fa-info-circle text-muted"></i></a>
           </h5>
-           
-          
-          
          
+           
+           
          <div class="btn-group btn-group-select2-wrap">
-         <select class="sample-select-ajax">
+         <select class="sample-search">
          <option value="3620194" selected="selected">mental retardation patient12</option>
          </select> 
          </div>
@@ -53,17 +53,27 @@
         
               </section>
             <section>
-         <h5>
-           <div class="btn-group pull-right">
-            <button class="btn btn-dark-default" data-toggle="modal" data-target="#filter">
-              Setup
-            </button>
+            <h5>
       
-           </div>
-           Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
-           </h5>
            
-    
+             <div class="btn-group dropdown pull-right">
+              <button class="btn btn-default dropdown-toggle caret-abs-pos" type="button" data-toggle="dropdown"><i class="fa fa-cog"></i> <span class="caret"></a></button>
+              <ul class="dropdown-menu">
+              <li> 
+              <a data-toggle="modal" data-target="#filter" href="#">
+               Setup filter
+              </a>
+            </li>
+            <li>
+              <a data-toggle="modal" data-target="#combinefilter" href="#">
+                Combine filter
+              </a>
+            </li>
+          </ul>
+            </div>
+             
+             Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
+           </h5>
               
             <div class="btn-group btn-group-select2-wrap">
            <select class="select2" multiple="">
@@ -82,9 +92,10 @@
             <section>
          <h5>
            <div class="btn-group pull-right">
-          <button class="btn btn-dark-default" type="button" data-toggle="modal" data-target="#selectColumns">Setup</button>
-         </div>
-           Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a> </h5>
+            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns"><i class="fa fa-cog"></i></button>
+          </div>
+           Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a>
+             </h5>
       
                
             
@@ -102,10 +113,9 @@
             </div>  
          </section>
             <section>      
-    
               <button class="btn btn-block btn-primary" type="button">
-             Analyze
-          </button>
+              Analyze
+             </button>
             
     
          </section>
@@ -117,7 +127,7 @@
         
           </section>
            <section>
-             <hr>
+            
            <small>Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited</small>
            
          </section>
@@ -168,13 +178,13 @@
                <label>Login</label>
                
                  <input type="text" class="form-control">
-                 <div class="help-text hidden">No this login</div>
+                 <div class="help-text text-danger hidden">No this login</div>
                  </div>
                  <div class="form-group has-feedback">
                <label>Password</label>
      
                <input type="password" class="form-control">
-             <div class="help-text hidden">No this login</div>
+             <div class="help-text text-danger hidden">No this login</div>
     
                
              </div>
@@ -186,11 +196,13 @@
                 <!-- <button class="btn btn-block btn-openid"></button> -->
                  </div>
                 <hr>
-    <div class="form-group">
+             <div class="form-group">
                   If you do not already have an account <a class="btb btn-link" href="">register for free</a>
                  </div>
     
-             
+                <div class="form-group">
+                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                 </div>
               </form> 
             </div>
         <div role="tabpanel" class="tab-pane" id="register">  
@@ -199,8 +211,8 @@
                  <div class="form-group has-feedback">
                <label>Email</label>
                
-                 <input type="email" class="form-control">
-                   <div class="help-text hidden">Error</div>
+                  <input type="email" class="form-control">
+                  <div class="help-text text-danger hidden">Error</div>
                  </div>
                  <div class="form-group">
                  <button type="button" class="btn btn-block btn-primary" id="btnLogin">Sign up for free</button>
@@ -214,8 +226,10 @@
                 <div class="form-group">
                    Already have an account?<a href="" class="btb btn-link"> Sign in</a>
                  </div> 
-    
-              </form> 
+                 <div class="form-group">
+                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                 </div>
+                </form> 
                 </div>
       </div>
     
@@ -240,7 +254,7 @@
               </d>
             </dl> 
     
-            <dl>
+               <dl>
               <dt>
                Specialization: 
               </dt>
@@ -248,31 +262,40 @@
                 Doctor
               </d>
             </dl> 
-            <dl>
-              <dt>
-               Balance: 
-              </dt>
-              <dd>
-             <a href="">789 Queries Left</a>
-              </d>
-            </dl>
-      		  <dl>
+              
+               <dl>
               <dt>
                Language: 
               </dt>
               <dd>
                English
               </dd>
-            </dl>
-           
-            
-       
+            </dl>         
+               <dl>
+              <dt>
+               Balance: 
+              </dt>
+                 <!--if paid sample analises, not a zero balance -->
+              <dd>
+                 <span  class="text-success">789 paid analises left</span>
+                 <!--  If zero balance  -->
+                 <span  class="text-warning hidden">0 paid analises left</span>
+              </dd>
+              </dl>
+              
+              <!--  If no paid options, to use remove class hidden  -->
+                 <p class="hidden">
+                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                 </p>
+            <!--if paid sample analises, zero balance, to use remove classes hidden  -->
+                  <p class="hidden">
+                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy">Buy access to continue to use the advanced features of App Genomix</a>
+                  </p>
+              
                 </div>
                   <div class="user-view hidden">
                 
                <form>
-      
-            
                 <div class="form-group has-feedback">
                   <label>Name</label>
                  <input type="text" class="form-control">
@@ -282,27 +305,26 @@
                  <label>Last Name</label>
      
                  <input type="text" class="form-control">
-                 <div class="help-text hidden">No this login</div>
-               
-             </div>
+                 <div class="help-text hidden">No this login</div>           
+                </div>
                  <div class="form-group has-feedback">
                  <label>Email</label>
      
-                 <input type="email" class="form-control">
+                 <input type="email" class="form-control" value="user@domain.com">
                  <div class="help-text hidden">No this login</div>
                
-             </div>
+                 </div>
                  <div class="form-group has-feedback">
                  <label>Specialization</label>
      
                  <input type="text" class="form-control">
                  <div class="help-text hidden">No this login</div>
                
-             </div>
+                </div>
                  <div class="form-group has-feedback">
                  <label>Language</label>
-     <div class="select-wrap">
-                 <select class="select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+                 <div class="select-wrap">
+                  <select class="select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                    <option>
                     English
                    </option>
@@ -311,7 +333,7 @@
                    </option>
     
                  </select>
-     </div>
+                 </div>
                  <div class="help-text hidden">No this login</div>
                
              </div>
@@ -323,97 +345,100 @@
                   <button class="btn btn-block  btn-primary usrViewActBtn" type="button">Save</button>
                    </div>
              </div>
+                 
+                 
+                 
               </form> 
+               
               </div>
              </div>
-        </div>
+            </div>
               <div class="panel panel-default">
                <div class="panel-heading">
                <h4 class="panel-title"> <a href="">Latest Paid Analises</a></h4>
                </div>
-               <ul class="list-group">
-                 <li>
-      <div class="list-group-item">
-        <h5 class="list-group-item-heading">#456</h5>
-        <ul class="list-unstyled">
-            
-            <li>
-              <strong>
-               Gender: 
-              </strong>
-              <span>
-               Male
-              </span>
-            </li>
-      		<li>
-              <strong>
-               Phenotype: 
-              </strong>
-              <span>
-               11p partial monosomy syndrome
-              </span>
-            </li>
-            <li>
-              <strong>           Sample:            </strong>
-              <span>            ATCC HCC1187 TumorBL</span>
-            </li>
-    <li>
-    <strong>
-              Description: 
-              </strong>
-       <span>
-               Custom text
-              </span>
-    </li>
-            
-        </ul>
-        
-      </div>
-                 
-    </li>
-    <li>
-      <div class="list-group-item">
-        <h5 class="list-group-item-heading">#56</h5>
-        <ul class="list-unstyled">
-            
-            <li>
-              <strong>
-               Gender: 
-              </strong>
-              <span>
-               Male
-              </span>
-            </li>
-      		<li>
-              <strong>
-               Phenotype: 
-              </strong>
-              <span>
-               11p partial monosomy syndrome
-              </span>
-            </li>
-            <li>
-              <strong>           Sample:            </strong>
-              <span>       iha1           </span>
-            </li>
-    <li>
-    <strong>
-              Description: 
-              </strong>
-       <span>
-               Custom text
-              </span>
-    </li>
-            
-        </ul>
-        
-      </div>
-                 
-    </li>
-               </ul>
+                     
+                 <!----- samples -->
+                <div class="flex">
+               <dl>
+                <dt>Name</dt>
+                <dd>Ogden syndrome</dd>
+              </dl>
+               <dl>
+                <dt>Versia</dt>
+                <dd>V.1.6</dd>
+               </dl>
+               <dl>
+                <dt>Size</dt>
+                <dd>56 KB</dd>
+               </dl>
+               <dl>
+                <dt>Datetime</dt>
+                <dd><a href="">02.12.2015 21:32:21</a></dd>
+               </dl> 
+            </div>
+                <div class="flex">
+               <dl>
+                <dt>Name</dt>
+                <dd>Ogden syndrome</dd>
+              </dl>
+               <dl>
+                <dt>Versia</dt>
+                <dd>V.1.6</dd>
+               </dl>
+               <dl>
+                <dt>Size</dt>
+                <dd>56 KB</dd>
+               </dl>
+               <dl>
+                <dt>Analized</dt>
+                <dd><a href="">02.12.2015 21:32:21</a></dd>
+               </dl> 
+            </div>
+                <div class="flex">
+               <dl>
+                <dt>Name</dt>
+                <dd>Ogden syndrome</dd>
+              </dl>
+               <dl>
+                <dt>Versia</dt>
+                <dd>V.1.6</dd>
+               </dl>
+               <dl>
+                <dt>Size</dt>
+                <dd>56 KB</dd>
+               </dl>
+               <dl>
+                <dt>Analized</dt>
+                <dd><a href="">02.12.2015 21:32:21</a></dd>
+               </dl> 
+            </div>
+                <div class="flex">
+               <dl>
+                <dt>Name</dt>
+                <dd>Ogden syndrome</dd>
+              </dl>
+               <dl>
+                <dt>Versia</dt>
+                <dd>V.1.6</dd>
+               </dl>
+               <dl>
+                <dt>Size</dt>
+                <dd>56 KB</dd>
+               </dl>
+               <dl>
+                <dt>Analized</dt>
+                <dd><a href="">02.12.2015 21:32:21</a></dd>
+               </dl> 
+            </div>
+                
              </div>
-            
-           </div> 
+              <div class="panel panel-default">
+                  <div class="panel-body">
+                  <a class="btn btn-block btn-default" href="#">Logout</a>
+                  </div>
+                 </div>
+               </div> 
           </div>  
     </div>
     
@@ -431,9 +456,9 @@
                     
                         <div data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand" data-toggle="modal" data-target="#info">AGx<sup>i</sup></a></div>
                        
-                         <div class="visible-xs" data-toggle="tooltip" data-placement="right" title="Open sidebar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i class="fa fa-lg fa-filter"></i></a></div>
+                         <div class="visible-xs"><a type="button" href="#" class="btn navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i class="fa fa-lg fa-filter"></i></a></div>
                          
-                          <div class="dropdown hidden-xs" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i class="fa fa-lg fa-filter"></i></a></div>   
+                          <div class="hidden-xs" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i class="fa fa-lg fa-filter"></i></a></div>   
                         <!-- Need for reserve width for table search -->
                         <div class="width100"></div>
                         
@@ -448,22 +473,22 @@
                             </a>
                         
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                              <li><a id="header_dropdown_export_excel" href="#">MSExcel</a></li>
-                              <li><a href="#">CVS</a></li>
-                              <li><a href="#">SQL</a></li>            
-                              <li><a href="#">JSON</a></li>
-                              <li><a href="#">XML</a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename">MSExcel</a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename">CVS</a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename">SQL</a></li>            
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename">JSON</a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename">XML</a></li>
                             </ul>
                         
                         </div>
                         
                         </div>
-                         <div data-toggle="tooltip" data-placement="left" title="History of saved file" data-container="body" data-trigger="hover" class="hidden-xs">
-                         <button class="btn navbar-btn" data-toggle="modal" data-target="#exporthistory"><span class="hidden-xxs">Saved files</span><span class="visible-xxs"><i class="fa fa-lg fa-cloud"></i></span></button>       
+                         <div class="hidden-xxs" data-toggle="tooltip" data-placement="left" title="History of saved file" data-container="body" data-trigger="hover">
+                           <button class="btn navbar-btn" data-toggle="modal" data-target="#exporthistory">Saved files</button>       
                         </div>  
                     
                          <div data-toggle="tooltip" data-placement="left" title="Change interface language" data-container="body" data-trigger="hover">
-                         <div class="language dropdown" >
+                         <div class="dropdown language">
                              <a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="dropdown" role="button"><span class="visible-xs">Eng</span><span class="hidden-xs">English </span><span class="caret"></span></a>
                          
                              <ul class="dropdown-menu">
@@ -472,11 +497,11 @@
                              </ul>
                           </div>
                          </div> 
-                         <div data-toggle="tooltip" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs"><a href="#" class="btn navbar-btn dropdown-toggle" type="button" data-toggle="modal" data-target="#buy">Buy</a></div> 
-                         <div class="guest" data-toggle="tooltip" data-placement="left" title="Register or sigh for access to featured options" data-container="body" data-trigger="hover"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight" id="signInBtn"><span class="guest">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden">Name Lastname</span></a></div>
+                         <div data-toggle="tooltip" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs"><a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy">Buy</a></div> 
+                         <div data-toggle="tooltip" data-placement="left" title="Register or sigh for access to featured options" data-container="body" data-trigger="hover" class="hidden-xs hidden-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden">Name Lastname</span></a></div>
                          
                          
-                        </div>
+                         <div class="visible-xs visible-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight" ><span class="guest">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden">Name Lastname</span></a></div>    </div>
                      </nav>
                       
                        
@@ -549,13 +574,17 @@
                                              </div>           
                                        
                                              
-                                             <div class="table-cell">
-                                            <div class="btn-group btn-group-submit" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Analyze current sample with current filters and view">
-                                              <button class="btn btn-alt-primary" type="button">
+                                            <div class="table-cell">
+                                            <div class="btn-group btn-group-submit"
+                                              data-toggle="tooltip"
+                                              data-placement="bottom"
+                                              data-container="body"
+                                              title="Analyze current sample with current filters and view">  
+                                              <button class="btn btn-rounded btn-alt-primary" type="button">
                                                  Analyze
                                               </button>
-                                            </div>
-                                             </div>           
+                                             </div>
+                                            </div>           
                                              <div class="table-cell">
                                             <div class="btn-group btn-group-history"  data-toggle="tooltip" data-placement="bottom" data-container="body" title="History of queries, saved query settings">
                                                  <button data-target="#history" data-toggle="modal" type="button" class="btn btn-default"><span class="">Load history</span></button>
@@ -632,7 +661,7 @@
             <div class="collapse copyview">
             <div class="row grid-toolbar">
              <div class="col-sm-6">
-             <label>New Filter</label> 
+             <label>New View</label> 
              <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
               <div class="help-text text-danger">Name can not be empty</div>
                 
@@ -653,14 +682,14 @@
                  <h5>Table Columns</h5>
                 <div class="row grid-toolbar nobg">
                 
-                  <div class="col-sm-6"><small class="text-muted text-order">Order</small> <small class="text-muted">Column Name and Multi Sort Order</small></div>
+                  <div class="col-xs-6"><small class="text-muted text-order">Order</small> <small class="text-muted">Column Name and Multi Sort Order</small></div>
                  
-                  <div class="col-sm-6"><small class="text-muted">Column Filter and Keywords</small></div>
+                  <div class="col-xs-6"><small class="text-muted">Column Filter and Keywords</small></div>
                 </div>
                
                  <div class="row grid-toolbar level1">
                    
-                  <div class="col-sm-6 btn-group-select2">
+                  <div class="col-xs-6 btn-group-select2">
                     <div class="btn-group">
                       <button class="btn btn-link btnDrag" disabled="">
                         <span class="icon-bar"></span>
@@ -698,7 +727,7 @@
                     </div>   
                     
                     </div>
-                     <div class="col-sm-5 input-group">
+                     <div class="col-xs-5 input-group">
                       <span class="input-group-addon">
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
@@ -706,13 +735,13 @@
                       <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" readonly="">
                       </div>
                       
-                     <div class="col-sm-1">
+                     <div class="col-xs-1">
                        <button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button>
-                       
+                       <button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
                      </div>
                   </div>
                   <div class="row grid-toolbar level2">
-                  <div class="col-sm-6  btn-group-select2">
+                  <div class="col-xs-6  btn-group-select2">
                      <div class="btn-group">
                       <button class="btn btn-link btnDrag" disabled="">
                         <span class="icon-bar"></span>
@@ -751,7 +780,7 @@
                        <button type="button" class="btn btn-default btnSort active asc" disabled=""></button>
                     </div>
                       </div>
-                  <div class="col-sm-5 input-group">
+                  <div class="col-xs-5 input-group">
                       <span class="input-group-addon">
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
@@ -759,12 +788,12 @@
                       <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""readonly="">
                       </div>
                       
-                    <div class="col-sm-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button>
+                    <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
                        
                      </div>
                 </div>
                  <div class="row grid-toolbar">
-                  <div class="col-sm-6  btn-group-select2">
+                  <div class="col-xs-6  btn-group-select2">
                      <div class="btn-group">
                       <button class="btn btn-link btnDrag" disabled="">
                         <span class="icon-bar"></span>
@@ -801,7 +830,7 @@
                        <button type="button" class="btn btn-default btnSort" disabled=""></button>
                     </div>
                   </div>
-                  <div class="col-sm-5 input-group">
+                  <div class="col-xs-5 input-group">
                       <span class="input-group-addon">
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
@@ -809,12 +838,12 @@
                       <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
                       </div>
                       
-                    <div class="col-sm-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button>
+                    <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
                        
                      </div>
                 </div>
                   <div class="row grid-toolbar">
-                  <div class="col-sm-6 btn-group-select2">
+                  <div class="col-xs-6 btn-group-select2">
                      <div class="btn-group">
                       <button class="btn btn-link btnDrag" disabled="">
                         <span class="icon-bar"></span>
@@ -852,7 +881,7 @@
                     </div>
                   </div>
                    
-                  <div class="col-sm-5 input-group">
+                  <div class="col-xs-5 input-group">
                       <span class="input-group-addon">
                           <input type="checkbox" id="cCh1" disabled="">
                       </span>
@@ -860,7 +889,8 @@
                       <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="">
                       </div>
                       
-                    <div class="col-sm-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
+                    <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button>
+                      <button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
                        
                      </div>
                 </div>
@@ -869,14 +899,14 @@
                  <h5>Table Columns</h5>
                 <div class="row grid-toolbar nobg">
                 
-                  <div class="col-sm-6"><small class="text-muted text-order">Order</small> <small class="text-muted">Column Name and Multi Sort Order</small></div>
+                  <div class="col-xs-6"><small class="text-muted text-order">Order</small> <small class="text-muted">Column Name and Multi Sort Order</small></div>
                  
-                  <div class="col-sm-6"><small class="text-muted">Column Filter and Keywords</small></div>
+                  <div class="col-xs-6"><small class="text-muted">Column Filter and Keywords</small></div>
                 </div>
                
                  <div class="row grid-toolbar level1">
                    
-                  <div class="col-sm-6 btn-group-select2">
+                  <div class="col-xs-6 btn-group-select2">
                     <div class="btn-group">
                       <button class="btn btn-link btnDrag">
                         <span class="icon-bar"></span>
@@ -914,7 +944,7 @@
                     </div>   
                     
                     </div>
-                     <div class="col-sm-5 input-group">
+                     <div class="col-xs-5 input-group">
                       <span class="input-group-addon">
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
@@ -922,13 +952,13 @@
                       <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden">
                       </div>
                       
-                     <div class="col-sm-1">
-                       <button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button>
+                     <div class="col-xs-1">
+                       <button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
                        
                      </div>
                   </div>
                   <div class="row grid-toolbar level2">
-                  <div class="col-sm-6  btn-group-select2">
+                  <div class="col-xs-6  btn-group-select2">
                      <div class="btn-group">
                       <button class="btn btn-link btnDrag">
                         <span class="icon-bar"></span>
@@ -967,7 +997,7 @@
                        <button type="button" class="btn btn-default btnSort active asc"></button>
                     </div>
                       </div>
-                  <div class="col-sm-5 input-group">
+                  <div class="col-xs-5 input-group">
                       <span class="input-group-addon">
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
@@ -975,12 +1005,12 @@
                       <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
                       </div>
                       
-                    <div class="col-sm-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button>
+                    <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
                        
                      </div>
                 </div>
                  <div class="row grid-toolbar">
-                  <div class="col-sm-6  btn-group-select2">
+                  <div class="col-xs-6  btn-group-select2">
                      <div class="btn-group">
                       <button class="btn btn-link btnDrag">
                         <span class="icon-bar"></span>
@@ -1017,7 +1047,7 @@
                        <button type="button" class="btn btn-default btnSort"></button>
                     </div>
                   </div>
-                  <div class="col-sm-5 input-group">
+                  <div class="col-xs-5 input-group">
                       <span class="input-group-addon">
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
@@ -1025,12 +1055,12 @@
                       <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
                       </div>
                       
-                    <div class="col-sm-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button>
+                    <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
                        
                      </div>
                 </div>
                   <div class="row grid-toolbar">
-                  <div class="col-sm-6 btn-group-select2">
+                  <div class="col-xs-6 btn-group-select2">
                      <div class="btn-group">
                       <button class="btn btn-link btnDrag">
                         <span class="icon-bar"></span>
@@ -1068,7 +1098,7 @@
                     </div>
                   </div>
                    
-                  <div class="col-sm-5 input-group">
+                  <div class="col-xs-5 input-group">
                       <span class="input-group-addon">
                           <input type="checkbox" id="cCh1">
                       </span>
@@ -1076,7 +1106,7 @@
                       <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="">
                       </div>
                       
-                    <div class="col-sm-1"><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
+                    <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
                        
                      </div>
                 </div>
@@ -1090,7 +1120,7 @@
               <div class="btn-group pull-right">
                 <a class="btn btn-default" href="">Cancel</a>
               </div>
-              Are you sure you want to delete this view?
+              Are you sure you want to delete this view?  It can not recover.
            </div>
               <div class="alert alert-help">Add/remove by click plus and minus column new setting row. Drag row for set table column order. You can sort the same time only two fields. Set checkbox for available table column filert. Add keywords by substitution dictionary for download already filtered results</div>
             </div>
@@ -1102,7 +1132,6 @@
         </div>
       </div>
     </div>
-    
     <div class="modal fade" id="filter"  role="dialog" aria-labelledby="filterLabel">
       <div class="modal-dialog modal-dialog-primary modal-lg" role="document">
         <div class="modal-content">
@@ -1112,13 +1141,14 @@
            <h4 class="modal-title">Setup Filters</h4>
           </div>
           <div class="modal-body">
+            <div class="alert alert-help">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</div>
              <div class="collapse in copyfilter" id="newfilterField">
                <div class="row grid-toolbar">
                 <div class="col-sm-6">
                   <label>Available Filters</label>
                 </div>
               </div>
-               <div class="alert alert-help">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</div>
+               
                <div class="row grid-toolbar">
                  <div class="col-sm-6">
                   <select class="select2" id="filterSelector">
@@ -1145,24 +1175,22 @@
                        
                   </div>
                </div>
-              
              </div>
              <div class="collapse copyfilter" id="copyfilterField"> 
                
                 
                <div class="row grid-toolbar">
                  <div class="col-sm-6"> 
-                      <label>New Filter</label>  
+                   <label>New Filter</label>  
                    <input value="Copy of Eye Cancer Diagnostics" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
                 </div>
-    <div class="col-sm-5">
-       <label>Description</label>
-    <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
-    </div>
-    <div class="col-sm-1">
-      
-    <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent">Cancel</button>
-      </div>
+                <div class="col-sm-5">
+                   <label>Description</label>
+                <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
+                </div>
+                <div class="col-sm-1">
+                   <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent">Cancel</button>
+                </div>
                  
               </div>
                 <div class="help-text text-danger">Name can not be empty</div>
@@ -1176,13 +1204,13 @@
     		<dt class="rules-group-header">
     		 
     		<div class="btn-group pull-right group-actions">
-    			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="fa fa-plus"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-lg fa-plus-circle"></i> Add group </button>
+    			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button>
     		</div>
     		<div class="btn-group group-conditions">
     			<label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_0_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_0_cond" value="OR"> OR </label>
     		</div>
     		<div class="error-container" data-toggle="tooltip">
-    			<i class="glyphicon glyphicon-warning-sign"></i>
+    			<i class="fa fa-warning"></i>
     		</div>
     		</dt>
     		<dd class="rules-group-body">
@@ -1190,14 +1218,14 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
-    				<i class="glyphicon glyphicon-warning-sign"></i>
+    				<i class="fa fa-warning"></i>
     			</div>
     			<div class="rule-filter-container">
-    				<select class="selectTree" disabled="">
+    				<select class="selectTree">
       			<optgroup label="General">	
               <option>View</option>
               <option>Chromosome</option>
@@ -1269,7 +1297,7 @@
     </select>
     			</div>
     			<div class="rule-operator-container">
-    				<select class="form-control select2" name="builder-basic_rule_0_operator" disabled="">
+    				<select class="form-control select2" name="builder-basic_rule_0_operator">
     					<option value="equal">equal</option>
     					<option value="not_equal">not equal</option>
     					<option value="in">in</option>
@@ -1285,17 +1313,33 @@
     				</select>
     			</div>
     			<div class="rule-value-container">
-    				<input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0" disabled="">
+    				<select class="select2 form-control">
+      				<option>
+      				 Value1
+      				</option>
+      				<option>
+      				 Value2
+      				</option>
+      				<option>
+      				 Value3
+      				</option>
+      				<option>
+      				 Value4
+      				</option>
+      				<option>
+      				 Value5
+      				</option>
+    				</select>
     			</div>
     			</li>
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
-    				<i class="glyphicon glyphicon-warning-sign"></i>
+    				<i class="fa fa-warning"></i>
     			</div>
     			<div class="rule-filter-container">
     				<select class="selectTree" >
@@ -1379,24 +1423,24 @@
     					<option value="less_or_equal">less or equal</option>
     					<option value="greater">greater</option>
     					<option value="greater_or_equal">greater or equal</option>
-    					<option value="between">between</option>
+    					<option value="between" selected>between</option>
     					<option value="not_between">not between</option>
     					<option value="is_null">is null</option>
     					<option value="is_not_null">is not null</option>
     				</select>
     			</div>
     			<div class="rule-value-container">
-    				<input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0">
+    				<input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0">, <input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0">
     			</div>
     			</li>
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
-    				<i class="glyphicon glyphicon-warning-sign"></i>
+    				<i class="fa fa-warning"></i>
     			</div>
     			<div class="rule-filter-container">
     				<select class="selectTree" >
@@ -1433,22 +1477,22 @@
       			</optgroup>
       			<optgroup label="Variant Functional Score">
       			  <option>SIFT</option>
-    <option>SIFT Prediction</option>
-    <option>PolyPhen 2</option>
-    <option>PolyPhen 2 Prediction</option>
-    <option>LRT</option>
-    <option>LRT Prediction</option>
-    <option>MutationTaster</option>
-    <option>MutationTaster Prediction</option>
-    <option>MutationAssessor</option>
-    <option>MutationAssessor Prediction</option>
-    <option>FATHMM</option>
-    <option>FATHMM Prediction</option>
-    <option>Tute Variant Score</option>
-    <option>Tute Prediction</option>
-    <option>GERP++</option>
-    <option>PhyloP</option>
-    <option>SiPhy</option>
+              <option>SIFT Prediction</option>
+              <option>PolyPhen 2</option>
+              <option>PolyPhen 2 Prediction</option>
+              <option>LRT</option>
+              <option>LRT Prediction</option>
+              <option>MutationTaster</option>
+              <option>MutationTaster Prediction</option>
+              <option>MutationAssessor</option>
+              <option>MutationAssessor Prediction</option>
+              <option>FATHMM</option>
+              <option>FATHMM Prediction</option>
+              <option>Tute Variant Score</option>
+              <option>Tute Prediction</option>
+              <option>GERP++</option>
+              <option>PhyloP</option>
+              <option>SiPhy</option>
       			</optgroup>
       			<optgroup label="Known Disease Association">
       	
@@ -1476,7 +1520,7 @@
     			<div class="rule-operator-container">
     				<select class="form-control select2" name="builder-basic_rule_0_operator">
     					<option value="equal">equal</option>
-    					<option value="not_equal">not equal</option>
+    					<option value="not_equal" selected>not equal</option>
     					<option value="in">in</option>
     					<option value="not_in">not in</option>
     					<option value="less">less</option>
@@ -1484,7 +1528,7 @@
     					<option value="greater">greater</option>
     					<option value="greater_or_equal">greater or equal</option>
     					<option value="between">between</option>
-    					<option value="not_between" selected>not between</option>
+    					<option value="not_between">not between</option>
     					<option value="is_null">is null</option>
     					<option value="is_not_null">is not null</option>
     				</select>
@@ -1496,11 +1540,11 @@
     				<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
-    				<i class="glyphicon glyphicon-warning-sign"></i>
+    				<i class="fa fa-warning"></i>
     			</div>
     			<div class="rule-filter-container">
     				<select class="selectTree" >
@@ -1591,7 +1635,19 @@
     				</select>
     			</div>
     			<div class="rule-value-container">
-    				<input class="form-control" type="number" name="builder-basic_rule_0_value_0" step="0.01" min="0">
+    				<select class="select2">
+      				<option>1</option>
+      				<option>2</option>
+      				<option>3</option>
+      				<option>4</option>
+    				</select>, 
+    				
+    				<select class="select2">
+      				<option>1</option>
+      				<option>2</option>
+      				<option>3</option>
+      				<option>4</option>
+    				</select>
     			</div>
     			</li>
     		</ul>
@@ -1602,6 +1658,17 @@
       </div>
               </div> 
              <div class="alert alert-help">Lock filter options not available with selected sample</div>
+            <div class="alert alert-danger">
+              <button type="button" class="close hidden" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+              <div class="btn-group pull-right ">
+                <a class="btn btn-danger" href="">Delete</a></div>
+              <div class="btn-group pull-right">
+                <a class="btn btn-default" href="">Cancel</a>
+              </div>
+              Are you sure you want to delete this filter?  It can not recover.
+           </div>
          </div>
           <div class="modal-footer">
             <div class="btn-group pull-left">
@@ -1625,29 +1692,23 @@
          <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">Combine Filters</h4>
           </div>
-          <div class="modal-body">
-            
+          <div class="modal-body">        
+    
                <div class="row grid-toolbar">
-                          <div class="col-sm-6">
-                            <label>New Combined Filter</label>
-                          </div>
-                          <div class="col-sm-6">
-                            <label>Description</label>
-                          </div>
-                        </div>
-               <div class="row grid-toolbar">
-                           <div class="col-sm-6">    
-                             <input value="Eye Cancer Diagnostics + Breast Cancer" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
-                          </div>
+               <div class="col-sm-6">  
+                <label>New Combined Filter</label>  
+                <input value="Eye Cancer Diagnostics + Breast Cancer" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
+              </div>
               <div class="col-sm-5">
-              <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
+                 <label>Description</label>
+                 <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
               </div>
               <div class="col-sm-1">
-              <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed">Cancel</button>
-                </div>
+                <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent">Cancel</button>
+              </div>
                  
-              </div>     
-              
+              </div> 
+                <div class="help-text text-danger">Name can not be empty</div>              
                <div class="row grid-toolbar">
                 <div class="col-sm-6">
                   <label>Available Filters for combine</label>
@@ -1697,8 +1758,9 @@
                  <option selected value="eye">Eye Cancer Diagnostics</option>            
                 <option value="cust1">Breast cancer</option>
                 <option value="cust2">Lung cancer</option>
-                <option value="cust3">Autism</option>
-                <option value="cust4">Retinoblastoma</option><option value="cust5">Mental retardation</option>
+                <option value="cust3" disabled="">Autism</option>
+                <option value="cust4">Retinoblastoma</option>
+                <option value="cust5" disabled="">Mental retardation</option>
             </select>
     			</div>
     			</li>
@@ -1727,9 +1789,9 @@
                  <option value="eye">Eye Cancer Diagnostics</option>            
                 <option selected value="cust1">Breast cancer</option>
                 <option value="cust2">Lung cancer</option>
-                <option value="cust3">Autism</option>
+                <option value="cust3" disabled="">Autism</option>
                 <option value="cust4">Retinoblastoma</option>
-                <option value="cust5">Mental retardation</option>
+                <option value="cust5" disabled>Mental retardation</option>
             </select>
     			</div>
     			</li>
@@ -1772,9 +1834,9 @@
                  <option value="eye">Eye Cancer Diagnostics</option>            
                 <option value="cust1">Breast cancer</option>
                 <option value="cust2">Lung cancer</option>
-                <option value="cust3">Autism</option>
+                <option value="cust3" disabled="">Autism</option>
                 <option  selected value="cust4">Retinoblastoma</option>
-                <option value="cust5">Mental retardation</option>
+                <option value="cust5" disabled>Mental retardation</option>
             </select>
     			</div>
     			</li>	</ul>
@@ -1790,18 +1852,21 @@
         
       </div>
               </div> 
+               <div class="alert alert-danger">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                   Add more than one filter to create a combined conditions
+               </div>
              </div>
        
            
-          <div class="modal-footer">
-            <div class="btn-group pull-left">
+             <div class="modal-footer">
+              <div class="btn-group pull-left">
               <button type="button" class="btn btn-default hidden" data-dismiss="modal">Reset Filter</button>
             </div>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Combine</button>
-            
-           
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Combine</button>        
           </div>
         </div>
       </div>
@@ -1837,7 +1902,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="uploadLabel">Upload sample</h4>
           </div>
-          <div class="modal-body">
+          <div class="modal-body ">
       
         <div class="drop-area">
        <div class="text-muted">Drag and drop your files here or manually select them.</div>
@@ -1846,35 +1911,34 @@
           Chose files
         </button>
       </div>
-      <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
-    </div>
-       <div class="drop-area">
-        <div class="progress">
+       <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
+       <div class="progress hidden">
     <div class="progress progress-striped">
           <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-primary  progress-bar-primary">
             <span class="sr-only">40% Complete (success)</span>
           </div>
         </div>
     </div>
-       </div>
-        <div class="alert alert-danger">
+    </div>
+      
+        <div class="alert alert-danger hidden">
           <p><strong>Error!</strong>You trying to load zip file format.</p>    
         </div>
-        <div class="alert alert-danger">
+        <div class="alert alert-danger hidden">
           <p><strong>Error!</strong>The file is damaged or unreadable</p>    
         </div>
     
-         <div class="alert alert-warning">
+         <div class="alert alert-warning hidden">
           <p><strong>Warning!</strong>The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</p>    
         </div>
-        <div class="alert alert-success">
+        <div class="alert alert-success hidden">
           <p><strong>Success!</strong>The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
         </div>
         
         <h4>Searh for available samples</h4>
          <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>    
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-       <div class="panel panel-success">
+        <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingOne">
            <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
@@ -1982,7 +2046,7 @@
             </div>
            <div class="flex"> 
             <dl>
-              <dt><label class="btn btn-wrapnormal"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
+              <dt><label class="btn btn-wrapnormal btn-sm"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
               </dt>
               <dd><div class="collapse" id="emailOpts3">
                                 
@@ -2012,8 +2076,7 @@
                 </div>
              </div>
            </div>
-     
-      <div class="panel panel-warning">
+        <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingTwo">
           <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
@@ -2153,7 +2216,7 @@
            </div>
         </div>
       </div>
-      <div class="panel panel-default">
+       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingThree">
              <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
@@ -2319,7 +2382,7 @@
           </div>
           <div class="modal-body table-content">
     
-              <table class="table table-condensed table-stipped">
+              <table class="table table-condensed">
                 <thead>
                   <tr>
                     <th>
@@ -2345,6 +2408,16 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <!-- Empty results -->
+                      <tr class="hidden">
+      <td colspan="7"><div class="empty empty-history">
+        <h3><span class="fa-stack fa-lg">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-flag fa-stack-1x fa-inverse"></i>
+      </span> You have not saved even a single file <span>Select several mutations in the table with the results of the analysis, and click Export in the top menu</span></h3>
+      </div></td>
+                           
+                          </tr>
                   <tr>
                     <td>
                       <button class="btn btn-link" data-toggle="collapse" data-target=".details1"><i class="fa fa-plus-circle"></i></button>
@@ -2390,7 +2463,7 @@
             </div>
             <div class="modal-body table-content">
                
-                 <table class="table table-condensed table-stipped">
+                 <table class="table table-condensed">
                     <thead>
                       <tr>
                         <th>
@@ -2411,6 +2484,14 @@
                       
                     </thead>
                     <tbody>
+                      <!-- Empty results -->
+                      <tr class="hidden">
+      <td colspan="7"><div class="empty empty-files"><h3><span class="fa-stack fa-lg">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-flag fa-stack-1x fa-inverse"></i>
+      </span> You have not saved even a single file <span>Select several mutations in the table with the results of the analysis, and click Export in the top menu</span></h3>
+      </div></td></tr>
+                          <!-- Results -->
                       <tr>
                         <td>12.11.2015 02:34:21</td>
                         <td>
@@ -2522,7 +2603,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="uploadLabel">Upload sample</h4>
           </div>
-          <div class="modal-body">
+          <div class="modal-body ">
       
         <div class="drop-area">
        <div class="text-muted">Drag and drop your files here or manually select them.</div>
@@ -2531,35 +2612,34 @@
           Chose files
         </button>
       </div>
-      <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
-    </div>
-       <div class="drop-area">
-        <div class="progress">
+       <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
+       <div class="progress hidden">
     <div class="progress progress-striped">
           <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-primary  progress-bar-primary">
             <span class="sr-only">40% Complete (success)</span>
           </div>
         </div>
     </div>
-       </div>
-        <div class="alert alert-danger">
+    </div>
+      
+        <div class="alert alert-danger hidden">
           <p><strong>Error!</strong>You trying to load zip file format.</p>    
         </div>
-        <div class="alert alert-danger">
+        <div class="alert alert-danger hidden">
           <p><strong>Error!</strong>The file is damaged or unreadable</p>    
         </div>
     
-         <div class="alert alert-warning">
+         <div class="alert alert-warning hidden">
           <p><strong>Warning!</strong>The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</p>    
         </div>
-        <div class="alert alert-success">
+        <div class="alert alert-success hidden">
           <p><strong>Success!</strong>The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
         </div>
         
         <h4>Searh for available samples</h4>
          <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>    
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-       <div class="panel panel-success">
+        <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingOne">
            <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
@@ -2667,7 +2747,7 @@
             </div>
            <div class="flex"> 
             <dl>
-              <dt><label class="btn btn-wrapnormal"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
+              <dt><label class="btn btn-wrapnormal btn-sm"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend1" type="buuton"><input type="checkbox"> Notify By Email After Complete</label>
               </dt>
               <dd><div class="collapse" id="emailOpts3">
                                 
@@ -2697,8 +2777,7 @@
                 </div>
              </div>
            </div>
-     
-      <div class="panel panel-warning">
+        <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingTwo">
           <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
@@ -2838,7 +2917,7 @@
            </div>
         </div>
       </div>
-      <div class="panel panel-default">
+       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingThree">
              <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
@@ -3059,7 +3138,86 @@
           </div>
         </div>
       </div>
+    </div><<<<<<< HEAD
+    <div class="modal fade" id="filename" tabindex="-1" role="dialog" aria-labelledby="filenameLabel">
+      <div class="modal-dialog modal-dialog-primary" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="filenameLabel">Export selected variants in file</h4>
+          </div>
+          <div class="modal-body">
+          
+      <form class="form-horizontal">
+         <div class="form-group">
+          <label class="col-xs-12 col-sm-1 control-label">Format</label>
+          <div class="col-sm-4 col-xs-12">
+          <select class="select2 form-control">
+            <option selected="">
+              MSExcel
+            </option>
+              <option>
+              CVS
+            </option>
+              <option>
+              SQL
+            </option>
+            <option>
+              JSON
+            </option>
+            <option>
+              XML
+            </option>
+    
+          </select>
+          </div>
+        </div>
+         <div class="form-group">
+          <label class="col-xs-12 col-sm-2">File name</label>
+          <div class="col-xs-12">
+          <input type="text" class="form-control text-primary" value="[Sample name]'s Selected Mutations 21.12.2015 23:45:56" placeholder="Set file name (required)">
+          <div class="help-text text-danger hidden">Name can not be empty</div>
+          </div>
+        </div>    
+         <div class="form-group">
+          <label class="col-xs-12">Description</label>
+           <div class="col-xs-12">
+         <textarea class="form-control" placeholder="Note (optional)"></textarea>
+           </div>
+        </div>
+      </form>
+    
+            
+         
+         </div>
+         <div class="modal-footer">
+            
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>        
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Export</button>
+            
+           
+          </div>
+        </div>
+      </div>
+    </div>    <div class="alert alert-inverse alert-fixed hidden">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <!--   success state -->
+      <p>Filename.vcf is upload successfully</p>
+      <p>You can choose sample SampleName for analises now</p>
+      <p><button class="btn btn-sm btn-block btn-success">Choose this sample for analises</button></p>
+    <!--   warning state -->  
+     <p>Filename.vcf is upload successfully</p>
+      <p>You can choose sample SampleName for analises now <span class="text-warning">but sample metadata is not complite</p>
+      <p><button class="btn btn-sm btn-block btn-warning">Choose this sample for analises</button></p>
+    <!--   danger state -->
+     <p>Filename.vcf is not upload</p>
+      <p><span class="text-danger">File is damage or file format not supported</p>
     </div>
+=======
+>>>>>>> master
+
     <script src="http://localhost:8080/webpack-dev-server.js"></script>
     <script type="text/javascript" src="genomics.js" charset="utf-8"></script>
 

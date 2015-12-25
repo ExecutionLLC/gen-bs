@@ -11,7 +11,7 @@ const SETTINGS = {
         sessionHeader: ENV.WS_SESSION_HEADER || 'X-Session-Id'
     },
     database: {
-        host: ENV.WS_DATABASE_SERVER || '172.17.0.2',
+        host: ENV.WS_DATABASE_SERVER || 'localhost',
         user: ENV.WS_DATABASE_USER || 'postgres',
         password: ENV.WS_DATABASE_PASSWORD || 'zxcasdqwe',
         databaseName: ENV.WS_DATABASE_NAME || 'genomixdb'
