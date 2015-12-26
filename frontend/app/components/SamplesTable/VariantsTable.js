@@ -7,6 +7,12 @@ import observeStore from '../../utils/observeStore'
 
 const $tableElement = $('#variants_table');
 const tableHeaderElement = '#variants_table thead tr th';
+const tableHeaderInputElement = '#variants_table thead tr th input';
+
+function firstCharUpperCase(str) {
+  return str.charAt(0).toUpperCase()  
+    + str.slice(1);
+}
 
 
 function selectVariants(state) {
@@ -20,9 +26,9 @@ function fillTableHead(labels) {
   labels.map( (label) => {
     head.push(
         `<th data-label="${label}">
-          ${label.charAt(0).toUpperCase() + label.slice(1)}
+          ${firstCharUpperCase(label)}
           <button class="btn btn-default btnSort"></button>
-          <div><input type=""></div>
+          <div><input type="text" placeholder="Search ${label}"></div>
         </th>`);
   })
   head.push('</tr></thead>');
@@ -72,6 +78,13 @@ function subscribeToSort() {
         $(e.currentTarget).data('label'),
         (sortOrder === 'asc') ? ('desc'):('asc')
     ))
+  });
+}
+
+function subscribeToSort() {
+  $(document).on('change keyup', tableHeaderInputElement, (e) => {
+    var key = $(e.currentTarget).parent().parent().data('label');
+    console.log('input', key, $(e.currentTarget).val());
   });
 }
 
