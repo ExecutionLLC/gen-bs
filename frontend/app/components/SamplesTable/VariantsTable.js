@@ -5,6 +5,9 @@ import { fetchVariants, sortVariants, filterVariants } from '../../actions'
 import store from '../../containers/App'
 import observeStore from '../../utils/observeStore'
 
+import '../../assets/vendor/bootstrap3-editable/js/bootstrap-editable'
+import '../../assets/vendor/bootstrap3-editable/css/bootstrap-editable.css'
+
 const $tableElement = $('#variants_table');
 const tableHeaderSortElement = '#variants_table thead tr th .variants-table-header-label';
 const tableHeaderFilterElement = '#variants_table thead tr th input';
@@ -53,7 +56,7 @@ function fillRows(tData) {
     tData.map( (rowData) => {
       row.push('<tr>');
       for(var key in rowData) {
-        row.push(`<td>${rowData[key]}</td>`);
+        row.push(`<td class="${key}">${rowData[key]}</td>`);
       }
       row.push('</tr>');
     });
@@ -87,6 +90,10 @@ function getInitialState() {
 
 function render(tableRows) {
   $('#variants_table_body').html(tableRows);
+  $('td.comment').editable({
+    //mode: 'inline',
+    type: 'textarea'
+  });
 }
 
 function renderHead(tableHead) {
@@ -132,6 +139,5 @@ $( () => {
   getInitialState();
   subscribeToSort();
   subscribeToFilter();
-    window.store = store;
 });
 
