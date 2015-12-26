@@ -43,7 +43,7 @@ function variantsTable(state = {}, action) {
 
     case ActionTypes.FILTER_VARIANTS:
       return Object.assign({}, state, {
-        filteredVariants: _.filter(action.variants, (o) => { return _.includes(o[action.columnKey].toString(), action.filterValue)}),
+        filteredVariants: _.filter(action.variants, (o) => { return _.includes(o[action.columnKey].toString().toUpperCase(), action.filterValue.toUpperCase())}),
         columnFilters: Object.assign({}, state.filterValue, {
           [action.columnKey]: action.filterValue
         })
