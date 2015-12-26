@@ -25,6 +25,16 @@ export const fileTypes = {
  * action creators
  */
 
+export const FILTER_VARIANTS = 'FILTER_VARIANTS'
+export function filterVariants(variants, columnKey, filterValue) {
+  return {
+    type: FILTER_VARIANTS,
+    variants: variants,
+    columnKey: columnKey,
+    filterValue: filterValue
+  }
+}
+
 export const SORT_VARIANTS = 'SORT_VARIANTS'
 export function sortVariants(variants, columnKey, sortOrder) {
   return {
