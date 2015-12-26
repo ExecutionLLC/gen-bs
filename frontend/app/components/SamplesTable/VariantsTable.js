@@ -34,15 +34,26 @@ function fillTableHead(labels) {
   var head = [];
   head.push('<tr>');
 
+  head.push(
+      `<th data-label="comment">
+        <span class="variants-table-header-label">
+          Comment
+          <button class="btn btn-default btnSort"></button>
+        </span>
+        <div><input type="text" placeholder="Search coment"></div>
+      </th>`);
+
   labels.map( (label) => {
-    head.push(
-        `<th data-label="${label}">
-          <span class="variants-table-header-label">
-            ${firstCharUpperCase(label)}
-            <button class="btn btn-default btnSort"></button>
-          </span>
-          <div><input type="text" placeholder="Search ${label}"></div>
-        </th>`);
+    if (label !== 'comment') {
+      head.push(
+          `<th data-label="${label}">
+            <span class="variants-table-header-label">
+              ${firstCharUpperCase(label)}
+              <button class="btn btn-default btnSort"></button>
+            </span>
+            <div><input type="text" placeholder="Search ${label}"></div>
+          </th>`);
+    }
   })
   head.push('</tr>');
   return head.join('');
@@ -50,18 +61,18 @@ function fillTableHead(labels) {
 
 function fillRows(tData) {
     var row = [];
-    //row.push('<tbody id="variants_table_body">')
-    //var row = [fillTableHead(Object.keys(tData[0]))];
 
     tData.map( (rowData) => {
       row.push('<tr>');
+      row.push(`<td class="comment">${rowData['comment']}</td>`);
       for(var key in rowData) {
-        row.push(`<td class="${key}">${rowData[key]}</td>`);
+        if(key !== 'comment') {
+          row.push(`<td class="${key}">${rowData[key]}</td>`);
+        }
       }
       row.push('</tr>');
     });
 
-    //row.push('</tbody>')
     return row.join('');
 }
 
@@ -91,7 +102,7 @@ function getInitialState() {
 function render(tableRows) {
   $('#variants_table_body').html(tableRows);
   $('td.comment').editable({
-    //mode: 'inline',
+    mode: 'popup',
     type: 'textarea'
   });
 }
