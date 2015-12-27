@@ -38,15 +38,15 @@ class OperationsService extends ServiceBase {
             method: method,
             timestamp: Date.now()
         };
+        console.log('starting operation ' + operation.id + ' of type ' + operation.type);
         sessionOperations[operationId] = operation;
         callback(null, operation);
     }
 
     findInAllSessions(operationId, callback) {
-        const operation = _.map(this.operations)
-            .find(operation => operation.id === operationId);
-        if (operation) {
-            callback(null, operation);
+        const session = _.find(this.operations, sessionOperations => sessionOperations[operationId]);
+        if (session) {
+            callback(null, session[operationId]);
         } else {
             this._onOperationNotFound(callback)
         }

@@ -11,37 +11,34 @@ class TestController extends ControllerBase {
 
         const server = this.services.applicationServer;
 
-        this.sourcesListRecieved = this.sourcesListRecieved.bind(this);
+        this.onSourcesListReceived = this.onSourcesListReceived.bind(this);
         this.sourcesListError = this.sourcesListError.bind(this);
 
-        this.sourceMetadataRecieved = this.sourceMetadataRecieved.bind(this);
+        this.onSourceMetadataReceived = this.onSourceMetadataReceived.bind(this);
         this.sourceMetadataError = this.sourceMetadataError.bind(this);
 
         this.test = this.test.bind(this);
 
-        server.registerEvent(server.registeredEvents().sourcesList.event, this.sourcesListRecieved);
-        server.registerEvent(server.registeredEvents().sourcesList.error, this.sourcesListError);
-
-        server.registerEvent(server.registeredEvents().sourceMetadata.event, this.sourceMetadataRecieved);
-        server.registerEvent(server.registeredEvents().sourceMetadata.error, this.sourceMetadataError);
+        server.on(server.registeredEvents().getSourcesList, this.onSourcesListReceived);
+        server.on(server.registeredEvents().getSourceMetadata, this.onSourceMetadataReceived);
     }
 
-    sourcesListRecieved(data) {
-        console.log(data);
+    onSourcesListReceived(operationResult) {
+        console.log(operationResult);
 
-        _.each(data, (source) => {
-            this.services.applicationServer.requestSourceMetadata(source, (error, result) => {
+        _.each(operationResult.result, (source) => {
+            this.services.applicationServer.requestSourceMetadata(operationResult.sessionId, source, (error, result) => {
                 if (error) {
                     console.log(error);
                 } else {
                     console.log(result);
                 }
-            }, this);
+            });
         });
     }
 
-    sourceMetadataRecieved(data) {
-        console.log(data);
+    onSourceMetadataReceived(operationResult) {
+        console.log(operationResult);
     }
 
     sourcesListError(error) {
@@ -53,7 +50,7 @@ class TestController extends ControllerBase {
     }
 
     test(request, response) {
-        this.services.applicationServer.requestSourcesList((error, result) => {
+        this.services.applicationServer.requestSourcesList(request.sessionId, (error, result) => {
             if (error) {
                 this.sendInternalError(response, error);
             } else {

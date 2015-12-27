@@ -8,33 +8,23 @@ const RPCProxy = require('../utils/RPCProxy');
 
 const FIELDS_METADATA = require('../test_data/fields_metadata.json');
 
-const REGISTERED_EVENTS = {
-    sourcesList: {
-        data: 'sourcesList.data',
-        error: 'sourcesList.error'
-    },
-    sourceMetadata: {
-        data: 'sourceMetadata.data',
-        error: 'sourceMetadata.error'
-    },
-    openSearchSession: {
-        data: 'openSearchSession.data',
-        error: 'openSearchSession.error'
-    },
-    searchInResults: {
-        data: 'searchInResults.data',
-        error: 'searchInResults.error'
-    },
-    uploadFile: {
-        data: 'uploadFile.data',
-        error: 'uploadFile.error'
-    }
+const METHODS = {
+    getSourcesList: 'v1.get_sources',
+    getSourceMetadata: 'v1.get_source_metadata',
+    openSearchSession: 'v1.open_session',
+    closeSearchSession: 'v1.close_session',
+    setFilters: 'v1.set_filters'
 };
 
 class ApplicationServerService extends ServiceBase {
     constructor(services) {
         super(services);
 
+        this.requestSourcesList = this.requestSourcesList.bind(this);
+        this.requestSourceMetadata = this.requestSourceMetadata.bind(this);
+        this.requestCloseSearchSession = this.requestCloseSearchSession.bind(this);
+        this.requestOpenSearchSession = this.requestOpenSearchSession.bind(this);
+        this.requestSearchInResults = this.requestSearchInResults.bind(this);
         this._requestOperations = this._requestOperations.bind(this);
         this._requestOperationState = this._requestOperationState.bind(this);
 
@@ -48,19 +38,23 @@ class ApplicationServerService extends ServiceBase {
     }
 
     registeredEvents() {
-        return REGISTERED_EVENTS;
+        return METHODS;
     }
 
-    requestSourcesList(callback) {
-        const method = 'v1.get_sources';
-        const operationId = this.services.sessions.addSystemOperation(method);
-        this._rpcSend(operationId, method, null, callback);
+    requestSourcesList(sessionId, callback) {
+        const operationTypes = this.services.operations.operationTypes();
+        const method = METHODS.getSourcesList;
+        this.services.operations.add(sessionId, operationTypes.SYSTEM, method, (error, operation) => {
+            this._rpcSend(operation.id, method, null, callback);
+        });
     }
 
-    requestSourceMetadata(source, callback) {
-        const method = 'v1.get_source_metadata';
-        const operationId = this.services.sessions.addSystemOperation(method);
-        this._rpcSend(operationId, method, source, callback);
+    requestSourceMetadata(sessionId, sourceName, callback) {
+        const method = METHODS.getSourceMetadata;
+        const operationTypes = this.services.operations.operationTypes();
+        this.services.operations.add(sessionId, operationTypes.SYSTEM, method, (error, operation) => {
+            this._rpcSend(operation.id, method, sourceName, callback);
+        });
     }
 
     /**
@@ -70,7 +64,7 @@ class ApplicationServerService extends ServiceBase {
      * @param callback callback
      * */
     requestOpenSearchSession(sessionId, params, callback) {
-        const method = 'v1.open_session';
+        const method = METHODS.openSearchSession;
         const searchSessionRequest = {
             view: params.view,
             filters: params.filters,
@@ -99,7 +93,7 @@ class ApplicationServerService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-                const method = 'v1.close_session';
+                const method = METHODS.closeSearchSession;
                 this._rpcSend(operationId, method, null, callback);
             }
         });
@@ -110,7 +104,7 @@ class ApplicationServerService extends ServiceBase {
            if (error) {
                callback(error);
            } else {
-               const method = 'v1.set_filters';
+               const method = METHODS.setFilters;
                const searchInResultsRequest = {
                    globalSearchValue: params.globalSearchValue,
                    fieldSearchValues: params.fieldSearchValues
@@ -120,98 +114,16 @@ class ApplicationServerService extends ServiceBase {
         });
     }
 
-    _closePreviousSearchIfAny(sessionId, callback) {
-        const operationTypes = this.services.operations.operationTypes();
-        this.services.operations.findAllByType(sessionId, operationTypes.SEARCH, (error, operations) => {
-            if (error) {
-                callback(error);
-            } else {
-                if (_.isEmpty(operations)) {
-                    callback(null);
-                } else {
-                    // Expect the inly search operation here.
-                    const searchOperation = operations[0];
-                    this.requestCloseSearchSession(searchOperation.id, (error) => {
-                       callback(null);
-                    });
-                }
-            }
-        });
+    getFieldsMetadata(user, callback) {
+        callback(null, FIELDS_METADATA);
     }
 
-    _onData(operation, data) {
-        const methodName = operation.method;
-        switch (methodName) {
-            case 'v1.get_sources':
-                this.eventEmitter.emit(REGISTERED_EVENTS.sourcesList.event, data);
-                break;
-            case 'v1.get_source_metadata':
-                this.eventEmitter.emit(REGISTERED_EVENTS.sourceMetadata.event, data);
-                break;
-            default:
-                console.log('Unknown method call: ' + methodName, data);
-                break;
-        }
-    }
-
-    _onError(operation, error) {
-        const methodName = operation.method;
-        switch (methodName) {
-            case 'v1.get_sources':
-                this.eventEmitter.emit(REGISTERED_EVENTS.sourcesList.error, error);
-                break;
-            case 'v1.get_source_metadata':
-                this.eventEmitter.emit(REGISTERED_EVENTS.sourceMetadata.error, error);
-                break;
-            default:
-                console.log('Unknown method call: ' + methodName, error);
-                break;
-        }
-    }
-
-    _rpcReply(rpcError, rpcMessage) {
-        console.log('RPC REPLY: ', rpcError, rpcMessage);
-        const operationTypes = this.services.operations.operationTypes();
-
-        const operationId = rpcMessage.id;
-        this.services.operations.find(operationId, (error, operation) => {
-            if (error) {
-                // Log and do nothing as we don't have information about the operation.
-                console.error(error);
-                console.log('Error finding operation when receiving RPC reply from AS. See the error description above. Do nothing.');
-            } else {
-                // Forget all operations done except search. Search operations will be reused.
-                if (operation.type !== operationTypes.SEARCH) {
-                    this.services.operations.remove(sessionId, operation.id, (error) => {
-                        if (error) {
-                            console.error(error);
-                            console.error('Error removing operation, see above');
-                        }
-                        // We have anything needed to continue, so going on.
-                        if (rpcError) {
-                            this._onError(operation, rpcError);
-                        } else {
-                            this._onData(operation, rpcMessage.result);
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    registerEvent(event, callback) {
+    on(event, callback) {
         this.eventEmitter.on(event, callback);
     }
 
-    unregisterEvent(event, callback) {
+    off(event, callback) {
         this.eventEmitter.removeListener(event, callback);
-    }
-
-    _rpcSend(operationId, method, params, callback) {
-        this.rpcProxy.send(operationId, method, params);
-        // TODO: add log event
-        console.log('RPC SEND: ', operationId, method, params);
-        callback(null, operationId);
     }
 
     _requestOperationState(operationId, callback) {
@@ -222,7 +134,7 @@ class ApplicationServerService extends ServiceBase {
         console.log('Requesting operations...');
         this.services.sessions.findAll((error, sessionIds) => {
             _.each(sessionIds, sessionId => {
-                this.services.sessions.findOperationIds(sessionId, (error, operationIds) => {
+                this.services.operations.findAll(sessionId, (error, operationIds) => {
                     _.each(operationIds, operationId => {
                         this._requestOperationState(operationId, (error) => {
                             if (error) {
@@ -235,8 +147,72 @@ class ApplicationServerService extends ServiceBase {
         });
     }
 
-    getFieldsMetadata(user, callback) {
-        callback(null, FIELDS_METADATA);
+    _completeOperationIfNeeded(operationId, operationResult, callback) {
+        // TODO: Here we should analyze the response and operation method
+        // TODO: and decide should we remove the operation or not.
+        // Currently just complete all non-search operations.
+        const operations = this.services.operations;
+        operations.findInAllSessions(operationId, (error, operation) => {
+            if (error) {
+                callback(error);
+            } else {
+                if (operation.type !== operations.operationTypes().SEARCH) {
+                    operations.remove(operation.sessionId, operation.id, callback);
+                } else {
+                    callback(null, operation);
+                }
+            }
+        });
+    }
+
+    _closePreviousSearchIfAny(sessionId, callback) {
+        const operationTypes = this.services.operations.operationTypes();
+        this.services.operations.findAllByType(sessionId, operationTypes.SEARCH, (error, operations) => {
+            if (error) {
+                callback(error);
+            } else {
+                if (_.isEmpty(operations)) {
+                    callback(null);
+                } else {
+                    // Expect the only search operation here.
+                    const searchOperation = operations[0];
+                    this.requestCloseSearchSession(searchOperation.id, callback);
+                }
+            }
+        });
+    }
+
+    _rpcReply(rpcError, rpcMessage) {
+        console.log('RPC REPLY: ', rpcError, rpcMessage);
+        if (rpcError) {
+            console.error('RPC request error! %s', rpcError);
+            console.log('The RPC event will be ignored.');
+        } else {
+            const operationId = rpcMessage.id;
+            const operationResult = {
+                operationId: operationId,
+                result: rpcMessage.result
+            };
+            this._completeOperationIfNeeded(operationId, operationResult, (error, operation) => {
+                if (error) {
+                    console.error('Error when trying to complete operation: %s. Do nothing.', error);
+                } else {
+                    const methodName = operation.method;
+                    operationResult.sessionId = operation.sessionId;
+                    const haveEventHandlers = this.eventEmitter.emit(methodName, operationResult);
+                    if (!haveEventHandlers) {
+                        console.error('No handler is registered for event ' + methodName);
+                    }
+                }
+            });
+        }
+    }
+
+    _rpcSend(operationId, method, params, callback) {
+        this.rpcProxy.send(operationId, method, params);
+        // TODO: add log event
+        console.log('RPC SEND: ', operationId, method, params);
+        callback(null, operationId);
     }
 }
 

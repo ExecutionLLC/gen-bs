@@ -26,6 +26,7 @@ class ApiController extends ControllerBase {
                         if (error) {
                             next(new Error(error));
                         } else {
+                            request.sessionId = sessionId;
                             request.user = user;
                             next();
                         }

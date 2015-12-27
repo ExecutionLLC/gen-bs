@@ -28,13 +28,13 @@ class RPCProxy {
     }
 
     _replyResult(message) {
-        if (this.replyCallback){
+        if (this.replyCallback) {
             const msg = JSON.parse(message);
-            if(msg.error) {
-                this.replyCallback(msg.error, {id: msg.id});
-            } else {
-                this.replyCallback(null, {id: msg.id, result: msg.result});
-            }
+            this.replyCallback(msg.error, {
+                id: msg.id, result: msg.result
+            });
+        } else {
+            console.error('No callback is registered for RPC reply');
         }
     }
 
