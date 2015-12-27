@@ -11,8 +11,8 @@ export default function variantsTable(state = {}, action) {
     case ActionTypes.RECEIVE_VARIANTS:
       return Object.assign({}, state, {
         isFetching: false,
-        variants: action.variants,
-        filteredVariants: action.variants,
+        variants: action.variants.map( (o, index) => Object.assign(o, {_fid: index, _selected: false}) ),
+        filteredVariants: action.variants.map( (o, index) => Object.assign(o, {_fid: index, _selected: false}) ),
         lastUpdated: action.receivedAt
       })
 
@@ -29,6 +29,18 @@ export default function variantsTable(state = {}, action) {
         filteredVariants: _.filter(action.variants, (o) => { return _.includes(o[action.columnKey].toString().toUpperCase(), action.filterValue.toUpperCase())}),
         columnFilters: Object.assign({}, state.filterValue, {
           [action.columnKey]: action.filterValue
+        })
+      })
+
+    case ActionTypes.SELECT_VARIANTS_ROW:
+      return Object.assign({}, state, {
+        clickedRow: { _fid: action.rowId },
+        filteredVariants: state.variants.map( (o) => {
+          if(action.rowId == o._fid) {
+            console.log('o', o)
+            o._selected = !o._selected
+          }
+          return o;
         })
       })
 

@@ -1,6 +1,6 @@
 import json from '../../../json/data-variants.json';
 
-import { fetchVariants, sortVariants, filterVariants } from '../../actions'
+import { fetchVariants, sortVariants, filterVariants, selectTableRow } from '../../actions'
 
 import store from '../../containers/App'
 import observeStore from '../../utils/observeStore'
@@ -11,6 +11,8 @@ import '../../assets/vendor/bootstrap3-editable/css/bootstrap-editable.css'
 const $tableElement = $('#variants_table');
 const tableHeaderSortElement = '#variants_table thead tr th .variants-table-header-label';
 const tableHeaderFilterElement = '#variants_table thead tr th input';
+const tableRowElement = '#variants_table tbody tr';
+const tableCheckboxElement = '#variants_table tbody tr td input[type=checkbox]';
 
 /**
  * POJO with attrs and methods for VariantsTable
@@ -25,6 +27,8 @@ var variantsTable = {
   selectSort: (state) => state.variantsTable.sortOrder,
 
   selectFilter: (state) => state.variantsTable.columnFilters,
+
+  selectRowSelected: (state) => state.variantsTable.clickedRow,
 
 
   fillTableHead: function(labels) {
@@ -66,7 +70,7 @@ var variantsTable = {
     var row = [];
 
     tData.map( (rowData) => {
-      row.push('<tr>');
+      row.push(`<tr id=${rowData._fid}>`);
       
       // checkbox
       row.push(`<td><input type="checkbox" /></td>`);
@@ -105,6 +109,17 @@ var variantsTable = {
         this.renderHead(this.fillTableHead(Object.keys(variants[0])));
         this.render(this.fillRows(variants));
       }
+    });
+
+    observeStore(store, this.selectRowSelected, () => {
+      const rowId = store.getState().variantsTable.clickedRow._fid;
+      const selected = _.find(store.getState().variantsTable.filteredVariants, { _fid: rowId })._selected;
+      console.log('select', selected);
+      //const selected = false;
+      var $row = $(tableRowElement + '#' + rowId);
+      var $checkbox = $(tableRowElement + '#' + rowId + ' td input[type=checkbox]');
+      $row.toggleClass('success');
+      $checkbox.prop('checked', selected);
     });
   },
 
@@ -149,6 +164,29 @@ var variantsTable = {
           value
       ))
     });
+  },
+
+  _selectRow: (e) => {
+    const $row = $(e.currentTarget).parent().parent();
+    const _fid = $(e.currentTarget).parent().parent().attr('id');
+
+    store.dispatch( selectTableRow(parseInt(_fid)) );
+  },
+
+  subscribeToSelectRows: function () {
+    $(document).on('change', tableCheckboxElement, (e) => {
+      const _fid = $(e.currentTarget).parent().parent().attr('id');
+
+      store.dispatch( selectTableRow(_fid) )
+      //this._selectRow(e);
+    });
+
+    $(document).on('click', tableRowElement, (e) => {
+      const _fid = $(e.currentTarget).attr('id');
+
+      store.dispatch( selectTableRow(parseInt(_fid)) )
+      //this._selectRow(e);
+    });
   }
 
 }
@@ -159,5 +197,6 @@ $( () => {
   variantsTable.getInitialState();
   variantsTable.subscribeToSort();
   variantsTable.subscribeToFilter();
+  variantsTable.subscribeToSelectRows();
 });
 

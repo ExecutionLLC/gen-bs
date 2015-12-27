@@ -85,6 +85,14 @@ export function setColumnFilter(columnId, filterValue) {
   }
 }
 
+export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW'
+export function selectTableRow(rowId) {
+  return {
+    type: SELECT_VARIANTS_ROW,
+    rowId
+  }
+}
+
 export function initializeTable(table) {
   return {
     type: INITIALIZE_TABLE,
