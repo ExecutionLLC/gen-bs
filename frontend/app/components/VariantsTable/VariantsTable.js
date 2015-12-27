@@ -32,6 +32,11 @@ var variantsTable = {
     head.push('<tr>');
 
     head.push(
+        `<th data-label="checkbox">
+          <input type="checkbox" />
+        </th>`);
+
+    head.push(
         `<th data-label="comment">
           <span class="variants-table-header-label">
             Comment
@@ -62,7 +67,12 @@ var variantsTable = {
 
     tData.map( (rowData) => {
       row.push('<tr>');
+      
+      // checkbox
+      row.push(`<td><input type="checkbox" /></td>`);
+
       row.push(`<td class="comment">${rowData['comment']}</td>`);
+
       for(var key in rowData) {
         if(key !== 'comment') {
           row.push(`<td class="${key}">${rowData[key]}</td>`);
@@ -77,7 +87,6 @@ var variantsTable = {
 
   getInitialState: function() {
     store.dispatch(fetchVariants());
-    console.log('this',this);
 
     observeStore(store, this.selectFilter, () => {
       const filteredVariants = store.getState().variantsTable.filteredVariants;
