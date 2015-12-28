@@ -12,12 +12,11 @@ class TestController extends ControllerBase {
         const server = this.services.applicationServer;
 
         this.onSourcesListReceived = this.onSourcesListReceived.bind(this);
-        this.sourcesListError = this.sourcesListError.bind(this);
 
         this.onSourceMetadataReceived = this.onSourceMetadataReceived.bind(this);
-        this.sourceMetadataError = this.sourceMetadataError.bind(this);
 
-        this.test = this.test.bind(this);
+        this.testSources = this.testSources.bind(this);
+        this.testSearch = this.testSearch.bind(this);
 
         server.on(server.registeredEvents().getSourcesList, this.onSourcesListReceived);
         server.on(server.registeredEvents().getSourceMetadata, this.onSourceMetadataReceived);
@@ -41,15 +40,7 @@ class TestController extends ControllerBase {
         console.log(operationResult);
     }
 
-    sourcesListError(error) {
-        console.log(error);
-    }
-
-    sourceMetadataError(error) {
-        console.log(error);
-    }
-
-    test(request, response) {
+    testSources(request, response) {
         this.services.applicationServer.requestSourcesList(request.sessionId, (error, result) => {
             if (error) {
                 this.sendInternalError(response, error);
@@ -59,9 +50,14 @@ class TestController extends ControllerBase {
         });
     }
 
+    testSearch(request, response) {
+        this.sendJson(response, {status: 'OK'});
+    }
+
     createRouter() {
         const router = new Express();
-        router.get('/', this.test);
+        router.get('/sources', this.testSources);
+        router.get('/search', this.testSearch);
         return router;
     }
 }
