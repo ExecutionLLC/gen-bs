@@ -21,6 +21,10 @@ class UserEntityServiceBase extends ServiceBase {
         this.theModel.find(user.id, itemId, callback);
     }
 
+    findMany(user, itemIds, callback) {
+        this.theModel.findMany(user.id, itemIds, callback);
+    }
+
     findAll(user, callback) {
         if (!this._checkUserIsSet(user, callback)) {
             return;

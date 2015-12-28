@@ -33,8 +33,8 @@ class SearchController extends ControllerBase {
         const offset = jsonBody.offset;
 
         this.services.search
-          .sendSearchRequest(viewId, filterIds, globalSearchValue,
-          fieldSearchValues, limit, offset, (error, operationId) => {
+            .sendSearchRequest(viewId, filterIds, globalSearchValue,
+                fieldSearchValues, limit, offset, (error, operationId) => {
             this.sendJson(response, {
               operationId: operationId
             });

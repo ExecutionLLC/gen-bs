@@ -75,6 +75,25 @@ class MockModelBase {
         }
     }
 
+    findMany(userId, itemIds, callback) {
+        if (!this._checkItemIdSet(userId, callback)) {
+            return;
+        }
+
+        if (!itemIds || itemIds.length === 0) {
+            callback(null, []);
+            return;
+        }
+
+        const userItems = _.filter(this.hash, descriptor => descriptor.userId === userId
+            && _.find(itemIds, itemId => descriptor.item.id === itemId));
+        if (userItems) {
+            callback(null, userItems);
+        } else {
+            callback(new Error('No items found with specified ids: %s', itemIds));
+        }
+    }
+
     findAll(userId, callback) {
         if (!this._checkUserIdSet(userId, callback)) {
             return;

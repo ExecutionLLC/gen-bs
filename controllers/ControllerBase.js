@@ -2,6 +2,9 @@
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
+const HTTP_INTERNAL = 500;
+const HTTP_OK = 200;
+
 /**
  * Base class for all controllers.
  * */
@@ -11,7 +14,13 @@ class ControllerBase {
     }
 
     sendInternalError(response, message) {
-        this.sendError(response, 500, message);
+        this.sendError(response, HTTP_INTERNAL, message);
+    }
+
+    sendOk(response) {
+        response
+            .status(HTTP_OK)
+            .end();
     }
 
     sendError(response, httpError, message) {

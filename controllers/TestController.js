@@ -11,49 +11,37 @@ class TestController extends ControllerBase {
 
         const server = this.services.applicationServer;
 
-        this.sourcesListRecieved = this.sourcesListRecieved.bind(this);
-        this.sourcesListError = this.sourcesListError.bind(this);
+        this.onSourcesListReceived = this.onSourcesListReceived.bind(this);
 
-        this.sourceMetadataRecieved = this.sourceMetadataRecieved.bind(this);
-        this.sourceMetadataError = this.sourceMetadataError.bind(this);
+        this.onSourceMetadataReceived = this.onSourceMetadataReceived.bind(this);
 
-        this.test = this.test.bind(this);
+        this.testSources = this.testSources.bind(this);
+        this.testSearch = this.testSearch.bind(this);
 
-        server.registerEvent(server.registeredEvents().sourcesList.event, this.sourcesListRecieved);
-        server.registerEvent(server.registeredEvents().sourcesList.error, this.sourcesListError);
-
-        server.registerEvent(server.registeredEvents().sourceMetadata.event, this.sourceMetadataRecieved);
-        server.registerEvent(server.registeredEvents().sourceMetadata.error, this.sourceMetadataError);
+        server.on(server.registeredEvents().getSourcesList, this.onSourcesListReceived);
+        server.on(server.registeredEvents().getSourceMetadata, this.onSourceMetadataReceived);
     }
 
-    sourcesListRecieved(data) {
-        console.log(data);
+    onSourcesListReceived(operationResult) {
+        console.log(operationResult);
 
-        _.each(data, (source) => {
-            this.services.applicationServer.requestSourceMetadata(source, (error, result) => {
+        _.each(operationResult.result, (source) => {
+            this.services.applicationServer.requestSourceMetadata(operationResult.sessionId, source, (error, result) => {
                 if (error) {
                     console.log(error);
                 } else {
                     console.log(result);
                 }
-            }, this);
+            });
         });
     }
 
-    sourceMetadataRecieved(data) {
-        console.log(data);
+    onSourceMetadataReceived(operationResult) {
+        console.log(operationResult);
     }
 
-    sourcesListError(error) {
-        console.log(error);
-    }
-
-    sourceMetadataError(error) {
-        console.log(error);
-    }
-
-    test(request, response) {
-        this.services.applicationServer.requestSourcesList((error, result) => {
+    testSources(request, response) {
+        this.services.applicationServer.requestSourcesList(request.sessionId, (error, result) => {
             if (error) {
                 this.sendInternalError(response, error);
             } else {
@@ -62,9 +50,14 @@ class TestController extends ControllerBase {
         });
     }
 
+    testSearch(request, response) {
+        this.sendJson(response, {status: 'OK'});
+    }
+
     createRouter() {
         const router = new Express();
-        router.get('/', this.test);
+        router.get('/sources', this.testSources);
+        router.get('/search', this.testSearch);
         return router;
     }
 }
