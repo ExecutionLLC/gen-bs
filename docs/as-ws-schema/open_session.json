@@ -11,14 +11,14 @@
         "type": "string",
         "description": "name of the user file"
       },
-      "filter": {
+      "view_filter": {
         "type": "object",
         "params": {
           "type": "object",
           "description": "filter for loading (should be simulare to the fronted filter, but has addition field 'source_name')"
         }
       },
-      "view": {
+      "view_structure": {
         "$ref": "base_json/view.json#",
         "description": "view for loading"
       }

@@ -66,10 +66,9 @@ class ApplicationServerService extends ServiceBase {
     requestOpenSearchSession(sessionId, params, callback) {
         const method = METHODS.openSearchSession;
         const searchSessionRequest = {
-            view: params.view,
-            filters: params.filters,
-            globalSearchValue: params.globalSearchValue,
-            fieldSearchValues: params.fieldSearchValues
+            user_filename: params.sampleId,
+            view_structure: params.view,
+            view_filter: params.filters
         };
 
         const operationTypes = this.services.operations.operationTypes();
