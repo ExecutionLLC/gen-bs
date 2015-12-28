@@ -35,7 +35,7 @@ export default function variantsTable(state = {}, action) {
     case ActionTypes.SELECT_VARIANTS_ROW:
       return Object.assign({}, state, {
         clickedRow: { _fid: action.rowId },
-        filteredVariants: state.variants.map( (o) => {
+        filteredVariants: state.filteredVariants.map( (o) => {
           if(action.rowId == o._fid) {
             console.log('o', o)
             o._selected = !o._selected

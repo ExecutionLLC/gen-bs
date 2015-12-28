@@ -8,6 +8,7 @@ import observeStore from '../../utils/observeStore'
 import '../../assets/vendor/bootstrap3-editable/js/bootstrap-editable'
 import '../../assets/vendor/bootstrap3-editable/css/bootstrap-editable.css'
 
+
 const $tableElement = $('#variants_table');
 const tableHeaderSortElement = '#variants_table thead tr th .variants-table-header-label';
 const tableHeaderFilterElement = '#variants_table thead tr th input';
@@ -19,16 +20,16 @@ const tableCheckboxElement = '#variants_table tbody tr td input[type=checkbox]';
  */
 var variantsTable = {
 
-  firstCharUpperCase: (str) => str.charAt(0).toUpperCase() + str.slice(1),
+  firstCharUpperCase: str => str.charAt(0).toUpperCase() + str.slice(1),
 
 
-  selectVariants: (state) => state.variantsTable.variants,
+  selectVariants: state => state.variantsTable.variants,
 
-  selectSort: (state) => state.variantsTable.sortOrder,
+  selectSort: state => state.variantsTable.sortOrder,
 
-  selectFilter: (state) => state.variantsTable.columnFilters,
+  selectFilter: state => state.variantsTable.columnFilters,
 
-  selectRowSelected: (state) => state.variantsTable.clickedRow,
+  selectRowSelected: state => state.variantsTable.clickedRow,
 
 
   fillTableHead: function(labels) {
@@ -70,7 +71,7 @@ var variantsTable = {
     var row = [];
 
     tData.map( (rowData) => {
-      row.push(`<tr id=${rowData._fid}>`);
+      row.push(`<tr id=${rowData._fid} class="${rowData._selected ? 'success': ''}">`);
       
       // checkbox
       row.push(`<td><input type="checkbox" /></td>`);

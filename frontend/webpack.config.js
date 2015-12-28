@@ -35,11 +35,11 @@ module.exports = {
       //{test: /\.html$/, loader: "file?name=[name].[ext]"},
       {test: /\.json$/, loader: "file?name=[name].[ext]"},
         
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+      //{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
       //{ test: /\.js?$/, exclude: /node_modules|bower_components/, loaders: ['react-hot', 'jsx', 'babel?stage=0'] },
       {
         test: /\.js?$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(node_modules|bower_components|vendor)/,
         loader: 'babel',
         query: {
           presets: ['es2015']

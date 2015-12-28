@@ -2,13 +2,13 @@ import { combineReducers } from 'redux'
 import * as ActionTypes from '../actions'
 
 import variantsTable from './variantsTable' 
-import exportFileType from './exportToFile' 
+import exportToFile from './exportToFile' 
 
 
 
 const genApp = combineReducers({
   variantsTable,
-  exportFileType
+  exportToFile
 })
 
 export default genApp

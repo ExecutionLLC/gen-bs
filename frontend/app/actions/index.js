@@ -7,7 +7,7 @@ import jsonUrl from '../../json/data-variants.json';
 export const SET_COLUMN_FILTER = 'SET_COLUMN_FILTER'
 export const INITIALIZE_TABLE = 'INITIALIZE_TABLE'
 
-export const SET_EXPORT_FILE_TYPE = 'EXPORT_FROM_TABLE'
+export const EXPORT_TO_FILE = 'EXPORT_FILE_TO'
 
 
 /*
@@ -16,7 +16,7 @@ export const SET_EXPORT_FILE_TYPE = 'EXPORT_FROM_TABLE'
 
 export const fileTypes = {
   NONE: null,
-  EXCEL: 'EXCEL',
+  EXCEL: 'Excel',
   CSV: 'CSV'
 }
 
@@ -100,10 +100,11 @@ export function initializeTable(table) {
   }
 }
 
-export function setExportFileType(fileType) {
+export function exportToFile(fileType, fileName) {
   return {
-    type: SET_EXPORT_FILE_TYPE,
-    fileType
+    type: EXPORT_TO_FILE,
+    fileType,
+    fileName
   }
 }
 
