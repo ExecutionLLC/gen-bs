@@ -4,21 +4,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="selectColumnsLabel">Setup views</h4>
+        <h4 class="modal-title" id="selectColumnsLabel" data-localize="views.heading">Setup views</h4>
       </div>
      <form>
       <div class="modal-body">
         <div class="collapse in copyview">
           <div class="row grid-toolbar">
             <div class="col-sm-6">
-              <label>Available Filters</label>
+              <label data-localize="views.selector.title">Available Views</label>
             </div>
           </div>
-            <div class="alert alert-help">Standard view are not edited, duplicate it for custom</div>
+            <div class="alert alert-help"><span data-localize="views.selector.description">Standard view are not edited, duplicate it for custom</span></div>
             <div class="row grid-toolbar">
            <div class="col-sm-6">  
             <select class="select2">
-    
             <option value="1" selected>Default View</option>
             <option value="2" >Copy of Default View</option>
             <option value="3" >User Custom View 1</option>
@@ -32,10 +31,10 @@
              </div>
                <!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                 <div class="btn-group hidden">
-                  <button class="btn btn-default">Reset View</button> 
+                  <button class="btn btn-default"><span data-localize="views.reset.title">Reset View</button> 
                 </div>
                 <div class="btn-group hidden">
-                  <button type="button" class="btn btn-link">Delete View</button> 
+                  <button type="button" class="btn btn-link"><span data-localize="views.reset.title">Delete View</span></button> 
                 </div>
               <!-- / --> 
                                
@@ -48,13 +47,13 @@
         <div class="collapse copyview">
         <div class="row grid-toolbar">
          <div class="col-sm-6">
-         <label>New View</label> 
+         <label data-localize="view.new.name.title">New View</label> 
          <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
-          <div class="help-text text-danger">Name can not be empty</div>
+         <div class="help-text text-danger" data-localize="view.new.name.error">Name can not be empty</div>
             
         </div>
          <div class="col-sm-5">
-         <label>Description</label>
+         <label data-localize="general.description">Description</label>
          <input type="text" class="form-control" placeholder="Set view description (optional)">
         
             

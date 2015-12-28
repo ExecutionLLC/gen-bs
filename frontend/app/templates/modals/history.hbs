@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="historyLabel">History of Analises Queries</h4>
+        <h4 class="modal-title" id="historyLabel" data-localize="history.heading">History of Analises Queries</h4>
       </div>
       <div class="modal-body table-content">
 
@@ -13,20 +13,20 @@
                 <th>
                   
                 </th>
-                <th>
+                <th data-localize="general.datetime">
                   Datetime
                 </th>
-                 <th>
+                 <t data-localize="general.samples"h>
                   Samples
                 </th>
-                 <th>
+                 <th data-localize="general.filters">
                   Filters
                 </th>
-                <th>
+                <th data-localize="general.view">
                   View
                 </th>
-                 <th>
-                  Q-ty results
+                 <th data-localize="general.variants">
+                  Searched variants	
                 </th>
                 <th>
                 </th>
@@ -39,7 +39,7 @@
     <h3><span class="fa-stack fa-lg">
   <i class="fa fa-circle fa-stack-2x"></i>
   <i class="fa fa-flag fa-stack-1x fa-inverse"></i>
-  </span> You have not saved even a single file <span>Select several mutations in the table with the results of the analysis, and click Export in the top menu</span></h3>
+  </span> <span data-localize="history.empty.title">You have not saved even a single file</span> <span class="subtext"><a href=""><span data-localize="history.empty.description">Buy paid features AGx</span></a></span><span data-localize="history.empty.help">and select the sample filters, view and run the sample analysis</span></h3>
   </div></td>
                        
                       </tr>
@@ -53,8 +53,9 @@
                 <td>Default View</td>
                 <td>98986</td>
                 <td>
-  
-                <button class="btn btn-sm btn-default">Load now</button>
+                <div class="btn-group load">
+                  <button class="btn btn-sm btn-default"><span data-localize="history.load.tittle">Load now</span></button>
+                </div>
 
                 </td>
               </tr>
