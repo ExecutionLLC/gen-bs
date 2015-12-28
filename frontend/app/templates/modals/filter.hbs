@@ -4,27 +4,27 @@
       <div class="modal-header">
         
      <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title">Setup Filters</h4>
+       <h4 class="modal-title" data-localize="filters.heading">Setup Filters</h4>
       </div>
       <div class="modal-body">
-        <div class="alert alert-help">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</div>
          <div class="collapse in copyfilter" id="newfilterField">
            <div class="row grid-toolbar">
             <div class="col-sm-6">
-              <label>Available Filters</label>
+              <label data-localize="filters.selector.title">Available Filters</label>
             </div>
           </div>
-           
+           <div class="alert alert-help"><span data-localize="filters.selector.description">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</span></div>
+
            <div class="row grid-toolbar">
              <div class="col-sm-6">
               <select class="select2" id="filterSelector">
-             <option selected value="eye">Eye Cancer Diagnostics</option>            
-            <option value="cust1">Breast cancer</option>
-            <option value="cust2">Lung cancer</option>
-            <option value="cust3" disabled="">Autism</option>
-            <option value="cust4">Retinoblastoma</option>
-            <option value="cust5" disabled="">Mental retardation</option>
-        </select>
+                <option selected value="eye">Eye Cancer Diagnostics</option>            
+                <option value="cust1">Breast cancer</option>
+                <option value="cust2">Lung cancer</option>
+                <option value="cust3" disabled="">Autism</option>
+                <option value="cust4">Retinoblastoma</option>
+                <option value="cust5" disabled="">Mental retardation</option>
+            </select>
           </div>
              <div class="col-sm-6">
                  <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
@@ -47,7 +47,7 @@
             
            <div class="row grid-toolbar">
              <div class="col-sm-6"> 
-               <label>New Filter</label>  
+               <label  data-localize="filters.new.name.title">New Filter</label>  
                <input value="Copy of Eye Cancer Diagnostics" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
             </div>
             <div class="col-sm-5">

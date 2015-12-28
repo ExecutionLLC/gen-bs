@@ -146,7 +146,7 @@
     
     
         <div class="btn-toolbar sidebar-top">
-        <div class="btn-group"><h5>Account</h5></div>
+        <div class="btn-group"><h5 data-localize="account.title">Account</h5></div>
         <div class="btn-group pull-right"><button data-target="#sidebarRight" data-toggle="collapse" class="btn navbar-btn sidebarToggle" href="#" type="button"><i class="fa fa-close"></i></button>
           
         </div>
@@ -156,15 +156,15 @@
            <div class="guest">
          <div class="panel panel-default">
            <div class="panel-body">
-          <p class="light">
+          <p class="light" data-localize="account.description">
              Short text about what the benefits received by the user upon login
          </p> 
          
     
       <!-- Nav tabs -->
       <ul class="nav nav-tabs nav-justified" role="tablist">
-        <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
-        <li role="presentation"><a href="#register" aria-controls="#register" role="tab" data-toggle="tab">Register</a></li>
+        <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab" data-localize="account.login.title">Login</a></li>
+        <li role="presentation"><a href="#register" aria-controls="#register" role="tab" data-toggle="tab" data-localize="account.register.title">Register</a></li>
     
       </ul>
     
@@ -175,33 +175,34 @@
           
             <form>
                  <div class="form-group has-feedback">
-               <label>Login</label>
+               <label data-localize="account.login.title">Login</label>
                
                  <input type="text" class="form-control">
-                 <div class="help-text text-danger hidden">No this login</div>
+                 <div class="help-text text-danger hidden"><span data-localize="account.login.error">No that login</span></div>
                  </div>
                  <div class="form-group has-feedback">
-               <label>Password</label>
+               <label data-localize="account.password.title">Password</label>
      
                <input type="password" class="form-control">
-             <div class="help-text text-danger hidden">No this login</div>
+             <div class="help-text text-danger hidden"><span data-localize="account.password.error">Wrong password</span></div>
+             <div class="help-text"><small data-localize="account.password.help">Not less than 6 characters, 1 uppercase, 1 character, 1..9, latin letters and symbols</small></div>
     
                
              </div>
                  <div class="form-group">
-                   <a href="" class="btb btn-link">Remember password</a>
+                   <a href="" class="btb btn-link" data-localize="account.password.error">Remember password</a>
                  </div>
                  <div class="form-group">
-                 <button type="button" class="btn btn-block btn-primary" id="btnLogin">Sign in</button>
+                 <button type="button" class="btn btn-block btn-primary" id="btnLogin"><span data-localize="account.login.action">Sign in</span></button>
                 <!-- <button class="btn btn-block btn-openid"></button> -->
                  </div>
                 <hr>
-             <div class="form-group">
-                  If you do not already have an account <a class="btb btn-link" href="">register for free</a>
+               <div class="form-group">
+                  <span data-localize="account.login.question">If you do not already have an account</span> <a class="btb btn-link" href="" data-localize="account.register.action">register for free</a>
                  </div>
     
                 <div class="form-group">
-                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
                  </div>
               </form> 
             </div>
@@ -209,25 +210,26 @@
             
             <form>
                  <div class="form-group has-feedback">
-               <label>Email</label>
+               <label data-localize="account.email.title">Email</label>
                
                   <input type="email" class="form-control">
-                  <div class="help-text text-danger hidden">Error</div>
+                  <div class="help-text text-danger hidden"><span data-localize="account.email.error">Wrong email</span></div>
+         
                  </div>
                  <div class="form-group">
-                 <button type="button" class="btn btn-block btn-primary" id="btnLogin">Sign up for free</button>
+                 <button type="button" class="btn btn-block btn-primary" id="btnLogin"><span data-localize="account.register.action">Sign up for free</span></button>
              
                </div>
                  <hr>
                  
                   <div class="form-group">
-                   By clicking <strong>Sign up for free</strong> you agree to <a href="" class="btb btn-link">our terms and conditions</a>
+                   <span data-localize="account.register.confirm">By clicking</span> <strong data-localize="account.register.action">Sign up for free</strong> <span data-localize="account.register.agree">you agree to</span> <a href="" class="btb btn-link" data-localize="account.register.terms">our terms and conditions</a>
                  </div> 
                 <div class="form-group">
-                   Already have an account?<a href="" class="btb btn-link"> Sign in</a>
+                  <span data-localize="account.register.terms">Already have an account?</span><a href="" class="btb btn-link" data-localize="account.login.action"> Sign in</a>
                  </div> 
                  <div class="form-group">
-                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
                  </div>
                 </form> 
                 </div>
@@ -240,14 +242,14 @@
     
              <div class="panel panel-default">
                <div class="panel-heading">
-                  <h4 class="panel-title"> <button type="button" class="btn btn-link pull-right" id="userEditBtn"><i class="fa fa-pencil"></i></button> Name Lastname</h4>
+                  <h4 class="panel-title"> <button type="button" class="btn btn-link pull-right" id="userEditBtn"><i class="fa fa-pencil"></i></button><span>Name</span> <span>Lastname</span></h4>
                </div>
               <div class="panel-body">
                   <div class="user-view">           
           
                <dl>
               <dt>
-               Email: 
+               <span data-localize="account.email.title">Email</span>: 
               </dt>
               <dd>
                 <a href="maito:user@domain.com">user@domain.com</a>
@@ -256,7 +258,7 @@
     
                <dl>
               <dt>
-               Specialization: 
+               <span data-localize="account.specialization.title">Specialization</span>: 
               </dt>
               <dd>
                 Doctor
@@ -265,7 +267,7 @@
               
                <dl>
               <dt>
-               Language: 
+               <span data-localize="language.title">Language</span>: 
               </dt>
               <dd>
                English
@@ -273,23 +275,23 @@
             </dl>         
                <dl>
               <dt>
-               Balance: 
+               <span data-localize="account.balance.title">Balance</span>: 
               </dt>
                  <!--if paid sample analises, not a zero balance -->
               <dd>
-                 <span  class="text-success">789 paid analises left</span>
+                 <span class="text-success">789 <span data-localize="account.balance.count">paid analysis left</span></span>
                  <!--  If zero balance  -->
-                 <span  class="text-warning hidden">0 paid analises left</span>
+                 <span class="text-warning hidden">0 <span data-localize="account.balance.count">paid analysis left</span></span>
               </dd>
               </dl>
               
               <!--  If no paid options, to use remove class hidden  -->
                  <p class="hidden">
-                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
                  </p>
             <!--if paid sample analises, zero balance, to use remove classes hidden  -->
                   <p class="hidden">
-                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy">Buy access to continue to use the advanced features of App Genomix</a>
+                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action_continue">Buy access to continue to use the advanced features of App Genomix</a>
                   </p>
               
                 </div>
@@ -297,32 +299,32 @@
                 
                <form>
                 <div class="form-group has-feedback">
-                  <label>Name</label>
+                  <label data-localize="account.name.title">Name</label>
                  <input type="text" class="form-control">
-                   <div class="help-text hidden">No this login</div>
+                   <div class="help-text hidden" data-localize="account.name.error">Name can not be so short</div>
                  </div>
                  <div class="form-group has-feedback">
-                 <label>Last Name</label>
+                 <label data-localize="account.lastname.title">Last Name</label>
      
                  <input type="text" class="form-control">
-                 <div class="help-text hidden">No this login</div>           
+                 <div class="help-text hidden" data-localize="account.name.error">Last Name can not be so short</div>           
                 </div>
                  <div class="form-group has-feedback">
-                 <label>Email</label>
+                 <label data-localize="account.email.title">Email</label>
      
                  <input type="email" class="form-control" value="user@domain.com">
-                 <div class="help-text hidden">No this login</div>
+                 <div class="help-text hidden"><span data-localize="account.email.error">Wrong email</span></div>
                
                  </div>
                  <div class="form-group has-feedback">
-                 <label>Specialization</label>
+                 <label data-localize="account.specialization.title">Specialization</label>
      
                  <input type="text" class="form-control">
-                 <div class="help-text hidden">No this login</div>
+                
                
                 </div>
                  <div class="form-group has-feedback">
-                 <label>Language</label>
+                 <label data-localize="language.title">Language</label>
                  <div class="select-wrap">
                   <select class="select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                    <option>
@@ -334,15 +336,15 @@
     
                  </select>
                  </div>
-                 <div class="help-text hidden">No this login</div>
+                 
                
              </div>
                  <div class="row form-action">
                    <div class="col-xs-6">
-                   <button class="btn btn-block  btn-default usrViewActBtn" type="button">Cancel</button>
+                   <button class="btn btn-block  btn-default usrViewActBtn" type="button"><span data-localize="actions.cancel">Cancel</span></button>
                    </div>
                    <div class="col-xs-6"> 
-                  <button class="btn btn-block  btn-primary usrViewActBtn" type="button">Save</button>
+                  <button class="btn btn-block  btn-primary usrViewActBtn" type="button"><span data-localize="actions.save">Save</span></button>
                    </div>
              </div>
                  
@@ -355,7 +357,7 @@
             </div>
               <div class="panel panel-default">
                <div class="panel-heading">
-               <h4 class="panel-title"> <a href="">Latest Paid Analises</a></h4>
+               <h4 class="panel-title"> <a href="" data-localize="account.paid_analysis">Latest Paid Analysis</a></h4>
                </div>
                      
                  <!----- samples -->
@@ -435,7 +437,7 @@
              </div>
               <div class="panel panel-default">
                   <div class="panel-body">
-                  <a class="btn btn-block btn-default" href="#">Logout</a>
+                  <a class="btn btn-block btn-default" href="#"><span data-localize="account.logout">Logout</span></a>
                   </div>
                  </div>
                </div> 
@@ -454,30 +456,31 @@
                     <nav class="navbar navbar-inverse navbar-fixed-top navbar-main">
                       <div class="navbar-inner">
                     
-                        <div data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand" data-toggle="modal" data-target="#info">AGx<sup>i</sup></a></div>
+                        <div data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand" data-toggle="modal" data-target="#info"><span data-localize="brand.title">AGx</span><sup>i</sup></a></div>
                        
                          <div class="visible-xs"><a type="button" href="#" class="btn navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i class="fa fa-lg fa-filter"></i></a></div>
                          
                           <div class="hidden-xs" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i class="fa fa-lg fa-filter"></i></a></div>   
-                        <!-- Need for reserve width for table search -->
-                        <div class="width100"></div>
+                        <div class="navbar-search-toogle"><a class="btn navbar-btn btn-link" id="searchToggle"><i class="fa fa-search"></i></a></div>
+                          
+                        <div class="navbar-search width100"><div class="navbar-search-field width"><input type="text" class="form-control" placeholder="Search for 912345 variants current sample analises"></div></div> 
                         
                       
                         <div>
                         <div class="dropdown" data-toggle="tooltip" data-placement="right" title="Export of results to file" data-container="body" data-trigger="hover">
                         
                             <a class="btn navbar-btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                              <span class="hidden-xxs" data-localize="export">Export</span>
+                              <span class="hidden-xxs" data-localize="actions.export.title">Export</span>
                               <span class="visible-xxs"><i class="fa fa-lg fa-cloud-download"></i></span>
                               <span class="caret"></span>
                             </a>
                         
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="msexcel">MSExcel</span></a></li>
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="cvs">CVS</a></li>
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="sql">SQL</span></a></li>            
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="json">JSON</span></a></li>
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="xml">XML</span></a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.msexcel">MSExcel</span></a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.cvs">CVS</a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.sql">SQL</span></a></li>            
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.json">JSON</span></a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.xml">XML</span></a></li>
                             </ul>
                         
                         </div>
@@ -487,21 +490,21 @@
                            <button class="btn navbar-btn" data-toggle="modal" data-target="#exporthistory"><span data-localize="files.title">Saved files</span></button>       
                         </div>  
                     
-                         <div data-toggle="tooltip" data-placement="left" title="Change interface language" data-container="body" data-trigger="hover">
-                         <div class="dropdown language">
-                             <a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="dropdown" role="button"><span class="visible-xs">Eng</span><span class="hidden-xs">English </span><span class="caret"></span></a>
-                         
-                             <ul class="dropdown-menu">
-                               <li><a href="/">English</a></li>
-                               <li><a href="index-ch.html">中国</a></li>
-                             </ul>
-                          </div>
-                         </div> 
-                         <div data-toggle="tooltip" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs"><a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy">Buy</a></div> 
-                         <div data-toggle="tooltip" data-placement="left" title="Register or sigh for access to featured options" data-container="body" data-trigger="hover" class="hidden-xs hidden-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden">Name Lastname</span></a></div>
-                         
-                         
-                         <div class="visible-xs visible-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight" ><span class="guest">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden">Name Lastname</span></a></div>    </div>
+                        <div data-toggle="tooltip" data-placement="left" title="Change interface language" data-container="body" data-trigger="hover">
+                        <div class="dropdown language">
+                        
+                            <a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="dropdown" role="button"><span class="visible-xs">Eng</span><span class="hidden-xs">English </span><span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="#" type="button" id="en_lang">English</a></li>
+                              <li><a href="#" type="button" id="ch_lang">中国</a></li>
+                            </ul>
+                            
+                           <input type="hidden" id="curr_lang" value="en">
+                         </div>
+                        </div> 
+                        <div data-toggle="tooltip" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs"><a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy"><span data-localize="account.buy.title">Buy</span></a></div>
+                        <div data-toggle="tooltip" data-placement="left" title="Register or sigh for access to featured options" data-container="body" data-trigger="hover" class="hidden-xs hidden-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest" data-localize="account.login.title">Login<span class="hidden-xs"> (<span data-localize="account.register.title">Register</span>)</span></span><span class="user hidden"><span data-localize="account.name.title">Name</span> <span data-localize="account.lastname.title">Lastname</span></span></a></div>
+                        <div class="visible-xs visible-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest" data-localize="account.login.title">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden"><span data-localize="account.name.title">Name</span> <span data-localize="account.lastname.title">Lastname</span></span></a></div>    </div>
                      </nav>
                       
                        
@@ -514,7 +517,7 @@
                                         
                                             <div class="table-cell">
                                              <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body"  title="Upload .vfc file of sample">
-                                                 <a href="#" class="btn btn-primary" data-toggle="modal" type="button" data-target="#upload">Upload</a>
+                                                 <a href="#" class="btn btn-primary" data-toggle="modal" type="button" data-target="#upload"><span data-localize="upload.title">Upload</span></a>
                                             </div>
                                             </div>           
                                         
@@ -531,11 +534,11 @@
                                              <div class="table-cell">
                                             <div class="dropdown btn-group"  data-toggle="tooltip" data-placement="right" data-container="body" title="Setup, combine, create custom new filters or combine default">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                  Filters <span class="caret"></span>
+                                                  <span data-localize="general.filters">Filters</span> <span class="caret"></span>
                                                 </button>
                                               <ul class="dropdown-menu dropdown-menu-item-template">
-                                                <li><a href="#" type="button" data-toggle="modal" data-target="#filter">Setup Filters</a></li>
-                                                <li><a href="#" type="button" data-toggle="modal" data-target="#combinefilter">Combine Filters</a></li>
+                                                <li><a href="#" type="button" data-toggle="modal" data-target="#filter"><span data-localize="filters.setup.title">Setup Filters</span></a></li>
+                                                <li><a href="#" type="button" data-toggle="modal" data-target="#combinefilter"><span data-localize="filters.combine.title">Combine Filters</span></a></li>
                                                 
                                               </ul>
                                             </div>
@@ -557,7 +560,7 @@
                                         
                                              <div class="table-cell">
                                              <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Setup custom new views, select colunms, colunm order, sorting and colunm filter">
-                                               <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns">Views</button>
+                                               <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns"><span data-localize="views.title">Views</button>
                                              </div>
                                              </div> 
                                              <div class="table-cell table-cell100">
@@ -587,7 +590,7 @@
                                             </div>           
                                              <div class="table-cell">
                                             <div class="btn-group btn-group-history"  data-toggle="tooltip" data-placement="bottom" data-container="body" title="History of queries, saved query settings">
-                                                 <button data-target="#history" data-toggle="modal" type="button" class="btn btn-default"><span class="">Load history</span></button>
+                                                 <button data-target="#history" data-toggle="modal" type="button" class="btn btn-default"><span  data-localize="history.title">Load history</span></button>
                                             </div>
                                              </div>           
                             
@@ -595,11 +598,13 @@
                                 </div>
                             </nav>
                         </div>    
+                    <!--
                     
                     <div class="table-variants-wrapper">
                       <table class="table table-condensed table-hover table-variants responsive" id="samples_table">
                       </table>        
                     </div>
+                    -->
                 </div>
     
                 <div id="fav-message" class="hidden">
@@ -640,14 +645,14 @@
               </div>    
                <div class="col-sm-6">
                  <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
-                   <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn">Duplicate</button> 
+                   <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn" data-localize="">Duplicate</button> 
                  </div>
                    <!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                     <div class="btn-group hidden">
                       <button class="btn btn-default"><span data-localize="views.reset.title">Reset View</button> 
                     </div>
                     <div class="btn-group hidden">
-                      <button type="button" class="btn btn-link"><span data-localize="views.reset.title">Delete View</span></button> 
+                      <button type="button" class="btn btn-link"><span data-localize="views.deletes.title">Delete View</span></button> 
                     </div>
                   <!-- / --> 
                                    
@@ -660,7 +665,7 @@
             <div class="collapse copyview">
             <div class="row grid-toolbar">
              <div class="col-sm-6">
-             <label data-localize="view.new.name.title">New View</label> 
+             <label data-localize="views.new.name.title">New View</label> 
              <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
              <div class="help-text text-danger" data-localize="view.new.name.error">Name can not be empty</div>
                 
@@ -672,7 +677,7 @@
                 
             </div>
               <div class="col-sm-1">
-                <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview">Cancel</button> 
+                <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview"><span data-localize="actions.cancel">Cancel</span></button> 
               </div>
             </div>
       
@@ -1137,27 +1142,27 @@
           <div class="modal-header">
             
          <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-           <h4 class="modal-title">Setup Filters</h4>
+           <h4 class="modal-title" data-localize="filters.heading">Setup Filters</h4>
           </div>
           <div class="modal-body">
-            <div class="alert alert-help">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</div>
              <div class="collapse in copyfilter" id="newfilterField">
                <div class="row grid-toolbar">
                 <div class="col-sm-6">
-                  <label>Available Filters</label>
+                  <label data-localize="filters.selector.title">Available Filters</label>
                 </div>
               </div>
-               
+               <div class="alert alert-help"><span data-localize="filters.selector.description">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</span></div>
+    
                <div class="row grid-toolbar">
                  <div class="col-sm-6">
                   <select class="select2" id="filterSelector">
-                 <option selected value="eye">Eye Cancer Diagnostics</option>            
-                <option value="cust1">Breast cancer</option>
-                <option value="cust2">Lung cancer</option>
-                <option value="cust3" disabled="">Autism</option>
-                <option value="cust4">Retinoblastoma</option>
-                <option value="cust5" disabled="">Mental retardation</option>
-            </select>
+                    <option selected value="eye">Eye Cancer Diagnostics</option>            
+                    <option value="cust1">Breast cancer</option>
+                    <option value="cust2">Lung cancer</option>
+                    <option value="cust3" disabled="">Autism</option>
+                    <option value="cust4">Retinoblastoma</option>
+                    <option value="cust5" disabled="">Mental retardation</option>
+                </select>
               </div>
                  <div class="col-sm-6">
                      <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
@@ -1180,7 +1185,7 @@
                 
                <div class="row grid-toolbar">
                  <div class="col-sm-6"> 
-                   <label>New Filter</label>  
+                   <label  data-localize="filters.new.name.title">New Filter</label>  
                    <input value="Copy of Eye Cancer Diagnostics" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
                 </div>
                 <div class="col-sm-5">
@@ -1893,56 +1898,54 @@
         </div>
       </div>
       </div> 
-    
     <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="uploadLabel">
       <div class="modal-dialog modal-lg modal-dialog-primary" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="uploadLabel">Upload sample</h4>
+            <h4 class="modal-title" id="uploadLabel" data-localize="upload.title">Upload sample</h4>
           </div>
           <div class="modal-body ">
       
         <div class="drop-area">
-       <div class="text-muted">Drag and drop your files here or manually select them.</div>
+       <div class="text-muted" data-localize="upload.description">Drag and drop your files here or manually select them.</div>
        <div>
         <button class="btn btn-success btn-rounded">
-          Chose files
+          <span data-localize="upload.choose">Chose files</span>
         </button>
       </div>
-       <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
+       <div class="text-muted" data-localize="upload.description">Supported File Types:.vcf, .vcf.gz</div>
        <div class="progress hidden">
     <div class="progress progress-striped">
           <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-primary  progress-bar-primary">
-            <span class="sr-only">40% Complete (success)</span>
+            <span class="sr-only">40% <span data-localize="general.complete">Complete</span> (<span data-localize="general.success_simple">success</span>)</span></span>
           </div>
         </div>
     </div>
     </div>
       
         <div class="alert alert-danger hidden">
-          <p><strong>Error!</strong>You trying to load zip file format.</p>    
+          <p><strong data-localize="general.error">Error!</strong><span data-localize="upload.errors.wrongformat">You trying to load zip file format.</span></p>    
         </div>
         <div class="alert alert-danger hidden">
-          <p><strong>Error!</strong>The file is damaged or unreadable</p>    
+          <p><strong data-localize="general.error">Error!</strong><span data-localize="upload.errors.unreadable">The file is damaged or unreadable</p>    
         </div>
-    
-         <div class="alert alert-warning hidden">
-          <p><strong>Warning!</strong>The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</p>    
+        <div class="alert alert-warning hidden">
+          <p><strong data-localize="general.warning">Warning!</strong><span data-localize="upload.warnings.notcomplete">The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</span></p>    
         </div>
         <div class="alert alert-success hidden">
-          <p><strong>Success!</strong>The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
+          <p><strong data-localize="general.success">Success!</strong><span data-localize="upload.success.loaded">The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
         </div>
         
-        <h4>Searh for available samples</h4>
+        <h4 data-localize="samples.search.title">Search for available samples</h4>
          <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>    
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
            <div class="btn-group pull-right" >
-          <a class="btn btn-default btn-choose" role="button">
-                  Select for analisis
-                </a>
+           <a class="btn btn-default btn-choose" role="button">
+              <span data-localize="samples.select_for.title">Select for analisis</span>
+          </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               <i class="fa fa-pencil"></i>
             </a>
@@ -2079,7 +2082,7 @@
         <div class="panel-heading" role="tab" id="headingTwo">
           <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
-                  Select for analisis
+                  <span data-localize="samples.select_for.title">Select for analisis</span>
                 </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               <i class="fa fa-pencil"></i>
@@ -2219,7 +2222,7 @@
         <div class="panel-heading" role="tab" id="headingThree">
              <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
-                  Select for analisis
+                  <span data-localize="samples.select_for.title">Select for analisis</span>
                 </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseTree">
               <i class="fa fa-pencil"></i>
@@ -2390,7 +2393,7 @@
                     <th data-localize="general.datetime">
                       Datetime
                     </th>
-                     <t data-localize="general.samples"h>
+                     <th data-localize="general.samples">
                       Samples
                     </th>
                      <th data-localize="general.filters">
@@ -2594,56 +2597,54 @@
         </div>
       </div>
     </div>
-    
     <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="uploadLabel">
       <div class="modal-dialog modal-lg modal-dialog-primary" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="uploadLabel">Upload sample</h4>
+            <h4 class="modal-title" id="uploadLabel" data-localize="upload.title">Upload sample</h4>
           </div>
           <div class="modal-body ">
       
         <div class="drop-area">
-       <div class="text-muted">Drag and drop your files here or manually select them.</div>
+       <div class="text-muted" data-localize="upload.description">Drag and drop your files here or manually select them.</div>
        <div>
         <button class="btn btn-success btn-rounded">
-          Chose files
+          <span data-localize="upload.choose">Chose files</span>
         </button>
       </div>
-       <div class="text-muted">Supported File Types:.vcf, .vcf.gz</div>
+       <div class="text-muted" data-localize="upload.description">Supported File Types:.vcf, .vcf.gz</div>
        <div class="progress hidden">
     <div class="progress progress-striped">
           <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-primary  progress-bar-primary">
-            <span class="sr-only">40% Complete (success)</span>
+            <span class="sr-only">40% <span data-localize="general.complete">Complete</span> (<span data-localize="general.success_simple">success</span>)</span></span>
           </div>
         </div>
     </div>
     </div>
       
         <div class="alert alert-danger hidden">
-          <p><strong>Error!</strong>You trying to load zip file format.</p>    
+          <p><strong data-localize="general.error">Error!</strong><span data-localize="upload.errors.wrongformat">You trying to load zip file format.</span></p>    
         </div>
         <div class="alert alert-danger hidden">
-          <p><strong>Error!</strong>The file is damaged or unreadable</p>    
+          <p><strong data-localize="general.error">Error!</strong><span data-localize="upload.errors.unreadable">The file is damaged or unreadable</p>    
         </div>
-    
-         <div class="alert alert-warning hidden">
-          <p><strong>Warning!</strong>The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</p>    
+        <div class="alert alert-warning hidden">
+          <p><strong data-localize="general.warning">Warning!</strong><span data-localize="upload.warnings.notcomplete">The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</span></p>    
         </div>
         <div class="alert alert-success hidden">
-          <p><strong>Success!</strong>The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
+          <p><strong data-localize="general.success">Success!</strong><span data-localize="upload.success.loaded">The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
         </div>
         
-        <h4>Searh for available samples</h4>
+        <h4 data-localize="samples.search.title">Search for available samples</h4>
          <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>    
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
            <div class="btn-group pull-right" >
-          <a class="btn btn-default btn-choose" role="button">
-                  Select for analisis
-                </a>
+           <a class="btn btn-default btn-choose" role="button">
+              <span data-localize="samples.select_for.title">Select for analisis</span>
+          </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               <i class="fa fa-pencil"></i>
             </a>
@@ -2780,7 +2781,7 @@
         <div class="panel-heading" role="tab" id="headingTwo">
           <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
-                  Select for analisis
+                  <span data-localize="samples.select_for.title">Select for analisis</span>
                 </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               <i class="fa fa-pencil"></i>
@@ -2920,7 +2921,7 @@
         <div class="panel-heading" role="tab" id="headingThree">
              <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
-                  Select for analisis
+                  <span data-localize="samples.select_for.title">Select for analisis</span>
                 </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseTree">
               <i class="fa fa-pencil"></i>
@@ -3098,14 +3099,14 @@
           <div class="modal-lg-scroll" class="mCustomScrollbar" data-mcs-theme="dark">
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
     
-    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+              <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
     
      
-    <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+              <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
     
-    <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
+              <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
     
-    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+              <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
             
             </div>
           
@@ -3201,16 +3202,16 @@
       <span aria-hidden="true">&times;</span>
     </button>
     <!--   success state -->
-      <p>Filename.vcf is upload successfully</p>
-      <p>You can choose sample SampleName for analises now</p>
-      <p><button class="btn btn-sm btn-block btn-success">Choose this sample for analises</button></p>
+      <p data-localize="upload.alerts.success.title">Filename.vcf is upload successfully</p>
+      <p data-localize="upload.alerts.success.description">You can choose sample SampleName for analises now</p>
+      <p><button class="btn btn-sm btn-block btn-success"><span data-localize="upload.alerts.success.action">Choose this sample for analises</span></button></p>
     <!--   warning state -->  
-     <p>Filename.vcf is upload successfully</p>
-      <p>You can choose sample SampleName for analises now <span class="text-warning">but sample metadata is not complite</p>
-      <p><button class="btn btn-sm btn-block btn-warning">Choose this sample for analises</button></p>
+     <p data-localize="upload.alerts.warning.title">Filename.vcf is upload successfully</p>
+      <p data-localize="upload.alerts.warning.warning">You can choose sample SampleName for analises now <span class="text-warning">but sample metadata is not complite</p>
+      <p><button class="btn btn-sm btn-block btn-warning" data-localize="upload.alerts.warning.action">Fill sample metadata</button></p>
     <!--   danger state -->
-     <p>Filename.vcf is not upload</p>
-      <p><span class="text-danger">File is damage or file format not supported</p>
+     <p data-localize="upload.alerts.error.title">Filename.vcf is not upload</p>
+      <p data-localize="upload.alerts.error.warning"><span class="text-danger">File is damage or file format not supported</p>
     </div>
 
 

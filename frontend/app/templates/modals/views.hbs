@@ -27,14 +27,14 @@
           </div>    
            <div class="col-sm-6">
              <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
-               <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn">Duplicate</button> 
+               <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn" data-localize="">Duplicate</button> 
              </div>
                <!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                 <div class="btn-group hidden">
                   <button class="btn btn-default"><span data-localize="views.reset.title">Reset View</button> 
                 </div>
                 <div class="btn-group hidden">
-                  <button type="button" class="btn btn-link"><span data-localize="views.reset.title">Delete View</span></button> 
+                  <button type="button" class="btn btn-link"><span data-localize="views.deletes.title">Delete View</span></button> 
                 </div>
               <!-- / --> 
                                
@@ -47,7 +47,7 @@
         <div class="collapse copyview">
         <div class="row grid-toolbar">
          <div class="col-sm-6">
-         <label data-localize="view.new.name.title">New View</label> 
+         <label data-localize="views.new.name.title">New View</label> 
          <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
          <div class="help-text text-danger" data-localize="view.new.name.error">Name can not be empty</div>
             
@@ -59,7 +59,7 @@
             
         </div>
           <div class="col-sm-1">
-            <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview">Cancel</button> 
+            <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview"><span data-localize="actions.cancel">Cancel</span></button> 
           </div>
         </div>
   
