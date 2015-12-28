@@ -7,7 +7,7 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    sendSearchRequest(user, sessionId, viewId, filterIds, globalSearchValue, fieldSearchValues, callback) {
+    sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, callback) {
         // Check that session id is valid and belongs to the specified user.
         this.services.sessions.findById(sessionId, user.id, (error) => {
             if (error) {
@@ -19,21 +19,12 @@ class SearchService extends ServiceBase {
                     } else {
                         this.services.filters.findMany(user, filterIds, (error, filters) => {
                             const params = {
+                                sampleId: sampleId,
                                 view: view,
-                                filters: filters,
-                                globalSearchValue: globalSearchValue,
-                                fieldSearchValues: fieldSearchValues
+                                filters: filters
                             };
 
-                            this.services.applicationServer.requestOpenSearchSession(sessionId, searchOperationId, params, (error, operationId) => {
-                                if (error) {
-                                    callback(error);
-                                } else if (operationId !== searchOperationId) {
-                                    callback(new Error('Operation id is changed by the application server! The search session will not be available for the client.'));
-                                } else {
-                                    callback(searchOperationId);
-                                }
-                            });
+                            this.services.applicationServer.requestOpenSearchSession(sessionId, params, callback);
                         });
                     }
                 });
