@@ -1,0 +1,488 @@
+[
+  {
+    "id": "0592fc55-0258-4010-bae4-afafe7971f34",
+    "name": "ipsum",
+    "synonyms": [
+      {
+        "id": "102b808e-7136-4be2-96e1-3ed3349f23d7",
+        "name": "et"
+      },
+      {
+        "id": "58370264-8c17-4f89-97db-2de081e63440",
+        "name": "pariatur"
+      },
+      {
+        "id": "f0fb56da-b869-4ce3-a6d5-099902739eb5",
+        "name": "magna"
+      }
+    ]
+  },
+  {
+    "id": "193be5bf-746a-4acf-a873-d80699ca42cc",
+    "name": "consequat",
+    "synonyms": [
+      {
+        "id": "337d5288-9494-47ba-beb8-1048957bbb0f",
+        "name": "mollit"
+      },
+      {
+        "id": "d189bb71-f857-42ed-9732-639567f208b3",
+        "name": "occaecat"
+      },
+      {
+        "id": "910fd789-afb1-4a76-ab02-7eef7941ba6b",
+        "name": "magna"
+      }
+    ]
+  },
+  {
+    "id": "fd1c9ffe-74a1-4ffb-b9f4-b6cc62a85569",
+    "name": "est",
+    "synonyms": [
+      {
+        "id": "dec5c4df-bcd0-421a-a049-d9552090a5d2",
+        "name": "irure"
+      },
+      {
+        "id": "3b820ba2-557a-4995-bcf9-40b5bbac09b6",
+        "name": "officia"
+      },
+      {
+        "id": "458e18bb-4589-442b-817a-cfc537b141de",
+        "name": "do"
+      }
+    ]
+  },
+  {
+    "id": "c6fe5559-18cd-4399-84d6-b303a3f0d335",
+    "name": "ipsum",
+    "synonyms": [
+      {
+        "id": "bd3b2fbf-85fe-4c9e-afd7-6acd5b260664",
+        "name": "aliqua"
+      },
+      {
+        "id": "8171ac23-ef57-4dad-ba78-791aaf84da7b",
+        "name": "qui"
+      },
+      {
+        "id": "fec07500-22c8-42ca-9a75-826ff764d9ef",
+        "name": "tempor"
+      }
+    ]
+  },
+  {
+    "id": "e9c79144-31c6-4292-9f3d-52bb36883a8f",
+    "name": "amet",
+    "synonyms": [
+      {
+        "id": "f7e50a3e-f48b-46ec-aa1f-50965899060d",
+        "name": "reprehenderit"
+      },
+      {
+        "id": "d0b22358-412f-4ffb-9c89-5dd6f84537e0",
+        "name": "ullamco"
+      },
+      {
+        "id": "11ec6e89-2b65-497b-86a6-f168508e169d",
+        "name": "incididunt"
+      }
+    ]
+  },
+  {
+    "id": "b4a51613-9475-4276-b5a5-95797761107d",
+    "name": "aute",
+    "synonyms": [
+      {
+        "id": "c568d029-4f09-4913-9276-65ba6348e981",
+        "name": "do"
+      },
+      {
+        "id": "27cd96e3-88db-4fe2-b707-4ad96965e337",
+        "name": "minim"
+      },
+      {
+        "id": "fa9d13d5-7917-433a-997f-9b98af53b6e4",
+        "name": "adipisicing"
+      }
+    ]
+  },
+  {
+    "id": "37af1074-a297-4d10-8969-68b9625334a7",
+    "name": "voluptate",
+    "synonyms": [
+      {
+        "id": "ee27640b-824c-46b8-925b-fad6a251ee05",
+        "name": "aliquip"
+      },
+      {
+        "id": "5021b934-2443-4658-b1dd-3ea4bd6a5f1b",
+        "name": "ea"
+      },
+      {
+        "id": "a42cd408-583c-44ac-8cbd-324c6a1a433b",
+        "name": "cillum"
+      }
+    ]
+  },
+  {
+    "id": "068fb2a5-9093-4128-b006-a316e76473e5",
+    "name": "irure",
+    "synonyms": [
+      {
+        "id": "dbc6bb38-952f-4827-86e3-094bdba78635",
+        "name": "voluptate"
+      },
+      {
+        "id": "eced678e-050a-4635-8bbe-959bf20b9949",
+        "name": "fugiat"
+      },
+      {
+        "id": "ecbfea7d-6270-4f17-85fc-863e49c9c2dd",
+        "name": "eiusmod"
+      }
+    ]
+  },
+  {
+    "id": "e875c321-78d9-47d6-b318-54917076c0e2",
+    "name": "eu",
+    "synonyms": [
+      {
+        "id": "292fcf3d-8e83-48d8-b89a-3708ca026eb6",
+        "name": "ut"
+      },
+      {
+        "id": "07d87633-e2ed-4289-934c-c4010172a93a",
+        "name": "incididunt"
+      },
+      {
+        "id": "2719e1fa-0a43-4ed8-9143-dd618b5461c1",
+        "name": "ut"
+      }
+    ]
+  },
+  {
+    "id": "cc3433fa-0216-4f40-9cd5-61cb1582ad2c",
+    "name": "pariatur",
+    "synonyms": [
+      {
+        "id": "5cf2d48a-1139-428b-a150-1ea3e23ad117",
+        "name": "eiusmod"
+      },
+      {
+        "id": "59846038-f5da-4b7d-8d9e-c3f53073583c",
+        "name": "laboris"
+      },
+      {
+        "id": "6510da52-bfad-4f38-9160-2e8cf27409e6",
+        "name": "id"
+      }
+    ]
+  },
+  {
+    "id": "dff60db2-a6c1-41da-a394-b23b5c76f4ea",
+    "name": "veniam",
+    "synonyms": [
+      {
+        "id": "635e501b-b532-4187-8e3f-707be21c3a04",
+        "name": "proident"
+      },
+      {
+        "id": "ce7deeac-808b-4b2d-8e15-83df15760395",
+        "name": "amet"
+      },
+      {
+        "id": "b431e304-61f1-4073-8167-fd0ff935d87a",
+        "name": "in"
+      }
+    ]
+  },
+  {
+    "id": "d822cce9-977e-4563-9715-0e4b29050944",
+    "name": "ea",
+    "synonyms": [
+      {
+        "id": "36da93a6-592f-406d-88b2-465b60d57f15",
+        "name": "in"
+      },
+      {
+        "id": "d913dcfd-846a-4e15-a084-6c90dbf3902e",
+        "name": "non"
+      },
+      {
+        "id": "cab94a88-0060-4ef1-bf69-c7ee4c6f4356",
+        "name": "et"
+      }
+    ]
+  },
+  {
+    "id": "2006d03a-eb26-4212-9950-f3e7c598322e",
+    "name": "nisi",
+    "synonyms": [
+      {
+        "id": "27287809-dfb6-4e7e-a024-f85e4cc18b8d",
+        "name": "sunt"
+      },
+      {
+        "id": "8cffbaec-71c0-4500-ba3d-b89f93711046",
+        "name": "do"
+      },
+      {
+        "id": "5393b0b0-0d7e-4bbd-afdd-2df8f005af0a",
+        "name": "excepteur"
+      }
+    ]
+  },
+  {
+    "id": "c44fca69-adcd-4534-9a92-69b68a97d6cd",
+    "name": "commodo",
+    "synonyms": [
+      {
+        "id": "e0b00e78-c708-4453-91df-fc2dd5d268aa",
+        "name": "duis"
+      },
+      {
+        "id": "07252248-132f-4fb6-bf12-dbae374938df",
+        "name": "laborum"
+      },
+      {
+        "id": "7d660111-0f9d-4ef0-9d39-4e05677ec172",
+        "name": "irure"
+      }
+    ]
+  },
+  {
+    "id": "7ba5e244-ee49-4e05-9e3c-da237200e278",
+    "name": "do",
+    "synonyms": [
+      {
+        "id": "aba4a409-d55f-4a71-a378-010e281d2606",
+        "name": "commodo"
+      },
+      {
+        "id": "781cb596-db39-41c1-b70e-6506b213ed91",
+        "name": "veniam"
+      },
+      {
+        "id": "0d788ee1-c92d-4cb9-93ea-53d793bf4361",
+        "name": "aliqua"
+      }
+    ]
+  },
+  {
+    "id": "0c48c4a7-b8b7-4376-b4c0-f7c1f9017852",
+    "name": "sint",
+    "synonyms": [
+      {
+        "id": "0f83d9e4-3b27-476c-9f8c-78828ff78ed7",
+        "name": "in"
+      },
+      {
+        "id": "0f3ba0f4-52e3-40ad-8487-0fc065c95776",
+        "name": "fugiat"
+      },
+      {
+        "id": "3d1c25e2-8764-443d-b61f-9b14258e949f",
+        "name": "sint"
+      }
+    ]
+  },
+  {
+    "id": "d2077a4a-96d3-476e-bb6a-ec002bebe2ed",
+    "name": "ea",
+    "synonyms": [
+      {
+        "id": "4f171921-678d-4f04-8a31-ca99f678d805",
+        "name": "eu"
+      },
+      {
+        "id": "f91e4c69-194d-4e37-afcb-7b05b8179bee",
+        "name": "sint"
+      },
+      {
+        "id": "325f3dc6-8dc1-417b-8f84-39a87b46b4e1",
+        "name": "fugiat"
+      }
+    ]
+  },
+  {
+    "id": "cab84dc0-78e5-4747-a75e-2a137f8fce4f",
+    "name": "cupidatat",
+    "synonyms": [
+      {
+        "id": "b9ee4a50-30a9-47f3-b3a7-ae5fd618dc5d",
+        "name": "officia"
+      },
+      {
+        "id": "685e45eb-b6fe-45b4-a00d-71cb648f6d7d",
+        "name": "irure"
+      },
+      {
+        "id": "5099806b-54be-447e-be99-1404679cee08",
+        "name": "officia"
+      }
+    ]
+  },
+  {
+    "id": "dc1dc56c-a220-4ab8-925b-42832467132a",
+    "name": "quis",
+    "synonyms": [
+      {
+        "id": "4f4bed11-48ec-4839-a38c-885b302c29ed",
+        "name": "est"
+      },
+      {
+        "id": "91853fd0-bcf1-4d05-b63c-55076f3a9be8",
+        "name": "dolor"
+      },
+      {
+        "id": "d70bb697-83fb-4766-bbaa-53b22b768292",
+        "name": "exercitation"
+      }
+    ]
+  },
+  {
+    "id": "c054bd4b-4c22-48ed-8774-23802e414e72",
+    "name": "ipsum",
+    "synonyms": [
+      {
+        "id": "7d23ec0a-84b2-424e-8aef-973e55ce5a8b",
+        "name": "ad"
+      },
+      {
+        "id": "b02b1256-ea10-458a-a8bb-fb7d6d866b38",
+        "name": "aliqua"
+      },
+      {
+        "id": "95ccca81-00fa-4d49-affe-2049e1bcb8a1",
+        "name": "aliquip"
+      }
+    ]
+  },
+  {
+    "id": "fdda0a97-ad55-4e27-a2ce-08f920ef784b",
+    "name": "eu",
+    "synonyms": [
+      {
+        "id": "ba7108aa-03a9-4725-997a-6810c831d871",
+        "name": "aute"
+      },
+      {
+        "id": "ddf2db2e-1ade-4019-9fb2-b4ece556e156",
+        "name": "tempor"
+      },
+      {
+        "id": "3da7c190-ce41-4446-8bde-77352392ce55",
+        "name": "magna"
+      }
+    ]
+  },
+  {
+    "id": "187cb696-c721-4f68-a3f7-61cb8d7cdcaf",
+    "name": "est",
+    "synonyms": [
+      {
+        "id": "30ae3553-ab75-461a-856d-e83b9823930c",
+        "name": "nostrud"
+      },
+      {
+        "id": "5756e253-a487-422e-a918-d8b4d36ce4c8",
+        "name": "excepteur"
+      },
+      {
+        "id": "ec53e819-b4db-4552-889a-26dc789b242b",
+        "name": "commodo"
+      }
+    ]
+  },
+  {
+    "id": "5b9fe63b-7d90-4ed4-8a40-4501727f459d",
+    "name": "est",
+    "synonyms": [
+      {
+        "id": "17168c48-c353-409d-9ac1-19ef765a9886",
+        "name": "sit"
+      },
+      {
+        "id": "64d5c1b1-5de0-4845-8800-a512838db1ab",
+        "name": "enim"
+      },
+      {
+        "id": "e446d4bf-b94b-4ab2-b915-9ba4b09aab69",
+        "name": "aliquip"
+      }
+    ]
+  },
+  {
+    "id": "fd56936c-33b8-411c-8067-e1dfa18e0496",
+    "name": "irure",
+    "synonyms": [
+      {
+        "id": "a569f80c-36f0-4f30-81b4-b86552a9fa50",
+        "name": "qui"
+      },
+      {
+        "id": "676200fb-31a5-4cf6-902f-7234257b403f",
+        "name": "culpa"
+      },
+      {
+        "id": "c4e3606e-39a9-45f3-9f77-0fc033fb27a0",
+        "name": "cillum"
+      }
+    ]
+  },
+  {
+    "id": "4f80e5cd-adb1-425f-ba65-f9e38858ad98",
+    "name": "dolore",
+    "synonyms": [
+      {
+        "id": "2297594c-c1a1-49d0-8c6c-d0f8a1c5d833",
+        "name": "laboris"
+      },
+      {
+        "id": "a7a611f8-84e3-4da8-837a-e5d90f905184",
+        "name": "in"
+      },
+      {
+        "id": "1ee5cd21-65ad-41ce-8906-bc5e8910b282",
+        "name": "deserunt"
+      }
+    ]
+  },
+  {
+    "id": "7607d45e-8cf1-4a14-9e88-078d6cac5110",
+    "name": "eu",
+    "synonyms": [
+      {
+        "id": "e09778ec-1ab5-467d-8b50-6cb5a3196997",
+        "name": "laborum"
+      },
+      {
+        "id": "d8286113-1e3d-41de-8276-3227d48700f9",
+        "name": "non"
+      },
+      {
+        "id": "5ab9a0e6-0313-4b23-9101-0330a77be14d",
+        "name": "ullamco"
+      }
+    ]
+  },
+  {
+    "id": "9d85c3ce-a7bb-413f-8af5-08823bdcb8f1",
+    "name": "elit",
+    "synonyms": [
+      {
+        "id": "8d1e1231-cbdc-4ab0-a3a8-f5d9523c36ab",
+        "name": "dolore"
+      },
+      {
+        "id": "8ca9b857-de43-4ee5-92e5-2412b9ff391f",
+        "name": "proident"
+      },
+      {
+        "id": "e847994a-bedb-42f4-b827-e9784ba24204",
+        "name": "sunt"
+      }
+    ]
+  }
+]

@@ -1,56 +1,81 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
 
-const ModelBase = require('./ModelBase');
-const MockModelBase = require('./MockModelBase');
+const SecureModelBase = require('./SecureModelBase');
 
-const VIEWS = require('../test_data/views.json');
-const userId = require('../test_data/user_metadata.json')[0].id;
+const mappedColumns = ['id', 'name', 'description', 'is_disabled_4copy'];
 
-const mappedColumns = {
-    view: ['id', 'name', 'description', 'is_disabled_4copy'],
-    viewItem: ['id', 'order', 'sort_order', 'description']
-};
-
-class ViewsModel extends ModelBase {
+class ViewsModel extends SecureModelBase {
     constructor(models) {
-        super(models, 'view');
+        super(models, 'view', mappedColumns);
     }
 
     add(userId, languId, view, callback) {
-        this._add(userId, languId, view, callback);
+        let _view = this._init(userId, languId, view);
+
+        this.db.knex.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    this._insert(_view, trx, cb);
+                },
+                (viewId, cb) => {
+                    const dataToInsert = {
+                        viewId: viewId,
+                        languId: languId,
+                        description: _view.description
+                    };
+                    this._insertViewText(dataToInsert, trx, (error) => {
+                        cb(error, viewId);
+                    });
+                },
+                (viewId, cb) => {
+                    this._addViewItems(viewId, _view.viewListItems, trx, (error) => {
+                        cb(error, viewId);
+                    });
+                }
+            ], cb);
+        }, callback);
     }
 
-    find(userId, viewId, callback) {
-        this._getView(userId, viewId, (error, viewData) => {
+    // Создаёт новую версию существующего view
+    update(userId, viewId, view, callback) {
+        this._fetch(userId, viewId, (error, viewData) => {
             if (error) {
                 callback(error);
             } else {
-               this._getViewItems(viewId, (error, viewItemsData) => {
-                   if (error) {
-                       callback(error);
-                   } else {
-                        if (viewData) {
-                           callback(null, this._compileView(viewData, viewItemsData));
-                        }
-                        else {
-                            callback();
-                        }
-                   }
-               });
+                let _view = view;
+                _view.originalViewId = viewData.originalViewId || viewData.id;
+                this._add(userId, viewData.langu_id, _view, callback);
+            }
+        });
+    }
+
+    find(userId, viewId, callback) {
+        this._fetch(userId, viewId, (error, viewData) => {
+            if (error) {
+                callback(error);
+            } else {
+                this._fetchViewItems(viewId, (error, viewItemsData) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, this._compileView(viewData, viewItemsData));
+                    }
+                });
             }
         });
     }
 
     // Собирает последние версии каждого view для текущего пользователя
     findAll(userId, callback) {
-        this._getUserViews(userId, (error, viewsData) => {
+        this._fetchUserViews(userId, (error, viewsData) => {
             if (error) {
                 callback(error);
             } else {
                 const viewIds = _.pluck(viewsData, 'id');
-                this._getViewItemsByIds(viewIds, (error, viewItemsData) => {
+                this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -64,32 +89,32 @@ class ViewsModel extends ModelBase {
         });
     }
 
-    // Создаёт новую версию существующего view
-    update(userId, viewId, view, callback) {
-        this._getView(userId, viewId, (error, viewData) => {
-            if (error) {
-                callback(error);
-            } else {
-                view.originalViewId = viewData.original_view_id || viewData.id;
-                this._add(userId, viewData.langu_id, view, callback);
-            }
-        });
+    _init(userId, languId, data) {
+        let _data = super._init(userId, languId, data);
+        if (data.originalViewId) {
+            _data.originalViewId = data.originalViewId;
+        }
+        _data.name =  data.name;
+        _data.viewType = 'user';
+        _data.viewListItems = data.viewListItems;
+        return _data;
     }
 
-    // Set is_deleted = true
-    remove(userId, viewId, callback) {
-        this.knex(this.baseTable)
-            .where('creator', userId)
-            .andWhere('id', viewId)
-            .update({
-                is_deleted: true
-            })
-            .then(() => {
-                callback(null, viewId);
-            })
-            .catch((error) => {
-                callback(error)
-            });
+    _insert(data, trx, callback) {
+        const dataToInsert = {
+            id: data.id,
+            creator: data.creator,
+            name: data.name,
+            viewType: data.viewType
+        }
+        if (data.originalViewId) {
+            dataToInsert.originalViewId = data.originalViewId
+        }
+        super._insert(dataToInsert, trx, callback);
+    }
+
+    _insertViewText(data, trx, callback) {
+        this._insertTable('view_text', data, trx, callback);
     }
 
     _compileViews(viewsData, viewItemsData) {
@@ -99,10 +124,7 @@ class ViewsModel extends ModelBase {
     }
 
     _compileView(viewData, viewItemsData) {
-        let view = _.reduce(mappedColumns.view, (memo, column) => {
-            memo[column] = viewData[column];
-            return memo;
-        }, {});
+        let view = super._toJson(viewData);
         view['view_list_items'] = this._compileViewItems(viewItemsData);
         return view;
     }
@@ -114,7 +136,7 @@ class ViewsModel extends ModelBase {
     }
 
     _compileViewItem(viewItemData) {
-        let viewItem = _.reduce(mappedColumns.viewItem, (memo, column) => {
+        let viewItem = _.reduce(this.mappedColumns.viewItem, (memo, column) => {
             memo[column] = viewItemData[column];
             return memo;
         }, {});
@@ -122,155 +144,76 @@ class ViewsModel extends ModelBase {
         return viewItem;
     }
 
-    _getUserViews(userId, callback) {
+    _addViewItems(viewId, viewItems, trx) {
+        let viewItemIds = [];
+        async.map(viewItems, (item, cb) => {
+            this.models.viewItems._insert(item, trx, (error, viewItemId) => {
+                if (error) {
+                    cb(error);
+                } else {
+                    viewItemIds.push(viewItemId);
+                    cb(null, viewItemId);
+                }
+            });
+        }, callback(error, viewItemIds));
+    }
+
+    _fetch(userId, id, callback) {
+        super._fetchView(id, (error, data) => {
+            if (error) {
+                callback(error);
+            } else {
+                const secureInfo = {userId: userId};
+                this._secureCheck(data, secureInfo, callback);
+            }
+        });
+    }
+
+    _fetchView(viewId, callback) {
+        this.db.knex.select()
+            .from(this.baseTable)
+            .innerJoin('view_text', 'view_text.view_id', 'view.id')
+            .where('id', viewId)
+            .exec((error, viewData) => {
+                if (error) {
+                    callback(error);
+                } else {
+                    if (viewData.length > 0) {
+                        callback(null, viewData[0]);
+                    } else {
+                        callback(new Error('Item not found: ' + viewId));
+                    }
+                }
+            });
+    }
+
+    _fetchUserViews(userId, callback) {
         const _query = 'SELECT * FROM ' +
             '(SELECT ROW_NUMBER() OVER (' +
             'PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC) AS RN, * ' +
             'FROM ' + this.baseTable + ' ' +
             'INNER JOIN view_text ON view_text.view_id = view.id ' +
             'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
-        this.knex.raw(_query)
-        .then((viewsData) => {
-            callback(null, viewsData.rows);
-        })
-        .catch((error) => {
-            callback(error);
-        });
+        this.db.knex.raw(_query)
+            .exec(callback((error, viewsData) => {
+                callback(error, viewsData.rows);
+            }));
     }
 
-    _getView(userId, viewId, callback) {
-        this.knex.select()
-            .from(this.baseTable)
-            .innerJoin('view_text', 'view_text.view_id', 'view.id')
-            .where('creator', userId)
-            .andWhere('id', viewId)
-            .then((viewData) => {
-                if (viewData.length > 0) {
-                    callback(null, viewData[0]);
-                } else {
-                    callback();
-                }
-            })
-            .catch((error) => {
-                callback(error);
-            });
-    }
-
-    _getViewItemsByIds(viewIds, callback) {
-        this.knex.select()
+    _fetchViewItemsByIds(viewIds, callback) {
+        this.db.knex.select()
             .from('view_item')
             .whereIn('view_id', viewIds)
             .orderBy('view_id', 'asc')
-            .then((viewItemsData) => {
-                callback(null, viewItemsData);
-            })
-            .catch((error) => {
-                callback(error);
-            });
+            .exec(callback);
     }
 
-    _getViewItems(viewId, callback) {
-        this.knex.select()
+    _fetchViewItems(viewId, callback) {
+        this.db.knex.select()
             .from('view_item')
             .where('view_id', viewId)
             .orderBy('order', 'asc')
-            .then((viewItemsData) => {
-                callback(null, viewItemsData);
-            })
-            .catch((error) => {
-                callback(error);
-            });
-    }
-
-    _add(userId, languId, view, callback) {
-        this.knex.transaction((trx) => {
-            let viewId;
-            return this._addView(userId, view, trx)
-                .then((insertedView) => {
-                    viewId = insertedView.id;
-                    return this._addViewDescription(viewId, languId, view.description, trx)
-                        .then(() => {
-                            return this._addViewItems(viewId, view.viewListItems, trx);
-                        });
-                })
-                .then(() => {
-                    trx.commit;
-                    callback(null, viewId);
-                })
-                .catch(trx.rollback)
-        });
-    }
-
-    _addView(userId, view, trx) {
-        const id = super._generateId();
-        let dataToInsert = {
-            id: id,
-            name: view.name,
-            view_type: 'user',
-            creator: userId
-        };
-        if (view.originalViewId) {
-            dataToInsert.original_view_id = view.originalViewId;
-        }
-        return this.knex(this.baseTable)
-            .transacting(trx)
-            .insert(dataToInsert)
-            .then(() => {
-                return dataToInsert;
-            });
-    }
-
-    _addViewDescription(viewId, languId, description, trx) {
-        const dataToInsert = {
-            view_id: viewId,
-            langu_id: languId,
-            description: description
-        };
-        return this.knex('view_text')
-            .transacting(trx)
-            .insert(dataToInsert)
-            .then(() => {
-                return dataToInsert;
-            });
-    }
-
-    _addViewItems(viewId, viewItems, trx) {
-        const promises = _.map(viewItems, viewItem => {
-            const id = super._generateId();
-            const itemToInsert = {
-                id: id,
-                view_id: viewId,
-                field_id: viewItem.fieldId,
-                order: viewItem.order,
-                sort_order: viewItem.sortOrder,
-                sort_direction: viewItem.sortDirection
-            };
-            return this.knex('view_item')
-                .transacting(trx)
-                .insert(itemToInsert)
-                .then(() => {
-                    _.map(viewItem.keywords,
-                        keyword => this._addViewItemKeywords(itemToInsert.id, keyword.id, trx));
-                    return itemToInsert.id;
-                });
-        });
-        return Promise.all(promises)
-            .then((itemIds) => {
-                return itemIds;
-            });
-    }
-
-    _addViewItemKeywords(viewItemId, keywordId, trx) {
-        const dataToInsert = {
-            view_item_id: viewItemId,
-            keyword_id: keywordId
-        };
-        return this.knex('view_item_keyword')
-            .transacting(trx)
-            .insert(dataToInsert)
-            .then(() => {
-                return dataToInsert;
-            });
+            .exec(callback);
     }
 }
 

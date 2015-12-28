@@ -40,6 +40,7 @@ class DatabaseCreator {
                                     ;
                             });
                     } else {
+                        // TODO: можно вставить DROP DATABASE, есть работающий способ
                         console.log('Database is found.');
                     }
                 }).then(() => {
@@ -288,9 +289,12 @@ class DatabaseCreator {
                 table.enu('sort_direction', sortDirectionEnumValues);
             })
             .createTable('view_item_keyword', table => {
-                table.uuid('keyword_id');
-                table.uuid('view_item_id');
-
+                table.uuid('keyword_id')
+                    .references('id')
+                    .inTable('keyword');
+                table.uuid('view_item_id')
+                    .references('id')
+                    .inTable('view_item');
                 table.primary(['keyword_id', 'view_item_id']);
             })
 

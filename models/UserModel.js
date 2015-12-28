@@ -1,62 +1,52 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
 
-const ModelBase = require('./ModelBase');
+const ExtendedModelBase = require('./ExtendedModelBase');
 
 const mappedColumns = ['id', 'number_paid_samples', 'email', 'default_langu_id'];
 
-class UserModel extends ModelBase {
+class UserModel extends ExtendedModelBase {
     constructor(models) {
-        super(models, 'user');
+        super(models, 'user', mappedColumns);
     }
 
-    add(user, callback) {
-        this.knex(this.baseTable).insert(user)
-            .then(() => {
-                callback(null, user);
-            })
-            .catch((error) => {
-                callback(error);
-            });
-    }
-
-    find(userId, callback) {
-        this._getUser(userId, (error, userData) => {
-            if (error) {
-                callback(error);
-            } else {
-                if (userData) {
-                    callback(null, this._compileUser(userData));
-                } else {
-                    callback();
+    add(user, languId, callback) {
+        let _user = this._init(languId, user);
+        this.db.knex.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    this._insert(_user, trx, cb);
+                },
+                (userId, cb) => {
+                    const dataToInsert = {
+                        userId: userId,
+                        languId: languId,
+                        name: _user.name,
+                        lastName: _user.last_name,
+                        speciality: _user.speciality
+                    }
+                    this._insertUserText(dataToInsert, trx, (error) => {
+                        cb(error, userId);
+                    });
                 }
-            }
-        });
+            ], cb);
+        }, callback);
     }
 
-    _getUser(userId, callback) {
-        this.knex.select()
-            .from(this.baseTable)
-            .where('id', userId)
-            .then((userData) => {
-                if (userData.length > 0) {
-                    callback(null, userData[0]);
-                }
-                else {
-                    callback();
-                }
-            })
-            .catch((error) => {
-                callback(error);
-            });
+    _insert(data, trx, callback) {
+        const dataToInsert = {
+            id: id,
+            numberPaidSamples: data.numberPaidSamples,
+            email: data.email,
+            defaultLanguId: data.defaultLanguId
+        }
+        super._insert(dataToInsert, trx, callback);
     }
 
-    _compileUser(userData) {
-        return _.reduce(mappedColumns, (memo, column) => {
-            memo[column] = userData[column];
-            return memo;
-        }, {});
+    _insertUserText(data, trx, callback) {
+        this._insertTable('user_text', data, trx, callback);
     }
 }
 

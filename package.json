@@ -26,6 +26,7 @@
     "node": "4.2.2"
   },
   "dependencies": {
+    "async": "1.5.0",
     "body-parser": "1.14.1",
     "change-case": "2.3.1",
     "domain": "*",
@@ -36,5 +37,7 @@
     "node-uuid": "1.4.7",
     "pg": "4.4.3",
     "ws": "0.8.1"
+  },
+  "devDependencies": {
   }
 }
