@@ -1,0 +1,30 @@
+.tooltip-variant(@bg, @color) { 
+ .tooltip-inner { 
+    background: @bg;
+    color: @color;
+  }
+  &.top .tooltip-arrow { 
+     border-top-color: @bg;
+  }
+  &.top-left .tooltip-arrow { 
+    border-top-color: @bg;
+  }
+  &.top-right .tooltip-arrow { 
+    border-top-color: @bg;
+  }
+  &.right .tooltip-arrow { 
+    border-right-color: @bg;
+ }
+  &.left .tooltip-arrow {
+     border-left-color: @bg;
+  }
+  &.bottom .tooltip-arrow {
+    border-bottom-color: @bg;
+  }
+  &.bottom-left .tooltip-arrow {
+    border-bottom-color: @bg;
+  }
+  &.bottom-right .tooltip-arrow {
+     border-bottom-color:  @bg;
+  }
+}

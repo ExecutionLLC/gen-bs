@@ -10,21 +10,20 @@
       <div class="sidebar-wrap">
       <div class="sidebar-scroll sidebar-filter">
      
-     
-     
-        <section>
-       <h5>
-       <div class="btn-group pull-right">
-        <a href="#" class="btn btn-warning btn-block" data-toggle="modal" type="button" data-target="#upload">Upload</a>
-       </div>
+     <section>
+      <div class="btn-group btn-block">
+            <a data-target="#upload" type="button" data-toggle="modal" class="btn btn-warning btn-block" href="#">Upload sample</a>
+           </div>
+     </section>
+      <section>
+     <h5>
          Choose sample  <a class="btn btn-link" type="button" data-toggle="tooltip"data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples"><i class="fa fa-info-circle text-muted"></i></a>
       </h5>
-       
-      
-      
      
+       
+       
      <div class="btn-group btn-group-select2-wrap">
-     <select class="sample-select-ajax">
+     <select class="sample-search">
      <option value="3620194" selected="selected">mental retardation patient12</option>
      </select> 
      </div>
@@ -33,17 +32,27 @@
     
           </section>
         <section>
-     <h5>
-       <div class="btn-group pull-right">
-        <button class="btn btn-dark-default" data-toggle="modal" data-target="#filter">
-          Setup
-        </button>
+        <h5>
   
-       </div>
-       Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
-       </h5>
        
-
+         <div class="btn-group dropdown pull-right">
+          <button class="btn btn-default dropdown-toggle caret-abs-pos" type="button" data-toggle="dropdown"><i class="fa fa-cog"></i> <span class="caret"></a></button>
+          <ul class="dropdown-menu">
+          <li> 
+          <a data-toggle="modal" data-target="#filter" href="#">
+           Setup filter
+          </a>
+        </li>
+        <li>
+          <a data-toggle="modal" data-target="#combinefilter" href="#">
+            Combine filter
+          </a>
+        </li>
+      </ul>
+        </div>
+         
+         Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
+       </h5>
           
         <div class="btn-group btn-group-select2-wrap">
        <select class="select2" multiple="">
@@ -62,9 +71,10 @@
         <section>
      <h5>
        <div class="btn-group pull-right">
-      <button class="btn btn-dark-default" type="button" data-toggle="modal" data-target="#selectColumns">Setup</button>
-     </div>
-       Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a> </h5>
+        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns"><i class="fa fa-cog"></i></button>
+      </div>
+       Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a>
+         </h5>
   
            
         
@@ -82,10 +92,9 @@
         </div>  
      </section>
         <section>      
-
           <button class="btn btn-block btn-primary" type="button">
-         Analyze
-      </button>
+          Analyze
+         </button>
         
 
      </section>
@@ -97,7 +106,7 @@
     
       </section>
        <section>
-         <hr>
+        
        <small>Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited</small>
        
      </section>

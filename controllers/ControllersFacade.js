@@ -7,12 +7,12 @@ const ViewController = require('./ViewController');
 const FilterController = require('./FilterController');
 const FieldsMetadataController = require('./FieldsMetadataController');
 
-const LoginController = require('./LoginController');
 const SearchController = require('./SearchController');
 
 const TestController = require('./TestController');
 
 const WSController = require('./WSController');
+const SessionsController = require('./SessionsController');
 const ApiController = require('./ApiController');
 
 class ControllersFacade {
@@ -24,8 +24,8 @@ class ControllersFacade {
         this.filtersController = new FilterController(services);
         this.fieldsMetadataController = new FieldsMetadataController(services);
 
-        this.loginController = new LoginController(services);
         this.searchController = new SearchController(services);
+        this.sessionsController = new SessionsController(services);
 
         this.wsController = new WSController(services);
 

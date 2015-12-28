@@ -64,12 +64,18 @@
   // Links within the dropdown menu
   > li > a {
     display: block;
-    padding: 3px 20px;
+    padding: 8px 20px;
     clear: both;
     font-weight: normal;
     line-height: @line-height-base;
     color: @dropdown-link-color;
     white-space: nowrap; // prevent links from randomly breaking onto new lines
+ 
+  }
+  @media (min-width: @grid-float-breakpoint) { 
+    > li > a {
+      padding: 3px 20px; 
+    }
   }
 }
 
@@ -224,5 +230,14 @@
     opacity: 0.5;
     vertical-align: middle;
     }
+  }
+}
+.caret-abs-pos { 
+  position: relative;
+  
+  .caret { 
+    position: absolute;
+    right: 5px;
+    top: 25px;
   }
 }

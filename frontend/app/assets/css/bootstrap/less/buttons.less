@@ -40,7 +40,6 @@
   &.active {
     outline: 0;
     background-image: none;
-    .box-shadow(inset 0 1px 1px rgba(0,0,0,.125));
   }
 
   &.disabled,
@@ -48,7 +47,6 @@
   fieldset[disabled] & {
     cursor: @cursor-disabled;
     .opacity(.65);
-    .box-shadow(none);
   }
 
   a& {
@@ -106,7 +104,7 @@
   text-decoration: none;
   padding-left: 0;
   padding-right: 0;
-  
+  vertical-align: middle;
   &,
   &:active,
   &.active,
@@ -198,14 +196,14 @@ input[type="button"] {
 
 //
 .btn-openid { 
- background: rgba(0, 0, 0, 0) url("http://localhost:3000/assets/images/openid_connect.png") no-repeat scroll center center / cover ;
+    background: rgba(0, 0, 0, 0) url("http://localhost:3000/assets/images/openid_connect.png") no-repeat scroll center center / cover ;
     border: 1px solid @navbar-inverse-border;
     height: 34px;
     width: 180px
  }
  //
  
- .btn-group-select2 { 
+.btn-group-select2 { 
  
   .btn-group { 
     display: table-cell;
@@ -236,15 +234,17 @@ input[type="button"] {
   padding-left: @padding-small-horizontal;
   padding-right: @padding-small-horizontal;
 }
-.btn-wrapnormal { 
-font-size: @font-size-small;
+.btn-wrapnormal {  
+    white-space: normal;
+   
+  &.btn-sm { 
     font-weight: bold;
     line-height: 1.2;
     padding-left: 24px;
     position: relative;
     text-align: left;
-    white-space: normal;
-  color: @text-muted;
+    color: @text-muted;
+  }
   input { 
     position: absolute;
     left: 0;
@@ -264,8 +264,14 @@ font-size: @font-size-small;
    .grid-toolbar { 
     background: rgba(255, 255, 255, 0.6);
     margin: 0 0 2px;
-    padding: 8px 10px;
-  
+    padding: 5px;
+    position: relative;
+   .btn-link { 
+    padding-top: 8px;
+    + .btn-link {
+      margin-left: 5px; 
+    }
+  }
    .btnSort { 
       position: relative;
       &:after { 
@@ -310,7 +316,42 @@ font-size: @font-size-small;
       }
      }
   }
-   .grid-toolbar.nobg { background: none; }  
+   .grid-toolbar.nobg { background: none; }
+   @media (max-width: @screen-xss-max) {
+   
+   }
+     @media (max-width: @screen-xs-max) {
+   .col-xs-6 { 
+      width: 100%;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-bottom: 5px;
+    }
+    .col-xs-5 { 
+     margin-bottom: 5px;
+    margin-left: 50px!important;
+    padding-left: 10px;
+    padding-right: 102px !important;
+    width: 100%;
+        }
+    .col-xs-1 { 
+     margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 5px;
+    position: absolute;
+    right: 0;
+    top: 47px;
+    width: auto;
+
+    }
+    }  
+    @media (min-width: @screen-sm) {
+      .grid-toolbar { 
+        padding: 8px 10px;
+        
+      }
+    }
+  
 }
 .btnSort { 
 

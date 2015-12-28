@@ -148,10 +148,14 @@
   // Modal sizes
   .modal-sm { width: @modal-sm; }
 }
-
-@media (min-width: @screen-md-min) {
-  .modal-lg { width: @modal-lg; }
+.modal-lg {
+  width: 100%;
+   @media (min-width: @modal-lg) {
+    width: @modal-lg;
+  }
 }
+
+
 .modal-dialog-primary { 
   .modal-content { 
    background-color: transparent;  

@@ -15,7 +15,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "name of the column"
+            "description": "name of the column (1 - one value, -1 - same as number of mutations, 0 - any)"
           },
           "is_mandatory": {
             "type": "boolean",

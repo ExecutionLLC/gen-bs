@@ -15,6 +15,7 @@ class SearchController extends ControllerBase {
 
     analyze(request, response) {
         const user = request.user;
+        const sessionId = request.sessionId;
         if (!this.checkUserIsDefined(request, response)) {
             return;
         }
@@ -27,14 +28,12 @@ class SearchController extends ControllerBase {
 
         const viewId = jsonBody.viewId;
         const filterIds = jsonBody.filterIds;
-        const globalSearchValue = jsonBody.globalSearchValue;
-        const fieldSearchValues = jsonBody.fieldSearchValues;
+        const sampleId = jsonBody.sampleId;
         const limit = jsonBody.limit;
         const offset = jsonBody.offset;
 
         this.services.search
-          .sendSearchRequest(viewId, filterIds, globalSearchValue,
-          fieldSearchValues, limit, offset, (error, operationId) => {
+            .sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, limit, offset, (error, operationId) => {
             this.sendJson(response, {
               operationId: operationId
             });
