@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 const ServiceBase = require('./ServiceBase');
 
 const FIELDS_METADATA = require('../test_data/fields_metadata.json');
@@ -15,7 +17,16 @@ class FieldsMetadataService extends ServiceBase {
         } else {
             callback(new Error('User is undefined'));
         }
+    }
 
+    import(appServerFieldMetadataArray, callback) {
+        _.map(appServerFieldMetadataArray, )
+    }
+
+    _createFieldMetadata(appServerFieldMetadata) {
+        const webServerMetadata = {
+
+        };
     }
 }
 
