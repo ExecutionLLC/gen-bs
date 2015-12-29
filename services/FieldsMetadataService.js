@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 
@@ -19,13 +20,21 @@ class FieldsMetadataService extends ServiceBase {
         }
     }
 
-    import(appServerFieldMetadataArray, callback) {
-        _.map(appServerFieldMetadataArray, )
+    import(sourceName, appServerFieldMetadataArray, callback) {
+        const webServerFields = _.map(appServerFieldMetadataArray, this._createFieldMetadata);
+        // TODO: here we should ignore all mandatory fields, as they should be already added.
     }
 
-    _createFieldMetadata(appServerFieldMetadata) {
-        const webServerMetadata = {
-
+    static createFieldMetadata(sourceName, appServerFieldMetadata) {
+        return {
+            id: Uuid.v4(),
+            name: appServerFieldMetadata.name,
+            sourceName: sourceName,
+            isMandatory: appServerFieldMetadata.isMandatory,
+            editable: false,
+            filterControlEnable: false,
+            valueType: appServerFieldMetadata.type,
+            description: appServerFieldMetadata.desc
         };
     }
 }

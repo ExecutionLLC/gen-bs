@@ -10,9 +10,15 @@ const ControllersFacade = require('./controllers/ControllersFacade');
 const ServicesFacade = require('./services/ServicesFacade');
 const ModelsFacade = require('./models/ModelsFacade');
 
+const StartupTaskManager = require('./startup/StartupTaskManager');
+
 const models = new ModelsFacade();
 const services = new ServicesFacade(Config, models);
 const controllers = new ControllersFacade(services);
+
+const startupManager = new StartupTaskManager(services, models);
+
+startupManager.execute();
 
 // Create service.
 const httpServer = Http.createServer();
