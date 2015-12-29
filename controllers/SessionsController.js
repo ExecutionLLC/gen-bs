@@ -66,7 +66,7 @@ class SessionsController extends ControllerBase {
     }
 
     _getSessionId(request) {
-        return request.get(this.services.config.sessionHeaderName);
+        return request.get(this.services.config.sessionHeader);
     }
 
     createRouter() {
