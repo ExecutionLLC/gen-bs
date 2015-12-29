@@ -42,9 +42,7 @@
   },
   "actions": {
     "search": {
-      "placeholder_begin": "Search for",
-      "placeholder_end": "available samples",
-      "description": "Filter for sample list"
+      "value": "Search for mutations of current sample"
     },
     "save_choose": {
       "title": "Save and choose",
@@ -224,13 +222,12 @@
     "new": {
       "name": {
         "title": "New view",
-        "placeholder": "Set view name a copy",
+        "value": "Set view name a copy",
         "error": "Name can not be empty",
         "value_prefix": "Copy of"
       },
       "description": {
-        "title": "Description",
-        "placeholder": "Type view description (optional)"
+        "value": "Type view description (optional)"
       }
     },
     "delete": {
@@ -255,7 +252,7 @@
       "columns_sorting": "Column Name and Multi Sort Order",
       "columns_filter": "Column Filter and Keywords",
       "keywords": {
-        "placeholder": "Keywords (Optional)"
+        "value": "Keywords (Optional)"
       },
       "asc_help": "Asc Descending",
       "desc_help": "Sort Descending"
@@ -274,8 +271,7 @@
         "value_prefix": "Copy of"
       },
       "description": {
-        "title": "Description",
-        "placeholder": "Type filter description (optional)"
+        "value": "Type filter description (optional)"
       }
     },
     "delete": {

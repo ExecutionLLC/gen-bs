@@ -923,7 +923,22 @@ body {
        > tr { 
          > th { 
           
-           > div { 
+           > div {
+             position: relative;
+             min-height: 38px;
+             .btnSort { 
+               position: absolute;
+               z-index: 1;
+               right: 0;
+               top: -10px;;
+             } 
+             .variants-table-header-label { 
+                display: block;
+                line-height: 1.15;
+                padding-right: 24px;
+                white-space: normal;
+                word-wrap: break-word;
+             } 
            }
          }
        }

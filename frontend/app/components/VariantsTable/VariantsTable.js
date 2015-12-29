@@ -43,9 +43,9 @@ var variantsTable = {
 
     head.push(
         `<th data-label="comment">
-          <span class="variants-table-header-label">
+          <div><span class="variants-table-header-label">
             Comment
-          </span><button class="btn btn-link btnSort"></button>
+          </span><button class="btn btn-link btnSort"></button></div>
           <div><input type="text" class="form-control" placeholder="Search coment"></div>
         </th>`);
 
@@ -53,9 +53,9 @@ var variantsTable = {
       if (label !== 'comment') {
         head.push(
             `<th data-label="${label}">
-              <span class="variants-table-header-label">
+              <div><span class="variants-table-header-label">
                 ${this.firstCharUpperCase(label)}
-              </span><button class="btn btn-link btnSort"></button>
+              </span><button class="btn btn-link btnSort"></button></div>
               <div><input type="text"  class="form-control" placeholder="Search ${label}"></div>
             </th>`);
       }

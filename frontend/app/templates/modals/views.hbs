@@ -8,14 +8,35 @@
       </div>
      <form>
       <div class="modal-body">
-        <div class="collapse in copyview">
+
+        <div class="collapse copyview">
+        <div class="row grid-toolbar">
+         <div class="col-sm-6">
+         <label data-localize="views.new.name.title">New View</label> 
+         <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
+         <div class="help-text text-danger" data-localize="views.new.name.error">Name can not be empty</div>
+            
+        </div>
+         <div class="col-sm-5">
+         <label data-localize="general.description">Description</label>
+         <input type="text" class="form-control" data-localize="views.new.description" placeholder="Set view description (optional)">
+        
+            
+        </div>
+          <div class="col-sm-1">
+            <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview"><span data-localize="actions.cancel">Cancel</span></button> 
+          </div>
+        </div>
+  
+        </div> 
+                <div class="collapse in copyview">
           <div class="row grid-toolbar">
             <div class="col-sm-6">
               <label data-localize="views.selector.title">Available Views</label>
             </div>
           </div>
             <div class="alert alert-help"><span data-localize="views.selector.description">Standard view are not edited, duplicate it for custom</span></div>
-            <div class="row grid-toolbar">
+             <div class="row grid-toolbar">
            <div class="col-sm-6">  
             <select class="select2">
             <option value="1" selected>Default View</option>
@@ -27,7 +48,7 @@
           </div>    
            <div class="col-sm-6">
              <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
-               <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn" data-localize="">Duplicate</button> 
+               <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn"><span data-localize="actions.duplicate.title">Duplicate</span></button> 
              </div>
                <!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                 <div class="btn-group hidden">
@@ -41,30 +62,8 @@
            </div>
            
       </div>        
-    
-    
-            </div>
-        <div class="collapse copyview">
-        <div class="row grid-toolbar">
-         <div class="col-sm-6">
-         <label data-localize="views.new.name.title">New View</label> 
-         <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
-         <div class="help-text text-danger" data-localize="view.new.name.error">Name can not be empty</div>
-            
-        </div>
-         <div class="col-sm-5">
-         <label data-localize="general.description">Description</label>
-         <input type="text" class="form-control" placeholder="Set view description (optional)">
-        
-            
-        </div>
-          <div class="col-sm-1">
-            <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview"><span data-localize="actions.cancel">Cancel</span></button> 
-          </div>
-        </div>
-  
-        </div>   
-          <div class="sort-setting hidden" id="view1Sett">
+            </div>  
+          <div class="sort-setting copyview collapse in">
              <h5 data-localize="views.setup.title">Table Columns</h5>
             <div class="row grid-toolbar nobg">
             
@@ -118,7 +117,7 @@
                       <input type="checkbox" id="cCh1" checked="" disabled="">
                   </span>
                 
-                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" readonly="" data-localize="views.setup.keywords.placeholder">
+                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" readonly="" data-localize="views.setup.keywords">
                   </div>
                   
                  <div class="col-xs-1">
@@ -171,7 +170,7 @@
                       <input type="checkbox" id="cCh1" checked="" disabled="">
                   </span>
                 
-                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""readonly="">
+                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" readonly="" data-localize="views.setup.keywords">
                   </div>
                   
                 <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -221,7 +220,7 @@
                       <input type="checkbox" id="cCh1" checked="" disabled="">
                   </span>
                 
-                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" data-localize="views.setup.keywords">
                   </div>
                   
                 <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -272,7 +271,7 @@
                       <input type="checkbox" id="cCh1" disabled="">
                   </span>
                 
-                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="">
+                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="" data-localize="views.setup.keywords">
                   </div>
                   
                 <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button>
@@ -281,7 +280,7 @@
                  </div>
             </div>
         </div>
-          <div class="sort-setting" id="view2Sett">
+          <div class="sort-setting copyview collapse">
              <h5 data-localize="views.setup.title">Table Columns</h5>
             <div class="row grid-toolbar nobg">
             
@@ -335,7 +334,7 @@
                       <input type="checkbox" id="cCh1" checked="">
                   </span>
                 
-                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden">
+                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" data-localize="views.setup.keywords">
                   </div>
                   
                  <div class="col-xs-1">
@@ -388,7 +387,7 @@
                       <input type="checkbox" id="cCh1" checked="">
                   </span>
                 
-                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="" data-localize="views.setup.keywords">
                   </div>
                   
                 <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -438,7 +437,7 @@
                       <input type="checkbox" id="cCh1" checked="">
                   </span>
                 
-                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="" data-localize="views.setup.keywords"> 
                   </div>
                   
                 <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -489,7 +488,7 @@
                       <input type="checkbox" id="cCh1">
                   </span>
                 
-                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="">
+                  <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="" data-localize="views.setup.keywords">
                   </div>
                   
                 <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
