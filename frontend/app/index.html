@@ -463,7 +463,7 @@
                           <div class="hidden-xs" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i class="fa fa-lg fa-filter"></i></a></div>   
                         <div class="navbar-search-toogle"><a class="btn navbar-btn btn-link" id="searchToggle"><i class="fa fa-search"></i></a></div>
                           
-                        <div class="navbar-search width100"><div class="navbar-search-field width"><input type="text" class="form-control" placeholder="Search for 912345 variants current sample analises"></div></div> 
+                        <div class="navbar-search width100"><div class="navbar-search-field width"><input type="text" data-localize="actions.search" class="form-control" placeholder="Search for mutations of current sample analysis" data-localize=""></div></div> 
                         
                       
                         <div>
@@ -592,7 +592,7 @@
                                               data-container="body"
                                               title="Analyze current sample with current filters and view">  
                                               <button class="btn btn-rounded btn-alt-primary" type="button">
-                                                 <span data-localize="action.analyze">Analyze</span>
+                                                 <span data-localize="actions.analyze.title">Analyze</span>
                                               </button>
                                              </div>
                                             </div>           
@@ -634,14 +634,35 @@
           </div>
          <form>
           <div class="modal-body">
-            <div class="collapse in copyview">
+    
+            <div class="collapse copyview">
+            <div class="row grid-toolbar">
+             <div class="col-sm-6">
+             <label data-localize="views.new.name.title">New View</label> 
+             <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
+             <div class="help-text text-danger" data-localize="views.new.name.error">Name can not be empty</div>
+                
+            </div>
+             <div class="col-sm-5">
+             <label data-localize="general.description">Description</label>
+             <input type="text" class="form-control" data-localize="views.new.description" placeholder="Set view description (optional)">
+            
+                
+            </div>
+              <div class="col-sm-1">
+                <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview"><span data-localize="actions.cancel">Cancel</span></button> 
+              </div>
+            </div>
+      
+            </div> 
+                    <div class="collapse in copyview">
               <div class="row grid-toolbar">
                 <div class="col-sm-6">
                   <label data-localize="views.selector.title">Available Views</label>
                 </div>
               </div>
                 <div class="alert alert-help"><span data-localize="views.selector.description">Standard view are not edited, duplicate it for custom</span></div>
-                <div class="row grid-toolbar">
+                 <div class="row grid-toolbar">
                <div class="col-sm-6">  
                 <select class="select2">
                 <option value="1" selected>Default View</option>
@@ -653,7 +674,7 @@
               </div>    
                <div class="col-sm-6">
                  <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
-                   <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn" data-localize="">Duplicate</button> 
+                   <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn"><span data-localize="actions.duplicate.title">Duplicate</span></button> 
                  </div>
                    <!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                     <div class="btn-group hidden">
@@ -667,30 +688,8 @@
                </div>
                
           </div>        
-        
-        
-                </div>
-            <div class="collapse copyview">
-            <div class="row grid-toolbar">
-             <div class="col-sm-6">
-             <label data-localize="views.new.name.title">New View</label> 
-             <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
-             <div class="help-text text-danger" data-localize="view.new.name.error">Name can not be empty</div>
-                
-            </div>
-             <div class="col-sm-5">
-             <label data-localize="general.description">Description</label>
-             <input type="text" class="form-control" placeholder="Set view description (optional)">
-            
-                
-            </div>
-              <div class="col-sm-1">
-                <button type="button" class="btn btn-default btn-label-indent delete-copy" type="button" data-toggle="collapse" data-target=".copyview"><span data-localize="actions.cancel">Cancel</span></button> 
-              </div>
-            </div>
-      
-            </div>   
-              <div class="sort-setting hidden" id="view1Sett">
+                </div>  
+              <div class="sort-setting copyview collapse in">
                  <h5 data-localize="views.setup.title">Table Columns</h5>
                 <div class="row grid-toolbar nobg">
                 
@@ -744,7 +743,7 @@
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" readonly="" data-localize="views.setup.keywords.placeholder">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" readonly="" data-localize="views.setup.keywords">
                       </div>
                       
                      <div class="col-xs-1">
@@ -797,7 +796,7 @@
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""readonly="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" readonly="" data-localize="views.setup.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -847,7 +846,7 @@
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" data-localize="views.setup.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -898,7 +897,7 @@
                           <input type="checkbox" id="cCh1" disabled="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="" data-localize="views.setup.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button>
@@ -907,7 +906,7 @@
                      </div>
                 </div>
             </div>
-              <div class="sort-setting" id="view2Sett">
+              <div class="sort-setting copyview collapse">
                  <h5 data-localize="views.setup.title">Table Columns</h5>
                 <div class="row grid-toolbar nobg">
                 
@@ -961,7 +960,7 @@
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" data-localize="views.setup.keywords">
                       </div>
                       
                      <div class="col-xs-1">
@@ -1014,7 +1013,7 @@
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="" data-localize="views.setup.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -1064,7 +1063,7 @@
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="" data-localize="views.setup.keywords"> 
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -1115,7 +1114,7 @@
                           <input type="checkbox" id="cCh1">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="" data-localize="views.setup.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -1198,7 +1197,7 @@
                 </div>
                 <div class="col-sm-5">
                    <label data-localize="general.description">Description</label>
-                <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
+                <input value="" placeholder="Type filter description (optional)" class="form-control" type="text" data-localize="filters.new.description">
                 </div>
                 <div class="col-sm-1">
                    <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent"><span data-localize="actions.cancel">Cancel</span></button>
@@ -2557,45 +2556,68 @@
           </div>
         </div>    
     <div class="modal fade" id="buy" tabindex="-1" role="dialog" aria-labelledby="buylabel">
-      <div class="modal-dialog modal-dialog-sm modal-dialog-primary" role="document">
+      <div class="modal-dialog modal-dialog-primary" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="loginLabel">Distributors</h4>
           </div>
-          <div class="modal-body">
-       
+          <div class="modal-body table-content">
        <div class="list-group">
-      <a href="#" class="list-group-item active">
+    
+      <a href="#" class="list-group-item">
         <h4 class="list-group-item-heading">Company heading</h4>
-        <ul class="list-group-item-text">
+        <dl class="dl-horizontal">
+          <dt>Adress</dt>
+          <dd><ul class="list-group-item-text">
            <li>Office adress line 1,</li>
            <li> Office adress line 1,</li>
-            <li>Office adress line 1,</li>
+           <li>Office adress line 1,</li>
           
         </ul>
+        </dd>
+        </dl>
+         <dl class="dl-horizontal">
+          <dt>Phone</dt>
+          <dd>+890 678 343789</dd>
+         </dl>
+        
       </a>
-    </div>
-     <div class="list-group">
-      <a href="#" class="list-group-item ">
+    <a href="#" class="list-group-item">
         <h4 class="list-group-item-heading">Company heading</h4>
-        <ul class="list-group-item-text">
+        <dl class="dl-horizontal">
+          <dt>Adress</dt>
+          <dd><ul class="list-group-item-text">
            <li>Office adress line 1,</li>
            <li> Office adress line 1,</li>
-            <li>Office adress line 1,</li>
+           <li>Office adress line 1,</li>
           
         </ul>
+        </dd>
+        </dl>
+         <dl class="dl-horizontal">
+          <dt>Phone</dt>
+          <dd>+890 678 343789</dd>
+         </dl>
+        
       </a>
-    </div>
-     <div class="list-group">
-      <a href="#" class="list-group-item ">
+      <a href="#" class="list-group-item">
         <h4 class="list-group-item-heading">Company heading</h4>
-        <ul class="list-group-item-text">
+        <dl class="dl-horizontal">
+          <dt>Adress</dt>
+          <dd><ul class="list-group-item-text">
            <li>Office adress line 1,</li>
            <li> Office adress line 1,</li>
-            <li>Office adress line 1,</li>
+           <li>Office adress line 1,</li>
           
         </ul>
+        </dd>
+        </dl>
+         <dl class="dl-horizontal">
+          <dt>Phone</dt>
+          <dd>+890 678 343789</dd>
+         </dl>
+        
       </a>
     </div>
     
