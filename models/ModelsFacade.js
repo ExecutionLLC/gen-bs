@@ -1,5 +1,7 @@
 'use strict';
 
+const Logger = require('./utils/Logger');
+
 const LanguModel = require('./LanguModel');
 const UserModel = require('./UserModel');
 const ViewsModel = require('./ViewsModel');
@@ -11,7 +13,8 @@ const SamplesModel = require('./SamplesModel');
 const FieldsMetadataModel = require('./FieldsMetadataModel');
 
 class ModelsFacade {
-    constructor() {
+    constructor(config) {
+        this.logger = new Logger(config.logger);
         this.langu = new LanguModel(this);
         this.user = new UserModel(this);
         this.views = new ViewsModel(this);

@@ -6,10 +6,12 @@ const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
-const Knex = require('knex');
+const Logger = require('../utils/Logger');
 const KnexWrapper = require('../lib/KnexWrapper');
 
 const Config = require('../utils/Config');
+
+const loggerSettings = Config.logger;
 const databaseSettings = Config.database;
 
 const knexConfig = {
@@ -22,13 +24,14 @@ const knexConfig = {
     }
 };
 
-// Knex instance should only be created once per application.
-const knexSingleton = new Knex(knexConfig);
-const knexWrapper = new KnexWrapper(knexSingleton);
+// Knex instance should only be created once per application
+const logger = new Logger(loggerSettings);
+const knexWrapper = new KnexWrapper(knexConfig, logger);
 
 class ModelBase {
     constructor(models, baseTable, mappedColumns) {
         this.models = models;
+        this.logger = models.logger;
         this.baseTable = baseTable;
         this.mappedColumns = mappedColumns;
 
@@ -65,12 +68,26 @@ class ModelBase {
     }
 
     _exists(id, callback) {
-        this.db.knex.select()
-            .from(this.baseTable)
-            .where('id', id)
-            .exec((error, data) => {
-                callback(error, (data.length > 0));
-            });
+        this.db.exec((knex, cb) => {
+            knex.select()
+                .from(this.baseTable)
+                .where('id', id)
+                .exec((error, data) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, (data.length > 0));
+                    }
+                });
+        }, callback);
+
+
+        //this.db.knex.select()
+        //    .from(this.baseTable)
+        //    .where('id', id)
+        //    .exec((error, data) => {
+        //        callback(error, (data.length > 0));
+        //    });
     }
 
     _fetch(id, callback) {

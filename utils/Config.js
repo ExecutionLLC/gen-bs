@@ -14,6 +14,16 @@ const SETTINGS = {
         user: ENV.WS_DATABASE_USER || 'postgres',
         password: ENV.WS_DATABASE_PASSWORD || 'postgres',
         databaseName: ENV.WS_DATABASE_NAME || 'genomixdb'
+    },
+    logger: {
+        app_name: 'genomix',
+        console: {
+            level: 'trace'
+        },
+        file: {
+            level: 'warn',
+            path: 'logs/server.log'
+        }
     }
 };
 

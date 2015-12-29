@@ -12,7 +12,7 @@ class LanguModel extends ModelBase {
     }
 
     add(langu, callback) {
-        this.db.knex.transactionally((trx, cb) => {
+        this.db.transactionally((trx, cb) => {
             this._insert(langu, trx, cb)
         }, callback);
     }

@@ -2,7 +2,7 @@
 
 const ExtendedModelBase = require('./ExtendedModelBase');
 
-class UserModelBase extends ExtendedModelBase {
+class SecureModelBase extends ExtendedModelBase {
     constructor(models, baseTable, mappedColumns) {
         super(models, baseTable, mappedColumns);
     }
@@ -50,4 +50,4 @@ class UserModelBase extends ExtendedModelBase {
     }
 }
 
-module.exports = UserModelBase;
+module.exports = SecureModelBase;

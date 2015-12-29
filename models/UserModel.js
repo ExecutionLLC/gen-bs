@@ -14,7 +14,7 @@ class UserModel extends ExtendedModelBase {
 
     add(user, languId, callback) {
         let _user = this._init(languId, user);
-        this.db.knex.transactionally((trx, cb) => {
+        this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     this._insert(_user, trx, cb);
@@ -24,7 +24,7 @@ class UserModel extends ExtendedModelBase {
                         userId: userId,
                         languId: languId,
                         name: _user.name,
-                        lastName: _user.last_name,
+                        lastName: _user.lastName,
                         speciality: _user.speciality
                     }
                     this._insertUserText(dataToInsert, trx, (error) => {
