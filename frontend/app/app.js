@@ -20,8 +20,8 @@ import './assets/vendor/jquery-localize/dist/jquery.localize.js';
 
 import './assets/css/index.less';
 
+import './components/VariantsTable/VariantsTable';
 
-import './components/SamplesTable/SamplesTable';
 import './components/Old/old';
 import './components/localize/jquerylocalize.js';
 

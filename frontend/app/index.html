@@ -469,6 +469,12 @@
                         <div>
                         <div class="dropdown" data-toggle="tooltip" data-placement="right" title="Export of results to file" data-container="body" data-trigger="hover">
                         
+                            <a class="btn navbar-btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="modal" data-target="#filename">
+                              <span class="hidden-xxs" data-localize="actions.export.title">Export</span>
+                              <span class="visible-xxs"><i class="fa fa-lg fa-cloud-download"></i></span>
+                            </a>
+                        
+                        <!--
                             <a class="btn navbar-btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                               <span class="hidden-xxs" data-localize="actions.export.title">Export</span>
                               <span class="visible-xxs"><i class="fa fa-lg fa-cloud-download"></i></span>
@@ -482,10 +488,12 @@
                               <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.json">JSON</span></a></li>
                               <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.xml">XML</span></a></li>
                             </ul>
+                        -->
                         
                         </div>
                         
                         </div>
+                    
                          <div class="hidden-xxs" data-toggle="tooltip" data-placement="left" title="History of saved file" data-container="body" data-trigger="hover">
                            <button class="btn navbar-btn" data-toggle="modal" data-target="#exporthistory"><span data-localize="files.title">Saved files</span></button>       
                         </div>  
@@ -598,13 +606,13 @@
                                 </div>
                             </nav>
                         </div>    
-                    <!--
                     
                     <div class="table-variants-wrapper">
-                      <table class="table table-condensed table-hover table-variants responsive" id="samples_table">
+                      <table class="table table-condensed table-hover table-bordered table-striped table-variants " id="variants_table">
+                        <thead id="variants_table_head"></thead>
+                        <tbody id="variants_table_body"></tbody>
                       </table>        
                     </div>
-                    -->
                 </div>
     
                 <div id="fav-message" class="hidden">
@@ -3153,12 +3161,12 @@
          <div class="form-group">
           <label class="col-xs-12 col-sm-1 control-label">Format</label>
           <div class="col-sm-4 col-xs-12">
-          <select class="select2 form-control">
+          <select class="select2 form-control" name="filename[filetype]">
             <option selected="">
-              MSExcel
+              EXCEL
             </option>
               <option>
-              CVS
+              CSV
             </option>
               <option>
               SQL
@@ -3176,7 +3184,7 @@
          <div class="form-group">
           <label class="col-xs-12 col-sm-2">File name</label>
           <div class="col-xs-12">
-          <input type="text" class="form-control text-primary" value="[Sample name]'s Selected Mutations 21.12.2015 23:45:56" placeholder="Set file name (required)">
+          <input type="text" name="filename[name]" class="form-control text-primary" value="[Sample name]'s Selected Mutations 21.12.2015 23:45:56" placeholder="Set file name (required)">
           <div class="help-text text-danger hidden">Name can not be empty</div>
           </div>
         </div>    
@@ -3194,13 +3202,14 @@
          <div class="modal-footer">
             
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>        
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Export</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal_export_button">Export</button>
             
            
           </div>
         </div>
       </div>
-    </div>    <div class="alert alert-inverse alert-fixed">
+    </div>
+    <div class="alert alert-inverse alert-fixed">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
