@@ -39,7 +39,7 @@ module.exports = {
       //{ test: /\.js?$/, exclude: /node_modules|bower_components/, loaders: ['react-hot', 'jsx', 'babel?stage=0'] },
       {
         test: /\.js?$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(node_modules|bower_components|vendor)/,
         loader: 'babel',
         query: {
           presets: ['es2015']
@@ -91,7 +91,8 @@ module.exports = {
     new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
-        "window.jQuery": "jquery"
+        "window.jQuery": "jquery",
+        _: "lodash"
     }),
 
     new webpack.DefinePlugin({
