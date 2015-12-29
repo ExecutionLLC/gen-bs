@@ -1,122 +1,128 @@
 'use strict';
 
 const _ = require('lodash');
-const uuid = require('node-uuid');
+const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
-
-const SYSTEM_USER_ID = '9c952e80-c2db-4a09-a0b0-6ea667d254a1';
-
-const OPERATION_TYPES = {
-    SYSTEM: 'system',
-    SEARCH: 'search',
-    UPLOAD: 'upload'
-}
 
 class SessionService extends ServiceBase {
     constructor(services) {
         super(services);
+
         this.sessions = {};
     }
 
-    systemUserId() {
-        return SYSTEM_USER_ID;
-    }
+    /**
+     * Creates a new session for the specified user with token.
+     * Currently, also destroys existing sessions of the same user, if any.
+     * */
+    startForUser(userName, password, callback) {
+        this.sessions.tokens.login(userName, password, (error, tokenDescriptor) => {
+            if (error) {
+                callback(error);
+            } else {
+                const token = tokenDescriptor.token;
+                const userId = tokenDescriptor.userId;
 
-    operationTypes() {
-        return OPERATION_TYPES;
-    }
+                // Check and remove existing user session.
+                let existingSessionId = _.findKey(this.sessions, {'userId': userId});
+                if (existingSessionId) {
+                    this._destroySession(existingSessionId, (error) => {
+                        if (error) {
+                            console.error('Error destroying existing session: %s', error);
+                        }
+                    });
+                }
 
-    startSessionForUser(userId) {
-        let sessionId = _.findKey(this.sessions, {'userId': userId});
-        if (!sessionId) {
-            sessionId = uuid.v4();
-            this.sessions[sessionId] = {
-                lastActivity: Date.now(),
-                userId: userId,
-                operations: {}
+                this._createSession(userId, token, callback);
             }
-        }
-        return sessionId;
-    }
-
-    _sessionByUser(userId) {
-        return _.find(this.sessions, (session) => {
-            return session.userId == userId;
         });
     }
 
-    _checkSession(sessionId) {
-        if (!this.sessions[sessionId]) {
-            // TODO: throw new exception
+    /**
+     * Starts demo user session.
+     * There should be only few active demo sessions at one time.
+     * */
+    startDemo(callback) {
+        this.services.users.findDemoUser((error, demoUser) => {
+            if (error) {
+                callback(error);
+            } else {
+                this._createSession(null, demoUser.id, (error, session) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, session.id);
+                    }
+                });
+            }
+        });
+    }
+
+    findById(sessionId, callback) {
+        // TODO: Do dead sessions cleanup here.
+        const session = this.sessions[sessionId];
+        if (session) {
+            callback(null, session.id);
+        } else {
+            callback(new Error('Session is not found.'));
         }
     }
 
-    deleteSession(sessionId) {
-        if (this.sessions[sessionId]) {
+    findSessionUserId(sessionId, callback) {
+        this.findById(sessionId, (error, sessionId) => {
+            if (error) {
+                callback(error);
+            } else {
+                const session = this.sessions[sessionId];
+                callback(null, session.userId);
+            }
+        })
+    }
+
+    destroySession(sessionId, callback) {
+        const sessionDescriptor = this.sessions[sessionId];
+        if (!sessionDescriptor) {
+            callback(new Error('Session is not found'));
+        } else {
+            // Destroy the local session information.
             delete this.sessions[sessionId];
+
+            if (sessionDescriptor.token) {
+                // Destroy the associated user token.
+                this.services.tokens.logout(sessionDescriptor.token, (error) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                    // continue, just log the error here.
+                });
+            }
+
+            // Clear active session operatations.
+            this.services.operations.removeAll(sessionId, callback);
         }
     }
 
-    _addOperation(session, operationType, method) {
-        const operationId = uuid.v4();
-        session.operations[operationId] = {'id': operationId, 'type': operationType, 'progress': 0, 'method': method};
-        return operationId;
+    /**
+     * Returns all session ids.
+     * */
+    findAll(callback) {
+        const sessionIds = _.keys(this.sessions);
+        callback(null, sessionIds);
     }
 
-    deleteOperation(operationId) {
-        let session = this._findSession(operationId);
-        if (session) {
-            this._deleteOperation(session, operationId);
-        }
-    }
+    _createSession(token, userId, callback) {
+        const sessionId = Uuid.v4();
+        const session = {
+            id: sessionId,
+            userId: userId,
+            token: token,
+            lastActivity: Date.now(),
+            operations: {}
+        };
 
-    _deleteOperation(session, operationId) {
-        delete session.operations[operationId];
-    }
-
-    addSystemOperation(method) {
-        const sessionId = this.startSessionForUser(SYSTEM_USER_ID);
-        return this._addOperation(this.sessions[sessionId], OPERATION_TYPES.SYSTEM, method);
-    }
-
-    addSearchOperation(sessionId, method) {
-        this._checkSession(sessionId);
-        let session = this.sessions[sessionId];
-        session.lastActivity = Date.now();
-
-        const lastSearchOperationId = this._lastSearchOperationId(session);
-        if (lastSearchOperationId) {
-            this._deleteOperation(session, lastSearchOperationId);
-        }
-        return this._addOperation(session, OPERATION_TYPES.SEARCH, method);
-    }
-
-    addUploadOperation(sessionId, method) {
-        this.checkSession(sessionId);
-        let session = this.sessions[sessionId];
-        session.lastActivity = Date.now();
-
-        return this._addOperation(session, OPERATION_TYPES.UPLOAD, method);
-    }
-
-    _lastSearchOperationId(session) {
-        return _.findKey(session.operations, (operation) => {
-           return operation.type == OPERATION_TYPES.SEARCH;
-        });
-    }
-
-    _findSession(operationId) {
-        return _.find(this.sessions, (session) => {
-            return _.findKey(session.operations, {id: operationId});
-        });
-    }
-
-    findOperation(operationId) {
-        const session = this._findSession(operationId);
-        if (session) {
-            return session.operations[operationId];
-        }
+        this.sessions[sessionId] = session;
+        callback(null, session);
     }
 }
 

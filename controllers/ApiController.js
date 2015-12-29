@@ -14,19 +14,40 @@ class ApiController extends ControllerBase {
     }
 
     _initUserMiddleware(request, reponse, next) {
-        const tokenHeaderName = this.services.config.applicationServer.authTokenHeader;
-        const token = request.get(tokenHeaderName);
-        this.services.users.findByToken(token, (error, user) => {
-            if (error) {
-                next(error);
-            } else if (user) {
-                request.user = user;
-                next();
-            } else {
-                // TODO: load demo user here if there is no token.
-                next(new Error('User is not found by token'));
-            }
-        });
+        const sessionHeaderName = this.services.config.sessionHeader;
+        const sessions = this.services.sessions;
+
+        const setUserBySessionFunc = (sessionId) => {
+            sessions.findSessionUserId(sessionId, (error, userId) => {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    this.services.users.find(userId, (error, user) => {
+                        if (error) {
+                            next(new Error(error));
+                        } else {
+                            request.sessionId = sessionId;
+                            request.user = user;
+                            next();
+                        }
+                    });
+                }
+            });
+        };
+
+        const sessionId = request.get(sessionHeaderName);
+        if (sessionId) {
+            setUserBySessionFunc(sessionId);
+        } else {
+            console.error('Automatically open demo session for testing');
+            sessions.startDemo((error, sessionId) => {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    setUserBySessionFunc(sessionId);
+                }
+            });
+        }
     }
 
     createRouter(controllersFacade) {
@@ -34,6 +55,9 @@ class ApiController extends ControllerBase {
         const viewsRouter = controllersFacade.viewsController.createRouter();
         const fieldsRouter = controllersFacade.fieldsMetadataController.createRouter();
         const filtersRouter = controllersFacade.filtersController.createRouter();
+
+        const searchRouter = controllersFacade.searchController.createRouter();
+        const sessionsRouter = controllersFacade.sessionsController.createRouter();
 
         const demoDataRouter = controllersFacade.demoDataController.createRouter();
         const dataRouter = controllersFacade.dataController.createRouter();
@@ -48,6 +72,8 @@ class ApiController extends ControllerBase {
         // Initialize child routes
         router.use('/demo/data', demoDataRouter);
         router.use('/data', dataRouter);
+        router.use('/session', sessionsRouter);
+        router.use('/search', searchRouter);
         router.use('/filters', filtersRouter);
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);
