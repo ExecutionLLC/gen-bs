@@ -10,7 +10,7 @@ import '../../assets/vendor/bootstrap3-editable/css/bootstrap-editable.css'
 
 
 const $tableElement = $('#variants_table');
-const tableHeaderSortElement = '#variants_table thead tr th .variants-table-header-label';
+const tableHeaderSortElement = '#variants_table thead tr th div span.variants-table-header-label';
 const tableHeaderFilterElement = '#variants_table thead tr th input';
 const tableRowElement = '#variants_table tbody tr';
 const tableCheckboxElement = '#variants_table tbody tr td input[type=checkbox]';
@@ -44,9 +44,9 @@ var variantsTable = {
     head.push(
         `<th data-label="comment">
           <div><span class="variants-table-header-label">
-            Comment
-          </span><button class="btn btn-link btnSort"></button></div>
-          <div><input type="text" class="form-control" placeholder="Search coment"></div>
+            Comment<button class="btn btn-link btnSort"></button>
+          </span></div>
+          <div><input type="text" class="form-control"></div>
         </th>`);
 
     labels.map( (label) => {
@@ -54,9 +54,9 @@ var variantsTable = {
         head.push(
             `<th data-label="${label}">
               <div><span class="variants-table-header-label">
-                ${this.firstCharUpperCase(label)}
-              </span><button class="btn btn-link btnSort"></button></div>
-              <div><input type="text"  class="form-control" placeholder="Search ${label}"></div>
+                ${this.firstCharUpperCase(label)}<button class="btn btn-link btnSort"></button>
+              </span></div>
+              <div><input type="text"  class="form-control"></div>
             </th>`);
       }
     })
