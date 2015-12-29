@@ -7,6 +7,11 @@ const ControllerBase = require('./ControllerBase');
 class SessionsController extends ControllerBase {
     constructor(services) {
         super(services);
+
+        this.open = this.open.bind(this);
+        this.check = this.check.bind(this);
+        this.close = this.close.bind(this);
+        this._getSessionId = this._getSessionId.bind(this);
     }
 
     /**
