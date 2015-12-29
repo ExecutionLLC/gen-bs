@@ -4,9 +4,9 @@ export default function exportToFile(state = {type: ActionTypes.fileTypes.NONE, 
   switch (action.type) {
     case ActionTypes.EXPORT_TO_FILE:
         return {
-          type: action.fileType,
-          name: action.fileName,
-          blob: $('#variants_table').tableExport({type:'csv',escape:'false', consoleLog: 'false'})
+          type: action.fileType.type,
+          name: action.fileName + '.' + action.fileType.ext,
+          blob: $('#variants_table').tableExport({type: action.fileType.type,escape:'false', consoleLog: 'false'})
         }
 
     default:

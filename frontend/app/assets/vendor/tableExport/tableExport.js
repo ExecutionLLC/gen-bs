@@ -121,7 +121,8 @@ THE SOFTWARE.*/
 					}
 					
 					var base64data = "base64," + $.base64.encode(tdData);
-					window.open('data:application/sql;filename=exportData;' + base64data);
+          return new Blob([tdData], {type: 'application/sql;filename=exportData;'});
+					//window.open('data:application/sql;filename=exportData;' + base64data);
 					
 				
 				}else if(defaults.type == 'json'){
@@ -169,8 +170,10 @@ THE SOFTWARE.*/
 					if(defaults.consoleLog == 'true'){
 						console.log(JSON.stringify(jsonExportArray));
 					}
-					var base64data = "base64," + $.base64.encode(JSON.stringify(jsonExportArray));
-					window.open('data:application/json;filename=exportData;' + base64data);
+					//var base64data = "base64," + $.base64.encode(JSON.stringify(jsonExportArray));
+          //return new Blob([JSON.stringify(jsonExportArray)], {type: 'application/json;filename=exportData;'});
+          return new Blob([JSON.stringify(jsonExportArray)], {type: 'application/json;filename=exportData;'});
+					//window.open('data:application/json;filename=exportData;' + base64data);
 				}else if(defaults.type == 'xml'){
 				
 					var xml = '<?xml version="1.0" encoding="utf-8"?>';
@@ -211,9 +214,10 @@ THE SOFTWARE.*/
 					}
 					
 					var base64data = "base64," + $.base64.encode(xml);
-					window.open('data:application/xml;filename=exportData;' + base64data);
+          return new Blob([xml], {type:'data:application/xml;filename=exportData.doc;' });
+					//window.open('data:application/xml;filename=exportData;' + base64data);
 
-				}else if(defaults.type == 'excel' || defaults.type == 'doc'|| defaults.type == 'powerpoint'  ){
+				}else if(defaults.type == 'xlsx' || defaults.type == 'doc'|| defaults.type == 'powerpoint'  ){
 					//console.log($(this).html());
 					var excel="<table>";
 					// Header
@@ -278,7 +282,8 @@ THE SOFTWARE.*/
 					excelFile += "</html>";
 
 					var base64data = "base64," + $.base64.encode(excelFile);
-					window.open('data:application/vnd.ms-'+defaults.type+';filename=exportData.doc;' + base64data);
+          return new Blob([excelFile], {type:'data:application/vnd.ms-excel;filename=exportData.doc;' });
+					//window.open('data:application/vnd.ms-'+defaults.type+';filename=exportData.doc;' + base64data);
 					
 				}else if(defaults.type == 'png'){
 					html2canvas($(el), {

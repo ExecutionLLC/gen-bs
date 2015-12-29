@@ -25,14 +25,13 @@ var exportFilenameForm = {
       const fileType = $('#filename select[name="filename[filetype]"]').val();
 
       //saveAs(blob, filename);
-      store.dispatch( exportToFile( fileType, fileName ) )
+      store.dispatch( exportToFile( fileTypes[fileType], fileName ) )
     })
   },
 
   getInitialState: function() {
     exportFilenameForm.subscribeToSubmit();
     observeStore(store, this.selectExport, () => {
-      console.log('in export', store.getState().exportToFile.fileName);
       if(store.getState().exportToFile.blob !== null) {
         saveAs(store.getState().exportToFile.blob, store.getState().exportToFile.name);
       }
@@ -41,5 +40,8 @@ var exportFilenameForm = {
 };
 
 $( () => {
+
+  const fileName = $('#filename input[name="filename[name]"]').val(`[Sample name]'s Selected Mutations ${new Date()}`);
+
   exportFilenameForm.getInitialState();
 });
