@@ -1,5 +1,6 @@
 {
   "general": {
+    "samples": "样本",
     "filename": "角南",
     "filters": "过滤器",
     "datetime": "日期时间",
@@ -160,11 +161,11 @@
     "help": "拖动并在这里您的文件拖放或手动选择它们。",
     "choose": "选择文件",
     "alerts": {
-      "errors": {
+      "error": {
         "title": "file.vcf不上传",
         "description": "文件损坏或文件格式不支持"
       },
-      "warnings": {
+      "warning": {
         "title": "成功上传",
         "description": "您可以选择的样品进行分析，现在",
         "accent": "但样品的元数据是不完整的",
@@ -176,11 +177,11 @@
         "action": "选择这个样品分析"
       }
     },
-    "errors": {
+    "error": {
       "unreadable": "该文件被损坏或无法读取",
       "wrongformat": "你试图加载未知文件格式"
     },
-    "warnings": {
+    "warning": {
       "notcomplete": "该文件没有上传成功，但元数据是不完整的。填写必要的分析所需的字段"
     },
     "success": {
@@ -203,12 +204,15 @@
       "placeholder_end": "提供样品"
     },
     "select_for": {
-      "tittle": "选择分析",
+      "title": "选择分析",
       "description": "选择样本以进行分析"
     },
     "edit": {
       "tittle": "编辑",
-      "description": "编辑样品元"
+      "description": "编辑样品元",
+      "analyzed": {
+        "warning": "样品进行分析。如果更改 .."
+      }
     }
   },
   "views": {
@@ -242,13 +246,13 @@
       "standard": "标准",
       "placeholder": "选择查看"
     },
-    "settings": {
+    "setup": {
       "title": "表列",
       "description": "添加/按点击加号和减号列新设置的行删除。拖行集表列的顺序。可以只有两个字段排序在同一时间。设置复选框可用表列filert。通过置换字典添加关键字下载已筛选结果",
       "confirm": "你确定要删除这个观点？它无法恢复。",
       "order": "订购",
-      "colunms_sorting": "列名和Multi排序",
-      "colunms_filter": "列筛选器和关键字",
+      "columns_sorting": "列名和Multi排序",
+      "columns_filter": "列筛选器和关键字",
       "keywords": {
         "placeholder": "String"
       },
@@ -289,7 +293,9 @@
     },
     "combine": {
       "title": "合并过滤器",
-      "submit": "合并和选择",
+      "combine": {
+        "title": "结合与选择"
+      },
       "new": {
         "name": {
           "title": "新组合筛选",
@@ -301,14 +307,15 @@
           "placeholder": "类型过滤器描述（可选）"
         }
       },
-      "rulles": {
-        "title": "可用过滤器相结合"
+      "rules": {
+        "title": "可用过滤器相结合",
+        "description": "添加多个过滤器来创建一个组合条件"
       }
     },
-    "settings": {
+    "setup": {
       "title": "设置过滤器",
       "description": "",
-      "rulles": {
+      "rules": {
         "confirm": "你确定要删除这个过滤器？它无法恢复。",
         "description": "不适用于所选样本锁定过滤器选项"
       }

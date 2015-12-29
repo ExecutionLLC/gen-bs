@@ -1,3 +1,11 @@
+function changeLang(lang){
+  var currentLang = lang;
+  var opts = { language: currentLang, pathPrefix: "./lang" };
+  $("[data-localize]").localize("application", opts);
+}
+
+
+
 $("#curr_lang").val("en");
 
 $('#ch_lang').on('click', function (e) {
@@ -9,18 +17,22 @@ $('#en_lang').on('click', function (e) {
    $("#curr_lang").val("en");
 });
 
-$('.collapse').on('show.bs.collapse', function () { 
-  var currentLang = $("#curr_lang").val();
-  changeLang(currentLang);
-}); 
-$('#upload').on('shown.bs.modal', function () { 
-  var currentLang = $("#curr_lang").val();
-   changeLang(currentLang);
-}); 
 
-function changeLang(lang){
-  var currentLang = lang;
-  var opts = { language: currentLang, pathPrefix: "./lang" };
-  $("[data-localize]").localize("application", opts);
-}
+$('.collapse').each(function () {
+   var collapse = $(this);
+   collapse.on('shown.bs.collapse', function () { 
+   var currentLang = $("#curr_lang").val();
+   changeLang(currentLang);
+  }); 
+});
+
+$('.modal').each(function () {
+      var modal = $(this);
+      modal.on('shown.bs.modal', function (e) {
+      var currentLang = $("#curr_lang").val();
+      changeLang(currentLang);
+    });
+});
+
+
 
