@@ -5161,6 +5161,9 @@ select[multiple].input-lg {
 .form-horizontal-rows .flex dl {
   margin-bottom: 10px;
 }
+.form-horizontal-rows .flex dl dt {
+  padding-top: 8px;
+}
 .row.grid-toolbar > div {
   margin: 0 0 5px;
 }
@@ -5850,8 +5853,8 @@ input[type="button"].btn-block {
 }
 .btn-wrapnormal input {
   position: absolute;
-  left: 0;
-  top: .25em;
+  left: .25em;
+  top: .5em;
 }
 .icon-bar {
   background-color: #ddd;
@@ -7839,7 +7842,7 @@ a.thumbnail.active {
 .alert-fixed {
   position: fixed;
   z-index: 1060;
-  top: 15px;
+  top: 165px;
   right: 15px;
   max-width: 260px;
   min-width: 200px;
@@ -10891,6 +10894,9 @@ div.DTS div.dataTables_paginate {
 .select-wrap .select2 {
   width: 100%!important;
 }
+.rel {
+  position: relative;
+}
 @-ms-viewport {
   width: device-width;
 }
@@ -11130,14 +11136,16 @@ body {
   height: 0;
   margin: 0;
   border-bottom: none;
-  z-index: auto;
   -webkit-transition: all 0.25s linear;
   -o-transition: all 0.25s linear;
   transition: all 0.25s linear;
 }
 .navbar-main .navbar-search-toogle {
   background: rgba(0, 0, 0, 0.05);
-  padding-left: 10px!important;
+}
+.navbar-main .navbar-search-toogle .btn {
+  background: transparent;
+  border-color: transparent;
 }
 .navbar-main .navbar-nav {
   float: none;
@@ -11189,6 +11197,21 @@ body {
 .navbar-main .language .open .dropdown-menu {
   position: absolute;
   background-color: #fff;
+}
+.navbar-main .language span.select2 .select2-selection--single {
+  border-radius: 0;
+  border: none;
+  background: transparent;
+}
+.navbar-main .language span.select2 .select2-selection--single .select2-selection__rendered {
+  line-height: 50px;
+  color: #d8e5f1;
+}
+.navbar-main .language span.select2 .select2-selection--single .select2-selection__arrow {
+  height: 50px;
+}
+.navbar-main .language span.select2 .select2-selection--single .select2-selection__arrow b {
+  border-color: #d8e5f1 transparent transparent;
 }
 .navbar-main .navbar-inner {
   position: relative;
@@ -11773,13 +11796,22 @@ body {
   position: relative;
 }
 .table-variants-wrapper div.dataTables_wrapper .toolbar,
-.table-variants-wrapper div.dataTables_wrapper .qt-buttons {
+.table-variants-wrapper div.dataTables_wrapper .dt-buttons {
   position: absolute;
   top: 0;
   left: 25%;
   margin-left: 127px;
   height: 50px;
   z-index: 3;
+}
+.table-variants-wrapper div.dataTables_wrapper .toolbar .btn,
+.table-variants-wrapper div.dataTables_wrapper .dt-buttons .btn {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  color: #d8e5f1;
 }
 .table-variants-wrapper div.dataTables_wrapper div.dataTables_filter label {
   color: rgba(0, 0, 0, 0);
@@ -11993,7 +12025,7 @@ body {
   max-width: 50%;
   text-align: left;
 }
-.empty h3 span + span {
+.empty h3 .subtext {
   font-size: 14px;
   display: block;
   line-height: 1.4;

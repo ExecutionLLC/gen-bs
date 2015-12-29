@@ -20,27 +20,6 @@
         "type": "string"
       }
     },
-    "global_search_value": {
-      "type": "string"
-    },
-    "field_search_values": {
-      "type": "array",
-      "minItems": 1,
-      "uniqueItems": true,
-      "items": {
-        "type": "object",
-        "parameters": {
-          "field_id": {
-            "type": "string",
-            "description": "Id of the field"
-          },
-          "value": {
-            "type":"string",
-            "description": "Text in the search control."
-          }
-        }
-      }
-    },
     "limit": {
       "type": "integer"
     },
