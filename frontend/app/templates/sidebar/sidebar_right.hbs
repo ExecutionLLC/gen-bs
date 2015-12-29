@@ -2,7 +2,7 @@
 
 
     <div class="btn-toolbar sidebar-top">
-    <div class="btn-group"><h5>Account</h5></div>
+    <div class="btn-group"><h5 data-localize="account.title">Account</h5></div>
     <div class="btn-group pull-right"><button data-target="#sidebarRight" data-toggle="collapse" class="btn navbar-btn sidebarToggle" href="#" type="button"><i class="fa fa-close"></i></button>
       
     </div>
@@ -12,15 +12,15 @@
        <div class="guest">
      <div class="panel panel-default">
        <div class="panel-body">
-      <p class="light">
+      <p class="light" data-localize="account.description">
          Short text about what the benefits received by the user upon login
      </p> 
      
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
-    <li role="presentation"><a href="#register" aria-controls="#register" role="tab" data-toggle="tab">Register</a></li>
+    <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab" data-localize="account.login.title">Login</a></li>
+    <li role="presentation"><a href="#register" aria-controls="#register" role="tab" data-toggle="tab" data-localize="account.register.title">Register</a></li>
 
   </ul>
 
@@ -31,33 +31,34 @@
       
         <form>
              <div class="form-group has-feedback">
-           <label>Login</label>
+           <label data-localize="account.login.title">Login</label>
            
              <input type="text" class="form-control">
-             <div class="help-text text-danger hidden">No this login</div>
+             <div class="help-text text-danger hidden"><span data-localize="account.login.error">No that login</span></div>
              </div>
              <div class="form-group has-feedback">
-           <label>Password</label>
+           <label data-localize="account.password.title">Password</label>
  
            <input type="password" class="form-control">
-         <div class="help-text text-danger hidden">No this login</div>
+         <div class="help-text text-danger hidden"><span data-localize="account.password.error">Wrong password</span></div>
+         <div class="help-text"><small data-localize="account.password.help">Not less than 6 characters, 1 uppercase, 1 character, 1..9, latin letters and symbols</small></div>
 
            
          </div>
              <div class="form-group">
-               <a href="" class="btb btn-link">Remember password</a>
+               <a href="" class="btb btn-link" data-localize="account.password.error">Remember password</a>
              </div>
              <div class="form-group">
-             <button type="button" class="btn btn-block btn-primary" id="btnLogin">Sign in</button>
+             <button type="button" class="btn btn-block btn-primary" id="btnLogin"><span data-localize="account.login.action">Sign in</span></button>
             <!-- <button class="btn btn-block btn-openid"></button> -->
              </div>
             <hr>
-         <div class="form-group">
-              If you do not already have an account <a class="btb btn-link" href="">register for free</a>
+           <div class="form-group">
+              <span data-localize="account.login.question">If you do not already have an account</span> <a class="btb btn-link" href="" data-localize="account.register.action">register for free</a>
              </div>
 
             <div class="form-group">
-                <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
              </div>
           </form> 
         </div>
@@ -65,25 +66,26 @@
         
         <form>
              <div class="form-group has-feedback">
-           <label>Email</label>
+           <label data-localize="account.email.title">Email</label>
            
               <input type="email" class="form-control">
-              <div class="help-text text-danger hidden">Error</div>
+              <div class="help-text text-danger hidden"><span data-localize="account.email.error">Wrong email</span></div>
+     
              </div>
              <div class="form-group">
-             <button type="button" class="btn btn-block btn-primary" id="btnLogin">Sign up for free</button>
+             <button type="button" class="btn btn-block btn-primary" id="btnLogin"><span data-localize="account.register.action">Sign up for free</span></button>
          
            </div>
              <hr>
              
               <div class="form-group">
-               By clicking <strong>Sign up for free</strong> you agree to <a href="" class="btb btn-link">our terms and conditions</a>
+               <span data-localize="account.register.confirm">By clicking</span> <strong data-localize="account.register.action">Sign up for free</strong> <span data-localize="account.register.agree">you agree to</span> <a href="" class="btb btn-link" data-localize="account.register.terms">our terms and conditions</a>
              </div> 
             <div class="form-group">
-               Already have an account?<a href="" class="btb btn-link"> Sign in</a>
+              <span data-localize="account.register.terms">Already have an account?</span><a href="" class="btb btn-link" data-localize="account.login.action"> Sign in</a>
              </div> 
              <div class="form-group">
-                <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
              </div>
             </form> 
             </div>
@@ -96,14 +98,14 @@
 
          <div class="panel panel-default">
            <div class="panel-heading">
-              <h4 class="panel-title"> <button type="button" class="btn btn-link pull-right" id="userEditBtn"><i class="fa fa-pencil"></i></button> Name Lastname</h4>
+              <h4 class="panel-title"> <button type="button" class="btn btn-link pull-right" id="userEditBtn"><i class="fa fa-pencil"></i></button><span>Name</span> <span>Lastname</span></h4>
            </div>
           <div class="panel-body">
               <div class="user-view">           
       
            <dl>
           <dt>
-           Email: 
+           <span data-localize="account.email.title">Email</span>: 
           </dt>
           <dd>
             <a href="maito:user@domain.com">user@domain.com</a>
@@ -112,7 +114,7 @@
 
            <dl>
           <dt>
-           Specialization: 
+           <span data-localize="account.specialization.title">Specialization</span>: 
           </dt>
           <dd>
             Doctor
@@ -121,7 +123,7 @@
           
            <dl>
           <dt>
-           Language: 
+           <span data-localize="language.title">Language</span>: 
           </dt>
           <dd>
            English
@@ -129,23 +131,23 @@
         </dl>         
            <dl>
           <dt>
-           Balance: 
+           <span data-localize="account.balance.title">Balance</span>: 
           </dt>
              <!--if paid sample analises, not a zero balance -->
           <dd>
-             <span  class="text-success">789 paid analises left</span>
+             <span class="text-success">789 <span data-localize="account.balance.count">paid analysis left</span></span>
              <!--  If zero balance  -->
-             <span  class="text-warning hidden">0 paid analises left</span>
+             <span class="text-warning hidden">0 <span data-localize="account.balance.count">paid analysis left</span></span>
           </dd>
           </dl>
           
           <!--  If no paid options, to use remove class hidden  -->
              <p class="hidden">
-                <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy">Buy access to advanced features of App Genomix</a>
+                <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
              </p>
         <!--if paid sample analises, zero balance, to use remove classes hidden  -->
               <p class="hidden">
-                <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy">Buy access to continue to use the advanced features of App Genomix</a>
+                <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action_continue">Buy access to continue to use the advanced features of App Genomix</a>
               </p>
           
             </div>
@@ -153,32 +155,32 @@
             
            <form>
             <div class="form-group has-feedback">
-              <label>Name</label>
+              <label data-localize="account.name.title">Name</label>
              <input type="text" class="form-control">
-               <div class="help-text hidden">No this login</div>
+               <div class="help-text hidden" data-localize="account.name.error">Name can not be so short</div>
              </div>
              <div class="form-group has-feedback">
-             <label>Last Name</label>
+             <label data-localize="account.lastname.title">Last Name</label>
  
              <input type="text" class="form-control">
-             <div class="help-text hidden">No this login</div>           
+             <div class="help-text hidden" data-localize="account.name.error">Last Name can not be so short</div>           
             </div>
              <div class="form-group has-feedback">
-             <label>Email</label>
+             <label data-localize="account.email.title">Email</label>
  
              <input type="email" class="form-control" value="user@domain.com">
-             <div class="help-text hidden">No this login</div>
+             <div class="help-text hidden"><span data-localize="account.email.error">Wrong email</span></div>
            
              </div>
              <div class="form-group has-feedback">
-             <label>Specialization</label>
+             <label data-localize="account.specialization.title">Specialization</label>
  
              <input type="text" class="form-control">
-             <div class="help-text hidden">No this login</div>
+            
            
             </div>
              <div class="form-group has-feedback">
-             <label>Language</label>
+             <label data-localize="language.title">Language</label>
              <div class="select-wrap">
               <select class="select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
                <option>
@@ -190,15 +192,15 @@
 
              </select>
              </div>
-             <div class="help-text hidden">No this login</div>
+             
            
          </div>
              <div class="row form-action">
                <div class="col-xs-6">
-               <button class="btn btn-block  btn-default usrViewActBtn" type="button">Cancel</button>
+               <button class="btn btn-block  btn-default usrViewActBtn" type="button"><span data-localize="actions.cancel">Cancel</span></button>
                </div>
                <div class="col-xs-6"> 
-              <button class="btn btn-block  btn-primary usrViewActBtn" type="button">Save</button>
+              <button class="btn btn-block  btn-primary usrViewActBtn" type="button"><span data-localize="actions.save">Save</span></button>
                </div>
          </div>
              
@@ -211,7 +213,7 @@
         </div>
           <div class="panel panel-default">
            <div class="panel-heading">
-           <h4 class="panel-title"> <a href="">Latest Paid Analises</a></h4>
+           <h4 class="panel-title"> <a href="" data-localize="account.paid_analysis">Latest Paid Analysis</a></h4>
            </div>
                  
              <!----- samples -->
@@ -247,7 +249,7 @@
             <dd>56 KB</dd>
            </dl>
            <dl>
-            <dt>Analized</dt>
+            <dt>analyzed</dt>
             <dd><a href="">02.12.2015 21:32:21</a></dd>
            </dl> 
         </div>
@@ -265,7 +267,7 @@
             <dd>56 KB</dd>
            </dl>
            <dl>
-            <dt>Analized</dt>
+            <dt>analyzed</dt>
             <dd><a href="">02.12.2015 21:32:21</a></dd>
            </dl> 
         </div>
@@ -283,7 +285,7 @@
             <dd>56 KB</dd>
            </dl>
            <dl>
-            <dt>Analized</dt>
+            <dt>analyzed</dt>
             <dd><a href="">02.12.2015 21:32:21</a></dd>
            </dl> 
         </div>
@@ -291,7 +293,7 @@
          </div>
           <div class="panel panel-default">
               <div class="panel-body">
-              <a class="btn btn-block btn-default" href="#">Logout</a>
+              <a class="btn btn-block btn-default" href="#"><span data-localize="account.logout">Logout</span></a>
               </div>
              </div>
            </div> 

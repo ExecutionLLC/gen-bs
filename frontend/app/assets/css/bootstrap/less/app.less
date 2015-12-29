@@ -9,15 +9,12 @@ body {
   height: 0;
   margin: 0; 
   border-bottom: none;
-  z-index: auto;
-
  .transition(all .25s linear);
-
  .navbar-search-toogle { 
    background: fade(#000, 5%);
-    padding-left: 10px!important;
   .btn { 
-      
+     background: transparent;
+     border-color:transparent;  
   } 
  }
  .navbar-nav {
@@ -70,10 +67,32 @@ body {
       }
        } 
     }
- .open .dropdown-menu { 
+   .open .dropdown-menu { 
       position: absolute;
       background-color:@dropdown-bg;
     }
+   
+   //
+   span.select2 { 
+    .select2-selection--single { 
+         
+          border-radius: 0;
+          border: none;
+          background: transparent;
+       
+          .select2-selection__rendered { 
+           line-height: @navbar-height;
+               color: @navbar-inverse-color;
+           }
+           .select2-selection__arrow { 
+             height:  @navbar-height;
+           }
+        .select2-selection__arrow b {
+         border-color: @navbar-inverse-color transparent transparent;
+         
+        }
+     }
+   }
  }
  .navbar-inner {
     position: relative;
@@ -740,13 +759,20 @@ body {
       position: relative;
     }
     div.dataTables_wrapper .toolbar,
-    div.dataTables_wrapper .qt-buttons { 
+    div.dataTables_wrapper .dt-buttons { 
       position: absolute;
       top:0;
       left: 25%;
       margin-left: 127px;
       height: 50px;
       z-index: 3;
+      .btn { 
+          .navbar-vertical-align(@line-height-computed);
+          border-radius: 0;
+          border: none;
+           background: transparent;
+          color: @navbar-inverse-color;
+       }
       }
     div.dataTables_wrapper div.dataTables_filter label { 
     color: rgba(0, 0, 0, 0);
@@ -909,7 +935,7 @@ body {
     margin: 0 auto;
     max-width: 50%;
     text-align: left;
-     span  + span { 
+    .subtext{ 
       font-size: @font-size-base;
       display: block;
      line-height: 1.4;
