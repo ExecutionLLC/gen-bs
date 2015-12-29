@@ -45,9 +45,8 @@ var variantsTable = {
         `<th data-label="comment">
           <span class="variants-table-header-label">
             Comment
-            <button class="btn btn-default btnSort"></button>
-          </span>
-          <div><input type="text" placeholder="Search coment"></div>
+          </span><button class="btn btn-link btnSort"></button>
+          <div><input type="text" class="form-control" placeholder="Search coment"></div>
         </th>`);
 
     labels.map( (label) => {
@@ -56,9 +55,8 @@ var variantsTable = {
             `<th data-label="${label}">
               <span class="variants-table-header-label">
                 ${this.firstCharUpperCase(label)}
-                <button class="btn btn-default btnSort"></button>
-              </span>
-              <div><input type="text" placeholder="Search ${label}"></div>
+              </span><button class="btn btn-link btnSort"></button>
+              <div><input type="text"  class="form-control" placeholder="Search ${label}"></div>
             </th>`);
       }
     })
@@ -119,7 +117,7 @@ var variantsTable = {
       //const selected = false;
       var $row = $(tableRowElement + '#' + rowId);
       var $checkbox = $(tableRowElement + '#' + rowId + ' td input[type=checkbox]');
-      $row.toggleClass('success');
+      $row.toggleClass('active');
       $checkbox.prop('checked', selected);
     });
   },
