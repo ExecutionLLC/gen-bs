@@ -9,7 +9,7 @@
   },
   "fields": [
     {
-      "id": "e975744c-f6c7-495e-b4c7-83b3ffe0691d",
+      "id": "71450a95-f9d5-42b8-9ba2-4a5badccaee0",
       "name": "CHROM",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -18,7 +18,7 @@
       "description": "Chromosome identifier"
     },
     {
-      "id": "ec333777-271b-4169-91b9-92d48a994b44",
+      "id": "66538813-da15-47ac-b562-c423de3bdc19",
       "name": "POS",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -27,7 +27,7 @@
       "description": "The reference position"
     },
     {
-      "id": "8ec04897-0abf-4c5a-9144-5fc83356ed97",
+      "id": "35ca60ae-f9f7-4e87-b61b-0a8ba176a4dd",
       "name": "ID",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -36,7 +36,7 @@
       "description": "Semi-colon separated list of unique identifiers where available"
     },
     {
-      "id": "25d5f0d4-fdd3-48a8-9ad4-970fb9e99dc3",
+      "id": "ae146236-dc09-4da4-9b7b-8dbbb429ef71",
       "name": "REF",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -45,7 +45,7 @@
       "description": "The value in the POS field refers to the position of the first base in the String"
     },
     {
-      "id": "5630353d-b66f-44ad-8e01-c30bba7ce939",
+      "id": "e1d2d924-eb80-41b0-a337-71436b454f63",
       "name": "ALT",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -54,7 +54,7 @@
       "description": "Comma separated list of alternate non-reference alleles called on at least one of the samples"
     },
     {
-      "id": "649e2d21-a8ec-48fe-b1a7-dcfc52dd541d",
+      "id": "6c7bdc50-bdec-41a9-897d-cd2944665933",
       "name": "QUAL",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -63,7 +63,7 @@
       "description": "Quality"
     },
     {
-      "id": "a62799e7-cbeb-46db-90ae-89d0b1ed4977",
+      "id": "a6855bdf-3181-41c7-bcc9-2be5df4240d2",
       "name": "FILTER",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -72,7 +72,7 @@
       "description": "Filter status"
     },
     {
-      "id": "a903870e-8215-47d2-b0cc-cdb7c5565c70",
+      "id": "8fabd8f4-05ce-45b3-ae58-5cec7298b4b9",
       "name": "INFO_AF",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -81,7 +81,7 @@
       "description": "Allele frequency based on Flow Evaluator observation counts"
     },
     {
-      "id": "6b411720-808b-43ea-9a61-1569a43f3ca6",
+      "id": "83ab3810-1cef-4611-b54f-b851fdaf4f95",
       "name": "INFO_AO",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -90,7 +90,7 @@
       "description": "Alternate allele observations"
     },
     {
-      "id": "6f0eebd1-a163-490e-9b55-44a796dad198",
+      "id": "5449442e-28ed-4b0f-9c51-69345006b58c",
       "name": "INFO_DP",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -99,7 +99,7 @@
       "description": "Total read depth at the locus"
     },
     {
-      "id": "4a4387e2-37ba-4428-9e9b-fd4e259fc9dc",
+      "id": "0aa4ea73-5451-445e-94c6-3403f502b941",
       "name": "INFO_FAO",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -108,7 +108,7 @@
       "description": "Flow Evaluator Alternate allele observations"
     },
     {
-      "id": "1b3d10b0-97f2-41fd-ab30-328b78e52eec",
+      "id": "c54e76f1-1337-4841-9b80-c05d65319d2f",
       "name": "INFO_FDP",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -117,7 +117,7 @@
       "description": "Flow Evaluator read depth at the locus"
     },
     {
-      "id": "bb1c4663-b52b-4ad2-9968-242fa46150ca",
+      "id": "c966adc2-3790-4d39-9229-10260576786c",
       "name": "INFO_FR",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -126,7 +126,7 @@
       "description": "Reason why the variant was filtered."
     },
     {
-      "id": "bced70f4-573d-42fa-9c0b-a912323f9e17",
+      "id": "08f0e056-aaa2-46a0-948b-55313fbb733b",
       "name": "INFO_FRO",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -135,7 +135,7 @@
       "description": "Flow Evaluator Reference allele observations"
     },
     {
-      "id": "72c45d98-fcef-432d-97a2-4b3ebd1f61fe",
+      "id": "ba433bcd-a10a-4892-9ca8-95edda1dbba8",
       "name": "INFO_FSAF",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -144,7 +144,7 @@
       "description": "Flow Evaluator Alternate allele observations on the forward strand"
     },
     {
-      "id": "7afa3e1c-2b0c-4c54-b69d-ee02b776acd5",
+      "id": "b6d1519e-ce27-42c9-af75-59c1d12630fa",
       "name": "INFO_FSAR",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -153,7 +153,7 @@
       "description": "Flow Evaluator Alternate allele observations on the reverse strand"
     },
     {
-      "id": "69f535d5-daa0-4de0-85e9-72e2a3b355b3",
+      "id": "329531b6-22bd-4013-b060-eb6afa61c5df",
       "name": "INFO_FSRF",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -162,7 +162,7 @@
       "description": "Flow Evaluator Reference observations on the forward strand"
     },
     {
-      "id": "80a88a52-8e1e-4f2b-b97c-3dcd334b20e8",
+      "id": "ffee11b9-4aa1-465b-b9c8-f8d309ddc2d7",
       "name": "INFO_FSRR",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -171,7 +171,7 @@
       "description": "Flow Evaluator Reference observations on the reverse strand"
     },
     {
-      "id": "7a290217-3594-49c5-8b53-06c457ca3128",
+      "id": "33d98808-ed96-449f-bcb8-7a5933951f8b",
       "name": "INFO_FWDB",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -180,7 +180,7 @@
       "description": "Forward strand bias in prediction."
     },
     {
-      "id": "0f86cc2f-0b8c-4145-a0e6-f6cd359cec1d",
+      "id": "df043978-d3da-4a32-9ba3-9fa8c5af1c73",
       "name": "INFO_FXX",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -189,7 +189,7 @@
       "description": "Flow Evaluator failed read ratio"
     },
     {
-      "id": "96da394d-8422-4e1b-b3d3-262e05596ac4",
+      "id": "5656429a-a203-465a-a029-8f178769ccfe",
       "name": "INFO_HRUN",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -198,7 +198,7 @@
       "description": "Run length: the number of consecutive repeats of the alternate allele in the reference genome"
     },
     {
-      "id": "c860816a-0301-41bc-a645-f90ac2a8a3f5",
+      "id": "6bbf2c7a-a43c-4c9c-8093-56e564ed2eb4",
       "name": "INFO_HS",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -207,7 +207,7 @@
       "description": "Indicate it is at a hot spot"
     },
     {
-      "id": "db39b1f8-c71d-42e4-988a-16f406fe1e76",
+      "id": "5a3584ab-3936-42d6-a621-60beeedd461b",
       "name": "INFO_LEN",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -216,7 +216,7 @@
       "description": "allele length"
     },
     {
-      "id": "f082ad7f-34c2-4e34-b6cd-492a4a2955ca",
+      "id": "5730a301-4758-4227-9d72-6be758e037ec",
       "name": "INFO_MLLD",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -225,7 +225,7 @@
       "description": "Mean log-likelihood delta per read."
     },
     {
-      "id": "86d633fa-4937-4b2f-b17c-6b4642db482b",
+      "id": "88dd2cc9-9138-416e-80b4-6d797a8cfaa7",
       "name": "INFO_NS",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -234,7 +234,7 @@
       "description": "Number of samples with data"
     },
     {
-      "id": "b701af62-e4c0-4606-aa28-f9ed3b08001a",
+      "id": "b836135b-9354-4383-8b1a-146b36a5fd79",
       "name": "INFO_PB",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -243,7 +243,7 @@
       "description": "Bias of relative variant position in reference reads versus variant reads. Equals Mann-Whitney U rho statistic P(Y>X)+0.5P(Y=X)"
     },
     {
-      "id": "30d50720-6b4c-44af-ba4c-be567d9bb3e3",
+      "id": "190bc6de-d0cd-4d00-a6b6-dc5e641c8ffa",
       "name": "INFO_PBP",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -252,7 +252,7 @@
       "description": "Pval of relative variant position in reference reads versus variant reads.  Related to GATK ReadPosRankSumTest"
     },
     {
-      "id": "c46b8b83-3cd3-4d8a-99b8-7e0d9adfd804",
+      "id": "5c050a80-921d-488c-b5f7-3a6dfc6dc643",
       "name": "INFO_QD",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -261,7 +261,7 @@
       "description": "QualityByDepth as 4*QUAL/FDP (analogous to GATK)"
     },
     {
-      "id": "c7ecafee-abe8-49c6-935f-dfea24917ed9",
+      "id": "6f07ec73-a762-4e99-9d53-319e86e526da",
       "name": "INFO_RBI",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -270,7 +270,7 @@
       "description": "Distance of bias parameters from zero."
     },
     {
-      "id": "4f2bd796-538e-4ef5-8a77-3bc145199679",
+      "id": "5a0a3efc-b4e5-4627-af44-a61299f4fedf",
       "name": "INFO_REFB",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -279,7 +279,7 @@
       "description": "Reference Hypothesis bias in prediction."
     },
     {
-      "id": "b6c39b79-0a01-42f7-8a95-cc4d2c1ac14e",
+      "id": "809e20e3-ecde-4135-92b7-6263b5eddd14",
       "name": "INFO_REVB",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -288,7 +288,7 @@
       "description": "Reverse strand bias in prediction."
     },
     {
-      "id": "451a9154-de63-4790-8ed5-8e7efcae2812",
+      "id": "def29ef7-83de-4ed6-8ae8-f19e8a8cb383",
       "name": "INFO_RO",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -297,7 +297,7 @@
       "description": "Reference allele observations"
     },
     {
-      "id": "ad87d1af-ac77-497d-a482-abe7e1fa5ecb",
+      "id": "c39347af-b6dd-419d-a0ae-3a0b33e842ed",
       "name": "INFO_SAF",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -306,7 +306,7 @@
       "description": "Alternate allele observations on the forward strand"
     },
     {
-      "id": "eb22e6ad-1410-46a7-8fcf-4af7ede61e35",
+      "id": "6966cc9e-2fe1-4a20-88a7-e9f3bc1ed9c1",
       "name": "INFO_SAR",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -315,7 +315,7 @@
       "description": "Alternate allele observations on the reverse strand"
     },
     {
-      "id": "1db39fa9-860a-45b8-baaa-88797915c1ab",
+      "id": "75f6ba65-2e09-470b-8f77-b2b7eb7a972d",
       "name": "INFO_SRF",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -324,7 +324,7 @@
       "description": "Number of reference observations on the forward strand"
     },
     {
-      "id": "edb1a525-ee1e-4664-8fb7-56e2041650d6",
+      "id": "57874ed2-cc2e-4fc6-890c-d6f4a48b88fb",
       "name": "INFO_SRR",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -333,7 +333,7 @@
       "description": "Number of reference observations on the reverse strand"
     },
     {
-      "id": "5a86b331-1f56-4012-bcae-eb9386976aa0",
+      "id": "6487c6ae-cc56-4954-b7c5-d05fd333c8de",
       "name": "INFO_SSEN",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -342,7 +342,7 @@
       "description": "Strand-specific-error prediction on negative strand."
     },
     {
-      "id": "706ae56d-dbf0-40da-9ec2-e3784356d062",
+      "id": "3f794947-d3d9-4444-be15-0bded83fe87f",
       "name": "INFO_SSEP",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -351,7 +351,7 @@
       "description": "Strand-specific-error prediction on positive strand."
     },
     {
-      "id": "8fc76521-8c46-41bc-a4e8-4d4c4a2e7758",
+      "id": "57888ecd-37bc-4604-a48f-ffd2ead9c7e0",
       "name": "INFO_SSSB",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -360,7 +360,7 @@
       "description": "Strand-specific strand bias for allele."
     },
     {
-      "id": "ab8f7e2b-de05-4d4b-841e-afaddc12042b",
+      "id": "87e8d157-e686-4fd8-8c0b-05dec2c97142",
       "name": "INFO_STB",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -369,7 +369,7 @@
       "description": "Strand bias in variant relative to reference."
     },
     {
-      "id": "5a1b08d1-7edb-453f-a45f-19501d283df5",
+      "id": "a1b8a1a9-7a70-4757-9c90-d28dfe1cda54",
       "name": "INFO_STBP",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -378,7 +378,7 @@
       "description": "Pval of Strand bias in variant relative to reference."
     },
     {
-      "id": "7fb8e51a-0f62-4e52-84ed-6d0600178db1",
+      "id": "ac7ff8b7-0ff8-42f0-9880-03df1d74d771",
       "name": "INFO_TYPE",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -387,7 +387,7 @@
       "description": "The type of allele, either snp, mnp, ins, del, or complex."
     },
     {
-      "id": "24d14ef0-310f-4bcf-aad1-969c00c4bc88",
+      "id": "c14036d1-7928-4f20-871d-ae1c67868d86",
       "name": "INFO_VARB",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -396,7 +396,7 @@
       "description": "Variant Hypothesis bias in prediction."
     },
     {
-      "id": "1d9f5da4-a486-4575-8dba-2bd5888a4a5e",
+      "id": "3b5b4288-5e30-404e-974e-03c68244a330",
       "name": "INFO_OID",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -405,7 +405,7 @@
       "description": "List of original Hotspot IDs"
     },
     {
-      "id": "b32a1768-12f8-4116-830f-53fafc709d6b",
+      "id": "9a4fe649-3c27-419c-99c2-15220ac4198d",
       "name": "INFO_OPOS",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -414,7 +414,7 @@
       "description": "List of original allele positions"
     },
     {
-      "id": "68e8c13b-c104-4437-bfd8-64554bd665be",
+      "id": "11898e43-724c-40f1-a096-c2b78fc9b6fa",
       "name": "INFO_OREF",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -423,7 +423,7 @@
       "description": "List of original reference bases"
     },
     {
-      "id": "2307fdfd-2c48-4565-a8a0-4795d07d4232",
+      "id": "73eb02cc-5dfa-433c-a924-99684702bb33",
       "name": "INFO_OALT",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,
@@ -432,7 +432,7 @@
       "description": "List of original variant bases"
     },
     {
-      "id": "a90e0b05-d407-4979-9766-3ea349cdd084",
+      "id": "29c97f7d-98b3-4642-9877-80a968e11168",
       "name": "INFO_OMAPALT",
       "sourceName": "ONH_400_1946141_IonXpress_022.vcf.gz",
       "editable": false,

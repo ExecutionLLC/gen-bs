@@ -9,7 +9,7 @@
   },
   "fields": [
     {
-      "id": "84d6ae65-da93-4517-899b-c2784a4513b9",
+      "id": "5f45e354-db43-4ae0-8432-8ee80cdc97ed",
       "name": "CHROM",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -18,7 +18,7 @@
       "description": "Chromosome identifier"
     },
     {
-      "id": "f2e7671f-b617-4b8a-9e05-8b7747954012",
+      "id": "61ab5575-e514-44a2-b8c5-e638861e7037",
       "name": "POS",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -27,7 +27,7 @@
       "description": "The reference position"
     },
     {
-      "id": "063c052c-d8f9-4f20-842f-4338f96b39a5",
+      "id": "bdee2bc6-ae56-4b2b-b53d-4809c7435c97",
       "name": "ID",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -36,7 +36,7 @@
       "description": "Semi-colon separated list of unique identifiers where available"
     },
     {
-      "id": "8c7eb2f5-672b-461e-8a85-6d648dae158c",
+      "id": "f0a2271e-0f02-4927-b13a-47a2e9e0148c",
       "name": "REF",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -45,7 +45,7 @@
       "description": "The value in the POS field refers to the position of the first base in the String"
     },
     {
-      "id": "4e2a4b5e-487f-4361-8f5b-734a631f7f42",
+      "id": "1e0f355d-101c-4595-b0e1-13c3491efce4",
       "name": "ALT",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -54,7 +54,7 @@
       "description": "Comma separated list of alternate non-reference alleles called on at least one of the samples"
     },
     {
-      "id": "c496ffc7-de75-4bda-85ac-de63ba4639d7",
+      "id": "d4bd5add-96cb-4a13-891f-331dc0fa3a25",
       "name": "QUAL",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -63,7 +63,7 @@
       "description": "Quality"
     },
     {
-      "id": "a193588d-3d89-4fe0-9d73-ef38b2041e01",
+      "id": "1c8e79e5-8ef9-411e-8cb7-fc31ecce669d",
       "name": "FILTER",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -72,7 +72,7 @@
       "description": "Filter status"
     },
     {
-      "id": "9d3806b4-8919-4e3f-8320-fc2d001d235b",
+      "id": "6d59c6f1-d337-4117-aaf7-9529078c90ae",
       "name": "INFO_OID",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -81,7 +81,7 @@
       "description": "List of original Hotspot IDs"
     },
     {
-      "id": "61c03371-4fb1-4955-9593-2a9c25c6b44c",
+      "id": "14f97371-dc3e-4bfd-863c-99e44c119313",
       "name": "INFO_OPOS",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -90,7 +90,7 @@
       "description": "List of original allele positions"
     },
     {
-      "id": "4997aee2-9556-40a0-83ac-d8b3ba26223c",
+      "id": "e6a5b8f1-0e2c-4e69-b12f-040c8918f92e",
       "name": "INFO_OREF",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -99,7 +99,7 @@
       "description": "List of original reference bases"
     },
     {
-      "id": "157cabc5-9614-4128-9c7b-531806782fe6",
+      "id": "fd6e07bb-8f78-4dbe-a620-6ab90b0c7322",
       "name": "INFO_OALT",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -108,7 +108,7 @@
       "description": "List of original variant bases"
     },
     {
-      "id": "26437785-afd3-437a-a93a-95b2f141b983",
+      "id": "d9049463-82de-4098-b851-f96cd7fb82be",
       "name": "INFO_OMAPALT",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -117,7 +117,7 @@
       "description": "Maps OID,OPOS,OREF,OALT entries to specific ALT alleles"
     },
     {
-      "id": "e9c840a7-117d-49f1-bc5d-f8b93d5bee22",
+      "id": "10f4764b-8282-4059-b65f-0ad6d121ca23",
       "name": "INFO_AO",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -126,7 +126,7 @@
       "description": "Alternate allele observations"
     },
     {
-      "id": "cbee2e78-7fec-4bf9-9356-0bfe3466fe66",
+      "id": "aa3e9644-af4b-46fe-9ac2-938c12c4b445",
       "name": "INFO_DP",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -135,7 +135,7 @@
       "description": "Total read depth at the locus"
     },
     {
-      "id": "4efb73c1-3933-4c15-a969-48a970d47ae8",
+      "id": "c28f3725-b93b-4e78-a593-cfb80f97925f",
       "name": "INFO_FAO",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -144,7 +144,7 @@
       "description": "Flow Evaluator Alternate allele observations"
     },
     {
-      "id": "5a7d7e3f-b236-4d33-97fc-ef2e27eb0d32",
+      "id": "989983e8-7a35-43d1-893a-01ae2a06f004",
       "name": "INFO_FDP",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -153,7 +153,7 @@
       "description": "Flow Evaluator read depth at the locus"
     },
     {
-      "id": "d588a378-0076-4020-83a3-afa39292d728",
+      "id": "d2a74423-8196-4f34-98ef-eaf12ccc105b",
       "name": "INFO_FR",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -162,7 +162,7 @@
       "description": "Reason why the variant was filtered."
     },
     {
-      "id": "8ef32ebc-1137-4612-8874-67a233a51385",
+      "id": "7410f715-768f-4345-919e-089585fb72f4",
       "name": "INFO_FRO",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -171,7 +171,7 @@
       "description": "Flow Evaluator Reference allele observations"
     },
     {
-      "id": "f0cc7d7a-b43d-4089-8de0-7ff9b6b3e7a6",
+      "id": "04f04221-afc6-47fe-b443-3a6f2ede356a",
       "name": "INFO_FSAF",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -180,7 +180,7 @@
       "description": "Flow Evaluator Alternate allele observations on the forward strand"
     },
     {
-      "id": "9fa96979-09bb-49e1-8619-12ecf751cae9",
+      "id": "182e80a8-ea27-46ae-ab2c-f18e564dda6d",
       "name": "INFO_FSAR",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -189,7 +189,7 @@
       "description": "Flow Evaluator Alternate allele observations on the reverse strand"
     },
     {
-      "id": "8232562c-3418-47ed-9f69-242fdf89d6fe",
+      "id": "24215fca-3cc0-48fa-bf6a-1dcf0c2baf72",
       "name": "INFO_FSRF",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -198,7 +198,7 @@
       "description": "Flow Evaluator Reference observations on the forward strand"
     },
     {
-      "id": "285e1f71-ffd0-4106-aafa-d873c53b1ca5",
+      "id": "4a8f9fc6-0b7e-4641-ade1-b0ae344560be",
       "name": "INFO_FSRR",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -207,7 +207,7 @@
       "description": "Flow Evaluator Reference observations on the reverse strand"
     },
     {
-      "id": "df5522e5-21ee-4090-9982-e98a270458ab",
+      "id": "5b475ee5-2998-4c30-b645-e6a774dabbd4",
       "name": "INFO_FWDB",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -216,7 +216,7 @@
       "description": "Forward strand bias in prediction."
     },
     {
-      "id": "013c6a89-2294-4817-a0f3-5f54ea068543",
+      "id": "64e2f097-d256-4f4a-aaaf-64a14f978b94",
       "name": "INFO_FXX",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -225,7 +225,7 @@
       "description": "Flow Evaluator failed read ratio"
     },
     {
-      "id": "15eea1a7-c19d-4aae-919b-40a361e254e7",
+      "id": "2faa05c1-46de-49b2-ae56-c5c6582b82c2",
       "name": "INFO_HRUN",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -234,7 +234,7 @@
       "description": "Run length: the number of consecutive repeats of the alternate allele in the reference genome"
     },
     {
-      "id": "65dc4383-f89e-4030-a7dd-b0a63d2f6d29",
+      "id": "3245bdca-f224-4a7a-bb4a-1106cf65638e",
       "name": "INFO_HS",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -243,7 +243,7 @@
       "description": "Indicate it is at a hot spot"
     },
     {
-      "id": "e52a8688-fe9a-4815-bb02-6f263970c22b",
+      "id": "5fb16792-7bd7-4855-bcc7-1e65a1471024",
       "name": "INFO_LEN",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -252,7 +252,7 @@
       "description": "allele length"
     },
     {
-      "id": "1086f7a0-694c-422d-9ded-2d566e1c013b",
+      "id": "c0952736-d07c-4ad1-a5e8-3c5ad350b3d0",
       "name": "INFO_MLLD",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -261,7 +261,7 @@
       "description": "Mean log-likelihood delta per read."
     },
     {
-      "id": "ba3d9520-dbbb-429b-8bdf-51e9ecb9ef94",
+      "id": "c3239442-665e-415f-a095-4235befbc2b7",
       "name": "INFO_NR",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -270,7 +270,7 @@
       "description": "Reason why the variant is a No-Call."
     },
     {
-      "id": "0a3ed4c5-35d1-4114-931f-106dec802908",
+      "id": "b9d47608-0638-43ef-9474-6effed5219d6",
       "name": "INFO_NS",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -279,7 +279,7 @@
       "description": "Number of samples with data"
     },
     {
-      "id": "e57da91c-1ff6-4d12-9a8a-6815014c7c38",
+      "id": "b3c9c96e-22bf-4d53-85b2-b14939137417",
       "name": "INFO_QD",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -288,7 +288,7 @@
       "description": "QualityByDepth as 4*QUAL/FDP (analogous to GATK)"
     },
     {
-      "id": "3c3895e3-c4f7-479b-911d-4db300b3915d",
+      "id": "5d22cab6-fcaf-4cae-8252-fc84a4ff7f16",
       "name": "INFO_RBI",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -297,7 +297,7 @@
       "description": "Distance of bias parameters from zero."
     },
     {
-      "id": "da396027-822c-41cd-922b-6152672d3f30",
+      "id": "66ffa527-eaa8-4400-a7f1-86d04881510e",
       "name": "INFO_REFB",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -306,7 +306,7 @@
       "description": "Reference Hypothesis bias in prediction."
     },
     {
-      "id": "a13f3fc8-5a93-4dbf-a8e7-026419b29853",
+      "id": "076d66d8-d47c-41d0-99d8-10ae8a50cdc4",
       "name": "INFO_REVB",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -315,7 +315,7 @@
       "description": "Reverse strand bias in prediction."
     },
     {
-      "id": "28049bea-aa17-4984-bf62-49b642ad0e37",
+      "id": "a453f0b8-b375-4520-8b70-7e9853537bf7",
       "name": "INFO_RO",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -324,7 +324,7 @@
       "description": "Reference allele observations"
     },
     {
-      "id": "5e7b5e8e-75a0-4363-b75e-0b8446acdd9e",
+      "id": "3283ec9b-d4fd-4f97-b0b4-3e3e2f238b42",
       "name": "INFO_SAF",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -333,7 +333,7 @@
       "description": "Alternate allele observations on the forward strand"
     },
     {
-      "id": "e3185d58-8334-4b17-9b07-5b31e85d260a",
+      "id": "d11e3b55-343a-4d5a-b025-736aa2f9fb73",
       "name": "INFO_SAR",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -342,7 +342,7 @@
       "description": "Alternate allele observations on the reverse strand"
     },
     {
-      "id": "8093de1c-6437-41dd-b285-032771d75b68",
+      "id": "5f6cd849-bee9-4df3-811e-22433de41a40",
       "name": "INFO_SRF",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -351,7 +351,7 @@
       "description": "Number of reference observations on the forward strand"
     },
     {
-      "id": "9fb69fbf-318f-4e32-b3f6-a9135f86ccb5",
+      "id": "8d4651bb-e520-4a0d-b438-1a1cff7ce563",
       "name": "INFO_SRR",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -360,7 +360,7 @@
       "description": "Number of reference observations on the reverse strand"
     },
     {
-      "id": "e3241b9b-b83e-4407-bc6e-40962f0424f0",
+      "id": "d9911431-ab01-4e39-ad90-be8a564d2eeb",
       "name": "INFO_SSEN",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -369,7 +369,7 @@
       "description": "Strand-specific-error prediction on negative strand."
     },
     {
-      "id": "3bd4f52f-8903-461f-bbc3-d93e1a2f0301",
+      "id": "f8264303-88dd-416e-8962-9f98bbd0fd12",
       "name": "INFO_SSEP",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -378,7 +378,7 @@
       "description": "Strand-specific-error prediction on positive strand."
     },
     {
-      "id": "4c3f2bd8-dd33-429a-9904-83094de459f3",
+      "id": "ed12bcc9-5eec-4228-870d-1981ac31d583",
       "name": "INFO_SSSB",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -387,7 +387,7 @@
       "description": "Strand-specific strand bias for allele."
     },
     {
-      "id": "051853e3-a261-4280-829d-243376345fc5",
+      "id": "0d29dd2c-9d79-4daa-aa2b-5dd42c1a8b2c",
       "name": "INFO_STB",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -396,7 +396,7 @@
       "description": "Strand bias in variant relative to reference."
     },
     {
-      "id": "fd8b3bd2-48b0-4291-a828-95a707e769f5",
+      "id": "f4f28645-96b1-4316-a169-3a3519ad4c38",
       "name": "INFO_TYPE",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
@@ -405,7 +405,7 @@
       "description": "The type of allele, either snp, mnp, ins, del, or complex."
     },
     {
-      "id": "3fba5172-f85f-44ed-8553-116bc1cdc749",
+      "id": "12f8bfb7-8f95-409c-8f31-71d56f58f384",
       "name": "INFO_VARB",
       "sourceName": "Sample_vcf4.1.vcf.gz",
       "editable": false,
