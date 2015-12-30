@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Uuid = require('node-uuid');
 
 const FsUtils = require('../utils/FileSystemUtils');
 const FieldsMetadataService = require('../services/FieldsMetadataService'); // Here lays the mapping function.
@@ -58,15 +59,15 @@ class SampleBuilder extends DefaultsBuilderBase {
             sample: sample,
             fields: sampleFieldMetadata
         };
-        const filePath = this.samplesDir + '/' + this._getSampleIdFromFilePath(sample.id) + '.json';
+        const filePath = this.samplesDir + '/' + sample.fileName + '.json';
         FsUtils.writeStringToFile(filePath, JSON.stringify(contents, null, 2), callback);
     }
 
     _importSample(sampleMetadataFilePath, callback) {
-        const sampleId = this._getSampleIdFromFilePath(sampleMetadataFilePath);
+        const sampleName = this._getSampleIdFromFilePath(sampleMetadataFilePath);
         const sample = {
-            id: sampleId,
-            fileName: sampleId,
+            id: Uuid.v4(),
+            fileName: sampleName,
             hash: null,
             sampleType: 'standard', // TODO: load sample types somewhere.
             isAnalyzed: true,
@@ -75,7 +76,7 @@ class SampleBuilder extends DefaultsBuilderBase {
 
         const sampleFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
         const sampleFields = JSON.parse(sampleFieldsString);
-        const wsMappedFields = _.map(sampleFields, sampleField => FieldsMetadataService.createFieldMetadata(sampleId, sampleField));
+        const wsMappedFields = _.map(sampleFields, sampleField => FieldsMetadataService.createFieldMetadata(sample.id, sampleField));
         this._storeSampleFieldMetadata(sample, wsMappedFields, callback);
     }
 }

@@ -1,20 +1,20 @@
 [
   {
-    "id": "dac0cace-a20a-4be3-9473-ebabe44df796",
+    "id": "b7ead923-9973-443a-9f44-5563d31b5073",
     "name": "Test Default View",
     "view_type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "6ec7454d-29d4-4549-a38a-9f8821e4d0b8",
-        "field_id": "71450a95-f9d5-42b8-9ba2-4a5badccaee0",
+        "id": "fbc72824-7958-497f-8592-42272681e230",
+        "field_id": "c6819c34-ae80-43dd-821a-28f0a9c04ed4",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "d4d1a4fa-f9ac-4bdd-a287-3a6d4ee3e387",
-        "field_id": "66538813-da15-47ac-b562-c423de3bdc19",
+        "id": "9abac1d0-c47d-4ccf-8a55-4fc64145d606",
+        "field_id": "24d4a99f-fa8f-43b9-aee6-fdad102cb548",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
@@ -22,28 +22,28 @@
     ]
   },
   {
-    "id": "cf538eb2-7797-41b8-8a66-08e3d24a0077",
+    "id": "32f404d7-e99e-4bcf-b999-45c518d74b95",
     "name": "Another Default View",
     "view_type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "522b0eae-11a6-4062-afa5-d22cd7719d3d",
-        "field_id": "71450a95-f9d5-42b8-9ba2-4a5badccaee0",
+        "id": "71300f05-712b-4f15-bb31-066266547456",
+        "field_id": "c6819c34-ae80-43dd-821a-28f0a9c04ed4",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "280d228d-b95c-4f35-ae45-650e6eea76b1",
-        "field_id": "66538813-da15-47ac-b562-c423de3bdc19",
+        "id": "ebc18183-ca1e-49b6-8461-625ab7dda6c6",
+        "field_id": "24d4a99f-fa8f-43b9-aee6-fdad102cb548",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
       },
       {
-        "id": "aa7c5217-aaa6-4119-9c97-08b79a30e726",
-        "field_id": "a6855bdf-3181-41c7-bcc9-2be5df4240d2",
+        "id": "a56ce391-9314-4bd1-90ab-2c493ec67ed2",
+        "field_id": "1c2db7dc-78e3-43a8-a0bb-6e8dd40a90fe",
         "order": 3,
         "sort_order": 3,
         "sort_direction": "desc"
