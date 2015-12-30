@@ -5,16 +5,14 @@ const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 
-const FIELDS_METADATA = require('../test_data/fields_metadata.json');
-
 class FieldsMetadataService extends ServiceBase {
-    constructor(services) {
-        super(services);
+    constructor(services, models) {
+        super(services, models);
     }
 
-    findForUserBySampleId(user, sampleId, callback) {
+    findByUserAndSampleId(user, sampleId, callback) {
         if (user) {
-            callback(null, FIELDS_METADATA);
+            this.models.fields.findByUserAndSampleId(user.id, sampleId, callback);
         } else {
             callback(new Error('User is undefined'));
         }

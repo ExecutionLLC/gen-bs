@@ -29,6 +29,15 @@ class FieldsMetadataModel {
         });
     }
 
+    findByUserAndSampleId(userId, sampleId, callback) {
+        const fields = _.filter(this.fields, field => field.sourceName === sampleId);
+        if (!fields || !fields.length) {
+            callback(new Error('No fields found for the specified sample'));
+        } else {
+            callback(null, fields);
+        }
+    }
+
     addWithId(field, callback) {
         this.fields.push(field);
         callback(null, field);
