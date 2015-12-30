@@ -8,10 +8,6 @@
     "params": {
       "type": "object",
       "properties": {
-        "session_id": {
-          "type": "string",
-          "description": "GUID of the file session"
-        },
         "filters": {
           "type": "array",
           "description": "list of filters",

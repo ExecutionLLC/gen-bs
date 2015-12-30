@@ -11,6 +11,8 @@
     &.@{state} > td,
     &.@{state} > th {
       background-color: @background;
+      border-color: darken(@background, 8%);
+      color: desaturate(darken(@background, 60%), 10%);
     }
   }
 
