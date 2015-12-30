@@ -1,0 +1,24 @@
+[
+  {
+    "id": "c947e883-f035-4809-bf3f-ed62bf4e9863",
+    "name": "Test Default View",
+    "view_type": "standard",
+    "description": "This is default view with two columns and no keywords",
+    "view_list_items": [
+      {
+        "id": "6cbbb2da-54c3-4bcb-9150-5ae2900cfcdc",
+        "field_id": "e975744c-f6c7-495e-b4c7-83b3ffe0691d",
+        "order": 1,
+        "sort_order": 1,
+        "sort_direction": "asc"
+      },
+      {
+        "id": "f1b8c6f5-b2f6-44c9-89af-221236e7d5bb",
+        "field_id": "ec333777-271b-4169-91b9-92d48a994b44",
+        "order": 2,
+        "sort_order": 2,
+        "sort_direction": "desc"
+      }
+    ]
+  }
+]

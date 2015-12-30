@@ -1,0 +1,120 @@
+{
+  "sample": {
+    "id": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+    "fileName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+    "hash": null,
+    "sampleType": "standard",
+    "isAnalyzed": true,
+    "creator": null
+  },
+  "fields": [
+    {
+      "id": "fc4eae36-b371-4daf-b880-a60c0702d30b",
+      "name": "CHROM",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "integer",
+      "description": "Chromosome identifier"
+    },
+    {
+      "id": "a6e0bae5-f60f-4f9b-b3c8-5a8128e8b443",
+      "name": "POS",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "integer",
+      "description": "The reference position"
+    },
+    {
+      "id": "3eb4b369-1472-4935-bdd2-bd817e0117f5",
+      "name": "ID",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "string",
+      "description": "Semi-colon separated list of unique identifiers where available"
+    },
+    {
+      "id": "3ac79911-2dee-47af-ac02-004c67176b67",
+      "name": "REF",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "string",
+      "description": "The value in the POS field refers to the position of the first base in the String"
+    },
+    {
+      "id": "6c930bd1-a860-40e0-bd40-564ec7591f02",
+      "name": "ALT",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "string",
+      "description": "Comma separated list of alternate non-reference alleles called on at least one of the samples"
+    },
+    {
+      "id": "71a0fb78-6eb7-4dbe-bfbd-5808204c6065",
+      "name": "QUAL",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "float",
+      "description": "Quality"
+    },
+    {
+      "id": "20967e0f-52f8-4253-b25b-ee61476348d5",
+      "name": "FILTER",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "string",
+      "description": "Filter status"
+    },
+    {
+      "id": "e7486719-0848-448b-8b05-5959374e0196",
+      "name": "INFO_ADP",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "integer",
+      "description": "Average per-sample depth of bases with Phred score >= 0"
+    },
+    {
+      "id": "ef6b1f0e-3add-46bf-983e-d24f9a252e5b",
+      "name": "INFO_WT",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "integer",
+      "description": "Number of samples called reference (wild-type)"
+    },
+    {
+      "id": "5da1ba29-80e4-4314-988f-d134822552de",
+      "name": "INFO_HET",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "integer",
+      "description": "Number of samples called heterozygous-variant"
+    },
+    {
+      "id": "911a4cc5-604c-4e8f-b183-2b4413c668b0",
+      "name": "INFO_HOM",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "integer",
+      "description": "Number of samples called homozygous-variant"
+    },
+    {
+      "id": "f1945b24-991b-4fd9-9a8d-1f5c28d28c7c",
+      "name": "INFO_NC",
+      "sourceName": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
+      "editable": false,
+      "filterControlEnable": false,
+      "valueType": "integer",
+      "description": "Number of samples not called"
+    }
+  ]
+}

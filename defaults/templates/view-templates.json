@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Test Default View",
+    "description": "This is default view with two columns and no keywords",
+    "type": "standard",
+    "items": [
+      {
+        "field": {
+          "source_name": "ONH_400_1946141_IonXpress_022.vcf.gz",
+          "field_name": "CHROM"
+        },
+        "order": 1,
+        "sort_order": 1,
+        "sort_direction": "asc"
+      },
+      {
+        "field": {
+          "source_name": "ONH_400_1946141_IonXpress_022.vcf.gz",
+          "field_name": "POS"
+        },
+        "order": 2,
+        "sort_order": 2,
+        "sort_direction": "desc"
+      }
+    ]
+  }
+]
