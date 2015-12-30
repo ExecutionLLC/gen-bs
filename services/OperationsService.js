@@ -62,7 +62,7 @@ class OperationsService extends ServiceBase {
                 this._onOperationNotFound(callback);
             }
         } else {
-            callback(new Error('Session is not found'));
+            this._onOperationNotFound(callback);
         }
     }
 
@@ -72,7 +72,7 @@ class OperationsService extends ServiceBase {
             const operations = _.filter(sessionOperations);
             callback(null, operations);
         } else {
-            callback(new Error('Session is not found'));
+            callback(null, []);
         }
     }
 

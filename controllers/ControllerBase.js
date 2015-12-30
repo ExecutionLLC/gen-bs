@@ -24,11 +24,14 @@ class ControllerBase {
     }
 
     sendError(response, httpError, message) {
+        if (message && typeof message !== 'string') {
+            message = message.toString();
+        }
         response
             .status(httpError)
             .json({
                 code: httpError,
-                message
+                message: message
             })
             .end();
     }

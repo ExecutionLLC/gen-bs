@@ -76,9 +76,8 @@ class MockModelBase {
             return;
         }
 
-        const userItem = _.filter(this.hash, descriptor => descriptor.userId === userId
-            && descriptor.item.id === itemId)
-            .first();
+        const userItem = _.find(this.hash, descriptor => descriptor.userId === userId
+            && descriptor.item.id === itemId);
 
         if (!userItem) {
             callback(new Error('Item not found by id ' + itemId));

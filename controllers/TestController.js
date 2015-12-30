@@ -58,16 +58,21 @@ class TestController extends ControllerBase {
             if (error) {
                 this.sendInternalError(response, error);
             } else {
-                this.services.samples.find(sampleId, (error, sample) => {
+                this.services.samples.find(request.user, sampleId, (error, sample) => {
                     if (error) {
                         this.sendInternalError(response, error);
                     } else {
-                        this.services.views.find(viewId, (error, view) => {
+                        this.services.views.find(request.user, viewId, (error, view) => {
                             if (error) {
                                 this.sendInternalError(response, error);
                             } else {
+                                const appServerSampleId =
+                                    sample.sampleType === 'standard'
+                                        || sample.sampleType === 'advanced' ?
+                                    sample.fileName : sample.id;
                                 this.services.applicationServer.requestOpenSearchSession(sessionId, {
-
+                                    view: view,
+                                    sampleId: appServerSampleId
                                 }, (error) => {
                                     this.sendInternalError(response, error);
                                 });
@@ -77,8 +82,6 @@ class TestController extends ControllerBase {
                 });
             }
         });
-
-        this.sendJson(response, {status: 'OK'});
     }
 
     createRouter() {

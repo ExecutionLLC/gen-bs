@@ -90,9 +90,9 @@ class RPCProxy {
         return JSON.stringify({id: operationId, method: method, params: [params]});
     }
 
-    send(operationId, method, params) {
+    send(operationId, method, params, callback) {
         var self = this;
-        self.ws.send(self._formatJson(operationId, method, params));
+        self.ws.send(self._formatJson(operationId, method, params), null, callback);
     }
 }
 
