@@ -39,8 +39,8 @@ class ApiController extends ControllerBase {
         if (sessionId) {
             setUserBySessionFunc(sessionId);
         } else {
-            console.error('Automatically open demo session for testing');
-            sessions.startDemo((error, sessionId) => {
+            console.error('Automatically open user session for testing');
+            sessions.startForUser('valarie', 'password', (error, sessionId) => {
                 if (error) {
                     next(new Error(error));
                 } else {
