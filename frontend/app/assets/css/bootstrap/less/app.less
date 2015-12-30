@@ -870,15 +870,20 @@ body {
 
    &.table > thead > tr > th  { 
      padding-right: @table-condensed-cell-padding;
-     border-bottom: none;
+     border-bottom: 1px solid #ddd;
      padding-right: 2px;
       padding-left: 2px;
-
+     padding-bottom: 0;
+   
      .form-control { 
-      font-weight: normal;
-      text-overflow: ellipsis;
-      padding-left: 4px;
-      padding-right: 4px;
+        background: transparent;
+        border-width: 1px 0 0;
+        font-weight: normal;
+        margin-top: 10px;
+        padding-left: 15px;
+        padding-right: 4px;
+        padding-top: 0;
+        text-overflow: ellipsis;
       }
     }
  
@@ -891,29 +896,6 @@ body {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-/*
-          &:first-child { 
-            padding-left: @table-condensed-cell-padding * 3;
-            max-width: 60px;
-          }
-          &:last-child { 
-            padding-right: @table-condensed-cell-padding * 4;
-          }
-          &.sorting_1 { 
-            background:fade(@brand-primary, 8%);
-            border-color: fade(@brand-primary, 10%);
-          }
-          &.sorting_2 { 
-             background:fade(@brand-primary, 4%);
-              border-color:fade(@brand-primary, 6%);
-          }
-          &.sorting_3 { 
-            background:fade(@brand-primary, 2%);
-             border-color:fade(@brand-primary, 4%);
-
-          }
-*/
-        
  
        }
      }
@@ -923,9 +905,41 @@ body {
        > tr { 
          > th { 
           
-           > div { 
+           > div {
+             position: relative;
+             min-height: 30px;
+             }
+           > div + div { 
+             &:before {
+               .fa();
+               position: absolute;
+               left: 0;
+               top:9px;
+               content: "\f002";
+               color: #ccc;
+             }
            }
-         }
+             .btnSort { 
+               position: absolute;
+               z-index: 1;
+               right: 0;
+               top: -10px;;
+                
+             } 
+             .btnSort:hover { 
+               &:before {
+                  opacity: 1; 
+               }
+                  }
+             .variants-table-header-label { 
+                display: block;
+                line-height: 1.15;
+                padding-right: 24px;
+                white-space: normal;
+                word-wrap: break-word;
+             } 
+           }
+         
        }
      }
   

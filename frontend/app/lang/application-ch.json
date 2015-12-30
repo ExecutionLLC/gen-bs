@@ -42,9 +42,7 @@
   },
   "actions": {
     "search": {
-      "placeholder_begin": "搜索",
-      "placeholder_end": "提供样品",
-      "description": "String"
+      "value": "搜索当前样本的突变"
     },
     "save_choose": {
       "title": "保存并选择",
@@ -223,13 +221,12 @@
     "new": {
       "name": {
         "title": "新观点",
-        "placeholder": "设置视图名称的副本",
+        "value": "设置视图名称的副本",
         "error": "名称不能为空",
         "value_prefix": "副本"
       },
       "description": {
-        "title": "描述",
-        "placeholder": "类型视图的描述（可选）"
+        "value": "类型视图的描述（可选）"
       }
     },
     "delete": {
@@ -254,7 +251,7 @@
       "columns_sorting": "列名和Multi排序",
       "columns_filter": "列筛选器和关键字",
       "keywords": {
-        "placeholder": "String"
+        "value": "关键词（可选）"
       },
       "asc_help": "升序降序",
       "desc_help": "降序"
@@ -273,8 +270,7 @@
         "value_prefix": "副本"
       },
       "description": {
-        "title": "描述",
-        "placeholder": "类型过滤器描述（可选）"
+        "value": "类型过滤器描述（可选）"
       }
     },
     "delete": {

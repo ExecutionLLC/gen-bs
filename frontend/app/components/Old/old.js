@@ -142,33 +142,22 @@ $('#builder-basic .selectTree').select2()
 
 
   
-//profile temp actions
+// temp actions
 $('#btnLogin').on('click', function (e) {
-      $('.guest').addClass("hidden");
-      $('.user').removeClass("hidden");
-     });
+  $('.guest').addClass("hidden");
+  $('.user').removeClass("hidden");
+ });
 $('#btnLogout').on('click', function (e) {
-      $('user').addClass("hidden");
-      $('#guest').removeClass("hidden");
-     });
+  $('user').addClass("hidden");
+  $('#guest').removeClass("hidden");
+});
 
 $('#userEditBtn').on('click', function (e) {
    $('.user-view').toggleClass('hidden')
   });
 $('.usrViewActBtn').on('click', function (e) {
    $('.user-view').toggleClass('hidden')
-  });
-$('#dblBtn').on('click', function (e) {
-   $('#view1Sett').toggleClass('hidden');
-   $('#view2Sett').toggleClass('hidden');
 });
 $('.btnSort.active').on('click', function (e) { 
    $(this).toggleClass('asc').toggleClass('desc');
 });
-//custom scrollbar
-/*
-$('#info').on('shown.bs.modal', function (e) {
-          $(".modal-lg-scroll").mCustomScrollbar();
-     })         
-});
-*/
