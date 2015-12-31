@@ -16,9 +16,9 @@ class FieldsMetadataController extends ControllerBase {
             return;
         }
         const user = request.user;
-        const sampleId = 'get-sample-id-from-request';
+        const sampleId = request.params.sampleId;
 
-        this.services.fieldsMetadata.findForUserBySampleId(user, sampleId, (error, fieldsMetadata) => {
+        this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fieldsMetadata) => {
             if (error) {
                 this.sendInternalError(response, error);
             } else {
@@ -30,7 +30,7 @@ class FieldsMetadataController extends ControllerBase {
     createRouter() {
         const router = new Express();
 
-        router.get('/', this.getFieldsMetadata);
+        router.get('/:sampleId', this.getFieldsMetadata);
 
         return router;
     }

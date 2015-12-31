@@ -6,8 +6,20 @@ const Uuid = require('node-uuid');
 class MockModelBase {
     constructor(defaultData, mockUserId) {
         this.hash = {};
+        if (typeof defaultData === 'function') {
+            defaultData((error, data) => {
+                if (error) {
+                    throw new Error(error);
+                }
+                this._loadDataToHash(data, mockUserId);
+            });
+        } else {
+            this._loadDataToHash(defaultData, mockUserId);
+        }
+    }
 
-        _.forEach(defaultData, item => {
+    _loadDataToHash(data, mockUserId) {
+        _.forEach(data, item => {
             this.hash[item.id] = {
                 userId: mockUserId,
                 item: item

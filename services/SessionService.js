@@ -17,24 +17,33 @@ class SessionService extends ServiceBase {
      * Currently, also destroys existing sessions of the same user, if any.
      * */
     startForUser(userName, password, callback) {
-        this.sessions.tokens.login(userName, password, (error, tokenDescriptor) => {
+        this.services.tokens.login(userName, password, (error, token) => {
             if (error) {
                 callback(error);
             } else {
-                const token = tokenDescriptor.token;
-                const userId = tokenDescriptor.userId;
+                this.services.tokens.findUserIdByToken(token, (error, userId) => {
+                   if (error) {
+                       callback(error);
+                   } else {
+                       // Check and remove existing user session.
+                       let existingSessionId = _.find(this.sessions, session => session.userId === userId);
+                       if (existingSessionId) {
+                           this.destroySession(existingSessionId, (error) => {
+                               if (error) {
+                                   console.error('Error destroying existing session: %s', error);
+                               }
+                           });
+                       }
 
-                // Check and remove existing user session.
-                let existingSessionId = _.findKey(this.sessions, {'userId': userId});
-                if (existingSessionId) {
-                    this._destroySession(existingSessionId, (error) => {
-                        if (error) {
-                            console.error('Error destroying existing session: %s', error);
-                        }
-                    });
-                }
-
-                this._createSession(userId, token, callback);
+                       this._createSession(token, userId, (error, session) => {
+                           if (error) {
+                               callback(error);
+                           } else {
+                               callback(null, session.id);
+                           }
+                       });
+                   }
+                });
             }
         });
     }
