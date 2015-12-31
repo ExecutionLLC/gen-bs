@@ -13,14 +13,19 @@ function WidthChange(mq) {
 	if (mq.matches) {
 		// window width is at least 768px
 		$('[data-toggle="tooltip"]').tooltip({
-  		trigger: "hover"
+  		trigger: "hover",
+  		delay: { "show": 500, "hide": 100 }
 		});
 	}
 	else {
 		// window width is less than 768px
-			$('[data-toggle="tooltip"]').tooltip({
+		$('#subnav').collapse('hide');
+		$('body').addClass("subnav-closed");
+		$('[data-toggle="tooltip"]').tooltip('destroy');
+		$('[data-toggle="tooltip"]').tooltip({
   		trigger: "click"
 		});
+		
 	}
 
 }
@@ -32,10 +37,19 @@ function WidthChange(mq) {
     });
     $('#sidebarLeft').on('shown.bs.collapse', function () {
         $('body').removeClass("sidebar-left-closed");
-    });
-    $('#sidebarRight').on('hide.bs.collapse', function () {
+        $('[data-toggle="tooltip"]').tooltip('destroy');
+        $('[data-toggle="tooltip"]').tooltip({
+  		    trigger: "click"
+		    });
+      });
+     $('#sidebarRight').on('hide.bs.collapse', function () {
+     
      $('body').addClass("sidebar-right-closed");
-    });
+     $('[data-toggle="tooltip"]').tooltip('destroy');
+      $('[data-toggle="tooltip"]').tooltip({
+  		  trigger: "click"
+		  });
+     });
     $('#sidebarRight').on('shown.bs.collapse', function () {
         $('body').removeClass("sidebar-right-closed");
     });
@@ -89,7 +103,7 @@ $('.selectTree').select2();
  function formatRepoSelection (repo) {
       return repo.full_name || repo.text;
     }               
-$ajax.select2({
+ $ajax.select2({
       ajax: {
         url: "https://api.github.com/search/repositories",
         dataType: 'json',

@@ -124,7 +124,9 @@ body {
       color: @navbar-inverse-color;
       height: 50px;
       line-height: 50px;
-    .inverse-placeholder();
+      padding-left: 0;
+      text-overflow: ellipsis;
+     .inverse-placeholder();
     &:focus { 
       color: #fff;
      }
@@ -136,11 +138,11 @@ body {
      }
    }
   }
-   .dropdown { 
+    .dropdown { 
      position: relative;
      z-index: 4;
    }
- }
+  }
  a:hover,
  a:focus { 
    text-decoration: none;
@@ -157,12 +159,20 @@ body {
 @media (max-width: @screen-xss-max) {
  .navbar-inner { 
    > div { 
+     span.user {
+       max-width: 80px;
+       display: block; 
+       width: 100%;
+       overflow: hidden;
+       text-overflow: ellipsis;
+       white-space: nowrap;
+     }
      > a, > div > a {
     
        .caret { 
          position: absolute;
-         right: 2px;
-         top:32px;
+         right: 1px;
+         top: 25px;
         }
        }
    }
@@ -170,8 +180,14 @@ body {
 }
 
 @media (max-width: @screen-xs-max) {
+   .navbar-search-toogle { 
+     .btn { 
+       min-width: 24px;
+       padding-right: 4px;
+     }
+    }
    .navbar-inner { 
-   > div { 
+   > div {     
      > a, > div > a {
        padding-left: 8px;
        padding-right: 8px;
@@ -179,7 +195,7 @@ body {
        }
        }
       } 
-    .dropdown-toggle { 
+   .dropdown-toggle { 
      .visible-xs { 
        display: inline-block !important;
      }
@@ -528,7 +544,7 @@ body {
      left: @sidebar-opened-width;
      right: @sidebar-opened-width;
       .transition(all .25s linear);
-      z-index: 1;
+      z-index: 2;
 
   }
   @media (max-width: @screen-xs) {
@@ -742,20 +758,24 @@ body {
 
 //datatable main table
 .table-variants-wrapper { 
-    bottom: 0;
+    bottom: 34px;
     left: 0;
     position: absolute;
     right: 0;
     top: 100px;
+    overflow: hidden;
    th { 
        .form-control { 
               width: 100%;
          }
      }
-    div.dataTables_wrapper { 
+  .table-variants-container { 
       height: 100%;
       position: relative;
+      overflow: auto;
     }
+
+/*
     div.dataTables_wrapper .toolbar,
     div.dataTables_wrapper .dt-buttons { 
       position: absolute;
@@ -854,7 +874,6 @@ body {
     font-size: ceil((@font-size-base * 0.9));
   }
    @media (max-width: @screen-xs-max) {
-     
         div.dataTables_wrapper div.dataTables_filter { 
           left: 100px;
           width: 25%;
@@ -863,8 +882,28 @@ body {
           left:9px;
         }
     }
+*/
     
 }
+.table-variant-footer { 
+  background: #f9f9f9 none repeat scroll 0 0;
+    border-top: 1px solid #f0f0f0;
+    bottom: 0;
+    height: 33px;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    .btn-link { 
+      padding: 0 12px;
+      line-height: 28px;
+      color: @gray;
+      &:hover { 
+        color: @gray-dark;
+      }
+    }
+  }
 .table.table-variants {
    margin-top: 0!important;
 
@@ -872,9 +911,9 @@ body {
      padding-right: @table-condensed-cell-padding;
      border-bottom: 1px solid #ddd;
      padding-right: 2px;
-      padding-left: 2px;
+     padding-left: 2px;
      padding-bottom: 0;
-   
+
      .form-control { 
         background: transparent;
         border-width: 1px 0 0;
@@ -900,8 +939,7 @@ body {
        }
      }
     }
-    
-     thead { 
+    thead { 
        > tr { 
          > th { 
           
@@ -944,6 +982,7 @@ body {
      }
   
 }
+
 //table
 .empty {
   background: rgb(247, 247, 247) none repeat scroll 0% 0%; margin: -5px -5px -5px -32px; text-align: center; padding: 150px 0px; color: rgb(170, 170, 170);
