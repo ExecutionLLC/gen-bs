@@ -38,7 +38,6 @@ var variantsTable = {
 
     head.push(
         `<th data-label="checkbox">
-          <input type="checkbox" />
         </th>`);
 
     head.push(

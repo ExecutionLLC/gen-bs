@@ -10,10 +10,10 @@
          <div class="collapse in copyfilter" id="newfilterField">
            <div class="row grid-toolbar">
             <div class="col-sm-6">
-              <label data-localize="filters.selector.title">Available Filters</label>
+              <label data-localize="filters.setup.selector.title">Available Filters</label>
             </div>
           </div>
-           <div class="alert alert-help"><span data-localize="filters.selector.description">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</span></div>
+           <div class="alert alert-help"><span data-localize="filters.setup.selector.description">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</span></div>
 
            <div class="row grid-toolbar">
              <div class="col-sm-6">
@@ -27,15 +27,15 @@
             </select>
           </div>
              <div class="col-sm-6">
-                 <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
+                 <div class="btn-group"  data-localize="actions.duplicate.help" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
                    <button class="btn btn-default" type="button" data-toggle="collapse" data-target=".copyfilter"><span data-localize="actions.duplicate.title">Duplicate</span></button>
                  </div>
                     <!--   Видимы когда в селекторе выбраны пользовательские фильтры, которые можно редактировать -->
                   <div class="btn-group">
-                    <button class="btn btn-default hidden"><span data-localize="filters.reset.title">Reset Filter</span></button> 
+                    <button class="btn btn-default hidden"><span data-localize="filters.setup.reset.title">Reset Filter</span></button> 
                   </div>
                 <div class="btn-group hidden" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Delete filter">
-                   <button class="btn btn-link"><span  data-localize="actions.delete">Delete</span></button>
+                   <button class="btn btn-link"><span  data-localize="filters.setup.delete.title">Delete Filter</span></button>
                 </div>
                    <!-- / -->          
                    
@@ -47,19 +47,19 @@
             
            <div class="row grid-toolbar">
              <div class="col-sm-6"> 
-               <label  data-localize="filters.new.name.title">New Filter</label>  
+               <label  data-localize="filters.setup.new.name.title">New Filter</label>  
                <input value="Copy of Eye Cancer Diagnostics" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
             </div>
             <div class="col-sm-5">
                <label data-localize="general.description">Description</label>
-            <input value="" placeholder="Type filter description (optional)" class="form-control" type="text" data-localize="filters.new.description">
+            <input data-localize="filters.setup.new.name" value="" placeholder="Type filter description (optional)" class="form-control" type="text" data-localize="filters.new.description">
             </div>
             <div class="col-sm-1">
                <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent"><span data-localize="actions.cancel">Cancel</span></button>
             </div>
              
           </div>
-            <div class="help-text text-danger"><span data-localize="filters.new.name.error">Name can not be empty</span></div>
+            <div class="help-text text-danger"><span data-localize="filters.setup.new.name.error">Name can not be empty</span></div>
          
          </div>
          <div class="row">
@@ -523,7 +523,7 @@
     
   </div>
           </div> 
-        <div class="alert alert-help"><span data-localize="filters.setup.rules.description">Lock filter options not available with selected sample</span></div>
+        <div class="alert alert-help"><span data-localize="filters.setup.settings.description">Lock filter options not available with selected sample</span></div>
         <div class="alert alert-danger">
           <button type="button" class="close hidden" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">×</span>
@@ -533,16 +533,16 @@
           <div class="btn-group pull-right">
             <a class="btn btn-default" href=""><span data-localize="actions.delete">Cancel</span></a>
           </div>
-          <span data-localize="filters.setup.rules.confirm">Are you sure you want to delete this filter?  It can not recover.</span>
+          <span data-localize="filters.setup.settings.confirm">Are you sure you want to delete this filter?  It can not recover.</span>
        </div>
      </div>
       <div class="modal-footer">
         <div class="btn-group pull-left">
-          <button type="button" class="btn btn-default hidden" data-dismiss="modal"><span data-localize="filter.reset.title">Reset Filter</span></button>
+          <button type="button" class="btn btn-default hidden" data-dismiss="modal"><span data-localize="filter.settings.reset.title">Reset Filter</span></button>
         </div>
         <button type="button" class="btn btn-default" data-dismiss="modal"><span data-localize="actions.cancel">Cancel</span></button>
         
-        <button type="button" class="btn btn-primary" data-dismiss="modal"><span data-localize="actions.save_choose.title">Save and Choose</span></button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"><span data-localize="actions.save_select.title">Save and Select</span></button>
         
        
       </div>
