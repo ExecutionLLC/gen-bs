@@ -3,9 +3,20 @@
 const _ = require('lodash');
 const async = require('async');
 
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const ExtendedModelBase = require('./ExtendedModelBase');
 
-const mappedColumns = ['id', 'number_paid_samples', 'email', 'default_langu_id'];
+const mappedColumns = [
+    'id',
+    'number_paid_samples',
+    'is_deleted',
+    'email',
+    'default_langu_id',
+    'langu_id',
+    'name',
+    'last_name',
+    'speciality'
+];
 
 class UserModel extends ExtendedModelBase {
     constructor(models) {
@@ -13,20 +24,21 @@ class UserModel extends ExtendedModelBase {
     }
 
     add(user, languId, callback) {
-        let _user = this._init(languId, user);
+        let userData = this._init(languId, user);
+
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
-                    this._insert(_user, trx, cb);
+                    this._insert(userData, trx, cb);
                 },
                 (userId, cb) => {
                     const dataToInsert = {
                         userId: userId,
                         languId: languId,
-                        name: _user.name,
-                        lastName: _user.lastName,
-                        speciality: _user.speciality
-                    }
+                        name: userData.name,
+                        lastName: userData.lastName,
+                        speciality: userData.speciality
+                    };
                     this._insertUserText(dataToInsert, trx, (error) => {
                         cb(error, userId);
                     });
@@ -37,7 +49,7 @@ class UserModel extends ExtendedModelBase {
 
     _insert(data, trx, callback) {
         const dataToInsert = {
-            id: id,
+            id: data.id,
             numberPaidSamples: data.numberPaidSamples,
             email: data.email,
             defaultLanguId: data.defaultLanguId
@@ -47,6 +59,26 @@ class UserModel extends ExtendedModelBase {
 
     _insertUserText(data, trx, callback) {
         this._insertTable('user_text', data, trx, callback);
+    }
+
+    _fetch(id, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+            .from(this.baseTable)
+            .innerJoin('user_text', 'user_text.user_id', this.baseTable + '.id')
+            .where('id', id)
+            .asCallback((error, data) => {
+                if (error) {
+                    cb(error);
+                } else {
+                    if (data.length > 0) {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
+                    } else {
+                        cb(new Error('Item not found: ' + id));
+                    }
+                }
+            });
+        }, callback);
     }
 }
 

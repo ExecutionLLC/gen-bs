@@ -6,11 +6,11 @@ const uuid = require('node-uuid');
 
 const LanguModel = require('../models/LanguModel');
 const UserModel = require('../models/UserModel');
-const ViewsModel = require('../models/ViewsModel');
-const ViewItemsModel = require('../models/ViewItemsModel');
 const KeywordsModel = require('../models/KeywordsModel');
-const SynonymsModel = require('../models/SynonymsModel');
 const FiltersModel = require('../models/FiltersModel');
+const ViewsModel = require('../models/ViewsModel');
+const SamplesModel = require('../models/SamplesModel');
+const FieldsMetadataModel = require('../models/FieldsMetadataModel');
 
 const Config = require('../utils/Config');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
@@ -19,6 +19,8 @@ const USERS = require('../test_data/user_metadata.json');
 const KEYWORDS = require('../test_data/keywords.json');
 const VIEWS = require('../test_data/views.json');
 const FILTERS = require('../test_data/filters.json');
+const FIELDS_METADATA = require('../test_data/fields_metadata.json');
+const SAMPLE_METADATA = require('../test_data/sample_metadata.json');
 
 const DEFAULT_USER_ID = USERS[0].id;
 
@@ -31,34 +33,52 @@ const DEFAULT_LANGU_ID = DEFAULT_LANG.id;
 class TestModels {
     constructor() {
         this.config = Config;
+
         this.langu = new LanguModel(this);
-        this.views = new ViewsModel(this);
-        this.viewItems = new ViewItemsModel(this);
-        this.filters = new FiltersModel(this);
-        this.keywords = new KeywordsModel(this);
-        this.synonyms = new SynonymsModel(this);
         this.user = new UserModel(this);
+        this.keywords = new KeywordsModel(this);
+        this.views = new ViewsModel(this);
+        this.filters = new FiltersModel(this);
+        this.samples = new SamplesModel(this);
+        this.fields = new FieldsMetadataModel(this);
 
         this.userId = DEFAULT_USER_ID;
     }
 
     process() {
-        let self = this;
-
         async.waterfall([
-            function(cb) { self._defaultLanguExists(cb); },
-            function(exists, cb) { self._addDefaultLangu(exists, cb); },
-            function(languId, cb) { self._output('LANG:', languId, cb); },
-            function(languId, cb) { self._insertKeywords(languId, cb); },
-            function(insertedKeywords, cb) { self._output('KEYWORDS INSERTED:', insertedKeywords, cb); },
-            function(insertedKeywords, cb) { self._insertUsers(cb); },
-            function(insertedUsers, cb) {
-                self.userId = insertedUsers[0];
-                self._output('USERS INSERTED:', insertedUsers, cb);
+            (cb) => { this._defaultLanguExists(cb); },
+            (exists, cb) => { this._addDefaultLangu(exists, cb); },
+            (languId, cb) => { this._output('LANG:', languId, cb); },
+            (languId, cb) => { this._findLangu('en', cb); },
+            (langu, cb) => { this._insertKeywords(langu.id, cb); },
+            (insertedKeywords, cb) => {
+                this._output('KEYWORDS INSERTED:', insertedKeywords, cb);
             },
-            function(insertedUsers, cb) { self._insertViews(cb); },
-            function(insertedViews, cb) { self._output('VIEWS INSERTED:', insertedViews, cb); },
-            function(x, cb) { process.exit(1); }
+            (insertedKeywords, cb) => {
+                this.keywords.find(insertedKeywords[0], cb);
+            },
+            (keyword, cb) => {
+                this._output('FIND KEYWORD:', keyword, cb);
+            },
+            (keyword, cb) => { this._insertUsers(cb); },
+            (insertedUsers, cb) => {
+                this.userId = insertedUsers[0];
+                this._output('USERS INSERTED:', insertedUsers, cb);
+            },
+            (insertedUsers, cb) => {
+                this._insertFilters(cb);
+            },
+            (insertedFilters, cb) => { this._output('FILTERS INSERTED:', insertedFilters, cb); },
+            (insertedFilters, cb) => { this.filters.find(this.userId, insertedFilters[0], cb); },
+            (filter, cb) => { this._output('FILTER:', filter, cb); },
+            (filter, cb) => {
+                this._insertViews(cb);
+            },
+            (insertedViews, cb) => { this._output('VIEWS INSERTED:', insertedViews, cb); },
+            (insertedViews, cb) => { this.views.find(this.userId, insertedViews[1], cb); },
+            (view, cb) => { this._output('VIEW:', view, cb); },
+            (xcode, cb) => { process.exit(1); }
         ], (error) => {
             if (error) {
                 console.log('ERROR ', error);
@@ -74,33 +94,39 @@ class TestModels {
     }
 
     _defaultLanguExists(callback) {
-        this.langu._exists(DEFAULT_LANGU_ID, callback);
+        this.langu.exists(DEFAULT_LANGU_ID, callback);
     }
 
     _addDefaultLangu(exists, callback) {
         if (exists) {
             callback(null, DEFAULT_LANGU_ID);
         } else {
-            this.langu.add(DEFAULT_LANGU_ID, callback);
+            this.langu.add(DEFAULT_LANG, callback);
         }
+    }
+
+    _findLangu(languId, callback) {
+        this.langu.find(languId, callback);
     }
 
     _insertKeywords(languId, callback) {
         let insertedKeywords = [];
-        async.each(KEYWORDS, (keyword, cb) => {
+        this.keywords.generateIds = false;
+        async.each(ChangeCaseUtil.convertKeysToCamelCase(KEYWORDS), (keyword, cb) => {
             this.keywords.add(languId, keyword, (error, insertedKeyword) => {
                 insertedKeywords.push(insertedKeyword);
                 cb(error, insertedKeyword);
             });
         }, (error) => {
+            this.keywords.generateIds = true;
             callback(error, insertedKeywords);
         });
     }
 
     _insertUsers(callback) {
         let insertedUsers = [];
-        async.each(USERS, (user, cb) => {
-            this.user.add(user, (error, insertedUser) => {
+        async.each(ChangeCaseUtil.convertKeysToCamelCase(USERS), (user, cb) => {
+            this.user.add(user, DEFAULT_LANGU_ID, (error, insertedUser) => {
                 insertedUsers.push(insertedUser);
                 cb(error, insertedUser);
             });
@@ -111,7 +137,7 @@ class TestModels {
 
     _insertViews(callback) {
         let insertedViews = [];
-        async.each(VIEWS, (view, cb) => {
+        async.each(ChangeCaseUtil.convertKeysToCamelCase(VIEWS), (view, cb) => {
             this.views.add(this.userId, DEFAULT_LANGU_ID, view, (error, insertedView) => {
                 insertedViews.push(insertedView);
                 cb(error, insertedView);
@@ -123,8 +149,8 @@ class TestModels {
 
     _insertFilters(callback) {
         let insertedFilters = [];
-        async.each(FILTERS, (view, cb) => {
-            this.filters.add(view, (error, insertedFilter) => {
+        async.each(ChangeCaseUtil.convertKeysToCamelCase(FILTERS), (filter, cb) => {
+            this.filters.add(this.userId, DEFAULT_LANGU_ID, filter, (error, insertedFilter) => {
                 insertedFilters.push(insertedFilter);
                 cb(error, insertedFilter);
             });

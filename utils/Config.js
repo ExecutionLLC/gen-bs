@@ -22,7 +22,7 @@ const SETTINGS = {
         },
         file: {
             level: 'warn',
-            path: 'logs/server.log'
+            path: 'logs/genomix.log'
         }
     }
 };

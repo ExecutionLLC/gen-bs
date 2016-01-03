@@ -117,6 +117,8 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('langu');
                 table.integer('number_paid_samples');
+                table.boolean('is_deleted')
+                    .defaultTo(false);
             })
             .createTable('user_text', table => {
                 table.uuid('user_id')
@@ -145,6 +147,8 @@ class DatabaseCreator {
                 table.json('rules');
                 table.enu('filter_type', entityTypeEnumValues);
                 table.boolean('is_disabled_4copy')
+                    .defaultTo(false);
+                table.boolean('is_deleted')
                     .defaultTo(false);
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
@@ -247,8 +251,10 @@ class DatabaseCreator {
                     .inTable('view');
                 table.string('name', 50);
                 table.enu('view_type', entityTypeEnumValues);
-                table.boolean('is_disabled_4copy');
-                table.boolean('is_deleted');
+                table.boolean('is_disabled_4copy')
+                    .defaultTo(false);
+                table.boolean('is_deleted')
+                    .defaultTo(false);
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
@@ -340,7 +346,10 @@ class DatabaseCreator {
                 table.string('hash', 50);
                 table.enu('sample_type', entityTypeEnumValues);
                 table.enu('status', sampleStatusEnumValues);
-                table.boolean('is_analyzed');
+                table.boolean('is_analyzed')
+                    .defaultTo(false);
+                table.boolean('is_deleted')
+                    .defaultTo(false);
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')

@@ -25,9 +25,11 @@ class SecureModelBase extends ExtendedModelBase {
     }
 
     _init(userId, languId, data) {
-        let _data = super._init(languId, data);
-        _data.creator = userId;
-        return _data;
+        let result = data;
+        if (this.generateIds) { result.id = this._generateId(); };
+        result.languId = languId;
+        result.creator = userId;
+        return result;
     }
 
     _secureCheck(data, secureInfo, callback) {

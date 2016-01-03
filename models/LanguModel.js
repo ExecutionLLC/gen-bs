@@ -13,7 +13,7 @@ class LanguModel extends ModelBase {
 
     add(langu, callback) {
         this.db.transactionally((trx, cb) => {
-            this._insert(langu, trx, cb)
+            this._insert(langu, trx, cb);
         }, callback);
     }
 }

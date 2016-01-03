@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-
 const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
@@ -24,18 +23,35 @@ const knexConfig = {
     }
 };
 
-// Knex instance should only be created once per application
 const logger = new Logger(loggerSettings);
+
+// KnexWrapper instance should only be created once per application
 const knexWrapper = new KnexWrapper(knexConfig, logger);
 
 class ModelBase {
     constructor(models, baseTable, mappedColumns) {
         this.models = models;
         this.logger = models.logger;
+        this.generateIds = true;
         this.baseTable = baseTable;
         this.mappedColumns = mappedColumns;
 
         this.db = knexWrapper;
+    }
+
+    exists(id, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+            .from(this.baseTable)
+            .where('id', id)
+            .asCallback((error, data) => {
+                if (error) {
+                    cb(error);
+                } else {
+                    cb(null, (data.length > 0));
+                }
+            });
+        }, callback);
     }
 
     find(id, callback) {
@@ -54,57 +70,38 @@ class ModelBase {
     }
 
     _init(data) {
-        let _data = data;
-        _data.id = this._generateId();
-        return _data;
+        let result = data;
+        if (this.generateIds) {
+            result.id = this._generateId();
+        };
+        return result;
     }
 
     _toJson(item) {
-        return ChangeCaseUtil.convertToSnakeCase(
-            _.reduce(this.mappedColumns, (memo, column) => {
-                memo[column] = item[column];
-                return memo;
-            }, {}));
-    }
-
-    _exists(id, callback) {
-        this.db.exec((knex, cb) => {
-            knex.select()
-                .from(this.baseTable)
-                .where('id', id)
-                .exec((error, data) => {
-                    if (error) {
-                        cb(error);
-                    } else {
-                        cb(null, (data.length > 0));
-                    }
-                });
-        }, callback);
-
-
-        //this.db.knex.select()
-        //    .from(this.baseTable)
-        //    .where('id', id)
-        //    .exec((error, data) => {
-        //        callback(error, (data.length > 0));
-        //    });
+        const data = ChangeCaseUtil.convertKeysToSnakeCase(item);
+        return _.reduce(this.mappedColumns, (memo, column) => {
+            memo[column] = data[column];
+            return memo;
+        }, {});
     }
 
     _fetch(id, callback) {
-        this.db.knex.select()
-            .from(this.baseTable)
-            .where('id', id)
-            .exec((error, data) => {
-                if (error) {
-                    callback(error);
-                } else {
-                    if (data.length > 0) {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTable)
+                .where('id', id)
+                .asCallback((error, data) => {
+                    if(error) {
+                        cb(error);
                     } else {
-                        callback(new Error('Item not found: ' + id));
+                        if (data.length > 0) {
+                            cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
+                        } else {
+                            cb(new Error('Item not found: ' + id));
+                        }
                     }
-                }
-            });
+                });
+        }, callback);
     }
 
     _insert(data, trx, callback) {
@@ -112,14 +109,14 @@ class ModelBase {
     }
 
     _insertTable(tableName, data, trx, callback) {
-        trx.exec((knex, cb) => {
+        trx.asCallback((knex, cb) => {
             knex(tableName)
-                .insert(ChangeCaseUtil.convertKeysToSnakeCase(data))
-                .exec((error) => {
-                    cb(error, data.id);
-                });
-        }, callback);
-    }
+            .insert(ChangeCaseUtil.convertKeysToSnakeCase(data))
+            .asCallback(cb);
+        }, (error) => {
+            callback(error, data.id);
+        });
+    };
 }
 
 module.exports = ModelBase;
