@@ -25,6 +25,7 @@
     "node": "4.2.2"
   },
   "dependencies": {
+    "async": "1.5.1",
     "body-parser": "1.14.1",
     "change-case": "2.3.1",
     "domain": "*",
