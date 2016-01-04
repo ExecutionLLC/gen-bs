@@ -23,6 +23,15 @@ class RPCProxy {
         setInterval(() => this._connect(), 1000);
     }
 
+    send(operationId, method, params, callback) {
+        const jsonData = this._formatJson(operationId, method, params);
+        this.ws.send(jsonData, null, callback);
+    }
+
+    _formatJson(operationId, method, params) {
+        return JSON.stringify({id: operationId, method: method, params: params});
+    }
+
     _address() {
         return 'ws://' + this.host + ':' + this.port + '/ws';
     }
@@ -40,10 +49,11 @@ class RPCProxy {
 
     _close(event) {
         if (event.wasClean) {
-            console.log('Socket closed (clear)', event);
+            console.log('Socket closed (clean)', event);
         } else {
-            console.log('Socket closed (unclear)', event);
+            console.log('Socket closed (unclean)', event);
         }
+
         if (this.disconnectCallback) {
             this.disconnectCallback();
         }
@@ -84,15 +94,6 @@ class RPCProxy {
         if (this.connectCallback) {
             this.connectCallback();
         }
-    }
-
-    _formatJson(operationId, method, params) {
-        return JSON.stringify({id: operationId, method: method, params: [params]});
-    }
-
-    send(operationId, method, params, callback) {
-        var self = this;
-        self.ws.send(self._formatJson(operationId, method, params), null, callback);
     }
 }
 

@@ -94,7 +94,7 @@ class ApplicationServerService extends ServiceBase {
         const appServerView = this._createAppServerView(params.view, params.fieldsMetadata);
 
         const searchSessionRequest = {
-            user_filename: appServerSampleId,
+            sample: appServerSampleId,
             view_structure: appServerView,
             view_filter: params.filters || {}
         };
@@ -210,15 +210,16 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _rpcReply(rpcError, rpcMessage) {
-        console.log('RPC REPLY: ', rpcError, rpcMessage);
-        if (rpcError) {
+        console.log('RPC REPLY', JSON.stringify(rpcError, null, 2), JSON.stringify(rpcMessage, null, 2));
+        if (rpcError && !rpcMessage) {
             console.error('RPC request error! %s', rpcError);
-            console.log('The RPC event will be ignored.');
+            console.log('The RPC event will be ignored, as there is no message received, only error.');
         } else {
             const operationId = rpcMessage.id;
             const operationResult = {
                 operationId: operationId,
-                result: rpcMessage.result
+                result: rpcMessage.result,
+                error: rpcError
             };
             this._completeOperationIfNeeded(operationId, operationResult, (error, operation) => {
                 if (error) {
@@ -236,10 +237,15 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _rpcSend(operationId, method, params, callback) {
-        this.rpcProxy.send(operationId, method, params);
-        // TODO: add log event
-        console.log('RPC SEND: ', operationId, method, params);
-        callback(null, operationId);
+        this.rpcProxy.send(operationId, method, params, (error) => {
+            if (error) {
+                callback(error);
+            } else {
+                console.log('RPC SEND: ', operationId, method);
+                console.log('Params:', JSON.stringify(params, null, 2));
+                callback(null, operationId);
+            }
+        });
     }
 }
 
