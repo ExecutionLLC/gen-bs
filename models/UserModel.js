@@ -57,9 +57,9 @@ class UserModel extends ExtendedModelBase {
             };
             this._update(id, dataToUpdate, trx, (error, userId) => {
                 if (error) {
-                    callback(error);
+                    cb(error);
                 } else {
-                    this._updateUserText(id, languId, user, trx, callback);
+                    this._updateUserText(id, languId, user, trx, cb);
                 }
             });
         }, callback);
