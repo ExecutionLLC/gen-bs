@@ -1,7 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
-var events = require('events');
+const async = require('async');
+const events = require('events');
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
@@ -57,6 +58,30 @@ class ApplicationServerService extends ServiceBase {
         });
     }
 
+    _createAppServerView(view, fieldMetadata) {
+        const idToFieldMetadata = _.indexBy(fieldMetadata, 'id');
+        return {
+            sample_columns: _.map(view.viewListItems, (viewListItem) => {
+                const field = idToFieldMetadata[viewListItem.fieldId];
+                return {
+                    name: field.name,
+                    filter: [] // TODO: List of resolved keyword values.
+                };
+            }),
+            sources: []
+        };
+    }
+
+    /**
+     * For default samples file name should be used.
+     * For user samples sample id is file name.
+     * */
+    _getAppServerSampleId(sample) {
+        return sample.sampleType === 'standard'
+            || sample.sampleType === 'advanced' ?
+                sample.fileName : sample.id;
+    }
+
     /**
      * Opens a new search session.
      * @param sessionId Id of the session in which the operation should be opened.
@@ -65,9 +90,12 @@ class ApplicationServerService extends ServiceBase {
      * */
     requestOpenSearchSession(sessionId, params, callback) {
         const method = METHODS.openSearchSession;
+        const appServerSampleId = this._getAppServerSampleId(params.sample);
+        const appServerView = this._createAppServerView(params.view, params.fieldsMetadata);
+
         const searchSessionRequest = {
-            user_filename: params.sampleId,
-            view_structure: params.view || {},
+            user_filename: appServerSampleId,
+            view_structure: appServerView,
             view_filter: params.filters || {}
         };
 

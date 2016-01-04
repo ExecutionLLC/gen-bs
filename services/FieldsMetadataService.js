@@ -18,11 +18,6 @@ class FieldsMetadataService extends ServiceBase {
         }
     }
 
-    import(sourceName, appServerFieldMetadataArray, callback) {
-        const webServerFields = _.map(appServerFieldMetadataArray, this._createFieldMetadata);
-        // TODO: here we should ignore all mandatory fields, as they should be already added.
-    }
-
     static createFieldMetadata(sourceName, appServerFieldMetadata) {
         return {
             id: Uuid.v4(),

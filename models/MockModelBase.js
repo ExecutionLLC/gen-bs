@@ -3,6 +3,8 @@
 const _ = require('lodash');
 const Uuid = require('node-uuid');
 
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+
 class MockModelBase {
     constructor(defaultData, mockUserId) {
         this.hash = {};
@@ -20,9 +22,10 @@ class MockModelBase {
 
     _loadDataToHash(data, mockUserId) {
         _.forEach(data, item => {
+            const convertedItem = ChangeCaseUtil.convertKeysToCamelCase(item);
             this.hash[item.id] = {
                 userId: mockUserId,
-                item: item
+                item: convertedItem
             };
         });
     }
@@ -82,7 +85,7 @@ class MockModelBase {
         if (!userItem) {
             callback(new Error('Item not found by id ' + itemId));
         } else {
-            callback(null, userItem);
+            callback(null, userItem.item);
         }
     }
 
