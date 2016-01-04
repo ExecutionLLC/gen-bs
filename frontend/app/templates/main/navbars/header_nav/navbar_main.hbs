@@ -2,7 +2,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top navbar-main">
   <div class="navbar-inner">
 
-    <div data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand" data-toggle="modal" data-target="#info">AGx<sup>i</sup></a></div>
+    <div data-localize="brand.help" data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand" data-toggle="modal" data-target="#info"><span data-localize="brand.title">AGx</span><sup>i</sup></a></div>
    
     {{> header_nav/create_query}}
    
@@ -12,9 +12,9 @@
 
     {{> header_nav/saved_files}}
 
-     {{> header_nav/language }}
+    {{> header_nav/language }}
  
-     {{> header_nav/auth }}
+    {{> header_nav/auth }}
     </div>
  </nav>
   

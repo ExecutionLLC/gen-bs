@@ -15,28 +15,20 @@ class DataController extends ControllerBase {
 
   getData(request, response) {
     const user = request.user;
-    const sampleId = 'get-sample-id-from-request-or-set-default-here';
-    this.services.fieldsMetadata.findForUserBySampleId(user, sampleId, (error, fieldMetadata) => {
-      // Get field metadata for sample.
+    this.services.views.findAll(user, (error, views) => {
       if (error) {
         this.sendInternalError(response, error);
       } else {
-        this.services.views.findAll(user, (error, views) => {
+        this.services.filters.findAll(user, (error, filters) => {
           if (error) {
             this.sendInternalError(response, error);
           } else {
-            this.services.filters.findAll(user, (error, filters) => {
+            this.services.samples.findAll(user, (error, samples) => {
               if (error) {
                 this.sendInternalError(response, error);
               } else {
-                this.services.samples.findAllForUser(user, (error, samples) => {
-                  if (error) {
-                    this.sendInternalError(response, error);
-                  } else {
-                    const dataObject = this._mergeDataResponse(user, views, filters, samples);
-                    this.sendJson(response, dataObject);
-                  }
-                });
+                const dataObject = this._mergeDataResponse(user, views, filters, samples);
+                this.sendJson(response, dataObject);
               }
             });
           }

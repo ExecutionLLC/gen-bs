@@ -1,10 +1,12 @@
-<div data-toggle="tooltip" data-placement="left" title="Change interface language" data-container="body" data-trigger="hover">
+<div data-localize="language.help" data-toggle="tooltip" data-placement="left" title="Change interface language" data-container="body" data-trigger="hover">
 <div class="dropdown language">
-    <a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="dropdown" role="button"><span class="visible-xs">Eng</span><span class="hidden-xs">English </span><span class="caret"></span></a>
 
+    <a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="dropdown" role="button"><span class="visible-xs" data-localize="language.lang_xs_En">Eng</span><span class="hidden-xs" data-localize="language.lang_sm_En">English </span><span class="caret"></span></a>
     <ul class="dropdown-menu">
-      <li><a href="/">English</a></li>
-      <li><a href="index-ch.html">中国</a></li>
+      <li><a href="#" type="button" id="en_lang"><span data-localize="language.lang_sm_En">English</span></a></li>
+      <li><a href="#" type="button" id="ch_lang"><span data-localize="language.lang_sm_Ch">中国</span></a></li>
     </ul>
+    
+   <input type="hidden" id="curr_lang" value="en">
  </div>
 </div>

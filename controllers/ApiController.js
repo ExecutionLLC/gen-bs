@@ -39,8 +39,8 @@ class ApiController extends ControllerBase {
         if (sessionId) {
             setUserBySessionFunc(sessionId);
         } else {
-            console.error('Automatically open demo session for testing');
-            sessions.startDemo((error, sessionId) => {
+            console.error('Automatically open user session for testing');
+            sessions.startForUser('valarie', 'password', (error, sessionId) => {
                 if (error) {
                     next(new Error(error));
                 } else {
@@ -52,6 +52,7 @@ class ApiController extends ControllerBase {
 
     createRouter(controllersFacade) {
         // Create child routers
+        const sampleRouter = controllersFacade.samplesController.createRouter();
         const viewsRouter = controllersFacade.viewsController.createRouter();
         const fieldsRouter = controllersFacade.fieldsMetadataController.createRouter();
         const filtersRouter = controllersFacade.filtersController.createRouter();
@@ -74,6 +75,7 @@ class ApiController extends ControllerBase {
         router.use('/data', dataRouter);
         router.use('/session', sessionsRouter);
         router.use('/search', searchRouter);
+        router.use('/samples', sampleRouter);
         router.use('/filters', filtersRouter);
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);

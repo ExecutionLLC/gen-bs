@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="historyLabel">History of Analises Queries</h4>
+        <h4 class="modal-title" id="historyLabel" data-localize="history.heading">History of Analises Queries</h4>
       </div>
       <div class="modal-body table-content">
 
@@ -13,20 +13,20 @@
                 <th>
                   
                 </th>
-                <th>
+                <th data-localize="general.datetime">
                   Datetime
                 </th>
-                 <th>
+                 <th data-localize="general.samples">
                   Samples
                 </th>
-                 <th>
+                 <th data-localize="general.filters">
                   Filters
                 </th>
-                <th>
+                <th data-localize="general.view">
                   View
                 </th>
-                 <th>
-                  Q-ty results
+                 <th data-localize="general.results">
+                  Results	
                 </th>
                 <th>
                 </th>
@@ -39,7 +39,7 @@
     <h3><span class="fa-stack fa-lg">
   <i class="fa fa-circle fa-stack-2x"></i>
   <i class="fa fa-flag fa-stack-1x fa-inverse"></i>
-  </span> You have not saved even a single file <span>Select several mutations in the table with the results of the analysis, and click Export in the top menu</span></h3>
+  </span> <span data-localize="history.empty.title">You have not saved even a single file</span> <span class="subtext"><a href=""><span data-localize="history.empty.description">Buy paid features AGx</span></a></span><span data-localize="history.empty.help">and select the sample filters, view and run the sample analysis</span></h3>
   </div></td>
                        
                       </tr>
@@ -53,19 +53,21 @@
                 <td>Default View</td>
                 <td>98986</td>
                 <td>
-  
-                <button class="btn btn-sm btn-default">Load now</button>
+                <div class="btn-group load" data-localize="history.load.help" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Load the analysis query now">
+                  <button class="btn btn-sm btn-default"><span data-localize="history.load.title">Load now</span></button>
+                </div>
 
                 </td>
               </tr>
               <tr class="collapse details1">
                 <td colspan="7">
                  
-                     <dl class="dl-horizontal"><dt>Date:</dt><dd>12.11.2015 02:34:21</dd></dl>
-                     <dl class="dl-horizontal"><dt>Sample:</dt><dd>ATCC HCC1187 TumorBL <span class="text-success">Analised <i class="fa fa-check"></i></span></dd></dl>
-                     <dl class="dl-horizontal"><dt>Filters:</dt><dd>Eye Cancer Diagnostics</dd></dl>
-                     <dl class="dl-horizontal"><dt>Date:</dt><dd>12.11.2015 02:34:21</dd></dl>
-                     <dl class="dl-horizontal"><dt>Date:</dt><dd>12.11.2015 02:34:21</dd></dl>
+                     <dl class="dl-horizontal"><dt><span data-localize="general.date">Date</span>:</dt><dd>12.11.2015 02:34:21</dd></dl>
+                     <dl class="dl-horizontal"><dt><span data-localize="general.sample">Sample</span>:</dt><dd>ATCC HCC1187 TumorBL <span class="text-success"><span data-localize="samples.setings.analized.title">Analised</span> <i class="fa fa-check"></i></span></dd></dl>
+                     <dl class="dl-horizontal"><dt><span data-localize="general.filters">Filters</span>:</dt><dd>Eye Cancer Diagnostics</dd></dl>
+                     <dl class="dl-horizontal"><dt><span data-localize="general.view">View</span>:</dt><dd>Default View</dd></dl>
+                     <dl class="dl-horizontal"><dt><span data-localize="general.results">Results</span>:</dt><dd>98986</dd></dl>
+
                   </dl>
                   
                 </td>

@@ -3,20 +3,20 @@
     <div class="modal-content">
        <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="filenameLabel">Export selected variants in file</h4>
+        <h4 class="modal-title" id="filenameLabel" data-localize="files.export.settings.heading">Export selected variants in file</h4>
       </div>
       <div class="modal-body">
       
   <form class="form-horizontal">
      <div class="form-group">
-      <label class="col-xs-12 col-sm-1 control-label">Format</label>
+      <label class="col-xs-12 col-sm-1 control-label" data-localize="files.export.settings.format.label">Format</label>
       <div class="col-sm-4 col-xs-12">
-      <select class="select2 form-control">
+      <select class="select2 form-control" name="filename[filetype]">
         <option selected="">
-          MSExcel
+          EXCEL
         </option>
           <option>
-          CVS
+          CSV
         </option>
           <option>
           SQL
@@ -32,16 +32,16 @@
       </div>
     </div>
      <div class="form-group">
-      <label class="col-xs-12 col-sm-2">File name</label>
+      <label class="col-xs-12 col-sm-2" data-localize="files.export.settings.filename.label">File name</label>
       <div class="col-xs-12">
-      <input type="text" class="form-control text-primary" value="[Sample name]'s Selected Mutations 21.12.2015 23:45:56" placeholder="Set file name (required)">
-      <div class="help-text text-danger hidden">Name can not be empty</div>
+      <input type="text" name="filename[name]" class="form-control text-primary" value="[Sample name]'s Selected Mutations 21.12.2015 23:45:56" placeholder="Set file name (required)">
+      <div class="help-text text-danger hidden" data-localize="files.export.settings.filename.error">Name can not be empty</div>
       </div>
     </div>    
      <div class="form-group">
-      <label class="col-xs-12">Description</label>
+      <label class="col-xs-12" data-localize="general.description.label">Description</label>
        <div class="col-xs-12">
-     <textarea class="form-control" placeholder="Note (optional)"></textarea>
+     <textarea class="form-control" data-localize="general.description" placeholder="Note (optional)"></textarea>
        </div>
     </div>
   </form>
@@ -51,8 +51,8 @@
      </div>
      <div class="modal-footer">
         
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>        
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Export</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="actions.cancel">Cancel</span></button>        
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal_export_button"><span class="files.export.title">Export</span></button>
         
        
       </div>

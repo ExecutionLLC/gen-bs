@@ -130,7 +130,7 @@
 @table-bg-accent:               #fcfcfc;
 //** Background color used for `.table-hover`.
 @table-bg-hover:                #f5f5f5;
-@table-bg-active:               #eee;
+@table-bg-active:               @active;
 
 //** Border color for table and cell borders.
 @table-border-color:            #f5f5f5;
@@ -598,9 +598,9 @@
 @modal-content-fallback-border-color:          #999;
 
 //** Modal backdrop background color
-@modal-backdrop-bg:           #444;
+@modal-backdrop-bg:           desaturate(@brand-primary, 30%);
 //** Modal backdrop opacity
-@modal-backdrop-opacity:      .5;
+@modal-backdrop-opacity:      .7;
 //** Modal header border color
 @modal-header-border-color:   #e5e5e5;
 //** Modal footer border color

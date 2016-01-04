@@ -8,13 +8,8 @@
     "params": {
       "type": "object",
       "properties": {
-        "session_id": {
-          "type": "string",
-          "description": "GUID of the file session"
-        },
-        "filters": {
+        "sort_order": {
           "type": "array",
-          "description": "list of filters",
           "items": {
             "$ref": "base_json/sort_order.json#"
           }

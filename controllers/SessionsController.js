@@ -7,6 +7,11 @@ const ControllerBase = require('./ControllerBase');
 class SessionsController extends ControllerBase {
     constructor(services) {
         super(services);
+
+        this.open = this.open.bind(this);
+        this.check = this.check.bind(this);
+        this.close = this.close.bind(this);
+        this._getSessionId = this._getSessionId.bind(this);
     }
 
     /**
@@ -61,7 +66,7 @@ class SessionsController extends ControllerBase {
     }
 
     _getSessionId(request) {
-        return request.get(this.services.config.sessionHeaderName);
+        return request.get(this.services.config.sessionHeader);
     }
 
     createRouter() {
