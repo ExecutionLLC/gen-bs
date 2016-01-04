@@ -111,12 +111,23 @@ class ModelBase {
     _insertTable(tableName, data, trx, callback) {
         trx.asCallback((knex, cb) => {
             knex(tableName)
-            .insert(ChangeCaseUtil.convertKeysToSnakeCase(data))
-            .asCallback(cb);
+                .insert(ChangeCaseUtil.convertKeysToSnakeCase(data))
+                .asCallback(cb);
         }, (error) => {
             callback(error, data.id);
         });
     };
+
+    _update(id, data, trx, callback) {
+        trx.asCallback((knex, cb) => {
+            knex(this.baseTable)
+                .where('id', id)
+                .update(ChangeCaseUtil.convertKeysToSnakeCase(data))
+                .asCallback(cb);
+        }, (error) => {
+            callback(error, id);
+        });
+    }
 }
 
 module.exports = ModelBase;

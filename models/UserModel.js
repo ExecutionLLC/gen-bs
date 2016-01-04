@@ -47,6 +47,41 @@ class UserModel extends ExtendedModelBase {
         }, callback);
     }
 
+    update(id, languId, user, callback) {
+        this.db.transactionally((trx, cb) => {
+            const dataToUpdate = {
+                numberPaidSamples: user.numberPaidSamples,
+                email: user.email,
+                isDeleted: user.isDeleted,
+                defaultLanguId: languId
+            };
+            this._update(id, dataToUpdate, trx, (error, userId) => {
+                if (error) {
+                    callback(error);
+                } else {
+                    this._updateUserText(id, languId, user, trx, callback);
+                }
+            });
+        }, callback);
+    }
+
+    _updateUserText(id, languId, data, trx, callback) {
+        const dataToUpdate = {
+            languId: languId,
+            name: data.name,
+            lastName: data.lastName,
+            speciality: data.speciality
+        };
+        trx.asCallback((knex, cb) => {
+            knex('user_text')
+                .where('user_id', id)
+                .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
+                .asCallback((error) => {
+                    cb(error, id);
+                });
+        }, callback);
+    }
+
     _insert(data, trx, callback) {
         const dataToInsert = {
             id: data.id,

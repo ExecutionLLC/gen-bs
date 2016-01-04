@@ -16,6 +16,12 @@ class LanguModel extends ModelBase {
             this._insert(langu, trx, cb);
         }, callback);
     }
+
+    update(id, langu, callback) {
+        this.db.transactionally((trx, cb) => {
+            this._update(id, langu, trx, cb);
+        }, callback);
+    }
 }
 
 module.exports = LanguModel;
