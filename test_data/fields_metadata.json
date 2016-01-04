@@ -6,54 +6,48 @@
     "value_type": "string",
     "filter_control_enable": true,
     "is_mandatory": true,
-    "editable": false,
+    "is_editable": false,
     "description": "eiusmod eiusmod sit non in ut elit voluptate duis ullamco",
     "keywords": [
       {
         "id": "9f39810a-90d5-46c6-b80e-ec0a0a84e8da",
-        "name": "do",
+        "value": "do",
         "synonyms": [
           {
             "id": "258fbfe4-2e72-4864-81a7-d77fa2620ebb",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "dolore"
+            "value": "dolore"
           },
           {
             "id": "31f8a116-a3ab-4dba-955b-f9bdb95c0905",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "ut"
+            "value": "ut"
           }
         ]
       },
       {
         "id": "227c90ce-3ac2-46f3-8b9d-717b4030a5ae",
-        "name": "irure",
+        "value": "irure",
         "synonyms": [
           {
             "id": "390040ca-7a0c-434a-b62e-6fdc6a60616b",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "consequat"
+            "value": "consequat"
           },
           {
             "id": "7c187641-50d8-4f75-afcc-37516939c6e3",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "aliqua"
+            "value": "aliqua"
           }
         ]
       },
       {
         "id": "4c426ca6-391f-4ef2-a9b0-fd2adb153469",
-        "name": "voluptate",
+        "value": "voluptate",
         "synonyms": [
           {
             "id": "d5ff82e8-aeef-429f-9d5c-82d7a13c42c2",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "cupidatat"
+            "value": "cupidatat"
           },
           {
             "id": "49506569-0368-4468-b7c8-e5b5a206f1c7",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "ex"
+            "value": "ex"
           }
         ]
       }
@@ -66,54 +60,48 @@
     "value_type": "string",
     "filter_control_enable": true,
     "is_mandatory": true,
-    "editable": false,
+    "is_editable": false,
     "description": "voluptate sit nisi irure tempor fugiat ad sit irure magna",
     "keywords": [
       {
         "id": "a2c7d818-1357-4685-96f9-9b71719ead56",
-        "name": "aute",
+        "value": "aute",
         "synonyms": [
           {
             "id": "fe8c1339-5666-43a6-a92e-bbc64b9a8d0f",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "ullamco"
+            "value": "ullamco"
           },
           {
             "id": "1435b33c-d64e-483d-8308-4f4c7dcaffea",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "Lorem"
+            "value": "Lorem"
           }
         ]
       },
       {
         "id": "211c3aa1-8a9c-4d04-9423-1048c25a0eef",
-        "name": "anim",
+        "value": "anim",
         "synonyms": [
           {
             "id": "aaef99bd-087d-4f22-b17f-9c934447d6b5",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "ipsum"
+            "value": "ipsum"
           },
           {
             "id": "29d40b49-4c04-4352-aaf0-5f2b48890aa4",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "aute"
+            "value": "aute"
           }
         ]
       },
       {
         "id": "9a058694-8349-4d5f-a5ef-5e54d615d3f3",
-        "name": "consequat",
+        "value": "consequat",
         "synonyms": [
           {
             "id": "6271f019-0dcb-49ff-9155-bcf13ac9a1bf",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "quis"
+            "value": "quis"
           },
           {
             "id": "ef363968-89d7-4a4d-8419-a95866579112",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "id"
+            "value": "id"
           }
         ]
       }
@@ -126,54 +114,48 @@
     "value_type": "string",
     "filter_control_enable": true,
     "is_mandatory": true,
-    "editable": false,
+    "is_editable": false,
     "description": "minim culpa non nulla id adipisicing ea ipsum nostrud consequat",
     "keywords": [
       {
         "id": "36b2db2c-05da-43ea-abce-6ff066eed0eb",
-        "name": "commodo",
+        "value": "commodo",
         "synonyms": [
           {
             "id": "7b760cab-c47c-4a37-b597-5f4528756fd6",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "qui"
+            "value": "qui"
           },
           {
             "id": "3c5dc185-962e-493c-b2b8-e6968d16e094",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "ut"
+            "value": "ut"
           }
         ]
       },
       {
         "id": "8ef53dd6-3ed6-4113-bee1-3e7d70fb6412",
-        "name": "ullamco",
+        "value": "ullamco",
         "synonyms": [
           {
             "id": "dc4454fe-14f1-48f0-9f47-fe5bd77f2f54",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "anim"
+            "value": "anim"
           },
           {
             "id": "86e9d644-9278-4c01-a6e5-35a383e8c094",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "qui"
+            "value": "qui"
           }
         ]
       },
       {
         "id": "be87ddde-3581-43be-ab2b-378b25185997",
-        "name": "nulla",
+        "value": "nulla",
         "synonyms": [
           {
             "id": "2d705166-d93c-4a12-acff-86c993d7c59f",
-            "keyword_id": "here_should_be_parent_keyword_id",
             "name": "laboris"
           },
           {
             "id": "779bb89b-c3d1-4cb2-8f5a-71776f747be0",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "cupidatat"
+            "value": "cupidatat"
           }
         ]
       }
@@ -186,54 +168,48 @@
     "value_type": "string",
     "filter_control_enable": true,
     "is_mandatory": true,
-    "editable": false,
+    "is_editable": false,
     "description": "consectetur cupidatat elit deserunt anim et ullamco veniam in aliquip",
     "keywords": [
       {
         "id": "cd64ed4a-7565-45b2-89b6-60120fbd0a2b",
-        "name": "aute",
+        "value": "aute",
         "synonyms": [
           {
             "id": "f7fed0ba-afbf-4c43-8254-19d50fb47a57",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "nostrud"
+            "value": "nostrud"
           },
           {
             "id": "64fde02f-8103-4bdb-bd9e-1f6bb5c4b7b9",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "commodo"
+            "value": "commodo"
           }
         ]
       },
       {
         "id": "2f1a5750-f635-4242-963a-89efb8024faa",
-        "name": "deserunt",
+        "value": "deserunt",
         "synonyms": [
           {
             "id": "641b0416-3d72-45ec-b893-3e4f4ffa9da6",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "consectetur"
+            "value": "consectetur"
           },
           {
             "id": "8d4755a3-cff8-491a-b4a3-b8ad782320a6",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "esse"
+            "value": "esse"
           }
         ]
       },
       {
         "id": "77f03559-6a92-46f6-b08f-18f1c1ee3b04",
-        "name": "veniam",
+        "value": "veniam",
         "synonyms": [
           {
             "id": "e84b2c64-1121-46a1-adb9-6b54fbaa10b9",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "non"
+            "value": "non"
           },
           {
             "id": "ecf8350a-2db7-4462-bb56-89ff90ce99dc",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "qui"
+            "value": "qui"
           }
         ]
       }
@@ -246,38 +222,34 @@
     "value_type": "string",
     "filter_control_enable": true,
     "is_mandatory": true,
-    "editable": false,
+    "is_editable": false,
     "description": "quis dolor eu ex eiusmod qui amet enim proident fugiat",
     "keywords": [
       {
         "id": "b3528f8d-8fe1-4f2c-b344-e17cfe82d0d7",
-        "name": "pariatur",
+        "value": "pariatur",
         "synonyms": [
           {
             "id": "21485b04-6c1f-41e3-85ee-1402f96fcf69",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "aliquip"
+            "value": "aliquip"
           },
           {
             "id": "4eb5ce11-ad47-4b38-a426-f820771a69d7",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "consectetur"
+            "value": "consectetur"
           }
         ]
       },
       {
         "id": "5d872ca1-186c-47db-9c01-558f958c817c",
-        "name": "ut",
+        "value": "ut",
         "synonyms": [
           {
             "id": "b3b35f71-c181-4cac-9dc2-77676c0bb3ef",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "laboris"
+            "value": "laboris"
           },
           {
             "id": "5186b787-1b1f-4254-b162-853e28dc5924",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "commodo"
+            "value": "commodo"
           }
         ]
       },
@@ -287,13 +259,11 @@
         "synonyms": [
           {
             "id": "3547ea15-20d2-4581-b82a-69f362988414",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "qui"
+            "value": "qui"
           },
           {
             "id": "ac89d6d9-529e-46dc-a272-458c79b4e0f7",
-            "keyword_id": "here_should_be_parent_keyword_id",
-            "name": "aliquip"
+            "value": "aliquip"
           }
         ]
       }

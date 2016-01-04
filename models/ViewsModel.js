@@ -57,7 +57,7 @@ class ViewsModel extends SecureModelBase {
             } else {
                 let newView = view;
                 newView.originalViewId = viewData.originalViewId || viewData.id;
-                this.add(userId, viewData.langu_id, newView, callback);
+                this.add(userId, viewData.languId, newView, callback);
             }
         });
     }
@@ -165,7 +165,7 @@ class ViewsModel extends SecureModelBase {
             '(SELECT ROW_NUMBER() OVER (' +
             'PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC) AS RN, * ' +
             'FROM ' + this.baseTable + ' ' +
-            'INNER JOIN view_text ON view_text.view_id = view.id ' +
+            'INNER JOIN view_text ON view_text.view_id = ' + this.baseTable + '.id ' +
             'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
         this.db.asCallback((knex, cb) => {
             knex.raw(query)

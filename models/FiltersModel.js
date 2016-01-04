@@ -82,7 +82,7 @@ class FiltersModel extends SecureModelBase {
             } else {
                 let newFilter = filter;
                 newFilter.originalFilterId = filterData.originalFilterId || filterData.id;
-                this.add(userId, filterData.langu_id, newFilter, callback);
+                this.add(userId, filterData.languId, newFilter, callback);
             }
         });
     }
@@ -129,7 +129,7 @@ class FiltersModel extends SecureModelBase {
             '(SELECT ROW_NUMBER() OVER (' +
             'PARTITION BY CASE WHEN original_filter_id isnull THEN id ELSE original_filter_id END ORDER BY timestamp DESC) AS RN, * ' +
             'FROM ' + this.baseTable + ' ' +
-            'INNER JOIN filter_text ON filter_text.filter_id = filter.id ' +
+            'INNER JOIN filter_text ON filter_text.filter_id = ' + this.baseTable + '.id ' +
             'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
         this.db.asCallback((knex, cb) => {
             knex.raw(query)

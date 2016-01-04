@@ -6,7 +6,6 @@ const async = require('async');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const ModelBase = require('./ModelBase');
 
-// TODO: value -> name (или наоборот!)
 const mappedColumns = ['id', 'field_id', 'value', 'synonyms'];
 
 class KeywordsModel extends ModelBase {
@@ -16,7 +15,6 @@ class KeywordsModel extends ModelBase {
 
     add(languId, keyword, callback) {
         let keywordData = this._init(keyword);
-
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
@@ -36,7 +34,7 @@ class KeywordsModel extends ModelBase {
             let synonymData = {
                 keywordId: keywordId,
                 languId: languId,
-                value: synonym.name
+                value: synonym.value
             };
             if (this.generateIds) {
                 synonymData.id = this._generateId;
@@ -68,8 +66,7 @@ class KeywordsModel extends ModelBase {
 
     fetchKeywordSynonyms(keywordId, callback) {
         this.db.asCallback((knex, cb) => {
-            // TODO: value -> name (или наоборот!)
-            knex.select('id', 'langu_id', 'value as name')
+            knex.select('id', 'langu_id', 'value')
                 .from('synonym_text')
                 .where('keyword_id', keywordId)
                 .asCallback((error, synonyms) => {
