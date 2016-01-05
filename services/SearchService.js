@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 const ServiceBase = require('./ServiceBase');
 
 class SearchService extends ServiceBase {
@@ -8,55 +10,70 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, callback) {
-        // Check that session id is valid and belongs to the specified user.
-        this.services.sessions.findById(sessionId, user.id, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.services.views.find(user, viewId, (error, view) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        this.services.filters.findMany(user, filterIds, (error, filters) => {
-                            const params = {
-                                sampleId: sampleId,
-                                view: view,
-                                filters: filters
-                            };
-
-                            this.services.applicationServer.requestOpenSearchSession(sessionId, params, callback);
-                        });
-                    }
-                });
+        async.waterfall([
+            (callback) => {
+                this.services.sessions.findById(sessionId, callback);
+            },
+            (sessionId, callback) => {
+                // TODO: Add filters here.
+                this._createAppServerSearchParams(sessionId, user, viewId, sampleId, callback);
+            },
+            (appServerRequestParams, callback) => {
+                this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
+                    appServerRequestParams, callback);
             }
-        });
+        ], callback);
     }
 
     searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, callback) {
         const sessions = this.services.sessions;
-        sessions.findById(sessionId, user.id, (error) => {
-           if (error) {
-               callback(error);
-           } else {
-               sessions.checkOperationType(sessionId, operationId, sessions.operationTypes().SEARCH, (error) => {
-                   if (error) {
-                       callback(error);
-                   } else {
-                       const params = {
-                           globalSearchValue: globalSearchValue,
-                           fieldSearchValues: fieldSearchValues
-                       };
+        async.waterfall([
+            (callback) => {
+                sessions.findById(sessionId, callback);
+            },
+            (sessionId, callback) => {
+                const params = {
+                    globalSearchValue: globalSearchValue,
+                    fieldSearchValues: fieldSearchValues
+                };
+                this.services.applicationServer.requestSearchInResults(sessionId, operationId, params, (error) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, operationId);
+                    }
+                });
+            }
+        ], callback);
+    }
 
-                       this.services.applicationServer.requestSearchInResults(operationId, params, (error) => {
-                           if (error) {
-                               callback(error);
-                           } else {
-                               callback(null, operationId);
-                           }
-                       });
-                   }
-               });
-           }
+    _createAppServerSearchParams(sessionId, user, viewId, sampleId, callback) {
+        async.parallel({
+            sessionId: (callback) => {
+                callback(null, sessionId);
+            },
+            sample: (callback) => {
+                this.services.samples.find(user, sampleId, callback);
+            },
+            fieldsMetadata: (callback) => {
+                // TODO: Add source field metadata here.
+                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+            },
+            view: (callback) => {
+                this.services.views.find(user, viewId, callback);
+            }
+        }, (error, result) => {
+            if (error) {
+                callback(error);
+            } else {
+                const appServerSearchParams = {
+                    sessionId: result.sessionId,
+                    view: result.view,
+                    sample: result.sample,
+                    fieldsMetadata: result.fieldsMetadata
+                };
+                callback(null, appServerSearchParams);
+            }
         });
     }
 }
