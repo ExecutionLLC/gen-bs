@@ -20,12 +20,12 @@ class ServiceFacade {
     this.users = new UsersService(this, models);
     this.samples = new SamplesService(this, models);
     this.sessions = new SessionService(this, models);
-    this.wsService = new WSService(this, models);
     this.operations = new OperationService(this, models);
     this.applicationServer = new ApplicationServerService(this, models);
     this.fieldsMetadata = new FieldsMetadataService(this, models);
     this.search = new SearchService(this, models);
     this.tokens = new TokenService(this, models);
+    this.wsService = new WSService(this, models);
   }
 }
 

@@ -13,6 +13,8 @@ const HTTP_OK = 200;
 class ControllerBase {
     constructor(services) {
         this.services = services;
+
+        this.getSessionId = this.getSessionId.bind(this);
     }
 
     sendInternalError(response, message) {
@@ -53,6 +55,10 @@ class ControllerBase {
         }
         const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(requestBody);
         return camelCasedBody;
+    }
+
+    getSessionId(request) {
+        return request.get(this.services.config.sessionHeader);
     }
 
     checkUserIsDefined(request, response) {
