@@ -4,6 +4,7 @@ const Uuid = require('node-uuid');
 const _ = require('lodash');
 
 const ServiceBase = require('./ServiceBase');
+var async = require('async');
 
 const SYSTEM_SESSION = '9c952e80-c2db-4a09-a0b0-6ea667d254a1';
 
@@ -28,7 +29,7 @@ class OperationsService extends ServiceBase {
         return OPERATION_TYPES;
     }
 
-    add(sessionId, operationType, method, callback) {
+    add(sessionId, operationType, method, data, callback) {
         const operationId = Uuid.v4();
         const sessionOperations = this.operations[sessionId] || (this.operations[sessionId] = {});
         const operation = {
@@ -36,11 +37,24 @@ class OperationsService extends ServiceBase {
             sessionId: sessionId,
             type: operationType,
             method: method,
+            data: data,
             timestamp: Date.now()
         };
         console.log('starting operation ' + operation.id + ' of type ' + operation.type);
         sessionOperations[operationId] = operation;
         callback(null, operation);
+    }
+
+    setData(sessionId, operationId, data, callback) {
+        async.waterfall([
+            (callback) => {
+                this.find(sessionId, operationId, callback);
+            },
+            (operation, callback) => {
+                operation.data = data;
+                callback(null, operation);
+            }
+        ], callback);
     }
 
     findInAllSessions(operationId, callback) {

@@ -2,12 +2,10 @@
 
 const _ = require('lodash');
 const async = require('async');
-const events = require('events');
+const EventEmitter = require('events').EventEmitter;
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
-
-const FIELDS_METADATA = require('../test_data/fields_metadata.json');
 
 const METHODS = {
     getSourcesList: 'v1.get_sources',
@@ -34,7 +32,7 @@ class ApplicationServerService extends ServiceBase {
         this.host = this.services.config.applicationServer.host;
         this.port = this.services.config.applicationServer.port;
 
-        this.eventEmitter = new events.EventEmitter();
+        this.eventEmitter = new EventEmitter();
         this.rpcProxy = new RPCProxy(this.host, this.port, this._requestOperations, null, this._rpcReply);
     }
 
@@ -56,30 +54,6 @@ class ApplicationServerService extends ServiceBase {
         this.services.operations.add(sessionId, operationTypes.SYSTEM, method, (error, operation) => {
             this._rpcSend(operation.id, method, sourceName, callback);
         });
-    }
-
-    _createAppServerView(view, fieldMetadata) {
-        const idToFieldMetadata = _.indexBy(fieldMetadata, 'id');
-        return {
-            sample_columns: _.map(view.viewListItems, (viewListItem) => {
-                const field = idToFieldMetadata[viewListItem.fieldId];
-                return {
-                    name: field.name,
-                    filter: [] // TODO: List of resolved keyword values.
-                };
-            }),
-            sources: []
-        };
-    }
-
-    /**
-     * For default samples file name should be used.
-     * For user samples sample id is file name.
-     * */
-    _getAppServerSampleId(sample) {
-        return sample.sampleType === 'standard'
-            || sample.sampleType === 'advanced' ?
-                sample.fileName : sample.id;
     }
 
     /**
@@ -104,7 +78,11 @@ class ApplicationServerService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-                this.services.operations.add(sessionId, operationTypes.SEARCH, method, (error, operation) => {
+                const operationData = {
+                    offset: params.offset,
+                    limit: params.limit
+                };
+                this.services.operations.add(sessionId, operationTypes.SEARCH, method, operationData, (error, operation) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -127,22 +105,23 @@ class ApplicationServerService extends ServiceBase {
     }
 
     requestSearchInResults(sessionId, operationId, params, callback) {
-        this.services.operations.find(sessionId, operationId, (error, operation) => {
-           if (error) {
-               callback(error);
-           } else {
-               const method = METHODS.setFilters;
-               const searchInResultsRequest = {
-                   globalSearchValue: params.globalSearchValue,
-                   fieldSearchValues: params.fieldSearchValues
-               };
-               this._rpcSend(operationId, method, searchInResultsRequest, callback);
-           }
-        });
-    }
-
-    getFieldsMetadata(user, callback) {
-        callback(null, FIELDS_METADATA);
+        async.waterfall([
+            (callback) => {
+                this.services.operations.find(sessionId, operationId, callback);
+            },
+            (operation, callback) => {
+                const method = METHODS.setFilters;
+                const searchInResultsRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
+                this._rpcSend(operationId, method, searchInResultsRequest, callback);
+            },
+            (operationId, callback) => {
+                // Store information about the desired limits after the operation call is successful.
+                this.services.operations.setData(sessionId, operationId, {
+                    offset: params.offset,
+                    limit: params.limit
+                }, callback);
+            }
+        ], callback);
     }
 
     on(event, callback) {
@@ -172,6 +151,42 @@ class ApplicationServerService extends ServiceBase {
                 });
             });
         });
+    }
+
+    _createSetFilterParams(globalSearchValue, fieldSearchValues) {
+        return {
+            global_search: globalSearchValue,
+            filters: _.map(fieldSearchValues, fieldSearchValue => {
+                return {
+                    column_name: fieldSearchValue.fieldMetadata.name,
+                    column_filter: fieldSearchValue.value
+                };
+            })
+        };
+    }
+
+    _createAppServerView(view, fieldMetadata) {
+        const idToFieldMetadata = _.indexBy(fieldMetadata, 'id');
+        return {
+            sample_columns: _.map(view.viewListItems, (viewListItem) => {
+                const field = idToFieldMetadata[viewListItem.fieldId];
+                return {
+                    name: field.name,
+                    filter: [] // TODO: List of resolved keyword values.
+                };
+            }),
+            sources: []
+        };
+    }
+
+    /**
+     * For default samples file name should be used.
+     * For user samples sample id is file name.
+     * */
+    _getAppServerSampleId(sample) {
+        return sample.sampleType === 'standard'
+        || sample.sampleType === 'advanced' ?
+            sample.fileName : sample.id;
     }
 
     _completeOperationIfNeeded(operationId, operationResult, callback) {

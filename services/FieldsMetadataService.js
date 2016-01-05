@@ -18,6 +18,14 @@ class FieldsMetadataService extends ServiceBase {
         }
     }
 
+    find(fieldId, callback) {
+        this.models.fields.find(fieldId, callback);
+    }
+
+    findMany(fieldIds, callback) {
+        this.models.fields.findMany(fieldIds, callback);
+    }
+
     static createFieldMetadata(sourceName, appServerFieldMetadata) {
         return {
             id: Uuid.v4(),

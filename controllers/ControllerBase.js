@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 const HTTP_INTERNAL = 500;
@@ -43,8 +45,13 @@ class ControllerBase {
         .end();
     }
 
-    getRequestBody(request) {
-        const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(request.body);
+    getRequestBody(request, response) {
+        const requestBody = request.body;
+        if (_.isEmpty(requestBody)) {
+            this.sendInternalError(response, 'Request body is empty');
+            return null;
+        }
+        const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(requestBody);
         return camelCasedBody;
     }
 

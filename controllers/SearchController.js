@@ -14,23 +14,23 @@ class SearchController extends ControllerBase {
     }
 
     analyze(request, response) {
-        const user = request.user;
-        const sessionId = request.sessionId;
         if (!this.checkUserIsDefined(request, response)) {
             return;
         }
 
-        const jsonBody = ChangeCaseUtil.convertKeysToCamelCase(request.body);
-        if (!jsonBody) {
-            this.sendInternalError(response, 'Body is empty');
+        const body = this.getRequestBody(request, response);
+        if (!body) {
             return;
         }
 
-        const viewId = jsonBody.viewId;
-        const filterIds = jsonBody.filterIds;
-        const sampleId = jsonBody.sampleId;
-        const limit = jsonBody.limit;
-        const offset = jsonBody.offset;
+        const user = request.user;
+        const sessionId = request.sessionId;
+
+        const viewId = body.viewId;
+        const filterIds = body.filterIds;
+        const sampleId = body.sampleId;
+        const limit = body.limit;
+        const offset = body.offset;
 
         this.services.search
             .sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, limit, offset, (error, operationId) => {
@@ -38,12 +38,43 @@ class SearchController extends ControllerBase {
               operationId: operationId
             });
           });
-    };
+    }
+
+    searchInResults(request, response) {
+        if (!this.checkUserIsDefined(request, response)) {
+            return;
+        }
+
+        const user = request.user;
+        const operationId = request.params.operationId;
+        const sessionId = request.sessionId;
+        const body = this.getRequestBody(request, response);
+        if (!body) {
+            return;
+        }
+
+        const globalSearchValue = body.topSearch;
+        const fieldSearchValues = body.search;
+        const limit = body.limit;
+        const offset = body.offset;
+
+        this.services.search.searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues,
+                limit, offset, (error, operationId) => {
+            if (error) {
+                this.sendInternalError(response, error);
+            } else {
+                this.sendJson(response, {
+                    operationId: operationId
+                });
+            }
+        });
+    }
 
     createRouter() {
         const router = new Express();
 
         router.post('/', this.analyze);
+        router.post('/:operationId', this.searchInResults);
 
         return router;
     }

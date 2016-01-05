@@ -9,14 +9,14 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, callback) {
+    sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, limit, offset, callback) {
         async.waterfall([
             (callback) => {
                 this.services.sessions.findById(sessionId, callback);
             },
             (sessionId, callback) => {
                 // TODO: Add filters here.
-                this._createAppServerSearchParams(sessionId, user, viewId, sampleId, callback);
+                this._createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback);
             },
             (appServerRequestParams, callback) => {
                 this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -25,18 +25,18 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, callback) {
+    searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, limit, offset, callback) {
         const sessions = this.services.sessions;
         async.waterfall([
             (callback) => {
                 sessions.findById(sessionId, callback);
             },
             (sessionId, callback) => {
-                const params = {
-                    globalSearchValue: globalSearchValue,
-                    fieldSearchValues: fieldSearchValues
-                };
-                this.services.applicationServer.requestSearchInResults(sessionId, operationId, params, (error) => {
+                this._createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
+                    fieldSearchValues, limit, offset, callback);
+            },
+            (appServerParams, callback) => {
+                this.services.applicationServer.requestSearchInResults(sessionId, operationId, appServerParams, (error) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -47,11 +47,37 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createAppServerSearchParams(sessionId, user, viewId, sampleId, callback) {
+    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, limit, offset, callback) {
+        async.map(fieldSearchValues, (fieldSearchValue, callback) => {
+            async.waterfall([
+                (callback) => {
+                    this.services.fieldsMetadata.find(fieldSearchValue.id, callback);
+                },
+                (fieldMetadata, callback) => {
+                    callback(null, {
+                        fieldMetadata,
+                        value: fieldSearchValue.value
+                    });
+                }
+            ], callback);
+        }, (error, result) => {
+            if (error) {
+                callback(error);
+            } else {
+                callback(null, {
+                    sessionId,
+                    operationId,
+                    globalSearchValue,
+                    fieldSearchValues: result,
+                    limit,
+                    offset
+                });
+            }
+        });
+    }
+
+    _createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback) {
         async.parallel({
-            sessionId: (callback) => {
-                callback(null, sessionId);
-            },
             sample: (callback) => {
                 this.services.samples.find(user, sampleId, callback);
             },
@@ -67,10 +93,12 @@ class SearchService extends ServiceBase {
                 callback(error);
             } else {
                 const appServerSearchParams = {
-                    sessionId: result.sessionId,
+                    sessionId,
                     view: result.view,
                     sample: result.sample,
-                    fieldsMetadata: result.fieldsMetadata
+                    fieldsMetadata: result.fieldsMetadata,
+                    limit,
+                    offset
                 };
                 callback(null, appServerSearchParams);
             }
