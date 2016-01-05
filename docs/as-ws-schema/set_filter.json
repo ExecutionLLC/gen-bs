@@ -8,6 +8,10 @@
     "params": {
       "type": "object",
       "properties": {
+        "global_search": {
+          "type": "string",
+          "description": "global search string value"
+        },
         "filters": {
           "type": "array",
           "description": "list of filters",
