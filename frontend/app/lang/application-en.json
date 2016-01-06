@@ -112,6 +112,9 @@
         },
         "description": {
           "value": "Note (optional)"
+        },
+        "warning": {
+          "limit": "Only the first 100 search results will be exported"
         }
       }
     },

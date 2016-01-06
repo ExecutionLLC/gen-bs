@@ -112,6 +112,9 @@
         },
         "description": {
           "value": "注（可选）"
+        },
+        "warning": {
+          "limit": "只有前100个搜索结果将出口"
         }
       }
     },
