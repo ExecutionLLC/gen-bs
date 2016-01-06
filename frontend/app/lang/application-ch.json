@@ -13,7 +13,8 @@
     "success": "成功！",
     "success_simple": "成功",
     "complete": "完成",
-    "date": "日期"
+    "date": "日期",
+    "welcome": "欢迎。"
   },
   "results": {
     "title": "结果",
@@ -150,7 +151,11 @@
       "heading": "分销商"
     },
     "buy": "买AGX先进功能的访问",
-    "buy_continue": "购买获得继续使用AGX的先进功能"
+    "buy_continue": "购买获得继续使用AGX的先进功能",
+    "warning": {
+      "nopaid_analyzes": "您还没有支付的分析"
+    },
+    "select_office": "选择最接近的办公室给你，并要求购买的支付功能AGX"
   },
   "account": {
     "title": "帐户",

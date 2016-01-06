@@ -311,7 +311,7 @@ body {
    .btn-default { 
      color: darken(@sidebar-inverse-color, 20%);
      border-color:  darken(@sidebar-inverse-color, 30%);
-    background: transparent ;
+     background: transparent ;
            &:hover,
            &:focus,
            &:active { 
@@ -349,17 +349,26 @@ body {
      .select2-container--default .select2-selection--single .select2-selection__rendered { 
       color: darken(@sidebar-inverse-color, 20%); 
      }
-     .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:hover, .nav-tabs.nav-justified > .active > a:focus { 
+     
+     .nav-tabs.nav-justified > .active > a,
+     .nav-tabs.nav-justified > .active > a:hover,
+     .nav-tabs.nav-justified > .active > a:focus,
+     .nav-tabs.nav-justified > .active > a:active { 
       border-color: darken(@sidebar-inverse-color, 20%);
       background: transparent;
+      color: darken(@sidebar-inverse-color, 10%);
      }
-     .nav-tabs.nav-justified > li > a {  border-bottom-color: darken(@sidebar-inverse-color, 20%);}
+     
+     .nav-tabs.nav-justified > li > a { 
+       border-bottom-color: darken(@sidebar-inverse-color, 20%);
+      }
      .nav-tabs { 
-       margin-top: 20px;
-         border-bottom-color: darken(@sidebar-inverse-color, 20%);
+       margin: 20px 0;
+       background-color: transparent;
        > li {
          > a { 
            color: darken(@sidebar-inverse-color, 20%);
+           padding: 12px;
            &:hover { 
             border-color: transparent; 
             border-bottom-color: darken(@sidebar-inverse-color, 20%);
@@ -1073,3 +1082,8 @@ body.ch {
    
   }  
 }
+
+.list-group-header {
+  padding: 10px 20px;
+  border-bottom: 3px solid #f0f0f0;
+} 
