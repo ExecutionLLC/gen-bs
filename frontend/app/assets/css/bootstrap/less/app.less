@@ -17,26 +17,7 @@ body {
      border-color:transparent;  
   } 
  }
- .navbar-nav {
-    float: none; 
-    margin: 0;
-    white-space: nowrap;
-    
-    > li { 
-       float: none;
-       display: inline-block;  
-    > a { 
-     color:  @navbar-inverse-color;
-     padding-left: 5px;
-     padding-right: 5px;
-     &.btn-link { 
-      padding-left: 10px;
-     padding-right: 10px;
-     border: none;
-     }
-    }
-   }
- } 
+
  .dropdown-menu {
    margin: 2px 0 0;
     }      
@@ -44,16 +25,26 @@ body {
     line-height: @navbar-height;
     padding: 0 15px;
     font-size: 1.3em;
-   > a {
+
     color: @navbar-inverse-color;
     float: left;
-    big { 
-    font-size: 22px;
-    }
-   }
-  sup {
-     font-style: italic; font-family: serif;
+    sup {
+     font-size: 15px;
+    font-weight: bold;
+    left: 0.15em;
+    opacity: 0.7;
+    top: -0.75em;
+    font-style: italic;
   }
+
+    &:hover { 
+      opacity: .8;
+      sup { 
+        text-decoration: underline;
+      }
+   
+   }
+
  }
  .language { 
    .dropdown-toggle { 
@@ -64,7 +55,7 @@ body {
        > li {
        > a { 
           padding:10px 12px;      
-      }
+        }
        } 
     }
    .open .dropdown-menu { 
@@ -111,12 +102,27 @@ body {
      > a, > div > a {
        white-space: nowrap;
        min-width: 50px; 
-       color: @navbar-inverse-color;      
+       color: @navbar-inverse-color;
+       &:hover { 
+        opacity: .8;
+      }      
      }
     &.navbar-search {
      padding-left: 0;
      width: 100%;
-    .form-control { 
+ 
+    .navbar-search-field {
+      position: relative; 
+      &:before { 
+        .fa();
+        content: "\f002";
+        color: @navbar-inverse-color;
+        position: absolute;
+        top:18px;
+        left: 12px;
+        opacity: .8;
+      }
+      .form-control { 
       background: fade(#000, 5%);
       border-radius: 0;
       border: none ;
@@ -124,18 +130,14 @@ body {
       color: @navbar-inverse-color;
       height: 50px;
       line-height: 50px;
-      padding-left: 0;
+      padding-left: 32px;
       text-overflow: ellipsis;
      .inverse-placeholder();
     &:focus { 
       color: #fff;
      }
     }
-    .input-btn { 
-      background: fade(#000, 5%);
-      border: none ;
-      color: fade(#fff, 40%); 
-     }
+    }
    }
   }
     .dropdown { 
@@ -180,12 +182,7 @@ body {
 }
 
 @media (max-width: @screen-xs-max) {
-   .navbar-search-toogle { 
-     .btn { 
-       min-width: 24px;
-       padding-right: 4px;
-     }
-    }
+
    .navbar-inner { 
    > div {     
      > a, > div > a {
@@ -220,23 +217,8 @@ body {
 
  }
 
-@media (min-width: @screen-md) {
 
-}
- &.search-expand {
-    
-    .nav-inner { 
 
-         > div { 
-             + div,
-             + div + div, 
-             + div + div + div { 
-                  display: none!important;
-             
-           }
-         }
-       }
-    }
 
 }
 
