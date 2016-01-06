@@ -450,9 +450,9 @@
                          <div class="visible-xs"><a type="button" href="#" class="btn navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i class="fa fa-lg fa-filter"></i></a></div>
                          
                           <div class="hidden-xs"  data-localize="query.help" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i class="fa fa-lg fa-filter"></i></a></div>   
-                        <div class="navbar-search-toogle"><a class="btn navbar-btn btn-link" id="searchToggle"><i class="fa fa-search"></i></a></div>
+                        
                           
-                        <div class="navbar-search width100"><div class="navbar-search-field width"><input type="text" data-localize="results.search" class="form-control" placeholder="Search for mutations of current sample analysis" data-localize=""></div></div> 
+                        <div class="navbar-search"><div class="navbar-search-field width"><input type="text" data-localize="results.search" class="form-control" placeholder="Search for mutations of current sample analysis" data-localize=""></div></div> 
                         
                       
                         <div>
@@ -544,12 +544,12 @@
                                               <div class="table-cell table-cell100">
                                                 <div class="btn-group"  data-localize="filters.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
                                                 <select class="select2" multiple="">
-                                                       <option selected value="eye">Eye Cancer Diagnostics</option>            
-                                                        <option value="cust1">Breast cancer</option>
-                                                        <option value="cust2">Lung cancer</option>
+                                                       <option selected value="eye" title="standard">Eye Cancer Diagnostics</option>            
+                                                        <option value="cust1" title="standard">Breast cancer</option>
+                                                        <option value="cust2" title="standard">Lung cancer</option>
                                                         <option value="cust3">Autism</option>
                                                         <option value="cust4">Retinoblastoma</option>
-                                                        <option value="cust5">Mental retardation</option>
+                                                        <option value="cust5" title="standard">Mental retardation</option>
                                                     </select>
                                             </div>
                                               </div>
@@ -600,7 +600,7 @@
                     
                     <div class="table-variants-wrapper">
                       <div class="table-variants-container">
-                      <table class="table table-hover table-bordered table-striped table-variants " id="variants_table">
+                      <table class="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
                         <thead id="variants_table_head"></thead>
                         <tbody id="variants_table_body"></tbody>
                       </table> 
@@ -667,7 +667,7 @@
                  <div class="row grid-toolbar">
                <div class="col-sm-6">  
                 <select class="select2" placeholder="Select View">
-                <option value="1" title="standard" selected>Default View</option>
+                <option value="1" title="standard" selected title="standard">Default View</option>
                 <option value="2">Copy of Default View</option>
                 <option value="3">User Custom View 1</option>
                 <option value="4">User Custom View 2</option>
@@ -1165,12 +1165,12 @@
                <div class="row grid-toolbar">
                  <div class="col-sm-6">
                   <select class="select2" id="filterSelector">
-                    <option selected value="eye">Eye Cancer Diagnostics</option>            
-                    <option value="cust1">Breast cancer</option>
-                    <option value="cust2">Lung cancer</option>
+                    <option selected value="eye" title="standard">Eye Cancer Diagnostics</option>            
+                    <option value="cust1" title="standard">Breast cancer</option>
+                    <option value="cust2" title="standard">Lung cancer</option>
                     <option value="cust3" disabled="">Autism</option>
                     <option value="cust4">Retinoblastoma</option>
-                    <option value="cust5" disabled="">Mental retardation</option>
+                    <option value="cust5" disabled="" title="standard">Mental retardation</option>
                 </select>
               </div>
                  <div class="col-sm-6">
