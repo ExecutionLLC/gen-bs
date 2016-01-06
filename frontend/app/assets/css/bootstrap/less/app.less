@@ -99,7 +99,7 @@ body {
      &.width100 { 
         width: 100%;
      }
-     > a, > div > a {
+     > a, > div > a, .btn {
        white-space: nowrap;
        min-width: 50px; 
        color: @navbar-inverse-color;
@@ -169,7 +169,7 @@ body {
        text-overflow: ellipsis;
        white-space: nowrap;
      }
-     > a, > div > a {
+     > a, > div > a, .btn {
     
        .caret { 
          position: absolute;
@@ -927,6 +927,35 @@ body {
 }
 select.select2.form-control + span.select2 { 
   width: 100%!important;
+}
+.select2-results__option[title="standard"]{
+  position: relative;
+   padding-right: 55px;
+  &:after { 
+    position: absolute;
+    content: "standard";
+    right: 8px;
+    top:8px;
+    font-size: x-small;
+    color: #ddd;
+  }
+ 
+}
+body.ch { 
+ .select2-results__option[title="standard"]{ 
+    &:after { 
+       content: "标准";
+    }
+  }
+}
+
+.select2-results__option[title="standard"]:hover,
+.select2-results__option[title="standard"]:focus,
+.select2-results__option[title="standard"]:active,
+.select2-results__option.select2-results__option--highlighted { 
+    &:after { 
+      color: #fff;
+    } 
 }
 
 //query-builder overwriting
