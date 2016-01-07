@@ -14,10 +14,17 @@ class WSController extends ControllerBase {
 
     addWebSocketServerCallbacks(webSocketServer) {
         webSocketServer.on('connection', (ws) => {
+            console.log('WS client connected');
             ws.on('message', (message) => {
                 const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
                 console.log('Received: ' + JSON.stringify(message, null, 2));
                 this.onClientMessage(ws, convertedMessage);
+            });
+            ws.on('error', error => {
+                console.log('Error in client socket: ' + JSON.stringify(error, null, 2));
+            });
+            ws.on('close', () => {
+                console.log('WS client disconnected');
             });
         });
     }
