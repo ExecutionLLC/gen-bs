@@ -7,6 +7,7 @@ const Async = require('async');
 const SESSION_HEADER = 'X-Session-Id';
 const HOST = 'localhost';
 const PORT = 5000;
+const DEFAULT_SESSION_ID = 'asdasd';
 const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 
@@ -50,6 +51,31 @@ operations.add('Get data', (callback) => {
   });
 });
 
+operations.add('Start search', (callback) => {
+  waterfall([
+    (callback) => {
+      callback(null, {
+        viewId: 'ebee0654-78cf-4b32-a3e9-19e26f60370d',
+        filterIds: null,
+        sampleId: 'ff4c177c-8d4e-4cb5-bef2-f94bd5a62fa1',
+        limit: 100,
+        offset: 0
+      });
+    },
+    (searchData, callback) => {
+      read('Session Id: ', DEFAULT_SESSION_ID, (error, result) => {
+        searchData.sessionId = result;
+        callback(error, searchData);
+      });
+    },
+    (searchData, callback) => {
+      Request.get({
+
+      })
+    }
+  ], callback);
+});
+
 operations.add('Open session', (callback) => {
   waterfall([
     (callback) => {
@@ -86,7 +112,7 @@ operations.add('Open session', (callback) => {
 operations.add('Check session', (callback) => {
   waterfall([
     (callback) => {
-      read('Session Id: ', 'asdasddsas', (error, result) => {
+      read('Session Id: ', DEFAULT_SESSION_ID, (error, result) => {
         callback(error, result);
       });
     },
@@ -105,7 +131,7 @@ operations.add('Check session', (callback) => {
 operations.add('Close session', (callback) => {
   waterfall([
     (callback) => {
-      read('Session Id: ', 'asdasdqq', (error, result) => {
+      read('Session Id: ', DEFAULT_SESSION_ID, (error, result) => {
         callback(error, result);
       })
     },
