@@ -43,12 +43,7 @@ class ApplicationServerReplyService extends ServiceBase {
                     this._completeOperationIfNeeded(operation, callback);
                 },
                 (operation, callback) => {
-                    // TODO: Pre-process message reply to either report progress or attach operation data to results.
-                    callback(null, {
-                        operation,
-                        result: rpcMessage.result,
-                        error: rpcError
-                    });
+                    this._createOperationResult(operation, rpcError, rpcMessage, callback);
                 },
                 (operationResult, callback) => {
                     const eventName = operationResult.operation.method;
@@ -62,6 +57,56 @@ class ApplicationServerReplyService extends ServiceBase {
                 callback(error, result);
             });
         }
+    }
+
+    _createOpenSearchResultSync(operation, rpcMessage) {
+        const sessionState = rpcMessage.result.sessionState;
+        // If not ready, just send the progress up;
+        if (sessionState.status !== SESSION_STATUS.READY) {
+            return {
+                status: sessionState.status,
+                progress: sessionState.progress
+            };
+        } else {
+            // The status is 'ready', so the data is available in Redis.
+            const conditions = operation.data;
+            return {
+                status: SESSION_STATUS.READY,
+                progress: 100,
+                redisDb: {
+                    host: sessionState.redisDb.url,
+                    number: sessionState.redisDb.number,
+                    offset: conditions.offset,
+                    total: conditions.total
+                }
+            };
+        }
+    }
+
+    _createOperationResult(operation, rpcError, rpcMessage, callback) {
+        const event = operation.method;
+        const events = this.registeredEvents();
+
+        let result = null;
+
+        switch (event) {
+            case events.openSearchSession:
+                result = this._createOpenSearchResultSync(operation, rpcMessage);
+                break;
+
+            default:
+                console.error('Unexpected result came from the application server, send as is.');
+                result = rpcMessage.result;
+                break;
+        }
+
+        const operationResult = {
+            operation,
+            error: rpcError,
+            result
+        };
+
+        callback(null, operationResult);
     }
 
     _findMessageOperation(rpcMessage, callback) {
