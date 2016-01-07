@@ -2,6 +2,8 @@
 
 const WebSocket = require('ws');
 
+const ChangeCaseUtil = require('./ChangeCaseUtil');
+
 const SocketState = {
     CONNECTING: 0,
     CONNECTED: 1,
@@ -24,7 +26,8 @@ class RPCProxy {
     }
 
     send(operationId, method, params, callback) {
-        const jsonData = this._formatJson(operationId, method, params);
+        const convertedParams = ChangeCaseUtil.convertKeysToSnakeCase(params);
+        const jsonData = this._formatJson(operationId, method, convertedParams);
         this.ws.send(jsonData, null, callback);
     }
 
@@ -80,7 +83,8 @@ class RPCProxy {
         this.connected = true;
 
         this.ws.on('message', (message, flags) => {
-            this._replyResult(message, flags);
+            const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
+            this._replyResult(convertedMessage, flags);
         });
 
         this.ws.on('close', (event) => {

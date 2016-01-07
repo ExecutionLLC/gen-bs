@@ -176,7 +176,7 @@ function execute() {
   operations.printPrompt();
   Read({prompt: 'Choose operation: '}, (error, operationChar) => {
     operations.execAt(operationChar, () => {
-      setTimeout(execute, 1000);
+      setTimeout(execute, 0);
     });
   });
 }

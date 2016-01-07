@@ -10,7 +10,7 @@ class TestController extends ControllerBase {
     constructor(services) {
         super(services);
 
-        const server = this.services.applicationServer;
+        const serverReply = this.services.applicationServerReply;
 
         this.onSourcesListReceived = this.onSourcesListReceived.bind(this);
 
@@ -19,8 +19,8 @@ class TestController extends ControllerBase {
         this.testSources = this.testSources.bind(this);
         this.testSearch = this.testSearch.bind(this);
 
-        server.on(server.registeredEvents().getSourcesList, this.onSourcesListReceived);
-        server.on(server.registeredEvents().getSourceMetadata, this.onSourceMetadataReceived);
+        serverReply.on(serverReply.registeredEvents().getSourcesList, this.onSourcesListReceived);
+        serverReply.on(serverReply.registeredEvents().getSourceMetadata, this.onSourceMetadataReceived);
     }
 
     onSourcesListReceived(operationResult) {

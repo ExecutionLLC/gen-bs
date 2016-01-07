@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const async = require('async');
-const EventEmitter = require('events').EventEmitter;
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
@@ -32,7 +31,6 @@ class ApplicationServerService extends ServiceBase {
         this.host = this.services.config.applicationServer.host;
         this.port = this.services.config.applicationServer.port;
 
-        this.eventEmitter = new EventEmitter();
         this.rpcProxy = new RPCProxy(this.host, this.port, this._requestOperations, null, this._rpcReply);
     }
 
@@ -124,14 +122,6 @@ class ApplicationServerService extends ServiceBase {
         ], callback);
     }
 
-    on(event, callback) {
-        this.eventEmitter.on(event, callback);
-    }
-
-    off(event, callback) {
-        this.eventEmitter.removeListener(event, callback);
-    }
-
     _requestOperationState(operationId, callback) {
         this._rpcSend(operationId, 'v1.get_session_state', {session_id: operationId}, callback);
     }
@@ -155,11 +145,11 @@ class ApplicationServerService extends ServiceBase {
 
     _createSetFilterParams(globalSearchValue, fieldSearchValues) {
         return {
-            global_search: globalSearchValue,
+            globalSearch: globalSearchValue,
             filters: _.map(fieldSearchValues, fieldSearchValue => {
                 return {
-                    column_name: fieldSearchValue.fieldMetadata.name,
-                    column_filter: fieldSearchValue.value
+                    columnName: fieldSearchValue.fieldMetadata.name,
+                    columnFilter: fieldSearchValue.value
                 };
             })
         };
@@ -168,7 +158,7 @@ class ApplicationServerService extends ServiceBase {
     _createAppServerView(view, fieldMetadata) {
         const idToFieldMetadata = _.indexBy(fieldMetadata, 'id');
         return {
-            sample_columns: _.map(view.viewListItems, (viewListItem) => {
+            sampleColumns: _.map(view.viewListItems, (viewListItem) => {
                 const field = idToFieldMetadata[viewListItem.fieldId];
                 return {
                     name: field.name,
@@ -189,24 +179,6 @@ class ApplicationServerService extends ServiceBase {
             sample.fileName : sample.id;
     }
 
-    _completeOperationIfNeeded(operationId, operationResult, callback) {
-        // TODO: Here we should analyze the response and operation method
-        // TODO: and decide should we remove the operation or not.
-        // Currently just complete all non-search operations.
-        const operations = this.services.operations;
-        operations.findInAllSessions(operationId, (error, operation) => {
-            if (error) {
-                callback(error);
-            } else {
-                if (operation.type !== operations.operationTypes().SEARCH) {
-                    operations.remove(operation.sessionId, operation.id, callback);
-                } else {
-                    callback(null, operation);
-                }
-            }
-        });
-    }
-
     _closePreviousSearchIfAny(sessionId, callback) {
         const operationTypes = this.services.operations.operationTypes();
         this.services.operations.findAllByType(sessionId, operationTypes.SEARCH, (error, operations) => {
@@ -225,30 +197,12 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _rpcReply(rpcError, rpcMessage) {
-        console.log('RPC REPLY', JSON.stringify(rpcError, null, 2), JSON.stringify(rpcMessage, null, 2));
-        if (rpcError && !rpcMessage) {
-            console.error('RPC request error! %s', rpcError);
-            console.log('The RPC event will be ignored, as there is no message received, only error.');
-        } else {
-            const operationId = rpcMessage.id;
-            const operationResult = {
-                operationId: operationId,
-                result: rpcMessage.result,
-                error: rpcError
-            };
-            this._completeOperationIfNeeded(operationId, operationResult, (error, operation) => {
-                if (error) {
-                    console.error('Error when trying to complete operation: %s. Do nothing.', error);
-                } else {
-                    const methodName = operation.method;
-                    operationResult.sessionId = operation.sessionId;
-                    const haveEventHandlers = this.eventEmitter.emit(methodName, operationResult);
-                    if (!haveEventHandlers) {
-                        console.error('No handler is registered for event ' + methodName);
-                    }
-                }
-            });
-        }
+        console.log('RPC REPLY, error: ', JSON.stringify(rpcError, null, 2), ', message: ', JSON.stringify(rpcMessage, null, 2));
+        this.services.applicationServerReply.onRpcReplyReceived(rpcError, rpcMessage, (error) => {
+            if (error) {
+                console.error('Error processing RPC reply', error);
+            }
+        });
     }
 
     _rpcSend(operationId, method, params, callback) {
