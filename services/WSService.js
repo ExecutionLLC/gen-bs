@@ -1,20 +1,18 @@
 'use strict';
 
-const _ = require('lodash');
-
 const ServiceBase = require('./ServiceBase');
-
-const EventEmitter = require('events').EventEmitter;
+const EventProxy = require('../utils/EventProxy');
 
 const EVENTS = {
-    operationProgress: 'operationProgress'
+    operationProgress: 'operationProgress',
+    searchResults: 'searchResults'
 };
 
 class WSService extends ServiceBase {
     constructor(services) {
         super(services);
 
-        this.eventEmitter = new EventEmitter();
+        this.eventEmitter = new EventProxy();
         this._registerAppServerEvents();
     }
 
@@ -27,13 +25,27 @@ class WSService extends ServiceBase {
     }
 
     off(eventName, callback) {
-        this.eventEmitter.removeListener(eventName, callback);
+        this.eventEmitter.off(eventName, callback);
+    }
+
+    _onSearchReply(reply, callback) {
+        const sessionStatuses = this.services.applicationServerReply.sessionStatuses();
+        if (reply.status !== sessionStatuses.READY) {
+            this.eventEmitter.emit(EVENTS.operationProgress, reply);
+        } else {
+            // TODO: Get data from redis here.
+            this.eventEmitter.emit(EVENTS.searchResults, {
+                'TODO': 'The data is ready but we cannot extract it'
+            });
+        }
+        callback(null);
     }
 
     _registerAppServerEvents() {
-        const appServer = this.services.applicationServer;
-        const AppServerEvents = appServer.registeredEvents();
+        const appServerReply = this.services.applicationServerReply;
+        const events = appServerReply.registeredEvents();
 
+        appServerReply.on(events.openSearchSession, this._onSearchReply.bind(this));
     }
 
 }

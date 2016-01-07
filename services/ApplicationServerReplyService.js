@@ -1,9 +1,9 @@
 'use strict';
 
 const async = require('async');
-const EventEmitter = require('events').EventEmitter;
 
 const ServiceBase = require('./ServiceBase');
+const EventProxy = require('../utils/EventProxy');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -15,11 +15,15 @@ class ApplicationServerReplyService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
 
-        this.eventEmitter = new EventEmitter();
+        this.eventEmitter = new EventProxy();
     }
 
     registeredEvents() {
         return this.services.applicationServer.registeredEvents();
+    }
+
+    sessionStatuses() {
+        return SESSION_STATUS;
     }
 
     on(eventName, callback) {
@@ -27,7 +31,7 @@ class ApplicationServerReplyService extends ServiceBase {
     }
 
     off(eventName, callback) {
-        this.eventEmitter.removeListener(eventName, callback);
+        this.eventEmitter.off(eventName, callback);
     }
 
     onRpcReplyReceived(rpcError, rpcMessage, callback) {
