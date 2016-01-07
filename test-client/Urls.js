@@ -13,6 +13,14 @@ class Urls {
         return this._constructApiUrl('/data');
     }
 
+    startSearch() {
+        return this._constructApiUrl('/search');
+    }
+
+    startSearchInResults(operationId) {
+        return this._constructApiUrl('/search/' + operationId);
+    }
+
     _constructApiUrl(subUrl) {
         return 'http://' + this.host + ':' + this.port + '/api' + subUrl;
     }

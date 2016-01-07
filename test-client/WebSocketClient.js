@@ -1,12 +1,10 @@
 'use strict';
 
-const Request = require('request');
 const WebSocket = require('ws');
 
 class WebSocketClient {
   constructor(host, port) {
     this.address = 'ws://' + host + ':' + port;
-
 
     this.wsClient = new WebSocket(this.address);
 

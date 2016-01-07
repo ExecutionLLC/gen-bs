@@ -19,12 +19,22 @@ const urls = new Urls(HOST, PORT);
 const wsClient = new WebSocketClient(HOST, PORT);
 const operations = new Operations();
 
+function stringify(obj) {
+  return JSON.stringify(obj, null, 2);
+}
+
+function createHeaders(sessionId) {
+  const headers = {};
+  headers[SESSION_HEADER] = sessionId;
+  return headers;
+}
+
 function waterfall(tasks, callback) {
   Async.waterfall(tasks, (error, result) => {
     if (error) {
       console.error(error);
     } else {
-      console.log('Result: ' + JSON.stringify(result, null, 2));
+      console.log('Result: ' + stringify(result));
     }
     callback();
   });
@@ -36,45 +46,6 @@ function read(prompt, defaultValue, callback) {
     default: defaultValue
   }, callback);
 }
-
-operations.add('Get data', (callback) => {
-  Request.get({
-    url: urls.data()
-  }, (error, response, body) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('Response: ' + JSON.stringify(response, null, 2));
-      console.log('Body: ' + JSON.parse(body));
-    }
-    callback();
-  });
-});
-
-operations.add('Start search', (callback) => {
-  waterfall([
-    (callback) => {
-      callback(null, {
-        viewId: 'ebee0654-78cf-4b32-a3e9-19e26f60370d',
-        filterIds: null,
-        sampleId: 'ff4c177c-8d4e-4cb5-bef2-f94bd5a62fa1',
-        limit: 100,
-        offset: 0
-      });
-    },
-    (searchData, callback) => {
-      read('Session Id: ', DEFAULT_SESSION_ID, (error, result) => {
-        searchData.sessionId = result;
-        callback(error, searchData);
-      });
-    },
-    (searchData, callback) => {
-      Request.get({
-
-      })
-    }
-  ], callback);
-});
 
 operations.add('Open session', (callback) => {
   waterfall([
@@ -104,9 +75,61 @@ operations.add('Open session', (callback) => {
           user_name: userDescriptor.userName,
           password: userDescriptor.password
         }
-      }, callback);
+      }, (error, response, body) => {
+        callback(error, body);
+      });
     }
   ], callback);
+});
+
+operations.add('Start search', (callback) => {
+  waterfall([
+    (callback) => {
+      callback(null, {
+        viewId: 'b7ead923-9973-443a-9f44-5563d31b5073',
+        filterIds: null,
+        sampleId: 'ce81aa10-13e3-47c8-bd10-205e97a92d69',
+        limit: 100,
+        offset: 0
+      });
+    },
+    (searchData, callback) => {
+      read('Session Id: ', DEFAULT_SESSION_ID, (error, result) => {
+        searchData.sessionId = result;
+        callback(error, searchData);
+      });
+    },
+    (searchData, callback) => {
+      const headers = createHeaders(searchData.sessionId);
+      Request.post({
+        url: urls.startSearch(),
+        headers,
+        json: searchData
+      }, (error, response, body) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Response: ' + stringify(response));
+          console.log('Body: ' + stringify(body));
+        }
+        callback();
+      });
+    }
+  ], callback);
+});
+
+operations.add('Get data', (callback) => {
+  Request.get({
+    url: urls.data()
+  }, (error, response, body) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log('Response: ' + stringify(response));
+      console.log('Body: ' + stringify(JSON.parse(body)));
+    }
+    callback();
+  });
 });
 
 operations.add('Check session', (callback) => {
@@ -117,8 +140,7 @@ operations.add('Check session', (callback) => {
       });
     },
     (sessionId, callback) => {
-      const headers = {};
-      headers[SESSION_HEADER] = sessionId;
+      const headers = createHeaders(sessionId);
 
       Request.put({
         url: urls.session(),
@@ -136,8 +158,7 @@ operations.add('Close session', (callback) => {
       })
     },
     (sessionId, callback) => {
-      const headers = {};
-      headers[SESSION_HEADER] = sessionId;
+      const headers = createHeaders(sessionId);
 
       Request.del({
         url: urls.session(),

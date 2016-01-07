@@ -34,10 +34,14 @@ class SearchController extends ControllerBase {
 
         this.services.search
             .sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, limit, offset, (error, operationId) => {
-            this.sendJson(response, {
-              operationId: operationId
+                if (error) {
+                    this.sendInternalError(response, error);
+                } else {
+                    this.sendJson(response, {
+                        operationId: operationId
+                    });
+                }
             });
-          });
     }
 
     searchInResults(request, response) {
