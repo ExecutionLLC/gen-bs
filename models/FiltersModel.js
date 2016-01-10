@@ -23,55 +23,34 @@ class FiltersModel extends SecureModelBase {
     }
 
     add(userId, languId, filter, callback) {
-        let filterData = this._init(userId, languId, filter);
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
-                    this._insert(filterData, trx, cb);
+                    const dataToInsert = {
+                        id: this._generateId(),
+                        creator: userId,
+                        name: filter.name,
+                        // TODO: неверные тестовые данные!
+                        // rules: filter.rules,
+                        filterType: 'user'
+                    };
+                    if (filter.originalFilterId) {
+                        dataToInsert.originalFilterId = filter.originalFilterId;
+                    }
+                    this._insert(dataToInsert, trx, cb);
                 },
                 (filterId, cb) => {
-                    const filterTextData = {
+                    const dataToInsert = {
                         filterId: filterId,
                         languId: languId,
-                        description: filterData.description
+                        description: filter.description
                     };
-                    this._insertFilterText(filterTextData, trx, (error) => {
+                    this._insertTable('filter_text', dataToInsert, trx, (error, result) => {
                         cb(error, filterId);
                     });
                 }
             ], cb);
         }, callback);
-    }
-
-    _init(userId, languId, data) {
-        let result = super._init(userId, languId, data);
-        if (data.originalFilterId) {
-            result.originalFilterId = data.originalFilterId;
-        }
-        result.name = data.name;
-        // TODO: неверные тестовые данные!
-        //result.rules = data.rules;
-        result.filterType = 'user';
-        return result;
-    }
-
-    _insert(data, trx, callback) {
-        const dataToInsert = {
-            id: data.id,
-            creator: data.creator,
-            name: data.name,
-            // TODO: неверные тестовые данные!
-            //rules: data.rules,
-            filterType: data.filterType
-        }
-        if (data.originalFilterId) {
-            dataToInsert.originalFilterId = data.originalFilterId
-        }
-        super._insert(dataToInsert, trx, callback);
-    }
-
-    _insertFilterText(data, trx, callback) {
-        this._insertTable('filter_text', data, trx, callback);
     }
 
     // Создаёт новую версию существующего filter
@@ -83,6 +62,25 @@ class FiltersModel extends SecureModelBase {
                 let newFilter = filter;
                 newFilter.originalFilterId = filterData.originalFilterId || filterData.id;
                 this.add(userId, filterData.languId, newFilter, callback);
+            }
+        });
+    }
+
+    find(userId, filterId, callback) {
+        this._fetch(userId, filterId, (error, filterData) => {
+            callback(error, this._toJson(filterData));
+        });
+    }
+
+    // Собирает последние версии каждого filter для текущего пользователя
+    findAll(userId, callback) {
+        this._fetchUserFilters(userId, (error, filtersData) => {
+            if (error) {
+                callback(error);
+            } else {
+                async.map(filtersData, (filterData, cb) => {
+                    cb(null, this._toJson(filterData));
+                }, callback);
             }
         });
     }
@@ -118,12 +116,6 @@ class FiltersModel extends SecureModelBase {
         }, callback);
     }
 
-    find(userId, filterId, callback) {
-        this._fetch(userId, filterId, (error, filterData) => {
-            callback(error, this._toJson(filterData));
-        });
-    }
-
     _fetchUserFilters(userId, callback) {
         const query = 'SELECT * FROM ' +
             '(SELECT ROW_NUMBER() OVER (' +
@@ -141,19 +133,6 @@ class FiltersModel extends SecureModelBase {
                 }
             });
         }, callback);
-    }
-
-    // Собирает последние версии каждого filter для текущего пользователя
-    findAll(userId, callback) {
-        this._fetchUserFilters(userId, (error, filtersData) => {
-            if (error) {
-                callback(error);
-            } else {
-                async.map(filtersData, (filterData, cb) => {
-                    cb(null, this._toJson(filterData));
-                }, callback);
-            }
-        });
     }
 }
 

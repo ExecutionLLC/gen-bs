@@ -6,7 +6,12 @@ const async = require('async');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const ModelBase = require('./ModelBase');
 
-const mappedColumns = ['id', 'field_id', 'value', 'synonyms'];
+const mappedColumns = [
+    'id',
+    'field_id',
+    'value',
+    'synonyms'
+];
 
 class KeywordsModel extends ModelBase {
     constructor(models) {
@@ -14,35 +19,11 @@ class KeywordsModel extends ModelBase {
     }
 
     add(languId, keyword, callback) {
-        let keywordData = this._init(keyword);
-        this.db.transactionally((trx, cb) => {
-            async.waterfall([
-                (cb) => {
-                    this._insert(keywordData, trx, cb);
-                },
-                (keywordId, cb) => {
-                    this._addSynonyms(languId, keywordId, keyword.synonyms, trx, (error) => {
-                        cb(error, keywordId);
-                    });
-                }
-            ], cb);
-        }, callback);
+        this._add(languId, keyword, false, callback);
     }
 
-    _addSynonyms(languId, keywordId, synonyms, trx, callback) {
-        async.map(synonyms, (synonym, cb) => {
-            let synonymData = {
-                keywordId: keywordId,
-                languId: languId,
-                value: synonym.value
-            };
-            if (this.generateIds) {
-                synonymData.id = this._generateId;
-            } else {
-                synonymData.id = synonym.id;
-            }
-            this._addSynonym(synonymData, trx, cb);
-        }, callback);
+    addWithId(languId, keyword, callback) {
+        this._add(languId, keyword, true, callback);
     }
 
     find(id, callback) {
@@ -70,25 +51,44 @@ class KeywordsModel extends ModelBase {
                 .from('synonym_text')
                 .where('keyword_id', keywordId)
                 .asCallback((error, synonyms) => {
-                if (error) {
-                    cb(error);
-                } else {
-                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(synonyms));
-                }
-            });
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(synonyms));
+                    }
+                });
         }, callback);
     }
 
-    _addSynonym(synonym, trx, callback) {
-        this._insertTable('synonym_text', synonym, trx, callback);
+    _add(languId, keyword, withIds, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: (withIds ? keyword.id : this._generateId()),
+                        value: keyword.value
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                },
+                (keywordId, cb) => {
+                    this._addSynonyms(languId, keywordId, keyword.synonyms, withIds, trx, (error, result) => {
+                        cb(error, keywordId);
+                    });
+                }
+            ], cb);
+        }, callback);
     }
 
-    _insert(data, trx, callback) {
-        const dataToInsert = {
-            id: data.id,
-            value: data.name
-        }
-        super._insert(dataToInsert, trx, callback);
+    _addSynonyms(languId, keywordId, synonyms, withIds, trx, callback) {
+        async.map(synonyms, (synonym, cb) => {
+            let dataToInsert = {
+                id: (withIds ? synonym.id : this._generateId()),
+                keywordId: keywordId,
+                languId: languId,
+                value: synonym.value
+            };
+            this._insertTable('synonym_text', dataToInsert, trx, callback);
+        }, callback);
     }
 }
 

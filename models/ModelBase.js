@@ -4,9 +4,7 @@ const _ = require('lodash');
 const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
-
-const Logger = require('../utils/Logger');
-const KnexWrapper = require('../lib/KnexWrapper');
+const KnexWrapper = require('../utils/KnexWrapper');
 
 const Config = require('../utils/Config');
 
@@ -23,16 +21,13 @@ const knexConfig = {
     }
 };
 
-const logger = new Logger(loggerSettings);
-
 // KnexWrapper instance should only be created once per application
-const knexWrapper = new KnexWrapper(knexConfig, logger);
+const knexWrapper = new KnexWrapper(knexConfig, loggerSettings);
 
 class ModelBase {
     constructor(models, baseTable, mappedColumns) {
         this.models = models;
         this.logger = models.logger;
-        this.generateIds = true;
         this.baseTable = baseTable;
         this.mappedColumns = mappedColumns;
 
@@ -69,14 +64,6 @@ class ModelBase {
         return Uuid.v4();
     }
 
-    _init(data) {
-        let result = data;
-        if (this.generateIds) {
-            result.id = this._generateId();
-        };
-        return result;
-    }
-
     _toJson(item) {
         const data = ChangeCaseUtil.convertKeysToSnakeCase(item);
         return _.reduce(this.mappedColumns, (memo, column) => {
@@ -104,25 +91,25 @@ class ModelBase {
         }, callback);
     }
 
-    _insert(data, trx, callback) {
-        this._insertTable(this.baseTable, data, trx, callback);
+    _insert(dataToInsert, trx, callback) {
+        this._insertTable(this.baseTable, dataToInsert, trx, callback);
     }
 
-    _insertTable(tableName, data, trx, callback) {
+    _insertTable(tableName, dataToInsert, trx, callback) {
         trx.asCallback((knex, cb) => {
             knex(tableName)
-                .insert(ChangeCaseUtil.convertKeysToSnakeCase(data))
+                .insert(ChangeCaseUtil.convertKeysToSnakeCase(dataToInsert))
                 .asCallback(cb);
         }, (error) => {
-            callback(error, data.id);
+            callback(error, dataToInsert.id);
         });
     };
 
-    _update(id, data, trx, callback) {
+    _update(id, dataToUpdate, trx, callback) {
         trx.asCallback((knex, cb) => {
             knex(this.baseTable)
                 .where('id', id)
-                .update(ChangeCaseUtil.convertKeysToSnakeCase(data))
+                .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
                 .asCallback(cb);
         }, (error) => {
             callback(error, id);

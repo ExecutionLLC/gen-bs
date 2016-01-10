@@ -17,13 +17,6 @@ class ExtendedModelBase extends ModelBase {
                 .asCallback(cb)
         }, callback(error, id));
     }
-
-    _init(languId, data) {
-        let result = data;
-        if (this.generateIds) { result.id = this._generateId(); };
-        result.languId = languId;
-        return result;
-    }
 }
 
 module.exports = ExtendedModelBase;

@@ -23,25 +23,32 @@ class ViewsModel extends SecureModelBase {
     }
 
     add(userId, languId, view, callback) {
-        let viewData = this._init(userId, languId, view);
-
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
-                    this._insert(viewData, trx, cb);
+                    const dataToInsert = {
+                        id: this._generateId(),
+                        creator: userId,
+                        name: view.name,
+                        viewType: 'user'
+                    };
+                    if (view.originalViewId) {
+                        dataToInsert.originalViewId = view.originalViewId
+                    }
+                    this._insert(dataToInsert, trx, cb);
                 },
                 (viewId, cb) => {
-                    const viewTextData = {
+                    const dataToInsert = {
                         viewId: viewId,
                         languId: languId,
-                        description: viewData.description
+                        description: view.description
                     };
-                    this._insertViewText(viewTextData, trx, (error) => {
+                    this._insertTable('view_text', dataToInsert, trx, (error, result) => {
                         cb(error, viewId);
                     });
                 },
                 (viewId, cb) => {
-                    this._addViewItems(viewId, view.viewListItems, trx, (error) => {
+                    this._addViewItems(viewId, view.viewListItems, trx, (error, result) => {
                         cb(error, viewId);
                     });
                 }
@@ -62,32 +69,37 @@ class ViewsModel extends SecureModelBase {
         });
     }
 
-    _init(userId, languId, data) {
-        let result = super._init(userId, languId, data);
-        if (data.originalViewId) {
-            result.originalViewId = data.originalViewId;
-        }
-        result.name =  data.name;
-        result.viewType = 'user';
-        result.viewListItems = data.viewListItems;
-        return result;
+    find(userId, viewId, callback) {
+        let view;
+        async.waterfall([
+            (cb) => { this._fetch(userId, viewId, cb); },
+            (viewData, cb) => {
+                view = viewData;
+                this._fetchViewItems(viewId, cb);
+            },
+            (viewItems, cb) => {
+                this._compileView(view, viewItems, cb);
+            }
+        ], callback);
     }
 
-    _insert(data, trx, callback) {
-        const dataToInsert = {
-            id: data.id,
-            creator: data.creator,
-            name: data.name,
-            viewType: data.viewType
-        }
-        if (data.originalViewId) {
-            dataToInsert.originalViewId = data.originalViewId
-        }
-        super._insert(dataToInsert, trx, callback);
-    }
-
-    _insertViewText(data, trx, callback) {
-        this._insertTable('view_text', data, trx, callback);
+    // Собирает последние версии каждого view для текущего пользователя
+    findAll(userId, callback) {
+        async.waterfall([
+            (cb) => { this._fetchUserViews(userId, cb); },
+            (viewsData, cb) => {
+                const viewIds = _.pluck(viewsData, 'id');
+                this._fetchViewItemsByIds(viewIds, cb);
+            },
+            (viewItemsData, cb) => {
+                const viewItems = _.groupBy(viewItemsData, (viewItem) => {
+                    return viewItem.viewId;
+                });
+                async.map(viewsData, (viewData, cbk) => {
+                    this._compileView(viewData, viewItems[viewData.id], cbk);
+                }, cb);
+            }
+        ], callback);
     }
 
     _addViewItems(viewId, viewItems, trx, callback) {
@@ -98,17 +110,17 @@ class ViewsModel extends SecureModelBase {
 
     _addViewItem(viewId, viewItem, trx, callback) {
         const dataToInsert = {
-            id: viewItem.id,
+            id: this._generateId(),
             viewId: viewId,
             order: viewItem.order,
-            sortOrder: viewItem.sort_order,
+            sortOrder: viewItem.sortOrder,
             sortDirection: viewItem.sortDirection
         };
         this._insertTable('view_item', dataToInsert, trx, (error, viewItemId) => {
             if (error) {
                 callback(error);
             } else {
-                this._addKeywords(viewItemId, viewItem.keywords, trx, (error) => {
+                this._addKeywords(viewItemId, viewItem.keywords, trx, (error, result) => {
                     callback(error, viewItemId);
                 });
             }
@@ -179,20 +191,6 @@ class ViewsModel extends SecureModelBase {
         }, callback);
     }
 
-    find(userId, viewId, callback) {
-        let view;
-        async.waterfall([
-            (cb) => { this._fetch(userId, viewId, cb); },
-            (viewData, cb) => {
-                view = viewData;
-                this._fetchViewItems(viewId, cb);
-            },
-            (viewItems, cb) => {
-                this._compileView(view, viewItems, cb);
-            }
-        ], callback);
-    }
-
     _compileView(view, viewItems, callback) {
         let viewData = view;
         this._mapViewItems(viewItems, (error, viewItemsData) => {
@@ -203,25 +201,6 @@ class ViewsModel extends SecureModelBase {
                 callback(null, this._toJson(viewData));
             }
         });
-    }
-
-    // Собирает последние версии каждого view для текущего пользователя
-    findAll(userId, callback) {
-        async.waterfall([
-            (cb) => { this._fetchUserViews(userId, cb); },
-            (viewsData, cb) => {
-                const viewIds = _.pluck(viewsData, 'id');
-                this._fetchViewItemsByIds(viewIds, cb);
-            },
-            (viewItemsData, cb) => {
-                const viewItems = _.groupBy(viewItemsData, (viewItem) => {
-                    return viewItem.viewId;
-                });
-                async.map(viewsData, (viewData, cbk) => {
-                    this._compileView(viewData, viewItems[viewData.id], cbk);
-                }, cb);
-            }
-        ], callback);
     }
 
     _mapViewItems(viewItems, callback) {

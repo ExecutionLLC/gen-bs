@@ -24,14 +24,6 @@ class SecureModelBase extends ExtendedModelBase {
         });
     }
 
-    _init(userId, languId, data) {
-        let result = data;
-        if (this.generateIds) { result.id = this._generateId(); };
-        result.languId = languId;
-        result.creator = userId;
-        return result;
-    }
-
     _secureCheck(data, secureInfo, callback) {
         if (secureInfo.userId !== data.creator) {
             callback(new Error('Security check: user not found'));

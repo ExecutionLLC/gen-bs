@@ -12,7 +12,7 @@ const SETTINGS = {
     database: {
         host: ENV.WS_DATABASE_SERVER || 'localhost',
         user: ENV.WS_DATABASE_USER || 'postgres',
-        password: ENV.WS_DATABASE_PASSWORD || 'postgres',
+        password: ENV.WS_DATABASE_PASSWORD || '!mtu222333Ax',
         databaseName: ENV.WS_DATABASE_NAME || 'genomixdb'
     },
     logger: {

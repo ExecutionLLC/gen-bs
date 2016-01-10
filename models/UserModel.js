@@ -24,22 +24,26 @@ class UserModel extends ExtendedModelBase {
     }
 
     add(user, languId, callback) {
-        let userData = this._init(languId, user);
-
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
-                    this._insert(userData, trx, cb);
+                    const dataToInsert = {
+                        id: this._generateId(),
+                        numberPaidSamples: user.numberPaidSamples,
+                        email: user.email,
+                        defaultLanguId: languId
+                    };
+                    this._insert(dataToInsert, trx, cb);
                 },
                 (userId, cb) => {
                     const dataToInsert = {
                         userId: userId,
                         languId: languId,
-                        name: userData.name,
-                        lastName: userData.lastName,
-                        speciality: userData.speciality
+                        name: user.name,
+                        lastName: user.lastName,
+                        speciality: user.speciality
                     };
-                    this._insertUserText(dataToInsert, trx, (error) => {
+                    this._insertTable('user_text', dataToInsert, trx, (error) => {
                         cb(error, userId);
                     });
                 }
@@ -49,29 +53,30 @@ class UserModel extends ExtendedModelBase {
 
     update(id, languId, user, callback) {
         this.db.transactionally((trx, cb) => {
-            const dataToUpdate = {
-                numberPaidSamples: user.numberPaidSamples,
-                email: user.email,
-                isDeleted: user.isDeleted,
-                defaultLanguId: languId
-            };
-            this._update(id, dataToUpdate, trx, (error, userId) => {
-                if (error) {
-                    cb(error);
-                } else {
-                    this._updateUserText(id, languId, user, trx, cb);
+            async.waterfall([
+                (cb) => {
+                    const dataToUpdate = {
+                        numberPaidSamples: user.numberPaidSamples,
+                        email: user.email,
+                        isDeleted: user.isDeleted,
+                        defaultLanguId: languId
+                    };
+                    this._update(id, dataToUpdate, trx, cb);
+                },
+                (userId, cb) => {
+                    const dataToUpdate = {
+                        languId: languId,
+                        name: user.name,
+                        lastName: user.lastName,
+                        speciality: user.speciality
+                    };
+                    this._updateUserText(id, dataToUpdate, trx, cb);
                 }
-            });
+            ], cb);
         }, callback);
     }
 
-    _updateUserText(id, languId, data, trx, callback) {
-        const dataToUpdate = {
-            languId: languId,
-            name: data.name,
-            lastName: data.lastName,
-            speciality: data.speciality
-        };
+    _updateUserText(id, dataToUpdate, trx, callback) {
         trx.asCallback((knex, cb) => {
             knex('user_text')
                 .where('user_id', id)
@@ -80,20 +85,6 @@ class UserModel extends ExtendedModelBase {
                     cb(error, id);
                 });
         }, callback);
-    }
-
-    _insert(data, trx, callback) {
-        const dataToInsert = {
-            id: data.id,
-            numberPaidSamples: data.numberPaidSamples,
-            email: data.email,
-            defaultLanguId: data.defaultLanguId
-        }
-        super._insert(dataToInsert, trx, callback);
-    }
-
-    _insertUserText(data, trx, callback) {
-        this._insertTable('user_text', data, trx, callback);
     }
 
     _fetch(id, callback) {

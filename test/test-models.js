@@ -111,14 +111,12 @@ class TestModels {
 
     _insertKeywords(languId, callback) {
         let insertedKeywords = [];
-        this.keywords.generateIds = false;
         async.each(ChangeCaseUtil.convertKeysToCamelCase(KEYWORDS), (keyword, cb) => {
-            this.keywords.add(languId, keyword, (error, insertedKeyword) => {
+            this.keywords.addWithId(languId, keyword, (error, insertedKeyword) => {
                 insertedKeywords.push(insertedKeyword);
                 cb(error, insertedKeyword);
             });
         }, (error) => {
-            this.keywords.generateIds = true;
             callback(error, insertedKeywords);
         });
     }
