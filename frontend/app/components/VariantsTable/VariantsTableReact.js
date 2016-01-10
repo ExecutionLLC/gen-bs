@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { fetchVariants } from '../../actions'
 
+import VariantsTableHead from './VariantsTableHead'
 import VariantsTableRows from './VariantsTableRows'
 
 
@@ -23,7 +24,7 @@ class VariantsTableReact extends Component {
         <div className="table-variants-wrapper">
           <div className="table-variants-container">
             <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
-              <thead id="variants_table_head"></thead>
+              <VariantsTableHead variants={this.props.variants}/>
               <VariantsTableRows variants={this.props.variants}/>
             </table> 
           </div>

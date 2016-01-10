@@ -12,8 +12,8 @@ export default class VariantsTableRows extends Component {
       rows = this.props.variants.map(function(rowData) {
         let row = [];
 
-        row.push(<td><input type="checkbox" /></td>);
-        row.push(<td class="comment">{rowData['comment']}</td>);
+        row.push(<td key="row_checkbox"><input type="checkbox"/></td>);
+        row.push(<td className="comment" key="comment">{rowData['comment']}</td>);
 
         for(var key in rowData) {
           if(key !== 'comment') {
