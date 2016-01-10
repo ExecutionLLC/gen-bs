@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact'
+import NavbarMain from '../components/Header/NavbarMain'
 
 
 export default class App extends Component {
@@ -18,6 +19,7 @@ export default class App extends Component {
 
               <div className="main-width-wrapper">
                   <div className="container-fluid" id="maintable">
+                      <NavbarMain />
                       <div className="collapse collapse-subnav" id="subnav">
                       </div>    
                       <VariantsTableReact {...this.props} />
