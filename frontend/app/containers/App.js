@@ -1,17 +1,36 @@
+import React, { Component } from 'react';
 
-import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger'
-import { createStore, applyMiddleware } from 'redux'
-import genApp from '../reducers'
+import VariantsTableReact from '../components/VariantsTable/VariantsTableReact'
 
-import '../components/Header/ExportButtons'
 
-const loggerMiddleware = createLogger()
+export default class App extends Component {
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware,
-  loggerMiddleware
-)(createStore)
+  constructor(props) {
+    super(props)
+  }
 
-const store = createStoreWithMiddleware(genApp);
-export default store;
+  render() {
+    return (
+
+      <div className="main" id="main">
+        <nav className="navbar navbar-inverse navbar-static-top"></nav>
+          <div className="main-frame">
+
+              <div className="main-width-wrapper">
+                  <div className="container-fluid" id="maintable">
+                      <div className="collapse collapse-subnav" id="subnav">
+                      </div>    
+                      <VariantsTableReact {...this.props} />
+                  </div>
+
+                  <div id="fav-message" className="hidden">
+                      You can export these items to file
+                  </div>
+              </div>
+
+          </div>
+      </div>
+
+    )
+  }
+}

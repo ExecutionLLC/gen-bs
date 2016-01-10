@@ -20,10 +20,18 @@ import './assets/vendor/jquery-localize/dist/jquery.localize.js';
 
 import './assets/css/index.less';
 
-import './components/VariantsTable/VariantsTable';
+//import './components/VariantsTable/VariantsTable';
 
-import './components/Old/old';
+//import './components/Old/old';
 import './components/localize/jquerylocalize.js';
 
 
 
+import React from 'react'
+import { render } from 'react-dom'
+import Root from './containers/Root'
+
+render(
+  <Root />,
+  document.getElementById('root')
+)
