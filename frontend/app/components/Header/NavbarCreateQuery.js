@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 
 import Upload from './NavbarCreateQuery/Upload'
 import MetadataSearch from './NavbarCreateQuery/MetadataSearch'
@@ -9,12 +10,10 @@ import Views from './NavbarCreateQuery/Views'
 import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 
+import { openModal } from '../../actions'
 
-export default class NavbarMain extends Component {
 
-  constructor(props) {
-    super(props)
-  }
+class NavbarCreateQuery extends Component {
 
   render() {
     return (
@@ -26,18 +25,14 @@ export default class NavbarMain extends Component {
                   <MetadataSearch />
                   <FiltersSetup />
                   <Filters />
-                  <ViewsSetup />
+
+                  <ViewsSetup
+                    {...this.props}
+                  />
+
                   <Views />
                   <Analyze />
                   <LoadHistory />
-
-                    
-                  {/* 
-                   
-                        {{> create_query/load_history }}
-                        */}
-                   
-
                 </div>
             </div>
         </nav>
@@ -45,3 +40,14 @@ export default class NavbarMain extends Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  const { modalWindows } = state
+
+  return {
+    modalWindows
+  }
+}
+
+export default connect(mapStateToProps)(NavbarCreateQuery)
+

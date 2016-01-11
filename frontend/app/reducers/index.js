@@ -4,11 +4,14 @@ import * as ActionTypes from '../actions'
 import variantsTable from './variantsTable' 
 import exportToFile from './exportToFile' 
 
+import modalWindows from './modalWindows' 
+
 
 
 const genApp = combineReducers({
   variantsTable,
-  exportToFile
+  exportToFile,
+  modalWindows 
 })
 
 export default genApp

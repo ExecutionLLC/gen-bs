@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact'
 import NavbarMain from '../components/Header/NavbarMain'
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery'
+import ViewsModal from '../components/Modals/ViewsModal'
+
+import { openModal, closeModal } from '../actions'
 
 
-export default class App extends Component {
+class App extends Component {
 
   constructor(props) {
     super(props)
@@ -22,7 +26,10 @@ export default class App extends Component {
                   <div className="container-fluid" id="maintable">
                       <NavbarMain />
                       <div className="collapse collapse-subnav" id="subnav">
-                        <NavbarCreateQuery />
+                        <NavbarCreateQuery
+                          {...this.props}
+                          openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
+                        />
                       </div>    
                       <VariantsTableReact {...this.props} />
                   </div>
@@ -33,8 +40,23 @@ export default class App extends Component {
               </div>
 
           </div>
+          <ViewsModal 
+            showModal={this.props.modalWindows.views.showModal}
+            closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+          />
       </div>
 
     )
   }
 }
+
+function mapStateToProps(state) {
+  const { modalWindows } = state
+
+  return {
+    modalWindows
+  }
+}
+
+export default connect(mapStateToProps)(App)
+
