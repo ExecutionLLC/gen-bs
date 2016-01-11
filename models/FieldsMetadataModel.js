@@ -64,14 +64,14 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    find(id, callback) {
+    find(metadataId, callback) {
         let metadata = {};
-        this._fetch(id, (error, fieldMetadata) => {
+        this._fetch(metadataId, (error, fieldMetadata) => {
             if (error) {
                 callback(error);
             } else {
                 metadata = fieldMetadata;
-                this._fetchMetadataKeywords(metadata.id, (error, keywords) => {
+                this._fetchMetadataKeywords(metadataId, (error, keywords) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -83,16 +83,16 @@ class FieldsMetadataModel extends ModelBase {
         });
     }
 
-    // TODO: посмотреть нужен ли подобный метод в services, скорректирровать и сделать
+    // TODO: посмотреть нужен ли подобный метод в services, скорректировать и сделать
     //findByUserAndSampleId(userId, sampleId, callback) {
     //
     //}
 
-    _fetchMetadataKeywords(id, callback) {
+    _fetchMetadataKeywords(metadataId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select('id', 'field_id', 'value')
             .from('keyword')
-            .where('field_id', id)
+            .where('field_id', metadataId)
             .asCallback((error, keywords) => {
                 if (error) {
                     cb(error);
@@ -122,12 +122,12 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    _fetch(id, callback) {
+    _fetch(metadataId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from(this.baseTable)
                 .innerJoin('field_text', 'field_text.field_id', this.baseTable + '.id')
-                .where('id', id)
+                .where('id', metadataId)
                 .asCallback((error, data) => {
                 if (error) {
                     cb(error);

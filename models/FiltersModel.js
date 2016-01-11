@@ -85,8 +85,8 @@ class FiltersModel extends SecureModelBase {
         });
     }
 
-    _fetch(userId, id, callback) {
-        this._fetchFilter(id, (error, data) => {
+    _fetch(userId, filterId, callback) {
+        this._fetchFilter(filterId, (error, data) => {
             if (error) {
                 callback(error);
             } else {
@@ -125,7 +125,7 @@ class FiltersModel extends SecureModelBase {
             'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
         this.db.asCallback((knex, cb) => {
             knex.raw(query)
-                .asCallback((error, viewsData) => {
+                .asCallback((error, filtersData) => {
                 if (error) {
                     cb(error);
                 } else {

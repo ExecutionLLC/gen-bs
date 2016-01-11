@@ -51,7 +51,7 @@ class UserModel extends ExtendedModelBase {
         }, callback);
     }
 
-    update(id, languId, user, callback) {
+    update(userId, languId, user, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
@@ -61,38 +61,38 @@ class UserModel extends ExtendedModelBase {
                         isDeleted: user.isDeleted,
                         defaultLanguId: languId
                     };
-                    this._update(id, dataToUpdate, trx, cb);
+                    this._update(userId, dataToUpdate, trx, cb);
                 },
-                (userId, cb) => {
+                (id, cb) => {
                     const dataToUpdate = {
                         languId: languId,
                         name: user.name,
                         lastName: user.lastName,
                         speciality: user.speciality
                     };
-                    this._updateUserText(id, dataToUpdate, trx, cb);
+                    this._updateUserText(userId, dataToUpdate, trx, cb);
                 }
             ], cb);
         }, callback);
     }
 
-    _updateUserText(id, dataToUpdate, trx, callback) {
+    _updateUserText(userId, dataToUpdate, trx, callback) {
         trx.asCallback((knex, cb) => {
             knex('user_text')
-                .where('user_id', id)
+                .where('user_id', userId)
                 .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
                 .asCallback((error) => {
-                    cb(error, id);
+                    cb(error, userId);
                 });
         }, callback);
     }
 
-    _fetch(id, callback) {
+    _fetch(userId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
             .from(this.baseTable)
             .innerJoin('user_text', 'user_text.user_id', this.baseTable + '.id')
-            .where('id', id)
+            .where('id', userId)
             .asCallback((error, data) => {
                 if (error) {
                     cb(error);

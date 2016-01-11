@@ -141,8 +141,8 @@ class ViewsModel extends SecureModelBase {
         this._insertTable('view_item_keyword', dataToInsert, trx, callback);
     }
 
-    _fetch(userId, id, callback) {
-        this._fetchView(id, (error, data) => {
+    _fetch(userId, viewId, callback) {
+        this._fetchView(viewId, (error, data) => {
             if (error) {
                 callback(error);
             } else {

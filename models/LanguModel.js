@@ -17,9 +17,9 @@ class LanguModel extends ModelBase {
         }, callback);
     }
 
-    update(id, langu, callback) {
+    update(languId, langu, callback) {
         this.db.transactionally((trx, cb) => {
-            this._update(id, langu, trx, cb);
+            this._update(languId, langu, trx, cb);
         }, callback);
     }
 }

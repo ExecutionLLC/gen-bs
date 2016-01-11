@@ -26,14 +26,14 @@ class KeywordsModel extends ModelBase {
         this._add(languId, keyword, true, callback);
     }
 
-    find(id, callback) {
+    find(keywordId, callback) {
         let keyword = {};
-        this._fetch(id, (error, keywordData) => {
+        this._fetch(keywordId, (error, keywordData) => {
             if (error) {
                 callback(error);
             } else {
                 keyword = keywordData;
-                this.fetchKeywordSynonyms(keyword.id, (error, synonyms) => {
+                this.fetchKeywordSynonyms(keywordId, (error, synonyms) => {
                     if (error) {
                         callback(error);
                     } else {

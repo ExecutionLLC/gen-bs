@@ -46,26 +46,6 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    _addNewFileSampleVersion(sampleId, fieldId, values, trx, callback) {
-        async.waterfall([
-            (cb) => {
-                const dataToInsert = {
-                    id: this._generateId(),
-                    vcfFileSampleId: sampleId
-                };
-                this._insertTable('vcf_file_sample_version', dataToInsert, trx, cb);
-            },
-            (versionId, cb) => {
-                const dataToInsert = {
-                    vcfFileSampleVersionId: versionId,
-                    fieldId: fieldId,
-                    values: values
-                };
-                this._insertTable('vcf_file_sample_values', dataToInsert, trx, cb);
-            }
-        ], callback);
-    }
-
     update(userId, sampleId, sample, callback) {
         this._fetch(userId, sampleId, (error, sampleData) => {
             if (error) {
@@ -110,19 +90,39 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
-    // TODO: посмотреть нужен ли подобный метод в services, скорректирровать и сделать
+    // TODO: посмотреть нужен ли подобный метод в services, скорректировать и сделать
     //findAll(userId, callback) {
     //
     //}
 
+    _addNewFileSampleVersion(sampleId, fieldId, values, trx, callback) {
+        async.waterfall([
+            (cb) => {
+                const dataToInsert = {
+                    id: this._generateId(),
+                    vcfFileSampleId: sampleId
+                };
+                this._insertTable('vcf_file_sample_version', dataToInsert, trx, cb);
+            },
+            (versionId, cb) => {
+                const dataToInsert = {
+                    vcfFileSampleVersionId: versionId,
+                    fieldId: fieldId,
+                    values: values
+                };
+                this._insertTable('vcf_file_sample_values', dataToInsert, trx, cb);
+            }
+        ], callback);
+    }
+
     _fetchFileSampleValues(sampleId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
-                .limit(1)
                 .from('vcf_file_sample_version')
                 .innerJoin('vcf_file_sample_values', 'vcf_file_sample_values.vcf_file_sample_version_id', 'vcf_file_sample_version.id')
                 .orderBy('vcf_file_sample_version.timestamp', 'desc')
                 .where('vcf_file_sample_id', sampleId)
+                .limit(1)
                 .asCallback((error, result) => {
                     if (error) {
                         cb(error);
