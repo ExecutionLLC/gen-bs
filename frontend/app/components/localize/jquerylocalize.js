@@ -2,6 +2,7 @@ function changeLang(lang){
   var currentLang = lang;
   var opts = { language: currentLang, pathPrefix: "./lang" };
   $("[data-localize]").localize("application", opts);
+  $("body").addClass(currentLang);
   reinitTooltip(mq);
 }
 
