@@ -92,7 +92,7 @@ class ApplicationServerService extends ServiceBase {
     }
 
     requestCloseSearchSession(sessionId, operationId, callback) {
-        this.services.sessions.remove(sessionId, operationId, (error, operation) => {
+        this.services.operations.remove(sessionId, operationId, (error) => {
             if (error) {
                 callback(error);
             } else {

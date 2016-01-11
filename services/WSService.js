@@ -40,7 +40,6 @@ class WSService extends ServiceBase {
                     this.eventEmitter.emit(EVENTS.searchResults, data);
                 });
         }
-        callback(null);
     }
 
     _registerAppServerEvents() {
