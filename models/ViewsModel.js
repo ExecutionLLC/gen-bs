@@ -70,7 +70,7 @@ class ViewsModel extends SecureModelBase {
     }
 
     find(userId, viewId, callback) {
-        let view;
+        let view = {};
         async.waterfall([
             (cb) => { this._fetch(userId, viewId, cb); },
             (viewData, cb) => {

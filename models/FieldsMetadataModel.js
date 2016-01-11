@@ -33,10 +33,6 @@ class FieldsMetadataModel extends ModelBase {
         this._add(languId, metadata, true, callback);
     }
 
-    find(id, callback) {
-
-    }
-
     _add(languId, metadata, withId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
@@ -87,6 +83,7 @@ class FieldsMetadataModel extends ModelBase {
         });
     }
 
+    // TODO: посмотреть нужен ли подобный метод в services, скорректирровать и сделать
     //findByUserAndSampleId(userId, sampleId, callback) {
     //
     //}
