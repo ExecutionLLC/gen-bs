@@ -65,6 +65,10 @@ class ApplicationServerReplyService extends ServiceBase {
 
     _createOpenSearchResultSync(operation, rpcMessage) {
         const sessionState = rpcMessage.result.sessionState;
+        if (!sessionState) {
+            console.warn('Cannot get session state from result. Ignore request.');
+            return;
+        }
         // If not ready, just send the progress up;
         if (sessionState.status !== SESSION_STATUS.READY) {
             return {
