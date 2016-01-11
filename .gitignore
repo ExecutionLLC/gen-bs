@@ -13,6 +13,7 @@ deploy.sh
 *npm-debug.log*
 
 .logs/
+.logs/genomix.log
 .settings/
 .project
 .pydevproject
