@@ -1,6 +1,6 @@
 'use strict';
 
-const Express = require('express');
+const _ = require('lodash');
 
 const ControllerBase = require('./ControllerBase');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
@@ -10,7 +10,7 @@ class WSController extends ControllerBase {
     constructor(services) {
         super(services);
 
-        this.clientsBySession = {};
+        this.clients = [];
     }
 
     addWebSocketServerCallbacks(webSocketServer) {
@@ -18,9 +18,11 @@ class WSController extends ControllerBase {
             console.log('WS client connected');
             ws.on('message', (messageString) => {
                 const message = JSON.parse(messageString);
+                const clientDescriptor = this._findClientDescriptor(ws);
                 const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
                 console.log('Received: ' + JSON.stringify(message, null, 2));
-                this.onClientMessage(ws, convertedMessage);
+                console.log('In session: ' + clientDescriptor.sessionId);
+                this._onClientMessage(ws, convertedMessage);
             });
             ws.on('error', error => {
                 console.log('Error in client socket: ' + JSON.stringify(error, null, 2));
@@ -28,15 +30,25 @@ class WSController extends ControllerBase {
             ws.on('close', () => {
                 console.log('WS client disconnected');
             });
+
+            this.clients.push({
+                ws: ws,
+                sessionId: null
+            });
         });
     }
 
-    onClientMessage(clientWs, message) {
+    _onClientMessage(clientWs, message) {
         const sessionId = message.sessionId;
         if (sessionId) {
             console.log('Connecting client WS to session ' + sessionId);
-            this.clientsBySession[sessionId] = clientWs;
+            const clientDescriptor = this._findClientDescriptor(clientWs);
+            clientDescriptor.sessionId = sessionId;
         }
+    }
+
+    _findClientDescriptor(clientWs) {
+        return _.find(this.clients, client => client.ws === clientWs);
     }
 }
 
