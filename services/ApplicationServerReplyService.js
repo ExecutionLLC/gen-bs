@@ -74,15 +74,18 @@ class ApplicationServerReplyService extends ServiceBase {
         } else {
             // The status is 'ready', so the data is available in Redis.
             const conditions = operation.data;
+            const redisAddress = this._parseAddress(sessionState.redisDb.url);
             return {
                 status: SESSION_STATUS.READY,
                 progress: 100,
                 redisDb: {
-                    host: sessionState.redisDb.url,
-                    number: sessionState.redisDb.number,
-                    offset: conditions.offset,
-                    total: conditions.total
-                }
+                    host: redisAddress.host,
+                    port: redisAddress.port,
+                    dataIndex: sessionState.sort.index,
+                    databaseNumber: sessionState.redisDb.number
+                },
+                offset: conditions.offset,
+                total: conditions.total
             };
         }
     }
@@ -128,6 +131,16 @@ class ApplicationServerReplyService extends ServiceBase {
         } else {
             callback(null, operation);
         }
+    }
+
+    _parseAddress(hostAddress) {
+        const addressParts = hostAddress.split(':');
+        const host = addressParts[0];
+        const port = addressParts[1];
+        return {
+            host,
+            port
+        };
     }
 }
 

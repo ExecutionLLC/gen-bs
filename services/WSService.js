@@ -33,10 +33,12 @@ class WSService extends ServiceBase {
         if (reply.status !== sessionStatuses.READY) {
             this.eventEmitter.emit(EVENTS.operationProgress, reply);
         } else {
-            // TODO: Get data from redis here.
-            this.eventEmitter.emit(EVENTS.searchResults, {
-                'TODO': 'The data is ready but we cannot extract it'
-            });
+            const redisDb = reply.redisDb;
+            this.services.redis.fetch(redisDb.host, redisDb.port, redisDb.databaseNumber,
+                redisDb.dataIndex, reply.offset, reply.total, (error, data) => {
+                    // Send data to client
+                    this.eventEmitter.emit(EVENTS.searchResults, data);
+                });
         }
         callback(null);
     }

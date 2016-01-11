@@ -4,6 +4,7 @@ const UsersService = require('./UsersService');
 const ViewsService = require('./ViewsService');
 const FiltersService = require('./FiltersService');
 const SamplesService = require('./SamplesService');
+const RedisService = require('./RedisService');
 const SessionService = require('./SessionService');
 const OperationService = require('./OperationsService');
 const WSService = require('./WSService');
@@ -26,6 +27,7 @@ class ServiceFacade {
     this.applicationServerReply = new ApplicationServerReplyService(this, models);
     this.fieldsMetadata = new FieldsMetadataService(this, models);
     this.search = new SearchService(this, models);
+    this.redis = new RedisService(this, models);
     this.tokens = new TokenService(this, models);
     this.wsService = new WSService(this, models);
   }
