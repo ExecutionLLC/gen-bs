@@ -2,6 +2,31 @@ function changeLang(lang){
   var currentLang = lang;
   var opts = { language: currentLang, pathPrefix: "./lang" };
   $("[data-localize]").localize("application", opts);
+  $("body").addClass(currentLang);
+  reinitTooltip(mq);
+}
+
+if (matchMedia) {
+	var mq = window.matchMedia("(min-width: 768px)");
+}
+
+
+function reinitTooltip(mq) {
+  $('[data-toggle="tooltip"]').tooltip('destroy');
+	if (mq.matches) {
+		// window width is at least 768px
+		$('[data-toggle="tooltip"]').tooltip({
+  		 trigger: "hover",
+  		 delay: { "show": 500, "hide": 100 }
+		});
+	}
+	else {
+		// window width is less than 768px
+		$('[data-toggle="tooltip"]').tooltip({
+  		trigger: "click"
+		});
+	}
+
 }
 
 

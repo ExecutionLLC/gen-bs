@@ -11,12 +11,12 @@
 
            <div class="row grid-toolbar">
            <div class="col-sm-6">  
-            <label data-localize="filters.combine.new.name.title">New Combined Filter</label>  
-            <input value="Eye Cancer Diagnostics + Breast Cancer" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
+            <label data-localize="filters.combine.new.name.label">New Combined Filter</label>  
+            <input data-localize="filters.combine.new.name" value="Eye Cancer Diagnostics + Breast Cancer" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
           </div>
           <div class="col-sm-5">
              <label data-localize="general.description">Description</label>
-             <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
+             <input value="" data-localize="filters.combine.new.description" placeholder="Type filter description (optional)" class="form-control" type="text">
           </div>
           <div class="col-sm-1">
             <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent"><span data-localize="actions.cancel">Cancel</span></button>
@@ -26,7 +26,7 @@
             <div class="help-text text-danger"><span data-localize="filters.combine.new.name.error">Name can not be empty</span></div>              
            <div class="row grid-toolbar">
             <div class="col-sm-6">
-              <label data-localize="filters.combine.rules.title">Available Filters for combine</label>
+              <label data-localize="filters.combine.settings.title">Available Filters for combine</label>
             </div>
           </div>
            <div class="row">
@@ -171,17 +171,15 @@
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
-              <span data-localize="filters.combine.rules.description">Add more than one filter to create a combined condition</span>
+              <span data-localize="filters.combine.settings.description">Add more than one filter to create a combined condition</span>
            </div>
          </div>
    
        
          <div class="modal-footer">
-          <div class="btn-group pull-left">
-          <button type="button" class="btn btn-default hidden" data-dismiss="modal"><span data-localize="filters.reset.title">Reset Filter</span></button>
-        </div>
+    
           <button type="button" class="btn btn-default" data-dismiss="modal"><span data-localize="actions.cancel">Cancel</span></button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal"><span data-localize="filters.combine.combine.title">Combine and Choose</span></button>        
+          <button type="button" class="btn btn-primary" data-dismiss="modal"><span data-localize="filters.combine.combine.title">Combine and select</span></button>        
       </div>
     </div>
   </div>

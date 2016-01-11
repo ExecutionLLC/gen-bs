@@ -3,7 +3,7 @@
 
 
     <div class="sidebar-top btn-toolbar">
-     <div class="btn-group"><h5>analyze Sample <a href="#"data-toggle="tooltip" data-placement="right" data-container="body" title="Analyze current sample with current filters and view"><i class="fa fa-info-circle text-muted"></i></a></h5></div>
+     <div class="btn-group"><h5><span data-localize="query.heading">Query sample analysis</span> <a href="#" data-localize="query.help" title="Analyze current sample with current filters and view" data-toggle="tooltip" data-placement="right" data-container="body"><i class="fa fa-info-circle text-muted"></i></a></h5></div>
      <div class="btn-group pull-right"><button data-target="#sidebarLeft" data-toggle="collapse" class="btn navbar-btn sidebarToggle" href="#" type="button"><i class="fa fa-close"></i></button>     
     </div>
    </div>
@@ -12,12 +12,12 @@
      
      <section>
       <div class="btn-group btn-block">
-            <a data-target="#upload" type="button" data-toggle="modal" class="btn btn-warning btn-block" href="#">Upload sample</a>
+            <a data-target="#upload" type="button" data-toggle="modal" class="btn btn-warning btn-block" href="#"><span data-localize="samples.upload.title">Upload</span></a>
            </div>
      </section>
       <section>
      <h5>
-         Choose sample  <a class="btn btn-link" type="button" data-toggle="tooltip"data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples"><i class="fa fa-info-circle text-muted"></i></a>
+         <span  data-localize="sample.headings">Choose sample</span>  <a class="btn btn-link" data-localize="samples.help" type="button" data-toggle="tooltip"data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples"><i class="fa fa-info-circle text-muted"></i></a>
       </h5>
      
        
@@ -40,18 +40,18 @@
           <ul class="dropdown-menu">
           <li> 
           <a data-toggle="modal" data-target="#filter" href="#">
-           Setup filter
+           <span data-localize="filters.setup.title">Setup Filters</span>
           </a>
         </li>
         <li>
           <a data-toggle="modal" data-target="#combinefilter" href="#">
-            Combine filter
+            <span data-localize="filters.combine.title">Combine Filters</span>
           </a>
         </li>
       </ul>
         </div>
          
-         Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
+         <span data-localize="filters.heading">Select filter</span> <a type="button" data-localize="filters.help" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
        </h5>
           
         <div class="btn-group btn-group-select2-wrap">
@@ -73,7 +73,7 @@
        <div class="btn-group pull-right">
         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns"><i class="fa fa-cog"></i></button>
       </div>
-       Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a>
+       <span data-localize="views.heading">Select view</span>  <a type="button" class="btn btn-link" data-localize="views.help" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a>
          </h5>
   
            
@@ -93,31 +93,20 @@
      </section>
         <section>      
           <button class="btn btn-block btn-primary" type="button">
-          Analyze
+           <span data-localize="query.analyze.title">Analyze</span>
          </button>
         
 
      </section>
       <section>
-       
-        <button data-target="#history" data-toggle="modal" type="button" class="btn btn-block btn-default"><span class="">History analysis</span></button>
-       
-
-    
+         <button data-target="#history" data-toggle="modal" type="button" class="btn btn-block btn-default"><span data-localize="history.title">Load history</span></button>
       </section>
        <section>
         
-       <small>Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited</small>
+       <small data-localize="query.description">Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited</small>
        
      </section>
        </div>
       </div>
-   <!--
-  <div class="sidebar-bottom  btn-toolbar">
-      
-    </div>
--->
-
-
    
 </div>
