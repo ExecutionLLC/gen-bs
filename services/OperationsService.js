@@ -140,7 +140,7 @@ class OperationsService extends ServiceBase {
     }
 
     _closeSearchSession(searchOperation, callback) {
-        this.services.applicationServer.requestCloseSearchSession(searchOperation.id, callback);
+        this.services.applicationServer.requestCloseSearchSession(searchOperation.sessionId, searchOperation.id, callback);
     }
 }
 
