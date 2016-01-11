@@ -39,11 +39,12 @@ class RPCProxy {
         return 'ws://' + this.host + ':' + this.port + '/ws';
     }
 
-    _replyResult(message) {
+    _replyResult(messageString) {
+        const unconvertedMessage = JSON.parse(messageString);
+        const message = ChangeCaseUtil.convertKeysToCamelCase(unconvertedMessage);
         if (this.replyCallback) {
-            const msg = JSON.parse(message);
-            this.replyCallback(msg.error, {
-                id: msg.id, result: msg.result
+            this.replyCallback(message.error, {
+                id: message.id, result: message.result
             });
         } else {
             console.error('No callback is registered for RPC reply');
@@ -82,18 +83,9 @@ class RPCProxy {
 
         this.connected = true;
 
-        this.ws.on('message', (message, flags) => {
-            const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
-            this._replyResult(convertedMessage, flags);
-        });
-
-        this.ws.on('close', (event) => {
-            this._close(event);
-        });
-
-        this.ws.on('error', (event) => {
-            this._error(event);
-        });
+        this.ws.on('message', this._replyResult.bind(this));
+        this.ws.on('close', this._close.bind(this));
+        this.ws.on('error', this._error.bind(this));
 
         if (this.connectCallback) {
             this.connectCallback();

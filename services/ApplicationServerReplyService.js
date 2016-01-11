@@ -65,7 +65,7 @@ class ApplicationServerReplyService extends ServiceBase {
 
     _createOpenSearchResultSync(operation, rpcMessage) {
         const sessionState = rpcMessage.result.sessionState;
-        // If not ready, just send the progress up;
+        // If not ready, just send the progress up
         if (sessionState.status !== SESSION_STATUS.READY) {
             return {
                 status: sessionState.status,
