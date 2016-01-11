@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 
-import CreateQueryNavbarButton from './NavbarMain/CreateQueryNavbarButton'
+import Upload from './NavbarCreateQuery/Upload'
+import MetadataSearch from './NavbarCreateQuery/MetadataSearch'
+import FiltersSetup from './NavbarCreateQuery/FiltersSetup'
+import Filters from './NavbarCreateQuery/Filters'
+import ViewsSetup from './NavbarCreateQuery/ViewsSetup'
+import Views from './NavbarCreateQuery/Views'
+import Analyze from './NavbarCreateQuery/Analyze'
+import LoadHistory from './NavbarCreateQuery/LoadHistory'
 
 
 export default class NavbarMain extends Component {
@@ -15,23 +22,17 @@ export default class NavbarMain extends Component {
         <nav className="navbar navbar-fixed-top navbar-default">
             <div className="container-fluid">
                 <div className="table-row">
+                  <Upload />
+                  <MetadataSearch />
+                  <FiltersSetup />
+                  <Filters />
+                  <ViewsSetup />
+                  <Views />
+                  <Analyze />
+                  <LoadHistory />
 
                     
                   {/* 
-                        {{> create_query/upload }}
-                   
-                    
-                        {{> create_query/metadata_search }}
-            
-
-                  
-                        {{> create_query/filters}}
-                    
-                        {{> create_query/views }}
-                   
-                   
-                         
-                        {{> create_query/analyze }}
                    
                         {{> create_query/load_history }}
                         */}

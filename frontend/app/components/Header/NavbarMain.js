@@ -5,6 +5,7 @@ import NavbarSearch from './NavbarMain/NavbarSearch'
 import ExportDropdown from './NavbarMain/ExportDropdown'
 import SavedFiles from './NavbarMain/SavedFiles'
 import Language from './NavbarMain/Language'
+import Buy from './NavbarMain/Buy'
 import Auth from './NavbarMain/Auth'
 
 
@@ -27,6 +28,7 @@ export default class NavbarMain extends Component {
              <ExportDropdown />
              <SavedFiles />
              <Language />
+             <Buy />
              <Auth />
            </div>
          </nav>
