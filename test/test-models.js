@@ -4,6 +4,13 @@ const _ = require('lodash');
 var async = require('async');
 const uuid = require('node-uuid');
 
+const Config = require('../utils/Config');
+const Logger = require('../utils/Logger');
+
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+
+const KnexWrapper = require('../utils/KnexWrapper');
+
 const LanguModel = require('../models/LanguModel');
 const UserModel = require('../models/UserModel');
 const KeywordsModel = require('../models/KeywordsModel');
@@ -11,9 +18,6 @@ const FiltersModel = require('../models/FiltersModel');
 const ViewsModel = require('../models/ViewsModel');
 const SamplesModel = require('../models/SamplesModel');
 const FieldsMetadataModel = require('../models/FieldsMetadataModel');
-
-const Config = require('../utils/Config');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 const USERS = require('../test_data/user_metadata.json');
 const KEYWORDS = require('../test_data/keywords.json');
@@ -33,6 +37,9 @@ const DEFAULT_LANGU_ID = DEFAULT_LANG.id;
 class TestModels {
     constructor() {
         this.config = Config;
+
+        this.logger = new Logger(Config.logger);
+        this.db = new KnexWrapper(this.config, this.logger);
 
         this.langu = new LanguModel(this);
         this.user = new UserModel(this);

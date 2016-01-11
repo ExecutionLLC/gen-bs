@@ -4,40 +4,21 @@ const _ = require('lodash');
 const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
-const KnexWrapper = require('../utils/KnexWrapper');
-
-const Config = require('../utils/Config');
-
-const loggerSettings = Config.logger;
-const databaseSettings = Config.database;
-
-const knexConfig = {
-    client: 'pg',
-    connection: {
-        host: databaseSettings.host,
-        user: databaseSettings.user,
-        password: databaseSettings.password,
-        database: databaseSettings.databaseName
-    }
-};
-
-// KnexWrapper instance should only be created once per application
-const knexWrapper = new KnexWrapper(knexConfig, loggerSettings);
 
 class ModelBase {
-    constructor(models, baseTable, mappedColumns) {
+    constructor(models, baseTableName, mappedColumns) {
         this.models = models;
         this.logger = models.logger;
-        this.baseTable = baseTable;
+        this.baseTableName = baseTableName;
         this.mappedColumns = mappedColumns;
 
-        this.db = knexWrapper;
+        this.db = models.db;
     }
 
     exists(id, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
-            .from(this.baseTable)
+            .from(this.baseTableName)
             .where('id', id)
             .asCallback((error, data) => {
                 if (error) {
@@ -54,7 +35,7 @@ class ModelBase {
             if (error) {
                 callback(error);
             } else {
-                callback(null, this._toJson(data));
+                callback(null, this._mapColumns(data));
             }
         });
     }
@@ -64,7 +45,7 @@ class ModelBase {
         return Uuid.v4();
     }
 
-    _toJson(item) {
+    _mapColumns(item) {
         const data = ChangeCaseUtil.convertKeysToSnakeCase(item);
         return _.reduce(this.mappedColumns, (memo, column) => {
             memo[column] = data[column];
@@ -75,27 +56,25 @@ class ModelBase {
     _fetch(id, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
-                .from(this.baseTable)
+                .from(this.baseTableName)
                 .where('id', id)
                 .asCallback((error, data) => {
                     if(error) {
                         cb(error);
+                    } else if (data.length > 0) {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
                     } else {
-                        if (data.length > 0) {
-                            cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
-                        } else {
-                            cb(new Error('Item not found: ' + id));
-                        }
+                        cb(new Error('Item not found: ' + id));
                     }
                 });
         }, callback);
     }
 
     _insert(dataToInsert, trx, callback) {
-        this._insertTable(this.baseTable, dataToInsert, trx, callback);
+        this._insertIntoTable(this.baseTableName, dataToInsert, trx, callback);
     }
 
-    _insertTable(tableName, dataToInsert, trx, callback) {
+    _insertIntoTable(tableName, dataToInsert, trx, callback) {
         trx.asCallback((knex, cb) => {
             knex(tableName)
                 .insert(ChangeCaseUtil.convertKeysToSnakeCase(dataToInsert))
@@ -107,7 +86,7 @@ class ModelBase {
 
     _update(id, dataToUpdate, trx, callback) {
         trx.asCallback((knex, cb) => {
-            knex(this.baseTable)
+            knex(this.baseTableName)
                 .where('id', id)
                 .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
                 .asCallback(cb);

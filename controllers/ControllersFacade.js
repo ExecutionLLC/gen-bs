@@ -17,7 +17,9 @@ const SessionsController = require('./SessionsController');
 const ApiController = require('./ApiController');
 
 class ControllersFacade {
-    constructor(services) {
+    constructor(logger, services) {
+        this.logger = logger;
+
         this.dataController = new DataController(services);
         this.demoDataController = new DemoDataController(services);
 

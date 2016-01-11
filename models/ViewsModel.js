@@ -32,9 +32,6 @@ class ViewsModel extends SecureModelBase {
                         name: view.name,
                         viewType: 'user'
                     };
-                    if (view.originalViewId) {
-                        dataToInsert.originalViewId = view.originalViewId
-                    }
                     this._insert(dataToInsert, trx, cb);
                 },
                 (viewId, cb) => {
@@ -43,7 +40,7 @@ class ViewsModel extends SecureModelBase {
                         languId: languId,
                         description: view.description
                     };
-                    this._insertTable('view_text', dataToInsert, trx, (error, result) => {
+                    this._insertIntoTable('view_text', dataToInsert, trx, (error, result) => {
                         cb(error, viewId);
                     });
                 },
@@ -62,23 +59,50 @@ class ViewsModel extends SecureModelBase {
             if (error) {
                 callback(error);
             } else {
-                let newView = view;
-                newView.originalViewId = viewData.originalViewId || viewData.id;
-                this.add(userId, viewData.languId, newView, callback);
+                this.db.transactionally((trx, cb) => {
+                    async.waterfall([
+                        (cb) => {
+                            const dataToInsert = {
+                                id: this._generateId(),
+                                creator: userId,
+                                name: view.name,
+                                viewType: view.viewType,
+                                originalViewId: viewData.originalViewId || viewData.id
+                            };
+                            this._insert(dataToInsert, trx, cb);
+                        },
+                        (viewId, cb) => {
+                            const dataToInsert = {
+                                viewId: viewId,
+                                languId: viewData.languId,
+                                description: view.description
+                            };
+                            this._insertIntoTable('view_text', dataToInsert, trx, (error, result) => {
+                                cb(error, viewId);
+                            });
+                        },
+                        (viewId, cb) => {
+                            this._addViewItems(viewId, view.viewListItems, trx, (error, result) => {
+                                cb(error, viewId);
+                            });
+                        }
+                    ], cb);
+                }, callback);
             }
         });
     }
 
     find(userId, viewId, callback) {
-        let view = {};
         async.waterfall([
             (cb) => { this._fetch(userId, viewId, cb); },
-            (viewData, cb) => {
-                view = viewData;
-                this._fetchViewItems(viewId, cb);
-            },
-            (viewItems, cb) => {
-                this._compileView(view, viewItems, cb);
+            (view, cb) => {
+                this._fetchViewItems(viewId, (error, viewItems) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        this._mapView(view, viewItems, cb);
+                    }
+                });
             }
         ], callback);
     }
@@ -89,15 +113,52 @@ class ViewsModel extends SecureModelBase {
             (cb) => { this._fetchUserViews(userId, cb); },
             (viewsData, cb) => {
                 const viewIds = _.pluck(viewsData, 'id');
-                this._fetchViewItemsByIds(viewIds, cb);
-            },
-            (viewItemsData, cb) => {
-                const viewItems = _.groupBy(viewItemsData, (viewItem) => {
-                    return viewItem.viewId;
+                this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        const viewItems = _.groupBy(viewItemsData, (viewItem) => {
+                            return viewItem.viewId;
+                        });
+                        async.map(viewsData, (viewData, cbk) => {
+                            this._mapView(viewData, viewItems[viewData.id], cbk);
+                        }, cb);
+                    }
                 });
-                async.map(viewsData, (viewData, cbk) => {
-                    this._compileView(viewData, viewItems[viewData.id], cbk);
-                }, cb);
+            }
+        ], callback);
+    }
+
+    findMany(userId, viewIds, callback) {
+        async.waterfall([
+            (cb) => { this._fetchViews(viewIds, cb); },
+            (views, cb) => {
+                if (views.length == viewIds.length) {
+                    cb(null, views);
+                } else {
+                    cb('Inactive views found: ' + viewIds + ', userId: ' + userId);
+                }
+            },
+            (views, cb) => {
+                if (_.every(views, 'creator', userId)) {
+                    cb(null, views);
+                } else {
+                    cb('Unauthorized views: ' + viewIds + ', userId: ' + userId);
+                }
+            },
+            (views, cb) => {
+                this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        const viewItems = _.groupBy(viewItemsData, (viewItem) => {
+                            return viewItem.viewId;
+                        });
+                        async.map(views, (view, cbk) => {
+                            this._mapView(viewData, viewItems[view.id], cbk);
+                        }, cb);
+                    }
+                });
             }
         ], callback);
     }
@@ -116,7 +177,7 @@ class ViewsModel extends SecureModelBase {
             sortOrder: viewItem.sortOrder,
             sortDirection: viewItem.sortDirection
         };
-        this._insertTable('view_item', dataToInsert, trx, (error, viewItemId) => {
+        this._insertIntoTable('view_item', dataToInsert, trx, (error, viewItemId) => {
             if (error) {
                 callback(error);
             } else {
@@ -138,7 +199,7 @@ class ViewsModel extends SecureModelBase {
             viewItemId: viewItemId,
             keywordId: keywordId
         };
-        this._insertTable('view_item_keyword', dataToInsert, trx, callback);
+        this._insertIntoTable('view_item_keyword', dataToInsert, trx, callback);
     }
 
     _fetch(userId, viewId, callback) {
@@ -155,20 +216,35 @@ class ViewsModel extends SecureModelBase {
     _fetchView(viewId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
-            .from(this.baseTable)
-            .innerJoin('view_text', 'view_text.view_id', this.baseTable + '.id')
+            .from(this.baseTableName)
+            .innerJoin('view_text', 'view_text.view_id', this.baseTableName + '.id')
             .where('id', viewId)
             .asCallback((error, viewData) => {
                 if (error) {
                     cb(error);
-                } else {
-                    if (viewData.length > 0) {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewData[0]));
-                    } else {
-                        cb(new Error('Item not found: ' + viewId));
-                    }
+                } else if (viewData.length > 0) {
+                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewData[0]));
+                }
+                else {
+                    cb(new Error('Item not found: ' + viewId));
                 }
             });
+        }, callback);
+    }
+
+    _fetchViews(viewIds, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .innerJoin('view_text', 'view_text.view_id', this.baseTableName + '.id')
+                .whereIn('id', viewIds)
+                .asCallback((error, viewsData) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData));
+                    }
+                });
         }, callback);
     }
 
@@ -176,8 +252,8 @@ class ViewsModel extends SecureModelBase {
         const query = 'SELECT * FROM ' +
             '(SELECT ROW_NUMBER() OVER (' +
             'PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC) AS RN, * ' +
-            'FROM ' + this.baseTable + ' ' +
-            'INNER JOIN view_text ON view_text.view_id = ' + this.baseTable + '.id ' +
+            'FROM ' + this.baseTableName + ' ' +
+            'INNER JOIN view_text ON view_text.view_id = ' + this.baseTableName + '.id ' +
             'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
         this.db.asCallback((knex, cb) => {
             knex.raw(query)
@@ -191,14 +267,14 @@ class ViewsModel extends SecureModelBase {
         }, callback);
     }
 
-    _compileView(view, viewItems, callback) {
+    _mapView(view, viewItems, callback) {
         let viewData = view;
         this._mapViewItems(viewItems, (error, viewItemsData) => {
             if (error) {
                 callback(error);
             } else {
                 viewData.viewListItems = viewItemsData;
-                callback(null, this._toJson(viewData));
+                callback(null, this._mapColumns(viewData));
             }
         });
     }

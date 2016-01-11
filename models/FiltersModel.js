@@ -30,13 +30,9 @@ class FiltersModel extends SecureModelBase {
                         id: this._generateId(),
                         creator: userId,
                         name: filter.name,
-                        // TODO: неверные тестовые данные!
-                        // rules: filter.rules,
+                        rules: filter.rules,
                         filterType: 'user'
                     };
-                    if (filter.originalFilterId) {
-                        dataToInsert.originalFilterId = filter.originalFilterId;
-                    }
                     this._insert(dataToInsert, trx, cb);
                 },
                 (filterId, cb) => {
@@ -45,7 +41,7 @@ class FiltersModel extends SecureModelBase {
                         languId: languId,
                         description: filter.description
                     };
-                    this._insertTable('filter_text', dataToInsert, trx, (error, result) => {
+                    this._insertIntoTable('filter_text', dataToInsert, trx, (error, result) => {
                         cb(error, filterId);
                     });
                 }
@@ -59,16 +55,38 @@ class FiltersModel extends SecureModelBase {
             if (error) {
                 callback(error);
             } else {
-                let newFilter = filter;
-                newFilter.originalFilterId = filterData.originalFilterId || filterData.id;
-                this.add(userId, filterData.languId, newFilter, callback);
+                this.db.transactionally((trx, cb) => {
+                    async.waterfall([
+                        (cb) => {
+                            const dataToInsert = {
+                                id: this._generateId(),
+                                creator: userId,
+                                name: filter.name,
+                                rules: filter.rules,
+                                filterType: filter.filterType,
+                                originalFilterId: filterData.originalfilterId || filterData.id
+                            };
+                            this._insert(dataToInsert, trx, cb);
+                        },
+                        (filterId, cb) => {
+                            const dataToInsert = {
+                                filterId: filterId,
+                                languId: filterData.languId,
+                                description: filter.description
+                            };
+                            this._insertIntoTable('filter_text', dataToInsert, trx, (error, result) => {
+                                cb(error, filterId);
+                            });
+                        }
+                    ], cb);
+                }, callback);
             }
         });
     }
 
     find(userId, filterId, callback) {
         this._fetch(userId, filterId, (error, filterData) => {
-            callback(error, this._toJson(filterData));
+            callback(error, this._mapColumns(filterData));
         });
     }
 
@@ -79,10 +97,35 @@ class FiltersModel extends SecureModelBase {
                 callback(error);
             } else {
                 async.map(filtersData, (filterData, cb) => {
-                    cb(null, this._toJson(filterData));
+                    cb(null, this._mapColumns(filterData));
                 }, callback);
             }
         });
+    }
+
+    findMany(userId, filterIds, callback) {
+        async.waterfall([
+            (cb) => { this._fetchFilters(filterIds, cb); },
+            (filtersData, cb) => {
+                if (filtersData.length == filterIds.length) {
+                    cb(null, filtersData);
+                } else {
+                    cb('Inactive filters found: ' + filterIds + ', userId: ' + userId);
+                }
+            },
+            (filtersData, cb) => {
+                if (_.every(filtersData, 'creator', userId)) {
+                    cb(null, filtersData);
+                } else {
+                    cb('Unauthorized filters: ' + filterIds + ', userId: ' + userId);
+                }
+            },
+            (filtersData, cb) => {
+                async.map(filtersData, (filterData, cb) => {
+                    cb(null, this._mapColumns(filterData));
+                }, cb);
+            }
+        ], callback);
     }
 
     _fetch(userId, filterId, callback) {
@@ -99,8 +142,8 @@ class FiltersModel extends SecureModelBase {
     _fetchFilter(filterId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
-                .from(this.baseTable)
-                .innerJoin('filter_text', 'filter_text.filter_id', this.baseTable + '.id')
+                .from(this.baseTableName)
+                .innerJoin('filter_text', 'filter_text.filter_id', this.baseTableName + '.id')
                 .where('id', filterId)
                 .asCallback((error, filterData) => {
                     if (error) {
@@ -116,12 +159,28 @@ class FiltersModel extends SecureModelBase {
         }, callback);
     }
 
+    _fetchFilters(filterIds, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .innerJoin('filter_text', 'filter_text.filter_id', this.baseTableName + '.id')
+                .whereIn('id', filterIds)
+                .asCallback((error, filtersData) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData));
+                    }
+                });
+        }, callback);
+    }
+
     _fetchUserFilters(userId, callback) {
         const query = 'SELECT * FROM ' +
             '(SELECT ROW_NUMBER() OVER (' +
             'PARTITION BY CASE WHEN original_filter_id isnull THEN id ELSE original_filter_id END ORDER BY timestamp DESC) AS RN, * ' +
-            'FROM ' + this.baseTable + ' ' +
-            'INNER JOIN filter_text ON filter_text.filter_id = ' + this.baseTable + '.id ' +
+            'FROM ' + this.baseTableName + ' ' +
+            'INNER JOIN filter_text ON filter_text.filter_id = ' + this.baseTableName + '.id ' +
             'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
         this.db.asCallback((knex, cb) => {
             knex.raw(query)

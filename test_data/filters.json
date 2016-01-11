@@ -3,7 +3,7 @@
     "id": "40ba673e-5f7f-459a-a4cd-37755727efa3",
     "name": "sit",
     "description": "officia",
-    "rules": "nisi sit pariatur",
+    "rules": {},
     "is_standard": true,
     "is_advanced": true,
     "is_disabled_4copy": true
@@ -12,7 +12,7 @@
     "id": "ac00b286-014f-4072-9781-57f84177b1f1",
     "name": "ad",
     "description": "amet",
-    "rules": "excepteur et do",
+    "rules": {},
     "is_standard": true,
     "is_advanced": true,
     "is_disabled_4copy": true
@@ -21,7 +21,7 @@
     "id": "c4ec9a95-1811-4b17-9d99-6a8fa8eb4bb4",
     "name": "proident",
     "description": "ex",
-    "rules": "occaecat voluptate ex",
+    "rules": {},
     "is_standard": true,
     "is_advanced": true,
     "is_disabled_4copy": true
@@ -30,7 +30,7 @@
     "id": "da92815b-3b00-4efe-8b17-3fb433b84422",
     "name": "adipisicing",
     "description": "enim",
-    "rules": "laboris et do",
+    "rules": {},
     "is_standard": true,
     "is_advanced": true,
     "is_disabled_4copy": true
@@ -39,7 +39,7 @@
     "id": "15d6c6fe-fb91-4cce-a026-f020f8c39ef4",
     "name": "adipisicing",
     "description": "aliquip",
-    "rules": "consequat quis commodo",
+    "rules": {},
     "is_standard": true,
     "is_advanced": true,
     "is_disabled_4copy": true

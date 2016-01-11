@@ -5,8 +5,6 @@ const _ = require('lodash');
 const Knex = require('knex');
 const KnexTransaction = require('./KnexTransaction');
 
-const Logger = require('../utils/Logger');
-
 const knexDataToSql = (data) => {
     let counter = 0;
     return data.sql.replace(/\?/g, function() {
@@ -16,15 +14,26 @@ const knexDataToSql = (data) => {
 };
 
 class KnexWrapper {
-    constructor(knexConfig, loggerSettings) {
-        this.knex = new Knex(knexConfig);
-        this.knex.debug = false;
+    constructor(config, logger) {
+        this.config = config;
+        this.logger = logger;
 
-        this.config = knexConfig;
-        this.logger = new Logger(loggerSettings);
+        const databaseSettings = config.database;
+        const knexConfig = {
+            client: 'pg',
+            connection: {
+                host: databaseSettings.host,
+                user: databaseSettings.user,
+                password: databaseSettings.password,
+                database: databaseSettings.databaseName
+            }
+        };
+
+        this.knexConfig = knexConfig;
+        this.knex = new Knex(this.knexConfig);
 
         this.knex.on('query', (data) => {
-            this.logger.info("EXECUTING ON " + this.config.connection.database + " : " + knexDataToSql(data));
+            this.logger.info("EXECUTING ON " + this.knexConfig.connection.database + " : " + knexDataToSql(data));
         });
     }
 

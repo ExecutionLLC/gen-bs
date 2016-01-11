@@ -33,7 +33,7 @@ class SamplesModel extends SecureModelBase {
                         fileName: sample.fileName,
                         hash: sample.hash,
                         isAnalised: sample.isAnalysed,
-                        sampleType: 'standart'
+                        sampleType: 'standard'
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
@@ -74,26 +74,66 @@ class SamplesModel extends SecureModelBase {
     }
 
     find(userId, sampleId, callback) {
-        let sample = {};
         async.waterfall([
             (cb) => { this._fetch(userId, sampleId, cb); },
-            (sampleData, cb) => {
-                sample = sampleData;
-                this._fetchFileSampleValues(sample.id, cb);
-            },
-            (fileSampleValues, cb) => {
-                sample.vcfFileSampleVersionId = fileSampleValues.vcfFileSampleVersionId;
-                sample.fieldId = fileSampleValues.fieldId;
-                sample.values = fileSampleValues.values;
-                cb(null, this._toJson(sample));
+            (sample, cb) => {
+                this._mapFileSampleValues(sample, cb);
             }
         ], callback);
     }
 
-    // TODO: посмотреть нужен ли подобный метод в services, скорректировать и сделать
-    //findAll(userId, callback) {
-    //
-    //}
+    findAll(userId, callback) {
+        async.waterfall([
+            (cb) => {
+                this._fetchSamplesByUserId(userId, cb);
+            },
+            (samples, cb) => {
+                async.map(samples, (sample, cbk) => {
+                    this._mapFileSampleValues(sample, cbk);
+                }, cb);
+            }
+        ], callback);
+    }
+
+    findMany(userId, sampleIds, callback) {
+        async.waterfall([
+            (cb) => {
+                this._fetchSamplesByIds(sampleIds, cb);
+            },
+            (samples, cb) => {
+                if (samples.length == samples.length) {
+                    cb(null, samples);
+                } else {
+                    cb('Inactive samples found: ' + sampleIds + ', userId: ' + userId);
+                }
+            },
+            (samples, cb) => {
+                if (_.every(samples, 'creator', userId)) {
+                    cb(null, samples);
+                } else {
+                    cb('Unauthorized samples: ' + sampleIds + ', userId: ' + userId);
+                }
+            },
+            (samples, cb) => {
+                async.map(samples, (sample, cbk) => {
+                    this._mapFileSampleValues(sample, cbk);
+                }, cb);
+            }
+        ], callback);
+    }
+
+    _mapFileSampleValues(sample, callback) {
+        this._fetchFileSampleValues(sample.id, (error, result) => {
+            if (error) {
+                callback(error);
+            } else {
+                sample.vcfFileSampleVersionId = result.vcfFileSampleVersionId;
+                sample.fieldId = result.fieldId;
+                sample.values = result.values;
+                callback(null, this._mapColumns(sample));
+            }
+        });
+    }
 
     _addNewFileSampleVersion(sampleId, fieldId, values, trx, callback) {
         async.waterfall([
@@ -102,7 +142,7 @@ class SamplesModel extends SecureModelBase {
                     id: this._generateId(),
                     vcfFileSampleId: sampleId
                 };
-                this._insertTable('vcf_file_sample_version', dataToInsert, trx, cb);
+                this._insertIntoTable('vcf_file_sample_version', dataToInsert, trx, cb);
             },
             (versionId, cb) => {
                 const dataToInsert = {
@@ -110,9 +150,39 @@ class SamplesModel extends SecureModelBase {
                     fieldId: fieldId,
                     values: values
                 };
-                this._insertTable('vcf_file_sample_values', dataToInsert, trx, cb);
+                this._insertIntoTable('vcf_file_sample_values', dataToInsert, trx, cb);
             }
         ], callback);
+    }
+
+    _fetchSamplesByUserId(userId, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .where('creator', userId)
+                .asCallback((error, samplesData) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(samplesData));
+                    }
+                });
+        }, callback);
+    }
+
+    _fetchSamplesByIds(sampleIds, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .whereIn('id', sampleIds)
+                .asCallback((error, samplesData) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(samplesData));
+                    }
+                });
+        }, callback);
     }
 
     _fetchFileSampleValues(sampleId, callback) {

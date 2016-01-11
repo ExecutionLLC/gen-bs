@@ -1,15 +1,15 @@
 'use strict';
 
-const ExtendedModelBase = require('./ExtendedModelBase');
+const RemovableModelBase = require('./RemovableModelBase');
 
-class SecureModelBase extends ExtendedModelBase {
-    constructor(models, baseTable, mappedColumns) {
-        super(models, baseTable, mappedColumns);
+class SecureModelBase extends RemovableModelBase {
+    constructor(models, baseTableName, mappedColumns) {
+        super(models, baseTableName, mappedColumns);
     }
 
     find(userId, id, callback) {
         this._fetch(userId, id, (error, data) => {
-            callback(error, this._toJson(data));
+            callback(error, this._mapColumns(data));
         });
     }
 

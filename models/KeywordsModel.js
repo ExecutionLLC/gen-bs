@@ -27,22 +27,48 @@ class KeywordsModel extends ModelBase {
     }
 
     find(keywordId, callback) {
-        let keyword = {};
-        this._fetch(keywordId, (error, keywordData) => {
-            if (error) {
-                callback(error);
-            } else {
-                keyword = keywordData;
+        async.waterfall([
+            (cb) => {
+                this._fetch(keywordId, cb);
+            },
+            (keyword, cb) => {
                 this.fetchKeywordSynonyms(keywordId, (error, synonyms) => {
                     if (error) {
-                        callback(error);
+                        cb(error);
                     } else {
                         keyword.synonyms = synonyms;
-                        callback(null, this._toJson(keyword));
+                        cb(null, this._mapColumns(keyword));
                     }
                 });
             }
-        });
+        ], callback);
+    }
+
+    findMany(keywordIds, callback) {
+        async.waterfall([
+            (cb) => {
+                this._fetchKeywords(keywordIds, cb);
+            },
+            (keywords, cb) => {
+                if (keywords.length == keywordIds.length) {
+                    cb(null, keywords);
+                } else {
+                    cb('Inactive keywords found: ' + keywordIds);
+                }
+            },
+            (keywords, cb) => {
+                async.map(keywords, (keyword, cbk) => {
+                    this.fetchKeywordSynonyms(keywordId, (error, synonyms) => {
+                        if (error) {
+                            cbk(error);
+                        } else {
+                            keyword.synonyms = synonyms;
+                            cbk(null, this._mapColumns(keyword));
+                        }
+                    });
+                }, cb);
+            }
+        ], callback);
     }
 
     fetchKeywordSynonyms(keywordId, callback) {
@@ -87,7 +113,22 @@ class KeywordsModel extends ModelBase {
                 languId: languId,
                 value: synonym.value
             };
-            this._insertTable('synonym_text', dataToInsert, trx, callback);
+            this._insertIntoTable('synonym_text', dataToInsert, trx, callback);
+        }, callback);
+    }
+
+    _fetchKeywords(keywordIds, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .whereIn('id', keywordIds)
+                .asCallback((error, keywordsData) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(keywordsData));
+                    }
+                });
         }, callback);
     }
 }

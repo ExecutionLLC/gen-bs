@@ -56,7 +56,7 @@ class FieldsMetadataModel extends ModelBase {
                         languId: languId,
                         description: metadata.description,
                     };
-                    this._insertTable('field_text', dataToInsert, trx, (error) => {
+                    this._insertIntoTable('field_text', dataToInsert, trx, (error) => {
                         cb(error, metadataId);
                     });
                 }
@@ -65,28 +65,76 @@ class FieldsMetadataModel extends ModelBase {
     }
 
     find(metadataId, callback) {
-        let metadata = {};
-        this._fetch(metadataId, (error, fieldMetadata) => {
+        async.waterfall([
+            (cb) => {
+                this._fetch(metadataId, cb);
+            },
+            (metadata, cb) => {
+                this._mapMetadata(metadata, cb);
+            }
+        ], callback);
+    }
+
+    findMany(userId, metadataIds, callback) {
+        async.waterfall([
+            (cb) => {
+                this._fetchByIds(metadataIds, cb);
+            },
+            (fieldsMetadata, cb) => {
+                async.map(fieldsMetadata, (metadata, cbk) => {
+                    this._mapMetadata(metadata, cbk);
+                }, cb);
+            }
+        ], callback);
+    }
+
+    findByUserAndSampleId(userId, sampleId, callback) {
+        async.waterfall([
+            (cb) => {
+                this._fetchMetadataBySampleId(sampleId, cb);
+            },
+            (metadata, cb) => {
+                if (metadata.creator == userId) {
+
+                } else {
+                    cb(new Error('Security check: user not found'));
+                }
+            }
+        ], callback);
+    }
+
+    _mapMetadata(metadata, callback) {
+        this._fetchMetadataKeywords(metadata.id, (error, keywords) => {
             if (error) {
-                callback(error);
+                cb(error);
             } else {
-                metadata = fieldMetadata;
-                this._fetchMetadataKeywords(metadataId, (error, keywords) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        metadata.keywords = keywords;
-                        callback(null, this._toJson(metadata));
-                    }
-                });
+                metadata.keywords = keywords;
+                callback(null, this._mapColumns(metadata));
             }
         });
     }
 
-    // TODO: посмотреть нужен ли подобный метод в services, скорректировать и сделать
-    //findByUserAndSampleId(userId, sampleId, callback) {
-    //
-    //}
+    _fetchMetadataBySampleId(sampleId, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from('vcf_file_sample')
+                .innerJoin('vcf_file_sample_values', 'vcf_file_sample_values.vcf_file_sample_version_id', 'vcf_file_sample_version.id')
+                .innerJoin('field_metadata', 'field_metadata.id', 'vcf_file_sample_values.field_id')
+                .innerJoin('field_text', 'field_text.field_id', 'field_metadata.id')
+                .orderBy('vcf_file_sample_version.timestamp', 'desc')
+                .where('vcf_file_sample_id', sampleId)
+                .limit(1)
+                .asCallback((error, metadata) => {
+                    if (error) {
+                        cb(error);
+                    } else if (data.length > 0) {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
+                    } else {
+                        cb(new Error('Item not found: ' + sampleId));
+                    }
+                });
+        }, callback);
+    }
 
     _fetchMetadataKeywords(metadataId, callback) {
         this.db.asCallback((knex, cb) => {
@@ -125,20 +173,34 @@ class FieldsMetadataModel extends ModelBase {
     _fetch(metadataId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
-                .from(this.baseTable)
+                .from(this.baseTableName)
                 .innerJoin('field_text', 'field_text.field_id', this.baseTable + '.id')
                 .where('id', metadataId)
                 .asCallback((error, data) => {
                 if (error) {
                     cb(error);
+                } else if (data.length > 0) {
+                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
                 } else {
-                    if (data.length > 0) {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
-                    } else {
-                        cb(new Error('Item not found: ' + id));
-                    }
+                    cb(new Error('Item not found: ' + id));
                 }
             });
+        }, callback);
+    }
+
+    _fetchByIds(metadataIds, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .innerJoin('field_text', 'field_text.field_id', this.baseTable + '.id')
+                .whereIn('id', metadataIds)
+                .asCallback((error, fieldsMetadata) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                    }
+                });
         }, callback);
     }
 }

@@ -4,7 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
-const ExtendedModelBase = require('./ExtendedModelBase');
+const RemovableModelBase = require('./RemovableModelBase');
 
 const mappedColumns = [
     'id',
@@ -18,7 +18,7 @@ const mappedColumns = [
     'speciality'
 ];
 
-class UserModel extends ExtendedModelBase {
+class UserModel extends RemovableModelBase {
     constructor(models) {
         super(models, 'user', mappedColumns);
     }
@@ -43,7 +43,7 @@ class UserModel extends ExtendedModelBase {
                         lastName: user.lastName,
                         speciality: user.speciality
                     };
-                    this._insertTable('user_text', dataToInsert, trx, (error) => {
+                    this._insertIntoTable('user_text', dataToInsert, trx, (error) => {
                         cb(error, userId);
                     });
                 }
@@ -58,7 +58,6 @@ class UserModel extends ExtendedModelBase {
                     const dataToUpdate = {
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
-                        isDeleted: user.isDeleted,
                         defaultLanguId: languId
                     };
                     this._update(userId, dataToUpdate, trx, cb);
@@ -90,8 +89,8 @@ class UserModel extends ExtendedModelBase {
     _fetch(userId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
-            .from(this.baseTable)
-            .innerJoin('user_text', 'user_text.user_id', this.baseTable + '.id')
+            .from(this.baseTableName)
+            .innerJoin('user_text', 'user_text.user_id', this.baseTableName + '.id')
             .where('id', userId)
             .asCallback((error, data) => {
                 if (error) {

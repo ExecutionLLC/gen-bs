@@ -2,14 +2,14 @@
 
 const ModelBase = require('./ModelBase');
 
-class ExtendedModelBase extends ModelBase {
-    constructor(models, baseTable, mappedColumns) {
-        super(models, baseTable, mappedColumns);
+class RemovableModelBase extends ModelBase {
+    constructor(models, baseTableName, mappedColumns) {
+        super(models, baseTableName, mappedColumns);
     }
 
     remove(id, callback) {
         this.db.asCallback((knex, cb) => {
-            knex(this.baseTable)
+            knex(this.baseTableName)
                 .where('id', id)
                 .update({
                     is_deleted: true
@@ -19,4 +19,4 @@ class ExtendedModelBase extends ModelBase {
     }
 }
 
-module.exports = ExtendedModelBase;
+module.exports = RemovableModelBase;

@@ -1,6 +1,6 @@
 'use strict';
 
-const Logger = require('./utils/Logger');
+const KnexWrapper = require('../utils/KnexWrapper');
 
 const LanguModel = require('./LanguModel');
 const UserModel = require('./UserModel');
@@ -11,8 +11,12 @@ const SamplesModel = require('./SamplesModel');
 const FieldsMetadataModel = require('./FieldsMetadataModel');
 
 class ModelsFacade {
-    constructor(config) {
-        this.logger = new Logger(config.logger);
+    constructor(config, logger) {
+        this.config = config;
+        this.logger = logger;
+
+        // KnexWrapper instance should only be created once for ModelsFacade
+        this.db = new KnexWrapper(config, this.logger);
 
         this.langu = new LanguModel(this);
         this.user = new UserModel(this);
