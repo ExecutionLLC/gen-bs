@@ -13,6 +13,10 @@ class WebSocketClient {
     this.wsClient.on('close', this._onWsError.bind(this));
   }
 
+  send(data) {
+    this.wsClient.send(JSON.stringify(data));
+  }
+
   _onWsMessage(message, flags) {
     console.log('WS Message: ' + JSON.stringify(message, null, 2));
     console.log('WS Message Flags: ' + JSON.stringify(flags, null, 2));

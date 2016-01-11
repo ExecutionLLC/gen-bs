@@ -11,6 +11,8 @@ const DEFAULT_SESSION_ID = 'asdasd';
 const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+
 const Operations = require('./Operations');
 const Urls = require('./Urls');
 const WebSocketClient = require('./WebSocketClient');
@@ -76,6 +78,12 @@ operations.add('Open session', (callback) => {
           password: userDescriptor.password
         }
       }, (error, response, body) => {
+        const bodyObject = ChangeCaseUtil.convertKeysToCamelCase(body);
+        const sessionId = bodyObject.sessionId;
+        // Associate session with the opened socket.
+        wsClient.send({
+          sessionId
+        });
         callback(error, body);
       });
     }
