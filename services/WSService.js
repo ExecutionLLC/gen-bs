@@ -28,7 +28,7 @@ class WSService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    _onSearchReply(reply, callback) {
+    _onSearchReply(reply) {
         const sessionStatuses = this.services.applicationServerReply.sessionStatuses();
         if (reply.status !== sessionStatuses.READY) {
             this.eventEmitter.emit(EVENTS.operationProgress, reply);
