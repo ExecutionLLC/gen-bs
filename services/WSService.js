@@ -30,12 +30,13 @@ class WSService extends ServiceBase {
 
     _onSearchReply(reply) {
         const sessionStatuses = this.services.applicationServerReply.sessionStatuses();
-        if (reply.status !== sessionStatuses.READY) {
+        const result = reply.result;
+        if (result.status !== sessionStatuses.READY) {
             this.eventEmitter.emit(EVENTS.operationProgress, reply);
         } else {
-            const redisDb = reply.redisDb;
+            const redisDb = result.redisDb;
             this.services.redis.fetch(redisDb.host, redisDb.port, redisDb.databaseNumber,
-                redisDb.dataIndex, reply.offset, reply.total, (error, data) => {
+                redisDb.dataIndex, result.offset, result.total, (error, data) => {
                     // Send data to client
                     this.eventEmitter.emit(EVENTS.searchResults, data);
                 });

@@ -111,7 +111,7 @@ class OperationsService extends ServiceBase {
                 const sessionOperations = this.operations[sessionId];
                 delete sessionOperations[operation.id];
                 if (operation.type === OPERATION_TYPES.SEARCH) {
-                    this._closeSearchSession(operation, callback);
+                    this.services.applicationServer.requestCloseSearchSession(operation.sessionId, operation.id, callback);
                 } else {
                     callback(null, operation);
                 }
@@ -137,10 +137,6 @@ class OperationsService extends ServiceBase {
 
     _onOperationNotFound(callback) {
         callback(new Error('Operation is not found'));
-    }
-
-    _closeSearchSession(searchOperation, callback) {
-        this.services.applicationServer.requestCloseSearchSession(searchOperation.sessionId, searchOperation.id, callback);
     }
 }
 
