@@ -1,7 +1,9 @@
+import { changeView } from './views'
+import { fetchFields } from './fields'
+
 /*
  * action types
  */
-
 export const RECEIVE_USERDATA = 'RECEIVE_USERDATA'
 export const REQUEST_USERDATA = 'REQUEST_USERDATA'
 
@@ -9,16 +11,12 @@ export const REQUEST_USERDATA = 'REQUEST_USERDATA'
 /*
  * Other constants
  */
-
 const USERDATA_URL = 'http://localhost:5000/api/data'
-
 
 
 /*
  * action creators
  */
-
-
 function requestUserdata() {
   return {
     type: REQUEST_USERDATA
@@ -40,9 +38,13 @@ export function fetchUserdata() {
     dispatch(requestUserdata())
 
     return $.get(USERDATA_URL)
-      .then(json =>
+      .then(json => {
+        const sampleId = json.samples[0].id || null
+        const view = json.views[0] || null
         dispatch(receiveUserdata(json))
-      )
+        dispatch(changeView(view))
+        dispatch(fetchFields(sampleId))
+      })
 
       // TODO:
       // catch any error in the network call.

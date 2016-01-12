@@ -19,12 +19,13 @@ class VariantsTableReact extends Component {
   }
 
   render() {
+    const { variants, views, fields } = this.props
     return (
 
         <div className="table-variants-wrapper">
           <div className="table-variants-container">
             <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
-              <VariantsTableHead variants={this.props.variants}/>
+              <VariantsTableHead variants={variants} view={views.current} fields={fields.list} />
               <VariantsTableRows variants={this.props.variants}/>
             </table> 
           </div>

@@ -4,13 +4,27 @@ import  { firstCharToUpperCase } from '../../utils/stringUtils'
 export default class VariantsTableHead extends Component {
 
   render() {
+    const { variants, view, fields } = this.props
+    console.log('props in thead', this.props)
     let variantsColumns = null;
     let head = [];
 
-    if (!this.props.variants) {
+    const viewedFields = _.filter(fields, (field) => view.view_list_items.reduce(
+      (prev, cur) => prev || (cur.field_id  === field.id) , false ))
+
+
+    const filterFunc = (label) => {
+      return (
+        (label !== 'comment') && 
+          viewedFields.reduce( (prev,cur) => (prev || cur.name === label), false )
+      )
+    }
+
+
+    if (!variants || !view) {
       head = null;
     } else {
-      variantsColumns = Object.keys(this.props.variants[0]);
+      variantsColumns = Object.keys(variants[0]);
       head.push(<th data-label="checkbox" key="row_checkbox"></th>);
 
       head.push(
@@ -21,7 +35,7 @@ export default class VariantsTableHead extends Component {
             <div><input type="text" className="form-control" /></div>
           </th>
       )
-      variantsColumns.filter( (label) => label !== 'comment' ).map( (label) => {
+      variantsColumns.filter( filterFunc ).map( (label) => {
           head.push(
               <th data-label={label} key={label} > 
                 <div><span className="variants-table-header-label">

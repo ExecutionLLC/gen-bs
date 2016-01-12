@@ -22,43 +22,43 @@ class App extends Component {
 
   render() {
     const { samples, isFetching } = this.props.userData
+
     return (
 
       <div className="main" id="main">
         <nav className="navbar navbar-inverse navbar-static-top"></nav>
-          <div className="main-frame">
+        {isFetching && samples.length === 0 &&
+          <h2>Loading...</h2>
+        }
+        {!isFetching && samples.length === 0 &&
+          <h2>Empty.</h2>
+        }
+        {samples.length > 0 &&
+            <div className="main-frame">
 
-              <div className="main-width-wrapper">
-                  <div className="container-fluid" id="maintable">
-                      <NavbarMain />
-                      <div className="collapse collapse-subnav" id="subnav">
-                        {isFetching && samples.length === 0 &&
-                          <h2>Loading...</h2>
-                        }
-                        {!isFetching && samples.length === 0 &&
-                          <h2>Empty.</h2>
-                        }
-                        {samples.length > 0 &&
-                          <NavbarCreateQuery
-                            {...this.props}
-                            openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
-                            userData={ this.props.userData  }
-                          />
-                        }
-                      </div>    
-                      <VariantsTableReact {...this.props} />
-                  </div>
+                <div className="main-width-wrapper">
+                    <div className="container-fluid" id="maintable">
+                        <NavbarMain />
+                        <div className="collapse collapse-subnav" id="subnav">
+                            <NavbarCreateQuery
+                              {...this.props}
+                              openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
+                            />
+                        </div>    
+                        <VariantsTableReact {...this.props} />
+                    </div>
 
-                  <div id="fav-message" className="hidden">
-                      You can export these items to file
-                  </div>
-              </div>
+                    <div id="fav-message" className="hidden">
+                        You can export these items to file
+                    </div>
+                </div>
 
-          </div>
-          <ViewsModal 
-            showModal={this.props.modalWindows.views.showModal}
-            closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
-          />
+            </div>
+        }
+        <ViewsModal 
+          showModal={this.props.modalWindows.views.showModal}
+          closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+        />
       </div>
 
     )
@@ -66,11 +66,13 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const { userData, modalWindows } = state
+  const { userData, modalWindows, views, fields } = state
 
   return {
     userData,
-    modalWindows
+    modalWindows,
+    views,
+    fields
   }
 }
 

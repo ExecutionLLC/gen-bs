@@ -3,9 +3,6 @@ import jsonUrl from '../../json/variants777.json';
 /*
  * action types
  */
-
-export const INITIALIZE_TABLE = 'INITIALIZE_TABLE'
-
 export const SET_COLUMN_FILTER = 'SET_COLUMN_FILTER'
 export const FILTER_VARIANTS = 'FILTER_VARIANTS'
 export const SORT_VARIANTS = 'SORT_VARIANTS'
@@ -20,7 +17,6 @@ export const REQUEST_VARIANTS = 'REQUEST_VARIANTS'
 /*
  * action creators
  */
-
 export function filterVariants(variants, columnKey, filterValue) {
   return {
     type: FILTER_VARIANTS,
@@ -84,10 +80,4 @@ export function selectTableRow(rowId) {
   }
 }
 
-export function initializeTable(table) {
-  return {
-    type: INITIALIZE_TABLE,
-    table
-  }
-}
 
