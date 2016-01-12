@@ -20,6 +20,7 @@ const WebSocketClient = require('./WebSocketClient');
 const urls = new Urls(HOST, PORT);
 const wsClient = new WebSocketClient(HOST, PORT);
 const operations = new Operations();
+let lastSessionId = 'asdasd';
 
 function stringify(obj) {
   return JSON.stringify(obj, null, 2);
@@ -47,6 +48,10 @@ function read(prompt, defaultValue, callback) {
     prompt: prompt,
     default: defaultValue
   }, callback);
+}
+
+function askSession(callback) {
+  read('Session Id: ', lastSessionId, callback);
 }
 
 operations.add('Open session', (callback) => {
@@ -80,10 +85,11 @@ operations.add('Open session', (callback) => {
       }, (error, response, body) => {
         const bodyObject = ChangeCaseUtil.convertKeysToCamelCase(body);
         const sessionId = bodyObject.sessionId;
-        // Associate session with the opened socket.
+        console.log('Associate session with the opened socket');
         wsClient.send({
           sessionId
         });
+        lastSessionId = sessionId;
         callback(error, body);
       });
     }
@@ -102,7 +108,7 @@ operations.add('Start search', (callback) => {
       });
     },
     (searchData, callback) => {
-      read('Session Id: ', DEFAULT_SESSION_ID, (error, result) => {
+      askSession((error, result) => {
         searchData.sessionId = result;
         callback(error, searchData);
       });
@@ -143,7 +149,7 @@ operations.add('Get data', (callback) => {
 operations.add('Check session', (callback) => {
   waterfall([
     (callback) => {
-      read('Session Id: ', DEFAULT_SESSION_ID, (error, result) => {
+      askSession((error, result) => {
         callback(error, result);
       });
     },
@@ -161,9 +167,9 @@ operations.add('Check session', (callback) => {
 operations.add('Close session', (callback) => {
   waterfall([
     (callback) => {
-      read('Session Id: ', DEFAULT_SESSION_ID, (error, result) => {
+      askSession((error, result) => {
         callback(error, result);
-      })
+      });
     },
     (sessionId, callback) => {
       const headers = createHeaders(sessionId);
