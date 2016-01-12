@@ -18,7 +18,6 @@ class SearchService extends ServiceBase {
                 // TODO: Add filters here.
                 this._createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback);
             },
-            // TODO: Complete existing search operation here (now it is done inside AS Service.
             (appServerRequestParams, callback) => {
                 this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
                     appServerRequestParams, callback);

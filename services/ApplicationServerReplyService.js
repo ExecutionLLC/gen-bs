@@ -63,12 +63,53 @@ class ApplicationServerReplyService extends ServiceBase {
         }
     }
 
-    _createOpenSearchResultSync(operation, rpcMessage) {
-        const sessionState = rpcMessage.result.sessionState;
-        if (!sessionState) {
-            console.warn('Cannot get session state from result. Ignore request.');
+    _createOperationResult(operation, rpcError, rpcMessage, callback) {
+        const event = operation.method;
+        const events = this.registeredEvents();
+
+        let result = null;
+
+        if (rpcError) {
+            callback(null, {
+                operation,
+                error: rpcError,
+                result: rpcMessage
+            });
             return;
         }
+
+        switch (event) {
+            case events.openSearchSession:
+                result = this._createOpenSearchResultSync(operation, rpcMessage, rpcError);
+                break;
+
+            default:
+                console.error('Unexpected result came from the application server, send as is.');
+                result = rpcMessage.result;
+                break;
+        }
+
+        const operationResult = {
+            operation,
+            result
+        };
+
+        callback(null, operationResult);
+    }
+
+    _createOpenSearchResultSync(operation, message, error) {
+        if (error) {
+            return {
+                error,
+                message
+            };
+        }
+
+        if (!message || !message.result || !message.result.sessionState) {
+            console.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            return;
+        }
+        const sessionState = message.result.sessionState;
         // If not ready, just send the progress up
         if (sessionState.status !== SESSION_STATUS.READY) {
             return {
@@ -89,35 +130,9 @@ class ApplicationServerReplyService extends ServiceBase {
                     databaseNumber: sessionState.redisDb.number
                 },
                 offset: conditions.offset,
-                total: conditions.total
+                limit: conditions.limit
             };
         }
-    }
-
-    _createOperationResult(operation, rpcError, rpcMessage, callback) {
-        const event = operation.method;
-        const events = this.registeredEvents();
-
-        let result = null;
-
-        switch (event) {
-            case events.openSearchSession:
-                result = this._createOpenSearchResultSync(operation, rpcMessage);
-                break;
-
-            default:
-                console.error('Unexpected result came from the application server, send as is.');
-                result = rpcMessage.result;
-                break;
-        }
-
-        const operationResult = {
-            operation,
-            error: rpcError,
-            result
-        };
-
-        callback(null, operationResult);
     }
 
     _findMessageOperation(rpcMessage, callback) {

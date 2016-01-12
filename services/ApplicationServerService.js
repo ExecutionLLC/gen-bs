@@ -92,12 +92,12 @@ class ApplicationServerService extends ServiceBase {
     }
 
     requestCloseSearchSession(sessionId, operationId, callback) {
-        this.services.operations.remove(sessionId, operationId, (error) => {
+        this.services.operations.find(sessionId, operationId, (error, operation) => {
             if (error) {
                 callback(error);
             } else {
                 const method = METHODS.closeSearchSession;
-                this._rpcSend(operationId, method, null, callback);
+                this._rpcSend(operation.id, method, null, callback);
             }
         });
     }
@@ -190,7 +190,7 @@ class ApplicationServerService extends ServiceBase {
                 } else {
                     // Expect the only search operation here.
                     const searchOperation = operations[0];
-                    this.requestCloseSearchSession(searchOperation.id, callback);
+                    this.services.operations.remove(sessionId, searchOperation.id, callback);
                 }
             }
         });
