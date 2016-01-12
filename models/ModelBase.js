@@ -75,24 +75,20 @@ class ModelBase {
     }
 
     _insertIntoTable(tableName, dataToInsert, trx, callback) {
-        trx.asCallback((knex, cb) => {
-            knex(tableName)
-                .insert(ChangeCaseUtil.convertKeysToSnakeCase(dataToInsert))
-                .asCallback(cb);
-        }, (error) => {
-            callback(error, dataToInsert.id);
-        });
+        trx(tableName)
+            .insert(ChangeCaseUtil.convertKeysToSnakeCase(dataToInsert))
+            .asCallback((error) => {
+                callback(error, dataToInsert.id);
+            });
     };
 
     _update(id, dataToUpdate, trx, callback) {
-        trx.asCallback((knex, cb) => {
-            knex(this.baseTableName)
-                .where('id', id)
-                .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
-                .asCallback(cb);
-        }, (error) => {
-            callback(error, id);
-        });
+        trx(this.baseTableName)
+            .where('id', id)
+            .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
+            .asCallback((error) => {
+                callback(error, id);
+            });
     }
 }
 

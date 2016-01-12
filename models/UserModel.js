@@ -76,14 +76,12 @@ class UserModel extends RemovableModelBase {
     }
 
     _updateUserText(userId, dataToUpdate, trx, callback) {
-        trx.asCallback((knex, cb) => {
-            knex('user_text')
-                .where('user_id', userId)
-                .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
-                .asCallback((error) => {
-                    cb(error, userId);
-                });
-        }, callback);
+        trx('user_text')
+            .where('user_id', userId)
+            .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
+            .asCallback((error) => {
+                callback(error, userId);
+            });
     }
 
     _fetch(userId, callback) {

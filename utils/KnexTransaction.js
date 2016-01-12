@@ -1,75 +1,35 @@
 'use strict';
 
-const _ = require('lodash');
-const async = require('async');
-
-const EventEmitter = require('events').EventEmitter;
-
 class KnexTransaction {
-    constructor(knex, completeHandler) {
+    constructor(knex, logger) {
         this.knex = knex;
+        this.logger = logger;
         this.transaction = null;
-        this.openingTransaction = false;
-        this.completeCount = 0;
-        this.openCount = 0;
-        this.trxError = null;
-        this.completeHandler = completeHandler;
-        this.eventEmitter = new EventEmitter();
     };
 
-    completedTransactions(error) {
-        this.completeCount++;
-        if (error) {
-            this.trxError = this.trxError || {error: error};
-        }
-        if (this.completeCount == this.openCount) {
-            this.complete();
-        }
-    };
-
-    openTransaction() {
-        this.openingTransaction = true;
+    openTransaction(callback) {
         this.knex.transaction((trx) => {
             this.transaction = trx;
-            this.openCount++;
-            this.eventEmitter.emit('open', trx);
-        }).asCallback((error) => {
-            this.completedTransactions(error);
+            callback(null, trx);
         });
-    };
+    }
 
-    ensureTransaction(callback) {
-        if (this.transaction) {
-            return callback(this.transaction);
+    complete(error, data, callback) {
+        if (error) {
+            this.logger.warn("ROLLING BACK TRANSACTION: " + error);
+            this.transaction
+                .rollback()
+                .asCallback(error => {
+                    callback(error);
+                });
+        } else {
+            this.logger.info("COMMITING TRANSACTION");
+            this.transaction
+                .commit()
+                .asCallback((error) => {
+                    callback(error, data);
+                });
         }
-        if (!this.openingTransaction) {
-            this.openTransaction();
-        }
-        this.eventEmitter.on('open', (trx) => {
-            callback(trx);
-        });
-    };
-
-    commit() {
-        this.transaction.commit();
-    };
-
-    complete() {
-        this.eventEmitter.removeAllListeners();
-        this.completeHandler(this.trxError);
-    };
-
-    rollback(error) {
-        this.trxError = this.trxError || error || "Explicit rollback";
-        this.transaction.rollback();
-    };
-
-    asCallback(query, callback) {
-        this.ensureTransaction((trx) => {
-            query(trx, (error, result) => {
-                callback(error, result);
-            });
-        });
     }
 }
 

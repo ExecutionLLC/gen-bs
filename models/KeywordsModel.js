@@ -92,6 +92,7 @@ class KeywordsModel extends ModelBase {
                 (cb) => {
                     const dataToInsert = {
                         id: (withIds ? keyword.id : this._generateId()),
+                        // fieldId: keyword.fieldId,
                         value: keyword.value
                     };
                     this._insert(dataToInsert, trx, cb);

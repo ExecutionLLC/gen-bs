@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
 
 const Knex = require('knex');
 const KnexTransaction = require('./KnexTransaction');
@@ -41,27 +42,36 @@ class KnexWrapper {
         query(this.knex, callback);
     }
 
-    transaction(trxCallback, resultCallback) {
-        let trx = new KnexTransaction(this.knex, resultCallback);
-        trxCallback(trx);
-    }
-
-    transactionally(trxCallback, resultCallback) {
-        let result;
-        this.transaction((trx) => {
-            trxCallback(trx, (error, res) => {
-                if (error) {
-                    this.logger.warn("ROLLING BACK TRANSACTION: " + error);
-                    trx.rollback(error);
-                } else {
-                    this.logger.info("COMMITING TRANSACTION");
-                    result = res;
-                    trx.commit();
-                }
-            });
-        }, (error) => {
-            resultCallback(error, result);
-        });
+    transactionally(query, callback) {
+        async.waterfall([
+            (cb) => {
+                // 1. Create transaction
+                // 2. Open transaction
+                let trx = new KnexTransaction(this.knex, this.logger);
+                trx.openTransaction((error, knex) => {
+                    cb(error, {
+                        trx,
+                        knex
+                    });
+                });
+            },
+            (result, cb) => {
+                const trx = result.trx;
+                // 3. Execute query with the transaction
+                query(result.knex, (error, data) => {
+                    cb(null, {
+                        trx,
+                        error,
+                        data
+                    });
+                });
+            },
+            (result, cb) => {
+                // 4. Complete transaction
+                let trx = result.trx;
+                trx.complete(result.error, result.data, cb);
+            }
+        ], callback);
     }
 }
 
