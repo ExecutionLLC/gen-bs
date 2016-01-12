@@ -11,7 +11,7 @@ const mappedColumns = [
     'file_name',
     'hash',
     'sample_type',
-    'is_analysed',
+    'is_analyzed',
     'is_deleted',
     'vcf_file_sample_version_id',
     'field_id',
@@ -57,7 +57,7 @@ class SamplesModel extends SecureModelBase {
                             const dataToUpdate = {
                                 fileName: sample.fileName,
                                 hash: sample.hash,
-                                isAnalised: sample.isAnalysed,
+                                isAnalized: sample.isAnalyzed,
                                 sampleType: sample.sampleType
                             };
                             this._update(sampleId, dataToUpdate, trx, cb);
