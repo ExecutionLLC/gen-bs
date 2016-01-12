@@ -42,7 +42,7 @@ export function fetchUserdata() {
         const sampleId = json.samples[0].id || null
         const view = json.views[0] || null
         dispatch(receiveUserdata(json))
-        dispatch(changeView(view))
+        dispatch(changeView(json.views, view.id))
         dispatch(fetchFields(sampleId))
       })
 

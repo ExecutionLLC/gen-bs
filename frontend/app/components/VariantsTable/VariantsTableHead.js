@@ -5,7 +5,6 @@ export default class VariantsTableHead extends Component {
 
   render() {
     const { variants, view, fields } = this.props
-    console.log('props in thead', this.props)
     let variantsColumns = null;
     let head = [];
 

@@ -19,11 +19,13 @@ export default class Views extends Component {
       <div className="btn-group btn-group-select100" data-localize="views.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available views">
 
         <Select2
-         multiple={false}
-         data={views.map( v => v.name )}
-         options={{
-           placeholder: 'Default View',
-         }} />
+          multiple={false}
+          data={views.map( v => { return {id: v.id, text: v.name} } )}
+          options={{
+            placeholder: 'Default View',
+          }} 
+          onSelect={(e) => { this.props.viewSelected(e) } }
+       />
 
       </div>
        </div>

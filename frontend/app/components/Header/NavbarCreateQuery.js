@@ -10,10 +10,14 @@ import Views from './NavbarCreateQuery/Views'
 import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 
+import { changeView } from '../../actions/views'
+
 
 class NavbarCreateQuery extends Component {
 
+
   render() {
+    console.log('props onSelect', this.props);
     return (
 
         <nav className="navbar navbar-fixed-top navbar-default">
@@ -25,7 +29,10 @@ class NavbarCreateQuery extends Component {
                   <Filters />
 
                   <ViewsSetup {...this.props} />
-                  <Views {...this.props} />
+                  <Views
+                    {...this.props}
+                    viewSelected={ (e) => this.props.dispatch(changeView(this.props.views.list, $(e.target).val()))}
+                  />
 
                   <Analyze />
                   <LoadHistory />
@@ -38,10 +45,11 @@ class NavbarCreateQuery extends Component {
 }
 
 function mapStateToProps(state) {
-  const { modalWindows } = state
+  const { modalWindows, views } = state
 
   return {
-    modalWindows
+    modalWindows,
+    views
   }
 }
 

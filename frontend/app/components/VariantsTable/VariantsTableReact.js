@@ -26,7 +26,7 @@ class VariantsTableReact extends Component {
           <div className="table-variants-container">
             <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
               <VariantsTableHead variants={variants} view={views.current} fields={fields.list} />
-              <VariantsTableRows variants={this.props.variants}/>
+              <VariantsTableRows variants={this.props.variants} view={views.current} fields={fields.list} />
             </table> 
           </div>
         </div>
