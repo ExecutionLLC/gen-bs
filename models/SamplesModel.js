@@ -32,7 +32,7 @@ class SamplesModel extends SecureModelBase {
                         creator: userId,
                         fileName: sample.fileName,
                         hash: sample.hash,
-                        isAnalised: sample.isAnalysed,
+                        isAnalized: sample.isAnalyzed,
                         sampleType: 'standard'
                     };
                     this._insert(dataToInsert, trx, cb);
