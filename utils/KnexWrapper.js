@@ -30,7 +30,7 @@ class KnexWrapper {
         };
 
         this.knexConfig = knexConfig;
-        this.knex = new Knex(this.knexConfig);
+        this.knex = new Knex(knexConfig);
 
         this.knex.on('query', (data) => {
             this.logger.info("EXECUTING ON " + this.knexConfig.connection.database + " : " + knexDataToSql(data));

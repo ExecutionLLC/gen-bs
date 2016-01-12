@@ -113,7 +113,7 @@ class KeywordsModel extends ModelBase {
                 languId: languId,
                 value: synonym.value
             };
-            this._insertIntoTable('synonym_text', dataToInsert, trx, callback);
+            this._insertIntoTable('synonym_text', dataToInsert, trx, cb);
         }, callback);
     }
 

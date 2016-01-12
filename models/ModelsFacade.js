@@ -16,7 +16,7 @@ class ModelsFacade {
         this.logger = logger;
 
         // KnexWrapper instance should only be created once for ModelsFacade
-        this.db = new KnexWrapper(config, this.logger);
+        this.db = new KnexWrapper(config, logger);
 
         this.langu = new LanguModel(this);
         this.user = new UserModel(this);

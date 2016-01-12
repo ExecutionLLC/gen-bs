@@ -40,12 +40,12 @@ class ViewsModel extends SecureModelBase {
                         languId: languId,
                         description: view.description
                     };
-                    this._insertIntoTable('view_text', dataToInsert, trx, (error, result) => {
+                    this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
                         cb(error, viewId);
                     });
                 },
                 (viewId, cb) => {
-                    this._addViewItems(viewId, view.viewListItems, trx, (error, result) => {
+                    this._addViewItems(viewId, view.viewListItems, trx, (error) => {
                         cb(error, viewId);
                     });
                 }
@@ -77,12 +77,12 @@ class ViewsModel extends SecureModelBase {
                                 languId: viewData.languId,
                                 description: view.description
                             };
-                            this._insertIntoTable('view_text', dataToInsert, trx, (error, result) => {
+                            this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
                                 cb(error, viewId);
                             });
                         },
                         (viewId, cb) => {
-                            this._addViewItems(viewId, view.viewListItems, trx, (error, result) => {
+                            this._addViewItems(viewId, view.viewListItems, trx, (error) => {
                                 cb(error, viewId);
                             });
                         }
@@ -181,7 +181,7 @@ class ViewsModel extends SecureModelBase {
             if (error) {
                 callback(error);
             } else {
-                this._addKeywords(viewItemId, viewItem.keywords, trx, (error, result) => {
+                this._addKeywords(viewItemId, viewItem.keywords, trx, (error) => {
                     callback(error, viewItemId);
                 });
             }

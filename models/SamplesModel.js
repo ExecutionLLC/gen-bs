@@ -47,7 +47,7 @@ class SamplesModel extends SecureModelBase {
     }
 
     update(userId, sampleId, sample, callback) {
-        this._fetch(userId, sampleId, (error, sampleData) => {
+        this._fetch(userId, sampleId, (error) => {
             if (error) {
                 callback(error);
             } else {
@@ -63,7 +63,7 @@ class SamplesModel extends SecureModelBase {
                             this._update(sampleId, dataToUpdate, trx, cb);
                         },
                         (id, cb) => {
-                            this._addNewFileSampleVersion(sampleId, sample.fieldId, sample.values, trx, (error, result) => {
+                            this._addNewFileSampleVersion(sampleId, sample.fieldId, sample.values, trx, (error) => {
                                 cb(error, sampleId);
                             });
                         }

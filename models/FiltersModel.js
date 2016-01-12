@@ -74,7 +74,7 @@ class FiltersModel extends SecureModelBase {
                                 languId: filterData.languId,
                                 description: filter.description
                             };
-                            this._insertIntoTable('filter_text', dataToInsert, trx, (error, result) => {
+                            this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
                                 cb(error, filterId);
                             });
                         }

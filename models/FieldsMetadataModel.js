@@ -75,7 +75,7 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
-    findMany(userId, metadataIds, callback) {
+    findMany(metadataIds, callback) {
         async.waterfall([
             (cb) => {
                 this._fetchByIds(metadataIds, cb);
@@ -95,10 +95,13 @@ class FieldsMetadataModel extends ModelBase {
             },
             (metadata, cb) => {
                 if (metadata.creator == userId) {
-
+                    cb(null, metadata);
                 } else {
                     cb(new Error('Security check: user not found'));
                 }
+            },
+            (metadata, cb) => {
+                this._mapMetadata(metadata, cb);
             }
         ], callback);
     }
@@ -174,15 +177,15 @@ class FieldsMetadataModel extends ModelBase {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from(this.baseTableName)
-                .innerJoin('field_text', 'field_text.field_id', this.baseTable + '.id')
+                .innerJoin('field_text', 'field_text.field_id', this.baseTableName + '.id')
                 .where('id', metadataId)
-                .asCallback((error, data) => {
+                .asCallback((error, metadata) => {
                 if (error) {
                     cb(error);
-                } else if (data.length > 0) {
-                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
+                } else if (metadata.length > 0) {
+                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
                 } else {
-                    cb(new Error('Item not found: ' + id));
+                    cb(new Error('Item not found: ' + metadataId));
                 }
             });
         }, callback);
@@ -192,7 +195,7 @@ class FieldsMetadataModel extends ModelBase {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from(this.baseTableName)
-                .innerJoin('field_text', 'field_text.field_id', this.baseTable + '.id')
+                .innerJoin('field_text', 'field_text.field_id', this.baseTableName + '.id')
                 .whereIn('id', metadataIds)
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
