@@ -47,17 +47,18 @@ class ApplicationServerReplyService extends ServiceBase {
                     this._completeOperationIfNeeded(operation, callback);
                 },
                 (operation, callback) => {
-                    this._createOperationResult(operation, rpcError, rpcMessage, callback);
-                },
-                (operationResult, callback) => {
-                    const eventName = operationResult.operation.method;
-                    const haveEventHandlers = this.eventEmitter.emit(eventName, operationResult);
-                    if (!haveEventHandlers) {
-                        console.error('No handler is registered for event ' + eventName);
-                    }
-                    callback(null);
+                    this._createOperationResult(operation, rpcError, rpcMessage, (error, result) => {
+                        result.operation = operation;
+                        callback(error, result);
+                    });
                 }
             ], (error, result) => {
+                const eventName = result.operation.method;
+                // TODO: Form result and fire event here.
+                const haveEventHandlers = this.eventEmitter.emit(eventName, result);
+                if (!haveEventHandlers) {
+                    console.error('No handler is registered for event ' + eventName);
+                }
                 callback(error, result);
             });
         }
@@ -71,7 +72,7 @@ class ApplicationServerReplyService extends ServiceBase {
 
         if (rpcError) {
             callback(null, {
-                operation,
+                operationId: operation.id,
                 error: rpcError,
                 result: rpcMessage
             });
@@ -80,58 +81,52 @@ class ApplicationServerReplyService extends ServiceBase {
 
         switch (event) {
             case events.openSearchSession:
-                result = this._createOpenSearchResultSync(operation, rpcMessage, rpcError);
+                this._createOpenSearchResult(operation, rpcMessage, callback);
                 break;
 
             default:
                 console.error('Unexpected result came from the application server, send as is.');
-                result = rpcMessage.result;
+                callback(null, rpcMessage.result);
                 break;
         }
-
-        const operationResult = {
-            operation,
-            result
-        };
-
-        callback(null, operationResult);
     }
 
-    _createOpenSearchResultSync(operation, message, error) {
-        if (error) {
-            return {
-                error,
-                message
-            };
-        }
-
+    _createOpenSearchResult(operation, message, callback) {
         if (!message || !message.result || !message.result.sessionState) {
             console.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
-            return;
-        }
-        const sessionState = message.result.sessionState;
-        // If not ready, just send the progress up
-        if (sessionState.status !== SESSION_STATUS.READY) {
-            return {
-                status: sessionState.status,
-                progress: sessionState.progress
-            };
+            callback(null, {
+                result: message
+            });
         } else {
-            // The status is 'ready', so the data is available in Redis.
-            const conditions = operation.data;
-            const redisAddress = this._parseAddress(sessionState.redisDb.url);
-            return {
-                status: SESSION_STATUS.READY,
-                progress: 100,
-                redisDb: {
+            const sessionState = message.result.sessionState;
+            // If not ready, just send the progress up
+            if (sessionState.status !== SESSION_STATUS.READY) {
+                callback(null, {
+                    status: sessionState.status,
+                    progress: sessionState.progress
+                });
+            } else {
+                // Get data from Redis
+                const conditions = operation.data;
+                const redisAddress = this._parseAddress(sessionState.redisDb.url);
+                const redisDb = {
                     host: redisAddress.host,
                     port: redisAddress.port,
+                    databaseNumber: sessionState.redisDb.number,
                     dataIndex: sessionState.sort.index,
-                    databaseNumber: sessionState.redisDb.number
-                },
-                offset: conditions.offset,
-                limit: conditions.limit
-            };
+                    offset: conditions.offset,
+                    limit: conditions.limit
+                };
+                this.services.redis.fetch(redisDb.host, redisDb.port, redisDb.databaseNumber,
+                    redisDb.dataIndex, redisDb.offset, redisDb.limit, (error, data) => {
+                        // TODO: Match fields by name from sample and sources here.
+                        callback(null, {
+                            status: SESSION_STATUS.READY,
+                            progress: 100,
+                            data
+                        });
+                    });
+            }
         }
     }
 

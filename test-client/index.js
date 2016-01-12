@@ -177,7 +177,7 @@ operations.add('Close session', (callback) => {
       Request.del({
         url: urls.session(),
         headers
-      }, callback)
+      }, callback);
     }
   ], callback);
 });
