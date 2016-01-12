@@ -6,7 +6,8 @@ import NavbarMain from '../components/Header/NavbarMain'
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery'
 import ViewsModal from '../components/Modals/ViewsModal'
 
-import { openModal, closeModal } from '../actions'
+import { openModal, closeModal } from '../actions/modalWindows'
+import { fetchUserdata } from '../actions/userData'
 
 
 class App extends Component {
@@ -15,7 +16,12 @@ class App extends Component {
     super(props)
   }
 
+  componentDidMount() {
+    this.props.dispatch(fetchUserdata())
+  }
+
   render() {
+    const { samples, isFetching } = this.props.userData
     return (
 
       <div className="main" id="main">
@@ -26,10 +32,19 @@ class App extends Component {
                   <div className="container-fluid" id="maintable">
                       <NavbarMain />
                       <div className="collapse collapse-subnav" id="subnav">
-                        <NavbarCreateQuery
-                          {...this.props}
-                          openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
-                        />
+                        {isFetching && samples.length === 0 &&
+                          <h2>Loading...</h2>
+                        }
+                        {!isFetching && samples.length === 0 &&
+                          <h2>Empty.</h2>
+                        }
+                        {samples.length > 0 &&
+                          <NavbarCreateQuery
+                            {...this.props}
+                            openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
+                            userData={ this.props.userData  }
+                          />
+                        }
                       </div>    
                       <VariantsTableReact {...this.props} />
                   </div>
@@ -51,9 +66,10 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const { modalWindows } = state
+  const { userData, modalWindows } = state
 
   return {
+    userData,
     modalWindows
   }
 }

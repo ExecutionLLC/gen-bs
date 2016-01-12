@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions'
+import * as ActionTypes from '../actions/variantsTable'
 
 export default function variantsTable(state = {}, action) {
   switch (action.type) {
@@ -37,7 +37,6 @@ export default function variantsTable(state = {}, action) {
         clickedRow: { _fid: action.rowId },
         filteredVariants: state.filteredVariants.map( (o) => {
           if(action.rowId == o._fid) {
-            console.log('o', o)
             o._selected = !o._selected
           }
           return o;

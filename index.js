@@ -1,6 +1,10 @@
 'use strict';
 
 const Express = require('express');
+// added by Vatagin
+const cors = require('cors');
+//
+
 const bodyParser = require('body-parser');
 const Http = require('http');
 const WebSocketServer = require('ws').Server;
@@ -19,6 +23,10 @@ const controllers = new ControllersFacade(services);
 // Create service.
 const httpServer = Http.createServer();
 const app = new Express();
+
+// added by Vatagin
+app.use(cors());
+//
 
 app.set('port', Config.port);
 

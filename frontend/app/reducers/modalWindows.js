@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions'
+import * as ActionTypes from '../actions/modalWindows'
 
 export default function modalWindows(state = {views: { showModal: false  }}, action) {
   switch (action.type) {

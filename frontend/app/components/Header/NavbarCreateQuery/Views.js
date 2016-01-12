@@ -7,7 +7,12 @@ export default class Views extends Component {
     super(props)
   }
 
+  componentDidMount() {
+    console.log('views props', this.props)
+  }
+
   render() {
+    const views = this.props.userData.views
     return (
 
        <div className="table-cell table-cell100">
@@ -15,7 +20,7 @@ export default class Views extends Component {
 
         <Select2
          multiple={false}
-         data={['Default View', 'Default View Copy', 'User Custom View 1', 'User Custom View 2', 'User Custom View 3', '']}
+         data={views.map( v => v.name )}
          options={{
            placeholder: 'Default View',
          }} />

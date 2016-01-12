@@ -27,6 +27,7 @@
   "dependencies": {
     "body-parser": "1.14.1",
     "change-case": "2.3.1",
+    "cors": "2.7.1",
     "domain": "*",
     "express": "4.13.3",
     "knex": "0.9.0",

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
-import { fetchVariants } from '../../actions'
+import { fetchVariants } from '../../actions/variantsTable'
 
 import VariantsTableHead from './VariantsTableHead'
 import VariantsTableRows from './VariantsTableRows'

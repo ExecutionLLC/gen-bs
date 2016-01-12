@@ -10,8 +10,6 @@ import Views from './NavbarCreateQuery/Views'
 import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 
-import { openModal } from '../../actions'
-
 
 class NavbarCreateQuery extends Component {
 
@@ -26,11 +24,9 @@ class NavbarCreateQuery extends Component {
                   <FiltersSetup />
                   <Filters />
 
-                  <ViewsSetup
-                    {...this.props}
-                  />
+                  <ViewsSetup {...this.props} />
+                  <Views {...this.props} />
 
-                  <Views />
                   <Analyze />
                   <LoadHistory />
                 </div>

@@ -1,34 +1,26 @@
-import jsonUrl from '../../json/data-variants.json';
+import jsonUrl from '../../json/variants777.json';
 
 /*
  * action types
  */
 
-export const SET_COLUMN_FILTER = 'SET_COLUMN_FILTER'
 export const INITIALIZE_TABLE = 'INITIALIZE_TABLE'
 
-export const EXPORT_TO_FILE = 'EXPORT_TO_FILE'
+export const SET_COLUMN_FILTER = 'SET_COLUMN_FILTER'
+export const FILTER_VARIANTS = 'FILTER_VARIANTS'
+export const SORT_VARIANTS = 'SORT_VARIANTS'
 
+export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW'
 
-/*
- * other constants
- */
+export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS'
+export const REQUEST_VARIANTS = 'REQUEST_VARIANTS'
 
-export const fileTypes = {
-  NONE: null,
-  EXCEL: {type: 'xlsx', ext: 'xlsx' },
-  CSV: {type: 'csv', ext: 'csv' }, 
-  SQL: {type: 'sql', ext: 'sql' },
-  JSON: {type: 'json', ext: 'json' },
-  XML: {type: 'xml', ext: 'xml' }
-}
 
 
 /*
  * action creators
  */
 
-export const FILTER_VARIANTS = 'FILTER_VARIANTS'
 export function filterVariants(variants, columnKey, filterValue) {
   return {
     type: FILTER_VARIANTS,
@@ -38,7 +30,6 @@ export function filterVariants(variants, columnKey, filterValue) {
   }
 }
 
-export const SORT_VARIANTS = 'SORT_VARIANTS'
 export function sortVariants(variants, columnKey, sortOrder) {
   return {
     type: SORT_VARIANTS,
@@ -48,14 +39,12 @@ export function sortVariants(variants, columnKey, sortOrder) {
   }
 }
 
-export const REQUEST_VARIANTS = 'REQUEST_VARIANTS'
 function requestVariants() {
   return {
     type: REQUEST_VARIANTS
   }
 }
 
-export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS'
 function receiveVariants(json) {
   return {
     type: RECEIVE_VARIANTS,
@@ -88,7 +77,6 @@ export function setColumnFilter(columnId, filterValue) {
   }
 }
 
-export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW'
 export function selectTableRow(rowId) {
   return {
     type: SELECT_VARIANTS_ROW,
@@ -100,30 +88,6 @@ export function initializeTable(table) {
   return {
     type: INITIALIZE_TABLE,
     table
-  }
-}
-
-export function exportToFile(fileType, fileName) {
-  return {
-    type: EXPORT_TO_FILE,
-    fileType,
-    fileName
-  }
-}
-
-export const OPEN_MODAL = 'OPEN_MODAL'
-export function openModal(modalName) {
-  return {
-    type: OPEN_MODAL,
-    modalName
-  }
-}
-
-export const CLOSE_MODAL = 'CLOSE_MODAL'
-export function closeModal(modalName) {
-  return {
-    type: CLOSE_MODAL,
-    modalName
   }
 }
 
