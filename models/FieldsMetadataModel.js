@@ -57,6 +57,11 @@ class FieldsMetadataModel {
             callback(new Error('Field not found'));
         }
     }
+
+    findMany(ids, callback) {
+        const fields = _.filter(this.fields, (field) => _.any(ids, fieldId => field.id === fieldId));
+        callback(null, fields);
+    }
 }
 
 module.exports = FieldsMetadataModel;

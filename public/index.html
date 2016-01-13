@@ -24,7 +24,7 @@
     
     
         <div class="sidebar-top btn-toolbar">
-         <div class="btn-group"><h5>analyze Sample <a href="#"data-toggle="tooltip" data-placement="right" data-container="body" title="Analyze current sample with current filters and view"><i class="fa fa-info-circle text-muted"></i></a></h5></div>
+         <div class="btn-group"><h5><span data-localize="query.heading">Query sample analysis</span> <a href="#" data-localize="query.help" title="Analyze current sample with current filters and view" data-toggle="tooltip" data-placement="right" data-container="body"><i class="fa fa-info-circle text-muted"></i></a></h5></div>
          <div class="btn-group pull-right"><button data-target="#sidebarLeft" data-toggle="collapse" class="btn navbar-btn sidebarToggle" href="#" type="button"><i class="fa fa-close"></i></button>     
         </div>
        </div>
@@ -33,12 +33,12 @@
          
          <section>
           <div class="btn-group btn-block">
-                <a data-target="#upload" type="button" data-toggle="modal" class="btn btn-warning btn-block" href="#">Upload sample</a>
+                <a data-target="#upload" type="button" data-toggle="modal" class="btn btn-warning btn-block" href="#"><span data-localize="samples.upload.title">Upload</span></a>
                </div>
          </section>
           <section>
          <h5>
-             Choose sample  <a class="btn btn-link" type="button" data-toggle="tooltip"data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples"><i class="fa fa-info-circle text-muted"></i></a>
+             <span  data-localize="sample.headings">Choose sample</span>  <a class="btn btn-link" data-localize="samples.help" type="button" data-toggle="tooltip"data-toggle="tooltip" data-placement="right"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples"><i class="fa fa-info-circle text-muted"></i></a>
           </h5>
          
            
@@ -61,18 +61,18 @@
               <ul class="dropdown-menu">
               <li> 
               <a data-toggle="modal" data-target="#filter" href="#">
-               Setup filter
+               <span data-localize="filters.setup.title">Setup Filters</span>
               </a>
             </li>
             <li>
               <a data-toggle="modal" data-target="#combinefilter" href="#">
-                Combine filter
+                <span data-localize="filters.combine.title">Combine Filters</span>
               </a>
             </li>
           </ul>
             </div>
              
-             Choose filter <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
+             <span data-localize="filters.heading">Select filter</span> <a type="button" data-localize="filters.help" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup and choose, combine available, create custom new filters"><i class="fa fa-info-circle text-muted"></i></a>
            </h5>
               
             <div class="btn-group btn-group-select2-wrap">
@@ -94,7 +94,7 @@
            <div class="btn-group pull-right">
             <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns"><i class="fa fa-cog"></i></button>
           </div>
-           Choose view  <a type="button" class="btn btn-link" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a>
+           <span data-localize="views.heading">Select view</span>  <a type="button" class="btn btn-link" data-localize="views.help" data-toggle="tooltip" data-placement="right" data-container="body" title="Choose, setup custom new views, select columns, colunm order, sorting and column filter"><i class="fa fa-info-circle text-muted"></i></a>
              </h5>
       
                
@@ -114,32 +114,21 @@
          </section>
             <section>      
               <button class="btn btn-block btn-primary" type="button">
-              Analyze
+               <span data-localize="query.analyze.title">Analyze</span>
              </button>
             
     
          </section>
           <section>
-           
-            <button data-target="#history" data-toggle="modal" type="button" class="btn btn-block btn-default"><span class="">History analysis</span></button>
-           
-    
-        
+             <button data-target="#history" data-toggle="modal" type="button" class="btn btn-block btn-default"><span data-localize="history.title">Load history</span></button>
           </section>
            <section>
             
-           <small>Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited</small>
+           <small data-localize="query.description">Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited</small>
            
          </section>
            </div>
           </div>
-       <!--
-      <div class="sidebar-bottom  btn-toolbar">
-          
-        </div>
-    -->
-    
-    
        
     </div>
     <div class="sidebar sidebar-inverse sidebar-right collapse width" id="sidebarRight"> 
@@ -175,25 +164,25 @@
           
             <form>
                  <div class="form-group has-feedback">
-               <label data-localize="account.login.title">Login</label>
+               <label data-localize="account.login.login.label">Login</label>
                
                  <input type="text" class="form-control">
-                 <div class="help-text text-danger hidden"><span data-localize="account.login.error">No that login</span></div>
+                 <div class="help-text text-danger hidden"><span data-localize="account.login.login.error">No that login</span></div>
                  </div>
                  <div class="form-group has-feedback">
-               <label data-localize="account.password.title">Password</label>
+               <label data-localize="account.login.password.label">Password</label>
      
                <input type="password" class="form-control">
-             <div class="help-text text-danger hidden"><span data-localize="account.password.error">Wrong password</span></div>
-             <div class="help-text"><small data-localize="account.password.help">Not less than 6 characters, 1 uppercase, 1 character, 1..9, latin letters and symbols</small></div>
+             <div class="help-text text-danger hidden"><span data-localize="account.label.password.error">Wrong password</span></div>
+             <div class="help-text"><small data-localize="account.label.password.help">Not less than 6 characters, 1 uppercase, 1 character, 1..9, latin letters and symbols</small></div>
     
                
              </div>
                  <div class="form-group">
-                   <a href="" class="btb btn-link" data-localize="account.password.error">Remember password</a>
+                   <a href="" class="btb btn-link" data-localize="account.login.password.error">Remember password</a>
                  </div>
                  <div class="form-group">
-                 <button type="button" class="btn btn-block btn-primary" id="btnLogin"><span data-localize="account.login.action">Sign in</span></button>
+                 <button type="button" class="btn btn-block btn-primary" id="btnLogin"><span data-localize="account.login.sign_in">Sign in</span></button>
                 <!-- <button class="btn btn-block btn-openid"></button> -->
                  </div>
                 <hr>
@@ -202,7 +191,7 @@
                  </div>
     
                 <div class="form-group">
-                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
+                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy" data-localize="buy.buy">Buy access to advanced features of App Genomix</a>
                  </div>
               </form> 
             </div>
@@ -210,26 +199,26 @@
             
             <form>
                  <div class="form-group has-feedback">
-               <label data-localize="account.email.title">Email</label>
+               <label data-localize="account.register.email.label">Email</label>
                
                   <input type="email" class="form-control">
-                  <div class="help-text text-danger hidden"><span data-localize="account.email.error">Wrong email</span></div>
+                  <div class="help-text text-danger hidden"><span data-localize="account.register.email.error">Wrong email</span></div>
          
                  </div>
                  <div class="form-group">
-                 <button type="button" class="btn btn-block btn-primary" id="btnLogin"><span data-localize="account.register.action">Sign up for free</span></button>
+                 <button type="button" class="btn btn-block btn-primary" id="btnLogin"><span data-localize="account.register.sign_up">Sign up for free</span></button>
              
                </div>
                  <hr>
                  
                   <div class="form-group">
-                   <span data-localize="account.register.confirm">By clicking</span> <strong data-localize="account.register.action">Sign up for free</strong> <span data-localize="account.register.agree">you agree to</span> <a href="" class="btb btn-link" data-localize="account.register.terms">our terms and conditions</a>
+                   <span data-localize="account.register.confirm">By clicking</span> <strong data-localize="account.register.sign_up">Sign up for free</strong> <span data-localize="account.register.agree">you agree to</span> <a href="" class="btb btn-link" data-localize="account.register.terms">our terms and conditions</a>
                  </div> 
                 <div class="form-group">
                   <span data-localize="account.register.terms">Already have an account?</span><a href="" class="btb btn-link" data-localize="account.login.action"> Sign in</a>
                  </div> 
                  <div class="form-group">
-                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
+                    <a class="btn btn-link btn-block btn-wrapnormal text-warning" href=""  type="button" data-toggle="modal" data-target="#buy" data-localize="buy.buy">Buy access to advanced features of App Genomix</a>
                  </div>
                 </form> 
                 </div>
@@ -249,7 +238,7 @@
           
                <dl>
               <dt>
-               <span data-localize="account.email.title">Email</span>: 
+               <span data-localize="account.profile.email.label">Email</span>: 
               </dt>
               <dd>
                 <a href="maito:user@domain.com">user@domain.com</a>
@@ -258,7 +247,7 @@
     
                <dl>
               <dt>
-               <span data-localize="account.specialization.title">Specialization</span>: 
+               <span data-localize="account.profile.specialization.label">Specialization</span>: 
               </dt>
               <dd>
                 Doctor
@@ -275,23 +264,23 @@
             </dl>         
                <dl>
               <dt>
-               <span data-localize="account.balance.title">Balance</span>: 
+               <span data-localize="account.profile.balance.label">Balance</span>: 
               </dt>
                  <!--if paid sample analises, not a zero balance -->
               <dd>
-                 <span class="text-success">789 <span data-localize="account.balance.count">paid analysis left</span></span>
+                 <span class="text-success">789 <span data-localize="account.profile.balance.value">paid analysis left</span></span>
                  <!--  If zero balance  -->
-                 <span class="text-warning hidden">0 <span data-localize="account.balance.count">paid analysis left</span></span>
+                 <span class="text-warning hidden">0 <span data-localize="account.profile.balance.value">paid analysis left</span></span>
               </dd>
               </dl>
               
               <!--  If no paid options, to use remove class hidden  -->
                  <p class="hidden">
-                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action">Buy access to advanced features of App Genomix</a>
+                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy" data-localize="buy.buy">Buy access to advanced features of App Genomix</a>
                  </p>
             <!--if paid sample analises, zero balance, to use remove classes hidden  -->
                   <p class="hidden">
-                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy" data-localize="account.buy.action_continue">Buy access to continue to use the advanced features of App Genomix</a>
+                    <a class="btn btn-warning btn-block btn-wrapnormal" href="" type="button" data-toggle="modal" data-target="#buy" data-localize="buy.buy_continue">Buy access to continue to use the advanced features of App Genomix</a>
                   </p>
               
                 </div>
@@ -299,25 +288,25 @@
                 
                <form>
                 <div class="form-group has-feedback">
-                  <label data-localize="account.name.title">Name</label>
+                  <label data-localize="account.profile.name.label">Name</label>
                  <input type="text" class="form-control">
-                   <div class="help-text hidden" data-localize="account.name.error">Name can not be so short</div>
+                   <div class="help-text hidden" data-localize="account.profile.name.error">Name can not be so short</div>
                  </div>
                  <div class="form-group has-feedback">
-                 <label data-localize="account.lastname.title">Last Name</label>
+                 <label data-localize="account.profile.lastname.label">Last Name</label>
      
                  <input type="text" class="form-control">
-                 <div class="help-text hidden" data-localize="account.name.error">Last Name can not be so short</div>           
+                 <div class="help-text hidden" data-localize="account.profile.name.error">Last Name can not be so short</div>           
                 </div>
                  <div class="form-group has-feedback">
-                 <label data-localize="account.email.title">Email</label>
+                 <label data-localize="account.profile.email.label">Email</label>
      
                  <input type="email" class="form-control" value="user@domain.com">
-                 <div class="help-text hidden"><span data-localize="account.email.error">Wrong email</span></div>
+                 <div class="help-text hidden"><span data-localize="account.profile.email.error">Wrong email</span></div>
                
                  </div>
                  <div class="form-group has-feedback">
-                 <label data-localize="account.specialization.title">Specialization</label>
+                 <label data-localize="account.profile.specialization.label">Specialization</label>
      
                  <input type="text" class="form-control">
                 
@@ -357,7 +346,7 @@
             </div>
               <div class="panel panel-default">
                <div class="panel-heading">
-               <h4 class="panel-title"> <a href="" data-localize="account.paid_analysis">Latest Paid Analysis</a></h4>
+               <h4 class="panel-title"> <a href="" data-localize="account.payments.heading">Latest Paid Analysis</a></h4>
                </div>
                      
                  <!----- samples -->
@@ -456,37 +445,32 @@
                     <nav class="navbar navbar-inverse navbar-fixed-top navbar-main">
                       <div class="navbar-inner">
                     
-                        <div data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand" data-toggle="modal" data-target="#info"><span data-localize="brand.title">AGx</span><sup>i</sup></a></div>
+                        <div data-localize="brand.help" data-toggle="tooltip" data-placement="left" title="Click for about and help info" data-container="body" data-trigger="hover"><a class="btn navbar-btn brand" data-toggle="modal" data-target="#info"><span data-localize="brand.title">AGx</span><sup>i</sup></a></div>
                        
                          <div class="visible-xs"><a type="button" href="#" class="btn navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i class="fa fa-lg fa-filter"></i></a></div>
                          
-                          <div class="hidden-xs" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i class="fa fa-lg fa-filter"></i></a></div>   
-                        <div class="navbar-search-toogle"><a class="btn navbar-btn btn-link" id="searchToggle"><i class="fa fa-search"></i></a></div>
+                          <div class="hidden-xs"  data-localize="query.help" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover"><a type="button" href="#" class="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i class="fa fa-lg fa-filter"></i></a></div>   
+                        
                           
-                        <div class="navbar-search width100"><div class="navbar-search-field width"><input type="text" class="form-control" placeholder="Search for 912345 variants current sample analises"></div></div> 
+                        <div class="navbar-search"><div class="navbar-search-field width"><input type="text" data-localize="results.search" class="form-control" placeholder="Search for mutations of current sample analysis" data-localize=""></div></div> 
                         
                       
                         <div>
-                        <div class="dropdown" data-toggle="tooltip" data-placement="right" title="Export of results to file" data-container="body" data-trigger="hover">
+                        <div class="dropdown" data-localize="files.export.help" data-toggle="tooltip" data-placement="right" title="Select several mutations in the table and save to file" data-container="body" data-trigger="hover">
                         
                             <a class="btn navbar-btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="modal" data-target="#filename">
-                              <span class="hidden-xxs" data-localize="actions.export.title">Export</span>
+                              <span class="hidden-xxs" data-localize="files.export.title">Export</span>
                               <span class="visible-xxs"><i class="fa fa-lg fa-cloud-download"></i></span>
                             </a>
                         
                         <!--
-                            <a class="btn navbar-btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                              <span class="hidden-xxs" data-localize="actions.export.title">Export</span>
-                              <span class="visible-xxs"><i class="fa fa-lg fa-cloud-download"></i></span>
-                              <span class="caret"></span>
-                            </a>
                         
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.msexcel">MSExcel</span></a></li>
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.cvs">CVS</a></li>
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.sql">SQL</span></a></li>            
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.json">JSON</span></a></li>
-                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="actions.exportformats.xml">XML</span></a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="files.export.format.values.msexcel">MSExcel</span></a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="files.export.format.values.cvs">CVS</a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="files.export.format.values.sql">SQL</span></a></li>            
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="files.export.format.values.json">JSON</span></a></li>
+                              <li><a href="#" type="button" data-toggle="modal" data-target="#filename"><span data-localize="files.export.format.values.xml">XML</span></a></li>
                             </ul>
                         -->
                         
@@ -494,25 +478,31 @@
                         
                         </div>
                     
-                         <div class="hidden-xxs" data-toggle="tooltip" data-placement="left" title="History of saved file" data-container="body" data-trigger="hover">
+                        <div class="hidden-xxs" data-localize="files.help" data-toggle="tooltip" data-placement="left" title="History of saved files" data-container="body" data-trigger="hover">
                            <button class="btn navbar-btn" data-toggle="modal" data-target="#exporthistory"><span data-localize="files.title">Saved files</span></button>       
                         </div>  
                     
-                        <div data-toggle="tooltip" data-placement="left" title="Change interface language" data-container="body" data-trigger="hover">
+                        <div data-localize="language.help" data-toggle="tooltip" data-placement="left" title="Change interface language" data-container="body" data-trigger="hover">
                         <div class="dropdown language">
                         
-                            <a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="dropdown" role="button"><span class="visible-xs">Eng</span><span class="hidden-xs">English </span><span class="caret"></span></a>
+                            <a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="dropdown" role="button"><span class="visible-xs" data-localize="language.lang_xs_En">Eng</span><span class="hidden-xs" data-localize="language.lang_sm_En">English </span><span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                              <li><a href="#" type="button" id="en_lang">English</a></li>
-                              <li><a href="#" type="button" id="ch_lang">中国</a></li>
+                              <li><a href="#" type="button" id="en_lang"><span data-localize="language.lang_sm_En">English</span></a></li>
+                              <li><a href="#" type="button" id="ch_lang"><span data-localize="language.lang_sm_Ch">中国</span></a></li>
                             </ul>
                             
                            <input type="hidden" id="curr_lang" value="en">
                          </div>
                         </div> 
-                        <div data-toggle="tooltip" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs"><a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy"><span data-localize="account.buy.title">Buy</span></a></div>
-                        <div data-toggle="tooltip" data-placement="left" title="Register or sigh for access to featured options" data-container="body" data-trigger="hover" class="hidden-xs hidden-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest" data-localize="account.login.title">Login<span class="hidden-xs"> (<span data-localize="account.register.title">Register</span>)</span></span><span class="user hidden"><span data-localize="account.name.title">Name</span> <span data-localize="account.lastname.title">Lastname</span></span></a></div>
-                        <div class="visible-xs visible-xss"><a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest" data-localize="account.login.title">Login<span class="hidden-xs"> (Register)</span></span><span class="user hidden"><span data-localize="account.name.title">Name</span> <span data-localize="account.lastname.title">Lastname</span></span></a></div>    </div>
+                        <div data-toggle="tooltip" data-localize="account.buy.help" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs">
+                        	<a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy"><span data-localize="buy.title">Buy</span></a>
+                        </div>
+                        <div data-toggle="tooltip" data-localize="account.help"  data-placement="left" title="Register or login for access to featured options" data-container="body" data-trigger="hover" class="hidden-xs hidden-xss">
+                        	<a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest" data-localize="account.login.title">Login<span class="hidden-xs"> (<span data-localize="account.register.title">Register</span>)</span></span><span class="user hidden"><span>Name</span><span>Lastname</span></span></a>
+                        </div>
+                        <div class="visible-xs visible-xss">
+                        	<a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest" data-localize="account.login.title">Login</span><span class="user hidden"><span>Name</span><span>Lastname</span></span></a>
+                        </div>    </div>
                      </nav>
                       
                        
@@ -524,13 +514,13 @@
                             
                                         
                                             <div class="table-cell">
-                                             <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body"  title="Upload .vfc file of sample">
-                                                 <a href="#" class="btn btn-primary" data-toggle="modal" type="button" data-target="#upload"><span data-localize="upload.title">Upload</span></a>
+                                             <div class="btn-group" data-localize="samples.upload.help" data-toggle="tooltip" data-placement="bottom" data-container="body"  title="Upload .vfc file of sample">
+                                                 <a href="#" class="btn btn-primary" data-toggle="modal" type="button" data-target="#upload"><span data-localize="samples.upload.title">Upload</span></a>
                                             </div>
                                             </div>           
                                         
                                             <div class="table-cell table-cell100">
-                                            <div class="btn-group"  data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples">
+                                            <div class="btn-group" data-localize="samples.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples">
                                                <select class="sample-search">
                                                  <option value="3620194" selected="selected">mental retardation patient12</option>
                                                </select> 
@@ -540,9 +530,9 @@
                             
                                       
                                              <div class="table-cell">
-                                            <div class="dropdown btn-group"  data-toggle="tooltip" data-placement="right" data-container="body" title="Setup, combine, create custom new filters or combine default">
+                                            <div class="dropdown btn-group" data-localize="filters.setup.help"  data-toggle="tooltip" data-placement="right" data-container="body" title="Setup, combine, create custom new filters or combine default">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                  <span data-localize="general.filters">Filters</span> <span class="caret"></span>
+                                                  <span data-localize="filters.title">Filters</span> <span class="caret"></span>
                                                 </button>
                                               <ul class="dropdown-menu dropdown-menu-item-template">
                                                 <li><a href="#" type="button" data-toggle="modal" data-target="#filter"><span data-localize="filters.setup.title">Setup Filters</span></a></li>
@@ -552,14 +542,14 @@
                                             </div>
                                              </div>
                                               <div class="table-cell table-cell100">
-                                                <div class="btn-group" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
+                                                <div class="btn-group"  data-localize="filters.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
                                                 <select class="select2" multiple="">
-                                                       <option selected value="eye">Eye Cancer Diagnostics</option>            
-                                                        <option value="cust1">Breast cancer</option>
-                                                        <option value="cust2">Lung cancer</option>
+                                                       <option selected value="eye" title="standard">Eye Cancer Diagnostics</option>            
+                                                        <option value="cust1" title="standard">Breast cancer</option>
+                                                        <option value="cust2" title="standard">Lung cancer</option>
                                                         <option value="cust3">Autism</option>
                                                         <option value="cust4">Retinoblastoma</option>
-                                                        <option value="cust5">Mental retardation</option>
+                                                        <option value="cust5" title="standard">Mental retardation</option>
                                                     </select>
                                             </div>
                                               </div>
@@ -567,14 +557,14 @@
                                             
                                         
                                              <div class="table-cell">
-                                             <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Setup custom new views, select colunms, colunm order, sorting and colunm filter">
+                                             <div class="btn-group"  data-localize="views.setup.help" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Setup custom new views, select colunms, colunm order, sorting and colunm filter">
                                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#selectColumns"><span data-localize="views.title">Views</button>
                                              </div>
                                              </div> 
                                              <div class="table-cell table-cell100">
-                                            <div class="btn-group btn-group-select100" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available views">
+                                            <div class="btn-group btn-group-select100" data-localize="views.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available views">
                                               <select class="select2" is="view">
-                                                <option value="1" selected>Default View</option>
+                                                <option value="1" selected title="standard">Default View</option>
                                                 <option value="2">Default View Copy</option>
                                                 <option value="3">Custom View</option>
                                                 <option value="4">User Custom View 1</option>
@@ -587,17 +577,18 @@
                                              
                                             <div class="table-cell">
                                             <div class="btn-group btn-group-submit"
+                                              data-localize="query.analyze.help"
                                               data-toggle="tooltip"
                                               data-placement="bottom"
                                               data-container="body"
                                               title="Analyze current sample with current filters and view">  
                                               <button class="btn btn-rounded btn-alt-primary" type="button">
-                                                 <span data-localize="action.analyze">Analyze</span>
+                                                 <span data-localize="query.analyze.title">Analyze</span>
                                               </button>
                                              </div>
                                             </div>           
                                              <div class="table-cell">
-                                            <div class="btn-group btn-group-history"  data-toggle="tooltip" data-placement="bottom" data-container="body" title="History of queries, saved query settings">
+                                            <div class="btn-group btn-group-history"  data-localize="history.help"  data-toggle="tooltip" data-placement="bottom" data-container="body" title="History of queries, saved query settings">
                                                  <button data-target="#history" data-toggle="modal" type="button" class="btn btn-default"><span  data-localize="history.title">Load history</span></button>
                                             </div>
                                              </div>           
@@ -608,11 +599,22 @@
                         </div>    
                     
                     <div class="table-variants-wrapper">
-                      <table class="table table-condensed table-hover table-bordered table-striped table-variants " id="variants_table">
+                      <div class="table-variants-container">
+                      <table class="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
                         <thead id="variants_table_head"></thead>
                         <tbody id="variants_table_body"></tbody>
-                      </table>        
-                    </div>
+                      </table> 
+                      </div>
+                      </div>
+                    <div class="table-variant-footer">
+                        
+                        <div class="btn-toolbar">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-link"><i class="fa fa-times-circle"></i> <span  data-localize="results.remove_selection">Remove selection</span></button>
+                          </div>
+                        </div>
+                      </div>       
+                    
                 </div>
     
                 <div id="fav-message" class="hidden">
@@ -634,53 +636,18 @@
           </div>
          <form>
           <div class="modal-body">
-            <div class="collapse in copyview">
-              <div class="row grid-toolbar">
-                <div class="col-sm-6">
-                  <label data-localize="views.selector.title">Available Views</label>
-                </div>
-              </div>
-                <div class="alert alert-help"><span data-localize="views.selector.description">Standard view are not edited, duplicate it for custom</span></div>
-                <div class="row grid-toolbar">
-               <div class="col-sm-6">  
-                <select class="select2">
-                <option value="1" selected>Default View</option>
-                <option value="2" >Copy of Default View</option>
-                <option value="3" >User Custom View 1</option>
-                <option value="4" >User Custom View 2</option>
-                <option value="5" >User Custom View 3</option>
-              </select>
-              </div>    
-               <div class="col-sm-6">
-                 <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
-                   <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn" data-localize="">Duplicate</button> 
-                 </div>
-                   <!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
-                    <div class="btn-group hidden">
-                      <button class="btn btn-default"><span data-localize="views.reset.title">Reset View</button> 
-                    </div>
-                    <div class="btn-group hidden">
-                      <button type="button" class="btn btn-link"><span data-localize="views.deletes.title">Delete View</span></button> 
-                    </div>
-                  <!-- / --> 
-                                   
-               </div>
-               
-          </div>        
-        
-        
-                </div>
+    
             <div class="collapse copyview">
             <div class="row grid-toolbar">
              <div class="col-sm-6">
-             <label data-localize="views.new.name.title">New View</label> 
-             <input type="text" class="form-control text-primary" placeholder="Set view name a copy" value="Copy Default View">
-             <div class="help-text text-danger" data-localize="view.new.name.error">Name can not be empty</div>
+             <label data-localize="views.setup.new.name.title">New View</label> 
+             <input type="text" class="form-control text-primary" data-localize="views.setup.new.name.help" placeholder="Set view name a copy" value="Copy Default View">
+             <div class="help-text text-danger" data-localize="views.setup.new.name.error">Name can not be empty</div>
                 
             </div>
              <div class="col-sm-5">
              <label data-localize="general.description">Description</label>
-             <input type="text" class="form-control" placeholder="Set view description (optional)">
+             <input type="text" class="form-control" data-localize="views.setup.new.description" placeholder="Set view description (optional)">
             
                 
             </div>
@@ -689,14 +656,48 @@
               </div>
             </div>
       
-            </div>   
-              <div class="sort-setting hidden" id="view1Sett">
-                 <h5 data-localize="views.setup.title">Table Columns</h5>
+            </div> 
+                    <div class="collapse in copyview">
+              <div class="row grid-toolbar">
+                <div class="col-sm-6">
+                  <label data-localize="views.setup.selector.label">Available Views</label>
+                </div>
+              </div>
+                <div class="alert alert-help"><span data-localize="views.setup.selector.description">Standard view are not edited, duplicate it for custom</span></div>
+                 <div class="row grid-toolbar">
+               <div class="col-sm-6">  
+                <select class="select2" placeholder="Select View">
+                <option value="1" title="standard" selected title="standard">Default View</option>
+                <option value="2">Copy of Default View</option>
+                <option value="3">User Custom View 1</option>
+                <option value="4">User Custom View 2</option>
+                <option value="5">User Custom View 3</option>
+              </select>
+              </div>    
+               <div class="col-sm-6">
+                 <div class="btn-group" data-localize="actions.duplicate.help" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
+                   <button type="button" class="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn"><span data-localize="actions.duplicate.title">Duplicate</span></button> 
+                 </div>
+                   <!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
+                    <div class="btn-group hidden">
+                      <button class="btn btn-default"><span data-localize="views.setup.reset.title">Reset View</button> 
+                    </div>
+                    <div class="btn-group hidden">
+                      <button type="button" class="btn btn-link"><span data-localize="views.setup.delete.title">Delete View</span></button> 
+                    </div>
+                  <!-- / --> 
+                                   
+               </div>
+               
+          </div>        
+                </div>  
+              <div class="sort-setting copyview collapse in">
+                 <h5 data-localize="views.setup.settings.title">Table Columns</h5>
                 <div class="row grid-toolbar nobg">
                 
-                  <div class="col-xs-6"><small class="text-muted text-order" data-localize="views.setup.order">Order</small> <small class="text-muted" data-localize="views.setup.columns_sorting">Column Name and Multi Sort Order</small></div>
+                  <div class="col-xs-6"><small class="text-muted text-order" data-localize="views.setup.settings.columns_order">Order</small> <small class="text-muted" data-localize="views.setup.settings.columns_sorting">Column Name and Multi Sort Order</small></div>
                  
-                  <div class="col-xs-6"><small class="text-muted" data-localize="views.setup.columns_filter">Column Filter and Keywords</small></div>
+                  <div class="col-xs-6"><small class="text-muted" data-localize="views.setup.settings.columns_filter">Column Filter and Keywords</small></div>
                 </div>
                
                  <div class="row grid-toolbar level1">
@@ -734,17 +735,17 @@
                       </optgroup>
                     </select>
                     </div>
-                    <div class="btn-group">
+                    <div class="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                        <button type="button" class="btn btn-default btnSort active desc" disabled=""></button>
                     </div>   
                     
                     </div>
                      <div class="col-xs-5 input-group">
-                      <span class="input-group-addon">
+                      <span class="input-group-addon"  data-localize="views.setup.settings.filter" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Column Filter">
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" readonly="" data-localize="views.setup.keywords.placeholder">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" readonly="" data-localize="views.setup.settings.keywords">
                       </div>
                       
                      <div class="col-xs-1">
@@ -788,16 +789,16 @@
                     </div>
                 
               
-                  <div class="btn-group">
-                       <button type="button" class="btn btn-default btnSort active asc" disabled=""></button>
+                  <div class="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
+                       <button type="button" class="btn btn-default btnSort active asc" disabled="" ></button>
                     </div>
                       </div>
                   <div class="col-xs-5 input-group">
-                      <span class="input-group-addon">
+                      <span class="input-group-addon"  data-localize="views.setup.settings.filter" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Column Filter">
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""readonly="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" readonly="" data-localize="views.setup.settings.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -838,16 +839,16 @@
                       </optgroup>
                     </select>
                     </div>
-                  <div class="btn-group">
+                  <div class="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                        <button type="button" class="btn btn-default btnSort" disabled=""></button>
                     </div>
                   </div>
                   <div class="col-xs-5 input-group">
-                      <span class="input-group-addon">
+                      <span class="input-group-addon"  data-localize="views.setup.settings.filter" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Column Filter">
                           <input type="checkbox" id="cCh1" checked="" disabled="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" data-localize="views.settings.setup.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link" disabled=""><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -888,17 +889,17 @@
                       </optgroup>
                     </select>
                     </div>
-                    <div class="btn-group">
+                    <div class="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                        <button type="button" class="btn btn-default btnSort" disabled=""></button>
                     </div>
                   </div>
                    
                   <div class="col-xs-5 input-group">
-                      <span class="input-group-addon">
+                      <span class="input-group-addon"  data-localize="views.setup.settings.filter" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Column Filter">
                           <input type="checkbox" id="cCh1" disabled="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="" data-localize="views.settings.setup.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link" disabled=""><i class="fa fa-lg fa-minus-circle"></i></button>
@@ -907,13 +908,13 @@
                      </div>
                 </div>
             </div>
-              <div class="sort-setting" id="view2Sett">
+              <div class="sort-setting copyview collapse">
                  <h5 data-localize="views.setup.title">Table Columns</h5>
                 <div class="row grid-toolbar nobg">
                 
-                  <div class="col-xs-6"><small class="text-muted text-order" data-localize="views.setup.order">Order</small> <small class="text-muted" data-localize="views.setup.columns_sorting">Column Name and Multi Sort Order</small></div>
+                  <div class="col-xs-6"><small class="text-muted text-order" data-localize="views.setup.settings.columns_order">Order</small> <small class="text-muted" data-localize="views.setup.settings.columns_sorting">Column Name and Multi Sort Order</small></div>
                  
-                  <div class="col-xs-6"><small class="text-muted" data-localize="views.setup.columns_filter">Column Filter and Keywords</small></div>
+                  <div class="col-xs-6"><small class="text-muted" data-localize="views.setup.settings.columns_filter">Column Filter and Keywords</small></div>
                 </div>
                
                  <div class="row grid-toolbar level1">
@@ -951,17 +952,17 @@
                       </optgroup>
                     </select>
                     </div>
-                    <div class="btn-group">
+                    <div class="btn-group"  data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                        <button type="button" class="btn btn-default btnSort active desc"></button>
                     </div>   
                     
                     </div>
                      <div class="col-xs-5 input-group">
-                      <span class="input-group-addon">
+                      <span class="input-group-addon"  data-localize="views.setup.settings.filter" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Column Filter">
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="Ogden" data-localize="views.setup.settings.keywords">
                       </div>
                       
                      <div class="col-xs-1">
@@ -1005,16 +1006,16 @@
                     </div>
                 
               
-                  <div class="btn-group">
+                  <div class="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                        <button type="button" class="btn btn-default btnSort active asc"></button>
                     </div>
                       </div>
                   <div class="col-xs-5 input-group">
-                      <span class="input-group-addon">
+                      <span class="input-group-addon"  data-localize="views.setup.settings.filter" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Column Filter">
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="" data-localize="views.setup.settings.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -1055,16 +1056,16 @@
                       </optgroup>
                     </select>
                     </div>
-                  <div class="btn-group">
+                  <div class="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                        <button type="button" class="btn btn-default btnSort"></button>
                     </div>
                   </div>
                   <div class="col-xs-5 input-group">
-                      <span class="input-group-addon">
+                      <span class="input-group-addon"  data-localize="views.setup.settings.filter" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Column Filter">
                           <input type="checkbox" id="cCh1" checked="">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" value="" data-localize="views.setup.settings.keywords"> 
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -1105,17 +1106,17 @@
                       </optgroup>
                     </select>
                     </div>
-                    <div class="btn-group">
+                    <div class="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                        <button type="button" class="btn btn-default btnSort"></button>
                     </div>
                   </div>
                    
                   <div class="col-xs-5 input-group">
-                      <span class="input-group-addon">
+                      <span class="input-group-addon"  data-localize="views.setup.settings.filter" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Column Filter">
                           <input type="checkbox" id="cCh1">
                       </span>
                     
-                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="">
+                      <input type="text" class="form-control" placeholder="Keywords (Optional)" id="cFl1" disabled="" data-localize="views.setup.settings.keywords">
                       </div>
                       
                     <div class="col-xs-1"><button class="btn-link"><i class="fa fa-lg fa-minus-circle"></i></button><button class="btn-link"><i class="fa fa-lg fa-plus-circle"></i></button>
@@ -1132,13 +1133,13 @@
               <div class="btn-group pull-right">
                 <a class="btn btn-default" href="" data-localize="actions.cancel">Cancel</a>
               </div>
-              <span data-localize="views.setup.confirm">Are you sure you want to delete this view?  It can not recover.</span>
+              <span data-localize="views.setup.settings.confirm">Are you sure you want to delete this view?  It can not recover.</span>
            </div>
-              <div class="alert alert-help"><span data-localize="views.setup.description">Add/remove by click plus and minus column new setting row. Drag row for set table column order. You can sort the same time only two fields. Set checkbox for available table column filert. Add keywords by substitution dictionary for download already filtered results</span></div>
+              <div class="alert alert-help"><span data-localize="views.setup.settings.description">Add/remove by click plus and minus column new setting row. Drag row for set table column order. You can sort the same time only two fields. Set checkbox for available table column filert. Add keywords by substitution dictionary for download already filtered results</span></div>
             </div>
           <div class="modal-footer">         
              <button type="button" class="btn btn-default" data-dismiss="modal"><span  data-localize="actions.cancel">Cancel</button>
-             <button type="button" class="btn btn-primary"><span data-localize="actions.save_choose.title">Save and Choose</span></button>
+             <button type="button" class="btn btn-primary"><span data-localize="actions.save_select.title">Save and Select</span></button>
           </div>
          </form>
         </div>
@@ -1156,32 +1157,32 @@
              <div class="collapse in copyfilter" id="newfilterField">
                <div class="row grid-toolbar">
                 <div class="col-sm-6">
-                  <label data-localize="filters.selector.title">Available Filters</label>
+                  <label data-localize="filters.setup.selector.title">Available Filters</label>
                 </div>
               </div>
-               <div class="alert alert-help"><span data-localize="filters.selector.description">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</span></div>
+               <div class="alert alert-help"><span data-localize="filters.setup.selector.description">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</span></div>
     
                <div class="row grid-toolbar">
                  <div class="col-sm-6">
                   <select class="select2" id="filterSelector">
-                    <option selected value="eye">Eye Cancer Diagnostics</option>            
-                    <option value="cust1">Breast cancer</option>
-                    <option value="cust2">Lung cancer</option>
+                    <option selected value="eye" title="standard">Eye Cancer Diagnostics</option>            
+                    <option value="cust1" title="standard">Breast cancer</option>
+                    <option value="cust2" title="standard">Lung cancer</option>
                     <option value="cust3" disabled="">Autism</option>
                     <option value="cust4">Retinoblastoma</option>
-                    <option value="cust5" disabled="">Mental retardation</option>
+                    <option value="cust5" disabled="" title="standard">Mental retardation</option>
                 </select>
               </div>
                  <div class="col-sm-6">
-                     <div class="btn-group" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
+                     <div class="btn-group"  data-localize="actions.duplicate.help" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
                        <button class="btn btn-default" type="button" data-toggle="collapse" data-target=".copyfilter"><span data-localize="actions.duplicate.title">Duplicate</span></button>
                      </div>
                         <!--   Видимы когда в селекторе выбраны пользовательские фильтры, которые можно редактировать -->
                       <div class="btn-group">
-                        <button class="btn btn-default hidden"><span data-localize="filters.reset.title">Reset Filter</span></button> 
+                        <button class="btn btn-default hidden"><span data-localize="filters.setup.reset.title">Reset Filter</span></button> 
                       </div>
                     <div class="btn-group hidden" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Delete filter">
-                       <button class="btn btn-link"><span  data-localize="actions.delete">Delete</span></button>
+                       <button class="btn btn-link"><span  data-localize="filters.setup.delete.title">Delete Filter</span></button>
                     </div>
                        <!-- / -->          
                        
@@ -1193,19 +1194,19 @@
                 
                <div class="row grid-toolbar">
                  <div class="col-sm-6"> 
-                   <label  data-localize="filters.new.name.title">New Filter</label>  
+                   <label  data-localize="filters.setup.new.name.title">New Filter</label>  
                    <input value="Copy of Eye Cancer Diagnostics" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
                 </div>
                 <div class="col-sm-5">
                    <label data-localize="general.description">Description</label>
-                <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
+                <input data-localize="filters.setup.new.name" value="" placeholder="Type filter description (optional)" class="form-control" type="text" data-localize="filters.new.description">
                 </div>
                 <div class="col-sm-1">
                    <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent"><span data-localize="actions.cancel">Cancel</span></button>
                 </div>
                  
               </div>
-                <div class="help-text text-danger"><span data-localize="filters.new.name.error">Name can not be empty</span></div>
+                <div class="help-text text-danger"><span data-localize="filters.setup.new.name.error">Name can not be empty</span></div>
              
              </div>
              <div class="row">
@@ -1669,7 +1670,7 @@
         
       </div>
               </div> 
-            <div class="alert alert-help"><span data-localize="filters.setup.rules.description">Lock filter options not available with selected sample</span></div>
+            <div class="alert alert-help"><span data-localize="filters.setup.settings.description">Lock filter options not available with selected sample</span></div>
             <div class="alert alert-danger">
               <button type="button" class="close hidden" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">×</span>
@@ -1679,16 +1680,16 @@
               <div class="btn-group pull-right">
                 <a class="btn btn-default" href=""><span data-localize="actions.delete">Cancel</span></a>
               </div>
-              <span data-localize="filters.setup.rules.confirm">Are you sure you want to delete this filter?  It can not recover.</span>
+              <span data-localize="filters.setup.settings.confirm">Are you sure you want to delete this filter?  It can not recover.</span>
            </div>
          </div>
           <div class="modal-footer">
             <div class="btn-group pull-left">
-              <button type="button" class="btn btn-default hidden" data-dismiss="modal"><span data-localize="filter.reset.title">Reset Filter</span></button>
+              <button type="button" class="btn btn-default hidden" data-dismiss="modal"><span data-localize="filter.settings.reset.title">Reset Filter</span></button>
             </div>
             <button type="button" class="btn btn-default" data-dismiss="modal"><span data-localize="actions.cancel">Cancel</span></button>
             
-            <button type="button" class="btn btn-primary" data-dismiss="modal"><span data-localize="actions.save_choose.title">Save and Choose</span></button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal"><span data-localize="actions.save_select.title">Save and Select</span></button>
             
            
           </div>
@@ -1708,12 +1709,12 @@
     
                <div class="row grid-toolbar">
                <div class="col-sm-6">  
-                <label data-localize="filters.combine.new.name.title">New Combined Filter</label>  
-                <input value="Eye Cancer Diagnostics + Breast Cancer" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
+                <label data-localize="filters.combine.new.name.label">New Combined Filter</label>  
+                <input data-localize="filters.combine.new.name" value="Eye Cancer Diagnostics + Breast Cancer" placeholder="Set filter name a copy" class="form-control text-primary" type="text">
               </div>
               <div class="col-sm-5">
                  <label data-localize="general.description">Description</label>
-                 <input value="" placeholder="Type filter description (optional)" class="form-control" type="text">
+                 <input value="" data-localize="filters.combine.new.description" placeholder="Type filter description (optional)" class="form-control" type="text">
               </div>
               <div class="col-sm-1">
                 <button data-target=".copyfilter" data-toggle="collapse" type="button" class="btn btn-default collapsed btn-label-indent"><span data-localize="actions.cancel">Cancel</span></button>
@@ -1723,7 +1724,7 @@
                 <div class="help-text text-danger"><span data-localize="filters.combine.new.name.error">Name can not be empty</span></div>              
                <div class="row grid-toolbar">
                 <div class="col-sm-6">
-                  <label data-localize="filters.combine.rules.title">Available Filters for combine</label>
+                  <label data-localize="filters.combine.settings.title">Available Filters for combine</label>
                 </div>
               </div>
                <div class="row">
@@ -1868,17 +1869,15 @@
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                   </button>
-                  <span data-localize="filters.combine.rules.description">Add more than one filter to create a combined condition</span>
+                  <span data-localize="filters.combine.settings.description">Add more than one filter to create a combined condition</span>
                </div>
              </div>
        
            
              <div class="modal-footer">
-              <div class="btn-group pull-left">
-              <button type="button" class="btn btn-default hidden" data-dismiss="modal"><span data-localize="filters.reset.title">Reset Filter</span></button>
-            </div>
+        
               <button type="button" class="btn btn-default" data-dismiss="modal"><span data-localize="actions.cancel">Cancel</span></button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal"><span data-localize="filters.combine.combine.title">Combine and Choose</span></button>        
+              <button type="button" class="btn btn-primary" data-dismiss="modal"><span data-localize="filters.combine.combine.title">Combine and select</span></button>        
           </div>
         </div>
       </div>
@@ -1911,18 +1910,18 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="uploadLabel" data-localize="upload.title">Upload sample</h4>
+            <h4 class="modal-title" id="uploadLabel" data-localize="samples.upload.title">Upload and search sample</h4>
           </div>
           <div class="modal-body ">
       
         <div class="drop-area">
-       <div class="text-muted" data-localize="upload.description">Drag and drop your files here or manually select them.</div>
+       <div class="text-muted" data-localize="samples.upload.dropzone.help">Drag and drop your files here or manually select them.</div>
        <div>
         <button class="btn btn-success btn-rounded">
-          <span data-localize="upload.choose">Chose files</span>
+          <span data-localize="samples.upload.dropzone.select">Select file</span>
         </button>
       </div>
-       <div class="text-muted" data-localize="upload.description">Supported File Types:.vcf, .vcf.gz</div>
+       <div class="text-muted" data-localize="samples.upload.dropzone.description">Supported File Types:.vcf, .vcf.gz</div>
        <div class="progress hidden">
     <div class="progress progress-striped">
           <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-primary  progress-bar-primary">
@@ -1933,27 +1932,28 @@
     </div>
       
         <div class="alert alert-danger hidden">
-          <p><strong data-localize="general.error">Error!</strong><span data-localize="upload.errors.wrongformat">You trying to load zip file format.</span></p>    
+          <p><strong data-localize="general.error">Error!</strong><span data-localize="samples.upload.error.wrongformat">You trying to load zip file format.</span></p>    
         </div>
         <div class="alert alert-danger hidden">
-          <p><strong data-localize="general.error">Error!</strong><span data-localize="upload.errors.unreadable">The file is damaged or unreadable</p>    
+          <p><strong data-localize="general.error">Error!</strong><span data-localize="samples.upload.error.unreadable">The file is damaged or unreadable</p>    
         </div>
         <div class="alert alert-warning hidden">
-          <p><strong data-localize="general.warning">Warning!</strong><span data-localize="upload.warnings.notcomplete">The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</span></p>    
+          <p><strong data-localize="general.warning">Warning!</strong><span data-localize="samples.upload.warning.notcomplete">The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</span></p>    
         </div>
         <div class="alert alert-success hidden">
-          <p><strong data-localize="general.success">Success!</strong><span data-localize="upload.success.loaded">The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
+          <p><strong data-localize="general.success">Success!</strong><span data-localize="samples.upload.success.loaded">The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
         </div>
         
-        <h4 data-localize="samples.search.title">Search for available samples</h4>
+        <h4 data-localize="samples.search.label">Search for available samples</h4>
          <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>    
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
           <div class="panel panel-default">
           <div class="panel-heading" role="tab" id="headingOne">
-           <div class="btn-group pull-right" >
+           <div class="btn-group pull-right">
+            
            <a class="btn btn-default btn-choose" role="button">
-              <span data-localize="samples.select_for.title">Select for analysis</span>
-          </a>
+              <span data-localize="samples.settings.select.title">Select for analysis</span>
+           </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               <i class="fa fa-pencil"></i>
             </a>
@@ -2050,18 +2050,18 @@
                   </select></dd>
                </dl>
                 <dl>
-                <dt><i class="fa fa-check text-success"></i> <span class="text-success">analyzed</dt>
+                <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analyzed</dt>
                 <dd><input type="text" class="form-control" value="24.09.2015 34:45"></dd>
                </dl>
             </div>
            <div class="flex"> 
             <dl>
-              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend3" type="button"><input type="checkbox"> <span data-localize="samples.notify.title">Notify By Email After Complete</span></label>
+              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend3" type="button"><input type="checkbox"> <span data-localize="samples.settings.notify.label">Notify By Email After Complete</span></label>
               </dt>
               <dd><div class="collapse" id="emailOpts3">
                                 
                    
-                     <input type="text" class="form-control" placeholder="email"> 
+                     <input type="text" class="form-control" placeholder="email" data-localize="samples.settings.notify"> 
                      
                  
                     
@@ -2070,7 +2070,7 @@
             </dl>
             <dl>
               <dt><div class="btn-group pull-right">
-                 <button class="btn btn-link"><small data-localize="samples.delete">Delete sample</small></button>
+                 <button class="btn btn-link"><small data-localize="samples.settings.delete">Delete sample</small></button>
                   </div>
               </dt>
               <dd>
@@ -2090,9 +2090,9 @@
         <div class="panel-heading" role="tab" id="headingTwo">
           <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
-                  <span data-localize="samples.select_for.title">Select for analysis</span>
+                  <span data-localize="samples.settings.select.title">Select for analysis</span>
                 </a>
-           <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
               <i class="fa fa-pencil"></i>
             </a>
            </div>
@@ -2133,7 +2133,7 @@
           
              <div class="alert alert-warning">
              <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>
-             <p><strong data-localize="general.warning">Warning!</strong><span  data-localize="samples.edit.analyzed.warning">Sample is analyzed. If you change ..</span></p>
+             <p><strong data-localize="general.warning">Warning!</strong><span data-localize="samples.settings.analyzed.warning">Sample is analyzed. If you change ..</span></p>
              </div> 
          
             <div class="flex">
@@ -2196,12 +2196,12 @@
             </div>
            <div class="flex"> 
             <dl>
-              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts1" id="emailSend1" type="buuton"><input type="checkbox"> <span data-localize="samples.notify.title">Notify By Email After Complete</span></label>
+              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts1" id="emailSend1" type="buuton"><input type="checkbox"> <span data-localize="samples.settings.notify.label">Notify By Email After Complete</span></label>
               </dt>
               <dd><div class="collapse" id="emailOpts1">
                                 
                    
-                     <input type="text" class="form-control" placeholder="email"> 
+                     <input type="text" class="form-control" placeholder="email" data-localize="samples.settings.notify">  
                      
                  
                     
@@ -2210,7 +2210,7 @@
             </dl>
             <dl>
               <dt><div class="btn-group pull-right">
-                  <button class="btn btn-link"><small data-localize="samples.delete">Delete sample</small></button>
+                  <button class="btn btn-link"><small data-localize="samples.settings.delete">Delete sample</small></button>
                </div>
               </dt>
               <dd>
@@ -2230,7 +2230,7 @@
         <div class="panel-heading" role="tab" id="headingThree">
              <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
-                  <span data-localize="samples.select_for.title">Select for analysis</span>
+                  <span data-localize="samples.settings.select.title">Select for analysis</span>
                 </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
               <i class="fa fa-pencil"></i>
@@ -2265,7 +2265,7 @@
                 <dd>345</dd>
                </dl>
                 <dl>
-                <dt><i class="fa fa-check text-success"></i> <span class="text-success">analyzed</dt>
+                <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analyzed</dt>
                 <dd>24.09.2015 34:45</dd>
                </dl>
             </div>         
@@ -2276,7 +2276,7 @@
           
               <div class="alert alert-warning">
        <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>
-      <p><strong data-localize="general.warning">Warning!</strong> <span data-localize="samples.edit.analyzed.warning">Sample is analyzed. If you change ..</span></p>
+      <p><strong data-localize="general.warning">Warning!</strong> <span data-localize="samples.settings.analyzed.warning">Sample is analyzed. If you change ..</span></p>
     </div>
          
            <div class="flex">
@@ -2336,18 +2336,18 @@
                   </select></dd>
                </dl>
                 <dl>
-                <dt><i class="fa fa-check text-success"></i> <span class="text-success">analyzed</dt>
+                <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analyzed</dt>
                 <dd><input type="text" class="form-control" value="24.09.2015 34:45"></dd>
                </dl>
             </div>
            <div class="flex"> 
             <dl>
-              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts2" id="emailSend2" type="buuton"><input type="checkbox"> <span data-localize="samples.notify.title">Notify By Email After Complete</span></label>
+              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts2" id="emailSend2" type="buuton"><input type="checkbox"> <span data-localize="samples.settings.notify.label">Notify By Email After Complete</span></label>
               </dt>
               <dd><div class="collapse" id="emailOpts2">
                                 
                    
-                     <input type="text" class="form-control" placeholder="email"> 
+                     <input type="text" class="form-control" placeholder="email" data-localize="samples.settings.notify">  
                      
                  
                     
@@ -2356,7 +2356,7 @@
             </dl>
             <dl>
               <dt><div class="btn-group pull-right">
-                 <button class="btn btn-link"><small data-localize="samples.delete">Delete sample</small></button>
+                 <button class="btn btn-link"><small data-localize="samples.settings.delete">Delete sample</small></button>
                   </div>
               </dt>
               <dd>
@@ -2410,8 +2410,8 @@
                     <th data-localize="general.view">
                       View
                     </th>
-                     <th data-localize="general.variants">
-                      Searched variants	
+                     <th data-localize="general.results">
+                      Results	
                     </th>
                     <th>
                     </th>
@@ -2438,7 +2438,7 @@
                     <td>Default View</td>
                     <td>98986</td>
                     <td>
-                    <div class="btn-group load">
+                    <div class="btn-group load" data-localize="history.load.help" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Load the analysis query now">
                       <button class="btn btn-sm btn-default"><span data-localize="history.load.title">Load now</span></button>
                     </div>
     
@@ -2447,11 +2447,12 @@
                   <tr class="collapse details1">
                     <td colspan="7">
                      
-                         <dl class="dl-horizontal"><dt>Date:</dt><dd>12.11.2015 02:34:21</dd></dl>
-                         <dl class="dl-horizontal"><dt>Sample:</dt><dd>ATCC HCC1187 TumorBL <span class="text-success">Analised <i class="fa fa-check"></i></span></dd></dl>
-                         <dl class="dl-horizontal"><dt>Filters:</dt><dd>Eye Cancer Diagnostics</dd></dl>
-                         <dl class="dl-horizontal"><dt>Date:</dt><dd>12.11.2015 02:34:21</dd></dl>
-                         <dl class="dl-horizontal"><dt>Date:</dt><dd>12.11.2015 02:34:21</dd></dl>
+                         <dl class="dl-horizontal"><dt><span data-localize="general.date">Date</span>:</dt><dd>12.11.2015 02:34:21</dd></dl>
+                         <dl class="dl-horizontal"><dt><span data-localize="general.sample">Sample</span>:</dt><dd>ATCC HCC1187 TumorBL <span class="text-success"><span data-localize="samples.setings.analized.title">Analised</span> <i class="fa fa-check"></i></span></dd></dl>
+                         <dl class="dl-horizontal"><dt><span data-localize="general.filters">Filters</span>:</dt><dd>Eye Cancer Diagnostics</dd></dl>
+                         <dl class="dl-horizontal"><dt><span data-localize="general.view">View</span>:</dt><dd>Default View</dd></dl>
+                         <dl class="dl-horizontal"><dt><span data-localize="general.results">Results</span>:</dt><dd>98986</dd></dl>
+    
                       </dl>
                       
                     </td>
@@ -2489,8 +2490,8 @@
                     <th data-localize="general.view">
                       View
                     </th>
-                     <th data-localize="general.variants">
-                      Searched variants	
+                     <th data-localize="general.results">
+                      Results	
                     </th>
                   <th>
                   </th>
@@ -2557,45 +2558,68 @@
           </div>
         </div>    
     <div class="modal fade" id="buy" tabindex="-1" role="dialog" aria-labelledby="buylabel">
-      <div class="modal-dialog modal-dialog-sm modal-dialog-primary" role="document">
+      <div class="modal-dialog modal-dialog-primary" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="loginLabel">Distributors</h4>
+            <h4 class="modal-title" id="loginLabel"><span data-localize="buy.distributors.heading">Distributors</span></h4>
           </div>
-          <div class="modal-body">
-       
+          <div class="modal-body table-content">
        <div class="list-group">
-      <a href="#" class="list-group-item active">
+    
+      <a href="#" class="list-group-item">
         <h4 class="list-group-item-heading">Company heading</h4>
-        <ul class="list-group-item-text">
-           <li>Office adress line 1,</li>
-           <li> Office adress line 1,</li>
-            <li>Office adress line 1,</li>
+        <dl class="dl-horizontal">
+          <dt>address</dt>
+          <dd><ul class="list-group-item-text">
+           <li>Office address line 1,</li>
+           <li> Office address line 1,</li>
+           <li>Office address line 1,</li>
           
         </ul>
+        </dd>
+        </dl>
+         <dl class="dl-horizontal">
+          <dt>Phone</dt>
+          <dd>+890 678 343789</dd>
+         </dl>
+        
       </a>
-    </div>
-     <div class="list-group">
-      <a href="#" class="list-group-item ">
+    <a href="#" class="list-group-item">
         <h4 class="list-group-item-heading">Company heading</h4>
-        <ul class="list-group-item-text">
-           <li>Office adress line 1,</li>
-           <li> Office adress line 1,</li>
-            <li>Office adress line 1,</li>
+        <dl class="dl-horizontal">
+          <dt>address</dt>
+          <dd><ul class="list-group-item-text">
+           <li>Office address line 1,</li>
+           <li> Office address line 1,</li>
+           <li>Office address line 1,</li>
           
         </ul>
+        </dd>
+        </dl>
+         <dl class="dl-horizontal">
+          <dt>Phone</dt>
+          <dd>+890 678 343789</dd>
+         </dl>
+        
       </a>
-    </div>
-     <div class="list-group">
-      <a href="#" class="list-group-item ">
+      <a href="#" class="list-group-item">
         <h4 class="list-group-item-heading">Company heading</h4>
-        <ul class="list-group-item-text">
-           <li>Office adress line 1,</li>
-           <li> Office adress line 1,</li>
-            <li>Office adress line 1,</li>
+        <dl class="dl-horizontal">
+          <dt>address</dt>
+          <dd><ul class="list-group-item-text">
+           <li>Office adres line 1,</li>
+           <li> Office adres line 1,</li>
+           <li>Office address line 1,</li>
           
         </ul>
+        </dd>
+        </dl>
+         <dl class="dl-horizontal">
+          <dt>Phone</dt>
+          <dd>+890 678 343789</dd>
+         </dl>
+        
       </a>
     </div>
     
@@ -2611,18 +2635,18 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="uploadLabel" data-localize="upload.title">Upload sample</h4>
+            <h4 class="modal-title" id="uploadLabel" data-localize="samples.upload.title">Upload and search sample</h4>
           </div>
           <div class="modal-body ">
       
         <div class="drop-area">
-       <div class="text-muted" data-localize="upload.description">Drag and drop your files here or manually select them.</div>
+       <div class="text-muted" data-localize="samples.upload.dropzone.help">Drag and drop your files here or manually select them.</div>
        <div>
         <button class="btn btn-success btn-rounded">
-          <span data-localize="upload.choose">Chose files</span>
+          <span data-localize="samples.upload.dropzone.select">Select file</span>
         </button>
       </div>
-       <div class="text-muted" data-localize="upload.description">Supported File Types:.vcf, .vcf.gz</div>
+       <div class="text-muted" data-localize="samples.upload.dropzone.description">Supported File Types:.vcf, .vcf.gz</div>
        <div class="progress hidden">
     <div class="progress progress-striped">
           <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-primary  progress-bar-primary">
@@ -2633,27 +2657,28 @@
     </div>
       
         <div class="alert alert-danger hidden">
-          <p><strong data-localize="general.error">Error!</strong><span data-localize="upload.errors.wrongformat">You trying to load zip file format.</span></p>    
+          <p><strong data-localize="general.error">Error!</strong><span data-localize="samples.upload.error.wrongformat">You trying to load zip file format.</span></p>    
         </div>
         <div class="alert alert-danger hidden">
-          <p><strong data-localize="general.error">Error!</strong><span data-localize="upload.errors.unreadable">The file is damaged or unreadable</p>    
+          <p><strong data-localize="general.error">Error!</strong><span data-localize="samples.upload.error.unreadable">The file is damaged or unreadable</p>    
         </div>
         <div class="alert alert-warning hidden">
-          <p><strong data-localize="general.warning">Warning!</strong><span data-localize="upload.warnings.notcomplete">The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</span></p>    
+          <p><strong data-localize="general.warning">Warning!</strong><span data-localize="samples.upload.warning.notcomplete">The file not uploaded successfully but metadata is not complete. Fill required fields necessary for analysis</span></p>    
         </div>
         <div class="alert alert-success hidden">
-          <p><strong data-localize="general.success">Success!</strong><span data-localize="upload.success.loaded">The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
+          <p><strong data-localize="general.success">Success!</strong><span data-localize="samples.upload.success.loaded">The file is not loaded, the metadata correctly filled. You can choose it for analysis</p>    
         </div>
         
-        <h4 data-localize="samples.search.title">Search for available samples</h4>
+        <h4 data-localize="samples.search.label">Search for available samples</h4>
          <div class="form-group has-feedback"><input type="text" class="form-control"><span class="form-control-feedback"><i class="fa fa-lg fa-search text-muted"></i></span></div>    
           <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
           <div class="panel panel-default">
           <div class="panel-heading" role="tab" id="headingOne">
-           <div class="btn-group pull-right" >
+           <div class="btn-group pull-right">
+            
            <a class="btn btn-default btn-choose" role="button">
-              <span data-localize="samples.select_for.title">Select for analysis</span>
-          </a>
+              <span data-localize="samples.settings.select.title">Select for analysis</span>
+           </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               <i class="fa fa-pencil"></i>
             </a>
@@ -2750,18 +2775,18 @@
                   </select></dd>
                </dl>
                 <dl>
-                <dt><i class="fa fa-check text-success"></i> <span class="text-success">analyzed</dt>
+                <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analyzed</dt>
                 <dd><input type="text" class="form-control" value="24.09.2015 34:45"></dd>
                </dl>
             </div>
            <div class="flex"> 
             <dl>
-              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend3" type="button"><input type="checkbox"> <span data-localize="samples.notify.title">Notify By Email After Complete</span></label>
+              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts3" id="emailSend3" type="button"><input type="checkbox"> <span data-localize="samples.settings.notify.label">Notify By Email After Complete</span></label>
               </dt>
               <dd><div class="collapse" id="emailOpts3">
                                 
                    
-                     <input type="text" class="form-control" placeholder="email"> 
+                     <input type="text" class="form-control" placeholder="email" data-localize="samples.settings.notify"> 
                      
                  
                     
@@ -2770,7 +2795,7 @@
             </dl>
             <dl>
               <dt><div class="btn-group pull-right">
-                 <button class="btn btn-link"><small data-localize="samples.delete">Delete sample</small></button>
+                 <button class="btn btn-link"><small data-localize="samples.settings.delete">Delete sample</small></button>
                   </div>
               </dt>
               <dd>
@@ -2790,9 +2815,9 @@
         <div class="panel-heading" role="tab" id="headingTwo">
           <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
-                  <span data-localize="samples.select_for.title">Select for analysis</span>
+                  <span data-localize="samples.settings.select.title">Select for analysis</span>
                 </a>
-           <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
               <i class="fa fa-pencil"></i>
             </a>
            </div>
@@ -2833,7 +2858,7 @@
           
              <div class="alert alert-warning">
              <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>
-             <p><strong data-localize="general.warning">Warning!</strong><span  data-localize="samples.edit.analyzed.warning">Sample is analyzed. If you change ..</span></p>
+             <p><strong data-localize="general.warning">Warning!</strong><span data-localize="samples.settings.analyzed.warning">Sample is analyzed. If you change ..</span></p>
              </div> 
          
             <div class="flex">
@@ -2896,12 +2921,12 @@
             </div>
            <div class="flex"> 
             <dl>
-              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts1" id="emailSend1" type="buuton"><input type="checkbox"> <span data-localize="samples.notify.title">Notify By Email After Complete</span></label>
+              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts1" id="emailSend1" type="buuton"><input type="checkbox"> <span data-localize="samples.settings.notify.label">Notify By Email After Complete</span></label>
               </dt>
               <dd><div class="collapse" id="emailOpts1">
                                 
                    
-                     <input type="text" class="form-control" placeholder="email"> 
+                     <input type="text" class="form-control" placeholder="email" data-localize="samples.settings.notify">  
                      
                  
                     
@@ -2910,7 +2935,7 @@
             </dl>
             <dl>
               <dt><div class="btn-group pull-right">
-                  <button class="btn btn-link"><small data-localize="samples.delete">Delete sample</small></button>
+                  <button class="btn btn-link"><small data-localize="samples.settings.delete">Delete sample</small></button>
                </div>
               </dt>
               <dd>
@@ -2930,7 +2955,7 @@
         <div class="panel-heading" role="tab" id="headingThree">
              <div class="btn-group pull-right" >
           <a class="btn btn-default btn-choose" role="button">
-                  <span data-localize="samples.select_for.title">Select for analysis</span>
+                  <span data-localize="samples.settings.select.title">Select for analysis</span>
                 </a>
            <a class="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
               <i class="fa fa-pencil"></i>
@@ -2965,7 +2990,7 @@
                 <dd>345</dd>
                </dl>
                 <dl>
-                <dt><i class="fa fa-check text-success"></i> <span class="text-success">analyzed</dt>
+                <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analyzed</dt>
                 <dd>24.09.2015 34:45</dd>
                </dl>
             </div>         
@@ -2976,7 +3001,7 @@
           
               <div class="alert alert-warning">
        <button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>
-      <p><strong data-localize="general.warning">Warning!</strong> <span data-localize="samples.edit.analyzed.warning">Sample is analyzed. If you change ..</span></p>
+      <p><strong data-localize="general.warning">Warning!</strong> <span data-localize="samples.settings.analyzed.warning">Sample is analyzed. If you change ..</span></p>
     </div>
          
            <div class="flex">
@@ -3036,18 +3061,18 @@
                   </select></dd>
                </dl>
                 <dl>
-                <dt><i class="fa fa-check text-success"></i> <span class="text-success">analyzed</dt>
+                <dt><i class="fa fa-check text-success"></i> <span class="text-success">Analyzed</dt>
                 <dd><input type="text" class="form-control" value="24.09.2015 34:45"></dd>
                </dl>
             </div>
            <div class="flex"> 
             <dl>
-              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts2" id="emailSend2" type="buuton"><input type="checkbox"> <span data-localize="samples.notify.title">Notify By Email After Complete</span></label>
+              <dt><label class="btn btn-wrapnormal rel btn-sm"  data-toggle="collapse" data-target="#emailOpts2" id="emailSend2" type="buuton"><input type="checkbox"> <span data-localize="samples.settings.notify.label">Notify By Email After Complete</span></label>
               </dt>
               <dd><div class="collapse" id="emailOpts2">
                                 
                    
-                     <input type="text" class="form-control" placeholder="email"> 
+                     <input type="text" class="form-control" placeholder="email" data-localize="samples.settings.notify">  
                      
                  
                     
@@ -3056,7 +3081,7 @@
             </dl>
             <dl>
               <dt><div class="btn-group pull-right">
-                 <button class="btn btn-link"><small data-localize="samples.delete">Delete sample</small></button>
+                 <button class="btn btn-link"><small data-localize="samples.settings.delete">Delete sample</small></button>
                   </div>
               </dt>
               <dd>
@@ -3089,55 +3114,48 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="uploadLabel">About AGx</h4>
+            <h4 class="modal-title" id="uploadLabel" data-localize="brand.about.heading">About AGx</h4>
           </div>
           <div class="modal-body">
           
     
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#about" aria-controls="about" role="tab" data-toggle="tab">About AGx</a></li>
-        <li role="presentation"><a href="#faq" aria-controls="faq" role="tab" data-toggle="tab">FAQ</a></li>
-        <li role="presentation"><a href="#terms" aria-controls="terms" role="tab" data-toggle="tab">Terms</a></li>
-        <li role="presentation"><a href="#privacy" aria-controls="privacy" role="tab" data-toggle="tab">Privacy</a></li>
+        <li role="presentation" class="active"><a href="#about" aria-controls="about" role="tab" data-toggle="tab"><span data-localize="brand.about.heading">About AGx</span></a></li>
+        <li role="presentation"><a href="#faq" aria-controls="faq" role="tab" data-toggle="tab"><span data-localize="brand.faq.heading">FAQ</span></a></li>
+        <li role="presentation"><a href="#terms" aria-controls="terms" role="tab" data-toggle="tab"><span data-localize="brand.terms.heading">Terms</span></a></li>
+        <li role="presentation"><a href="#privacy" aria-controls="privacy" role="tab" data-toggle="tab"><span data-localize="brand.privacy.heading">Privacy</span></a></li>
       </ul>
     
       <!-- Tab panes -->
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="about"> 
-          <h3>About AGx</h3>
+          <h3 data-localize="brand.about.heading">About AGx</h3>
           <div class="modal-lg-scroll" class="mCustomScrollbar" data-mcs-theme="dark">
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+              <div data-localize="brand.faq.description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
     
-              <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-    
-     
-              <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
-    
-              <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
-    
-              <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+              
             
             </div>
           
           </div>
         <div role="tabpanel" class="tab-pane" id="faq">
-           <h3>FAQ</h3>
+           <h3 data-localize="brand.faq.heading">FAQ</h3>
           <div class="modal-lg-scroll">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <div  data-localize="brand.faq.description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
           </div>
           
           </div>
         <div role="tabpanel" class="tab-pane" id="terms">
-          <h3>Terms</h3>
+          <h3 data-localize="brand.terms.heading">Terms</h3>
           <div class="modal-lg-scroll">
-           <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+           <div data-localize="brand.terms.description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
           </div>
           </div>
         <div role="tabpanel" class="tab-pane" id="privacy">
-          <h3>Privacy</h3>
+          <h3 data-localize="brand.privacy.heading">Privacy</h3>
           <div class="modal-lg-scroll">
-         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+         <div data-localize="brand.privacy.description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
           </div>
           </div>
       </div>
@@ -3153,13 +3171,13 @@
         <div class="modal-content">
            <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="filenameLabel">Export selected variants in file</h4>
+            <h4 class="modal-title" id="filenameLabel" data-localize="files.export.settings.heading">Export selected variants in file</h4>
           </div>
           <div class="modal-body">
           
       <form class="form-horizontal">
          <div class="form-group">
-          <label class="col-xs-12 col-sm-1 control-label">Format</label>
+          <label class="col-xs-12 col-sm-1 control-label" data-localize="files.export.settings.format.label">Format</label>
           <div class="col-sm-4 col-xs-12">
           <select class="select2 form-control" name="filename[filetype]">
             <option selected="">
@@ -3182,16 +3200,16 @@
           </div>
         </div>
          <div class="form-group">
-          <label class="col-xs-12 col-sm-2">File name</label>
+          <label class="col-xs-12 col-sm-2" data-localize="files.export.settings.filename.label">File name</label>
           <div class="col-xs-12">
           <input type="text" name="filename[name]" class="form-control text-primary" value="[Sample name]'s Selected Mutations 21.12.2015 23:45:56" placeholder="Set file name (required)">
-          <div class="help-text text-danger hidden">Name can not be empty</div>
+          <div class="help-text text-danger hidden" data-localize="files.export.settings.filename.error">Name can not be empty</div>
           </div>
         </div>    
          <div class="form-group">
-          <label class="col-xs-12">Description</label>
+          <label class="col-xs-12" data-localize="general.description.label">Description</label>
            <div class="col-xs-12">
-         <textarea class="form-control" placeholder="Note (optional)"></textarea>
+         <textarea class="form-control" data-localize="general.description" placeholder="Note (optional)"></textarea>
            </div>
         </div>
       </form>
@@ -3201,29 +3219,29 @@
          </div>
          <div class="modal-footer">
             
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>        
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal_export_button">Export</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><span class="actions.cancel">Cancel</span></button>        
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal_export_button"><span class="files.export.title">Export</span></button>
             
            
           </div>
         </div>
       </div>
     </div>
-    <div class="alert alert-inverse alert-fixed">
+    <div class="alert alert-inverse alert-fixed hidden">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
     <!--   success state -->
-      <p data-localize="upload.alerts.success.title">Filename.vcf is upload successfully</p>
-      <p data-localize="upload.alerts.success.description">You can choose sample SampleName for analises now</p>
-      <p><button class="btn btn-sm btn-block btn-success"><span data-localize="upload.alerts.success.action">Choose this sample for analises</span></button></p>
+      <p data-localize="samples.upload.alerts.success.title">Filename.vcf is upload successfully</p>
+      <p data-localize="samples.upload.alerts.success.description">You can choose sample SampleName for analises now</p>
+      <p><button class="btn btn-sm btn-block btn-success"><span data-localize="samples.upload.alerts.success.action">Choose this sample for analises</span></button></p>
     <!--   warning state -->  
-     <p data-localize="upload.alerts.warning.title">Filename.vcf is upload successfully</p>
-      <p data-localize="upload.alerts.warning.title">You can choose sample SampleName for analises now <span class="text-warning" data-localize="upload.alerts.warning.accent">but sample metadata is not complite</p>
-      <p><button class="btn btn-sm btn-block btn-warning" data-localize="upload.alerts.warning.action">Fill sample metadata</button></p>
+     <p data-localize="samples.upload.alerts.warning.title">Filename.vcf is upload successfully</p>
+      <p data-localize="samples.upload.alerts.warning.title">You can choose sample SampleName for analises now <span class="text-warning" data-localize="samples.upload.alerts.warning.accent">but sample metadata is not complite</p>
+      <p><button class="btn btn-sm btn-block btn-warning" data-localize="samples.upload.alerts.warning.action">Fill sample metadata</button></p>
     <!--   danger state -->
-     <p data-localize="upload.alerts.error.title">Filename.vcf is not upload</p>
-      <p data-localize="upload.alerts.error.description"><span class="text-danger">File is damage or file format not supported</p>
+     <p data-localize="samples.upload.alerts.error.title">Filename.vcf is not upload</p>
+      <p data-localize="samples.upload.alerts.error.description"><span class="text-danger">File is damage or file format not supported</p>
     </div>
 
     <script src="http://localhost:8080/webpack-dev-server.js"></script>

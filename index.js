@@ -1,11 +1,10 @@
 'use strict';
 
 const Express = require('express');
-// added by Vatagin
-const cors = require('cors');
-//
 
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const morgan = require('morgan');
 const Http = require('http');
 const WebSocketServer = require('ws').Server;
 
@@ -24,13 +23,15 @@ const controllers = new ControllersFacade(services);
 const httpServer = Http.createServer();
 const app = new Express();
 
-// added by Vatagin
+console.error('Cross-origin resource sharing enabled!');
 app.use(cors());
-//
 
 app.set('port', Config.port);
 
 app.use(bodyParser.json());
+
+app.use(morgan('combined'));
+
 app.use('/', Express.static('public'));
 
 const mainRouter = controllers.apiController.createRouter(controllers);
