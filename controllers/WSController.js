@@ -1,25 +1,71 @@
 'use strict';
 
-const Express = require('express');
+const _ = require('lodash');
 
 const ControllerBase = require('./ControllerBase');
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
+// TODO: Move it to the model layer.
 class WSController extends ControllerBase {
     constructor(services) {
         super(services);
+
+        this.clients = [];
+
+        this._subscribeAppServerReplyEvents();
     }
 
     addWebSocketServerCallbacks(webSocketServer) {
         webSocketServer.on('connection', (ws) => {
-            ws.on('message', (message) => {
-                console.log('Received: ' + message);
-                ws.send(message, (error) => {
-                    if (error) {
-                        console.error('Client WS send error', error);
-                    }
-                });
+            console.log('WS client connected');
+            ws.on('message', (messageString) => {
+                const message = JSON.parse(messageString);
+                const clientDescriptor = this._findClientByWs(ws);
+                const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
+                console.log('Received: ' + JSON.stringify(message, null, 2));
+                console.log('In session: ' + clientDescriptor.sessionId);
+                this._onClientMessage(ws, convertedMessage);
+            });
+            ws.on('error', error => {
+                console.log('Error in client socket: ' + JSON.stringify(error, null, 2));
+            });
+            ws.on('close', () => {
+                console.log('WS client disconnected');
+            });
+
+            this.clients.push({
+                ws: ws,
+                sessionId: null
             });
         });
+    }
+
+    _onClientMessage(clientWs, message) {
+        const sessionId = message.sessionId;
+        if (sessionId) {
+            console.log('Connecting client WS to session ' + sessionId);
+            const clientDescriptor = this._findClientByWs(clientWs);
+            clientDescriptor.sessionId = sessionId;
+        }
+    }
+
+    _onServerReply(reply) {
+        const sessionId = reply.sessionId;
+        const client = this._findClientBySessionId(sessionId);
+        client.ws.send(JSON.stringify(reply));
+    }
+
+    _findClientByWs(clientWs) {
+        return _.find(this.clients, client => client.ws === clientWs);
+    }
+
+    _findClientBySessionId(sessionId) {
+        return _.find(this.clients, client => client.sessionId === sessionId);
+    }
+
+    _subscribeAppServerReplyEvents() {
+        const events = this.services.applicationServerReply.registeredEvents();
+        this.services.applicationServerReply.on(events.onOperationResultReceived, this._onServerReply.bind(this));
     }
 }
 

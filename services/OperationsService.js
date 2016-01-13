@@ -4,6 +4,7 @@ const Uuid = require('node-uuid');
 const _ = require('lodash');
 
 const ServiceBase = require('./ServiceBase');
+var async = require('async');
 
 const SYSTEM_SESSION = '9c952e80-c2db-4a09-a0b0-6ea667d254a1';
 
@@ -28,7 +29,7 @@ class OperationsService extends ServiceBase {
         return OPERATION_TYPES;
     }
 
-    add(sessionId, operationType, method, callback) {
+    add(sessionId, operationType, method, data, callback) {
         const operationId = Uuid.v4();
         const sessionOperations = this.operations[sessionId] || (this.operations[sessionId] = {});
         const operation = {
@@ -36,11 +37,24 @@ class OperationsService extends ServiceBase {
             sessionId: sessionId,
             type: operationType,
             method: method,
+            data: data,
             timestamp: Date.now()
         };
         console.log('starting operation ' + operation.id + ' of type ' + operation.type);
         sessionOperations[operationId] = operation;
         callback(null, operation);
+    }
+
+    setData(sessionId, operationId, data, callback) {
+        async.waterfall([
+            (callback) => {
+                this.find(sessionId, operationId, callback);
+            },
+            (operation, callback) => {
+                operation.data = data;
+                callback(null, operation);
+            }
+        ], callback);
     }
 
     findInAllSessions(operationId, callback) {
@@ -62,7 +76,7 @@ class OperationsService extends ServiceBase {
                 this._onOperationNotFound(callback);
             }
         } else {
-            callback(new Error('Session is not found'));
+            this._onOperationNotFound(callback);
         }
     }
 
@@ -72,7 +86,7 @@ class OperationsService extends ServiceBase {
             const operations = _.filter(sessionOperations);
             callback(null, operations);
         } else {
-            callback(new Error('Session is not found'));
+            callback(null, []);
         }
     }
 
@@ -91,34 +105,31 @@ class OperationsService extends ServiceBase {
     }
 
     remove(sessionId, operationId, callback) {
-        this.find(sessionId, operationId, (error) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => this.find(sessionId, operationId, callback),
+            (operation, callback) => {
                 const sessionOperations = this.operations[sessionId];
-                const operation = sessionOperations[operationId];
-                delete sessionOperations[operationId];
+                if (operation.type === OPERATION_TYPES.SEARCH) {
+                    this.services.applicationServer.requestCloseSearchSession(operation.sessionId, operation.id, callback);
+                } else {
+                    callback(null, operation);
+                }
+                delete sessionOperations[operation.id];
+            },
+            (operation, callback) => {
+                // Remove empty entries to keep the object clean.
+                if (_.isEmpty(this.operations[sessionId])) {
+                    delete this.operations[sessionId];
+                }
                 callback(null, operation);
             }
-        });
+        ], callback);
     }
 
     removeAll(sessionId, callback) {
         const sessionOperations = this.operations[sessionId];
         if (sessionOperations) {
-            // Close AS sessions for search operations.
-            const searchOperations = _.filter(sessionOperations, operation => operation.type === OPERATION_TYPES.SEARCH);
-
-            // Delete operations.
-            delete this.operations[sessionId];
-
-            // Now we expect the only search operation, so just report error and do nothing, if there are more.
-            if (searchOperations.length > 1) {
-                callback(new Error('Too many search operations for the session'));
-            } else {
-                const searchOperation = searchOperations[0];
-                this.services.applicationServer.requestCloseSearchSession(searchOperation.id, callback);
-            }
+            async.each(sessionOperations, (operation, cb) => this.remove(sessionId, operation.id, cb), callback);
         } else {
             callback(null);
         }

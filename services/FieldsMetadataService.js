@@ -18,9 +18,12 @@ class FieldsMetadataService extends ServiceBase {
         }
     }
 
-    import(sourceName, appServerFieldMetadataArray, callback) {
-        const webServerFields = _.map(appServerFieldMetadataArray, this._createFieldMetadata);
-        // TODO: here we should ignore all mandatory fields, as they should be already added.
+    find(fieldId, callback) {
+        this.models.fields.find(fieldId, callback);
+    }
+
+    findMany(fieldIds, callback) {
+        this.models.fields.findMany(fieldIds, callback);
     }
 
     static createFieldMetadata(sourceName, appServerFieldMetadata) {

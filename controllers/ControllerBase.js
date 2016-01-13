@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 const HTTP_INTERNAL = 500;
@@ -11,6 +13,8 @@ const HTTP_OK = 200;
 class ControllerBase {
     constructor(services) {
         this.services = services;
+
+        this.getSessionId = this.getSessionId.bind(this);
     }
 
     sendInternalError(response, message) {
@@ -24,6 +28,9 @@ class ControllerBase {
     }
 
     sendError(response, httpError, message) {
+        if (message && typeof message !== 'string') {
+            message = message.toString();
+        }
         response
             .status(httpError)
             .json({
@@ -40,9 +47,18 @@ class ControllerBase {
         .end();
     }
 
-    getRequestBody(request) {
-        const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(request.body);
+    getRequestBody(request, response) {
+        const requestBody = request.body;
+        if (_.isEmpty(requestBody)) {
+            this.sendInternalError(response, 'Request body is empty');
+            return null;
+        }
+        const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(requestBody);
         return camelCasedBody;
+    }
+
+    getSessionId(request) {
+        return request.get(this.services.config.sessionHeader);
     }
 
     checkUserIsDefined(request, response) {
