@@ -7,7 +7,6 @@ const SamplesService = require('./SamplesService');
 const RedisService = require('./RedisService');
 const SessionService = require('./SessionService');
 const OperationService = require('./OperationsService');
-const WSService = require('./WSService');
 const FieldsMetadataService = require('./FieldsMetadataService');
 const ApplicationServerService = require('./ApplicationServerService');
 const ApplicationServerReplyService = require('./ApplicationServerReplyService');
@@ -29,7 +28,6 @@ class ServiceFacade {
     this.search = new SearchService(this, models);
     this.redis = new RedisService(this, models);
     this.tokens = new TokenService(this, models);
-    this.wsService = new WSService(this, models);
   }
 }
 

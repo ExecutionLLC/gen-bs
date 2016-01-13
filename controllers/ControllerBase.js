@@ -35,7 +35,7 @@ class ControllerBase {
             .status(httpError)
             .json({
                 code: httpError,
-                message: message
+                message
             })
             .end();
     }
