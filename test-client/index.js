@@ -7,7 +7,6 @@ const Async = require('async');
 const SESSION_HEADER = 'X-Session-Id';
 const HOST = 'localhost';
 const PORT = 5000;
-const DEFAULT_SESSION_ID = 'asdasd';
 const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 
@@ -20,7 +19,8 @@ const WebSocketClient = require('./WebSocketClient');
 const urls = new Urls(HOST, PORT);
 const wsClient = new WebSocketClient(HOST, PORT);
 const operations = new Operations();
-let lastSessionId = 'asdasd';
+let lastSessionId = undefined;
+let lastOperationId = undefined;
 
 function stringify(obj) {
   return JSON.stringify(obj, null, 2);
@@ -47,11 +47,17 @@ function read(prompt, defaultValue, callback) {
   Read({
     prompt: prompt,
     default: defaultValue
-  }, callback);
+  }, (error, result) => {
+    callback(error, result);
+  });
 }
 
 function askSession(callback) {
   read('Session Id: ', lastSessionId, callback);
+}
+
+function askOperation(callback) {
+  read('Operation Id: ', lastOperationId, callback);
 }
 
 operations.add('Open session', (callback) => {
@@ -123,10 +129,45 @@ operations.add('Start search', (callback) => {
         if (error) {
           console.error(error);
         } else {
+          const bodyObject = ChangeCaseUtil.convertKeysToCamelCase(body);
+          lastOperationId = bodyObject.operationId;
           console.log('Response: ' + stringify(response));
           console.log('Body: ' + stringify(body));
         }
         callback();
+      });
+    }
+  ], callback);
+});
+
+operations.add('Search in results', (callback) => {
+  waterfall([
+    (callback) => {
+      askSession(callback);
+    },
+    (sessionId, callback) => {
+      askOperation((error, operationId) => {
+        callback(error, {
+          sessionId,
+          operationId
+        });
+      });
+    },
+    (sessionWithOperation, callback) => {
+      const headers = createHeaders(sessionWithOperation.sessionId);
+      Request.post({
+        url: urls.startSearchInResults(sessionWithOperation.operationId),
+        json: {
+          topSearch: null,
+          search: [],
+          limit: 100,
+          offset: 0
+        },
+        headers
+      }, (error, response, body) => {
+        console.log('Response: ' + stringify(response));
+        console.log('Body: ' + stringify(body));
+        callback(error);
       });
     }
   ], callback);

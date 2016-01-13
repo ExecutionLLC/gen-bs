@@ -11,6 +11,7 @@ class SearchController extends ControllerBase {
         super(services);
 
         this.analyze = this.analyze.bind(this);
+        this.searchInResults = this.searchInResults.bind(this);
     }
 
     analyze(request, response) {

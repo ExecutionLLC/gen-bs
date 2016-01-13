@@ -11,7 +11,7 @@ const METHODS = {
     getSourceMetadata: 'v1.get_source_metadata',
     openSearchSession: 'v1.open_session',
     closeSearchSession: 'v1.close_session',
-    setFilters: 'v1.set_filters'
+    setFilters: 'v1.set_filter'
 };
 
 class ApplicationServerService extends ServiceBase {
