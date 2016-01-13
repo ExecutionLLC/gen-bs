@@ -2,6 +2,7 @@
 
 const Express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const Http = require('http');
 const WebSocketServer = require('ws').Server;
 
@@ -19,6 +20,9 @@ const controllers = new ControllersFacade(services);
 // Create service.
 const httpServer = Http.createServer();
 const app = new Express();
+
+console.error('Cross-origin resource sharing enabled!');
+app.use(cors());
 
 app.set('port', Config.port);
 
