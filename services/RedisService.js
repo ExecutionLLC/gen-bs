@@ -4,14 +4,31 @@ const async = require('async');
 const _ = require('lodash');
 const Redis = require('redis');
 
-class RedisService {
-    fetch(redisHost, redisPort, databaseNumber, redisIndex, offset, limit, callback) {
+const ServiceBase = require('./ServiceBase');
+
+class RedisService extends ServiceBase {
+    constructor(services, models) {
+        super(services, models);
+    }
+
+    fetch(redisParams, callback) {
         async.waterfall([
             (callback) => {
-                this._createClient(redisHost, redisPort, databaseNumber, callback);
+                this._createClient(redisParams.host, redisParams.port, redisParams.databaseNumber, callback);
             },
             (client, callback) => {
-                this._fetchData(client, redisIndex, offset, limit, callback);
+                this._fetchData(client, redisParams.dataIndex, redisParams.offset, redisParams.limit, callback);
+            },
+            (rawData, callback) => {
+                this.services.users.find(redisParams.userId, (error, user) => {
+                    callback(error, {
+                        user,
+                        rawData
+                    });
+                });
+            },
+            (dataWithUser, callback) => {
+                this._convertFields(dataWithUser.rawData, dataWithUser.user, redisParams.sampleId, callback);
             }
         ], callback);
     }
@@ -22,12 +39,19 @@ class RedisService {
             port
         });
 
+        // Select Redis database by number
         client.select(databaseNumber, (error) => callback(error, client));
     }
 
+    /**
+     * Extracts rows from Redis. Rows are extracted by indices.
+     * These indices are stored in the list specified by 'index'.
+     * Each resulting row is object[fieldName] = fieldValue.
+     * */
     _fetchData(client, index, offset, limit, callback) {
         async.waterfall([
             (callback) => this._fetchRowIndices(client, index, offset, limit, callback),
+            // Correct row indices as now the values don't start from 'row:', but the indices do.
             (rowIndices, callback) => callback(null, _.map(rowIndices, (rowIndex) => 'row:' + rowIndex)),
             (rowIndices, callback) => this._fetchRows(client, rowIndices, callback)
         ], callback);
@@ -87,6 +111,43 @@ class RedisService {
                 {}
             ));
         });
+    }
+
+    /**
+     * Converts fields names into field ids.
+     * */
+    _convertFields(rawData, user, sampleId, callback) {
+        async.waterfall([
+            (callback) => {
+                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fields) => {
+                    callback(error, fields);
+                });
+            },
+            (fields, callback) => {
+                // will be matching fields by name, so create fieldName->field hash
+                const fieldNameToFieldHash = _.reduce(fields, (memo, field) => {
+                    memo[field.name] = field;
+                }, {});
+                callback(null, fieldNameToFieldHash);
+            },
+            // TODO: Add sources field metadata
+            (fieldNameToFieldHash, callback) => {
+                const mappedData = _.map(rawData, (rowObject) => {
+                    const fieldIdToValueObject = {};
+                    const fieldNames = _.keys(rowObject);
+                    _.each(fieldNames, fieldName => {
+                        const field = fieldNameToFieldHash[fieldName];
+                        const fieldValue = rowObject[fieldName];
+                        if (field) {
+                            fieldIdToValueObject[field.id] = fieldValue;
+                        } else {
+                            console.error('Field is not found! The value will be ignored: ' + fieldName);
+                        }
+                    });
+                });
+                callback(null, mappedData);
+            }
+        ], callback);
     }
 }
 

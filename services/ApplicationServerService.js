@@ -77,6 +77,8 @@ class ApplicationServerService extends ServiceBase {
                 callback(error);
             } else {
                 const operationData = {
+                    sampleId: params.sample.id,
+                    userId: params.userId,
                     offset: params.offset,
                     limit: params.limit
                 };

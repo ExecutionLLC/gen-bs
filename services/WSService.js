@@ -30,7 +30,6 @@ class WSService extends ServiceBase {
 
     _onSearchReply(reply) {
         const sessionStatuses = this.services.applicationServerReply.sessionStatuses();
-        const result = reply.result;
         if (reply.error || reply.status !== sessionStatuses.READY) {
             this.eventEmitter.emit(EVENTS.operationProgress, reply);
         } else {

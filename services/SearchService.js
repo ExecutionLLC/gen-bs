@@ -94,6 +94,7 @@ class SearchService extends ServiceBase {
             } else {
                 const appServerSearchParams = {
                     sessionId,
+                    userId: user.id,
                     view: result.view,
                     sample: result.sample,
                     fieldsMetadata: result.fieldsMetadata,

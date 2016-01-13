@@ -47,14 +47,13 @@ class ApplicationServerReplyService extends ServiceBase {
                     this._completeOperationIfNeeded(operation, callback);
                 },
                 (operation, callback) => {
-                    this._createOperationResult(operation, rpcError, rpcMessage, (error, result) => {
+                    this._parseOperationResult(operation, rpcError, rpcMessage, (error, result) => {
                         result.operation = operation;
                         callback(error, result);
                     });
                 }
             ], (error, result) => {
                 const eventName = result.operation.method;
-                // TODO: Form result and fire event here.
                 const haveEventHandlers = this.eventEmitter.emit(eventName, result);
                 if (!haveEventHandlers) {
                     console.error('No handler is registered for event ' + eventName);
@@ -64,7 +63,10 @@ class ApplicationServerReplyService extends ServiceBase {
         }
     }
 
-    _createOperationResult(operation, rpcError, rpcMessage, callback) {
+    /**
+     * Selects and runs proper message parser. Handles RPC-level errors.
+     * */
+    _parseOperationResult(operation, rpcError, rpcMessage, callback) {
         const event = operation.method;
         const events = this.registeredEvents();
 
@@ -81,7 +83,7 @@ class ApplicationServerReplyService extends ServiceBase {
 
         switch (event) {
             case events.openSearchSession:
-                this._createOpenSearchResult(operation, rpcMessage, callback);
+                this._parseOpenSearchResult(operation, rpcMessage, callback);
                 break;
 
             default:
@@ -91,7 +93,10 @@ class ApplicationServerReplyService extends ServiceBase {
         }
     }
 
-    _createOpenSearchResult(operation, message, callback) {
+    /**
+     * Parses RPC message for the 'open_session' method calls.
+     * */
+    _parseOpenSearchResult(operation, message, callback) {
         if (!message || !message.result || !message.result.sessionState) {
             console.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
@@ -109,23 +114,27 @@ class ApplicationServerReplyService extends ServiceBase {
                 // Get data from Redis
                 const conditions = operation.data;
                 const redisAddress = this._parseAddress(sessionState.redisDb.url);
-                const redisDb = {
+                const redisParams = {
                     host: redisAddress.host,
                     port: redisAddress.port,
+                    sampleId: conditions.sampleId,
+                    userId: conditions.userId,
                     databaseNumber: sessionState.redisDb.number,
                     dataIndex: sessionState.sort.index,
                     offset: conditions.offset,
                     limit: conditions.limit
                 };
-                this.services.redis.fetch(redisDb.host, redisDb.port, redisDb.databaseNumber,
-                    redisDb.dataIndex, redisDb.offset, redisDb.limit, (error, data) => {
-                        // TODO: Match fields by name from sample and sources here.
-                        callback(null, {
-                            status: SESSION_STATUS.READY,
-                            progress: 100,
-                            data
-                        });
-                    });
+                async.waterfall([
+                    (callback) => {
+                        this.services.redis.fetch(redisParams, callback);
+                    }
+                ], (error, result) => {
+                    // TODO: Create result
+                    callback(null, {
+                        error,
+                        result
+                    })
+                });
             }
         }
     }
