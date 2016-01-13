@@ -11,6 +11,8 @@ class WSController extends ControllerBase {
         super(services);
 
         this.clients = [];
+
+        this._subscribeAppServerReplyEvents();
     }
 
     addWebSocketServerCallbacks(webSocketServer) {
@@ -18,7 +20,7 @@ class WSController extends ControllerBase {
             console.log('WS client connected');
             ws.on('message', (messageString) => {
                 const message = JSON.parse(messageString);
-                const clientDescriptor = this._findClientDescriptor(ws);
+                const clientDescriptor = this._findClientByWs(ws);
                 const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
                 console.log('Received: ' + JSON.stringify(message, null, 2));
                 console.log('In session: ' + clientDescriptor.sessionId);
@@ -42,13 +44,28 @@ class WSController extends ControllerBase {
         const sessionId = message.sessionId;
         if (sessionId) {
             console.log('Connecting client WS to session ' + sessionId);
-            const clientDescriptor = this._findClientDescriptor(clientWs);
+            const clientDescriptor = this._findClientByWs(clientWs);
             clientDescriptor.sessionId = sessionId;
         }
     }
 
-    _findClientDescriptor(clientWs) {
+    _onServerReply(reply) {
+        const sessionId = reply.sessionId;
+        const client = this._findClientBySessionId(sessionId);
+        client.ws.send(JSON.stringify(reply));
+    }
+
+    _findClientByWs(clientWs) {
         return _.find(this.clients, client => client.ws === clientWs);
+    }
+
+    _findClientBySessionId(sessionId) {
+        return _.find(this.clients, client => client.sessionId === sessionId);
+    }
+
+    _subscribeAppServerReplyEvents() {
+        const events = this.services.applicationServerReply.registeredEvents();
+        this.services.applicationServerReply.on(events.onOperationResultReceived, this._onServerReply.bind(this));
     }
 }
 

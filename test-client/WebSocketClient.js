@@ -19,7 +19,6 @@ class WebSocketClient {
 
   _onWsMessage(message, flags) {
     console.log('WS Message: ' + JSON.stringify(message, null, 2));
-    console.log('WS Message Flags: ' + JSON.stringify(flags, null, 2));
   }
 
   _onWsError(error) {

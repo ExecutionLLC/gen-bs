@@ -19,8 +19,8 @@ class TestController extends ControllerBase {
         this.testSources = this.testSources.bind(this);
         this.testSearch = this.testSearch.bind(this);
 
-        serverReply.on(serverReply.registeredEvents().getSourcesList, this.onSourcesListReceived);
-        serverReply.on(serverReply.registeredEvents().getSourceMetadata, this.onSourceMetadataReceived);
+        serverReply.on(serverReply.registeredEvents().onSourceMetadataReceived, this.onSourcesListReceived);
+        serverReply.on(serverReply.registeredEvents().onSourcesListReceived, this.onSourceMetadataReceived);
     }
 
     onSourcesListReceived(operationResult) {

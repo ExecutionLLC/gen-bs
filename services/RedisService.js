@@ -127,6 +127,7 @@ class RedisService extends ServiceBase {
                 // will be matching fields by name, so create fieldName->field hash
                 const fieldNameToFieldHash = _.reduce(fields, (memo, field) => {
                     memo[field.name] = field;
+                    return memo;
                 }, {});
                 callback(null, fieldNameToFieldHash);
             },
@@ -138,12 +139,17 @@ class RedisService extends ServiceBase {
                     _.each(fieldNames, fieldName => {
                         const field = fieldNameToFieldHash[fieldName];
                         const fieldValue = rowObject[fieldName];
-                        if (field) {
+
+                        // Keep the search key and transfer it to the client as is.
+                        if (fieldName === 'search_key') {
+                            fieldIdToValueObject[fieldName] = fieldValue;
+                        } else if (field) {
                             fieldIdToValueObject[field.id] = fieldValue;
                         } else {
                             console.error('Field is not found! The value will be ignored: ' + fieldName);
                         }
                     });
+                    return fieldIdToValueObject;
                 });
                 callback(null, mappedData);
             }

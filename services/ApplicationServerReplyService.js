@@ -11,15 +11,21 @@ const SESSION_STATUS = {
     READY: 'ready'
 };
 
+const EVENTS = {
+    onOperationResultReceived: 'onOperationResultReceived',
+    onSourcesListReceived: 'onSourcesListReceived',
+    onSourceMetadataReceived: 'onSourceMetadataReceived'
+};
+
 class ApplicationServerReplyService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
 
-        this.eventEmitter = new EventProxy();
+        this.eventEmitter = new EventProxy(EVENTS);
     }
 
     registeredEvents() {
-        return this.services.applicationServer.registeredEvents();
+        return EVENTS;
     }
 
     sessionStatuses() {
@@ -47,18 +53,27 @@ class ApplicationServerReplyService extends ServiceBase {
                     this._completeOperationIfNeeded(operation, callback);
                 },
                 (operation, callback) => {
-                    this._parseOperationResult(operation, rpcError, rpcMessage, (error, result) => {
-                        result.operation = operation;
-                        callback(error, result);
+                    this._processOperationResult(operation, rpcError, rpcMessage, (error, operationResult) => {
+                        callback(error, {
+                            operation,
+                            operationResult
+                        });
                     });
                 }
-            ], (error, result) => {
-                const eventName = result.operation.method;
-                const haveEventHandlers = this.eventEmitter.emit(eventName, result);
-                if (!haveEventHandlers) {
-                    console.error('No handler is registered for event ' + eventName);
+            ], (error, resultWithOperation) => {
+                if (!resultWithOperation || !resultWithOperation.operation) {
+                    console.error('No operation is found. Error: ' + error);
+                } else {
+                    const operation = resultWithOperation.operation;
+                    const result = resultWithOperation.operationResult;
+                    const eventData = {
+                        operationId: operation.id,
+                        sessionId: operation.sessionId,
+                        result
+                    };
+                    this.eventEmitter.emit(EVENTS.onOperationResultReceived, eventData);
+                    callback(error, result);
                 }
-                callback(error, result);
             });
         }
     }
@@ -66,9 +81,9 @@ class ApplicationServerReplyService extends ServiceBase {
     /**
      * Selects and runs proper message parser. Handles RPC-level errors.
      * */
-    _parseOperationResult(operation, rpcError, rpcMessage, callback) {
+    _processOperationResult(operation, rpcError, rpcMessage, callback) {
         const event = operation.method;
-        const events = this.registeredEvents();
+        const events = this.services.applicationServer.registeredEvents();
 
         let result = null;
 
@@ -81,9 +96,11 @@ class ApplicationServerReplyService extends ServiceBase {
             return;
         }
 
+        // Each of the following methods is expected to set 'eventName' parameter,
+        // which describes an event that should be raised with the result.
         switch (event) {
             case events.openSearchSession:
-                this._parseOpenSearchResult(operation, rpcMessage, callback);
+                this._processOpenSearchResult(operation, rpcMessage, callback);
                 break;
 
             default:
@@ -96,7 +113,7 @@ class ApplicationServerReplyService extends ServiceBase {
     /**
      * Parses RPC message for the 'open_session' method calls.
      * */
-    _parseOpenSearchResult(operation, message, callback) {
+    _processOpenSearchResult(operation, message, callback) {
         if (!message || !message.result || !message.result.sessionState) {
             console.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
@@ -104,6 +121,13 @@ class ApplicationServerReplyService extends ServiceBase {
             });
         } else {
             const sessionState = message.result.sessionState;
+            const conditions = operation.data;
+
+            const sampleId = conditions.sampleId;
+            const userId = conditions.userId;
+            const limit = conditions.limit;
+            const offset = conditions.offset;
+
             // If not ready, just send the progress up
             if (sessionState.status !== SESSION_STATUS.READY) {
                 callback(null, {
@@ -112,28 +136,28 @@ class ApplicationServerReplyService extends ServiceBase {
                 });
             } else {
                 // Get data from Redis
-                const conditions = operation.data;
-                const redisAddress = this._parseAddress(sessionState.redisDb.url);
+                const redisAddress = this._parseRedisAddress(sessionState.redisDb.url);
                 const redisParams = {
                     host: redisAddress.host,
                     port: redisAddress.port,
-                    sampleId: conditions.sampleId,
-                    userId: conditions.userId,
+                    sampleId,
+                    userId,
                     databaseNumber: sessionState.redisDb.number,
                     dataIndex: sessionState.sort.index,
-                    offset: conditions.offset,
-                    limit: conditions.limit
+                    offset,
+                    limit
                 };
                 async.waterfall([
                     (callback) => {
                         this.services.redis.fetch(redisParams, callback);
                     }
                 ], (error, result) => {
-                    // TODO: Create result
-                    callback(null, {
-                        error,
-                        result
-                    })
+                    callback(error, {
+                        sampleId,
+                        offset,
+                        limit,
+                        data: result
+                    });
                 });
             }
         }
@@ -144,6 +168,9 @@ class ApplicationServerReplyService extends ServiceBase {
         this.services.operations.findInAllSessions(operationId, callback);
     }
 
+    /**
+     * Deletes associated information for completed operations.
+     * */
     _completeOperationIfNeeded(operation, callback) {
         // TODO: Here we should analyze the response and operation method
         // TODO: and decide should we remove the operation or not.
@@ -156,7 +183,7 @@ class ApplicationServerReplyService extends ServiceBase {
         }
     }
 
-    _parseAddress(hostAddress) {
+    _parseRedisAddress(hostAddress) {
         const addressParts = hostAddress.split(':');
         const host = addressParts[0];
         const port = addressParts[1];
