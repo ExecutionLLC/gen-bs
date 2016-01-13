@@ -11,7 +11,8 @@ export const REQUEST_USERDATA = 'REQUEST_USERDATA'
 /*
  * Other constants
  */
-const USERDATA_URL = 'http://localhost:5000/api/data'
+//const USERDATA_URL = 'http://localhost:5000/api/data'
+const USERDATA_URL = 'http://localhost:8888/api/data'
 
 
 /*

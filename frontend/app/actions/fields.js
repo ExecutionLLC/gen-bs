@@ -5,7 +5,8 @@ export const RECEIVE_FIELDS = 'RECEIVE_FIELDS'
 export const REQUEST_FIELDS = 'REQUEST_FIELDS'
 
 
-var _fieldsUrl = (sampleId) => `http://localhost:5000/api/fields/${sampleId}`
+//var _fieldsUrl = (sampleId) => `http://localhost:5000/api/fields/${sampleId}`
+var _fieldsUrl = (sampleId) => `http://localhost:8888/api/fields/${sampleId}`
 
 /*
  * action creators

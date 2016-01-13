@@ -17,7 +17,6 @@ class NavbarCreateQuery extends Component {
 
 
   render() {
-    console.log('props onSelect', this.props);
     return (
 
         <nav className="navbar navbar-fixed-top navbar-default">

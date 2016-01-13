@@ -1,36 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
+
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact'
 import NavbarMain from '../components/Header/NavbarMain'
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery'
 import ViewsModal from '../components/Modals/ViewsModal'
 
+import { login } from '../actions/auth'
 import { openModal, closeModal } from '../actions/modalWindows'
 import { fetchUserdata } from '../actions/userData'
 
 
 class App extends Component {
 
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
-    this.props.dispatch(fetchUserdata())
+    this.props.dispatch(login('valarie', 'password'))
   }
 
   render() {
-    const { samples, isFetching } = this.props.userData
+    const { isAuthenticated, samples, isFetching } = this.props.userData
 
     return (
 
       <div className="main" id="main">
         <nav className="navbar navbar-inverse navbar-static-top"></nav>
-        {isFetching && samples.length === 0 &&
+        {!isAuthenticated &&
+          <h2>Auth ...</h2>
+        }
+        {isAuthenticated && isFetching && samples.length === 0 &&
           <h2>Loading...</h2>
         }
-        {!isFetching && samples.length === 0 &&
+        {isAuthenticated && !isFetching && samples.length === 0 &&
           <h2>Empty.</h2>
         }
         {samples.length > 0 &&
@@ -66,9 +67,10 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const { userData, modalWindows, views, fields } = state
+  const { auth, userData, modalWindows, views, fields } = state
 
   return {
+    auth,
     userData,
     modalWindows,
     views,
