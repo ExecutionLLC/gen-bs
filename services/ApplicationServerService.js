@@ -1,19 +1,17 @@
 'use strict';
 
 const _ = require('lodash');
-var events = require('events');
+const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
-
-const FIELDS_METADATA = require('../test_data/fields_metadata.json');
 
 const METHODS = {
     getSourcesList: 'v1.get_sources',
     getSourceMetadata: 'v1.get_source_metadata',
     openSearchSession: 'v1.open_session',
     closeSearchSession: 'v1.close_session',
-    setFilters: 'v1.set_filters'
+    setFilters: 'v1.set_filter'
 };
 
 class ApplicationServerService extends ServiceBase {
@@ -33,7 +31,6 @@ class ApplicationServerService extends ServiceBase {
         this.host = this.services.config.applicationServer.host;
         this.port = this.services.config.applicationServer.port;
 
-        this.eventEmitter = new events.EventEmitter();
         this.rpcProxy = new RPCProxy(this.host, this.port, this._requestOperations, null, this._rpcReply);
     }
 
@@ -65,10 +62,13 @@ class ApplicationServerService extends ServiceBase {
      * */
     requestOpenSearchSession(sessionId, params, callback) {
         const method = METHODS.openSearchSession;
+        const appServerSampleId = this._getAppServerSampleId(params.sample);
+        const appServerView = this._createAppServerView(params.view, params.fieldsMetadata);
+
         const searchSessionRequest = {
-            user_filename: params.sampleId,
-            view_structure: params.view,
-            view_filter: params.filters
+            sample: appServerSampleId,
+            view_structure: appServerView,
+            view_filter: params.filters || {}
         };
 
         const operationTypes = this.services.operations.operationTypes();
@@ -76,7 +76,13 @@ class ApplicationServerService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-                this.services.operations.add(sessionId, operationTypes.SEARCH, method, (error, operation) => {
+                const operationData = {
+                    sampleId: params.sample.id,
+                    userId: params.userId,
+                    offset: params.offset,
+                    limit: params.limit
+                };
+                this.services.operations.add(sessionId, operationTypes.SEARCH, method, operationData, (error, operation) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -88,41 +94,34 @@ class ApplicationServerService extends ServiceBase {
     }
 
     requestCloseSearchSession(sessionId, operationId, callback) {
-        this.services.sessions.remove(sessionId, operationId, (error, operation) => {
+        this.services.operations.find(sessionId, operationId, (error, operation) => {
             if (error) {
                 callback(error);
             } else {
                 const method = METHODS.closeSearchSession;
-                this._rpcSend(operationId, method, null, callback);
+                this._rpcSend(operation.id, method, null, callback);
             }
         });
     }
 
     requestSearchInResults(sessionId, operationId, params, callback) {
-        this.services.operations.find(sessionId, operationId, (error, operation) => {
-           if (error) {
-               callback(error);
-           } else {
-               const method = METHODS.setFilters;
-               const searchInResultsRequest = {
-                   globalSearchValue: params.globalSearchValue,
-                   fieldSearchValues: params.fieldSearchValues
-               };
-               this._rpcSend(operationId, method, searchInResultsRequest, callback);
-           }
-        });
-    }
-
-    getFieldsMetadata(user, callback) {
-        callback(null, FIELDS_METADATA);
-    }
-
-    on(event, callback) {
-        this.eventEmitter.on(event, callback);
-    }
-
-    off(event, callback) {
-        this.eventEmitter.removeListener(event, callback);
+        async.waterfall([
+            (callback) => {
+                this.services.operations.find(sessionId, operationId, callback);
+            },
+            (operation, callback) => {
+                const method = METHODS.setFilters;
+                const searchInResultsRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
+                this._rpcSend(operationId, method, searchInResultsRequest, callback);
+            },
+            (operationId, callback) => {
+                // Store information about the desired limits after the operation call is successful.
+                this.services.operations.setData(sessionId, operationId, {
+                    offset: params.offset,
+                    limit: params.limit
+                }, callback);
+            }
+        ], callback);
     }
 
     _requestOperationState(operationId, callback) {
@@ -146,22 +145,40 @@ class ApplicationServerService extends ServiceBase {
         });
     }
 
-    _completeOperationIfNeeded(operationId, operationResult, callback) {
-        // TODO: Here we should analyze the response and operation method
-        // TODO: and decide should we remove the operation or not.
-        // Currently just complete all non-search operations.
-        const operations = this.services.operations;
-        operations.findInAllSessions(operationId, (error, operation) => {
-            if (error) {
-                callback(error);
-            } else {
-                if (operation.type !== operations.operationTypes().SEARCH) {
-                    operations.remove(operation.sessionId, operation.id, callback);
-                } else {
-                    callback(null, operation);
-                }
-            }
-        });
+    _createSetFilterParams(globalSearchValue, fieldSearchValues) {
+        return {
+            globalSearch: globalSearchValue,
+            filters: _.map(fieldSearchValues, fieldSearchValue => {
+                return {
+                    columnName: fieldSearchValue.fieldMetadata.name,
+                    columnFilter: fieldSearchValue.value
+                };
+            })
+        };
+    }
+
+    _createAppServerView(view, fieldMetadata) {
+        const idToFieldMetadata = _.indexBy(fieldMetadata, 'id');
+        return {
+            sampleColumns: _.map(view.viewListItems, (viewListItem) => {
+                const field = idToFieldMetadata[viewListItem.fieldId];
+                return {
+                    name: field.name,
+                    filter: [] // TODO: List of resolved keyword values.
+                };
+            }),
+            sources: []
+        };
+    }
+
+    /**
+     * For default samples file name should be used.
+     * For user samples sample id is file name.
+     * */
+    _getAppServerSampleId(sample) {
+        return sample.sampleType === 'standard'
+        || sample.sampleType === 'advanced' ?
+            sample.fileName : sample.id;
     }
 
     _closePreviousSearchIfAny(sessionId, callback) {
@@ -175,43 +192,31 @@ class ApplicationServerService extends ServiceBase {
                 } else {
                     // Expect the only search operation here.
                     const searchOperation = operations[0];
-                    this.requestCloseSearchSession(searchOperation.id, callback);
+                    this.services.operations.remove(sessionId, searchOperation.id, callback);
                 }
             }
         });
     }
 
     _rpcReply(rpcError, rpcMessage) {
-        console.log('RPC REPLY: ', rpcError, rpcMessage);
-        if (rpcError) {
-            console.error('RPC request error! %s', rpcError);
-            console.log('The RPC event will be ignored.');
-        } else {
-            const operationId = rpcMessage.id;
-            const operationResult = {
-                operationId: operationId,
-                result: rpcMessage.result
-            };
-            this._completeOperationIfNeeded(operationId, operationResult, (error, operation) => {
-                if (error) {
-                    console.error('Error when trying to complete operation: %s. Do nothing.', error);
-                } else {
-                    const methodName = operation.method;
-                    operationResult.sessionId = operation.sessionId;
-                    const haveEventHandlers = this.eventEmitter.emit(methodName, operationResult);
-                    if (!haveEventHandlers) {
-                        console.error('No handler is registered for event ' + methodName);
-                    }
-                }
-            });
-        }
+        console.log('RPC REPLY, error: ', JSON.stringify(rpcError, null, 2), ', message: ', JSON.stringify(rpcMessage, null, 2));
+        this.services.applicationServerReply.onRpcReplyReceived(rpcError, rpcMessage, (error) => {
+            if (error) {
+                console.error('Error processing RPC reply', error);
+            }
+        });
     }
 
     _rpcSend(operationId, method, params, callback) {
-        this.rpcProxy.send(operationId, method, params);
-        // TODO: add log event
-        console.log('RPC SEND: ', operationId, method, params);
-        callback(null, operationId);
+        this.rpcProxy.send(operationId, method, params, (error) => {
+            if (error) {
+                callback(error);
+            } else {
+                console.log('RPC SEND: ', operationId, method);
+                console.log('Params:', JSON.stringify(params, null, 2));
+                callback(null, operationId);
+            }
+        });
     }
 }
 

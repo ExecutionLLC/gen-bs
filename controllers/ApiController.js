@@ -13,7 +13,7 @@ class ApiController extends ControllerBase {
         this._initUserMiddleware = this._initUserMiddleware.bind(this);
     }
 
-    _initUserMiddleware(request, reponse, next) {
+    _initUserMiddleware(request, response, next) {
         const sessionHeaderName = this.services.config.sessionHeader;
         const sessions = this.services.sessions;
 
@@ -39,14 +39,7 @@ class ApiController extends ControllerBase {
         if (sessionId) {
             setUserBySessionFunc(sessionId);
         } else {
-            console.error('Automatically open user session for testing');
-            sessions.startForUser('valarie', 'password', (error, sessionId) => {
-                if (error) {
-                    next(new Error(error));
-                } else {
-                    setUserBySessionFunc(sessionId);
-                }
-            });
+            next();
         }
     }
 

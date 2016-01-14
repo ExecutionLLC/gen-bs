@@ -11,14 +11,16 @@ class SessionsController extends ControllerBase {
         this.open = this.open.bind(this);
         this.check = this.check.bind(this);
         this.close = this.close.bind(this);
-        this._getSessionId = this._getSessionId.bind(this);
     }
 
     /**
      * Opens new session, either demo or user, depending on the user name and password presence in the request.
      * */
     open(request, response) {
-        const body = this.getRequestBody(request);
+        const body = this.getRequestBody(request, response);
+        if (!body) {
+            return;
+        }
         const userName = body.userName;
         const password = body.password;
 
@@ -41,7 +43,7 @@ class SessionsController extends ControllerBase {
     }
 
     check(request, response) {
-        const sessionId = this._getSessionId(request);
+        const sessionId = this.getSessionId(request);
 
         this.services.sessions.findById(sessionId, (error, sessionId) => {
             if (error) {
@@ -55,7 +57,7 @@ class SessionsController extends ControllerBase {
     }
 
     close(request, response) {
-        const sessionId = this._getSessionId(request);
+        const sessionId = this.getSessionId(request);
         this.services.sessions.destroySession(sessionId, (error) => {
             if (error) {
                 this.sendInternalError(response, error);
@@ -63,10 +65,6 @@ class SessionsController extends ControllerBase {
                 this.sendJson(response, {});
             }
         });
-    }
-
-    _getSessionId(request) {
-        return request.get(this.services.config.sessionHeader);
     }
 
     createRouter() {
