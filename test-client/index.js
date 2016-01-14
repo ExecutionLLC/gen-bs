@@ -6,7 +6,7 @@ const Async = require('async');
 
 const SESSION_HEADER = 'X-Session-Id';
 const HOST = 'localhost';
-const PORT = 5000;
+const PORT = 8888;
 const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 

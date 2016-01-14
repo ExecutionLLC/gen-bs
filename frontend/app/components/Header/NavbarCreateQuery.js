@@ -15,8 +15,11 @@ import { changeView } from '../../actions/views'
 
 class NavbarCreateQuery extends Component {
 
-
   render() {
+
+    const { dispatch, views } = this.props
+
+
     return (
 
         <nav className="navbar navbar-fixed-top navbar-default">
@@ -30,7 +33,7 @@ class NavbarCreateQuery extends Component {
                   <ViewsSetup {...this.props} />
                   <Views
                     {...this.props}
-                    viewSelected={ (e) => this.props.dispatch(changeView(this.props.views.list, $(e.target).val()))}
+                    viewSelected={ (e) => dispatch(changeView(views.list, $(e.target).val()))}
                   />
 
                   <Analyze />
@@ -44,11 +47,12 @@ class NavbarCreateQuery extends Component {
 }
 
 function mapStateToProps(state) {
-  const { modalWindows, views } = state
+  const { modalWindows, views, ui} = state
 
   return {
     modalWindows,
-    views
+    views,
+    ui
   }
 }
 

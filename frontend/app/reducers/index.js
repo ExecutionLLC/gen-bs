@@ -7,6 +7,7 @@ import exportToFile from './exportToFile'
 import modalWindows from './modalWindows' 
 import views from './views' 
 import fields from './fields' 
+import ui from './ui' 
 
 
 
@@ -17,7 +18,8 @@ const genApp = combineReducers({
   exportToFile,
   modalWindows ,
   views,
-  fields
+  fields,
+  ui
 })
 
 export default genApp

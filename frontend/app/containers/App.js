@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 
 
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact'
@@ -20,10 +21,16 @@ class App extends Component {
 
   render() {
     const { isAuthenticated, samples, isFetching } = this.props.userData
+    const { dispatch, ui } = this.props
+
+    var mainDivClass = classNames({
+      'main': true,
+      'subnav-closed': ui.queryNavbarClosed
+    });
 
     return (
 
-      <div className="main" id="main">
+      <div className={mainDivClass} id="main">
         <nav className="navbar navbar-inverse navbar-static-top"></nav>
         {!isAuthenticated &&
           <h2>Auth ...</h2>
@@ -67,14 +74,15 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const { auth, userData, modalWindows, views, fields } = state
+  const { auth, userData, modalWindows, views, fields, ui } = state
 
   return {
     auth,
     userData,
     modalWindows,
     views,
-    fields
+    fields,
+    ui
   }
 }
 

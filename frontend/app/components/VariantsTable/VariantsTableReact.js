@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 
 import { fetchVariants } from '../../actions/variantsTable'
 
@@ -19,10 +20,16 @@ class VariantsTableReact extends Component {
   }
 
   render() {
-    const { variants, views, fields } = this.props
+    const { variants, views, fields, ui } = this.props
+
+    var tableWrapperClass = classNames({
+      'table-variants-wrapper': true,
+      'subnav-closed': ui.queryNavbarClosed
+    });
+
     return (
 
-        <div className="table-variants-wrapper">
+        <div className={tableWrapperClass}>
           <div className="table-variants-container">
             <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
               <VariantsTableHead variants={variants} view={views.current} fields={fields.list} />
@@ -37,10 +44,11 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-  const { variantsTable } = state
+  const { variantsTable, ui } = state
 
   return {
-    variants: variantsTable.variants
+    variants: variantsTable.variants,
+    ui
   }
 }
 
