@@ -95,7 +95,9 @@ body {
      padding-left: 1px;
      vertical-align: top;
      width: 1%;
-
+     > div { 
+       position: relative;
+     }
      &.width100 { 
         width: 100%;
      }
@@ -103,6 +105,11 @@ body {
        white-space: nowrap;
        min-width: 50px; 
        color: @navbar-inverse-color;
+       .badge { 
+         position: absolute;
+         right: 3px;
+         top: 3px;
+       }
        &:hover { 
         opacity: .8;
       }      
@@ -1063,6 +1070,19 @@ body.ch {
     
 }
 }
+.combine-options { 
+  .query-builder .rule-container .rule-value-container {
+    span.select2 { 
+    width: 380px !important;
+    }
+    @media (max-width: @screen-xss-max) { 
+     span.select2 { 
+        width: 100%!important;
+      }
+    }
+  }
+
+}
 //
 
 .loader { 
@@ -1087,3 +1107,4 @@ body.ch {
   padding: 10px 20px;
   border-bottom: 3px solid #f0f0f0;
 } 
+
