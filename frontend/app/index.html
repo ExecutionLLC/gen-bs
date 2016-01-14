@@ -456,12 +456,12 @@
                         
                       
                         <div>
-                        <div data-localize="files.export.help" data-toggle="tooltip" data-placement="right" title="Select several mutations in the table and save to file" data-container="body" data-trigger="hover">
+                        <div data-localize="files.export.help" data-toggle="tooltip" data-placement="right" title="Select several mutations in the table and save to file. There are indicate the number of already selected recordings" data-container="body" data-trigger="hover">
                         
                             <a class="btn navbar-btn" type="button" id="dropdownMenu1" data-toggle="modal" data-target="#filename">
                               <span class="hidden-xxs" data-localize="files.export.title">Export</span>
                               <span class="visible-xxs"><i class="fa fa-lg fa-cloud-download"></i></span>
-                            <span class="badge">7</span>
+                            <span class="label label-warning">7</span>
                             </a>
                         
                         <!--
@@ -495,8 +495,10 @@
                            <input type="hidden" id="curr_lang" value="en">
                          </div>
                         </div> 
-                        <div data-toggle="tooltip" data-localize="account.buy.help" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs">
-                        	<a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy"><span data-localize="buy.title">Buy</span></a>
+                        <!-- 	replace this tooltip by "data-localize="account.profile.balance.value" for paying users -->
+                        <div data-toggle="tooltip" data-localize="buy.help" data-placement="left" title="The amount paid by the remaining tests" data-container="body" data-trigger="hover" class="hidden-xs">
+                        	<a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy"><span data-localize="buy.title">Buy</span><span class="label label-success">>99</span></a>
+                        
                         </div>
                         <div data-toggle="tooltip" data-localize="account.help"  data-placement="left" title="Register or login for access to featured options" data-container="body" data-trigger="hover" class="hidden-xs hidden-xss">
                         	<a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest" data-localize="account.login.title">Login<span class="hidden-xs"> (<span data-localize="account.register.title">Register</span>)</span></span><span class="user hidden"><span>Name</span><span>Lastname</span></span></a>
