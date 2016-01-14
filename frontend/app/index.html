@@ -18,7 +18,7 @@
 </head>
 <body class="sidebar-left-closed sidebar-right-closed subnav-closed">
 
-<div class="loader hidden"></div>
+<div class="loader hidden"><span data-localize="genearl.loading">Loading. Wait, please.</span></div>
     <div class="sidebar sidebar-default sidebar-left collapse width" id="sidebarLeft">
     
     
@@ -524,9 +524,21 @@
                                         
                                             <div class="table-cell table-cell100">
                                             <div class="btn-group" data-localize="samples.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples">
+                                               <select class="select2">
+                                                 <option value="3">Sample 1</option>
+                                                      <option value="3">Sample 2</option>
+                                                           <option value="3">Sample 3</option>
+                                                                <option value="3">Sample 4</option>
+                                                 <option value="3">Sample 5</option>
+                                                 <option value="3">Sample 6</option>
+                                                 <option value="3">Sample 7</option>
+                                            
+                                               </select>  
+                                            <!--
                                                <select class="sample-search">
                                                  <option value="3620194" selected="selected">mental retardation patient12</option>
                                                </select> 
+                                            -->
                                             </div>
                                             </div>
                                 
@@ -1220,7 +1232,7 @@
     		<dt class="rules-group-header">
     		 
     		<div class="btn-group pull-right group-actions">
-    			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button>
+    			<button type="button" class="btn btn-xs btn-primary" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-primary" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button>
     		</div>
     		<div class="btn-group group-conditions">
     			<label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_0_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_0_cond" value="OR"> OR </label>
@@ -1234,7 +1246,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1351,7 +1363,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1452,7 +1464,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1556,7 +1568,7 @@
     				<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1738,7 +1750,7 @@
     		<dt class="rules-group-header">
     		 
     		<div class="btn-group pull-right group-actions">
-    			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="glyphicon glyphicon-plus"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-lg fa-plus-circle"></i> Add group </button>
+    			<button type="button" class="btn btn-xs btn-primary" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-primary" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button>
     		</div>
     		<div class="btn-group group-conditions">
     			<label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_0_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_0_cond" value="OR"> OR </label>
@@ -1752,7 +1764,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1783,7 +1795,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1814,7 +1826,7 @@
     			<dl id="builder-basic_group_1" class="rules-group-container">
     	<dt class="rules-group-header">
     	<div class="btn-group pull-right group-actions">
-    		<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="glyphicon glyphicon-plus"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-lg fa-plus-circle"></i> Add group </button><button type="button" class="btn btn-xs btn-danger" data-delete="group"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    		<button type="button" class="btn btn-xs btn-primary" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-primary" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button><button type="button" class="btn btn-xs btn-default" data-delete="group"><i class="glyphicon glyphicon-remove"></i> Delete </button>
     	</div>
     	<div class="btn-group group-conditions">
     		<label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_1_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_1_cond" value="OR"> OR </label>
@@ -1828,7 +1840,7 @@
     		<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">

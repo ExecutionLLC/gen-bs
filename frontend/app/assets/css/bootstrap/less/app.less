@@ -1021,6 +1021,12 @@ body.ch {
      border-left: none; 
     }
 }
+ .rules-group-container .rules-group-header .group-actions { 
+   .btn { 
+     margin-left: 2px;
+   
+   }
+ }
 @media (max-width: @screen-xss-max) {
     .rule-container .rule-filter-container  {
      width: 100%; 
@@ -1082,8 +1088,14 @@ body.ch {
 //
 
 .loader { 
-  position: relative;
+  background: fade(@modal-backdrop-bg, 70%);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
     z-index: 3000;
+     color: darken( @light-primary-color, 5%);
   &:before { 
     .fa();
    -webkit-animation: fa-spin 2s infinite linear;
@@ -1092,11 +1104,22 @@ body.ch {
    position: relative;
    left: 50%;
    margin: 10px;
-   font-size: 48px;
-   color: darken( @light-primary-color, 15%);
-   text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff;
+   font-size: 70px;
+   color: darken( @light-primary-color, 5%);
+   top: 50%;
    
-  }  
+  } 
+  span { 
+  display: block;
+    font-size: 30px;
+    left: 50%;
+    margin-left: -100px;
+    margin-top: 100px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 300px;
+  } 
 }
 
 .list-group-header {
