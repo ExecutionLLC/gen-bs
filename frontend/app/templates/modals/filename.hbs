@@ -9,7 +9,7 @@
       
   <form class="form-horizontal">
      <div class="form-group">
-      <label class="col-xs-12 col-sm-1 control-label" data-localize="files.export.settings.format.label">Format</label>
+      <label class="col-xs-12 col-sm-2 control-label" data-localize="files.export.settings.format.label">Format</label>
       <div class="col-sm-4 col-xs-12">
       <select class="select2 form-control" name="filename[filetype]">
         <option selected="">
@@ -44,6 +44,9 @@
      <textarea class="form-control" data-localize="general.description" placeholder="Note (optional)"></textarea>
        </div>
     </div>
+    <div class="alert alert-warning hidden">
+          <p><strong data-localize="general.warning">Warning!</strong><span data-localize="files.export.settings.warning.limit"> Only the first 100 search results will be exported</span></p>    
+        </div>
   </form>
 
         
