@@ -11,6 +11,10 @@
 			"description": "Text Label",
 			"type": "string"
 		},
+		"label": {
+			"description": "Display text for the field",
+			"type": "string"
+		},
 		"source_name": {
 			"type": "string",
 			"description": "Name of the source. Should be equal to id for user-uploaded samples."
@@ -64,11 +68,16 @@
 		},
 		"multi_select": {
 			"type": "boolean"
+		},
+		"value": {
+			"type": "string",
+			"description": "Used when requesting update of an editable sample field."
 		}
 	},
 	"required": [
 		"id",
 		"name",
+		"label",
 		"description",
 		"filter_control_enable",
 		"editable",

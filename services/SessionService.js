@@ -26,11 +26,13 @@ class SessionService extends ServiceBase {
                        callback(error);
                    } else {
                        // Check and remove existing user session.
-                       let existingSessionId = _.find(this.sessions, session => session.userId === userId);
-                       if (existingSessionId) {
-                           this.destroySession(existingSessionId, (error) => {
+                       let existingSession = _.find(this.sessions, session => session.userId === userId);
+                       if (existingSession) {
+                           this.destroySession(existingSession.id, (error) => {
                                if (error) {
                                    console.error('Error destroying existing session: %s', error);
+                               } else {
+                                   console.log('Existing session for user ' + userName + ' is destroyed.');
                                }
                            });
                        }

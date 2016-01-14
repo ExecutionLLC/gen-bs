@@ -2,6 +2,8 @@
 
 const WebSocket = require('ws');
 
+const ChangeCaseUtil = require('./ChangeCaseUtil');
+
 const SocketState = {
     CONNECTING: 0,
     CONNECTED: 1,
@@ -23,15 +25,26 @@ class RPCProxy {
         setInterval(() => this._connect(), 1000);
     }
 
+    send(operationId, method, params, callback) {
+        const convertedParams = ChangeCaseUtil.convertKeysToSnakeCase(params);
+        const jsonData = this._formatJson(operationId, method, convertedParams);
+        this.ws.send(jsonData, null, callback);
+    }
+
+    _formatJson(operationId, method, params) {
+        return JSON.stringify({id: operationId, method: method, params: params});
+    }
+
     _address() {
         return 'ws://' + this.host + ':' + this.port + '/ws';
     }
 
-    _replyResult(message) {
+    _replyResult(messageString) {
+        const unconvertedMessage = JSON.parse(messageString);
+        const message = ChangeCaseUtil.convertKeysToCamelCase(unconvertedMessage);
         if (this.replyCallback) {
-            const msg = JSON.parse(message);
-            this.replyCallback(msg.error, {
-                id: msg.id, result: msg.result
+            this.replyCallback(message.error, {
+                id: message.id, result: message.result
             });
         } else {
             console.error('No callback is registered for RPC reply');
@@ -40,10 +53,11 @@ class RPCProxy {
 
     _close(event) {
         if (event.wasClean) {
-            console.log('Socket closed (clear)', event);
+            console.log('Socket closed (clean)', event);
         } else {
-            console.log('Socket closed (unclear)', event);
+            console.log('Socket closed (unclean)', event);
         }
+
         if (this.disconnectCallback) {
             this.disconnectCallback();
         }
@@ -69,30 +83,13 @@ class RPCProxy {
 
         this.connected = true;
 
-        this.ws.on('message', (message, flags) => {
-            this._replyResult(message, flags);
-        });
-
-        this.ws.on('close', (event) => {
-            this._close(event);
-        });
-
-        this.ws.on('error', (event) => {
-            this._error(event);
-        });
+        this.ws.on('message', this._replyResult.bind(this));
+        this.ws.on('close', this._close.bind(this));
+        this.ws.on('error', this._error.bind(this));
 
         if (this.connectCallback) {
             this.connectCallback();
         }
-    }
-
-    _formatJson(operationId, method, params) {
-        return JSON.stringify({id: operationId, method: method, params: [params]});
-    }
-
-    send(operationId, method, params) {
-        var self = this;
-        self.ws.send(self._formatJson(operationId, method, params));
     }
 }
 
