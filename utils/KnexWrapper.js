@@ -24,6 +24,7 @@ class KnexWrapper {
             client: 'pg',
             connection: {
                 host: databaseSettings.host,
+                port: databaseSettings.port,
                 user: databaseSettings.user,
                 password: databaseSettings.password,
                 database: databaseSettings.databaseName

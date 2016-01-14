@@ -23,34 +23,11 @@ class ViewsModel extends SecureModelBase {
     }
 
     add(userId, languId, view, callback) {
-        this.db.transactionally((trx, cb) => {
-            async.waterfall([
-                (cb) => {
-                    const dataToInsert = {
-                        id: this._generateId(),
-                        creator: userId,
-                        name: view.name,
-                        viewType: 'user'
-                    };
-                    this._insert(dataToInsert, trx, cb);
-                },
-                (viewId, cb) => {
-                    const dataToInsert = {
-                        viewId: viewId,
-                        languId: languId,
-                        description: view.description
-                    };
-                    this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
-                        cb(error, viewId);
-                    });
-                },
-                (viewId, cb) => {
-                    this._addViewItems(viewId, view.viewListItems, trx, (error) => {
-                        cb(error, viewId);
-                    });
-                }
-            ], cb);
-        }, callback);
+        this._add(userId, languId, view, false, callback);
+    }
+
+    addWithId(userId, languId, view, callback) {
+        this._add(userId, languId, view, true, callback);
     }
 
     // Создаёт новую версию существующего view
@@ -163,6 +140,37 @@ class ViewsModel extends SecureModelBase {
         ], callback);
     }
 
+    _add(userId, languId, view, withId, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: (withId ? view.id : this._generateId()),
+                        creator: userId,
+                        name: view.name,
+                        viewType: view.viewType || 'user'
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                },
+                (viewId, cb) => {
+                    const dataToInsert = {
+                        viewId: viewId,
+                        languId: languId,
+                        description: view.description
+                    };
+                    this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
+                        cb(error, viewId);
+                    });
+                },
+                (viewId, cb) => {
+                    this._addViewItems(viewId, view.viewListItems, trx, (error) => {
+                        cb(error, viewId);
+                    });
+                }
+            ], cb);
+        }, callback);
+    }
+
     _addViewItems(viewId, viewItems, trx, callback) {
         async.map(viewItems, (viewItem, cb) => {
             this._addViewItem(viewId, viewItem, trx, cb);
@@ -173,6 +181,7 @@ class ViewsModel extends SecureModelBase {
         const dataToInsert = {
             id: this._generateId(),
             viewId: viewId,
+            //fieldId: viewItem.fieldId,
             order: viewItem.order,
             sortOrder: viewItem.sortOrder,
             sortDirection: viewItem.sortDirection
@@ -254,7 +263,7 @@ class ViewsModel extends SecureModelBase {
             'PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC) AS RN, * ' +
             'FROM ' + this.baseTableName + ' ' +
             'INNER JOIN view_text ON view_text.view_id = ' + this.baseTableName + '.id ' +
-            'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
+            'WHERE (creator = \'' + userId + '\' OR creator IS NULL) AND is_deleted = false) T WHERE T.RN = 1';
         this.db.asCallback((knex, cb) => {
             knex.raw(query)
                 .asCallback((error, viewsData) => {

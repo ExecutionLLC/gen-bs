@@ -10,8 +10,9 @@ const Knex = require('knex');
  * used in knexjs.</remarks>
  * */
 class DatabaseCreator {
-    constructor(serverHost, userName, password, databaseName) {
+    constructor(serverHost, serverPort, userName, password, databaseName) {
         this.serverHost = serverHost;
+        this.serverPort = serverPort;
         this.userName = userName;
         this.password = password;
         this.databaseName = databaseName;
@@ -25,43 +26,53 @@ class DatabaseCreator {
         return new Promise((resolve, reject) => {
             this._isDatabaseExists(postgresKnex)
                 .then(isDatabaseExists => {
-                    if (!isDatabaseExists) {
-                        return this._createEmptyDatabase(postgresKnex)
+                    if (isDatabaseExists) {
+                        return this._dropDatabaseIfExists(postgresKnex)
+                            .catch((dropError) => {
+                                return Promise.reject('Failed to drop database. ' + dropError);
+                            })
                             .then(() => {
-                                console.log('Connecting to database...');
-                                const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
-                                const databaseKnex = new Knex(databaseConfig);
-
-                                return this._createTables(databaseKnex)
-                                    .finally(() => {
-                                        console.log('Destroying database context...');
-                                        databaseKnex.destroy();
-                                    })
-                                    ;
+                                console.log('Database dropped: ' + this.databaseName + '.');
+                                return this._createDatabase(postgresKnex)
+                                    .catch((error) => {
+                                        return Promise.reject('Failed to create database. ' + error);
+                                    });
                             });
                     } else {
-                        // TODO: можно вставить DROP DATABASE, есть работающий способ
-                        console.log('Database is found.');
+                        return this._createDatabase(postgresKnex)
+                            .catch((error) => {
+                                return Promise.reject('Failed to create database. ' + error);
+                            })
                     }
-                }).then(() => {
-                resolve();
-            })
-            .catch((error) => {
-                console.log('Caught error, dropping database ' + this.databaseName);
-                postgresKnex.raw('DROP DATABASE ' + this.databaseName)
-                    .then(() => {
-                        reject(error);
-                    }).catch((dropError) => {
-                        console.error('Failed to drop database: ' + dropError);
-                        reject(error);
-                    });
-                reject(error);
-            })
-            .finally(() => {
-                console.log('Destroying postgres database context..');
-                postgresKnex.destroy();
-            });
+                })
+                .then(() => {
+                    console.log('Database created: ' + this.databaseName + '.');
+                    resolve();
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+                .finally(() => {
+                    console.log('Destroying postgres database context...');
+                    postgresKnex.destroy();
+                });
         });
+    }
+
+    _createDatabase(postgresKnex) {
+        console.log('Creating database ' + this.databaseName + '...');
+        return this._createEmptyDatabase(postgresKnex)
+            .then(() => {
+                console.log('Connecting to database...');
+                const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
+                const databaseKnex = new Knex(databaseConfig);
+
+                return this._createTables(databaseKnex)
+                    .finally(() => {
+                        console.log('Destroying ' + this.databaseName + ' database context...');
+                        databaseKnex.destroy();
+                    });
+            });
     }
 
     _createTables(databaseKnex) {
@@ -163,7 +174,7 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
-                table.string('description', 100);
+                table.string('description', 512);
 
                 table.primary(['filter_id', 'langu_id']);
             })
@@ -186,11 +197,16 @@ class DatabaseCreator {
                 table.string('name', 50);
                 table.string('source_name', 128);
                 table.enu('value_type', fieldValueTypesEnumValues);
-                table.boolean('filter_control_enable');
-                table.boolean('is_mandatory');
-                table.boolean('is_editable');
-                table.boolean('is_invisible');
-                table.boolean('is_multi_select');
+                table.boolean('filter_control_enable')
+                    .defaultTo(true);
+                table.boolean('is_mandatory')
+                    .defaultTo(false);
+                table.boolean('is_editable')
+                    .defaultTo(true);
+                table.boolean('is_invisible')
+                    .defaultTo(false);
+                table.boolean('is_multi_select')
+                    .defaultTo(true);
             })
             .createTable('field_text', table => {
                 table.uuid('field_id')
@@ -199,7 +215,7 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
-                table.string('description', 100);
+                table.string('description', 512);
 
                 table.primary(['field_id', 'langu_id']);
             })
@@ -268,7 +284,7 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
-                table.string('description', 100);
+                table.string('description', 512);
             })
             .createTable('view_assignment', table => {
                 table.uuid('user_id')
@@ -312,6 +328,8 @@ class DatabaseCreator {
                 table.string('chrom', 50);
                 table.integer('pos');
                 table.string('alt', 50);
+                // Field is needed to fetch comments. The comment is currently assigned to the search key,
+                // which can be the same for different samples. Comments should be fetched by that search key.
                 table.bigInteger('search_key');
                 table.uuid('creator')
                     .references('id')
@@ -434,7 +452,7 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
-                table.string('description', 100);
+                table.string('description', 512);
 
                 table.primary(['saved_file_id', 'langu_id']);
             })
@@ -475,8 +493,21 @@ class DatabaseCreator {
 
     _createEmptyDatabase(postgresKnex) {
         // Create database
-        console.log('Creating database ' + this.databaseName);
         return postgresKnex.raw('CREATE DATABASE ' + this.databaseName);
+    }
+
+    _dropDatabaseIfExists(postgresKnex) {
+        console.log('Dropping database ' + this.databaseName + '...');
+        // Disallow to connect to database
+        return postgresKnex.raw('UPDATE pg_database SET datallowconn = false WHERE datname = \'' + this.databaseName + '\'')
+            .then(() => {
+                // Terminate active database connections
+                return postgresKnex.raw('SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = \'' + this.databaseName + '\'')
+                    .then(() => {
+                        // Drop database if exists
+                        return postgresKnex.raw('DROP DATABASE IF EXISTS ' + this.databaseName);
+                    });
+            });
     }
 
     /**
@@ -498,6 +529,7 @@ class DatabaseCreator {
             client: 'pg',
             connection: {
                 host: this.serverHost,
+                port: this.serverPort,
                 user: this.userName,
                 password: this.password,
                 database: databaseName

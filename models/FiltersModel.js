@@ -181,7 +181,7 @@ class FiltersModel extends SecureModelBase {
             'PARTITION BY CASE WHEN original_filter_id isnull THEN id ELSE original_filter_id END ORDER BY timestamp DESC) AS RN, * ' +
             'FROM ' + this.baseTableName + ' ' +
             'INNER JOIN filter_text ON filter_text.filter_id = ' + this.baseTableName + '.id ' +
-            'WHERE creator = \'' + userId + '\' AND is_deleted = false) T WHERE T.RN = 1';
+            'WHERE (creator = \'' + userId + '\' OR WHERE creator IS NULL) AND is_deleted = false) T WHERE T.RN = 1';
         this.db.asCallback((knex, cb) => {
             knex.raw(query)
                 .asCallback((error, filtersData) => {

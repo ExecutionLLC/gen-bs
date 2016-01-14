@@ -12,7 +12,6 @@ const mappedColumns = [
     'is_deleted',
     'email',
     'default_langu_id',
-    'langu_id',
     'name',
     'last_name',
     'speciality'
@@ -24,31 +23,11 @@ class UserModel extends RemovableModelBase {
     }
 
     add(user, languId, callback) {
-        this.db.transactionally((trx, cb) => {
-            async.waterfall([
-                (cb) => {
-                    const dataToInsert = {
-                        id: this._generateId(),
-                        numberPaidSamples: user.numberPaidSamples,
-                        email: user.email,
-                        defaultLanguId: languId
-                    };
-                    this._insert(dataToInsert, trx, cb);
-                },
-                (userId, cb) => {
-                    const dataToInsert = {
-                        userId: userId,
-                        languId: languId,
-                        name: user.name,
-                        lastName: user.lastName,
-                        speciality: user.speciality
-                    };
-                    this._insertIntoTable('user_text', dataToInsert, trx, (error) => {
-                        cb(error, userId);
-                    });
-                }
-            ], cb);
-        }, callback);
+        this._add(user, languId, false, callback);
+    }
+
+    addWithId(user, languId, callback) {
+        this._add(user, languId, true, callback);
     }
 
     update(userId, languId, user, callback) {
@@ -70,6 +49,34 @@ class UserModel extends RemovableModelBase {
                         speciality: user.speciality
                     };
                     this._updateUserText(userId, dataToUpdate, trx, cb);
+                }
+            ], cb);
+        }, callback);
+    }
+
+    _add(user, languId, withId, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: (withId ? user.id : this._generateId()),
+                        numberPaidSamples: user.numberPaidSamples,
+                        email: user.email,
+                        defaultLanguId: languId
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                },
+                (userId, cb) => {
+                    const dataToInsert = {
+                        userId: userId,
+                        languId: languId,
+                        name: user.name,
+                        lastName: user.lastName,
+                        speciality: user.speciality
+                    };
+                    this._insertIntoTable('user_text', dataToInsert, trx, (error) => {
+                        cb(error, userId);
+                    });
                 }
             ], cb);
         }, callback);

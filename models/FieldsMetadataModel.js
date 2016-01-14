@@ -33,37 +33,6 @@ class FieldsMetadataModel extends ModelBase {
         this._add(languId, metadata, true, callback);
     }
 
-    _add(languId, metadata, withId, callback) {
-        this.db.transactionally((trx, cb) => {
-            async.waterfall([
-                (cb) => {
-                    const dataToInsert = {
-                        id: (withId ? metadata.id : this._generateId()),
-                        name: metadata.name,
-                        sourceName: metadata.sourceName,
-                        valueType: metadata.valueType,
-                        filterControlEnable: metadata.filterControlEnable,
-                        isMandatory: metadata.isMandatory,
-                        isEditable: metadata.isEditable,
-                        isInvisible: metadata.isInvisible,
-                        isMultiSelect: metadata.isMultiSelect
-                    };
-                    this._insert(dataToInsert, trx, cb);
-                },
-                (metadataId, cb) => {
-                    const dataToInsert = {
-                        fieldId: metadataId,
-                        languId: languId,
-                        description: metadata.description,
-                    };
-                    this._insertIntoTable('field_text', dataToInsert, trx, (error) => {
-                        cb(error, metadataId);
-                    });
-                }
-            ], cb);
-        }, callback);
-    }
-
     find(metadataId, callback) {
         async.waterfall([
             (cb) => {
@@ -104,6 +73,37 @@ class FieldsMetadataModel extends ModelBase {
                 this._mapMetadata(metadata, cb);
             }
         ], callback);
+    }
+
+    _add(languId, metadata, withId, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: (withId ? metadata.id : this._generateId()),
+                        name: metadata.name,
+                        sourceName: metadata.sourceName,
+                        valueType: metadata.valueType || 'user',
+                        filterControlEnable: metadata.filterControlEnable || true,
+                        isMandatory: metadata.isMandatory || false,
+                        isEditable: metadata.isEditable || true,
+                        isInvisible: metadata.isInvisible || false,
+                        isMultiSelect: metadata.isMultiSelect || true
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                },
+                (metadataId, cb) => {
+                    const dataToInsert = {
+                        fieldId: metadataId,
+                        languId: languId,
+                        description: metadata.description,
+                    };
+                    this._insertIntoTable('field_text', dataToInsert, trx, (error) => {
+                        cb(error, metadataId);
+                    });
+                }
+            ], cb);
+        }, callback);
     }
 
     _mapMetadata(metadata, callback) {

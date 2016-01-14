@@ -24,26 +24,11 @@ class SamplesModel extends SecureModelBase {
     }
 
     add(userId, sample, callback) {
-        this.db.transactionally((trx, cb) => {
-            async.waterfall([
-                (cb) => {
-                    const dataToInsert = {
-                        id: this._generateId(),
-                        creator: userId,
-                        fileName: sample.fileName,
-                        hash: sample.hash,
-                        isAnalized: sample.isAnalyzed,
-                        sampleType: 'standard'
-                    };
-                    this._insert(dataToInsert, trx, cb);
-                },
-                (sampleId, cb) => {
-                    this._addNewFileSampleVersion(sampleId, sample.fieldId, sample.values, trx, (error, result) => {
-                        cb(error, sampleId);
-                    });
-                }
-            ], cb);
-        }, callback);
+        this._add(userId, sample, false, callback);
+    }
+
+    addWithId(userId, sample, callback) {
+        this._add(userId, sample, true, callback);
     }
 
     update(userId, sampleId, sample, callback) {
@@ -122,6 +107,33 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
+    _add(userId, sample, withId, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: (withId ? sample.id : this._generateId()),
+                        creator: userId,
+                        fileName: sample.fileName,
+                        hash: sample.hash,
+                        isAnalyzed: sample.isAnalyzed || false,
+                        sampleType: 'standard'
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                },
+                (sampleId, cb) => {
+                    if (sample.values) {
+                        this._addNewFileSampleVersion(sampleId, sample.fieldId, sample.values, trx, (error) => {
+                            cb(error, sampleId);
+                        });
+                    } else {
+                        cb(null, sampleId);
+                    }
+                }
+            ], cb);
+        }, callback);
+    }
+
     _mapFileSampleValues(sample, callback) {
         this._fetchFileSampleValues(sample.id, (error, result) => {
             if (error) {
@@ -160,6 +172,7 @@ class SamplesModel extends SecureModelBase {
             knex.select()
                 .from(this.baseTableName)
                 .where('creator', userId)
+                .orWhereNull('creator')
                 .asCallback((error, samplesData) => {
                     if (error) {
                         cb(error);

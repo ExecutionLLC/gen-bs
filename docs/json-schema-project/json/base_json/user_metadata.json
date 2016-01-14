@@ -16,7 +16,7 @@
 		"speciality": {
 			"type": "string"
 		},
-		"language": {
+		"default_langu_id": {
 			"type": "string",
 			"maxLength": 2
 		},

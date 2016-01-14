@@ -11,6 +11,7 @@ const SETTINGS = {
     },
     database: {
         host: ENV.WS_DATABASE_SERVER || 'localhost',
+        port: ENV.WS_DATABASE_PORT || 5432,
         user: ENV.WS_DATABASE_USER || 'postgres',
         password: ENV.WS_DATABASE_PASSWORD || 'postgres',
         databaseName: ENV.WS_DATABASE_NAME || 'genomixdb'
@@ -24,7 +25,8 @@ const SETTINGS = {
             level: 'warn',
             path: 'logs/genomix.log'
         }
-    }
+    },
+    defaultLanguId: 'en'
 };
 
 module.exports = SETTINGS;
