@@ -14,7 +14,8 @@
     "success_simple": "success",
     "complete": "Complete",
     "date": "Date",
-    "welcome": "Welcome."
+    "welcome": "Welcome.",
+    "loading": "Loading. Wait, please"
   },
   "results": {
     "title": "Results",

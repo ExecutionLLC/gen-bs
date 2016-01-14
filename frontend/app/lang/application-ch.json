@@ -14,7 +14,8 @@
     "success_simple": "成功",
     "complete": "完成",
     "date": "日期",
-    "welcome": "欢迎。"
+    "welcome": "欢迎。",
+    "loading": "请等一下"
   },
   "results": {
     "title": "结果",
