@@ -114,21 +114,14 @@ class ApplicationServerService extends ServiceBase {
                 const operationData = _.cloneDeep(operation.data);
                 operationData.limit = params.limit;
                 operationData.offset = params.offset;
-                this.services.operations.setData(sessionId, operationId, data, (error) => {
+                this.services.operations.setData(sessionId, operationId, operationData, (error) => {
                     callback(error, operation);
                 });
             },
             (operation, callback) => {
                 const method = METHODS.setFilters;
                 const searchInResultsRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
-                this._rpcSend(operationId, method, searchInResultsRequest, callback);
-            },
-            (operationId, callback) => {
-                // Store information about the desired limits after the operation call is successful.
-                this.services.operations.setData(sessionId, operationId, {
-                    offset: params.offset,
-                    limit: params.limit
-                }, callback);
+                this._rpcSend(operationId, method, searchInResultsRequest, (error) => callback(error, operation));
             }
         ], callback);
     }

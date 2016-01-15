@@ -57,12 +57,14 @@ class SearchService extends ServiceBase {
                 const redisData = operation.data.redis;
                 const userId = user.id;
                 const redisParams = {
+                    sessionId,
+                    operationId,
                     host: redisData.host,
                     port: redisData.port,
                     sampleId: redisData.sampleId,
                     userId,
                     databaseNumber: redisData.databaseNumber,
-                    databaseIndex: redisData.databaseIndex,
+                    dataIndex: redisData.dataIndex,
                     limit,
                     offset
                 };

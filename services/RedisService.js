@@ -22,6 +22,14 @@ class RedisService extends ServiceBase {
         return EVENTS;
     }
 
+    on(eventName, callback) {
+        this.eventEmitter.on(eventName, callback);
+    }
+
+    off(eventName, callback) {
+        this.eventEmitter.off(eventName, callback);
+    }
+
     fetch(redisParams, callback) {
         async.waterfall([
             (callback) => {
@@ -42,17 +50,21 @@ class RedisService extends ServiceBase {
                 this._convertFields(dataWithUser.rawData, dataWithUser.user, redisParams.sampleId, callback);
             },
             (data, callback) => {
-                this._emitDataReceivedEvent(redisParams.sampleId, redisParams.offset, redisParams.limit, data, callback);
+                this._emitDataReceivedEvent(redisParams.sessionId, redisParams.operationId, redisParams.sampleId, redisParams.offset, redisParams.limit, data, callback);
             }
         ], callback);
     }
 
-    _emitDataReceivedEvent(sampleId, offset, limit, data, callback) {
+    _emitDataReceivedEvent(sessionId, operationId, sampleId, offset, limit, data, callback) {
         const reply = {
-            sampleId,
-            offset,
-            limit,
-            data
+            sessionId,
+            operationId,
+            result: {
+                sampleId,
+                offset,
+                limit,
+                data
+            }
         };
 
         // Send data to both event listeners and callback.

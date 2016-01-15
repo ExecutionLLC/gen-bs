@@ -52,7 +52,11 @@ class WSController extends ControllerBase {
     _onServerReply(reply) {
         const sessionId = reply.sessionId;
         const client = this._findClientBySessionId(sessionId);
-        client.ws.send(JSON.stringify(reply));
+        if (client && client.ws) {
+            client.ws.send(JSON.stringify(reply));
+        } else {
+            console.log('No client WS is found for session ' + sessionId);
+        }
     }
 
     _findClientByWs(clientWs) {
@@ -63,6 +67,9 @@ class WSController extends ControllerBase {
         return _.find(this.clients, client => client.sessionId === sessionId);
     }
 
+    /**
+     * Here are the places where web socket messages are formed.
+     * */
     _subscribeAppServerReplyEvents() {
         const appServerReplyEvents = this.services.applicationServerReply.registeredEvents();
         const redisEvents = this.services.redis.registeredEvents();

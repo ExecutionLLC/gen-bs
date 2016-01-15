@@ -64,22 +64,21 @@ class ApplicationServerReplyService extends ServiceBase {
             ], (error, resultWithOperation) => {
                 if (!resultWithOperation || !resultWithOperation.operation) {
                     console.error('No operation is found. Error: ' + error);
-                } else {
-                    if (resultWithOperation) {
-                        // Fire only progress events here, for which resultWithOperation != null.
-                        // Redis has it's own event to indicate the data retrieval finish,
-                        // and resultWithOperation == null in this case.
-                        const operation = resultWithOperation.operation;
-                        const result = resultWithOperation.operationResult;
-                        const eventData = {
-                            operationId: operation.id,
-                            sessionId: operation.sessionId,
-                            result
-                        };
-                        this.eventEmitter.emit(EVENTS.onOperationResultReceived, eventData);
-                    }
-
+                } else if (resultWithOperation && resultWithOperation.operationResult) {
+                    // Fire only progress events here, for which operationResult != null.
+                    // Redis has it's own event to indicate the data retrieval finish,
+                    // and operationResult == null in this case.
+                    const operation = resultWithOperation.operation;
+                    const result = resultWithOperation.operationResult;
+                    const eventData = {
+                        operationId: operation.id,
+                        sessionId: operation.sessionId,
+                        result
+                    };
+                    this.eventEmitter.emit(EVENTS.onOperationResultReceived, eventData);
                     callback(error, result);
+                } else {
+                    callback(error, null);
                 }
             });
         }
@@ -149,6 +148,8 @@ class ApplicationServerReplyService extends ServiceBase {
                     port: redisAddress.port,
                     sampleId,
                     userId,
+                    operationId: operation.id,
+                    sessionId: operation.sessionId,
                     databaseNumber: sessionState.redisDb.number,
                     dataIndex: sessionState.sort.index,
                     offset,

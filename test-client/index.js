@@ -60,6 +60,10 @@ function askOperation(callback) {
   read('Operation Id: ', lastOperationId, callback);
 }
 
+operations.add('Redraw list', callback => {
+  callback();
+});
+
 operations.add('Open session', (callback) => {
   waterfall([
     (callback) => {
@@ -158,8 +162,13 @@ operations.add('Search in results', (callback) => {
       Request.post({
         url: urls.startSearchInResults(sessionWithOperation.operationId),
         json: {
-          topSearch: null,
-          search: [],
+          topSearch: '123',
+          search: [
+            {
+              fieldId: 'c6819c34-ae80-43dd-821a-28f0a9c04ed4',
+              value: '23'
+            }
+          ],
           limit: 100,
           offset: 0
         },
@@ -173,7 +182,7 @@ operations.add('Search in results', (callback) => {
   ], callback);
 });
 
-operation.add('Fetch page', callback => {
+operations.add('Fetch page', callback => {
   waterfall([
     (callback) => {
       askSession(callback);
@@ -187,13 +196,13 @@ operation.add('Fetch page', callback => {
       });
     },
     (context, callback) => {
-      read('limit', (error, limit) => {
+      read('limit', 100, (error, limit) => {
         context.limit = limit;
         callback(error, context);
       })
     },
     (context, callback) => {
-      read('offset', (error, offset) => {
+      read('offset', 0, (error, offset) => {
         context.offset = offset;
         callback(error, context);
       });
@@ -218,22 +227,32 @@ operation.add('Fetch page', callback => {
           console.log('Body: ' + stringify(body));
         }
       });
+      callback();
     }
-  ])
+  ], callback);
 });
 
 operations.add('Get data', (callback) => {
-  Request.get({
-    url: urls.data()
-  }, (error, response, body) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('Response: ' + stringify(response));
-      console.log('Body: ' + stringify(JSON.parse(body)));
+  waterfall([
+    (callback) => {
+      askSession(callback);
+    },
+    (sessionId, callback) => {
+      const headers = createHeaders(sessionId);
+      Request.get({
+        url: urls.data(),
+        headers
+      }, (error, response, body) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Response: ' + stringify(response));
+          console.log('Body: ' + stringify(JSON.parse(body)));
+        }
+        callback(null);
+      });
     }
-    callback();
-  });
+  ], callback);
 });
 
 operations.add('Check session', (callback) => {
