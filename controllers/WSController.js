@@ -43,6 +43,7 @@ class WSController extends ControllerBase {
             });
             ws.on('close', () => {
                 console.log('WS client disconnected');
+                this._removeClientByWs(ws);
             });
 
             this.clients.push({
@@ -65,7 +66,11 @@ class WSController extends ControllerBase {
         const sessionId = reply.sessionId;
         const client = this._findClientBySessionId(sessionId);
         if (client && client.ws) {
-            client.ws.send(JSON.stringify(reply));
+            client.ws.send(JSON.stringify(reply), null, (error) => {
+                if (error) {
+                    console.error('Error sending client WS reply: ' + JSON.stringify(error));
+                }
+            });
         } else {
             console.log('No client WS is found for session ' + sessionId);
         }
@@ -77,6 +82,11 @@ class WSController extends ControllerBase {
 
     _findClientBySessionId(sessionId) {
         return _.find(this.clients, client => client.sessionId === sessionId);
+    }
+
+    _removeClientByWs(clientWs) {
+        const index = _.findIndex(this.clients, (client) => client.ws === clientWs);
+        this.clients.splice(index, 1);
     }
 
     /**
