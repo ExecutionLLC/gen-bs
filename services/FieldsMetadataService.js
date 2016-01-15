@@ -30,6 +30,7 @@ class FieldsMetadataService extends ServiceBase {
         return {
             id: Uuid.v4(),
             name: appServerFieldMetadata.name,
+            label: appServerFieldMetadata.name, // Set label to name by default.
             sourceName: sourceName,
             isMandatory: appServerFieldMetadata.isMandatory,
             editable: false,
