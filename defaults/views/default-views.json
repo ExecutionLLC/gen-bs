@@ -1,20 +1,20 @@
 [
   {
-    "id": "b7ead923-9973-443a-9f44-5563d31b5073",
+    "id": "9725759f-c5eb-4f9c-a868-0d8a337c11f4",
     "name": "Test Default View",
     "view_type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "fbc72824-7958-497f-8592-42272681e230",
-        "field_id": "c6819c34-ae80-43dd-821a-28f0a9c04ed4",
+        "id": "4738e936-9c77-4b4f-a9b9-0b4cfbb2b7cc",
+        "source_name": "sample",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "9abac1d0-c47d-4ccf-8a55-4fc64145d606",
-        "field_id": "24d4a99f-fa8f-43b9-aee6-fdad102cb548",
+        "id": "0c91c34f-e019-4690-92be-943a60acbd95",
+        "source_name": "sample",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
@@ -22,28 +22,28 @@
     ]
   },
   {
-    "id": "32f404d7-e99e-4bcf-b999-45c518d74b95",
+    "id": "b517be30-9bec-4388-a58c-f71a58c590f3",
     "name": "Another Default View",
     "view_type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "71300f05-712b-4f15-bb31-066266547456",
-        "field_id": "c6819c34-ae80-43dd-821a-28f0a9c04ed4",
+        "id": "567410fd-5bfb-4bb0-8cdc-1a82fcc1c741",
+        "source_name": "sample",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "ebc18183-ca1e-49b6-8461-625ab7dda6c6",
-        "field_id": "24d4a99f-fa8f-43b9-aee6-fdad102cb548",
+        "id": "7970da2a-b25a-45d8-ae96-02e883333e33",
+        "source_name": "sample",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
       },
       {
-        "id": "a56ce391-9314-4bd1-90ab-2c493ec67ed2",
-        "field_id": "1c2db7dc-78e3-43a8-a0bb-6e8dd40a90fe",
+        "id": "5cc99783-dd8f-4cdc-9f42-c06eeb385149",
+        "source_name": "sample",
         "order": 3,
         "sort_order": 3,
         "sort_direction": "desc"
