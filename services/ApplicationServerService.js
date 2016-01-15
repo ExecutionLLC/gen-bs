@@ -68,7 +68,8 @@ class ApplicationServerService extends ServiceBase {
         const searchSessionRequest = {
             sample: appServerSampleId,
             view_structure: appServerView,
-            view_filter: params.filters || {}
+            view_filter: params.filters || {},
+            view_sort_order: params.viewSortOrder || []
         };
 
         const operationTypes = this.services.operations.operationTypes();
