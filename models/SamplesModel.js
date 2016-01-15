@@ -23,12 +23,12 @@ class SamplesModel extends SecureModelBase {
         super(models, 'vcf_file_sample', mappedColumns);
     }
 
-    add(userId, sample, callback) {
-        this._add(userId, sample, false, callback);
+    add(userId, languId, sample, callback) {
+        this._add(userId, languId, sample, false, callback);
     }
 
-    addWithId(userId, sample, callback) {
-        this._add(userId, sample, true, callback);
+    addWithId(userId, languId, sample, callback) {
+        this._add(userId, languId, sample, true, callback);
     }
 
     update(userId, sampleId, sample, callback) {
@@ -107,7 +107,7 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
-    _add(userId, sample, withId, callback) {
+    _add(userId, languId, sample, withId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {

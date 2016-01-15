@@ -22,6 +22,20 @@ class LanguModel extends ModelBase {
             this._update(languId, langu, trx, cb);
         }, callback);
     }
+
+    findAll(callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .asCallback((error, languages) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(languages));
+                    }
+                });
+        }, callback);
+    }
 }
 
 module.exports = LanguModel;

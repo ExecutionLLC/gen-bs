@@ -134,7 +134,7 @@ class InitialDataImportManager {
         const result = {};
         async.waterfall([
             (cb) => {
-                this.models.samples.addWithId(null, sampleFields.sample, cb);
+                this.models.samples.addWithId(null, this.config.defaultLanguId, sampleFields.sample, cb);
             },
             (id, cb) => {
                 result.sample = id;

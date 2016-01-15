@@ -1,8 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
-
-const USER_METADATA = require('../test_data/user_metadata.json');
 const ServiceBase = require('./ServiceBase');
 
 const DEMO_USER = {
@@ -11,15 +8,13 @@ const DEMO_USER = {
     "last_name": "Demo",
     "email": "demo@demo.com",
     "speciality": "doctor",
-    "language": "en",
+    "default_langu_id": "en",
     "number_paid_samples": 0
 };
 
 class UserService extends ServiceBase {
-    constructor(services) {
-        super(services);
-
-        this.users = USER_METADATA;
+    constructor(services, models) {
+        super(services, models);
     }
 
     findDemoUser(callback) {
@@ -30,12 +25,7 @@ class UserService extends ServiceBase {
         if (userId === DEMO_USER.id) {
             callback(null, DEMO_USER);
         } else {
-            const user = _.find(this.users, user => user.id === userId);
-            if (user) {
-                callback(null, user);
-            } else {
-                callback(new Error('User is not found.'));
-            }
+            this.models.user.find(userId, callback);
         }
     }
 }
