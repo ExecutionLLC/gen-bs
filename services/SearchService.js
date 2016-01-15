@@ -81,7 +81,7 @@ class SearchService extends ServiceBase {
         async.map(fieldSearchValues, (fieldSearchValue, callback) => {
             async.waterfall([
                 (callback) => {
-                    this.services.fieldsMetadata.find(fieldSearchValue.id, callback);
+                    this.services.fieldsMetadata.find(fieldSearchValue.fieldId, callback);
                 },
                 (fieldMetadata, callback) => {
                     callback(null, {
