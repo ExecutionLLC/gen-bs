@@ -15,7 +15,7 @@ export default class Views extends Component {
     const views = this.props.userData.views
     return (
 
-       <div className="table-cell table-cell100">
+      <div className="table-cell table-cell100">
       <div className="btn-group btn-group-select100" data-localize="views.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available views">
 
         <Select2

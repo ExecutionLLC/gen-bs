@@ -1,6 +1,6 @@
 import * as ActionTypes from '../actions/auth'
 
-export default function fields(state = {
+export default function auth(state = {
   isFetching:false,
   sessionId: null,
   isAuthenticated: false

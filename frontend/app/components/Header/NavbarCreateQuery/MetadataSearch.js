@@ -9,6 +9,7 @@ export default class MetadataSearch extends Component {
   }
 
   render() {
+    const samples = this.props.userData.samples
     return (
 
         <div className="table-cell table-cell100">
@@ -16,10 +17,12 @@ export default class MetadataSearch extends Component {
               <Select2
                className="sample-search"
                multiple={false}
-               data={['mental retardation patient12', 'feature', 'documents', 'discussion']}
+               data={samples.map( s => { return {id: s.id, text: s.file_name} } )}
                options={{
                  placeholder: 'search by sample',
-               }} />
+               }} 
+               onSelect={(e) => { this.props.sampleSelected(e) } }
+               />
             </div>
         </div>
 

@@ -4,24 +4,20 @@ import  { firstCharToUpperCase } from '../../utils/stringUtils'
 export default class VariantsTableHead extends Component {
 
   render() {
-    const { variants, view, fields } = this.props
+    const { variants, fields } = this.props
     let variantsColumns = null;
     let head = [];
-
-    const viewedFields = _.filter(fields, (field) => view.view_list_items.reduce(
-      (prev, cur) => prev || (cur.field_id  === field.id) , false ))
 
 
     const filterFunc = (label) => {
       return (
         (label !== 'comment')
         && (label !== 'search_key')
-        //&& viewedFields.reduce( (prev,cur) => (prev || cur.name === label), false ) 
       )
     }
 
 
-    if (!variants || !view) {
+    if (!variants) {
       head = null;
     } else {
       variantsColumns = Object.keys(variants[0]);

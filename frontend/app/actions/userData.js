@@ -1,5 +1,4 @@
-import { changeSelectedSample } from './ui'
-import { changeView } from './views'
+import { analyze, changeSample, changeView } from './ui'
 import { fetchFields } from './fields'
 
 /*
@@ -49,7 +48,8 @@ export function fetchUserdata() {
         const sample = json.samples[0] || null
         dispatch(receiveUserdata(json))
         dispatch(changeView(json.views, view.id))
-        dispatch(changeSelectedSample(json.samples, sample.id, view.id))
+        dispatch(changeSample(json.samples, sample.id))
+        dispatch(analyze(sample.id, view.id, null))
         dispatch(fetchFields(sampleId))
       })
 

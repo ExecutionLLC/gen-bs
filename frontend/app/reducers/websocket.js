@@ -54,6 +54,11 @@ export default function websocket(state = {
         return Object.assign({}, state, {
           lastMessageSended: action.msg
         })
+    case ActionTypes.REQUEST_ANALYZE:
+        return Object.assign({}, state, {
+          variants: null,
+          isVariantsEmpty: true
+        })
 
     default:
       return state

@@ -10,14 +10,16 @@ import Views from './NavbarCreateQuery/Views'
 import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 
-import { changeView } from '../../actions/views'
+import { changeSample, changeView, analyze } from '../../actions/ui'
 
 
 class NavbarCreateQuery extends Component {
 
   render() {
 
-    const { dispatch, views } = this.props
+    const { dispatch, samples, views } = this.props
+    const { currentSample, currentView } = this.props.ui
+    console.log('navbar', this.props)
 
 
     return (
@@ -26,17 +28,26 @@ class NavbarCreateQuery extends Component {
             <div className="container-fluid">
                 <div className="table-row">
                   <Upload />
-                  <MetadataSearch />
+                  <MetadataSearch
+                    {...this.props}
+                    sampleSelected={ (e) => dispatch(changeSample(samples, $(e.target).val()))}
+                  />
                   <FiltersSetup />
-                  <Filters />
+                  <Filters
+                    {...this.props}
+                    filterSelected={ (e) => dispatch(changeFilter(views, $(e.target).val()))}
+                  />
 
                   <ViewsSetup {...this.props} />
                   <Views
                     {...this.props}
-                    viewSelected={ (e) => dispatch(changeView(views.list, $(e.target).val()))}
+                    viewSelected={ (e) => dispatch(changeView(views, $(e.target).val()))}
                   />
 
-                  <Analyze />
+                  <Analyze 
+                    {...this.props}
+                    clicked ={ (e) => dispatch(analyze(currentSample.id, currentView.id, null))}
+                  />
                   <LoadHistory />
                 </div>
             </div>
@@ -47,11 +58,13 @@ class NavbarCreateQuery extends Component {
 }
 
 function mapStateToProps(state) {
-  const { modalWindows, views, ui} = state
+  const { modalWindows, userData, ui} = state
 
   return {
     modalWindows,
-    views,
+    samples: userData.samples,
+    views: userData.views,
+    filters: userData.filters,
     ui
   }
 }

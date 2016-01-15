@@ -33,10 +33,10 @@ class App extends Component {
       <div className={mainDivClass} id="main">
         <nav className="navbar navbar-inverse navbar-static-top"></nav>
         {!isAuthenticated &&
-          <h2>Auth ...</h2>
+          <div >&nbsp;</div>
         }
         {isAuthenticated && isFetching && samples.length === 0 &&
-          <h2>Loading...</h2>
+          <div className="loader"></div>
         }
         {isAuthenticated && !isFetching && samples.length === 0 &&
           <h2>Empty.</h2>

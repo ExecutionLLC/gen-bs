@@ -17,7 +17,7 @@ export default class Analyze extends Component {
               data-placement="bottom"
               data-container="body"
               title="Analyze current sample with current filters and view">  
-              <button className="btn btn-rounded btn-alt-primary" type="button">
+              <button className="btn btn-rounded btn-alt-primary" type="button" onClick={this.props.clicked}>
                  <span data-localize="query.analyze.title">Analyze</span>
               </button>
             </div>

@@ -3,7 +3,8 @@ import * as ActionTypes from '../actions/ui'
 export default function ui(state = {
   queryNavbarClosed: true,
   samples: [],
-  currentSample: null 
+  currentSample: null,
+  currentView: null,
 }, action) {
 
   switch (action.type) {
@@ -13,10 +14,22 @@ export default function ui(state = {
         queryNavbarClosed: !state.queryNavbarClosed
       })
 
-    case ActionTypes.CHANGE_SELECTED_SAMPLE:
+    case ActionTypes.CHANGE_SAMPLE:
       return Object.assign({}, state, {
           samples: action.samples,
-          currentSample: _.find(action.samples, {id: action.selectedSampleId})
+          currentSample: _.find(action.samples, {id: action.sampleId})
+      })
+
+    case ActionTypes.CHANGE_VIEW:
+      return Object.assign({}, state, {
+          views: action.views,
+          currentView: _.find(action.views, {id: action.viewId})
+      })
+
+    case ActionTypes.CHANGE_FILTER:
+      return Object.assign({}, state, {
+          filters: action.filters,
+          currentFilter: _.find(action.filters, {id: action.filterId})
       })
 
     default:
