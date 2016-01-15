@@ -15,7 +15,7 @@ export default class MetadataSearch extends Component {
             <div className="btn-group" data-localize="samples.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples">
               <Select2
                className="sample-search"
-               multiple={true}
+               multiple={false}
                data={['mental retardation patient12', 'feature', 'documents', 'discussion']}
                options={{
                  placeholder: 'search by sample',

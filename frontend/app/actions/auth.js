@@ -1,7 +1,7 @@
 import { getCookie } from '../utils/cookie'
 
 import { fetchUserdata } from './userData'
-import WebSocketClient from '../utils/WebSocketClient'
+import { createWsConnection, subscribeToWs, send } from './websocket'
 /*
  * action types
  */
@@ -12,14 +12,8 @@ export const REQUEST_SESSION = 'REQUEST_SESSION'
 /*
  * other consts
  */
-const searchParams = {
-  sampleId: "ce81aa10-13e3-47c8-bd10-205e97a92d69",
-  viewId: 'b7ead923-9973-443a-9f44-5563d31b5073',
-  filterIds: null,
-  limit: 100,
-  offset: 0
-}
 const SESSION_URL = 'http://localhost:8888/api/session'
+const WS_URL = 'ws://localhost:8888'
 
 
 /*
@@ -34,44 +28,16 @@ function requestSession() {
 function receiveSession(json) {
   const sessionId = json.session_id || null
   const isAuthenticated = (sessionId !== null) ? true:false
-  var wsClient = new WebSocketClient('localhost','8888');
 
-  $.ajaxSetup({
-    headers: { "X-Session-Id": sessionId }
-  });
   
-  setTimeout(() => {
-    console.log(wsClient.wsClient.readyState)
-    wsClient.send({session_id: sessionId})
-    $.ajax('http://localhost:8888/api/search', {
-      'headers': {"X-Session-Id": sessionId},
-      'data': JSON.stringify(searchParams),
-      'type': 'POST',
-      'processData': false,
-      'contentType': 'application/json'
-    })
-    .then(json => {
-      console.log('search', json)
-    })
-  }, 1000)
   
-
-
   document.cookie = `sessionId=${sessionId}`
 
-
-  
-
-  return dispatch => {
-
-    dispatch(fetchUserdata())
-
-    return {
-      type: RECEIVE_SESSION,
-      sessionId: sessionId,
-      isAuthenticated: isAuthenticated,
-      receivedAt: Date.now()
-    }
+  return {
+    type: RECEIVE_SESSION,
+    sessionId: sessionId,
+    isAuthenticated: isAuthenticated,
+    receivedAt: Date.now()
   }
 }
 
@@ -81,11 +47,13 @@ export function login(name, password) {
   return dispatch => {
 
     const sessionId = getCookie('sessionId')
+    //const sessionId = '8fcbad04-f3ad-437b-a4c7-dc49b4c0941d'
 
     dispatch(requestSession())
 
     // null for debug purpose
     //if (sessionId && sessionId !== 'null') {
+    //  console.log('cookie session', sessionId)
     //  dispatch(receiveSession({session_id: sessionId}))
     //} else {
       return $.ajax(SESSION_URL, {
@@ -95,7 +63,20 @@ export function login(name, password) {
           'contentType': 'application/json'
         })
         .then(json => {
+          const conn = new WebSocket(WS_URL)
+          const sessionId = json.session_id
           dispatch(receiveSession(json))
+          dispatch(createWsConnection(conn))
+          dispatch(subscribeToWs(sessionId))
+          $.ajaxSetup({
+            headers: { "X-Session-Id": sessionId }
+          });
+          //dispatch(send({session_id: json.session_id}))
+            dispatch(fetchUserdata())
+
+          setTimeout(() => {
+          }, 1000)
+
         })
       // TODO:
       // catch any error in the network call.

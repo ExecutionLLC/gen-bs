@@ -1,3 +1,4 @@
+import { changeSelectedSample } from './ui'
 import { changeView } from './views'
 import { fetchFields } from './fields'
 
@@ -42,8 +43,10 @@ export function fetchUserdata() {
       .then(json => {
         const sampleId = json.samples[0].id || null
         const view = json.views[0] || null
+        const sample = json.samples[0] || null
         dispatch(receiveUserdata(json))
         dispatch(changeView(json.views, view.id))
+        dispatch(changeSelectedSample(json.samples, sample.id, view.id))
         dispatch(fetchFields(sampleId))
       })
 

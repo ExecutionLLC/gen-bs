@@ -14,6 +14,8 @@ export const REQUEST_VARIANTS = 'REQUEST_VARIANTS'
 
 
 
+
+
 /*
  * action creators
  */
@@ -49,11 +51,27 @@ function receiveVariants(json) {
   }
 }
 
-export function fetchVariants() {
+export function fetchVariants(searchParams) {
 
   return dispatch => {
 
+    //var wsClient = new WebSocketClient('localhost','8888');
+
     dispatch(requestVariants())
+
+    setTimeout(() => {
+      //console.log(wsClient.wsClient.readyState)
+      $.ajax('http://localhost:8888/api/search', {
+        //'headers': {"X-Session-Id": sessionId},
+        'data': JSON.stringify(searchParams),
+        'type': 'POST',
+        'processData': false,
+        'contentType': 'application/json'
+      })
+      .then(json => {
+        console.log('search', json)
+      })
+    }, 1000)
 
     return $.get(jsonUrl)
       .then(json =>

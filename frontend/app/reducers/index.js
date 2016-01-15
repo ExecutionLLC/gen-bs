@@ -8,6 +8,7 @@ import modalWindows from './modalWindows'
 import views from './views' 
 import fields from './fields' 
 import ui from './ui' 
+import websocket from './websocket' 
 
 
 
@@ -19,7 +20,8 @@ const genApp = combineReducers({
   modalWindows ,
   views,
   fields,
-  ui
+  ui,
+  websocket
 })
 
 export default genApp
