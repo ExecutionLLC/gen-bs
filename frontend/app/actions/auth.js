@@ -15,6 +15,9 @@ export const REQUEST_SESSION = 'REQUEST_SESSION'
 const SESSION_URL = 'http://localhost:8888/api/session'
 const WS_URL = 'ws://localhost:8888'
 
+//const SESSION_URL = 'http://ec2-52-91-166-29.compute-1.amazonaws.com:8080/api/session'
+//const WS_URL = 'ws://ec2-52-91-166-29.compute-1.amazonaws.com:8080'
+
 
 /*
  * action creators
@@ -47,15 +50,23 @@ export function login(name, password) {
   return dispatch => {
 
     const sessionId = getCookie('sessionId')
-    //const sessionId = '8fcbad04-f3ad-437b-a4c7-dc49b4c0941d'
+    //const sessionId = 'e829e70b-8f89-47b0-8655-09e0b33ccc85'
+    var conn = null
 
     dispatch(requestSession())
 
     // null for debug purpose
-    //if (sessionId && sessionId !== 'null') {
-    //  console.log('cookie session', sessionId)
-    //  dispatch(receiveSession({session_id: sessionId}))
-    //} else {
+    if (sessionId && sessionId !== 'null') {
+      conn = new WebSocket(WS_URL)
+      console.log('cookie session', sessionId)
+      dispatch(receiveSession({session_id: sessionId}))
+      dispatch(createWsConnection(conn))
+      dispatch(subscribeToWs(sessionId))
+      $.ajaxSetup({
+        headers: { "X-Session-Id": sessionId }
+      });
+      dispatch(fetchUserdata())
+    } else {
       return $.ajax(SESSION_URL, {
           'data': JSON.stringify({user_name: name, password: password}),
           'type': 'POST',
@@ -63,7 +74,7 @@ export function login(name, password) {
           'contentType': 'application/json'
         })
         .then(json => {
-          const conn = new WebSocket(WS_URL)
+          conn = new WebSocket(WS_URL)
           const sessionId = json.session_id
           dispatch(receiveSession(json))
           dispatch(createWsConnection(conn))
@@ -71,16 +82,11 @@ export function login(name, password) {
           $.ajaxSetup({
             headers: { "X-Session-Id": sessionId }
           });
-          //dispatch(send({session_id: json.session_id}))
-            dispatch(fetchUserdata())
-
-          setTimeout(() => {
-          }, 1000)
-
+          dispatch(fetchUserdata())
         })
       // TODO:
       // catch any error in the network call.
-        //}
+      }
   }
 }
 

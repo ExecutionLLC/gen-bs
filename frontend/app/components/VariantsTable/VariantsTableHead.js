@@ -14,8 +14,9 @@ export default class VariantsTableHead extends Component {
 
     const filterFunc = (label) => {
       return (
-        (label !== 'comment') && 
-          viewedFields.reduce( (prev,cur) => (prev || cur.name === label), false )
+        (label !== 'comment')
+        && (label !== 'search_key')
+        //&& viewedFields.reduce( (prev,cur) => (prev || cur.name === label), false ) 
       )
     }
 
@@ -35,10 +36,13 @@ export default class VariantsTableHead extends Component {
           </th>
       )
       variantsColumns.filter( filterFunc ).map( (label) => {
+          let name = '';
+          name = _.find(fields, (field) => field.id === label).name
+          
           head.push(
               <th data-label={label} key={label} > 
                 <div><span className="variants-table-header-label">
-                  { firstCharToUpperCase(label) }<button className="btn btn-link btnSort"></button>
+                  { name }<button className="btn btn-link btnSort"></button>
                 </span></div>
                 <div><input type="text" className="form-control" /></div>
               </th>

@@ -6,13 +6,14 @@ export default class VariantsTableRows extends Component {
     const { variants, view, fields } = this.props
     let rows;
 
-    const viewedFields = _.filter(fields, (field) => view.view_list_items.reduce(
-      (prev, cur) => prev || (cur.field_id  === field.id) , false ))
+    //const viewedFields = _.filter(fields, (field) => view.view_list_items.reduce(
+    //  (prev, cur) => prev || (cur.field_id  === field.id) , false ))
 
     const filterFunc = (label) => {
       return (
         (label !== 'comment') && 
-          viewedFields.reduce( (prev,cur) => (prev || cur.name === label), false )
+        (label !== 'search_key')
+          //  viewedFields.reduce( (prev,cur) => (prev || cur.name === label), false )
       )
     }
 
@@ -20,7 +21,7 @@ export default class VariantsTableRows extends Component {
     if (!variants || !view) {
       rows = null;
     } else {
-      rows = this.props.variants.map(function(rowData) {
+      rows = this.props.variants.map(function(rowData, i) {
         let row = [];
         const columnNames = Object.keys(rowData)
 
@@ -35,7 +36,7 @@ export default class VariantsTableRows extends Component {
         
 
         return (
-          <tr key={rowData._fid}>
+          <tr key={i}>
             {row}
           </tr>
         )

@@ -27,11 +27,14 @@ function receiveFields(json) {
 
 export function fetchFields(sampleId) {
 
-  return dispatch => {
+  return ( dispatch, getState )  => {
 
     dispatch(requestFields())
 
-    return $.get(_fieldsUrl(sampleId))
+    return $.ajax(_fieldsUrl(sampleId), {
+        'type': 'GET',
+         'headers': { "X-Session-Id": getState().auth.sessionId}
+      })
       .then(json => {
         dispatch(receiveFields(json))
       })

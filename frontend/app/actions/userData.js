@@ -12,8 +12,8 @@ export const REQUEST_USERDATA = 'REQUEST_USERDATA'
 /*
  * Other constants
  */
-//const USERDATA_URL = 'http://localhost:5000/api/data'
 const USERDATA_URL = 'http://localhost:8888/api/data'
+//const USERDATA_URL = 'http://ec2-52-91-166-29.compute-1.amazonaws.com:8080/api/data'
 
 
 /*
@@ -35,11 +35,14 @@ function receiveUserdata(json) {
 
 export function fetchUserdata() {
 
-  return dispatch => {
+  return (dispatch, getState ) => {
 
     dispatch(requestUserdata())
 
-    return $.get(USERDATA_URL)
+    return $.ajax(USERDATA_URL, {
+        'type': 'GET',
+         'headers': { "X-Session-Id": getState().auth.sessionId}
+      })
       .then(json => {
         const sampleId = json.samples[0].id || null
         const view = json.views[0] || null

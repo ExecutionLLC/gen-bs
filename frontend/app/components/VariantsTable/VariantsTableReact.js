@@ -16,11 +16,14 @@ class VariantsTableReact extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(fetchVariants())
+    //this.props.dispatch(fetchVariants())
   }
 
   render() {
-    const { variants, views, fields, ui } = this.props
+    const { dispatch, variants, isVariantsEmpty, views, fields, ui } = this.props
+    //const { variants, isVariantsEmpty } = this.props.websocket
+    //const variants = this.props.websocket.variants
+    console.log('var table', this.props)
 
     var tableWrapperClass = classNames({
       'table-variants-wrapper': true,
@@ -30,12 +33,17 @@ class VariantsTableReact extends Component {
     return (
 
         <div className={tableWrapperClass}>
-          <div className="table-variants-container">
-            <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
-              <VariantsTableHead variants={variants} view={views.current} fields={fields.list} />
-              <VariantsTableRows variants={this.props.variants} view={views.current} fields={fields.list} />
-            </table> 
-          </div>
+          { isVariantsEmpty &&
+            <div class="loader"></div>
+          }
+          { !isVariantsEmpty &&
+            <div className="table-variants-container">
+              <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
+                <VariantsTableHead variants={variants} view={views.current} fields={fields.list} />
+                <VariantsTableRows variants={variants} view={views.current} fields={fields.list} />
+              </table> 
+            </div>
+          }
         </div>
 
 
@@ -44,10 +52,12 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-  const { variantsTable, ui } = state
+  const { websocket, ui } = state
+  console.log('table state ws',websocket)
 
   return {
-    variants: variantsTable.variants,
+    variants: websocket.variants,
+    isVariantsEmpty: websocket.isVariantsEmpty,
     ui
   }
 }
