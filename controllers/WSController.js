@@ -34,7 +34,7 @@ class WSController extends ControllerBase {
             });
 
             this.clients.push({
-                ws: ws,
+                ws,
                 sessionId: null
             });
         });
@@ -64,8 +64,11 @@ class WSController extends ControllerBase {
     }
 
     _subscribeAppServerReplyEvents() {
-        const events = this.services.applicationServerReply.registeredEvents();
-        this.services.applicationServerReply.on(events.onOperationResultReceived, this._onServerReply.bind(this));
+        const appServerReplyEvents = this.services.applicationServerReply.registeredEvents();
+        const redisEvents = this.services.redis.registeredEvents();
+
+        this.services.applicationServerReply.on(appServerReplyEvents.onOperationResultReceived, this._onServerReply.bind(this));
+        this.services.redis.on(redisEvents.dataReceived, this._onServerReply.bind(this));
     }
 }
 

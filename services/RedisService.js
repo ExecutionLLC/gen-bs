@@ -5,10 +5,21 @@ const _ = require('lodash');
 const Redis = require('redis');
 
 const ServiceBase = require('./ServiceBase');
+const EventEmitter = require('../utils/EventProxy');
+
+const EVENTS = {
+    dataReceived: 'dataReceived'
+};
 
 class RedisService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
+
+        this.eventEmitter = new EventEmitter(EVENTS);
+    }
+
+    registeredEvents() {
+        return EVENTS;
     }
 
     fetch(redisParams, callback) {
@@ -29,8 +40,24 @@ class RedisService extends ServiceBase {
             },
             (dataWithUser, callback) => {
                 this._convertFields(dataWithUser.rawData, dataWithUser.user, redisParams.sampleId, callback);
+            },
+            (data, callback) => {
+                this._emitDataReceivedEvent(redisParams.sampleId, redisParams.offset, redisParams.limit, data, callback);
             }
         ], callback);
+    }
+
+    _emitDataReceivedEvent(sampleId, offset, limit, data, callback) {
+        const reply = {
+            sampleId,
+            offset,
+            limit,
+            data
+        };
+
+        // Send data to both event listeners and callback.
+        this.eventEmitter.emit(EVENTS.dataReceived, reply);
+        callback(null, reply);
     }
 
     _createClient(host, port, databaseNumber, callback) {

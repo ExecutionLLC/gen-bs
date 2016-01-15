@@ -173,6 +173,55 @@ operations.add('Search in results', (callback) => {
   ], callback);
 });
 
+operation.add('Fetch page', callback => {
+  waterfall([
+    (callback) => {
+      askSession(callback);
+    },
+    (sessionId, callback) => {
+      askOperation((error, operationId) => {
+        callback(error, {
+          sessionId,
+          operationId
+        });
+      });
+    },
+    (context, callback) => {
+      read('limit', (error, limit) => {
+        context.limit = limit;
+        callback(error, context);
+      })
+    },
+    (context, callback) => {
+      read('offset', (error, offset) => {
+        context.offset = offset;
+        callback(error, context);
+      });
+    },
+    (context, callback) => {
+      lastSessionId = context.sessionId;
+      lastOperationId = context.operationId;
+
+      const headers = createHeaders(context.sessionId);
+      Request.get({
+        url: urls.loadNextPage(context.operationId),
+        headers,
+        qs: {
+          offset: context.offset,
+          limit: context.limit
+        }
+      }, (error, response, body) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Response: ' + stringify(response));
+          console.log('Body: ' + stringify(body));
+        }
+      });
+    }
+  ])
+});
+
 operations.add('Get data', (callback) => {
   Request.get({
     url: urls.data()

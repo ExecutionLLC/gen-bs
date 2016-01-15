@@ -4,6 +4,7 @@ const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
 const EventProxy = require('../utils/EventProxy');
+var _ = require('lodash');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -64,14 +65,20 @@ class ApplicationServerReplyService extends ServiceBase {
                 if (!resultWithOperation || !resultWithOperation.operation) {
                     console.error('No operation is found. Error: ' + error);
                 } else {
-                    const operation = resultWithOperation.operation;
-                    const result = resultWithOperation.operationResult;
-                    const eventData = {
-                        operationId: operation.id,
-                        sessionId: operation.sessionId,
-                        result
-                    };
-                    this.eventEmitter.emit(EVENTS.onOperationResultReceived, eventData);
+                    if (resultWithOperation) {
+                        // Fire only progress events here, for which resultWithOperation != null.
+                        // Redis has it's own event to indicate the data retrieval finish,
+                        // and resultWithOperation == null in this case.
+                        const operation = resultWithOperation.operation;
+                        const result = resultWithOperation.operationResult;
+                        const eventData = {
+                            operationId: operation.id,
+                            sessionId: operation.sessionId,
+                            result
+                        };
+                        this.eventEmitter.emit(EVENTS.onOperationResultReceived, eventData);
+                    }
+
                     callback(error, result);
                 }
             });
@@ -149,18 +156,34 @@ class ApplicationServerReplyService extends ServiceBase {
                 };
                 async.waterfall([
                     (callback) => {
+                        this._storeRedisParamsInOperation(redisParams, operation, callback);
+                    },
+                    (callback) => {
                         this.services.redis.fetch(redisParams, callback);
                     }
-                ], (error, result) => {
-                    callback(error, {
-                        sampleId,
-                        offset,
-                        limit,
-                        data: result
-                    });
+                ], (error) => {
+                    // Redis will fire data event by itself, so send null as result to distinguish cases.
+                    callback(error, null);
                 });
             }
         }
+    }
+
+    _storeRedisParamsInOperation(redisParams, operation, callback) {
+        // Store Redis information in the operation.
+        // This is done to be able to fetch another page later.
+        const operationData = _.cloneDeep(operation.data);
+        operationData.redis = {
+            host: redisParams.host,
+            port: redisParams.port,
+            databaseNumber: redisParams.databaseNumber,
+            dataIndex: redisParams.dataIndex,
+            sampleId: redisParams.sampleId
+        };
+
+        this.services.operations.setData(operation.sessionId, operation.id, operationData, (error) => {
+            callback(error);
+        });
     }
 
     _findMessageOperation(rpcMessage, callback) {

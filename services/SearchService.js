@@ -47,6 +47,34 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
+    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
+        // The actual data or error should go to web socket for convenience.
+        async.waterfall([
+            (callback) => {
+                this.services.operations.find(sessionId, operationId, callback);
+            },
+            (operation, callback) => {
+                const redisData = operation.data.redis;
+                const userId = user.id;
+                const redisParams = {
+                    host: redisData.host,
+                    port: redisData.port,
+                    sampleId: redisData.sampleId,
+                    userId,
+                    databaseNumber: redisData.databaseNumber,
+                    databaseIndex: redisData.databaseIndex,
+                    limit,
+                    offset
+                };
+                this.services.redis.fetch(redisParams, callback);
+            },
+            (results, callback) => {
+                // Results have already been sent by the Redis service through web socket.
+                callback(null, operationId);
+            }
+        ], callback);
+    }
+
     _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, limit, offset, callback) {
         async.map(fieldSearchValues, (fieldSearchValue, callback) => {
             async.waterfall([

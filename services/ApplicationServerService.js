@@ -110,6 +110,15 @@ class ApplicationServerService extends ServiceBase {
                 this.services.operations.find(sessionId, operationId, callback);
             },
             (operation, callback) => {
+                // save necessary data to the operation to be able to fetch required amount of data.
+                const operationData = _.cloneDeep(operation.data);
+                operationData.limit = params.limit;
+                operationData.offset = params.offset;
+                this.services.operations.setData(sessionId, operationId, data, (error) => {
+                    callback(error, operation);
+                });
+            },
+            (operation, callback) => {
                 const method = METHODS.setFilters;
                 const searchInResultsRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
                 this._rpcSend(operationId, method, searchInResultsRequest, callback);
