@@ -19,12 +19,24 @@ class WSController extends ControllerBase {
         webSocketServer.on('connection', (ws) => {
             console.log('WS client connected');
             ws.on('message', (messageString) => {
-                const message = JSON.parse(messageString);
-                const clientDescriptor = this._findClientByWs(ws);
-                const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
-                console.log('Received: ' + JSON.stringify(message, null, 2));
-                console.log('In session: ' + clientDescriptor.sessionId);
-                this._onClientMessage(ws, convertedMessage);
+                try {
+                    const message = JSON.parse(messageString);
+                    const clientDescriptor = this._findClientByWs(ws);
+                    const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
+                    console.log('Received: ' + JSON.stringify(message, null, 2));
+                    console.log('In session: ' + clientDescriptor.sessionId);
+                    this._onClientMessage(ws, convertedMessage);
+                } catch (e) {
+                    console.error('Client WS message parse error: ' + JSON.stringify(e));
+                    const error = {
+                        message:'Error parsing message:' + JSON.stringify(e)
+                    };
+                    ws.send(JSON.stringify(error), null, (error) => {
+                        if (error) {
+                            console.error('Error sending response to the client: ' + JSON.stringify(error));
+                        }
+                    })
+                }
             });
             ws.on('error', error => {
                 console.log('Error in client socket: ' + JSON.stringify(error, null, 2));
