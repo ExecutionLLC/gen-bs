@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Test Filter",
+    "description": "Test filter description",
+    "type": "standard",
+    "is_disabled_4copy": false,
+    "rules": {
+      "$or": [
+        {
+          "field": {
+            "source_name": "sample",
+            "field_name": "CHROM"
+          },
+          "condition": {
+            "$ne": "10"
+          }
+        },
+        {
+          "field": {
+            "source_name": "sample",
+            "field_name": "POS"
+          },
+          "condition": {
+            "$gt": 100
+          }
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "field_name": "CHROM"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
