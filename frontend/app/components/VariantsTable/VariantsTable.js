@@ -68,7 +68,7 @@ var variantsTable = {
     var row = [];
 
     tData.map( (rowData) => {
-      row.push(`<tr id=${rowData._fid} class="${rowData._selected ? 'success': ''}">`);
+      row.push(`<tr id=${rowData._fid} class="${rowData._selected ? 'active': ''}">`);
       
       // checkbox
       row.push(`<td><input type="checkbox" /></td>`);

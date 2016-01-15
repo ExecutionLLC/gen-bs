@@ -11,8 +11,7 @@
   // Our parent element can be arbitrary since tooltips are by default inserted as a sibling of their target element.
   // So reset our font and text properties to avoid inheriting weird values.
   .reset-text();
-  font-size: @font-size-small;
-
+  font-size: @font-size-base*.94;
   .opacity(0);
 
   &.in     { .opacity(@tooltip-opacity); }
@@ -30,6 +29,7 @@
   text-align: center;
   background-color: @tooltip-bg;
   border-radius: @border-radius-base;
+    box-shadow:0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -99,13 +99,21 @@
     border-width: 0 @tooltip-arrow-width @tooltip-arrow-width;
     border-bottom-color: @tooltip-arrow-color;
   }
+  &.tooltip-warning { 
+  .tooltip-variant (@tooltip-warning-bg, @tooltip-warning-color);
+  }
+  &.tooltip-primary { 
+  .tooltip-variant (@tooltip-primary-bg, @tooltip-primary-color);
+  }
+  &.tooltip-inverse { 
+  .tooltip-variant (@tooltip-inverse-bg, @tooltip-inverse-color);
+  }
 }
 .tooltip.right { 
   .tooltip-inner { 
     text-align: left;
   }
 }
-
-.tooltip-warning { 
-  .tooltip-variant (@tooltip-warning-bg, @tooltip-warning-color);
+.tooltip.fadeInUp { 
+  margin-top: 70px;
 }

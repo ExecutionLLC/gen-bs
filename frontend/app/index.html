@@ -518,7 +518,7 @@
                                         
                                             <div class="table-cell">
                                              <div class="btn-group" data-localize="samples.upload.help" data-toggle="tooltip" data-placement="bottom" data-container="body"  title="Upload .vfc file of sample">
-                                                 <a href="#" class="btn btn-primary" data-toggle="modal" type="button" data-target="#upload"><span data-localize="samples.upload.title">Upload</span></a>
+                                                 <a href="#" class="btn btn-rounded btn-alt-primary" data-toggle="modal" type="button" data-target="#upload"><span data-localize="samples.upload.title">Upload</span></a>
                                             </div>
                                             </div>           
                                         
@@ -558,7 +558,7 @@
                                              </div>
                                               <div class="table-cell table-cell100">
                                                 <div class="btn-group"  data-localize="filters.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
-                                                <select class="select2" multiple="">
+                                                <select class="select2" multiple="" id="filterSelect">
                                                        <option selected value="eye" title="standard">Eye Cancer Diagnostics</option>            
                                                         <option value="cust1" title="standard">Breast cancer</option>
                                                         <option value="cust2" title="standard">Lung cancer</option>
@@ -578,7 +578,7 @@
                                              </div> 
                                              <div class="table-cell table-cell100">
                                             <div class="btn-group btn-group-select100" data-localize="views.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available views">
-                                              <select class="select2" is="view">
+                                              <select class="select2" id="viewSelect">
                                                 <option value="1" selected title="standard">Default View</option>
                                                 <option value="2">Default View Copy</option>
                                                 <option value="3">Custom View</option>
@@ -591,13 +591,13 @@
                                        
                                              
                                             <div class="table-cell">
-                                            <div class="btn-group btn-group-submit"
+                                            <div id="analyzeBtnGroup" class="btn-group btn-group-submit"
                                               data-localize="query.analyze.help"
                                               data-toggle="tooltip"
                                               data-placement="bottom"
                                               data-container="body"
-                                              title="Analyze current sample with current filters and view">  
-                                              <button class="btn btn-rounded btn-alt-primary" type="button">
+                                              title="Click for analyze current sample with current filters and view">  
+                                              <button class="btn btn-rounded btn-primary" type="button">
                                                  <span data-localize="query.analyze.title">Analyze</span>
                                               </button>
                                              </div>
@@ -615,7 +615,7 @@
                     
                     <div class="table-variants-wrapper">
                       <div class="table-variants-container">
-                      <table class="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
+                      <table class="table table-hover table-bordered table-striped table-variants" id="variants_table">
                         <thead id="variants_table_head"></thead>
                         <tbody id="variants_table_body"></tbody>
                       </table> 

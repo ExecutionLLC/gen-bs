@@ -745,7 +745,7 @@ body {
     }  
 }
 .subnav-closed { 
-.table-variants-wrapper {
+  .table-variants-wrapper {
   top:50px; 
   }
 }
@@ -792,6 +792,7 @@ body {
      padding-right: 2px;
      padding-left: 2px;
      padding-bottom: 0;
+     cursor: pointer;
 
      .form-control { 
         background: transparent;
@@ -859,6 +860,24 @@ body {
            }
        }
      }
+    tbody { 
+      background: #fff;
+      tr {
+        &:hover { 
+         cursor: pointer; 
+        } 
+         
+         td.comment {
+          width: 200px;
+          cursor: text;
+           .transition(all .25s linear);
+          &:hover { 
+            color: @brand-primary;
+            
+          }
+        }
+      }
+    }
     &.table-resposive {
         thead,
         tbody,
@@ -889,6 +908,7 @@ body {
       }
    }
 }
+
 
 //table
 .empty {
@@ -951,7 +971,6 @@ select.select2.form-control + span.select2 {
     font-size: x-small;
     color: #ddd;
   }
- 
 }
 body.ch { 
  .select2-results__option[title="standard"]{ 
@@ -968,6 +987,16 @@ body.ch {
     &:after { 
       color: #fff;
     } 
+}
+select.select2.temp-active { 
+ + span.select2 { 
+   &.select2-container--default .select2-selection--single .select2-selection__rendered { 
+     //.fadeOut();
+   }
+   &.select2-container--default .select2-selection--multiple .select2-selection__rendered .select2-selection__choice { 
+     //.fadeOut();
+   }
+ } 
 }
 
 //query-builder overwriting
@@ -1127,3 +1156,70 @@ body.ch {
   border-bottom: 3px solid #f0f0f0;
 } 
 
+@-webkit-keyframes fadeOut {
+  from {
+    color: @brand-primary;
+  }
+
+  to {
+    color: @text-color;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+   color: @brand-primary;
+  }
+
+  to {
+    color: @text-color;
+  }
+}
+
+
+.fadeOut {
+  -webkit-animation-duration: 3s;
+  animation-duration: 3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-name: fadeOut;
+  animation-name: fadeOut;
+}
+
+
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInUp {
+    -webkit-animation-duration: .5s;
+  animation-duration: .5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
