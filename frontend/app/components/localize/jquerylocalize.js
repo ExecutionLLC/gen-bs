@@ -17,7 +17,7 @@ function reinitTooltip(mq) {
 		// window width is at least 768px
 		$('[data-toggle="tooltip"]').tooltip({
   		 trigger: "hover",
-  		 delay: { "show": 500, "hide": 100 }
+  		 delay: { "show": 1000, "hide": 100 }
 		});
 	}
 	else {
