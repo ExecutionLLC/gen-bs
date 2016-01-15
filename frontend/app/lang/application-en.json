@@ -127,7 +127,7 @@
   },
   "history": {
     "title": "Load History",
-    "heading": "History query analysis",
+    "heading": "Load History",
     "help": {
       "title": "History of queries, saved query settings"
     },

@@ -786,6 +786,7 @@ body {
   }
 .table.table-variants {
    margin-top: 0!important;
+   margin-bottom: 0;
    background:#f6f6f6;
     > thead > tr > th  { 
      padding-right: @table-condensed-cell-padding;
@@ -865,12 +866,14 @@ body {
       tr {
         &:hover { 
          cursor: pointer; 
+         td.comment { 
+           color: @brand-primary;
+         }
         } 
          
          td.comment {
           width: 200px;
-          cursor: text;
-           .transition(all .25s linear);
+          cursor: pointer;
           &:hover { 
             color: @brand-primary;
             
