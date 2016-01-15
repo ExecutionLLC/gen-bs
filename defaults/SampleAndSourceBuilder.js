@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
 const Uuid = require('node-uuid');
 
 const FsUtils = require('../utils/FileSystemUtils');
@@ -15,37 +16,32 @@ class SampleBuilder extends DefaultsBuilderBase {
     }
 
     build(callback) {
-        FsUtils.createDirectoryIfNotExists(this.samplesDir, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                this._removeJsonFilesFromDirectory(this.samplesDir, (error) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        FsUtils.getAllFiles(this.asSamplesDir, '.json', (error, sampleFiles) => {
-                            if (error) {
-                                callback(error);
-                            } else {
-                                let filesLeft = sampleFiles.length;
-                                _.each(sampleFiles, sampleMetadataPath => {
-                                    this._importSample(sampleMetadataPath, (error) => {
-                                        if (error) {
-                                            callback(error);
-                                        } else {
-                                            filesLeft--;
-                                            if (!filesLeft) {
-                                                callback(null);
-                                            }
-                                        }
-                                    });
-                                });
+        async.waterfall([
+            (callback) => {
+                FsUtils.createDirectoryIfNotExists(this.samplesDir, callback);
+            },
+            (callback) => {
+                this._removeJsonFilesFromDirectory(this.samplesDir, callback);
+            },
+            (callback) => {
+                FsUtils.getAllFiles(this.asSamplesDir, '.json', callback);
+            },
+            (sampleFiles, callback) => {
+                let filesLeft = sampleFiles.length;
+                _.each(sampleFiles, sampleMetadataPath => {
+                    this._importSample(sampleMetadataPath, (error) => {
+                        if (error) {
+                            callback(error);
+                        } else {
+                            filesLeft--;
+                            if (!filesLeft) {
+                                callback(null);
                             }
-                        });
-                    }
+                        }
+                    });
                 });
             }
-        });
+        ], callback);
     }
 
     _getSampleIdFromFilePath(sampleMetadataFilePath) {

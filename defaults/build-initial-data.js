@@ -3,7 +3,7 @@
 /**
  * NPM script is used to build initial data and add it to the database (later).
  * */
-const sampleBuilder = require('./SampleBuilder');
+const sampleBuilder = require('./SampleAndSourceBuilder');
 const viewsBuilder = require('./ViewBuilder');
 
 function displayErrorAndExitProcess(error) {

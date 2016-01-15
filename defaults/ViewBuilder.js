@@ -19,21 +19,6 @@ class ViewBuilder extends DefaultsBuilderBase {
         this._createListItem = this._createListItem.bind(this);
     }
 
-    /**
-     * Gets field id from the generated source metadata.
-     * */
-    _getFieldId(sourceName, fieldName) {
-        const sourceFilePath = this._getMetadataFilePath(sourceName);
-        const sourceContents = FsUtils.getFileContentsAsString(sourceFilePath);
-        const sourceMetadata = JSON.parse(sourceContents);
-        const fieldMetadata = sourceMetadata.fields;
-        const field = _.find(fieldMetadata, field => field.name === fieldName);
-        if (!field) {
-            throw new Error('Field is not found! Source name: %s, field name: %s', sourceName, fieldName);
-        }
-        return field.id;
-    }
-
     _createListItem(listItemTemplate) {
         const fieldDescriptor = listItemTemplate.field;
         return {
