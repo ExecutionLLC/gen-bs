@@ -13,7 +13,9 @@
     "success": "Success!",
     "success_simple": "success",
     "complete": "Complete",
-    "date": "Date"
+    "date": "Date",
+    "welcome": "Welcome.",
+    "loading": "Loading. Wait, please"
   },
   "results": {
     "title": "Results",
@@ -112,6 +114,9 @@
         },
         "description": {
           "value": "Note (optional)"
+        },
+        "warning": {
+          "limit": "Only the first 100 search results will be exported"
         }
       }
     },
@@ -147,7 +152,11 @@
       "heading": "Distributors"
     },
     "buy": "Buy access to advanced features of App Genomix",
-    "buy_continue": "Buy access to continue to use the advanced features of App Genomix"
+    "buy_continue": "Buy access to continue to use the advanced features of App Genomix",
+    "warning": {
+      "nopaid_analyzes": "You have not paid analyzes"
+    },
+    "select_office": "Select the office closest to you and ask for the purchase of paid features AGx"
   },
   "account": {
     "title": "Account",

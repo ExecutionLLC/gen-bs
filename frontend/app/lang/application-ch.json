@@ -13,7 +13,9 @@
     "success": "成功！",
     "success_simple": "成功",
     "complete": "完成",
-    "date": "日期"
+    "date": "日期",
+    "welcome": "欢迎。",
+    "loading": "请等一下"
   },
   "results": {
     "title": "结果",
@@ -86,7 +88,7 @@
     "title": "保存的文件",
     "heading": "保存的文件",
     "help": {
-      "title": "保存的文件历史"
+      "title": "选择几个突变在表中，并保存到文件。有表示已选定的记录数量"
     },
     "export": {
       "title": "出口",
@@ -112,6 +114,9 @@
         },
         "description": {
           "value": "注（可选）"
+        },
+        "warning": {
+          "limit": "只有前100个搜索结果将出口"
         }
       }
     },
@@ -147,7 +152,11 @@
       "heading": "分销商"
     },
     "buy": "买AGX先进功能的访问",
-    "buy_continue": "购买获得继续使用AGX的先进功能"
+    "buy_continue": "购买获得继续使用AGX的先进功能",
+    "warning": {
+      "nopaid_analyzes": "您还没有支付的分析"
+    },
+    "select_office": "选择最接近的办公室给你，并要求购买的支付功能AGX"
   },
   "account": {
     "title": "帐户",

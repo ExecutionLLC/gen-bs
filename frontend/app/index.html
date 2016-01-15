@@ -18,7 +18,7 @@
 </head>
 <body class="sidebar-left-closed sidebar-right-closed subnav-closed">
 
-<div class="loader hidden"></div>
+<div class="loader hidden"><span data-localize="genearl.loading">Loading. Wait, please.</span></div>
     <div class="sidebar sidebar-default sidebar-left collapse width" id="sidebarLeft">
     
     
@@ -456,11 +456,12 @@
                         
                       
                         <div>
-                        <div class="dropdown" data-localize="files.export.help" data-toggle="tooltip" data-placement="right" title="Select several mutations in the table and save to file" data-container="body" data-trigger="hover">
+                        <div data-localize="files.export.help" data-toggle="tooltip" data-placement="right" title="Select several mutations in the table and save to file. There are indicate the number of already selected recordings" data-container="body" data-trigger="hover">
                         
-                            <a class="btn navbar-btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="modal" data-target="#filename">
+                            <a class="btn navbar-btn" type="button" id="dropdownMenu1" data-toggle="modal" data-target="#filename">
                               <span class="hidden-xxs" data-localize="files.export.title">Export</span>
                               <span class="visible-xxs"><i class="fa fa-lg fa-cloud-download"></i></span>
+                            <span class="label label-warning">7</span>
                             </a>
                         
                         <!--
@@ -494,8 +495,10 @@
                            <input type="hidden" id="curr_lang" value="en">
                          </div>
                         </div> 
-                        <div data-toggle="tooltip" data-localize="account.buy.help" data-placement="left" title="Buy featured options for genetic analises" data-container="body" data-trigger="hover" class="hidden-xs">
-                        	<a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy"><span data-localize="buy.title">Buy</span></a>
+                        <!-- 	replace this tooltip by "data-localize="account.profile.balance.value" for paying users -->
+                        <div data-toggle="tooltip" data-localize="buy.help" data-placement="left" title="The amount paid by the remaining tests" data-container="body" data-trigger="hover" class="hidden-xs">
+                        	<a href="#" class="btn navbar-btn" type="button" data-toggle="modal" data-target="#buy"><span data-localize="buy.title">Buy</span><span class="label label-success">>99</span></a>
+                        
                         </div>
                         <div data-toggle="tooltip" data-localize="account.help"  data-placement="left" title="Register or login for access to featured options" data-container="body" data-trigger="hover" class="hidden-xs hidden-xss">
                         	<a href="#" class="btn navbar-btn dropdown-toggle" data-toggle="collapse" data-target="#sidebarRight"><span class="guest" data-localize="account.login.title">Login<span class="hidden-xs"> (<span data-localize="account.register.title">Register</span>)</span></span><span class="user hidden"><span>Name</span><span>Lastname</span></span></a>
@@ -521,9 +524,21 @@
                                         
                                             <div class="table-cell table-cell100">
                                             <div class="btn-group" data-localize="samples.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples">
+                                               <select class="select2">
+                                                 <option value="3">Sample 1</option>
+                                                      <option value="3">Sample 2</option>
+                                                           <option value="3">Sample 3</option>
+                                                                <option value="3">Sample 4</option>
+                                                 <option value="3">Sample 5</option>
+                                                 <option value="3">Sample 6</option>
+                                                 <option value="3">Sample 7</option>
+                                            
+                                               </select>  
+                                            <!--
                                                <select class="sample-search">
                                                  <option value="3620194" selected="selected">mental retardation patient12</option>
                                                </select> 
+                                            -->
                                             </div>
                                             </div>
                                 
@@ -1157,7 +1172,7 @@
              <div class="collapse in copyfilter" id="newfilterField">
                <div class="row grid-toolbar">
                 <div class="col-sm-6">
-                  <label data-localize="filters.setup.selector.title">Available Filters</label>
+                  <label data-localize="filters.setup.selector.label">Available Filters</label>
                 </div>
               </div>
                <div class="alert alert-help"><span data-localize="filters.setup.selector.description">Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis</span></div>
@@ -1217,7 +1232,7 @@
     		<dt class="rules-group-header">
     		 
     		<div class="btn-group pull-right group-actions">
-    			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button>
+    			<button type="button" class="btn btn-xs btn-primary" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-primary" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button>
     		</div>
     		<div class="btn-group group-conditions">
     			<label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_0_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_0_cond" value="OR"> OR </label>
@@ -1231,7 +1246,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1348,7 +1363,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1449,7 +1464,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1553,7 +1568,7 @@
     				<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="fa fa-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1678,7 +1693,7 @@
               <div class="btn-group pull-right ">
                 <a class="btn btn-danger" href=""><span data-localize="actions.delete">Delete</span></a></div>
               <div class="btn-group pull-right">
-                <a class="btn btn-default" href=""><span data-localize="actions.delete">Cancel</span></a>
+                <a class="btn btn-default" href=""><span data-localize="actions.cancel">Cancel</span></a>
               </div>
               <span data-localize="filters.setup.settings.confirm">Are you sure you want to delete this filter?  It can not recover.</span>
            </div>
@@ -1727,15 +1742,15 @@
                   <label data-localize="filters.combine.settings.title">Available Filters for combine</label>
                 </div>
               </div>
-               <div class="row">
+               <div class="row combine-options">
                 <div class="col-lg-12">
                
-        <div id="builder-basic-filters" class="query-builder builder-basic-filters form-inline">
+                <div id="builder-basic-filters" class="query-builder builder-basic-filters form-inline">
     	<dl id="builder-basic_group_0" class="rules-group-container">
     		<dt class="rules-group-header">
     		 
     		<div class="btn-group pull-right group-actions">
-    			<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="glyphicon glyphicon-plus"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-lg fa-plus-circle"></i> Add group </button>
+    			<button type="button" class="btn btn-xs btn-primary" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-primary" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button>
     		</div>
     		<div class="btn-group group-conditions">
     			<label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_0_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_0_cond" value="OR"> OR </label>
@@ -1749,7 +1764,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1780,7 +1795,7 @@
     			<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1811,7 +1826,7 @@
     			<dl id="builder-basic_group_1" class="rules-group-container">
     	<dt class="rules-group-header">
     	<div class="btn-group pull-right group-actions">
-    		<button type="button" class="btn btn-xs btn-success" data-add="rule"><i class="glyphicon glyphicon-plus"></i> Add rule </button><button type="button" class="btn btn-xs btn-success" data-add="group"><i class="fa fa-lg fa-plus-circle"></i> Add group </button><button type="button" class="btn btn-xs btn-danger" data-delete="group"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    		<button type="button" class="btn btn-xs btn-primary" data-add="rule"><i class="fa fa-plus-circle"></i> Add rule </button><button type="button" class="btn btn-xs btn-primary" data-add="group"><i class="fa fa-plus-circle"></i> Add group </button><button type="button" class="btn btn-xs btn-default" data-delete="group"><i class="glyphicon glyphicon-remove"></i> Delete </button>
     	</div>
     	<div class="btn-group group-conditions">
     		<label class="btn btn-xs btn-primary"><input type="radio" name="builder-basic_group_1_cond" value="AND"> AND </label><label class="btn btn-xs btn-primary active"><input type="radio" name="builder-basic_group_1_cond" value="OR"> OR </label>
@@ -1825,7 +1840,7 @@
     		<li id="builder-basic_rule_0" class="rule-container">
     			<div class="rule-header">
     				<div class="btn-group pull-right rule-actions">
-    					<button type="button" class="btn btn-xs btn-danger" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
+    					<button type="button" class="btn btn-xs btn-default" data-delete="rule"><i class="glyphicon glyphicon-remove"></i> Delete </button>
     				</div>
     			</div>
     			<div class="error-container">
@@ -1863,7 +1878,7 @@
     	</dl>
     </div>
         
-      </div>
+                </div>
               </div> 
                <div class="alert alert-danger">
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -2565,6 +2580,13 @@
             <h4 class="modal-title" id="loginLabel"><span data-localize="buy.distributors.heading">Distributors</span></h4>
           </div>
           <div class="modal-body table-content">
+            <div class="list-group-header">
+            <h3 class="" data-localize="general.welcome">Welcome.</h3>
+            <p class="text-warning" data-localize="buy.warning.nopaid_analyzes">You have not paid analyzes</p>
+            <p><span data-localize="buy.select_office"> Select the office closest to you and ask for the purchase of paid features AGx</span></p>  
+    
+    </div>
+            
        <div class="list-group">
     
       <a href="#" class="list-group-item">
@@ -3177,7 +3199,7 @@
           
       <form class="form-horizontal">
          <div class="form-group">
-          <label class="col-xs-12 col-sm-1 control-label" data-localize="files.export.settings.format.label">Format</label>
+          <label class="col-xs-12 col-sm-2 control-label" data-localize="files.export.settings.format.label">Format</label>
           <div class="col-sm-4 col-xs-12">
           <select class="select2 form-control" name="filename[filetype]">
             <option selected="">
@@ -3212,6 +3234,9 @@
          <textarea class="form-control" data-localize="general.description" placeholder="Note (optional)"></textarea>
            </div>
         </div>
+        <div class="alert alert-warning hidden">
+              <p><strong data-localize="general.warning">Warning!</strong><span data-localize="files.export.settings.warning.limit"> Only the first 100 search results will be exported</span></p>    
+            </div>
       </form>
     
             
