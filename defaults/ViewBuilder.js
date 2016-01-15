@@ -36,10 +36,10 @@ class ViewBuilder extends DefaultsBuilderBase {
 
     _createListItem(listItemTemplate) {
         const fieldDescriptor = listItemTemplate.field;
-        const fieldId = this._getFieldId(fieldDescriptor.sourceName, fieldDescriptor.fieldName);
         return {
             id: Uuid.v4(),
-            fieldId: fieldId,
+            fieldName: fieldDescriptor.name,
+            sourceName: fieldDescriptor.sourceName,
             order: listItemTemplate.order,
             sortOrder: listItemTemplate.sortOrder,
             sortDirection: listItemTemplate.sortDirection
