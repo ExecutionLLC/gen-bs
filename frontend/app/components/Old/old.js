@@ -71,6 +71,20 @@ function WidthChange(mq) {
       console.log('show.bs.collapse');
     }); 
 
+    $('#selectColumns, #filter').on('hidden.bs.modal', function (e) {
+  
+      $('#analyzeBtnGroup').tooltip('destroy');
+      $('#analyzeBtnGroup').tooltip({
+         template: '<div class="tooltip fadeInUp" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+         trigger: 'click',
+         container: 'body',
+         placement: 'bottom'
+      });
+      $('#analyzeBtnGroup').tooltip('show'); 
+      
+    });
+
+
 //select2        
 $('.select2').select2({
   placeholder: "Not chosen",

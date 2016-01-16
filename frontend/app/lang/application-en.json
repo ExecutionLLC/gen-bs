@@ -13,7 +13,9 @@
     "success": "Success!",
     "success_simple": "success",
     "complete": "Complete",
-    "date": "Date"
+    "date": "Date",
+    "welcome": "Welcome.",
+    "loading": "Loading. Wait, please"
   },
   "results": {
     "title": "Results",
@@ -30,7 +32,7 @@
     "analyze": {
       "title": "Analyze",
       "help": {
-        "title": "Analyze current sample with current filters and view"
+        "title": "Click for analyze current sample with current filters and view"
       }
     },
     "description": "Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited"
@@ -112,6 +114,9 @@
         },
         "description": {
           "value": "Note (optional)"
+        },
+        "warning": {
+          "limit": "Only the first 100 search results will be exported"
         }
       }
     },
@@ -122,7 +127,7 @@
   },
   "history": {
     "title": "Load History",
-    "heading": "History query analysis",
+    "heading": "Load History",
     "help": {
       "title": "History of queries, saved query settings"
     },
@@ -147,7 +152,11 @@
       "heading": "Distributors"
     },
     "buy": "Buy access to advanced features of App Genomix",
-    "buy_continue": "Buy access to continue to use the advanced features of App Genomix"
+    "buy_continue": "Buy access to continue to use the advanced features of App Genomix",
+    "warning": {
+      "nopaid_analyzes": "You have not paid analyzes"
+    },
+    "select_office": "Select the office closest to you and ask for the purchase of paid features AGx"
   },
   "account": {
     "title": "Account",

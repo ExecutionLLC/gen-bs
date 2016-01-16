@@ -663,6 +663,14 @@
       }
     }
   }
+  @label-success-navbar: lighten(@label-success-bg, 10%);
+   @label-warning-navbar: lighten(@label-warning-bg, 10%);
+  .label-success { 
+    .label-variant(@label-success-navbar);
+  }
+  .label-warning { 
+    .label-variant(@label-warning-navbar);
+  }
 }
 //custrom styles
 .navbar-inverse {
