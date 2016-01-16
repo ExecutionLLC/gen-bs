@@ -133,6 +133,9 @@ module.exports = {
     }),
     */
 
+    new webpack.DefinePlugin({
+      API_PORT: JSON.stringify(8888),
+    })
   ]
 
 
