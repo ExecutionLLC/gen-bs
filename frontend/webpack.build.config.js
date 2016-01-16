@@ -3,7 +3,6 @@
 var webpack = require("webpack");
 var path = require("path");
 
-//var bower_dir = __dirname + '/bower_components';
 var node_dir = __dirname + '/node_modules';
 var vendor_dir = __dirname + '/vendor';
 var bundle_dir = __dirname + '/build';
@@ -25,24 +24,18 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, '../public'),
-    filename: 'genomics.js',
-    //publicPath: 'http://localhost:8080/assets'
+    filename: 'genomics.js'
 
   },
   module: {
     loaders: [
-      //{ test: /\.hbs/, loader: "handlebars-template-loader" },
-      //{test: /\.html$/, loader: "file?name=[name].[ext]"},
       {test: /\.json$/, loader: "file?name=[name].[ext]"},
-        
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
-      //{ test: /\.js?$/, exclude: /node_modules|bower_components/, loaders: ['react-hot', 'jsx', 'babel?stage=0'] },
       {
         test: /\.js?$/,
         exclude: /(node_modules|bower_components|vendor)/,
         loader: 'babel',
         query: {
-          presets: ['es2015']
+          presets: ['react', 'es2015']
         }
       },
       { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
@@ -65,10 +58,7 @@ module.exports = {
       {
           test: /\.less$/,
           loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
-      },
-
-      //{ test: /\.js$/, loader: 'expose?$' },
-      //{ test: /\.js$/, loader: 'expose?jQuery' }
+      }
     ]
   },
 
@@ -76,12 +66,6 @@ module.exports = {
     extensions: ['', '.js', '.jsx','.css', 'less']
   },
   
-  //resolve: {
-  //  alias: {
-  //    'bootstrap-table': node_dir + '/bootstrap-table/dist/bootstrap-table.js',
-  //  }
-  //},
-
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin("genomics.css", {
@@ -96,18 +80,7 @@ module.exports = {
     }),
 
     new webpack.DefinePlugin({
-      API_URL: JSON.stringify("http://localhost:8000"),
-      DP_API_URL: JSON.stringify("http://localhost:3001")
-    }),
-
-    new HandlebarsPlugin({
-      entry: path.join(process.cwd(), "app", "index.hbs"),
-      output: path.join(process.cwd(), "../public", "index.html"),
-      partials: [
-          path.join(process.cwd(), "app", "templates", "*", "*.hbs"),
-          path.join(process.cwd(), "app", "templates", "*", "*", "*.hbs"),
-          path.join(process.cwd(), "app", "templates", "*", "*", "*", "*.hbs")
-      ],
+      API_PORT: JSON.stringify(8080),
     })
 
   ]
