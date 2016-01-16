@@ -1,4 +1,4 @@
-import jsonUrl from '../../json/variants777.json';
+import config from '../../config'
 
 /*
  * action types
@@ -60,7 +60,7 @@ export function fetchVariants(searchParams) {
     dispatch(requestVariants())
 
     setTimeout(() => {
-      $.ajax('http://localhost:8888/api/search', {
+      $.ajax(config.URLS.SEARCH, {
         'data': JSON.stringify(searchParams),
         'type': 'POST',
         'processData': false,
@@ -71,10 +71,6 @@ export function fetchVariants(searchParams) {
       })
     }, 1000)
 
-    return $.get(jsonUrl)
-      .then(json =>
-        dispatch(receiveVariants(json))
-      )
       // TODO:
       // catch any error in the network call.
   }

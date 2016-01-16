@@ -24,7 +24,7 @@ module.exports = {
 
 
   output: {
-    path: path.resolve(__dirname, '../public'),
+    path: path.resolve(__dirname, '../dev_build'),
     filename: 'genomics.js',
     //publicPath: 'http://localhost:8080/assets'
 

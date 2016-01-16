@@ -1,3 +1,4 @@
+import config from '../../config'
 import { getCookie } from '../utils/cookie'
 
 import { fetchUserdata } from './userData'
@@ -9,14 +10,6 @@ export const RECEIVE_SESSION = 'RECEIVE_SESSION'
 export const REQUEST_SESSION = 'REQUEST_SESSION'
 
 
-/*
- * other consts
- */
-const SESSION_URL = 'http://localhost:8888/api/session'
-const WS_URL = 'ws://localhost:8888'
-
-//const SESSION_URL = 'http://ec2-52-91-166-29.compute-1.amazonaws.com:8080/api/session'
-//const WS_URL = 'ws://ec2-52-91-166-29.compute-1.amazonaws.com:8080'
 
 
 /*
@@ -48,6 +41,7 @@ export function login(name, password) {
 
 
   return dispatch => {
+    console.log(config)
 
     const sessionId = getCookie('sessionId')
     //const sessionId = 'e829e70b-8f89-47b0-8655-09e0b33ccc85'
@@ -57,7 +51,7 @@ export function login(name, password) {
 
     // null for debug purpose
     if (sessionId && sessionId !== 'null') {
-      conn = new WebSocket(WS_URL)
+      conn = new WebSocket(config.URLS.WS)
       console.log('cookie session', sessionId)
       dispatch(receiveSession({session_id: sessionId}))
       dispatch(createWsConnection(conn))
@@ -67,14 +61,14 @@ export function login(name, password) {
       });
       dispatch(fetchUserdata())
     } else {
-      return $.ajax(SESSION_URL, {
+      return $.ajax(config.URLS.SESSION, {
           'data': JSON.stringify({user_name: name, password: password}),
           'type': 'POST',
           'processData': false,
           'contentType': 'application/json'
         })
         .then(json => {
-          conn = new WebSocket(WS_URL)
+          conn = new WebSocket(config.URLS.WS)
           const sessionId = json.session_id
           dispatch(receiveSession(json))
           dispatch(createWsConnection(conn))
