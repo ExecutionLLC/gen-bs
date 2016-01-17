@@ -89,6 +89,12 @@ class DatabaseCreator {
             'rw' // Share as read-write
         ];
 
+        // Type of source as they are got from VCF.
+        const fieldSourceTypesEnumValues = [
+            'sample',
+            'source'
+        ];
+
         // Types of fields as they are got from VCF.
         const fieldValueTypesEnumValues = [
             'float',
@@ -195,6 +201,7 @@ class DatabaseCreator {
                 table.uuid('id')
                     .primary();
                 table.string('name', 50);
+                table.enu('source_type', fieldSourceTypesEnumValues);
                 table.string('source_name', 128);
                 table.enu('value_type', fieldValueTypesEnumValues);
                 table.boolean('filter_control_enable')

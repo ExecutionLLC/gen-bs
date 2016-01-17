@@ -9,6 +9,7 @@ const ModelBase = require('./ModelBase');
 const mappedColumns = [
     'id',
     'name',
+    'source_type',
     'source_name',
     'value_type',
     'filter_control_enable',
@@ -82,6 +83,7 @@ class FieldsMetadataModel extends ModelBase {
                     const dataToInsert = {
                         id: (withId ? metadata.id : this._generateId()),
                         name: metadata.name,
+                        sourceType: metadata.sourceType,
                         sourceName: metadata.sourceName,
                         valueType: metadata.valueType || 'user',
                         filterControlEnable: metadata.filterControlEnable || true,
