@@ -1,0 +1,36 @@
+[
+  {
+    "id": "d2fe3c37-a556-4568-b60f-a1a0c2413e40",
+    "name": "Test Filter",
+    "description": "Test filter description",
+    "type": "standard",
+    "is_disabled_4copy": false,
+    "rules": {
+      "$or": [
+        {
+          "CHROM": {
+            "$ne": 10
+          }
+        },
+        {
+          "common_no_known_medical_impact_20151201,CHROM": {
+            "$ne": 10
+          }
+        },
+        {
+          "FILTER": "PASS"
+        },
+        {
+          "POS": {
+            "$gt": 100
+          }
+        },
+        {
+          "$and": [
+            {}
+          ]
+        }
+      ]
+    }
+  }
+]
