@@ -104,7 +104,7 @@ class UserModel extends RemovableModelBase {
                     if (data.length > 0) {
                         cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
                     } else {
-                        cb(new Error('Item not found: ' + id));
+                        cb(new Error('Item not found: ' + userId));
                     }
                 }
             });

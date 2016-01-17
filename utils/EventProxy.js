@@ -28,7 +28,7 @@ class EventProxy {
 
     _checkEvent(eventName) {
         if (this.knownEvents
-            && !_.any(this.knownEvents, event => event === eventName)) {
+            && !_.some(this.knownEvents, event => event === eventName)) {
             throw new Error('Unexpected event: ' + eventName)
         }
     }
