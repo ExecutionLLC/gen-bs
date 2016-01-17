@@ -1,6 +1,6 @@
 {
   "sample": {
-    "id": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+    "id": "84ccdcbf-8488-4de0-b346-0dd776863a74",
     "fileName": "ONH_405_1946139_IonXpress_032.vcf.gz",
     "hash": null,
     "sampleType": "standard",
@@ -9,10 +9,10 @@
   },
   "fields": [
     {
-      "id": "d6b30824-ae88-457f-a043-2dda37b64f97",
+      "id": "a76ef60e-8bff-431f-a29c-8819b62f4e32",
       "name": "CHROM",
       "label": "CHROM",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -20,10 +20,10 @@
       "description": "Chromosome identifier"
     },
     {
-      "id": "77556529-bee6-4c76-add1-5cad5d6eb7b1",
+      "id": "de260ea0-e5f6-4b0f-93df-ec85f2ab5d90",
       "name": "POS",
       "label": "POS",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -31,10 +31,10 @@
       "description": "The reference position"
     },
     {
-      "id": "9f29cdfc-444b-463d-94e5-2a4dcd7f0070",
+      "id": "a7ee9b99-bc1a-4614-8877-c6ec41735afd",
       "name": "ID",
       "label": "ID",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -42,10 +42,10 @@
       "description": "Semi-colon separated list of unique identifiers where available"
     },
     {
-      "id": "ef914f38-d7f7-45ed-8379-fd60d6e1d65f",
+      "id": "84238c6c-2f06-4aec-938e-7cd671ecb164",
       "name": "REF",
       "label": "REF",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -53,10 +53,10 @@
       "description": "The value in the POS field refers to the position of the first base in the String"
     },
     {
-      "id": "647a3db2-9734-45ae-9e18-f5977b3b4264",
+      "id": "0dd2a09c-5be3-4773-a2fd-44235a49fd8a",
       "name": "ALT",
       "label": "ALT",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -64,10 +64,10 @@
       "description": "Comma separated list of alternate non-reference alleles called on at least one of the samples"
     },
     {
-      "id": "4212f3d7-c406-43d3-a8dd-2c241061c9f9",
+      "id": "6fcce307-d8fd-4fd6-afbd-d2a6c9a2abef",
       "name": "QUAL",
       "label": "QUAL",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -75,10 +75,10 @@
       "description": "Quality"
     },
     {
-      "id": "58bc9447-a9a8-4761-8c0b-6dbf3164164e",
+      "id": "16f15144-41fe-44df-8b59-cb12e4dd4ea7",
       "name": "FILTER",
       "label": "FILTER",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -86,10 +86,10 @@
       "description": "Filter status"
     },
     {
-      "id": "992516bd-c493-43f7-aeb1-4a5580e76386",
+      "id": "f0277557-e02d-45c3-8fc1-8958d4540c4a",
       "name": "INFO_AF",
       "label": "INFO_AF",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -97,10 +97,10 @@
       "description": "Allele frequency based on Flow Evaluator observation counts"
     },
     {
-      "id": "9ac6c592-1da8-42bb-80c8-a0ad431bc15a",
+      "id": "0b6dc6e0-416b-4752-b6a2-a0f90d4ba1fd",
       "name": "INFO_AO",
       "label": "INFO_AO",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -108,10 +108,10 @@
       "description": "Alternate allele observations"
     },
     {
-      "id": "a36c9169-7934-46a2-a351-29bf9b2d341a",
+      "id": "62435ab8-2b2a-4485-8865-b75dac7f2882",
       "name": "INFO_DP",
       "label": "INFO_DP",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -119,10 +119,10 @@
       "description": "Total read depth at the locus"
     },
     {
-      "id": "d30868d3-61a3-4bdf-bffe-c1fb4250ca24",
+      "id": "e782f407-3868-4cca-ba6c-13b7ce37b4cf",
       "name": "INFO_FAO",
       "label": "INFO_FAO",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -130,10 +130,10 @@
       "description": "Flow Evaluator Alternate allele observations"
     },
     {
-      "id": "b95570de-fb14-46cc-86dc-f35f9e94040f",
+      "id": "4de94e5b-8f01-4f94-af8d-613ddab3937c",
       "name": "INFO_FDP",
       "label": "INFO_FDP",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -141,10 +141,10 @@
       "description": "Flow Evaluator read depth at the locus"
     },
     {
-      "id": "539b2474-cb85-4272-9c9f-38b03aec4b61",
+      "id": "78ce89c5-272d-4da7-bcef-18fd243eb472",
       "name": "INFO_FR",
       "label": "INFO_FR",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -152,10 +152,10 @@
       "description": "Reason why the variant was filtered."
     },
     {
-      "id": "4f714b98-1ca9-4092-8db6-c273a2fda1e5",
+      "id": "c93a9e02-7628-4be3-a6bd-8802b9db6eee",
       "name": "INFO_FRO",
       "label": "INFO_FRO",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -163,10 +163,10 @@
       "description": "Flow Evaluator Reference allele observations"
     },
     {
-      "id": "b031ea01-bf6b-4307-ba43-1e5d3611b077",
+      "id": "c3adda86-376a-4d1a-9242-cb5f29b2f3b6",
       "name": "INFO_FSAF",
       "label": "INFO_FSAF",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -174,10 +174,10 @@
       "description": "Flow Evaluator Alternate allele observations on the forward strand"
     },
     {
-      "id": "657ba309-edc9-42f0-9924-fd095b597e8f",
+      "id": "020efe2f-4651-4cd0-afea-25e53cddc473",
       "name": "INFO_FSAR",
       "label": "INFO_FSAR",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -185,10 +185,10 @@
       "description": "Flow Evaluator Alternate allele observations on the reverse strand"
     },
     {
-      "id": "aab991f6-d1ce-4cff-a046-25f7919ff403",
+      "id": "7972e70e-6138-4995-9222-8b414e76b1f9",
       "name": "INFO_FSRF",
       "label": "INFO_FSRF",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -196,10 +196,10 @@
       "description": "Flow Evaluator Reference observations on the forward strand"
     },
     {
-      "id": "3232f6fd-6ba6-4177-a12c-c8e5e1ccd314",
+      "id": "3b4771f2-f0b1-4635-89bd-e2faad40e810",
       "name": "INFO_FSRR",
       "label": "INFO_FSRR",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -207,10 +207,10 @@
       "description": "Flow Evaluator Reference observations on the reverse strand"
     },
     {
-      "id": "fdb03d4e-3b7f-48ee-b896-4e93abc1bc33",
+      "id": "5cffc4e2-5042-447c-ae1a-e8bb1528889b",
       "name": "INFO_FWDB",
       "label": "INFO_FWDB",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -218,10 +218,10 @@
       "description": "Forward strand bias in prediction."
     },
     {
-      "id": "4d4e282c-7934-48f3-9427-9c17ce0adcc0",
+      "id": "a7c10375-8d99-47d7-b897-67d03fcbe631",
       "name": "INFO_FXX",
       "label": "INFO_FXX",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -229,10 +229,10 @@
       "description": "Flow Evaluator failed read ratio"
     },
     {
-      "id": "2f754dec-7ec6-4000-bd0f-f3df439331db",
+      "id": "ca6c280d-9472-429c-bceb-7dbfb5d044ed",
       "name": "INFO_HRUN",
       "label": "INFO_HRUN",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -240,10 +240,10 @@
       "description": "Run length: the number of consecutive repeats of the alternate allele in the reference genome"
     },
     {
-      "id": "fd733d7f-e333-41cc-8169-c1cddc7aec84",
+      "id": "d9718cfe-6b4d-4a81-b270-b8ac41668efa",
       "name": "INFO_HS",
       "label": "INFO_HS",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -251,10 +251,10 @@
       "description": "Indicate it is at a hot spot"
     },
     {
-      "id": "4ecac41b-58e9-4b79-994f-75a7e3106f28",
+      "id": "1a83a8d7-d952-42aa-8ae1-b4c16da26b73",
       "name": "INFO_LEN",
       "label": "INFO_LEN",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -262,10 +262,10 @@
       "description": "allele length"
     },
     {
-      "id": "e1367466-2672-4a34-a3d3-7a2032f35364",
+      "id": "e6f48c8b-4645-4716-8758-81b58888fbdd",
       "name": "INFO_MLLD",
       "label": "INFO_MLLD",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -273,10 +273,10 @@
       "description": "Mean log-likelihood delta per read."
     },
     {
-      "id": "3bb1a408-0f4f-4bb5-b80b-b76b6ae8e249",
+      "id": "07c63b13-a53f-42e6-9988-6ff1daaf1fae",
       "name": "INFO_NS",
       "label": "INFO_NS",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -284,10 +284,10 @@
       "description": "Number of samples with data"
     },
     {
-      "id": "dbda7d85-b0cb-4f0b-8804-bbe834c12ed9",
+      "id": "8f4a58ff-0d81-4f75-b3b5-e4784e52170c",
       "name": "INFO_PB",
       "label": "INFO_PB",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -295,10 +295,10 @@
       "description": "Bias of relative variant position in reference reads versus variant reads. Equals Mann-Whitney U rho statistic P(Y>X)+0.5P(Y=X)"
     },
     {
-      "id": "473dd089-535d-4173-8f42-4b810ab51e23",
+      "id": "daa81cbb-50f7-4a1e-b255-0e2d730fe83e",
       "name": "INFO_PBP",
       "label": "INFO_PBP",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -306,10 +306,10 @@
       "description": "Pval of relative variant position in reference reads versus variant reads.  Related to GATK ReadPosRankSumTest"
     },
     {
-      "id": "3d5b60e9-45dc-445a-9291-2467e85562ae",
+      "id": "c9edca25-3f25-40ae-8638-029b036e2c82",
       "name": "INFO_QD",
       "label": "INFO_QD",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -317,10 +317,10 @@
       "description": "QualityByDepth as 4*QUAL/FDP (analogous to GATK)"
     },
     {
-      "id": "98db528e-a3a6-496f-8256-8dcf087c4852",
+      "id": "60d6103a-9a1d-42e1-94f4-fabc760b038a",
       "name": "INFO_RBI",
       "label": "INFO_RBI",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -328,10 +328,10 @@
       "description": "Distance of bias parameters from zero."
     },
     {
-      "id": "5e86c333-6f09-4851-9183-86ab5546bdcc",
+      "id": "a30e0ea1-e55a-489c-b923-762dc93f257e",
       "name": "INFO_REFB",
       "label": "INFO_REFB",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -339,10 +339,10 @@
       "description": "Reference Hypothesis bias in prediction."
     },
     {
-      "id": "3b9df893-f9be-4cf3-b4fb-8a20df6987c8",
+      "id": "d1d23888-e93a-4249-93e2-64e778aae44c",
       "name": "INFO_REVB",
       "label": "INFO_REVB",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -350,10 +350,10 @@
       "description": "Reverse strand bias in prediction."
     },
     {
-      "id": "1fe431c6-f548-4caf-bcd7-68e729e2d464",
+      "id": "ba47d0db-d91e-467d-96eb-8a0e1e49b1da",
       "name": "INFO_RO",
       "label": "INFO_RO",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -361,10 +361,10 @@
       "description": "Reference allele observations"
     },
     {
-      "id": "43df9804-0024-4e46-a766-a83e222a308c",
+      "id": "8bf840c6-c763-41af-b315-34396d6ea819",
       "name": "INFO_SAF",
       "label": "INFO_SAF",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -372,10 +372,10 @@
       "description": "Alternate allele observations on the forward strand"
     },
     {
-      "id": "20e4579e-9bdb-4319-8380-6f83e300a52b",
+      "id": "76548f1a-799b-445f-93f2-a14b1f10b965",
       "name": "INFO_SAR",
       "label": "INFO_SAR",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -383,10 +383,10 @@
       "description": "Alternate allele observations on the reverse strand"
     },
     {
-      "id": "8894b4de-0280-4eac-8c7a-43debcdf4d8a",
+      "id": "b4fe3501-4242-4e26-87a8-00d4e9e4d72d",
       "name": "INFO_SRF",
       "label": "INFO_SRF",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -394,10 +394,10 @@
       "description": "Number of reference observations on the forward strand"
     },
     {
-      "id": "ecd3cda0-ecf1-4d45-8afc-3efa17d7d1f3",
+      "id": "060dbd6f-ec62-40ea-89b3-e647fa834785",
       "name": "INFO_SRR",
       "label": "INFO_SRR",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -405,10 +405,10 @@
       "description": "Number of reference observations on the reverse strand"
     },
     {
-      "id": "e919c87e-b339-40c1-8cc2-a631ceeb2e20",
+      "id": "5dc0a06b-5177-480c-bb67-0227d7d5f52a",
       "name": "INFO_SSEN",
       "label": "INFO_SSEN",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -416,10 +416,10 @@
       "description": "Strand-specific-error prediction on negative strand."
     },
     {
-      "id": "e854d18b-9897-4278-9eec-46053c05ee7e",
+      "id": "3db11cc5-96c1-40b3-93ba-f5acfc546450",
       "name": "INFO_SSEP",
       "label": "INFO_SSEP",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -427,10 +427,10 @@
       "description": "Strand-specific-error prediction on positive strand."
     },
     {
-      "id": "94e1de45-47f0-4a92-bff5-f9f331e0773b",
+      "id": "c0e04d94-fec0-4a96-a8a4-f61ab9672d7b",
       "name": "INFO_SSSB",
       "label": "INFO_SSSB",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -438,10 +438,10 @@
       "description": "Strand-specific strand bias for allele."
     },
     {
-      "id": "0e346c2c-7606-45b9-a850-7a4627fc685d",
+      "id": "78be3d14-e632-4af9-b5d3-610cfad874b9",
       "name": "INFO_STB",
       "label": "INFO_STB",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -449,10 +449,10 @@
       "description": "Strand bias in variant relative to reference."
     },
     {
-      "id": "13294b01-e580-4453-b263-96a1b4070aff",
+      "id": "ef267457-1345-45dd-a785-c1627ee5f159",
       "name": "INFO_STBP",
       "label": "INFO_STBP",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -460,10 +460,10 @@
       "description": "Pval of Strand bias in variant relative to reference."
     },
     {
-      "id": "31cbc669-9662-487f-abc2-bfea473b9059",
+      "id": "b105422f-14b7-41d6-8942-649a739eafb5",
       "name": "INFO_TYPE",
       "label": "INFO_TYPE",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -471,10 +471,10 @@
       "description": "The type of allele, either snp, mnp, ins, del, or complex."
     },
     {
-      "id": "b3538b66-1192-4d3f-849c-d8e39d9e2701",
+      "id": "884ac88f-04f2-47de-8f1a-69b9abda2024",
       "name": "INFO_VARB",
       "label": "INFO_VARB",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -482,10 +482,10 @@
       "description": "Variant Hypothesis bias in prediction."
     },
     {
-      "id": "2a28b996-1fc7-412e-918b-09e032e88d7b",
+      "id": "ba5ca655-3051-46fd-9133-e59d2b356653",
       "name": "INFO_OID",
       "label": "INFO_OID",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -493,10 +493,10 @@
       "description": "List of original Hotspot IDs"
     },
     {
-      "id": "281ec346-65b1-4a9b-888c-d9322f5d3515",
+      "id": "147c18a7-3aff-46e5-8014-53b4a85b5c4b",
       "name": "INFO_OPOS",
       "label": "INFO_OPOS",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -504,10 +504,10 @@
       "description": "List of original allele positions"
     },
     {
-      "id": "eee54879-1f45-4657-98b4-f55c089838af",
+      "id": "ad0fd835-5806-4b21-831b-9ae3743e768e",
       "name": "INFO_OREF",
       "label": "INFO_OREF",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -515,10 +515,10 @@
       "description": "List of original reference bases"
     },
     {
-      "id": "de4d60b1-0a9a-4e8c-bc86-c46095f162ab",
+      "id": "ee057603-f882-476f-9700-7147509876e4",
       "name": "INFO_OALT",
       "label": "INFO_OALT",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -526,10 +526,10 @@
       "description": "List of original variant bases"
     },
     {
-      "id": "6568aabf-b080-4840-9b37-a4368686eb90",
+      "id": "e8b541b0-1e8f-4119-a4e0-56e8b161bbcc",
       "name": "INFO_OMAPALT",
       "label": "INFO_OMAPALT",
-      "sourceName": "34f4f7c5-3827-4758-bacd-d6072f3317b1",
+      "sourceName": "84ccdcbf-8488-4de0-b346-0dd776863a74",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,

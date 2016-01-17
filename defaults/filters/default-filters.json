@@ -1,6 +1,6 @@
 [
   {
-    "id": "d2fe3c37-a556-4568-b60f-a1a0c2413e40",
+    "id": "b7a15d54-1564-41d3-bdca-de4b2aaf8a67",
     "name": "Test Filter",
     "description": "Test filter description",
     "type": "standard",
@@ -13,7 +13,7 @@
           }
         },
         {
-          "common_no_known_medical_impact_20151201,CHROM": {
+          "common_no_known_medical_impact_20151201_CHROM": {
             "$ne": 10
           }
         },
@@ -27,7 +27,9 @@
         },
         {
           "$and": [
-            {}
+            {
+              "CHROM": 24
+            }
           ]
         }
       ]

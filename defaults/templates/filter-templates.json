@@ -46,7 +46,8 @@
               "field": {
                 "source_name": "sample",
                 "name": "CHROM"
-              }
+              },
+              "condition": 24
             }
           ]
         }

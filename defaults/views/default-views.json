@@ -1,47 +1,63 @@
 [
   {
-    "id": "b9511067-38db-467f-a6ec-a882b774c434",
+    "id": "8ca58193-a77d-4c03-9e10-42032749b379",
     "name": "Test Default View",
-    "viewType": "standard",
+    "view_type": "standard",
     "description": "This is default view with two columns and no keywords",
-    "viewListItems": [
+    "view_list_items": [
       {
-        "id": "71e4645f-ead0-4dd6-ab4c-7710a3ec1a27",
-        "fieldName": "CHROM",
-        "order": 1
+        "id": "f7f29197-4e42-4be2-b77e-53e573b031f5",
+        "field_name": "CHROM",
+        "source_name": "sample",
+        "order": 1,
+        "sort_order": 1,
+        "sort_direction": "asc"
       },
       {
-        "id": "e6ee2858-e329-48b4-b064-e6d76a6d946c",
-        "fieldName": "POS",
-        "order": 2
+        "id": "0ad41e2d-da81-4875-ab1d-58eaef09623e",
+        "field_name": "POS",
+        "source_name": "sample",
+        "order": 2,
+        "sort_order": 2,
+        "sort_direction": "desc"
       },
       {
-        "id": "94992caa-a22a-4859-9ce7-6af85561befc",
-        "fieldName": "CHROM",
+        "id": "76e95e57-c260-4838-9700-f21528b88272",
+        "field_name": "CHROM",
+        "source_name": "common_no_known_medical_impact_20151201",
         "order": 3
       }
     ]
   },
   {
-    "id": "b7ea6ef4-ee63-4060-b634-503213151844",
+    "id": "01ed2894-5f09-415e-8c99-400fcc6aff23",
     "name": "Another Default View",
-    "viewType": "advanced",
+    "view_type": "advanced",
     "description": "This is default view with two columns and no keywords",
-    "viewListItems": [
+    "view_list_items": [
       {
-        "id": "9fa5c38d-6845-48fc-9427-0ae8cc26c046",
-        "fieldName": "CHROM",
-        "order": 1
+        "id": "7bb0eb06-9039-4b06-978a-d6ac983b7a12",
+        "field_name": "CHROM",
+        "source_name": "sample",
+        "order": 1,
+        "sort_order": 1,
+        "sort_direction": "asc"
       },
       {
-        "id": "e80cd64e-ca50-4cd2-b834-c7ce20461976",
-        "fieldName": "POS",
-        "order": 2
+        "id": "712eb421-5155-4413-b786-4c53a0ddbd8d",
+        "field_name": "POS",
+        "source_name": "sample",
+        "order": 2,
+        "sort_order": 2,
+        "sort_direction": "desc"
       },
       {
-        "id": "759852de-d8c0-49d6-87c9-31e7e5653023",
-        "fieldName": "FILTER",
-        "order": 3
+        "id": "dff01710-d1bc-43ed-8b27-b2734f741568",
+        "field_name": "FILTER",
+        "source_name": "sample",
+        "order": 3,
+        "sort_order": 3,
+        "sort_direction": "desc"
       }
     ]
   }
