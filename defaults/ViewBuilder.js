@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const Uuid = require('node-uuid');
+const async = require('async');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 const FsUtils = require('../utils/FileSystemUtils');
@@ -17,6 +18,27 @@ class ViewBuilder extends DefaultsBuilderBase {
         this.build = this.build.bind(this);
         this._createView = this._createView.bind(this);
         this._createListItem = this._createListItem.bind(this);
+    }
+
+    /**
+     * Builds default views using templates file.
+     *
+     * The method needs samples field metadata to be present, as it uses field ids to build views.
+     * */
+    build(callback) {
+        async.waterfall([
+            (callback) => {
+                FsUtils.createDirectoryIfNotExists(this.viewsDir, callback);
+            },
+            (callback) => {
+                this._removeJsonFilesFromDirectory(this.viewsDir, callback);
+            },
+            (callback) => {
+                const views = _.map(this.viewTemplates, this._createView);
+                this._storeViews(views);
+                callback(null);
+            }
+        ], callback);
     }
 
     _createListItem(listItemTemplate) {
@@ -46,29 +68,6 @@ class ViewBuilder extends DefaultsBuilderBase {
         const viewsJson = JSON.stringify(snakeCasedViews, null, 2);
         const viewsFile = this.viewsDir + '/default-views.json';
         FsUtils.writeStringToFile(viewsFile, viewsJson, callback);
-    }
-
-    /**
-     * Builds default views using templates file.
-     *
-     * The method needs samples field metadata to be present, as it uses field ids to build views.
-     * */
-    build(callback) {
-        FsUtils.createDirectoryIfNotExists(this.viewsDir, (error) => {
-           if (error) {
-               callback(error);
-           } else {
-               this._removeJsonFilesFromDirectory(this.viewsDir, (error) => {
-                   if (error) {
-                       callback(error);
-                   } else {
-                       const views = _.map(this.viewTemplates, this._createView);
-                       this._storeViews(views);
-                       callback(null);
-                   }
-               });
-           }
-        });
     }
 }
 

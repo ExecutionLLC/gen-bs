@@ -9,7 +9,7 @@
         {
           "field": {
             "source_name": "sample",
-            "field_name": "CHROM"
+            "name": "CHROM"
           },
           "condition": {
             "$ne": "10"
@@ -18,7 +18,14 @@
         {
           "field": {
             "source_name": "sample",
-            "field_name": "POS"
+            "name": "FILTER"
+          },
+          "condition": "PASS"
+        },
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "POS"
           },
           "condition": {
             "$gt": 100
@@ -29,7 +36,7 @@
             {
               "field": {
                 "source_name": "sample",
-                "field_name": "CHROM"
+                "name": "CHROM"
               }
             }
           ]

@@ -1,19 +1,19 @@
 [
   {
-    "id": "9725759f-c5eb-4f9c-a868-0d8a337c11f4",
+    "id": "f408b41e-049e-4cab-b11b-dc6e8f77d776",
     "name": "Test Default View",
     "view_type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "4738e936-9c77-4b4f-a9b9-0b4cfbb2b7cc",
+        "id": "180bf862-7fcd-445a-bdbe-2b93514f6806",
         "source_name": "sample",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "0c91c34f-e019-4690-92be-943a60acbd95",
+        "id": "cba4c34f-f24d-4ee8-a4ee-6ff2c945c067",
         "source_name": "sample",
         "order": 2,
         "sort_order": 2,
@@ -22,27 +22,27 @@
     ]
   },
   {
-    "id": "b517be30-9bec-4388-a58c-f71a58c590f3",
+    "id": "6ded6642-eedd-474f-bba9-56a3e11f3b33",
     "name": "Another Default View",
     "view_type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "567410fd-5bfb-4bb0-8cdc-1a82fcc1c741",
+        "id": "dc1c8c40-8186-4cc3-b7f5-45def8d70afc",
         "source_name": "sample",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "7970da2a-b25a-45d8-ae96-02e883333e33",
+        "id": "e6c25d0d-65de-49cf-8d35-88963007c906",
         "source_name": "sample",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
       },
       {
-        "id": "5cc99783-dd8f-4cdc-9f42-c06eeb385149",
+        "id": "f90116d2-86e6-4713-a86e-61aca85ade67",
         "source_name": "sample",
         "order": 3,
         "sort_order": 3,
