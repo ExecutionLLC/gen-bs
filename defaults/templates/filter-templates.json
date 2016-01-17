@@ -9,19 +9,19 @@
         {
           "field": {
             "source_name": "sample",
-            "name": "CHROM"
+            "name": "ALT"
           },
           "condition": {
-            "$ne": 10
+            "$ne": "A"
           }
         },
         {
           "field": {
             "source_name": "common_no_known_medical_impact_20151201",
-            "name": "CHROM"
+            "name": "ALT"
           },
           "condition": {
-            "$ne": 10
+            "$ne": "B"
           }
         },
         {
@@ -30,26 +30,6 @@
             "name": "FILTER"
           },
           "condition": "PASS"
-        },
-        {
-          "field": {
-            "source_name": "sample",
-            "name": "POS"
-          },
-          "condition": {
-            "$gt": 100
-          }
-        },
-        {
-          "$and": [
-            {
-              "field": {
-                "source_name": "sample",
-                "name": "CHROM"
-              },
-              "condition": 24
-            }
-          ]
         }
       ]
     }

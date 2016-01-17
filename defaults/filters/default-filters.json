@@ -1,6 +1,6 @@
 [
   {
-    "id": "b7a15d54-1564-41d3-bdca-de4b2aaf8a67",
+    "id": "c1af7cd2-e58d-44a6-9c31-3c4a4f9f3295",
     "name": "Test Filter",
     "description": "Test filter description",
     "type": "standard",
@@ -8,29 +8,17 @@
     "rules": {
       "$or": [
         {
-          "CHROM": {
-            "$ne": 10
+          "ALT": {
+            "$ne": "A"
           }
         },
         {
-          "common_no_known_medical_impact_20151201_CHROM": {
-            "$ne": 10
+          "common_no_known_medical_impact_20151201_ALT": {
+            "$ne": "B"
           }
         },
         {
           "FILTER": "PASS"
-        },
-        {
-          "POS": {
-            "$gt": 100
-          }
-        },
-        {
-          "$and": [
-            {
-              "CHROM": 24
-            }
-          ]
         }
       ]
     }

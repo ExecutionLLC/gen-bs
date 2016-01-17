@@ -28,6 +28,20 @@
           "name": "CHROM"
         },
         "order": 3
+      },
+      {
+        "field": {
+          "source_name": "common_no_known_medical_impact_20151201",
+          "name": "ALT"
+        },
+        "order": 4
+      },
+      {
+        "field": {
+          "source_name": "sample",
+          "name": "ALT"
+        },
+        "order": 5
       }
     ]
   },

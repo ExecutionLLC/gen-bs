@@ -1,6 +1,6 @@
 {
   "sample": {
-    "id": "70020cc4-9869-4888-af44-fc6151d1635f",
+    "id": "112055aa-5b85-4014-bdec-d5936ff0b80f",
     "fileName": "common_no_known_medical_impact_20151201",
     "hash": null,
     "sampleType": "standard",
@@ -9,7 +9,7 @@
   },
   "fields": [
     {
-      "id": "fb3ba9ca-74e2-4dd8-bc07-d9571e9c2627",
+      "id": "93af4d0f-bc47-45d6-ad0b-7b5830f88312",
       "name": "CHROM",
       "label": "CHROM",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -20,7 +20,7 @@
       "description": "Chromosome identifier"
     },
     {
-      "id": "923fe1f7-d22b-4813-9f3c-c020884bd661",
+      "id": "903fa92b-c2e9-4baf-9872-8a4161c1cc80",
       "name": "POS",
       "label": "POS",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -31,7 +31,7 @@
       "description": "The reference position"
     },
     {
-      "id": "4ca5b3d2-5f27-4fa8-8572-9d4d9281b04a",
+      "id": "f0006e33-e801-4983-80fa-2fcc97900680",
       "name": "ID",
       "label": "ID",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -42,7 +42,7 @@
       "description": "Semi-colon separated list of unique identifiers where available"
     },
     {
-      "id": "1235bdea-e0cb-4bdc-a899-8b1bb9bca463",
+      "id": "dffa7d8c-28d5-461a-88b7-3b43dc6f1b4b",
       "name": "REF",
       "label": "REF",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -53,7 +53,7 @@
       "description": "The value in the POS field refers to the position of the first base in the String"
     },
     {
-      "id": "4ed62c1e-1684-428c-8f51-ca3381efec75",
+      "id": "fef811f5-b8f1-4717-8d13-cd27da037867",
       "name": "ALT",
       "label": "ALT",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -64,7 +64,7 @@
       "description": "Comma separated list of alternate non-reference alleles called on at least one of the samples"
     },
     {
-      "id": "573a3aa8-9246-4f6a-a313-08f5b571c159",
+      "id": "31d1169c-4bf7-4734-aa99-4107ebfffa84",
       "name": "QUAL",
       "label": "QUAL",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -75,7 +75,7 @@
       "description": "Quality"
     },
     {
-      "id": "f168c82d-664c-4726-bb67-cab2b2e102df",
+      "id": "e9fafd85-285b-4c54-b066-345d41546f45",
       "name": "FILTER",
       "label": "FILTER",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -86,7 +86,7 @@
       "description": "Filter status"
     },
     {
-      "id": "22e691ea-4130-455f-97ef-76424e8b4509",
+      "id": "aae02830-aba9-42f2-ad85-f54193bd2832",
       "name": "INFO_RS",
       "label": "INFO_RS",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -97,7 +97,7 @@
       "description": "dbSNP ID (i.e. rs number)"
     },
     {
-      "id": "0151d8bd-c1f1-41b3-88e4-efa2f764a87f",
+      "id": "0ae646be-51f7-427b-a6b5-883ac10dba96",
       "name": "INFO_RSPOS",
       "label": "INFO_RSPOS",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -108,7 +108,7 @@
       "description": "Chr position reported in dbSNP"
     },
     {
-      "id": "ee12af80-828e-4979-b7b6-d2c4317a62c3",
+      "id": "56e58894-8080-464b-8c44-1ea6d05fe9a1",
       "name": "INFO_RV",
       "label": "INFO_RV",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -119,7 +119,7 @@
       "description": "RS orientation is reversed"
     },
     {
-      "id": "04f7588f-1e67-4505-9695-180eb7acd391",
+      "id": "7b2072f0-4cae-4f01-96bc-b3b5b761db70",
       "name": "INFO_VP",
       "label": "INFO_VP",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -130,7 +130,7 @@
       "description": "Variation Property.  Documentation is at ftp://ftp.ncbi.nlm.nih.gov/snp/specs/dbSNP_BitField_latest.pdf"
     },
     {
-      "id": "bbd40123-7a4e-44dd-bb4a-cdfa7d53c7e1",
+      "id": "7dd3b0eb-ecc3-4779-b4db-e39c13e693d1",
       "name": "INFO_GENEINFO",
       "label": "INFO_GENEINFO",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -141,7 +141,7 @@
       "description": "Pairs each of gene symbol:gene id.  The gene symbol and id are delimited by a colon (:) and each pair is delimited by a vertical bar (|)"
     },
     {
-      "id": "aa510a85-c99f-43e3-a485-fb24f6831720",
+      "id": "46f73e64-fc40-472c-abaf-0d83fde44e22",
       "name": "INFO_dbSNPBuildID",
       "label": "INFO_dbSNPBuildID",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -152,7 +152,7 @@
       "description": "First dbSNP Build for RS"
     },
     {
-      "id": "72929bb0-1e57-48f9-b95a-3b071adbd086",
+      "id": "34c54c76-141e-4572-9dc5-c54171d45b43",
       "name": "INFO_SAO",
       "label": "INFO_SAO",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -163,7 +163,7 @@
       "description": "Variant Allele Origin: 0 - unspecified, 1 - Germline, 2 - Somatic, 3 - Both"
     },
     {
-      "id": "069d7d71-ccb0-4cef-a033-e2ecaf278489",
+      "id": "15a8b94f-ec36-4f4f-866b-c3a146f2108a",
       "name": "INFO_SSR",
       "label": "INFO_SSR",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -174,7 +174,7 @@
       "description": "Variant Suspect Reason Codes (may be more than one value added together) 0 - unspecified, 1 - Paralog, 2 - byEST, 4 - oldAlign, 8 - Para_EST, 16 - 1kg_failed, 1024 - other"
     },
     {
-      "id": "13d5df61-ce6c-4d2b-9e86-4ece13c201e3",
+      "id": "bc8c6915-d845-41da-9d20-5bb3e78ec321",
       "name": "INFO_WGT",
       "label": "INFO_WGT",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -185,7 +185,7 @@
       "description": "Weight, 00 - unmapped, 1 - weight 1, 2 - weight 2, 3 - weight 3 or more"
     },
     {
-      "id": "68a50d42-8d84-4fe1-8b64-ea07383bf79a",
+      "id": "00ff957f-394e-4f29-8bac-e66ccfbb8261",
       "name": "INFO_VC",
       "label": "INFO_VC",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -196,7 +196,7 @@
       "description": "Variation Class"
     },
     {
-      "id": "4d0e5310-bec8-4d8c-ac2b-47ebcc5ee04b",
+      "id": "bc33c503-1782-45e8-8178-c8e2d11da1ca",
       "name": "INFO_PM",
       "label": "INFO_PM",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -207,7 +207,7 @@
       "description": "Variant is Precious(Clinical,Pubmed Cited)"
     },
     {
-      "id": "5e2d5a58-60e0-4046-95de-952e574cc261",
+      "id": "5c28843e-8fc9-4ae5-a82f-4e64d8fa005c",
       "name": "INFO_TPA",
       "label": "INFO_TPA",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -218,7 +218,7 @@
       "description": "Provisional Third Party Annotation(TPA) (currently rs from PHARMGKB who will give phenotype data)"
     },
     {
-      "id": "7adba949-2083-4165-b809-9453bd6050c8",
+      "id": "108aaf5a-14c6-4a1c-b56b-818b00697bc9",
       "name": "INFO_PMC",
       "label": "INFO_PMC",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -229,7 +229,7 @@
       "description": "Links exist to PubMed Central article"
     },
     {
-      "id": "6c0c39ca-22a2-4f21-9623-9a59a252cf7b",
+      "id": "8597bc71-949f-47ca-a0ec-7eaf25ff2135",
       "name": "INFO_S3D",
       "label": "INFO_S3D",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -240,7 +240,7 @@
       "description": "Has 3D structure - SNP3D table"
     },
     {
-      "id": "205e7353-f7bc-4af0-8cba-f9f6815a10c3",
+      "id": "40de860b-cfea-42e4-9ad4-36fe1776614b",
       "name": "INFO_SLO",
       "label": "INFO_SLO",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -251,7 +251,7 @@
       "description": "Has SubmitterLinkOut - From SNP->SubSNP->Batch.link_out"
     },
     {
-      "id": "0bd51c82-f127-4614-9a1b-149d77bcd253",
+      "id": "7d042605-9718-4995-be9d-87dc5f541b8a",
       "name": "INFO_NSF",
       "label": "INFO_NSF",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -262,7 +262,7 @@
       "description": "Has non-synonymous frameshift A coding region variation where one allele in the set changes all downstream amino acids. FxnClass = 44"
     },
     {
-      "id": "8f2b032f-c1b0-4c6f-8beb-80014123399e",
+      "id": "8fbc6430-9f53-44a3-871f-0d4e0749a83c",
       "name": "INFO_NSM",
       "label": "INFO_NSM",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -273,7 +273,7 @@
       "description": "Has non-synonymous missense A coding region variation where one allele in the set changes protein peptide. FxnClass = 42"
     },
     {
-      "id": "4ef6196f-ca28-487d-85ce-5e2d52e51fc8",
+      "id": "70d027e4-6afd-441a-bfd0-748b44b30234",
       "name": "INFO_NSN",
       "label": "INFO_NSN",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -284,7 +284,7 @@
       "description": "Has non-synonymous nonsense A coding region variation where one allele in the set changes to STOP codon (TER). FxnClass = 41"
     },
     {
-      "id": "1b45aa38-e93a-41e4-9d95-4efd97b6de79",
+      "id": "c6571254-0f5a-422c-8790-e0140b420f9b",
       "name": "INFO_REF",
       "label": "INFO_REF",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -295,7 +295,7 @@
       "description": "Has reference A coding region variation where one allele in the set is identical to the reference sequence. FxnCode = 8"
     },
     {
-      "id": "8881e47d-476a-41cb-af82-73cf826f82a6",
+      "id": "3fdea59a-544b-4ec7-beba-1aca9f0674f8",
       "name": "INFO_SYN",
       "label": "INFO_SYN",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -306,7 +306,7 @@
       "description": "Has synonymous A coding region variation where one allele in the set does not change the encoded amino acid. FxnCode = 3"
     },
     {
-      "id": "94e0b8bd-4f24-40f9-bbd4-3018d9885822",
+      "id": "4951ea3c-687e-487b-bdfd-5b8762cfe436",
       "name": "INFO_U3",
       "label": "INFO_U3",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -317,7 +317,7 @@
       "description": "In 3' UTR Location is in an untranslated region (UTR). FxnCode = 53"
     },
     {
-      "id": "fc1bb438-6ce2-49ea-bf55-9c8af71ae09a",
+      "id": "e47fed6c-7938-4b5d-8484-9dab3af64d11",
       "name": "INFO_U5",
       "label": "INFO_U5",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -328,7 +328,7 @@
       "description": "In 5' UTR Location is in an untranslated region (UTR). FxnCode = 55"
     },
     {
-      "id": "e66edc72-82f6-438b-885a-6d3469a5a262",
+      "id": "16e0671b-65e9-48d9-bac1-d7ea844f0455",
       "name": "INFO_ASS",
       "label": "INFO_ASS",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -339,7 +339,7 @@
       "description": "In acceptor splice site FxnCode = 73"
     },
     {
-      "id": "2d05ae9c-f0b3-4cd2-b9d0-da4d5f192dd4",
+      "id": "a2e80fa3-e7b3-4f58-a036-1739dbe01b11",
       "name": "INFO_DSS",
       "label": "INFO_DSS",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -350,7 +350,7 @@
       "description": "In donor splice-site FxnCode = 75"
     },
     {
-      "id": "39e8f60e-05e1-4582-af10-eed366ff2812",
+      "id": "bbc6bc84-4ce4-4ab3-9b03-5619d4f236b6",
       "name": "INFO_INT",
       "label": "INFO_INT",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -361,7 +361,7 @@
       "description": "In Intron FxnCode = 6"
     },
     {
-      "id": "70c03c48-a56a-458e-8aa4-657bf970ef3e",
+      "id": "1ff15139-71c5-41c7-8d35-0b9597c8b8a6",
       "name": "INFO_R3",
       "label": "INFO_R3",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -372,7 +372,7 @@
       "description": "In 3' gene region FxnCode = 13"
     },
     {
-      "id": "5cf79d4f-bbdc-46e0-b51b-05d046375f17",
+      "id": "c0d318bd-3141-4d93-8983-61008b12d8b8",
       "name": "INFO_R5",
       "label": "INFO_R5",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -383,7 +383,7 @@
       "description": "In 5' gene region FxnCode = 15"
     },
     {
-      "id": "d34d2762-ad08-4462-b187-31fbd0e5fc83",
+      "id": "02859db5-b450-4019-a2c9-773cc2f5485b",
       "name": "INFO_OTH",
       "label": "INFO_OTH",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -394,7 +394,7 @@
       "description": "Has other variant with exactly the same set of mapped positions on NCBI refernce assembly."
     },
     {
-      "id": "fe015049-4d14-45c7-a228-7d06c187b895",
+      "id": "5b264747-fd89-4f05-801d-1e1944413b62",
       "name": "INFO_CFL",
       "label": "INFO_CFL",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -405,7 +405,7 @@
       "description": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies."
     },
     {
-      "id": "ad5801c7-13bf-4e05-a740-05cbbd00769b",
+      "id": "6945c839-9c0a-419e-9758-d16b7b592463",
       "name": "INFO_ASP",
       "label": "INFO_ASP",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -416,7 +416,7 @@
       "description": "Is Assembly specific. This is set if the variant only maps to one assembly"
     },
     {
-      "id": "1e1efae6-b227-4979-b14d-dab3eb3dd118",
+      "id": "ae48d979-9440-4c7f-bd44-2e31c733f4ad",
       "name": "INFO_MUT",
       "label": "INFO_MUT",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -427,7 +427,7 @@
       "description": "Is mutation (journal citation, explicit fact): a low frequency variation that is cited in journal and other reputable sources"
     },
     {
-      "id": "333afe60-12b3-499a-8f7f-12340c234fc9",
+      "id": "61d4c1d8-e168-42c4-882a-7441676548a4",
       "name": "INFO_VLD",
       "label": "INFO_VLD",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -438,7 +438,7 @@
       "description": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data."
     },
     {
-      "id": "91b6fc72-3d79-4789-946f-791dbc660372",
+      "id": "ba907cfd-76e2-499a-9a8c-c19ed966e172",
       "name": "INFO_G5A",
       "label": "INFO_G5A",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -449,7 +449,7 @@
       "description": ">5% minor allele frequency in each and all populations"
     },
     {
-      "id": "048fe40a-391b-40f2-9d06-6ce8a57b5db3",
+      "id": "ab57da4a-402b-49cd-bb2d-5a659daa2e3d",
       "name": "INFO_G5",
       "label": "INFO_G5",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -460,7 +460,7 @@
       "description": ">5% minor allele frequency in 1+ populations"
     },
     {
-      "id": "76986b35-d032-420b-94eb-6c440e678263",
+      "id": "98c2ce71-ac27-467c-9163-9a9bf016f17e",
       "name": "INFO_HD",
       "label": "INFO_HD",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -471,7 +471,7 @@
       "description": "Marker is on high density genotyping kit (50K density or greater).  The variant may have phenotype associations present in dbGaP."
     },
     {
-      "id": "ad763fd2-db9d-4307-97aa-f36613001845",
+      "id": "5a4b70c4-a353-4b3b-93bb-84e6803d2797",
       "name": "INFO_GNO",
       "label": "INFO_GNO",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -482,7 +482,7 @@
       "description": "Genotypes available. The variant has individual genotype (in SubInd table)."
     },
     {
-      "id": "31a10a09-e767-4026-990d-6ba750d3a9d2",
+      "id": "b49280e8-19b2-4c97-84c7-389e5e91b107",
       "name": "INFO_KGPhase1",
       "label": "INFO_KGPhase1",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -493,7 +493,7 @@
       "description": "1000 Genome phase 1 (incl. June Interim phase 1)"
     },
     {
-      "id": "f2648529-20cf-41d8-aa9b-8acd73350667",
+      "id": "ae092e70-8e95-4f2f-9c01-5707077dc8a4",
       "name": "INFO_KGPhase3",
       "label": "INFO_KGPhase3",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -504,7 +504,7 @@
       "description": "1000 Genome phase 3"
     },
     {
-      "id": "797dd941-43db-4d29-b0c1-0f1e7a4abe8b",
+      "id": "d13fe939-e7d5-4c8f-b1a5-529b30b64b29",
       "name": "INFO_CDA",
       "label": "INFO_CDA",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -515,7 +515,7 @@
       "description": "Variation is interrogated in a clinical diagnostic assay"
     },
     {
-      "id": "8e0fb9d7-7e64-46ac-a754-dae8df99f642",
+      "id": "dc9b4ec8-a5d3-4f63-8573-6b5cdcde8952",
       "name": "INFO_LSD",
       "label": "INFO_LSD",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -526,7 +526,7 @@
       "description": "Submitted from a locus-specific database"
     },
     {
-      "id": "4cc750b9-59eb-4380-9b1e-e8d49ed3de3d",
+      "id": "f07f9b93-4dfe-4641-9e2d-f631ef02f55c",
       "name": "INFO_MTP",
       "label": "INFO_MTP",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -537,7 +537,7 @@
       "description": "Microattribution/third-party annotation(TPA:GWAS,PAGE)"
     },
     {
-      "id": "97e9d0b0-55eb-4c26-abc5-f39a65c05b75",
+      "id": "4f459f42-3e8e-4afb-81e6-950e8aa9b41e",
       "name": "INFO_OM",
       "label": "INFO_OM",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -548,7 +548,7 @@
       "description": "Has OMIM/OMIA"
     },
     {
-      "id": "889308c0-e6fd-4cd3-b870-b4bdbd6712de",
+      "id": "42378835-a16b-4898-844d-1ad8afe0651f",
       "name": "INFO_NOC",
       "label": "INFO_NOC",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -559,7 +559,7 @@
       "description": "Contig allele not present in variant allele list. The reference sequence allele at the mapped position is not present in the variant allele list, adjusted for orientation."
     },
     {
-      "id": "b88000d1-1117-45c3-9cfc-37a434eab8d0",
+      "id": "fd47ea66-2533-46ad-a309-77523ffcc24c",
       "name": "INFO_WTD",
       "label": "INFO_WTD",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -570,7 +570,7 @@
       "description": "Is Withdrawn by submitter If one member ss is withdrawn by submitter, then this bit is set.  If all member ss' are withdrawn, then the rs is deleted to SNPHistory"
     },
     {
-      "id": "600b6dcc-012e-45a9-a2e5-2fc7518b838f",
+      "id": "93a5f713-9c5e-4373-b127-6673bfa1837f",
       "name": "INFO_NOV",
       "label": "INFO_NOV",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -581,7 +581,7 @@
       "description": "Rs cluster has non-overlapping allele sets. True when rs set has more than 2 alleles from different submissions and these sets share no alleles in common."
     },
     {
-      "id": "e0cd2496-93de-4599-92fc-40ac35aa3d38",
+      "id": "eba45a44-4489-4049-8441-56bc0df12ad7",
       "name": "INFO_CAF",
       "label": "INFO_CAF",
       "sourceName": "common_no_known_medical_impact_20151201",
@@ -592,7 +592,7 @@
       "description": "An ordered, comma delimited list of allele frequencies based on 1000Genomes, starting with the reference allele followed by alternate alleles as ordered in the ALT column. Where a 1000Genomes alternate allele is not in the dbSNPs alternate allele set, the allele is added to the ALT column.  The minor allele is the second largest value in the list, and was previuosly reported in VCF as the GMAF.  This is the GMAF reported on the RefSNP and EntrezSNP pages and VariationReporter"
     },
     {
-      "id": "6d907b6e-2197-4fc5-8fba-9afdc5360b11",
+      "id": "1b9e65ba-6813-47d5-8b90-2b248b7849f1",
       "name": "INFO_COMMON",
       "label": "INFO_COMMON",
       "sourceName": "common_no_known_medical_impact_20151201",

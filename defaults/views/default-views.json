@@ -1,12 +1,12 @@
 [
   {
-    "id": "8ca58193-a77d-4c03-9e10-42032749b379",
+    "id": "298daa02-ff9f-4d2f-a6a5-15c69a93d0c1",
     "name": "Test Default View",
     "view_type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "f7f29197-4e42-4be2-b77e-53e573b031f5",
+        "id": "9b85d8e2-3ea4-4220-8132-c51ed1dff3fd",
         "field_name": "CHROM",
         "source_name": "sample",
         "order": 1,
@@ -14,7 +14,7 @@
         "sort_direction": "asc"
       },
       {
-        "id": "0ad41e2d-da81-4875-ab1d-58eaef09623e",
+        "id": "67ee8d7c-d9e4-482a-9e92-a9ea2109ba33",
         "field_name": "POS",
         "source_name": "sample",
         "order": 2,
@@ -22,21 +22,33 @@
         "sort_direction": "desc"
       },
       {
-        "id": "76e95e57-c260-4838-9700-f21528b88272",
+        "id": "b1ef5632-cc77-42fb-ad49-f701c4c71a92",
         "field_name": "CHROM",
         "source_name": "common_no_known_medical_impact_20151201",
         "order": 3
+      },
+      {
+        "id": "b262694c-e557-4b74-941f-75e85473bfa8",
+        "field_name": "ALT",
+        "source_name": "common_no_known_medical_impact_20151201",
+        "order": 4
+      },
+      {
+        "id": "a8709d93-7a20-4d2e-ad3c-b7c076c47b94",
+        "field_name": "ALT",
+        "source_name": "sample",
+        "order": 5
       }
     ]
   },
   {
-    "id": "01ed2894-5f09-415e-8c99-400fcc6aff23",
+    "id": "88ff7076-db12-43fd-87dd-1b6903d501fc",
     "name": "Another Default View",
     "view_type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "7bb0eb06-9039-4b06-978a-d6ac983b7a12",
+        "id": "32f51e87-65b0-4c33-bc75-28347e499fa0",
         "field_name": "CHROM",
         "source_name": "sample",
         "order": 1,
@@ -44,7 +56,7 @@
         "sort_direction": "asc"
       },
       {
-        "id": "712eb421-5155-4413-b786-4c53a0ddbd8d",
+        "id": "e7c97e82-8e3d-42f0-a86a-5469fcff30dc",
         "field_name": "POS",
         "source_name": "sample",
         "order": 2,
@@ -52,7 +64,7 @@
         "sort_direction": "desc"
       },
       {
-        "id": "dff01710-d1bc-43ed-8b27-b2734f741568",
+        "id": "e65e6871-1413-48de-9258-cc13a232b24f",
         "field_name": "FILTER",
         "source_name": "sample",
         "order": 3,
