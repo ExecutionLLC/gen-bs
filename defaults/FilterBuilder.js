@@ -74,7 +74,7 @@ class FilterBuilder extends DefaultsBuilderBase {
             const field = rulesObject.field;
             const condition = rulesObject.condition;
             const fieldName = field.source_name === 'sample' ?
-                field.name : field.source_name + ',' + field.name;
+                field.name : field.source_name + '_' + field.name;
 
             const result = {};
             result[fieldName] = condition;

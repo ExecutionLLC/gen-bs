@@ -64,11 +64,12 @@ class ApplicationServerService extends ServiceBase {
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(params.sample);
         const appServerView = this._createAppServerView(params.view, params.fieldsMetadata);
+        const appServerFilter = this._createAppServerFilter(params.filter, params.fieldsMetadata);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
             view_structure: appServerView,
-            view_filter: params.filters || {},
+            view_filter: appServerFilter,
             view_sort_order: params.viewSortOrder || []
         };
 
@@ -160,17 +161,37 @@ class ApplicationServerService extends ServiceBase {
         };
     }
 
+    _createAppServerFilter(filter, fieldMetadata) {
+        return (filter || {}).rules;
+    }
+
     _createAppServerView(view, fieldMetadata) {
-        const idToFieldMetadata = _.indexBy(fieldMetadata, 'id');
+        const listItems = view.viewListItems;
+        const itemsBySource = _.groupBy(listItems, (listItem) => listItem.sourceName);
+
+        const appServerSampleColumns = _.map(itemsBySource['sample'], this._createAppServerViewColumn);
+        const sourceNames = _(itemsBySource)
+            .keys()
+            .filter(key => key !== 'sample')
+            .value();
+        const appServerSources = _.map(sourceNames, sourceName => {
+            const sourceColumns = _.map(itemsBySource[sourceName], this._createAppServerViewColumn);
+            return {
+                name: sourceName,
+                columns: sourceColumns
+            };
+        });
+
         return {
-            sampleColumns: _.map(view.viewListItems, (viewListItem) => {
-                const field = idToFieldMetadata[viewListItem.fieldId];
-                return {
-                    name: field.name,
-                    filter: [] // TODO: List of resolved keyword values.
-                };
-            }),
-            sources: []
+            sampleColumns: appServerSampleColumns,
+            sources: appServerSources
+        };
+    }
+
+    _createAppServerViewColumn(listItem) {
+        return {
+            name: listItem.fieldName,
+            filter: [] // TODO: List of resolved keywords
         };
     }
 

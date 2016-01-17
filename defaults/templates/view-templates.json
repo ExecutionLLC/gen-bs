@@ -7,7 +7,7 @@
       {
         "field": {
           "source_name": "sample",
-          "field_name": "CHROM"
+          "name": "CHROM"
         },
         "order": 1,
         "sort_order": 1,
@@ -16,11 +16,18 @@
       {
         "field": {
           "source_name": "sample",
-          "field_name": "POS"
+          "name": "POS"
         },
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
+      },
+      {
+        "field": {
+          "source_name": "common_no_known_medical_impact_20151201",
+          "name": "CHROM"
+        },
+        "order": 3
       }
     ]
   },
@@ -32,7 +39,7 @@
       {
         "field": {
           "source_name": "sample",
-          "field_name": "CHROM"
+          "name": "CHROM"
         },
         "order": 1,
         "sort_order": 1,
@@ -41,7 +48,7 @@
       {
         "field": {
           "source_name": "sample",
-          "field_name": "POS"
+          "name": "POS"
         },
         "order": 2,
         "sort_order": 2,
@@ -50,7 +57,7 @@
       {
         "field": {
           "source_name": "sample",
-          "field_name": "FILTER"
+          "name": "FILTER"
         },
         "order": 3,
         "sort_order": 3,

@@ -12,7 +12,16 @@
             "name": "CHROM"
           },
           "condition": {
-            "$ne": "10"
+            "$ne": 10
+          }
+        },
+        {
+          "field": {
+            "source_name": "common_no_known_medical_impact_20151201",
+            "name": "CHROM"
+          },
+          "condition": {
+            "$ne": 10
           }
         },
         {

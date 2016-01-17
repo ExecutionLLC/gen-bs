@@ -1,52 +1,47 @@
 [
   {
-    "id": "f408b41e-049e-4cab-b11b-dc6e8f77d776",
+    "id": "b9511067-38db-467f-a6ec-a882b774c434",
     "name": "Test Default View",
-    "view_type": "standard",
+    "viewType": "standard",
     "description": "This is default view with two columns and no keywords",
-    "view_list_items": [
+    "viewListItems": [
       {
-        "id": "180bf862-7fcd-445a-bdbe-2b93514f6806",
-        "source_name": "sample",
-        "order": 1,
-        "sort_order": 1,
-        "sort_direction": "asc"
+        "id": "71e4645f-ead0-4dd6-ab4c-7710a3ec1a27",
+        "fieldName": "CHROM",
+        "order": 1
       },
       {
-        "id": "cba4c34f-f24d-4ee8-a4ee-6ff2c945c067",
-        "source_name": "sample",
-        "order": 2,
-        "sort_order": 2,
-        "sort_direction": "desc"
+        "id": "e6ee2858-e329-48b4-b064-e6d76a6d946c",
+        "fieldName": "POS",
+        "order": 2
+      },
+      {
+        "id": "94992caa-a22a-4859-9ce7-6af85561befc",
+        "fieldName": "CHROM",
+        "order": 3
       }
     ]
   },
   {
-    "id": "6ded6642-eedd-474f-bba9-56a3e11f3b33",
+    "id": "b7ea6ef4-ee63-4060-b634-503213151844",
     "name": "Another Default View",
-    "view_type": "advanced",
+    "viewType": "advanced",
     "description": "This is default view with two columns and no keywords",
-    "view_list_items": [
+    "viewListItems": [
       {
-        "id": "dc1c8c40-8186-4cc3-b7f5-45def8d70afc",
-        "source_name": "sample",
-        "order": 1,
-        "sort_order": 1,
-        "sort_direction": "asc"
+        "id": "9fa5c38d-6845-48fc-9427-0ae8cc26c046",
+        "fieldName": "CHROM",
+        "order": 1
       },
       {
-        "id": "e6c25d0d-65de-49cf-8d35-88963007c906",
-        "source_name": "sample",
-        "order": 2,
-        "sort_order": 2,
-        "sort_direction": "desc"
+        "id": "e80cd64e-ca50-4cd2-b834-c7ce20461976",
+        "fieldName": "POS",
+        "order": 2
       },
       {
-        "id": "f90116d2-86e6-4713-a86e-61aca85ade67",
-        "source_name": "sample",
-        "order": 3,
-        "sort_order": 3,
-        "sort_direction": "desc"
+        "id": "759852de-d8c0-49d6-87c9-31e7e5653023",
+        "fieldName": "FILTER",
+        "order": 3
       }
     ]
   }

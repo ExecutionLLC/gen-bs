@@ -9,14 +9,13 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, limit, offset, callback) {
+    sendSearchRequest(user, sessionId, sampleId, viewId, filterId, limit, offset, callback) {
         async.waterfall([
             (callback) => {
                 this.services.sessions.findById(sessionId, callback);
             },
             (sessionId, callback) => {
-                // TODO: Add filters here.
-                this._createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback);
+                this._createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback);
             },
             (appServerRequestParams, callback) => {
                 this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -106,14 +105,35 @@ class SearchService extends ServiceBase {
         });
     }
 
-    _createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback) {
+    _createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback) {
         async.parallel({
             sample: (callback) => {
                 this.services.samples.find(user, sampleId, callback);
             },
+            filter: (callback) => {
+                this.services.filters.find(user, filterId, callback);
+            },
             fieldsMetadata: (callback) => {
-                // TODO: Add source field metadata here.
-                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                async.waterfall([
+                    (callback) => {
+                        // Load sample metadata
+                        this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                    },
+                    (sampleMetadata, callback) => {
+                        // Load sources metadata
+                        this.services.fieldsMetadata.findSourcesMetadata((error, sourcesMetadata) => {
+                            callback(error, {
+                                sampleMetadata,
+                                sourcesMetadata
+                            });
+                        });
+                    },
+                    (metadata, callback) => {
+                        // Join metadata into one collection.
+                        const sourcesMetadata = metadata.sourcesMetadata;
+                        callback(null, sourcesMetadata.concat(metadata.sampleMetadata));
+                    }
+                ], callback);
             },
             view: (callback) => {
                 this.services.views.find(user, viewId, callback);
@@ -126,6 +146,7 @@ class SearchService extends ServiceBase {
                     sessionId,
                     userId: user.id,
                     view: result.view,
+                    filter: result.filter,
                     sample: result.sample,
                     fieldsMetadata: result.fieldsMetadata,
                     limit,

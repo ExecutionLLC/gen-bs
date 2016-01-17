@@ -13,6 +13,9 @@ const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const DefaultViews = require('../defaults/views/default-views.json');
+const DefaultFilters = require('../defaults/filters/default-filters.json');
+const SampleId = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample.id;
 
 const Operations = require('./Operations');
 const Urls = require('./Urls');
@@ -112,9 +115,9 @@ operations.add('Start search', (callback) => {
   waterfall([
     (callback) => {
       callback(null, {
-        viewId: 'b7ead923-9973-443a-9f44-5563d31b5073',
-        filterIds: null,
-        sampleId: 'ce81aa10-13e3-47c8-bd10-205e97a92d69',
+        viewId: DefaultViews[0].id,
+        filterId: DefaultFilters[0].id,
+        sampleId: SampleId,
         limit: 100,
         offset: 0
       });

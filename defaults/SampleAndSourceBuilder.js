@@ -16,17 +16,18 @@ class SampleBuilder extends DefaultsBuilderBase {
     }
 
     build(callback) {
+        // Source and sample metadata has the same format.
         async.waterfall([
             (callback) => {
-                this._buildMetadata(this.asSamplesDir, this.samplesDir, false, callback);
+                this._buildMetadata(this.asSamplesDir, this.samplesDir, true, callback);
             },
             (callback) => {
-                this._buildMetadata(this.asSourcesDir, this.sourcesDir, true, callback);
+                this._buildMetadata(this.asSourcesDir, this.sourcesDir, false, callback);
             }
         ], callback);
     }
 
-    _buildMetadata(asMetadataTemplatesDir, targetDir, useSourceName, callback) {
+    _buildMetadata(asMetadataTemplatesDir, targetDir, isSample, callback) {
         async.waterfall([
             (callback) => {
                 FsUtils.createDirectoryIfNotExists(targetDir, callback);
@@ -40,7 +41,7 @@ class SampleBuilder extends DefaultsBuilderBase {
             (sampleFiles, callback) => {
                 let filesLeft = sampleFiles.length;
                 _.each(sampleFiles, sampleMetadataPath => {
-                    this._importSample(sampleMetadataPath, targetDir, useSourceName, (error) => {
+                    this._importSample(sampleMetadataPath, targetDir, isSample, (error) => {
                         if (error) {
                             callback(error);
                         } else {
@@ -70,7 +71,7 @@ class SampleBuilder extends DefaultsBuilderBase {
         FsUtils.writeStringToFile(filePath, JSON.stringify(contents, null, 2), callback);
     }
 
-    _importSample(sampleMetadataFilePath, outputDir, useSourceName, callback) {
+    _importSample(sampleMetadataFilePath, outputDir, isSample, callback) {
         const sampleName = this._getIdFromFilePath(sampleMetadataFilePath);
         const sample = {
             id: Uuid.v4(),
@@ -83,10 +84,10 @@ class SampleBuilder extends DefaultsBuilderBase {
 
         const sampleFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
         const sampleFields = JSON.parse(sampleFieldsString);
-        const sourceName = (useSourceName) ? sampleName : sample.id;
+        const sourceName = (isSample) ? sample.id : sampleName;
         const wsMappedFields = _.map(
             sampleFields,
-            sampleField => FieldsMetadataService.createFieldMetadata(sourceName, sampleField)
+            sampleField => FieldsMetadataService.createFieldMetadata(sourceName, isSample, sampleField)
         );
         this._storeFieldMetadata(sample, wsMappedFields, outputDir, callback);
     }
