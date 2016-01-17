@@ -1,5 +1,6 @@
 import { fetchVariants } from './variantsTable'
 import { requestAnalyze } from './websocket'
+import {viewBuilderSelectView} from './viewBuilder'
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR'
 export const CHANGE_SAMPLE = 'CHANGE_SAMPLE'
@@ -26,11 +27,21 @@ export function changeSample(samples, sampleId) {
   }
 }
 
+function changeHeaderView(views, viewId) {
+  return dispatch => {
+    dispatch( viewBuilderSelectView(views, viewId))
+    return {
+      type: CHANGE_VIEW,
+      views,
+      viewId
+    }
+  }
+}
+
 export function changeView(views, viewId) {
-  return {
-    type: CHANGE_VIEW,
-    views,
-    viewId
+  return dispatch => {
+    dispatch( viewBuilderSelectView(views, viewId))
+    dispatch( changeHeaderView(views, viewId))
   }
 }
 
