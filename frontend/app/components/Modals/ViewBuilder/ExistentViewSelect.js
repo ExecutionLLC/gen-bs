@@ -32,7 +32,7 @@ export default class ExistentViewSelect extends Component {
                       options={views.map( v => { return {value: v.id, label: v.name} } )}
                       value={currentView.id}
                       clearable={false}
-                      onChange={ (val) => dispatch(viewBuilderSelectView(views, val.value))}
+                      onChange={ (val) => dispatch(viewBuilderSelectView(views, val.value, true))}
                     />
                 </div>    
                 <div className="col-sm-6">

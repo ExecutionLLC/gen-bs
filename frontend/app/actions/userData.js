@@ -41,10 +41,12 @@ export function fetchUserdata() {
         const sampleId = json.samples[0].id || null
         const view = json.views[0] || null
         const sample = json.samples[0] || null
+        const filter = json.filters[0] || null
+        console.log('filter', filter)
         dispatch(receiveUserdata(json))
         dispatch(changeView(json.views, view.id))
         dispatch(changeSample(json.samples, sample.id))
-        dispatch(analyze(sample.id, view.id, null))
+        //dispatch(analyze(sample.id, view.id, filter.id))
         dispatch(fetchFields(sampleId))
       })
 

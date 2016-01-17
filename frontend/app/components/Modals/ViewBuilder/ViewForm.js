@@ -2,15 +2,20 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
+import { viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn } from '../../../actions/viewBuilder'
+
 
 export default class ViewForm extends Component {
 
   render() {
-    const { fields } = this.props
-    const { currentView } = this.props.viewBuilder
+    const { dispatch, fields } = this.props
+    const view = this.props.viewBuilder.editOrNew ? (this.props.viewBuilder.editedView):(this.props.viewBuilder.newView)
+    console.log('form props', this.props.viewBuilder,this.props.viewBuilder.editOrNew )
 
-    const selects = currentView.view_list_items.map( function(viewItem) {
-    const defaultValue = _.find(fields.list, (f) => f.id === viewItem.field_id).id
+
+    const selects = view.view_list_items.map( function(viewItem, index) {
+
+      var currentValue = `${viewItem.field_name}@${viewItem.source_name}`
 
       return (
 
@@ -26,10 +31,11 @@ export default class ViewForm extends Component {
                 </div>
                 <div className="btn-group">
                   <Select
-                    options={fields.list.map( f => { return {value: f.id, label: f.name} } )}
-                    value={defaultValue}
+                    options={ fields.list.map( (f) => { return {value: `${f.name}@${f.source_type}`, label: f.name}} ) }
+                    value={currentValue}
                     clearable={false}
-                    onChange={ (val) => {this.props.changeColumn(val)} }
+                    onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value.split('@')[0], val.value.split('@')[1] )) }
+                    disabled={view.view_type === 'standard'}
                   />
                 </div>
                 <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
@@ -46,8 +52,8 @@ export default class ViewForm extends Component {
                   </div>
                   
                  <div className="col-xs-1">
-                   <button className="btn-link" disabled=""><i className="fa fa-lg fa-minus-circle"></i></button>
-                   <button className="btn-link" disabled=""><i className="fa fa-lg fa-plus-circle"></i></button>
+                   <button className="btn-link" disabled="" onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i className="fa fa-lg fa-minus-circle"></i></button>
+                   <button className="btn-link" disabled="" onClick={ () => dispatch(viewBuilderAddColumn(index)) }><i className="fa fa-lg fa-plus-circle"></i></button>
                  </div>
               </div>
       )

@@ -20,6 +20,8 @@ class ViewsModal extends Component {
     const { dispatch, showModal, closeModal } = this.props
     const { currentSample, currentView } = this.props.ui
     const { samples, views, isValid } = this.props.userData
+    const { isEditOrNew, editedView, newView } = this.props.viewBuilder
+
     return (
 
       
@@ -43,7 +45,6 @@ class ViewsModal extends Component {
                         <ExistentViewSelect {...this.props} />
                         <ViewForm
                           {...this.props}
-                          changeColumn={(val) => dispatch(viewBuilderChangeColumn(val.value))}
                         />
                     </Modal.Body>
                     <ViewBuilderFooter {...this.props} />

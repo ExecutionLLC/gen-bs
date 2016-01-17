@@ -29,7 +29,6 @@ export function changeSample(samples, sampleId) {
 
 function changeHeaderView(views, viewId) {
   return dispatch => {
-    dispatch( viewBuilderSelectView(views, viewId))
     return {
       type: CHANGE_VIEW,
       views,
@@ -40,7 +39,7 @@ function changeHeaderView(views, viewId) {
 
 export function changeView(views, viewId) {
   return dispatch => {
-    dispatch( viewBuilderSelectView(views, viewId))
+    dispatch( viewBuilderSelectView(views, viewId, true))
     dispatch( changeHeaderView(views, viewId))
   }
 }
@@ -53,13 +52,13 @@ export function changeFilter(filters, filterId) {
   }
 }
 
-export function analyze(sampleId, viewId, filterIds) {
+export function analyze(sampleId, viewId, filterId) {
   return dispatch => {
 
     const searchParams = {
       sampleId: sampleId,
       viewId: viewId,
-      filterIds: null,
+      filterId: filterId,
       limit: 100,
       offset: 0
     }
