@@ -5,13 +5,13 @@ const Uuid = require('node-uuid');
 const async = require('async');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil.js');
 const FsUtils = require('../utils/FileSystemUtils');
 
 class FilterBuilder extends DefaultsBuilderBase {
     constructor() {
         super();
 
+        // CAUTION! Do not use ChangeCaseUtil here, as currently it works incorrect with '$' symbols.
         this.filterTemplates = require(this.defaultsDir + '/templates/filter-templates.json');
 
         this.build = this.build.bind(this);
