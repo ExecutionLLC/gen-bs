@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
-import Select2 from 'react-select2-wrapper';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 
 export default class ViewForm extends Component {
-
-  componentWillReceiveProps() {
-    console.log('tag', this.refs)
-  }
 
   render() {
     const { fields } = this.props
     const { currentView } = this.props.viewBuilder
 
     const selects = currentView.view_list_items.map( function(viewItem) {
-      console.log('col names: ', _.find(fields.list, (f) => f.id === viewItem.field_id ).name)
-      const defaultValue = _.find(fields.list, (f) => f.id === viewItem.field_id).id
-      console.log('default: ',defaultValue) 
-    console.log('tag', this.refs)
+    const defaultValue = _.find(fields.list, (f) => f.id === viewItem.field_id).id
 
       return (
 
@@ -31,12 +25,11 @@ export default class ViewForm extends Component {
                   </button>
                 </div>
                 <div className="btn-group">
-                  <Select2
-                    ref={`view_item_${viewItem.id}`}
-                    multiple={false}
-                    data={fields.list.map( f => { return {id: f.id, text: f.name} } )}
-                    defaultValue={defaultValue}
-                    onSelect={ (e) => console.log('select')}
+                  <Select
+                    options={fields.list.map( f => { return {value: f.id, label: f.name} } )}
+                    value={defaultValue}
+                    clearable={false}
+                    onChange={ (val) => {this.props.changeColumn(val)} }
                   />
                 </div>
                 <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">

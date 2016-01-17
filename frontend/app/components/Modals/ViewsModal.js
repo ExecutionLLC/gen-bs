@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap';
 
 import { viewBuilderSelectView } from '../../actions/viewBuilder'
+import { viewBuilderChangeColumn } from '../../actions/viewBuilder'
 
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader'
 import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter'
@@ -40,7 +41,10 @@ class ViewsModal extends Component {
                         //<NewView />
                       }
                         <ExistentViewSelect {...this.props} />
-                        <ViewForm {...this.props} />
+                        <ViewForm
+                          {...this.props}
+                          changeColumn={(val) => dispatch(viewBuilderChangeColumn(val.value))}
+                        />
                     </Modal.Body>
                     <ViewBuilderFooter {...this.props} />
                   </form>

@@ -1,4 +1,5 @@
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW'
+export const VBUILDER_CHANGE_COLUMN = 'VBUILDER_CHANGE_COLUMN'
 
 
 /*
@@ -9,6 +10,13 @@ export function viewBuilderSelectView(views, viewId) {
     type: VBUILDER_SELECT_VIEW,
     views,
     viewId
+  }
+}
+
+export function viewBuilderChangeColumn(fieldId) {
+  return {
+    type: VBUILDER_CHANGE_COLUMN,
+    fieldId
   }
 }
 
