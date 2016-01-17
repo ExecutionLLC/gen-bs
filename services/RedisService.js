@@ -5,10 +5,29 @@ const _ = require('lodash');
 const Redis = require('redis');
 
 const ServiceBase = require('./ServiceBase');
+const EventEmitter = require('../utils/EventProxy');
+
+const EVENTS = {
+    dataReceived: 'dataReceived'
+};
 
 class RedisService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
+
+        this.eventEmitter = new EventEmitter(EVENTS);
+    }
+
+    registeredEvents() {
+        return EVENTS;
+    }
+
+    on(eventName, callback) {
+        this.eventEmitter.on(eventName, callback);
+    }
+
+    off(eventName, callback) {
+        this.eventEmitter.off(eventName, callback);
     }
 
     fetch(redisParams, callback) {
@@ -29,8 +48,28 @@ class RedisService extends ServiceBase {
             },
             (dataWithUser, callback) => {
                 this._convertFields(dataWithUser.rawData, dataWithUser.user, redisParams.sampleId, callback);
+            },
+            (data, callback) => {
+                this._emitDataReceivedEvent(redisParams.sessionId, redisParams.operationId, redisParams.sampleId, redisParams.offset, redisParams.limit, data, callback);
             }
         ], callback);
+    }
+
+    _emitDataReceivedEvent(sessionId, operationId, sampleId, offset, limit, data, callback) {
+        const reply = {
+            sessionId,
+            operationId,
+            result: {
+                sampleId,
+                offset,
+                limit,
+                data
+            }
+        };
+
+        // Send data to both event listeners and callback.
+        this.eventEmitter.emit(EVENTS.dataReceived, reply);
+        callback(null, reply);
     }
 
     _createClient(host, port, databaseNumber, callback) {
@@ -124,9 +163,16 @@ class RedisService extends ServiceBase {
                 });
             },
             (fields, callback) => {
+                this.services.fieldsMetadata.findSourcesMetadata((error, sourcesFields) => {
+                    callback(error, fields.concat(sourcesFields));
+                });
+            },
+            (fields, callback) => {
                 // will be matching fields by name, so create fieldName->field hash
                 const fieldNameToFieldHash = _.reduce(fields, (memo, field) => {
-                    memo[field.name] = field;
+                    // Source fields will be prepended by the source name, sample fields - will not.
+                    const fieldName = field.sourceType === 'sample' ? field.name : field.sourceName + '_' + field.name;
+                    memo[fieldName] = field;
                     return memo;
                 }, {});
                 callback(null, fieldNameToFieldHash);

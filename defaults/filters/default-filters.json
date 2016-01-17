@@ -1,0 +1,26 @@
+[
+  {
+    "id": "c1af7cd2-e58d-44a6-9c31-3c4a4f9f3295",
+    "name": "Test Filter",
+    "description": "Test filter description",
+    "type": "standard",
+    "is_disabled_4copy": false,
+    "rules": {
+      "$or": [
+        {
+          "ALT": {
+            "$ne": "A"
+          }
+        },
+        {
+          "common_no_known_medical_impact_20151201_ALT": {
+            "$ne": "B"
+          }
+        },
+        {
+          "FILTER": "PASS"
+        }
+      ]
+    }
+  }
+]

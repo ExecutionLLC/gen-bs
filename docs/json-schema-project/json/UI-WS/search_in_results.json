@@ -12,7 +12,7 @@
 			"items": {
 				"type": "object",
 				"properties": {
-					"id": {
+					"field_id": {
 						"description": "column id",
 						"type": "number"
 					},

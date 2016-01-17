@@ -6,8 +6,8 @@
     "items": [
       {
         "field": {
-          "source_name": "ONH_400_1946141_IonXpress_022.vcf.gz",
-          "field_name": "CHROM"
+          "source_name": "sample",
+          "name": "CHROM"
         },
         "order": 1,
         "sort_order": 1,
@@ -15,12 +15,33 @@
       },
       {
         "field": {
-          "source_name": "ONH_400_1946141_IonXpress_022.vcf.gz",
-          "field_name": "POS"
+          "source_name": "sample",
+          "name": "POS"
         },
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
+      },
+      {
+        "field": {
+          "source_name": "common_no_known_medical_impact_20151201",
+          "name": "CHROM"
+        },
+        "order": 3
+      },
+      {
+        "field": {
+          "source_name": "common_no_known_medical_impact_20151201",
+          "name": "ALT"
+        },
+        "order": 4
+      },
+      {
+        "field": {
+          "source_name": "sample",
+          "name": "ALT"
+        },
+        "order": 5
       }
     ]
   },
@@ -31,8 +52,8 @@
     "items": [
       {
         "field": {
-          "source_name": "ONH_400_1946141_IonXpress_022.vcf.gz",
-          "field_name": "CHROM"
+          "source_name": "sample",
+          "name": "CHROM"
         },
         "order": 1,
         "sort_order": 1,
@@ -40,8 +61,8 @@
       },
       {
         "field": {
-          "source_name": "ONH_400_1946141_IonXpress_022.vcf.gz",
-          "field_name": "POS"
+          "source_name": "sample",
+          "name": "POS"
         },
         "order": 2,
         "sort_order": 2,
@@ -49,8 +70,8 @@
       },
       {
         "field": {
-          "source_name": "ONH_400_1946141_IonXpress_022.vcf.gz",
-          "field_name": "FILTER"
+          "source_name": "sample",
+          "name": "FILTER"
         },
         "order": 3,
         "sort_order": 3,

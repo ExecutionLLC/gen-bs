@@ -7,9 +7,13 @@
   "properties": {
     "params": {
       "type": "object",
-      "user_filename": {
+      "sample": {
         "type": "string",
         "description": "name of the user file"
+      },
+      "view_structure": {
+        "$ref": "base_json/view.json#",
+        "description": "view for loading"
       },
       "view_filter": {
         "type": "object",
@@ -18,9 +22,11 @@
           "description": "filter for loading (should be simulare to the fronted filter, but has addition field 'source_name')"
         }
       },
-      "view_structure": {
-        "$ref": "base_json/view.json#",
-        "description": "view for loading"
+      "view_sort_order": {
+        "type": "array",
+        "items": {
+          "$ref": "base_json/sort_order.json#"
+        }
       }
     },
     "result": {

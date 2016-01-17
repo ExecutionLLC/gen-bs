@@ -211,6 +211,11 @@ class FieldsMetadataModel extends ModelBase {
         const fields = _.filter(this.fields, (field) => _.any(ids, fieldId => field.id === fieldId));
         callback(null, fields);
     }
+
+    findSourcesMetadata(callback) {
+        const fields = _.filter(this.fields, (field) => field.sourceType === 'source');
+        callback(null, fields);
+    }
 }
 
 module.exports = FieldsMetadataModel;

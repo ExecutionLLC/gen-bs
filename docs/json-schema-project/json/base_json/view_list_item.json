@@ -6,9 +6,13 @@
 			"description": "The unique identifier for a settings row",
 			"type": "number"
 		},
-		"field_id": {
+		"field_name": {
 			"type": "string",
-			"description": "UUID, id of the corresponding field metadata object."
+			"description": "name of the field in sample."
+		},
+		"source_name": {
+			"type": "string",
+			"description": "Null for sample fields, otherwise contains name of the source field is contained in."
 		},
 		"order": {
 			"description": "The order of column in list",

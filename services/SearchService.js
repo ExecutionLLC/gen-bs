@@ -9,14 +9,13 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, limit, offset, callback) {
+    sendSearchRequest(user, sessionId, sampleId, viewId, filterId, limit, offset, callback) {
         async.waterfall([
             (callback) => {
                 this.services.sessions.findById(sessionId, callback);
             },
             (sessionId, callback) => {
-                // TODO: Add filters here.
-                this._createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback);
+                this._createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback);
             },
             (appServerRequestParams, callback) => {
                 this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -47,11 +46,41 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
+    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
+        // The actual data or error should go to web socket for convenience.
+        async.waterfall([
+            (callback) => {
+                this.services.operations.find(sessionId, operationId, callback);
+            },
+            (operation, callback) => {
+                const redisData = operation.data.redis;
+                const userId = user.id;
+                const redisParams = {
+                    sessionId,
+                    operationId,
+                    host: redisData.host,
+                    port: redisData.port,
+                    sampleId: redisData.sampleId,
+                    userId,
+                    databaseNumber: redisData.databaseNumber,
+                    dataIndex: redisData.dataIndex,
+                    limit,
+                    offset
+                };
+                this.services.redis.fetch(redisParams, callback);
+            },
+            (results, callback) => {
+                // Results have already been sent by the Redis service through web socket.
+                callback(null, operationId);
+            }
+        ], callback);
+    }
+
     _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, limit, offset, callback) {
         async.map(fieldSearchValues, (fieldSearchValue, callback) => {
             async.waterfall([
                 (callback) => {
-                    this.services.fieldsMetadata.find(fieldSearchValue.id, callback);
+                    this.services.fieldsMetadata.find(fieldSearchValue.fieldId, callback);
                 },
                 (fieldMetadata, callback) => {
                     callback(null, {
@@ -76,14 +105,35 @@ class SearchService extends ServiceBase {
         });
     }
 
-    _createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback) {
+    _createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback) {
         async.parallel({
             sample: (callback) => {
                 this.services.samples.find(user, sampleId, callback);
             },
+            filter: (callback) => {
+                this.services.filters.find(user, filterId, callback);
+            },
             fieldsMetadata: (callback) => {
-                // TODO: Add source field metadata here.
-                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                async.waterfall([
+                    (callback) => {
+                        // Load sample metadata
+                        this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                    },
+                    (sampleMetadata, callback) => {
+                        // Load sources metadata
+                        this.services.fieldsMetadata.findSourcesMetadata((error, sourcesMetadata) => {
+                            callback(error, {
+                                sampleMetadata,
+                                sourcesMetadata
+                            });
+                        });
+                    },
+                    (metadata, callback) => {
+                        // Join metadata into one collection.
+                        const sourcesMetadata = metadata.sourcesMetadata;
+                        callback(null, sourcesMetadata.concat(metadata.sampleMetadata));
+                    }
+                ], callback);
             },
             view: (callback) => {
                 this.services.views.find(user, viewId, callback);
@@ -96,6 +146,7 @@ class SearchService extends ServiceBase {
                     sessionId,
                     userId: user.id,
                     view: result.view,
+                    filter: result.filter,
                     sample: result.sample,
                     fieldsMetadata: result.fieldsMetadata,
                     limit,
