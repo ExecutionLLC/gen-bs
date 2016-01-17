@@ -163,6 +163,11 @@ class RedisService extends ServiceBase {
                 });
             },
             (fields, callback) => {
+                this.services.fieldsMetadata.findSourcesMetadata((error, sourcesFields) => {
+                    callback(error, fields.concat(sourcesFields));
+                });
+            },
+            (fields, callback) => {
                 // will be matching fields by name, so create fieldName->field hash
                 const fieldNameToFieldHash = _.reduce(fields, (memo, field) => {
                     // Source fields will be prepended by the source name, sample fields - will not.
