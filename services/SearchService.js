@@ -137,7 +137,13 @@ class SearchService extends ServiceBase {
                 this.services.samples.find(user, sampleId, callback);
             },
             filter: (callback) => {
-                this.services.filters.find(user, filterId, callback);
+                // Filters are not required.
+                if (filterId) {
+                    this.services.filters.find(user, filterId, callback);
+                } else {
+                    callback(null, null);
+                }
+
             },
             fieldsMetadata: (callback) => {
                 async.waterfall([
