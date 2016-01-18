@@ -53,7 +53,7 @@ class UserEntityControllerBase extends ControllerBase {
         }
 
         const user = request.user;
-        const itemId = request.query.id ;
+        const itemId = request.params.id ;
         const item = request.body;
 
         item.id = itemId;
