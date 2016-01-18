@@ -61,11 +61,12 @@ class SearchController extends ControllerBase {
 
         const globalSearchValue = body.topSearch;
         const fieldSearchValues = body.search;
+        const sortValues = body.sort;
         const limit = body.limit;
         const offset = body.offset;
 
         this.services.search.searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues,
-                limit, offset, (error, operationId) => {
+                sortValues, limit, offset, (error, operationId) => {
             if (error) {
                 this.sendInternalError(response, error);
             } else {

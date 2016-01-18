@@ -24,7 +24,7 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, limit, offset, callback) {
+    searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
         const sessions = this.services.sessions;
         async.waterfall([
             (callback) => {
@@ -32,7 +32,7 @@ class SearchService extends ServiceBase {
             },
             (sessionId, callback) => {
                 this._createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
-                    fieldSearchValues, limit, offset, callback);
+                    fieldSearchValues, sortValues, limit, offset, callback);
             },
             (appServerParams, callback) => {
                 this.services.applicationServer.requestSearchInResults(sessionId, operationId, appServerParams, (error) => {
@@ -76,7 +76,28 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, limit, offset, callback) {
+    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
+        async.parallel({
+            fieldSearchValues: (callback) => {
+                this._createAppServerFieldSearchValues(fieldSearchValues, callback);
+            },
+            sortValues: (callback) => {
+                this._createAppServerSortValues(sortValues, callback);
+            }
+        }, (error, result) => {
+            callback(error, {
+                sessionId,
+                operationId,
+                globalSearchValue,
+                fieldSearchValues: result.fieldSearchValues,
+                sortValues: result.sortValues,
+                limit,
+                offset
+            });
+        });
+    }
+
+    _createAppServerFieldSearchValues(fieldSearchValues, callback) {
         async.map(fieldSearchValues, (fieldSearchValue, callback) => {
             async.waterfall([
                 (callback) => {
@@ -89,20 +110,25 @@ class SearchService extends ServiceBase {
                     });
                 }
             ], callback);
-        }, (error, result) => {
-            if (error) {
-                callback(error);
-            } else {
-                callback(null, {
-                    sessionId,
-                    operationId,
-                    globalSearchValue,
-                    fieldSearchValues: result,
-                    limit,
-                    offset
-                });
-            }
-        });
+        }, callback);
+    }
+
+    _createAppServerSortValues(sortValues, callback) {
+        async.map(sortValues, (sortValue, callback) => {
+            async.waterfall([
+                callback => {
+                    this.services.fieldsMetadata.find(sortValue.fieldId, callback);
+                },
+                (fieldMetadata, callback) => {
+                    callback(null, {
+                        fieldMetadata,
+                        order: sortValue.order,
+                        direction: sortValue.direction
+                    });
+                }
+            ], callback);
+        },
+        callback);
     }
 
     _createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback) {
