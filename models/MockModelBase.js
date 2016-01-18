@@ -34,8 +34,8 @@ class MockModelBase {
         item.id = Uuid.v4();
 
         this.hash[item.id] = {
-            userId: userId,
-            item: item
+            userId,
+            item
         };
 
         callback(null, item);
@@ -52,7 +52,10 @@ class MockModelBase {
         if (!existingItem) {
             callback(new Error('Item is not found'));
         } else {
-            this.hash[item.id] = item;
+            this.hash[item.id] = {
+                userId,
+                item
+            };
             callback(null, item);
         }
     }
