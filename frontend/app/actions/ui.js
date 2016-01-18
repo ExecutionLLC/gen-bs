@@ -5,7 +5,7 @@ import {viewBuilderSelectView} from './viewBuilder'
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR'
 export const CHANGE_SAMPLE = 'CHANGE_SAMPLE'
 export const CHANGE_VIEW = 'CHANGE_VIEW'
-export const CHANGE_FILTER = 'CHANGE_VIEW'
+export const CHANGE_FILTER = 'CHANGE_FILTER'
 export const ANALYZE = 'ANALYZE'
 
 
@@ -28,12 +28,10 @@ export function changeSample(samples, sampleId) {
 }
 
 function changeHeaderView(views, viewId) {
-  return dispatch => {
-    return {
-      type: CHANGE_VIEW,
-      views,
-      viewId
-    }
+  return {
+    type: CHANGE_VIEW,
+    views,
+    viewId
   }
 }
 
@@ -53,12 +51,12 @@ export function changeFilter(filters, filterId) {
 }
 
 export function analyze(sampleId, viewId, filterId) {
-  return dispatch => {
+  return ( dispatch, getState )  => {
 
     const searchParams = {
       sampleId: sampleId,
       viewId: viewId,
-      filterId: filterId,
+      filterId: getState().userData.filters[0].id,
       limit: 100,
       offset: 0
     }

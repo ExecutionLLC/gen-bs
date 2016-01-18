@@ -40,7 +40,6 @@ class NavbarCreateQuery extends Component {
                   <ViewsSetup {...this.props} />
                   <Views
                     {...this.props}
-                    viewSelected={ (e) => dispatch(changeView(views, $(e.target).val()))}
                   />
 
                   <Analyze 

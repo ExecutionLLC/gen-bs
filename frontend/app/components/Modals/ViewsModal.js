@@ -7,7 +7,7 @@ import { viewBuilderChangeColumn } from '../../actions/viewBuilder'
 
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader'
 import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter'
-import NewView from './ViewBuilder/NewView'
+import NewViewInputs from './ViewBuilder/NewViewInputs'
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect'
 import ViewForm from './ViewBuilder/ViewForm'
 
@@ -15,12 +15,11 @@ class ViewsModal extends Component {
 
 
   render() {
-    console.log('view modal props', this.props)
 
     const { dispatch, showModal, closeModal } = this.props
     const { currentSample, currentView } = this.props.ui
     const { samples, views, isValid } = this.props.userData
-    const { isEditOrNew, editedView, newView } = this.props.viewBuilder
+    const { editOrNew, editedView, newView } = this.props.viewBuilder
 
     return (
 
@@ -39,13 +38,22 @@ class ViewsModal extends Component {
                   <ViewBuilderHeader />
                   <form>
                     <Modal.Body>
-                      {
-                        //<NewView />
+                      { !editOrNew &&
+                        <div>
+                          <NewViewInputs  {...this.props} />
+                          <ViewForm
+                            {...this.props}
+                          />
+                        </div>
                       }
-                        <ExistentViewSelect {...this.props} />
-                        <ViewForm
-                          {...this.props}
-                        />
+                      { editOrNew &&
+                        <div>
+                          <ExistentViewSelect {...this.props} />
+                          <ViewForm
+                            {...this.props}
+                          />
+                        </div>
+                      }
                     </Modal.Body>
                     <ViewBuilderFooter {...this.props} />
                   </form>

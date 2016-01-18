@@ -11,6 +11,7 @@ const config = {
     WS: `ws://${HOST}:${PORT}`,
     SESSION: `http://${HOST}:${PORT}/api/session`,
     FIELDS: (sampleId) => `http://${HOST}:${PORT}/api/fields/${sampleId}`,
+    SOURCE_FIELDS: `http://${HOST}:${PORT}/api/fields/sources`,
     USERDATA: `http://${HOST}:${PORT}/api/data`,
     SEARCH: `http://${HOST}:${PORT}/api/search`,
     VIEWS: `http://${HOST}:${PORT}/api/views`

@@ -10,7 +10,6 @@ export default class ViewForm extends Component {
   render() {
     const { dispatch, fields } = this.props
     const view = this.props.viewBuilder.editOrNew ? (this.props.viewBuilder.editedView):(this.props.viewBuilder.newView)
-    console.log('form props', this.props.viewBuilder,this.props.viewBuilder.editOrNew )
 
 
     const selects = view.view_list_items.map( function(viewItem, index) {
@@ -19,7 +18,7 @@ export default class ViewForm extends Component {
 
       return (
 
-             <div className="row grid-toolbar level1">
+             <div className="row grid-toolbar level1" key={Math.round(Math.random()*100000000).toString()} >
                
               <div className="col-xs-6 btn-group-select2">
                 <div className="btn-group">

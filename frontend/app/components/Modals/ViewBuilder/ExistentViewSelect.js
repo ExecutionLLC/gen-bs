@@ -3,17 +3,20 @@ import { Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-import { viewBuilderSelectView } from '../../../actions/viewBuilder'
+import { viewBuilderSelectView, viewBuilderToggleNewEdit } from '../../../actions/viewBuilder'
 
 
 export default class ExistentViewSelect extends Component {
 
 
   render() {
-    console.log('exist v', this.props)
+
     const { dispatch, showModal, closeModal } = this.props
     const { currentView } = this.props.viewBuilder
     const { samples, views, isValid } = this.props.userData
+
+    console.log('esel currentView', currentView)
+
     return (
 
         <div className="collapse in copyview">
@@ -37,7 +40,7 @@ export default class ExistentViewSelect extends Component {
                 </div>    
                 <div className="col-sm-6">
                     <div className="btn-group" data-localize="actions.duplicate.help" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Сopy this to a new">
-                        <button type="button" className="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn">
+                      <button type="button" className="btn btn-default collapse in copyview" data-toggle="collapse" data-target=".copyview" id="dblBtn" onClick={ () => dispatch(viewBuilderToggleNewEdit(false)) } >
                             <span data-localize="actions.duplicate.title">Duplicate</span>
                         </button> 
                     </div>

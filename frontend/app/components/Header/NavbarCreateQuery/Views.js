@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
-import Select2 from 'react-select2-wrapper';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+
+import { changeView } from '../../../actions/ui'
 
 export default class Views extends Component {
 
-  constructor(props) {
-    super(props)
-  }
-
-  componentDidMount() {
-    console.log('views props', this.props)
-  }
 
   render() {
-    const views = this.props.userData.views
+    const dispatch = this.props.dispatch
+    const views = this.props.views
+    const currentView = this.props.ui.currentView
+    console.log('views props', this.props)
     return (
 
       <div className="table-cell table-cell100">
       <div className="btn-group btn-group-select100" data-localize="views.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available views">
 
-        <Select2
-          multiple={false}
-          data={views.map( v => { return {id: v.id, text: v.name} } )}
-          options={{
-            placeholder: 'Default View',
-          }} 
-          onSelect={(e) => { this.props.viewSelected(e) } }
-       />
+        <Select
+          options={views.map( v => { return {value: v.id, label: v.name} } )}
+          value={currentView ? currentView.id: null}
+          clearable={false}
+          onChange={ (val) => dispatch(changeView(views, val.value) )}
+        />
 
       </div>
        </div>

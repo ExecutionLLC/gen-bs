@@ -1,6 +1,6 @@
 import config from '../../config'
 import { analyze, changeSample, changeView } from './ui'
-import { fetchFields } from './fields'
+import { fetchFields, fetchSourceFields } from './fields'
 
 /*
  * action types
@@ -48,6 +48,41 @@ export function fetchUserdata() {
         dispatch(changeSample(json.samples, sample.id))
         //dispatch(analyze(sample.id, view.id, filter.id))
         dispatch(fetchFields(sampleId))
+        dispatch(fetchSourceFields())
+      })
+
+      // TODO:
+      // catch any error in the network call.
+  }
+}
+
+function requestViews() {
+  return {
+    type: REQUEST_USERDATA
+  }
+}
+
+function receiveViews(json) {
+  return {
+    type: RECEIVE_USERDATA,
+    userData: json,
+    receivedAt: Date.now()
+  }
+}
+
+export function fetchViews() {
+
+  return (dispatch, getState ) => {
+    dispatch(requestViews())
+
+    return $.ajax(config.URLS.VIEWS, {
+        'type': 'GET',
+         'headers': { "X-Session-Id": getState().auth.sessionId}
+      })
+      .then(json => {
+        const view = json.views[0] || null
+
+        dispatch(receiveViews(json))
       })
 
       // TODO:
