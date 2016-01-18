@@ -1,6 +1,6 @@
 {
   "sample": {
-    "id": "d67fec77-ec43-4287-b617-39d850313225",
+    "id": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
     "fileName": "vars_CHLA-IPSC-06_Whole-Exome.vcf.gz",
     "hash": null,
     "sampleType": "standard",
@@ -9,10 +9,10 @@
   },
   "fields": [
     {
-      "id": "de488338-b8da-4c34-b9b3-a54b664faaff",
+      "id": "d57ca5ad-42b1-4abb-be29-14138372cfb9",
       "name": "CHROM",
       "label": "CHROM",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -20,10 +20,10 @@
       "description": "Chromosome identifier"
     },
     {
-      "id": "aec8f535-783b-437e-b595-97cc85b00047",
+      "id": "87a8746c-628c-4867-97b3-6d36f46ba203",
       "name": "POS",
       "label": "POS",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -31,10 +31,10 @@
       "description": "The reference position"
     },
     {
-      "id": "b207f149-240e-4e34-b0ce-d0cd9c5f51a3",
+      "id": "5d38b480-b8f6-4033-83bf-7c969ccd71af",
       "name": "ID",
       "label": "ID",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -42,10 +42,10 @@
       "description": "Semi-colon separated list of unique identifiers where available"
     },
     {
-      "id": "578322f8-ec8f-4b48-95b5-31a891111d76",
+      "id": "340de92d-30af-4d27-8221-e31a112fde8d",
       "name": "REF",
       "label": "REF",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -53,10 +53,10 @@
       "description": "The value in the POS field refers to the position of the first base in the String"
     },
     {
-      "id": "a3590589-72b0-4100-a8ec-bdcc005db1d6",
+      "id": "ee38f762-dc66-40df-ba54-bf2b7c7fa752",
       "name": "ALT",
       "label": "ALT",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -64,10 +64,10 @@
       "description": "Comma separated list of alternate non-reference alleles called on at least one of the samples"
     },
     {
-      "id": "72f7c45e-c347-4c11-adb3-88342843e6fb",
+      "id": "6226e5ee-52ec-4809-82dc-a905fe5c6bde",
       "name": "QUAL",
       "label": "QUAL",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -75,10 +75,10 @@
       "description": "Quality"
     },
     {
-      "id": "c68f3aee-a56c-4c16-b495-c9c03617720a",
+      "id": "d10cbc70-7c8a-42f7-abc2-33d70885caa4",
       "name": "FILTER",
       "label": "FILTER",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -86,10 +86,10 @@
       "description": "Filter status"
     },
     {
-      "id": "5f8157b5-f3e8-412d-962d-dc24988e2659",
+      "id": "42489a75-0272-4b13-9527-a726d44641a8",
       "name": "INFO_ADP",
       "label": "INFO_ADP",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -97,10 +97,10 @@
       "description": "Average per-sample depth of bases with Phred score >= 0"
     },
     {
-      "id": "4f2fbf0e-3512-4e36-a72e-e85ca9c6b168",
+      "id": "af52ff2f-6389-44c9-b771-d77fb017816e",
       "name": "INFO_WT",
       "label": "INFO_WT",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -108,10 +108,10 @@
       "description": "Number of samples called reference (wild-type)"
     },
     {
-      "id": "2db484d3-f16e-4a52-b0cd-a24c4ddfda83",
+      "id": "8893aa5b-c39b-4b3c-9000-017760dda568",
       "name": "INFO_HET",
       "label": "INFO_HET",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -119,10 +119,10 @@
       "description": "Number of samples called heterozygous-variant"
     },
     {
-      "id": "1046a6a4-5b91-4a63-a7df-04ca212221a2",
+      "id": "2fedb5b0-839d-40fc-9f2d-7343512aab75",
       "name": "INFO_HOM",
       "label": "INFO_HOM",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,
@@ -130,10 +130,10 @@
       "description": "Number of samples called homozygous-variant"
     },
     {
-      "id": "007b3cac-f1f8-4c05-93c7-184e621bfbb1",
+      "id": "050328fd-4c26-47b8-a6c8-3a59a8c65a11",
       "name": "INFO_NC",
       "label": "INFO_NC",
-      "sourceName": "d67fec77-ec43-4287-b617-39d850313225",
+      "sourceName": "90161a4e-574b-4fae-9f9f-d47388ac2bc7",
       "sourceType": "sample",
       "editable": false,
       "filterControlEnable": false,

@@ -1,6 +1,6 @@
 [
   {
-    "id": "c1af7cd2-e58d-44a6-9c31-3c4a4f9f3295",
+    "id": "2daf4d76-97be-47d0-82de-199f4392d4b4",
     "name": "Test Filter",
     "description": "Test filter description",
     "type": "standard",
@@ -10,11 +10,6 @@
         {
           "ALT": {
             "$ne": "A"
-          }
-        },
-        {
-          "common_no_known_medical_impact_20151201_ALT": {
-            "$ne": "B"
           }
         },
         {
