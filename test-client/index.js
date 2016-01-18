@@ -3,6 +3,7 @@
 const Request = require('request');
 const Read = require('read');
 const Async = require('async');
+const _ = require('lodash');
 
 const env = process.env;
 
@@ -15,7 +16,8 @@ const DEFAULT_PASSWORD = 'password';
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const DefaultViews = require('../defaults/views/default-views.json');
 const DefaultFilters = require('../defaults/filters/default-filters.json');
-const SampleId = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample.id;
+const Sample = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample;
+const SampleFields = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').fields;
 
 const Operations = require('./Operations');
 const Urls = require('./Urls');
@@ -117,7 +119,7 @@ operations.add('Start search', (callback) => {
       callback(null, {
         viewId: DefaultViews[0].id,
         filterId: DefaultFilters[0].id,
-        sampleId: SampleId,
+        sampleId: Sample.id,
         limit: 100,
         offset: 0
       });
@@ -164,14 +166,15 @@ operations.add('Search in results', (callback) => {
     },
     (sessionWithOperation, callback) => {
       const headers = createHeaders(sessionWithOperation.sessionId);
+      const field = _.find(SampleFields, field => field.name === 'FILTER');
       Request.post({
         url: urls.startSearchInResults(sessionWithOperation.operationId),
         json: {
           topSearch: '123',
           search: [
             {
-              fieldId: 'c6819c34-ae80-43dd-821a-28f0a9c04ed4',
-              value: '23'
+              fieldId: field.id,
+              value: 'PASS'
             }
           ],
           limit: 100,
