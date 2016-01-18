@@ -173,6 +173,7 @@ class SamplesModel extends SecureModelBase {
                 .from(this.baseTableName)
                 .where('creator', userId)
                 .orWhereNull('creator')
+                .andWhere('is_deleted', false)
                 .asCallback((error, samplesData) => {
                     if (error) {
                         cb(error);
