@@ -210,6 +210,7 @@ class DatabaseCreator {
                     .defaultTo(true);
                 table.boolean('is_invisible')
                     .defaultTo(false);
+                table.string('dimension', 3);
             })
             .createTable('field_text', table => {
                 table.uuid('field_id')

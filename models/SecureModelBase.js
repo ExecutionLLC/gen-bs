@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 const RemovableModelBase = require('./RemovableModelBase');
 
 class SecureModelBase extends RemovableModelBase {
@@ -25,7 +27,9 @@ class SecureModelBase extends RemovableModelBase {
     }
 
     _secureCheck(data, secureInfo, callback) {
-        if (secureInfo.userId !== data.creator) {
+        if (_.isNull(data.creator)) {
+            callback(null, data);
+        } else if (secureInfo.userId !== data.creator) {
             callback(new Error('Security check: user not found'));
         } else {
             callback(null, data);

@@ -182,6 +182,7 @@ class SearchService extends ServiceBase {
             } else {
                 const appServerSearchParams = {
                     sessionId,
+                    langu: result.langu,
                     userId: user.id,
                     keyword: result.keyword,
                     view: result.view,

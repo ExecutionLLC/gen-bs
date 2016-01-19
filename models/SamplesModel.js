@@ -162,7 +162,7 @@ class SamplesModel extends SecureModelBase {
                     fieldId: fieldId,
                     values: values
                 };
-                this._insertIntoTable('vcf_file_sample_values', dataToInsert, trx, cb);
+                this._insertIntoTable('vcf_file_sample_value', dataToInsert, trx, cb);
             }
         ], callback);
     }
@@ -203,8 +203,8 @@ class SamplesModel extends SecureModelBase {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from('vcf_file_sample_version')
-                .innerJoin('vcf_file_sample_values', 'vcf_file_sample_values.vcf_file_sample_version_id', 'vcf_file_sample_version.id')
-                .orderBy('vcf_file_sample_version.timestamp', 'desc')
+                .innerJoin('vcf_file_sample_value', 'vcf_file_sample_value.vcf_file_sample_version_id', 'vcf_file_sample_version.id')
+                //.orderBy('vcf_file_sample_version.timestamp', 'desc')
                 .where('vcf_file_sample_id', sampleId)
                 .limit(1)
                 .asCallback((error, result) => {
@@ -216,6 +216,7 @@ class SamplesModel extends SecureModelBase {
                 });
         }, callback);
     }
+
 }
 
 module.exports = SamplesModel;

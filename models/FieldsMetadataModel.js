@@ -15,6 +15,7 @@ const mappedColumns = [
     'is_mandatory',
     'is_editable',
     'is_invisible',
+    'dimension',
     'langu_id',
     'description'
 ];
@@ -90,7 +91,8 @@ class FieldsMetadataModel extends ModelBase {
                         valueType: metadata.valueType || 'user',
                         isMandatory: metadata.isMandatory || false,
                         isEditable: metadata.isEditable || true,
-                        isInvisible: metadata.isInvisible || false
+                        isInvisible: metadata.isInvisible || false,
+                        dimension: metadata.dimension
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
@@ -123,10 +125,10 @@ class FieldsMetadataModel extends ModelBase {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from('vcf_file_sample')
-                .innerJoin('vcf_file_sample_values', 'vcf_file_sample_values.vcf_file_sample_version_id', 'vcf_file_sample_version.id')
-                .innerJoin('field_metadata', 'field_metadata.id', 'vcf_file_sample_values.field_id')
+                .innerJoin('vcf_file_sample_value', 'vcf_file_sample_value.vcf_file_sample_version_id', 'vcf_file_sample_version.id')
+                .innerJoin('field_metadata', 'field_metadata.id', 'vcf_file_sample_value.field_id')
                 .innerJoin('field_text', 'field_text.field_id', 'field_metadata.id')
-                .orderBy('vcf_file_sample_version.timestamp', 'desc')
+                //.orderBy('vcf_file_sample_version.timestamp', 'desc')
                 .where('vcf_file_sample_id', sampleId)
                 .limit(1)
                 .asCallback((error, metadata) => {

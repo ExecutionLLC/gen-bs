@@ -5,7 +5,8 @@
     "hash": null,
     "sampleType": "standard",
     "isAnalyzed": true,
-    "creator": null
+    "creator": null,
+    "values": null
   },
   "fields": [
     {
@@ -85,6 +86,9 @@
       "valueType": "string",
       "description": "Filter status"
     },
+
+
+
     {
       "id": "519d457b-9b15-452e-a3b5-ab0b082b390e",
       "name": "INFO_AF",
