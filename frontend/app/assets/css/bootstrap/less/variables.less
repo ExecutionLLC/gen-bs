@@ -510,9 +510,9 @@
 //** Tooltip max width
 @tooltip-max-width:           200px;
 //** Tooltip text color
-@tooltip-color:               fade(#fff, 70%);
+@tooltip-color:               @brand-primary;
 //** Tooltip background color
-@tooltip-bg:                  #3b444c;
+@tooltip-bg:                  lighten(@light-primary-color, 6%);
 @tooltip-opacity:             1;
 
 
@@ -523,8 +523,14 @@
 @tooltip-arrow-color:         @tooltip-bg;
 
 //color tooltip
-@tooltip-warning-bg:          @brand-warning;
-@tooltip-warning-color:       #fff;
+@tooltip-warning-bg:          @state-warning-bg;
+@tooltip-warning-color:       @state-warning-text;
+@tooltip-primary-bg:          @brand-primary;
+@tooltip-primary-color:       #fff;
+
+@tooltip-inverse-bg:          @light-primary-color;
+@tooltip-inverse-color:       @brand-primary;
+
 
 //== Popovers
 //
