@@ -162,7 +162,7 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _createAppServerFilter(filter, fieldMetadata) {
-        return (filter || {}).rules;
+        return (filter || {}).rules || {};
     }
 
     _createAppServerView(view, fieldMetadata) {
