@@ -14,6 +14,11 @@ const METHODS = {
     setFilters: 'v1.set_filter'
 };
 
+/**
+ * This service sends requests to AS.
+ * Replies to these requests are handled
+ * by the separate ApplicationServerReplyService.
+ * */
 class ApplicationServerService extends ServiceBase {
     constructor(services) {
         super(services);
@@ -65,12 +70,13 @@ class ApplicationServerService extends ServiceBase {
         const appServerSampleId = this._getAppServerSampleId(params.sample);
         const appServerView = this._createAppServerView(params.view, params.fieldsMetadata);
         const appServerFilter = this._createAppServerFilter(params.filter, params.fieldsMetadata);
+        const appServerSortOrder = this._createAppServerViewSortOrder(params.view, params.fieldsMetadata);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
             view_structure: appServerView,
             view_filter: appServerFilter,
-            view_sort_order: params.viewSortOrder || []
+            view_sort_order: appServerSortOrder
         };
 
         const operationTypes = this.services.operations.operationTypes();
@@ -161,19 +167,45 @@ class ApplicationServerService extends ServiceBase {
         };
     }
 
+    _createAppServerViewSortOrder(view, fieldMetadata) {
+        const viewListItems = view.viewListItems;
+
+        // Get all items which specify sort order.
+        const sortItems = _.filter(viewListItems, listItem => !!listItem.sortOrder);
+
+        // Sort items by specified order.
+        const sortedSortItems = _.sortBy(sortItems, listItem => listItem.sortOrder);
+
+        //noinspection UnnecessaryLocalVariableJS leaved for debug.
+        const appServerSortOrder = _.map(sortedSortItems, listItem => {
+            return {
+                columnName: listItem.fieldName,
+                isAscendingOrder: (listItem.sortOrder && listItem.sortOrder === 'asc')? true : false
+            };
+        });
+
+        return appServerSortOrder;
+    }
+
     _createAppServerFilter(filter, fieldMetadata) {
         return (filter || {}).rules || {};
     }
 
     _createAppServerView(view, fieldMetadata) {
         const listItems = view.viewListItems;
+        // Group view items by source name.
         const itemsBySource = _.groupBy(listItems, (listItem) => listItem.sourceName);
 
+        // 'sample' group contains all sample fields.
         const appServerSampleColumns = _.map(itemsBySource['sample'], this._createAppServerViewColumn);
+
+        // Other groups except 'sample' are source names.
         const sourceNames = _(itemsBySource)
             .keys()
             .filter(key => key !== 'sample')
             .value();
+
+        // Make groups of columns separately for each source.
         const appServerSources = _.map(sourceNames, sourceName => {
             const sourceColumns = _.map(itemsBySource[sourceName], this._createAppServerViewColumn);
             return {

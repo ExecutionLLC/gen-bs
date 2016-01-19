@@ -137,7 +137,8 @@ class SearchService extends ServiceBase {
                 this.services.samples.find(user, sampleId, callback);
             },
             filter: (callback) => {
-                // Filters are not required.
+                // TODO: Made filters not required.
+                // The error should be raised here later in case user didn't choose any filter.
                 if (filterId) {
                     this.services.filters.find(user, filterId, callback);
                 } else {
