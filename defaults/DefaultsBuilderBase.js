@@ -9,7 +9,10 @@ class DefaultsBuilderBase {
         this.defaultsDir = __dirname;
         this.asSamplesDir = this.defaultsDir + '/templates/samples'; // Here AS default sample metadata files are stored.
         this.samplesDir = this.defaultsDir + '/samples'; // Output directory for converted samples.
+        this.sourcesDir = this.defaultsDir + '/sources'; // Output directory for sources metadata.
+        this.asSourcesDir = this.defaultsDir + '/templates/sources'; // AS sample metadata.
         this.viewsDir = this.defaultsDir + '/views'; // Output directory for default views.
+        this.filtersDir = this.defaultsDir + '/filters'; // Output directory for default filters.
     }
 
     _removeJsonFilesFromDirectory(directory, callback) {

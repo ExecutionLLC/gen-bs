@@ -5,8 +5,8 @@ const Uuid = require('node-uuid');
 
 const FsUtils = require('../utils/FileSystemUtils');
 
-const loadFieldsMetadataFunc = (callback) => {
-    FsUtils.getAllFiles(__dirname + '/../defaults/samples/', '.json', (error, files) => {
+const loadFieldsMetadataFunc = (folderName, callback) => {
+    FsUtils.getAllFiles(__dirname + '/../defaults/' + folderName + '/', '.json', (error, files) => {
         if (error) {
             callback(error);
         } else {
@@ -21,11 +21,16 @@ const loadFieldsMetadataFunc = (callback) => {
 
 class FieldsMetadataModel {
     constructor() {
-        loadFieldsMetadataFunc((error, fields) => {
+        loadFieldsMetadataFunc('samples', (error, fields) => {
             if (error) {
                 throw new Error(error);
             }
-            this.fields = fields;
+            loadFieldsMetadataFunc('sources', (error, sourcesFields) => {
+                if (error) {
+                    throw new Error(error);
+                }
+                this.fields = fields.concat(sourcesFields);
+            });
         });
     }
 
@@ -60,6 +65,11 @@ class FieldsMetadataModel {
 
     findMany(ids, callback) {
         const fields = _.filter(this.fields, (field) => _.any(ids, fieldId => field.id === fieldId));
+        callback(null, fields);
+    }
+
+    findSourcesMetadata(callback) {
+        const fields = _.filter(this.fields, (field) => field.sourceType === 'source');
         callback(null, fields);
     }
 }

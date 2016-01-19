@@ -7,11 +7,9 @@ const ControllerBase = require('./ControllerBase');
 class FieldsMetadataController extends ControllerBase {
     constructor(services) {
         super(services);
-
-        this.getFieldsMetadata = this.getFieldsMetadata.bind(this);
     }
 
-    getFieldsMetadata(request, response) {
+    getSampleMetadata(request, response) {
         if (!this.checkUserIsDefined(request, response)) {
             return;
         }
@@ -27,10 +25,25 @@ class FieldsMetadataController extends ControllerBase {
         });
     }
 
+    getSourcesMetadata(request, response) {
+        if (!this.checkUserIsDefined(request, response)) {
+            return;
+        }
+
+        this.services.fieldsMetadata.findSourcesMetadata((error, fieldsMetadata) => {
+            if (error) {
+                this.sendInternalError(response, error);
+            } else {
+                this.sendJson(response, fieldsMetadata);
+            }
+        });
+    }
+
     createRouter() {
         const router = new Express();
 
-        router.get('/:sampleId', this.getFieldsMetadata);
+        router.get('/sources', this.getSourcesMetadata.bind(this));
+        router.get('/:sampleId', this.getSampleMetadata.bind(this));
 
         return router;
     }

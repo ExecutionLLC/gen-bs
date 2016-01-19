@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const Uuid = require('node-uuid');
+const async = require('async');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 const FsUtils = require('../utils/FileSystemUtils');
@@ -20,26 +21,32 @@ class ViewBuilder extends DefaultsBuilderBase {
     }
 
     /**
-     * Gets field id from the generated source metadata.
+     * Builds default views using templates file.
+     *
+     * The method needs samples field metadata to be present, as it uses field ids to build views.
      * */
-    _getFieldId(sourceName, fieldName) {
-        const sourceFilePath = this._getMetadataFilePath(sourceName);
-        const sourceContents = FsUtils.getFileContentsAsString(sourceFilePath);
-        const sourceMetadata = JSON.parse(sourceContents);
-        const fieldMetadata = sourceMetadata.fields;
-        const field = _.find(fieldMetadata, field => field.name === fieldName);
-        if (!field) {
-            throw new Error('Field is not found! Source name: %s, field name: %s', sourceName, fieldName);
-        }
-        return field.id;
+    build(callback) {
+        async.waterfall([
+            (callback) => {
+                FsUtils.createDirectoryIfNotExists(this.viewsDir, callback);
+            },
+            (callback) => {
+                this._removeJsonFilesFromDirectory(this.viewsDir, callback);
+            },
+            (callback) => {
+                const views = _.map(this.viewTemplates, this._createView);
+                this._storeViews(views);
+                callback(null);
+            }
+        ], callback);
     }
 
     _createListItem(listItemTemplate) {
         const fieldDescriptor = listItemTemplate.field;
-        const fieldId = this._getFieldId(fieldDescriptor.sourceName, fieldDescriptor.fieldName);
         return {
             id: Uuid.v4(),
-            fieldId: fieldId,
+            fieldName: fieldDescriptor.name,
+            sourceName: fieldDescriptor.sourceName,
             order: listItemTemplate.order,
             sortOrder: listItemTemplate.sortOrder,
             sortDirection: listItemTemplate.sortDirection
@@ -61,29 +68,6 @@ class ViewBuilder extends DefaultsBuilderBase {
         const viewsJson = JSON.stringify(snakeCasedViews, null, 2);
         const viewsFile = this.viewsDir + '/default-views.json';
         FsUtils.writeStringToFile(viewsFile, viewsJson, callback);
-    }
-
-    /**
-     * Builds default views using templates file.
-     *
-     * The method needs samples field metadata to be present, as it uses field ids to build views.
-     * */
-    build(callback) {
-        FsUtils.createDirectoryIfNotExists(this.viewsDir, (error) => {
-           if (error) {
-               callback(error);
-           } else {
-               this._removeJsonFilesFromDirectory(this.viewsDir, (error) => {
-                   if (error) {
-                       callback(error);
-                   } else {
-                       const views = _.map(this.viewTemplates, this._createView);
-                       this._storeViews(views);
-                       callback(null);
-                   }
-               });
-           }
-        });
     }
 }
 
