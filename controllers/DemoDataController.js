@@ -32,7 +32,7 @@ class DemoDataController extends ControllerBase {
         }
 
         const user = request.user;
-        this.services.applicationServer.getFieldsMetadata(user, (error, fieldsMetadata) => {
+        this.services.applicationServer.getSampleMetadata(user, (error, fieldsMetadata) => {
             if (error) {
                 this.sendError(response, error);
             } else {

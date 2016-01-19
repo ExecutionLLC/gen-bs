@@ -11,7 +11,7 @@
     "test:models": "node ./test/test-models.js",
     "start": "node index.js",
     "build:data": "node ./defaults/build-initial-data.js",
-    "start:client": "node test-client/index.js"
+    "client": "node test-client/index.js"
   },
   "repository": {
     "type": "git",

@@ -184,7 +184,7 @@ class RedisService extends ServiceBase {
                     const fieldNames = _.keys(rowObject);
                     _.each(fieldNames, fieldName => {
                         const field = fieldNameToFieldHash[fieldName];
-                        const fieldValue = rowObject[fieldName];
+                        const fieldValue = this._mapFieldValue(rowObject[fieldName]);
 
                         // Keep the search key and transfer it to the client as is.
                         if (fieldName === 'search_key') {
@@ -200,6 +200,11 @@ class RedisService extends ServiceBase {
                 callback(null, mappedData);
             }
         ], callback);
+    }
+
+    _mapFieldValue(actualFieldValue) {
+        // This is VCF way to mark files.
+        return (actualFieldValue !== 'nan') ? actualFieldValue : '.';
     }
 }
 

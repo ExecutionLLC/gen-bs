@@ -17,15 +17,6 @@
         },
         {
           "field": {
-            "source_name": "common_no_known_medical_impact_20151201",
-            "name": "ALT"
-          },
-          "condition": {
-            "$ne": "B"
-          }
-        },
-        {
-          "field": {
             "source_name": "sample",
             "name": "FILTER"
           },
