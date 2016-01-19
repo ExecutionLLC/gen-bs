@@ -10,18 +10,27 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, sessionId, sampleId, viewId, filterId, limit, offset, callback) {
-        async.waterfall([
-            (callback) => {
-                this.services.sessions.findById(sessionId, callback);
-            },
-            (sessionId, callback) => {
-                this._createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback);
-            },
-            (appServerRequestParams, callback) => {
-                this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
-                    appServerRequestParams, callback);
-            }
-        ], callback);
+        if (!viewId || !filterId || !sampleId || !limit) {
+            callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
+                    viewId,
+                    filterId,
+                    sampleId,
+                    limit
+                }, null, 2)));
+        } else {
+            async.waterfall([
+                (callback) => {
+                    this.services.sessions.findById(sessionId, callback);
+                },
+                (sessionId, callback) => {
+                    this._createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback);
+                },
+                (appServerRequestParams, callback) => {
+                    this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
+                        appServerRequestParams, callback);
+                }
+            ], callback);
+        }
     }
 
     searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
