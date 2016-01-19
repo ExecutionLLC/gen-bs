@@ -52,6 +52,16 @@ export default function viewBuilder(state = {
         currentView: action.view
       })
 
+    case ActionTypes.VBUILDER_REQUEST_DELETE_VIEW:
+      return Object.assign({}, state, {
+        isFetching: true
+      })
+
+    case ActionTypes.VBUILDER_RECEIVE_DELETE_VIEW:
+      return Object.assign({}, state, {
+        isFetching: false
+      })
+
     case ActionTypes.VBUILDER_DELETE_COLUMN:
       return Object.assign({}, state, {
         editedView: state.editedView ? Object.assign({}, state.editedView, {

@@ -18,16 +18,18 @@ export const VBUILDER_RECEIVE_UPDATE_VIEW = 'VBUILDER_RECEIVE_UPDATE_VIEW'
 export const VBUILDER_REQUEST_CREATE_VIEW = 'VBUILDER_REQUEST_CREATE_VIEW'
 export const VBUILDER_RECEIVE_CREATE_VIEW = 'VBUILDER_RECEIVE_CREATE_VIEW'
 
+export const VBUILDER_REQUEST_DELETE_VIEW = 'VBUILDER_REQUEST_DELETE_VIEW'
+export const VBUILDER_RECEIVE_DELETE_VIEW = 'VBUILDER_RECEIVE_DELETE_VIEW'
+
 export const VBUILDER_TOGGLE_NEW_EDIT = 'VBUILDER_TOGGLE_NEW_EDIT'
 
 
 /*
  * Action Creators
  */
-export function viewBuilderToggleNewEdit(currentView, editOrNew) {
+export function viewBuilderToggleNewEdit(editOrNew) {
   return {
     type: VBUILDER_TOGGLE_NEW_EDIT,
-    currentView,
     editOrNew
   }
 }
@@ -144,3 +146,39 @@ function viewBuilderReceiveCreateView(json) {
   }
 }
 
+
+function viewBuilderRequestDeleteView() {
+  return {
+    type: VBUILDER_REQUEST_DELETE_VIEW
+  }
+}
+
+function viewBuilderReceiveDeleteView(json) {
+  return {
+    type: VBUILDER_RECEIVE_DELETE_VIEW,
+    view: json
+  }
+}
+
+export function viewBuilderDeleteView(viewItemIndex) {
+
+  return (dispatch, getState) => {
+    dispatch(viewBuilderRequestCreateView())
+
+    return $.ajax(config.URLS.VIEWS, {
+        'type': 'DELETE',
+        'headers': { "X-Session-Id": getState().auth.sessionId },
+        'data': JSON.stringify(getState().viewBuilder.newView),
+        'processData': false,
+        'contentType': 'application/json'
+      })
+      .done(json => {
+        dispatch(viewBuilderReceiveDeleteView(json))
+        dispatch(closeModal('views'))
+        dispatch(fetchViews(json.id))
+      })
+      .fail(err => {
+        console.error('CREATE View FAILED: ', err.responseText)
+      })
+  }
+}

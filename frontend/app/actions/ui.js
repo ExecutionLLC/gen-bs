@@ -7,7 +7,7 @@ export const CHANGE_SAMPLE = 'CHANGE_SAMPLE'
 export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW'
 export const CHANGE_FILTER = 'CHANGE_FILTER'
 export const ANALYZE = 'ANALYZE'
-
+export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP'
 
 
 /*
@@ -65,5 +65,12 @@ export function analyze(sampleId, viewId, filterId) {
 
     dispatch(fetchVariants(searchParams))
 
+  }
+}
+
+export function toggleAnalyzeTooltip(flag) {
+  return {
+    type: TOGGLE_ANALYZE_TOOLTIP,
+    isAnalyzeTooltipVisible: flag
   }
 }
