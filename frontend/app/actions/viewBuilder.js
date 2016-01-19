@@ -100,7 +100,7 @@ export function viewBuilderUpdateView(viewItemIndex) {
       .done(json => {
         dispatch(viewBuilderReceiveUpdateView(json))
         dispatch(closeModal('views'))
-        dispatch(changeView(getState().userData.views, json.id))
+        dispatch(fetchViews(json.id))
       })
       .fail(err => {
         console.error('UPDATE View FAILED: ', err.responseText)
@@ -123,8 +123,7 @@ export function viewBuilderCreateView(viewItemIndex) {
       .done(json => {
         dispatch(viewBuilderReceiveCreateView(json))
         dispatch(closeModal('views'))
-        dispatch(fetchViews(getState().userData.views, json.id))
-        dispatch(changeView(getState().userData.views, json.id))
+        dispatch(fetchViews(json.id))
       })
       .fail(err => {
         console.error('CREATE View FAILED: ', err.responseText)

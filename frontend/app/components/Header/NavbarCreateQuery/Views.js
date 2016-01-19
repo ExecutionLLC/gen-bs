@@ -21,7 +21,7 @@ export default class Views extends Component {
           options={views.map( v => { return {value: v.id, label: v.name} } )}
           value={currentView ? currentView.id: null}
           clearable={false}
-          onChange={ (val) => dispatch(changeView(views, val.value) )}
+          onChange={ (val) => dispatch(changeView(val.value) )}
         />
 
       </div>

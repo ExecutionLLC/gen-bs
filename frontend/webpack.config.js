@@ -134,10 +134,10 @@ module.exports = {
     */
 
     new webpack.DefinePlugin({
-      API_PORT: JSON.stringify(8080),
-      API_HOST: JSON.stringify('ec2-52-91-59-42.compute-1.amazonaws.com'),
-      //API_PORT: JSON.stringify(8888),
-      //API_HOST: JSON.stringify('localhost'),
+      //API_PORT: JSON.stringify(8080),
+      //API_HOST: JSON.stringify('ec2-52-91-59-42.compute-1.amazonaws.com'),
+      API_PORT: JSON.stringify(8888),
+      API_HOST: JSON.stringify('localhost'),
     })
   ]
 

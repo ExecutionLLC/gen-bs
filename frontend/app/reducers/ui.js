@@ -20,7 +20,7 @@ export default function ui(state = {
           currentSample: _.find(action.samples, {id: action.sampleId})
       })
 
-    case ActionTypes.CHANGE_VIEW:
+    case ActionTypes.CHANGE_HEADER_VIEW:
       return Object.assign({}, state, {
           views: action.views,
           currentView: _.find(action.views, {id: action.viewId})

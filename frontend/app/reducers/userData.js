@@ -29,6 +29,21 @@ export default function userData(state = {
         lastUpdated: action.receivedAt
       })
 
+    case ActionTypes.REQUEST_VIEWS:
+      return Object.assign({}, state, {
+        isFetching: true
+      })
+
+    case ActionTypes.RECEIVE_VIEWS:
+      return Object.assign({}, state, {
+        isFetching: false,
+
+        views: action.views,
+
+        lastUpdated: action.receivedAt
+      })
+
+
 
     default:
       return state
