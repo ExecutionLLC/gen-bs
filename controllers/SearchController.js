@@ -90,6 +90,7 @@ class SearchController extends ControllerBase {
 
         if (!limit || !offset) {
             this.sendInternalError(response, new Error('Please set "limit" and "offset" query parameters.'));
+            return;
         }
 
         this.services.search.loadResultsPage(user, sessionId, operationId, limit, offset, (error) => {
