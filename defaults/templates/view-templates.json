@@ -80,9 +80,14 @@
           "source_name": "sample",
           "name": "FILTER"
         },
-        "order": 3,
-        "sort_order": 3,
-        "sort_direction": "desc"
+        "order": 3
+      },
+      {
+        "field": {
+          "source_name": "sample",
+          "name": "ALT"
+        },
+        "order": 4
       }
     ]
   }
