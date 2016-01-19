@@ -31,7 +31,7 @@ class NavbarCreateQuery extends Component {
                     {...this.props}
                     sampleSelected={ (e) => dispatch(changeSample(samples, $(e.target).val()))}
                   />
-                  <FiltersSetup />
+                  <FiltersSetup {...this.props} />
                   <Filters
                     {...this.props}
                     filterSelected={ (e) => dispatch(changeFilter(views, $(e.target).val()))}

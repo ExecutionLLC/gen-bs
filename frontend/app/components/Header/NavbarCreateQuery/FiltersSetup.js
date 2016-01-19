@@ -17,7 +17,8 @@ export default class FiltersSetup extends Component {
                 <span data-localize="filters.title">Filters</span> <span className="caret"></span>
               </button>
             <ul className="dropdown-menu dropdown-menu-item-template">
-              <li><a href="#" type="button" data-toggle="modal" data-target="#filter"><span data-localize="filters.setup.title">Setup Filters</span></a></li>
+              <li><a onClick={this.props.openModal.bind(this, 'filters')} href="#" type="button" data-toggle="modal" data-target="#filter" ><span data-localize="filters.setup.title">Setup Filters</span></a></li>
+             
               <li><a href="#" type="button" data-toggle="modal" data-target="#combinefilter"><span data-localize="filters.combine.title">Combine Filters</span></a></li>
               
             </ul>
