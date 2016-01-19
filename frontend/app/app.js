@@ -2,11 +2,11 @@ import 'babel-polyfill'
 import 'jszip'
 
 
-const $ = require('jquery');
+//const $ = require('jquery');
 const JSZip = require('jszip');
 window.JSZip = JSZip;
-window.jQuery = $;
-window.$ = $;
+//window.jQuery = $;
+//window.$ = $;
 
 import './assets/vendor/jQuery-QueryBuilder/dist/css/query-builder.default.min.css';
 import './assets/css/bootstrap/js/bootstrap.js';

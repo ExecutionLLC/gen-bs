@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader'
 import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter'
+import QueryBuilder from './FilterBuilder/QueryBuilder'
 
 class FiltersModal extends Component {
   render() {
@@ -31,6 +32,7 @@ class FiltersModal extends Component {
                   <FilterBuilderHeader />
                     <form>
                       <Modal.Body>
+                        < QueryBuilder />
                       </Modal.Body>
                       <FilterBuilderFooter {...this.props} />
                     </form>

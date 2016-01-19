@@ -60,6 +60,7 @@
         <option value="pt-BR" data-icon="flag flag-pt-BR">Brazilian Portuguese</option>
         <option value="ro" data-icon="flag flag-ro">Romanian</option>
         <option value="ru" data-icon="flag flag-ru">Russian</option>
+        <option value="zh-CN" data-icon="flag flag-zh-CN" >Simplified Chinese</option>
       </select>
     </div>
 
@@ -130,6 +131,30 @@ var options = {
     'bt-checkbox': { color: 'primary' },
     'invert': null
   },
+
+  // standard operators in custom optgroups
+  operators: [
+    {type: 'equal',            optgroup: 'basic'},
+    {type: 'not_equal',        optgroup: 'basic'},
+    {type: 'in',               optgroup: 'basic'},
+    {type: 'not_in',           optgroup: 'basic'},
+    {type: 'less',             optgroup: 'numbers'},
+    {type: 'less_or_equal',    optgroup: 'numbers'},
+    {type: 'greater',          optgroup: 'numbers'},
+    {type: 'greater_or_equal', optgroup: 'numbers'},
+    {type: 'between',          optgroup: 'numbers'},
+    {type: 'not_between',      optgroup: 'numbers'},
+    {type: 'begins_with',      optgroup: 'strings'},
+    {type: 'not_begins_with',  optgroup: 'strings'},
+    {type: 'contains',         optgroup: 'strings'},
+    {type: 'not_contains',     optgroup: 'strings'},
+    {type: 'ends_with',        optgroup: 'strings'},
+    {type: 'not_ends_with',    optgroup: 'strings'},
+    {type: 'is_empty'     },
+    {type: 'is_not_empty' },
+    {type: 'is_null'      },
+    {type: 'is_not_null'  }
+  ],
 
   filters: [
   /*
@@ -480,7 +505,7 @@ $('.reset').on('click', function() {
 $('.parse-json').on('click', function() {
   $('#result').removeClass('hide')
     .find('pre').html(JSON.stringify(
-      $('#builder').queryBuilder('getRules'),
+      $('#builder').queryBuilder('getRules', {get_flags: true}),
       undefined, 2
     ));
 });
