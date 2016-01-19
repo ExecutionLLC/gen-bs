@@ -19,7 +19,6 @@ class NavbarCreateQuery extends Component {
 
     const { dispatch, samples, views } = this.props
     const { currentSample, currentView } = this.props.ui
-    console.log('navbar', this.props)
 
 
     return (
@@ -41,7 +40,6 @@ class NavbarCreateQuery extends Component {
                   <ViewsSetup {...this.props} />
                   <Views
                     {...this.props}
-                    viewSelected={ (e) => dispatch(changeView(views, $(e.target).val()))}
                   />
 
                   <Analyze 

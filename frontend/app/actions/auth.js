@@ -39,47 +39,63 @@ function receiveSession(json) {
 
 export function login(name, password) {
 
+  var processData = (dispatch, sessionId) => {
+    var conn = new WebSocket(config.URLS.WS)
+    dispatch(receiveSession({session_id: sessionId}))
+    dispatch(createWsConnection(conn))
+    dispatch(subscribeToWs(sessionId))
+    $.ajaxSetup({
+      headers: { "X-Session-Id": sessionId }
+    });
+    dispatch(fetchUserdata())
+  }
+
+  var newSession = (dispatch, cb) => {
+    return $.ajax(config.URLS.SESSION, {
+        'data': JSON.stringify({user_name: name, password: password}),
+        'type': 'POST',
+        'processData': false,
+        'contentType': 'application/json'
+      })
+      .then(json => {
+        console.log('GET new session from server', json.session_id)
+        cb(dispatch, json.session_id)
+      })
+    // TODO:
+    // catch any error in the network call.
+  }
+
+  var checkSession = (dispatch, cb, sessionId) => {
+    return $.ajax(config.URLS.SESSION, {
+        'type': 'PUT',
+        'headers': { "X-Session-Id": sessionId },
+        'processData': false,
+        'contentType': 'application/json'
+      })
+      .done(json => {
+        console.log('cookie session VALID', sessionId)
+        cb(dispatch, sessionId)
+      })
+      .fail(json => {
+        console.log('cookie session INVALID', sessionId)
+        newSession(dispatch, processData)
+      })
+    // TODO:
+    // catch any error in the network call.
+  }
+
 
   return dispatch => {
-    console.log(config)
 
     const sessionId = getCookie('sessionId')
-    //const sessionId = 'e829e70b-8f89-47b0-8655-09e0b33ccc85'
-    var conn = null
 
     dispatch(requestSession())
 
     // null for debug purpose
     if (sessionId && sessionId !== 'null') {
-      conn = new WebSocket(config.URLS.WS)
-      console.log('cookie session', sessionId)
-      dispatch(receiveSession({session_id: sessionId}))
-      dispatch(createWsConnection(conn))
-      dispatch(subscribeToWs(sessionId))
-      $.ajaxSetup({
-        headers: { "X-Session-Id": sessionId }
-      });
-      dispatch(fetchUserdata())
+        checkSession(dispatch, processData, sessionId)
     } else {
-      return $.ajax(config.URLS.SESSION, {
-          'data': JSON.stringify({user_name: name, password: password}),
-          'type': 'POST',
-          'processData': false,
-          'contentType': 'application/json'
-        })
-        .then(json => {
-          conn = new WebSocket(config.URLS.WS)
-          const sessionId = json.session_id
-          dispatch(receiveSession(json))
-          dispatch(createWsConnection(conn))
-          dispatch(subscribeToWs(sessionId))
-          $.ajaxSetup({
-            headers: { "X-Session-Id": sessionId }
-          });
-          dispatch(fetchUserdata())
-        })
-      // TODO:
-      // catch any error in the network call.
+        newSession(dispatch, processData)
       }
   }
 }
