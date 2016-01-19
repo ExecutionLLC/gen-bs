@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import classNames from 'classnames';
 
 import { viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn } from '../../../actions/viewBuilder'
 
@@ -10,6 +11,11 @@ export default class ViewForm extends Component {
   render() {
     const { dispatch, fields } = this.props
     const view = this.props.viewBuilder.editOrNew ? (this.props.viewBuilder.editedView):(this.props.viewBuilder.newView)
+    var disabledClass = classNames({
+      'disabled': (view.view_type === 'standard') ? 'disabled':''
+    })
+    console.log('disabled', disabledClass)
+
 
 
     const selects = view.view_list_items.map( function(viewItem, index) {
@@ -51,8 +57,8 @@ export default class ViewForm extends Component {
                   </div>
                   
                  <div className="col-xs-1">
-                   <button className="btn-link" disabled="" onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i className="fa fa-lg fa-minus-circle"></i></button>
-                   <button className="btn-link" disabled="" onClick={ () => dispatch(viewBuilderAddColumn(index)) }><i className="fa fa-lg fa-plus-circle"></i></button>
+                   <button className="btn-link" disabled={disabledClass} onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i className="fa fa-lg fa-minus-circle"></i></button>
+                   <button className="btn-link" disabled={disabledClass} onClick={ () => dispatch(viewBuilderAddColumn(index)) }><i className="fa fa-lg fa-plus-circle"></i></button>
                  </div>
               </div>
       )

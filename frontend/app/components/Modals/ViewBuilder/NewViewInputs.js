@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 
-import { viewBuilderToggleNewEdit } from '../../../actions/viewBuilder'
+import { viewBuilderToggleNewEdit, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
 
 
 export default class NewViewInputs extends Component {
@@ -19,13 +19,28 @@ export default class NewViewInputs extends Component {
 
             <div className="col-sm-6">
               <label data-localize="views.setup.new.name.title">New View</label> 
-              <input type="text" className="form-control text-primary" data-localize="views.setup.new.name.help" placeholder="Set view name a copy" value={newView.name} />
+              <input
+                type="text"
+                className="form-control text-primary"
+                data-localize="views.setup.new.name.help"
+                placeholder="Set view name a copy"
+                value={newView.name}
+                onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: e.target.value, desctription: newView.desctription, })) }
+              />
+
               <div className="help-text text-danger" data-localize="views.setup.new.name.error">Name can not be empty</div>
             </div>
 
           <div className="col-sm-5">
             <label data-localize="general.description">Description</label>
-            <input type="text" className="form-control" data-localize="views.setup.new.description" placeholder="Set view description (optional)" value={newView.description} onChange={ (val) => console.log('desc change: ', val)} />
+            <input
+              type="text"
+              className="form-control"
+              data-localize="views.setup.new.description"
+              placeholder="Set view description (optional)"
+              value={newView.description}
+              onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: newView.name, description: e.target.value})) }
+            />
           </div>
 
           <div className="col-sm-1">

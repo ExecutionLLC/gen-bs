@@ -46,7 +46,7 @@ export function fetchUserdata() {
         dispatch(receiveUserdata(json))
         dispatch(changeView(json.views, view.id))
         dispatch(changeSample(json.samples, sample.id))
-        //dispatch(analyze(sample.id, view.id, filter.id))
+        dispatch(analyze(sample.id, view.id, filter.id))
         dispatch(fetchFields(sampleId))
         dispatch(fetchSourceFields())
       })

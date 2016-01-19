@@ -6,6 +6,8 @@ import { fetchViews } from './userData'
 
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW'
 
+export const VBUILDER_CHANGE_ATTR = 'VBUILDER_CHANGE_ATTR'
+
 export const VBUILDER_CHANGE_COLUMN = 'VBUILDER_CHANGE_COLUMN'
 export const VBUILDER_DELETE_COLUMN = 'VBUILDER_DELETE_COLUMN'
 export const VBUILDER_ADD_COLUMN = 'VBUILDER_ADD_COLUMN'
@@ -36,6 +38,14 @@ export function viewBuilderSelectView(views, viewId, editOrNew) {
     views,
     viewId,
     editOrNew
+  }
+}
+
+export function viewBuilderChangeAttr(attr) {
+  return {
+    type: VBUILDER_CHANGE_ATTR,
+    name: attr.name,
+    description: attr.description
   }
 }
 

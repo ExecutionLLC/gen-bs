@@ -54,7 +54,7 @@ export default function viewBuilder(state = {
 
     case ActionTypes.VBUILDER_DELETE_COLUMN:
       return Object.assign({}, state, {
-        editedView: state.editetView ? Object.assign({}, state.editedView, {
+        editedView: state.editedView ? Object.assign({}, state.editedView, {
           view_list_items: [
             ...state.editedView.view_list_items.slice(0, action.viewItemIndex),
             ...state.editedView.view_list_items.slice(action.viewItemIndex + 1)
@@ -70,7 +70,7 @@ export default function viewBuilder(state = {
   
     case ActionTypes.VBUILDER_ADD_COLUMN:
       return Object.assign({}, state, {
-        editedView: state.editetView ? Object.assign({}, state.editedView, {
+        editedView: state.editedView ? Object.assign({}, state.editedView, {
           view_list_items: [
             ...state.editedView.view_list_items.slice(0, action.viewItemIndex),
             state.editedView.view_list_items[action.viewItemIndex],
@@ -86,9 +86,21 @@ export default function viewBuilder(state = {
         }) : null
       })
 
+    case ActionTypes.VBUILDER_CHANGE_ATTR:
+      return Object.assign({}, state, {
+        editedView: state.editedView ? Object.assign( {}, state.editedView, {
+          name: action.name,
+          description: action.description
+        }):null,
+        newView: state.newView ? Object.assign( {}, state.newView, {
+          name: action.name,
+          description: action.description
+        }):null
+      })
+
     case ActionTypes.VBUILDER_CHANGE_COLUMN:
       return Object.assign({}, state, {
-        editedView: Object.assign({}, state.editedView, {
+        editedView: state.editedView ? Object.assign({}, state.editedView, {
           view_list_items: [
             ...state.editedView.view_list_items.slice(0, action.viewItemIndex),
 
@@ -99,7 +111,19 @@ export default function viewBuilder(state = {
             
             ...state.editedView.view_list_items.slice(action.viewItemIndex + 1)
           ]
-        })
+        }) : null,
+        newView: state.newView ? Object.assign({}, state.newView, {
+          view_list_items: [
+            ...state.newView.view_list_items.slice(0, action.viewItemIndex),
+
+            Object.assign({}, state.newView.view_list_items[action.viewItemIndex], {
+              field_name: action.fieldName,
+              source_name: action.sourceName
+            }),
+            
+            ...state.newView.view_list_items.slice(action.viewItemIndex + 1)
+          ]
+        }) : null
       })
 
     default:
