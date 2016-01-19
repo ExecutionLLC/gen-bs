@@ -28,14 +28,16 @@ class SearchController extends ControllerBase {
         const user = request.user;
         const sessionId = request.sessionId;
 
+        const languId = body.languId;
+        const keywordId = body.keywordId;
+        const sampleId = body.sampleId;
         const viewId = body.viewId;
         const filterId = body.filterId;
-        const sampleId = body.sampleId;
         const limit = body.limit;
         const offset = body.offset;
 
         this.services.search
-            .sendSearchRequest(user, sessionId, sampleId, viewId, filterId, limit, offset, (error, operationId) => {
+            .sendSearchRequest(user, sessionId, languId, keywordId, sampleId, viewId, filterId, limit, offset, (error, operationId) => {
                 if (error) {
                     this.sendInternalError(response, error);
                 } else {

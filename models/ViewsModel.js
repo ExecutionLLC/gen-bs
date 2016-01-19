@@ -184,7 +184,8 @@ class ViewsModel extends SecureModelBase {
             //fieldId: viewItem.fieldId,
             order: viewItem.order,
             sortOrder: viewItem.sortOrder,
-            sortDirection: viewItem.sortDirection
+            sortDirection: viewItem.sortDirection,
+            filterControlEnable: viewItem.filterControlEnable || true
         };
         this._insertIntoTable('view_item', dataToInsert, trx, (error, viewItemId) => {
             if (error) {

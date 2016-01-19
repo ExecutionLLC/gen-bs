@@ -204,16 +204,12 @@ class DatabaseCreator {
                 table.enu('source_type', fieldSourceTypesEnumValues);
                 table.string('source_name', 128);
                 table.enu('value_type', fieldValueTypesEnumValues);
-                table.boolean('filter_control_enable')
-                    .defaultTo(true);
                 table.boolean('is_mandatory')
                     .defaultTo(false);
                 table.boolean('is_editable')
                     .defaultTo(true);
                 table.boolean('is_invisible')
                     .defaultTo(false);
-                table.boolean('is_multi_select')
-                    .defaultTo(true);
             })
             .createTable('field_text', table => {
                 table.uuid('field_id')
@@ -316,6 +312,8 @@ class DatabaseCreator {
                 table.integer('order');
                 table.integer('sort_order');
                 table.enu('sort_direction', sortDirectionEnumValues);
+                table.boolean('filter_control_enable')
+                    .defaultTo(true);
             })
             .createTable('view_item_keyword', table => {
                 table.uuid('keyword_id')

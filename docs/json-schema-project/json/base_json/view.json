@@ -27,7 +27,7 @@
       "type": "boolean",
       "description": "If true, user should not be allowed to copy the view on UI."
     },
-    "modifiedTimestamp": {
+    "modified_timestamp": {
       "type": "integer",
       "description": "Timestamp of the last view modification."
     },

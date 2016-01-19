@@ -8,11 +8,15 @@ const env = process.env;
 
 const SESSION_HEADER = 'X-Session-Id';
 const HOST = 'localhost';
-const PORT = env.GEN_PORT || 5000;
+const PORT = 8888;
+
 const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+
+const DefaultLangu = require('../defaults/langu/default-langu.json');
+const DefaultKeywords = require('../defaults/keywords/default-keywords.json');
 const DefaultViews = require('../defaults/views/default-views.json');
 const DefaultFilters = require('../defaults/filters/default-filters.json');
 const SampleId = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample.id;
@@ -24,6 +28,7 @@ const WebSocketClient = require('./WebSocketClient');
 const urls = new Urls(HOST, PORT);
 const wsClient = new WebSocketClient(HOST, PORT);
 const operations = new Operations();
+
 let lastSessionId = undefined;
 let lastOperationId = undefined;
 
@@ -115,6 +120,8 @@ operations.add('Start search', (callback) => {
   waterfall([
     (callback) => {
       callback(null, {
+        languId: DefaultLangu[0].id,
+        keywordId: DefaultKeywords[0].id,
         viewId: DefaultViews[0].id,
         filterId: DefaultFilters[0].id,
         sampleId: SampleId,

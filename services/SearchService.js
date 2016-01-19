@@ -9,13 +9,13 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    sendSearchRequest(user, sessionId, sampleId, viewId, filterId, limit, offset, callback) {
+    sendSearchRequest(user, sessionId, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback) {
         async.waterfall([
             (callback) => {
                 this.services.sessions.findById(sessionId, callback);
             },
             (sessionId, callback) => {
-                this._createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback);
+                this._createAppServerSearchParams(sessionId, user, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback);
             },
             (appServerRequestParams, callback) => {
                 this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -105,8 +105,14 @@ class SearchService extends ServiceBase {
         });
     }
 
-    _createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback) {
+    _createAppServerSearchParams(sessionId, user, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback) {
         async.parallel({
+            langu: (callback) => {
+                this.services.langu.find(languId, callback);
+            },
+            keyword: (callback) => {
+                this.services.keywords.find(keywordId, callback);
+            },
             sample: (callback) => {
                 this.services.samples.find(user, sampleId, callback);
             },
@@ -145,6 +151,7 @@ class SearchService extends ServiceBase {
                 const appServerSearchParams = {
                     sessionId,
                     userId: user.id,
+                    keyword: result.keyword,
                     view: result.view,
                     filter: result.filter,
                     sample: result.sample,

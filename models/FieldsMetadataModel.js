@@ -12,11 +12,9 @@ const mappedColumns = [
     'source_type',
     'source_name',
     'value_type',
-    'filter_control_enable',
     'is_mandatory',
     'is_editable',
     'is_invisible',
-    'is_multi_select',
     'langu_id',
     'description'
 ];
@@ -76,6 +74,10 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    findSourcesMetadata(callback) {
+        this._fetchMetadataBySourceType('source', callback);
+    }
+
     _add(languId, metadata, withId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
@@ -86,11 +88,9 @@ class FieldsMetadataModel extends ModelBase {
                         sourceType: metadata.sourceType,
                         sourceName: metadata.sourceName,
                         valueType: metadata.valueType || 'user',
-                        filterControlEnable: metadata.filterControlEnable || true,
                         isMandatory: metadata.isMandatory || false,
                         isEditable: metadata.isEditable || true,
-                        isInvisible: metadata.isInvisible || false,
-                        isMultiSelect: metadata.isMultiSelect || true
+                        isInvisible: metadata.isInvisible || false
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
@@ -141,27 +141,6 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    _fetchMetadataKeywords(metadataId, callback) {
-        this.db.asCallback((knex, cb) => {
-            knex.select('id', 'field_id', 'value')
-            .from('keyword')
-            .where('field_id', metadataId)
-            .asCallback((error, keywords) => {
-                if (error) {
-                    cb(error);
-                } else {
-                    this._mapKeywords(keywords, (error, result) => {
-                        if (error) {
-                            cb(error);
-                        } else {
-                            cb(null, ChangeCaseUtil.convertKeysToCamelCase(result));
-                        }
-                    });
-                }
-            });
-        }, callback);
-    }
-
     _mapKeywords(keywords, callback) {
         async.map(keywords, (keyword, cb) => {
             this.models.keywords.fetchKeywordSynonyms(keyword.id, (error, synonyms) => {
@@ -209,14 +188,40 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    findMany(ids, callback) {
-        const fields = _.filter(this.fields, (field) => _.any(ids, fieldId => field.id === fieldId));
-        callback(null, fields);
+    _fetchMetadataBySourceType(sourceType, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .where('source_type', sourceType)
+                .asCallback((error, fieldsMetadata) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                    }
+                });
+        }, callback);
     }
 
-    findSourcesMetadata(callback) {
-        const fields = _.filter(this.fields, (field) => field.sourceType === 'source');
-        callback(null, fields);
+    _fetchMetadataKeywords(metadataId, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select('id', 'field_id', 'value')
+                .from('keyword')
+                .where('field_id', metadataId)
+                .asCallback((error, keywords) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        this._mapKeywords(keywords, (error, result) => {
+                            if (error) {
+                                cb(error);
+                            } else {
+                                cb(null, ChangeCaseUtil.convertKeysToCamelCase(result));
+                            }
+                        });
+                    }
+                });
+        }, callback);
     }
 }
 

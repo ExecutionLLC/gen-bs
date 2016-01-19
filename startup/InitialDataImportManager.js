@@ -36,6 +36,12 @@ class InitialDataImportManager {
             (users, cb) => {
                 result.users = users;
 
+                const keywordsDir = defaultsDir + '/keywords';
+                this._importKeywordFiles(keywordsDir, cb);
+            },
+            (keywords, cb) => {
+                result.keywords = keywords;
+
                 const viewsDir = defaultsDir + '/views';
                 this._importViewFiles(viewsDir, cb);
             },
@@ -91,6 +97,26 @@ class InitialDataImportManager {
         const users = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(usersString));
         async.map(users, (user, cb) => {
             this.models.user.addWithId(user, user.defaultLanguId, cb)
+        }, callback);
+    }
+
+    _importKeywordFiles(keywordsDir, callback) {
+        FsUtils.getAllFiles(keywordsDir, '.json', (error, files) => {
+            if (error) {
+                callback(error);
+            } else {
+                async.map(files, (file, cb) => {
+                    this._importKeywords(file, cb);
+                }, callback);
+            }
+        });
+    }
+
+    _importKeywords(keywordsFilePath, callback) {
+        const keywordsString = FsUtils.getFileContentsAsString(keywordsFilePath);
+        const keywords = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(keywordsString));
+        async.map(keywords, (keyword, cb) => {
+            this.models.keywords.addWithId(this.config.defaultLanguId, keyword, cb)
         }, callback);
     }
 

@@ -98,7 +98,7 @@ class KeywordsModel extends ModelBase {
                     this._insert(dataToInsert, trx, cb);
                 },
                 (keywordId, cb) => {
-                    this._addSynonyms(languId, keywordId, keyword.synonyms, withIds, trx, (error, result) => {
+                    this._addSynonyms(languId, keywordId, keyword.synonyms, withIds, trx, (error) => {
                         cb(error, keywordId);
                     });
                 }

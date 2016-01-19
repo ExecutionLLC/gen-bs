@@ -38,9 +38,6 @@
 				"boolean"
 			]
 		},
-		"filter_control_enable": {
-			"type": "boolean"
-		},
 		"is_mandatory": {
 			"type": "boolean"
 		},
@@ -73,9 +70,6 @@
 					}
 				}
 			}
-		},
-		"multi_select": {
-			"type": "boolean"
 		},
 		"value": {
 			"type": "string",
