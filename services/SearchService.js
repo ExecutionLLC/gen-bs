@@ -122,8 +122,8 @@ class SearchService extends ServiceBase {
                 (fieldMetadata, callback) => {
                     callback(null, {
                         fieldMetadata,
-                        order: sortValue.order,
-                        direction: sortValue.direction
+                        sortOrder: sortValue.order,
+                        sortDirection: sortValue.direction
                     });
                 }
             ], callback);

@@ -127,9 +127,9 @@ class ApplicationServerService extends ServiceBase {
                 });
             },
             (operation, callback) => {
-                const method = METHODS.setFilters;
-                const searchInResultsRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
-                this._rpcSend(operationId, method, searchInResultsRequest, (error) => callback(error, operation));
+                const setFilterRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
+                const setSortRequest = this._createSetSortParams(params.sortValues);
+                this._rpcSend(operationId, METHODS.setFilters, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
     }
@@ -165,6 +165,19 @@ class ApplicationServerService extends ServiceBase {
                 };
             })
         };
+    }
+
+    _createSetSortParams(sortParams) {
+        const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
+        //noinspection UnnecessaryLocalVariableJS leaved for debugging
+        const appServerSortParams = _.map(sortedParams, sortedParam => {
+            return {
+                columnName: sortedParam.fieldMetadata.name,
+                isAscendingOrder: (sortedParam.sortOrder === 'asc')
+            };
+        });
+
+        return appServerSortParams;
     }
 
     _createAppServerViewSortOrder(view, fieldMetadata) {
