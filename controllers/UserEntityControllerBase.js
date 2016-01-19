@@ -54,7 +54,10 @@ class UserEntityControllerBase extends ControllerBase {
 
         const user = request.user;
         const itemId = request.params.id ;
-        const item = request.body;
+        const item = this.getRequestBody(request, response);
+        if (!item) {
+            return;
+        }
 
         item.id = itemId;
 
@@ -73,7 +76,10 @@ class UserEntityControllerBase extends ControllerBase {
         }
 
         const user = request.user;
-        const item = request.body;
+        const item = this.getRequestBody(request, response);
+        if (!item) {
+            return;
+        }
         this.theService.add(user, item, (error, insertedItem) => {
             if (error) {
                 this.sendInternalError(response, error);
