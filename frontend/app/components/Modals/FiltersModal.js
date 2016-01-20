@@ -6,6 +6,8 @@ import { Modal } from 'react-bootstrap';
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader'
 import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter'
 import QueryBuilder from './FilterBuilder/QueryBuilder'
+import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect'
+import NewFilterInputs from './FilterBuilder/NewFilterInputs'
 
 class FiltersModal extends Component {
   render() {
@@ -13,7 +15,7 @@ class FiltersModal extends Component {
     const { dispatch, showModal, closeModal } = this.props
     const { currentSample, currentFilter } = this.props.ui
     const { samples, views, isValid } = this.props.userData
-    //const { editOrNew, editedView, newView } = this.props.viewBuilder
+    const { editOrNew, editedFilter, newFilter} = this.props.filterBuilder
 
     return (
 
@@ -32,7 +34,22 @@ class FiltersModal extends Component {
                   <FilterBuilderHeader />
                     <form>
                       <Modal.Body>
-                        < QueryBuilder />
+                          { !editOrNew &&
+                            <div>
+                              <NewFilterInputs  {...this.props} />
+                              <QueryBuilder
+                                {...this.props}
+                              />
+                            </div>
+                          }
+                          { editOrNew &&
+                            <div>
+                              <ExistentFilterSelect {...this.props} />
+                              <QueryBuilder
+                                {...this.props}
+                              />
+                            </div>
+                          }
                       </Modal.Body>
                       <FilterBuilderFooter {...this.props} />
                     </form>
