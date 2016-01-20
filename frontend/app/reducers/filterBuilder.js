@@ -6,7 +6,8 @@ export default function filterBuilder(state = {
   editedFilter: null,
   newFilter: null,
   editOrNew: true,
-  isFetching: false
+  isFetching: false,
+  rulesRequested: false
 }, action) {
 
   var currentFilter;
@@ -20,7 +21,8 @@ export default function filterBuilder(state = {
         isReceivedFilters: currentFilter !== null,
         editedFilter: action.editOrNew ? currentFilter: null,
         newFilter: !action.editOrNew ? currentFilter: null,
-        editOrNew: action.editOrNew
+        editOrNew: action.editOrNew,
+        rulesPrepared: false
       })
 
     case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
@@ -40,6 +42,16 @@ export default function filterBuilder(state = {
           name: action.name,
           description: action.description
         }):null
+      })
+
+    case ActionTypes.FBUILDER_REQUEST_RULES:
+      return Object.assign({}, state, {
+        rulesPrepared: true
+      })
+
+    case ActionTypes.FBUILDER_RECEIVE_RULES:
+      return Object.assign({}, state, {
+        rulesPrepared: false 
       })
 
     default:

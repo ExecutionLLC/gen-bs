@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn } from '../../../actions/viewBuilder'
 
 
-export default class ViewForm extends Component {
+export default class ViewBuilder extends Component {
 
   render() {
     const { dispatch, fields } = this.props
@@ -14,7 +14,6 @@ export default class ViewForm extends Component {
     var disabledClass = classNames({
       'disabled': (view.view_type === 'standard') ? 'disabled':''
     })
-    console.log('disabled', disabledClass)
 
 
 

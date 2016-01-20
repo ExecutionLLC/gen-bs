@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 
-//import { filterBuilderUpdateFilter, filterBuilderCreateFilter } from '../../../actions/filterBuilder';
+import { filterBuilderRequestRules } from '../../../actions/filterBuilder';
 
 
 export default class FilterBuilderFooter extends Component {
@@ -24,6 +24,9 @@ export default class FilterBuilderFooter extends Component {
           </button>
 
           <button
+            onClick={ () => {
+              dispatch(filterBuilderRequestRules())
+            }}
             type="button"
             className="btn btn-primary"
           >

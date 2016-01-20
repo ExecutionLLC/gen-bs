@@ -15,7 +15,6 @@ export default class ExistentFilterSelect extends Component {
     const { currentFilter} = this.props.filterBuilder
     const { samples, filters, isValid } = this.props.userData
 
-    console.log('esel currentFilter', currentFilter)
 
     return (
 

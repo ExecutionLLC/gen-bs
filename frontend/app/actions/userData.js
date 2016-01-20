@@ -11,6 +11,9 @@ export const REQUEST_USERDATA = 'REQUEST_USERDATA'
 export const RECEIVE_VIEWS = 'RECEIVE_VIEWS'
 export const REQUEST_VIEWS= 'REQUEST_VIEWS'
 
+export const RECEIVE_FILTERS = 'RECEIVE_FILTERS'
+export const REQUEST_FILTERS = 'REQUEST_FILTERS'
+
 
 
 /*
@@ -95,3 +98,38 @@ export function fetchViews(viewId) {
   }
 }
 
+function requestFilters() {
+  return {
+    type: REQUEST_FILTERS
+  }
+}
+
+function receiveFilters(json) {
+  return {
+    type: RECEIVE_FILTERS,
+    filters: json,
+    receivedAt: Date.now()
+  }
+}
+
+export function fetchFilters(filterId) {
+
+  return function(dispatch, getState ) {
+    dispatch(requestFilters())
+
+    return $.ajax(config.URLS.FILTERS, {
+        'type': 'GET',
+         'headers': { "X-Session-Id": getState().auth.sessionId}
+      })
+      .then(function(json) {
+        const filter = json[0] || null
+        const filterId = getState().filterBuilder.currentFilter.id || filter.id
+
+        dispatch(receiveFilters(json))
+        dispatch(changeFilter(filterId))
+      })
+
+      // TODO:
+      // catch any error in the network call.
+  }
+}
