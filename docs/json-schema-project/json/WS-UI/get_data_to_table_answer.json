@@ -3,34 +3,37 @@
 	"description": "Answer to API request for the main table",
 	"type": "object",
 	"properties": {
-		"total": {
-			"type": "integer",
-			"description": "Total row count on the server",
-			"minimum": 0
+		"session_id": {
+			"type": "string",
+			"description": "UUID of the user session the data is related to."
 		},
-		"offset": {
-			"type": "integer",
-			"description": "Start index of the first item in current selection",
-			"minimum": 0
+		"operation_id": {
+			"type": "string",
+			"description": "UUID of the search operation."
 		},
-		"items":{
-			"type": "array",
-			"items": {
-				"type": "array",
-				"description": "Row data",
-				"minItems": 0,
-				"items": {
-					"type": "object",
-					"description": "Column data in the specific row",
-					"properties": {
-						"field_id": {
-							"type": "string",
-							"description": "Column field identifier"
-						},
-						"field_value": {
-							"type": "string",
-							"description": "Value in the specific column of the specific row."
-						}
+		"result": {
+			"type": "object",
+			"description": "Object containing result of the operation",
+			"properties": {
+				"sample_id": {
+					"type": "string",
+					"description": "UUID of the sample which was selected"
+				},
+				"offset": {
+					"type": "integer",
+					"description": "Offset that was specified when asking to retrieve the data."
+				},
+				"limit": {
+					"type": "integer",
+					"description": "Number of rows to retrieve that was specified when asking to retrieve the data."
+				},
+				"data": {
+					"type": "array",
+					"minItems": 0,
+					"description": "Array of objects, each describing a separate row.",
+					"items": {
+						"type": "object",
+						"description": "Object containing 'field Id -> field value' hash for the row"
 					}
 				}
 			}
