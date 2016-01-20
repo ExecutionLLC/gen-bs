@@ -11,7 +11,6 @@ export default class Views extends Component {
     const dispatch = this.props.dispatch
     const views = this.props.views
     const currentView = this.props.ui.currentView
-    console.log('views props', this.props)
     return (
 
       <div className="table-cell table-cell100">

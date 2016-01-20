@@ -7,7 +7,7 @@ export default function filterBuilder(state = {
   newFilter: null,
   editOrNew: true,
   isFetching: false,
-  rulesRequested: false
+  rulesRequested: false,
 }, action) {
 
   var currentFilter;
@@ -22,7 +22,6 @@ export default function filterBuilder(state = {
         editedFilter: action.editOrNew ? currentFilter: null,
         newFilter: !action.editOrNew ? currentFilter: null,
         editOrNew: action.editOrNew,
-        rulesPrepared: false
       })
 
     case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
@@ -46,12 +45,42 @@ export default function filterBuilder(state = {
 
     case ActionTypes.FBUILDER_REQUEST_RULES:
       return Object.assign({}, state, {
-        rulesPrepared: true
+        rulesRequested: true,
+        rulesPrepared: false
       })
 
     case ActionTypes.FBUILDER_RECEIVE_RULES:
       return Object.assign({}, state, {
-        rulesPrepared: false 
+        rulesRequested: false,
+        rulesPrepared: true,
+        editedFilter: state.editedFilter ? Object.assign( {}, state.editedFilter, {
+          rules: action.rules
+        }):null,
+        newFilter: state.newFilter ? Object.assign( {}, state.newFilter, {
+          rules: action.rules
+        }):null
+      })
+
+    case ActionTypes.FBUILDER_REQUEST_UPDATE_FILTER:
+      return Object.assign({}, state, {
+        isFetching: true
+      })
+
+    case ActionTypes.FBUILDER_RECEIVE_UPDATE_FILTER:
+      return Object.assign({}, state, {
+        isFetching: false,
+        currentFilter: action.filter
+      })
+
+    case ActionTypes.FBUILDER_REQUEST_CREATE_FILTER:
+      return Object.assign({}, state, {
+        isFetching: true
+      })
+
+    case ActionTypes.FBUILDER_RECEIVE_CREATE_FILTER:
+      return Object.assign({}, state, {
+        isFetching: false,
+        currentFilter: action.filter
       })
 
     default:

@@ -10,7 +10,7 @@ import Views from './NavbarCreateQuery/Views'
 import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 
-import { changeSample, changeView, analyze } from '../../actions/ui'
+import { changeSample, changeView, changeFilter, analyze } from '../../actions/ui'
 
 
 class NavbarCreateQuery extends Component {
@@ -34,7 +34,6 @@ class NavbarCreateQuery extends Component {
                   <FiltersSetup {...this.props} />
                   <Filters
                     {...this.props}
-                    filterSelected={ (e) => dispatch(changeFilter(views, $(e.target).val()))}
                   />
 
                   <ViewsSetup {...this.props} />

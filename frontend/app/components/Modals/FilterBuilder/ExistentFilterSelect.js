@@ -21,7 +21,7 @@ export default class ExistentFilterSelect extends Component {
         <div className="collapse in copyview">
             <div className="row grid-toolbar">
                 <div className="col-sm-6">
-                  <label data-localize="views.setup.selector.label">Available Views</label>
+                  <label data-localize="views.setup.selector.label">Available Filters</label>
                 </div>
             </div>
             { currentFilter.filter_type === 'standard' &&

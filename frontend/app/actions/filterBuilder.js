@@ -1,8 +1,8 @@
 import config from '../../config'
 
 import { closeModal } from './modalWindows'
-import { changeView } from './ui'
-import { fetchViews } from './userData'
+import { changeFilter} from './ui'
+import { fetchFilters } from './userData'
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER'
 
@@ -47,7 +47,43 @@ export function filterBuilderChangeAttr(attr) {
   }
 }
 
-function filterwBuilderRequestUpdateFilter() {
+function filterBuilderRequestCreateFilter() {
+  return {
+    type: FBUILDER_REQUEST_CREATE_FILTER
+  }
+}
+
+function filterBuilderReceiveCreateFilter(json) {
+  return {
+    type: FBUILDER_RECEIVE_CREATE_FILTER,
+    filter: json
+  }
+}
+
+export function filterBuilderCreateFilter() {
+
+  return (dispatch, getState) => {
+    dispatch(filterBuilderRequestUpdateFilter())
+
+    return $.ajax(config.URLS.FILTERS, {
+        'type': 'POST',
+        'headers': { "X-Session-Id": getState().auth.sessionId },
+        'data': JSON.stringify(getState().filterBuilder.newFilter),
+        'processData': false,
+        'contentType': 'application/json'
+      })
+      .done(json => {
+        dispatch(filterBuilderReceiveUpdateFilter(json))
+        dispatch(closeModal('filters'))
+        dispatch(fetchFilters(json.id))
+      })
+      .fail(err => {
+        console.error('CREATE Filter FAILED: ', err.responseText)
+      })
+  }
+}
+
+function filterBuilderRequestUpdateFilter() {
   return {
     type: FBUILDER_REQUEST_UPDATE_FILTER
   }
@@ -56,14 +92,14 @@ function filterwBuilderRequestUpdateFilter() {
 function filterBuilderReceiveUpdateFilter(json) {
   return {
     type: FBUILDER_RECEIVE_UPDATE_FILTER,
-    view: json
+    filter: json
   }
 }
 
-export function viewBuilderUpdateView(viewItemIndex) {
+export function filterBuilderUpdateFilter() {
 
   return (dispatch, getState) => {
-    dispatch(viewBuilderRequestUpdateView())
+    dispatch(filterBuilderRequestUpdateFilter())
 
     return $.ajax(`${config.URLS.FILTERS}/${getState().filterBuilder.editedFilter.id}`, {
         'type': 'PUT',
@@ -90,9 +126,19 @@ export function filterBuilderRequestRules() {
 }
 
 export function filterBuilderReceiveRules(rules) {
+  return (dispatch, getState) => {
+    dispatch(filterBuilderRules(rules))
+    getState().filterBuilder.editOrNew ? 
+      dispatch(filterBuilderUpdateFilter()) : dispatch(filterBuilderCreateFilter())
+  }
+}
+
+export function filterBuilderRules(rules) {
   return {
     type: FBUILDER_RECEIVE_RULES,
-    rules
+    rules,
+    rulesPrepared: true,
+    rPromise: function(resolve, reject) { resolve(777) }
   }
 }
 
