@@ -20,11 +20,10 @@ const loadAllFiles = (callback) => {
         },
         (sampleFiles, callback) => {
             FsUtils.getAllFiles(sourcesFolder, extension, (error, sourceFiles) => {
-                callback(error, {sampleFiles, sourceFiles});
+                callback(error, sampleFiles.concat(sourceFiles));
             });
         },
-        (result, callback) => {
-            const allFiles = result.sampleFiles.concat(result.sourceFiles);
+        (allFiles, callback) => {
             const fileContents = _(allFiles)
                 .map(file => FsUtils.getFileContentsAsString(file))
                 .map(contents => JSON.parse(contents))
