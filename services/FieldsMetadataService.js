@@ -35,13 +35,12 @@ class FieldsMetadataService extends ServiceBase {
             id: Uuid.v4(),
             name: appServerFieldMetadata.name,
             label: appServerFieldMetadata.name, // Set label to name by default.
-            sourceName: sourceName,
-            sourceType: isSample ? 'sample' : 'source',
+            sourceName: isSample ? 'sample' : sourceName,
             isMandatory: appServerFieldMetadata.isMandatory,
-            editable: false,
-            filterControlEnable: false,
+            isEditable: false,
             valueType: appServerFieldMetadata.type,
-            description: appServerFieldMetadata.desc
+            description: appServerFieldMetadata.desc,
+            dimension: appServerFieldMetadata.num
         };
     }
 }
