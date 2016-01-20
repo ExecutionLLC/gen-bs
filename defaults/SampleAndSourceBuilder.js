@@ -9,7 +9,7 @@ const FieldsMetadataService = require('../services/FieldsMetadataService'); // H
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 
-class SampleBuilder extends DefaultsBuilderBase {
+class SampleAndSourceBuilder extends DefaultsBuilderBase {
     constructor() {
         super();
         this.build = this.build.bind(this);
@@ -79,6 +79,7 @@ class SampleBuilder extends DefaultsBuilderBase {
             hash: null,
             sampleType: 'standard', // TODO: load sample types somewhere.
             isAnalyzed: true,
+            isSource: !isSample,
             creator: null
         };
 
@@ -93,4 +94,4 @@ class SampleBuilder extends DefaultsBuilderBase {
     }
 }
 
-module.exports = new SampleBuilder();
+module.exports = new SampleAndSourceBuilder();
