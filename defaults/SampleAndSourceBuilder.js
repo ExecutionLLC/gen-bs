@@ -5,6 +5,8 @@ const async = require('async');
 const Uuid = require('node-uuid');
 
 const FsUtils = require('../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+
 const FieldsMetadataService = require('../services/FieldsMetadataService'); // Here lays the mapping function.
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
@@ -68,7 +70,7 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
             fields: sampleFieldMetadata
         };
         const filePath = outputDir + '/' + sample.fileName + '.json';
-        FsUtils.writeStringToFile(filePath, JSON.stringify(contents, null, 2), callback);
+        FsUtils.writeStringToFile(filePath, JSON.stringify(ChangeCaseUtil.convertKeysToSnakeCase(contents), null, 2), callback);
     }
 
     _importSample(sampleMetadataFilePath, outputDir, isSample, callback) {

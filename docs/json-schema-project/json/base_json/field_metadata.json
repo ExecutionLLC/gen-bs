@@ -15,14 +15,6 @@
 			"description": "Display text for the field",
 			"type": "string"
 		},
-		"source_type": {
-			"type": "string",
-			"description": "Where is the field came from",
-			"enum": [
-				"sample",
-				"source"
-			]
-		},
 		"source_name": {
 			"type": "string",
 			"description": "Name of the source. Should be equal to id for user-uploaded samples."
@@ -44,7 +36,7 @@
 		"is_mandatory": {
 			"type": "boolean"
 		},
-		"editable": {
+		"is_editable": {
 			"type": "boolean"
 		},
 		"description": {
@@ -87,7 +79,6 @@
 		"name",
 		"label",
 		"description",
-		"filter_control_enable",
 		"editable",
 		"tech"
 	]
