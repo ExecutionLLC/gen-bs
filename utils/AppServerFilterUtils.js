@@ -16,7 +16,7 @@ class AppServerFilterUtils {
             result[operator] = mappedOperands;
             return result;
         } else {
-            return _(filterRulesObject)
+            const mappedColumns = _(filterRulesObject)
                 .keys()
                 .map(fieldId => {
                     const field = fieldIdToMetadata[fieldId];
@@ -31,6 +31,12 @@ class AppServerFilterUtils {
                     };
                 })
                 .value();
+            if (mappedColumns.length != 1) {
+                throw new Error('Unexpected filter format: there should be only one field condition per object.');
+            } else {
+                return mappedColumns[0];
+            }
+
         }
     }
 }
