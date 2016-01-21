@@ -11,7 +11,7 @@ class AppServerFilterUtils {
             filterRulesObject['$or'] ? '$or' : null;
         if (operator) {
             const operands = filterRulesObject[operator];
-            const mappedOperands = _.map(operands, AppServerFilterUtils._createServerRulesRecursively);
+            const mappedOperands = _.map(operands, (operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata));
             const result = {};
             result[operator] = mappedOperands;
             return result;
@@ -20,6 +20,9 @@ class AppServerFilterUtils {
                 .keys()
                 .map(fieldId => {
                     const field = fieldIdToMetadata[fieldId];
+                    if (!field) {
+                        throw new Error('Field is not found for id ' + fieldId);
+                    }
                     const condition = filterRulesObject[fieldId];
                     return {
                         columnName: field.name,
