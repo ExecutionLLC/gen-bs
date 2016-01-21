@@ -171,7 +171,7 @@ class RedisService extends ServiceBase {
                 // will be matching fields by name, so create fieldName->field hash
                 const fieldNameToFieldHash = _.reduce(fields, (memo, field) => {
                     // Source fields will be prepended by the source name, sample fields - will not.
-                    const fieldName = field.sourceType === 'sample' ? field.name : field.sourceName + '_' + field.name;
+                    const fieldName = field.sourceName === 'sample' ? field.name : field.sourceName + '_' + field.name;
                     memo[fieldName] = field;
                     return memo;
                 }, {});
