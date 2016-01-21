@@ -16,7 +16,7 @@ class AppServerFilterUtils {
             result[operator] = mappedOperands;
             return result;
         } else {
-            _(filterRulesObject)
+            return _(filterRulesObject)
                 .keys()
                 .map(fieldId => {
                     const field = fieldIdToMetadata[fieldId];
@@ -26,7 +26,8 @@ class AppServerFilterUtils {
                         sourceName: field.sourceName,
                         condition
                     };
-                });
+                })
+                .value();
         }
     }
 }

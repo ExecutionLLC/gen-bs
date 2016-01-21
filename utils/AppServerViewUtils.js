@@ -10,6 +10,9 @@ class AppServerViewUtils {
         // Map list items' field ids to pair (field name, source name).
         const listItems = _.map(view.viewListItems, listItem => {
             const field = fieldIdToMetadata[listItem.fieldId];
+            if (!field) {
+                throw new Error('Field is not found with id ' + listItem.fieldId);
+            }
             return {
                 fieldName: field.name,
                 sourceName: field.sourceName,

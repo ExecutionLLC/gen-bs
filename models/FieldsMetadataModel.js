@@ -2,8 +2,8 @@
 
 const _ = require('lodash');
 const async = require('async');
-const Uuid = require('node-uuid');
 
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const FsUtils = require('../utils/FileSystemUtils');
 
 /**
@@ -26,29 +26,22 @@ const loadAllFiles = (callback) => {
         (allFiles, callback) => {
             const fileContents = _(allFiles)
                 .map(file => FsUtils.getFileContentsAsString(file))
-                .map(contents => JSON.parse(contents))
+                .map(contents => ChangeCaseUtil.convertKeysToCamelCase(
+                    JSON.parse(contents)
+                ))
                 .value();
             callback(null, fileContents);
         }
     ], callback);
 };
 
-const addFieldMetadataIfNeededAndReturnId = (fieldMetadata, isSource, existingFields) => {
-    const existingField = FieldsMetadataModel.getExistingFieldOrNull(fieldMetadata, isSource, existingFields);
-    if (existingField) {
-        return existingField.id;
-    } else {
-        fieldMetadata.sourceName = isSource ? fieldMetadata.sourceName : 'sample';
-        existingFields.push(fieldMetadata);
-        return fieldMetadata.id;
-    }
-};
-
 class FieldsMetadataModel {
     constructor() {
         this.sampleIdToFieldIds = {};
-        this.fieldIdToFieldMetadata = {};
-        this.fieldsMetadata = [];
+        this.fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
+            require('../defaults/fields/fields-metadata.json')
+        );
+        this.fieldIdToFieldMetadata = _.indexBy(this.fieldsMetadata, 'id');
 
         loadAllFiles((error, filesContents) => {
             if (error) {
@@ -58,20 +51,12 @@ class FieldsMetadataModel {
             // Collect all the fields metadata and connect fields to sample ids.
             _.each(filesContents, fileContents => {
                 const fileMetadata = fileContents.sample;
-                const fieldsMetadata = fileContents.fields;
-
+                const fieldIds = fileContents.fieldIds;
                 if (!fileMetadata.isSource) {
-                    const sampleId = fileMetadata.id;
                     //noinspection UnnecessaryLocalVariableJS
-                    const sampleFieldsIds = _.map(fieldsMetadata, (fieldMetadata) => addFieldMetadataIfNeededAndReturnId(fieldMetadata, fileMetadata.isSource, this.fieldsMetadata));
-                    this.sampleIdToFieldIds[sampleId] = sampleFieldsIds;
-                } else {
-                    // just add source metadata to the list.
-                    _.each(fieldsMetadata, fieldMetadata => addFieldMetadataIfNeededAndReturnId(fieldMetadata, true, this.fieldsMetadata));
+                    this.sampleIdToFieldIds[fileMetadata.id] = fieldIds;
                 }
             });
-            // Create hash with fields metadata.
-            _.each(this.fieldsMetadata, fieldMetadata => this.fieldIdToFieldMetadata[fieldMetadata.id] = fieldMetadata);
         });
     }
 
