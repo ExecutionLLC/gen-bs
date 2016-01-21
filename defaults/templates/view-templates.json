@@ -39,7 +39,7 @@
       {
         "field": {
           "source_name": "common_no_known_medical_impact_20151201",
-          "name": "INFO_RV"
+          "name": "INFO_VP"
         },
         "order": 4
       },
