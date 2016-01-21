@@ -1,8 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
-const Uuid = require('node-uuid');
-
 const MockModelBase = require('./MockModelBase');
 
 const VIEWS = require('../defaults/views/default-views.json');

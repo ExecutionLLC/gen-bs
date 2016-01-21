@@ -31,6 +31,7 @@ class ControllerBase {
         if (message && typeof message !== 'string') {
             message = message.toString();
         }
+        console.error(message);
         response
             .status(httpError)
             .json({

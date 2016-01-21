@@ -3,8 +3,9 @@
 /**
  * NPM script is used to build initial data and add it to the database (later).
  * */
-const sampleBuilder = require('./SampleBuilder');
+const sampleBuilder = require('./SampleAndSourceBuilder');
 const viewsBuilder = require('./ViewBuilder');
+const filtersBuilder = require('./FilterBuilder');
 
 function displayErrorAndExitProcess(error) {
     if (error) {
@@ -17,6 +18,9 @@ sampleBuilder.build((error) => {
     displayErrorAndExitProcess(error);
     viewsBuilder.build((error) => {
         displayErrorAndExitProcess(error);
-        console.log('Generation completed.');
+        filtersBuilder.build((error) => {
+            displayErrorAndExitProcess(error);
+            console.log('Generation completed.');
+        });
     });
 });

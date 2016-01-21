@@ -12,9 +12,9 @@
 			"items": {
 				"type": "object",
 				"properties": {
-					"id": {
-						"description": "column id",
-						"type": "number"
+					"field_id": {
+						"description": "column uuid",
+						"type": "string"
 					},
 					"value": {
 						"description": "value in filter control",
@@ -23,11 +23,36 @@
 				}
 			}
 		},
-		"expected_number": {
+		"sort": {
+			"type": "array",
+			"description": "Array of field ids with sort directions (asc/desc).",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field_id": {
+                  "description": "column uuid",
+                  "type": "string"
+                },
+                "order": {
+                  "description": "Column order in sorting",
+                  "type": "integer"
+                },
+                "direction": {
+                  "description": "Sort direction",
+                  "type": "string",
+                  "enum": [
+                    "asc",
+                    "desc"
+                  ]
+                }
+              }
+            }
+		},
+		"limit": {
 			"type": "integer"
 		},
-		"start_number": {
-			"type": "number"
+		"offset": {
+			"type": "integer"
 		}
 	}
 }

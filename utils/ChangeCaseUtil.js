@@ -20,10 +20,12 @@ class ChangeCaseUtil {
       const clone = _.cloneDeep(obj);
       _.keys(clone)
         .forEach(key => {
-        const mutatedKey = mutatorFunc(key);
-        const value = clone[key];
-        delete clone[key];
-        clone[mutatedKey] = ChangeCaseUtil._processObjectKeys(value, mutatorFunc);
+          if (_.every(key, ChangeCaseUtil._isAlphanumericOrDash)) {
+            const mutatedKey = mutatorFunc(key);
+            const value = clone[key];
+            delete clone[key];
+            clone[mutatedKey] = ChangeCaseUtil._processObjectKeys(value, mutatorFunc);
+          } // else ignore the value and keep an old key.
       });
       return clone;
     } else if (obj.constructor === Array) {
@@ -32,6 +34,15 @@ class ChangeCaseUtil {
     } else {
       return obj;
     }
+  }
+
+  static _isAlphanumericOrDash(char) {
+    const code = (char) => char.charCodeAt(0);
+    const charCode = code(char);
+    return char === '_'
+        || (charCode >= code('a') && charCode <= code('z'))
+        || (charCode >= code('A') && charCode <= code('Z'))
+        || (charCode >= code('0') && charCode <= code('9'));
   }
 }
 

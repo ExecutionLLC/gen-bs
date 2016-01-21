@@ -1,0 +1,380 @@
+{
+  "CHROM": {
+    "name": "CHROM",
+    "is_mandatory": true,
+    "num": 1,
+    "type": "integer",
+    "desc": "Chromosome identifier"
+  },
+  "POS": {
+    "name": "POS",
+    "is_mandatory": true,
+    "num": 1,
+    "type": "integer",
+    "desc": "The reference position"
+  },
+  "ID": {
+    "name": "ID",
+    "is_mandatory": true,
+    "num": 0,
+    "type": "string",
+    "desc": "Semi-colon separated list of unique identifiers where available"
+  },
+  "REF": {
+    "name": "REF",
+    "is_mandatory": true,
+    "num": 0,
+    "type": "string",
+    "desc": "The value in the POS field refers to the position of the first base in the String"
+  },
+  "ALT": {
+    "name": "ALT",
+    "is_mandatory": true,
+    "num": 0,
+    "type": "string",
+    "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples"
+  },
+  "QUAL": {
+    "name": "QUAL",
+    "is_mandatory": true,
+    "num": 1,
+    "type": "float",
+    "desc": "Quality"
+  },
+  "FILTER": {
+    "name": "FILTER",
+    "is_mandatory": true,
+    "num": 0,
+    "type": "string",
+    "desc": "Filter status"
+  },
+  "INFO_RS": {
+    "name": "INFO_RS",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "integer",
+    "desc": "dbSNP ID (i.e. rs number)"
+  },
+  "INFO_RSPOS": {
+    "name": "INFO_RSPOS",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "integer",
+    "desc": "Chr position reported in dbSNP"
+  },
+  "INFO_RV": {
+    "name": "INFO_RV",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "RS orientation is reversed"
+  },
+  "INFO_VP": {
+    "name": "INFO_VP",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "string",
+    "desc": "Variation Property.  Documentation is at ftp://ftp.ncbi.nlm.nih.gov/snp/specs/dbSNP_BitField_latest.pdf"
+  },
+  "INFO_GENEINFO": {
+    "name": "INFO_GENEINFO",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "string",
+    "desc": "Pairs each of gene symbol:gene id.  The gene symbol and id are delimited by a colon (:) and each pair is delimited by a vertical bar (|)"
+  },
+  "INFO_dbSNPBuildID": {
+    "name": "INFO_dbSNPBuildID",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "integer",
+    "desc": "First dbSNP Build for RS"
+  },
+  "INFO_SAO": {
+    "name": "INFO_SAO",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "integer",
+    "desc": "Variant Allele Origin: 0 - unspecified, 1 - Germline, 2 - Somatic, 3 - Both"
+  },
+  "INFO_SSR": {
+    "name": "INFO_SSR",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "integer",
+    "desc": "Variant Suspect Reason Codes (may be more than one value added together) 0 - unspecified, 1 - Paralog, 2 - byEST, 4 - oldAlign, 8 - Para_EST, 16 - 1kg_failed, 1024 - other"
+  },
+  "INFO_WGT": {
+    "name": "INFO_WGT",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "integer",
+    "desc": "Weight, 00 - unmapped, 1 - weight 1, 2 - weight 2, 3 - weight 3 or more"
+  },
+  "INFO_VC": {
+    "name": "INFO_VC",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "string",
+    "desc": "Variation Class"
+  },
+  "INFO_PM": {
+    "name": "INFO_PM",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Variant is Precious(Clinical,Pubmed Cited)"
+  },
+  "INFO_TPA": {
+    "name": "INFO_TPA",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Provisional Third Party Annotation(TPA) (currently rs from PHARMGKB who will give phenotype data)"
+  },
+  "INFO_PMC": {
+    "name": "INFO_PMC",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Links exist to PubMed Central article"
+  },
+  "INFO_S3D": {
+    "name": "INFO_S3D",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has 3D structure - SNP3D table"
+  },
+  "INFO_SLO": {
+    "name": "INFO_SLO",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has SubmitterLinkOut - From SNP->SubSNP->Batch.link_out"
+  },
+  "INFO_NSF": {
+    "name": "INFO_NSF",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has non-synonymous frameshift A coding region variation where one allele in the set changes all downstream amino acids. FxnClass = 44"
+  },
+  "INFO_NSM": {
+    "name": "INFO_NSM",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has non-synonymous missense A coding region variation where one allele in the set changes protein peptide. FxnClass = 42"
+  },
+  "INFO_NSN": {
+    "name": "INFO_NSN",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has non-synonymous nonsense A coding region variation where one allele in the set changes to STOP codon (TER). FxnClass = 41"
+  },
+  "INFO_REF": {
+    "name": "INFO_REF",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has reference A coding region variation where one allele in the set is identical to the reference sequence. FxnCode = 8"
+  },
+  "INFO_SYN": {
+    "name": "INFO_SYN",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has synonymous A coding region variation where one allele in the set does not change the encoded amino acid. FxnCode = 3"
+  },
+  "INFO_U3": {
+    "name": "INFO_U3",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "In 3' UTR Location is in an untranslated region (UTR). FxnCode = 53"
+  },
+  "INFO_U5": {
+    "name": "INFO_U5",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "In 5' UTR Location is in an untranslated region (UTR). FxnCode = 55"
+  },
+  "INFO_ASS": {
+    "name": "INFO_ASS",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "In acceptor splice site FxnCode = 73"
+  },
+  "INFO_DSS": {
+    "name": "INFO_DSS",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "In donor splice-site FxnCode = 75"
+  },
+  "INFO_INT": {
+    "name": "INFO_INT",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "In Intron FxnCode = 6"
+  },
+  "INFO_R3": {
+    "name": "INFO_R3",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "In 3' gene region FxnCode = 13"
+  },
+  "INFO_R5": {
+    "name": "INFO_R5",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "In 5' gene region FxnCode = 15"
+  },
+  "INFO_OTH": {
+    "name": "INFO_OTH",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has other variant with exactly the same set of mapped positions on NCBI refernce assembly."
+  },
+  "INFO_CFL": {
+    "name": "INFO_CFL",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has Assembly conflict. This is for weight 1 and 2 variant that maps to different chromosomes on different assemblies."
+  },
+  "INFO_ASP": {
+    "name": "INFO_ASP",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Is Assembly specific. This is set if the variant only maps to one assembly"
+  },
+  "INFO_MUT": {
+    "name": "INFO_MUT",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Is mutation (journal citation, explicit fact): a low frequency variation that is cited in journal and other reputable sources"
+  },
+  "INFO_VLD": {
+    "name": "INFO_VLD",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Is Validated.  This bit is set if the variant has 2+ minor allele count based on frequency or genotype data."
+  },
+  "INFO_G5A": {
+    "name": "INFO_G5A",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": ">5% minor allele frequency in each and all populations"
+  },
+  "INFO_G5": {
+    "name": "INFO_G5",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": ">5% minor allele frequency in 1+ populations"
+  },
+  "INFO_HD": {
+    "name": "INFO_HD",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Marker is on high density genotyping kit (50K density or greater).  The variant may have phenotype associations present in dbGaP."
+  },
+  "INFO_GNO": {
+    "name": "INFO_GNO",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Genotypes available. The variant has individual genotype (in SubInd table)."
+  },
+  "INFO_KGPhase1": {
+    "name": "INFO_KGPhase1",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "1000 Genome phase 1 (incl. June Interim phase 1)"
+  },
+  "INFO_KGPhase3": {
+    "name": "INFO_KGPhase3",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "1000 Genome phase 3"
+  },
+  "INFO_CDA": {
+    "name": "INFO_CDA",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Variation is interrogated in a clinical diagnostic assay"
+  },
+  "INFO_LSD": {
+    "name": "INFO_LSD",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Submitted from a locus-specific database"
+  },
+  "INFO_MTP": {
+    "name": "INFO_MTP",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Microattribution/third-party annotation(TPA:GWAS,PAGE)"
+  },
+  "INFO_OM": {
+    "name": "INFO_OM",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Has OMIM/OMIA"
+  },
+  "INFO_NOC": {
+    "name": "INFO_NOC",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Contig allele not present in variant allele list. The reference sequence allele at the mapped position is not present in the variant allele list, adjusted for orientation."
+  },
+  "INFO_WTD": {
+    "name": "INFO_WTD",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Is Withdrawn by submitter If one member ss is withdrawn by submitter, then this bit is set.  If all member ss' are withdrawn, then the rs is deleted to SNPHistory"
+  },
+  "INFO_NOV": {
+    "name": "INFO_NOV",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "boolean",
+    "desc": "Rs cluster has non-overlapping allele sets. True when rs set has more than 2 alleles from different submissions and these sets share no alleles in common."
+  },
+  "INFO_CAF": {
+    "name": "INFO_CAF",
+    "is_mandatory": false,
+    "num": 0,
+    "type": "string",
+    "desc": "An ordered, comma delimited list of allele frequencies based on 1000Genomes, starting with the reference allele followed by alternate alleles as ordered in the ALT column. Where a 1000Genomes alternate allele is not in the dbSNPs alternate allele set, the allele is added to the ALT column.  The minor allele is the second largest value in the list, and was previuosly reported in VCF as the GMAF.  This is the GMAF reported on the RefSNP and EntrezSNP pages and VariationReporter"
+  },
+  "INFO_COMMON": {
+    "name": "INFO_COMMON",
+    "is_mandatory": false,
+    "num": 1,
+    "type": "integer",
+    "desc": "RS is a common SNP.  A common SNP is one that has at least one 1000Genomes population with a minor allele of frequency >= 1% and for which 2 or more founders contribute to that minor allele frequency."
+  }
+}
