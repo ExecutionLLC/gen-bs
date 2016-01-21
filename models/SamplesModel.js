@@ -107,6 +107,27 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
+    makeAnalyzed(userId, sampleId, callback) {
+        this._fetch(userId, sampleId, (error) => {
+            if (error) {
+                callback(error);
+            } else {
+                this.db.transactionally((trx, cb) => {
+                    trx(this.baseTableName)
+                        .where('id', sampleId)
+                        .update({
+                            is_analyzed: true,
+                            analyzed_timestamp: this.db.knex.fn.now()
+                        })
+                        .asCallback((error) => {
+                            cb(error, sampleId);
+                        });
+                }, callback);
+            }
+        });
+    }
+
+    // languId is used for compatibility
     _add(userId, languId, sample, withId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
@@ -122,13 +143,10 @@ class SamplesModel extends SecureModelBase {
                     this._insert(dataToInsert, trx, cb);
                 },
                 (sampleId, cb) => {
-                    if (sample.values) {
-                        this._addNewFileSampleVersion(sampleId, sample.fieldId, sample.values, trx, (error) => {
+                    const values = sample.values || null;
+                    this._addNewFileSampleVersion(sampleId, sample.fieldId, values, trx, (error) => {
                             cb(error, sampleId);
                         });
-                    } else {
-                        cb(null, sampleId);
-                    }
                 }
             ], cb);
         }, callback);

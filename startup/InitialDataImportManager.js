@@ -25,31 +25,37 @@ class InitialDataImportManager {
         async.waterfall([
             (cb) => {
                 const languDir = defaultsDir + '/langu';
-                this._importLangFiles(languDir, cb);
+                this._importFiles(languDir, this._importLangu, cb);
             },
             (langu, cb) => {
                 result.langu = langu;
 
                 const usersDir = defaultsDir + '/users';
-                this._importUserFiles(usersDir, cb);
+                this._importFiles(usersDir, this._importUsers, cb);
             },
             (users, cb) => {
                 result.users = users;
 
                 const keywordsDir = defaultsDir + '/keywords';
-                this._importKeywordFiles(keywordsDir, cb);
+                this._importFiles(keywordsDir, this._importKeywords, cb);
             },
             (keywords, cb) => {
                 result.keywords = keywords;
 
                 const viewsDir = defaultsDir + '/views';
-                this._importViewFiles(viewsDir, cb);
+                this._importFiles(viewsDir, this._importViews, cb);
             },
             (views, cb) => {
                 result.views = views;
 
+                const metadataDir = defaultDir + '/metadata';
+                this._importFiles(metadataDir, this._importFieldsMetadata, cb);
+            },
+            (metadata, cb) => {
+                result.metadata = metadata;
+
                 const samplesDir = defaultsDir + '/samples';
-                this._importSamples(samplesDir, cb);
+                this._importFiles(samplesDir, this._importSample, cb);
             },
             (samples, cb) => {
                 result.samples = samples;
@@ -60,13 +66,13 @@ class InitialDataImportManager {
         ], callback);
     }
 
-    _importLangFiles(languDir, callback) {
-        FsUtils.getAllFiles(languDir, '.json', (error, files) => {
+    _importFiles(importPath, importMethod, callback) {
+        FsUtils.getAllFiles(importPath, '.json', (error, files) => {
             if (error) {
                 callback(error);
             } else {
                 async.map(files, (file, cb) => {
-                    this._importLangu(file, cb);
+                    importMethod(file, cb);
                 }, callback);
             }
         });
@@ -80,36 +86,12 @@ class InitialDataImportManager {
         }, callback);
     }
 
-    _importUserFiles(userDir, callback) {
-        FsUtils.getAllFiles(userDir, '.json', (error, files) => {
-            if (error) {
-                callback(error);
-            } else {
-                async.map(files, (file, cb) => {
-                    this._importUsers(file, cb);
-                }, callback);
-            }
-        });
-    }
-
     _importUsers(usersFilePath, callback) {
         const usersString = FsUtils.getFileContentsAsString(usersFilePath);
         const users = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(usersString));
         async.map(users, (user, cb) => {
             this.models.user.addWithId(user, user.defaultLanguId, cb)
         }, callback);
-    }
-
-    _importKeywordFiles(keywordsDir, callback) {
-        FsUtils.getAllFiles(keywordsDir, '.json', (error, files) => {
-            if (error) {
-                callback(error);
-            } else {
-                async.map(files, (file, cb) => {
-                    this._importKeywords(file, cb);
-                }, callback);
-            }
-        });
     }
 
     _importKeywords(keywordsFilePath, callback) {
@@ -120,36 +102,12 @@ class InitialDataImportManager {
         }, callback);
     }
 
-    _importViewFiles(viewsDir, callback) {
-        FsUtils.getAllFiles(viewsDir, '.json', (error, files) => {
-            if (error) {
-                callback(error);
-            } else {
-                async.map(files, (file, cb) => {
-                    this._importViews(file, cb);
-                }, callback);
-            }
-        });
-    }
-
     _importViews(viewFilePath, callback) {
         const viewsString = FsUtils.getFileContentsAsString(viewFilePath);
         const views = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(viewsString));
         async.map(views, (view, cb) => {
             this.models.views.addWithId(null, this.config.defaultLanguId, view, cb)
         }, callback);
-    }
-
-    _importSamples(samplesDir, callback) {
-        FsUtils.getAllFiles(samplesDir, '.json', (error, files) => {
-            if (error) {
-                callback(error);
-            } else {
-                async.map(files, (file, cb) => {
-                    this._importSample(file, cb);
-                }, callback);
-            }
-        });
     }
 
     _importSample(sampleMetadataFilePath, callback) {
@@ -164,9 +122,7 @@ class InitialDataImportManager {
             },
             (id, cb) => {
                 result.sample = id;
-                async.map(sampleFields.fields, (metadata, cb) => {
-                    this.models.fields.addWithId(this.config.defaultLanguId, metadata, cb);
-                }, cb);
+                this._importMetadata(sampleFields.fields, cb);
             },
             (fieldIds, cb) => {
                 result.fields = fieldIds;
@@ -179,6 +135,18 @@ class InitialDataImportManager {
         const prefix = 'metadata_';
         const sampleFileName = FsUtils.getFileName(sampleMetadataFilePath);
         return sampleFileName.startsWith(prefix) ? sampleFileName.substr(prefix.length) : sampleFileName;
+    }
+
+    _importFieldsMetadata(fieldMetadataFilePath, callback) {
+        const fieldMetadataString = FsUtils.getFileContentsAsString(fieldMetadataFilePath);
+        const metadata = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(fieldMetadataString));
+        this._importMetadata(metadata, callback);
+    }
+
+    _importMetadata(fieldsMetadata, callback) {
+        async.map(fieldsMetadata, (metadata, cb) => {
+            this.models.fields.addWithId(this.config.defaultLanguId, metadata, cb)
+        }, callback);
     }
 }
 

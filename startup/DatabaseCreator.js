@@ -163,7 +163,7 @@ class DatabaseCreator {
                     .notNullable();
                 table.json('rules');
                 table.enu('filter_type', entityTypeEnumValues);
-                table.boolean('is_disabled_4copy')
+                table.boolean('is_copy_disabled')
                     .defaultTo(false);
                 table.boolean('is_deleted')
                     .defaultTo(false);
@@ -210,7 +210,7 @@ class DatabaseCreator {
                     .defaultTo(true);
                 table.boolean('is_invisible')
                     .defaultTo(false);
-                table.string('dimension', 3);
+                table.integer('dimension');
             })
             .createTable('field_text', table => {
                 table.uuid('field_id')
@@ -231,13 +231,15 @@ class DatabaseCreator {
                     .inTable('field_metadata');
             })
             .createTable('field_available_value_text', table => {
-                table.uuid('available_value_id')
+                table.uuid('field_available_value_id')
                     .references('id')
                     .inTable('field_available_value');
-                table.string('langu_id', 2);
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
                 table.string('value', 100);
 
-                table.primary(['available_value_id', 'langu_id']);
+                table.primary(['field_available_value_id', 'langu_id']);
             })
 
             // Keywords
@@ -271,7 +273,7 @@ class DatabaseCreator {
                     .inTable('view');
                 table.string('name', 50);
                 table.enu('view_type', entityTypeEnumValues);
-                table.boolean('is_disabled_4copy')
+                table.boolean('is_copy_disabled')
                     .defaultTo(false);
                 table.boolean('is_deleted')
                     .defaultTo(false);
@@ -374,8 +376,7 @@ class DatabaseCreator {
                     .defaultTo(false);
                 table.boolean('is_deleted')
                     .defaultTo(false);
-                table.timestamp('timestamp')
-                    .defaultTo(databaseKnex.fn.now());
+                table.timestamp('analyzed_timestamp');
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');

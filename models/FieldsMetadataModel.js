@@ -4,12 +4,12 @@ const _ = require('lodash');
 const async = require('async');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+
 const ModelBase = require('./ModelBase');
 
 const mappedColumns = [
     'id',
     'name',
-    'source_type',
     'source_name',
     'value_type',
     'is_mandatory',
@@ -17,7 +17,8 @@ const mappedColumns = [
     'is_invisible',
     'dimension',
     'langu_id',
-    'description'
+    'description',
+    'label'
 ];
 
 class FieldsMetadataModel extends ModelBase {
@@ -75,9 +76,9 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
-    findSourcesMetadata(callback) {
-        this._fetchMetadataBySourceType('source', callback);
-    }
+    //findSourcesMetadata(callback) {
+    //    this._fetchMetadataBySourceType('source', callback);
+    //}
 
     _add(languId, metadata, withId, callback) {
         this.db.transactionally((trx, cb) => {
@@ -86,11 +87,10 @@ class FieldsMetadataModel extends ModelBase {
                     const dataToInsert = {
                         id: (withId ? metadata.id : this._generateId()),
                         name: metadata.name,
-                        sourceType: metadata.sourceType,
                         sourceName: metadata.sourceName,
                         valueType: metadata.valueType || 'user',
                         isMandatory: metadata.isMandatory || false,
-                        isEditable: metadata.isEditable || true,
+                        isEditable: metadata.isEditable || false,
                         isInvisible: metadata.isInvisible || false,
                         dimension: metadata.dimension
                     };
@@ -101,6 +101,7 @@ class FieldsMetadataModel extends ModelBase {
                         fieldId: metadataId,
                         languId: languId,
                         description: metadata.description,
+                        label: metadata.label
                     };
                     this._insertIntoTable('field_text', dataToInsert, trx, (error) => {
                         cb(error, metadataId);
@@ -115,6 +116,9 @@ class FieldsMetadataModel extends ModelBase {
             if (error) {
                 cb(error);
             } else {
+                if (_.isNull(metadata.label)) {
+                    metadata.label = metadata.name;
+                }
                 metadata.keywords = keywords;
                 callback(null, this._mapColumns(metadata));
             }
@@ -190,20 +194,20 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    _fetchMetadataBySourceType(sourceType, callback) {
-        this.db.asCallback((knex, cb) => {
-            knex.select()
-                .from(this.baseTableName)
-                .where('source_type', sourceType)
-                .asCallback((error, fieldsMetadata) => {
-                    if (error) {
-                        cb(error);
-                    } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
-                    }
-                });
-        }, callback);
-    }
+    //_fetchMetadataBySourceType(sourceType, callback) {
+    //    this.db.asCallback((knex, cb) => {
+    //        knex.select()
+    //            .from(this.baseTableName)
+    //            .where('source_type', sourceType)
+    //            .asCallback((error, fieldsMetadata) => {
+    //                if (error) {
+    //                    cb(error);
+    //                } else {
+    //                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+    //                }
+    //            });
+    //    }, callback);
+    //}
 
     _fetchMetadataKeywords(metadataId, callback) {
         this.db.asCallback((knex, cb) => {

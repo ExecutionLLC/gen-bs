@@ -13,6 +13,7 @@ const mappedColumns = [
     'rules',
     'filter_type',
     'is_deleted',
+    'is_copy_disabled',
     'langu_id',
     'description'
 ];
@@ -49,7 +50,7 @@ class FiltersModel extends SecureModelBase {
         }, callback);
     }
 
-    // Создаёт новую версию существующего filter
+    // Creates a new version of an existing filter
     update(userId, filterId, filter, callback) {
         this._fetch(userId, filterId, (error, filterData) => {
             if (error) {
@@ -90,7 +91,7 @@ class FiltersModel extends SecureModelBase {
         });
     }
 
-    // Собирает последние версии каждого filter для текущего пользователя
+    // It collects the latest version of each filter for the current user
     findAll(userId, callback) {
         this._fetchUserFilters(userId, (error, filtersData) => {
             if (error) {

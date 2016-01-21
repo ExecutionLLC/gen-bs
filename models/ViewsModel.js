@@ -12,6 +12,7 @@ const mappedColumns = [
     'name',
     'view_type',
     'is_deleted',
+    'is_copy_disabled',
     'langu_id',
     'description',
     'view_list_items'
@@ -30,7 +31,7 @@ class ViewsModel extends SecureModelBase {
         this._add(userId, languId, view, true, callback);
     }
 
-    // Создаёт новую версию существующего view
+    // Creates a new version of an existing view
     update(userId, viewId, view, callback) {
         this._fetch(userId, viewId, (error, viewData) => {
             if (error) {
@@ -84,7 +85,7 @@ class ViewsModel extends SecureModelBase {
         ], callback);
     }
 
-    // Собирает последние версии каждого view для текущего пользователя
+    // It collects the latest version of each view for the current user
     findAll(userId, callback) {
         async.waterfall([
             (cb) => { this._fetchUserViews(userId, cb); },
@@ -181,11 +182,11 @@ class ViewsModel extends SecureModelBase {
         const dataToInsert = {
             id: this._generateId(),
             viewId: viewId,
-            //fieldId: viewItem.fieldId,
+            fieldId: viewItem.fieldId,
             order: viewItem.order,
             sortOrder: viewItem.sortOrder,
             sortDirection: viewItem.sortDirection,
-            filterControlEnable: viewItem.filterControlEnable || true
+            filterControlEnable: viewItem.filterControlEnable || false
         };
         this._insertIntoTable('view_item', dataToInsert, trx, (error, viewItemId) => {
             if (error) {
