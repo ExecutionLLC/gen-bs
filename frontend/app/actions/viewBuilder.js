@@ -51,12 +51,11 @@ export function viewBuilderChangeAttr(attr) {
   }
 }
 
-export function viewBuilderChangeColumn(viewItemIndex, fieldName, sourceName) {
+export function viewBuilderChangeColumn(viewItemIndex, fieldId) {
   return {
     type: VBUILDER_CHANGE_COLUMN,
     viewItemIndex,
-    fieldName,
-    sourceName
+    fieldId
   }
 }
 

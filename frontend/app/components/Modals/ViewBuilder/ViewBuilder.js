@@ -15,11 +15,12 @@ export default class ViewBuilder extends Component {
       'disabled': (view.view_type === 'standard') ? 'disabled':''
     })
 
+    
 
 
     const selects = view.view_list_items.map( function(viewItem, index) {
 
-      var currentValue = `${viewItem.field_name}@${viewItem.source_name}`
+      var currentValue = _.find(fields.list, {id: viewItem.field_id})
 
       return (
 
@@ -35,10 +36,10 @@ export default class ViewBuilder extends Component {
                 </div>
                 <div className="btn-group">
                   <Select
-                    options={ fields.list.map( (f) => { return {value: `${f.name}@${f.source_type}`, label: f.name}} ) }
+                    options={ fields.list.map( (f) => { return {value: f.id, label: f.label}} ) }
                     value={currentValue}
                     clearable={false}
-                    onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value.split('@')[0], val.value.split('@')[1] )) }
+                    onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
                     disabled={view.view_type === 'standard'}
                   />
                 </div>
