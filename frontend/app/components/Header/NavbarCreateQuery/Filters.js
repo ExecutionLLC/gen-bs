@@ -17,7 +17,7 @@ export default class Filters extends Component {
     return (
 
      <div className="table-cell table-cell100">
-          <div className="btn-group"  data-localize="filters.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
+          <div className="btn-group filter-select"  data-localize="filters.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
 
             <Select
               options={filters.map( f => { return {value: f.id, label: f.name} } )}
