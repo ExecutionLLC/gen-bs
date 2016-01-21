@@ -5,6 +5,7 @@ export default function ui(state = {
   samples: [],
   currentSample: null,
   currentView: null,
+  isAnalyzeTooltipVisible: false
 }, action) {
 
   switch (action.type) {
@@ -20,7 +21,7 @@ export default function ui(state = {
           currentSample: _.find(action.samples, {id: action.sampleId})
       })
 
-    case ActionTypes.CHANGE_VIEW:
+    case ActionTypes.CHANGE_HEADER_VIEW:
       return Object.assign({}, state, {
           views: action.views,
           currentView: _.find(action.views, {id: action.viewId})
@@ -30,6 +31,11 @@ export default function ui(state = {
       return Object.assign({}, state, {
           filters: action.filters,
           currentFilter: _.find(action.filters, {id: action.filterId})
+      })
+
+    case ActionTypes.TOGGLE_ANALYZE_TOOLTIP:
+      return Object.assign({}, state, {
+        isAnalyzeTooltipVisible: action.flag
       })
 
     default:

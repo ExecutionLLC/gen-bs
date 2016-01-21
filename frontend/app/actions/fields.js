@@ -6,6 +6,9 @@ import config from '../../config'
 export const RECEIVE_FIELDS = 'RECEIVE_FIELDS'
 export const REQUEST_FIELDS = 'REQUEST_FIELDS'
 
+export const RECEIVE_SOURCE_FIELDS = 'REQUEST_SOURCE_FIELDS'
+export const REQUEST_SOURCE_FIELDS = 'REQUEST_SOURCE_FIELDS'
+
 
 /*
  * action creators
@@ -42,4 +45,38 @@ export function fetchFields(sampleId) {
       // catch any error in the network call.
   }
 }
+
+function requestSourceFields() {
+  return {
+    type: REQUEST_SOURCE_FIELDS
+  }
+}
+
+function receiveSourceFields(json) {
+  return {
+    type: RECEIVE_SOURCE_FIELDS,
+    sourceFields: json,
+    receivedAt: Date.now()
+  }
+}
+
+export function fetchSourceFields(sampleId) {
+
+  return ( dispatch, getState )  => {
+
+    dispatch(requestSourceFields())
+
+    return $.ajax(config.URLS.SOURCE_FIELDS, {
+        'type': 'GET',
+         'headers': { "X-Session-Id": getState().auth.sessionId}
+      })
+      .then(json => {
+        dispatch(receiveSourceFields(json))
+      })
+
+      // TODO:
+      // catch any error in the network call.
+  }
+}
+
 

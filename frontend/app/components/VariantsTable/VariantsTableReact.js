@@ -31,6 +31,7 @@ class VariantsTableReact extends Component {
 
         <div className={tableWrapperClass}>
           { isVariantsEmpty &&
+            //null
             <div className="loader"></div>
           }
           { !isVariantsEmpty &&

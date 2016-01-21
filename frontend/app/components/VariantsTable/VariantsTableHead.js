@@ -31,12 +31,17 @@ export default class VariantsTableHead extends Component {
             <div><input type="text" className="form-control" /></div>
           </th>
       )
-      variantsColumns.filter( filterFunc ).map( (label) => {
+      variantsColumns.filter( filterFunc ).map( (tableFieldId) => {
           let name = '';
-          name = _.find(fields, (field) => field.id === label).name
+          let fieldMetadata = '';
+
+          fieldMetadata = _.find(fields, (field) => field.id === tableFieldId)
+          console.log('fieldMetadata',fieldMetadata)
+
+          name = (fieldMetadata === undefined) ? tableFieldId : fieldMetadata.name
           
           head.push(
-              <th data-label={label} key={label} > 
+              <th data-label={tableFieldId} key={tableFieldId} > 
                 <div><span className="variants-table-header-label">
                   { name }<button className="btn btn-link btnSort"></button>
                 </span></div>

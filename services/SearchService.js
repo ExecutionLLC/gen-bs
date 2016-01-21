@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
@@ -10,18 +11,29 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, sessionId, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback) {
-        async.waterfall([
-            (callback) => {
-                this.services.sessions.findById(sessionId, callback);
-            },
-            (sessionId, callback) => {
-                this._createAppServerSearchParams(sessionId, user, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback);
-            },
-            (appServerRequestParams, callback) => {
-                this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
-                    appServerRequestParams, callback);
-            }
-        ], callback);
+        if (!languId || !keywordId || !viewId || !filterId || !sampleId || !limit) {
+            callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
+                    languId,
+                    keywordId,
+                    viewId,
+                    filterId,
+                    sampleId,
+                    limit
+                }, null, 2)));
+        } else {
+            async.waterfall([
+                (callback) => {
+                    this.services.sessions.findById(sessionId, callback);
+                },
+                (sessionId, callback) => {
+                    this._createAppServerSearchParams(sessionId, user, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback);
+                },
+                (appServerRequestParams, callback) => {
+                    this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
+                        appServerRequestParams, callback);
+                }
+            ], callback);
+        }
     }
 
     searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
@@ -122,8 +134,8 @@ class SearchService extends ServiceBase {
                 (fieldMetadata, callback) => {
                     callback(null, {
                         fieldMetadata,
-                        order: sortValue.order,
-                        direction: sortValue.direction
+                        sortOrder: sortValue.order,
+                        sortDirection: sortValue.direction
                     });
                 }
             ], callback);
@@ -143,7 +155,8 @@ class SearchService extends ServiceBase {
                 this.services.samples.find(user, sampleId, callback);
             },
             filter: (callback) => {
-                // Filters are not required.
+                // TODO: Made filters not required.
+                // The error should be raised here later in case user didn't choose any filter.
                 if (filterId) {
                     this.services.filters.find(user, filterId, callback);
                 } else {

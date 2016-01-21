@@ -73,9 +73,13 @@
         "id": "588aad30-57a7-45bd-9ae4-bc6c727aa8ff",
         "field_name": "FILTER",
         "source_name": "sample",
-        "order": 3,
-        "sort_order": 3,
-        "sort_direction": "desc"
+        "order": 3
+      },
+      {
+        "id": "83c70ab8-4434-49e2-99ff-b599219fdf1a",
+        "field_name": "ALT",
+        "source_name": "sample",
+        "order": 4
       }
     ]
   }
