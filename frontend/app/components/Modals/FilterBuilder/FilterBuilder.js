@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 
+import filterOperators from './filterOperators'
 import { filterBuilderReceiveRules, filterBuilderUpdateFilter, filterBuilderCreateFilter } from '../../../actions/filterBuilder';
 
 
 export default class FilterBuilder extends Component {
 
   componentDidMount() {
+
 
     const { dispatch, fields } = this.props
     const { editOrNew, rulesRequested, editedFilter, newFilter } = this.props.filterBuilder
@@ -21,7 +23,8 @@ export default class FilterBuilder extends Component {
     })
 
     window.$(el).queryBuilder({
-      filters: builderFilters
+      filters: builderFilters,
+      operators: filterOperators
     })
     window.$(el).queryBuilder('setRulesFromMongo', filter.rules);
     if(filter.type === 'standard') {
@@ -51,7 +54,8 @@ export default class FilterBuilder extends Component {
       dispatch(filterBuilderReceiveRules(rules))
     } else {
       window.$(el).queryBuilder({
-        filters: builderFilters
+        filters: builderFilters,
+        operators: filterOperators
       })
       window.$(el).queryBuilder('setRulesFromMongo', filter.rules);
       if(filter.type === 'standard') {
