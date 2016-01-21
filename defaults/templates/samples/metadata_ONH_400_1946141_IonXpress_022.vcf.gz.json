@@ -1,5 +1,6 @@
 {
   "reference": "hg18",
+  "sample_type": "standard",
   "fields": [
     {
       "name": "CHROM",

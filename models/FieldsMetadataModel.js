@@ -34,20 +34,13 @@ const loadAllFiles = (callback) => {
 };
 
 const addFieldMetadataIfNeededAndReturnId = (fieldMetadata, isSource, existingFields) => {
-    const existingField = _.find(existingFields,
-        field => field.name === fieldMetadata.name
-            && field.valueType === fieldMetadata.valueType
-            && field.dimension === fieldMetadata.dimension
-    );
-    const shouldAddField =
-        (isSource && (!fieldMetadata.isMandatory || !existingField)) // Should add copies of all non-mandatory source fields
-        || (!isSource && !existingField); // Should only add sample fields if there is no existing field.
-    if (shouldAddField) {
+    const existingField = FieldsMetadataModel.getExistingFieldOrNull(fieldMetadata, isSource, existingFields);
+    if (existingField) {
+        return existingField.id;
+    } else {
         fieldMetadata.sourceName = isSource ? fieldMetadata.sourceName : 'sample';
         existingFields.push(fieldMetadata);
         return fieldMetadata.id;
-    } else {
-        return existingField.id;
     }
 };
 
@@ -111,6 +104,27 @@ class FieldsMetadataModel {
         const fields = _.filter(this.fieldsMetadata, (field) => field.sourceName !== 'sample');
         const requiredFields = _.filter(this.fieldsMetadata, (field) => field.isMandatory);
         callback(null, requiredFields.concat(fields));
+    }
+
+    /**
+     * Returns existing field metadata if the field is already in the existingFields array.
+     * Returns null, if there is no such field in existingFields array.
+     * */
+    static getExistingFieldOrNull(fieldMetadata, existingFields, isSourceField) {
+        const existingField = _.find(existingFields,
+            field => field.name === fieldMetadata.name
+            && field.valueType === fieldMetadata.valueType
+            && field.dimension === fieldMetadata.dimension
+        );
+        const shouldAddField =
+            (isSourceField && (!fieldMetadata.isMandatory || !existingField)) // Should add copies of all non-mandatory source fields
+            || (!isSourceField && !existingField); // Should only add sample fields if there is no existing field.
+
+        if (shouldAddField) {
+            return null;
+        } else {
+            return existingField;
+        }
     }
 }
 
