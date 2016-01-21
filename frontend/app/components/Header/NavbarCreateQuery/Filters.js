@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 
-import { changeView } from '../../../actions/ui'
+import { changeFilter } from '../../../actions/ui'
 
 export default class Filters extends Component {
 

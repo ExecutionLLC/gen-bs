@@ -18,7 +18,7 @@ class NavbarCreateQuery extends Component {
   render() {
 
     const { dispatch, samples, views } = this.props
-    const { currentSample, currentView } = this.props.ui
+    const { currentSample, currentView, currentFilter } = this.props.ui
 
 
     return (
@@ -43,7 +43,7 @@ class NavbarCreateQuery extends Component {
 
                   <Analyze 
                     {...this.props}
-                    clicked ={ (e) => dispatch(analyze(currentSample.id, currentView.id, null))}
+                    clicked ={ (e) => dispatch(analyze(currentSample.id, currentView.id, currentFilter.id))}
                   />
                   <LoadHistory />
                 </div>

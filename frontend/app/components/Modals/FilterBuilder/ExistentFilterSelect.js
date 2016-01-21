@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-import { filterBuilderSelectView, filterBuilderToggleNewEdit } from '../../../actions/filterBuilder'
+import { filterBuilderSelectFilter, filterBuilderToggleNewEdit } from '../../../actions/filterBuilder'
 
 
 export default class ExistentFilterSelect extends Component {

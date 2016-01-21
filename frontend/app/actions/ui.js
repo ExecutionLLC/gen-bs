@@ -66,7 +66,7 @@ export function analyze(sampleId, viewId, filterId) {
     const searchParams = {
       sampleId: sampleId,
       viewId: viewId,
-      filterId: getState().userData.filters[0].id,
+      filterId: filterId,
       limit: 100,
       offset: 0
     }

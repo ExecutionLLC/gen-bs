@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import { filterBuilderRequestRules } from '../../../actions/filterBuilder';
 
@@ -9,7 +10,13 @@ export default class FilterBuilderFooter extends Component {
   render() {
 
     const { dispatch, closeModal } = this.props
-    //const { editOrNew } = this.props.viewBuilder
+    const { editOrNew, editedFilter, newFilter } = this.props.filterBuilder
+    const filter = editOrNew ? (editedFilter):(newFilter)
+
+    var disabledClass = classNames({
+      'disabled': (filter.type === 'standard') ? 'disabled':''
+    })
+
 
     return (
 
@@ -24,6 +31,7 @@ export default class FilterBuilderFooter extends Component {
           </button>
 
           <button
+            disabled={disabledClass} 
             onClick={ () => {
               dispatch(filterBuilderRequestRules())
             }}

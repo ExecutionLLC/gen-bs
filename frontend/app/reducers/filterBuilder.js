@@ -28,7 +28,7 @@ export default function filterBuilder(state = {
       return Object.assign({}, state, {
         editOrNew: action.editOrNew,
         editedFilter: action.editOrNew ? state.currentFilter: null,
-        newFilter: !action.editOrNew ? Object.assign({}, state.currentFilter, { filter_type: 'advanced', name: `Copy of ${state.currentFilter.name}` }) : null,
+        newFilter: !action.editOrNew ? Object.assign({}, state.currentFilter, { type: 'advanced', name: `Copy of ${state.currentFilter.name}` }) : null,
       })
 
     case ActionTypes.FBUILDER_CHANGE_ATTR:
