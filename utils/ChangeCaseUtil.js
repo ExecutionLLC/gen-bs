@@ -25,7 +25,11 @@ class ChangeCaseUtil {
             const value = clone[key];
             delete clone[key];
             clone[mutatedKey] = ChangeCaseUtil._processObjectKeys(value, mutatorFunc);
-          } // else ignore the value and keep an old key.
+          } else {
+            // keep the old key and process it's values
+            const value = clone[key];
+            clone[key] = ChangeCaseUtil._processObjectKeys(value, mutatorFunc);
+          }
       });
       return clone;
     } else if (obj.constructor === Array) {

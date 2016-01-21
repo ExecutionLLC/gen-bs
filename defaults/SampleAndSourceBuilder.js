@@ -5,11 +5,19 @@ const async = require('async');
 const Uuid = require('node-uuid');
 
 const FsUtils = require('../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+
 const FieldsMetadataService = require('../services/FieldsMetadataService'); // Here lays the mapping function.
+const FieldsMetadataModel = require('../models/FieldsMetadataModel'); // Here is the metadata equality check.
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 
-class SampleBuilder extends DefaultsBuilderBase {
+/**
+ * Produces the following results:
+ * - metadata of all fields, including required and editable fields.
+ * - samples to fields mappings (which sample contains which fields).
+ * */
+class SampleAndSourceBuilder extends DefaultsBuilderBase {
     constructor() {
         super();
         this.build = this.build.bind(this);
@@ -17,17 +25,34 @@ class SampleBuilder extends DefaultsBuilderBase {
 
     build(callback) {
         // Source and sample metadata has the same format.
+        // Fields metadata array below will be filling during samples and sources processing.
         async.waterfall([
             (callback) => {
-                this._buildMetadata(this.asSamplesDir, this.samplesDir, true, callback);
+                this._loadRequiredAndEditableFields(callback);
             },
-            (callback) => {
-                this._buildMetadata(this.asSourcesDir, this.sourcesDir, false, callback);
+            (fieldsMetadata, callback) => {
+                this._buildMetadata(this.asSamplesDir, this.samplesDir, true, fieldsMetadata, (error) => {
+                    callback(error, fieldsMetadata);
+                });
+            },
+            (fieldsMetadata, callback) => {
+                this._buildMetadata(this.asSourcesDir, this.sourcesDir, false, fieldsMetadata, (error) => {
+                    callback(error, fieldsMetadata);
+                });
+            },
+            (fieldsMetadata, callback) => {
+                this._storeFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
 
-    _buildMetadata(asMetadataTemplatesDir, targetDir, isSample, callback) {
+    _loadRequiredAndEditableFields(callback) {
+        const requiredFields = ChangeCaseUtil.convertKeysToCamelCase(require(this.requiredFieldsFile));
+        const editableFields = ChangeCaseUtil.convertKeysToCamelCase(require(this.editableFieldsFile));
+        callback(null, requiredFields.concat(editableFields));
+    }
+
+    _buildMetadata(asMetadataTemplatesDir, targetDir, isSample, fieldsMetadata, callback) {
         async.waterfall([
             (callback) => {
                 FsUtils.createDirectoryIfNotExists(targetDir, callback);
@@ -41,7 +66,7 @@ class SampleBuilder extends DefaultsBuilderBase {
             (sampleFiles, callback) => {
                 let filesLeft = sampleFiles.length;
                 _.each(sampleFiles, sampleMetadataPath => {
-                    this._importSample(sampleMetadataPath, targetDir, isSample, (error) => {
+                    this._importSample(sampleMetadataPath, targetDir, isSample, fieldsMetadata, (error) => {
                         if (error) {
                             callback(error);
                         } else {
@@ -56,41 +81,76 @@ class SampleBuilder extends DefaultsBuilderBase {
         ], callback);
     }
 
-    _getIdFromFilePath(sampleMetadataFilePath) {
+    _getNameFromFilePath(sampleMetadataFilePath) {
         const prefix = 'metadata_';
         const sampleFileName = FsUtils.getFileName(sampleMetadataFilePath, '.json');
         return sampleFileName.startsWith(prefix) ? sampleFileName.substr(prefix.length) : sampleFileName;
     }
 
-    _storeFieldMetadata(sample, sampleFieldMetadata, outputDir, callback) {
+    _storeSampleMetadata(sample, sampleFieldIds, outputDir, callback) {
         const contents = {
             sample: sample,
-            fields: sampleFieldMetadata
+            fieldIds: sampleFieldIds
         };
         const filePath = outputDir + '/' + sample.fileName + '.json';
-        FsUtils.writeStringToFile(filePath, JSON.stringify(contents, null, 2), callback);
+        FsUtils.writeStringToFile(filePath, this._getObjectStringToSave(contents), callback);
     }
 
-    _importSample(sampleMetadataFilePath, outputDir, isSample, callback) {
-        const sampleName = this._getIdFromFilePath(sampleMetadataFilePath);
+    _storeFieldsMetadata(fieldsMetadata, callback) {
+        async.waterfall([
+            (callback) => {
+                FsUtils.createDirectoryIfNotExists(this.fieldMetadataDir, callback);
+            },
+            (callback) => {
+                const filePath = this.fieldMetadataFile;
+                FsUtils.writeStringToFile(filePath, this._getObjectStringToSave(fieldsMetadata), callback);
+            }
+        ], callback);
+    }
+
+    _importSample(sampleMetadataFilePath, outputDir, isSample, fieldsMetadata, callback) {
+        const sampleName = this._getNameFromFilePath(sampleMetadataFilePath);
+        const sampleTemplateString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
+        const sampleTemplate = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(sampleTemplateString));
         const sample = {
             id: Uuid.v4(),
             fileName: sampleName,
             hash: null,
-            sampleType: 'standard', // TODO: load sample types somewhere.
+            reference: sampleTemplate.reference,
+            sampleType: sampleTemplate.sampleType,
             isAnalyzed: true,
+            isSource: !isSample,
             creator: null
         };
-
-        const sampleFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
-        const sampleFields = JSON.parse(sampleFieldsString);
         const sourceName = (isSample) ? sample.id : sampleName;
+
+        // Convert metadata into WS format.
         const wsMappedFields = _.map(
-            sampleFields,
+            sampleTemplate.fields,
             sampleField => FieldsMetadataService.createFieldMetadata(sourceName, isSample, sampleField)
         );
-        this._storeFieldMetadata(sample, wsMappedFields, outputDir, callback);
+
+        // Now build sample to fields connection and list of unique fields.
+        const sampleFieldIds = [];
+        _.each(wsMappedFields, fieldMetadata => {
+            const existingField = FieldsMetadataModel.getExistingFieldOrNull(fieldMetadata, fieldsMetadata, !isSample);
+            if (existingField) {
+                sampleFieldIds.push(existingField.id);
+            } else {
+                fieldsMetadata.push(fieldMetadata);
+                sampleFieldIds.push(fieldMetadata.id);
+            }
+        });
+        this._storeSampleMetadata(sample, sampleFieldIds, outputDir, callback);
+    }
+
+    /**
+     * Converts keys to snake_case and stringifies the result.
+     * */
+    _getObjectStringToSave(obj) {
+        const convertedObj = ChangeCaseUtil.convertKeysToSnakeCase(obj);
+        return JSON.stringify(convertedObj, null, 2);
     }
 }
 
-module.exports = new SampleBuilder();
+module.exports = new SampleAndSourceBuilder();

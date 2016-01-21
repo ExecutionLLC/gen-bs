@@ -6,13 +6,16 @@ const async = require('async');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 const FsUtils = require('../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil.js');
 
+// TODO: Now view builder can be merged with field builder to reduce most of the copy-paste.
 class FilterBuilder extends DefaultsBuilderBase {
     constructor() {
         super();
 
-        // CAUTION! Do not use ChangeCaseUtil here, as currently it works incorrect with '$' symbols.
-        this.filterTemplates = require(this.defaultsDir + '/templates/filter-templates.json');
+        this.filterTemplates = ChangeCaseUtil.convertKeysToCamelCase(
+            require(this.defaultsDir + '/templates/filter-templates.json')
+        );
 
         this.build = this.build.bind(this);
         this._storeFilters = this._storeFilters.bind(this);
@@ -22,6 +25,10 @@ class FilterBuilder extends DefaultsBuilderBase {
     }
 
     build(callback) {
+        const fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
+            require(this.fieldMetadataFile)
+        );
+
         async.waterfall([
             (callback) => {
                 FsUtils.createDirectoryIfNotExists(this.filtersDir, callback);
@@ -30,7 +37,7 @@ class FilterBuilder extends DefaultsBuilderBase {
                 this._removeJsonFilesFromDirectory(this.filtersDir, callback);
             },
             (callback) => {
-                const filters = _.map(this.filterTemplates, this._createFilter);
+                const filters = _.map(this.filterTemplates, (filter) => this._createFilter(filter, fieldsMetadata));
                 this._storeFilters(filters, callback);
             }
         ], callback);
@@ -42,23 +49,23 @@ class FilterBuilder extends DefaultsBuilderBase {
         FsUtils.writeStringToFile(filtersFile, json, callback);
     }
 
-    _createFilter(filterTemplate) {
-        const rules = this._createRules(filterTemplate.rules);
+    _createFilter(filterTemplate, fieldsMetadata) {
+        const rules = this._createRules(filterTemplate.rules, fieldsMetadata);
         return {
             id: Uuid.v4(),
             name: filterTemplate.name,
             description: filterTemplate.description,
             type: filterTemplate.type,
-            is_disabled_4copy: filterTemplate.is_disabled_4copy,
+            isCopyDisabled: filterTemplate.isCopyDisabled,
             rules
         };
     }
 
-    _createRules(rulesTemplate) {
-        return this._processRulesRecursively(rulesTemplate);
+    _createRules(rulesTemplate, fieldsMetadata) {
+        return this._processRulesRecursively(rulesTemplate, fieldsMetadata);
     }
 
-    _processRulesRecursively(rulesObject) {
+    _processRulesRecursively(rulesObject, fieldsMetadata) {
         const operator = rulesObject['$and'] ?
             '$and' : (
                 rulesObject['$or'] ? '$or' : null
@@ -66,19 +73,30 @@ class FilterBuilder extends DefaultsBuilderBase {
 
         if (operator) {
             const operands = rulesObject[operator];
-            const mappedOperands = _.map(operands, this._processRulesRecursively);
+            const mappedOperands = _.map(operands, (operand) => this._processRulesRecursively(operand, fieldsMetadata));
             const result = {};
             result[operator] = mappedOperands;
             return result;
         } else {
-            const field = rulesObject.field;
-            const condition = rulesObject.condition;
-            const fieldName = field.source_name === 'sample' ?
-                field.name : field.source_name + '_' + field.name;
+            const fieldDescriptor = rulesObject.field;
+            const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldsMetadata);
+            if (!field) {
+                throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName);
+            }
 
+            const condition = rulesObject.condition;
             const result = {};
-            result[fieldName] = condition;
+            result[field.id] = condition;
             return result;
+        }
+    }
+
+    _findField(fieldName, sourceName, fieldsMetadata) {
+        const fields = _.filter(fieldsMetadata, fieldMetadata => fieldMetadata.sourceName === sourceName && fieldMetadata.name === fieldName);
+        if (fields.length > 1) {
+            throw new Error('Too many fields match, name: ' + fieldName + ', source: ' + sourceName);
+        } else {
+            return fields[0];
         }
     }
 }

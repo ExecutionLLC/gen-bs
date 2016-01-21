@@ -22,7 +22,7 @@ class UserEntityControllerBase extends ControllerBase {
         }
 
         const user = request.user;
-        const itemId = request.query.id;
+        const itemId = request.params.id;
         this.theService.find(user, itemId, (error, item) => {
            if (error) {
                this.sendInternalError(response, error);

@@ -6,6 +6,9 @@ const async = require('async');
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
 
+const AppServerViewUtils = require('../utils/AppServerViewUtils');
+const AppServerFilterUtils = require('../utils/AppServerFilterUtils');
+
 const METHODS = {
     getSourcesList: 'v1.get_sources',
     getSourceMetadata: 'v1.get_source_metadata',
@@ -66,17 +69,19 @@ class ApplicationServerService extends ServiceBase {
      * @param callback callback
      * */
     requestOpenSearchSession(sessionId, params, callback) {
+        const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
+
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(params.sample);
-        const appServerView = this._createAppServerView(params.view, params.fieldsMetadata);
-        const appServerFilter = this._createAppServerFilter(params.filter, params.fieldsMetadata);
-        const appServerSortOrder = this._createAppServerViewSortOrder(params.view, params.fieldsMetadata);
+        const appServerView = AppServerViewUtils.createAppServerView(params.view, fieldIdToFieldMetadata);
+        const appServerFilter = AppServerFilterUtils.createAppServerFilter(params.filter, fieldIdToFieldMetadata);
+        const appServerSortOrder = this._createAppServerViewSortOrder(params.view, fieldIdToFieldMetadata);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
-            view_structure: appServerView,
-            view_filter: appServerFilter,
-            view_sort_order: appServerSortOrder
+            viewStructure: appServerView,
+            viewFilter: appServerFilter,
+            viewSortOrder: appServerSortOrder
         };
 
         const operationTypes = this.services.operations.operationTypes();
@@ -180,7 +185,7 @@ class ApplicationServerService extends ServiceBase {
         return appServerSortParams;
     }
 
-    _createAppServerViewSortOrder(view, fieldMetadata) {
+    _createAppServerViewSortOrder(view, fieldIdToMetadata) {
         const viewListItems = view.viewListItems;
 
         // Get all items which specify sort order.
@@ -191,53 +196,14 @@ class ApplicationServerService extends ServiceBase {
 
         //noinspection UnnecessaryLocalVariableJS leaved for debug.
         const appServerSortOrder = _.map(sortedSortItems, listItem => {
+            const field = fieldIdToMetadata[listItem.fieldId];
             return {
-                columnName: listItem.fieldName,
-                isAscendingOrder: (listItem.sortOrder && listItem.sortOrder === 'asc')? true : false
+                columnName: field.name,
+                isAscendingOrder: (listItem.sortDirection && listItem.sortDirection === 'asc')? true : false
             };
         });
 
         return appServerSortOrder;
-    }
-
-    _createAppServerFilter(filter, fieldMetadata) {
-        return (filter || {}).rules || {};
-    }
-
-    _createAppServerView(view, fieldMetadata) {
-        const listItems = view.viewListItems;
-        // Group view items by source name.
-        const itemsBySource = _.groupBy(listItems, (listItem) => listItem.sourceName);
-
-        // 'sample' group contains all sample fields.
-        const appServerSampleColumns = _.map(itemsBySource['sample'], this._createAppServerViewColumn);
-
-        // Other groups except 'sample' are source names.
-        const sourceNames = _(itemsBySource)
-            .keys()
-            .filter(key => key !== 'sample')
-            .value();
-
-        // Make groups of columns separately for each source.
-        const appServerSources = _.map(sourceNames, sourceName => {
-            const sourceColumns = _.map(itemsBySource[sourceName], this._createAppServerViewColumn);
-            return {
-                name: sourceName,
-                columns: sourceColumns
-            };
-        });
-
-        return {
-            sampleColumns: appServerSampleColumns,
-            sources: appServerSources
-        };
-    }
-
-    _createAppServerViewColumn(listItem) {
-        return {
-            name: listItem.fieldName,
-            filter: [] // TODO: List of resolved keywords
-        };
     }
 
     /**
@@ -245,9 +211,8 @@ class ApplicationServerService extends ServiceBase {
      * For user samples sample id is file name.
      * */
     _getAppServerSampleId(sample) {
-        return sample.sampleType === 'standard'
-        || sample.sampleType === 'advanced' ?
-            sample.fileName : sample.id;
+        return sample.sampleType === 'standard' || sample.sampleType === 'advanced' ?
+                sample.fileName : sample.id;
     }
 
     _closePreviousSearchIfAny(sessionId, callback) {
