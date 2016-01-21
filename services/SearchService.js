@@ -11,6 +11,7 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, sessionId, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback) {
+        // TODO: переделать на _.some
         if (!languId || !keywordId || !viewId || !filterId || !sampleId || !limit) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
                     languId,

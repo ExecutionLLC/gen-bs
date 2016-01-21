@@ -29,7 +29,7 @@
     "is_editable": false,
     "is_mandatory": false,
     "value_type": "string",
-    "description": "Gender (Male/Female/Unknown (default))"
+    "description": "Gender (Male/Female/Unknown (default))",
     "dimension": 1
   },
   {

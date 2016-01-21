@@ -16,6 +16,15 @@ class InitialDataImportManager {
         this.models = models;
         this.config = config;
         this.logger = logger;
+
+        this._importFiles = this._importFiles.bind(this);
+        this._importLangu = this._importLangu.bind(this);
+        this._importUsers = this._importUsers.bind(this);
+        this._importKeywords = this._importKeywords.bind(this);
+        this._importViews = this._importViews.bind(this);
+        this._importSample = this._importSample.bind(this);
+        this._importFieldsMetadata = this._importFieldsMetadata.bind(this);
+        this._importMetadata = this._importMetadata.bind(this);
     }
 
     execute(callback) {
@@ -48,7 +57,7 @@ class InitialDataImportManager {
             (views, cb) => {
                 result.views = views;
 
-                const metadataDir = defaultDir + '/metadata';
+                const metadataDir = defaultsDir + '/metadata';
                 this._importFiles(metadataDir, this._importFieldsMetadata, cb);
             },
             (metadata, cb) => {

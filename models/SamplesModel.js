@@ -143,10 +143,17 @@ class SamplesModel extends SecureModelBase {
                     this._insert(dataToInsert, trx, cb);
                 },
                 (sampleId, cb) => {
-                    const values = sample.values || null;
-                    this._addNewFileSampleVersion(sampleId, sample.fieldId, values, trx, (error) => {
-                            cb(error, sampleId);
-                        });
+                    this._addNewFileSampleVersion(sampleId, trx, cb);
+                },
+                (versionId, cb) => {
+
+                    //const values = sample.values || null;
+                    //const dataToInsert = {
+                    //    vcfFileSampleVersionId: versionId,
+                    //    fieldId: fieldId,
+                    //    values: values
+                    //};
+                    //this._insertIntoTable('vcf_file_sample_value', dataToInsert, trx, cb);
                 }
             ], cb);
         }, callback);
@@ -165,24 +172,12 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    _addNewFileSampleVersion(sampleId, fieldId, values, trx, callback) {
-        async.waterfall([
-            (cb) => {
-                const dataToInsert = {
-                    id: this._generateId(),
-                    vcfFileSampleId: sampleId
-                };
-                this._insertIntoTable('vcf_file_sample_version', dataToInsert, trx, cb);
-            },
-            (versionId, cb) => {
-                const dataToInsert = {
-                    vcfFileSampleVersionId: versionId,
-                    fieldId: fieldId,
-                    values: values
-                };
-                this._insertIntoTable('vcf_file_sample_value', dataToInsert, trx, cb);
-            }
-        ], callback);
+    _addNewFileSampleVersion(sampleId, trx, callback) {
+        const dataToInsert = {
+            id: this._generateId(),
+            vcfFileSampleId: sampleId
+        };
+        this._insertIntoTable('vcf_file_sample_version', dataToInsert, trx, callback);
     }
 
     _fetchSamplesByUserId(userId, callback) {
