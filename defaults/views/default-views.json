@@ -1,73 +1,73 @@
 [
   {
-    "id": "a8606663-5700-46aa-967a-7e7a14d448c7",
+    "id": "005bda7c-ab25-43c1-8622-eaa4bbd9ec9f",
     "name": "Test Default View",
     "view_type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "59de8b5e-211d-4eef-82ca-5e8d71d98191",
+        "id": "e59ee1d6-87db-4c97-b7de-70cf0d0ceae3",
         "field_id": "00000000-0000-0000-0000-00000000001",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "c77123c7-1900-44be-87c6-f2bba7af2c67",
+        "id": "9b53b43f-bea9-46af-a6de-530dd5b24cd3",
         "field_id": "00000000-0000-0000-0000-00000000002",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
       },
       {
-        "id": "c2a7463b-1903-46fa-af89-83a997389620",
+        "id": "ac0923d1-a140-4717-94f3-ab4efb311395",
         "field_id": "00000000-0000-0000-0000-00000000007",
         "order": 6
       },
       {
-        "id": "e4948a30-7b2f-4500-97f9-b75558b00e95",
-        "field_id": "c655d305-e887-4410-965b-16d0d2b1cc54",
+        "id": "2236261b-b03a-4caa-9bb1-cbabeeffbb50",
+        "field_id": "3764550a-3c26-489c-983a-7d51c4b6c043",
         "order": 3
       },
       {
-        "id": "5afa3433-4435-42e1-8ccc-f074622b70e3",
-        "field_id": "697d1a11-a393-4549-9108-4083d3eb1c56",
+        "id": "1b37ab07-0742-4710-b614-06b469e78905",
+        "field_id": "61794fe9-9c50-402d-a269-8761aa763057",
         "order": 4
       },
       {
-        "id": "531cf36c-4e1f-4cf9-b9e7-9a6836ca5967",
+        "id": "4b050325-d95c-42ad-82ed-bb7a73e850e1",
         "field_id": "00000000-0000-0000-0000-00000000005",
         "order": 5
       }
     ]
   },
   {
-    "id": "4079b118-09cd-47f8-871e-f621ba81ad0e",
+    "id": "2f0af32a-8675-411c-a06e-966b9e1eb376",
     "name": "Another Default View",
     "view_type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "98e52c50-8447-4202-8068-83ceae2db805",
+        "id": "06dad8cb-472c-4392-8543-5ac8adae653b",
         "field_id": "00000000-0000-0000-0000-00000000001",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "eddc7d78-0906-419f-a06c-a903ffcf2592",
+        "id": "c8c328a9-8393-48c9-bed5-4f9013c895e6",
         "field_id": "00000000-0000-0000-0000-00000000002",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
       },
       {
-        "id": "67726b12-8d4c-4faa-91b6-cdcaa53f6162",
+        "id": "7024051f-db28-4db3-a1f6-7f1b6c7efa91",
         "field_id": "00000000-0000-0000-0000-00000000007",
         "order": 3
       },
       {
-        "id": "8f69587a-61dd-46c8-bc06-aea6ee275bd3",
+        "id": "aa5c0bee-3a65-4e22-b602-59110ec4b98f",
         "field_id": "00000000-0000-0000-0000-00000000005",
         "order": 4
       }
