@@ -11,6 +11,7 @@ class DefaultsBuilderBase {
         this.samplesDir = this.defaultsDir + '/samples'; // Output directory for converted samples.
         this.sourcesDir = this.defaultsDir + '/sources'; // Output directory for sources metadata.
         this.fieldMetadataDir = this.defaultsDir + '/fields'; // Output directory for field metadata.
+        this.fieldMetadataFile = this.fieldMetadataDir + '/fields-metadata.json'; // Result of field aggregation.
         this.asSourcesDir = this.defaultsDir + '/templates/sources'; // AS sample metadata.
         this.viewsDir = this.defaultsDir + '/views'; // Output directory for default views.
         this.filtersDir = this.defaultsDir + '/filters'; // Output directory for default filters.

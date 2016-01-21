@@ -41,7 +41,7 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
                 });
             },
             (fieldsMetadata, callback) => {
-                this._storeFieldsMetadata(fieldsMetadata, this.fieldMetadataDir, callback);
+                this._storeFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
@@ -96,13 +96,13 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
         FsUtils.writeStringToFile(filePath, this._getObjectStringToSave(contents), callback);
     }
 
-    _storeFieldsMetadata(fieldsMetadata, outputDir, callback) {
+    _storeFieldsMetadata(fieldsMetadata, callback) {
         async.waterfall([
             (callback) => {
-                FsUtils.createDirectoryIfNotExists(outputDir, callback);
+                FsUtils.createDirectoryIfNotExists(this.fieldMetadataDir, callback);
             },
             (callback) => {
-                const filePath = outputDir + '/' + 'fields-metadata.json';
+                const filePath = this.fieldMetadataFile;
                 FsUtils.writeStringToFile(filePath, this._getObjectStringToSave(fieldsMetadata), callback);
             }
         ], callback);

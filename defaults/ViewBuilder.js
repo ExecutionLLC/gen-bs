@@ -8,12 +8,16 @@ const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 const FsUtils = require('../utils/FileSystemUtils');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
+// TODO: Now view builder can be merged with field builder to reduce most of the copy-paste.
 class ViewBuilder extends DefaultsBuilderBase {
     constructor() {
         super();
 
         this.viewTemplates = ChangeCaseUtil.convertKeysToCamelCase(
             require(this.defaultsDir + '/templates/view-templates.json')
+        );
+        this.fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
+            require(this.fieldMetadataFile)
         );
         this.build = this.build.bind(this);
         this._createView = this._createView.bind(this);
@@ -43,10 +47,13 @@ class ViewBuilder extends DefaultsBuilderBase {
 
     _createListItem(listItemTemplate) {
         const fieldDescriptor = listItemTemplate.field;
+        const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName);
+        if (!field) {
+            throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName);
+        }
         return {
             id: Uuid.v4(),
-            fieldName: fieldDescriptor.name,
-            sourceName: fieldDescriptor.sourceName,
+            fieldId: field.id,
             order: listItemTemplate.order,
             sortOrder: listItemTemplate.sortOrder,
             sortDirection: listItemTemplate.sortDirection
@@ -68,6 +75,15 @@ class ViewBuilder extends DefaultsBuilderBase {
         const viewsJson = JSON.stringify(snakeCasedViews, null, 2);
         const viewsFile = this.viewsDir + '/default-views.json';
         FsUtils.writeStringToFile(viewsFile, viewsJson, callback);
+    }
+
+    _findField(fieldName, sourceName) {
+        const fields = _.filter(this.fieldsMetadata, fieldMetadata => fieldMetadata.sourceName === sourceName && fieldMetadata.name === fieldName);
+        if (fields.length > 1) {
+            throw new Error('Too many fields match, name: ' + fieldName + ', source: ' + sourceName);
+        } else {
+            return fields[0];
+        }
     }
 }
 
