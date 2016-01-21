@@ -16,9 +16,6 @@ class ViewBuilder extends DefaultsBuilderBase {
         this.viewTemplates = ChangeCaseUtil.convertKeysToCamelCase(
             require(this.defaultsDir + '/templates/view-templates.json')
         );
-        this.fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
-            require(this.fieldMetadataFile)
-        );
         this.build = this.build.bind(this);
         this._createView = this._createView.bind(this);
         this._createListItem = this._createListItem.bind(this);
@@ -30,6 +27,9 @@ class ViewBuilder extends DefaultsBuilderBase {
      * The method needs samples field metadata to be present, as it uses field ids to build views.
      * */
     build(callback) {
+        const fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
+            require(this.fieldMetadataFile)
+        );
         async.waterfall([
             (callback) => {
                 FsUtils.createDirectoryIfNotExists(this.viewsDir, callback);
@@ -38,16 +38,16 @@ class ViewBuilder extends DefaultsBuilderBase {
                 this._removeJsonFilesFromDirectory(this.viewsDir, callback);
             },
             (callback) => {
-                const views = _.map(this.viewTemplates, this._createView);
+                const views = _.map(this.viewTemplates, (view) => this._createView(view, fieldsMetadata));
                 this._storeViews(views);
                 callback(null);
             }
         ], callback);
     }
 
-    _createListItem(listItemTemplate) {
+    _createListItem(listItemTemplate, fieldsMetadata) {
         const fieldDescriptor = listItemTemplate.field;
-        const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName);
+        const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldsMetadata);
         if (!field) {
             throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName);
         }
@@ -60,13 +60,13 @@ class ViewBuilder extends DefaultsBuilderBase {
         };
     }
 
-    _createView(viewTemplate) {
+    _createView(viewTemplate, fieldsMetadata) {
         return {
             id: Uuid.v4(),
             name: viewTemplate.name,
             viewType: viewTemplate.type,
             description: viewTemplate.description,
-            viewListItems: _.map(viewTemplate.items, this._createListItem)
+            viewListItems: _.map(viewTemplate.items, (listItem) => this._createListItem(listItem, fieldsMetadata))
         };
     }
 
@@ -77,8 +77,8 @@ class ViewBuilder extends DefaultsBuilderBase {
         FsUtils.writeStringToFile(viewsFile, viewsJson, callback);
     }
 
-    _findField(fieldName, sourceName) {
-        const fields = _.filter(this.fieldsMetadata, fieldMetadata => fieldMetadata.sourceName === sourceName && fieldMetadata.name === fieldName);
+    _findField(fieldName, sourceName, fieldsMetadata) {
+        const fields = _.filter(fieldsMetadata, fieldMetadata => fieldMetadata.sourceName === sourceName && fieldMetadata.name === fieldName);
         if (fields.length > 1) {
             throw new Error('Too many fields match, name: ' + fieldName + ', source: ' + sourceName);
         } else {
