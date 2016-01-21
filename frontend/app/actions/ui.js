@@ -1,11 +1,14 @@
 import { fetchVariants } from './variantsTable'
 import { requestAnalyze } from './websocket'
-import {viewBuilderSelectView} from './viewBuilder'
+import { viewBuilderSelectView } from './viewBuilder'
+import { filterBuilderSelectFilter} from './filterBuilder'
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR'
+
 export const CHANGE_SAMPLE = 'CHANGE_SAMPLE'
 export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW'
-export const CHANGE_FILTER = 'CHANGE_FILTER'
+export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER'
+
 export const ANALYZE = 'ANALYZE'
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP'
 
@@ -42,11 +45,18 @@ export function changeView(viewId) {
   }
 }
 
-export function changeFilter(filters, filterId) {
+export function changeHeaderFilter(filters, filterId) {
   return {
-    type: CHANGE_FILTER,
+    type: CHANGE_HEADER_FILTER,
     filters,
     filterId
+  }
+}
+
+export function changeFilter(filterId) {
+  return (dispatch, getState)  => {
+    dispatch( changeHeaderFilter(getState().userData.filters, filterId))
+    dispatch( filterBuilderSelectFilter(getState().userData.filters, filterId, true))
   }
 }
 
@@ -56,7 +66,7 @@ export function analyze(sampleId, viewId, filterId) {
     const searchParams = {
       sampleId: sampleId,
       viewId: viewId,
-      filterId: getState().userData.filters[0].id,
+      filterId: filterId,
       limit: 100,
       offset: 0
     }

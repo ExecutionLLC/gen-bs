@@ -6,7 +6,9 @@ import classNames from 'classnames'
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact'
 import NavbarMain from '../components/Header/NavbarMain'
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery'
+
 import ViewsModal from '../components/Modals/ViewsModal'
+import FiltersModal from '../components/Modals/FiltersModal'
 
 import { login } from '../actions/auth'
 import { openModal, closeModal } from '../actions/modalWindows'
@@ -65,6 +67,10 @@ class App extends Component {
         }
         <ViewsModal 
           showModal={this.props.modalWindows.views.showModal}
+          closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+        />
+        <FiltersModal 
+          showModal={this.props.modalWindows.filters.showModal}
           closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
         />
       </div>

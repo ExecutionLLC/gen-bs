@@ -6,6 +6,7 @@ import variantsTable from './variantsTable'
 import exportToFile from './exportToFile' 
 import modalWindows from './modalWindows' 
 import viewBuilder from './viewBuilder' 
+import filterBuilder from './filterBuilder' 
 import fields from './fields' 
 import ui from './ui' 
 import websocket from './websocket' 
@@ -19,6 +20,7 @@ const genApp = combineReducers({
   exportToFile,
   modalWindows ,
   viewBuilder,
+  filterBuilder,
   fields,
   ui,
   websocket

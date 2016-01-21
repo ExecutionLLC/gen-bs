@@ -9,7 +9,7 @@ import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader'
 import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter'
 import NewViewInputs from './ViewBuilder/NewViewInputs'
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect'
-import ViewForm from './ViewBuilder/ViewForm'
+import ViewBuilder from './ViewBuilder/ViewBuilder'
 
 class ViewsModal extends Component {
 
@@ -41,7 +41,7 @@ class ViewsModal extends Component {
                       { !editOrNew &&
                         <div>
                           <NewViewInputs  {...this.props} />
-                          <ViewForm
+                          <ViewBuilder
                             {...this.props}
                           />
                         </div>
@@ -49,7 +49,7 @@ class ViewsModal extends Component {
                       { editOrNew &&
                         <div>
                           <ExistentViewSelect {...this.props} />
-                          <ViewForm
+                          <ViewBuilder
                             {...this.props}
                           />
                         </div>

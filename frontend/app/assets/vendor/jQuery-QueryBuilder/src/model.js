@@ -93,7 +93,7 @@ var Node = function(parent, $el) {
         return new Node();
     }
 
-    Object.defineProperty(this, '__', { value: {}});
+    Object.defineProperty(this, '__', { value: {} });
 
     $el.data('queryBuilderModel', this);
 
@@ -115,7 +115,7 @@ Object.defineProperty(Node.prototype, 'parent', {
     },
     set: function(value) {
         this.__.parent = value;
-        this.level = value === null ? 1 : value.level+1;
+        this.level = value === null ? 1 : value.level + 1;
         this.model = value === null ? null : value.model;
     }
 });
@@ -150,7 +150,7 @@ Node.prototype.drop = function() {
     }
 
     if (!this.isRoot()) {
-        this.parent._dropNode(this);
+        this.parent._removeNode(this);
         this.parent = null;
     }
 };
@@ -163,8 +163,8 @@ Node.prototype.drop = function() {
 Node.prototype.moveAfter = function(node) {
     if (this.isRoot()) return;
 
-    this.parent._dropNode(this);
-    node.parent._addNode(this, node.getPos()+1);
+    this._move(node.parent, node.getPos() + 1);
+
     return this;
 };
 
@@ -180,8 +180,8 @@ Node.prototype.moveAtBegin = function(target) {
         target = this.parent;
     }
 
-    this.parent._dropNode(this);
-    target._addNode(this, 0);
+    this._move(target, 0);
+
     return this;
 };
 
@@ -197,9 +197,23 @@ Node.prototype.moveAtEnd = function(target) {
         target = this.parent;
     }
 
-    this.parent._dropNode(this);
-    target._addNode(this, target.length());
+    this._move(target, target.length());
+
     return this;
+};
+
+/**
+ * Move itself at specific position of Group
+ * @param {Group}
+ * @param {int}
+ */
+Node.prototype._move = function(group, index) {
+    this.parent._removeNode(this);
+    group._appendNode(this, index, false);
+
+    if (this.model !== null) {
+        this.model.trigger('move', this, group, index);
+    }
 };
 
 
@@ -256,9 +270,10 @@ Group.prototype.length = function() {
  * Add a Node at specified index
  * @param {Node}
  * @param {int,optional}
+ * @param {boolean,optional}
  * @return {Node} the inserted node
  */
-Group.prototype._addNode = function(node, index) {
+Group.prototype._appendNode = function(node, index, trigger) {
     if (index === undefined) {
         index = this.length();
     }
@@ -266,7 +281,7 @@ Group.prototype._addNode = function(node, index) {
     this.rules.splice(index, 0, node);
     node.parent = this;
 
-    if (this.model !== null) {
+    if (trigger && this.model !== null) {
         this.model.trigger('add', node, index);
     }
 
@@ -280,7 +295,7 @@ Group.prototype._addNode = function(node, index) {
  * @return {Group} the inserted group
  */
 Group.prototype.addGroup = function($el, index) {
-    return this._addNode(new Group(this, $el), index);
+    return this._appendNode(new Group(this, $el), index, true);
 };
 
 /**
@@ -290,7 +305,7 @@ Group.prototype.addGroup = function($el, index) {
  * @return {Rule} the inserted rule
  */
 Group.prototype.addRule = function($el, index) {
-    return this._addNode(new Rule(this, $el), index);
+    return this._appendNode(new Rule(this, $el), index, true);
 };
 
 /**
@@ -298,7 +313,7 @@ Group.prototype.addRule = function($el, index) {
  * @param {Node}
  * @return {Group} self
  */
-Group.prototype._dropNode = function(node) {
+Group.prototype._removeNode = function(node) {
     var index = this.getNodePos(node);
     if (index !== -1) {
         node.parent = null;
@@ -325,7 +340,7 @@ Group.prototype.getNodePos = function(node) {
  * @return {boolean}
  */
 Group.prototype.each = function(reverse, cbRule, cbGroup, context) {
-    if (typeof reverse === 'function') {
+    if (typeof reverse == 'function') {
         context = cbGroup;
         cbGroup = cbRule;
         cbRule = reverse;
@@ -333,13 +348,13 @@ Group.prototype.each = function(reverse, cbRule, cbGroup, context) {
     }
     context = context === undefined ? null : context;
 
-    var i = reverse ? this.rules.length-1 : 0,
-        l = reverse ? 0 : this.rules.length-1,
-        c = reverse ? -1 : 1,
-        next = function(){ return reverse ? i>=l : i<=l; },
-        stop = false;
+    var i = reverse ? this.rules.length - 1 : 0;
+    var l = reverse ? 0 : this.rules.length - 1;
+    var c = reverse ? -1 : 1;
+    var next = function() { return reverse ? i >= l : i <= l; };
+    var stop = false;
 
-    for (; next(); i+=c) {
+    for (; next(); i+= c) {
         if (this.rules[i] instanceof Group) {
             if (cbGroup !== undefined) {
                 stop = cbGroup.call(context, this.rules[i]) === false;
@@ -406,5 +421,7 @@ Rule.prototype.constructor = Rule;
 defineModelProperties(Rule, ['filter', 'operator', 'value']);
 
 
+// EXPORT
+// ===============================
 QueryBuilder.Group = Group;
 QueryBuilder.Rule = Rule;

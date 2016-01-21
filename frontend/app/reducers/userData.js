@@ -43,6 +43,18 @@ export default function userData(state = {
         lastUpdated: action.receivedAt
       })
 
+    case ActionTypes.REQUEST_FILTERS:
+      return Object.assign({}, state, {
+        isFetching: true
+      })
+
+    case ActionTypes.RECEIVE_FILTERS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        filters: action.filters,
+        lastUpdated: action.receivedAt
+      })
+
 
 
     default:

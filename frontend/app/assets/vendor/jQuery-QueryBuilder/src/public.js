@@ -77,23 +77,24 @@ QueryBuilder.prototype.getModel = function(target) {
 QueryBuilder.prototype.validate = function() {
     this.clearErrors();
 
-    var that = this;
+    var self = this;
 
     var valid = (function parse(group) {
-        var done = 0, errors = 0;
+        var done = 0;
+        var errors = 0;
 
         group.each(function(rule) {
             if (!rule.filter) {
-                that.triggerValidationError(rule, 'no_filter', null);
+                self.triggerValidationError(rule, 'no_filter', null);
                 errors++;
                 return;
             }
 
             if (rule.operator.nb_inputs !== 0) {
-                var valid = that.validateValue(rule, rule.value);
+                var valid = self.validateValue(rule, rule.value);
 
                 if (valid !== true) {
-                    that.triggerValidationError(rule, valid, rule.value);
+                    self.triggerValidationError(rule, valid, rule.value);
                     errors++;
                     return;
                 }
@@ -113,8 +114,8 @@ QueryBuilder.prototype.validate = function() {
         if (errors > 0) {
             return false;
         }
-        else if (done === 0 && (!that.settings.allow_empty || !group.isRoot())) {
-            that.triggerValidationError(group, 'empty_group', null);
+        else if (done === 0 && (!self.settings.allow_empty || !group.isRoot())) {
+            self.triggerValidationError(group, 'empty_group', null);
             return false;
         }
 
@@ -127,14 +128,20 @@ QueryBuilder.prototype.validate = function() {
 
 /**
  * Get an object representing current rules
+ * @param {object} options
+ *      - get_flags: false[default] | true(only changes from default flags) | 'all'
  * @return {object}
  */
-QueryBuilder.prototype.getRules = function() {
+QueryBuilder.prototype.getRules = function(options) {
+    options = $.extend({
+        get_flags: false
+    }, options);
+
     if (!this.validate()) {
         return {};
     }
 
-    var that = this;
+    var self = this;
 
     var out = (function parse(group) {
         var data = {
@@ -144,6 +151,13 @@ QueryBuilder.prototype.getRules = function() {
 
         if (group.data) {
             data.data = $.extendext(true, 'replace', {}, group.data);
+        }
+
+        if (options.get_flags) {
+            var flags = self.getGroupFlags(group.flags, options.get_flags === 'all');
+            if (!$.isEmptyObject(flags)) {
+                data.flags = flags;
+            }
         }
 
         group.each(function(model) {
@@ -163,6 +177,13 @@ QueryBuilder.prototype.getRules = function() {
 
             if (model.filter.data || model.data) {
                 rule.data = $.extendext(true, 'replace', {}, model.filter.data, model.data);
+            }
+
+            if (options.get_flags) {
+                var flags = self.getRuleFlags(model.flags, options.get_flags === 'all');
+                if (!$.isEmptyObject(flags)) {
+                    rule.flags = flags;
+                }
             }
 
             data.rules.push(rule);
@@ -191,28 +212,28 @@ QueryBuilder.prototype.setRules = function(data) {
         };
     }
 
-    if (!data || !data.rules || (data.rules.length===0 && !this.settings.allow_empty)) {
+    if (!data || !data.rules || (data.rules.length === 0 && !this.settings.allow_empty)) {
         Utils.error('RulesParse', 'Incorrect data object passed');
     }
 
     this.clear();
     this.setRoot(false, data.data);
-    
+
     this.model.root.flags = this.parseGroupFlags(data);
 
     data = this.change('setRules', data);
 
-    var that = this;
+    var self = this;
 
-    (function add(data, group){
+    (function add(data, group) {
         if (group === null) {
             return;
         }
 
         if (data.condition === undefined) {
-            data.condition = that.settings.default_condition;
+            data.condition = self.settings.default_condition;
         }
-        else if (that.settings.conditions.indexOf(data.condition) == -1) {
+        else if (self.settings.conditions.indexOf(data.condition) == -1) {
             Utils.error('UndefinedCondition', 'Invalid condition "{0}"', data.condition);
         }
 
@@ -220,19 +241,19 @@ QueryBuilder.prototype.setRules = function(data) {
 
         data.rules.forEach(function(item) {
             var model;
-            if (item.rules && item.rules.length>0) {
-                if (that.settings.allow_groups != -1 && that.settings.allow_groups < group.level) {
-                    that.reset();
-                    Utils.error('RulesParse', 'No more than {0} groups are allowed', that.settings.allow_groups);
+            if (item.rules && item.rules.length > 0) {
+                if (self.settings.allow_groups !== -1 && self.settings.allow_groups < group.level) {
+                    self.reset();
+                    Utils.error('RulesParse', 'No more than {0} groups are allowed', self.settings.allow_groups);
                 }
                 else {
-                    model = that.addGroup(group, false, item.data);
+                    model = self.addGroup(group, false, item.data);
                     if (model === null) {
                         return;
                     }
-                    
-                    model.flags = that.parseGroupFlags(item);
-                    
+
+                    model.flags = self.parseGroupFlags(item);
+
                     add(item, model);
                 }
             }
@@ -244,14 +265,14 @@ QueryBuilder.prototype.setRules = function(data) {
                     item.operator = 'equal';
                 }
 
-                model = that.addRule(group, item.data);
+                model = self.addRule(group, item.data);
                 if (model === null) {
                     return;
                 }
 
-                model.filter = that.getFilterById(item.id);
-                model.operator = that.getOperatorByType(item.operator);
-                model.flags = that.parseRuleFlags(item);
+                model.filter = self.getFilterById(item.id);
+                model.operator = self.getOperatorByType(item.operator);
+                model.flags = self.parseRuleFlags(item);
 
                 if (model.operator.nb_inputs !== 0 && item.value !== undefined) {
                     model.value = item.value;
