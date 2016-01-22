@@ -47,11 +47,11 @@ class InitialDataImportManager {
             (users, cb) => {
                 result.users = users;
 
-                const metadataDir = defaultsDir + '/metadata';
-                this._importFiles(metadataDir, this._importFieldsMetadata, cb);
+                const fieldsDir = defaultsDir + '/fields';
+                this._importFiles(fieldsDir, this._importFieldsMetadata, cb);
             },
-            (metadata, cb) => {
-                result.metadata = metadata;
+            (fields, cb) => {
+                result.fields = fields;
 
                 const keywordsDir = defaultsDir + '/keywords';
                 this._importFiles(keywordsDir, this._importKeywords, cb);

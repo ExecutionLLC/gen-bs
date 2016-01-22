@@ -114,18 +114,22 @@ class SamplesModel extends SecureModelBase {
                 callback(error);
             } else {
                 this.db.transactionally((trx, cb) => {
-                    trx(this.baseTableName)
-                        .where('id', sampleId)
-                        .update({
-                            is_analyzed: true,
-                            analyzed_timestamp: this.db.knex.fn.now()
-                        })
-                        .asCallback((error) => {
-                            cb(error, sampleId);
-                        });
+                    this._setAnalyzed(sampleId, true, trx, cb);
                 }, callback);
             }
         });
+    }
+
+    _setAnalyzed(sampleId, value, trx, callback) {
+        trx(this.baseTableName)
+            .where('id', sampleId)
+            .update({
+                is_analyzed: value,
+                analyzed_timestamp: value ? this.db.knex.fn.now() : null
+            })
+            .asCallback((error) => {
+                callback(error, sampleId);
+            });
     }
 
     // languId is used for interface compatibility
@@ -144,23 +148,29 @@ class SamplesModel extends SecureModelBase {
                     this._insert(dataToInsert, trx, cb);
                 },
                 (sampleId, cb) => {
-                    this._addNewFileSampleVersion(sampleId, trx, cb);
+                    this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
+                        if (error) {
+                            cb(error);
+                        } else {
+                            cb(null, {sampleId, versionId});
+                        }
+                    });
                 },
-                (versionId, cb) => {
-                    this._addFileSampleValues(versionId, sample.values, trx, cb);
+                (sampleObj, cb) => {
+                    this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
+                        cb(error, sampleObj);
+                    });
                 }
             ], cb);
         }, callback);
     }
 
     _mapFileSampleValues(sample, callback) {
-        this._fetchFileSampleValues(sample.id, (error, result) => {
+        this._fetchFileSampleValues(sample.id, (error, values) => {
             if (error) {
                 callback(error);
             } else {
-                sample.vcfFileSampleVersionId = result.vcfFileSampleVersionId;
-                sample.fieldId = result.fieldId;
-                sample.values = result.values;
+                sample.values = values;
                 callback(null, this._mapColumns(sample));
             }
         });
@@ -221,14 +231,32 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    _fetchFileSampleValues(sampleId, callback) {
+    _fetchLastSampleVersionId(sampleId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from('vcf_file_sample_version')
-                .innerJoin('vcf_file_sample_value', 'vcf_file_sample_value.vcf_file_sample_version_id', 'vcf_file_sample_version.id')
-                //.orderBy('vcf_file_sample_version.timestamp', 'desc')
                 .where('vcf_file_sample_id', sampleId)
+                .orderBy('timestamp', 'desc')
                 .limit(1)
+                .asCallback((error, result) => {
+                    if (error) {
+                        cb(error);
+                    } else if (result.length > 0) {
+                        cb(null, result[0].id);
+                    } else {
+                        cb(new Error('Sample not found: ' + sampleId));
+                    }
+                });
+        }, callback);
+    }
+
+    _fetchMetadataForSampleVersion(versionId, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from('vcf_file_sample_value')
+                .innerJoin('field_metadata', 'vcf_file_sample_value.field_id', 'field_metadata.id')
+                .innerJoin('field_text', 'field_text.field_id', 'field_metadata.id')
+                .where('vcf_file_sample_version_id', versionId)
                 .asCallback((error, result) => {
                     if (error) {
                         cb(error);
@@ -237,6 +265,17 @@ class SamplesModel extends SecureModelBase {
                     }
                 });
         }, callback);
+    }
+
+    _fetchFileSampleValues(sampleId, callback) {
+        async.waterfall([
+            (cb) => {
+                this._fetchLastSampleVersionId(sampleId, cb);
+            },
+            (versionId, cb) => {
+                this._fetchMetadataForSampleVersion(versionId, cb);
+            }
+        ], callback);
     }
 
 }

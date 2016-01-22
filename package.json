@@ -8,7 +8,6 @@
     "deploy": "bash ./scripts/heroku-deploy.sh",
     "db:create": "node ./scripts/create-database.js",
     "import:defaults": "node ./scripts/import-defaults.js",
-    "test:models": "node ./test/test-models.js",
     "start": "node index.js",
     "build:data": "node ./defaults/build-initial-data.js",
     "client": "node test-client/index.js"

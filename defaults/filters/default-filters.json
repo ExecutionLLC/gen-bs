@@ -1,0 +1,49 @@
+[
+  {
+    "id": "8355f3a0-910a-4657-bb63-1d5f2b1d7f9d",
+    "name": "Test Filter",
+    "description": "Test filter description",
+    "type": "standard",
+    "isCopyDisabled": false,
+    "rules": {
+      "$or": [
+        {
+          "00000000-0000-0000-0000-000000000005": {
+            "$ne": "A"
+          }
+        },
+        {
+          "00000000-0000-0000-0000-000000000007": "PASS"
+        },
+        {
+          "$and": [
+            {
+              "7b26d9e7-bb7b-49bc-81af-35ef6fec6c52": {
+                "$ne": "ABC"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "69071bfc-e78e-41e7-aa90-3f481c5f3eb9",
+    "name": "Another Test Filter",
+    "description": "Test filter description v2",
+    "type": "advanced",
+    "isCopyDisabled": false,
+    "rules": {
+      "$or": [
+        {
+          "00000000-0000-0000-0000-000000000005": {
+            "$ne": "A"
+          }
+        },
+        {
+          "00000000-0000-0000-0000-000000000007": "PASS"
+        }
+      ]
+    }
+  }
+]

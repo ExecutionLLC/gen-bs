@@ -61,14 +61,11 @@ class FieldsMetadataModel extends ModelBase {
     findByUserAndSampleId(userId, sampleId, callback) {
         async.waterfall([
             (cb) => {
-                this._fetchMetadataBySampleId(sampleId, cb);
+                this.models.samples.find(userId, sampleId, cb);
             },
-            (metadata, cb) => {
-                if (metadata.creator == userId) {
-                    cb(null, metadata);
-                } else {
-                    cb(new Error('Security check: user not found'));
-                }
+            (sample, cb) => {
+                cb(null, sample.values);
+                //this.models.samples._fetchFileSampleValues(sample.id, cb);
             },
             (metadata, cb) => {
                 this._mapMetadata(metadata, cb);
@@ -76,9 +73,9 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
-    //findSourcesMetadata(callback) {
-    //    this._fetchMetadataBySourceType('source', callback);
-    //}
+    findSourcesMetadata(callback) {
+        this._fetchMetadataBySource('source', callback);
+    }
 
     _add(languId, metadata, withId, callback) {
         this.db.transactionally((trx, cb) => {
@@ -123,28 +120,6 @@ class FieldsMetadataModel extends ModelBase {
                 callback(null, this._mapColumns(metadata));
             }
         });
-    }
-
-    _fetchMetadataBySampleId(sampleId, callback) {
-        this.db.asCallback((knex, cb) => {
-            knex.select()
-                .from('vcf_file_sample')
-                .innerJoin('vcf_file_sample_value', 'vcf_file_sample_value.vcf_file_sample_version_id', 'vcf_file_sample_version.id')
-                .innerJoin('field_metadata', 'field_metadata.id', 'vcf_file_sample_value.field_id')
-                .innerJoin('field_text', 'field_text.field_id', 'field_metadata.id')
-                //.orderBy('vcf_file_sample_version.timestamp', 'desc')
-                .where('vcf_file_sample_id', sampleId)
-                .limit(1)
-                .asCallback((error, metadata) => {
-                    if (error) {
-                        cb(error);
-                    } else if (data.length > 0) {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
-                    } else {
-                        cb(new Error('Item not found: ' + sampleId));
-                    }
-                });
-        }, callback);
     }
 
     _mapKeywords(keywords, callback) {
@@ -194,20 +169,20 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    //_fetchMetadataBySourceType(sourceType, callback) {
-    //    this.db.asCallback((knex, cb) => {
-    //        knex.select()
-    //            .from(this.baseTableName)
-    //            .where('source_type', sourceType)
-    //            .asCallback((error, fieldsMetadata) => {
-    //                if (error) {
-    //                    cb(error);
-    //                } else {
-    //                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
-    //                }
-    //            });
-    //    }, callback);
-    //}
+    _fetchMetadataBySource(source, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .where('source_name', source)
+                .asCallback((error, fieldsMetadata) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                    }
+                });
+        }, callback);
+    }
 
     _fetchMetadataKeywords(metadataId, callback) {
         this.db.asCallback((knex, cb) => {
