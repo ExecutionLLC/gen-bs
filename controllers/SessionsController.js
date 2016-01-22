@@ -29,7 +29,7 @@ class SessionsController extends ControllerBase {
                 this.sendInternalError(response, error);
             } else {
                 this.sendJson(response, {
-                    sessionId: sessionId
+                    sessionId
                 });
             }
         };
@@ -50,7 +50,7 @@ class SessionsController extends ControllerBase {
                 this.sendInternalError(response, error);
             } else {
                 this.sendJson(response, {
-                    sessionId: sessionId
+                    sessionId
                 });
             }
         })

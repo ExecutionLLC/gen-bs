@@ -18,15 +18,19 @@ class SessionsClient {
     }
 
     checkSession(sessionId, callback) {
-        RequestClient.put(this.urls.session(), {
-            SESSION_HEADER: sessionId
-        }, null, callback);
+        RequestClient.put(this.urls.session(),
+            this._makeSessionHeader(sessionId), null, callback);
     }
 
     closeSession(sessionId, callback) {
-        RequestClient.del(this.urls.session(), {
-            SESSION_HEADER: sessionId
-        }, null, callback);
+        RequestClient.del(this.urls.session(),
+            this._makeSessionHeader(sessionId), null, callback);
+    }
+
+    _makeSessionHeader(sessionId) {
+        const headers = {};
+        headers[SESSION_HEADER] = sessionId;
+        return headers;
     }
 }
 
