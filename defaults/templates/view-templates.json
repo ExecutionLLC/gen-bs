@@ -32,14 +32,14 @@
       {
         "field": {
           "source_name": "common_no_known_medical_impact_20151201",
-          "name": "CHROM"
+          "name": "INFO_RSPOS"
         },
         "order": 3
       },
       {
         "field": {
           "source_name": "common_no_known_medical_impact_20151201",
-          "name": "ALT"
+          "name": "INFO_VP"
         },
         "order": 4
       },

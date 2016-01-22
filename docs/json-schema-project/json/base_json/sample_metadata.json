@@ -2,7 +2,7 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
-		"modifiedTimestamp": {
+		"modified_timestamp": {
 			"type": "string",
 			"description": "Timestamp indicating the time this exact version has been created."
 		},

@@ -4,6 +4,7 @@ const _ = require('lodash');
 
 const MockModelBase = require('./MockModelBase');
 const FsUtils = require('../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 const userId = require('../test_data/user_metadata.json')[0].id;
 
@@ -13,7 +14,9 @@ const samplesLoadFunc = (callback) => {
             callback(error);
         } else {
             const samples = _.map(files, (file) => FsUtils.getFileContentsAsString(file))
-                .map(contents => JSON.parse(contents))
+                .map(contents => ChangeCaseUtil.convertKeysToCamelCase(
+                    JSON.parse(contents)
+                ))
                 .map(sampleMetadata => sampleMetadata.sample);
             callback(null, samples);
         }
