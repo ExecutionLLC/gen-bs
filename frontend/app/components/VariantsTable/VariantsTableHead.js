@@ -35,8 +35,10 @@ export default class VariantsTableHead extends Component {
           let name = '';
           let fieldMetadata = '';
 
-          fieldMetadata = _.find(fields, (field) => field.id === tableFieldId)
-          console.log('fieldMetadata',fieldMetadata)
+          fieldMetadata =
+            _.find(fields.list, (field) => field.id === tableFieldId) ||
+            _.find(fields.sourceFieldsList, (field) => field.id === tableFieldId)
+
 
           name = (fieldMetadata === undefined) ? tableFieldId : fieldMetadata.name
           

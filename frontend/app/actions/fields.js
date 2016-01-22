@@ -3,11 +3,11 @@ import config from '../../config'
 /*
  * action types
  */
-export const RECEIVE_FIELDS = 'RECEIVE_FIELDS'
 export const REQUEST_FIELDS = 'REQUEST_FIELDS'
+export const RECEIVE_FIELDS = 'RECEIVE_FIELDS'
 
-export const RECEIVE_SOURCE_FIELDS = 'REQUEST_SOURCE_FIELDS'
 export const REQUEST_SOURCE_FIELDS = 'REQUEST_SOURCE_FIELDS'
+export const RECEIVE_SOURCE_FIELDS = 'RECEIVE_SOURCE_FIELDS'
 
 
 /*

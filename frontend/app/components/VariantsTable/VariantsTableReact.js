@@ -29,8 +29,8 @@ class VariantsTableReact extends Component {
           { !isVariantsEmpty &&
             <div className="table-variants-container">
               <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
-                <VariantsTableHead variants={variants} fields={fields.list} />
-                <VariantsTableRows variants={variants} fields={fields.list} />
+                <VariantsTableHead variants={variants} fields={fields} />
+                <VariantsTableRows variants={variants} fields={fields} />
               </table> 
             </div>
           }

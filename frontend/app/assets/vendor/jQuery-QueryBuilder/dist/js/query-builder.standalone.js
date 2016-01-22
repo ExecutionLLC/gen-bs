@@ -2124,7 +2124,7 @@ QueryBuilder.templates.group = '\
     </div> \
     <div class="btn-group group-conditions"> \
       {{~ it.conditions: condition }} \
-        <label class="btn btn-xs btn-primary"> \
+        <label class="btn btn-xs btn-default"> \
           <input type="radio" name="{{= it.group_id }}_cond" value="{{= condition }}"> {{= it.lang.conditions[condition] || condition }} \
         </label> \
       {{~}} \
@@ -2157,7 +2157,7 @@ QueryBuilder.templates.rule = '\
 
 QueryBuilder.templates.filterSelect = '\
 {{ var optgroup = null; }} \
-<select class="form-control" name="{{= it.rule.id }}_filter"> \
+<select class="form-control selectTree" name="{{= it.rule.id }}_filter"> \
   {{? it.settings.display_empty_filter }} \
     <option value="-1">{{= it.settings.select_placeholder }}</option> \
   {{?}} \
@@ -2175,7 +2175,7 @@ QueryBuilder.templates.filterSelect = '\
 
 QueryBuilder.templates.operatorSelect = '\
 {{ var optgroup = null; }} \
-<select class="form-control" name="{{= it.rule.id }}_operator"> \
+<select class="form-control select2" name="{{= it.rule.id }}_operator"> \
   {{~ it.operators: operator }} \
     {{? optgroup !== operator.optgroup }} \
       {{? optgroup !== null }}</optgroup>{{?}} \

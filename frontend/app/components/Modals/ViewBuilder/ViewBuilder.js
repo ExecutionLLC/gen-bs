@@ -15,15 +15,27 @@ export default class ViewBuilder extends Component {
       'disabled': (view.view_type === 'standard') ? 'disabled':''
     })
 
+    
 
 
     const selects = view.view_list_items.map( function(viewItem, index) {
 
-      var currentValue = `${viewItem.field_name}@${viewItem.source_name}`
+      var currentValue =
+        _.find(fields.list, {id: viewItem.field_id}) ||
+        _.find(fields.sourceFieldsList, {id: viewItem.field_id}) ||
+        {id: null}
+
+      const selectOptions= [
+
+          ...fields.list.filter((f) => f.id !== currentValue.id).map( (f) => { return {value: f.id, label: `${f.label} -- ${f.source_name}`}} ),
+
+          ...fields.sourceFieldsList.filter((f) => (f.id !== currentValue.id) && (f.source_name !== 'sample')).map( (f) => { return {value: f.id, label: `${f.label} -- ${f.source_name}`}} )
+
+        ]
 
       return (
 
-             <div className="row grid-toolbar level1" key={Math.round(Math.random()*100000000).toString()} >
+             <div className="row grid-toolbar" key={Math.round(Math.random()*100000000).toString()} >
                
               <div className="col-xs-6 btn-group-select2">
                 <div className="btn-group">
@@ -35,15 +47,15 @@ export default class ViewBuilder extends Component {
                 </div>
                 <div className="btn-group">
                   <Select
-                    options={ fields.list.map( (f) => { return {value: `${f.name}@${f.source_type}`, label: f.name}} ) }
+                    options={selectOptions}
                     value={currentValue}
                     clearable={false}
-                    onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value.split('@')[0], val.value.split('@')[1] )) }
+                    onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
                     disabled={view.view_type === 'standard'}
                   />
                 </div>
                 <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
-                   <button type="button" className="btn btn-default btnSort active desc" disabled=""></button>
+                   <button type="button" className="btn btn-default btnSort active desc" disabled></button>
                 </div>   
                 
                 </div>
