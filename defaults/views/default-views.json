@@ -1,84 +1,74 @@
 [
   {
-    "id": "b40061f3-8ec4-4261-9017-24541ad12eaa",
+    "id": "0709ea33-ee1a-45a7-89dd-176cc2623467",
     "name": "Test Default View",
     "view_type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "1e5c4073-b349-4d02-866e-342aa7863ebd",
-        "field_name": "CHROM",
-        "source_name": "sample",
+        "id": "dee5ce0c-76f5-4717-80ee-a3ea428e8031",
+        "field_id": "00000000-0000-0000-0000-00000000001",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "e069a56b-bfb9-41ea-b005-be756a2e8da6",
-        "field_name": "POS",
-        "source_name": "sample",
+        "id": "2f17ed70-0f65-4a1d-a36b-3b04c22b3076",
+        "field_id": "00000000-0000-0000-0000-00000000002",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
       },
       {
-        "id": "496e246a-0200-460d-a0f9-d9a15cf73c21",
-        "field_name": "FILTER",
-        "source_name": "sample",
+        "id": "09874aaf-7057-4053-a4f4-525a1c2da0c2",
+        "field_id": "00000000-0000-0000-0000-00000000007",
         "order": 6
       },
       {
-        "id": "cb5c68a0-44e5-4c53-9f82-f48eb704cecb",
-        "field_name": "CHROM",
-        "source_name": "common_no_known_medical_impact_20151201",
+        "id": "9e4cf54e-9693-4182-9f22-9c869a5ec469",
+        "field_id": "70dfc62c-4867-483b-a0f0-330136ddd0c6",
         "order": 3
       },
       {
-        "id": "53046a7d-4a47-49e2-9055-001a46f461ee",
-        "field_name": "ALT",
-        "source_name": "common_no_known_medical_impact_20151201",
+        "id": "8268f664-1cf9-48a5-a183-9d9dd2cc467a",
+        "field_id": "96698827-5d91-4393-b56b-0075915bc57e",
         "order": 4
       },
       {
-        "id": "9e2b6695-fb99-43f1-8cb7-356ac09c2007",
-        "field_name": "ALT",
-        "source_name": "sample",
+        "id": "af33a981-c5a4-48c0-aab2-e4d0c7c879fc",
+        "field_id": "00000000-0000-0000-0000-00000000005",
         "order": 5
       }
     ]
   },
   {
-    "id": "6fd4edff-5bd0-4660-ad8d-142a25ad2ab2",
+    "id": "390a08d0-d2a2-45b3-aa7f-8a45b8061001",
     "name": "Another Default View",
     "view_type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "eb30e154-11e6-43e7-a0a8-cf355a59e6db",
-        "field_name": "CHROM",
-        "source_name": "sample",
+        "id": "aff0f624-43cb-45fb-a2a6-fe007f735095",
+        "field_id": "00000000-0000-0000-0000-00000000001",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
       },
       {
-        "id": "07ad3e7b-69c8-4230-847a-1e98b1d6919f",
-        "field_name": "POS",
-        "source_name": "sample",
+        "id": "614b744a-16ba-4b40-98c1-a8f85fd4f4d3",
+        "field_id": "00000000-0000-0000-0000-00000000002",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
       },
       {
-        "id": "e9d0fb19-cdba-44a5-955d-760af9373466",
-        "field_name": "FILTER",
-        "source_name": "sample",
+        "id": "4ced1359-0e57-43c8-97ec-491c9d9eca8e",
+        "field_id": "00000000-0000-0000-0000-00000000007",
         "order": 3
       },
       {
-        "id": "19331c67-218c-4cc0-bc12-b33e6646d624",
-        "field_name": "ALT",
-        "source_name": "sample",
+        "id": "0a18859a-be5c-4785-89a8-c1cee637f2c2",
+        "field_id": "00000000-0000-0000-0000-00000000005",
         "order": 4
       }
     ]

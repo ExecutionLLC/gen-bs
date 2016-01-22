@@ -17,7 +17,6 @@ export default class Analyze extends Component {
       target: () => ReactDOM.findDOMNode(this.refs.analyze_tooltip_target)
 
     };
-    console.log('tooltip target', ReactDOM.findDOMNode(this.refs.analyze_tooltip_target))
     return (
 
         <div className="table-cell">

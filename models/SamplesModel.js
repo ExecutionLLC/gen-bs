@@ -48,9 +48,10 @@ class SamplesModel extends SecureModelBase {
                             this._update(sampleId, dataToUpdate, trx, cb);
                         },
                         (id, cb) => {
-                            this._addNewFileSampleVersion(sampleId, sample.fieldId, sample.values, trx, (error) => {
-                                cb(error, sampleId);
-                            });
+                            this._addNewFileSampleVersion(sampleId, trx, cb);
+                        },
+                        (versionId, cb) => {
+                            this._addFileSampleValues(versionId, sample.values, trx, cb);
                         }
                     ], cb);
                 }, callback);
@@ -127,7 +128,7 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    // languId is used for compatibility
+    // languId is used for interface compatibility
     _add(userId, languId, sample, withId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
@@ -146,14 +147,7 @@ class SamplesModel extends SecureModelBase {
                     this._addNewFileSampleVersion(sampleId, trx, cb);
                 },
                 (versionId, cb) => {
-
-                    //const values = sample.values || null;
-                    //const dataToInsert = {
-                    //    vcfFileSampleVersionId: versionId,
-                    //    fieldId: fieldId,
-                    //    values: values
-                    //};
-                    //this._insertIntoTable('vcf_file_sample_value', dataToInsert, trx, cb);
+                    this._addFileSampleValues(versionId, sample.values, trx, cb);
                 }
             ], cb);
         }, callback);
@@ -178,6 +172,21 @@ class SamplesModel extends SecureModelBase {
             vcfFileSampleId: sampleId
         };
         this._insertIntoTable('vcf_file_sample_version', dataToInsert, trx, callback);
+    }
+
+    _addFileSampleValues(versionId, values, trx, callback) {
+        async.map(values, (value, cb) => {
+            this._addFileSampleValue(versionId, value, trx, cb);
+        }, callback);
+    }
+
+    _addFileSampleValue(versionId, value, trx, callback) {
+        const dataToInsert = {
+            vcfFileSampleVersionId: versionId,
+            fieldId: value.fieldId,
+            values: value.values
+        };
+        this._insertIntoTable('vcf_file_sample_value', dataToInsert, trx, callback);
     }
 
     _fetchSamplesByUserId(userId, callback) {

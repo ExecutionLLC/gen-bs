@@ -24,30 +24,11 @@ class FiltersModel extends SecureModelBase {
     }
 
     add(userId, languId, filter, callback) {
-        this.db.transactionally((trx, cb) => {
-            async.waterfall([
-                (cb) => {
-                    const dataToInsert = {
-                        id: this._generateId(),
-                        creator: userId,
-                        name: filter.name,
-                        rules: filter.rules,
-                        filterType: 'user'
-                    };
-                    this._insert(dataToInsert, trx, cb);
-                },
-                (filterId, cb) => {
-                    const dataToInsert = {
-                        filterId: filterId,
-                        languId: languId,
-                        description: filter.description
-                    };
-                    this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
-                        cb(error, filterId);
-                    });
-                }
-            ], cb);
-        }, callback);
+        this._add(userId, languId, filter, false, callback);
+    }
+
+    addWithId(userId, languId, filter, callback) {
+        this._add(userId, languId, filter, true, callback);
     }
 
     // Creates a new version of an existing filter
@@ -127,6 +108,33 @@ class FiltersModel extends SecureModelBase {
                 }, cb);
             }
         ], callback);
+    }
+
+    _add(userId, languId, filter, withId, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: (withId ? filter.id : this._generateId()),
+                        creator: userId,
+                        name: filter.name,
+                        rules: filter.rules,
+                        filterType: 'user'
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                },
+                (filterId, cb) => {
+                    const dataToInsert = {
+                        filterId: filterId,
+                        languId: languId,
+                        description: filter.description
+                    };
+                    this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
+                        cb(error, filterId);
+                    });
+                }
+            ], cb);
+        }, callback);
     }
 
     _fetch(userId, filterId, callback) {

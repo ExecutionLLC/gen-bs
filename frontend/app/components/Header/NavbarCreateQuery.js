@@ -10,7 +10,7 @@ import Views from './NavbarCreateQuery/Views'
 import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 
-import { changeSample, changeView, analyze } from '../../actions/ui'
+import { changeSample, changeView, changeFilter, analyze } from '../../actions/ui'
 
 
 class NavbarCreateQuery extends Component {
@@ -18,7 +18,7 @@ class NavbarCreateQuery extends Component {
   render() {
 
     const { dispatch, samples, views } = this.props
-    const { currentSample, currentView } = this.props.ui
+    const { currentSample, currentView, currentFilter } = this.props.ui
 
 
     return (
@@ -31,10 +31,9 @@ class NavbarCreateQuery extends Component {
                     {...this.props}
                     sampleSelected={ (e) => dispatch(changeSample(samples, $(e.target).val()))}
                   />
-                  <FiltersSetup />
+                  <FiltersSetup {...this.props} />
                   <Filters
                     {...this.props}
-                    filterSelected={ (e) => dispatch(changeFilter(views, $(e.target).val()))}
                   />
 
                   <ViewsSetup {...this.props} />
@@ -44,7 +43,7 @@ class NavbarCreateQuery extends Component {
 
                   <Analyze 
                     {...this.props}
-                    clicked ={ (e) => dispatch(analyze(currentSample.id, currentView.id, null))}
+                    clicked ={ (e) => dispatch(analyze(currentSample.id, currentView.id, currentFilter.id))}
                   />
                   <LoadHistory />
                 </div>

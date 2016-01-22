@@ -11,14 +11,6 @@ import VariantsTableRows from './VariantsTableRows'
 
 class VariantsTableReact extends Component {
 
-  constructor(props) {
-    super(props)
-  }
-
-  componentDidMount() {
-    //this.props.dispatch(fetchVariants())
-  }
-
   render() {
     const { dispatch, variants, isVariantsEmpty, views, fields, ui } = this.props
 

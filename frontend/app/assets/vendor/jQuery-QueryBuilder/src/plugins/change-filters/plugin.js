@@ -1,7 +1,6 @@
 /*!
  * jQuery QueryBuilder Change Filters
  * Allows to change available filters after plugin initialization.
- * Copyright 2014-2015 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
  */
 
 QueryBuilder.extend({
@@ -12,7 +11,7 @@ QueryBuilder.extend({
      * @param {object[]} new filters
      */
     setFilters: function(delete_orphans, filters) {
-        var that = this;
+        var self = this;
 
         if (filters === undefined) {
             filters = delete_orphans;
@@ -20,6 +19,7 @@ QueryBuilder.extend({
         }
 
         filters = this.checkFilters(filters);
+        filters = this.change('setFilters', filters);
 
         var filtersIds = filters.map(function(filter) {
             return filter.id;
@@ -29,12 +29,12 @@ QueryBuilder.extend({
         if (!delete_orphans) {
             (function checkOrphans(node) {
                 node.each(
-                  function(rule) {
-                      if (rule.filter && filtersIds.indexOf(rule.filter.id) === -1) {
-                          Utils.error('ChangeFilter', 'A rule is using filter "{0}"', rule.filter.id);
-                      }
-                  },
-                  checkOrphans
+                    function(rule) {
+                        if (rule.filter && filtersIds.indexOf(rule.filter.id) === -1) {
+                            Utils.error('ChangeFilter', 'A rule is using filter "{0}"', rule.filter.id);
+                        }
+                    },
+                    checkOrphans
                 );
             }(this.model.root));
         }
@@ -50,7 +50,7 @@ QueryBuilder.extend({
                       rule.drop();
                   }
                   else {
-                      that.createRuleFilters(rule);
+                      self.createRuleFilters(rule);
 
                       rule.$el.find(Selectors.rule_filter).val(rule.filter ? rule.filter.id : '-1');
                   }
@@ -60,11 +60,11 @@ QueryBuilder.extend({
         }(this.model.root));
 
         // update plugins
-        if (that.settings.plugins) {
-            if (that.settings.plugins['unique-filter']) {
+        if (this.settings.plugins) {
+            if (this.settings.plugins['unique-filter']) {
                 this.updateDisabledFilters();
             }
-            else if (this.settings.plugins['bt-selectpicker']) {
+            if (this.settings.plugins['bt-selectpicker']) {
                 this.$el.find(Selectors.rule_filter).selectpicker('render');
             }
         }
@@ -78,6 +78,8 @@ QueryBuilder.extend({
                 this.settings.default_filter = null;
             }
         }
+
+        this.trigger('afterSetFilters', filters);
     },
 
     /**
@@ -107,7 +109,7 @@ QueryBuilder.extend({
             // after filter by its id
             if (this.filters.some(function(filter, index) {
                 if (filter.id == position) {
-                    position = index+1;
+                    position = index + 1;
                     return true;
                 }
             })) {

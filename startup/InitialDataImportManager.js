@@ -25,6 +25,8 @@ class InitialDataImportManager {
         this._importSample = this._importSample.bind(this);
         this._importFieldsMetadata = this._importFieldsMetadata.bind(this);
         this._importMetadata = this._importMetadata.bind(this);
+        this._importFilters = this._importFilters.bind(this);
+        this._makeSampleValues = this._makeSampleValues.bind(this);
     }
 
     execute(callback) {
@@ -45,6 +47,12 @@ class InitialDataImportManager {
             (users, cb) => {
                 result.users = users;
 
+                const metadataDir = defaultsDir + '/metadata';
+                this._importFiles(metadataDir, this._importFieldsMetadata, cb);
+            },
+            (metadata, cb) => {
+                result.metadata = metadata;
+
                 const keywordsDir = defaultsDir + '/keywords';
                 this._importFiles(keywordsDir, this._importKeywords, cb);
             },
@@ -57,17 +65,17 @@ class InitialDataImportManager {
             (views, cb) => {
                 result.views = views;
 
-                const metadataDir = defaultsDir + '/metadata';
-                this._importFiles(metadataDir, this._importFieldsMetadata, cb);
-            },
-            (metadata, cb) => {
-                result.metadata = metadata;
-
                 const samplesDir = defaultsDir + '/samples';
                 this._importFiles(samplesDir, this._importSample, cb);
             },
             (samples, cb) => {
                 result.samples = samples;
+
+                const filtersDir = defaultsDir + '/filters';
+                this._importFiles(filtersDir, this._importFilters, cb);
+            },
+            (filters, cb) => {
+                result.filters = filters;
 
                 console.log(result);
                 cb(null, result);
@@ -111,33 +119,38 @@ class InitialDataImportManager {
         }, callback);
     }
 
-    _importViews(viewFilePath, callback) {
-        const viewsString = FsUtils.getFileContentsAsString(viewFilePath);
+    _importViews(viewsFilePath, callback) {
+        const viewsString = FsUtils.getFileContentsAsString(viewsFilePath);
         const views = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(viewsString));
         async.map(views, (view, cb) => {
             this.models.views.addWithId(null, this.config.defaultLanguId, view, cb)
         }, callback);
     }
 
+    _importFilters(filtersFilePath, callback) {
+        const filtersString = FsUtils.getFileContentsAsString(filtersFilePath);
+        const filters = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(filtersString));
+        async.map(filters, (filter, cb) => {
+            this.models.filters.addWithId(null, this.config.defaultLanguId, filter, cb)
+        }, callback);
+    }
+
     _importSample(sampleMetadataFilePath, callback) {
-        const sampleId = this._getSampleIdFromFilePath(sampleMetadataFilePath);
         const sampleFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
         const sampleFields = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(sampleFieldsString));
 
-        const result = {};
-        async.waterfall([
-            (cb) => {
-                this.models.samples.addWithId(null, this.config.defaultLanguId, sampleFields.sample, cb);
-            },
-            (id, cb) => {
-                result.sample = id;
-                this._importMetadata(sampleFields.fields, cb);
-            },
-            (fieldIds, cb) => {
-                result.fields = fieldIds;
-                cb(null, result);
-            }
-        ], callback);
+        let sample = sampleFields.sample;
+        sample.values = this._makeSampleValues(sampleFields.fieldIds);
+        this.models.samples.addWithId(null, this.config.defaultLanguId, sampleFields.sample, callback);
+    }
+
+    _makeSampleValues(fieldIds) {
+        return _.map(fieldIds, (fieldId) => {
+            return {
+                fieldId: fieldId,
+                values: null
+            };
+        });
     }
 
     _getSampleIdFromFilePath(sampleMetadataFilePath) {

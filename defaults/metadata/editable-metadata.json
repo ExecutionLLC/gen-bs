@@ -1,6 +1,6 @@
 [
   {
-    "id": "00000000-0000-0000-0000-00000000010",
+    "id": "00000000-0000-0000-0000-000000000010",
     "name": "FAMILY_ID",
     "label": "Family id",
     "source_name": "sample",
@@ -11,7 +11,7 @@
     "dimension": 1
   },
   {
-    "id": "00000000-0000-0000-0000-00000000011",
+    "id": "00000000-0000-0000-0000-000000000011",
     "name": "FAMILY_INFO",
     "label": "Family information",
     "source_name": "sample",
@@ -22,7 +22,7 @@
     "dimension": 1
   },
   {
-    "id": "00000000-0000-0000-0000-00000000012",
+    "id": "00000000-0000-0000-0000-000000000012",
     "name": "GENDER",
     "label": "Gender",
     "source_name": "sample",
@@ -33,7 +33,7 @@
     "dimension": 1
   },
   {
-    "id": "00000000-0000-0000-0000-00000000013",
+    "id": "00000000-0000-0000-0000-000000000013",
     "name": "PHENOTYPE",
     "label": "Phenotype",
     "source_name": "sample",
@@ -44,7 +44,7 @@
     "dimension": 1
   },
   {
-    "id": "00000000-0000-0000-0000-00000000014",
+    "id": "00000000-0000-0000-0000-000000000014",
     "name": "SAMPLE_ID",
     "label": "Sample id",
     "source_name": "sample",
@@ -55,7 +55,7 @@
     "dimension": 1
   },
   {
-    "id": "00000000-0000-0000-0000-00000000015",
+    "id": "00000000-0000-0000-0000-000000000015",
     "name": "SAMPLE_TYPE",
     "label": "Sample type",
     "source_name": "sample",
@@ -66,7 +66,7 @@
     "dimension": 1
   },
   {
-    "id": "00000000-0000-0000-0000-00000000016",
+    "id": "00000000-0000-0000-0000-000000000016",
     "name": "REFERENCE",
     "label": "Genome build",
     "source_name": "sample",
@@ -77,7 +77,7 @@
     "dimension": 1
   },
   {
-    "id": "00000000-0000-0000-0000-00000000017",
+    "id": "00000000-0000-0000-0000-000000000017",
     "name": "COMMENT",
     "label": "Comment",
     "source_name": "sample",

@@ -220,6 +220,7 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('langu');
                 table.string('description', 512);
+                table.string('label', 50);
 
                 table.primary(['field_id', 'langu_id']);
             })

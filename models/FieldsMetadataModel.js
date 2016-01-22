@@ -229,6 +229,27 @@ class FieldsMetadataModel extends ModelBase {
                 });
         }, callback);
     }
+
+    /**
+     * Returns existing field metadata if the field is already in the existingFields array.
+     * Returns null, if there is no such field in existingFields array.
+     * */
+    static getExistingFieldOrNull(fieldMetadata, existingFields, isSourceField) {
+        const existingField = _.find(existingFields,
+            field => field.name === fieldMetadata.name
+            && field.valueType === fieldMetadata.valueType
+            && field.dimension === fieldMetadata.dimension
+        );
+        const shouldAddField =
+            (isSourceField && (!fieldMetadata.isMandatory || !existingField)) // Should add copies of all non-mandatory source fields
+            || (!isSourceField && !existingField); // Should only add sample fields if there is no existing field.
+
+        if (shouldAddField) {
+            return null;
+        } else {
+            return existingField;
+        }
+    }
 }
 
 module.exports = FieldsMetadataModel;

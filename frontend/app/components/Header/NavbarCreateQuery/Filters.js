@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import Select2 from 'react-select2-wrapper';
+import Select from 'react-select';
 
+import { changeFilter } from '../../../actions/ui'
 
 export default class Filters extends Component {
 
@@ -10,19 +11,21 @@ export default class Filters extends Component {
 
   render() {
     const filters = this.props.userData.filters
+    const dispatch = this.props.dispatch
+    const currentFilter = this.props.ui.currentFilter
 
     return (
 
      <div className="table-cell table-cell100">
-          <div className="btn-group"  data-localize="filters.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
-              <Select2
-                 multiple={false}
-                 data={filters.map( f => { return {id: f.id, text: f.name} } )}
-                 options={{
-                   placeholder: 'Default Filter',
-                 }} 
-                 onSelect={(e) => { this.props.filterSelected(e) } }
-              />
+          <div className="btn-group filter-select"  data-localize="filters.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
+
+            <Select
+              options={filters.map( f => { return {value: f.id, label: f.name} } )}
+              value={currentFilter ? currentFilter.id: null}
+              clearable={false}
+              onChange={ (val) => dispatch(changeFilter(val.value) )}
+            />
+
           </div>
       </div>
 

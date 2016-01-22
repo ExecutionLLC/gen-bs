@@ -1,7 +1,6 @@
 /*!
  * jQuery QueryBuilder Sortable
  * Enables drag & drop sort of rules.
- * Copyright 2014-2015 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
  */
 
 Selectors.rule_and_group_containers = Selectors.rule_container + ', ' + Selectors.group_container;
@@ -14,8 +13,9 @@ QueryBuilder.define('sortable', function(options) {
         // configure jQuery to use dataTransfer
         $.event.props.push('dataTransfer');
 
-        var placeholder, src,
-            self = e.builder;
+        var placeholder;
+        var src;
+        var self = e.builder;
 
         // only add "draggable" attribute when hovering drag handle
         // preventing text select bug in Firefox
@@ -80,9 +80,11 @@ QueryBuilder.define('sortable', function(options) {
             src.$el.show();
             placeholder.drop();
 
-            src = placeholder = null;
-
             self.$el.find(Selectors.rule_and_group_containers).removeAttr('draggable');
+
+            self.trigger('afterMove', src);
+
+            src = placeholder = null;
         });
     });
 
@@ -105,7 +107,7 @@ QueryBuilder.define('sortable', function(options) {
      * Modify templates
      */
     this.on('getGroupTemplate.filter', function(h, level) {
-        if (level>1) {
+        if (level > 1) {
             var $h = $(h.value);
             $h.find(Selectors.condition_container).after('<div class="drag-handle"><i class="' + options.icon + '"></i></div>');
             h.value = $h.prop('outerHTML');
