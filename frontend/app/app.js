@@ -2,11 +2,11 @@ import 'babel-polyfill'
 import 'jszip'
 
 
-const $ = require('jquery');
+//const $ = require('jquery');
 const JSZip = require('jszip');
 window.JSZip = JSZip;
-window.jQuery = $;
-window.$ = $;
+//window.jQuery = $;
+//window.$ = $;
 
 import './assets/vendor/jQuery-QueryBuilder/dist/css/query-builder.default.min.css';
 import './assets/css/bootstrap/js/bootstrap.js';
@@ -20,10 +20,18 @@ import './assets/vendor/jquery-localize/dist/jquery.localize.js';
 
 import './assets/css/index.less';
 
-import './components/VariantsTable/VariantsTable';
+//import './components/VariantsTable/VariantsTable';
 
-import './components/Old/old';
+//import './components/Old/old';
 import './components/localize/jquerylocalize.js';
 
 
 
+import React from 'react'
+import { render } from 'react-dom'
+import Root from './containers/Root'
+
+render(
+  <Root />,
+  document.getElementById('root')
+)

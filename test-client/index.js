@@ -3,14 +3,23 @@
 const Request = require('request');
 const Read = require('read');
 const Async = require('async');
+const _ = require('lodash');
+
+const env = process.env;
 
 const SESSION_HEADER = 'X-Session-Id';
 const HOST = 'localhost';
-const PORT = 5000;
+const PORT = env.GEN_PORT || 5000;
 const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const DefaultViews = require('../defaults/views/default-views.json');
+const DefaultFilters = require('../defaults/filters/default-filters.json');
+const Sample = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample;
+const SampleFieldIds = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').field_ids;
+const AllFields = require('../defaults/fields/fields-metadata.json');
+const SampleFields = _.filter(AllFields, field => _.some(SampleFieldIds, fieldId => fieldId === field.id));
 
 const Operations = require('./Operations');
 const Urls = require('./Urls');
@@ -60,6 +69,10 @@ function askOperation(callback) {
   read('Operation Id: ', lastOperationId, callback);
 }
 
+operations.add('Redraw list', callback => {
+  callback();
+});
+
 operations.add('Open session', (callback) => {
   waterfall([
     (callback) => {
@@ -106,9 +119,9 @@ operations.add('Start search', (callback) => {
   waterfall([
     (callback) => {
       callback(null, {
-        viewId: 'b7ead923-9973-443a-9f44-5563d31b5073',
-        filterIds: null,
-        sampleId: 'ce81aa10-13e3-47c8-bd10-205e97a92d69',
+        viewId: DefaultViews[0].id,
+        filterId: DefaultFilters[0].id,
+        sampleId: Sample.id,
         limit: 100,
         offset: 0
       });
@@ -155,11 +168,17 @@ operations.add('Search in results', (callback) => {
     },
     (sessionWithOperation, callback) => {
       const headers = createHeaders(sessionWithOperation.sessionId);
+      const field = _.find(SampleFields, field => field.name === 'FILTER');
       Request.post({
         url: urls.startSearchInResults(sessionWithOperation.operationId),
         json: {
-          topSearch: null,
-          search: [],
+          topSearch: '123',
+          search: [
+            {
+              fieldId: field.id,
+              value: 'PASS'
+            }
+          ],
           limit: 100,
           offset: 0
         },
@@ -173,18 +192,77 @@ operations.add('Search in results', (callback) => {
   ], callback);
 });
 
-operations.add('Get data', (callback) => {
-  Request.get({
-    url: urls.data()
-  }, (error, response, body) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log('Response: ' + stringify(response));
-      console.log('Body: ' + stringify(JSON.parse(body)));
+operations.add('Fetch page', callback => {
+  waterfall([
+    (callback) => {
+      askSession(callback);
+    },
+    (sessionId, callback) => {
+      askOperation((error, operationId) => {
+        callback(error, {
+          sessionId,
+          operationId
+        });
+      });
+    },
+    (context, callback) => {
+      read('limit', 100, (error, limit) => {
+        context.limit = limit;
+        callback(error, context);
+      })
+    },
+    (context, callback) => {
+      read('offset', 0, (error, offset) => {
+        context.offset = offset;
+        callback(error, context);
+      });
+    },
+    (context, callback) => {
+      lastSessionId = context.sessionId;
+      lastOperationId = context.operationId;
+
+      const headers = createHeaders(context.sessionId);
+      Request.get({
+        url: urls.loadNextPage(context.operationId),
+        headers,
+        qs: {
+          offset: context.offset,
+          limit: context.limit
+        }
+      }, (error, response, body) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Response: ' + stringify(response));
+          console.log('Body: ' + stringify(body));
+        }
+      });
+      callback();
     }
-    callback();
-  });
+  ], callback);
+});
+
+operations.add('Get data', (callback) => {
+  waterfall([
+    (callback) => {
+      askSession(callback);
+    },
+    (sessionId, callback) => {
+      const headers = createHeaders(sessionId);
+      Request.get({
+        url: urls.data(),
+        headers
+      }, (error, response, body) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Response: ' + stringify(response));
+          console.log('Body: ' + stringify(JSON.parse(body)));
+        }
+        callback(null);
+      });
+    }
+  ], callback);
 });
 
 operations.add('Check session', (callback) => {

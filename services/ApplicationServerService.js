@@ -6,6 +6,9 @@ const async = require('async');
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
 
+const AppServerViewUtils = require('../utils/AppServerViewUtils');
+const AppServerFilterUtils = require('../utils/AppServerFilterUtils');
+
 const METHODS = {
     getSourcesList: 'v1.get_sources',
     getSourceMetadata: 'v1.get_source_metadata',
@@ -14,6 +17,11 @@ const METHODS = {
     setFilters: 'v1.set_filter'
 };
 
+/**
+ * This service sends requests to AS.
+ * Replies to these requests are handled
+ * by the separate ApplicationServerReplyService.
+ * */
 class ApplicationServerService extends ServiceBase {
     constructor(services) {
         super(services);
@@ -61,14 +69,19 @@ class ApplicationServerService extends ServiceBase {
      * @param callback callback
      * */
     requestOpenSearchSession(sessionId, params, callback) {
+        const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
+
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(params.sample);
-        const appServerView = this._createAppServerView(params.view, params.fieldsMetadata);
+        const appServerView = AppServerViewUtils.createAppServerView(params.view, fieldIdToFieldMetadata);
+        const appServerFilter = AppServerFilterUtils.createAppServerFilter(params.filter, fieldIdToFieldMetadata);
+        const appServerSortOrder = this._createAppServerViewSortOrder(params.view, fieldIdToFieldMetadata);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
-            view_structure: appServerView,
-            view_filter: params.filters || {}
+            viewStructure: appServerView,
+            viewFilter: appServerFilter,
+            viewSortOrder: appServerSortOrder
         };
 
         const operationTypes = this.services.operations.operationTypes();
@@ -110,16 +123,18 @@ class ApplicationServerService extends ServiceBase {
                 this.services.operations.find(sessionId, operationId, callback);
             },
             (operation, callback) => {
-                const method = METHODS.setFilters;
-                const searchInResultsRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
-                this._rpcSend(operationId, method, searchInResultsRequest, callback);
+                // save necessary data to the operation to be able to fetch required amount of data.
+                const operationData = _.cloneDeep(operation.data);
+                operationData.limit = params.limit;
+                operationData.offset = params.offset;
+                this.services.operations.setData(sessionId, operationId, operationData, (error) => {
+                    callback(error, operation);
+                });
             },
-            (operationId, callback) => {
-                // Store information about the desired limits after the operation call is successful.
-                this.services.operations.setData(sessionId, operationId, {
-                    offset: params.offset,
-                    limit: params.limit
-                }, callback);
+            (operation, callback) => {
+                const setFilterRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
+                const setSortRequest = this._createSetSortParams(params.sortValues);
+                this._rpcSend(operationId, METHODS.setFilters, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
     }
@@ -157,18 +172,38 @@ class ApplicationServerService extends ServiceBase {
         };
     }
 
-    _createAppServerView(view, fieldMetadata) {
-        const idToFieldMetadata = _.indexBy(fieldMetadata, 'id');
-        return {
-            sampleColumns: _.map(view.viewListItems, (viewListItem) => {
-                const field = idToFieldMetadata[viewListItem.fieldId];
-                return {
-                    name: field.name,
-                    filter: [] // TODO: List of resolved keyword values.
-                };
-            }),
-            sources: []
-        };
+    _createSetSortParams(sortParams) {
+        const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
+        //noinspection UnnecessaryLocalVariableJS leaved for debugging
+        const appServerSortParams = _.map(sortedParams, sortedParam => {
+            return {
+                columnName: sortedParam.fieldMetadata.name,
+                isAscendingOrder: (sortedParam.sortOrder === 'asc')
+            };
+        });
+
+        return appServerSortParams;
+    }
+
+    _createAppServerViewSortOrder(view, fieldIdToMetadata) {
+        const viewListItems = view.viewListItems;
+
+        // Get all items which specify sort order.
+        const sortItems = _.filter(viewListItems, listItem => !!listItem.sortOrder);
+
+        // Sort items by specified order.
+        const sortedSortItems = _.sortBy(sortItems, listItem => listItem.sortOrder);
+
+        //noinspection UnnecessaryLocalVariableJS leaved for debug.
+        const appServerSortOrder = _.map(sortedSortItems, listItem => {
+            const field = fieldIdToMetadata[listItem.fieldId];
+            return {
+                columnName: field.name,
+                isAscendingOrder: (listItem.sortDirection && listItem.sortDirection === 'asc')? true : false
+            };
+        });
+
+        return appServerSortOrder;
     }
 
     /**
@@ -176,9 +211,8 @@ class ApplicationServerService extends ServiceBase {
      * For user samples sample id is file name.
      * */
     _getAppServerSampleId(sample) {
-        return sample.sampleType === 'standard'
-        || sample.sampleType === 'advanced' ?
-            sample.fileName : sample.id;
+        return sample.sampleType === 'standard' || sample.sampleType === 'advanced' ?
+                sample.fileName : sample.id;
     }
 
     _closePreviousSearchIfAny(sessionId, callback) {

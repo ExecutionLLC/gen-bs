@@ -8,7 +8,8 @@
     "deploy": "bash ./scripts/heroku-deploy.sh",
     "db:create": "node ./scripts/create-database.js",
     "start": "node index.js",
-    "start:client": "node test-client/index.js"
+    "build:data": "node ./defaults/build-initial-data.js",
+    "client": "node test-client/index.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "cors": "2.7.1",
     "domain": "*",
     "express": "4.13.3",
+    "http-status": "0.2.0",
     "knex": "0.9.0",
     "lodash": "^3.10.1",
     "morgan": "1.6.1",

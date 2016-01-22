@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Test Filter",
+    "description": "Test filter description",
+    "type": "standard",
+    "is_copy_disabled": false,
+    "rules": {
+      "$or": [
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "ALT"
+          },
+          "condition": {
+            "$ne": "A"
+          }
+        },
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "FILTER"
+          },
+          "condition": "PASS"
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "common_no_known_medical_impact_20151201",
+                "name": "INFO_GENEINFO"
+              },
+              "condition": {
+                "$ne": "ABC"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Another Test Filter",
+    "description": "Test filter description v2",
+    "type": "advanced",
+    "is_copy_disabled": false,
+    "rules": {
+      "$or": [
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "ALT"
+          },
+          "condition": {
+            "$ne": "A"
+          }
+        },
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "FILTER"
+          },
+          "condition": "PASS"
+        }
+      ]
+    }
+  }
+]

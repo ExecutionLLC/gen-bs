@@ -1,11 +1,9 @@
 'use strict';
 
 const _ = require('lodash');
+const HttpStatus = require('http-status');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
-
-const HTTP_INTERNAL = 500;
-const HTTP_OK = 200;
 
 /**
  * Base class for all controllers.
@@ -18,12 +16,12 @@ class ControllerBase {
     }
 
     sendInternalError(response, message) {
-        this.sendError(response, HTTP_INTERNAL, message);
+        this.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 
     sendOk(response) {
         response
-            .status(HTTP_OK)
+            .status(HttpStatus.OK)
             .end();
     }
 
@@ -31,6 +29,7 @@ class ControllerBase {
         if (message && typeof message !== 'string') {
             message = message.toString();
         }
+        console.error(message);
         response
             .status(httpError)
             .json({

@@ -24,7 +24,7 @@ module.exports = {
 
 
   output: {
-    path: path.resolve(__dirname, '../public'),
+    path: path.resolve(__dirname, '../dev_build'),
     filename: 'genomics.js',
     //publicPath: 'http://localhost:8080/assets'
 
@@ -42,7 +42,7 @@ module.exports = {
         exclude: /(node_modules|bower_components|vendor)/,
         loader: 'babel',
         query: {
-          presets: ['es2015']
+          presets: ['react', 'es2015']
         }
       },
       { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
@@ -100,6 +100,7 @@ module.exports = {
       DP_API_URL: JSON.stringify("http://localhost:3001")
     }),
 
+    /*
     new HandlebarsPlugin({
       // path to main hbs template
       entry: path.join(process.cwd(), "app", "index.hbs"),
@@ -130,7 +131,14 @@ module.exports = {
       onBeforeSave: function (Handlebars, resultHtml) {},
       onDone: function (Handlebars) {}
     }),
+    */
 
+    new webpack.DefinePlugin({
+      //API_PORT: JSON.stringify(8080),
+      //API_HOST: JSON.stringify('ec2-52-91-59-42.compute-1.amazonaws.com'),
+      API_PORT: JSON.stringify(8888),
+      API_HOST: JSON.stringify('localhost'),
+    })
   ]
 
 

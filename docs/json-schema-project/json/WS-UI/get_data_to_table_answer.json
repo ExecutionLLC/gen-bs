@@ -1,0 +1,42 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "Answer to API request for the main table",
+	"type": "object",
+	"properties": {
+		"session_id": {
+			"type": "string",
+			"description": "UUID of the user session the data is related to."
+		},
+		"operation_id": {
+			"type": "string",
+			"description": "UUID of the search operation."
+		},
+		"result": {
+			"type": "object",
+			"description": "Object containing result of the operation",
+			"properties": {
+				"sample_id": {
+					"type": "string",
+					"description": "UUID of the sample which was selected"
+				},
+				"offset": {
+					"type": "integer",
+					"description": "Offset that was specified when asking to retrieve the data."
+				},
+				"limit": {
+					"type": "integer",
+					"description": "Number of rows to retrieve that was specified when asking to retrieve the data."
+				},
+				"data": {
+					"type": "array",
+					"minItems": 0,
+					"description": "Array of objects, each describing a separate row.",
+					"items": {
+						"type": "object",
+						"description": "Object containing 'field Id -> field value' hash for the row"
+					}
+				}
+			}
+		}
+	}
+}

@@ -7,7 +7,7 @@
   "properties": {
     "params": {
       "type": "object",
-      "user_filename": {
+      "sample": {
         "type": "string",
         "description": "name of the user file"
       },

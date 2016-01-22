@@ -9,23 +9,31 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    sendSearchRequest(user, sessionId, sampleId, viewId, filterIds, limit, offset, callback) {
-        async.waterfall([
-            (callback) => {
-                this.services.sessions.findById(sessionId, callback);
-            },
-            (sessionId, callback) => {
-                // TODO: Add filters here.
-                this._createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback);
-            },
-            (appServerRequestParams, callback) => {
-                this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
-                    appServerRequestParams, callback);
-            }
-        ], callback);
+    sendSearchRequest(user, sessionId, sampleId, viewId, filterId, limit, offset, callback) {
+        if (!viewId || !filterId || !sampleId || !limit) {
+            callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
+                    viewId,
+                    filterId,
+                    sampleId,
+                    limit
+                }, null, 2)));
+        } else {
+            async.waterfall([
+                (callback) => {
+                    this.services.sessions.findById(sessionId, callback);
+                },
+                (sessionId, callback) => {
+                    this._createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback);
+                },
+                (appServerRequestParams, callback) => {
+                    this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
+                        appServerRequestParams, callback);
+                }
+            ], callback);
+        }
     }
 
-    searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, limit, offset, callback) {
+    searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
         const sessions = this.services.sessions;
         async.waterfall([
             (callback) => {
@@ -33,7 +41,7 @@ class SearchService extends ServiceBase {
             },
             (sessionId, callback) => {
                 this._createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
-                    fieldSearchValues, limit, offset, callback);
+                    fieldSearchValues, sortValues, limit, offset, callback);
             },
             (appServerParams, callback) => {
                 this.services.applicationServer.requestSearchInResults(sessionId, operationId, appServerParams, (error) => {
@@ -47,11 +55,62 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, limit, offset, callback) {
+    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
+        // The actual data or error should go to web socket for convenience.
+        async.waterfall([
+            (callback) => {
+                this.services.operations.find(sessionId, operationId, callback);
+            },
+            (operation, callback) => {
+                const redisData = operation.data.redis;
+                const userId = user.id;
+                const redisParams = {
+                    sessionId,
+                    operationId,
+                    host: redisData.host,
+                    port: redisData.port,
+                    sampleId: redisData.sampleId,
+                    userId,
+                    databaseNumber: redisData.databaseNumber,
+                    dataIndex: redisData.dataIndex,
+                    limit,
+                    offset
+                };
+                this.services.redis.fetch(redisParams, callback);
+            },
+            (results, callback) => {
+                // Results have already been sent by the Redis service through web socket.
+                callback(null, operationId);
+            }
+        ], callback);
+    }
+
+    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
+        async.parallel({
+            fieldSearchValues: (callback) => {
+                this._createAppServerFieldSearchValues(fieldSearchValues, callback);
+            },
+            sortValues: (callback) => {
+                this._createAppServerSortValues(sortValues, callback);
+            }
+        }, (error, result) => {
+            callback(error, {
+                sessionId,
+                operationId,
+                globalSearchValue,
+                fieldSearchValues: result.fieldSearchValues,
+                sortValues: result.sortValues,
+                limit,
+                offset
+            });
+        });
+    }
+
+    _createAppServerFieldSearchValues(fieldSearchValues, callback) {
         async.map(fieldSearchValues, (fieldSearchValue, callback) => {
             async.waterfall([
                 (callback) => {
-                    this.services.fieldsMetadata.find(fieldSearchValue.id, callback);
+                    this.services.fieldsMetadata.find(fieldSearchValue.fieldId, callback);
                 },
                 (fieldMetadata, callback) => {
                     callback(null, {
@@ -60,30 +119,63 @@ class SearchService extends ServiceBase {
                     });
                 }
             ], callback);
-        }, (error, result) => {
-            if (error) {
-                callback(error);
-            } else {
-                callback(null, {
-                    sessionId,
-                    operationId,
-                    globalSearchValue,
-                    fieldSearchValues: result,
-                    limit,
-                    offset
-                });
-            }
-        });
+        }, callback);
     }
 
-    _createAppServerSearchParams(sessionId, user, viewId, sampleId, limit, offset, callback) {
+    _createAppServerSortValues(sortValues, callback) {
+        async.map(sortValues, (sortValue, callback) => {
+            async.waterfall([
+                callback => {
+                    this.services.fieldsMetadata.find(sortValue.fieldId, callback);
+                },
+                (fieldMetadata, callback) => {
+                    callback(null, {
+                        fieldMetadata,
+                        sortOrder: sortValue.order,
+                        sortDirection: sortValue.direction
+                    });
+                }
+            ], callback);
+        },
+        callback);
+    }
+
+    _createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback) {
         async.parallel({
             sample: (callback) => {
                 this.services.samples.find(user, sampleId, callback);
             },
+            filter: (callback) => {
+                // TODO: Made filters not required.
+                // The error should be raised here later in case user didn't choose any filter.
+                if (filterId) {
+                    this.services.filters.find(user, filterId, callback);
+                } else {
+                    callback(null, null);
+                }
+
+            },
             fieldsMetadata: (callback) => {
-                // TODO: Add source field metadata here.
-                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                async.waterfall([
+                    (callback) => {
+                        // Load sample metadata
+                        this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                    },
+                    (sampleMetadata, callback) => {
+                        // Load sources metadata
+                        this.services.fieldsMetadata.findSourcesMetadata((error, sourcesMetadata) => {
+                            callback(error, {
+                                sampleMetadata,
+                                sourcesMetadata
+                            });
+                        });
+                    },
+                    (metadata, callback) => {
+                        // Join metadata into one collection.
+                        const sourcesMetadata = metadata.sourcesMetadata;
+                        callback(null, sourcesMetadata.concat(metadata.sampleMetadata));
+                    }
+                ], callback);
             },
             view: (callback) => {
                 this.services.views.find(user, viewId, callback);
@@ -96,6 +188,7 @@ class SearchService extends ServiceBase {
                     sessionId,
                     userId: user.id,
                     view: result.view,
+                    filter: result.filter,
                     sample: result.sample,
                     fieldsMetadata: result.fieldsMetadata,
                     limit,

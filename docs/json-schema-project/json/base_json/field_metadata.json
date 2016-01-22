@@ -36,7 +36,7 @@
 		"is_mandatory": {
 			"type": "boolean"
 		},
-		"editable": {
+		"is_editable": {
 			"type": "boolean"
 		},
 		"description": {
@@ -79,7 +79,6 @@
 		"name",
 		"label",
 		"description",
-		"filter_control_enable",
 		"editable",
 		"tech"
 	]

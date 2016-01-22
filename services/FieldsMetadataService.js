@@ -22,20 +22,25 @@ class FieldsMetadataService extends ServiceBase {
         this.models.fields.find(fieldId, callback);
     }
 
+    findSourcesMetadata(callback) {
+        this.models.fields.findSourcesMetadata(callback);
+    }
+
     findMany(fieldIds, callback) {
         this.models.fields.findMany(fieldIds, callback);
     }
 
-    static createFieldMetadata(sourceName, appServerFieldMetadata) {
+    static createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {
         return {
             id: Uuid.v4(),
             name: appServerFieldMetadata.name,
-            sourceName: sourceName,
+            label: appServerFieldMetadata.name, // Set label to name by default.
+            sourceName: isSample ? 'sample' : sourceName,
             isMandatory: appServerFieldMetadata.isMandatory,
-            editable: false,
-            filterControlEnable: false,
+            isEditable: false,
             valueType: appServerFieldMetadata.type,
-            description: appServerFieldMetadata.desc
+            description: appServerFieldMetadata.desc,
+            dimension: appServerFieldMetadata.num
         };
     }
 }

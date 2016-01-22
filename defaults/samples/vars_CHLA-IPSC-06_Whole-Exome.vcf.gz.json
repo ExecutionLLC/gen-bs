@@ -1,120 +1,26 @@
 {
   "sample": {
-    "id": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-    "fileName": "vars_CHLA-IPSC-06_Whole-Exome.vcf.gz",
+    "id": "601c86fb-d3eb-48f5-a1a6-96176242bb8b",
+    "file_name": "vars_CHLA-IPSC-06_Whole-Exome.vcf.gz",
     "hash": null,
-    "sampleType": "standard",
-    "isAnalyzed": true,
+    "reference": "hg18",
+    "sample_type": "standard",
+    "is_analyzed": true,
+    "is_source": false,
     "creator": null
   },
-  "fields": [
-    {
-      "id": "dced00f3-273b-400a-b1bc-c56f05c50056",
-      "name": "CHROM",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "integer",
-      "description": "Chromosome identifier"
-    },
-    {
-      "id": "1e9d285a-2106-4644-bfbb-ab183000a523",
-      "name": "POS",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "integer",
-      "description": "The reference position"
-    },
-    {
-      "id": "7f398c62-9fcc-4f72-bbc7-913193dd624d",
-      "name": "ID",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "string",
-      "description": "Semi-colon separated list of unique identifiers where available"
-    },
-    {
-      "id": "03d21ced-cf64-4c41-ae31-552f7269a336",
-      "name": "REF",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "string",
-      "description": "The value in the POS field refers to the position of the first base in the String"
-    },
-    {
-      "id": "c52b6135-e297-4ae9-a9e7-b0f62c17a395",
-      "name": "ALT",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "string",
-      "description": "Comma separated list of alternate non-reference alleles called on at least one of the samples"
-    },
-    {
-      "id": "2b6a6d56-4c2e-4c6f-a5a0-8ad2f30c8cb1",
-      "name": "QUAL",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "float",
-      "description": "Quality"
-    },
-    {
-      "id": "c84b3474-d660-40aa-8eaa-f9b6e56cefb2",
-      "name": "FILTER",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "string",
-      "description": "Filter status"
-    },
-    {
-      "id": "ae74fd1a-ff7e-4e1e-b516-02918e21f90b",
-      "name": "INFO_ADP",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "integer",
-      "description": "Average per-sample depth of bases with Phred score >= 0"
-    },
-    {
-      "id": "ccb4e310-1a82-45e1-a53f-8428f6c285ad",
-      "name": "INFO_WT",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "integer",
-      "description": "Number of samples called reference (wild-type)"
-    },
-    {
-      "id": "be7d110e-d8a3-4ec7-8794-d32a431103e5",
-      "name": "INFO_HET",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "integer",
-      "description": "Number of samples called heterozygous-variant"
-    },
-    {
-      "id": "e2c640a6-a372-4cb1-9b83-03c348f4d0ec",
-      "name": "INFO_HOM",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "integer",
-      "description": "Number of samples called homozygous-variant"
-    },
-    {
-      "id": "4ed2637d-29fd-4049-9c89-733825a1f8bd",
-      "name": "INFO_NC",
-      "sourceName": "501cea8d-5a35-4340-bc63-5365fc7d0615",
-      "editable": false,
-      "filterControlEnable": false,
-      "valueType": "integer",
-      "description": "Number of samples not called"
-    }
+  "field_ids": [
+    "00000000-0000-0000-0000-00000000001",
+    "00000000-0000-0000-0000-00000000002",
+    "00000000-0000-0000-0000-00000000003",
+    "00000000-0000-0000-0000-00000000004",
+    "00000000-0000-0000-0000-00000000005",
+    "00000000-0000-0000-0000-00000000006",
+    "00000000-0000-0000-0000-00000000007",
+    "aaefc971-9a91-4db0-adb3-7324851af9c2",
+    "e57f8804-9ec4-456f-8371-aac82b9ec3d7",
+    "13c7419b-3ae2-434a-bc3e-f51f4d6df8a6",
+    "3369f643-32f0-403f-b039-9262578ce4b7",
+    "b02ef811-3f1e-4a1a-909f-0afe2e76f5f8"
   ]
 }

@@ -2,11 +2,13 @@
 
 const _ = require('lodash');
 const Uuid = require('node-uuid');
+const async = require('async');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 const FsUtils = require('../utils/FileSystemUtils');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
+// TODO: Now view builder can be merged with field builder to reduce most of the copy-paste.
 class ViewBuilder extends DefaultsBuilderBase {
     constructor() {
         super();
@@ -20,39 +22,51 @@ class ViewBuilder extends DefaultsBuilderBase {
     }
 
     /**
-     * Gets field id from the generated source metadata.
+     * Builds default views using templates file.
+     *
+     * The method needs samples field metadata to be present, as it uses field ids to build views.
      * */
-    _getFieldId(sourceName, fieldName) {
-        const sourceFilePath = this._getMetadataFilePath(sourceName);
-        const sourceContents = FsUtils.getFileContentsAsString(sourceFilePath);
-        const sourceMetadata = JSON.parse(sourceContents);
-        const fieldMetadata = sourceMetadata.fields;
-        const field = _.find(fieldMetadata, field => field.name === fieldName);
-        if (!field) {
-            throw new Error('Field is not found! Source name: %s, field name: %s', sourceName, fieldName);
-        }
-        return field.id;
+    build(callback) {
+        const fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
+            require(this.fieldMetadataFile)
+        );
+        async.waterfall([
+            (callback) => {
+                FsUtils.createDirectoryIfNotExists(this.viewsDir, callback);
+            },
+            (callback) => {
+                this._removeJsonFilesFromDirectory(this.viewsDir, callback);
+            },
+            (callback) => {
+                const views = _.map(this.viewTemplates, (view) => this._createView(view, fieldsMetadata));
+                this._storeViews(views);
+                callback(null);
+            }
+        ], callback);
     }
 
-    _createListItem(listItemTemplate) {
+    _createListItem(listItemTemplate, fieldsMetadata) {
         const fieldDescriptor = listItemTemplate.field;
-        const fieldId = this._getFieldId(fieldDescriptor.sourceName, fieldDescriptor.fieldName);
+        const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldsMetadata);
+        if (!field) {
+            throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName);
+        }
         return {
             id: Uuid.v4(),
-            fieldId: fieldId,
+            fieldId: field.id,
             order: listItemTemplate.order,
             sortOrder: listItemTemplate.sortOrder,
             sortDirection: listItemTemplate.sortDirection
         };
     }
 
-    _createView(viewTemplate) {
+    _createView(viewTemplate, fieldsMetadata) {
         return {
             id: Uuid.v4(),
             name: viewTemplate.name,
             viewType: viewTemplate.type,
             description: viewTemplate.description,
-            viewListItems: _.map(viewTemplate.items, this._createListItem)
+            viewListItems: _.map(viewTemplate.items, (listItem) => this._createListItem(listItem, fieldsMetadata))
         };
     }
 
@@ -63,27 +77,13 @@ class ViewBuilder extends DefaultsBuilderBase {
         FsUtils.writeStringToFile(viewsFile, viewsJson, callback);
     }
 
-    /**
-     * Builds default views using templates file.
-     *
-     * The method needs samples field metadata to be present, as it uses field ids to build views.
-     * */
-    build(callback) {
-        FsUtils.createDirectoryIfNotExists(this.viewsDir, (error) => {
-           if (error) {
-               callback(error);
-           } else {
-               this._removeJsonFilesFromDirectory(this.viewsDir, (error) => {
-                   if (error) {
-                       callback(error);
-                   } else {
-                       const views = _.map(this.viewTemplates, this._createView);
-                       this._storeViews(views);
-                       callback(null);
-                   }
-               });
-           }
-        });
+    _findField(fieldName, sourceName, fieldsMetadata) {
+        const fields = _.filter(fieldsMetadata, fieldMetadata => fieldMetadata.sourceName === sourceName && fieldMetadata.name === fieldName);
+        if (fields.length > 1) {
+            throw new Error('Too many fields match, name: ' + fieldName + ', source: ' + sourceName);
+        } else {
+            return fields[0];
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions'
+import * as ActionTypes from '../actions/exportToFile'
 
 export default function exportToFile(state = {type: ActionTypes.fileTypes.NONE, name: '', blob: null}, action) {
   switch (action.type) {

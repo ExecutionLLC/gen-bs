@@ -21,6 +21,10 @@ class Urls {
         return this._constructApiUrl('/search/' + operationId);
     }
 
+    loadNextPage(operationId) {
+        return this._constructApiUrl('/search/' + operationId);
+    }
+
     _constructApiUrl(subUrl) {
         return 'http://' + this.host + ':' + this.port + '/api' + subUrl;
     }
