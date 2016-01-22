@@ -1,4 +1,12 @@
-
+//dropdown focus fix
+ $('.variants-table-header-label').find('.form-control').click(function (e) {
+      e.stopPropagation();
+     });
+     
+//table th popover TODO: init after table-variants thead generate
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})     
 //layout// sidebar  
 // media query event handler
 if (matchMedia) {
@@ -189,3 +197,4 @@ $('.usrViewActBtn').on('click', function (e) {
 $('.btnSort.active').on('click', function (e) { 
    $(this).toggleClass('asc').toggleClass('desc');
 });
+
