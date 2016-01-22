@@ -5,7 +5,6 @@ class Urls {
         this.host = host;
         this.port = port;
     }
-
     session() {
         return this._constructApiUrl('/session');
     }
