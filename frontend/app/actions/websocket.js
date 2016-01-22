@@ -2,7 +2,8 @@
  * action types
  */
 export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION'
-export const WS_RECEIVE_ERROR = 'WS_RECEIVE_MESSAGE'
+export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR'
+export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR'
 export const WS_RECEIVE_CLOSE= 'WS_RECEIVE_MESSAGE'
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE'
 
@@ -43,6 +44,20 @@ function progressMessage(wsData) {
   }
 }
 
+function receiveError(err) {
+  return {
+    type: WS_RECEIVE_ERROR,
+    err 
+  }
+}
+
+function asError(err) {
+  return {
+    type: WS_RECEIVE_AS_ERROR,
+    err 
+  }
+}
+
 function otherMessage(wsData) {
   return {
     type: WS_OTHER_MESSAGE,
@@ -59,19 +74,14 @@ function receiveMessage(msg) {
         dispatch(tableMessage(wsData))
       } else if(wsData.result.progress) {
         dispatch(progressMessage(wsData))
+      } else if(wsData.result.error) {
+        dispatch(asError(wsData.result.error))
       } else {
         dispatch(otherMessage(wsData))
       }
     } else {
       dispatch(otherMessage(wsData))
     }
-  }
-}
-
-function receiveError(err) {
-  return {
-    type: WS_RECEIVE_ERROR,
-    err 
   }
 }
 
