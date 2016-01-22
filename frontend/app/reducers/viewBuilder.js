@@ -115,8 +115,7 @@ export default function viewBuilder(state = {
             ...state.editedView.view_list_items.slice(0, action.viewItemIndex),
 
             Object.assign({}, state.editedView.view_list_items[action.viewItemIndex], {
-              field_name: action.fieldName,
-              source_name: action.sourceName
+              field_id: action.fieldId
             }),
             
             ...state.editedView.view_list_items.slice(action.viewItemIndex + 1)
@@ -127,8 +126,7 @@ export default function viewBuilder(state = {
             ...state.newView.view_list_items.slice(0, action.viewItemIndex),
 
             Object.assign({}, state.newView.view_list_items[action.viewItemIndex], {
-              field_name: action.fieldName,
-              source_name: action.sourceName
+              field_id: action.fieldId
             }),
             
             ...state.newView.view_list_items.slice(action.viewItemIndex + 1)

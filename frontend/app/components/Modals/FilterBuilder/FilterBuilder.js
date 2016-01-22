@@ -4,8 +4,7 @@ import filterOperators from './filterOperators'
 import { filterBuilderReceiveRules, filterBuilderUpdateFilter, filterBuilderCreateFilter } from '../../../actions/filterBuilder';
 
 
-export default class FilterBuilder extends Component {
-
+export default class FilterBuilder extends Component { 
   componentDidMount() {
 
 
@@ -14,13 +13,13 @@ export default class FilterBuilder extends Component {
     const filter = editOrNew ? (editedFilter):(newFilter)
     var el = this.refs.builder
     var rules = []
-    const builderFilters = fields.list.map( (f) => {
-      return {
-        id: f.name,
-        label: f.name,
-        type: f.value_type === 'float' ? 'double' : f.value_type
-      }
-    })
+
+    const builderFilters = [
+
+        ...fields.list.map( (f) => { return {id: f.id, label: `${f.label} -- ${f.source_name}`, type: f.value_type === 'float' ? 'double' : f.value_type} } ),
+        ...fields.sourceFieldsList.filter((f) => (f.source_name !== 'sample')).map( (f) => { return {id: f.id, label: `${f.label} -- source`, type: f.value_type === 'float' ? 'double' : f.value_type }} )
+
+      ]
 
     window.$(el).queryBuilder({
       filters: builderFilters,
@@ -41,16 +40,16 @@ export default class FilterBuilder extends Component {
     const filter = editOrNew ? (editedFilter):(newFilter)
     var el = this.refs.builder
     var rules = []
-    const builderFilters = fields.list.map( (f) => {
-      return {
-        id: f.name,
-        label: f.name,
-        type: f.value_type === 'float' ? 'double' : f.value_type
-      }
-    })
+    const builderFilters = [
+
+        ...fields.list.map( (f) => { return {id: f.id, label: `${f.label} -- ${f.source_name}`, type: f.value_type === 'float' ? 'double' : f.value_type} } ),
+        ...fields.sourceFieldsList.filter((f) => (f.source_name !== 'sample')).map( (f) => { return {id: f.id, label: `${f.label} -- source`, type: f.value_type === 'float' ? 'double' : f.value_type }} )
+
+      ]
 
     if(rulesRequested) {
       rules = window.$(el).queryBuilder('getMongo');
+      console.log('rules',JSON.stringify(rules))
       dispatch(filterBuilderReceiveRules(rules))
     } else {
       window.$(el).queryBuilder({

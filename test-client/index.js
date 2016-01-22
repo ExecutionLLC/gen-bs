@@ -21,7 +21,9 @@ const DefaultKeywords = require('../defaults/keywords/default-keywords.json');
 const DefaultViews = require('../defaults/views/default-views.json');
 const DefaultFilters = require('../defaults/filters/default-filters.json');
 const Sample = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample;
-const SampleFields = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').fields;
+const SampleFieldIds = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').field_ids;
+const AllFields = require('../defaults/fields/fields-metadata.json');
+const SampleFields = _.filter(AllFields, field => _.some(SampleFieldIds, fieldId => fieldId === field.id));
 
 const Operations = require('./Operations');
 const Urls = require('./Urls');
