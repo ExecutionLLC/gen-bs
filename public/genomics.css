@@ -12576,8 +12576,14 @@ body.ch .select2-results__option[title="standard"]:after {
 .query-builder .rule-container .rule-value-container .form-control {
   width: 250px;
 }
-.query-builder .rule-container .rule-operator-container {
+.rule-operator-container select.form-control {
   width: 160px;
+}
+.query-builder .rule-container .rule-operator-container {
+  margin-left: 20px;
+}
+.query-builder .rule-container .rule-value-container {
+  margin-left: 10px;
 }
 /**
  * React Select
