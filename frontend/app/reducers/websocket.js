@@ -7,7 +7,9 @@ export default function websocket(state = {
   errors: [],
   closed: true,
   variants: null,
-  isVariantsEmpty: true,
+  isVariantsEmpty: false,
+  isVariantsValid: true,
+  isVariantsLoaded: false,
   progress: null
 }, action) {
   switch (action.type) {
@@ -22,7 +24,9 @@ export default function websocket(state = {
             action.wsData
           ],
           variants: action.wsData.result.data,
-          isVariantsEmpty: (action.wsData.result.data.length === 0)
+          isVariantsEmpty: (action.wsData.result.data.length === 0),
+          isVariantsLoaded: false,
+          isVariantsValid: true
         })
     case ActionTypes.WS_PROGRESS_MESSAGE:
         return Object.assign({}, state, {
@@ -37,14 +41,24 @@ export default function websocket(state = {
           messages: [
             ...state.messages,
             action.wsData
-          ]
+          ],
+        })
+    case ActionTypes.WS_RECEIVE_AS_ERROR:
+        return Object.assign({}, state, {
+          errors: [
+            ...state.errors,
+            action.err
+          ],
+          isVariantsLoaded: false,
+          isVariantsValid: false
         })
     case ActionTypes.WS_RECEIVE_ERROR:
         return Object.assign({}, state, {
           errors: [
             ...state.errors,
             action.err
-          ]
+          ],
+          isVariantsLoaded: false,
         })
     case ActionTypes.WS_RECEIVE_CLOSE:
         return Object.assign({}, state, {
@@ -57,7 +71,7 @@ export default function websocket(state = {
     case ActionTypes.REQUEST_ANALYZE:
         return Object.assign({}, state, {
           variants: null,
-          isVariantsEmpty: true
+          isVariantsLoaded: true
         })
 
     default:
