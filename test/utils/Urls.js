@@ -1,5 +1,46 @@
 'use strict';
 
+function _constructApiUrl(subUrl, host, port) {
+    return 'http://' + host + ':' + port + '/api' + subUrl;
+}
+
+class CollectionUrls {
+    constructor(baseUrl, host, port) {
+        this.baseUrl = baseUrl;
+        this.host = host;
+        this.port = port;
+    }
+
+    getAll() {
+        return this._constructApiUrl(this.baseUrl);
+    }
+
+    get(itemId) {
+        return this._createUrlForId(itemId);
+    }
+
+    create() {
+        return this._constructApiUrl(this.baseUrl);
+    }
+
+    update(itemId) {
+        return this._createUrlForId(itemId);
+    }
+
+    remove(itemId) {
+        return this._createUrlForId(itemId);
+    }
+
+    _createUrlForId(itemId) {
+        return this._constructApiUrl(this.baseUrl + '/' + itemId);
+    }
+
+    _constructApiUrl(subUrl) {
+        const url = subUrl ? this.baseUrl + '/' + subUrl : this.baseUrl;
+        return _constructApiUrl(url, this.host, this.port);
+    }
+}
+
 class Urls {
     constructor(host, port) {
         this.host = host;
@@ -18,6 +59,14 @@ class Urls {
         return this._constructApiUrl('/search');
     }
 
+    getAllFields() {
+        return this._constructApiUrl('/fields');
+    }
+
+    getSampleFields(sampleId) {
+        return this._constructApiUrl('/fields/' + sampleId);
+    }
+
     startSearchInResults(operationId) {
         return this._constructApiUrl('/search/' + operationId);
     }
@@ -26,32 +75,20 @@ class Urls {
         return this._constructApiUrl('/search/' + operationId);
     }
 
-    getAllFilters() {
-        return this._constructApiUrl('/filters');
+    viewsUrls() {
+        return new CollectionUrls('/views', this.host, this.port);
     }
 
-    getFilter(filterId) {
-        return this._filterUrlWithId(filterId);
+    filtersUrls() {
+        return new CollectionUrls('/filters', this.host, this.port);
     }
 
-    createFilter() {
-        return this._constructApiUrl('/filters');
-    }
-
-    updateFilter(filterId) {
-        return this._filterUrlWithId(filterId);
-    }
-
-    removeFilter(filterId) {
-        return this._filterUrlWithId(filterId);
-    }
-
-    _filterUrlWithId(filterId) {
-        return this._constructApiUrl('/filters/' + filterId);
+    samplesUrls() {
+        return new CollectionUrls('/samples', this.host, this.port);
     }
 
     _constructApiUrl(subUrl) {
-        return 'http://' + this.host + ':' + this.port + '/api' + subUrl;
+        return _constructApiUrl(subUrl, this.host, this.port);
     }
 }
 

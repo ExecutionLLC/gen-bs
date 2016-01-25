@@ -6,30 +6,32 @@ const ClientBase = require('./ClientBase');
 class FiltersClient extends ClientBase {
     constructor(urls) {
         super(urls);
+
+        this.filtersUrls = urls.filtersUrls();
     }
 
     getAll(sessionId, callback) {
-        RequestWrapper.get(this.urls.getAllFilters(),
+        RequestWrapper.get(this.filtersUrls.getAll(),
             this._makeSessionHeader(sessionId), null, null, callback);
     }
 
     get(sessionId, filterId, callback) {
-        RequestWrapper.get(this.urls.getFilter(filterId),
+        RequestWrapper.get(this.filtersUrls.get(filterId),
             this._makeSessionHeader(sessionId), null, null, callback);
     }
 
     add(sessionId, filter, callback) {
-        RequestWrapper.post(this.urls.createFilter(),
+        RequestWrapper.post(this.filtersUrls.create(),
             this._makeSessionHeader(sessionId), filter, callback);
     }
 
     update(sessionId, filter, callback) {
-        RequestWrapper.put(this.urls.updateFilter(filter.id),
+        RequestWrapper.put(this.filtersUrls.update(filter.id),
             this._makeSessionHeader(sessionId), filter, callback);
     }
 
     remove(sessionId, filterId, callback) {
-        RequestWrapper.del(this.urls.removeFilter(filterId),
+        RequestWrapper.del(this.filtersUrls.remove(filterId),
             this._makeSessionHeader(sessionId), null, callback);
     }
 }
