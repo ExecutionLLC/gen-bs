@@ -34,6 +34,10 @@ class Urls {
         return this._filterUrlWithId(filterId);
     }
 
+    createFilter() {
+        return this._constructApiUrl('/filters');
+    }
+
     updateFilter(filterId) {
         return this._filterUrlWithId(filterId);
     }

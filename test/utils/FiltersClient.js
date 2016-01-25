@@ -18,6 +18,11 @@ class FiltersClient extends ClientBase {
             this._makeSessionHeader(sessionId), null, null, callback);
     }
 
+    add(sessionId, filter, callback) {
+        RequestWrapper.post(this.urls.createFilter(),
+            this._makeSessionHeader(sessionId), filter, callback);
+    }
+
     update(sessionId, filter, callback) {
         RequestWrapper.put(this.urls.updateFilter(filter.id),
             this._makeSessionHeader(sessionId), filter, callback);

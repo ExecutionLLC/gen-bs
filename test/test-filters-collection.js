@@ -70,9 +70,38 @@ describe('Filters', () => {
             });
         });
         it('should create and update existing user filter', (done) => {
-            // TODO: create new user filter and update it.
-            assert.equal(true, false, 'Not implemented');
-            done();
+            filtersClient.getAll(sessionId, (error, response) => {
+                assert.ifError(error);
+                assert.equal(response.status, HttpStatus.OK);
+                const filters = response.body;
+                assert.ok(filters);
+                const filter = filters[0];
+                filter.name = 'Test Filter ' + Uuid.v4();
+                filtersClient.add(sessionId, filter, (error, response) => {
+                    assert.ifError(error);
+                    assert.equal(response.status, HttpStatus.OK);
+                    const addedFilter = response.body;
+                    assert.ok(addedFilter);
+                    assert.notEqual(addedFilter.id, filter.id, 'Filter id is not changed.');
+                    assert.equal(addedFilter.name, filter.name);
+                    assert.equal(addedFilter.type, 'user');
+
+                    // Update created filter.
+                    const filterToUpdate = _.cloneDeep(addedFilter);
+                    filterToUpdate.name = 'Test Filter ' + Uuid.v4();
+                    filterToUpdate.type = 'advanced';
+                    filtersClient.update(sessionId, filterToUpdate, (error, response) => {
+                        assert.ifError(error);
+                        assert.equal(response.status, HttpStatus.OK);
+                        const updatedFilter = response.body;
+                        assert.ok(updatedFilter);
+                        assert.equal(updatedFilter.id, filterToUpdate.id);
+                        assert.equal(updatedFilter.name, filterToUpdate.name);
+                        assert.notEqual(updatedFilter.type, 'user', 'Filter type change should not be allowed by update.');
+                        done();
+                    });
+                });
+            });
         });
 
     });
@@ -103,7 +132,6 @@ describe('Filters', () => {
                 done();
             })
         });
-
         it('should fail to get unknown filter', (done) => {
             filtersClient.get(sessionId, UnknownFilterId, (error, response) => {
                 assert.ifError(error);

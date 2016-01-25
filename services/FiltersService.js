@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 
 class FiltersService extends UserEntityServiceBase {
@@ -8,11 +10,16 @@ class FiltersService extends UserEntityServiceBase {
     }
 
     update(user, filter, callback) {
-        if (filter.type !== 'user') {
-            callback(new Error('Default filter cannot be updated'));
-        } else {
-            super.update(user, filter, callback);
-        }
+        async.waterfall([
+            (callback) => super.find(user, filter.id, callback),
+            (existingFilter, callback) => {
+                if (existingFilter.type !== 'user') {
+                    callback(new Error('Default filter cannot be updated'));
+                } else {
+                    super.update(user, filter, callback);
+                }
+            }
+        ], callback);
     }
 }
 

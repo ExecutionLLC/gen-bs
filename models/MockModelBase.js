@@ -32,6 +32,7 @@ class MockModelBase {
 
     add(userId, item, callback) {
         item.id = Uuid.v4();
+        item.type = 'user';
 
         this.hash[item.id] = {
             userId,
