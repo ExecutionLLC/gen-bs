@@ -102,6 +102,7 @@ operations.add('Open session', (callback) => {
           password: userDescriptor.password
         }
       }, (error, response, body) => {
+        console.log('Error:', stringify(error), 'Response: ', stringify(response), 'Body: ', stringify(body))
         const bodyObject = ChangeCaseUtil.convertKeysToCamelCase(body);
         const sessionId = bodyObject.sessionId;
         console.log('Associate session with the opened socket');

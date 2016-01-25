@@ -4,7 +4,7 @@
   "description": "Genomix Application WebServer Node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "deploy": "bash ./scripts/heroku-deploy.sh",
     "db:create": "node ./scripts/create-database.js",
     "start": "node index.js",
@@ -41,5 +41,8 @@
     "pg": "4.4.3",
     "redis": "2.4.2",
     "ws": "0.8.1"
+  },
+  "devDependencies": {
+    "request": "2.67.0"
   }
 }

@@ -26,6 +26,30 @@ class Urls {
         return this._constructApiUrl('/search/' + operationId);
     }
 
+    getAllFilters() {
+        return this._constructApiUrl('/filters');
+    }
+
+    getFilter(filterId) {
+        return this._filterUrlWithId(filterId);
+    }
+
+    createFilter() {
+        return this._constructApiUrl('/filters');
+    }
+
+    updateFilter(filterId) {
+        return this._filterUrlWithId(filterId);
+    }
+
+    removeFilter(filterId) {
+        return this._filterUrlWithId(filterId);
+    }
+
+    _filterUrlWithId(filterId) {
+        return this._constructApiUrl('/filters/' + filterId);
+    }
+
     _constructApiUrl(subUrl) {
         return 'http://' + this.host + ':' + this.port + '/api' + subUrl;
     }

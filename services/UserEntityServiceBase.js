@@ -36,6 +36,14 @@ class UserEntityServiceBase extends ServiceBase {
             callback(new Error('User cannot be undefined here.'));
         }
     }
+
+    remove(user, itemId, callback) {
+        if (!this._checkUserIsSet(user, callback)) {
+            return;
+        }
+
+        this.theModel.remove(user, itemId, callback);
+    }
 }
 
 module.exports = UserEntityServiceBase;

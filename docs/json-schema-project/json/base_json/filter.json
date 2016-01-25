@@ -34,7 +34,7 @@
 	"required": [
 		"id",
 		"name",
-		"filter_type",
+		"type",
 		"rules",
 		"is_copy_disabled"
 	]
