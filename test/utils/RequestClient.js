@@ -40,11 +40,12 @@ class RequestClient {
 
     static _createResponseConverter(callback) {
         return (error, response, body) => {
-            if (typeof body === 'string') {
+            const status = response.statusCode;
+            if (typeof body === 'string' && status < 400) {
                 body = JSON.parse(body);
             }
             callback(error, {
-                status: response.statusCode,
+                status,
                 body: ChangeCaseUtil.convertKeysToCamelCase(body)
             })
         };
