@@ -71,6 +71,7 @@ describe('Filters', () => {
         });
         it('should create and update existing user filter', (done) => {
             // TODO: create new user filter and update it.
+            assert.equal(true, false, 'Not implemented');
             done();
         });
 
