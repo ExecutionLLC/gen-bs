@@ -1,36 +1,38 @@
 'use strict';
 
-const RequestClient = require('./RequestClient');
-const Config = require('../../utils/Config');
+const assert = require('assert');
+const HttpStatus = require('http-status');
 
-const SESSION_HEADER = Config.sessionHeader;
+const RequestWrapper = require('./RequestWrapper');
+const ClientBase = require('./ClientBase');
 
-class SessionsClient {
+class SessionsClient extends ClientBase {
     constructor(urls) {
-        this.urls = urls;
+        super(urls);
     }
 
     openSession(userName, password, callback) {
-        RequestClient.post(this.urls.session(), null, {
+        RequestWrapper.post(this.urls.session(), null, {
             userName,
             password
         }, callback);
     }
 
     checkSession(sessionId, callback) {
-        RequestClient.put(this.urls.session(),
+        RequestWrapper.put(this.urls.session(),
             this._makeSessionHeader(sessionId), null, callback);
     }
 
     closeSession(sessionId, callback) {
-        RequestClient.del(this.urls.session(),
+        RequestWrapper.del(this.urls.session(),
             this._makeSessionHeader(sessionId), null, callback);
     }
 
-    _makeSessionHeader(sessionId) {
-        const headers = {};
-        headers[SESSION_HEADER] = sessionId;
-        return headers;
+    static getSessionFromResponse(response) {
+        assert.equal(response.status, HttpStatus.OK);
+        const sessionId = response.body.sessionId;
+        assert.ok(sessionId, 'Session is undefined.');
+        return sessionId;
     }
 }
 

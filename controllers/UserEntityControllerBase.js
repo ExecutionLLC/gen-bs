@@ -89,6 +89,22 @@ class UserEntityControllerBase extends ControllerBase {
         });
     }
 
+    remove(request, response) {
+        if (!this.checkUserIsDefined(request, response)) {
+            return;
+        }
+
+        const user = request.user;
+        const itemId = request.params.id;
+        this.theService.remove(user, itemId, (error, item) => {
+            if (error) {
+                this.sendInternalError(response, error);
+            } else {
+                this.sendJson(response, item);
+            }
+        });
+    }
+
     createRouter() {
         const router = new Express();
 
@@ -96,6 +112,7 @@ class UserEntityControllerBase extends ControllerBase {
         router.get('/:id', this.find);
         router.put('/:id', this.update);
         router.post('/', this.add);
+        router.delete('/:id', this.remove);
 
         return router;
     }

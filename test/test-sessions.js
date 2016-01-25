@@ -18,19 +18,12 @@ const TestUser = {
     password: 'password'
 };
 
-const getSessionFromResponse = (response) => {
-    assert.equal(response.status, HttpStatus.OK);
-    const sessionId = response.body.sessionId;
-    assert.ok(sessionId, 'Session is undefined.');
-    return sessionId;
-};
-
 describe('Sessions', () => {
     describe('#open', () => {
         it('should open correctly for existing user.', (done) => {
             sessionsClient.openSession(TestUser.userName, TestUser.password, (error, response) => {
                 assert.ifError(error);
-                getSessionFromResponse(response);
+                SessionsClient.getSessionFromResponse(response);
                 done();
             });
         });
@@ -47,10 +40,10 @@ describe('Sessions', () => {
         it('should return the same session for the correct session.', (done) => {
             sessionsClient.openSession(TestUser.userName, TestUser.password, (error, response) => {
                 assert.ifError(error);
-                const sessionId = getSessionFromResponse(response);
+                const sessionId = SessionsClient.getSessionFromResponse(response);
                 sessionsClient.checkSession(sessionId, (error, response) => {
                     assert.ifError(error);
-                    const anotherSessionId = getSessionFromResponse(response);
+                    const anotherSessionId = SessionsClient.getSessionFromResponse(response);
                     assert.equal(sessionId, anotherSessionId, 'Check method has returned a different session.');
                     done();
                 });
@@ -62,7 +55,7 @@ describe('Sessions', () => {
         it('should properly close opened session.', (done) => {
             sessionsClient.openSession(TestUser.userName, TestUser.password, (error, response) => {
                 assert.ifError(error);
-                const sessionId = getSessionFromResponse(response);
+                const sessionId = SessionsClient.getSessionFromResponse(response);
                 sessionsClient.closeSession(sessionId, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
