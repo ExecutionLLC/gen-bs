@@ -1,4 +1,5 @@
 const filterOperators = [
+'contains',
 'equal',
 'not_equal',
 'in',
