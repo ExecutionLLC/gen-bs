@@ -65,11 +65,11 @@ class FieldsMetadataModel extends ModelBase {
             },
             (sample, cb) => {
                 cb(null, sample.values);
-                //this.models.samples._fetchFileSampleValues(sample.id, cb);
-            },
-            (metadata, cb) => {
-                this._mapMetadata(metadata, cb);
             }
+            //,
+            //(metadata, cb) => {
+            //    this._mapMetadata(metadata, cb);
+            //}
         ], callback);
     }
 
@@ -109,17 +109,20 @@ class FieldsMetadataModel extends ModelBase {
     }
 
     _mapMetadata(metadata, callback) {
-        this._fetchMetadataKeywords(metadata.id, (error, keywords) => {
-            if (error) {
-                cb(error);
-            } else {
-                if (_.isNull(metadata.label)) {
-                    metadata.label = metadata.name;
-                }
-                metadata.keywords = keywords;
-                callback(null, this._mapColumns(metadata));
-            }
-        });
+
+
+
+        //this._fetchMetadataKeywords(metadata.id, (error, keywords) => {
+        //    if (error) {
+        //        cb(error);
+        //    } else {
+        //        if (_.isNull(metadata.label)) {
+        //            metadata.label = metadata.name;
+        //        }
+        //        metadata.keywords = keywords;
+        //        callback(null, this._mapColumns(metadata));
+        //    }
+        //});
     }
 
     _mapKeywords(keywords, callback) {
