@@ -3,18 +3,17 @@
   "title": "file session status",
   "type": "object",
   "properties": {
-    "session_id": {
-      "type": "string",
-      "description": "GUID of the file session"
-    },
     "session_state": {
       "type": "object",
       "description": "When state is ready, the data is available in Redis",
       "parameters": {
         "status": {
           "enum": [
-            "loading",
-            "filtering",
+            "sample_loading",
+            "view_building",
+            "view_filtering",
+            "view_loading",
+            "view_updating",
             "ready"
           ]
         },
@@ -33,62 +32,47 @@
             "number": {
               "type": "integer",
               "description": "redis DB number"
+            },
+            "result_index": {
+              "type": "string",
+              "description": "key of the sorted and filtered index"
             }
           }
         },
-        "column_filter": {
+        "view_structure": {
+          "$ref": "base_json/view.json#",
+          "description": "list of the view columns and keywords"
+        },
+        "view_filter": {
           "type": "object",
-          "description": "contains state of the column filter. Exists when the state is ready.",
-          "properties": {
-            "index": {
-              "type": "string",
-              "description": "name of the redis key which contains the array of keys passed column filtering (inside they are numbers of rows in VCF file actually)"
-            },
-            "status": {
-              "type": "object",
-              "properties": {
-                "passed": {
-                  "type": "integer",
-                  "description": "number of elements, which passed filters condition and are available in Redis"
-                },
-                "progress": {
-                  "type": "integer",
-                  "description": "progress of operation in %. If the state is ready and no column filters applied, contains 100%."
-                }
-              }
-            },
-            "filters": {
-              "type": "array",
-              "description": "list of column filters",
-              "items": {
-                "$ref": "column_filter.json#"
-              }
-            }
+          "params": {
+            "type": "object",
+            "description": "filter applied on the view"
           }
         },
-        "sort": {
-          "type": "object",
-          "description": "contains state of the sort order of all entries (even ones that not passed column filtering, so the indexes should be intersected). Available when the state is ready.",
-          "properties": {
-            "index": {
-              "type": "string",
-              "description": "name of the redis key"
-            },
-            "status": {
-              "enum": [
-                "running",
-                "ready"
-              ],
-              "description": "status of the sort operation"
-            },
-            "sort_order": {
-              "type": "array",
-              "description": "ordered list of the columns for sorting",
-              "items": {
-                "$ref": "sort_order.json#"
-              }
-            }
+        "view_sort_order": {
+          "type": "array",
+          "items": {
+            "$ref": "base_json/sort_order.json#"
           }
+        },
+        "column_filters": {
+          "type": "array",
+          "description": "list of column filters",
+          "items": {
+            "$ref": "column_filter.json#"
+          }
+        },
+        "sort_order": {
+          "type": "array",
+          "description": "ordered list of the columns for sorting",
+          "items": {
+            "$ref": "sort_order.json#"
+          }
+        },
+        "global_filter": {
+          "type": "string",
+          "description": "global search string value"
         }
       }
     }
