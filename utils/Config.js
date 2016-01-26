@@ -6,8 +6,8 @@ const SETTINGS = {
     port: ENV.GEN_WS_PORT || 5000,
     sessionHeader: ENV.GEN_WS_SESSION_HEADER || 'X-Session-Id',
     applicationServer: {
-        host: ENV.GEN_WS_AS_HOST || '192.168.1.101',
-        port: ENV.GEN_WS_AS_PORT || 8888
+        host: ENV.GEN_WS_AS_HOST || 'localhost',
+        port: ENV.GEN_WS_AS_PORT || 8000
     },
     database: {
         host: ENV.GEN_WS_DATABASE_SERVER || 'localhost',
