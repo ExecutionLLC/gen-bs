@@ -46,6 +46,7 @@ describe('Filters', () => {
         it('should get all filters', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
+                assert.equal(response.status, HttpStatus.OK);
                 const filters = response.body;
                 assert.ok(filters);
                 assert.ok(Array.isArray(filters));
@@ -56,12 +57,14 @@ describe('Filters', () => {
         it('should get existing filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
+                assert.equal(response.status, HttpStatus.OK);
                 const filters = response.body;
                 assert.ok(filters);
                 const firstFilter = filters[0];
 
                 filtersClient.get(sessionId, firstFilter.id, (error, response) => {
                     assert.ifError(error);
+                    assert.equal(response.status, HttpStatus.OK);
                     const filter = response.body;
                     assert.ok(filter);
                     checkFilter(filter);

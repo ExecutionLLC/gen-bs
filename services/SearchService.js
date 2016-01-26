@@ -10,12 +10,13 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, sessionId, sampleId, viewId, filterId, limit, offset, callback) {
-        if (!viewId || !filterId || !sampleId || !limit) {
+        if (!viewId || !filterId || !sampleId || !limit || (offset === undefined)) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
-                    viewId,
-                    filterId,
-                    sampleId,
-                    limit
+                    viewId: viewId || 'undefined',
+                    filterId: filterId || 'undefined',
+                    sampleId: sampleId || 'undefined',
+                    limit: limit || 'undefined',
+                    offset: offset || 'undefined'
                 }, null, 2)));
         } else {
             async.waterfall([
