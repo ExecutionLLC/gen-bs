@@ -151,7 +151,7 @@ class ApplicationServerReplyService extends ServiceBase {
                     operationId: operation.id,
                     sessionId: operation.sessionId,
                     databaseNumber: sessionState.redisDb.number,
-                    dataIndex: sessionState.sort.index,
+                    dataIndex: sessionState.redisDb.resultIndex,
                     offset,
                     limit
                 };
