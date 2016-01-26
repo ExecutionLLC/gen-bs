@@ -18,7 +18,7 @@ const DefaultViews = require('../defaults/views/default-views.json');
 const DefaultFilters = require('../defaults/filters/default-filters.json');
 const Sample = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample;
 const SampleFieldIds = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').field_ids;
-const AllFields = require('../defaults/fields/fields-metadata.json');
+const AllFields = ChangeCaseUtil.convertKeysToCamelCase(require('../defaults/fields/fields-metadata.json'));
 const SampleFields = _.filter(AllFields, field => _.some(SampleFieldIds, fieldId => fieldId === field.id));
 
 const Operations = require('./Operations');
@@ -169,15 +169,26 @@ operations.add('Search in results', (callback) => {
     },
     (sessionWithOperation, callback) => {
       const headers = createHeaders(sessionWithOperation.sessionId);
-      const field = _.find(SampleFields, field => field.name === 'FILTER');
+      const getFieldId = (fieldName, sourceName) => {
+        return _.find(AllFields,
+            field => field.name === fieldName && field.sourceName === sourceName)
+            .id;
+      };
       Request.post({
         url: urls.startSearchInResults(sessionWithOperation.operationId),
         json: {
           topSearch: '123',
           search: [
             {
-              fieldId: field.id,
+              fieldId: getFieldId('FILTER', 'sample'),
               value: 'PASS'
+            }
+          ],
+          sort: [
+            {
+              fieldId: getFieldId('CHROM', 'sample'),
+              order: 1,
+              direction: 'asc'
             }
           ],
           limit: 100,
