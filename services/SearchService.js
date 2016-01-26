@@ -14,12 +14,13 @@ class SearchService extends ServiceBase {
         // TODO: переделать на _.some
         if (!languId || !keywordId || !viewId || !filterId || !sampleId || !limit) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
-                    languId,
-                    keywordId,
-                    viewId,
-                    filterId,
-                    sampleId,
-                    limit
+                    languId: languId || 'undefined',
+                    keywordId: keywordId ||'undefined',
+                    viewId: viewId || 'undefined',
+                    filterId: filterId || 'undefined',
+                    sampleId: sampleId || 'undefined',
+                    limit: limit || 'undefined',
+                    offset: offset || 'undefined'
                 }, null, 2)));
         } else {
             async.waterfall([
