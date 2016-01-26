@@ -35,7 +35,7 @@ class WebSocketClient {
   }
 
   _onWsMessage(message, flags) {
-    console.log('WS Message: ' + message);
+    // console.log('WS Message: ' + message);
     const parsedMessage = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(message));
     if (this.messageCallback) {
       this.messageCallback(parsedMessage);
@@ -43,7 +43,7 @@ class WebSocketClient {
   }
 
   _onWsError(error) {
-    console.error('WS Error: ' + error);
+    // console.error('WS Error: ' + error);
     if (this.errorCallback) {
       this.errorCallback(error);
     }

@@ -32,7 +32,7 @@ class CollectionUrls {
     }
 
     _createUrlForId(itemId) {
-        return this._constructApiUrl(this.baseUrl + '/' + itemId);
+        return this._constructApiUrl(itemId);
     }
 
     _constructApiUrl(subUrl) {

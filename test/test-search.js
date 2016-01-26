@@ -26,7 +26,9 @@ const TestUser = {
     password: 'password'
 };
 
-describe('Search', () => {
+describe('Search', function() {
+    // Search should fit into 30 seconds
+    this.timeout(30000);
     let sessionId = null;
 
     before((done) => {
