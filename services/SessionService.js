@@ -27,7 +27,7 @@ class SessionService extends ServiceBase {
                    } else {
                        // Check and remove existing user session.
                        let existingSession = _.find(this.sessions, session => session.userId === userId);
-                       if (existingSession) {
+                       if (existingSession && !this.config.allowMultipleUserSessions) {
                            this.destroySession(existingSession.id, (error) => {
                                if (error) {
                                    console.error('Error destroying existing session: %s', error);

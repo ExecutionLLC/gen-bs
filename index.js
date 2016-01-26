@@ -22,8 +22,14 @@ const controllers = new ControllersFacade(services);
 const httpServer = Http.createServer();
 const app = new Express();
 
-console.error('Cross-origin resource sharing enabled!');
-app.use(cors());
+if (Config.enableCORS) {
+  console.error('Cross-origin resource sharing enabled!');
+  app.use(cors());
+}
+
+if (Config.allowMultipleUserSessions) {
+  console.error('Multiple user sessions enabled!');
+}
 
 app.set('port', Config.port);
 
