@@ -12,9 +12,9 @@ const mappedColumns = [
     'chrom',
     'pos',
     'alt',
-    'search_key',
-    'is_deleted',
-    'langu_id',
+    'searchKey',
+    'isDeleted',
+    'languId',
     'comment'
 ];
 

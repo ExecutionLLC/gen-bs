@@ -8,12 +8,12 @@ const RemovableModelBase = require('./RemovableModelBase');
 
 const mappedColumns = [
     'id',
-    'number_paid_samples',
-    'is_deleted',
+    'numberPaidSamples',
+    'isDeleted',
     'email',
-    'default_langu_id',
+    'defaultLanguId',
     'name',
-    'last_name',
+    'lastName',
     'speciality'
 ];
 

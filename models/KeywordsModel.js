@@ -8,7 +8,7 @@ const ModelBase = require('./ModelBase');
 
 const mappedColumns = [
     'id',
-    'field_id',
+    'fieldId',
     'value',
     'synonyms'
 ];

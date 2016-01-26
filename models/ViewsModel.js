@@ -8,14 +8,14 @@ const SecureModelBase = require('./SecureModelBase');
 
 const mappedColumns = [
     'id',
-    'original_view_id',
+    'originalViewId',
     'name',
-    'view_type',
-    'is_deleted',
-    'is_copy_disabled',
-    'langu_id',
+    'viewType',
+    'isDeleted',
+    'isCopyDisabled',
+    'languId',
     'description',
-    'view_list_items'
+    'viewListItems'
 ];
 
 class ViewsModel extends SecureModelBase {
@@ -95,7 +95,7 @@ class ViewsModel extends SecureModelBase {
                     if (error) {
                         cb(error);
                     } else {
-                        const viewItems = _.groupBy(viewItemsData, (viewItem) => {
+                        let viewItems = _.groupBy(viewItemsData, (viewItem) => {
                             return viewItem.viewId;
                         });
                         async.map(viewsData, (viewData, cbk) => {
@@ -129,7 +129,7 @@ class ViewsModel extends SecureModelBase {
                     if (error) {
                         cb(error);
                     } else {
-                        const viewItems = _.groupBy(viewItemsData, (viewItem) => {
+                        let viewItems = _.groupBy(viewItemsData, (viewItem) => {
                             return viewItem.viewId;
                         });
                         async.map(views, (view, cbk) => {
@@ -272,20 +272,19 @@ class ViewsModel extends SecureModelBase {
                     if (error) {
                         cb(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData));
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData.rows));
                     }
             });
         }, callback);
     }
 
     _mapView(view, viewItems, callback) {
-        let viewData = view;
         this._mapViewItems(viewItems, (error, viewItemsData) => {
             if (error) {
                 callback(error);
             } else {
-                viewData.viewListItems = viewItemsData;
-                callback(null, this._mapColumns(viewData));
+                view.viewListItems = viewItemsData;
+                callback(null, this._mapColumns(view));
             }
         });
     }

@@ -17,7 +17,7 @@ class ChangeCaseUtil {
           return obj;
       }
 
-      if (obj.constructor === Object) {
+      if (_.isObject(obj)) {
           const clone = _.cloneDeep(obj);
           _.keys(clone)
             .forEach(key => {
@@ -33,7 +33,7 @@ class ChangeCaseUtil {
                 }
             });
           return clone;
-      } else if (obj.constructor === Array) {
+      } else if (_.isArray(obj)) {
           const arr = obj;
           return _.map(arr, item => ChangeCaseUtil._processObjectKeys(item, mutatorFunc));
       } else {

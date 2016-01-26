@@ -8,13 +8,12 @@ const SecureModelBase = require('./SecureModelBase');
 
 const mappedColumns = [
     'id',
-    'file_name',
+    'fileName',
     'hash',
-    'sample_type',
-    'is_analyzed',
-    'is_deleted',
-    'vcf_file_sample_version_id',
-    'field_id',
+    'sampleType',
+    'isAnalyzed',
+    'isDeleted',
+    'vcfFileSampleVersionId',
     'values'
 ];
 
@@ -42,10 +41,12 @@ class SamplesModel extends SecureModelBase {
                             const dataToUpdate = {
                                 fileName: sample.fileName,
                                 hash: sample.hash,
-                                isAnalized: sample.isAnalyzed,
                                 sampleType: sample.sampleType
                             };
                             this._update(sampleId, dataToUpdate, trx, cb);
+                        },
+                        (id, cb) => {
+                            this._setAnalyzed(id, sample.isAnalyzed || false, trx, cb);
                         },
                         (id, cb) => {
                             this._addNewFileSampleVersion(sampleId, trx, cb);
@@ -142,10 +143,12 @@ class SamplesModel extends SecureModelBase {
                         creator: userId,
                         fileName: sample.fileName,
                         hash: sample.hash,
-                        isAnalyzed: sample.isAnalyzed || false,
                         sampleType: 'standard'
                     };
                     this._insert(dataToInsert, trx, cb);
+                },
+                (sampleId, cb) => {
+                    this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, cb);
                 },
                 (sampleId, cb) => {
                     this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
@@ -254,8 +257,6 @@ class SamplesModel extends SecureModelBase {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from('vcf_file_sample_value')
-                .innerJoin('field_metadata', 'vcf_file_sample_value.field_id', 'field_metadata.id')
-                .innerJoin('field_text', 'field_text.field_id', 'field_metadata.id')
                 .where('vcf_file_sample_version_id', versionId)
                 .asCallback((error, result) => {
                     if (error) {

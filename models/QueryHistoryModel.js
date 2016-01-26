@@ -8,9 +8,9 @@ const SecureModelBase = require('./SecureModelBase');
 
 const mappedColumns = [
     'id',
-    'vcf_file_sample_version_id',
-    'view_id',
-    'total_results'
+    'vcfFileSampleVersionId',
+    'viewId',
+    'totalResults'
 ];
 
 class QueryHistoryModel extends SecureModelBase {

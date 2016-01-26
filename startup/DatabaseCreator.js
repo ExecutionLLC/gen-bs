@@ -201,7 +201,6 @@ class DatabaseCreator {
                 table.uuid('id')
                     .primary();
                 table.string('name', 50);
-                table.enu('source_type', fieldSourceTypesEnumValues);
                 table.string('source_name', 128);
                 table.enu('value_type', fieldValueTypesEnumValues);
                 table.boolean('is_mandatory')

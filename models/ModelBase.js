@@ -46,7 +46,7 @@ class ModelBase {
     }
 
     _mapColumns(item) {
-        const data = ChangeCaseUtil.convertKeysToSnakeCase(item);
+        const data = ChangeCaseUtil.convertKeysToCamelCase(item);
         return _.reduce(this.mappedColumns, (memo, column) => {
             memo[column] = data[column];
             return memo;

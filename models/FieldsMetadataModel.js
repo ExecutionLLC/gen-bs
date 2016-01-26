@@ -10,13 +10,13 @@ const ModelBase = require('./ModelBase');
 const mappedColumns = [
     'id',
     'name',
-    'source_name',
-    'value_type',
-    'is_mandatory',
-    'is_editable',
-    'is_invisible',
+    'sourceName',
+    'valueType',
+    'isMandatory',
+    'isEditable',
+    'isInvisible',
     'dimension',
-    'langu_id',
+    'languId',
     'description',
     'label'
 ];
@@ -40,7 +40,7 @@ class FieldsMetadataModel extends ModelBase {
                 this._fetch(metadataId, cb);
             },
             (metadata, cb) => {
-                this._mapMetadata(metadata, cb);
+                cb(null, this._mapColumns(metadata));
             }
         ], callback);
     }
@@ -51,9 +51,7 @@ class FieldsMetadataModel extends ModelBase {
                 this._fetchByIds(metadataIds, cb);
             },
             (fieldsMetadata, cb) => {
-                async.map(fieldsMetadata, (metadata, cbk) => {
-                    this._mapMetadata(metadata, cbk);
-                }, cb);
+                this._mapMetadata(fieldsMetadata, cb);
             }
         ], callback);
     }
@@ -64,17 +62,44 @@ class FieldsMetadataModel extends ModelBase {
                 this.models.samples.find(userId, sampleId, cb);
             },
             (sample, cb) => {
-                cb(null, sample.values);
+                const fieldIds = _.pluck(sample.values, 'fieldId');
+                this.findMany(fieldIds, cb);
             }
-            //,
-            //(metadata, cb) => {
-            //    this._mapMetadata(metadata, cb);
-            //}
         ], callback);
     }
 
     findSourcesMetadata(callback) {
-        this._fetchMetadataBySource('source', callback);
+        async.waterfall([
+            (cb) => {
+                this._fetchSourcesMetadata(cb);
+            },
+            (fieldsMetadata, cb) => {
+                this._mapMetadata(fieldsMetadata, cb);
+            }
+        ], callback);
+    }
+
+    findMetadataBySourceName(sourceName, callback) {
+        async.waterfall([
+            (cb) => {
+                this._fetchMetadataBySourceName(sourceName, cb);
+            },
+            (metadata, cb) => {
+                cb(null, this._mapColumns(metadata));
+            }
+        ], callback);
+    }
+
+    findMetadataKeywords(metadataId, callback) {
+        async.waterfall([
+            (cb) => {
+                this._fetchMetadataKeywords(metadataId, cb);
+            },
+            (keywords, cb) => {
+                const keywordIds = _.pluck(viewsData, 'id');
+                this.models.keywords.findMany(keywordIds, cb);
+            }
+        ], callback);
     }
 
     _add(languId, metadata, withId, callback) {
@@ -105,36 +130,6 @@ class FieldsMetadataModel extends ModelBase {
                     });
                 }
             ], cb);
-        }, callback);
-    }
-
-    _mapMetadata(metadata, callback) {
-
-
-
-        //this._fetchMetadataKeywords(metadata.id, (error, keywords) => {
-        //    if (error) {
-        //        cb(error);
-        //    } else {
-        //        if (_.isNull(metadata.label)) {
-        //            metadata.label = metadata.name;
-        //        }
-        //        metadata.keywords = keywords;
-        //        callback(null, this._mapColumns(metadata));
-        //    }
-        //});
-    }
-
-    _mapKeywords(keywords, callback) {
-        async.map(keywords, (keyword, cb) => {
-            this.models.keywords.fetchKeywordSynonyms(keyword.id, (error, synonyms) => {
-                if (error) {
-                    cb(error);
-                } else {
-                    keyword.synonyms = synonyms;
-                    cb(null, keyword);
-                }
-            });
         }, callback);
     }
 
@@ -172,11 +167,26 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    _fetchMetadataBySource(source, callback) {
+    _fetchSourcesMetadata(callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from(this.baseTableName)
-                .where('source_name', source)
+                .whereNot('source_name', 'sample')
+                .asCallback((error, fieldsMetadata) => {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                    }
+                });
+        }, callback);
+    }
+
+    _fetchMetadataBySourceName(sourceName, callback) {
+        this.db.asCallback((knex, cb) => {
+            knex.select()
+                .from(this.baseTableName)
+                .where('source_name', sourceName)
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
                         cb(error);
@@ -189,22 +199,22 @@ class FieldsMetadataModel extends ModelBase {
 
     _fetchMetadataKeywords(metadataId, callback) {
         this.db.asCallback((knex, cb) => {
-            knex.select('id', 'field_id', 'value')
+            knex.select()
                 .from('keyword')
                 .where('field_id', metadataId)
                 .asCallback((error, keywords) => {
                     if (error) {
                         cb(error);
                     } else {
-                        this._mapKeywords(keywords, (error, result) => {
-                            if (error) {
-                                cb(error);
-                            } else {
-                                cb(null, ChangeCaseUtil.convertKeysToCamelCase(result));
-                            }
-                        });
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(keywords));
                     }
                 });
+        }, callback);
+    }
+
+    _mapMetadata(fieldsMetadata, callback) {
+        async.map(fieldsMetadata, (metadata, cb) => {
+            cb(null, this._mapColumns(metadata));
         }, callback);
     }
 
