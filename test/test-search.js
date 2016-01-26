@@ -33,6 +33,7 @@ describe('Search', () => {
         sessionsClient.openSession(TestUser.userName, TestUser.password, (error, response) => {
             assert.ifError(error);
             sessionId = SessionsClient.getSessionFromResponse(response);
+            webSocketClient.associateSession(sessionId);
             done();
         });
     });
@@ -42,18 +43,51 @@ describe('Search', () => {
         webSocketClient.onMessage(null);
     });
 
+    after((done) => {
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            assert.ifError(error);
+            assert.equal(response.status, HttpStatus.OK);
+            done();
+        });
+    });
+
     it('should correctly send search request', (done) => {
         const wsState = {
+            operationId: null,
             messages: [],
-            error: null
+            error: null,
+            sample: null,
+            view: null,
+            filter: null,
+            sourcesFields: null,
+            sampleFields: null,
+            limit: 100,
+            offset: 0
         };
 
         webSocketClient.onMessage((message) => {
-            wsState.messages.push(JSON.parse(message));
-            if (_.any(wsState.messages, (message) => message
+            // Here is the web socket response analysis.
+            wsState.messages.push(message);
+            assert.equal(message.operationId, wsState.operationId);
+            const endMessage = _.find(wsState.messages, (message) => message
                 && message.result
                 && message.result.data
-                && _.isArray(message.result.data))) {
+                && _.isArray(message.result.data));
+            if (endMessage) {
+                const rows = endMessage.result.data;
+                const allFields = wsState.sourcesFields.concat(wsState.sampleFields);
+
+                const fieldIdToMetadata = _.indexBy(allFields, 'id');
+
+                // Check that all field ids from the data lay either in sample or in source fields.
+                _.each(rows, row => {
+                    _(row)
+                        .keys()
+                        .each((key) => {
+                            assert.ok(fieldIdToMetadata[key], 'Field ' + key + ' is not found!');
+                        });
+                });
+
                 done();
             }
         });
@@ -71,17 +105,34 @@ describe('Search', () => {
                 assert.equal(response.status, HttpStatus.OK);
                 const views = response.body;
                 samplesClient.getAll(sessionId, (error, response) => {
+
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
                     const samples = response.body;
-
-                    const filter = filters[0];
-                    const view = views[0];
                     const sample = samples[0];
 
-                    searchClient.sendSearchRequest(sessionId, sample.id, view.id, filter.id, (error, response) => {
+                    samplesClient.getFields(sessionId, sample.id, (error, response) => {
                         assert.ifError(error);
-                        wsState.operationId = response.body.operationId;
+                        assert.equal(response.status, HttpStatus.OK);
+                        const sampleFields = response.body;
+                        samplesClient.getSourcesFields(sessionId, (error, response) => {
+                            assert.ifError(error);
+                            assert.equal(response.status, HttpStatus.OK, response.body);
+                            const sourcesFields = response.body;
+
+                            wsState.filter = filters[0];
+                            wsState.view = views[0];
+                            wsState.sample = sample;
+                            wsState.sourcesFields = sourcesFields;
+                            wsState.sampleFields = sampleFields;
+
+                            searchClient.sendSearchRequest(sessionId, wsState.sample.id, wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset, (error, response) => {
+                                assert.ifError(error);
+                                const operationId = response.body.operationId;
+                                assert.ok(operationId, JSON.stringify(response.body));
+                                wsState.operationId = operationId;
+                            });
+                        });
                     });
                 });
             });

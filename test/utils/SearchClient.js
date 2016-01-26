@@ -8,15 +8,16 @@ class SearchClient extends ClientBase {
         super(urls);
     }
 
-    sendSearchRequest(sessionId, sampleId, viewId, filterId, callback) {
-        RequestWrapper.get(
+    sendSearchRequest(sessionId, sampleId, viewId, filterId, limit, offset, callback) {
+        RequestWrapper.post(
             this.urls.startSearch(),
             this._makeSessionHeader(sessionId),
-            null,
             {
                 sampleId,
                 viewId,
-                filterId
+                filterId,
+                limit,
+                offset
             },
             callback
         );

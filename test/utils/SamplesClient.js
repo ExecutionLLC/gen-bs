@@ -24,6 +24,11 @@ class SamplesClient extends ClientBase {
             this._makeSessionHeader(sessionId), null, null, callback);
     }
 
+    getSourcesFields(sessionId, callback) {
+        RequestWrapper.get(this.urls.getSourcesFields(),
+            this._makeSessionHeader(sessionId), null, null, callback);
+    }
+
     remove(sessionId, sampleId, callback) {
         RequestWrapper.del(this.viewsUrls.remove(sampleId),
             this._makeSessionHeader(sessionId), null, callback);

@@ -2,6 +2,8 @@
 
 const WebSocket = require('ws');
 
+const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+
 class WebSocketClient {
   constructor(host, port) {
     this.address = 'ws://' + host + ':' + port;
@@ -11,6 +13,13 @@ class WebSocketClient {
     this.wsClient.on('message', this._onWsMessage.bind(this));
     this.wsClient.on('error', this._onWsError.bind(this));
     this.wsClient.on('close', this._onWsError.bind(this));
+  }
+
+  associateSession(sessionId) {
+    const message = ChangeCaseUtil.convertKeysToSnakeCase({
+      sessionId
+    });
+    this.wsClient.send(JSON.stringify(message));
   }
 
   send(data) {
@@ -26,16 +35,17 @@ class WebSocketClient {
   }
 
   _onWsMessage(message, flags) {
-    console.log('WS Message: ' + JSON.stringify(message, null, 2));
-    if (this.errorCallback) {
-      this.errorCallback(message);
+    console.log('WS Message: ' + message);
+    const parsedMessage = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(message));
+    if (this.messageCallback) {
+      this.messageCallback(parsedMessage);
     }
   }
 
   _onWsError(error) {
-    console.error('WS Error: ' + JSON.stringify(error, null, 2));
-    if (this.messageCallback) {
-      this.messageCallback(error);
+    console.error('WS Error: ' + error);
+    if (this.errorCallback) {
+      this.errorCallback(error);
     }
   }
 }

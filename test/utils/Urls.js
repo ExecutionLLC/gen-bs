@@ -12,7 +12,7 @@ class CollectionUrls {
     }
 
     getAll() {
-        return this._constructApiUrl(this.baseUrl);
+        return this._constructApiUrl();
     }
 
     get(itemId) {
@@ -20,7 +20,7 @@ class CollectionUrls {
     }
 
     create() {
-        return this._constructApiUrl(this.baseUrl);
+        return this._constructApiUrl();
     }
 
     update(itemId) {
@@ -65,6 +65,10 @@ class Urls {
 
     getSampleFields(sampleId) {
         return this._constructApiUrl('/fields/' + sampleId);
+    }
+
+    getSourcesFields() {
+        return this._constructApiUrl('/fields/sources');
     }
 
     startSearchInResults(operationId) {
