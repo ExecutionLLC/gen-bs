@@ -14,7 +14,7 @@ const METHODS = {
     getSourceMetadata: 'v1.get_source_metadata',
     openSearchSession: 'v1.open_session',
     closeSearchSession: 'v1.close_session',
-    setFilters: 'v1.set_filter'
+    searchInResults: 'v1.search_in_results'
 };
 
 /**
@@ -132,9 +132,9 @@ class ApplicationServerService extends ServiceBase {
                 });
             },
             (operation, callback) => {
-                const setFilterRequest = this._createSetFilterParams(params.globalSearchValue, params.fieldSearchValues);
-                const setSortRequest = this._createSetSortParams(params.sortValues);
-                this._rpcSend(operationId, METHODS.setFilters, setFilterRequest, (error) => callback(error, operation));
+                const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue,
+                    params.fieldSearchValues, params.sortValues);
+                this._rpcSend(operationId, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
     }
@@ -160,29 +160,23 @@ class ApplicationServerService extends ServiceBase {
         });
     }
 
-    _createSetFilterParams(globalSearchValue, fieldSearchValues) {
+    _createSearchInResultsParams(globalSearchValue, fieldSearchValues, sortParams) {
+        const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
         return {
-            globalSearch: globalSearchValue,
-            filters: _.map(fieldSearchValues, fieldSearchValue => {
+            globalFilter: globalSearchValue,
+            columnFilters: _.map(fieldSearchValues, fieldSearchValue => {
                 return {
                     columnName: fieldSearchValue.fieldMetadata.name,
                     columnFilter: fieldSearchValue.value
                 };
+            }),
+            sortOrder: _.map(sortedParams, sortedParam => {
+                return {
+                    columnName: sortedParam.fieldMetadata.name,
+                    isAscendingOrder: (sortedParam.sortOrder === 'asc')
+                };
             })
         };
-    }
-
-    _createSetSortParams(sortParams) {
-        const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
-        //noinspection UnnecessaryLocalVariableJS leaved for debugging
-        const appServerSortParams = _.map(sortedParams, sortedParam => {
-            return {
-                columnName: sortedParam.fieldMetadata.name,
-                isAscendingOrder: (sortedParam.sortOrder === 'asc')
-            };
-        });
-
-        return appServerSortParams;
     }
 
     _createAppServerViewSortOrder(view, fieldIdToMetadata) {
