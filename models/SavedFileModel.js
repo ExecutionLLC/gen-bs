@@ -9,7 +9,7 @@ const SecureModelBase = require('./SecureModelBase');
 const mappedColumns = [
     'id',
     'viewId',
-    'vcfFileSampleVersion_id',
+    'vcfFileSampleVersionId',
     'name',
     'url',
     'totalResults',
