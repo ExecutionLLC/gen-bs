@@ -9,7 +9,7 @@ const env = process.env;
 
 const SESSION_HEADER = 'X-Session-Id';
 const HOST = 'localhost';
-const PORT = env.GEN_PORT || 5000;
+const PORT = env.GEN_WS_PORT || 5000;
 const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 
