@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const Express = require('express');
 const async = require('async');
 
@@ -25,8 +26,16 @@ class DataController extends ControllerBase {
       samples: (callback) => {
         this.services.samples.findAll(user, callback);
       },
-      operations: (callback) => {
-        this.services.operations.findAll(sessionId, callback);
+      activeOperations: (callback) => {
+        this.services.operations.findAll(sessionId, (error, operations) => {
+          const clientOperations = _.map(operations, operation => {
+            return {
+              id: operation.id,
+              type: operation.type
+            };
+          });
+          callback(error, clientOperations);
+        });
       }
     }, (error, results) => {
       if (error) {

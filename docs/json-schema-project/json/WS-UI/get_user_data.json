@@ -50,6 +50,27 @@
 				"$ref": "../base_json/query_history.json#"
 			}
 		},
+		"active_operations": {
+			"type": "array",
+			"description": "Array of active operations for the session specified in the request header.",
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Operation identifier"
+					},
+					"type": {
+						"type": "string",
+						"description": "Operation type.",
+						"enum": [
+							"search",
+							"upload"
+						]
+					}
+				}
+			}
+		},
 		"number_paid_samples": {
 			"type": "integer"
 		}
