@@ -18,7 +18,7 @@ class SecureModelBase extends RemovableModelBase {
     add(userId, languId, item, callback) {
         async.waterfall([
             (cb) => {
-                this._add(userId, languId, item, true, callback);
+                this._add(userId, languId, item, true, cb);
             },
             (id, cb) => {
                 this.find(userId, id, cb);
