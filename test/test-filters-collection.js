@@ -104,7 +104,7 @@ describe('Filters', () => {
                         assert.equal(response.status, HttpStatus.OK);
                         const updatedFilter = response.body;
                         assert.ok(updatedFilter);
-                        assert.equal(updatedFilter.id, filterToUpdate.id);
+                        assert.notEqual(updatedFilter.id, filterToUpdate.id);
                         assert.equal(updatedFilter.name, filterToUpdate.name);
                         assert.notEqual(updatedFilter.type, 'user', 'Filter type change should not be allowed by update.');
                         done();

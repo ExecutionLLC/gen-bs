@@ -13,7 +13,7 @@ class FiltersService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => super.find(user, filter.id, callback),
             (existingFilter, callback) => {
-                if (existingFilter.type !== 'user') {
+                if (existingFilter.filterType !== 'user') {
                     callback(new Error('Default filter cannot be updated'));
                 } else {
                     super.update(user, filter, callback);

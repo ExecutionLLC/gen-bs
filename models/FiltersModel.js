@@ -98,7 +98,6 @@ class FiltersModel extends SecureModelBase {
                         creator: userId,
                         name: newData.name,
                         rules: newData.rules,
-                        //filterType: newData.filterType,
                         originalFilterId: data.originalfilterId || data.id
                     };
                     this._insert(dataToInsert, trx, cb);
@@ -110,7 +109,7 @@ class FiltersModel extends SecureModelBase {
                         description: newData.description
                     };
                     this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
-                        cb(error, filterId);
+                        cb(error, id);
                     });
                 }
             ], cb);
