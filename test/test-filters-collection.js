@@ -123,7 +123,7 @@ describe('Filters', () => {
                 assert.equal(response.status, HttpStatus.OK);
                 const filters = response.body;
                 assert.ok(filters);
-                const nonUserFilter = _.find(filters, filter => filter.type !== 'user');
+                const nonUserFilter = _.find(filters, filter => filter.filterType !== 'user');
                 assert.ok(nonUserFilter, 'Cannot find any non-user filter');
                 nonUserFilter.name = 'Test Name' + Uuid.v4();
 

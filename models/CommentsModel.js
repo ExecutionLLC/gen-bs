@@ -90,25 +90,25 @@ class CommentsModel extends SecureModelBase {
         }, callback);
     }
 
-    _update(userId, data, newData, callback) {
+    _update(userId, comment, commentToUpdate, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToUpdate = {
-                        reference: newData.reference,
-                        chrom: newData.chrom,
-                        pos: newData.pos,
-                        alt: newData.alt,
-                        searchKey: newData.searchKey
+                        reference: commentToUpdate.reference,
+                        chrom: commentToUpdate.chrom,
+                        pos: commentToUpdate.pos,
+                        alt: commentToUpdate.alt,
+                        searchKey: commentToUpdate.searchKey
                     };
-                    this._unsafeUpdate(data.id, dataToUpdate, trx, cb);
+                    this._unsafeUpdate(comment.id, dataToUpdate, trx, cb);
                 },
-                (id, cb) => {
+                (commentId, cb) => {
                     const dataToUpdate = {
-                        languId: data.languId,
-                        comment: newData.comment
+                        languId: comment.languId,
+                        comment: commentToUpdate.comment
                     };
-                    this._updateCommentText(id, dataToUpdate, trx, cb);
+                    this._updateCommentText(commentId, dataToUpdate, trx, cb);
                 }
             ], cb);
         }, callback);

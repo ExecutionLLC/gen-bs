@@ -3,7 +3,7 @@
     "id": "8355f3a0-910a-4657-bb63-1d5f2b1d7f9d",
     "name": "Test Filter",
     "description": "Test filter description",
-    "type": "standard",
+    "filterType": "standard",
     "isCopyDisabled": false,
     "rules": {
       "$or": [
@@ -31,7 +31,7 @@
     "id": "69071bfc-e78e-41e7-aa90-3f481c5f3eb9",
     "name": "Another Test Filter",
     "description": "Test filter description v2",
-    "type": "advanced",
+    "filterType": "advanced",
     "isCopyDisabled": false,
     "rules": {
       "$or": [

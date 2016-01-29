@@ -77,7 +77,7 @@ class InitialDataImportManager {
             (filters, cb) => {
                 result.filters = filters;
 
-                console.log(result);
+                console.log(JSON.stringify(result, null, 2));
                 cb(null, result);
             }
         ], callback);
@@ -131,7 +131,7 @@ class InitialDataImportManager {
         const filtersString = FsUtils.getFileContentsAsString(filtersFilePath);
         const filters = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(filtersString));
         async.map(filters, (filter, cb) => {
-            this.models.filters.addWithId(null, this.config.defaultLanguId, filter, cb)
+            this.models.filters.internalAdd(null, this.config.defaultLanguId, filter, cb)
         }, callback);
     }
 

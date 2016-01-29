@@ -74,16 +74,16 @@ class QueryHistoryModel extends SecureModelBase {
         }, callback);
     }
 
-    _update(userId, data, newData, callback) {
+    _update(userId, query, queryToUpdate, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToUpdate = {
-                        viewId: newData.viewId,
-                        vcfFileSampleVersionId: newData.vcfFileSampleVersionId,
-                        totalResults: newData.totalResults
+                        viewId: queryToUpdate.viewId,
+                        vcfFileSampleVersionId: queryToUpdate.vcfFileSampleVersionId,
+                        totalResults: queryToUpdate.totalResults
                     };
-                    this._unsafeUpdate(data.id, dataToUpdate, trx, cb);
+                    this._unsafeUpdate(query.id, dataToUpdate, trx, cb);
                 }
             ], cb);
         }, callback);

@@ -23,6 +23,20 @@ class FiltersModel extends SecureModelBase {
         super(models, 'filter', mappedColumns);
     }
 
+    add(userId, languId, filter, callback) {
+        filter.filterType = 'user';
+        super.add(userId, languId, filter, callback);
+    }
+
+    addWithId(userId, languId, filter, callback) {
+        filter.filterType = 'user';
+        super.addWithId(userId, languId, filter, callback);
+    }
+
+    internalAdd(userId, languId, filter, callback) {
+        this._add(userId, languId, filter, false, callback);
+    }
+
     // It collects the latest version of each filter for the current user
     findAll(userId, callback) {
         this._fetchUserFilters(userId, (error, filtersData) => {
@@ -89,27 +103,27 @@ class FiltersModel extends SecureModelBase {
     }
 
     // It creates a new version of an existing filter
-    _update(userId, data, newData, callback) {
+    _update(userId, filter, filterToUpdate, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
-                        name: newData.name,
-                        rules: newData.rules,
-                        originalFilterId: data.originalfilterId || data.id
+                        name: filterToUpdate.name,
+                        rules: filterToUpdate.rules,
+                        originalFilterId: filter.originalFilterId || filter.id
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
-                (id, cb) => {
+                (filterId, cb) => {
                     const dataToInsert = {
-                        filterId: id,
-                        languId: data.languId,
-                        description: newData.description
+                        filterId: filterId,
+                        languId: filter.languId,
+                        description: filterToUpdate.description
                     };
                     this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
-                        cb(error, id);
+                        cb(error, filterId);
                     });
                 }
             ], cb);

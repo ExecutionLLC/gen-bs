@@ -167,31 +167,31 @@ class ViewsModel extends SecureModelBase {
     }
 
     // Creates a new version of an existing view
-    _update(userId, data, newData, callback) {
+    _update(userId, view, viewToUpdate, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
-                        name: newData.name,
-                        viewType: newData.viewType,
-                        originalViewId: data.originalViewId || data.id
+                        name: viewToUpdate.name,
+                        viewType: viewToUpdate.viewType,
+                        originalViewId: view.originalViewId || view.id
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
                 (viewId, cb) => {
                     const dataToInsert = {
                         viewId: viewId,
-                        languId: data.languId,
-                        description: newData.description
+                        languId: view.languId,
+                        description: viewToUpdate.description
                     };
                     this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
                         cb(error, viewId);
                     });
                 },
                 (viewId, cb) => {
-                    this._addViewItems(viewId, newData.viewListItems, trx, (error) => {
+                    this._addViewItems(viewId, viewToUpdate.viewListItems, trx, (error) => {
                         cb(error, viewId);
                     });
                 }

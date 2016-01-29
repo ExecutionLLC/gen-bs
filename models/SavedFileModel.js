@@ -96,25 +96,25 @@ class SavedFileModel extends SecureModelBase {
         }, callback);
     }
 
-    _update(userId, data, newData, callback) {
+    _update(userId, file, fileToUpdate, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToUpdate = {
-                        viewId: newData.viewId,
-                        vcfFileSampleVersionId: newData.vcfFileSampleVersionId,
-                        name: newData.name,
-                        url: newData.url,
-                        totalResults: newData.totalResults
+                        viewId: fileToUpdate.viewId,
+                        vcfFileSampleVersionId: fileToUpdate.vcfFileSampleVersionId,
+                        name: fileToUpdate.name,
+                        url: fileToUpdate.url,
+                        totalResults: fileToUpdate.totalResults
                     };
-                    this._unsafeUpdate(data.id, dataToUpdate, trx, cb);
+                    this._unsafeUpdate(file.id, dataToUpdate, trx, cb);
                 },
-                (id, cb) => {
+                (fileId, cb) => {
                     const dataToUpdate = {
-                        languId: data.languId,
-                        description: newData.description
+                        languId: file.languId,
+                        description: fileToUpdate.description
                     };
-                    this._updateSavedFileText(id, dataToUpdate, trx, cb);
+                    this._updateSavedFileText(fileId, dataToUpdate, trx, cb);
                 }
             ], cb);
         }, callback);

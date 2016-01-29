@@ -129,25 +129,25 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    _update(userId, data, newData, callback) {
+    _update(userId, sample, sampleToUpdate, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToUpdate = {
-                        fileName: newData.fileName,
-                        hash: newData.hash,
-                        sampleType: newData.sampleType
+                        fileName: sampleToUpdate.fileName,
+                        hash: sampleToUpdate.hash,
+                        sampleType: sampleToUpdate.sampleType
                     };
-                    this._unsafeUpdate(data.id, dataToUpdate, trx, cb);
+                    this._unsafeUpdate(sample.id, dataToUpdate, trx, cb);
                 },
-                (id, cb) => {
-                    this._setAnalyzed(id, newData.isAnalyzed || false, trx, cb);
+                (sampleId, cb) => {
+                    this._setAnalyzed(sampleId, sampleToUpdate.isAnalyzed || false, trx, cb);
                 },
-                (id, cb) => {
-                    this._addNewFileSampleVersion(id, trx, cb);
+                (sampleId, cb) => {
+                    this._addNewFileSampleVersion(sampleId, trx, cb);
                 },
                 (versionId, cb) => {
-                    this._addFileSampleValues(versionId, newData.values, trx, cb);
+                    this._addFileSampleValues(versionId, sampleToUpdate.values, trx, cb);
                 }
             ], cb);
         }, callback);
