@@ -23,12 +23,56 @@ class SavedFileModel extends SecureModelBase {
         super(models, 'saved_file', mappedColumns);
     }
 
-    add(userId, languId, file, callback) {
+    find(userId, fileId, callback) {
+        this._fetch(userId, fileId, (error, fileData) => {
+            callback(error, this._mapColumns(fileData));
+        });
+    }
+
+    // Collets all saved files for user
+    findAll(userId, callback) {
+        this._fetchUserFiles(userId, (error, filesData) => {
+            if (error) {
+                callback(error);
+            } else {
+                async.map(filesData, (fileData, cb) => {
+                    cb(null, this._mapColumns(fileData));
+                }, callback);
+            }
+        });
+    }
+
+    findMany(userId, fileIds, callback) {
+        async.waterfall([
+            (cb) => { this._fetchSavedFiles(fileIds, cb); },
+            (filesData, cb) => {
+                if (filesData.length == fileIds.length) {
+                    cb(null, filesData);
+                } else {
+                    cb('Some saved files not found: ' + fileIds + ', userId: ' + userId);
+                }
+            },
+            (filesData, cb) => {
+                if (_.every(filesData, 'creator', userId)) {
+                    cb(null, filesData);
+                } else {
+                    cb('Unauthorized access to saved files: ' + fileIds + ', userId: ' + userId);
+                }
+            },
+            (filesData, cb) => {
+                async.map(filesData, (fileData, cb) => {
+                    cb(null, this._mapColumns(fileData));
+                }, cb);
+            }
+        ], callback);
+    }
+
+    _add(userId, languId, file, shouldGenerateId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
-                        id: this._generateId(),
+                        id: shouldGenerateId ? this._generateId() : file.id,
                         creator: userId,
                         viewId: file.viewId,
                         vcfFileSampleVersionId: file.vcfFileSampleVersionId,
@@ -52,78 +96,28 @@ class SavedFileModel extends SecureModelBase {
         }, callback);
     }
 
-    update(userId, fileId, file, callback) {
-        this._fetch(userId, fileId, (error, fileData) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.db.transactionally((trx, cb) => {
-                    async.waterfall([
-                        (cb) => {
-                            const dataToUpdate = {
-                                viewId: file.viewId,
-                                vcfFileSampleVersionId: file.vcfFileSampleVersionId,
-                                name: file.name,
-                                url: file.url,
-                                totalResults: file.totalResults
-                            };
-                            this._update(fileId, dataToUpdate, trx, cb);
-                        },
-                        (fileId, cb) => {
-                            const dataToUpdate = {
-                                languId: fileData.languId,
-                                description: file.description
-                            };
-                            this._updateSavedFileText(fileId, dataToUpdate, trx, cb);
-                        }
-                    ], cb);
-                }, callback);
-            }
-        });
-    }
-
-    find(userId, fileId, callback) {
-        this._fetch(userId, fileId, (error, fileData) => {
-            callback(error, this._mapColumns(fileData));
-        });
-    }
-
-    // Собирает все comments для текущего пользователя
-    findAll(userId, callback) {
-        this._fetchUserFiles(userId, (error, filesData) => {
-            if (error) {
-                callback(error);
-            } else {
-                async.map(filesData, (fileData, cb) => {
-                    cb(null, this._mapColumns(fileData));
-                }, callback);
-            }
-        });
-    }
-
-    findMany(userId, fileIds, callback) {
-        async.waterfall([
-            (cb) => { this._fetchSavedFiles(fileIds, cb); },
-            (filesData, cb) => {
-                if (filesData.length == fileIds.length) {
-                    cb(null, filesData);
-                } else {
-                    cb('Inactive saved files found: ' + fileIds + ', userId: ' + userId);
+    _update(userId, data, newData, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToUpdate = {
+                        viewId: newData.viewId,
+                        vcfFileSampleVersionId: newData.vcfFileSampleVersionId,
+                        name: newData.name,
+                        url: newData.url,
+                        totalResults: newData.totalResults
+                    };
+                    this._unsafeUpdate(data.id, dataToUpdate, trx, cb);
+                },
+                (id, cb) => {
+                    const dataToUpdate = {
+                        languId: data.languId,
+                        description: newData.description
+                    };
+                    this._updateSavedFileText(id, dataToUpdate, trx, cb);
                 }
-            },
-            (filesData, cb) => {
-                if (_.every(filesData, 'creator', userId)) {
-                    cb(null, filesData);
-                } else {
-                    cb('Unauthorized saved files: ' + fileIds + ', userId: ' + userId);
-                }
-            },
-            (filesData, cb) => {
-                async.map(filesData, (fileData, cb) => {
-                    cb(null, this._mapColumns(fileData));
-                }, cb);
-            }
-        ], callback);
+            ], cb);
+        }, callback);
     }
 
     _updateSavedFileText(fileId, dataToUpdate, trx, callback) {
@@ -153,14 +147,10 @@ class SavedFileModel extends SecureModelBase {
                 .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
                 .where('id', fileId)
                 .asCallback((error, fileData) => {
-                    if (error) {
-                        cb(error);
+                    if (error || !fileData.length) {
+                        cb(error || new Error('Item not found: ' + fileId));
                     } else {
-                        if (fileData.length > 0) {
-                            cb(null, ChangeCaseUtil.convertKeysToCamelCase(fileData[0]));
-                        } else {
-                            cb(new Error('Item not found: ' + fileId));
-                        }
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fileData[0]));
                     }
                 });
         }, callback);

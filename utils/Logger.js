@@ -2,7 +2,6 @@ var _ = require('lodash');
 
 var bunyan = require('bunyan');
 var path   = require('path');
-var domain = require('domain');
 
 var levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 
@@ -28,10 +27,6 @@ Logger.nullLogger = function() {
     }, {});
 };
 
-Logger.prototype.prepareFileName = function(filename) {
-    return path.normalize(path.join(__dirname, "..", filename));
-};
-
 Logger.prototype.prepareMetadata = function(metadata) {
     if (!metadata) metadata = {};
 
@@ -39,24 +34,14 @@ Logger.prototype.prepareMetadata = function(metadata) {
         metadata = {metadata: metadata};
     }
 
-    if (domain.active) {
-        if (domain.active.client_ip) {
-            metadata.ip = domain.active.client_ip;
-        }
-        if (!domain.active.in_request && domain.active.request_url) {
-            _.extend(metadata, domain.active.post_params || {});
-            metadata.url = domain.active.request_url;
-            domain.active.in_request = true;
-        }
-    }
     return metadata;
 };
 
 Logger.prototype.close = function() {
     for (var stream_id in this.bunyan.streams) {
-        var stream = this.bunyan.streams[stream_id];
-        if (stream.closeOnExit) {
-            stream.stream.end();
+        var s = this.bunyan.streams[stream_id];
+        if (s.closeOnExit) {
+            s.stream.end();
         }
     }
 };
@@ -73,7 +58,7 @@ Logger.prototype.init = function(params) {
 
     if (params.file) {
         streams.push({
-            path:   this.prepareFileName(params.file.path || "logs/server.log"),
+            path:   params.file.path,
             level:  params.file.level || "trace"
         });
     }

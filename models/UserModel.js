@@ -8,12 +8,11 @@ const RemovableModelBase = require('./RemovableModelBase');
 
 const mappedColumns = [
     'id',
-    'numberPaidSamples',
-    'isDeleted',
-    'email',
-    'defaultLanguId',
     'name',
     'lastName',
+    'email',
+    'language',
+    'numberPaidSamples',
     'speciality'
 ];
 
@@ -23,11 +22,11 @@ class UserModel extends RemovableModelBase {
     }
 
     add(user, languId, callback) {
-        this._add(user, languId, false, callback);
+        this._add(user, languId, true, callback);
     }
 
     addWithId(user, languId, callback) {
-        this._add(user, languId, true, callback);
+        this._add(user, languId, false, callback);
     }
 
     update(userId, languId, user, callback) {
@@ -39,7 +38,7 @@ class UserModel extends RemovableModelBase {
                         email: user.email,
                         defaultLanguId: languId
                     };
-                    this._update(userId, dataToUpdate, trx, cb);
+                    this._unsafeUpdate(userId, dataToUpdate, trx, cb);
                 },
                 (id, cb) => {
                     const dataToUpdate = {
@@ -54,12 +53,12 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
-    _add(user, languId, withId, callback) {
+    _add(user, languId, shouldGenerateId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
-                        id: (withId ? user.id : this._generateId()),
+                        id: shouldGenerateId ? this._generateId() : user.id,
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
                         defaultLanguId: languId
@@ -97,15 +96,13 @@ class UserModel extends RemovableModelBase {
             .from(this.baseTableName)
             .innerJoin('user_text', 'user_text.user_id', this.baseTableName + '.id')
             .where('id', userId)
-            .asCallback((error, data) => {
-                if (error) {
-                    cb(error);
+            .asCallback((error, userData) => {
+                if (error || !userData.length) {
+                    cb(error || new Error('Item not found: ' + userId));
                 } else {
-                    if (data.length > 0) {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
-                    } else {
-                        cb(new Error('Item not found: ' + userId));
-                    }
+                    let data = userData[0];
+                    data.language = data.defaultLanguId;
+                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(data));
                 }
             });
         }, callback);

@@ -102,12 +102,13 @@ describe('Search', function() {
             assert.ifError(error);
             assert.equal(response.status, HttpStatus.OK);
             const filters = response.body;
+
             viewsClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
                 assert.equal(response.status, HttpStatus.OK);
                 const views = response.body;
-                samplesClient.getAll(sessionId, (error, response) => {
 
+                samplesClient.getAll(sessionId, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
                     const samples = response.body;
@@ -117,6 +118,7 @@ describe('Search', function() {
                         assert.ifError(error);
                         assert.equal(response.status, HttpStatus.OK);
                         const sampleFields = response.body;
+
                         samplesClient.getSourcesFields(sessionId, (error, response) => {
                             assert.ifError(error);
                             assert.equal(response.status, HttpStatus.OK, response.body);
@@ -128,7 +130,7 @@ describe('Search', function() {
                             wsState.sourcesFields = sourcesFields;
                             wsState.sampleFields = sampleFields;
 
-                            searchClient.sendSearchRequest(sessionId, wsState.sample.id, wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset, (error, response) => {
+                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, wsState.sample.id, wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset, (error, response) => {
                                 assert.ifError(error);
                                 const operationId = response.body.operationId;
                                 assert.ok(operationId, JSON.stringify(response.body));

@@ -23,53 +23,6 @@ class ViewsModel extends SecureModelBase {
         super(models, 'view', mappedColumns);
     }
 
-    add(userId, languId, view, callback) {
-        this._add(userId, languId, view, false, callback);
-    }
-
-    addWithId(userId, languId, view, callback) {
-        this._add(userId, languId, view, true, callback);
-    }
-
-    // Creates a new version of an existing view
-    update(userId, viewId, view, callback) {
-        this._fetch(userId, viewId, (error, viewData) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.db.transactionally((trx, cb) => {
-                    async.waterfall([
-                        (cb) => {
-                            const dataToInsert = {
-                                id: this._generateId(),
-                                creator: userId,
-                                name: view.name,
-                                viewType: view.viewType,
-                                originalViewId: viewData.originalViewId || viewData.id
-                            };
-                            this._insert(dataToInsert, trx, cb);
-                        },
-                        (viewId, cb) => {
-                            const dataToInsert = {
-                                viewId: viewId,
-                                languId: viewData.languId,
-                                description: view.description
-                            };
-                            this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
-                                cb(error, viewId);
-                            });
-                        },
-                        (viewId, cb) => {
-                            this._addViewItems(viewId, view.viewListItems, trx, (error) => {
-                                cb(error, viewId);
-                            });
-                        }
-                    ], cb);
-                }, callback);
-            }
-        });
-    }
-
     find(userId, viewId, callback) {
         async.waterfall([
             (cb) => { this._fetch(userId, viewId, cb); },
@@ -114,14 +67,14 @@ class ViewsModel extends SecureModelBase {
                 if (views.length == viewIds.length) {
                     cb(null, views);
                 } else {
-                    cb('Inactive views found: ' + viewIds + ', userId: ' + userId);
+                    cb('Some views not found: ' + viewIds + ', userId: ' + userId);
                 }
             },
             (views, cb) => {
                 if (_.every(views, 'creator', userId)) {
                     cb(null, views);
                 } else {
-                    cb('Unauthorized views: ' + viewIds + ', userId: ' + userId);
+                    cb('Unauthorized access to views: ' + viewIds + ', userId: ' + userId);
                 }
             },
             (views, cb) => {
@@ -141,15 +94,15 @@ class ViewsModel extends SecureModelBase {
         ], callback);
     }
 
-    _add(userId, languId, view, withId, callback) {
+    _add(userId, languId, view, shouldGenerateId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
-                        id: (withId ? view.id : this._generateId()),
+                        id: shouldGenerateId ? this._generateId() : view.id,
                         creator: userId,
                         name: view.name,
-                        viewType: view.viewType || 'user'
+                        viewType: view.viewType
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
@@ -213,6 +166,39 @@ class ViewsModel extends SecureModelBase {
         this._insertIntoTable('view_item_keyword', dataToInsert, trx, callback);
     }
 
+    // Creates a new version of an existing view
+    _update(userId, data, newData, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: this._generateId(),
+                        creator: userId,
+                        name: newData.name,
+                        viewType: newData.viewType,
+                        originalViewId: data.originalViewId || data.id
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                },
+                (viewId, cb) => {
+                    const dataToInsert = {
+                        viewId: viewId,
+                        languId: data.languId,
+                        description: newData.description
+                    };
+                    this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
+                        cb(error, viewId);
+                    });
+                },
+                (viewId, cb) => {
+                    this._addViewItems(viewId, newData.viewListItems, trx, (error) => {
+                        cb(error, viewId);
+                    });
+                }
+            ], cb);
+        }, callback);
+    }
+
     _fetch(userId, viewId, callback) {
         this._fetchView(viewId, (error, data) => {
             if (error) {
@@ -231,13 +217,10 @@ class ViewsModel extends SecureModelBase {
             .innerJoin('view_text', 'view_text.view_id', this.baseTableName + '.id')
             .where('id', viewId)
             .asCallback((error, viewData) => {
-                if (error) {
-                    cb(error);
-                } else if (viewData.length > 0) {
+                if (error || !viewData.length) {
+                    cb(error || new Error('Item not found: ' + viewId));
+                } else {
                     cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewData[0]));
-                }
-                else {
-                    cb(new Error('Item not found: ' + viewId));
                 }
             });
         }, callback);

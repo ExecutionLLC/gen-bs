@@ -19,6 +19,10 @@ class LanguService extends ServiceBase {
     findAll(callback) {
         this.models.langu.findAll(callback);
     }
+
+    exists(languId, callback) {
+        this.models.langu.exists(languId, callback);
+    }
 }
 
 module.exports = LanguService;

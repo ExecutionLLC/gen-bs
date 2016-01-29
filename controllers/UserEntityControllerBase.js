@@ -12,8 +12,8 @@ class UserEntityControllerBase extends ControllerBase {
 
         this.find = this.find.bind(this);
         this.findAll = this.findAll.bind(this);
-        this.update = this.update.bind(this);
         this.add = this.add.bind(this);
+        this.update = this.update.bind(this);
     }
 
     find(request, response) {
@@ -75,12 +75,13 @@ class UserEntityControllerBase extends ControllerBase {
             return;
         }
 
+        const languId = request.languId;
         const user = request.user;
         const item = this.getRequestBody(request, response);
         if (!item) {
             return;
         }
-        this.theService.add(user, item, (error, insertedItem) => {
+        this.theService.add(user, languId, item, (error, insertedItem) => {
             if (error) {
                 this.sendInternalError(response, error);
             } else {

@@ -23,55 +23,6 @@ class FiltersModel extends SecureModelBase {
         super(models, 'filter', mappedColumns);
     }
 
-    add(userId, languId, filter, callback) {
-        this._add(userId, languId, filter, false, callback);
-    }
-
-    addWithId(userId, languId, filter, callback) {
-        this._add(userId, languId, filter, true, callback);
-    }
-
-    // Creates a new version of an existing filter
-    update(userId, filterId, filter, callback) {
-        this._fetch(userId, filterId, (error, filterData) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.db.transactionally((trx, cb) => {
-                    async.waterfall([
-                        (cb) => {
-                            const dataToInsert = {
-                                id: this._generateId(),
-                                creator: userId,
-                                name: filter.name,
-                                rules: filter.rules,
-                                filterType: filter.filterType,
-                                originalFilterId: filterData.originalfilterId || filterData.id
-                            };
-                            this._insert(dataToInsert, trx, cb);
-                        },
-                        (filterId, cb) => {
-                            const dataToInsert = {
-                                filterId: filterId,
-                                languId: filterData.languId,
-                                description: filter.description
-                            };
-                            this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
-                                cb(error, filterId);
-                            });
-                        }
-                    ], cb);
-                }, callback);
-            }
-        });
-    }
-
-    find(userId, filterId, callback) {
-        this._fetch(userId, filterId, (error, filterData) => {
-            callback(error, this._mapColumns(filterData));
-        });
-    }
-
     // It collects the latest version of each filter for the current user
     findAll(userId, callback) {
         this._fetchUserFilters(userId, (error, filtersData) => {
@@ -92,14 +43,14 @@ class FiltersModel extends SecureModelBase {
                 if (filtersData.length == filterIds.length) {
                     cb(null, filtersData);
                 } else {
-                    cb('Inactive filters found: ' + filterIds + ', userId: ' + userId);
+                    cb('Some filters not found: ' + filterIds + ', userId: ' + userId);
                 }
             },
             (filtersData, cb) => {
                 if (_.every(filtersData, 'creator', userId)) {
                     cb(null, filtersData);
                 } else {
-                    cb('Unauthorized filters: ' + filterIds + ', userId: ' + userId);
+                    cb('Unauthorized access to filters: ' + filterIds + ', userId: ' + userId);
                 }
             },
             (filtersData, cb) => {
@@ -110,16 +61,16 @@ class FiltersModel extends SecureModelBase {
         ], callback);
     }
 
-    _add(userId, languId, filter, withId, callback) {
+    _add(userId, languId, filter, shouldGenerateId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
-                        id: (withId ? filter.id : this._generateId()),
+                        id: shouldGenerateId ? this._generateId() : filter.id,
                         creator: userId,
                         name: filter.name,
                         rules: filter.rules,
-                        filterType: 'user'
+                        filterType: filter.filterType || 'user'
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
@@ -128,6 +79,35 @@ class FiltersModel extends SecureModelBase {
                         filterId: filterId,
                         languId: languId,
                         description: filter.description
+                    };
+                    this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
+                        cb(error, filterId);
+                    });
+                }
+            ], cb);
+        }, callback);
+    }
+
+    // It creates a new version of an existing filter
+    _update(userId, data, newData, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: this._generateId(),
+                        creator: userId,
+                        name: newData.name,
+                        rules: newData.rules,
+                        filterType: newData.filterType,
+                        originalFilterId: data.originalfilterId || data.id
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                },
+                (id, cb) => {
+                    const dataToInsert = {
+                        filterId: id,
+                        languId: data.languId,
+                        description: newData.description
                     };
                     this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
                         cb(error, filterId);
@@ -155,14 +135,10 @@ class FiltersModel extends SecureModelBase {
                 .innerJoin('filter_text', 'filter_text.filter_id', this.baseTableName + '.id')
                 .where('id', filterId)
                 .asCallback((error, filterData) => {
-                    if (error) {
-                        cb(error);
+                    if (error || !filterData.length) {
+                        cb(error || new Error('Item not found: ' + filterId));
                     } else {
-                        if (filterData.length > 0) {
-                            cb(null, ChangeCaseUtil.convertKeysToCamelCase(filterData[0]));
-                        } else {
-                            cb(new Error('Item not found: ' + filterId));
-                        }
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(filterData[0]));
                     }
             });
         }, callback);

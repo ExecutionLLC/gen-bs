@@ -14,13 +14,25 @@ class LanguModel extends ModelBase {
     add(langu, callback) {
         this.db.transactionally((trx, cb) => {
             this._insert(langu, trx, cb);
-        }, callback);
+        }, (error) => {
+            if (error) {
+                callback(error);
+            } else {
+                callback(null, langu);
+            }
+        });
     }
 
     update(languId, langu, callback) {
         this.db.transactionally((trx, cb) => {
-            this._update(languId, langu, trx, cb);
-        }, callback);
+            this._unsafeUpdate(languId, langu, trx, cb);
+        }, (error) => {
+            if (error) {
+                callback(error);
+            } else {
+                callback(null, langu);
+            }
+        });
     }
 
     findAll(callback) {

@@ -18,50 +18,6 @@ class QueryHistoryModel extends SecureModelBase {
         super(models, 'query_history', mappedColumns);
     }
 
-    add(userId, query, callback) {
-        this.db.transactionally((trx, cb) => {
-            async.waterfall([
-                (cb) => {
-                    const dataToInsert = {
-                        id: this._generateId(),
-                        creator: userId,
-                        viewId: query.viewId,
-                        vcfFileSampleVersionId: query.vcfFileSampleVersionId,
-                        totalResults: query.totalResults
-                    };
-                    this._insert(dataToInsert, trx, cb);
-                }
-            ], cb);
-        }, callback);
-    }
-
-    update(userId, queryId, query, callback) {
-        this._fetch(userId, queryId, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.db.transactionally((trx, cb) => {
-                    async.waterfall([
-                        (cb) => {
-                            const dataToUpdate = {
-                                viewId: query.viewId,
-                                vcfFileSampleVersionId: query.vcfFileSampleVersionId,
-                                totalResults: query.totalResults
-                            };
-                            this._update(queryId, dataToUpdate, trx, cb);
-                        }
-                    ], cb);
-                }, callback);
-            }
-        });
-    }
-
-    find(userId, queryId, callback) {
-        this._fetch(userId, queryId, (error, queryData) => {
-            callback(error, this._mapColumns(queryData));
-        });
-    }
-
     // Собирает все comments для текущего пользователя
     findAll(userId, callback) {
         this._fetchUserQueries(userId, (error, queriesData) => {
@@ -82,14 +38,14 @@ class QueryHistoryModel extends SecureModelBase {
                 if (queriesData.length == queryIds.length) {
                     cb(null, queriesData);
                 } else {
-                    cb('Inactive queries found: ' + queryIds + ', userId: ' + userId);
+                    cb('Some queries not found: ' + queryIds + ', userId: ' + userId);
                 }
             },
             (queriesData, cb) => {
                 if (_.every(queriesData, 'creator', userId)) {
                     cb(null, queriesData);
                 } else {
-                    cb('Unauthorized queries: ' + queryIds + ', userId: ' + userId);
+                    cb('Unauthorized access to queries: ' + queryIds + ', userId: ' + userId);
                 }
             },
             (queriesData, cb) => {
@@ -98,6 +54,39 @@ class QueryHistoryModel extends SecureModelBase {
                 }, cb);
             }
         ], callback);
+    }
+
+    // languId is used for interface compatibility
+    _add(userId, languId, query, shouldGenerateId, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToInsert = {
+                        id: shouldGenerateId ? this._generateId() : query.id,
+                        creator: userId,
+                        viewId: query.viewId,
+                        vcfFileSampleVersionId: query.vcfFileSampleVersionId,
+                        totalResults: query.totalResults
+                    };
+                    this._insert(dataToInsert, trx, cb);
+                }
+            ], cb);
+        }, callback);
+    }
+
+    _update(userId, data, newData, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToUpdate = {
+                        viewId: newData.viewId,
+                        vcfFileSampleVersionId: newData.vcfFileSampleVersionId,
+                        totalResults: newData.totalResults
+                    };
+                    this._unsafeUpdate(data.id, dataToUpdate, trx, cb);
+                }
+            ], cb);
+        }, callback);
     }
 
     _fetchUserQueries(userId, callback) {

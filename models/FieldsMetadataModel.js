@@ -26,14 +26,6 @@ class FieldsMetadataModel extends ModelBase {
         super(models, 'field_metadata', mappedColumns);
     }
 
-    add(languId, metadata, callback) {
-        this._add(languId, metadata, false, callback);
-    }
-
-    addWithId(languId, metadata, callback) {
-        this._add(languId, metadata, true, callback);
-    }
-
     find(metadataId, callback) {
         async.waterfall([
             (cb) => {
@@ -102,18 +94,18 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
-    _add(languId, metadata, withId, callback) {
+    _add(languId, metadata, shouldGenerateId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
-                        id: (withId ? metadata.id : this._generateId()),
+                        id: (shouldGenerateId ? this._generateId() : metadata.id),
                         name: metadata.name,
                         sourceName: metadata.sourceName,
-                        valueType: metadata.valueType || 'user',
-                        isMandatory: metadata.isMandatory || false,
-                        isEditable: metadata.isEditable || false,
-                        isInvisible: metadata.isInvisible || false,
+                        valueType: metadata.valueType,
+                        isMandatory: metadata.isMandatory,
+                        isEditable: metadata.isEditable,
+                        isInvisible: metadata.isInvisible,
                         dimension: metadata.dimension
                     };
                     this._insert(dataToInsert, trx, cb);
@@ -140,13 +132,11 @@ class FieldsMetadataModel extends ModelBase {
                 .innerJoin('field_text', 'field_text.field_id', this.baseTableName + '.id')
                 .where('id', metadataId)
                 .asCallback((error, metadata) => {
-                if (error) {
-                    cb(error);
-                } else if (metadata.length > 0) {
-                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
-                } else {
-                    cb(new Error('Item not found: ' + metadataId));
-                }
+                    if (error || !metadata.length) {
+                        cb(error || new Error('Item not found: ' + metadataId));
+                    } else {
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
+                    }
             });
         }, callback);
     }

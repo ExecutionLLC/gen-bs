@@ -23,12 +23,50 @@ class CommentsModel extends SecureModelBase {
         super(models, 'comment', mappedColumns);
     }
 
-    add(userId, languId, comment, callback) {
+    // Собирает все comments для текущего пользователя
+    findAll(userId, callback) {
+        this._fetchUserComments(userId, (error, commentsData) => {
+            if (error) {
+                callback(error);
+            } else {
+                async.map(commentsData, (commentData, cb) => {
+                    cb(null, this._mapColumns(commentData));
+                }, callback);
+            }
+        });
+    }
+
+    findMany(userId, commentIds, callback) {
+        async.waterfall([
+            (cb) => { this._fetchComments(commentIds, cb); },
+            (commentsData, cb) => {
+                if (commentsData.length == commentIds.length) {
+                    cb(null, commentsData);
+                } else {
+                    cb('Some comments not found: ' + commentIds + ', userId: ' + userId);
+                }
+            },
+            (commentsData, cb) => {
+                if (_.every(commentsData, 'creator', userId)) {
+                    cb(null, commentsData);
+                } else {
+                    cb('Unauthorized access to comments: ' + commentIds + ', userId: ' + userId);
+                }
+            },
+            (commentsData, cb) => {
+                async.map(commentsData, (commentData, cb) => {
+                    cb(null, this._mapColumns(commentData));
+                }, cb);
+            }
+        ], callback);
+    }
+
+    _add(userId, languId, comment, shouldGenerateId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
-                        id: this._generateId(),
+                        id: shouldGenerateId ? this._generateId() : comment.id,
                         creator: userId,
                         reference: comment.reference,
                         chrom: comment.chrom,
@@ -52,78 +90,28 @@ class CommentsModel extends SecureModelBase {
         }, callback);
     }
 
-    update(userId, commentId, comment, callback) {
-        this._fetch(userId, commentId, (error, commentData) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.db.transactionally((trx, cb) => {
-                    async.waterfall([
-                        (cb) => {
-                            const dataToUpdate = {
-                                reference: comment.reference,
-                                chrom: comment.chrom,
-                                pos: comment.pos,
-                                alt: comment.alt,
-                                searchKey: comment.searchKey
-                            };
-                            this._update(commentId, dataToUpdate, trx, cb);
-                        },
-                        (commentId, cb) => {
-                            const dataToUpdate = {
-                                languId: commentData.languId,
-                                comment: comment.comment
-                            };
-                            this._updateCommentText(commentId, dataToUpdate, trx, cb);
-                        }
-                    ], cb);
-                }, callback);
-            }
-        });
-    }
-
-    find(userId, commentId, callback) {
-        this._fetch(userId, commentId, (error, commentData) => {
-            callback(error, this._mapColumns(commentData));
-        });
-    }
-
-    // Собирает все comments для текущего пользователя
-    findAll(userId, callback) {
-        this._fetchUserComments(userId, (error, commentsData) => {
-            if (error) {
-                callback(error);
-            } else {
-                async.map(commentsData, (commentData, cb) => {
-                    cb(null, this._mapColumns(commentData));
-                }, callback);
-            }
-        });
-    }
-
-    findMany(userId, commentIds, callback) {
-        async.waterfall([
-            (cb) => { this._fetchComments(commentIds, cb); },
-            (commentsData, cb) => {
-                if (commentsData.length == commentIds.length) {
-                    cb(null, commentsData);
-                } else {
-                    cb('Inactive comments found: ' + commentIds + ', userId: ' + userId);
+    _update(userId, data, newData, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToUpdate = {
+                        reference: newData.reference,
+                        chrom: newData.chrom,
+                        pos: newData.pos,
+                        alt: newData.alt,
+                        searchKey: newData.searchKey
+                    };
+                    this._unsafeUpdate(data.id, dataToUpdate, trx, cb);
+                },
+                (id, cb) => {
+                    const dataToUpdate = {
+                        languId: data.languId,
+                        comment: newData.comment
+                    };
+                    this._updateCommentText(id, dataToUpdate, trx, cb);
                 }
-            },
-            (commentsData, cb) => {
-                if (_.every(commentsData, 'creator', userId)) {
-                    cb(null, commentsData);
-                } else {
-                    cb('Unauthorized comments: ' + commentIds + ', userId: ' + userId);
-                }
-            },
-            (commentsData, cb) => {
-                async.map(commentsData, (commentData, cb) => {
-                    cb(null, this._mapColumns(commentData));
-                }, cb);
-            }
-        ], callback);
+            ], cb);
+        }, callback);
     }
 
     _updateCommentText(commentId, dataToUpdate, trx, callback) {
@@ -153,14 +141,10 @@ class CommentsModel extends SecureModelBase {
                 .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
                 .where('id', commentId)
                 .asCallback((error, commentData) => {
-                    if (error) {
-                        cb(error);
+                    if (error || !commentData.length) {
+                        cb(error || new Error('Item not found: ' + commentId));
                     } else {
-                        if (commentData.length > 0) {
-                            cb(null, ChangeCaseUtil.convertKeysToCamelCase(commentData[0]));
-                        } else {
-                            cb(new Error('Item not found: ' + commentId));
-                        }
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(commentData[0]));
                     }
                 });
         }, callback);

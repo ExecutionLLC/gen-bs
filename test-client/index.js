@@ -8,6 +8,8 @@ const _ = require('lodash');
 const env = process.env;
 
 const SESSION_HEADER = 'X-Session-Id';
+const LANGUAGE_HEADER = 'X-Langu-Id';
+
 const HOST = 'localhost';
 const PORT = env.GEN_PORT || 5000;
 
@@ -40,9 +42,10 @@ function stringify(obj) {
   return JSON.stringify(obj, null, 2);
 }
 
-function createHeaders(sessionId) {
+function createHeaders(headersObj) {
   const headers = {};
-  headers[SESSION_HEADER] = sessionId;
+  headers[SESSION_HEADER] = headersObj.sessionId;
+  headers[LANGUAGE_HEADER] = headersObj.languId;
   return headers;
 }
 
@@ -141,7 +144,10 @@ operations.add('Start search', (callback) => {
       });
     },
     (searchData, callback) => {
-      const headers = createHeaders(searchData.sessionId);
+      const headers = createHeaders({
+        sessionId: searchData.sessionId,
+        languId: searchData.languId
+      });
       Request.post({
         url: urls.startSearch(),
         headers,
@@ -175,7 +181,10 @@ operations.add('Search in results', (callback) => {
       });
     },
     (sessionWithOperation, callback) => {
-      const headers = createHeaders(sessionWithOperation.sessionId);
+      const headers = createHeaders({
+          sessionId: sessionWithOperation.sessionId,
+          languId: DefaultLangu[0].id
+      });
       const getFieldId = (fieldName, sourceName) => {
         return _.find(AllFields,
             field => field.name === fieldName && field.sourceName === sourceName)
@@ -240,7 +249,10 @@ operations.add('Fetch page', callback => {
       lastSessionId = context.sessionId;
       lastOperationId = context.operationId;
 
-      const headers = createHeaders(context.sessionId);
+      const headers = createHeaders({
+        sessionId: context.sessionId,
+        languId: DefaultLangu[0].id
+      });
       Request.get({
         url: urls.loadNextPage(context.operationId),
         headers,
@@ -267,7 +279,10 @@ operations.add('Get data', (callback) => {
       askSession(callback);
     },
     (sessionId, callback) => {
-      const headers = createHeaders(sessionId);
+      const headers = createHeaders({
+        sessionId: sessionId,
+        languId: DefaultLangu[0].id
+      });
       Request.get({
         url: urls.data(),
         headers
@@ -292,8 +307,10 @@ operations.add('Check session', (callback) => {
       });
     },
     (sessionId, callback) => {
-      const headers = createHeaders(sessionId);
-
+      const headers = createHeaders({
+        sessionId: sessionId,
+        languId: DefaultLangu[0].id
+      });
       Request.put({
         url: urls.session(),
         headers
@@ -310,8 +327,10 @@ operations.add('Close session', (callback) => {
       });
     },
     (sessionId, callback) => {
-      const headers = createHeaders(sessionId);
-
+      const headers = createHeaders({
+        sessionId: sessionId,
+        languId: DefaultLangu[0].id
+      });
       Request.del({
         url: urls.session(),
         headers

@@ -1,11 +1,18 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
+
 const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 class ModelBase {
+    /**
+     * @param models Reference to the models facade
+     * @param baseTableName Name of the main (or the only) table of the corresponding model.
+     * @param mappedColumns List of column names that will be allowed to extract from the table(s) (@see ModelBase._mapColumns() method).
+     * */
     constructor(models, baseTableName, mappedColumns) {
         this.models = models;
         this.logger = models.logger;
@@ -13,6 +20,28 @@ class ModelBase {
         this.mappedColumns = mappedColumns;
 
         this.db = models.db;
+    }
+
+    add(languId, item, callback) {
+        async.waterfall([
+            (cb) => {
+                this._add(languId, item, true, cb);
+            },
+            (id, cb) => {
+                this.find(id, cb);
+            }
+        ], callback);
+    }
+
+    addWithId(languId, item, callback) {
+        async.waterfall([
+            (cb) => {
+                this._add(languId, item, false, cb);
+            },
+            (id, cb) => {
+                this.find(id, cb);
+            }
+        ], callback);
     }
 
     exists(id, callback) {
@@ -59,12 +88,10 @@ class ModelBase {
                 .from(this.baseTableName)
                 .where('id', id)
                 .asCallback((error, data) => {
-                    if(error) {
-                        cb(error);
-                    } else if (data.length > 0) {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
+                    if (error || !data.length) {
+                        cb(error || new Error('Item not found: ' + id));
                     } else {
-                        cb(new Error('Item not found: ' + id));
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
                     }
                 });
         }, callback);
@@ -82,7 +109,7 @@ class ModelBase {
             });
     };
 
-    _update(id, dataToUpdate, trx, callback) {
+    _unsafeUpdate(id, dataToUpdate, trx, callback) {
         trx(this.baseTableName)
             .where('id', id)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))

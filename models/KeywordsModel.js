@@ -18,14 +18,6 @@ class KeywordsModel extends ModelBase {
         super(models, 'keyword', mappedColumns);
     }
 
-    add(languId, keyword, callback) {
-        this._add(languId, keyword, false, callback);
-    }
-
-    addWithId(languId, keyword, callback) {
-        this._add(languId, keyword, true, callback);
-    }
-
     find(keywordId, callback) {
         async.waterfall([
             (cb) => {
@@ -53,7 +45,7 @@ class KeywordsModel extends ModelBase {
                 if (keywords.length == keywordIds.length) {
                     cb(null, keywords);
                 } else {
-                    cb('Inactive keywords found: ' + keywordIds);
+                    cb('Some keywords not found: ' + keywordIds);
                 }
             },
             (keywords, cb) => {
@@ -86,19 +78,19 @@ class KeywordsModel extends ModelBase {
         }, callback);
     }
 
-    _add(languId, keyword, withIds, callback) {
+    _add(languId, keyword, shouldGenerateId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
-                        id: (withIds ? keyword.id : this._generateId()),
+                        id: shouldGenerateId ? this._generateId() : keyword.id,
                         fieldId: keyword.fieldId,
                         value: keyword.value
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
                 (keywordId, cb) => {
-                    this._addSynonyms(languId, keywordId, keyword.synonyms, withIds, trx, (error) => {
+                    this._addSynonyms(languId, keywordId, keyword.synonyms, shouldGenerateId, trx, (error) => {
                         cb(error, keywordId);
                     });
                 }
@@ -106,10 +98,10 @@ class KeywordsModel extends ModelBase {
         }, callback);
     }
 
-    _addSynonyms(languId, keywordId, synonyms, withIds, trx, callback) {
+    _addSynonyms(languId, keywordId, synonyms, shouldGenerateId, trx, callback) {
         async.map(synonyms, (synonym, cb) => {
             let dataToInsert = {
-                id: (withIds ? synonym.id : this._generateId()),
+                id: (shouldGenerateId ? synonym.id : this._generateId()),
                 keywordId: keywordId,
                 languId: languId,
                 value: synonym.value

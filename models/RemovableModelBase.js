@@ -3,19 +3,17 @@
 const ModelBase = require('./ModelBase');
 
 class RemovableModelBase extends ModelBase {
+    /**
+     * @param models Reference to the models facade
+     * @param baseTableName Name of the main (or the only) table of the corresponding model.
+     * @param mappedColumns List of column names that will be allowed to extract from the table(s) (@see ModelBase._mapColumns() method).
+     * */
     constructor(models, baseTableName, mappedColumns) {
         super(models, baseTableName, mappedColumns);
     }
 
     remove(id, callback) {
-        this.db.asCallback((knex, cb) => {
-            knex(this.baseTableName)
-                .where('id', id)
-                .update({
-                    is_deleted: true
-                })
-                .asCallback(cb)
-        }, callback(error, id));
+        super._unsafeUpdate(id, {isDeleted: true}, callback);
     }
 }
 

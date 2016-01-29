@@ -10,12 +10,11 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    sendSearchRequest(user, sessionId, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback) {
+    sendSearchRequest(user, sessionId, languId, sampleId, viewId, filterId, limit, offset, callback) {
         // TODO: переделать на _.some
-        if (!languId || !keywordId || !viewId || !filterId || !sampleId || !limit) {
+        if (!languId || !viewId || !filterId || !sampleId || !limit) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
                     languId: languId || 'undefined',
-                    keywordId: keywordId ||'undefined',
                     viewId: viewId || 'undefined',
                     filterId: filterId || 'undefined',
                     sampleId: sampleId || 'undefined',
@@ -28,7 +27,7 @@ class SearchService extends ServiceBase {
                     this.services.sessions.findById(sessionId, callback);
                 },
                 (sessionId, callback) => {
-                    this._createAppServerSearchParams(sessionId, user, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback);
+                    this._createAppServerSearchParams(sessionId, user, languId, sampleId, viewId, filterId, limit, offset, callback);
                 },
                 (appServerRequestParams, callback) => {
                     this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -145,13 +144,10 @@ class SearchService extends ServiceBase {
         callback);
     }
 
-    _createAppServerSearchParams(sessionId, user, languId, keywordId, sampleId, viewId, filterId, limit, offset, callback) {
+    _createAppServerSearchParams(sessionId, user, languId, sampleId, viewId, filterId, limit, offset, callback) {
         async.parallel({
             langu: (callback) => {
                 this.services.langu.find(languId, callback);
-            },
-            keyword: (callback) => {
-                this.services.keywords.find(keywordId, callback);
             },
             sample: (callback) => {
                 this.services.samples.find(user, sampleId, callback);
@@ -199,7 +195,6 @@ class SearchService extends ServiceBase {
                     sessionId,
                     langu: result.langu,
                     userId: user.id,
-                    keyword: result.keyword,
                     view: result.view,
                     filter: result.filter,
                     sample: result.sample,

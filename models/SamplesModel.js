@@ -22,44 +22,6 @@ class SamplesModel extends SecureModelBase {
         super(models, 'vcf_file_sample', mappedColumns);
     }
 
-    add(userId, languId, sample, callback) {
-        this._add(userId, languId, sample, false, callback);
-    }
-
-    addWithId(userId, languId, sample, callback) {
-        this._add(userId, languId, sample, true, callback);
-    }
-
-    update(userId, sampleId, sample, callback) {
-        this._fetch(userId, sampleId, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.db.transactionally((trx, cb) => {
-                    async.waterfall([
-                        (cb) => {
-                            const dataToUpdate = {
-                                fileName: sample.fileName,
-                                hash: sample.hash,
-                                sampleType: sample.sampleType
-                            };
-                            this._update(sampleId, dataToUpdate, trx, cb);
-                        },
-                        (id, cb) => {
-                            this._setAnalyzed(id, sample.isAnalyzed || false, trx, cb);
-                        },
-                        (id, cb) => {
-                            this._addNewFileSampleVersion(sampleId, trx, cb);
-                        },
-                        (versionId, cb) => {
-                            this._addFileSampleValues(versionId, sample.values, trx, cb);
-                        }
-                    ], cb);
-                }, callback);
-            }
-        });
-    }
-
     find(userId, sampleId, callback) {
         async.waterfall([
             (cb) => { this._fetch(userId, sampleId, cb); },
@@ -91,14 +53,14 @@ class SamplesModel extends SecureModelBase {
                 if (samples.length == samples.length) {
                     cb(null, samples);
                 } else {
-                    cb('Inactive samples found: ' + sampleIds + ', userId: ' + userId);
+                    cb('Some samples not found: ' + sampleIds + ', userId: ' + userId);
                 }
             },
             (samples, cb) => {
                 if (_.every(samples, 'creator', userId)) {
                     cb(null, samples);
                 } else {
-                    cb('Unauthorized samples: ' + sampleIds + ', userId: ' + userId);
+                    cb('Unauthorized access to samples: ' + sampleIds + ', userId: ' + userId);
                 }
             },
             (samples, cb) => {
@@ -134,12 +96,12 @@ class SamplesModel extends SecureModelBase {
     }
 
     // languId is used for interface compatibility
-    _add(userId, languId, sample, withId, callback) {
+    _add(userId, languId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, cb) => {
             async.waterfall([
                 (cb) => {
                     const dataToInsert = {
-                        id: (withId ? sample.id : this._generateId()),
+                        id: shouldGenerateId ? this._generateId() : sample.id,
                         creator: userId,
                         fileName: sample.fileName,
                         hash: sample.hash,
@@ -163,6 +125,30 @@ class SamplesModel extends SecureModelBase {
                     this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
                         cb(error, sampleObj);
                     });
+                }
+            ], cb);
+        }, callback);
+    }
+
+    _update(userId, data, newData, callback) {
+        this.db.transactionally((trx, cb) => {
+            async.waterfall([
+                (cb) => {
+                    const dataToUpdate = {
+                        fileName: newData.fileName,
+                        hash: newData.hash,
+                        sampleType: newData.sampleType
+                    };
+                    this._unsafeUpdate(data.id, dataToUpdate, trx, cb);
+                },
+                (id, cb) => {
+                    this._setAnalyzed(id, newData.isAnalyzed || false, trx, cb);
+                },
+                (id, cb) => {
+                    this._addNewFileSampleVersion(id, trx, cb);
+                },
+                (versionId, cb) => {
+                    this._addFileSampleValues(versionId, newData.values, trx, cb);
                 }
             ], cb);
         }, callback);
@@ -234,20 +220,18 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    _fetchLastSampleVersionId(sampleId, callback) {
+    _fetchLastSampleVersion(sampleId, callback) {
         this.db.asCallback((knex, cb) => {
             knex.select()
                 .from('vcf_file_sample_version')
                 .where('vcf_file_sample_id', sampleId)
                 .orderBy('timestamp', 'desc')
                 .limit(1)
-                .asCallback((error, result) => {
-                    if (error) {
-                        cb(error);
-                    } else if (result.length > 0) {
-                        cb(null, result[0].id);
+                .asCallback((error, sampleData) => {
+                    if (error || !sampleData.length) {
+                        cb(error || new Error('Item not found: ' + sampleId));
                     } else {
-                        cb(new Error('Sample not found: ' + sampleId));
+                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(sampleData[0]));
                     }
                 });
         }, callback);
@@ -271,10 +255,10 @@ class SamplesModel extends SecureModelBase {
     _fetchFileSampleValues(sampleId, callback) {
         async.waterfall([
             (cb) => {
-                this._fetchLastSampleVersionId(sampleId, cb);
+                this._fetchLastSampleVersion(sampleId, cb);
             },
-            (versionId, cb) => {
-                this._fetchMetadataForSampleVersion(versionId, cb);
+            (sampleVersion, cb) => {
+                this._fetchMetadataForSampleVersion(sampleVersion.id, cb);
             }
         ], callback);
     }

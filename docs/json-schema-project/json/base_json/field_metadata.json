@@ -73,7 +73,6 @@
 		"name",
 		"label",
 		"description",
-		"editable",
-		"tech"
+		"is_editable"
 	]
 }

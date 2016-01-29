@@ -20,12 +20,12 @@ class SessionsClient extends ClientBase {
 
     checkSession(sessionId, callback) {
         RequestWrapper.put(this.urls.session(),
-            this._makeSessionHeader(sessionId), null, callback);
+            this._makeHeaders({sessionId}), null, callback);
     }
 
     closeSession(sessionId, callback) {
         RequestWrapper.del(this.urls.session(),
-            this._makeSessionHeader(sessionId), null, callback);
+            this._makeHeaders({sessionId}), null, callback);
     }
 
     static getSessionFromResponse(response) {
