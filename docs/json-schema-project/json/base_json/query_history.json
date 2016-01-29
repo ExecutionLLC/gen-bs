@@ -38,5 +38,10 @@
       }
     }
   },
-  "required": []
+  "required": [
+    "sample",
+    "view",
+    "filters",
+    "keywords"
+  ]
 }
