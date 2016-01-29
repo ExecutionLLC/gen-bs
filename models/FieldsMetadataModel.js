@@ -26,17 +26,6 @@ class FieldsMetadataModel extends ModelBase {
         super(models, 'field_metadata', mappedColumns);
     }
 
-    find(metadataId, callback) {
-        async.waterfall([
-            (cb) => {
-                this._fetch(metadataId, cb);
-            },
-            (metadata, cb) => {
-                cb(null, this._mapColumns(metadata));
-            }
-        ], callback);
-    }
-
     findMany(metadataIds, callback) {
         async.waterfall([
             (cb) => {

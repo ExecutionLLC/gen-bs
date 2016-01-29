@@ -60,13 +60,14 @@ class ModelBase {
     }
 
     find(id, callback) {
-        this._fetch(id, (error, data) => {
-            if (error) {
-                callback(error);
-            } else {
-                callback(null, this._mapColumns(data));
+        async.waterfall([
+            (cb) => {
+                this._fetch(id, cb);
+            },
+            (data, cb) => {
+                cb(null, this._mapColumns(data));
             }
-        });
+        ], callback);
     }
 
     _generateId() {
