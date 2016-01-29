@@ -92,12 +92,12 @@ describe('Filters', () => {
                     assert.ok(addedFilter);
                     assert.notEqual(addedFilter.id, filter.id, 'Filter id is not changed.');
                     assert.equal(addedFilter.name, filter.name);
-                    assert.equal(addedFilter.type, 'user');
+                    assert.equal(addedFilter.filterType, 'user');
 
                     // Update created filter.
                     const filterToUpdate = _.cloneDeep(addedFilter);
                     filterToUpdate.name = 'Test Filter ' + Uuid.v4();
-                    filterToUpdate.type = 'advanced';
+                    filterToUpdate.filterType = 'advanced';
 
                     filtersClient.update(sessionId, filterToUpdate, (error, response) => {
                         assert.ifError(error);

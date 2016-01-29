@@ -107,7 +107,7 @@ class InitialDataImportManager {
         const usersString = FsUtils.getFileContentsAsString(usersFilePath);
         const users = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(usersString));
         async.map(users, (user, cb) => {
-            this.models.user.addWithId(user, user.defaultLanguId, cb)
+            this.models.user.addWithId(user, user.language, cb)
         }, callback);
     }
 

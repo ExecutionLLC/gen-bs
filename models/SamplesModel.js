@@ -13,7 +13,6 @@ const mappedColumns = [
     'sampleType',
     'isAnalyzed',
     'isDeleted',
-    'vcfFileSampleVersionId',
     'values'
 ];
 
@@ -123,7 +122,7 @@ class SamplesModel extends SecureModelBase {
                 },
                 (sampleObj, cb) => {
                     this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
-                        cb(error, sampleObj);
+                        cb(error, sampleObj.sampleId);
                     });
                 }
             ], cb);

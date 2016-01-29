@@ -98,7 +98,7 @@ class FiltersModel extends SecureModelBase {
                         creator: userId,
                         name: newData.name,
                         rules: newData.rules,
-                        filterType: newData.filterType,
+                        //filterType: newData.filterType,
                         originalFilterId: data.originalfilterId || data.id
                     };
                     this._insert(dataToInsert, trx, cb);
