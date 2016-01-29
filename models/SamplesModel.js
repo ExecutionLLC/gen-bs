@@ -21,6 +21,16 @@ class SamplesModel extends SecureModelBase {
         super(models, 'vcf_file_sample', mappedColumns);
     }
 
+    add(userId, languId, filter, callback) {
+        sample.sampleType = 'user';
+        super.add(userId, languId, filter, callback);
+    }
+
+    addWithId(userId, languId, filter, callback) {
+        sample.sampleType = 'user';
+        super.addWithId(userId, languId, filter, callback);
+    }
+
     find(userId, sampleId, callback) {
         async.waterfall([
             (cb) => { this._fetch(userId, sampleId, cb); },
@@ -104,7 +114,7 @@ class SamplesModel extends SecureModelBase {
                         creator: userId,
                         fileName: sample.fileName,
                         hash: sample.hash,
-                        sampleType: 'standard'
+                        sampleType: sample.sampleType || 'standard'
                     };
                     this._insert(dataToInsert, trx, cb);
                 },
@@ -135,8 +145,7 @@ class SamplesModel extends SecureModelBase {
                 (cb) => {
                     const dataToUpdate = {
                         fileName: sampleToUpdate.fileName,
-                        hash: sampleToUpdate.hash,
-                        sampleType: sampleToUpdate.sampleType
+                        hash: sampleToUpdate.hash
                     };
                     this._unsafeUpdate(sample.id, dataToUpdate, trx, cb);
                 },

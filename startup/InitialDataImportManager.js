@@ -123,7 +123,7 @@ class InitialDataImportManager {
         const viewsString = FsUtils.getFileContentsAsString(viewsFilePath);
         const views = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(viewsString));
         async.map(views, (view, cb) => {
-            this.models.views.addWithId(null, this.config.defaultLanguId, view, cb)
+            this.models.views.internalAdd(null, this.config.defaultLanguId, view, cb)
         }, callback);
     }
 
@@ -141,7 +141,7 @@ class InitialDataImportManager {
 
         let sample = sampleFields.sample;
         sample.values = this._makeSampleValues(sampleFields.fieldIds);
-        this.models.samples.addWithId(null, this.config.defaultLanguId, sampleFields.sample, callback);
+        this.models.samples.internalAdd(null, this.config.defaultLanguId, sampleFields.sample, callback);
     }
 
     _makeSampleValues(fieldIds) {

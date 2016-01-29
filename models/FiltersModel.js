@@ -33,10 +33,6 @@ class FiltersModel extends SecureModelBase {
         super.addWithId(userId, languId, filter, callback);
     }
 
-    internalAdd(userId, languId, filter, callback) {
-        this._add(userId, languId, filter, false, callback);
-    }
-
     // It collects the latest version of each filter for the current user
     findAll(userId, callback) {
         this._fetchUserFilters(userId, (error, filtersData) => {

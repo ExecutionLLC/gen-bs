@@ -23,6 +23,16 @@ class ViewsModel extends SecureModelBase {
         super(models, 'view', mappedColumns);
     }
 
+    add(userId, languId, filter, callback) {
+        filter.viewType = 'user';
+        super.add(userId, languId, filter, callback);
+    }
+
+    addWithId(userId, languId, filter, callback) {
+        filter.viewType = 'user';
+        super.addWithId(userId, languId, filter, callback);
+    }
+
     find(userId, viewId, callback) {
         async.waterfall([
             (cb) => { this._fetch(userId, viewId, cb); },
@@ -175,7 +185,6 @@ class ViewsModel extends SecureModelBase {
                         id: this._generateId(),
                         creator: userId,
                         name: viewToUpdate.name,
-                        viewType: viewToUpdate.viewType,
                         originalViewId: view.originalViewId || view.id
                     };
                     this._insert(dataToInsert, trx, cb);
