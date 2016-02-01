@@ -8,9 +8,13 @@
     "params": {
       "type": "object",
       "properties": {
-        "filename": {
+        "sample_id": {
           "type": "string",
-          "description": "Full path of the uploaded sample"
+          "description": "UUID of the sample on WS."
+        },
+        "size": {
+          "type": "string",
+          "description": "Sample file size in bytes"
         }
       }
     },
@@ -24,12 +28,17 @@
             "ready"
           ]
         },
+        "sample_id": {
+          "type": "string",
+          "description": "UUID of the sample to which the message is related to."
+        },
         "progress": {
           "type": "integer",
           "description": "progress of operation in %. Operation correspond to enum value in status."
         },
         "metadata": {
-          "$ref": "base_json/file_metadata.json#"
+          "$ref": "base_json/file_metadata.json#",
+          "description": "Sent one time when the file is parsed."
         }
       }
     }
