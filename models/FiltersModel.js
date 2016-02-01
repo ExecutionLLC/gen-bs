@@ -39,8 +39,8 @@ class FiltersModel extends SecureModelBase {
             if (error) {
                 callback(error);
             } else {
-                async.map(filtersData, (filterData, cb) => {
-                    cb(null, this._mapColumns(filterData));
+                async.map(filtersData, (filterData, callback) => {
+                    callback(null, this._mapColumns(filterData));
                 }, callback);
             }
         });
@@ -48,33 +48,33 @@ class FiltersModel extends SecureModelBase {
 
     findMany(userId, filterIds, callback) {
         async.waterfall([
-            (cb) => { this._fetchFilters(filterIds, cb); },
-            (filtersData, cb) => {
+            (callback) => { this._fetchFilters(filterIds, callback); },
+            (filtersData, callback) => {
                 if (filtersData.length == filterIds.length) {
-                    cb(null, filtersData);
+                    callback(null, filtersData);
                 } else {
-                    cb('Some filters not found: ' + filterIds + ', userId: ' + userId);
+                    callback('Some filters not found: ' + filterIds + ', userId: ' + userId);
                 }
             },
-            (filtersData, cb) => {
+            (filtersData, callback) => {
                 if (_.every(filtersData, 'creator', userId)) {
-                    cb(null, filtersData);
+                    callback(null, filtersData);
                 } else {
-                    cb('Unauthorized access to filters: ' + filterIds + ', userId: ' + userId);
+                    callback('Unauthorized access to filters: ' + filterIds + ', userId: ' + userId);
                 }
             },
-            (filtersData, cb) => {
-                async.map(filtersData, (filterData, cb) => {
-                    cb(null, this._mapColumns(filterData));
-                }, cb);
+            (filtersData, callback) => {
+                async.map(filtersData, (filterData, callback) => {
+                    callback(null, this._mapColumns(filterData));
+                }, callback);
             }
         ], callback);
     }
 
     _add(userId, languId, filter, shouldGenerateId, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : filter.id,
                         creator: userId,
@@ -82,27 +82,27 @@ class FiltersModel extends SecureModelBase {
                         rules: filter.rules,
                         filterType: filter.filterType || 'user'
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 },
-                (filterId, cb) => {
+                (filterId, callback) => {
                     const dataToInsert = {
                         filterId: filterId,
                         languId: languId,
                         description: filter.description
                     };
-                    this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
-                        cb(error, filterId);
+                    this._unsafeInsert('filter_text', dataToInsert, trx, (error) => {
+                        callback(error, filterId);
                     });
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
     // It creates a new version of an existing filter
     _update(userId, filter, filterToUpdate, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
@@ -110,19 +110,19 @@ class FiltersModel extends SecureModelBase {
                         rules: filterToUpdate.rules,
                         originalFilterId: filter.originalFilterId || filter.id
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 },
-                (filterId, cb) => {
+                (filterId, callback) => {
                     const dataToInsert = {
                         filterId: filterId,
                         languId: filter.languId,
                         description: filterToUpdate.description
                     };
-                    this._insertIntoTable('filter_text', dataToInsert, trx, (error) => {
-                        cb(error, filterId);
+                    this._unsafeInsert('filter_text', dataToInsert, trx, (error) => {
+                        callback(error, filterId);
                     });
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
@@ -138,32 +138,32 @@ class FiltersModel extends SecureModelBase {
     }
 
     _fetchFilter(filterId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .innerJoin('filter_text', 'filter_text.filter_id', this.baseTableName + '.id')
                 .where('id', filterId)
                 .asCallback((error, filterData) => {
                     if (error || !filterData.length) {
-                        cb(error || new Error('Item not found: ' + filterId));
+                        callback(error || new Error('Item not found: ' + filterId));
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(filterData[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(filterData[0]));
                     }
             });
         }, callback);
     }
 
     _fetchFilters(filterIds, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .innerJoin('filter_text', 'filter_text.filter_id', this.baseTableName + '.id')
                 .whereIn('id', filterIds)
                 .asCallback((error, filtersData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData));
                     }
                 });
         }, callback);
@@ -176,13 +176,13 @@ class FiltersModel extends SecureModelBase {
             'FROM ' + this.baseTableName + ' ' +
             'INNER JOIN filter_text ON filter_text.filter_id = ' + this.baseTableName + '.id ' +
             'WHERE (creator = \'' + userId + '\' OR creator IS NULL) AND is_deleted = false) T WHERE T.RN = 1';
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.raw(query)
                 .asCallback((error, filtersData) => {
                 if (error) {
-                    cb(error);
+                    callback(error);
                 } else {
-                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData.rows));
+                    callback(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData.rows));
                 }
             });
         }, callback);

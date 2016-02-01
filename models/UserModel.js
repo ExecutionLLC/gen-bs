@@ -30,42 +30,42 @@ class UserModel extends RemovableModelBase {
     }
 
     update(userId, languId, user, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToUpdate = {
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
                         defaultLanguId: languId
                     };
-                    this._unsafeUpdate(userId, dataToUpdate, trx, cb);
+                    this._unsafeUpdate(userId, dataToUpdate, trx, callback);
                 },
-                (id, cb) => {
+                (id, callback) => {
                     const dataToUpdate = {
                         languId: languId,
                         name: user.name,
                         lastName: user.lastName,
                         speciality: user.speciality
                     };
-                    this._updateUserText(userId, dataToUpdate, trx, cb);
+                    this._updateUserText(userId, dataToUpdate, trx, callback);
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
     _add(user, languId, shouldGenerateId, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : user.id,
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
                         defaultLanguId: languId
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 },
-                (userId, cb) => {
+                (userId, callback) => {
                     const dataToInsert = {
                         userId: userId,
                         languId: languId,
@@ -73,11 +73,11 @@ class UserModel extends RemovableModelBase {
                         lastName: user.lastName,
                         speciality: user.speciality
                     };
-                    this._insertIntoTable('user_text', dataToInsert, trx, (error) => {
-                        cb(error, userId);
+                    this._unsafeInsert('user_text', dataToInsert, trx, (error) => {
+                        callback(error, userId);
                     });
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
@@ -91,18 +91,18 @@ class UserModel extends RemovableModelBase {
     }
 
     _fetch(userId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
             .from(this.baseTableName)
             .innerJoin('user_text', 'user_text.user_id', this.baseTableName + '.id')
             .where('id', userId)
             .asCallback((error, userData) => {
                 if (error || !userData.length) {
-                    cb(error || new Error('Item not found: ' + userId));
+                    callback(error || new Error('Item not found: ' + userId));
                 } else {
                     let data = userData[0];
                     data.language = data.defaultLanguId;
-                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(data));
+                    callback(null, ChangeCaseUtil.convertKeysToCamelCase(data));
                 }
             });
         }, callback);

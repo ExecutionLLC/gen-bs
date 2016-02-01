@@ -12,8 +12,8 @@ class LanguModel extends ModelBase {
     }
 
     add(langu, callback) {
-        this.db.transactionally((trx, cb) => {
-            this._insert(langu, trx, cb);
+        this.db.transactionally((trx, callback) => {
+            this._insert(langu, trx, callback);
         }, (error) => {
             if (error) {
                 callback(error);
@@ -24,8 +24,8 @@ class LanguModel extends ModelBase {
     }
 
     update(languId, langu, callback) {
-        this.db.transactionally((trx, cb) => {
-            this._unsafeUpdate(languId, langu, trx, cb);
+        this.db.transactionally((trx, callback) => {
+            this._unsafeUpdate(languId, langu, trx, callback);
         }, (error) => {
             if (error) {
                 callback(error);
@@ -36,14 +36,14 @@ class LanguModel extends ModelBase {
     }
 
     findAll(callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .asCallback((error, languages) => {
                     if (error) {
                         callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(languages));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(languages));
                     }
                 });
         }, callback);

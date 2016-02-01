@@ -35,13 +35,13 @@ class ViewsModel extends SecureModelBase {
 
     find(userId, viewId, callback) {
         async.waterfall([
-            (cb) => { this._fetch(userId, viewId, cb); },
-            (view, cb) => {
+            (callback) => { this._fetch(userId, viewId, callback); },
+            (view, callback) => {
                 this._fetchViewItems(viewId, (error, viewItems) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        this._mapView(view, viewItems, cb);
+                        this._mapView(view, viewItems, callback);
                     }
                 });
             }
@@ -51,19 +51,19 @@ class ViewsModel extends SecureModelBase {
     // It collects the latest version of each view for the current user
     findAll(userId, callback) {
         async.waterfall([
-            (cb) => { this._fetchUserViews(userId, cb); },
-            (viewsData, cb) => {
+            (callback) => { this._fetchUserViews(userId, callback); },
+            (viewsData, callback) => {
                 const viewIds = _.pluck(viewsData, 'id');
                 this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
                         let viewItems = _.groupBy(viewItemsData, (viewItem) => {
                             return viewItem.viewId;
                         });
-                        async.map(viewsData, (viewData, cbk) => {
-                            this._mapView(viewData, viewItems[viewData.id], cbk);
-                        }, cb);
+                        async.map(viewsData, (viewData, callback) => {
+                            this._mapView(viewData, viewItems[viewData.id], callback);
+                        }, callback);
                     }
                 });
             }
@@ -72,32 +72,32 @@ class ViewsModel extends SecureModelBase {
 
     findMany(userId, viewIds, callback) {
         async.waterfall([
-            (cb) => { this._fetchViews(viewIds, cb); },
-            (views, cb) => {
+            (callback) => { this._fetchViews(viewIds, callback); },
+            (views, callback) => {
                 if (views.length == viewIds.length) {
-                    cb(null, views);
+                    callback(null, views);
                 } else {
-                    cb('Some views not found: ' + viewIds + ', userId: ' + userId);
+                    callback('Some views not found: ' + viewIds + ', userId: ' + userId);
                 }
             },
-            (views, cb) => {
+            (views, callback) => {
                 if (_.every(views, 'creator', userId)) {
-                    cb(null, views);
+                    callback(null, views);
                 } else {
-                    cb('Unauthorized access to views: ' + viewIds + ', userId: ' + userId);
+                    callback('Unauthorized access to views: ' + viewIds + ', userId: ' + userId);
                 }
             },
-            (views, cb) => {
+            (views, callback) => {
                 this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
                         let viewItems = _.groupBy(viewItemsData, (viewItem) => {
                             return viewItem.viewId;
                         });
-                        async.map(views, (view, cbk) => {
-                            this._mapView(viewData, viewItems[view.id], cbk);
-                        }, cb);
+                        async.map(views, (view, callback) => {
+                            this._mapView(viewData, viewItems[view.id], callback);
+                        }, callback);
                     }
                 });
             }
@@ -105,39 +105,39 @@ class ViewsModel extends SecureModelBase {
     }
 
     _add(userId, languId, view, shouldGenerateId, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : view.id,
                         creator: userId,
                         name: view.name,
                         viewType: view.viewType
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 },
-                (viewId, cb) => {
+                (viewId, callback) => {
                     const dataToInsert = {
                         viewId: viewId,
                         languId: languId,
                         description: view.description
                     };
-                    this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
-                        cb(error, viewId);
+                    this._unsafeInsert('view_text', dataToInsert, trx, (error) => {
+                        callback(error, viewId);
                     });
                 },
-                (viewId, cb) => {
+                (viewId, callback) => {
                     this._addViewItems(viewId, view.viewListItems, trx, (error) => {
-                        cb(error, viewId);
+                        callback(error, viewId);
                     });
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
     _addViewItems(viewId, viewItems, trx, callback) {
-        async.map(viewItems, (viewItem, cb) => {
-            this._addViewItem(viewId, viewItem, trx, cb);
+        async.map(viewItems, (viewItem, callback) => {
+            this._addViewItem(viewId, viewItem, trx, callback);
         }, callback);
     }
 
@@ -151,7 +151,7 @@ class ViewsModel extends SecureModelBase {
             sortDirection: viewItem.sortDirection,
             filterControlEnable: viewItem.filterControlEnable || false
         };
-        this._insertIntoTable('view_item', dataToInsert, trx, (error, viewItemId) => {
+        this._unsafeInsert('view_item', dataToInsert, trx, (error, viewItemId) => {
             if (error) {
                 callback(error);
             } else {
@@ -163,8 +163,8 @@ class ViewsModel extends SecureModelBase {
     }
 
     _addKeywords(viewItemId, keywords, trx, callback) {
-        async.map(keywords, (keyword, cb) => {
-            this._addKeyword(viewItemId, keyword.id, trx, cb);
+        async.map(keywords, (keyword, callback) => {
+            this._addKeyword(viewItemId, keyword.id, trx, callback);
         }, callback);
     }
 
@@ -173,38 +173,38 @@ class ViewsModel extends SecureModelBase {
             viewItemId: viewItemId,
             keywordId: keywordId
         };
-        this._insertIntoTable('view_item_keyword', dataToInsert, trx, callback);
+        this._unsafeInsert('view_item_keyword', dataToInsert, trx, callback);
     }
 
     // Creates a new version of an existing view
     _update(userId, view, viewToUpdate, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
                         name: viewToUpdate.name,
                         originalViewId: view.originalViewId || view.id
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 },
-                (viewId, cb) => {
+                (viewId, callback) => {
                     const dataToInsert = {
                         viewId: viewId,
                         languId: view.languId,
                         description: viewToUpdate.description
                     };
-                    this._insertIntoTable('view_text', dataToInsert, trx, (error) => {
-                        cb(error, viewId);
+                    this._unsafeInsert('view_text', dataToInsert, trx, (error) => {
+                        callback(error, viewId);
                     });
                 },
-                (viewId, cb) => {
+                (viewId, callback) => {
                     this._addViewItems(viewId, viewToUpdate.viewListItems, trx, (error) => {
-                        cb(error, viewId);
+                        callback(error, viewId);
                     });
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
@@ -220,32 +220,32 @@ class ViewsModel extends SecureModelBase {
     }
 
     _fetchView(viewId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
             .from(this.baseTableName)
             .innerJoin('view_text', 'view_text.view_id', this.baseTableName + '.id')
             .where('id', viewId)
             .asCallback((error, viewData) => {
                 if (error || !viewData.length) {
-                    cb(error || new Error('Item not found: ' + viewId));
+                    callback(error || new Error('Item not found: ' + viewId));
                 } else {
-                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewData[0]));
+                    callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewData[0]));
                 }
             });
         }, callback);
     }
 
     _fetchViews(viewIds, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .innerJoin('view_text', 'view_text.view_id', this.baseTableName + '.id')
                 .whereIn('id', viewIds)
                 .asCallback((error, viewsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData));
                     }
                 });
         }, callback);
@@ -258,13 +258,13 @@ class ViewsModel extends SecureModelBase {
             'FROM ' + this.baseTableName + ' ' +
             'INNER JOIN view_text ON view_text.view_id = ' + this.baseTableName + '.id ' +
             'WHERE (creator = \'' + userId + '\' OR creator IS NULL) AND is_deleted = false) T WHERE T.RN = 1';
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.raw(query)
                 .asCallback((error, viewsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData.rows));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData.rows));
                     }
             });
         }, callback);
@@ -282,17 +282,17 @@ class ViewsModel extends SecureModelBase {
     }
 
     _mapViewItems(viewItems, callback) {
-        async.map(viewItems, (viewItem, cb) => {
+        async.map(viewItems, (viewItem, callback) => {
             this._fetchViewItemKeywords(viewItem.id, (error, keywords) => {
                 if (error) {
-                    cb(error);
+                    callback(error);
                 } else {
                     this._mapKeywords(keywords, (error, result) => {
                         if (error) {
-                            cb(error);
+                            callback(error);
                         } else {
                             viewItem.keywords = result;
-                            cb(null, viewItem);
+                            callback(null, viewItem);
                         }
                     });
                 }
@@ -301,20 +301,20 @@ class ViewsModel extends SecureModelBase {
     }
 
     _mapKeywords(keywords, callback) {
-        async.map(keywords, (keyword, cb) => {
+        async.map(keywords, (keyword, callback) => {
             this.models.keywords.fetchKeywordSynonyms(keyword.id, (error, synonyms) => {
                 if (error) {
-                    cb(error);
+                    callback(error);
                 } else {
                     keyword.synonyms = synonyms;
-                    cb(null, keyword);
+                    callback(null, keyword);
                 }
             });
         }, callback);
     }
 
     _fetchViewItemKeywords(viewItemId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from('view_item')
                 .innerJoin('view_item_keyword', 'view_item_keyword.view_item_id', 'view_item.id')
@@ -322,39 +322,39 @@ class ViewsModel extends SecureModelBase {
                 .where('view_item_id', viewItemId)
                 .asCallback((error, keywords) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(keywords));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(keywords));
                     }
                 });
         }, callback);
     }
 
     _fetchViewItemsByIds(viewIds, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from('view_item')
                 .whereIn('view_id', viewIds)
                 .asCallback((error, viewItemsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewItemsData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewItemsData));
                     }
                 });
         }, callback);
     }
 
     _fetchViewItems(viewId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from('view_item')
                 .where('view_id', viewId)
                 .asCallback((error, viewItemsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(viewItemsData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewItemsData));
                     }
                 });
         }, callback);

@@ -17,11 +17,11 @@ class SecureModelBase extends RemovableModelBase {
 
     add(userId, languId, item, callback) {
         async.waterfall([
-            (cb) => {
-                this._add(userId, languId, item, true, cb);
+            (callback) => {
+                this._add(userId, languId, item, true, callback);
             },
-            (id, cb) => {
-                this.find(userId, id, cb);
+            (id, callback) => {
+                this.find(userId, id, callback);
             }
         ], callback);
     }
@@ -32,25 +32,25 @@ class SecureModelBase extends RemovableModelBase {
 
     addWithId(userId, languId, item, callback) {
         async.waterfall([
-            (cb) => {
-                this._add(userId, languId, item, false, cb);
+            (callback) => {
+                this._add(userId, languId, item, false, callback);
             },
-            (id, cb) => {
-                this.find(userId, id, cb);
+            (id, callback) => {
+                this.find(userId, id, callback);
             }
         ], callback);
     }
 
     update(userId, id, item, callback) {
         async.waterfall([
-            (cb) => {
-                this._fetch(userId, id, cb);
+            (callback) => {
+                this._fetch(userId, id, callback);
             },
-            (itemData, cb) => {
-                this._update(userId, itemData, item, cb);
+            (itemData, callback) => {
+                this._update(userId, itemData, item, callback);
             },
-            (itemId, cb) => {
-                this.find(userId, itemId, cb);
+            (itemId, callback) => {
+                this.find(userId, itemId, callback);
             }
         ], callback);
     }

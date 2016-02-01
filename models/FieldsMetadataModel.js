@@ -28,65 +28,65 @@ class FieldsMetadataModel extends ModelBase {
 
     findMany(metadataIds, callback) {
         async.waterfall([
-            (cb) => {
-                this._fetchByIds(metadataIds, cb);
+            (callback) => {
+                this._fetchByIds(metadataIds, callback);
             },
-            (fieldsMetadata, cb) => {
-                this._mapMetadata(fieldsMetadata, cb);
+            (fieldsMetadata, callback) => {
+                this._mapMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
 
     findByUserAndSampleId(userId, sampleId, callback) {
         async.waterfall([
-            (cb) => {
-                this.models.samples.find(userId, sampleId, cb);
+            (callback) => {
+                this.models.samples.find(userId, sampleId, callback);
             },
-            (sample, cb) => {
+            (sample, callback) => {
                 const fieldIds = _.pluck(sample.values, 'fieldId');
-                this.findMany(fieldIds, cb);
+                this.findMany(fieldIds, callback);
             }
         ], callback);
     }
 
     findSourcesMetadata(callback) {
         async.waterfall([
-            (cb) => {
-                this._fetchSourcesMetadata(cb);
+            (callback) => {
+                this._fetchSourcesMetadata(callback);
             },
-            (fieldsMetadata, cb) => {
-                this._mapMetadata(fieldsMetadata, cb);
+            (fieldsMetadata, callback) => {
+                this._mapMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
 
     findMetadataBySourceName(sourceName, callback) {
         async.waterfall([
-            (cb) => {
-                this._fetchMetadataBySourceName(sourceName, cb);
+            (callback) => {
+                this._fetchMetadataBySourceName(sourceName, callback);
             },
-            (metadata, cb) => {
-                cb(null, this._mapColumns(metadata));
+            (metadata, callback) => {
+                callback(null, this._mapColumns(metadata));
             }
         ], callback);
     }
 
     findMetadataKeywords(metadataId, callback) {
         async.waterfall([
-            (cb) => {
-                this._fetchMetadataKeywords(metadataId, cb);
+            (callback) => {
+                this._fetchMetadataKeywords(metadataId, callback);
             },
-            (keywords, cb) => {
+            (keywords, callback) => {
                 const keywordIds = _.pluck(viewsData, 'id');
-                this.models.keywords.findMany(keywordIds, cb);
+                this.models.keywords.findMany(keywordIds, callback);
             }
         ], callback);
     }
 
     _add(languId, metadata, shouldGenerateId, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: (shouldGenerateId ? this._generateId() : metadata.id),
                         name: metadata.name,
@@ -97,103 +97,103 @@ class FieldsMetadataModel extends ModelBase {
                         isInvisible: metadata.isInvisible,
                         dimension: metadata.dimension
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 },
-                (metadataId, cb) => {
+                (metadataId, callback) => {
                     const dataToInsert = {
                         fieldId: metadataId,
                         languId: languId,
                         description: metadata.description,
                         label: metadata.label
                     };
-                    this._insertIntoTable('field_text', dataToInsert, trx, (error) => {
-                        cb(error, metadataId);
+                    this._unsafeInsert('field_text', dataToInsert, trx, (error) => {
+                        callback(error, metadataId);
                     });
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
     _fetch(metadataId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .innerJoin('field_text', 'field_text.field_id', this.baseTableName + '.id')
                 .where('id', metadataId)
                 .asCallback((error, metadata) => {
                     if (error || !metadata.length) {
-                        cb(error || new Error('Item not found: ' + metadataId));
+                        callback(error || new Error('Item not found: ' + metadataId));
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
                     }
             });
         }, callback);
     }
 
     _fetchByIds(metadataIds, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .innerJoin('field_text', 'field_text.field_id', this.baseTableName + '.id')
                 .whereIn('id', metadataIds)
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
                     }
                 });
         }, callback);
     }
 
     _fetchSourcesMetadata(callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .whereNot('source_name', 'sample')
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
                     }
                 });
         }, callback);
     }
 
     _fetchMetadataBySourceName(sourceName, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .where('source_name', sourceName)
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
                     }
                 });
         }, callback);
     }
 
     _fetchMetadataKeywords(metadataId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from('keyword')
                 .where('field_id', metadataId)
                 .asCallback((error, keywords) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(keywords));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(keywords));
                     }
                 });
         }, callback);
     }
 
     _mapMetadata(fieldsMetadata, callback) {
-        async.map(fieldsMetadata, (metadata, cb) => {
-            cb(null, this._mapColumns(metadata));
+        async.map(fieldsMetadata, (metadata, callback) => {
+            callback(null, this._mapColumns(metadata));
         }, callback);
     }
 

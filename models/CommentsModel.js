@@ -29,8 +29,8 @@ class CommentsModel extends SecureModelBase {
             if (error) {
                 callback(error);
             } else {
-                async.map(commentsData, (commentData, cb) => {
-                    cb(null, this._mapColumns(commentData));
+                async.map(commentsData, (commentData, callback) => {
+                    callback(null, this._mapColumns(commentData));
                 }, callback);
             }
         });
@@ -38,33 +38,33 @@ class CommentsModel extends SecureModelBase {
 
     findMany(userId, commentIds, callback) {
         async.waterfall([
-            (cb) => { this._fetchComments(commentIds, cb); },
-            (commentsData, cb) => {
+            (callback) => { this._fetchComments(commentIds, callback); },
+            (commentsData, callback) => {
                 if (commentsData.length == commentIds.length) {
-                    cb(null, commentsData);
+                    callback(null, commentsData);
                 } else {
-                    cb('Some comments not found: ' + commentIds + ', userId: ' + userId);
+                    callback('Some comments not found: ' + commentIds + ', userId: ' + userId);
                 }
             },
-            (commentsData, cb) => {
+            (commentsData, callback) => {
                 if (_.every(commentsData, 'creator', userId)) {
-                    cb(null, commentsData);
+                    callback(null, commentsData);
                 } else {
-                    cb('Unauthorized access to comments: ' + commentIds + ', userId: ' + userId);
+                    callback('Unauthorized access to comments: ' + commentIds + ', userId: ' + userId);
                 }
             },
-            (commentsData, cb) => {
-                async.map(commentsData, (commentData, cb) => {
-                    cb(null, this._mapColumns(commentData));
-                }, cb);
+            (commentsData, callback) => {
+                async.map(commentsData, (commentData, callback) => {
+                    callback(null, this._mapColumns(commentData));
+                }, callback);
             }
         ], callback);
     }
 
     _add(userId, languId, comment, shouldGenerateId, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : comment.id,
                         creator: userId,
@@ -74,26 +74,26 @@ class CommentsModel extends SecureModelBase {
                         alt: comment.alt,
                         searchKey: comment.searchKey
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 },
-                (commentId, cb) => {
+                (commentId, callback) => {
                     const dataToInsert = {
                         commentId: commentId,
                         languId: languId,
                         comment: comment.comment
                     };
-                    this._insertIntoTable('comment_text', dataToInsert, trx, (error) => {
-                        cb(error, commentId);
+                    this._unsafeInsert('comment_text', dataToInsert, trx, (error) => {
+                        callback(error, commentId);
                     });
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
     _update(userId, comment, commentToUpdate, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToUpdate = {
                         reference: commentToUpdate.reference,
                         chrom: commentToUpdate.chrom,
@@ -101,16 +101,16 @@ class CommentsModel extends SecureModelBase {
                         alt: commentToUpdate.alt,
                         searchKey: commentToUpdate.searchKey
                     };
-                    this._unsafeUpdate(comment.id, dataToUpdate, trx, cb);
+                    this._unsafeUpdate(comment.id, dataToUpdate, trx, callback);
                 },
-                (commentId, cb) => {
+                (commentId, callback) => {
                     const dataToUpdate = {
                         languId: comment.languId,
                         comment: commentToUpdate.comment
                     };
-                    this._updateCommentText(commentId, dataToUpdate, trx, cb);
+                    this._updateCommentText(commentId, dataToUpdate, trx, callback);
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
@@ -135,23 +135,23 @@ class CommentsModel extends SecureModelBase {
     }
 
     _fetchComment(commentId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
                 .where('id', commentId)
                 .asCallback((error, commentData) => {
                     if (error || !commentData.length) {
-                        cb(error || new Error('Item not found: ' + commentId));
+                        callback(error || new Error('Item not found: ' + commentId));
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(commentData[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(commentData[0]));
                     }
                 });
         }, callback);
     }
 
     _fetchUserComments(userId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
@@ -159,25 +159,25 @@ class CommentsModel extends SecureModelBase {
                 .andWhere('is_deleted', false)
                 .asCallback((error, commentsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(commentsData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(commentsData));
                     }
                 });
         }, callback);
     }
 
     _fetchComments(commentIds, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
                 .whereIn('id', commentIds)
                 .asCallback((error, commentsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(commentsData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(commentsData));
                     }
                 });
         }, callback);
