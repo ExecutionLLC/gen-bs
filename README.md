@@ -12,7 +12,7 @@ Please see the interactive workflow description here:
 
 https://guides.github.com/introduction/flow/
 
-# Organization
+# Project Structure
 
 WebServer consists of:
 
@@ -21,6 +21,8 @@ WebServer consists of:
 - models, which are the data access layer abstraction. Models do actual requests for accessing data sources, such as DB or application service.
 - utils, where helper methods are placed, such as snake-to-camel case conversion utility.
 - startup contains scripts executing at service start, such as database creation, AS data retrieval, etc.
+
+NPM scripts are used to build and launch anything the project needs.
 
 # Installation
 
@@ -61,6 +63,20 @@ Now the database should be created for the project. Use the following command to
 
     npm run db:create
 
+After the database is created, it should be filled with default values, such as samples and views. To do that, execute the following command:
+
+    npm run defaults:import
+
 After all of that done without errors, use the following command to launch the frontend with WS:
 
     npm start
+
+# Additional Info
+
+Default database data lays in `defaults/` folder.
+
+Part of the default data is imported from the external JSON files and needs some transformations to be imported. Such data lays in `defaults/templates/` folder.
+
+The scripts generating the actual defaults are also kept at the `defaults/` folder. These scripts can be launched by running the following command:
+
+    npm run defaults:generate
