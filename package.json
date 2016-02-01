@@ -7,9 +7,9 @@
     "test": "mocha",
     "deploy": "bash ./scripts/heroku-deploy.sh",
     "db:create": "node ./scripts/create-database.js",
-    "import:defaults": "node ./scripts/import-defaults.js",
+    "defaults:import": "node ./scripts/import-defaults.js",
     "start": "node index.js",
-    "build:data": "node ./defaults/build-initial-data.js",
+    "defaults:generate": "node ./defaults/build-initial-data.js",
     "client": "node test-client/index.js"
   },
   "repository": {
