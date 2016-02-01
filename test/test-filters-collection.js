@@ -28,7 +28,7 @@ const checkFilter = (filter) => {
     assert.ok(filter.id);
     assert.ok(filter.name);
     assert.ok(
-        _.any(['standard', 'advanced', 'user'], (type) => filter.filterType === type)
+        _.any(['standard', 'advanced', 'user'], (type) => filter.type === type)
     );
     assert.ok(filter.rules);
 };
@@ -92,12 +92,12 @@ describe('Filters', () => {
                     assert.ok(addedFilter);
                     assert.notEqual(addedFilter.id, filter.id, 'Filter id is not changed.');
                     assert.equal(addedFilter.name, filter.name);
-                    assert.equal(addedFilter.filterType, 'user');
+                    assert.equal(addedFilter.type, 'user');
 
                     // Update created filter.
                     const filterToUpdate = _.cloneDeep(addedFilter);
                     filterToUpdate.name = 'Test Filter ' + Uuid.v4();
-                    filterToUpdate.filterType = 'advanced';
+                    filterToUpdate.type = 'advanced';
 
                     filtersClient.update(sessionId, filterToUpdate, (error, response) => {
                         assert.ifError(error);
@@ -106,24 +106,22 @@ describe('Filters', () => {
                         assert.ok(updatedFilter);
                         assert.notEqual(updatedFilter.id, filterToUpdate.id);
                         assert.equal(updatedFilter.name, filterToUpdate.name);
-                        assert.notEqual(updatedFilter.type, 'user', 'Filter type change should not be allowed by update.');
+                        assert.equal(updatedFilter.type, 'user', 'Filter type change should not be allowed by update.');
                         done();
                     });
                 });
             });
         });
-
     });
 
     describe('failure tests', () => {
-
         it('should fail to update non-user filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
                 assert.equal(response.status, HttpStatus.OK);
                 const filters = response.body;
                 assert.ok(filters);
-                const nonUserFilter = _.find(filters, filter => filter.filterType !== 'user');
+                const nonUserFilter = _.find(filters, filter => filter.type !== 'user');
                 assert.ok(nonUserFilter, 'Cannot find any non-user filter');
                 nonUserFilter.name = 'Test Name' + Uuid.v4();
 

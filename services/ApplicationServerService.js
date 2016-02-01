@@ -205,7 +205,7 @@ class ApplicationServerService extends ServiceBase {
      * For user samples sample id is file name.
      * */
     _getAppServerSampleId(sample) {
-        return sample.sampleType === 'standard' || sample.sampleType === 'advanced' ?
+        return sample.type === 'standard' || sample.type === 'advanced' ?
                 sample.fileName : sample.id;
     }
 

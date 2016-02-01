@@ -25,7 +25,7 @@ export default class ExistentViewSelect extends Component {
                   <label data-localize="views.setup.selector.label">Available Views</label>
                 </div>
             </div>
-            { currentView.view_type === 'standard' &&
+            { currentView.type === 'standard' &&
               <div className="alert alert-help"><span data-localize="views.setup.selector.description">Standard view are not edited, duplicate it for custom</span>
               </div>
             }
@@ -47,14 +47,14 @@ export default class ExistentViewSelect extends Component {
               {
                 //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
               }
-                    { currentView.view_type !== 'standard' &&
+                    { currentView.type !== 'standard' &&
                       <div className="btn-group ">
                           <button className="btn btn-default">
                               <span data-localize="views.setup.reset.title" >Reset View</span>
                           </button> 
                       </div>
                     }
-                    { currentView.view_type !== 'standard' &&
+                    { currentView.type !== 'standard' &&
                       <div className="btn-group ">
                           <button type="button" className="btn btn-link">
                               <span data-localize="views.setup.delete.title" >Delete View</span>

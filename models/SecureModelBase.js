@@ -16,6 +16,7 @@ class SecureModelBase extends RemovableModelBase {
     }
 
     add(userId, languId, item, callback) {
+        item.type = 'user';
         async.waterfall([
             (callback) => {
                 this._add(userId, languId, item, true, callback);
@@ -26,11 +27,8 @@ class SecureModelBase extends RemovableModelBase {
         ], callback);
     }
 
-    internalAdd(userId, languId, filter, callback) {
-        this._add(userId, languId, filter, false, callback);
-    }
-
     addWithId(userId, languId, item, callback) {
+        item.type = 'user';
         async.waterfall([
             (callback) => {
                 this._add(userId, languId, item, false, callback);
@@ -39,6 +37,10 @@ class SecureModelBase extends RemovableModelBase {
                 this.find(userId, id, callback);
             }
         ], callback);
+    }
+
+    internalAdd(userId, languId, filter, callback) {
+        this._add(userId, languId, filter, false, callback);
     }
 
     update(userId, id, item, callback) {

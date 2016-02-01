@@ -10,7 +10,7 @@ const mappedColumns = [
     'id',
     'fileName',
     'hash',
-    'sampleType',
+    'type',
     'isAnalyzed',
     'isDeleted',
     'values'
@@ -19,16 +19,6 @@ const mappedColumns = [
 class SamplesModel extends SecureModelBase {
     constructor(models) {
         super(models, 'vcf_file_sample', mappedColumns);
-    }
-
-    add(userId, languId, filter, callback) {
-        sample.sampleType = 'user';
-        super.add(userId, languId, filter, callback);
-    }
-
-    addWithId(userId, languId, filter, callback) {
-        sample.sampleType = 'user';
-        super.addWithId(userId, languId, filter, callback);
     }
 
     find(userId, sampleId, callback) {
@@ -114,7 +104,7 @@ class SamplesModel extends SecureModelBase {
                         creator: userId,
                         fileName: sample.fileName,
                         hash: sample.hash,
-                        sampleType: sample.sampleType || 'standard'
+                        type: sample.type || 'user'
                     };
                     this._insert(dataToInsert, trx, callback);
                 },

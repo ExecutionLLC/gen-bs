@@ -10,7 +10,7 @@ const mappedColumns = [
     'id',
     'originalViewId',
     'name',
-    'viewType',
+    'type',
     'isDeleted',
     'isCopyDisabled',
     'languId',
@@ -21,16 +21,6 @@ const mappedColumns = [
 class ViewsModel extends SecureModelBase {
     constructor(models) {
         super(models, 'view', mappedColumns);
-    }
-
-    add(userId, languId, filter, callback) {
-        filter.viewType = 'user';
-        super.add(userId, languId, filter, callback);
-    }
-
-    addWithId(userId, languId, filter, callback) {
-        filter.viewType = 'user';
-        super.addWithId(userId, languId, filter, callback);
     }
 
     find(userId, viewId, callback) {
@@ -112,7 +102,7 @@ class ViewsModel extends SecureModelBase {
                         id: shouldGenerateId ? this._generateId() : view.id,
                         creator: userId,
                         name: view.name,
-                        viewType: view.viewType
+                        type: view.type || 'user'
                     };
                     this._insert(dataToInsert, trx, callback);
                 },
@@ -185,6 +175,7 @@ class ViewsModel extends SecureModelBase {
                         id: this._generateId(),
                         creator: userId,
                         name: viewToUpdate.name,
+                        type: view.type,
                         originalViewId: view.originalViewId || view.id
                     };
                     this._insert(dataToInsert, trx, callback);

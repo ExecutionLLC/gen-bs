@@ -12,7 +12,7 @@ export default class ViewBuilder extends Component {
     const { dispatch, fields } = this.props
     const view = this.props.viewBuilder.editOrNew ? (this.props.viewBuilder.editedView):(this.props.viewBuilder.newView)
     var disabledClass = classNames({
-      'disabled': (view.view_type === 'standard') ? 'disabled':''
+      'disabled': (view.type === 'standard') ? 'disabled':''
     });
 
     const selects = view.view_list_items.map( function(viewItem, index) {
@@ -48,7 +48,7 @@ export default class ViewBuilder extends Component {
                     value={currentValue}
                     clearable={false}
                     onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
-                    disabled={view.view_type === 'standard'}
+                    disabled={view.type === 'standard'}
                   />
                 </div>
                 <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">

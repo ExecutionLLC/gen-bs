@@ -11,7 +11,7 @@ const mappedColumns = [
     'originalFilterId',
     'name',
     'rules',
-    'filterType',
+    'type',
     'isDeleted',
     'isCopyDisabled',
     'languId',
@@ -21,16 +21,6 @@ const mappedColumns = [
 class FiltersModel extends SecureModelBase {
     constructor(models) {
         super(models, 'filter', mappedColumns);
-    }
-
-    add(userId, languId, filter, callback) {
-        filter.filterType = 'user';
-        super.add(userId, languId, filter, callback);
-    }
-
-    addWithId(userId, languId, filter, callback) {
-        filter.filterType = 'user';
-        super.addWithId(userId, languId, filter, callback);
     }
 
     // It collects the latest version of each filter for the current user
@@ -80,7 +70,7 @@ class FiltersModel extends SecureModelBase {
                         creator: userId,
                         name: filter.name,
                         rules: filter.rules,
-                        filterType: filter.filterType || 'user'
+                        type: filter.type || 'user'
                     };
                     this._insert(dataToInsert, trx, callback);
                 },
@@ -108,6 +98,7 @@ class FiltersModel extends SecureModelBase {
                         creator: userId,
                         name: filterToUpdate.name,
                         rules: filterToUpdate.rules,
+                        type: filter.type,
                         originalFilterId: filter.originalFilterId || filter.id
                     };
                     this._insert(dataToInsert, trx, callback);

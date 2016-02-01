@@ -4,7 +4,7 @@
     "file_name": "vars_CHLA-IPSC-05_Whole-Exome.vcf.gz",
     "hash": null,
     "reference": "hg18",
-    "sample_type": "standard",
+    "type": "standard",
     "is_analyzed": true,
     "is_source": false,
     "creator": null

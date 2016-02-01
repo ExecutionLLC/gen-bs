@@ -2,7 +2,7 @@
   {
     "id": "cf2bcd6a-a1eb-47bb-ae22-c474fd5f4b49",
     "name": "Test Default View",
-    "view_type": "standard",
+    "type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
@@ -44,7 +44,7 @@
   {
     "id": "52c61e78-a79d-4ac1-afc8-6c808f0cb5db",
     "name": "Another Default View",
-    "view_type": "advanced",
+    "type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {

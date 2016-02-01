@@ -55,7 +55,7 @@ class FilterBuilder extends DefaultsBuilderBase {
             id: Uuid.v4(),
             name: filterTemplate.name,
             description: filterTemplate.description,
-            filterType: filterTemplate.filterType,
+            type: filterTemplate.type,
             isCopyDisabled: filterTemplate.isCopyDisabled,
             rules
         };

@@ -64,7 +64,7 @@ class ViewBuilder extends DefaultsBuilderBase {
         return {
             id: Uuid.v4(),
             name: viewTemplate.name,
-            viewType: viewTemplate.type,
+            type: viewTemplate.type,
             description: viewTemplate.description,
             viewListItems: _.map(viewTemplate.items, (listItem) => this._createListItem(listItem, fieldsMetadata))
         };
