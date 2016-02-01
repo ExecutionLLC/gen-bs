@@ -1,77 +1,70 @@
-var _ = require('lodash');
+'use strict';
 
-var bunyan = require('bunyan');
-var path   = require('path');
+const _ = require('lodash');
+const bunyan = require('bunyan');
+const path   = require('path');
 
-var levels = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
+const LEVELS = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 
-var Logger = module.exports = function(params) {
-    var self = this;
-
-    this.bunyan = null;
-    this.filter = [];
-    this.init(params);
-};
-
-Logger.consoleLogger = function() {
-    return _.reduce(levels, function(logger, level) {
-        logger[level] = console.log.bind(console);
-        return logger;
-    }, {});
-};
-
-Logger.nullLogger = function() {
-    return _.reduce(levels, function(logger, level) {
-        logger[level] = function() {};
-        return logger;
-    }, {});
-};
-
-Logger.prototype.prepareMetadata = function(metadata) {
-    if (!metadata) metadata = {};
-
-    if (typeof metadata !== 'object') {
-        metadata = {metadata: metadata};
+class Logger {
+    constructor(params) {
+        this.bunyan = null;
+        this.filter = [];
+        this._init(params);
     }
 
-    return metadata;
-};
+    _init(params) {
+        var streams = [];
 
-Logger.prototype.close = function() {
-    for (var stream_id in this.bunyan.streams) {
-        var s = this.bunyan.streams[stream_id];
-        if (s.closeOnExit) {
-            s.stream.end();
+        if (params.console) {
+            streams.push({
+                stream: process.stdout,
+                level:  params.console.level || "trace"
+            });
         }
-    }
-};
 
-Logger.prototype.init = function(params) {
-    var streams = [];
+        if (params.file) {
+            streams.push({
+                path:   params.file.path,
+                level:  params.file.level || "trace"
+            });
+        }
 
-    if (params.console) {
-        streams.push({
-            stream: process.stdout,
-            level:  params.console.level || "trace"
+        this.filter_params = params['filter_params'] || [];
+        this.bunyan = bunyan.createLogger({
+            name: params['app_name'],
+            streams: streams
         });
     }
 
-    if (params.file) {
-        streams.push({
-            path:   params.file.path,
-            level:  params.file.level || "trace"
-        });
+    _writeMessage(level, message, metadata) {
+        this.bunyan[level](this._prepareMetadata(metadata), message);
     }
 
-    this.filter_params = params['filter_params'] || [];
-    this.bunyan = bunyan.createLogger({
-        name: params['app_name'],
-        streams: streams
-    });
-};
+    _prepareMetadata(metadata) {
+        if (!metadata) metadata = {};
 
-_.each(levels, function(level) {
+        if (typeof metadata !== 'object') {
+            metadata = {metadata: metadata};
+        }
+
+        return metadata;
+    }
+
+    close() {
+        _
+            .filter(this.bunyan.streams, stream => stream.closeOnExit)
+            .forEach(stream => stream.stream.end());
+    }
+}
+
+/**
+ * Generate methods for each of available log levels.
+ * */
+_.each(LEVELS, (level) => {
     Logger.prototype[level] = function(message, metadata) {
-        this.bunyan[level](this.prepareMetadata(metadata), message);
+        this._writeMessage(level, message, metadata);
     };
 });
+
+module.exports = Logger;
