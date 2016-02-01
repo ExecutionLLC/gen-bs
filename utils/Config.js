@@ -25,7 +25,7 @@ const SETTINGS = {
             level: 'trace'
         },
         file: {
-            level: 'warn',
+            level: 'trace',
             path: 'logs/genomix.log'
         }
     },
