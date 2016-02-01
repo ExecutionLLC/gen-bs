@@ -10,7 +10,7 @@
 		"name": {
 			"type": "string"
 		},
-		"type": {
+		"filter_type": {
 			"type": "string",
 			"description": "Standard - available for demo-user, advanced - only for registered.",
 			"enum": [
@@ -34,7 +34,7 @@
 	"required": [
 		"id",
 		"name",
-		"type",
+		"filter_type",
 		"rules",
 		"is_copy_disabled"
 	]

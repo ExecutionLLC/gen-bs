@@ -39,9 +39,9 @@
     }
   },
   "required": [
-    "curent_sample",
-    "current_view",
-    "current_filters",
-    "current_keywords"
+    "sample",
+    "view",
+    "filters",
+    "keywords"
   ]
 }

@@ -12,27 +12,27 @@ class FiltersClient extends ClientBase {
 
     getAll(sessionId, callback) {
         RequestWrapper.get(this.filtersUrls.getAll(),
-            this._makeSessionHeader(sessionId), null, null, callback);
+            this._makeHeaders({sessionId}, null), null, null, callback);
     }
 
     get(sessionId, filterId, callback) {
         RequestWrapper.get(this.filtersUrls.get(filterId),
-            this._makeSessionHeader(sessionId), null, null, callback);
+            this._makeHeaders({sessionId}), null, null, callback);
     }
 
-    add(sessionId, filter, callback) {
+    add(sessionId, languId, filter, callback) {
         RequestWrapper.post(this.filtersUrls.create(),
-            this._makeSessionHeader(sessionId), filter, callback);
+            this._makeHeaders({sessionId, languId}), filter, callback);
     }
 
     update(sessionId, filter, callback) {
         RequestWrapper.put(this.filtersUrls.update(filter.id),
-            this._makeSessionHeader(sessionId), filter, callback);
+            this._makeHeaders({sessionId}), filter, callback);
     }
 
     remove(sessionId, filterId, callback) {
         RequestWrapper.del(this.filtersUrls.remove(filterId),
-            this._makeSessionHeader(sessionId), null, callback);
+            this._makeHeaders({sessionId}), null, callback);
     }
 }
 

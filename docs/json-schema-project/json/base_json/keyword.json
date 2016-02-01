@@ -11,7 +11,7 @@
 			"type": "string",
 			"description": "UUID of the corresponding field."
 		},
-		"name": {
+		"value": {
 			"type": "string",
 			"maxLength": 50
 		},
@@ -27,7 +27,7 @@
 						"type": "string",
 						"description": "UUID of the keyword for this synonym"
 					},
-					"name": {
+					"value": {
 						"type": "string",
 						"maxLength": 50
 					}

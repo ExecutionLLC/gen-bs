@@ -2,6 +2,8 @@
 
 const ServiceBase = require('./ServiceBase');
 
+const USER_UNDEFINED = 'User cannot be undefined here.';
+
 class UserEntityServiceBase extends ServiceBase {
     constructor(services, models, theModel) {
         super(services, models);
@@ -9,20 +11,53 @@ class UserEntityServiceBase extends ServiceBase {
         this.theModel = theModel;
     }
 
-    add(user, item, callback) {
-        this.theModel.add(user.id, item, callback);
+    add(user, languId, item, callback) {
+        if (!this._checkUserIsSet(user, callback)) {
+            return;
+        }
+
+        if (user) {
+            const actualLanguId = languId || user.languId;
+            this.theModel.add(user.id, actualLanguId, item, callback);
+        } else {
+            callback(new Error(USER_UNDEFINED));
+        }
     }
 
     update(user, item, callback) {
-        this.theModel.update(user.id, item, callback);
+        if (!this._checkUserIsSet(user, callback)) {
+            return;
+        }
+
+        if (user) {
+            this.theModel.update(user.id, item.id, item, callback);
+        } else {
+            callback(new Error(USER_UNDEFINED));
+        }
     }
 
     find(user, itemId, callback) {
-        this.theModel.find(user.id, itemId, callback);
+        if (!this._checkUserIsSet(user, callback)) {
+            return;
+        }
+
+        if (user) {
+            this.theModel.find(user.id, itemId, callback);
+        } else {
+            callback(new Error(USER_UNDEFINED));
+        }
     }
 
     findMany(user, itemIds, callback) {
-        this.theModel.findMany(user.id, itemIds, callback);
+        if (!this._checkUserIsSet(user, callback)) {
+            return;
+        }
+
+        if (user) {
+            this.theModel.findMany(user.id, itemIds, callback);
+        } else {
+            callback(new Error(USER_UNDEFINED));
+        }
     }
 
     findAll(user, callback) {
@@ -33,7 +68,7 @@ class UserEntityServiceBase extends ServiceBase {
         if (user) {
             this.theModel.findAll(user.id, callback);
         } else {
-            callback(new Error('User cannot be undefined here.'));
+            callback(new Error(USER_UNDEFINED));
         }
     }
 

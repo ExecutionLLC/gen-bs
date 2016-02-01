@@ -11,6 +11,8 @@ deploy.sh
 
 .DS_Store
 *npm-debug.log*
+logs/
+*genomix.log
 
 .settings/
 .project

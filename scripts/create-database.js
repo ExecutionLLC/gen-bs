@@ -11,14 +11,15 @@ const Config = require('../utils/Config');
 
 const DatabaseSettings = Config.database;
 
-const databaseCreator = new DatabaseCreator(DatabaseSettings.host,
+const databaseCreator = new DatabaseCreator(DatabaseSettings.host, DatabaseSettings.port,
     DatabaseSettings.user, DatabaseSettings.password, DatabaseSettings.databaseName);
 
 databaseCreator.create()
 .then(() => {
-    console.log('Success.');
-}).catch(error => {
-    console.error('Error creating database: ' + error);
+    console.log('Done.');
+    process.exit(0);
+}).catch((error) => {
+    console.error(error);
     // Indicate failure to the caller.
     process.exit(1);
 });

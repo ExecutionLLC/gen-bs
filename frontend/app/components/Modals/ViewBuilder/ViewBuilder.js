@@ -13,10 +13,7 @@ export default class ViewBuilder extends Component {
     const view = this.props.viewBuilder.editOrNew ? (this.props.viewBuilder.editedView):(this.props.viewBuilder.newView)
     var disabledClass = classNames({
       'disabled': (view.view_type === 'standard') ? 'disabled':''
-    })
-
-    
-
+    });
 
     const selects = view.view_list_items.map( function(viewItem, index) {
 

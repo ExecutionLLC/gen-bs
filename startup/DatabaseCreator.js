@@ -10,8 +10,9 @@ const Knex = require('knex');
  * used in knexjs.</remarks>
  * */
 class DatabaseCreator {
-    constructor(serverHost, userName, password, databaseName) {
+    constructor(serverHost, serverPort, userName, password, databaseName) {
         this.serverHost = serverHost;
+        this.serverPort = serverPort;
         this.userName = userName;
         this.password = password;
         this.databaseName = databaseName;
@@ -25,42 +26,53 @@ class DatabaseCreator {
         return new Promise((resolve, reject) => {
             this._isDatabaseExists(postgresKnex)
                 .then(isDatabaseExists => {
-                    if (!isDatabaseExists) {
-                        return this._createEmptyDatabase(postgresKnex)
+                    if (isDatabaseExists) {
+                        return this._dropDatabaseIfExists(postgresKnex)
+                            .catch((dropError) => {
+                                return Promise.reject('Failed to drop database. ' + dropError);
+                            })
                             .then(() => {
-                                console.log('Connecting to database...');
-                                const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
-                                const databaseKnex = new Knex(databaseConfig);
-
-                                return this._createTables(databaseKnex)
-                                    .finally(() => {
-                                        console.log('Destroying database context...');
-                                        databaseKnex.destroy();
-                                    })
-                                    ;
+                                console.log('Database dropped: ' + this.databaseName + '.');
+                                return this._createDatabase(postgresKnex)
+                                    .catch((error) => {
+                                        return Promise.reject('Failed to create database. ' + error);
+                                    });
                             });
                     } else {
-                        console.log('Database is found.');
+                        return this._createDatabase(postgresKnex)
+                            .catch((error) => {
+                                return Promise.reject('Failed to create database. ' + error);
+                            })
                     }
-                }).then(() => {
-                resolve();
-            })
-            .catch((error) => {
-                console.log('Caught error, dropping database ' + this.databaseName);
-                postgresKnex.raw('DROP DATABASE ' + this.databaseName)
-                    .then(() => {
-                        reject(error);
-                    }).catch((dropError) => {
-                        console.error('Failed to drop database: ' + dropError);
-                        reject(error);
-                    });
-                reject(error);
-            })
-            .finally(() => {
-                console.log('Destroying postgres database context..');
-                postgresKnex.destroy();
-            });
+                })
+                .then(() => {
+                    console.log('Database created: ' + this.databaseName + '.');
+                    resolve();
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+                .finally(() => {
+                    console.log('Destroying postgres database context...');
+                    postgresKnex.destroy();
+                });
         });
+    }
+
+    _createDatabase(postgresKnex) {
+        console.log('Creating database ' + this.databaseName + '...');
+        return this._createEmptyDatabase(postgresKnex)
+            .then(() => {
+                console.log('Connecting to database...');
+                const databaseConfig = this._createKnexConfigForDatabaseName(this.databaseName);
+                const databaseKnex = new Knex(databaseConfig);
+
+                return this._createTables(databaseKnex)
+                    .finally(() => {
+                        console.log('Destroying ' + this.databaseName + ' database context...');
+                        databaseKnex.destroy();
+                    });
+            });
     }
 
     _createTables(databaseKnex) {
@@ -75,6 +87,12 @@ class DatabaseCreator {
         const accessRightsEnumValues = [
             'r', // Share as read-only
             'rw' // Share as read-write
+        ];
+
+        // Type of source as they are got from VCF.
+        const fieldSourceTypesEnumValues = [
+            'sample',
+            'source'
         ];
 
         // Types of fields as they are got from VCF.
@@ -116,6 +134,8 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('langu');
                 table.integer('number_paid_samples');
+                table.boolean('is_deleted')
+                    .defaultTo(false);
             })
             .createTable('user_text', table => {
                 table.uuid('user_id')
@@ -143,7 +163,9 @@ class DatabaseCreator {
                     .notNullable();
                 table.json('rules');
                 table.enu('filter_type', entityTypeEnumValues);
-                table.boolean('is_disabled_4copy')
+                table.boolean('is_copy_disabled')
+                    .defaultTo(false);
+                table.boolean('is_deleted')
                     .defaultTo(false);
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
@@ -158,7 +180,7 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
-                table.string('description', 100);
+                table.string('description', 512);
 
                 table.primary(['filter_id', 'langu_id']);
             })
@@ -181,11 +203,13 @@ class DatabaseCreator {
                 table.string('name', 50);
                 table.string('source_name', 128);
                 table.enu('value_type', fieldValueTypesEnumValues);
-                table.boolean('filter_control_enable');
-                table.boolean('is_mandatory');
-                table.boolean('is_editable');
-                table.boolean('is_invisible');
-                table.boolean('is_multi_select');
+                table.boolean('is_mandatory')
+                    .defaultTo(false);
+                table.boolean('is_editable')
+                    .defaultTo(true);
+                table.boolean('is_invisible')
+                    .defaultTo(false);
+                table.integer('dimension');
             })
             .createTable('field_text', table => {
                 table.uuid('field_id')
@@ -194,7 +218,8 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
-                table.string('description', 100);
+                table.string('description', 512);
+                table.string('label', 50);
 
                 table.primary(['field_id', 'langu_id']);
             })
@@ -206,13 +231,15 @@ class DatabaseCreator {
                     .inTable('field_metadata');
             })
             .createTable('field_available_value_text', table => {
-                table.uuid('available_value_id')
+                table.uuid('field_available_value_id')
                     .references('id')
                     .inTable('field_available_value');
-                table.string('langu_id', 2);
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
                 table.string('value', 100);
 
-                table.primary(['available_value_id', 'langu_id']);
+                table.primary(['field_available_value_id', 'langu_id']);
             })
 
             // Keywords
@@ -246,12 +273,24 @@ class DatabaseCreator {
                     .inTable('view');
                 table.string('name', 50);
                 table.enu('view_type', entityTypeEnumValues);
-                table.boolean('is_disabled_4copy');
+                table.boolean('is_copy_disabled')
+                    .defaultTo(false);
+                table.boolean('is_deleted')
+                    .defaultTo(false);
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
+            })
+            .createTable('view_text', table => {
+                table.uuid('view_id')
+                    .references('id')
+                    .inTable('view');
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
+                table.string('description', 512);
             })
             .createTable('view_assignment', table => {
                 table.uuid('user_id')
@@ -276,11 +315,16 @@ class DatabaseCreator {
                 table.integer('order');
                 table.integer('sort_order');
                 table.enu('sort_direction', sortDirectionEnumValues);
+                table.boolean('filter_control_enable')
+                    .defaultTo(true);
             })
             .createTable('view_item_keyword', table => {
-                table.uuid('keyword_id');
-                table.uuid('view_item_id');
-
+                table.uuid('keyword_id')
+                    .references('id')
+                    .inTable('keyword');
+                table.uuid('view_item_id')
+                    .references('id')
+                    .inTable('view_item');
                 table.primary(['keyword_id', 'view_item_id']);
             })
 
@@ -292,6 +336,8 @@ class DatabaseCreator {
                 table.string('chrom', 50);
                 table.integer('pos');
                 table.string('alt', 50);
+                // Field is needed to fetch comments. The comment is currently assigned to the search key,
+                // which can be the same for different samples. Comments should be fetched by that search key.
                 table.bigInteger('search_key');
                 table.uuid('creator')
                     .references('id')
@@ -326,9 +372,11 @@ class DatabaseCreator {
                 table.string('hash', 50);
                 table.enu('sample_type', entityTypeEnumValues);
                 table.enu('status', sampleStatusEnumValues);
-                table.boolean('is_analyzed');
-                table.timestamp('timestamp')
-                    .defaultTo(databaseKnex.fn.now());
+                table.boolean('is_analyzed')
+                    .defaultTo(false);
+                table.boolean('is_deleted')
+                    .defaultTo(false);
+                table.timestamp('analyzed_timestamp');
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
@@ -411,7 +459,7 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
-                table.string('description', 100);
+                table.string('description', 512);
 
                 table.primary(['saved_file_id', 'langu_id']);
             })
@@ -452,8 +500,21 @@ class DatabaseCreator {
 
     _createEmptyDatabase(postgresKnex) {
         // Create database
-        console.log('Creating database ' + this.databaseName);
         return postgresKnex.raw('CREATE DATABASE ' + this.databaseName);
+    }
+
+    _dropDatabaseIfExists(postgresKnex) {
+        console.log('Dropping database ' + this.databaseName + '...');
+        // Disallow to connect to database
+        return postgresKnex.raw('UPDATE pg_database SET datallowconn = false WHERE datname = \'' + this.databaseName + '\'')
+            .then(() => {
+                // Terminate active database connections
+                return postgresKnex.raw('SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = \'' + this.databaseName + '\'')
+                    .then(() => {
+                        // Drop database if exists
+                        return postgresKnex.raw('DROP DATABASE IF EXISTS ' + this.databaseName);
+                    });
+            });
     }
 
     /**
@@ -475,6 +536,7 @@ class DatabaseCreator {
             client: 'pg',
             connection: {
                 host: this.serverHost,
+                port: this.serverPort,
                 user: this.userName,
                 password: this.password,
                 database: databaseName

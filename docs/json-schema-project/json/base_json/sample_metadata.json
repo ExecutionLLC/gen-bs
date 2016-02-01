@@ -30,7 +30,7 @@
 				"user"
 			]
 		},
-		"is_analysed": {
+		"is_analyzed": {
 			"type": "boolean"
 		},
 		"analyzed_timestamp": {
@@ -40,7 +40,7 @@
 	"required": [
 		"id",
 		"hash",
-		"is_analysed",
+		"is_analyzed",
 		"is_standard",
 		"is_advanced"
 	]

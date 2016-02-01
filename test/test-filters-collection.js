@@ -14,6 +14,8 @@ const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
 const filtersClient = new FiltersClient(urls);
 
+const languId = Config.defaultLanguId;
+
 const TestUser = {
     userName: 'valarie',
     password: 'password'
@@ -26,7 +28,7 @@ const checkFilter = (filter) => {
     assert.ok(filter.id);
     assert.ok(filter.name);
     assert.ok(
-        _.any(['standard', 'advanced', 'user'], (type) => filter.type === type)
+        _.any(['standard', 'advanced', 'user'], (type) => filter.filterType === type)
     );
     assert.ok(filter.rules);
 };
@@ -54,6 +56,7 @@ describe('Filters', () => {
                 done();
             });
         });
+
         it('should get existing filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
@@ -72,6 +75,7 @@ describe('Filters', () => {
                 });
             });
         });
+
         it('should create and update existing user filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
@@ -80,25 +84,27 @@ describe('Filters', () => {
                 assert.ok(filters);
                 const filter = filters[0];
                 filter.name = 'Test Filter ' + Uuid.v4();
-                filtersClient.add(sessionId, filter, (error, response) => {
+
+                filtersClient.add(sessionId, languId, filter, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
                     const addedFilter = response.body;
                     assert.ok(addedFilter);
                     assert.notEqual(addedFilter.id, filter.id, 'Filter id is not changed.');
                     assert.equal(addedFilter.name, filter.name);
-                    assert.equal(addedFilter.type, 'user');
+                    assert.equal(addedFilter.filterType, 'user');
 
                     // Update created filter.
                     const filterToUpdate = _.cloneDeep(addedFilter);
                     filterToUpdate.name = 'Test Filter ' + Uuid.v4();
-                    filterToUpdate.type = 'advanced';
+                    filterToUpdate.filterType = 'advanced';
+
                     filtersClient.update(sessionId, filterToUpdate, (error, response) => {
                         assert.ifError(error);
                         assert.equal(response.status, HttpStatus.OK);
                         const updatedFilter = response.body;
                         assert.ok(updatedFilter);
-                        assert.equal(updatedFilter.id, filterToUpdate.id);
+                        assert.notEqual(updatedFilter.id, filterToUpdate.id);
                         assert.equal(updatedFilter.name, filterToUpdate.name);
                         assert.notEqual(updatedFilter.type, 'user', 'Filter type change should not be allowed by update.');
                         done();
@@ -117,9 +123,10 @@ describe('Filters', () => {
                 assert.equal(response.status, HttpStatus.OK);
                 const filters = response.body;
                 assert.ok(filters);
-                const nonUserFilter = _.find(filters, filter => filter.type !== 'user');
+                const nonUserFilter = _.find(filters, filter => filter.filterType !== 'user');
                 assert.ok(nonUserFilter, 'Cannot find any non-user filter');
                 nonUserFilter.name = 'Test Name' + Uuid.v4();
+
                 filtersClient.update(sessionId, nonUserFilter, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -127,6 +134,7 @@ describe('Filters', () => {
                 });
             });
         });
+
         it('should fail to get list in incorrect session', (done) => {
             filtersClient.getAll(UnknownSessionId, (error, response) => {
                 assert.ifError(error);
@@ -135,6 +143,7 @@ describe('Filters', () => {
                 done();
             })
         });
+
         it('should fail to get unknown filter', (done) => {
             filtersClient.get(sessionId, UnknownFilterId, (error, response) => {
                 assert.ifError(error);
@@ -144,4 +153,5 @@ describe('Filters', () => {
             });
         });
     });
+
 });

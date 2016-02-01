@@ -1,6 +1,8 @@
 'use strict';
 
 const Express = require('express');
+const async = require('async');
+
 const ControllerBase = require('./ControllerBase');
 
 /**
@@ -10,37 +12,75 @@ class ApiController extends ControllerBase {
     constructor(services) {
         super(services);
 
-        this._initUserMiddleware = this._initUserMiddleware.bind(this);
+        this._initHeaders = this._initHeaders.bind(this);
     }
 
-    _initUserMiddleware(request, response, next) {
+    _initHeaders(request, response, next) {
         const sessionHeaderName = this.services.config.sessionHeader;
+        const languageHeaderName = this.services.config.languageHeader;
         const sessions = this.services.sessions;
 
-        const setUserBySessionFunc = (sessionId) => {
+        const setUserBySessionFunc = (sessionId, callback) => {
             sessions.findSessionUserId(sessionId, (error, userId) => {
                 if (error) {
-                    next(new Error(error));
+                    callback(error);
                 } else {
                     this.services.users.find(userId, (error, user) => {
                         if (error) {
-                            next(new Error(error));
+                            callback(error);
                         } else {
                             request.sessionId = sessionId;
                             request.user = user;
-                            next();
+                            callback(null, request);
                         }
                     });
                 }
             });
         };
 
+        const setLanguBySessionFunc = (languId, callback) => {
+            this.services.langu.exists(languId, (error, exists) => {
+                if (error) {
+                    callback(error);
+                } else {
+                    if (exists) {
+                        request.languId = languId;
+                        callback(null, request);
+                    } else {
+                        callback(new Error('Language not found.'));
+                    }
+                }
+            });
+        };
+
+        const setRequestParameters = (sessionId, languId) => {
+            async.waterfall([
+                (cb) => {
+                    if (sessionId) {
+                        setUserBySessionFunc(sessionId, cb);
+                    } else {
+                        cb(null, null);
+                    }
+                },
+                (result, cb) => {
+                    if (languId) {
+                        setLanguBySessionFunc(languId, cb);
+                    } else {
+                        cb(null, null);
+                    }
+                }
+            ], (error) => {
+                if (error) {
+                    next(new Error(error));
+                } else {
+                    next();
+                }
+            });
+        };
+
         const sessionId = request.get(sessionHeaderName);
-        if (sessionId) {
-            setUserBySessionFunc(sessionId);
-        } else {
-            next();
-        }
+        const languId = request.get(languageHeaderName);
+        setRequestParameters(sessionId, languId);
     }
 
     createRouter(controllersFacade) {
@@ -61,7 +101,7 @@ class ApiController extends ControllerBase {
         const router = new Express();
 
         // Install Express middleware
-        router.use(this._initUserMiddleware);
+        router.use(this._initHeaders);
 
         // Initialize child routes
         router.use('/demo/data', demoDataRouter);
