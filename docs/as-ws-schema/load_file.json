@@ -8,6 +8,10 @@
     "params": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "description": "Upload session identifier."
+        },
         "sample_id": {
           "type": "string",
           "description": "UUID of the sample on WS."
@@ -22,11 +26,17 @@
       "type": "object",
       "properties": {
         "status": {
+          "type": "string",
+          "description": "Converting - file upload to AS complete, conversion to hd5 is in progress. Uploading - conversion completed, uploading to S3. Ready - should contain file metadata.",
           "enum": [
             "converting",
             "uploading",
             "ready"
           ]
+        },
+        "id": {
+          "type": "string",
+          "description": "Session identifier."
         },
         "sample_id": {
           "type": "string",
