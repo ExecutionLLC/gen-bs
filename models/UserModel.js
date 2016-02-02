@@ -100,9 +100,9 @@ class UserModel extends RemovableModelBase {
                 if (error || !userData.length) {
                     cb(error || new Error('Item not found: ' + userId));
                 } else {
-                    let data = userData[0];
+                    let data = ChangeCaseUtil.convertKeysToCamelCase(userData[0]);
                     data.language = data.defaultLanguId;
-                    cb(null, ChangeCaseUtil.convertKeysToCamelCase(data));
+                    cb(null, data);
                 }
             });
         }, callback);

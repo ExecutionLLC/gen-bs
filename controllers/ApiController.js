@@ -50,7 +50,7 @@ class ApiController extends ControllerBase {
                 if (languId) {
                     callback(null, languId);
                 } else if (user) {
-                    callback(null, user.defaultLanguId);
+                    callback(null, user.language);
                 } else {
                     callback(null, this.services.config.defaultLanguId);
                 }
