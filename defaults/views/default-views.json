@@ -1,75 +1,313 @@
 [
   {
-    "id": "cf2bcd6a-a1eb-47bb-ae22-c474fd5f4b49",
+    "id": "81e242dc-18e8-499b-af22-31cc194aad79",
     "name": "Test Default View",
     "type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "7da4d4a9-7739-4561-9197-b96f428978f0",
+        "id": "9c61c765-f695-4cd0-9c12-118873cd8f34",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
-        "sort_direction": "asc"
+        "sort_direction": "asc",
+        "keywords": [
+          {
+            "id": "ba63c667-98a7-449a-8a69-870aea514cdc",
+            "field_id": "00000000-0000-0000-0000-000000000001",
+            "name": "CHROM ipsum",
+            "value": "ipsum",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "et"
+              },
+              {
+                "langu_id": "en",
+                "value": "pariatur"
+              },
+              {
+                "langu_id": "en",
+                "value": "magna"
+              }
+            ]
+          },
+          {
+            "id": "576f3a65-566f-4f9d-abba-05c177bd1932",
+            "field_id": "00000000-0000-0000-0000-000000000001",
+            "name": "CHROM elit",
+            "value": "elit",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "dolore"
+              },
+              {
+                "langu_id": "en",
+                "value": "proident"
+              },
+              {
+                "langu_id": "en",
+                "value": "sunt"
+              }
+            ]
+          },
+          {
+            "id": "fdc2eab3-71cf-42c1-b15d-2722a26f0084",
+            "field_id": "00000000-0000-0000-0000-000000000001",
+            "name": "CHROM eu",
+            "value": "eu",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "aute"
+              },
+              {
+                "langu_id": "en",
+                "value": "tempor"
+              },
+              {
+                "langu_id": "en",
+                "value": "magna"
+              }
+            ]
+          }
+        ]
       },
       {
-        "id": "5cd62d2d-3fe0-4f13-b22e-dbff447d7f81",
+        "id": "51ded843-549b-43cb-849d-a7358bf3671f",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
-        "sort_direction": "desc"
+        "sort_direction": "desc",
+        "keywords": [
+          {
+            "id": "6c752c1c-3205-46bc-8cb0-f3c1af62a058",
+            "field_id": "00000000-0000-0000-0000-000000000002",
+            "name": "POS consequat",
+            "value": "consequat",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "mollit"
+              },
+              {
+                "langu_id": "en",
+                "value": "occaecat"
+              },
+              {
+                "langu_id": "en",
+                "value": "magna"
+              }
+            ]
+          }
+        ]
       },
       {
-        "id": "054abf5f-d9c8-48ae-8abb-1f6950275c3f",
+        "id": "37baa7d2-12a1-4320-ac35-cc6ec351960a",
         "field_id": "00000000-0000-0000-0000-000000000007",
-        "order": 6
+        "order": 6,
+        "keywords": [
+          {
+            "id": "8e6c19aa-02a9-4b77-b374-a0aa867f31ae",
+            "field_id": "00000000-0000-0000-0000-000000000007",
+            "name": "FILTER voluptate",
+            "value": "voluptate",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "aliquip"
+              },
+              {
+                "langu_id": "en",
+                "value": "ea"
+              },
+              {
+                "langu_id": "en",
+                "value": "cillum"
+              }
+            ]
+          }
+        ]
       },
       {
-        "id": "14b2c38c-ebd6-4a3b-b75f-1f23566c837d",
-        "field_id": "4760f631-b4db-4410-9976-a01b8030d47e",
-        "order": 3
+        "id": "e95d75d0-7732-4974-a903-1e43aa6a12ee",
+        "field_id": "21a4832f-f846-471f-99eb-bddcde3e9a4d",
+        "order": 3,
+        "keywords": []
       },
       {
-        "id": "cc6e7f08-dbff-4e8c-b344-458497930506",
-        "field_id": "d80b0be4-41d3-483c-9025-7499226ebfa5",
-        "order": 4
+        "id": "9aac288f-6944-4ff3-9e64-9b965f640975",
+        "field_id": "8e44dfad-4be9-4f10-b0c6-bcfd20989a42",
+        "order": 4,
+        "keywords": []
       },
       {
-        "id": "32faeba1-d5d6-4812-b398-4da7b070c6b5",
+        "id": "cbf78d1c-cda5-4220-8e9e-d9780b37480c",
         "field_id": "00000000-0000-0000-0000-000000000005",
-        "order": 5
+        "order": 5,
+        "keywords": [
+          {
+            "id": "b965873e-3bef-4d99-a353-645776e0d461",
+            "field_id": "00000000-0000-0000-0000-000000000005",
+            "name": "ALT amet",
+            "value": "amet",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "reprehenderit"
+              },
+              {
+                "langu_id": "en",
+                "value": "ullamco"
+              },
+              {
+                "langu_id": "en",
+                "value": "incididunt"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
   {
-    "id": "52c61e78-a79d-4ac1-afc8-6c808f0cb5db",
+    "id": "bca1f007-7109-42df-818b-c3cd9aa64798",
     "name": "Another Default View",
     "type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "3d3163a1-f386-4891-9f21-b7c3dd31b798",
+        "id": "b8423a19-b174-40bb-9d29-8b0f19976794",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
-        "sort_direction": "asc"
+        "sort_direction": "asc",
+        "keywords": [
+          {
+            "id": "ba63c667-98a7-449a-8a69-870aea514cdc",
+            "field_id": "00000000-0000-0000-0000-000000000001",
+            "name": "CHROM ipsum",
+            "value": "ipsum",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "et"
+              },
+              {
+                "langu_id": "en",
+                "value": "pariatur"
+              },
+              {
+                "langu_id": "en",
+                "value": "magna"
+              }
+            ]
+          },
+          {
+            "id": "576f3a65-566f-4f9d-abba-05c177bd1932",
+            "field_id": "00000000-0000-0000-0000-000000000001",
+            "name": "CHROM elit",
+            "value": "elit",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "dolore"
+              },
+              {
+                "langu_id": "en",
+                "value": "proident"
+              },
+              {
+                "langu_id": "en",
+                "value": "sunt"
+              }
+            ]
+          }
+        ]
       },
       {
-        "id": "b5cf555d-918f-4bef-9bdb-86ae8bc0f126",
+        "id": "8d043382-b582-4bb5-935f-2987b8c0795b",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
-        "sort_direction": "desc"
+        "sort_direction": "desc",
+        "keywords": [
+          {
+            "id": "6c752c1c-3205-46bc-8cb0-f3c1af62a058",
+            "field_id": "00000000-0000-0000-0000-000000000002",
+            "name": "POS consequat",
+            "value": "consequat",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "mollit"
+              },
+              {
+                "langu_id": "en",
+                "value": "occaecat"
+              },
+              {
+                "langu_id": "en",
+                "value": "magna"
+              }
+            ]
+          }
+        ]
       },
       {
-        "id": "26f36467-e8b0-4c9d-bccf-75a86d5522df",
+        "id": "df81158f-604d-4072-9631-79329ba6002b",
         "field_id": "00000000-0000-0000-0000-000000000007",
-        "order": 3
+        "order": 3,
+        "keywords": [
+          {
+            "id": "8e6c19aa-02a9-4b77-b374-a0aa867f31ae",
+            "field_id": "00000000-0000-0000-0000-000000000007",
+            "name": "FILTER voluptate",
+            "value": "voluptate",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "aliquip"
+              },
+              {
+                "langu_id": "en",
+                "value": "ea"
+              },
+              {
+                "langu_id": "en",
+                "value": "cillum"
+              }
+            ]
+          }
+        ]
       },
       {
-        "id": "eda87a67-b404-49d6-a5c1-f1506b82bc2d",
+        "id": "427ac73a-351d-4126-b467-d03d44649d63",
         "field_id": "00000000-0000-0000-0000-000000000005",
-        "order": 4
+        "order": 4,
+        "keywords": [
+          {
+            "id": "b965873e-3bef-4d99-a353-645776e0d461",
+            "field_id": "00000000-0000-0000-0000-000000000005",
+            "name": "ALT amet",
+            "value": "amet",
+            "synonyms": [
+              {
+                "langu_id": "en",
+                "value": "reprehenderit"
+              },
+              {
+                "langu_id": "en",
+                "value": "ullamco"
+              },
+              {
+                "langu_id": "en",
+                "value": "incididunt"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
