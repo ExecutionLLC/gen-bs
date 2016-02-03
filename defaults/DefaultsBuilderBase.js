@@ -13,7 +13,7 @@ class DefaultsBuilderBase {
         this.fieldMetadataDir = this.defaultsDir + '/fields'; // Output directory for field metadata.
         this.fieldMetadataFile = this.fieldMetadataDir + '/fields-metadata.json'; // Result of field aggregation.
         this.keywordsDir = this.defaultsDir + '/keywords'; // Output directory for keywords.
-        this.keywordsFile = this.keywordsDir + '/fields-metadata.json'; // Result of keyword aggregation.
+        this.keywordsFile = this.keywordsDir + '/default-keywords.json'; // Result of keyword aggregation.
         this.asSourcesDir = this.defaultsDir + '/templates/sources'; // AS sample metadata.
         this.viewsDir = this.defaultsDir + '/views'; // Output directory for default views.
         this.filtersDir = this.defaultsDir + '/filters'; // Output directory for default filters.

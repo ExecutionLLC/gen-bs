@@ -5,6 +5,7 @@
       "name": "CHROM",
       "value_type": "integer"
     },
+    "name": "CHROM ipsum",
     "value": "ipsum",
     "synonyms": [
       {
@@ -27,6 +28,7 @@
       "name": "POS",
       "value_type": "integer"
     },
+    "name": "POS consequat",
     "value": "consequat",
     "synonyms": [
       {
@@ -49,6 +51,7 @@
       "name": "ID",
       "value_type": "string"
     },
+    "name": "ID est",
     "value": "est",
     "synonyms": [
       {
@@ -71,6 +74,7 @@
       "name": "REF",
       "value_type": "string"
     },
+    "name": "REF ipsum",
     "value": "ipsum",
     "synonyms": [
       {
@@ -93,6 +97,7 @@
       "name": "ALT",
       "value_type": "string"
     },
+    "name": "ALT amet",
     "value": "amet",
     "synonyms": [
       {
@@ -115,6 +120,7 @@
       "name": "QUAL",
       "value_type": "float"
     },
+    "name": "QUAL aute",
     "value": "aute",
     "synonyms": [
       {
@@ -137,6 +143,7 @@
       "name": "FILTER",
       "value_type": "string"
     },
+    "name": "FILTER voluptate",
     "value": "voluptate",
     "synonyms": [
       {
@@ -159,6 +166,7 @@
       "name": "FAMILY_ID",
       "value_type": "string"
     },
+    "name": "FAMILY_ID irure",
     "value": "irure",
     "synonyms": [
       {
@@ -181,6 +189,7 @@
       "name": "FAMILY_INFO",
       "value_type": "string"
     },
+    "name": "FAMILY_INFO eu",
     "value": "eu",
     "synonyms": [
       {
@@ -203,6 +212,7 @@
       "name": "GENDER",
       "value_type": "string"
     },
+    "name": "GENDER pariatur",
     "value": "pariatur",
     "synonyms": [
       {
@@ -225,6 +235,7 @@
       "name": "PHENOTYPE",
       "value_type": "string"
     },
+    "name": "PHENOTYPE veniam",
     "value": "veniam",
     "synonyms": [
       {
@@ -247,6 +258,7 @@
       "name": "SAMPLE_ID",
       "value_type": "string"
     },
+    "name": "SAMPLE_ID ea",
     "value": "ea",
     "synonyms": [
       {
@@ -269,6 +281,7 @@
       "name": "SAMPLE_TYPE",
       "value_type": "string"
     },
+    "name": "SAMPLE_TYPE nisi",
     "value": "nisi",
     "synonyms": [
       {
@@ -291,6 +304,7 @@
       "name": "REFERENCE",
       "value_type": "string"
     },
+    "name": "REFERENCE commodo",
     "value": "commodo",
     "synonyms": [
       {
@@ -313,6 +327,7 @@
       "name": "COMMENT",
       "value_type": "string"
     },
+    "name": "COMMENT do",
     "value": "do",
     "synonyms": [
       {
@@ -335,6 +350,7 @@
       "name": "INFO_NR",
       "value_type": "string"
     },
+    "name": "INFO_NR sint",
     "value": "sint",
     "synonyms": [
       {
@@ -354,9 +370,10 @@
   {
     "field": {
       "source_name": "sample",
-      "name": "INFO_DR",
+      "name": "INFO_DP",
       "value_type": "integer"
     },
+    "name": "INFO_DP ea",
     "value": "ea",
     "synonyms": [
       {
@@ -379,6 +396,7 @@
       "name": "INFO_RO",
       "value_type": "integer"
     },
+    "name": "INFO_RO cupidatat",
     "value": "cupidatat",
     "synonyms": [
       {
@@ -401,6 +419,7 @@
       "name": "CHROM",
       "value_type": "integer"
     },
+    "name": "CHROM quis",
     "value": "quis",
     "synonyms": [
       {
@@ -423,28 +442,7 @@
       "name": "CHROM",
       "value_type": "integer"
     },
-    "value": "ipsum",
-    "synonyms": [
-      {
-        "langu_id": "en",
-        "value": "ad"
-      },
-      {
-        "langu_id": "en",
-        "value": "aliqua"
-      },
-      {
-        "langu_id": "en",
-        "value": "aliquip"
-      }
-    ]
-  },
-  {
-    "field": {
-      "source_name": "sample",
-      "name": "CHROM",
-      "value_type": "integer"
-    },
+    "name": "CHROM eu",
     "value": "eu",
     "synonyms": [
       {
@@ -467,6 +465,7 @@
       "name": "CHROM",
       "value_type": "integer"
     },
+    "name": "CHROM est",
     "value": "est",
     "synonyms": [
       {
@@ -489,7 +488,8 @@
       "name": "CHROM",
       "value_type": "integer"
     },
-    "value": "est",
+    "name": "CHROM estu",
+    "value": "estu",
     "synonyms": [
       {
         "langu_id": "en",
@@ -511,6 +511,7 @@
       "name": "CHROM",
       "value_type": "integer"
     },
+    "name": "CHROM irure",
     "value": "irure",
     "synonyms": [
       {
@@ -533,6 +534,7 @@
       "name": "CHROM",
       "value_type": "integer"
     },
+    "name": "CHROM dolore",
     "value": "dolore",
     "synonyms": [
       {
@@ -555,28 +557,7 @@
       "name": "CHROM",
       "value_type": "integer"
     },
-    "value": "eu",
-    "synonyms": [
-      {
-        "langu_id": "en",
-        "value": "laborum"
-      },
-      {
-        "langu_id": "en",
-        "value": "non"
-      },
-      {
-        "langu_id": "en",
-        "value": "ullamco"
-      }
-    ]
-  },
-  {
-    "field": {
-      "source_name": "sample",
-      "name": "CHROM",
-      "value_type": "integer"
-    },
+    "name": "CHROM elit",
     "value": "elit",
     "synonyms": [
       {

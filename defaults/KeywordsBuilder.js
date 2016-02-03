@@ -27,7 +27,7 @@ class KeywordsBuilder extends DefaultsBuilderBase {
 
     build(callback) {
         const fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
-            require(this.keywordsFile)
+            require(this.fieldMetadataFile)
         );
 
         async.waterfall([
@@ -45,9 +45,9 @@ class KeywordsBuilder extends DefaultsBuilderBase {
     }
 
     _storeKeywords(keywords, callback) {
-        const json = JSON.stringify(keywords, null, 2);
-        const keywordsFile = this.keywordsDir + '/default-keywords.json';
-        FsUtils.writeStringToFile(keywordsFile, json, callback);
+        const snakeCasedKeywords = ChangeCaseUtil.convertKeysToSnakeCase(keywords);
+        const jsonKeywords = JSON.stringify(snakeCasedKeywords, null, 2);
+        FsUtils.writeStringToFile(this.keywordsFile, jsonKeywords, callback);
     }
 
     _createKeyword(keywordTemplate, fieldsMetadata) {
@@ -58,18 +58,18 @@ class KeywordsBuilder extends DefaultsBuilderBase {
         return {
             id: keywordId,
             fieldId: field.id,
+            name: keywordTemplate.name,
             value: keywordTemplate.value,
             synonyms: synonyms
         };
     }
 
     _createSynonyms(keywordId, synonymsTemplate) {
-        return _.map(synonymsTemplate, (synonymTemplate) => this._createSynonym(keywordId, synonymTemplate));
+        return _.map(synonymsTemplate, (synonymTemplate) => this._createSynonym(synonymTemplate));
     }
 
-    _createSynonym(keywordId, synonymTemplate) {
+    _createSynonym(synonymTemplate) {
         return {
-            keywordId: keywordId,
             languId: synonymTemplate.languId,
             value: synonymTemplate.value
         }

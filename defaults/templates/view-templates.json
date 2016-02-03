@@ -10,6 +10,11 @@
           "name": "CHROM",
           "value_type": "integer"
         },
+        "keywords": [
+          "CHROM ipsum",
+          "CHROM elit",
+          "CHROM eu"
+        ],
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
@@ -20,6 +25,9 @@
           "name": "POS",
           "value_type": "integer"
         },
+        "keywords": [
+          "POS consequat"
+        ],
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
@@ -30,6 +38,9 @@
           "name": "FILTER",
           "value_type": "string"
         },
+        "keywords": [
+          "FILTER voluptate"
+        ],
         "order": 6
       },
       {
@@ -54,6 +65,9 @@
           "name": "ALT",
           "value_type": "string"
         },
+        "keywords": [
+          "ALT amet"
+        ],
         "order": 5
       }
     ]
@@ -69,6 +83,10 @@
           "name": "CHROM",
           "value_type": "integer"
         },
+        "keywords": [
+          "CHROM ipsum",
+          "CHROM elit"
+        ],
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
@@ -79,6 +97,9 @@
           "name": "POS",
           "value_type": "integer"
         },
+        "keywords": [
+          "POS consequat"
+        ],
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
@@ -89,6 +110,9 @@
           "name": "FILTER",
           "value_type": "string"
         },
+        "keywords": [
+          "FILTER voluptate"
+        ],
         "order": 3
       },
       {
@@ -97,6 +121,9 @@
           "name": "ALT",
           "value_type": "string"
         },
+        "keywords": [
+          "ALT amet"
+        ],
         "order": 4
       }
     ]
