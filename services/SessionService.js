@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
 const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
@@ -17,37 +18,42 @@ class SessionService extends ServiceBase {
      * Currently, also destroys existing sessions of the same user, if any.
      * */
     startForUser(userName, password, callback) {
-        this.services.tokens.login(userName, password, (error, token) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.services.tokens.findUserIdByToken(token, (error, userId) => {
-                   if (error) {
-                       callback(error);
-                   } else {
-                       // Check and remove existing user session.
-                       let existingSession = _.find(this.sessions, session => session.userId === userId);
-                       if (existingSession && !this.services.config.allowMultipleUserSessions) {
-                           this.destroySession(existingSession.id, (error) => {
-                               if (error) {
-                                   console.error('Error destroying existing session: %s', error);
-                               } else {
-                                   console.log('Existing session for user ' + userName + ' is destroyed.');
-                               }
-                           });
-                       }
-
-                       this._createSession(token, userId, (error, session) => {
-                           if (error) {
-                               callback(error);
-                           } else {
-                               callback(null, session.id);
-                           }
-                       });
-                   }
+        async.waterfall([
+            (callback) => this.services.tokens.login(userName, password, callback),
+            (token, callback) => this.services.tokens.findUserIdByToken(token, (error, userId) => {
+                callback(error, {
+                    userId,
+                    token
+                });
+            }),
+            (result, callback) => {
+                // Check and remove existing user session.
+                const userId = result.userId;
+                let existingSession = _.find(this.sessions, session => session.userId === userId);
+                if (existingSession && !this.services.config.allowMultipleUserSessions) {
+                    this.destroySession(existingSession.id, (error) => {
+                        if (error) {
+                            console.error('Error destroying existing session: %s', error);
+                        } else {
+                            console.log('Existing session for user ' + userName + ' is destroyed.');
+                        }
+                    });
+                }
+                callback(null, result);
+            },
+            (result, callback) => {
+                // Create new session for user.
+                const userId = result.userId;
+                const token = result.token;
+                this._createSession(token, userId, (error, session) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, session.id);
+                    }
                 });
             }
-        });
+        ], callback);
     }
 
     /**
@@ -126,8 +132,8 @@ class SessionService extends ServiceBase {
         const sessionId = Uuid.v4();
         const session = {
             id: sessionId,
-            userId: userId,
-            token: token,
+            userId,
+            token,
             lastActivity: Date.now(),
             operations: {}
         };

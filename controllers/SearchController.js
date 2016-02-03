@@ -27,8 +27,8 @@ class SearchController extends ControllerBase {
 
         const user = request.user;
         const sessionId = request.sessionId;
+        const languId = request.languId;
 
-        const languId = body.languId;
         const sampleId = body.sampleId;
         const viewId = body.viewId;
         const filterId = body.filterId;
