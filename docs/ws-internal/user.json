@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "User",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for user"
+    },
+    "name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "speciality": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "maxLength": 2
+    },
+    "number_paid_samples": {
+      "type": "integer"
+    },
+    "login": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    }
+  }
+}

@@ -4,8 +4,8 @@
 	"type": "object",
 	"properties": {
 		"id": {
-			"description": "UUID, the unique identifier for a keyword",
-			"type": "string"
+			"type": "string",
+			"description": "UUID, the unique identifier for a keyword"
 		},
 		"field_id": {
 			"type": "string",
