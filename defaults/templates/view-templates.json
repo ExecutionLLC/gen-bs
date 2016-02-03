@@ -7,7 +7,8 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "CHROM"
+          "name": "CHROM",
+          "value_type": "integer"
         },
         "order": 1,
         "sort_order": 1,
@@ -16,7 +17,8 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "POS"
+          "name": "POS",
+          "value_type": "integer"
         },
         "order": 2,
         "sort_order": 2,
@@ -25,28 +27,32 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "FILTER"
+          "name": "FILTER",
+          "value_type": "string"
         },
         "order": 6
       },
       {
         "field": {
           "source_name": "common_no_known_medical_impact_20151201",
-          "name": "INFO_RSPOS"
+          "name": "INFO_RSPOS",
+          "value_type": "integer"
         },
         "order": 3
       },
       {
         "field": {
           "source_name": "common_no_known_medical_impact_20151201",
-          "name": "INFO_VP"
+          "name": "INFO_VP",
+          "value_type": "string"
         },
         "order": 4
       },
       {
         "field": {
           "source_name": "sample",
-          "name": "ALT"
+          "name": "ALT",
+          "value_type": "string"
         },
         "order": 5
       }
@@ -60,7 +66,8 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "CHROM"
+          "name": "CHROM",
+          "value_type": "integer"
         },
         "order": 1,
         "sort_order": 1,
@@ -69,7 +76,8 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "POS"
+          "name": "POS",
+          "value_type": "integer"
         },
         "order": 2,
         "sort_order": 2,
@@ -78,14 +86,16 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "FILTER"
+          "name": "FILTER",
+          "value_type": "string"
         },
         "order": 3
       },
       {
         "field": {
           "source_name": "sample",
-          "name": "ALT"
+          "name": "ALT",
+          "value_type": "string"
         },
         "order": 4
       }

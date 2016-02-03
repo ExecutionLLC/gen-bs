@@ -47,9 +47,9 @@ class ViewBuilder extends DefaultsBuilderBase {
 
     _createListItem(listItemTemplate, fieldsMetadata) {
         const fieldDescriptor = listItemTemplate.field;
-        const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldsMetadata);
+        const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldDescriptor.valueType, fieldsMetadata);
         if (!field) {
-            throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName);
+            throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName + ', type: ' + fieldDescriptor.valueType);
         }
         return {
             id: Uuid.v4(),
@@ -75,15 +75,6 @@ class ViewBuilder extends DefaultsBuilderBase {
         const viewsJson = JSON.stringify(snakeCasedViews, null, 2);
         const viewsFile = this.viewsDir + '/default-views.json';
         FsUtils.writeStringToFile(viewsFile, viewsJson, callback);
-    }
-
-    _findField(fieldName, sourceName, fieldsMetadata) {
-        const fields = _.filter(fieldsMetadata, fieldMetadata => fieldMetadata.sourceName === sourceName && fieldMetadata.name === fieldName);
-        if (fields.length > 1) {
-            throw new Error('Too many fields match, name: ' + fieldName + ', source: ' + sourceName);
-        } else {
-            return fields[0];
-        }
     }
 }
 
