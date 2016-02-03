@@ -6,8 +6,8 @@ import { createWsConnection, subscribeToWs, send } from './websocket'
 /*
  * action types
  */
-export const RECEIVE_SESSION = 'RECEIVE_SESSION'
-export const REQUEST_SESSION = 'REQUEST_SESSION'
+export const RECEIVE_SESSION = 'RECEIVE_SESSION';
+export const REQUEST_SESSION = 'REQUEST_SESSION';
 
 
 
@@ -22,12 +22,12 @@ function requestSession() {
 }
 
 function receiveSession(json) {
-  const sessionId = json.session_id || null
-  const isAuthenticated = (sessionId !== null) ? true:false
+  const sessionId = json.session_id || null;
+  const isAuthenticated = (sessionId !== null);
 
   
   
-  document.cookie = `sessionId=${sessionId}`
+  document.cookie = `sessionId=${sessionId}`;
 
   return {
     type: RECEIVE_SESSION,
@@ -40,7 +40,7 @@ function receiveSession(json) {
 export function login(name, password) {
 
   var processData = (dispatch, sessionId) => {
-    var conn = new WebSocket(config.URLS.WS)
+    var conn = new WebSocket(config.URLS.WS);
     dispatch(receiveSession({session_id: sessionId}))
     dispatch(createWsConnection(conn))
     dispatch(subscribeToWs(sessionId))
