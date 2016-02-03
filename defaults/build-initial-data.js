@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 /**
  * NPM script is used to build initial data and add it to the database (later).
  * */
@@ -15,16 +17,23 @@ function displayErrorAndExitProcess(error) {
     }
 }
 
-sampleBuilder.build((error) => {
+async.waterfall([
+    (callback) => {
+        sampleBuilder.build(callback);
+    },
+    (callback) => {
+        keywordsBuilder.build(callback);
+    },
+    (callback) => {
+        viewsBuilder.build(callback);
+    },
+    (callback) => {
+        filtersBuilder.build(callback);
+    },
+    () => {
+        console.log('Generation completed.');
+        process.exit(0);
+    }
+], (error) => {
     displayErrorAndExitProcess(error);
-    keywordsBuilder.build((error) => {
-        displayErrorAndExitProcess(error);
-        viewsBuilder.build((error) => {
-            displayErrorAndExitProcess(error);
-            filtersBuilder.build((error) => {
-                displayErrorAndExitProcess(error);
-                console.log('Generation completed.');
-            });
-        });
-    });
 });

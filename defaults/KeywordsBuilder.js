@@ -19,7 +19,6 @@ class KeywordsBuilder extends DefaultsBuilderBase {
 
         this._storeKeywords = this._storeKeywords.bind(this);
         this._createKeyword = this._createKeyword.bind(this);
-        this._createKeyword = this._createKeyword.bind(this);
         this._createSynonyms = this._createSynonyms.bind(this);
         this._createSynonym = this._createSynonym.bind(this);
         this.build = this.build.bind(this);

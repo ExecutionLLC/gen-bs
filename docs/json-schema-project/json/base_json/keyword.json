@@ -11,6 +11,9 @@
 			"type": "string",
 			"description": "UUID of the corresponding field."
 		},
+		"name": {
+			"type": "string"
+		},
 		"value": {
 			"type": "string",
 			"maxLength": 50
