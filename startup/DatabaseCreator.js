@@ -162,7 +162,7 @@ class DatabaseCreator {
                 table.string('name', 50)
                     .notNullable();
                 table.json('rules');
-                table.enu('filter_type', entityTypeEnumValues);
+                table.enu('type', entityTypeEnumValues);
                 table.boolean('is_copy_disabled')
                     .defaultTo(false);
                 table.boolean('is_deleted')
@@ -272,7 +272,7 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('view');
                 table.string('name', 50);
-                table.enu('view_type', entityTypeEnumValues);
+                table.enu('type', entityTypeEnumValues);
                 table.boolean('is_copy_disabled')
                     .defaultTo(false);
                 table.boolean('is_deleted')
@@ -370,7 +370,7 @@ class DatabaseCreator {
                     .primary();
                 table.string('file_name', 50);
                 table.string('hash', 50);
-                table.enu('sample_type', entityTypeEnumValues);
+                table.enu('type', entityTypeEnumValues);
                 table.enu('status', sampleStatusEnumValues);
                 table.boolean('is_analyzed')
                     .defaultTo(false);

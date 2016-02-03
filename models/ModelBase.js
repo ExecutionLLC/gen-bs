@@ -24,36 +24,36 @@ class ModelBase {
 
     add(languId, item, callback) {
         async.waterfall([
-            (cb) => {
-                this._add(languId, item, true, cb);
+            (callback) => {
+                this._add(languId, item, true, callback);
             },
-            (id, cb) => {
-                this.find(id, cb);
+            (id, callback) => {
+                this.find(id, callback);
             }
         ], callback);
     }
 
     addWithId(languId, item, callback) {
         async.waterfall([
-            (cb) => {
-                this._add(languId, item, false, cb);
+            (callback) => {
+                this._add(languId, item, false, callback);
             },
-            (id, cb) => {
-                this.find(id, cb);
+            (id, callback) => {
+                this.find(id, callback);
             }
         ], callback);
     }
 
     exists(id, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
             .from(this.baseTableName)
             .where('id', id)
             .asCallback((error, data) => {
                 if (error) {
-                    cb(error);
+                    callback(error);
                 } else {
-                    cb(null, (data.length > 0));
+                    callback(null, (data.length > 0));
                 }
             });
         }, callback);
@@ -61,11 +61,11 @@ class ModelBase {
 
     find(id, callback) {
         async.waterfall([
-            (cb) => {
-                this._fetch(id, cb);
+            (callback) => {
+                this._fetch(id, callback);
             },
-            (data, cb) => {
-                cb(null, this._mapColumns(data));
+            (data, callback) => {
+                callback(null, this._mapColumns(data));
             }
         ], callback);
     }
@@ -84,25 +84,25 @@ class ModelBase {
     }
 
     _fetch(id, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .where('id', id)
                 .asCallback((error, data) => {
                     if (error || !data.length) {
-                        cb(error || new Error('Item not found: ' + id));
+                        callback(error || new Error('Item not found: ' + id));
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
                     }
                 });
         }, callback);
     }
 
     _insert(dataToInsert, trx, callback) {
-        this._insertIntoTable(this.baseTableName, dataToInsert, trx, callback);
+        this._unsafeInsert(this.baseTableName, dataToInsert, trx, callback);
     }
 
-    _insertIntoTable(tableName, dataToInsert, trx, callback) {
+    _unsafeInsert(tableName, dataToInsert, trx, callback) {
         trx(tableName)
             .insert(ChangeCaseUtil.convertKeysToSnakeCase(dataToInsert))
             .asCallback((error) => {

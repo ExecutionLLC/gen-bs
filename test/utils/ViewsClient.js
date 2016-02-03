@@ -20,7 +20,7 @@ class ViewsClient extends ClientBase {
     }
 
     add(sessionId, languId, view, callback) {
-        RequestWrapper.post(this.viewsUrls.add(),
+        RequestWrapper.post(this.viewsUrls.create(),
             this._makeHeaders({sessionId, languId}), view, callback);
     }
 

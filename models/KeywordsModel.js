@@ -20,16 +20,16 @@ class KeywordsModel extends ModelBase {
 
     find(keywordId, callback) {
         async.waterfall([
-            (cb) => {
-                this._fetch(keywordId, cb);
+            (callback) => {
+                this._fetch(keywordId, callback);
             },
-            (keyword, cb) => {
+            (keyword, callback) => {
                 this.fetchKeywordSynonyms(keywordId, (error, synonyms) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
                         keyword.synonyms = synonyms;
-                        cb(null, this._mapColumns(keyword));
+                        callback(null, this._mapColumns(keyword));
                     }
                 });
             }
@@ -38,88 +38,88 @@ class KeywordsModel extends ModelBase {
 
     findMany(keywordIds, callback) {
         async.waterfall([
-            (cb) => {
-                this._fetchKeywords(keywordIds, cb);
+            (callback) => {
+                this._fetchKeywords(keywordIds, callback);
             },
-            (keywords, cb) => {
+            (keywords, callback) => {
                 if (keywords.length == keywordIds.length) {
-                    cb(null, keywords);
+                    callback(null, keywords);
                 } else {
-                    cb('Some keywords not found: ' + keywordIds);
+                    callback('Some keywords not found: ' + keywordIds);
                 }
             },
-            (keywords, cb) => {
-                async.map(keywords, (keyword, cbk) => {
+            (keywords, callback) => {
+                async.map(keywords, (keyword, callback) => {
                     this.fetchKeywordSynonyms(keywordId, (error, synonyms) => {
                         if (error) {
-                            cbk(error);
+                            callback(error);
                         } else {
                             keyword.synonyms = synonyms;
-                            cbk(null, this._mapColumns(keyword));
+                            callback(null, this._mapColumns(keyword));
                         }
                     });
-                }, cb);
+                }, callback);
             }
         ], callback);
     }
 
     fetchKeywordSynonyms(keywordId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select('id', 'langu_id', 'value')
                 .from('synonym_text')
                 .where('keyword_id', keywordId)
                 .asCallback((error, synonyms) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(synonyms));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(synonyms));
                     }
                 });
         }, callback);
     }
 
     _add(languId, keyword, shouldGenerateId, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : keyword.id,
                         fieldId: keyword.fieldId,
                         value: keyword.value
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 },
-                (keywordId, cb) => {
+                (keywordId, callback) => {
                     this._addSynonyms(languId, keywordId, keyword.synonyms, shouldGenerateId, trx, (error) => {
-                        cb(error, keywordId);
+                        callback(error, keywordId);
                     });
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
     _addSynonyms(languId, keywordId, synonyms, shouldGenerateId, trx, callback) {
-        async.map(synonyms, (synonym, cb) => {
+        async.map(synonyms, (synonym, callback) => {
             let dataToInsert = {
                 id: (shouldGenerateId ? synonym.id : this._generateId()),
                 keywordId: keywordId,
                 languId: languId,
                 value: synonym.value
             };
-            this._insertIntoTable('synonym_text', dataToInsert, trx, cb);
+            this._unsafeInsert('synonym_text', dataToInsert, trx, callback);
         }, callback);
     }
 
     _fetchKeywords(keywordIds, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .whereIn('id', keywordIds)
                 .asCallback((error, keywordsData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(keywordsData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(keywordsData));
                     }
                 });
         }, callback);

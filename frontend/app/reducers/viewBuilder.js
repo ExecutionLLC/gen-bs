@@ -27,7 +27,7 @@ export default function viewBuilder(state = {
       return Object.assign({}, state, {
         editOrNew: action.editOrNew,
         editedView: action.editOrNew ? state.currentView : null,
-        newView: !action.editOrNew ? Object.assign({}, state.currentView, { view_type: 'advanced', name: `Copy of ${state.currentView.name}` }) : null,
+        newView: !action.editOrNew ? Object.assign({}, state.currentView, { type: 'advanced', name: `Copy of ${state.currentView.name}` }) : null,
       })
 
     case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW:

@@ -8,12 +8,17 @@
 		"hash": {
 			"type": "string"
 		},
+		"type": {
+			"type": "string",
+			"description": "Standard - available for demo-user, advanced - only for registered.",
+			"enum": [
+				"standard",
+				"advanced",
+				"user"
+			]
+		},
 		"metadata": {
 			"$ref": "./sample_metadata.json#"
-		},
-		"analysis_date": {
-			"type": "string",
-			"format": "date-time"
 		},
 		"vcf_fields": {
 			"type": "array",
@@ -21,7 +26,14 @@
 				"$ref": "./vcf_field.json#"
 			}
 		},
-		"is_analysed": {
+		"is_analyzed": {
+			"type": "boolean"
+		},
+		"analyzed_timestamp": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"is_deleted": {
 			"type": "boolean"
 		},
 		"commentaries": {
@@ -34,6 +46,7 @@
 	"required": [
 		"id",
 		"hash",
-		"is_analysed"
+		"type",
+		"is_analyzed"
 	]
 }

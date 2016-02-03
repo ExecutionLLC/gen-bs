@@ -14,7 +14,7 @@
       "description": "Localized filter description for UI",
       "type": "string"
     },
-    "view_type": {
+    "type": {
       "type": "string",
       "description": "Standard - available for demo-user, advanced - only for registered.",
       "enum": [
@@ -43,8 +43,8 @@
   "required": [
     "id",
     "name",
-    "view_type",
+    "type",
     "view_list_items",
-    "is_disabled_4copy"
+    "is_copy_disabled"
   ]
 }
