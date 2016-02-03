@@ -8,7 +8,7 @@ const DEMO_USER = {
     "last_name": "Demo",
     "email": "demo@demo.com",
     "speciality": "doctor",
-    "default_langu_id": "en",
+    "language": "en",
     "number_paid_samples": 0
 };
 
