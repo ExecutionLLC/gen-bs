@@ -24,7 +24,7 @@ export default class ExistentFilterSelect extends Component {
                   <label data-localize="views.setup.selector.label">Available Filters</label>
                 </div>
             </div>
-            { currentFilter.filter_type === 'standard' &&
+            { currentFilter.type === 'standard' &&
               <div className="alert alert-help"><span data-localize="views.setup.selector.description">Standard filter are not edited, duplicate it for custom</span>
               </div>
             }
@@ -46,14 +46,14 @@ export default class ExistentFilterSelect extends Component {
               {
                 //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
               }
-                    { currentFilter.filter_type !== 'standard' &&
+                    { currentFilter.type !== 'standard' &&
                       <div className="btn-group ">
                           <button className="btn btn-default">
                               <span data-localize="views.setup.reset.title" >Reset Filter</span>
                           </button> 
                       </div>
                     }
-                    { currentFilter.filter_type !== 'standard' &&
+                    { currentFilter.type !== 'standard' &&
                       <div className="btn-group ">
                           <button type="button" className="btn btn-link">
                               <span data-localize="views.setup.delete.title" >Delete Filter</span>

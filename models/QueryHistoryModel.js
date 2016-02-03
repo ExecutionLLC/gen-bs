@@ -24,8 +24,8 @@ class QueryHistoryModel extends SecureModelBase {
             if (error) {
                 callback(error);
             } else {
-                async.map(queriesData, (queryData, cb) => {
-                    cb(null, this._mapColumns(queryData));
+                async.map(queriesData, (queryData, callback) => {
+                    callback(null, this._mapColumns(queryData));
                 }, callback);
             }
         });
@@ -33,34 +33,34 @@ class QueryHistoryModel extends SecureModelBase {
 
     findMany(userId, queryIds, callback) {
         async.waterfall([
-            (cb) => { this._fetchQueries(queryIds, cb); },
-            (queriesData, cb) => {
+            (callback) => { this._fetchQueries(queryIds, callback); },
+            (queriesData, callback) => {
                 if (queriesData.length == queryIds.length) {
-                    cb(null, queriesData);
+                    callback(null, queriesData);
                 } else {
-                    cb('Some queries not found: ' + queryIds + ', userId: ' + userId);
+                    callback('Some queries not found: ' + queryIds + ', userId: ' + userId);
                 }
             },
-            (queriesData, cb) => {
+            (queriesData, callback) => {
                 if (_.every(queriesData, 'creator', userId)) {
-                    cb(null, queriesData);
+                    callback(null, queriesData);
                 } else {
-                    cb('Unauthorized access to queries: ' + queryIds + ', userId: ' + userId);
+                    callback('Unauthorized access to queries: ' + queryIds + ', userId: ' + userId);
                 }
             },
-            (queriesData, cb) => {
-                async.map(queriesData, (queryData, cb) => {
-                    cb(null, this._mapColumns(queryData));
-                }, cb);
+            (queriesData, callback) => {
+                async.map(queriesData, (queryData, callback) => {
+                    callback(null, this._mapColumns(queryData));
+                }, callback);
             }
         ], callback);
     }
 
     // languId is used for interface compatibility
     _add(userId, languId, query, shouldGenerateId, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : query.id,
                         creator: userId,
@@ -68,53 +68,53 @@ class QueryHistoryModel extends SecureModelBase {
                         vcfFileSampleVersionId: query.vcfFileSampleVersionId,
                         totalResults: query.totalResults
                     };
-                    this._insert(dataToInsert, trx, cb);
+                    this._insert(dataToInsert, trx, callback);
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
     _update(userId, query, queryToUpdate, callback) {
-        this.db.transactionally((trx, cb) => {
+        this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (cb) => {
+                (callback) => {
                     const dataToUpdate = {
                         viewId: queryToUpdate.viewId,
                         vcfFileSampleVersionId: queryToUpdate.vcfFileSampleVersionId,
                         totalResults: queryToUpdate.totalResults
                     };
-                    this._unsafeUpdate(query.id, dataToUpdate, trx, cb);
+                    this._unsafeUpdate(query.id, dataToUpdate, trx, callback);
                 }
-            ], cb);
+            ], callback);
         }, callback);
     }
 
     _fetchUserQueries(userId, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .where('creator', userId)
                 .andWhere('is_deleted', false)
                 .asCallback((error, queriesData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(queriesData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(queriesData));
                     }
                 });
         }, callback);
     }
 
     _fetchQueries(queryIds, callback) {
-        this.db.asCallback((knex, cb) => {
+        this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
                 .whereIn('id', queryIds)
                 .asCallback((error, queriesData) => {
                     if (error) {
-                        cb(error);
+                        callback(error);
                     } else {
-                        cb(null, ChangeCaseUtil.convertKeysToCamelCase(queriesData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(queriesData));
                     }
                 });
         }, callback);
