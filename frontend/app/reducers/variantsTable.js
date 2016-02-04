@@ -6,7 +6,7 @@ export default function variantsTable(state = {}, action) {
     case ActionTypes.REQUEST_VARIANTS:
       return Object.assign({}, state, {
         isFetching: true
-      })
+      });
 
     case ActionTypes.RECEIVE_VARIANTS:
       return Object.assign({}, state, {
@@ -14,7 +14,7 @@ export default function variantsTable(state = {}, action) {
         variants: action.variants.map( (o, index) => Object.assign(o, {_fid: index, _selected: false}) ),
         filteredVariants: action.variants.map( (o, index) => Object.assign(o, {_fid: index, _selected: false}) ),
         lastUpdated: action.receivedAt
-      })
+      });
 
     case ActionTypes.SORT_VARIANTS:
       return Object.assign({}, state, {
@@ -22,7 +22,7 @@ export default function variantsTable(state = {}, action) {
         sortOrder: Object.assign({}, state.sortOrder, {
           [action.columnKey]: action.sortOrder
         })
-      })
+      });
 
     case ActionTypes.FILTER_VARIANTS:
       return Object.assign({}, state, {
@@ -30,7 +30,7 @@ export default function variantsTable(state = {}, action) {
         columnFilters: Object.assign({}, state.filterValue, {
           [action.columnKey]: action.filterValue
         })
-      })
+      });
 
     case ActionTypes.SELECT_VARIANTS_ROW:
       return Object.assign({}, state, {
@@ -41,7 +41,7 @@ export default function variantsTable(state = {}, action) {
           }
           return o;
         })
-      })
+      });
 
     default:
       return state

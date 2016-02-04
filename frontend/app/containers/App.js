@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
-
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact'
 import NavbarMain from '../components/Header/NavbarMain'
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery'
@@ -22,8 +21,8 @@ class App extends Component {
   }
 
   render() {
-    const { isAuthenticated, samples, isFetching } = this.props.userData
-    const { dispatch, ui } = this.props
+    const { isAuthenticated, samples, isFetching } = this.props.userData;
+    const { dispatch, ui } = this.props;
 
     var mainDivClass = classNames({
       'main': true,
