@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One sample field template",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Field unique name"
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "description": "Mandatory field sign"
+    },
+    "num": {
+      "type": "integer",
+      "description": "Field number"
+    },
+    "type": {
+      "type": "string",
+      "description": "Field type"
+    },
+    "desc": {
+      "type": "string",
+      "description": "Field description"
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "num",
+    "type",
+    "desc"
+  ]
+}

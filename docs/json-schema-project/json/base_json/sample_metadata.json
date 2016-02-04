@@ -7,7 +7,8 @@
 			"description": "Timestamp indicating the time this exact version has been created."
 		},
 		"id": {
-			"type": "string"
+			"type": "string",
+			"description": "UUID, the unique identifier for the sample metadata"
 		},
 		"file_name": {
 			"type": "string",

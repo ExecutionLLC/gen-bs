@@ -4,8 +4,8 @@
   "type": "object",
   "properties": {
     "id": {
-      "description": "The unique identifier for a view",
-      "type": "integer"
+      "type": "string",
+      "description": "UUID, the unique identifier for the view"
     },
     "name": {
       "type": "string"

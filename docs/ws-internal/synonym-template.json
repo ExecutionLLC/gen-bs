@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One synonym template",
+  "type": "object",
+  "properties": {
+    "langu_id": {
+      "type": "string",
+      "enum": [
+        "en",
+        "zh"
+      ],
+      "description": "Language identifier"
+    },
+    "value": {
+      "type": "string",
+      "description": "Synonym value"
+    }
+  },
+  "required": [
+    "langu_id",
+    "value"
+  ]
+}

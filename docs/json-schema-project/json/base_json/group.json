@@ -3,7 +3,8 @@
 	"type": "object",
 	"properties": {
 		"id": {
-			"type": "number"
+			"type": "string",
+			"description": "UUID, the unique identifier for the group"
 		},
 		"name": {
 			"type": "string"
