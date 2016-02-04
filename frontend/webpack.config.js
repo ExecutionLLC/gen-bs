@@ -11,7 +11,13 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HandlebarsPlugin = require("handlebars-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+var ENV = process.env;
 
+var API_HOST = ENV.GEN_FRONTEND_API_HOST || 'localhost';
+var API_PORT = ENV.GEN_FRONTEND_API_PORT || 8888;
+
+console.log('-> API host: ', API_HOST);
+console.log('-> API port: ', API_PORT);
 
 module.exports = {
 
@@ -20,8 +26,6 @@ module.exports = {
   entry: [
     'webpack/hot/dev-server',
     "./app/app.js"],
-
-
 
   output: {
     path: path.resolve(__dirname, '../dev_build'),
@@ -136,8 +140,8 @@ module.exports = {
     new webpack.DefinePlugin({
       //API_PORT: JSON.stringify(8080),
       //API_HOST: JSON.stringify('ec2-52-91-59-42.compute-1.amazonaws.com'),
-      API_PORT: JSON.stringify(8888),
-      API_HOST: JSON.stringify('localhost'),
+      API_PORT: JSON.stringify(API_PORT),
+      API_HOST: JSON.stringify(API_HOST)
     })
   ]
 
