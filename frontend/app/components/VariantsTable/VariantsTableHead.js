@@ -7,7 +7,6 @@ export default class VariantsTableHead extends Component {
 
   render() {
     const { dispatch, variants, fields } = this.props
-    const { searchInResultsParams } = this.props.variantsTable.searchInResultsParams
     let variantsColumns = null;
     let head = [];
 
@@ -24,8 +23,6 @@ export default class VariantsTableHead extends Component {
       head = null;
     } else {
       variantsColumns = Object.keys(variants[0]);
-      console.log('Head props ', this.props.variantsTable)
-      console.log('Head props ', this.props.variantsTable.searchInResultsParams.search)
 
 
       head.push(<th data-label="checkbox" key="row_checkbox"></th>);
@@ -57,7 +54,7 @@ export default class VariantsTableHead extends Component {
                 <div>
                   <input type="text" className="form-control"
                     value={
-                      Object.assign(...this.props.variantsTable.searchInResultsParams.search)[tableFieldId]
+                      Object.assign({}, ...this.props.variantsTable.searchInResultsParams.search)[tableFieldId]
                     }
                     onChange={(e) => dispatch(changeVariantsFilter(variants, tableFieldId, e.target.value))}
                   />

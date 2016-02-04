@@ -73,10 +73,12 @@ function receiveMessage(msg) {
     if (wsData.result) {
       if (wsData.result.sampleId) {
 
+        // initialize table header filters
         const initialSearch =
           Object.keys(wsData.result.data[0])
             .filter((fieldId) => fieldId !== 'search_key')
             .map( (fieldId) => {return {[fieldId]: null}})
+
         dispatch(initSearchInResultsParams({search: initialSearch}))
 
         dispatch(tableMessage(wsData))

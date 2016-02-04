@@ -11,16 +11,10 @@ export default function variantsTable(
         searchInResultsParams: action.searchInResultsParams
       })
 
-    case ActionTypes.FILTER_VARIANTS:
-      const filterItemIndex = _.find(state.searchInResultsParams.search, {field_id: action.fieldId} )
+    case ActionTypes.CHANGE_VARIANTS_FILTER:
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          search: [
-            ...state.searchInResultsParams.search.slice(0, filterItemIndex),
-            {field_id: action.fieldId},
-            ...state.searchInResultsParams.search.slice(filterItemIndex + 1),
-
-          ] 
+          search: state.searchInResultsParams.search.map(e => e[action.fieldId] === undefined ? e: {[action.fieldId]: action.filterValue} )
         })
       })
 
