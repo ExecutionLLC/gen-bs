@@ -1,3 +1,4 @@
+import {initSearchInResultsParams} from './variantsTable'
 /*
  * action types
  */
@@ -71,6 +72,13 @@ function receiveMessage(msg) {
     console.log('wsData', wsData.result)
     if (wsData.result) {
       if (wsData.result.sampleId) {
+
+        const initialSearch =
+          Object.keys(wsData.result.data[0])
+            .filter((fieldId) => fieldId !== 'search_key')
+            .map( (fieldId) => {return {[fieldId]: null}})
+        dispatch(initSearchInResultsParams({search: initialSearch}))
+
         dispatch(tableMessage(wsData))
       } else if(wsData.result.progress) {
         dispatch(progressMessage(wsData))

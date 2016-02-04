@@ -6,6 +6,11 @@ export default function variantsTable(
   }, action) {
   switch (action.type) {
 
+    case ActionTypes.INIT_SEARCH_IN_RESULTS_PARAMS:
+      return Object.assign({}, state, {
+        searchInResultsParams: action.searchInResultsParams
+      })
+
     case ActionTypes.FILTER_VARIANTS:
       const filterItemIndex = _.find(state.searchInResultsParams.search, {field_id: action.fieldId} )
       return Object.assign({}, state, {

@@ -4,6 +4,8 @@ import config from '../../config'
  * action types
  */
 export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS'
+export const CHANGE_VARIANTS_FILTER= 'CHANGE_VARIANTS_FILTER'
+
 export const SET_COLUMN_FILTER = 'SET_COLUMN_FILTER'
 
 export const FILTER_VARIANTS = 'FILTER_VARIANTS'
@@ -31,7 +33,7 @@ export function initSearchInResultsParams(searchInResultsParams) {
 
 export function changeVariantsFilter(variants, fieldId, filterValue) {
   return {
-    type: FILTER_VARIANTS,
+    type: CHANGE_VARIANTS_FILTER,
     variants: variants,
     fieldId: fieldId,
     filterValue: filterValue

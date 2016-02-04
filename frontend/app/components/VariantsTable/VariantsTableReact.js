@@ -59,11 +59,12 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-  const { websocket, ui } = state
+  const { websocket, ui, variantsTable } = state
 
   return {
     ws: websocket,
-    ui
+    ui,
+    variantsTable
   }
 }
 

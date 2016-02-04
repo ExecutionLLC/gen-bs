@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { initSearchInResultsParams } from '../../actions/variantsTable'
+import { initSearchInResultsParams, changeVariantsFilter } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
 
   render() {
     const { dispatch, variants, fields } = this.props
+    const { searchInResultsParams } = this.props.variantsTable.searchInResultsParams
     let variantsColumns = null;
     let head = [];
 
@@ -23,9 +24,9 @@ export default class VariantsTableHead extends Component {
       head = null;
     } else {
       variantsColumns = Object.keys(variants[0]);
+      console.log('Head props ', this.props.variantsTable)
+      console.log('Head props ', this.props.variantsTable.searchInResultsParams.search)
 
-      const searchInResultsParams = variantsColumns.filter((fieldId) => fieldId !== 'search_key').map( (fieldId) => {return {[fieldId]: null}})
-      dispatch(initSearchInResultsParams(searchInResultsParams))
 
       head.push(<th data-label="checkbox" key="row_checkbox"></th>);
 
@@ -53,7 +54,14 @@ export default class VariantsTableHead extends Component {
                 <div><span className="variants-table-header-label">
                   { name }<button className="btn btn-link btnSort"></button>
                 </span></div>
-                <div><input type="text" className="form-control" /></div>
+                <div>
+                  <input type="text" className="form-control"
+                    value={
+                      Object.assign(...this.props.variantsTable.searchInResultsParams.search)[tableFieldId]
+                    }
+                    onChange={(e) => dispatch(changeVariantsFilter(variants, tableFieldId, e.target.value))}
+                  />
+                </div>
               </th>
           )
       });
