@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { initSearchInResultsParams, changeVariantsFilter } from '../../actions/variantsTable'
+import { initSearchInResultsParams, changeVariantsFilter, searchInResults } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
 
@@ -26,6 +26,7 @@ export default class VariantsTableHead extends Component {
 
 
       head.push(<th data-label="checkbox" key="row_checkbox"></th>);
+      head.push(<th key="row_submit"><button className="btn btn-success" onClick={dispatch(searchInResults())}>Submit</button></th>);
 
       head.push(
           <th data-label="comment" key="comment">

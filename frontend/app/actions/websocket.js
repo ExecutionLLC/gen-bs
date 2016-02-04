@@ -77,9 +77,19 @@ function receiveMessage(msg) {
         const initialSearch =
           Object.keys(wsData.result.data[0])
             .filter((fieldId) => fieldId !== 'search_key')
-            .map( (fieldId) => {return {[fieldId]: null}})
+            .map( (fieldId) => {return {field_id: fieldId, value: null}})
+        const initialSort =
+          Object.keys(wsData.result.data[0])
+            .filter((fieldId) => fieldId !== 'search_key')
+            .map( (fieldId) => {return {field_id: fieldId, order: null, direction: 'asc'}})
 
-        dispatch(initSearchInResultsParams({search: initialSearch}))
+        dispatch(initSearchInResultsParams({
+          top_search: '',
+          search: initialSearch,
+          sort: initialSort,
+          limit: 100,
+          offset: 0
+        }))
 
         dispatch(tableMessage(wsData))
       } else if(wsData.result.progress) {

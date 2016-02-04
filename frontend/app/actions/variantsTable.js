@@ -14,8 +14,11 @@ export const SORT_VARIANTS = 'SORT_VARIANTS'
 
 export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW'
 
-export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS'
 export const REQUEST_VARIANTS = 'REQUEST_VARIANTS'
+export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS'
+
+export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS'
+export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS'
 
 
 
@@ -58,7 +61,7 @@ function requestVariants() {
 function receiveVariants(json) {
   return {
     type: RECEIVE_VARIANTS,
-    variants: json,
+    operationId: json.operation_id,
     receivedAt: Date.now()
   }
 }
@@ -80,8 +83,48 @@ export function fetchVariants(searchParams) {
       })
       .then(json => {
         console.log('search', json)
+        dispatch(receiveVariants(json))
       })
     }, 1000)
+
+      // TODO:
+      // catch any error in the network call.
+  }
+}
+
+function requestSearchedResults() {
+  return {
+    type: REQUEST_SEARCHED_RESULTS
+  }
+}
+
+function receiveSearchedResults(json) {
+  return {
+    type: RECEIVE_SEARCHED_RESULTS,
+    receivedAt: Date.now()
+  }
+}
+
+export function searchInResults() {
+
+  return (dispatch, getState) => {
+
+    dispatch(requestSearchedResults())
+
+    $.ajax(config.URLS.SEARCH_IN_RESULTS(getState().variantsTable.operationId), {
+      'data': JSON.stringify(getState().variantsTable.searchInResultsParams),
+      'type': 'POST',
+      'processData': false,
+      'contentType': 'application/json'
+    })
+    .then(json => {
+      console.log('search', json)
+      dispatch(receiveSearchedResults(json))
+    })
+    .fail(json => {
+      console.log('search fail', json)
+      dispatch(receiveSearchedResults(json))
+    })
 
       // TODO:
       // catch any error in the network call.

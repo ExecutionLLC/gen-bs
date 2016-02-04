@@ -2,6 +2,7 @@ import * as ActionTypes from '../actions/variantsTable'
 
 export default function variantsTable(
   state = {
+    operationId: null,
     searchInResultsParams: {}
   }, action) {
   switch (action.type) {
@@ -14,7 +15,7 @@ export default function variantsTable(
     case ActionTypes.CHANGE_VARIANTS_FILTER:
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          search: state.searchInResultsParams.search.map(e => e[action.fieldId] === undefined ? e: {[action.fieldId]: action.filterValue} )
+          search: state.searchInResultsParams.search.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, value: action.filterValue} )
         })
       })
 
@@ -26,28 +27,20 @@ export default function variantsTable(
     case ActionTypes.RECEIVE_VARIANTS:
       return Object.assign({}, state, {
         isFetching: false,
-        variants: action.variants.map( (o, index) => Object.assign(o, {_fid: index, _selected: false}) ),
-        filteredVariants: action.variants.map( (o, index) => Object.assign(o, {_fid: index, _selected: false}) ),
+        operationId: action.operationId,
         lastUpdated: action.receivedAt
       })
 
-    case ActionTypes.SORT_VARIANTS:
+    case ActionTypes.REQUEST_SEARCHED_RESULTS:
       return Object.assign({}, state, {
-        filteredVariants: _.sortByOrder(action.variants, [action.columnKey], [action.sortOrder]),
-        sortOrder: Object.assign({}, state.sortOrder, {
-          [action.columnKey]: action.sortOrder
-        })
+        isFetching: true
       })
 
-      /*
-    case ActionTypes.FILTER_VARIANTS:
+    case ActionTypes.RECEIVE_SEARCHED_RESULTS:
       return Object.assign({}, state, {
-        filteredVariants: _.filter(action.variants, (o) => { return _.includes(o[action.columnKey].toString().toUpperCase(), action.filterValue.toUpperCase())}),
-        columnFilters: Object.assign({}, state.filterValue, {
-          [action.columnKey]: action.filterValue
-        })
+        isFetching: false,
+        lastUpdated: action.receivedAt
       })
-      */
 
     case ActionTypes.SELECT_VARIANTS_ROW:
       return Object.assign({}, state, {
