@@ -1,7 +1,23 @@
 import * as ActionTypes from '../actions/variantsTable'
 
-export default function variantsTable(state = {}, action) {
+export default function variantsTable(
+  state = {
+    searchInResultsParams: {}
+  }, action) {
   switch (action.type) {
+
+    case ActionTypes.FILTER_VARIANTS:
+      const filterItemIndex = _.find(state.searchInResultsParams.search, {field_id: action.fieldId} )
+      return Object.assign({}, state, {
+        searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+          search: [
+            ...state.searchInResultsParams.search.slice(0, filterItemIndex),
+            {field_id: action.fieldId},
+            ...state.searchInResultsParams.search.slice(filterItemIndex + 1),
+
+          ] 
+        })
+      })
 
     case ActionTypes.REQUEST_VARIANTS:
       return Object.assign({}, state, {
@@ -24,6 +40,7 @@ export default function variantsTable(state = {}, action) {
         })
       })
 
+      /*
     case ActionTypes.FILTER_VARIANTS:
       return Object.assign({}, state, {
         filteredVariants: _.filter(action.variants, (o) => { return _.includes(o[action.columnKey].toString().toUpperCase(), action.filterValue.toUpperCase())}),
@@ -31,6 +48,7 @@ export default function variantsTable(state = {}, action) {
           [action.columnKey]: action.filterValue
         })
       })
+      */
 
     case ActionTypes.SELECT_VARIANTS_ROW:
       return Object.assign({}, state, {

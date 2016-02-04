@@ -3,8 +3,11 @@ import config from '../../config'
 /*
  * action types
  */
+export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS'
 export const SET_COLUMN_FILTER = 'SET_COLUMN_FILTER'
+
 export const FILTER_VARIANTS = 'FILTER_VARIANTS'
+
 export const SORT_VARIANTS = 'SORT_VARIANTS'
 
 export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW'
@@ -19,11 +22,18 @@ export const REQUEST_VARIANTS = 'REQUEST_VARIANTS'
 /*
  * action creators
  */
-export function filterVariants(variants, columnKey, filterValue) {
+export function initSearchInResultsParams(searchInResultsParams) {
+  return {
+    type: INIT_SEARCH_IN_RESULTS_PARAMS,
+    searchInResultsParams
+  }
+}
+
+export function changeVariantsFilter(variants, fieldId, filterValue) {
   return {
     type: FILTER_VARIANTS,
     variants: variants,
-    columnKey: columnKey,
+    fieldId: fieldId,
     filterValue: filterValue
   }
 }

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
+import { initSearchInResultsParams } from '../../actions/variantsTable'
+
 export default class VariantsTableHead extends Component {
 
   render() {
-    const { variants, fields } = this.props
+    const { dispatch, variants, fields } = this.props
     let variantsColumns = null;
     let head = [];
 
@@ -21,6 +23,10 @@ export default class VariantsTableHead extends Component {
       head = null;
     } else {
       variantsColumns = Object.keys(variants[0]);
+
+      const searchInResultsParams = variantsColumns.filter((fieldId) => fieldId !== 'search_key').map( (fieldId) => {return {[fieldId]: null}})
+      dispatch(initSearchInResultsParams(searchInResultsParams))
+
       head.push(<th data-label="checkbox" key="row_checkbox"></th>);
 
       head.push(
