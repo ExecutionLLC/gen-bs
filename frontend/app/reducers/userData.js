@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actions/userData'
 
 export default function userData(state = {
-  isFetching:false,
+  isFetching: false,
   isValid: false,
   profileMetadata: {},
   samples: [],
@@ -14,7 +14,7 @@ export default function userData(state = {
     case ActionTypes.REQUEST_USERDATA:
       return Object.assign({}, state, {
         isFetching: true
-      })
+      });
 
     case ActionTypes.RECEIVE_USERDATA:
       return Object.assign({}, state, {
@@ -27,12 +27,12 @@ export default function userData(state = {
         views: action.userData.views,
 
         lastUpdated: action.receivedAt
-      })
+      });
 
     case ActionTypes.REQUEST_VIEWS:
       return Object.assign({}, state, {
         isFetching: true
-      })
+      });
 
     case ActionTypes.RECEIVE_VIEWS:
       return Object.assign({}, state, {
@@ -41,21 +41,19 @@ export default function userData(state = {
         views: action.views,
 
         lastUpdated: action.receivedAt
-      })
+      });
 
     case ActionTypes.REQUEST_FILTERS:
       return Object.assign({}, state, {
         isFetching: true
-      })
+      });
 
     case ActionTypes.RECEIVE_FILTERS:
       return Object.assign({}, state, {
         isFetching: false,
         filters: action.filters,
         lastUpdated: action.receivedAt
-      })
-
-
+      });
 
     default:
       return state

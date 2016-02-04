@@ -12,8 +12,8 @@ export default function fields(state = {
       return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
           samples: true
-        }),
-      })
+        })
+      });
 
     case ActionTypes.RECEIVE_FIELDS:
       return Object.assign({}, state, {
@@ -22,14 +22,14 @@ export default function fields(state = {
         }),
         list: action.fields,
         lastUpdated: action.receivedAt
-      })
+      });
 
     case ActionTypes.REQUEST_SOURCE_FIELDS:
       return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
           sources: true
-        }),
-      })
+        })
+      });
 
     case ActionTypes.RECEIVE_SOURCE_FIELDS:
       return Object.assign({}, state, {
@@ -38,11 +38,9 @@ export default function fields(state = {
         }),
         sourceFieldsList: action.sourceFields,
         lastUpdated: action.receivedAt
-      })
-
-
+      });
 
     default:
-      return state
+      return state;
   }
 }

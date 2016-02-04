@@ -7,7 +7,7 @@ export default function filterBuilder(state = {
   newFilter: null,
   editOrNew: true,
   isFetching: false,
-  rulesRequested: false,
+  rulesRequested: false
 }, action) {
 
   var currentFilter;
@@ -21,15 +21,15 @@ export default function filterBuilder(state = {
         isReceivedFilters: currentFilter !== null,
         editedFilter: action.editOrNew ? currentFilter: null,
         newFilter: !action.editOrNew ? currentFilter: null,
-        editOrNew: action.editOrNew,
-      })
+        editOrNew: action.editOrNew
+      });
 
     case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
       return Object.assign({}, state, {
         editOrNew: action.editOrNew,
         editedFilter: action.editOrNew ? state.currentFilter: null,
         newFilter: !action.editOrNew ? Object.assign({}, state.currentFilter, { type: 'advanced', name: `Copy of ${state.currentFilter.name}` }) : null,
-      })
+      });
 
     case ActionTypes.FBUILDER_CHANGE_ATTR:
       return Object.assign({}, state, {
@@ -41,7 +41,7 @@ export default function filterBuilder(state = {
           name: action.name,
           description: action.description
         }):null
-      })
+      });
 
     case ActionTypes.FBUILDER_REQUEST_RULES:
       return Object.assign({}, state, {
