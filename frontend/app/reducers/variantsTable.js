@@ -37,6 +37,25 @@ export default function variantsTable(
           search: searchArray })
       })
 
+    case ActionTypes.CHANGE_VARIANTS_SORT:
+      var sortArray = [...state.searchInResultsParams.search]
+      const sortFieldIndex = _.findIndex(state.searchInResultsParams.sort, {field_id: action.fieldId})
+
+      if (action.filterValue !== '') {
+        if (sortFieldIndex !== -1) {
+          sortArray = state.searchInResultsParams.sort.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, sort_order: action.sortOrder, sort_direction: action.sortDirection} )
+        } else {
+          sortArray.push({field_id: action.fieldId, sort_order: action.sortOrder, sort_direction: action.sortDirection })
+        }
+      } else {
+        sortArray.splice(fieldIndex,1)
+      }
+
+      return Object.assign({}, state, {
+        searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+          sort: sortArray })
+      })
+
     case ActionTypes.REQUEST_VARIANTS:
       return Object.assign({}, state, {
         isFetching: true

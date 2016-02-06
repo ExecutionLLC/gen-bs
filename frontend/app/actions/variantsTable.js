@@ -4,9 +4,8 @@ import config from '../../config'
  * action types
  */
 export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS'
-export const CHANGE_VARIANTS_FILTER= 'CHANGE_VARIANTS_FILTER'
-
-export const SET_COLUMN_FILTER = 'SET_COLUMN_FILTER'
+export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER'
+export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT'
 
 export const FILTER_VARIANTS = 'FILTER_VARIANTS'
 
@@ -42,6 +41,16 @@ export function changeVariantsFilter(variants, fieldId, filterValue) {
     filterValue: filterValue
   }
 }
+
+export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
+  return {
+    type: CHANGE_VARIANTS_SORT,
+    fieldId,
+    sortOrder,
+    sortDirection
+  }
+}
+
 
 export function sortVariants(variants, columnKey, sortOrder) {
   return {
@@ -112,27 +121,6 @@ export function searchInResults() {
     dispatch(requestSearchedResults())
     
     const clearedJson = getState().variantsTable.searchInResultsParams
-    /*
-     const clearedJson = {
-          topSearch: '123',
-          search: [
-            {
-              field_id: "00000000-0000-0000-0000-00000000005",
-              value: ""
-            }
-          ],
-          sort: [
-            {
-              field_id: "00000000-0000-0000-0000-00000000005",
-              order: 1,
-              direction: 'desc'
-            }
-          ],
-          limit: 100,
-          offset: 0
-        }
-        */
-
 
     $.ajax(config.URLS.SEARCH_IN_RESULTS(getState().variantsTable.operationId), {
       'data': JSON.stringify(clearedJson),
@@ -151,14 +139,6 @@ export function searchInResults() {
 
       // TODO:
       // catch any error in the network call.
-  }
-}
-
-export function setColumnFilter(columnId, filterValue) {
-  return {
-    type: SET_COLUMN_FILTER,
-    columnId,
-    filterValue
   }
 }
 

@@ -45,9 +45,6 @@ class VariantsTableReact extends Component {
           }
           { !isVariantsLoaded && !isVariantsEmpty && isVariantsValid &&
             <div className="table-variants-container">
-              <button className="btn btn-success" onClick={e => dispatch(searchInResults())}>
-                Submit
-              </button>
               <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
                 <VariantsTableHead variants={variants} fields={fields} {...this.props} />
                 <VariantsTableRows variants={variants} fields={fields} />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { changeVariantsFilter, searchInResults } from '../../actions/variantsTable'
+import { changeVariantsFilter, changeVariantsSort, searchInResults } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
 
@@ -81,9 +81,13 @@ export default class VariantsTableHead extends Component {
           
           head.push(
               <th data-label={tableFieldId} key={tableFieldId} > 
-                <div><span className="variants-table-header-label">
-                  { name }<button className="btn btn-link btnSort"></button>
-                </span></div>
+                <div>
+                  <span className="variants-table-header-label">
+                    { name }
+                    <button className="btn btn-link btnSort" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'asc')) }></button>
+                  </span>
+                    <button className="btn btn-default" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'desc')) }>Sort2</button>
+                </div>
                 {this._filterInputs(tableFieldId)}
               </th>
           )
