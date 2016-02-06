@@ -1,9 +1,42 @@
 import React, { Component } from 'react';
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { initSearchInResultsParams, changeVariantsFilter, searchInResults } from '../../actions/variantsTable'
+import { changeVariantsFilter, searchInResults } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
+
+  _filterInputs(fieldId) {
+    const { dispatch, variants, fields } = this.props
+    const fieldMetadata =
+      _.find(fields.list, (field) => field.id === fieldId) ||
+      _.find(fields.sourceFieldsList, (field) => field.id === fieldId)
+
+
+    const fieldValueType = (fieldMetadata === undefined) ? undefined : fieldMetadata.value_type
+
+    if (fieldValueType === 'string') {
+      return (
+        <div>
+          <input type="text" className="form-control"
+            value={
+              Object.assign({}, ...this.props.variantsTable.searchInResultsParams.search)[fieldId]
+            }
+            onChange={(e) => dispatch(changeVariantsFilter(variants, fieldId, e.target.value))}
+            onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResults() ): null }
+          />
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <input type="text" className="form-control"
+            value="Non-filtered type"
+            disabled
+          />
+        </div>
+      )
+    }
+  }
 
   render() {
     const { dispatch, variants, fields } = this.props
@@ -26,7 +59,6 @@ export default class VariantsTableHead extends Component {
 
 
       head.push(<th data-label="checkbox" key="row_checkbox"></th>);
-      head.push(<th key="row_submit"><button className="btn btn-success" onClick={dispatch(searchInResults())}>Submit</button></th>);
 
       head.push(
           <th data-label="comment" key="comment">
@@ -52,14 +84,7 @@ export default class VariantsTableHead extends Component {
                 <div><span className="variants-table-header-label">
                   { name }<button className="btn btn-link btnSort"></button>
                 </span></div>
-                <div>
-                  <input type="text" className="form-control"
-                    value={
-                      Object.assign({}, ...this.props.variantsTable.searchInResultsParams.search)[tableFieldId]
-                    }
-                    onChange={(e) => dispatch(changeVariantsFilter(variants, tableFieldId, e.target.value))}
-                  />
-                </div>
+                {this._filterInputs(tableFieldId)}
               </th>
           )
       });

@@ -74,24 +74,49 @@ function receiveMessage(msg) {
       if (wsData.result.sampleId) {
 
         // initialize table header filters
-        const initialSearch =
-          Object.keys(wsData.result.data[0])
-            .filter((fieldId) => fieldId !== 'search_key')
-            .map( (fieldId) => {return {field_id: fieldId, value: null}})
-        const initialSort =
-          Object.keys(wsData.result.data[0])
-            .filter((fieldId) => fieldId !== 'search_key')
-            .map( (fieldId) => {return {field_id: fieldId, order: null, direction: 'asc'}})
 
-        dispatch(initSearchInResultsParams({
-          top_search: '',
-          search: initialSearch,
-          sort: initialSort,
-          limit: 100,
-          offset: 0
-        }))
+        //const fieldValueType = (fieldMetadata === undefined) ? undefined : fieldMetadata.value_type
+
+              /*
+        const fieldIds = wsData.result.data[0]
+        if (fieldIds ) {
+          const initialSearch =
+            Object.keys(fieldIds)
+              .filter((fieldId) => fieldId !== 'search_key')
+              .filter((fieldId) => {
+                const fieldMetadata =
+                  _.find(getState().fields.list, (field) => field.id === fieldId)
+                  //_.find(getState().fields.sourceFieldsList, (field) => field.id === fieldId)
+                return (
+                  fieldMetadata && fieldMetadata.value_type === 'string'
+                )
+              })
+              .map( (fieldId) => {return {field_id: fieldId, value: ''}})
+          const initialSort =
+            Object.keys(fieldIds)
+              .filter((fieldId) => fieldId !== 'search_key')
+              .filter((fieldId) => {
+                const fieldMetadata =
+                  _.find(getState().fields.list, (field) => field.id === fieldId)
+                  //_.find(getState().fields.sourceFieldsList, (field) => field.id === fieldId)
+                return (
+                  fieldMetadata && fieldMetadata.value_type === 'string'
+                )
+              })
+              .map( (fieldId) => {return {field_id: fieldId, order: 1, direction: 'asc'}})
+
+          dispatch(initSearchInResultsParams({
+            top_search: '',
+            search: initialSearch,
+            sort: initialSort,
+            limit: 100,
+            offset: 0
+          }))
+        }
+          */
 
         dispatch(tableMessage(wsData))
+
       } else if(wsData.result.progress) {
         dispatch(progressMessage(wsData))
       } else if(wsData.result.error) {

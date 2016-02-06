@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
-import { fetchVariants } from '../../actions/variantsTable'
+import { fetchVariants, searchInResults } from '../../actions/variantsTable'
 
 import VariantsTableHead from './VariantsTableHead'
 import VariantsTableRows from './VariantsTableRows'
@@ -45,6 +45,9 @@ class VariantsTableReact extends Component {
           }
           { !isVariantsLoaded && !isVariantsEmpty && isVariantsValid &&
             <div className="table-variants-container">
+              <button className="btn btn-success" onClick={e => dispatch(searchInResults())}>
+                Submit
+              </button>
               <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
                 <VariantsTableHead variants={variants} fields={fields} {...this.props} />
                 <VariantsTableRows variants={variants} fields={fields} />

@@ -3,7 +3,13 @@ import * as ActionTypes from '../actions/variantsTable'
 export default function variantsTable(
   state = {
     operationId: null,
-    searchInResultsParams: {}
+    searchInResultsParams: {
+      search: [],
+      sort: [],
+      limit: 100,
+      offset: 0,
+      top_search: 'PASS'
+    }
   }, action) {
   switch (action.type) {
 
@@ -13,10 +19,22 @@ export default function variantsTable(
       })
 
     case ActionTypes.CHANGE_VARIANTS_FILTER:
+      var searchArray = [...state.searchInResultsParams.search]
+      const fieldIndex = _.findIndex(state.searchInResultsParams.search, {field_id: action.fieldId})
+
+      if (action.filterValue !== '') {
+        if (fieldIndex !== -1) {
+          searchArray = state.searchInResultsParams.search.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, value: action.filterValue} )
+        } else {
+          searchArray.push({field_id: action.fieldId, value: action.filterValue })
+        }
+      } else {
+        searchArray.splice(fieldIndex,1)
+      }
+
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          search: state.searchInResultsParams.search.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, value: action.filterValue} )
-        })
+          search: searchArray })
       })
 
     case ActionTypes.REQUEST_VARIANTS:
