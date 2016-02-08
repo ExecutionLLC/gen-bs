@@ -30,9 +30,6 @@
 				"boolean"
 			]
 		},
-		"filter_control_enable": {
-			"type": "boolean"
-		},
 		"is_mandatory": {
 			"type": "boolean"
 		},
@@ -66,9 +63,6 @@
 				}
 			}
 		},
-		"multi_select": {
-			"type": "boolean"
-		},
 		"value": {
 			"type": "string",
 			"description": "Used when requesting update of an editable sample field."
@@ -79,7 +73,6 @@
 		"name",
 		"label",
 		"description",
-		"editable",
-		"tech"
+		"is_editable"
 	]
 }

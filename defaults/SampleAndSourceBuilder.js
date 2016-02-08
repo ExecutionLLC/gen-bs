@@ -117,7 +117,7 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
             fileName: sampleName,
             hash: null,
             reference: sampleTemplate.reference,
-            sampleType: sampleTemplate.sampleType,
+            type: sampleTemplate.type,
             isAnalyzed: true,
             isSource: !isSample,
             creator: null

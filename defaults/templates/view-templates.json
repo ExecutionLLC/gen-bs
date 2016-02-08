@@ -7,8 +7,14 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "CHROM"
+          "name": "CHROM",
+          "value_type": "integer"
         },
+        "keywords": [
+          "CHROM ipsum",
+          "CHROM elit",
+          "CHROM eu"
+        ],
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
@@ -16,8 +22,12 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "POS"
+          "name": "POS",
+          "value_type": "integer"
         },
+        "keywords": [
+          "POS consequat"
+        ],
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
@@ -25,29 +35,39 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "FILTER"
+          "name": "FILTER",
+          "value_type": "string"
         },
+        "keywords": [
+          "FILTER voluptate"
+        ],
         "order": 6
       },
       {
         "field": {
           "source_name": "common_no_known_medical_impact_20151201",
-          "name": "INFO_RSPOS"
+          "name": "INFO_RSPOS",
+          "value_type": "integer"
         },
         "order": 3
       },
       {
         "field": {
           "source_name": "common_no_known_medical_impact_20151201",
-          "name": "INFO_VP"
+          "name": "INFO_VP",
+          "value_type": "string"
         },
         "order": 4
       },
       {
         "field": {
           "source_name": "sample",
-          "name": "ALT"
+          "name": "ALT",
+          "value_type": "string"
         },
+        "keywords": [
+          "ALT amet"
+        ],
         "order": 5
       }
     ]
@@ -60,8 +80,13 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "CHROM"
+          "name": "CHROM",
+          "value_type": "integer"
         },
+        "keywords": [
+          "CHROM ipsum",
+          "CHROM elit"
+        ],
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
@@ -69,8 +94,12 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "POS"
+          "name": "POS",
+          "value_type": "integer"
         },
+        "keywords": [
+          "POS consequat"
+        ],
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
@@ -78,15 +107,23 @@
       {
         "field": {
           "source_name": "sample",
-          "name": "FILTER"
+          "name": "FILTER",
+          "value_type": "string"
         },
+        "keywords": [
+          "FILTER voluptate"
+        ],
         "order": 3
       },
       {
         "field": {
           "source_name": "sample",
-          "name": "ALT"
+          "name": "ALT",
+          "value_type": "string"
         },
+        "keywords": [
+          "ALT amet"
+        ],
         "order": 4
       }
     ]

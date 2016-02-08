@@ -1,6 +1,8 @@
 'use strict';
 
 const Express = require('express');
+const async = require('async');
+
 const ControllerBase = require('./ControllerBase');
 
 /**
@@ -10,37 +12,73 @@ class ApiController extends ControllerBase {
     constructor(services) {
         super(services);
 
-        this._initUserMiddleware = this._initUserMiddleware.bind(this);
+        this._initHeaders = this._initHeaders.bind(this);
     }
 
-    _initUserMiddleware(request, response, next) {
+    /**
+     * Tries to get user by session id from header. If failed, user is kept undefined.
+     * */
+    _findAndSetUserAndSessionId(request, callback) {
         const sessionHeaderName = this.services.config.sessionHeader;
-        const sessions = this.services.sessions;
-
-        const setUserBySessionFunc = (sessionId) => {
-            sessions.findSessionUserId(sessionId, (error, userId) => {
-                if (error) {
-                    next(new Error(error));
-                } else {
-                    this.services.users.find(userId, (error, user) => {
-                        if (error) {
-                            next(new Error(error));
-                        } else {
-                            request.sessionId = sessionId;
-                            request.user = user;
-                            next();
-                        }
-                    });
-                }
-            });
-        };
-
         const sessionId = request.get(sessionHeaderName);
-        if (sessionId) {
-            setUserBySessionFunc(sessionId);
+
+        if (!sessionId) {
+            callback(null);
         } else {
-            next();
+            async.waterfall([
+                (callback) => this.services.sessions.findSessionUserId(sessionId, callback),
+                (userId, callback) => this.services.users.find(userId, callback),
+                (user, callback) => {
+                    request.sessionId = sessionId;
+                    request.user = user;
+                    callback(null);
+                }
+            ], callback);
         }
+    }
+
+    /**
+     * If no language is provided by header, tries to get either user or system-default language.
+     * */
+    _findAndSetLanguage(user, request, callback) {
+        const languageHeaderName = this.services.config.languageHeader;
+        const languId = request.get(languageHeaderName);
+
+        async.waterfall([
+            (callback) => {
+                // Choose languages in preferable order.
+                if (languId) {
+                    callback(null, languId);
+                } else if (user) {
+                    callback(null, user.language);
+                } else {
+                    callback(null, this.services.config.defaultLanguId);
+                }
+            },
+            (languId, callback) => this.services.langu.exists(languId, (error, isExistingLanguage) => callback(error, {
+                languId,
+                isExistingLanguage
+            })),
+            (result, callback) => {
+                if (!result.isExistingLanguage) {
+                    callback(new Error('Language is not found.'));
+                } else {
+                    request.languId = result.languId;
+                    callback(null);
+                }
+            }
+        ], callback);
+    }
+
+    _initHeaders(request, response, next) {
+        async.waterfall([
+            (callback) => {
+                this._findAndSetUserAndSessionId(request, callback);
+            },
+            (callback) => {
+                this._findAndSetLanguage(request.user, request, callback);
+            }
+        ], (error) => next(error));
     }
 
     createRouter(controllersFacade) {
@@ -61,7 +99,7 @@ class ApiController extends ControllerBase {
         const router = new Express();
 
         // Install Express middleware
-        router.use(this._initUserMiddleware);
+        router.use(this._initHeaders);
 
         // Initialize child routes
         router.use('/demo/data', demoDataRouter);

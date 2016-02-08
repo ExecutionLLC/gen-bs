@@ -11,27 +11,27 @@ class ViewsClient extends ClientBase {
 
     getAll(sessionId, callback) {
         RequestWrapper.get(this.viewsUrls.getAll(),
-            this._makeSessionHeader(sessionId), null, null, callback);
+            this._makeHeaders({sessionId}), null, null, callback);
     }
 
     get(sessionId, viewId, callback) {
         RequestWrapper.get(this.viewsUrls.get(viewId),
-            this._makeSessionHeader(sessionId), null, null, callback);
+            this._makeHeaders({sessionId}), null, null, callback);
     }
 
-    add(sessionId, view, callback) {
-        RequestWrapper.post(this.viewsUrls.add(),
-            this._makeSessionHeader(sessionId), view, callback);
+    add(sessionId, languId, view, callback) {
+        RequestWrapper.post(this.viewsUrls.create(),
+            this._makeHeaders({sessionId, languId}), view, callback);
     }
 
     update(sessionId, view, callback) {
         RequestWrapper.put(this.viewsUrls.update(view.id),
-            this._makeSessionHeader(sessionId), view, callback);
+            this._makeHeaders({sessionId}), view, callback);
     }
 
     remove(sessionId, viewId, callback) {
         RequestWrapper.del(this.viewsUrls.remove(viewId),
-            this._makeSessionHeader(sessionId), null, callback);
+            this._makeHeaders({sessionId}), null, callback);
     }
 }
 

@@ -155,6 +155,10 @@
 @btn-primary-color:              #fff;
 @btn-primary-bg:                 @brand-primary;
 @btn-primary-border:             @btn-primary-bg;
+@btn-dark-primary-color:              #fff;
+@btn-dark-primary-bg:                 darken(@brand-primary, 3%);
+@btn-dark-primary-border:             @btn-dark-primary-bg;
+
 
 @btn-success-color:              #fff;
 @btn-success-bg:                 @brand-success;
@@ -510,9 +514,9 @@
 //** Tooltip max width
 @tooltip-max-width:           200px;
 //** Tooltip text color
-@tooltip-color:               @brand-primary;
+@tooltip-color:               @gray-lighter;
 //** Tooltip background color
-@tooltip-bg:                  lighten(@light-primary-color, 6%);
+@tooltip-bg:                  #454548;
 @tooltip-opacity:             1;
 
 
@@ -791,8 +795,8 @@
 
 @badge-color:                 #fff;
 //** Linked badge text color on hover
-@badge-link-hover-color:      #fff;
-@badge-bg:                    @brand-warning;
+@badge-link-hover-color:      darken(@badge-color, 10%);
+@badge-bg:                    lighten(@brand-primary, 10%);
 
 //** Badge text color in active nav link
 @badge-active-color:          @link-color;

@@ -9,7 +9,8 @@
         {
           "field": {
             "source_name": "sample",
-            "name": "ALT"
+            "name": "ALT",
+            "value_type": "string"
           },
           "condition": {
             "$ne": "A"
@@ -18,7 +19,8 @@
         {
           "field": {
             "source_name": "sample",
-            "name": "FILTER"
+            "name": "FILTER",
+            "value_type": "string"
           },
           "condition": "PASS"
         },
@@ -27,7 +29,8 @@
             {
               "field": {
                 "source_name": "common_no_known_medical_impact_20151201",
-                "name": "INFO_GENEINFO"
+                "name": "INFO_GENEINFO",
+                "value_type": "string"
               },
               "condition": {
                 "$ne": "ABC"
@@ -48,7 +51,8 @@
         {
           "field": {
             "source_name": "sample",
-            "name": "ALT"
+            "name": "ALT",
+            "value_type": "string"
           },
           "condition": {
             "$ne": "A"
@@ -57,7 +61,8 @@
         {
           "field": {
             "source_name": "sample",
-            "name": "FILTER"
+            "name": "FILTER",
+            "value_type": "string"
           },
           "condition": "PASS"
         }

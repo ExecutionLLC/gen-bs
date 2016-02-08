@@ -26,6 +26,6 @@
 		"reference",
 		"chrom",
 		"pos",
-		"commentary"
+		"comment"
 	]
 }

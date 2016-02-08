@@ -4,91 +4,197 @@ const _ = require('lodash');
 const async = require('async');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
-const FsUtils = require('../utils/FileSystemUtils');
 
-/**
- * Loads all files for samples and sources.
- * */
-const loadAllFiles = (callback) => {
-    const extension = '.json';
-    const defaultsFolder = __dirname + '/../defaults';
-    const samplesFolder = defaultsFolder + '/samples';
-    const sourcesFolder = defaultsFolder + '/sources';
-    async.waterfall([
-        (callback) => {
-            FsUtils.getAllFiles(samplesFolder, extension, callback);
-        },
-        (sampleFiles, callback) => {
-            FsUtils.getAllFiles(sourcesFolder, extension, (error, sourceFiles) => {
-                callback(error, sampleFiles.concat(sourceFiles));
-            });
-        },
-        (allFiles, callback) => {
-            const fileContents = _(allFiles)
-                .map(file => FsUtils.getFileContentsAsString(file))
-                .map(contents => ChangeCaseUtil.convertKeysToCamelCase(
-                    JSON.parse(contents)
-                ))
-                .value();
-            callback(null, fileContents);
-        }
-    ], callback);
-};
+const ModelBase = require('./ModelBase');
 
-class FieldsMetadataModel {
-    constructor() {
-        this.sampleIdToFieldIds = {};
-        this.fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
-            require('../defaults/fields/fields-metadata.json')
-        );
-        this.fieldIdToFieldMetadata = _.indexBy(this.fieldsMetadata, 'id');
+const mappedColumns = [
+    'id',
+    'name',
+    'sourceName',
+    'valueType',
+    'isMandatory',
+    'isEditable',
+    'isInvisible',
+    'dimension',
+    'languId',
+    'description',
+    'label'
+];
 
-        loadAllFiles((error, filesContents) => {
-            if (error) {
-                throw new Error(error);
+class FieldsMetadataModel extends ModelBase {
+    constructor(models) {
+        super(models, 'field_metadata', mappedColumns);
+    }
+
+    findMany(metadataIds, callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetchByIds(metadataIds, callback);
+            },
+            (fieldsMetadata, callback) => {
+                this._mapMetadata(fieldsMetadata, callback);
             }
-
-            // Collect all the fields metadata and connect fields to sample ids.
-            _.each(filesContents, fileContents => {
-                const fileMetadata = fileContents.sample;
-                const fieldIds = fileContents.fieldIds;
-                if (!fileMetadata.isSource) {
-                    //noinspection UnnecessaryLocalVariableJS
-                    this.sampleIdToFieldIds[fileMetadata.id] = fieldIds;
-                }
-            });
-        });
+        ], callback);
     }
 
     findByUserAndSampleId(userId, sampleId, callback) {
-        const fieldIds = this.sampleIdToFieldIds[sampleId];
-
-        if (!fieldIds || !fieldIds.length) {
-            callback(new Error('No fields found for the specified sample'));
-        } else {
-            const fields = _.map(fieldIds, fieldId => this.fieldIdToFieldMetadata[fieldId]);
-            callback(null, fields);
-        }
-    }
-
-    find(id, callback) {
-        const field = this.fieldIdToFieldMetadata[id];
-        if (field) {
-            callback(null, field);
-        } else {
-            callback(new Error('Field not found'));
-        }
-    }
-
-    findMany(ids, callback) {
-        const fields = _.map(ids, fieldId => this.fieldIdToFieldMetadata[fieldId]);
-        callback(null, fields);
+        async.waterfall([
+            (callback) => {
+                this.models.samples.find(userId, sampleId, callback);
+            },
+            (sample, callback) => {
+                const fieldIds = _.pluck(sample.values, 'fieldId');
+                this.findMany(fieldIds, callback);
+            }
+        ], callback);
     }
 
     findSourcesMetadata(callback) {
-        const fields = _.filter(this.fieldsMetadata, (field) => field.sourceName !== 'sample');
-        const requiredFields = _.filter(this.fieldsMetadata, (field) => field.isMandatory);
-        callback(null, requiredFields.concat(fields));
+        async.waterfall([
+            (callback) => {
+                this._fetchSourcesMetadata(callback);
+            },
+            (fieldsMetadata, callback) => {
+                this._mapMetadata(fieldsMetadata, callback);
+            }
+        ], callback);
+    }
+
+    findMetadataBySourceName(sourceName, callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetchMetadataBySourceName(sourceName, callback);
+            },
+            (metadata, callback) => {
+                callback(null, this._mapColumns(metadata));
+            }
+        ], callback);
+    }
+
+    findMetadataKeywords(metadataId, callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetchMetadataKeywords(metadataId, callback);
+            },
+            (keywords, callback) => {
+                const keywordIds = _.pluck(viewsData, 'id');
+                this.models.keywords.findMany(keywordIds, callback);
+            }
+        ], callback);
+    }
+
+    _add(languId, metadata, shouldGenerateId, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => {
+                    const dataToInsert = {
+                        id: (shouldGenerateId ? this._generateId() : metadata.id),
+                        name: metadata.name,
+                        sourceName: metadata.sourceName,
+                        valueType: metadata.valueType,
+                        isMandatory: metadata.isMandatory,
+                        isEditable: metadata.isEditable,
+                        isInvisible: metadata.isInvisible,
+                        dimension: metadata.dimension
+                    };
+                    this._insert(dataToInsert, trx, callback);
+                },
+                (metadataId, callback) => {
+                    const dataToInsert = {
+                        fieldId: metadataId,
+                        languId: languId,
+                        description: metadata.description,
+                        label: metadata.label
+                    };
+                    this._unsafeInsert('field_text', dataToInsert, trx, (error) => {
+                        callback(error, metadataId);
+                    });
+                }
+            ], callback);
+        }, callback);
+    }
+
+    _fetch(metadataId, callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from(this.baseTableName)
+                .innerJoin('field_text', 'field_text.field_id', this.baseTableName + '.id')
+                .where('id', metadataId)
+                .asCallback((error, metadata) => {
+                    if (error || !metadata.length) {
+                        callback(error || new Error('Item not found: ' + metadataId));
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
+                    }
+            });
+        }, callback);
+    }
+
+    _fetchByIds(metadataIds, callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from(this.baseTableName)
+                .innerJoin('field_text', 'field_text.field_id', this.baseTableName + '.id')
+                .whereIn('id', metadataIds)
+                .asCallback((error, fieldsMetadata) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                    }
+                });
+        }, callback);
+    }
+
+    _fetchSourcesMetadata(callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from(this.baseTableName)
+                .whereNot('source_name', 'sample')
+                .asCallback((error, fieldsMetadata) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                    }
+                });
+        }, callback);
+    }
+
+    _fetchMetadataBySourceName(sourceName, callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from(this.baseTableName)
+                .where('source_name', sourceName)
+                .asCallback((error, fieldsMetadata) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                    }
+                });
+        }, callback);
+    }
+
+    _fetchMetadataKeywords(metadataId, callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from('keyword')
+                .where('field_id', metadataId)
+                .asCallback((error, keywords) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(keywords));
+                    }
+                });
+        }, callback);
+    }
+
+    _mapMetadata(fieldsMetadata, callback) {
+        async.map(fieldsMetadata, (metadata, callback) => {
+            callback(null, this._mapColumns(metadata));
+        }, callback);
     }
 
     /**

@@ -13,6 +13,7 @@ class ControllerBase {
         this.services = services;
 
         this.getSessionId = this.getSessionId.bind(this);
+        this.getLanguageId = this.getLanguageId.bind(this);
     }
 
     sendInternalError(response, message) {
@@ -58,6 +59,10 @@ class ControllerBase {
 
     getSessionId(request) {
         return request.get(this.services.config.sessionHeader);
+    }
+
+    getLanguageId(request) {
+        return request.get(this.services.config.languageHeader);
     }
 
     checkUserIsDefined(request, response) {

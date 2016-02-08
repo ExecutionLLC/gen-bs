@@ -9,11 +9,11 @@ export default function modalWindows(state = {
     case ActionTypes.OPEN_MODAL:
       return Object.assign({}, state, {
         [action.modalName]: {showModal: true}
-      })
+      });
     case ActionTypes.CLOSE_MODAL:
       return Object.assign({}, state, {
         [action.modalName]: {showModal: false}
-      })
+      });
 
     default:
       return state

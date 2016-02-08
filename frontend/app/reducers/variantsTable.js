@@ -59,14 +59,14 @@ export default function variantsTable(
     case ActionTypes.REQUEST_VARIANTS:
       return Object.assign({}, state, {
         isFetching: true
-      })
+      });
 
     case ActionTypes.RECEIVE_VARIANTS:
       return Object.assign({}, state, {
         isFetching: false,
         operationId: action.operationId,
         lastUpdated: action.receivedAt
-      })
+      });
 
     case ActionTypes.REQUEST_SEARCHED_RESULTS:
       return Object.assign({}, state, {
@@ -88,7 +88,7 @@ export default function variantsTable(
           }
           return o;
         })
-      })
+      });
 
     default:
       return state

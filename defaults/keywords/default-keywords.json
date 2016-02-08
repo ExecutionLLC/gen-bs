@@ -1,0 +1,502 @@
+[
+  {
+    "id": "ba63c667-98a7-449a-8a69-870aea514cdc",
+    "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM ipsum",
+    "value": "ipsum",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "et"
+      },
+      {
+        "langu_id": "en",
+        "value": "pariatur"
+      },
+      {
+        "langu_id": "en",
+        "value": "magna"
+      }
+    ]
+  },
+  {
+    "id": "6c752c1c-3205-46bc-8cb0-f3c1af62a058",
+    "field_id": "00000000-0000-0000-0000-000000000002",
+    "name": "POS consequat",
+    "value": "consequat",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "mollit"
+      },
+      {
+        "langu_id": "en",
+        "value": "occaecat"
+      },
+      {
+        "langu_id": "en",
+        "value": "magna"
+      }
+    ]
+  },
+  {
+    "id": "ef936b81-3ed8-4ed0-8af3-42826da23bfa",
+    "field_id": "00000000-0000-0000-0000-000000000003",
+    "name": "ID est",
+    "value": "est",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "irure"
+      },
+      {
+        "langu_id": "en",
+        "value": "officia"
+      },
+      {
+        "langu_id": "en",
+        "value": "do"
+      }
+    ]
+  },
+  {
+    "id": "400778ef-14cc-41ec-95f5-c5913ddc5a8a",
+    "field_id": "00000000-0000-0000-0000-000000000004",
+    "name": "REF ipsum",
+    "value": "ipsum",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "aliqua"
+      },
+      {
+        "langu_id": "en",
+        "value": "qui"
+      },
+      {
+        "langu_id": "en",
+        "value": "tempor"
+      }
+    ]
+  },
+  {
+    "id": "b965873e-3bef-4d99-a353-645776e0d461",
+    "field_id": "00000000-0000-0000-0000-000000000005",
+    "name": "ALT amet",
+    "value": "amet",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "reprehenderit"
+      },
+      {
+        "langu_id": "en",
+        "value": "ullamco"
+      },
+      {
+        "langu_id": "en",
+        "value": "incididunt"
+      }
+    ]
+  },
+  {
+    "id": "cef8bb81-2ae3-46e5-bc7c-a40be300b26d",
+    "field_id": "00000000-0000-0000-0000-000000000006",
+    "name": "QUAL aute",
+    "value": "aute",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "do"
+      },
+      {
+        "langu_id": "en",
+        "value": "minim"
+      },
+      {
+        "langu_id": "en",
+        "value": "adipisicing"
+      }
+    ]
+  },
+  {
+    "id": "8e6c19aa-02a9-4b77-b374-a0aa867f31ae",
+    "field_id": "00000000-0000-0000-0000-000000000007",
+    "name": "FILTER voluptate",
+    "value": "voluptate",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "aliquip"
+      },
+      {
+        "langu_id": "en",
+        "value": "ea"
+      },
+      {
+        "langu_id": "en",
+        "value": "cillum"
+      }
+    ]
+  },
+  {
+    "id": "22e2719f-f27a-4b9e-a740-438a5ec3a928",
+    "field_id": "00000000-0000-0000-0000-000000000010",
+    "name": "FAMILY_ID irure",
+    "value": "irure",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "voluptate"
+      },
+      {
+        "langu_id": "en",
+        "value": "fugiat"
+      },
+      {
+        "langu_id": "en",
+        "value": "eiusmod"
+      }
+    ]
+  },
+  {
+    "id": "e124722c-b1c6-4ae2-ad66-01e5cabfa9e3",
+    "field_id": "00000000-0000-0000-0000-000000000011",
+    "name": "FAMILY_INFO eu",
+    "value": "eu",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "ut"
+      },
+      {
+        "langu_id": "en",
+        "value": "incididunt"
+      },
+      {
+        "langu_id": "en",
+        "value": "ut"
+      }
+    ]
+  },
+  {
+    "id": "67cf8ce8-ae8a-44e7-be2e-fec3828a9549",
+    "field_id": "00000000-0000-0000-0000-000000000012",
+    "name": "GENDER pariatur",
+    "value": "pariatur",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "eiusmod"
+      },
+      {
+        "langu_id": "en",
+        "value": "laboris"
+      },
+      {
+        "langu_id": "en",
+        "value": "id"
+      }
+    ]
+  },
+  {
+    "id": "231c6465-715a-401c-b49f-bd35cda30c21",
+    "field_id": "00000000-0000-0000-0000-000000000013",
+    "name": "PHENOTYPE veniam",
+    "value": "veniam",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "proident"
+      },
+      {
+        "langu_id": "en",
+        "value": "amet"
+      },
+      {
+        "langu_id": "en",
+        "value": "in"
+      }
+    ]
+  },
+  {
+    "id": "745a3e09-3081-4d44-87e9-8f9feba27835",
+    "field_id": "00000000-0000-0000-0000-000000000014",
+    "name": "SAMPLE_ID ea",
+    "value": "ea",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "in"
+      },
+      {
+        "langu_id": "en",
+        "value": "non"
+      },
+      {
+        "langu_id": "en",
+        "value": "et"
+      }
+    ]
+  },
+  {
+    "id": "db2953a0-f13d-42cf-97d1-49574cfee491",
+    "field_id": "00000000-0000-0000-0000-000000000015",
+    "name": "SAMPLE_TYPE nisi",
+    "value": "nisi",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "sunt"
+      },
+      {
+        "langu_id": "en",
+        "value": "do"
+      },
+      {
+        "langu_id": "en",
+        "value": "excepteur"
+      }
+    ]
+  },
+  {
+    "id": "45de3cb0-f22a-464e-8e4f-6bbc455a3f08",
+    "field_id": "00000000-0000-0000-0000-000000000016",
+    "name": "REFERENCE commodo",
+    "value": "commodo",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "duis"
+      },
+      {
+        "langu_id": "en",
+        "value": "laborum"
+      },
+      {
+        "langu_id": "en",
+        "value": "irure"
+      }
+    ]
+  },
+  {
+    "id": "a5eba067-61a1-46f2-a780-1ecd2c561fe2",
+    "field_id": "00000000-0000-0000-0000-000000000017",
+    "name": "COMMENT do",
+    "value": "do",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "commodo"
+      },
+      {
+        "langu_id": "en",
+        "value": "veniam"
+      },
+      {
+        "langu_id": "en",
+        "value": "aliqua"
+      }
+    ]
+  },
+  {
+    "id": "08bcb7e6-2b47-4373-ab52-44dc3738d2af",
+    "field_id": "92f4b361-3e2f-4950-9c83-226c38d82bcb",
+    "name": "INFO_NR sint",
+    "value": "sint",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "in"
+      },
+      {
+        "langu_id": "en",
+        "value": "fugiat"
+      },
+      {
+        "langu_id": "en",
+        "value": "sint"
+      }
+    ]
+  },
+  {
+    "id": "c7255010-db52-4269-9f3e-1d3283cd44f5",
+    "field_id": "f4146d9d-2e71-4b1e-a320-c330728ff219",
+    "name": "INFO_DP ea",
+    "value": "ea",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "eu"
+      },
+      {
+        "langu_id": "en",
+        "value": "sint"
+      },
+      {
+        "langu_id": "en",
+        "value": "fugiat"
+      }
+    ]
+  },
+  {
+    "id": "2aa04268-e19b-4641-a4f0-94677fe6d7c5",
+    "field_id": "7cd18a1e-a3fe-4e36-bbc9-fb61e32ee37b",
+    "name": "INFO_RO cupidatat",
+    "value": "cupidatat",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "officia"
+      },
+      {
+        "langu_id": "en",
+        "value": "irure"
+      },
+      {
+        "langu_id": "en",
+        "value": "officia"
+      }
+    ]
+  },
+  {
+    "id": "d0050d72-3684-4076-a03c-4ba68ce982dd",
+    "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM quis",
+    "value": "quis",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "est"
+      },
+      {
+        "langu_id": "en",
+        "value": "dolor"
+      },
+      {
+        "langu_id": "en",
+        "value": "exercitation"
+      }
+    ]
+  },
+  {
+    "id": "fdc2eab3-71cf-42c1-b15d-2722a26f0084",
+    "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM eu",
+    "value": "eu",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "aute"
+      },
+      {
+        "langu_id": "en",
+        "value": "tempor"
+      },
+      {
+        "langu_id": "en",
+        "value": "magna"
+      }
+    ]
+  },
+  {
+    "id": "fd0b7023-bb8d-4e9f-84e8-1b27cd4868de",
+    "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM est",
+    "value": "est",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "nostrud"
+      },
+      {
+        "langu_id": "en",
+        "value": "excepteur"
+      },
+      {
+        "langu_id": "en",
+        "value": "commodo"
+      }
+    ]
+  },
+  {
+    "id": "7acbf829-8af2-4460-981b-3bd91b087de8",
+    "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM estu",
+    "value": "estu",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "sit"
+      },
+      {
+        "langu_id": "en",
+        "value": "enim"
+      },
+      {
+        "langu_id": "en",
+        "value": "aliquip"
+      }
+    ]
+  },
+  {
+    "id": "416bf567-48fd-4afd-a76f-b72400333eb6",
+    "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM irure",
+    "value": "irure",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "qui"
+      },
+      {
+        "langu_id": "en",
+        "value": "culpa"
+      },
+      {
+        "langu_id": "en",
+        "value": "cillum"
+      }
+    ]
+  },
+  {
+    "id": "151b45ee-32db-4927-bb51-dbc43abfa454",
+    "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM dolore",
+    "value": "dolore",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "laboris"
+      },
+      {
+        "langu_id": "en",
+        "value": "in"
+      },
+      {
+        "langu_id": "en",
+        "value": "deserunt"
+      }
+    ]
+  },
+  {
+    "id": "576f3a65-566f-4f9d-abba-05c177bd1932",
+    "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM elit",
+    "value": "elit",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "dolore"
+      },
+      {
+        "langu_id": "en",
+        "value": "proident"
+      },
+      {
+        "langu_id": "en",
+        "value": "sunt"
+      }
+    ]
+  }
+]
