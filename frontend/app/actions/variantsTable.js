@@ -1,4 +1,5 @@
 import config from '../../config'
+import { requestAnalyze } from './websocket'
 
 /*
  * action types
@@ -39,6 +40,15 @@ export function changeVariantsFilter(variants, fieldId, filterValue) {
     variants: variants,
     fieldId: fieldId,
     filterValue: filterValue
+  }
+}
+
+export function sort(fieldId, sortOrder, sortDirection) {
+  return dispatch => {
+    dispatch(changeVariantsSort(fieldId, sortOrder, sortDirection))
+    setTimeout(() => {
+      dispatch(searchInResults())
+    }, 1000)
   }
 }
 
@@ -119,6 +129,7 @@ export function searchInResults() {
   return (dispatch, getState) => {
 
     dispatch(requestSearchedResults())
+    dispatch(requestAnalyze())
     
     const clearedJson = getState().variantsTable.searchInResultsParams
 

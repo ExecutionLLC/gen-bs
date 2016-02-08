@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { changeVariantsFilter, changeVariantsSort, searchInResults } from '../../actions/variantsTable'
+import { changeVariantsFilter, sort, searchInResults } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
 
@@ -15,6 +15,8 @@ export default class VariantsTableHead extends Component {
     const fieldValueType = (fieldMetadata === undefined) ? undefined : fieldMetadata.value_type
 
     if (fieldValueType === 'string') {
+      console.log('input value', this.props.variantsTable.searchInResultsParams.search)
+      console.log('input field_id', fieldId)
       return (
         <div>
           <input type="text" className="form-control"
@@ -105,10 +107,10 @@ export default class VariantsTableHead extends Component {
                       </a>
 
                       <div className="btn-group-vertical" role="group" data-toggle="buttons">
-                        <button className="btn btn-link btnSort asc" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'asc')) }>
+                        <button className="btn btn-link btnSort asc" onClick={ e => dispatch(sort(tableFieldId, 1, 'asc')) }>
                           <input type="radio" name="options" id="option1" />
                         </button>
-                        <button className="btn btn-link btnSort desc " onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'desc')) }>
+                        <button className="btn btn-link btnSort desc " onClick={ e => dispatch(sort(tableFieldId, 1, 'desc')) }>
                           <input type="radio" name="options" id="option2" />
                         </button>
                       </div>
