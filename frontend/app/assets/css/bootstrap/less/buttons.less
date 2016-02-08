@@ -65,6 +65,12 @@
 
 .btn-default {
   .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
+  &:active,
+  &.active,
+  .open > .dropdown-toggle& {
+    background-color: #eee;
+    border-color: #d5d5d5;
+  }
 }
 .btn-dark-default {
   .button-variant(@btn-dark-default-color; @btn-dark-default-bg; @btn-dark-default-border);
@@ -72,6 +78,9 @@
 
 .btn-primary {
   .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
+}
+.btn-dark-primary {
+  .button-variant(@btn-dark-primary-color; @btn-dark-primary-bg; @btn-dark-primary-border);
 }
 // Success appears as green
 .btn-success {
@@ -360,29 +369,30 @@ input[type="button"] {
     height: 33px;
     width: 33px;
     position: relative;
+       color: @text-color;
     &:before { 
       .fa(); 
       position: absolute;
-      top: 10px;
-      left: 8px;
-      content: "\f0ec";
+      left: 11px;
+        top: 6px;
+       content: "\f0dc";
       opacity: .2;
-      .rotate(-90deg);
-      color: @text-color;
+  
+   
     }
   }
 .btnSort.asc {
    &:before { 
-   content: "\f160";
+   content: "\f0de";
     opacity: 1;
-    .rotate(0);
+   top: 11px;
    }
             }
 .btnSort.desc {
    &:before { 
-    content: "\f161";
+      content: "\f0dd";
       opacity: 1;
-     .rotate(0);
+
    }
   }
 
@@ -395,10 +405,10 @@ input[type="button"] {
       margin-bottom: 5px;
       &:before { 
         color: #888;
-    font-size: 9px;
-    left: -10px;
-    position: absolute;
-    top: 0;
+        font-size: 9px;
+        left: -10px;
+        position: absolute;
+        top: 0;
         
       }
     }

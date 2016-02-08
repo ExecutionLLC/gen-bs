@@ -2,7 +2,7 @@
 @brand-alt-primary:     @brand-warning;
 @brand-primary-navbar:  @brand-primary;
 @brand-success:         #388E3C;
-@brand-info:            #03A9F4;
+@brand-info:            #e60d69;
 @brand-warning:         #f5c338;
 @brand-danger:          #F44336;
 @light-primary-color:   #d8e5f1;
@@ -11,8 +11,8 @@
 @state-success-bg:               #C8E6C9;
 @state-success-border:           @state-success-bg;
 
-@state-info-text:                darken(@brand-info,15%);
-@state-info-bg:                  #B3E5FC;
+@state-info-text:                @brand-info;
+@state-info-bg:                  #e09cd4;
 @state-info-border:              @state-info-bg;
 
 @state-warning-text:             darken(@brand-warning, 15%);
@@ -23,4 +23,4 @@
 @state-danger-bg:                #ffddd2;
 @state-danger-border:            @state-danger-bg;
 
-@active:                         spin(desaturate(lighten(@brand-warning, 36%), 5%), 11);
+@active:                         spin(desaturate(lighten(@brand-primary, 55%), 10%), 11);
