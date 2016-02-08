@@ -61,12 +61,29 @@ export default class VariantsTableHead extends Component {
       head.push(<th data-label="checkbox" key="row_checkbox"></th>);
 
       head.push(
-          <th data-label="comment" key="comment">
-            <div><span className="variants-table-header-label">
-              Comment<button className="btn btn-link btnSort"></button>
-            </span></div>
-            <div><input type="text" className="form-control" /></div>
-          </th>
+              <th data-label="comment" key="comment" > 
+                <div>
+                  <div className="variants-table-header-label">
+                      <a type="button" className="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div className="popover variants-table-th-filter" role="tooltip"><div className="popover-content"></div></div>' data-content='<input type="text" className="form-control">'>
+                          COMMENT
+                      </a>
+
+                      <div className="btn-group-vertical" role="group" data-toggle="buttons">
+                        <button className="btn btn-link btnSort asc" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'asc')) }>
+                          <input type="radio" name="options" id="option1" />
+                        </button>
+                        <button className="btn btn-link btnSort desc " onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'desc')) }>
+                          <input type="radio" name="options" id="option2" />
+                        </button>
+                      </div>
+                  </div>
+                </div>
+                <div>
+                  <input type="text" className="form-control"
+                    value=""
+                  />
+                </div>
+              </th>
       )
       variantsColumns.filter( filterFunc ).map( (tableFieldId) => {
           let name = '';
@@ -82,11 +99,20 @@ export default class VariantsTableHead extends Component {
           head.push(
               <th data-label={tableFieldId} key={tableFieldId} > 
                 <div>
-                  <span className="variants-table-header-label">
-                    { name }
-                    <button className="btn btn-link btnSort" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'asc')) }></button>
-                  </span>
-                    <button className="btn btn-default" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'desc')) }>Sort2</button>
+                  <div className="variants-table-header-label">
+                      <a type="button" className="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div className="popover variants-table-th-filter" role="tooltip"><div className="popover-content"></div></div>' data-content='<input type="text" className="form-control">'>
+                        {firstCharToUpperCase(name)}
+                      </a>
+
+                      <div className="btn-group-vertical" role="group" data-toggle="buttons">
+                        <button className="btn btn-link btnSort asc" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'asc')) }>
+                          <input type="radio" name="options" id="option1" />
+                        </button>
+                        <button className="btn btn-link btnSort desc " onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'desc')) }>
+                          <input type="radio" name="options" id="option2" />
+                        </button>
+                      </div>
+                  </div>
                 </div>
                 {this._filterInputs(tableFieldId)}
               </th>
