@@ -165,8 +165,12 @@ class ApplicationServerService extends ServiceBase {
         return {
             globalFilter: globalSearchValue,
             columnFilters: _.map(fieldSearchValues, fieldSearchValue => {
+                // We need sources' columns to be prefixed by source name.
+                const fieldMetadata = fieldSearchValue.fieldMetadata;
+                const columnName = fieldMetadata.sourceName === 'sample' ?
+                    fieldMetadata.name : fieldMetadata.sourceName + '_' + fieldMetadata.name;
                 return {
-                    columnName: fieldSearchValue.fieldMetadata.name,
+                    columnName,
                     columnFilter: fieldSearchValue.value
                 };
             }),
