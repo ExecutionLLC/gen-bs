@@ -8,10 +8,22 @@ export default function variantsTable(
       sort: [],
       limit: 100,
       offset: 0,
-      top_search: 'PASS'
+      top_search: ''
     }
   }, action) {
   switch (action.type) {
+
+
+    case ActionTypes.CLEAR_SEARCH_PARAMS:
+      return Object.assign({}, state, {
+        searchInResultsParams: {
+          sort: [],
+          search: [],
+          limit: 100,
+          offset: 0,
+          top_search: ''
+        }
+      })
 
     case ActionTypes.INIT_SEARCH_IN_RESULTS_PARAMS:
       return Object.assign({}, state, {
@@ -38,14 +50,14 @@ export default function variantsTable(
       })
 
     case ActionTypes.CHANGE_VARIANTS_SORT:
-      var sortArray = [...state.searchInResultsParams.search]
+      var sortArray = [...state.searchInResultsParams.sort]
       const sortFieldIndex = _.findIndex(state.searchInResultsParams.sort, {field_id: action.fieldId})
 
       if (action.filterValue !== '') {
         if (sortFieldIndex !== -1) {
-          sortArray = state.searchInResultsParams.sort.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, sort_order: action.sortOrder, sort_direction: action.sortDirection} )
+          sortArray = state.searchInResultsParams.sort.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection} )
         } else {
-          sortArray.push({field_id: action.fieldId, sort_order: action.sortOrder, sort_direction: action.sortDirection })
+          sortArray.push({field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection })
         }
       } else {
         sortArray.splice(fieldIndex,1)

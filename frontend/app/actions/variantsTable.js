@@ -7,6 +7,7 @@ import { requestAnalyze } from './websocket'
 export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS'
 export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER'
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT'
+export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS'
 
 export const FILTER_VARIANTS = 'FILTER_VARIANTS'
 
@@ -31,6 +32,12 @@ export function initSearchInResultsParams(searchInResultsParams) {
   return {
     type: INIT_SEARCH_IN_RESULTS_PARAMS,
     searchInResultsParams
+  }
+}
+
+export function clearSearchParams() {
+  return {
+    type: CLEAR_SEARCH_PARAMS
   }
 }
 

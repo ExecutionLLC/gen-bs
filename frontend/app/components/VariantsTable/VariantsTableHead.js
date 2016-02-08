@@ -15,13 +15,13 @@ export default class VariantsTableHead extends Component {
     const fieldValueType = (fieldMetadata === undefined) ? undefined : fieldMetadata.value_type
 
     if (fieldValueType === 'string') {
-      console.log('input value', this.props.variantsTable.searchInResultsParams.search)
-      console.log('input field_id', fieldId)
+      var searchObj = _.find([...this.props.variantsTable.searchInResultsParams.search], {field_id: fieldId})
+      var inputValue = searchObj ? searchObj.value : ''
       return (
         <div>
           <input type="text" className="form-control"
             value={
-              Object.assign({}, ...this.props.variantsTable.searchInResultsParams.search)[fieldId]
+              inputValue
             }
             onChange={(e) => dispatch(changeVariantsFilter(variants, fieldId, e.target.value))}
             onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResults() ): null }
