@@ -43,7 +43,7 @@
     },
     "dimension": {
       "type": "integer",
-      "description": "Reference genom vcf coordinate system version"
+      "description": "Possible number of values in the field. Comes from application server. When name, type and dimension are the same, fields are considered the same"
     }
   },
   "required": [

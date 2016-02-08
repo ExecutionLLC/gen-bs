@@ -13,7 +13,7 @@
     },
     "fields": {
       "type": "object",
-      "description": "A JSON object with fields needed for sources"
+      "description": "A JSON object with fields needed for sources. See object example at: ../defaults/teplates/sources/metadata_common_no_known_medical_impact_20151201.json"
     }
   },
   "required": [

@@ -13,6 +13,7 @@
     },
     "value_type": {
       "type": "string",
+      "$ref": "./synonym-template.json#"
       "description": "Field value type"
     }
   },
