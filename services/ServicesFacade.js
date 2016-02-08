@@ -1,5 +1,7 @@
 'use strict';
 
+const LanguService = require('./LanguService');
+const KeywordsService = require('./KeywordsService');
 const UsersService = require('./UsersService');
 const ViewsService = require('./ViewsService');
 const FiltersService = require('./FiltersService');
@@ -14,8 +16,12 @@ const SearchService = require('./SearchService');
 const TokenService = require('./TokenService');
 
 class ServiceFacade {
-  constructor(config, models) {
+  constructor(config, logger, models) {
     this.config = config;
+    this.logger = logger;
+
+    this.langu = new LanguService(this, models);
+    this.keywords = new KeywordsService(this, models);
     this.views = new ViewsService(this, models);
     this.filters = new FiltersService(this, models);
     this.users = new UsersService(this, models);

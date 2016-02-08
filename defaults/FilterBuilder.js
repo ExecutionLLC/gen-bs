@@ -79,24 +79,15 @@ class FilterBuilder extends DefaultsBuilderBase {
             return result;
         } else {
             const fieldDescriptor = rulesObject.field;
-            const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldsMetadata);
+            const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldDescriptor.valueType, fieldsMetadata);
             if (!field) {
-                throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName);
+                throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName + ', type: ' + fieldDescriptor.valueType);
             }
 
             const condition = rulesObject.condition;
             const result = {};
             result[field.id] = condition;
             return result;
-        }
-    }
-
-    _findField(fieldName, sourceName, fieldsMetadata) {
-        const fields = _.filter(fieldsMetadata, fieldMetadata => fieldMetadata.sourceName === sourceName && fieldMetadata.name === fieldName);
-        if (fields.length > 1) {
-            throw new Error('Too many fields match, name: ' + fieldName + ', source: ' + sourceName);
-        } else {
-            return fields[0];
         }
     }
 }

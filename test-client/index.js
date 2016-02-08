@@ -8,18 +8,21 @@ const _ = require('lodash');
 const env = process.env;
 
 const SESSION_HEADER = 'X-Session-Id';
+const LANGUAGE_HEADER = 'X-Langu-Id';
+
 const HOST = 'localhost';
-const PORT = env.GEN_PORT || 5000;
+const PORT = env.GEN_WS_PORT || 5000;
+
 const DEFAULT_USER_NAME = 'valarie';
 const DEFAULT_PASSWORD = 'password';
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+
+const DefaultLangu = require('../defaults/langu/default-langu.json');
 const DefaultViews = require('../defaults/views/default-views.json');
 const DefaultFilters = require('../defaults/filters/default-filters.json');
 const Sample = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample;
-const SampleFieldIds = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').field_ids;
-const AllFields = require('../defaults/fields/fields-metadata.json');
-const SampleFields = _.filter(AllFields, field => _.some(SampleFieldIds, fieldId => fieldId === field.id));
+const AllFields = ChangeCaseUtil.convertKeysToCamelCase(require('../defaults/fields/fields-metadata.json'));
 
 const Operations = require('./Operations');
 const Urls = require('./Urls');
@@ -28,6 +31,7 @@ const WebSocketClient = require('./WebSocketClient');
 const urls = new Urls(HOST, PORT);
 const wsClient = new WebSocketClient(HOST, PORT);
 const operations = new Operations();
+
 let lastSessionId = undefined;
 let lastOperationId = undefined;
 
@@ -35,9 +39,10 @@ function stringify(obj) {
   return JSON.stringify(obj, null, 2);
 }
 
-function createHeaders(sessionId) {
+function createHeaders(headersObj) {
   const headers = {};
-  headers[SESSION_HEADER] = sessionId;
+  headers[SESSION_HEADER] = headersObj.sessionId;
+  headers[LANGUAGE_HEADER] = headersObj.languId;
   return headers;
 }
 
@@ -102,6 +107,7 @@ operations.add('Open session', (callback) => {
           password: userDescriptor.password
         }
       }, (error, response, body) => {
+        console.log('Error:', stringify(error), 'Response: ', stringify(response), 'Body: ', stringify(body))
         const bodyObject = ChangeCaseUtil.convertKeysToCamelCase(body);
         const sessionId = bodyObject.sessionId;
         console.log('Associate session with the opened socket');
@@ -119,6 +125,7 @@ operations.add('Start search', (callback) => {
   waterfall([
     (callback) => {
       callback(null, {
+        languId: DefaultLangu[0].id,
         viewId: DefaultViews[0].id,
         filterId: DefaultFilters[0].id,
         sampleId: Sample.id,
@@ -133,7 +140,10 @@ operations.add('Start search', (callback) => {
       });
     },
     (searchData, callback) => {
-      const headers = createHeaders(searchData.sessionId);
+      const headers = createHeaders({
+        sessionId: searchData.sessionId,
+        languId: searchData.languId
+      });
       Request.post({
         url: urls.startSearch(),
         headers,
@@ -167,16 +177,30 @@ operations.add('Search in results', (callback) => {
       });
     },
     (sessionWithOperation, callback) => {
-      const headers = createHeaders(sessionWithOperation.sessionId);
-      const field = _.find(SampleFields, field => field.name === 'FILTER');
+      const headers = createHeaders({
+          sessionId: sessionWithOperation.sessionId,
+          languId: DefaultLangu[0].id
+      });
+      const getFieldId = (fieldName, sourceName) => {
+        return _.find(AllFields,
+            field => field.name === fieldName && field.sourceName === sourceName)
+            .id;
+      };
       Request.post({
         url: urls.startSearchInResults(sessionWithOperation.operationId),
         json: {
           topSearch: '123',
           search: [
             {
-              fieldId: field.id,
+              fieldId: getFieldId('FILTER', 'sample'),
               value: 'PASS'
+            }
+          ],
+          sort: [
+            {
+              fieldId: getFieldId('CHROM', 'sample'),
+              order: 1,
+              direction: 'asc'
             }
           ],
           limit: 100,
@@ -221,7 +245,10 @@ operations.add('Fetch page', callback => {
       lastSessionId = context.sessionId;
       lastOperationId = context.operationId;
 
-      const headers = createHeaders(context.sessionId);
+      const headers = createHeaders({
+        sessionId: context.sessionId,
+        languId: DefaultLangu[0].id
+      });
       Request.get({
         url: urls.loadNextPage(context.operationId),
         headers,
@@ -248,7 +275,10 @@ operations.add('Get data', (callback) => {
       askSession(callback);
     },
     (sessionId, callback) => {
-      const headers = createHeaders(sessionId);
+      const headers = createHeaders({
+        sessionId: sessionId,
+        languId: DefaultLangu[0].id
+      });
       Request.get({
         url: urls.data(),
         headers
@@ -273,8 +303,10 @@ operations.add('Check session', (callback) => {
       });
     },
     (sessionId, callback) => {
-      const headers = createHeaders(sessionId);
-
+      const headers = createHeaders({
+        sessionId: sessionId,
+        languId: DefaultLangu[0].id
+      });
       Request.put({
         url: urls.session(),
         headers
@@ -291,8 +323,10 @@ operations.add('Close session', (callback) => {
       });
     },
     (sessionId, callback) => {
-      const headers = createHeaders(sessionId);
-
+      const headers = createHeaders({
+        sessionId: sessionId,
+        languId: DefaultLangu[0].id
+      });
       Request.del({
         url: urls.session(),
         headers

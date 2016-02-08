@@ -29,13 +29,15 @@ class WSController extends ControllerBase {
                 } catch (e) {
                     console.error('Client WS message parse error: ' + JSON.stringify(e));
                     const error = {
-                        message:'Error parsing message:' + JSON.stringify(e)
+                        result: {
+                            error:'Error parsing message:' + JSON.stringify(e)
+                        }
                     };
                     ws.send(JSON.stringify(error), null, (error) => {
                         if (error) {
                             console.error('Error sending response to the client: ' + JSON.stringify(error));
                         }
-                    })
+                    });
                 }
             });
             ws.on('error', error => {

@@ -32,6 +32,7 @@ class MockModelBase {
 
     add(userId, item, callback) {
         item.id = Uuid.v4();
+        item.type = 'user';
 
         this.hash[item.id] = {
             userId,
@@ -60,21 +61,18 @@ class MockModelBase {
         }
     }
 
-    remove(userId, item, callback) {
+    remove(userId, itemId, callback) {
         if (!this._checkUserIdSet(userId, callback)) {
             return;
         }
-        if (!this._checkItemIdSet(item, callback)) {
-            return;
-        }
-        const existingItem = this.hash[item.id];
+        const existingItem = this.hash[itemId];
 
         if (!existingItem) {
             callback(new Error('Item is not found'));
         }
 
-        delete this.hash[item.id];
-        callback(null, item);
+        delete this.hash[itemId];
+        callback(null, existingItem);
     }
 
     find(userId, itemId, callback) {

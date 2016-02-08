@@ -14,7 +14,7 @@
       "description": "Localized filter description for UI",
       "type": "string"
     },
-    "view_type": {
+    "type": {
       "type": "string",
       "description": "Standard - available for demo-user, advanced - only for registered.",
       "enum": [
@@ -27,7 +27,7 @@
       "type": "boolean",
       "description": "If true, user should not be allowed to copy the view on UI."
     },
-    "modifiedTimestamp": {
+    "modified_timestamp": {
       "type": "integer",
       "description": "Timestamp of the last view modification."
     },
@@ -43,8 +43,8 @@
   "required": [
     "id",
     "name",
-    "view_type",
+    "type",
     "view_list_items",
-    "is_disabled_4copy"
+    "is_copy_disabled"
   ]
 }

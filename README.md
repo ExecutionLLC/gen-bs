@@ -12,7 +12,7 @@ Please see the interactive workflow description here:
 
 https://guides.github.com/introduction/flow/
 
-# Organization
+# Project Structure
 
 WebServer consists of:
 
@@ -22,9 +22,23 @@ WebServer consists of:
 - utils, where helper methods are placed, such as snake-to-camel case conversion utility.
 - startup contains scripts executing at service start, such as database creation, AS data retrieval, etc.
 
+NPM scripts are used to build and launch anything the project needs.
+
 # Installation
 
-Currently, Node v4.2.2 is using. To be able to switch node versions easily in future it is recommended to use Node version manager (NVM), which is downloadable by the link below:
+## Database Installation
+
+Web server uses PostgreSQL to store project metadata (anything it needs, except the sample and source data itself, which is stored inside the application server). So, to be able to run it, you need to install PostgreSQL somewhere. If database access settings are different from defaults (which can be found in the `utils/Config.js`), use the following environment variables later when running to configure it:
+
+* `GEN_WS_DATABASE_SERVER` - to configure database host name.
+* `GEN_WS_DATABASE_PORT` - to configure database port.
+* `GEN_WS_DATABASE_USER` - user with root access to the server, defaults to `postgres`.
+* `GEN_WS_DATABASE_PASSWORD` - root user password.
+* `GEN_WS_DATABASE_NAME` - name of the database to use for the project.
+
+## Web Server Launch
+
+Currently, Node v4.2.2 is used. To be able to switch node versions easily in future it is recommended to use Node version manager (NVM), which is downloadable by the link below:
 
 https://github.com/creationix/nvm
 
@@ -34,53 +48,35 @@ After `nvm` is installed and the terminal is relaunched, as `nvm` wants, please 
 
 This will install Node version 4.2.2.
 
-After the proper node version is installed, go to the sources root and execute `npm install` command which will install all project dependencies.
+After the proper node version is installed, go to the sources root and execute:
+
+    npm install
+
+This command will install all the project dependencies.
 
 Currently, we have two jQuery plugins installed as submodules. To initialize them, from the sources root execute the following commands:
 
     git submodule init
     git submodule update
 
-Then, use `npm start` to launch the frontend with WS.
+Now the database should be created for the project. Use the following command to do that:
 
-# Deploying to Heroku
+    npm run db:create
 
-This part is not strictly necessary, but it is better to complete it to be sure your changes function well in production.
+After the database is created, it should be filled with default values, such as samples and views. To do that, execute the following command:
 
-First, you need to install the Heroku Toolbelt, which is available here:
+    npm run defaults:import
 
-https://toolbelt.heroku.com/
+After all of that done without errors, use the following command to launch the frontend with WS:
 
-Next, if you don't have an account, you need to register on Heroku. This can be done by the link below:
+    npm start
 
-https://signup.heroku.com/login
+# Additional Info
 
-Please execute the following command to login to Heroku
+Default database data lays in `defaults/` folder.
 
-    heroku login
+Part of the default data is imported from the external JSON files and needs some transformations to be imported. Such data lays in `defaults/templates/` folder.
 
-After that execute the following command from the sources root:
+The scripts generating the actual defaults are also kept at the `defaults/` folder. These scripts can be launched by running the following command:
 
-    heroku create
-
-This will create a empty Heroku application for you and will show the URL of it in the console. After that you should be able to use the following command to deploy your currently active branch to your Heroku site:
-
-    npm run deploy
-
-# Deploying to the production site
-
-The current customer-ready version of the system is available by the following URL:
-
-http://whispering-forest-5185.heroku.com
-
-If you think you should be able to deploy to it, please send the email you have been using for registration to Vasily Loginov, for him to be able to add you as a collaborator of the application.
-
-When you are said to be a collaborator, please execute the following command from the sources root:
-
-    git remote add production https://git.heroku.com/whispering-forest-5185.git
-
-After that you should be able to deploy to the production site using the following command:
-
-    git push production master
-
-Don't forget about the responsibility of this step.
+    npm run defaults:generate

@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
@@ -9,13 +10,15 @@ class SearchService extends ServiceBase {
         super(services);
     }
 
-    sendSearchRequest(user, sessionId, sampleId, viewId, filterId, limit, offset, callback) {
-        if (!viewId || !filterId || !sampleId || !limit) {
+    sendSearchRequest(user, sessionId, languId, sampleId, viewId, filterId, limit, offset, callback) {
+        if (!_.some([languId, viewId, filterId, sampleId, limit, offset])) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
-                    viewId,
-                    filterId,
-                    sampleId,
-                    limit
+                    languId: languId || 'undefined',
+                    viewId: viewId || 'undefined',
+                    filterId: filterId || 'undefined',
+                    sampleId: sampleId || 'undefined',
+                    limit: limit || 'undefined',
+                    offset: offset || 'undefined'
                 }, null, 2)));
         } else {
             async.waterfall([
@@ -23,7 +26,7 @@ class SearchService extends ServiceBase {
                     this.services.sessions.findById(sessionId, callback);
                 },
                 (sessionId, callback) => {
-                    this._createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback);
+                    this._createAppServerSearchParams(sessionId, user, languId, sampleId, viewId, filterId, limit, offset, callback);
                 },
                 (appServerRequestParams, callback) => {
                     this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -140,8 +143,11 @@ class SearchService extends ServiceBase {
         callback);
     }
 
-    _createAppServerSearchParams(sessionId, user, viewId, filterId, sampleId, limit, offset, callback) {
+    _createAppServerSearchParams(sessionId, user, languId, sampleId, viewId, filterId, limit, offset, callback) {
         async.parallel({
+            langu: (callback) => {
+                this.services.langu.find(languId, callback);
+            },
             sample: (callback) => {
                 this.services.samples.find(user, sampleId, callback);
             },
@@ -186,6 +192,7 @@ class SearchService extends ServiceBase {
             } else {
                 const appServerSearchParams = {
                     sessionId,
+                    langu: result.langu,
                     userId: user.id,
                     view: result.view,
                     filter: result.filter,

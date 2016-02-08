@@ -19,6 +19,8 @@ class ViewBuilder extends DefaultsBuilderBase {
         this.build = this.build.bind(this);
         this._createView = this._createView.bind(this);
         this._createListItem = this._createListItem.bind(this);
+        this._createKeywords = this._createKeywords.bind(this);
+        this._createKeyword = this._createKeyword.bind(this);
     }
 
     /**
@@ -30,6 +32,10 @@ class ViewBuilder extends DefaultsBuilderBase {
         const fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
             require(this.fieldMetadataFile)
         );
+        const keywords = ChangeCaseUtil.convertKeysToCamelCase(
+            require(this.keywordsFile)
+        );
+
         async.waterfall([
             (callback) => {
                 FsUtils.createDirectoryIfNotExists(this.viewsDir, callback);
@@ -38,36 +44,50 @@ class ViewBuilder extends DefaultsBuilderBase {
                 this._removeJsonFilesFromDirectory(this.viewsDir, callback);
             },
             (callback) => {
-                const views = _.map(this.viewTemplates, (view) => this._createView(view, fieldsMetadata));
+                const views = _.map(this.viewTemplates, (view) => this._createView(view, fieldsMetadata, keywords));
                 this._storeViews(views);
                 callback(null);
             }
         ], callback);
     }
 
-    _createListItem(listItemTemplate, fieldsMetadata) {
+    _createView(viewTemplate, fieldsMetadata, keywords) {
+        return {
+            id: Uuid.v4(),
+            name: viewTemplate.name,
+            type: viewTemplate.type,
+            description: viewTemplate.description,
+            viewListItems: _.map(viewTemplate.items, (listItem) => this._createListItem(listItem, fieldsMetadata, keywords))
+        };
+    }
+
+    _createListItem(listItemTemplate, fieldsMetadata, keywords) {
         const fieldDescriptor = listItemTemplate.field;
-        const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldsMetadata);
+        const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldDescriptor.valueType, fieldsMetadata);
         if (!field) {
-            throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName);
+            throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName + ', type: ' + fieldDescriptor.valueType);
         }
         return {
             id: Uuid.v4(),
             fieldId: field.id,
             order: listItemTemplate.order,
             sortOrder: listItemTemplate.sortOrder,
-            sortDirection: listItemTemplate.sortDirection
+            sortDirection: listItemTemplate.sortDirection,
+            keywords: this._createKeywords(listItemTemplate.keywords, keywords)
         };
     }
 
-    _createView(viewTemplate, fieldsMetadata) {
-        return {
-            id: Uuid.v4(),
-            name: viewTemplate.name,
-            viewType: viewTemplate.type,
-            description: viewTemplate.description,
-            viewListItems: _.map(viewTemplate.items, (listItem) => this._createListItem(listItem, fieldsMetadata))
-        };
+    _createKeywords(keywordsNames, keywords) {
+        return _.map(keywordsNames, (keywordName) => this._createKeyword(keywordName, keywords));
+    }
+
+    _createKeyword(keywordName, keywords) {
+        const findedKeywords = _.filter(keywords, keyword => keyword.name === keywordName);
+        if (findedKeywords.length > 1) {
+            throw new Error('Too many keywords match, name: ' + keywordName);
+        } else {
+            return findedKeywords[0];
+        }
     }
 
     _storeViews(views, callback) {
@@ -75,15 +95,6 @@ class ViewBuilder extends DefaultsBuilderBase {
         const viewsJson = JSON.stringify(snakeCasedViews, null, 2);
         const viewsFile = this.viewsDir + '/default-views.json';
         FsUtils.writeStringToFile(viewsFile, viewsJson, callback);
-    }
-
-    _findField(fieldName, sourceName, fieldsMetadata) {
-        const fields = _.filter(fieldsMetadata, fieldMetadata => fieldMetadata.sourceName === sourceName && fieldMetadata.name === fieldName);
-        if (fields.length > 1) {
-            throw new Error('Too many fields match, name: ' + fieldName + ', source: ' + sourceName);
-        } else {
-            return fields[0];
-        }
     }
 }
 

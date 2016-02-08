@@ -30,6 +30,9 @@
 				"desc"
 			]
 		},
+		"filter_control_enable": {
+			"type": "boolean"
+		},
 		"keywords": {
 			"type": "array",
 			"uniqueItems": true,

@@ -8,9 +8,17 @@
     "params": {
       "type": "object",
       "properties": {
-        "filename": {
+        "id": {
           "type": "string",
-          "description": "Full path of the uploaded sample"
+          "description": "Upload session identifier."
+        },
+        "sample_id": {
+          "type": "string",
+          "description": "UUID of the sample on WS."
+        },
+        "size": {
+          "type": "string",
+          "description": "Sample file size in bytes"
         }
       }
     },
@@ -18,18 +26,29 @@
       "type": "object",
       "properties": {
         "status": {
+          "type": "string",
+          "description": "Converting - file upload to AS complete, conversion to hd5 is in progress. Uploading - conversion completed, uploading to S3. Ready - should contain file metadata.",
           "enum": [
             "converting",
             "uploading",
             "ready"
           ]
         },
+        "id": {
+          "type": "string",
+          "description": "Session identifier."
+        },
+        "sample_id": {
+          "type": "string",
+          "description": "UUID of the sample to which the message is related to."
+        },
         "progress": {
           "type": "integer",
           "description": "progress of operation in %. Operation correspond to enum value in status."
         },
         "metadata": {
-          "$ref": "base_json/file_metadata.json#"
+          "$ref": "base_json/file_metadata.json#",
+          "description": "Sent one time when the file is parsed."
         }
       }
     }

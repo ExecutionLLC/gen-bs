@@ -1,0 +1,577 @@
+[
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "CHROM",
+      "value_type": "integer"
+    },
+    "name": "CHROM ipsum",
+    "value": "ipsum",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "et"
+      },
+      {
+        "langu_id": "en",
+        "value": "pariatur"
+      },
+      {
+        "langu_id": "en",
+        "value": "magna"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "POS",
+      "value_type": "integer"
+    },
+    "name": "POS consequat",
+    "value": "consequat",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "mollit"
+      },
+      {
+        "langu_id": "en",
+        "value": "occaecat"
+      },
+      {
+        "langu_id": "en",
+        "value": "magna"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "ID",
+      "value_type": "string"
+    },
+    "name": "ID est",
+    "value": "est",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "irure"
+      },
+      {
+        "langu_id": "en",
+        "value": "officia"
+      },
+      {
+        "langu_id": "en",
+        "value": "do"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "REF",
+      "value_type": "string"
+    },
+    "name": "REF ipsum",
+    "value": "ipsum",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "aliqua"
+      },
+      {
+        "langu_id": "en",
+        "value": "qui"
+      },
+      {
+        "langu_id": "en",
+        "value": "tempor"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "ALT",
+      "value_type": "string"
+    },
+    "name": "ALT amet",
+    "value": "amet",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "reprehenderit"
+      },
+      {
+        "langu_id": "en",
+        "value": "ullamco"
+      },
+      {
+        "langu_id": "en",
+        "value": "incididunt"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "QUAL",
+      "value_type": "float"
+    },
+    "name": "QUAL aute",
+    "value": "aute",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "do"
+      },
+      {
+        "langu_id": "en",
+        "value": "minim"
+      },
+      {
+        "langu_id": "en",
+        "value": "adipisicing"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "FILTER",
+      "value_type": "string"
+    },
+    "name": "FILTER voluptate",
+    "value": "voluptate",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "aliquip"
+      },
+      {
+        "langu_id": "en",
+        "value": "ea"
+      },
+      {
+        "langu_id": "en",
+        "value": "cillum"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "FAMILY_ID",
+      "value_type": "string"
+    },
+    "name": "FAMILY_ID irure",
+    "value": "irure",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "voluptate"
+      },
+      {
+        "langu_id": "en",
+        "value": "fugiat"
+      },
+      {
+        "langu_id": "en",
+        "value": "eiusmod"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "FAMILY_INFO",
+      "value_type": "string"
+    },
+    "name": "FAMILY_INFO eu",
+    "value": "eu",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "ut"
+      },
+      {
+        "langu_id": "en",
+        "value": "incididunt"
+      },
+      {
+        "langu_id": "en",
+        "value": "ut"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "GENDER",
+      "value_type": "string"
+    },
+    "name": "GENDER pariatur",
+    "value": "pariatur",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "eiusmod"
+      },
+      {
+        "langu_id": "en",
+        "value": "laboris"
+      },
+      {
+        "langu_id": "en",
+        "value": "id"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "PHENOTYPE",
+      "value_type": "string"
+    },
+    "name": "PHENOTYPE veniam",
+    "value": "veniam",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "proident"
+      },
+      {
+        "langu_id": "en",
+        "value": "amet"
+      },
+      {
+        "langu_id": "en",
+        "value": "in"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "SAMPLE_ID",
+      "value_type": "string"
+    },
+    "name": "SAMPLE_ID ea",
+    "value": "ea",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "in"
+      },
+      {
+        "langu_id": "en",
+        "value": "non"
+      },
+      {
+        "langu_id": "en",
+        "value": "et"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "SAMPLE_TYPE",
+      "value_type": "string"
+    },
+    "name": "SAMPLE_TYPE nisi",
+    "value": "nisi",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "sunt"
+      },
+      {
+        "langu_id": "en",
+        "value": "do"
+      },
+      {
+        "langu_id": "en",
+        "value": "excepteur"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "REFERENCE",
+      "value_type": "string"
+    },
+    "name": "REFERENCE commodo",
+    "value": "commodo",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "duis"
+      },
+      {
+        "langu_id": "en",
+        "value": "laborum"
+      },
+      {
+        "langu_id": "en",
+        "value": "irure"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "COMMENT",
+      "value_type": "string"
+    },
+    "name": "COMMENT do",
+    "value": "do",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "commodo"
+      },
+      {
+        "langu_id": "en",
+        "value": "veniam"
+      },
+      {
+        "langu_id": "en",
+        "value": "aliqua"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "INFO_NR",
+      "value_type": "string"
+    },
+    "name": "INFO_NR sint",
+    "value": "sint",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "in"
+      },
+      {
+        "langu_id": "en",
+        "value": "fugiat"
+      },
+      {
+        "langu_id": "en",
+        "value": "sint"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "INFO_DP",
+      "value_type": "integer"
+    },
+    "name": "INFO_DP ea",
+    "value": "ea",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "eu"
+      },
+      {
+        "langu_id": "en",
+        "value": "sint"
+      },
+      {
+        "langu_id": "en",
+        "value": "fugiat"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "INFO_RO",
+      "value_type": "integer"
+    },
+    "name": "INFO_RO cupidatat",
+    "value": "cupidatat",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "officia"
+      },
+      {
+        "langu_id": "en",
+        "value": "irure"
+      },
+      {
+        "langu_id": "en",
+        "value": "officia"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "CHROM",
+      "value_type": "integer"
+    },
+    "name": "CHROM quis",
+    "value": "quis",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "est"
+      },
+      {
+        "langu_id": "en",
+        "value": "dolor"
+      },
+      {
+        "langu_id": "en",
+        "value": "exercitation"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "CHROM",
+      "value_type": "integer"
+    },
+    "name": "CHROM eu",
+    "value": "eu",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "aute"
+      },
+      {
+        "langu_id": "en",
+        "value": "tempor"
+      },
+      {
+        "langu_id": "en",
+        "value": "magna"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "CHROM",
+      "value_type": "integer"
+    },
+    "name": "CHROM est",
+    "value": "est",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "nostrud"
+      },
+      {
+        "langu_id": "en",
+        "value": "excepteur"
+      },
+      {
+        "langu_id": "en",
+        "value": "commodo"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "CHROM",
+      "value_type": "integer"
+    },
+    "name": "CHROM estu",
+    "value": "estu",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "sit"
+      },
+      {
+        "langu_id": "en",
+        "value": "enim"
+      },
+      {
+        "langu_id": "en",
+        "value": "aliquip"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "CHROM",
+      "value_type": "integer"
+    },
+    "name": "CHROM irure",
+    "value": "irure",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "qui"
+      },
+      {
+        "langu_id": "en",
+        "value": "culpa"
+      },
+      {
+        "langu_id": "en",
+        "value": "cillum"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "CHROM",
+      "value_type": "integer"
+    },
+    "name": "CHROM dolore",
+    "value": "dolore",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "laboris"
+      },
+      {
+        "langu_id": "en",
+        "value": "in"
+      },
+      {
+        "langu_id": "en",
+        "value": "deserunt"
+      }
+    ]
+  },
+  {
+    "field": {
+      "source_name": "sample",
+      "name": "CHROM",
+      "value_type": "integer"
+    },
+    "name": "CHROM elit",
+    "value": "elit",
+    "synonyms": [
+      {
+        "langu_id": "en",
+        "value": "dolore"
+      },
+      {
+        "langu_id": "en",
+        "value": "proident"
+      },
+      {
+        "langu_id": "en",
+        "value": "sunt"
+      }
+    ]
+  }
+]
