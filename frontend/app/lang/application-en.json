@@ -38,7 +38,7 @@
     "description": "Here you can analyze your samples or demo. The fee is charged once only for the analysis of a new sample, re-load the results of the analysis of the sample has already been analyzed can be unlimited"
   },
   "brand": {
-    "title": "Agx",
+    "title": "AGx",
     "help": {
       "title": "Click for about and help info"
     },
@@ -125,9 +125,13 @@
       "description": "Select several mutations in the table with the results of the analysis, and click Export in the top menu"
     }
   },
+  "reports": {
+    "title": "Reports",
+    "heading": "Reports"
+  },
   "history": {
-    "title": "Load History",
-    "heading": "Load History",
+    "title": "History",
+    "heading": "History",
     "help": {
       "title": "History of queries, saved query settings"
     },
@@ -224,8 +228,8 @@
       "title": "Click here and type to search field symbols containing in metadata of available samples"
     },
     "upload": {
-      "title": "Upload",
-      "heading": "Upload and search sample",
+      "title": "Samples",
+      "heading": "Upload and select sample",
       "help": {
         "title": "Upload .vfc file of sample"
       },
@@ -297,7 +301,9 @@
       },
       "selector": {
         "label": "Available Views",
-        "description": "Standard view are not edited, duplicate it for custom",
+        "help": {
+          "title": "Standard view are not edited, duplicate it for custom"
+        },
         "title": "standard",
         "value": "Choose view"
       },
@@ -377,7 +383,9 @@
       },
       "selector": {
         "label": "Available Filters",
-        "description": "Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis",
+        "help": {
+          "title": "Standard filters can not be edited but can be copied to a new one.  Disabled standard filters can not be copied but can be used for analysis"
+        },
         "title": "standard",
         "value": "Choose filter"
       },

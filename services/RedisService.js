@@ -33,7 +33,9 @@ class RedisService extends ServiceBase {
     fetch(redisParams, callback) {
         async.waterfall([
             (callback) => {
-                this._createClient(redisParams.host, redisParams.port, redisParams.databaseNumber, callback);
+                // This is done to allow local port forwarding in dev env.
+                const redisHost = this.services.config.forceOverrideRedisToLocalhost ? 'localhost' : redisParams.host;
+                this._createClient(redisHost, redisParams.port, redisParams.databaseNumber, callback);
             },
             (client, callback) => {
                 this._fetchData(client, redisParams.dataIndex, redisParams.offset, redisParams.limit, callback);
