@@ -83,12 +83,22 @@ function FindNext() {
         DemoFinished('Found matching token on ' + index + ' line', index + ': ' + match.line.replace(token, '<mark>' + token + '</mark>'));
     });
 }
+
 $('#search-beginning').click(function() {
     nextIndex = 0;
     FindNext();
 });
+
+function ValidateVCF() {
+
+}
+
 $('#search-next').click(function() {
     FindNext();
+});
+
+$('#validate').click(function() {
+   ValidateVCF();
 });
 
 function FindAll() {
