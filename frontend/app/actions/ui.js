@@ -1,4 +1,4 @@
-import { fetchVariants } from './variantsTable'
+import { fetchVariants, clearSearchParams } from './variantsTable'
 import { requestAnalyze } from './websocket'
 import { viewBuilderSelectView } from './viewBuilder'
 import { filterBuilderSelectFilter} from './filterBuilder'
@@ -70,6 +70,8 @@ export function analyze(sampleId, viewId, filterId) {
       limit: 100,
       offset: 0
     }
+
+    dispatch(clearSearchParams())
 
     dispatch(requestAnalyze(searchParams))
 
