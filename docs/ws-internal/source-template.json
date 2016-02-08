@@ -13,7 +13,7 @@
     },
     "fields": {
       "type": "object",
-      "description": "A JSON object with fields needed by the UI for sources."
+      "description": "A JSON object with fields needed for sources"
     }
   },
   "required": [

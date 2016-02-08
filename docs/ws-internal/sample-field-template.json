@@ -5,7 +5,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Field unique name"
+      "description": "Field name"
     },
     "is_mandatory": {
       "type": "boolean",
