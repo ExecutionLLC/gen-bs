@@ -165,19 +165,15 @@ class ApplicationServerService extends ServiceBase {
         return {
             globalFilter: globalSearchValue,
             columnFilters: _.map(fieldSearchValues, fieldSearchValue => {
-                // We need sources' columns to be prefixed by source name.
-                const fieldMetadata = fieldSearchValue.fieldMetadata;
-                const columnName = fieldMetadata.sourceName === 'sample' ?
-                    fieldMetadata.name : fieldMetadata.sourceName + '_' + fieldMetadata.name;
                 return {
-                    columnName,
+                    columnName: this._getPrefixedFieldName(fieldSearchValue.fieldMetadata),
                     columnFilter: fieldSearchValue.value
                 };
             }),
             sortOrder: _.map(sortedParams, sortedParam => {
                 return {
-                    columnName: sortedParam.fieldMetadata.name,
-                    isAscendingOrder: (sortedParam.sortOrder === 'asc')
+                    columnName: this._getPrefixedFieldName(sortedParam.fieldMetadata),
+                    isAscendingOrder: (sortedParam.sortDirection === 'asc')
                 };
             })
         };
@@ -211,6 +207,12 @@ class ApplicationServerService extends ServiceBase {
     _getAppServerSampleId(sample) {
         return sample.type === 'standard' || sample.type === 'advanced' ?
                 sample.fileName : sample.id;
+    }
+
+    _getPrefixedFieldName(fieldMetadata) {
+        // We need sources' columns to be prefixed by source name.
+        return fieldMetadata.sourceName === 'sample' ?
+            fieldMetadata.name : fieldMetadata.sourceName + '_' + fieldMetadata.name;
     }
 
     _closePreviousSearchIfAny(sessionId, callback) {
