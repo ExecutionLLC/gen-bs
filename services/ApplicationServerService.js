@@ -177,7 +177,7 @@ class ApplicationServerService extends ServiceBase {
             sortOrder: _.map(sortedParams, sortedParam => {
                 return {
                     columnName: sortedParam.fieldMetadata.name,
-                    isAscendingOrder: (sortedParam.direction === 'asc')
+                    isAscendingOrder: (sortedParam.sortDirection === 'asc')
                 };
             })
         };
