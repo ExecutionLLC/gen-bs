@@ -250,7 +250,7 @@ class FieldsMetadataModel extends ModelBase {
                 this._fetchFieldAvailableValues(fieldMetadata.id, callback);
             },
             (fieldAvailableValues, callback) => {
-                if (fieldAvailableValues) {
+                if (fieldAvailableValues && (fieldAvailableValues.length > 0)) {
                     fieldMetadata.availableValues = fieldAvailableValues;
                 }
                 callback(null, this._mapColumns(fieldMetadata));
