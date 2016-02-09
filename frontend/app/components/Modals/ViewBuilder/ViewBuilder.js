@@ -24,9 +24,9 @@ export default class ViewBuilder extends Component {
 
       const selectOptions= [
 
-          ...fields.list.filter((f) => f.id !== currentValue.id).map( (f) => { return {value: f.id, label: `${f.label} -- ${f.source_name}`}} ),
+          ...fields.list.filter((f) => f.id !== currentValue.id).map( (f) => { return {value: f.id, label: `${f.name} -- ${f.source_name}`}} ),
 
-          ...fields.sourceFieldsList.filter((f) => (f.id !== currentValue.id) && (f.source_name !== 'sample')).map( (f) => { return {value: f.id, label: `${f.label} -- ${f.source_name}`}} )
+          ...fields.sourceFieldsList.filter((f) => (f.id !== currentValue.id) && (f.source_name !== 'sample')).map( (f) => { return {value: f.id, label: `${f.name} -- ${f.source_name}`}} )
 
         ]
 
