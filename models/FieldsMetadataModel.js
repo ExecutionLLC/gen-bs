@@ -18,12 +18,24 @@ const mappedColumns = [
     'dimension',
     'languId',
     'description',
-    'label'
+    'label',
+    'availableValues'
 ];
 
 class FieldsMetadataModel extends ModelBase {
     constructor(models) {
         super(models, 'field_metadata', mappedColumns);
+    }
+
+    find(metadataId, callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetch(metadataId, callback);
+            },
+            (fieldMetadata, callback) => {
+                this._mapFieldMetadata(fieldMetadata, callback);
+            }
+        ], callback);
     }
 
     findMany(metadataIds, callback) {
@@ -32,7 +44,7 @@ class FieldsMetadataModel extends ModelBase {
                 this._fetchByIds(metadataIds, callback);
             },
             (fieldsMetadata, callback) => {
-                this._mapMetadata(fieldsMetadata, callback);
+                this._mapFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
@@ -55,7 +67,7 @@ class FieldsMetadataModel extends ModelBase {
                 this._fetchSourcesMetadata(callback);
             },
             (fieldsMetadata, callback) => {
-                this._mapMetadata(fieldsMetadata, callback);
+                this._mapFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
@@ -65,8 +77,8 @@ class FieldsMetadataModel extends ModelBase {
             (callback) => {
                 this._fetchMetadataBySourceName(sourceName, callback);
             },
-            (metadata, callback) => {
-                callback(null, this._mapColumns(metadata));
+            (fieldsMetadata, callback) => {
+                this._mapFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
@@ -226,9 +238,39 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    _mapMetadata(fieldsMetadata, callback) {
-        async.map(fieldsMetadata, (metadata, callback) => {
-            callback(null, this._mapColumns(metadata));
+    _mapFieldsMetadata(fieldsMetadata, callback) {
+        async.map(fieldsMetadata, (fieldMetadata, callback) => {
+            this._mapFieldMetadata(fieldMetadata, callback);
+        }, callback);
+    }
+
+    _mapFieldMetadata(fieldMetadata, callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetchFieldAvailableValues(fieldMetadata.id, callback);
+            },
+            (fieldAvailableValues, callback) => {
+                if (fieldAvailableValues) {
+                    fieldMetadata.availableValues = fieldAvailableValues;
+                }
+                callback(null, this._mapColumns(fieldMetadata));
+            }
+        ], callback);
+    }
+
+    _fetchFieldAvailableValues(metadataId, callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from('field_available_value')
+                .innerJoin('field_available_value_text', 'field_available_value_text.field_available_value_id', 'field_available_value.id')
+                .whereIn('field_id', metadataId)
+                .asCallback((error, fieldAvailableValues) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldAvailableValues));
+                    }
+                });
         }, callback);
     }
 
