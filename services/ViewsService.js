@@ -42,7 +42,7 @@ class ViewsService extends UserEntityServiceBase {
           callback(new Error('View list items must be defined'))
       } else if (!_.isArray(view.viewListItems)) {
           callback(new Error('View list items must be an array'));
-      } else if (item.viewListItems.length === 0) {
+      } else if (view.viewListItems.length === 0) {
           callback(new Error('View list items must contain at least one element'));
       } else {
         callback(null, view);
