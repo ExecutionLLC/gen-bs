@@ -13,7 +13,7 @@
     },
     "fields": {
       "type": "object",
-      "description": "A JSON object with fields needed for sources. See object example at: ../defaults/teplates/sources/metadata_common_no_known_medical_impact_20151201.json"
+      "description": "A JSON object with fields needed for sources. A value object schema defined in source.json file. See object examples at ./defaults/templates/sources/"
     }
   },
   "required": [

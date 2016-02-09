@@ -38,7 +38,7 @@
       "description": "Field metadata value type"
     },
     "description": {
-      "description": "Localized field metadata description for UI",
+      "description": "Localized field metadata description",
       "type": "string"
     },
     "dimension": {

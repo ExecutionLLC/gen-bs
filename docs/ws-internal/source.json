@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One source",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for source"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Source file name"
+    },
+    "hash": {
+      "type": "string",
+      "description": "Source hash"
+    },
+    "reference": {
+      "type": "string",
+      "enum": [
+        "hg18",
+        "hg38"
+      ],
+      "description": "Source reference"
+    },
+    "is_analyzed": {
+      "type": "boolean",
+      "description": "Source is analyzed sign"
+    },
+    "is_source": {
+      "type": "boolean",
+      "description": "Source/sample sign"
+    },
+    "creator": {
+      "type": "string",
+      "description": "User id who created this source. May be null"
+    },
+    "field_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "description": "Field metadata id for source"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "file_name",
+    "reference",
+    "is_analyzed",
+    "is_source",
+    "field_ids"
+  ]
+}
