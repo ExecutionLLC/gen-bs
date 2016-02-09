@@ -31,6 +31,9 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
                 this._loadRequiredAndEditableFields(callback);
             },
             (fieldsMetadata, callback) => {
+                this._buildFieldsMetadata(fieldsMetadata, callback);
+            },
+            (fieldsMetadata, callback) => {
                 this._buildMetadata(this.asSamplesDir, this.samplesDir, true, fieldsMetadata, (error) => {
                     callback(error, fieldsMetadata);
                 });
@@ -44,6 +47,31 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
                 this._storeFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
+    }
+
+    _buildFieldsMetadata(fieldsMetadata, callback) {
+        async.map(fieldsMetadata, (fieldMetadata, callback) => {
+            let metadata = {
+                id: fieldMetadata.id,
+                name: fieldMetadata.name,
+                label: fieldMetadata.label,
+                sourceName: fieldMetadata.sourceName,
+                isEditable: fieldMetadata.isEditable,
+                isMandatory: fieldMetadata.isMandatory,
+                valueType: fieldMetadata.valueType,
+                description: fieldMetadata.description,
+                dimension: fieldMetadata.dimension
+            };
+            if (fieldMetadata.availableValues) {
+                metadata.availableValues = _.map(fieldMetadata.availableValues, (availableValue) => {
+                    return {
+                        id: Uuid.v4(),
+                        value: availableValue
+                    }
+                });
+            }
+            callback(null, metadata);
+        }, callback);
     }
 
     _loadRequiredAndEditableFields(callback) {

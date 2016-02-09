@@ -1,19 +1,19 @@
 [
   {
-    "id": "81e242dc-18e8-499b-af22-31cc194aad79",
+    "id": "9b7d7c80-1a97-489c-b355-16c7ca0ff422",
     "name": "Test Default View",
     "type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "9c61c765-f695-4cd0-9c12-118873cd8f34",
+        "id": "8a13599c-6ba1-4812-a148-15594a3a3f01",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc",
         "keywords": [
           {
-            "id": "ba63c667-98a7-449a-8a69-870aea514cdc",
+            "id": "6ffa7fdc-c05f-4afb-ad1f-cce0d6435328",
             "field_id": "00000000-0000-0000-0000-000000000001",
             "name": "CHROM ipsum",
             "value": "ipsum",
@@ -33,7 +33,7 @@
             ]
           },
           {
-            "id": "576f3a65-566f-4f9d-abba-05c177bd1932",
+            "id": "c61787ca-33eb-4f69-9467-eb54fbab3fde",
             "field_id": "00000000-0000-0000-0000-000000000001",
             "name": "CHROM elit",
             "value": "elit",
@@ -53,7 +53,7 @@
             ]
           },
           {
-            "id": "fdc2eab3-71cf-42c1-b15d-2722a26f0084",
+            "id": "5c5db3ef-b484-4b2e-803a-088253490068",
             "field_id": "00000000-0000-0000-0000-000000000001",
             "name": "CHROM eu",
             "value": "eu",
@@ -75,14 +75,14 @@
         ]
       },
       {
-        "id": "51ded843-549b-43cb-849d-a7358bf3671f",
+        "id": "be15c648-33fc-4c57-813b-640335a4fbd1",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc",
         "keywords": [
           {
-            "id": "6c752c1c-3205-46bc-8cb0-f3c1af62a058",
+            "id": "5c5a24c4-0905-44a6-858b-6254469983fc",
             "field_id": "00000000-0000-0000-0000-000000000002",
             "name": "POS consequat",
             "value": "consequat",
@@ -104,12 +104,12 @@
         ]
       },
       {
-        "id": "37baa7d2-12a1-4320-ac35-cc6ec351960a",
+        "id": "ebbce32f-6000-4740-9cbc-5e9074e0209e",
         "field_id": "00000000-0000-0000-0000-000000000007",
         "order": 6,
         "keywords": [
           {
-            "id": "8e6c19aa-02a9-4b77-b374-a0aa867f31ae",
+            "id": "64ef8b53-4a94-47b9-a3a5-adc89941b80e",
             "field_id": "00000000-0000-0000-0000-000000000007",
             "name": "FILTER voluptate",
             "value": "voluptate",
@@ -131,24 +131,24 @@
         ]
       },
       {
-        "id": "e95d75d0-7732-4974-a903-1e43aa6a12ee",
-        "field_id": "21a4832f-f846-471f-99eb-bddcde3e9a4d",
+        "id": "56edb757-60c2-4031-8f40-f66c91d6a38f",
+        "field_id": "597dfe14-ccfc-4b8d-a60f-b1519b408d56",
         "order": 3,
         "keywords": []
       },
       {
-        "id": "9aac288f-6944-4ff3-9e64-9b965f640975",
-        "field_id": "8e44dfad-4be9-4f10-b0c6-bcfd20989a42",
+        "id": "a1c6d78b-56f6-4092-accc-d51bc6750e06",
+        "field_id": "73b6e2c9-3eff-4da3-b90d-8a5225a54983",
         "order": 4,
         "keywords": []
       },
       {
-        "id": "cbf78d1c-cda5-4220-8e9e-d9780b37480c",
+        "id": "7a8d9734-619e-43db-815a-e7314ff2f1e4",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 5,
         "keywords": [
           {
-            "id": "b965873e-3bef-4d99-a353-645776e0d461",
+            "id": "4a761805-3b90-4762-82e8-b60ebebbb04e",
             "field_id": "00000000-0000-0000-0000-000000000005",
             "name": "ALT amet",
             "value": "amet",
@@ -172,20 +172,20 @@
     ]
   },
   {
-    "id": "bca1f007-7109-42df-818b-c3cd9aa64798",
+    "id": "4b5528fd-8527-4d73-bd4d-17015c6c46fb",
     "name": "Another Default View",
     "type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "b8423a19-b174-40bb-9d29-8b0f19976794",
+        "id": "0ec18676-71ff-433c-a6e8-bcf50b43a674",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc",
         "keywords": [
           {
-            "id": "ba63c667-98a7-449a-8a69-870aea514cdc",
+            "id": "6ffa7fdc-c05f-4afb-ad1f-cce0d6435328",
             "field_id": "00000000-0000-0000-0000-000000000001",
             "name": "CHROM ipsum",
             "value": "ipsum",
@@ -205,7 +205,7 @@
             ]
           },
           {
-            "id": "576f3a65-566f-4f9d-abba-05c177bd1932",
+            "id": "c61787ca-33eb-4f69-9467-eb54fbab3fde",
             "field_id": "00000000-0000-0000-0000-000000000001",
             "name": "CHROM elit",
             "value": "elit",
@@ -227,14 +227,14 @@
         ]
       },
       {
-        "id": "8d043382-b582-4bb5-935f-2987b8c0795b",
+        "id": "dccb6bb8-69a0-4c5e-a71b-aa2448281d63",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc",
         "keywords": [
           {
-            "id": "6c752c1c-3205-46bc-8cb0-f3c1af62a058",
+            "id": "5c5a24c4-0905-44a6-858b-6254469983fc",
             "field_id": "00000000-0000-0000-0000-000000000002",
             "name": "POS consequat",
             "value": "consequat",
@@ -256,12 +256,12 @@
         ]
       },
       {
-        "id": "df81158f-604d-4072-9631-79329ba6002b",
+        "id": "daee6849-5c8f-4bd0-a8e3-653df7e705ae",
         "field_id": "00000000-0000-0000-0000-000000000007",
         "order": 3,
         "keywords": [
           {
-            "id": "8e6c19aa-02a9-4b77-b374-a0aa867f31ae",
+            "id": "64ef8b53-4a94-47b9-a3a5-adc89941b80e",
             "field_id": "00000000-0000-0000-0000-000000000007",
             "name": "FILTER voluptate",
             "value": "voluptate",
@@ -283,12 +283,12 @@
         ]
       },
       {
-        "id": "427ac73a-351d-4126-b467-d03d44649d63",
+        "id": "2814b7e2-c891-46c9-bdf0-c5bcf2b597ab",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 4,
         "keywords": [
           {
-            "id": "b965873e-3bef-4d99-a353-645776e0d461",
+            "id": "4a761805-3b90-4762-82e8-b60ebebbb04e",
             "field_id": "00000000-0000-0000-0000-000000000005",
             "name": "ALT amet",
             "value": "amet",

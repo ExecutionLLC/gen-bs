@@ -85,7 +85,21 @@
     "is_mandatory": false,
     "value_type": "string",
     "description": "Family ",
-    "dimension": 1
+    "dimension": 1,
+    "available_values": [
+      {
+        "id": "ae88188d-f513-4f48-85e1-17b0f5b8d226",
+        "value": "1"
+      },
+      {
+        "id": "8ad42885-f8b9-476e-929d-e847e2b07c2a",
+        "value": "2"
+      },
+      {
+        "id": "1ddb8e4c-7587-421d-be73-58b384fbcc55",
+        "value": "3"
+      }
+    ]
   },
   {
     "id": "00000000-0000-0000-0000-000000000011",
@@ -165,7 +179,7 @@
     "dimension": 1
   },
   {
-    "id": "f86b2591-2801-40d6-8813-aa89431089c1",
+    "id": "948b5ffb-b676-4135-b4d4-a005f132a250",
     "name": "INFO_AF",
     "label": "INFO_AF",
     "source_name": "sample",
@@ -176,7 +190,7 @@
     "dimension": -1
   },
   {
-    "id": "ae06f57e-dd45-4872-9daf-f0641c1a6606",
+    "id": "c6640876-b119-4fa6-971c-97db06d6bee4",
     "name": "INFO_AO",
     "label": "INFO_AO",
     "source_name": "sample",
@@ -187,7 +201,7 @@
     "dimension": -1
   },
   {
-    "id": "f4146d9d-2e71-4b1e-a320-c330728ff219",
+    "id": "b4d28490-f940-433b-8d3d-83e9c3d600f1",
     "name": "INFO_DP",
     "label": "INFO_DP",
     "source_name": "sample",
@@ -198,7 +212,7 @@
     "dimension": 1
   },
   {
-    "id": "2b4708b7-cfc0-4acf-8129-f1c7596cd63e",
+    "id": "710d337b-224a-440e-9294-04e6b52e8c04",
     "name": "INFO_FAO",
     "label": "INFO_FAO",
     "source_name": "sample",
@@ -209,7 +223,7 @@
     "dimension": -1
   },
   {
-    "id": "c8f9aad4-7b72-4874-bcdd-b6b50912cee5",
+    "id": "b8c9c1dd-5add-4687-a063-a030f0e28951",
     "name": "INFO_FDP",
     "label": "INFO_FDP",
     "source_name": "sample",
@@ -220,7 +234,7 @@
     "dimension": 1
   },
   {
-    "id": "d0a3297b-66a9-47ed-85bd-056d30dae671",
+    "id": "d610fca7-1edc-4960-81bc-47d1d2a86dcd",
     "name": "INFO_FR",
     "label": "INFO_FR",
     "source_name": "sample",
@@ -231,7 +245,7 @@
     "dimension": 0
   },
   {
-    "id": "498a6d43-303b-45ab-a19a-171740ba7308",
+    "id": "0725b743-a59a-4f71-a728-e5564455179e",
     "name": "INFO_FRO",
     "label": "INFO_FRO",
     "source_name": "sample",
@@ -242,7 +256,7 @@
     "dimension": 1
   },
   {
-    "id": "4f9a59ec-5fee-415a-96c0-b74b995a56cb",
+    "id": "c4e79e75-793c-403e-964e-593ad0d58b20",
     "name": "INFO_FSAF",
     "label": "INFO_FSAF",
     "source_name": "sample",
@@ -253,7 +267,7 @@
     "dimension": -1
   },
   {
-    "id": "f05b3ecd-9e5c-409a-b0dd-70a111167394",
+    "id": "29f49f59-f1a6-4534-b112-00855394728f",
     "name": "INFO_FSAR",
     "label": "INFO_FSAR",
     "source_name": "sample",
@@ -264,7 +278,7 @@
     "dimension": -1
   },
   {
-    "id": "96fa4ca1-ded5-46fe-8692-781193e61f99",
+    "id": "e6ecebad-e99b-4237-a6a0-457fd4cfea9e",
     "name": "INFO_FSRF",
     "label": "INFO_FSRF",
     "source_name": "sample",
@@ -275,7 +289,7 @@
     "dimension": 1
   },
   {
-    "id": "f623ab79-e3cf-4c72-8b53-b35a69843aa8",
+    "id": "2ceb400f-6a95-453b-a56b-3230212d46a7",
     "name": "INFO_FSRR",
     "label": "INFO_FSRR",
     "source_name": "sample",
@@ -286,7 +300,7 @@
     "dimension": 1
   },
   {
-    "id": "4f0041b5-46bf-4ffc-91ea-8fc7fa990fb0",
+    "id": "18936d39-248a-4f94-b406-509f29ad29fd",
     "name": "INFO_FWDB",
     "label": "INFO_FWDB",
     "source_name": "sample",
@@ -297,7 +311,7 @@
     "dimension": -1
   },
   {
-    "id": "38bc945c-d337-4365-97bd-714118b714ab",
+    "id": "f4e88fb4-baa3-494b-bf20-ea94e6dd9be4",
     "name": "INFO_FXX",
     "label": "INFO_FXX",
     "source_name": "sample",
@@ -308,7 +322,7 @@
     "dimension": 1
   },
   {
-    "id": "9132b074-4aae-416a-9ed3-f6155700b76e",
+    "id": "aa627229-1e43-4ece-be38-0374bac55dcc",
     "name": "INFO_HRUN",
     "label": "INFO_HRUN",
     "source_name": "sample",
@@ -319,7 +333,7 @@
     "dimension": -1
   },
   {
-    "id": "afc212cf-3775-450e-b82d-f6033383635a",
+    "id": "90fcdaf0-ef9d-45b1-9cb2-8dfb850c170a",
     "name": "INFO_HS",
     "label": "INFO_HS",
     "source_name": "sample",
@@ -330,7 +344,7 @@
     "dimension": 0
   },
   {
-    "id": "85ad0c44-fddb-4cc9-9d45-540a62b45bc7",
+    "id": "1838e4a4-129e-49b9-b94e-d8248d94d70b",
     "name": "INFO_LEN",
     "label": "INFO_LEN",
     "source_name": "sample",
@@ -341,7 +355,7 @@
     "dimension": -1
   },
   {
-    "id": "13e4b455-f539-4657-b995-4bf51c034488",
+    "id": "7a20b633-0194-4670-9cdb-fd5ce79688cf",
     "name": "INFO_MLLD",
     "label": "INFO_MLLD",
     "source_name": "sample",
@@ -352,7 +366,7 @@
     "dimension": -1
   },
   {
-    "id": "5b1c6b0b-af2f-47e7-aaf3-f6de79856a86",
+    "id": "360cbea2-2a75-45a8-afdd-6642549a5ce1",
     "name": "INFO_NS",
     "label": "INFO_NS",
     "source_name": "sample",
@@ -363,7 +377,7 @@
     "dimension": 1
   },
   {
-    "id": "85bddef6-7f5b-4b0f-abb5-49b8974083e1",
+    "id": "92e0f70d-d33e-48d2-a7cd-590e71bd4e2f",
     "name": "INFO_PB",
     "label": "INFO_PB",
     "source_name": "sample",
@@ -374,7 +388,7 @@
     "dimension": -1
   },
   {
-    "id": "12bd7ca5-51d5-4027-9249-b2c5fec28014",
+    "id": "3cc120fb-e70c-4cef-b613-16bc40a07482",
     "name": "INFO_PBP",
     "label": "INFO_PBP",
     "source_name": "sample",
@@ -385,7 +399,7 @@
     "dimension": -1
   },
   {
-    "id": "43eacdf8-1089-4170-9b70-9e4c9759a52e",
+    "id": "cf052bb6-5c4e-4aa2-8874-2e54a286a6f0",
     "name": "INFO_QD",
     "label": "INFO_QD",
     "source_name": "sample",
@@ -396,7 +410,7 @@
     "dimension": 1
   },
   {
-    "id": "8d04adc0-e3ff-43c1-bc15-c2daf0751c55",
+    "id": "d09afa46-d52c-466b-95b4-6e1b84b5888b",
     "name": "INFO_RBI",
     "label": "INFO_RBI",
     "source_name": "sample",
@@ -407,7 +421,7 @@
     "dimension": -1
   },
   {
-    "id": "2674912d-95d9-4919-9608-44eb70e4f379",
+    "id": "d91ea7b9-b661-4013-9908-d5851685bc9c",
     "name": "INFO_REFB",
     "label": "INFO_REFB",
     "source_name": "sample",
@@ -418,7 +432,7 @@
     "dimension": -1
   },
   {
-    "id": "678952ac-3089-415a-9092-465ccd16275d",
+    "id": "3bbe67ff-c1d1-4235-97b7-a9e50e3959f7",
     "name": "INFO_REVB",
     "label": "INFO_REVB",
     "source_name": "sample",
@@ -429,7 +443,7 @@
     "dimension": -1
   },
   {
-    "id": "7cd18a1e-a3fe-4e36-bbc9-fb61e32ee37b",
+    "id": "dd7f6a6d-56ef-4666-b9d8-188e1f52c12a",
     "name": "INFO_RO",
     "label": "INFO_RO",
     "source_name": "sample",
@@ -440,7 +454,7 @@
     "dimension": 1
   },
   {
-    "id": "c3e52c0e-6bcb-4844-ab44-71cae80088ec",
+    "id": "4cc084e4-6f34-481f-8d34-e799bfcbad48",
     "name": "INFO_SAF",
     "label": "INFO_SAF",
     "source_name": "sample",
@@ -451,7 +465,7 @@
     "dimension": -1
   },
   {
-    "id": "c6c60464-124c-430c-bebf-db7d6e3235d8",
+    "id": "7c5a5bca-a9ea-4066-b2f1-f64a8d71f94f",
     "name": "INFO_SAR",
     "label": "INFO_SAR",
     "source_name": "sample",
@@ -462,7 +476,7 @@
     "dimension": -1
   },
   {
-    "id": "c1ce38b5-3063-4882-9501-81ba115501a2",
+    "id": "5379bd33-0d2f-40ee-95c2-8a5bd6a605a6",
     "name": "INFO_SRF",
     "label": "INFO_SRF",
     "source_name": "sample",
@@ -473,7 +487,7 @@
     "dimension": 1
   },
   {
-    "id": "b862133b-6147-45d8-87de-98d98121a403",
+    "id": "9d281233-b62a-4c01-bb58-402a162bed3e",
     "name": "INFO_SRR",
     "label": "INFO_SRR",
     "source_name": "sample",
@@ -484,7 +498,7 @@
     "dimension": 1
   },
   {
-    "id": "534fd4d6-9fd8-44e8-8163-e17fe61d8b96",
+    "id": "ff2be92d-7024-4f22-a6a1-3379756e47b4",
     "name": "INFO_SSEN",
     "label": "INFO_SSEN",
     "source_name": "sample",
@@ -495,7 +509,7 @@
     "dimension": -1
   },
   {
-    "id": "0092d863-2025-490f-8787-a8d069cc83d4",
+    "id": "25b392ee-8b49-4d1e-b22e-e7390b46ca22",
     "name": "INFO_SSEP",
     "label": "INFO_SSEP",
     "source_name": "sample",
@@ -506,7 +520,7 @@
     "dimension": -1
   },
   {
-    "id": "a2567be4-ff52-4bca-aa7e-e6f18a2a83cd",
+    "id": "0965fc18-e418-4924-9dc6-0eabea723f32",
     "name": "INFO_SSSB",
     "label": "INFO_SSSB",
     "source_name": "sample",
@@ -517,7 +531,7 @@
     "dimension": -1
   },
   {
-    "id": "f09ce4bb-87f0-490c-812a-96c91e340c23",
+    "id": "97840b17-03fc-4b6e-b3e2-41407ac17d69",
     "name": "INFO_STB",
     "label": "INFO_STB",
     "source_name": "sample",
@@ -528,7 +542,7 @@
     "dimension": -1
   },
   {
-    "id": "4e9b63e6-9048-44d9-a3ce-2c75792b277a",
+    "id": "3cadcfd6-68b6-493c-ad69-515ae343b7d7",
     "name": "INFO_STBP",
     "label": "INFO_STBP",
     "source_name": "sample",
@@ -539,7 +553,7 @@
     "dimension": -1
   },
   {
-    "id": "dbb6f4d5-ebaf-4e96-86f4-47fc5409ffd6",
+    "id": "9b8c510b-f776-405c-a951-0783e8947570",
     "name": "INFO_TYPE",
     "label": "INFO_TYPE",
     "source_name": "sample",
@@ -550,7 +564,7 @@
     "dimension": -1
   },
   {
-    "id": "c37849d0-e328-4679-b15e-35a38ba62830",
+    "id": "44ddc7a4-5d3f-4d9e-b15c-2a2be53df652",
     "name": "INFO_VARB",
     "label": "INFO_VARB",
     "source_name": "sample",
@@ -561,7 +575,7 @@
     "dimension": -1
   },
   {
-    "id": "6485bf2e-35ae-4d2b-8787-555ca8f26178",
+    "id": "2005cf23-cf3d-4d56-b1ee-0cc958c37050",
     "name": "INFO_OID",
     "label": "INFO_OID",
     "source_name": "sample",
@@ -572,7 +586,7 @@
     "dimension": 0
   },
   {
-    "id": "f654101f-4fdd-4dda-9525-723739f88d05",
+    "id": "13ee2701-c996-4a14-a119-8155e55add98",
     "name": "INFO_OPOS",
     "label": "INFO_OPOS",
     "source_name": "sample",
@@ -583,7 +597,7 @@
     "dimension": 0
   },
   {
-    "id": "c0d491e1-a96e-440d-99a2-2eaa3916f478",
+    "id": "331e5b99-8b0b-494d-bd01-b09a6194baad",
     "name": "INFO_OREF",
     "label": "INFO_OREF",
     "source_name": "sample",
@@ -594,7 +608,7 @@
     "dimension": 0
   },
   {
-    "id": "d4899137-147b-45e2-a96e-dc0a684e1526",
+    "id": "8445ba05-d70b-4db8-b438-2ea81f8337b5",
     "name": "INFO_OALT",
     "label": "INFO_OALT",
     "source_name": "sample",
@@ -605,7 +619,7 @@
     "dimension": 0
   },
   {
-    "id": "560df503-fc49-46e5-8240-c1d5fe690fbc",
+    "id": "51809192-5852-492a-9372-951483b8117b",
     "name": "INFO_OMAPALT",
     "label": "INFO_OMAPALT",
     "source_name": "sample",
@@ -616,29 +630,7 @@
     "dimension": 0
   },
   {
-    "id": "85e061fc-9a33-45ee-9ef8-43ca3b9aeae0",
-    "name": "INFO_FR",
-    "label": "INFO_FR",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Reason why the variant was filtered.",
-    "dimension": 1
-  },
-  {
-    "id": "92f4b361-3e2f-4950-9c83-226c38d82bcb",
-    "name": "INFO_NR",
-    "label": "INFO_NR",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Reason why the variant is a No-Call.",
-    "dimension": 1
-  },
-  {
-    "id": "e4532d52-796a-4919-8bb2-5690a757d9d2",
+    "id": "0cc297c7-a671-4e86-b595-322c33870f60",
     "name": "INFO_ADP",
     "label": "INFO_ADP",
     "source_name": "sample",
@@ -649,7 +641,7 @@
     "dimension": 1
   },
   {
-    "id": "36995844-fb5b-43f9-952e-25c5bfd49d94",
+    "id": "4aa33cb5-3e73-417e-812b-c336a12902fd",
     "name": "INFO_WT",
     "label": "INFO_WT",
     "source_name": "sample",
@@ -660,7 +652,7 @@
     "dimension": 1
   },
   {
-    "id": "c18aabd3-d380-474a-92b4-88d79bed7ec7",
+    "id": "13b99e63-3f8d-49dd-a3bd-160e6aba5ba2",
     "name": "INFO_HET",
     "label": "INFO_HET",
     "source_name": "sample",
@@ -671,7 +663,7 @@
     "dimension": 1
   },
   {
-    "id": "b3b5ea10-7ac6-4a3f-bc4a-e5ba7e05a858",
+    "id": "ba2cabd4-5ff4-44ba-8d62-b01561c813db",
     "name": "INFO_HOM",
     "label": "INFO_HOM",
     "source_name": "sample",
@@ -682,7 +674,7 @@
     "dimension": 1
   },
   {
-    "id": "e25dcbd0-5698-48f1-8db8-2929f5471816",
+    "id": "02589cc9-73ed-4bc4-b6e1-b22fa03e8663",
     "name": "INFO_NC",
     "label": "INFO_NC",
     "source_name": "sample",
@@ -693,7 +685,29 @@
     "dimension": 1
   },
   {
-    "id": "a5869fd3-19ab-403f-82ba-30f9aa7b1892",
+    "id": "9d0b0b0c-c99c-46cb-b532-029fb2b8554f",
+    "name": "INFO_FR",
+    "label": "INFO_FR",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Reason why the variant was filtered.",
+    "dimension": 1
+  },
+  {
+    "id": "9d2a9af0-1866-4160-918e-6abe747c825f",
+    "name": "INFO_NR",
+    "label": "INFO_NR",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Reason why the variant is a No-Call.",
+    "dimension": 1
+  },
+  {
+    "id": "31d85be9-5c05-4143-9301-32d2207132f5",
     "name": "INFO_RS",
     "label": "INFO_RS",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -704,7 +718,7 @@
     "dimension": 1
   },
   {
-    "id": "21a4832f-f846-471f-99eb-bddcde3e9a4d",
+    "id": "597dfe14-ccfc-4b8d-a60f-b1519b408d56",
     "name": "INFO_RSPOS",
     "label": "INFO_RSPOS",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -715,7 +729,7 @@
     "dimension": 1
   },
   {
-    "id": "aeb5b755-4b4a-4cde-b76a-df969228b12d",
+    "id": "320cef7e-94e9-4572-ba3b-d26c4111ff64",
     "name": "INFO_RV",
     "label": "INFO_RV",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -726,7 +740,7 @@
     "dimension": 0
   },
   {
-    "id": "8e44dfad-4be9-4f10-b0c6-bcfd20989a42",
+    "id": "73b6e2c9-3eff-4da3-b90d-8a5225a54983",
     "name": "INFO_VP",
     "label": "INFO_VP",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -737,7 +751,7 @@
     "dimension": 1
   },
   {
-    "id": "12aa512e-5fa7-4f00-bf0a-a866be99c7d3",
+    "id": "9935c643-af0f-4312-a966-13fe748b233b",
     "name": "INFO_GENEINFO",
     "label": "INFO_GENEINFO",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -748,7 +762,7 @@
     "dimension": 1
   },
   {
-    "id": "0c4f3542-e835-48b4-b02d-d611cdd3ab6e",
+    "id": "9039e62d-d308-4cbd-9d97-6e535ae0016c",
     "name": "INFO_dbSNPBuildID",
     "label": "INFO_dbSNPBuildID",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -759,7 +773,7 @@
     "dimension": 1
   },
   {
-    "id": "25ec1f32-e550-46d2-a377-bae0082ce961",
+    "id": "727fac31-ae15-4366-9d52-2808484c299c",
     "name": "INFO_SAO",
     "label": "INFO_SAO",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -770,7 +784,7 @@
     "dimension": 1
   },
   {
-    "id": "3dd5ca0b-35b3-42bd-a788-d953752d92f4",
+    "id": "bd64c048-9aaa-4ed0-a506-d9690502e6af",
     "name": "INFO_SSR",
     "label": "INFO_SSR",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -781,7 +795,7 @@
     "dimension": 1
   },
   {
-    "id": "a6fe513c-cc3a-47dd-b386-f9aceec4bf85",
+    "id": "c41e8a70-2f4c-4253-a9a7-350dbe36e70c",
     "name": "INFO_WGT",
     "label": "INFO_WGT",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -792,7 +806,7 @@
     "dimension": 1
   },
   {
-    "id": "d177960f-2a5f-4485-b508-8c6d7f4f2ec9",
+    "id": "52804d49-3429-42b7-a8f7-63b327e16686",
     "name": "INFO_VC",
     "label": "INFO_VC",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -803,7 +817,7 @@
     "dimension": 1
   },
   {
-    "id": "94b747f9-6388-488a-bb61-a5125a08d1fe",
+    "id": "3f778373-c055-4c1b-8247-afda60899a91",
     "name": "INFO_PM",
     "label": "INFO_PM",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -814,7 +828,7 @@
     "dimension": 0
   },
   {
-    "id": "f66ee6ed-d320-455f-84b8-5a4945b59712",
+    "id": "56ebb9ac-3a3d-4499-873b-76777db3d22c",
     "name": "INFO_TPA",
     "label": "INFO_TPA",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -825,7 +839,7 @@
     "dimension": 0
   },
   {
-    "id": "0bee4caa-665f-4b2a-bfa1-2b10a746fa60",
+    "id": "eb292188-8077-4809-830c-3f162e9d2998",
     "name": "INFO_PMC",
     "label": "INFO_PMC",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -836,7 +850,7 @@
     "dimension": 0
   },
   {
-    "id": "854646de-3cf2-4c98-b6a8-fbba1452c6e6",
+    "id": "ef1f913d-9904-4a8c-a9aa-135fd89b54e2",
     "name": "INFO_S3D",
     "label": "INFO_S3D",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -847,7 +861,7 @@
     "dimension": 0
   },
   {
-    "id": "26529757-f7cb-4cc0-ae23-f83e7f127633",
+    "id": "35049e73-d6d0-4b00-bb62-f838b7349505",
     "name": "INFO_SLO",
     "label": "INFO_SLO",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -858,7 +872,7 @@
     "dimension": 0
   },
   {
-    "id": "74c1728f-58c3-490c-8e80-d3eef04064ce",
+    "id": "a852b587-bab9-4d31-a252-8c63543b2f56",
     "name": "INFO_NSF",
     "label": "INFO_NSF",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -869,7 +883,7 @@
     "dimension": 0
   },
   {
-    "id": "82961eb1-3b74-4e52-94a7-51db5edb73c3",
+    "id": "c75addbd-6e22-4173-9942-c22741f31cf7",
     "name": "INFO_NSM",
     "label": "INFO_NSM",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -880,7 +894,7 @@
     "dimension": 0
   },
   {
-    "id": "916441b2-e9da-41cb-ad21-411f259434c3",
+    "id": "37b64c21-3312-4663-87a7-3c738dddd50b",
     "name": "INFO_NSN",
     "label": "INFO_NSN",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -891,7 +905,7 @@
     "dimension": 0
   },
   {
-    "id": "2014efef-0528-448c-8924-23ed1bc24a62",
+    "id": "5af12172-adf7-4167-883a-f1aea5b235d2",
     "name": "INFO_REF",
     "label": "INFO_REF",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -902,7 +916,7 @@
     "dimension": 0
   },
   {
-    "id": "75e2cae6-aaba-4eb1-ba92-0f6e407c0e3c",
+    "id": "b2f6fa65-7bd6-46f6-895f-443596d52d1d",
     "name": "INFO_SYN",
     "label": "INFO_SYN",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -913,7 +927,7 @@
     "dimension": 0
   },
   {
-    "id": "26b0fde6-3dd9-4646-ad59-314d25fa08d2",
+    "id": "2e740b46-269c-429d-8af8-103b03359601",
     "name": "INFO_U3",
     "label": "INFO_U3",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -924,7 +938,7 @@
     "dimension": 0
   },
   {
-    "id": "a704fcf3-d5d8-494b-8c4e-470f75d84c23",
+    "id": "c4c16480-764e-428b-aae3-2bd8f9fc6452",
     "name": "INFO_U5",
     "label": "INFO_U5",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -935,7 +949,7 @@
     "dimension": 0
   },
   {
-    "id": "ba7ecb84-5db0-46be-a6a2-150b7256f1d7",
+    "id": "ddea9fa2-6b43-4751-b090-d01d4a3f2504",
     "name": "INFO_ASS",
     "label": "INFO_ASS",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -946,7 +960,7 @@
     "dimension": 0
   },
   {
-    "id": "d16786d1-8cd9-412c-b3b7-1a41d9d794a6",
+    "id": "86add668-0218-477e-8ff1-c826ec11ae41",
     "name": "INFO_DSS",
     "label": "INFO_DSS",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -957,7 +971,7 @@
     "dimension": 0
   },
   {
-    "id": "355560b9-c312-4f7c-afa3-8d3271b6473c",
+    "id": "258bdf3b-a790-4caa-b144-8f7f870cc7e9",
     "name": "INFO_INT",
     "label": "INFO_INT",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -968,7 +982,7 @@
     "dimension": 0
   },
   {
-    "id": "e839d45f-3689-463a-b1a6-810f61fbc876",
+    "id": "372f178a-be90-4a8d-89f1-64d0436d0c81",
     "name": "INFO_R3",
     "label": "INFO_R3",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -979,7 +993,7 @@
     "dimension": 0
   },
   {
-    "id": "f5e6a9af-3420-48ed-945a-7b8671921797",
+    "id": "f8d7786f-45a1-4d6b-b678-158d9928ed1e",
     "name": "INFO_R5",
     "label": "INFO_R5",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -990,7 +1004,7 @@
     "dimension": 0
   },
   {
-    "id": "1d13629d-6628-4d33-8a0c-ea55c8795f8c",
+    "id": "a7de8fa0-9d83-4474-b87f-06d1e2d97028",
     "name": "INFO_OTH",
     "label": "INFO_OTH",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1001,7 +1015,7 @@
     "dimension": 0
   },
   {
-    "id": "9b492d33-bf7f-4dbe-a61c-a950fe8876ac",
+    "id": "1dd4932c-2558-4eea-87ad-9effe6474f87",
     "name": "INFO_CFL",
     "label": "INFO_CFL",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1012,7 +1026,7 @@
     "dimension": 0
   },
   {
-    "id": "11f6c6e9-036d-4d04-9c94-82f4dd39bddf",
+    "id": "952cb5e0-f034-4dbd-8f98-50f328e72ee4",
     "name": "INFO_ASP",
     "label": "INFO_ASP",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1023,7 +1037,7 @@
     "dimension": 0
   },
   {
-    "id": "eb466188-f80c-462c-90d8-23d61859c6a0",
+    "id": "d5a59baa-df20-4e50-a5e7-174f776f87cc",
     "name": "INFO_MUT",
     "label": "INFO_MUT",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1034,7 +1048,7 @@
     "dimension": 0
   },
   {
-    "id": "485d8fdf-402d-457b-b7ca-a41c8ca0a4f3",
+    "id": "69f24cf0-9cc6-4cc9-8dc6-7f89b9035bd5",
     "name": "INFO_VLD",
     "label": "INFO_VLD",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1045,7 +1059,7 @@
     "dimension": 0
   },
   {
-    "id": "055e8b76-5e99-4491-8025-3d0ad7e391fd",
+    "id": "f16143dd-258b-4278-8b82-8fb6ed00f9a3",
     "name": "INFO_G5A",
     "label": "INFO_G5A",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1056,7 +1070,7 @@
     "dimension": 0
   },
   {
-    "id": "a69cd256-851b-47a2-a708-9a7601bbed6a",
+    "id": "a9c6b760-fbe1-400c-be45-a6d052e12681",
     "name": "INFO_G5",
     "label": "INFO_G5",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1067,7 +1081,7 @@
     "dimension": 0
   },
   {
-    "id": "a247d969-1f62-43bd-a3cf-88ca736f0a24",
+    "id": "bb717c88-9035-4d97-add9-794ecf752847",
     "name": "INFO_HD",
     "label": "INFO_HD",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1078,7 +1092,7 @@
     "dimension": 0
   },
   {
-    "id": "c2f4a282-a781-42a6-b23b-cd5eda8fd389",
+    "id": "958af441-3232-41ca-85c9-318de388a3bd",
     "name": "INFO_GNO",
     "label": "INFO_GNO",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1089,7 +1103,7 @@
     "dimension": 0
   },
   {
-    "id": "51a8a665-2340-4156-bf07-5aaaa7c85055",
+    "id": "d4e7c144-1a3d-45c9-adcb-5fb100ab1016",
     "name": "INFO_KGPhase1",
     "label": "INFO_KGPhase1",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1100,7 +1114,7 @@
     "dimension": 0
   },
   {
-    "id": "4128aca8-81d7-4f99-af55-8153bd785190",
+    "id": "f1512f7a-59cd-454e-9977-8d220cbe6411",
     "name": "INFO_KGPhase3",
     "label": "INFO_KGPhase3",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1111,7 +1125,7 @@
     "dimension": 0
   },
   {
-    "id": "db5eefc6-645f-4c08-9e87-1911f8e2262c",
+    "id": "f89ae273-b1dd-48ac-8d00-778c1e4f5104",
     "name": "INFO_CDA",
     "label": "INFO_CDA",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1122,7 +1136,7 @@
     "dimension": 0
   },
   {
-    "id": "a6fc3e45-04c2-4d04-8699-b27c20f82260",
+    "id": "8fe68609-2b3d-425a-b7cc-3187076246aa",
     "name": "INFO_LSD",
     "label": "INFO_LSD",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1133,7 +1147,7 @@
     "dimension": 0
   },
   {
-    "id": "686dfb37-2c32-47b4-8601-20103bfccd7d",
+    "id": "2eecaf28-130d-4458-9dff-48a93c124c46",
     "name": "INFO_MTP",
     "label": "INFO_MTP",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1144,7 +1158,7 @@
     "dimension": 0
   },
   {
-    "id": "6f38022c-4e7f-4450-973a-9eeb4034a437",
+    "id": "daae569e-763a-4bfa-a93f-dcf48517c6a8",
     "name": "INFO_OM",
     "label": "INFO_OM",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1155,7 +1169,7 @@
     "dimension": 0
   },
   {
-    "id": "37d17fdd-3eec-4eb6-9cd4-91398c82f01f",
+    "id": "408e0cf1-f43b-42e3-9e63-9642301ca338",
     "name": "INFO_NOC",
     "label": "INFO_NOC",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1166,7 +1180,7 @@
     "dimension": 0
   },
   {
-    "id": "5593358b-5648-4262-8fea-9dc44a6c435b",
+    "id": "0d1e276e-b17d-45ac-bf21-c55f529fd8f5",
     "name": "INFO_WTD",
     "label": "INFO_WTD",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1177,7 +1191,7 @@
     "dimension": 0
   },
   {
-    "id": "4ee1f06c-fb6b-45a3-bdf9-a5aeb2756c1b",
+    "id": "3799506b-9cb6-4740-b254-5aa09b321048",
     "name": "INFO_NOV",
     "label": "INFO_NOV",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1188,7 +1202,7 @@
     "dimension": 0
   },
   {
-    "id": "8f693f5b-63d0-4f6c-9f3a-7b07e6b3e9ef",
+    "id": "beee8bbe-fddb-44f1-8ddb-4e2e5ed81e4b",
     "name": "INFO_CAF",
     "label": "INFO_CAF",
     "source_name": "common_no_known_medical_impact_20151201",
@@ -1199,7 +1213,7 @@
     "dimension": 0
   },
   {
-    "id": "e987036e-2347-4350-ad4f-c30ae60ec978",
+    "id": "53851b85-8506-453c-8971-c677f2b365ed",
     "name": "INFO_COMMON",
     "label": "INFO_COMMON",
     "source_name": "common_no_known_medical_impact_20151201",

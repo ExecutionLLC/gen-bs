@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "Vcf Filed Name",
+	"title": "Vcf Field metadata",
 	"type": "object",
 	"properties": {
 		"id": {
@@ -50,7 +50,6 @@
 		"available_values": {
 			"type": "array",
 			"description": "Values for enum-like fields",
-
 			"items": {
 				"type": "object",
 				"properties": {

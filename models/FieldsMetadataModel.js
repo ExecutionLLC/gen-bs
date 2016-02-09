@@ -109,9 +109,44 @@ class FieldsMetadataModel extends ModelBase {
                     this._unsafeInsert('field_text', dataToInsert, trx, (error) => {
                         callback(error, metadataId);
                     });
+                },
+                (metadataId, callback) => {
+                    this._addAvailableValues(languId, metadataId, metadata, shouldGenerateId, trx, (error) => {
+                        callback(error, metadataId);
+                    });
                 }
             ], callback);
         }, callback);
+    }
+
+    _addAvailableValues(languId, metadataId, metadata, shouldGenerateId, trx, callback) {
+        if (metadata.availableValues) {
+            async.map(metadata.availableValues, (availableValue, callback) => {
+                this._addAvailableValue(languId, metadataId, availableValue, shouldGenerateId, trx, callback);
+            }, callback);
+        } else {
+            callback(null, metadataId);
+        }
+    }
+
+    _addAvailableValue(languId, metadataId, availableValue, shouldGenerateId, trx, callback) {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = {
+                    id: (shouldGenerateId ? this._generateId() : availableValue.id),
+                    fieldId: metadataId
+                };
+                this._unsafeInsert('field_available_value', dataToInsert, trx, callback);
+            },
+            (fieldAvailableValueId, callback) => {
+                const dataToInsert = {
+                    fieldAvailableValueId: fieldAvailableValueId,
+                    languId: languId,
+                    value: availableValue.value
+                };
+                this._unsafeInsert('field_available_value_text', dataToInsert, trx, callback);
+            }
+        ], callback);
     }
 
     _fetch(metadataId, callback) {
