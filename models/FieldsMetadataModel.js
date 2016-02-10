@@ -18,12 +18,24 @@ const mappedColumns = [
     'dimension',
     'languId',
     'description',
-    'label'
+    'label',
+    'availableValues'
 ];
 
 class FieldsMetadataModel extends ModelBase {
     constructor(models) {
         super(models, 'field_metadata', mappedColumns);
+    }
+
+    find(metadataId, callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetch(metadataId, callback);
+            },
+            (fieldMetadata, callback) => {
+                this._mapFieldMetadata(fieldMetadata, callback);
+            }
+        ], callback);
     }
 
     findMany(metadataIds, callback) {
@@ -32,7 +44,7 @@ class FieldsMetadataModel extends ModelBase {
                 this._fetchByIds(metadataIds, callback);
             },
             (fieldsMetadata, callback) => {
-                this._mapMetadata(fieldsMetadata, callback);
+                this._mapFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
@@ -55,7 +67,7 @@ class FieldsMetadataModel extends ModelBase {
                 this._fetchSourcesMetadata(callback);
             },
             (fieldsMetadata, callback) => {
-                this._mapMetadata(fieldsMetadata, callback);
+                this._mapFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
@@ -65,8 +77,8 @@ class FieldsMetadataModel extends ModelBase {
             (callback) => {
                 this._fetchMetadataBySourceName(sourceName, callback);
             },
-            (metadata, callback) => {
-                callback(null, this._mapColumns(metadata));
+            (fieldsMetadata, callback) => {
+                this._mapFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
     }
@@ -109,9 +121,44 @@ class FieldsMetadataModel extends ModelBase {
                     this._unsafeInsert('field_text', dataToInsert, trx, (error) => {
                         callback(error, metadataId);
                     });
+                },
+                (metadataId, callback) => {
+                    this._addAvailableValues(metadataId, metadata, shouldGenerateId, trx, (error) => {
+                        callback(error, metadataId);
+                    });
                 }
             ], callback);
         }, callback);
+    }
+
+    _addAvailableValues(metadataId, metadata, shouldGenerateId, trx, callback) {
+        if (metadata.availableValues) {
+            async.map(metadata.availableValues, (availableValue, callback) => {
+                this._addAvailableValue(metadataId, availableValue, shouldGenerateId, trx, callback);
+            }, callback);
+        } else {
+            callback(null, metadataId);
+        }
+    }
+
+    _addAvailableValue(metadataId, availableValue, shouldGenerateId, trx, callback) {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = {
+                    id: (shouldGenerateId ? this._generateId() : availableValue.id),
+                    fieldId: metadataId
+                };
+                this._unsafeInsert('field_available_value', dataToInsert, trx, callback);
+            },
+            (fieldAvailableValueId, callback) => {
+                const dataToInsert = {
+                    fieldAvailableValueId: fieldAvailableValueId,
+                    languId: availableValue.languId,
+                    value: availableValue.value
+                };
+                this._unsafeInsert('field_available_value_text', dataToInsert, trx, callback);
+            }
+        ], callback);
     }
 
     _fetch(metadataId, callback) {
@@ -191,9 +238,39 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    _mapMetadata(fieldsMetadata, callback) {
-        async.map(fieldsMetadata, (metadata, callback) => {
-            callback(null, this._mapColumns(metadata));
+    _mapFieldsMetadata(fieldsMetadata, callback) {
+        async.map(fieldsMetadata, (fieldMetadata, callback) => {
+            this._mapFieldMetadata(fieldMetadata, callback);
+        }, callback);
+    }
+
+    _mapFieldMetadata(fieldMetadata, callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetchFieldAvailableValues(fieldMetadata.id, callback);
+            },
+            (fieldAvailableValues, callback) => {
+                if (fieldAvailableValues && (fieldAvailableValues.length > 0)) {
+                    fieldMetadata.availableValues = fieldAvailableValues;
+                }
+                callback(null, this._mapColumns(fieldMetadata));
+            }
+        ], callback);
+    }
+
+    _fetchFieldAvailableValues(metadataId, callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from('field_available_value')
+                .innerJoin('field_available_value_text', 'field_available_value_text.field_available_value_id', 'field_available_value.id')
+                .whereIn('field_id', metadataId)
+                .asCallback((error, fieldAvailableValues) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldAvailableValues));
+                    }
+                });
         }, callback);
     }
 

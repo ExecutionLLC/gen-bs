@@ -166,8 +166,8 @@ class InitialDataImportManager {
     }
 
     _importMetadata(fieldsMetadata, callback) {
-        async.map(fieldsMetadata, (metadata, cb) => {
-            this.models.fields.addWithId(this.config.defaultLanguId, metadata, cb)
+        async.map(fieldsMetadata, (fieldMetadata, cb) => {
+            this.models.fields.addWithId(this.config.defaultLanguId, fieldMetadata, cb)
         }, callback);
     }
 }

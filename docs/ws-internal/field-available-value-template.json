@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One view item template",
+  "type": "object",
+  "properties": {
+    "langu_id": {
+      "type": "string",
+      "enum": [
+        "en",
+        "zh"
+      ],
+      "description": "Field available value language identifier"
+    },
+    "value": {
+      "type": "string",
+      "description": "Field available value"
+    }
+  },
+  "required": [
+    "langu_id",
+    "value"
+  ]
+}

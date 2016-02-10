@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
-	"title": "Vcf Filed Name",
+	"title": "Vcf Field metadata",
 	"type": "object",
 	"properties": {
 		"id": {
@@ -40,6 +40,10 @@
 			"description": "Text description for tooltip",
 			"type": "string"
 		},
+		"dimension": {
+			"type": "integer",
+			"description": "Possible number of values in the field. Comes from application server. When name, type and dimension are the same, fields are considered the same"
+		},
 		"keywords": {
 			"type": "array",
 			"uniqueItems": true,
@@ -50,7 +54,6 @@
 		"available_values": {
 			"type": "array",
 			"description": "Values for enum-like fields",
-
 			"items": {
 				"type": "object",
 				"properties": {

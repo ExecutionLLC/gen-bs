@@ -4,18 +4,32 @@
     "name": "FAMILY_ID",
     "label": "Family id",
     "source_name": "sample",
-    "is_editable": false,
+    "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
     "description": "Family ",
-    "dimension": 1
+    "dimension": 1,
+    "available_values": [
+      {
+        "langu_id": "en",
+        "value": "abc1"
+      },
+      {
+        "langu_id": "en",
+        "value": "abc2"
+      },
+      {
+        "langu_id": "en",
+        "value": "abc3"
+      }
+    ]
   },
   {
     "id": "00000000-0000-0000-0000-000000000011",
     "name": "FAMILY_INFO",
     "label": "Family information",
     "source_name": "sample",
-    "is_editable": false,
+    "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
     "description": "Family information (proband (default)/mother/father/sibling)",
@@ -26,7 +40,7 @@
     "name": "GENDER",
     "label": "Gender",
     "source_name": "sample",
-    "is_editable": false,
+    "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
     "description": "Gender (Male/Female/Unknown (default))",
@@ -37,7 +51,7 @@
     "name": "PHENOTYPE",
     "label": "Phenotype",
     "source_name": "sample",
-    "is_editable": false,
+    "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
     "description": "Phenotype (Big ears (hpo1)/Small ears (hpo2))",
@@ -48,7 +62,7 @@
     "name": "SAMPLE_ID",
     "label": "Sample id",
     "source_name": "sample",
-    "is_editable": false,
+    "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
     "description": "Sample id",
@@ -59,7 +73,7 @@
     "name": "SAMPLE_TYPE",
     "label": "Sample type",
     "source_name": "sample",
-    "is_editable": false,
+    "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
     "description": "Sample type",
@@ -70,7 +84,7 @@
     "name": "REFERENCE",
     "label": "Genome build",
     "source_name": "sample",
-    "is_editable": false,
+    "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
     "description": "Genome build (hg19 (default)/hg38)",
@@ -81,7 +95,7 @@
     "name": "COMMENT",
     "label": "Comment",
     "source_name": "sample",
-    "is_editable": false,
+    "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
     "description": "User's comment",
