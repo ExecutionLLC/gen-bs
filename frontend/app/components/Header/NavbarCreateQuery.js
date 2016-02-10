@@ -26,7 +26,7 @@ class NavbarCreateQuery extends Component {
         <nav className="navbar navbar-fixed-top navbar-default">
             <div className="container-fluid">
                 <div className="table-row">
-                  <Upload />
+                  <Upload  {...this.props} />
                   <MetadataSearch
                     {...this.props}
                     sampleSelected={ (e) => dispatch(changeSample(samples, $(e.target).val()))}
