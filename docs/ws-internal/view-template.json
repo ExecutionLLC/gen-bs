@@ -26,7 +26,8 @@
       "uniqueItems": true,
       "items": {
         "$ref": "./view-list-item-template.json#"
-      }
+      },
+      "description": "View items list"
     }
   },
   "required": [

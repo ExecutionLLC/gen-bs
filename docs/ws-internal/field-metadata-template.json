@@ -44,6 +44,15 @@
     "dimension": {
       "type": "integer",
       "description": "Possible number of values in the field. Comes from application server. When name, type and dimension are the same, fields are considered the same"
+    },
+    "available_values": {
+      "type": "array",
+      "minItems": 0,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "./field-available-value-template.json#"
+      },
+      "description": "Field available values list"
     }
   },
   "required": [

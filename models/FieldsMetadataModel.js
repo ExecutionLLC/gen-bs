@@ -123,7 +123,7 @@ class FieldsMetadataModel extends ModelBase {
                     });
                 },
                 (metadataId, callback) => {
-                    this._addAvailableValues(languId, metadataId, metadata, shouldGenerateId, trx, (error) => {
+                    this._addAvailableValues(metadataId, metadata, shouldGenerateId, trx, (error) => {
                         callback(error, metadataId);
                     });
                 }
@@ -131,17 +131,17 @@ class FieldsMetadataModel extends ModelBase {
         }, callback);
     }
 
-    _addAvailableValues(languId, metadataId, metadata, shouldGenerateId, trx, callback) {
+    _addAvailableValues(metadataId, metadata, shouldGenerateId, trx, callback) {
         if (metadata.availableValues) {
             async.map(metadata.availableValues, (availableValue, callback) => {
-                this._addAvailableValue(languId, metadataId, availableValue, shouldGenerateId, trx, callback);
+                this._addAvailableValue(metadataId, availableValue, shouldGenerateId, trx, callback);
             }, callback);
         } else {
             callback(null, metadataId);
         }
     }
 
-    _addAvailableValue(languId, metadataId, availableValue, shouldGenerateId, trx, callback) {
+    _addAvailableValue(metadataId, availableValue, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
                 const dataToInsert = {
@@ -153,7 +153,7 @@ class FieldsMetadataModel extends ModelBase {
             (fieldAvailableValueId, callback) => {
                 const dataToInsert = {
                     fieldAvailableValueId: fieldAvailableValueId,
-                    languId: languId,
+                    languId: availableValue.languId,
                     value: availableValue.value
                 };
                 this._unsafeInsert('field_available_value_text', dataToInsert, trx, callback);
