@@ -43,19 +43,19 @@ class FiltersService extends UserEntityServiceBase {
                 }
             },
             (callback) => {
-                this._createFilterRulesRecursively(filter.rules, (error) => {
+                this._checkFilterRulesRecursively(filter.rules, (error) => {
                     callback(error);
                 });
             }
         ], callback);
     }
 
-    _createFilterRulesRecursively(filterRulesObject, callback) {
+    _checkFilterRulesRecursively(filterRulesObject, callback) {
         const operator = filterRulesObject['$and'] ? '$and' :
             filterRulesObject['$or'] ? '$or' : null;
         if (operator) {
             const operands = filterRulesObject[operator];
-            const mappedOperands = _.map(operands, (operand) => this._createFilterRulesRecursively(operand, callback));
+            const mappedOperands = _.map(operands, (operand) => this._checkFilterRulesRecursively(operand, callback));
             const result = {};
             result[operator] = mappedOperands;
             callback(null, result);
