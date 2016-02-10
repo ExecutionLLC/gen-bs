@@ -18,7 +18,7 @@ class FileUploadModal extends Component {
         >
           <FileUploadHeader />
           <Modal.Body>
-            <FileUpload />
+            <FileUpload {...this.props} />
           </Modal.Body>
         </Modal>
     )
@@ -26,12 +26,11 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-  const { ui, userData, fields } = state
+  const { ui, fileUpload } = state
 
   return {
-    userData,
-    fields,
-    ui
+    ui,
+    fileUpload
   }
 }
 
