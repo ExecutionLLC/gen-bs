@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const Uuid = require('node-uuid');
 
-const USER_METADATA = require('../test_data/user_metadata.json');
+const USER_METADATA = require('../defaults/users/default-users.json');
 const ServiceBase = require('./ServiceBase');
 
 /**

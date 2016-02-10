@@ -9,13 +9,13 @@
 //
 //## Gray and brand colors for use across Bootstrap.
 
-@gray-base:              #222;
+@gray-base:              #111;
 @gray-darker:            lighten(@gray-base, 13.5%); // #222
 @gray-dark:              lighten(@gray-base, 20%);   // #333
 @gray:                   lighten(@gray-base, 33.5%); // #555
 @gray-light:             lighten(@gray-base, 46.7%); // #777
 @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
-
+@gray-dark-tint:         #454548;
 
 
 //== Scaffolding
@@ -39,7 +39,7 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-@font-family-sans-serif:  "Lato", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:  "Helvetica Neue",Helvetica,Arial,sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
@@ -120,9 +120,9 @@
 //## Customizes the `.table` component with basic values, each used across all table variations.
 
 //** Padding for `<th>`s and `<td>`s.
-@table-cell-padding:            8px;
+@table-cell-padding:            5px;
 //** Padding for cells in `.table-condensed`.
-@table-condensed-cell-padding:  5px;
+@table-condensed-cell-padding:  4px;
 
 //** Default background color used for all tables.
 @table-bg:                      #fff;
@@ -155,6 +155,10 @@
 @btn-primary-color:              #fff;
 @btn-primary-bg:                 @brand-primary;
 @btn-primary-border:             @btn-primary-bg;
+@btn-dark-primary-color:              #fff;
+@btn-dark-primary-bg:                 darken(@brand-primary, 3%);
+@btn-dark-primary-border:             @btn-dark-primary-bg;
+
 
 @btn-success-color:              #fff;
 @btn-success-bg:                 @brand-success;
@@ -176,6 +180,10 @@
 @btn-alt-primary-border:         @btn-alt-primary-bg;
 
 @btn-link-disabled-color:        @gray-light;
+
+@btn-inverse-color:               @brand-primary;
+@btn-inverse-bg:                  #fff;
+@btn-inverse-border:              #fff;
 
 // Allows for customizing button radius independently from global border radius
 @btn-border-radius-base:         @border-radius-base;
@@ -211,7 +219,7 @@
 
 //** Placeholder text color
 @input-color-placeholder:        #999;
-@placeholder-inverse:            fade(#fff, 40%);
+@placeholder-inverse:            @light-primary-color;
 //** Default `.form-control` height
 @input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 2);
 //** Large `.form-control` height
@@ -365,7 +373,7 @@
 //##
 
 // Basics of a navbar
-@navbar-height:                    50px;
+@navbar-height:                    44px;
 @navbar-margin-bottom:             @line-height-computed;
 @navbar-border-radius:             @border-radius-base;
 @navbar-padding-horizontal:        floor((@grid-gutter-width / 2));
@@ -446,7 +454,7 @@
 
 
 //== Pills
-@nav-pills-border-radius:                   @border-radius-base;
+@nav-pills-border-radius:                   20px;
 @nav-pills-active-link-hover-bg:            @component-active-bg;
 @nav-pills-active-link-hover-color:         @component-active-color;
 
@@ -510,9 +518,9 @@
 //** Tooltip max width
 @tooltip-max-width:           200px;
 //** Tooltip text color
-@tooltip-color:               @brand-primary;
+@tooltip-color:               @gray-lighter;
 //** Tooltip background color
-@tooltip-bg:                  lighten(@light-primary-color, 6%);
+@tooltip-bg:                  @gray-dark-tint;
 @tooltip-opacity:             1;
 
 
@@ -592,11 +600,15 @@
 @modal-inner-padding:         15px;
 
 //** Padding applied to the modal title
+@modal-header-bg:              @brand-primary;
+
+@modal-title-color:            #fff ;
 @modal-title-padding:         15px;
 //** Modal title line-height
 @modal-title-line-height:     @line-height-base;
 
 //** Background color of modal content area
+
 @modal-content-bg:               #f9f9f9;
 //** Modal content border color
 @modal-content-border-color:                   rgba(0,0,0,.2);
@@ -604,7 +616,7 @@
 @modal-content-fallback-border-color:          #999;
 
 //** Modal backdrop background color
-@modal-backdrop-bg:           desaturate(@brand-primary, 40%);
+@modal-backdrop-bg:           desaturate(@brand-primary, 50%);
 //** Modal backdrop opacity
 @modal-backdrop-opacity:      .7;
 //** Modal header border color
@@ -791,8 +803,8 @@
 
 @badge-color:                 #fff;
 //** Linked badge text color on hover
-@badge-link-hover-color:      #fff;
-@badge-bg:                    @brand-warning;
+@badge-link-hover-color:      darken(@badge-color, 10%);
+@badge-bg:                    lighten(@brand-primary, 10%);
 
 //** Badge text color in active nav link
 @badge-active-color:          @link-color;
@@ -902,5 +914,15 @@
 @sidebar-default-bg:  #f9f9f9;
 @sidebar-default-color: @text-color; 
 
-@sidebar-inverse-bg:  #454548;
+@sidebar-inverse-bg:  @gray-dark-tint;
 @sidebar-inverse-color: #ccc;
+
+
+//tree
+@nav-tree-link-hover-bg:  #ebeff2 ;/*  lighten(desaturate(@brand-warning, 31%), 33%) */
+@nav-tree-link-hover-bg-elements:  darken(@nav-tree-link-hover-bg, 15%);
+
+@nav-tree-link-worked-full: lighten(desaturate(@brand-success, 20%), 25%);
+@nav-tree-link-worked-part: lighten(desaturate(@brand-success, 20%), 35%);
+@nav-tree-link-worked-no: #f6f6f6;
+

@@ -7,8 +7,8 @@
 .badge {
   display: inline-block;
   min-width: 10px;
-  padding: 2px 4px;
-  font-size: @font-size-small;
+  padding: 3px 5px;
+  font-size: 11px;
   font-weight: @badge-font-weight;
   color: @badge-color;
   line-height: @badge-line-height;
@@ -27,6 +27,7 @@
   .btn & {
     position: relative;
     top: -1px;
+    margin: 0 2px;
   }
 
   .btn-xs &,
@@ -62,5 +63,26 @@
 
   .nav-pills > li > a > & {
     margin-left: 3px;
+  }
+}
+.badge-primary { 
+  .badge-variant (@brand-primary);
+}
+.badge-warning { 
+  .badge-variant (@brand-warning);
+}
+
+.badge-success { 
+  .badge-variant (@brand-success);
+}
+.badge-info { 
+  .badge-variant (@brand-info);
+}
+
+.btn { 
+  .badge.badge-over-icon {
+    position: absolute;
+   right: -4px;
+    top: 0;
   }
 }

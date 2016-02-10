@@ -14,6 +14,7 @@ const config = {
     SOURCE_FIELDS: `http://${HOST}:${PORT}/api/fields/sources`,
     USERDATA: `http://${HOST}:${PORT}/api/data`,
     SEARCH: `http://${HOST}:${PORT}/api/search`,
+    SEARCH_IN_RESULTS: (operationId) => `http://${HOST}:${PORT}/api/search/${operationId}`,
     VIEWS: `http://${HOST}:${PORT}/api/views`,
     FILTERS: `http://${HOST}:${PORT}/api/filters`
   }

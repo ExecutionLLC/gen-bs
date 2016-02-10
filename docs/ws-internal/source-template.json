@@ -13,7 +13,7 @@
     },
     "fields": {
       "type": "object",
-      "description": "A JSON object with fields needed by the UI for sources."
+      "description": "A JSON key-value object. A value object schema defined in source-field-template.json file"
     }
   },
   "required": [

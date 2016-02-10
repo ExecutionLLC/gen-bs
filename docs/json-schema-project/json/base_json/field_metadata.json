@@ -40,6 +40,10 @@
 			"description": "Text description for tooltip",
 			"type": "string"
 		},
+		"dimension": {
+			"type": "integer",
+			"description": "Possible number of values in the field. Comes from application server. When name, type and dimension are the same, fields are considered the same"
+		},
 		"keywords": {
 			"type": "array",
 			"uniqueItems": true,

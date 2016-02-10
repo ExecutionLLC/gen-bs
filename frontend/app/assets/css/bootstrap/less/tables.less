@@ -236,8 +236,23 @@ table {
   }
 }
 .table {
-  
+   @media screen and (max-width: @screen-xs-max) {
+     
+      margin-bottom: 0;
 
+      // Ensure the content doesn't wrap
+      > thead,
+      > tbody,
+      > tfoot {
+        > tr {
+          > th,
+          > td {
+            padding: 12px 8px; 
+            }
+           }
+          }  
+   
+    }
   &.table-primary { 
   border: none;
   > thead > tr > th {

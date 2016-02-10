@@ -1,3 +1,4 @@
+import {initSearchInResultsParams} from './variantsTable'
 /*
  * action types
  */
@@ -69,7 +70,9 @@ function receiveMessage(msg) {
     console.log('wsData', wsData.result);
     if (wsData.result) {
       if (wsData.result.sampleId) {
-        dispatch(tableMessage(wsData));
+
+        dispatch(tableMessage(wsData))
+
       } else if(wsData.result.progress) {
         dispatch(progressMessage(wsData));
       } else if(wsData.result.error) {

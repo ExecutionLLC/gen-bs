@@ -9,11 +9,11 @@
     },
     "description": {
       "type": "string",
-      "description": "Localized filter description for UI"
+      "description": "Localized filter description"
     },
     "type": {
       "type": "string",
-      "description": "Standard - available for demo-user, advanced - only for registered.",
+      "description": "Standard - available for demo-user, advanced - only for registered",
       "enum": [
         "standard",
         "advanced",
@@ -22,11 +22,11 @@
     },
     "is_copy_disabled": {
       "type": "boolean",
-      "description": "If true, user should not be allowed to copy the view on UI."
+      "description": "If true, user should not be allowed to copy the view"
     },
     "rules": {
       "type": "string",
-      "description": "A JSON object with rules needed by the UI for this filter."
+      "description": "A JSON object with rules needed by the UI for this filter"
     }
   },
   "required": [

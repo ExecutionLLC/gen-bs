@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
-import { fetchVariants } from '../../actions/variantsTable'
+import { fetchVariants, searchInResults } from '../../actions/variantsTable'
 
 import VariantsTableHead from './VariantsTableHead'
 import VariantsTableRows from './VariantsTableRows'
@@ -28,7 +28,6 @@ class VariantsTableReact extends Component {
 
         <div className={tableWrapperClass}>
           { isVariantsLoaded &&
-            //null
             <div className="loader"></div>
           }
 
@@ -46,7 +45,7 @@ class VariantsTableReact extends Component {
           { !isVariantsLoaded && !isVariantsEmpty && isVariantsValid &&
             <div className="table-variants-container">
               <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
-                <VariantsTableHead variants={variants} fields={fields} />
+                <VariantsTableHead variants={variants} fields={fields} {...this.props} />
                 <VariantsTableRows variants={variants} fields={fields} />
               </table> 
             </div>
@@ -59,11 +58,12 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-  const { websocket, ui } = state
+  const { websocket, ui, variantsTable } = state
 
   return {
     ws: websocket,
-    ui
+    ui,
+    variantsTable
   }
 }
 

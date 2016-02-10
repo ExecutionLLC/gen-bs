@@ -25,8 +25,9 @@
       "minItems": 1,
       "uniqueItems": true,
       "items": {
-        "$ref": "./view_list_item-template.json#"
-      }
+        "$ref": "./view-list-item-template.json#"
+      },
+      "description": "View items list"
     }
   },
   "required": [

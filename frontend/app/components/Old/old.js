@@ -1,4 +1,40 @@
+//th filter&sort
+    $('.variants-table-header-label').each(function () {
+        var button = $(this);
+        body.find('variants-table-header-label').popover('destroy');
+        button.popover({
+          html: 'true',
+          container: 'body',
+          placement: 'left',
+          template: '<div class="popover variants-table-th-sort" role="tooltip"><div class="popover-content"></div></div>',
+          content: '<div class="input-group"><input type="text" class="form-control input-sm"><div class="input-group-btn" data-toggle="buttons"><button class="btn btn-sort asc"><input type="radio" name="options" id="option1"></button><button class="btn btn-sort desc"><input type="radio" name="options" id="option2"></button><button class="btn btn-reset" title="Remove column sort"><input type="radio" name="options" id="option2">&times;</button></div><div class="input-group-btn"><button class="btn btn-plus-sort" data-toggle="button" title="Now sort another colunm">+</button></div></div>'
+        }).on('shown.bs.popover', function () {
+            button.data('bs.popover').tip().find('.btn-reset').on('click', function(){
+               button.data('bs.popover').tip().find('.btn-plus-sort').button('toggle');
+               button.find('.badge').addClass('hidden');
+            });
+            
+               button.data('bs.popover').tip().find('.btn-plus-sort').on('click', function(){
+               button.find('.badge').toggleClass('hidden');
+            });
 
+        });
+       
+    });
+    
+
+
+//dropdown focus fix
+/*
+ $('.variants-table-header-label').find('.form-control').click(function (e) {
+      e.stopPropagation();
+     });
+*/
+     
+//table th popover TODO: init after table-variants thead generate
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})     
 //layout// sidebar  
 // media query event handler
 if (matchMedia) {
@@ -189,3 +225,4 @@ $('.usrViewActBtn').on('click', function (e) {
 $('.btnSort.active').on('click', function (e) { 
    $(this).toggleClass('asc').toggleClass('desc');
 });
+

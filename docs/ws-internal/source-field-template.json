@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One source field template",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Source field name"
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "description": "Source field mandatory sign"
+    },
+    "num": {
+      "type": "integer",
+      "description": "Number of source field values"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "string",
+        "integer",
+        "boolean",
+        "float"
+      ],
+      "description": "Source field type"
+    },
+    "desc": {
+      "type": "string",
+      "description": "Source field description"
+    }
+  },
+  "required": [
+    "name",
+    "is_mandatory",
+    "num",
+    "type"
+  ]
+}

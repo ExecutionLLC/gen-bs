@@ -51,26 +51,41 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
 
     _buildFieldsMetadata(fieldsMetadata, callback) {
         async.map(fieldsMetadata, (fieldMetadata, callback) => {
-            let metadata = {
-                id: fieldMetadata.id,
-                name: fieldMetadata.name,
-                label: fieldMetadata.label,
-                sourceName: fieldMetadata.sourceName,
-                isEditable: fieldMetadata.isEditable,
-                isMandatory: fieldMetadata.isMandatory,
-                valueType: fieldMetadata.valueType,
-                description: fieldMetadata.description,
-                dimension: fieldMetadata.dimension
-            };
-            if (fieldMetadata.availableValues) {
-                metadata.availableValues = _.map(fieldMetadata.availableValues, (availableValue) => {
-                    return {
-                        id: Uuid.v4(),
-                        value: availableValue
+            async.waterfall([
+                (callback) => {
+                    if (fieldMetadata.availableValues && !fieldMetadata.isEditable) {
+                        callback(new Error('Available values allowed only for editable fields'));
+                    } else {
+                        callback(null);
                     }
-                });
-            }
-            callback(null, metadata);
+                },
+                (callback) => {
+                    const metadata = {
+                        id: fieldMetadata.id,
+                        name: fieldMetadata.name,
+                        label: fieldMetadata.label,
+                        sourceName: fieldMetadata.sourceName,
+                        isEditable: fieldMetadata.isEditable,
+                        isMandatory: fieldMetadata.isMandatory,
+                        valueType: fieldMetadata.valueType,
+                        description: fieldMetadata.description,
+                        dimension: fieldMetadata.dimension
+                    };
+                    callback(null, metadata);
+                },
+                (metadata, callback) => {
+                    if (fieldMetadata.availableValues) {
+                        metadata.availableValues = _.map(fieldMetadata.availableValues, (availableValue) => {
+                            return {
+                                id: Uuid.v4(),
+                                languId: availableValue.languId,
+                                value: availableValue.value
+                            }
+                        });
+                    }
+                    callback(null, metadata);
+                }
+            ], callback);
         }, callback);
     }
 

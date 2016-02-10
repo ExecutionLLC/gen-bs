@@ -81,19 +81,25 @@
 // Modal header
 // Top section of the modal w/ title and dismiss
 .modal-header {
-  padding: @modal-title-padding;
-  border-bottom: 1px solid @modal-header-border-color;
+  background: @modal-header-bg;
+  padding:0;
+  position: relative;
+  //border-bottom: 1px solid @modal-header-border-color;
   &:extend(.clearfix all);
 }
 // Close icon
 .modal-header .close {
-  margin-top: -2px;
+      position: absolute;
+    right: 15px;
+    top:8px;
+    z-index: 1;
 }
 
 // Title text within header
 .modal-title {
   margin: 0;
   line-height: @modal-title-line-height;
+  color: @modal-title-color;
 }
 
 // Modal body
@@ -209,4 +215,103 @@
      }
    }
  } 
+}
+.modal.modal-second-layer { 
+  z-index: @zindex-modal + 1;
+  .modal-backdrop { 
+    opacity: .7;
+  }
+  .modal-dialog { 
+    margin-top: 100px;
+     position: relative;
+    z-index: 1041;
+  }
+}
+.modal { 
+  .modal-dialog.ui-draggable { 
+     z-index: 1041;
+  }
+}
+.modal-header {
+   &.modal-header-with-tabs { 
+     padding-bottom: 0;
+   }
+   &.modal-header-with-nav { 
+    padding: 0; 
+   }
+  .nav-tabs-primary { 
+    margin-bottom: -15px;
+    + .navbar { 
+      //margin-top: 15px;
+    }
+
+  }
+}
+
+.modal-max-size { 
+  bottom: 0;
+  .modal-dialog {
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    }
+  .modal-content { 
+    margin: 0;
+    position: relative;
+    height: 100%;
+    .modal-footer  {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .modal-header { 
+      position: absolute;
+      top:0;
+      left:0;
+      right: 0;
+      height: 44px;
+     }
+    .modal-body { 
+      position: absolute;
+      top: 45px;
+      left: 0;
+      right: 0;
+      bottom: 0; 
+      padding: 0;   
+    }
+  }
+}
+.modal-body-scroll { 
+  overflow: auto;
+   height: 100%;
+}
+.modal-header {
+  .modal-title { 
+    padding: 11px 15px;
+  }
+ .navbar { 
+   margin: 0;
+ }
+  .navbar-search { 
+     padding-left: 25px;
+  } 
+  .nav-tabs { 
+    display: table-row;
+    float: none;
+   
+    > li { 
+       display: table-cell;
+      float: none; 
+      white-space: nowrap;
+    }
+  }
+  .table-row > div:first-child {
+    min-width: 250px;
+  }
 }

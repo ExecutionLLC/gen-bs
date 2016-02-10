@@ -41,21 +41,13 @@ var variantsTable = {
         </th>`);
 
     head.push(
-        `<th data-label="comment">
-          <div><span class="variants-table-header-label">
-            Comment<button class="btn btn-link btnSort"></button>
-          </span></div>
-          <div><input type="text" class="form-control"></div>
-        </th>`);
+        `<th data-label="comment"><button type="button" class="btn-link variants-table-header-label"><em>Comment</em><span class="btn-sort"><span class="badge badge-info hidden">1</span></span></button></th>`);
 
     labels.map( (label) => {
       if (label !== 'comment') {
         head.push(
             `<th data-label="${label}">
-              <div><span class="variants-table-header-label">
-                ${this.firstCharUpperCase(label)}<button class="btn btn-link btnSort"></button>
-              </span></div>
-              <div><input type="text"  class="form-control"></div>
+               <button type="button" class="btn-link variants-table-header-label"><em>${this.firstCharUpperCase(label)}</em><span class="btn-sort"><span class="badge badge-info hidden">1</span></span></button>
             </th>`);
       }
     })
