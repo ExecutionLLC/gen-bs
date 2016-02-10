@@ -41,21 +41,21 @@ var variantsTable = {
         </th>`);
 
     head.push(
-        `<th data-label="comment">
-          <div><span class="variants-table-header-label">
-            Comment<button class="btn btn-link btnSort"></button>
-          </span></div>
-          <div><input type="text" class="form-control"></div>
-        </th>`);
+        `<th data-label="comment"><div class="variants-table-header-label">
+        <a type="button" class="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div class="popover variants-table-th-filter" role="tooltip"><div class="popover-content"></div></div>' data-content='<input type="text" class="form-control">'>Comment</a>
+           <div class="btn-group-vertical" role="group" data-toggle="buttons"><button class="btn btn-link btnSort asc"><input type="radio" name="options" id="option1"></button><button class="btn btn-link btnSort desc"><input type="radio" name="options" id="option2"></button></div>
+                </div></th>`);
 
     labels.map( (label) => {
       if (label !== 'comment') {
         head.push(
             `<th data-label="${label}">
-              <div><span class="variants-table-header-label">
-                ${this.firstCharUpperCase(label)}<button class="btn btn-link btnSort"></button>
-              </span></div>
-              <div><input type="text"  class="form-control"></div>
+              <div class="variants-table-header-label">
+               <a type="button" class="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div class="popover variants-table-th-filter" role="tooltip"><div class="popover-content"></div></div>' data-content='<input type="text" class="form-control">'>${this.firstCharUpperCase(label)}</a>
+             	
+                <div class="btn-group-vertical" role="group" data-toggle="buttons"><button class="btn btn-link btnSort asc"><input type="radio" name="options" id="option1"></button><button class="btn btn-link btnSort desc"><input type="radio" name="options" id="option2"></button></div>
+             
+               </div>
             </th>`);
       }
     })
