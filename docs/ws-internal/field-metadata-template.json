@@ -9,15 +9,15 @@
     },
     "name": {
       "type": "string",
-      "description": "Field metadata original name"
+      "description": "Field metadata name"
     },
     "label": {
       "type": "string",
-      "description": "Field metadata label"
+      "description": "Field metadata user-friendly name"
     },
     "source_name": {
       "type": "string",
-      "description": "Field metadata source name"
+      "description": "Field metadata source name, 'sample' for sample field metadata"
     },
     "is_editable": {
       "type": "boolean",
@@ -29,22 +29,28 @@
     },
     "value_type": {
       "type": "string",
+      "enum": [
+        "string",
+        "integer",
+        "boolean",
+        "float"
+      ],
       "description": "Field metadata value type"
     },
     "description": {
-      "description": "Localized field metadata description for UI",
+      "description": "Localized field metadata description",
       "type": "string"
     },
     "dimension": {
       "type": "integer",
-      "description": "Field metadata dimension"
+      "description": "Possible number of values in the field. Comes from application server. When name, type and dimension are the same, fields are considered the same"
     }
   },
   "required": [
     "id",
     "name",
     "label",
-    "sourc_name",
+    "source_name",
     "is_editable",
     "is_mandatory",
     "value_type",

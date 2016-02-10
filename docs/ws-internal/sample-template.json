@@ -26,7 +26,7 @@
       "uniqueItems": true,
       "description": "Sample fields list",
       "items": {
-        "$ref": "./sample_field-template.json#"
+        "$ref": "./sample-field-template.json#"
       }
     }
   },
