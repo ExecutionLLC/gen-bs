@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One view template",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "View unique name"
+    },
+    "description": {
+      "description": "Localized view description for UI",
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "description": "Standard - available for demo-user, advanced - only for registered.",
+      "enum": [
+        "standard",
+        "advanced",
+        "user"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "./view-list-item-template.json#"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "items"
+  ]
+}

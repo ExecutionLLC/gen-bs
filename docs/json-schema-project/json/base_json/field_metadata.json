@@ -4,8 +4,8 @@
 	"type": "object",
 	"properties": {
 		"id": {
-			"description": "The unique identifier for a field",
-			"type": "string"
+			"type": "string",
+			"description": "UUID, the unique identifier for the field metadata"
 		},
 		"name": {
 			"description": "Text Label",

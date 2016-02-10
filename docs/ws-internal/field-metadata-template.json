@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One field metadata template",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the field metadata"
+    },
+    "name": {
+      "type": "string",
+      "description": "Field metadata name"
+    },
+    "label": {
+      "type": "string",
+      "description": "Field metadata user-friendly name"
+    },
+    "source_name": {
+      "type": "string",
+      "description": "Field metadata source name, 'sample' for sample field metadata"
+    },
+    "is_editable": {
+      "type": "boolean",
+      "description": "Field metadata editable sign"
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "description": "Field metadata mandatory"
+    },
+    "value_type": {
+      "type": "string",
+      "enum": [
+        "string",
+        "integer",
+        "boolean",
+        "float"
+      ],
+      "description": "Field metadata value type"
+    },
+    "description": {
+      "description": "Localized field metadata description",
+      "type": "string"
+    },
+    "dimension": {
+      "type": "integer",
+      "description": "Possible number of values in the field. Comes from application server. When name, type and dimension are the same, fields are considered the same"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "label",
+    "source_name",
+    "is_editable",
+    "is_mandatory",
+    "value_type",
+    "description",
+    "dimension"
+  ]
+}

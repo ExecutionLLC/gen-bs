@@ -3,8 +3,8 @@
 	"type": "object",
 	"properties": {
 		"id": {
-			"description": "The unique identifier for a settings row",
-			"type": "number"
+			"type": "string",
+			"description": "UUID, the unique identifier for the view list item"
 		},
 		"field_name": {
 			"type": "string",

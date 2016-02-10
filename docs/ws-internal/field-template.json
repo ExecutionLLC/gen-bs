@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One field template",
+  "type": "object",
+  "properties": {
+    "source_name": {
+      "type": "string",
+      "description": "Field source name"
+    },
+    "name": {
+      "type": "string",
+      "description": "Field unique name"
+    },
+    "value_type": {
+      "type": "string",
+      "$ref": "./synonym-template.json#",
+      "description": "Field value type"
+    }
+  },
+  "required": [
+    "source_name",
+    "name",
+    "value_type"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One source template",
+  "type": "object",
+  "properties": {
+    "reference": {
+      "type": "string",
+      "enum": [
+        "hg18",
+        "hg38"
+      ],
+      "description": "Source reference"
+    },
+    "fields": {
+      "type": "object",
+      "description": "A JSON key-value object. A value object schema defined in source-field-template.json file"
+    }
+  },
+  "required": [
+    "reference",
+    "fields"
+  ]
+}

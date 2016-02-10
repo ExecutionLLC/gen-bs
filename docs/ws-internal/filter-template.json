@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One filter template",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Filter unique name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Localized filter description"
+    },
+    "type": {
+      "type": "string",
+      "description": "Standard - available for demo-user, advanced - only for registered",
+      "enum": [
+        "standard",
+        "advanced",
+        "user"
+      ]
+    },
+    "is_copy_disabled": {
+      "type": "boolean",
+      "description": "If true, user should not be allowed to copy the view"
+    },
+    "rules": {
+      "type": "string",
+      "description": "A JSON object with rules needed by the UI for this filter"
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "is_copy_disabled",
+    "rules"
+  ]
+}

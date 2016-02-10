@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One view item template",
+  "type": "object",
+  "properties": {
+    "field": {
+      "$ref": "./field-template.json#"
+    },
+    "keywords": {
+      "type": "array",
+      "minItems": 0,
+      "uniqueItems": true,
+      "description": "View item keywords list",
+      "items": {
+        "type": "string"
+      }
+    },
+    "order": {
+      "type": "integer",
+      "description": "View item order"
+    },
+    "sort_order": {
+      "type": "integer",
+      "description": "View item sort order"
+    },
+    "sort_direction": {
+      "type": "string",
+      "enum": [
+        "acs",
+        "desc"
+      ],
+      "description": "View item sort direction"
+    }
+  },
+  "required": [
+    "order"
+  ]
+}

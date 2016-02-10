@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One keyword template",
+  "type": "object",
+  "properties": {
+    "field": {
+      "$ref": "./field-template.json#"
+    },
+    "name": {
+      "type": "string",
+      "description": "Keyword unique name defined from user"
+    },
+    "value": {
+      "type": "string",
+      "description": "Keyword value"
+    },
+    "synonyms": {
+      "type": "array",
+      "minItems": 0,
+      "uniqueItems": true,
+      "description": "Keyword synonyms list",
+      "items": {
+        "$ref": "./synonym-template.json#"
+      }
+    }
+  },
+  "required": [
+    "field",
+    "name",
+    "value",
+    "synonyms"
+  ]
+}

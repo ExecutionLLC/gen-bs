@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "One sample template",
+  "type": "object",
+  "properties": {
+    "reference": {
+      "type": "string",
+      "enum": [
+        "hg18",
+        "hg38"
+      ],
+      "description": "Sample reference"
+    },
+    "type": {
+      "type": "string",
+      "description": "Standard - available for demo-user, advanced - only for registered.",
+      "enum": [
+        "standard",
+        "advanced",
+        "user"
+      ]
+    },
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Sample fields list",
+      "items": {
+        "$ref": "./sample-field-template.json#"
+      }
+    }
+  },
+  "required": [
+    "reference",
+    "type",
+    "fields"
+  ]
+}
