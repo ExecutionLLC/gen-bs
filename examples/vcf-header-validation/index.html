@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>ExGe - VCF File Validation</title>
+    <style>
+        input, button {
+            margin: 5px;
+        }
+        #output {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<input id="file-select" type="file" accept=".vcf" name="files[]"  />
+<hr>
+<button id="read">Read</button>
+<hr>
+
+<button id="validate">Validate VCF File</button>
+
+<hr>
+<button id="search-beginning">Find first</button>
+<input type="text" id="find-first-pattern" placeholder="Regexp pattern" />
+<button id="search-next">Find next</button>
+<hr>
+
+<button id="searchAll">Find all</button>
+<input type="text" id="find-all-pattern" placeholder="Regexp pattern" />
+(results are limited to 100 lines max)
+<hr>
+
+<div id="meta"></div><br>
+<div id="output">RESULTS</div>
+
+<script src="js/jquery-2.1.3.min.js"></script>
+<script src="js/line-navigator.js"></script>
+<script src="js/file-navigator.js"></script>
+<script src="js/vcf-validation.js"></script>
+</body>
+</html>
