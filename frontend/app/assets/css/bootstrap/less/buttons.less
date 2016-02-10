@@ -101,6 +101,9 @@
 .btn-alt-primary{ 
    .button-variant(@btn-alt-primary-color; @btn-alt-primary-bg; @btn-alt-primary-border); 
 }
+.btn-inverse { 
+   .button-variant(@btn-inverse-color; @btn-inverse-bg; @btn-inverse-border); 
+}
 
 // Link buttons
 // -------------------------
@@ -268,7 +271,7 @@ input[type="button"] {
     width: 22px;
     margin-bottom: 3px;
 }
-.sort-setting {
+.settings {
      margin-top: 30px; 
    .grid-toolbar { 
     background: rgba(255, 255, 255, 0.6);
@@ -281,7 +284,7 @@ input[type="button"] {
       margin-left: 5px; 
     }
   }
-   .btnSort { 
+   .btn-sort, .btnSort { 
       position: relative;
       &:after { 
           
@@ -298,32 +301,10 @@ input[type="button"] {
     text-transform: capitalize;
     top: 1px;
     width: 12px;
-          }
-     }
-     &.level1 { 
-    
-   .btnSort {  
-      &:after { 
-          display: block; 
-            content: "1";
 
-        }
-      
-    }
-   }
-     &.level2 { 
-       > div:first-child { 
-        //padding-left: 20px;   
-      }
-       .btnSort { 
-         position: relative;
-          &:after { 
-            display: block; 
-              content: "2";
-  
           }
-      }
      }
+
   }
    .grid-toolbar.nobg { background: none; }
    @media (max-width: @screen-xss-max) {
@@ -362,7 +343,7 @@ input[type="button"] {
     }
   
 }
-.btnSort { 
+.btn-sort, .btnSort  { 
 
     background-position: center center;
     background-repeat: no-repeat;
@@ -381,14 +362,14 @@ input[type="button"] {
    
     }
   }
-.btnSort.asc {
+.btn-sort.asc, .btnSort.asc {
    &:before { 
    content: "\f0de";
     opacity: 1;
    top: 11px;
    }
             }
-.btnSort.desc {
+.btn-sort.desc, .btnSort.desc {
    &:before { 
       content: "\f0dd";
       opacity: 1;
@@ -440,4 +421,7 @@ input[type="button"] {
 }
 .btn-label-indent { 
   margin-top: 1.72em;
+}
+.btn-width-fix { 
+  min-width: 105px;
 }

@@ -41,21 +41,13 @@ var variantsTable = {
         </th>`);
 
     head.push(
-        `<th data-label="comment"><div class="variants-table-header-label">
-        <a type="button" class="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div class="popover variants-table-th-filter" role="tooltip"><div class="popover-content"></div></div>' data-content='<input type="text" class="form-control">'>Comment</a>
-           <div class="btn-group-vertical" role="group" data-toggle="buttons"><button class="btn btn-link btnSort asc"><input type="radio" name="options" id="option1"></button><button class="btn btn-link btnSort desc"><input type="radio" name="options" id="option2"></button></div>
-                </div></th>`);
+        `<th data-label="comment"><button type="button" class="btn-link variants-table-header-label"><em>Comment</em><span class="btn-sort"><span class="badge badge-info hidden">1</span></span></button></th>`);
 
     labels.map( (label) => {
       if (label !== 'comment') {
         head.push(
             `<th data-label="${label}">
-              <div class="variants-table-header-label">
-               <a type="button" class="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div class="popover variants-table-th-filter" role="tooltip"><div class="popover-content"></div></div>' data-content='<input type="text" class="form-control">'>${this.firstCharUpperCase(label)}</a>
-             	
-                <div class="btn-group-vertical" role="group" data-toggle="buttons"><button class="btn btn-link btnSort asc"><input type="radio" name="options" id="option1"></button><button class="btn btn-link btnSort desc"><input type="radio" name="options" id="option2"></button></div>
-             
-               </div>
+               <button type="button" class="btn-link variants-table-header-label"><em>${this.firstCharUpperCase(label)}</em><span class="btn-sort"><span class="badge badge-info hidden">1</span></span></button>
             </th>`);
       }
     })
