@@ -2,16 +2,11 @@
 
 const async = require('async');
 
-const AppServerFilterUtils = require('../utils/AppServerFilterUtils');
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 
 class FiltersService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.filters);
-    }
-
-    add(user, languId, item, callback) {
-        super.add(user, languId, item, callback);
     }
 
     update(user, filter, callback) {
