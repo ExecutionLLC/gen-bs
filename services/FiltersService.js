@@ -12,7 +12,7 @@ class FiltersService extends UserEntityServiceBase {
 
     add(user, languId, filter, callback) {
         async.waterfall([
-            (callback) => this._checkFilterRules(filter.rules, callback),
+            (callback) => this._checkFilterRules(filter, callback),
             (callback) => {
                 super.add(user, languId, filter, callback);
             }
@@ -21,7 +21,7 @@ class FiltersService extends UserEntityServiceBase {
 
     update(user, filter, callback) {
         async.waterfall([
-            (callback) => this._checkFilterRules(filter.rules, callback),
+            (callback) => this._checkFilterRules(filter, callback),
             (callback) => super.find(user, filter.id, callback),
             (existingFilter, callback) => {
                 if (existingFilter.type !== 'user') {
@@ -33,10 +33,21 @@ class FiltersService extends UserEntityServiceBase {
         ], callback);
     }
 
-    _checkFilterRules(filterRulesObject, callback) {
-        this._createFilterRulesRecursively(filterRulesObject, (error) => {
-            callback(error);
-        });
+    _checkFilterRules(filter, callback) {
+        async.waterfall([
+            (callback) => {
+                if (!_.isObject(filter.rules)) {
+                    callback(new Error('Filter rules is not defined'))
+                } else {
+                    callback(null);
+                }
+            },
+            (callback) => {
+                this._createFilterRulesRecursively(filter.rules, (error) => {
+                    callback(error);
+                });
+            }
+        ], callback);
     }
 
     _createFilterRulesRecursively(filterRulesObject, callback) {

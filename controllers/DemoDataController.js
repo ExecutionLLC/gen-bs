@@ -12,7 +12,6 @@ class DemoDataController extends ControllerBase {
     constructor(services) {
         super(services);
 
-        this.getDemoUserData = this.getDemoUserData.bind(this);
         this.getFieldsMetadata = this.getFieldsMetadata.bind(this);
     }
 
@@ -33,7 +32,7 @@ class DemoDataController extends ControllerBase {
 
     createRouter() {
         const router = new Express();
-        router.get('/', this.getDemoUserData);
+        router.get('/', this.getFieldsMetadata);
         return router;
     }
 }
