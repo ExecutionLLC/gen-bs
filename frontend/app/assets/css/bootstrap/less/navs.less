@@ -88,7 +88,7 @@
       margin-right: 2px;
       line-height: @line-height-base;
       color: @text-color;
-      padding: 15px 25px;
+      padding: 12px 25px;
       &:hover {
         color: @nav-tabs-active-link-hover-color;
       }
@@ -116,12 +116,14 @@
 // Pills
 // -------------------------
 .nav-pills {
+  margin-bottom: @line-height-computed;
   > li {
     float: left;
 
     // Links rendered as pills
     > a {
       border-radius: @nav-pills-border-radius;
+      padding: 8px 40px;
     }
     + li {
       margin-left: 2px;
@@ -256,11 +258,84 @@
 .modal {
   .nav-tabs { 
    margin:-(@modal-inner-padding + 1) -(@modal-inner-padding) 0;
-  } 
-  .tab-content { 
+   
+ + .tab-content { 
+        margin:0 -(@modal-inner-padding) -(@modal-inner-padding);
+    .tab-pane {
     background: #fff; 
-    margin:0 -(@modal-inner-padding) -(@modal-inner-padding);
     padding:@modal-inner-padding;
+    }
+    &.nobg { 
+      background: none;
+    }
   }
+ }
 }
 
+.nav-tabs.nav-tabs-primary { 
+  background:@navbar-inverse-bg;
+  > li {
+    > a { 
+      color: @navbar-inverse-link-color;
+      background: transparent;
+      
+      &:hover,
+      &:focus,
+      &:active {
+        background: transparent;
+        color: #fff;
+         cursor: pointer;
+       }
+      }
+      
+
+      a.btn-inverse  {
+      &,
+      &:hover,
+      &:focus {
+        background: #fff;  
+        padding-top: @padding-base-vertical;
+         padding-bottom: @padding-base-vertical;
+         border-radius: 4px;
+         box-shadow: 0px -3px 0px @light-primary-color inset;
+        color: @link-color;
+        font-weight: bold;
+        margin: 7px 30px 0 15px;
+        border: none;
+        }
+      }
+      a.btn  {
+      
+      &:hover,
+      &:focus { 
+        color: @link-hover-color;
+        
+       } 
+      }
+    
+  &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: @navbar-inverse-link-active-color;
+        background:none;     
+      }
+    }
+   &.active > a.btn { 
+     &,
+      &:hover,
+      &:focus {
+        background: #fff;
+         color: @link-hover-color;
+      }
+   }
+ }
+}
+.nav-pills.nav-btn-group { 
+  margin-bottom: @line-height-computed;
+  > li:first-child { 
+    > a { 
+      
+    }
+  }
+}
