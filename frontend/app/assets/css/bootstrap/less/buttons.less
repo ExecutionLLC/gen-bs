@@ -284,7 +284,7 @@ input[type="button"] {
       margin-left: 5px; 
     }
   }
-   .btnSort { 
+   .btn-sort, .btnSort { 
       position: relative;
       &:after { 
           
@@ -301,32 +301,10 @@ input[type="button"] {
     text-transform: capitalize;
     top: 1px;
     width: 12px;
-          }
-     }
-     &.level1 { 
-    
-   .btnSort {  
-      &:after { 
-          display: block; 
-            content: "1";
 
-        }
-      
-    }
-   }
-     &.level2 { 
-       > div:first-child { 
-        //padding-left: 20px;   
-      }
-       .btnSort { 
-         position: relative;
-          &:after { 
-            display: block; 
-              content: "2";
-  
           }
-      }
      }
+
   }
    .grid-toolbar.nobg { background: none; }
    @media (max-width: @screen-xss-max) {
@@ -365,7 +343,7 @@ input[type="button"] {
     }
   
 }
-.btnSort { 
+.btn-sort, .btnSort  { 
 
     background-position: center center;
     background-repeat: no-repeat;
@@ -384,14 +362,14 @@ input[type="button"] {
    
     }
   }
-.btnSort.asc {
+.btn-sort.asc, .btnSort.asc {
    &:before { 
    content: "\f0de";
     opacity: 1;
    top: 11px;
    }
             }
-.btnSort.desc {
+.btn-sort.desc, .btnSort.desc {
    &:before { 
       content: "\f0dd";
       opacity: 1;

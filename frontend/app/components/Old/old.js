@@ -1,6 +1,7 @@
 //th filter&sort
     $('.variants-table-header-label').each(function () {
         var button = $(this);
+        body.find('variants-table-header-label').popover('destroy');
         button.popover({
           html: 'true',
           container: 'body',
