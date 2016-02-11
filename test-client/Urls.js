@@ -26,6 +26,10 @@ class Urls {
         return this._constructApiUrl('/search/' + operationId);
     }
 
+    uploadSample() {
+        return this._constructApiUrl('/sample/upload');
+    }
+
     _constructApiUrl(subUrl) {
         return 'http://' + this.host + ':' + this.port + '/api' + subUrl;
     }
