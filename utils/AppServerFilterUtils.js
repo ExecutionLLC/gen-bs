@@ -1,4 +1,5 @@
 'use strict';
+
 const _ = require('lodash');
 
 class AppServerFilterUtils {
@@ -36,7 +37,6 @@ class AppServerFilterUtils {
             } else {
                 return mappedColumns[0];
             }
-
         }
     }
 }
