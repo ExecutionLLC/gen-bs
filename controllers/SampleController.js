@@ -1,6 +1,5 @@
 'use strict';
 
-const async = require('async');
 const multer = require('multer');
 const fs = require('fs');
 
