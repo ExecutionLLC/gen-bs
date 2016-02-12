@@ -1,6 +1,8 @@
 'use strict';
 
+const async = require('async');
 const multer = require('multer');
+const fs = require('fs');
 
 const UserEntityControllerBase = require('./UserEntityControllerBase');
 
@@ -23,7 +25,11 @@ class SampleController extends UserEntityControllerBase {
             fileSize: sampleFile.size,
             originalFileName: sampleFile.originalname
         };
-        this.services.samples.upload(sessionId, user, fileInfo, (error, operationId) => {
+
+        async.waterfall([
+            (callback) => this.services.samples.upload(sessionId, user, fileInfo, callback),
+            (operationId, callback) => this._removeSampleFile(fileInfo.localFilePath, (error) => callback(error, operationId))
+        ], (error, operationId) => {
             if (error) {
                 this.sendInternalError(response, error);
             } else {
@@ -31,6 +37,17 @@ class SampleController extends UserEntityControllerBase {
                     operationId
                 });
             }
+        });
+    }
+
+    _removeSampleFile(localFilePath, callback) {
+        fs.unlink(localFilePath, (error) => {
+            if (error) {
+                this.services.logger.error('Error removing uploaded sample file: ' + error);
+            }
+
+            // Continue anyway.
+            callback(null);
         });
     }
 
