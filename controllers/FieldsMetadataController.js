@@ -17,11 +17,7 @@ class FieldsMetadataController extends ControllerBase {
         const sampleId = request.params.sampleId;
 
         this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fieldsMetadata) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, fieldsMetadata);
-            }
+            this.sendErrorOrJson(response, error, fieldsMetadata);
         });
     }
 
@@ -31,11 +27,7 @@ class FieldsMetadataController extends ControllerBase {
         }
 
         this.services.fieldsMetadata.findSourcesMetadata((error, fieldsMetadata) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, fieldsMetadata);
-            }
+            this.sendErrorOrJson(response, error, fieldsMetadata);
         });
     }
 

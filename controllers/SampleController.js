@@ -30,13 +30,9 @@ class SampleController extends UserEntityControllerBase {
             (callback) => this.services.samples.upload(sessionId, user, fileInfo, callback),
             (operationId, callback) => this._removeSampleFile(fileInfo.localFilePath, (error) => callback(error, operationId))
         ], (error, operationId) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, {
-                    operationId
-                });
-            }
+            this.sendErrorOrJson(response, error, {
+                operationId
+            });
         });
     }
 
