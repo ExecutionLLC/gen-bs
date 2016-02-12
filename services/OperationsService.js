@@ -109,8 +109,8 @@ class OperationsService extends ServiceBase {
             (callback) => this.find(sessionId, operationId, callback),
             (operation, callback) => {
                 const sessionOperations = this.operations[sessionId];
-                if (operation.type === OPERATION_TYPES.SEARCH) {
-                    this.services.applicationServer.requestCloseSearchSession(operation.sessionId, operation.id, callback);
+                if (operation.type === OPERATION_TYPES.SEARCH || operation.type === OPERATION_TYPES.UPLOAD) {
+                    this.services.applicationServer.requestCloseSession(operation.sessionId, operation.id, callback);
                 } else {
                     callback(null, operation);
                 }

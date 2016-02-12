@@ -15,7 +15,7 @@ const METHODS = {
     getSourcesList: 'v1.get_sources',
     getSourceMetadata: 'v1.get_source_metadata',
     openSearchSession: 'v1.open_session',
-    closeSearchSession: 'v1.close_session',
+    closeSession: 'v1.close_session',
     searchInResults: 'v1.search_in_results',
     uploadSample: 'v1.upload_file',
     processSample: 'v1.convert_file'
@@ -32,7 +32,7 @@ class ApplicationServerService extends ServiceBase {
 
         this.requestSourcesList = this.requestSourcesList.bind(this);
         this.requestSourceMetadata = this.requestSourceMetadata.bind(this);
-        this.requestCloseSearchSession = this.requestCloseSearchSession.bind(this);
+        this.requestCloseSession = this.requestCloseSession.bind(this);
         this.requestOpenSearchSession = this.requestOpenSearchSession.bind(this);
         this.requestSearchInResults = this.requestSearchInResults.bind(this);
         this._requestOperations = this._requestOperations.bind(this);
@@ -53,17 +53,19 @@ class ApplicationServerService extends ServiceBase {
     requestSourcesList(sessionId, callback) {
         const operationTypes = this.services.operations.operationTypes();
         const method = METHODS.getSourcesList;
-        this.services.operations.add(sessionId, operationTypes.SYSTEM, method, (error, operation) => {
-            this._rpcSend(operation.id, method, null, callback);
-        });
+        async.waterfall([
+            (callback) => this.services.operations.add(sessionId, operationTypes.SYSTEM, method, callback),
+            (operation, callback) => this._rpcSend(operation.id, method, null, callback)
+        ], callback);
     }
 
     requestSourceMetadata(sessionId, sourceName, callback) {
         const method = METHODS.getSourceMetadata;
         const operationTypes = this.services.operations.operationTypes();
-        this.services.operations.add(sessionId, operationTypes.SYSTEM, method, (error, operation) => {
-            this._rpcSend(operation.id, method, sourceName, callback);
-        });
+        async.waterfall([
+            (callback) => this.services.operations.add(sessionId, operationTypes.SYSTEM, method, callback),
+            (operation, callback) => this._rpcSend(operation.id, method, sourceName, callback)
+        ], callback);
     }
 
     /**
@@ -89,25 +91,19 @@ class ApplicationServerService extends ServiceBase {
         };
 
         const operationTypes = this.services.operations.operationTypes();
-        this._closePreviousSearchIfAny(sessionId, (error) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => this._closePreviousSearchIfAny(sessionId, (error) => callback(error)),
+            (callback) => {
                 const operationData = {
                     sampleId: params.sample.id,
                     userId: params.userId,
                     offset: params.offset,
                     limit: params.limit
                 };
-                this.services.operations.add(sessionId, operationTypes.SEARCH, method, operationData, (error, operation) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        this._rpcSend(operation.id, method, searchSessionRequest, callback);
-                    }
-                });
-            }
-        });
+                this.services.operations.add(sessionId, operationTypes.SEARCH, method, operationData, callback);
+            },
+            (operation, callback) => this._rpcSend(operation.id, method, searchSessionRequest, callback)
+        ], callback);
     }
 
     /**
@@ -157,12 +153,19 @@ class ApplicationServerService extends ServiceBase {
         ], callback);
     }
 
-    requestCloseSearchSession(sessionId, operationId, callback) {
+    /**
+     * Requests AS to close the specified operation.
+     *
+     * @param sessionId Id of the session the operation is related to.
+     * @param operationId Id of the operation to close.
+     * @param callback (error, operationId)
+     * */
+    requestCloseSession(sessionId, operationId, callback) {
         this.services.operations.find(sessionId, operationId, (error, operation) => {
             if (error) {
                 callback(error);
             } else {
-                const method = METHODS.closeSearchSession;
+                const method = METHODS.closeSession;
                 this._rpcSend(operation.id, method, null, callback);
             }
         });
