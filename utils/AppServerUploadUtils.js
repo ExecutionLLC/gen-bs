@@ -7,7 +7,7 @@ const Request = require('request');
 
 class AppServerUploadUtils {
     static createUploadUrl(asHost, asPort, sampleId, operationId) {
-        return 'http://' + asHost + ':' + asPort + '/' + operationId + '/' + sampleId;
+        return 'http://' + asHost + ':' + asPort + '/upload/' + operationId + '/' + sampleId;
     }
 
     static uploadFile(url, localFilePath, callback) {
