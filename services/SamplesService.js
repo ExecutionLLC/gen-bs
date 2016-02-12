@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Uuid = require('node-uuid');
 const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
@@ -16,8 +17,9 @@ class SamplesService extends UserEntityServiceBase {
      * */
     upload(sessionId, user, localFileInfo, callback) {
         this.services.logger.info('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
+        const sampleId = Uuid.v4();
         async.waterfall([
-            (callback) => this.services.applicationServer.uploadSample(sessionId, user,
+            (callback) => this.services.applicationServer.uploadSample(sessionId, sampleId, user,
                 localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
             (operationId, callback) => this.services.applicationServer.requestSampleProcessing(sessionId, operationId, callback)
         ], callback);

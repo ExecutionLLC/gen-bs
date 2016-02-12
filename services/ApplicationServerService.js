@@ -108,14 +108,13 @@ class ApplicationServerService extends ServiceBase {
      * Sends specified file sample to application server.
      *
      * @param sessionId Id of the session to which the file belongs.
+     * @param sampleId Id of the sample.
      * @param user Session owner.
      * @param sampleLocalPath Full local path to the sample file.
      * @param sampleFileName Original name of the sample file.
      * @param callback (error, operationId)
      * */
-    uploadSample(sessionId, user, sampleLocalPath, sampleFileName, callback) {
-        // TODO: Move sample id generation to the upper level, it is not the AS service responsibility.
-        const sampleId = Uuid.v4();
+    uploadSample(sessionId, sampleId, user, sampleLocalPath, sampleFileName, callback) {
         async.waterfall([
             (callback) => this.services.operations.addUploadOperation(sessionId, METHODS.uploadSample, callback),
             (operation, callback) => {
