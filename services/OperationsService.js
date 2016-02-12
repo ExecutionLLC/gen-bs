@@ -94,14 +94,13 @@ class OperationsService extends ServiceBase {
      * Finds all operations of the specified type.
      * */
     findAllByType(sessionId, operationType, callback) {
-        this.findAll(sessionId, (error, operations) => {
-           if (error) {
-               callback(error);
-           } else {
-               const result = _.filter(operations, operation => operation.type === operationType);
-               callback(null, result);
-           }
-        });
+        async.waterfall([
+            (callback) => this.findAll(sessionId, callback),
+            (operations, callback) => {
+                const result = _.filter(operations, operation => operation.type === operationType);
+                callback(null, result);
+            }
+        ], callback);
     }
 
     remove(sessionId, operationId, callback) {
