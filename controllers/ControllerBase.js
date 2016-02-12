@@ -58,11 +58,11 @@ class ControllerBase {
     }
 
     getSessionId(request) {
-        return request.get(this.services.config.sessionHeader);
+        return request.get(this.services.config.headers.sessionHeader);
     }
 
     getLanguageId(request) {
-        return request.get(this.services.config.languageHeader);
+        return request.get(this.services.config.headers.languageHeader);
     }
 
     checkUserIsDefined(request, response) {
