@@ -1,12 +1,40 @@
 'use strict';
 
-const lodash = require('lodash');
+const _ = require('lodash');
+const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
+const FieldsMetadataService = require('./FieldsMetadataService.js');
 
 class SamplesService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.samples);
+    }
+
+    /**
+     * Sends sample to application server for processing.
+     * */
+    upload(sessionId, user, localFileInfo, callback) {
+        this.services.logger.info('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
+        async.waterfall([
+            (callback) => this.services.applicationServer.uploadSample(sessionId, user,
+                localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
+            (operationId, callback) => this.services.applicationServer.requestSampleProcessing(sessionId, operationId, callback)
+        ], callback);
+    }
+
+    createMetadataForUploadedSample(user, sampleId, sampleFileName, applicationServerFieldsMetadata, callback) {
+        // Map AS fields metadata format into local.
+        const fieldsMetadata = _.map(applicationServerFieldsMetadata,
+            appServerFieldMetadata => FieldsMetadataService.createFieldMetadata(sampleId, true, appServerFieldMetadata));
+
+        const sample = {
+            id: sampleId,
+            fileName: sampleFileName,
+            hash: null
+        };
+
+        this.models.samples.addSampleWithMetadata(user.id, user.language, sample, fieldsMetadata, callback);
     }
 }
 

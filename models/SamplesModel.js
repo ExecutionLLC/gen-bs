@@ -70,6 +70,21 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
+    addSampleWithMetadata(userId, languId, sample, fieldsMetadata, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => {
+                    const dataToInsert = this._createDataToInsert(userId, sample, false);
+                    this._insert(dataToInsert, trx, (error) => callback(error));
+                },
+                (callback) => {
+                    this.models.fieldsMetadata.addInTransaction(trx, languId, fieldsMetadata, true,
+                        (error) => callback(error));
+                }
+            ], callback);
+        }, callback);
+    }
+
     makeAnalyzed(userId, sampleId, callback) {
         this._fetch(userId, sampleId, (error) => {
             if (error) {
@@ -99,13 +114,7 @@ class SamplesModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => {
-                    const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : sample.id,
-                        creator: userId,
-                        fileName: sample.fileName,
-                        hash: sample.hash,
-                        type: sample.type || 'user'
-                    };
+                    const dataToInsert = this._createDataToInsert(userId, sample, shouldGenerateId);
                     this._insert(dataToInsert, trx, callback);
                 },
                 (sampleId, callback) => {
@@ -259,6 +268,16 @@ class SamplesModel extends SecureModelBase {
                 this._fetchMetadataForSampleVersion(sampleVersion.id, callback);
             }
         ], callback);
+    }
+
+    _createDataToInsert(userId, sample, shouldGenerateId) {
+        return {
+            id: shouldGenerateId ? this._generateId() : sample.id,
+            creator: userId,
+            fileName: sample.fileName,
+            hash: sample.hash,
+            type: sample.type || 'user'
+        };
     }
 
 }

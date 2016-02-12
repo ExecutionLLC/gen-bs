@@ -2,19 +2,23 @@
 
 const _ = require('lodash');
 const async = require('async');
+const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
 
 const AppServerViewUtils = require('../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../utils/AppServerFilterUtils');
+const AppServerUploadUtils = require('../utils/AppServerUploadUtils');
 
 const METHODS = {
     getSourcesList: 'v1.get_sources',
     getSourceMetadata: 'v1.get_source_metadata',
     openSearchSession: 'v1.open_session',
     closeSearchSession: 'v1.close_session',
-    searchInResults: 'v1.search_in_results'
+    searchInResults: 'v1.search_in_results',
+    uploadSample: 'v1.upload_file',
+    processSample: 'v1.convert_file'
 };
 
 /**
@@ -66,7 +70,7 @@ class ApplicationServerService extends ServiceBase {
      * Opens a new search session.
      * @param sessionId Id of the session in which the operation should be opened.
      * @param params All the params necessary to open search session.
-     * @param callback callback
+     * @param callback (error, operationId)
      * */
     requestOpenSearchSession(sessionId, params, callback) {
         const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
@@ -104,6 +108,53 @@ class ApplicationServerService extends ServiceBase {
                 });
             }
         });
+    }
+
+    /**
+     * Sends specified file sample to application server.
+     *
+     * @param sessionId Id of the session to which the file belongs.
+     * @param user Session owner
+     * @param sampleLocalPath Full local path to the sample file
+     * @param callback (error, operationId)
+     * */
+    uploadSample(sessionId, user, sampleLocalPath, sampleFileName, callback) {
+        const operationTypes = this.services.operations.operationTypes();
+        const sampleId = Uuid.v4();
+        const operationData = {
+            sampleId,
+            sampleFileName
+        };
+        async.waterfall([
+            (callback) => this.services.operations.add(sessionId, operationTypes.UPLOAD, METHODS.uploadSample, operationData, callback),
+            (operation, callback) => {
+                const config = this.services.config;
+                const url = AppServerUploadUtils.createUploadUrl(
+                    config.applicationServer.host,
+                    config.applicationServer.port,
+                    sampleId,
+                    operation.id
+                );
+                AppServerUploadUtils.uploadFile(url, sampleLocalPath, (error) => callback(error, operation.id));
+            }
+        ], callback);
+    }
+
+    /**
+     * Sends request to process previously uploaded sample. Results will be sent by AS web socket.
+     *
+     * @param sessionId Id of the session the request is related to.
+     * @param operationId Id of the upload operation.
+     * @param callback (error, operationId)
+     * */
+    requestSampleProcessing(sessionId, operationId, callback) {
+        async.waterfall([
+            (callback) => this.services.operations.find(sessionId, operationId, callback),
+            (operation, callback) => {
+                const method = METHODS.processSample;
+                this._rpcSend(operationId, method, null, callback);
+            }
+        ], callback);
     }
 
     requestCloseSearchSession(sessionId, operationId, callback) {

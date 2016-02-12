@@ -27,7 +27,7 @@ class Urls {
     }
 
     uploadSample() {
-        return this._constructApiUrl('/sample/upload');
+        return this._constructApiUrl('/samples/upload');
     }
 
     _constructApiUrl(subUrl) {

@@ -10,7 +10,28 @@ class SampleController extends UserEntityControllerBase {
     }
 
     upload(request, response, next) {
-        const sampleFiles = request.files;
+        if (!this.checkUserIsDefined(request, response)) {
+            return;
+        }
+
+        const user = request.user;
+        const sessionId = request.sessionId;
+
+        const sampleFile = request.file;
+        const fileInfo = {
+            localFilePath: sampleFile.path,
+            fileSize: sampleFile.size,
+            originalFileName: sampleFile.originalname
+        };
+        this.services.samples.upload(sessionId, user, fileInfo, (error, operationId) => {
+            if (error) {
+                this.sendInternalError(response, error);
+            } else {
+                this.sendJson(response, {
+                    operationId
+                });
+            }
+        });
     }
 
     createRouter() {
@@ -24,7 +45,9 @@ class SampleController extends UserEntityControllerBase {
             }
         });
 
-        router.post('/upload', Upload.array('samples', 5), this.upload.bind(this));
+        // Cannot upload many samples here simultaneously, as the client
+        // will be unable to distinguish upload operation ids.
+        router.post('/upload', Upload.single('sample'), this.upload.bind(this));
 
         return router;
     }

@@ -51,15 +51,23 @@ class ApplicationServerReplyService extends ServiceBase {
                     this._findMessageOperation(rpcMessage, callback);
                 },
                 (operation, callback) => {
-                    this._completeOperationIfNeeded(operation, callback);
-                },
-                (operation, callback) => {
                     this._processOperationResult(operation, rpcError, rpcMessage, (error, operationResult) => {
                         callback(error, {
                             operation,
                             operationResult
                         });
                     });
+                },
+                (resultWithOperation, callback) => {
+                    // Determine if we should complete the operation, and complete it.
+                    const shouldCompleteOperation = resultWithOperation.operationResult
+                        && resultWithOperation.operationResult.shouldCompleteOperation;
+                    this._completeOperationIfNeeded(
+                        resultWithOperation.operation,
+                        shouldCompleteOperation,
+                        (error) => {
+                            callback(error, resultWithOperation);
+                        });
                 }
             ], (error, resultWithOperation) => {
                 if (!resultWithOperation || !resultWithOperation.operation) {
@@ -94,25 +102,76 @@ class ApplicationServerReplyService extends ServiceBase {
         let result = null;
 
         if (rpcError) {
+            // Errors in any types of the operations except the search operations should make them completed.
+            const shouldCompleteOperation = operation.type !== this.services.operations.operationTypes().SEARCH;
             callback(null, {
                 operationId: operation.id,
                 error: rpcError,
-                result: rpcMessage
+                result: rpcMessage,
+                shouldCompleteOperation
             });
             return;
         }
 
-        // Each of the following methods is expected to set 'eventName' parameter,
-        // which describes an event that should be raised with the result.
         switch (event) {
             case events.openSearchSession:
                 this._processOpenSearchResult(operation, rpcMessage, callback);
+                break;
+
+            case events.uploadSample:
+                this._processUploadSampleResult(operation, rpcMessage, callback);
                 break;
 
             default:
                 console.error('Unexpected result came from the application server, send as is.');
                 callback(null, rpcMessage.result);
                 break;
+        }
+    }
+
+    _processUploadSampleResult(operation, message, callback) {
+        this.services.logger.info('Processing upload result for operation ' + operation.id);
+        if (!message || !message.result || !message.result.status) {
+            this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            callback(null, {
+                result: message
+            });
+        } else {
+            const result = message.result;
+            const status = result.status;
+            const progress = result.progress;
+
+            // If not ready, just send the progress up
+            if (status !== SESSION_STATUS.READY) {
+                callback(null, {
+                    status,
+                    progress,
+                    shouldCompleteOperation: false
+                });
+            } else {
+                // Sample is fully processed and the fields metadata is available.
+                // Now we need to:
+                // 1. Insert all the data into database.
+                // 2. Send a message to the frontend to indicate the processing is fully completed.
+                // 3. Close the operation.
+                const sampleId = result.sampleId;
+                const fieldsMetadata = result.metadata;
+                const sampleFileName = operation.data.sampleFileName;
+                const sessionId = operation.sessionId;
+
+                async.waterfall([
+                    (callback) => this.services.sessions.findSessionUserId(sessionId, callback),
+                    (userId, callback) => this.services.users.find(userId, callback),
+                    (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
+                        sampleFileName, fieldsMetadata, callback)
+                ], (error) => {
+                    callback(error, {
+                        status,
+                        progress,
+                        shouldCompleteOperation: true
+                    });
+                });
+            }
         }
     }
 
@@ -138,7 +197,8 @@ class ApplicationServerReplyService extends ServiceBase {
             if (sessionState.status !== SESSION_STATUS.READY) {
                 callback(null, {
                     status: sessionState.status,
-                    progress: sessionState.progress
+                    progress: sessionState.progress,
+                    shouldCompleteOperation: false
                 });
             } else {
                 // Get data from Redis
@@ -195,12 +255,9 @@ class ApplicationServerReplyService extends ServiceBase {
     /**
      * Deletes associated information for completed operations.
      * */
-    _completeOperationIfNeeded(operation, callback) {
-        // TODO: Here we should analyze the response and operation method
-        // TODO: and decide should we remove the operation or not.
-        // Currently just complete all non-search operations.
+    _completeOperationIfNeeded(operation, shouldComplete, callback) {
         const operations = this.services.operations;
-        if (operation.type !== operations.operationTypes().SEARCH) {
+        if (shouldComplete) {
             operations.remove(operation.sessionId, operation.id, callback);
         } else {
             callback(null, operation);

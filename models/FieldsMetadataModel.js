@@ -95,39 +95,43 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    addInTransaction(trx, languId, metadata, shouldGenerateId, callback) {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = {
+                    id: (shouldGenerateId ? this._generateId() : metadata.id),
+                    name: metadata.name,
+                    sourceName: metadata.sourceName,
+                    valueType: metadata.valueType,
+                    isMandatory: metadata.isMandatory,
+                    isEditable: metadata.isEditable,
+                    isInvisible: metadata.isInvisible,
+                    dimension: metadata.dimension
+                };
+                this._insert(dataToInsert, trx, callback);
+            },
+            (metadataId, callback) => {
+                const dataToInsert = {
+                    fieldId: metadataId,
+                    languId: languId,
+                    description: metadata.description,
+                    label: metadata.label
+                };
+                this._unsafeInsert('field_text', dataToInsert, trx, (error) => {
+                    callback(error, metadataId);
+                });
+            },
+            (metadataId, callback) => {
+                this._addAvailableValues(metadataId, metadata, shouldGenerateId, trx, (error) => {
+                    callback(error, metadataId);
+                });
+            }
+        ], callback);
+    }
+
     _add(languId, metadata, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = {
-                        id: (shouldGenerateId ? this._generateId() : metadata.id),
-                        name: metadata.name,
-                        sourceName: metadata.sourceName,
-                        valueType: metadata.valueType,
-                        isMandatory: metadata.isMandatory,
-                        isEditable: metadata.isEditable,
-                        isInvisible: metadata.isInvisible,
-                        dimension: metadata.dimension
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                },
-                (metadataId, callback) => {
-                    const dataToInsert = {
-                        fieldId: metadataId,
-                        languId: languId,
-                        description: metadata.description,
-                        label: metadata.label
-                    };
-                    this._unsafeInsert('field_text', dataToInsert, trx, (error) => {
-                        callback(error, metadataId);
-                    });
-                },
-                (metadataId, callback) => {
-                    this._addAvailableValues(metadataId, metadata, shouldGenerateId, trx, (error) => {
-                        callback(error, metadataId);
-                    });
-                }
-            ], callback);
+            this.addInTransaction(trx, languId, metadata, shouldGenerateId, callback);
         }, callback);
     }
 
@@ -173,7 +177,7 @@ class FieldsMetadataModel extends ModelBase {
                     } else {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
                     }
-            });
+                });
         }, callback);
     }
 

@@ -303,7 +303,7 @@ operations.add('Upload file', (callback) => {
       askSession(callback)
     },
     (sessionId, callback) => {
-      read('File path: ', __dirname + '/../examples/test.vcf', (error, filePath) => {
+      read('File path: ', __dirname + '/../examples/vcf-header-validation/test.vcf', (error, filePath) => {
         callback(error, {
           filePath,
           sessionId
@@ -317,7 +317,7 @@ operations.add('Upload file', (callback) => {
       });
 
       const formData = {
-        samples: {
+        sample: {
           value: fs.createReadStream(result.filePath),
           options: {
             filename: path.basename(result.filePath)
@@ -339,7 +339,7 @@ operations.add('Upload file', (callback) => {
         callback(null);
       });
     }
-  ])
+  ], callback);
 });
 
 operations.add('Check session', (callback) => {
