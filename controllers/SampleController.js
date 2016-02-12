@@ -26,24 +26,20 @@ class SampleController extends UserEntityControllerBase {
             originalFileName: sampleFile.originalname
         };
 
-        async.waterfall([
-            (callback) => this.services.samples.upload(sessionId, user, fileInfo, callback),
-            (operationId, callback) => this._removeSampleFile(fileInfo.localFilePath, (error) => callback(error, operationId))
-        ], (error, operationId) => {
+        this.services.samples.upload(sessionId, user, fileInfo, (error, operationId) => {
+            // Try removing local file anyway.
+            this._removeSampleFile(fileInfo.localFilePath);
             this.sendErrorOrJson(response, error, {
                 operationId
             });
         });
     }
 
-    _removeSampleFile(localFilePath, callback) {
+    _removeSampleFile(localFilePath) {
         fs.unlink(localFilePath, (error) => {
             if (error) {
                 this.services.logger.error('Error removing uploaded sample file: ' + error);
             }
-
-            // Continue anyway.
-            callback(null);
         });
     }
 
