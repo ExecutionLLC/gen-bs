@@ -78,7 +78,7 @@ class SamplesModel extends SecureModelBase {
                     this._insert(dataToInsert, trx, (error) => callback(error));
                 },
                 (callback) => {
-                    this.models.fieldsMetadata.addInTransaction(trx, languId, fieldsMetadata, true,
+                    this.models.fields.addInTransaction(trx, languId, fieldsMetadata, true,
                         (error) => callback(error));
                 }
             ], callback);
