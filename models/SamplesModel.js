@@ -74,12 +74,25 @@ class SamplesModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => {
-                    const dataToInsert = this._createDataToInsert(userId, sample, false);
-                    this._insert(dataToInsert, trx, (error) => callback(error));
+                    // Add missing fields metadata
+                    this.models.fields.addMissingFields(languId, fieldsMetadata, trx, (error, fieldsWithIds) => {
+                        callback(error, fieldsWithIds);
+                    });
                 },
-                (callback) => {
-                    this.models.fields.addInTransaction(trx, languId, fieldsMetadata, true,
-                        (error) => callback(error));
+                // TODO: Load and add editable fields here.
+                (fieldsWithIds, callback) => {
+                    // Create entries for 'vcf_file_sample_values' table.
+                    sample.values = _.map(fieldsWithIds, fieldWithId => {
+                        return {
+                            fieldId: fieldWithId.id,
+                            value: null
+                        }
+                    });
+
+                    // Add sample entries.
+                    this._addInTransaction(userId, languId, sample, false, trx, (error, sample) => {
+                        callback(error, sample);
+                    });
                 }
             ], callback);
         }, callback);
@@ -112,30 +125,33 @@ class SamplesModel extends SecureModelBase {
     // languId is used for interface compatibility
     _add(userId, languId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = this._createDataToInsert(userId, sample, shouldGenerateId);
-                    this._insert(dataToInsert, trx, callback);
-                },
-                (sampleId, callback) => {
-                    this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback);
-                },
-                (sampleId, callback) => {
-                    this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            callback(null, {sampleId, versionId});
-                        }
-                    });
-                },
-                (sampleObj, callback) => {
-                    this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
-                        callback(error, sampleObj.sampleId);
-                    });
-                }
-            ], callback);
+            this._addInTransaction(userId, languId, sample, shouldGenerateId, trx, callback);
         }, callback);
+    }
+
+    _addInTransaction(userId, languId, sample, shouldGenerateId, trx, callback) {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = this._createDataToInsert(userId, sample, shouldGenerateId);
+                this._insert(dataToInsert, trx, callback);
+            },
+            (sampleId, callback) => {
+                this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback);
+            },
+            (sampleId, callback) => {
+                this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
+                    callback(error, {
+                        sampleId,
+                        versionId
+                    });
+                });
+            },
+            (sampleObj, callback) => {
+                this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
+                    callback(error, sampleObj.sampleId);
+                });
+            }
+        ], callback);
     }
 
     _update(userId, sample, sampleToUpdate, callback) {
@@ -180,6 +196,14 @@ class SamplesModel extends SecureModelBase {
         this._unsafeInsert('vcf_file_sample_version', dataToInsert, trx, callback);
     }
 
+    /**
+     * Adds sample values into vcf_file_sample_value table.
+     *
+     * @param versionId Id of the sample version.
+     * @param values array of the sample values, each of form {fieldId, values (string value for the table column)}.
+     * @param trx Knex transaction object.
+     * @param callback (error, resulting values list)
+     * */
     _addFileSampleValues(versionId, values, trx, callback) {
         async.map(values, (value, callback) => {
             this._addFileSampleValue(versionId, value, trx, callback);
