@@ -36,27 +36,29 @@ export function uploadFile(files) {
 
     const formData = new FormData()
     formData.append('sample', getState().fileUpload.files[0]);
-    console.log('upload formData file', getState().fileUpload.files[0])
-
-    var request = new XMLHttpRequest();
-    request.open("POST", config.URLS.FILE_UPLOAD);
-    request.send(formData);
 
     /*
+    console.log('upload formData file', getState().fileUpload.files[0])
+    var request = new XMLHttpRequest();
+    request.open("POST", config.URLS.FILE_UPLOAD);
+    req.setRequestHeader("X-Session-Id": getState().auth.sessionId);
+    request.send(formData);
+    */
+
     return $.ajax(config.URLS.FILE_UPLOAD, {
         'type': 'POST',
         'headers': { "X-Session-Id": getState().auth.sessionId },
         'data': formData,
-        'contentType': 'multipart/form-data',
+        //'contentType': 'multipart/form-data',
+        'contentType': false,
         'processData': false
       })
       .done(json => {
         dispatch(receiveFileUpload(json));
       })
       .fail(err => {
-        console.error('UPDATE View FAILED: ', err.responseText);
+        console.error('Upload FAILED: ', err.responseText);
       });
-      */
   }
 
 }
