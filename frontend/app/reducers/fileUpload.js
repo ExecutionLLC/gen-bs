@@ -17,6 +17,11 @@ export default function fileUpload(state = {
         isFetching: true
       });
 
+    case ActionTypes.RECEIVE_FILE_UPLOAD:
+      return Object.assign({}, state, {
+        isFetching: false 
+      });
+
     default:
       return state
 
