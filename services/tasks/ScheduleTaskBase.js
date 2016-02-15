@@ -1,7 +1,7 @@
 'use strict';
 
-class SheduleTaskBase {
-    constructor(name, interval, services, models) {
+class ScheduleTaskBase {
+    constructor(name, timeout, services, models) {
         this.services = services;
         this.models = models;
 
@@ -9,23 +9,37 @@ class SheduleTaskBase {
         this.logger = this.services.logger;
 
         this.name = name;
-        this.interval = interval;
+        this.timeout = timeout;
+        this.enabled = true;
 
-        this.startDate = Date.now();
-        this.nextExecDate = null;
-        this.running = false;
-
-        this.setNextExecDate();
+        this.pID = null;
     }
 
-    setExecDate(date) {
-        this.nextExecDate = date;
-        return this.nextExecDate;
+    enable() {
+        this.logger.info("Task enabled: " + this.name);
+        this.enabled = true;
     }
 
-    setNextExecDate() {
-        return this.setExecDate(Date.now() + this.interval * 1000);
+    disable() {
+        this.enabled = false;
+        this.logger.info("Task disabled: " + this.name);
+    }
+
+    start() {
+        if (this.enabled) {
+            this.logger.info("Task started: " + this.name);
+            this.pID = setTimeout(this.execute, this.timeout * 1000);
+        }
+    }
+
+    stop() {
+        clearTimeout(this.pID);
+        this.logger.info("Task stopped: " + this.name);
+    }
+
+    // Execute task stub
+    execute() {
     }
 }
 
-module.exports = SheduleTaskBase;
+module.exports = ScheduleTaskBase;

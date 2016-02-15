@@ -26,8 +26,7 @@ const SETTINGS = {
         sessionTimeout: ENV.GEN_WS_USER_SESSION_TIMEOUT || 300
     },
     schedule: {
-        enabled: ENV.GEN_WS_SCHEDULE_ENABLED || true,
-        interval: ENV.GEN_WS_SCHEDULE_INTERVAL || 10
+        enabled: ENV.GEN_WS_SCHEDULE_ENABLED || true
     },
     logger: {
         app_name: 'genomix',

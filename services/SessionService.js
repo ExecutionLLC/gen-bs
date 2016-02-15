@@ -17,7 +17,7 @@ class SessionService extends ServiceBase {
 
         this.startSystem((error, systemSession) => {
             if (error) {
-                this.logger.error('Error creating system session: ' + error);
+                throw new Error('Error creating system session: ' + error);
             } else {
                 this.logger.info('System session created: ' + JSON.stringify(systemSession, null, 2))
             }
@@ -177,17 +177,24 @@ class SessionService extends ServiceBase {
     }
 
     findExpiredSessions(callback) {
-        const now = Date.now();
         const expiredSessions = _.filter(this.sessions, (session) => {
-            return this._sessionExpired(now, session);
+            return this._isSessionExpired(session);
         });
         const expiredSessionIds = _.pluck(expiredSessions, 'id');
         callback(null, expiredSessionIds);
     }
 
     getMinimumActivityDate() {
-        const lastActivityDates = _.pluck(this.sessions, 'lastActivity');
-        return _.min(lastActivityDates);
+        const sessions = _.remove(this.sessions, (session) => {
+            session.systemUser == true;
+        });
+
+        const lastActivityDates = _.pluck(sessions, 'lastActivity');
+        if (lastActivityDates.length > 0) {
+            return _.min(lastActivityDates);
+        } else {
+            return null;
+        }
     }
 
     _createSession(token, userId, callback) {
@@ -214,10 +221,10 @@ class SessionService extends ServiceBase {
     }
 
     // 0 expiration time for non-expired sessions
-    _sessionExpired(checkTime, session) {
+    _isSessionExpired(session) {
         let result = false;
         const expirationTime = session.lastActivity + this.config.sessions.sessionTimeout * 1000;
-        if (!session.systemUser && (checkTime > expirationTime)) {
+        if (!session.systemUser && (Date.now() > expirationTime)) {
             return true;
         }
         return result;

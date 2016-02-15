@@ -6,16 +6,15 @@ const async = require('async');
 const ScheduleTaskBase = require('./ScheduleTaskBase');
 
 const TASK_NAME = 'CheckSessions';
-const TASK_INTERVAL = 30;
+const TASK_TIMEOUT = 30; // Task timeout, in seconds
 
 class CheckSessionsTask extends ScheduleTaskBase {
     constructor(services, models) {
-        super(TASK_NAME, TASK_INTERVAL, services, models);
+        super(TASK_NAME, TASK_TIMEOUT, services, models);
+        this.execute = this.execute.bind(this);
     }
 
-    exec(callback) {
-        this.running = true;
-
+    execute() {
         async.waterfall([
             (callback) => {
                 this.services.sessions.findExpiredSessions(callback);
@@ -31,21 +30,31 @@ class CheckSessionsTask extends ScheduleTaskBase {
                         callback(null, sessionId);
                     });
                 }, callback);
-            },
-            (sessionIds, callback) => {
-                const taskOutput = {
-                    result: {
-                        sessions: sessionIds
-                    },
-                    nextExecDate: _.min([this.services.sessions.getMinimumActivityDate(), Date.now() + this.interval * 1000])
-                };
-                callback(null, taskOutput);
             }
-        ], (error, result) => {
-            this.running = false;
-            callback(error, result);
+        ], (error) => {
+            if (error) {
+                this.logger.error("Task " + this.name + ' error: ' + error);
+            } else {
+                this.logger.info("Task " + this.name + ' processed.');
+            }
+            setTimeout(this.execute, this._calculateTimeout());
         });
+    }
 
+    _calculateTimeout() {
+        const defaultTimeout = this.timeout * 1000;
+        const lastActivityDate = this.services.sessions.getMinimumActivityDate();
+
+        let timeout = Date.now();
+        if (_.isNull(lastActivityDate)) {
+            timeout = defaultTimeout;
+        } else {
+            timeout = timeout - lastActivityDate;
+            if (timeout < 0) {
+                timeout = defaultTimeout;
+            }
+        }
+        return Math.min(timeout, defaultTimeout);
     }
 }
 
