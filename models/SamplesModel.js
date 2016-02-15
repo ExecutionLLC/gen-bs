@@ -49,7 +49,7 @@ class SamplesModel extends SecureModelBase {
                 this._fetchSamplesByIds(sampleIds, callback);
             },
             (samples, callback) => {
-                if (samples.length == samples.length) {
+                if (samples.length === sampleIds.length) {
                     callback(null, samples);
                 } else {
                     callback('Some samples not found: ' + sampleIds + ', userId: ' + userId);
@@ -68,6 +68,47 @@ class SamplesModel extends SecureModelBase {
                 }, callback);
             }
         ], callback);
+    }
+
+    addSampleWithMetadata(userId, languId, sample, fieldsMetadata, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
+                (callback) => {
+                    this.models.fields.addMissingFields(languId, fieldsMetadata, trx, (error, fieldsWithIds) => {
+                        callback(error, fieldsWithIds);
+                    });
+                },
+                // Add editable fields to the field list.
+                (fieldsWithIds, callback) => {
+                    this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
+                        const mappedFields = _.map(fieldsMetadata || [], fieldMetadata => {
+                            return {
+                                id: fieldMetadata.id,
+                                fieldMetadata
+                            }
+                        });
+                        const aggregatedFields = fieldsWithIds.concat(mappedFields);
+                        callback(error, aggregatedFields);
+                    });
+                },
+                // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
+                (fieldsWithIds, callback) => {
+                    const sampleWithValues = _.cloneDeep(sample);
+                    sampleWithValues.values = _.map(fieldsWithIds, fieldWithId => {
+                        return {
+                            fieldId: fieldWithId.id,
+                            value: null
+                        }
+                    });
+
+                    // Add sample entries.
+                    this._addInTransaction(userId, languId, sampleWithValues, false, trx, (error, resultSample) => {
+                        callback(error, resultSample);
+                    });
+                }
+            ], callback);
+        }, callback);
     }
 
     makeAnalyzed(userId, sampleId, callback) {
@@ -97,36 +138,33 @@ class SamplesModel extends SecureModelBase {
     // languId is used for interface compatibility
     _add(userId, languId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : sample.id,
-                        creator: userId,
-                        fileName: sample.fileName,
-                        hash: sample.hash,
-                        type: sample.type || 'user'
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                },
-                (sampleId, callback) => {
-                    this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback);
-                },
-                (sampleId, callback) => {
-                    this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            callback(null, {sampleId, versionId});
-                        }
-                    });
-                },
-                (sampleObj, callback) => {
-                    this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
-                        callback(error, sampleObj.sampleId);
-                    });
-                }
-            ], callback);
+            this._addInTransaction(userId, languId, sample, shouldGenerateId, trx, callback);
         }, callback);
+    }
+
+    _addInTransaction(userId, languId, sample, shouldGenerateId, trx, callback) {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = this._createDataToInsert(userId, sample, shouldGenerateId);
+                this._insert(dataToInsert, trx, callback);
+            },
+            (sampleId, callback) => {
+                this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback);
+            },
+            (sampleId, callback) => {
+                this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
+                    callback(error, {
+                        sampleId,
+                        versionId
+                    });
+                });
+            },
+            (sampleObj, callback) => {
+                this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
+                    callback(error, sampleObj.sampleId);
+                });
+            }
+        ], callback);
     }
 
     _update(userId, sample, sampleToUpdate, callback) {
@@ -171,6 +209,14 @@ class SamplesModel extends SecureModelBase {
         this._unsafeInsert('vcf_file_sample_version', dataToInsert, trx, callback);
     }
 
+    /**
+     * Adds sample values into vcf_file_sample_value table.
+     *
+     * @param versionId Id of the sample version.
+     * @param values array of the sample values, each of form {fieldId, values (string value for the table column)}.
+     * @param trx Knex transaction object.
+     * @param callback (error, resulting values list)
+     * */
     _addFileSampleValues(versionId, values, trx, callback) {
         async.map(values, (value, callback) => {
             this._addFileSampleValue(versionId, value, trx, callback);
@@ -259,6 +305,16 @@ class SamplesModel extends SecureModelBase {
                 this._fetchMetadataForSampleVersion(sampleVersion.id, callback);
             }
         ], callback);
+    }
+
+    _createDataToInsert(userId, sample, shouldGenerateId) {
+        return {
+            id: shouldGenerateId ? this._generateId() : sample.id,
+            creator: userId,
+            fileName: sample.fileName,
+            hash: sample.hash,
+            type: sample.type || 'user'
+        };
     }
 
 }

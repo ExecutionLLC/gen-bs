@@ -26,6 +26,14 @@ class ControllerBase {
             .end();
     }
 
+    sendErrorOrJson(response, error, jsonResult) {
+        if (error) {
+            this.sendInternalError(response, error);
+        } else {
+            this.sendJson(response, jsonResult);
+        }
+    }
+
     sendError(response, httpError, message) {
         if (message && typeof message !== 'string') {
             message = message.toString();
@@ -47,6 +55,9 @@ class ControllerBase {
         .end();
     }
 
+    /**
+     * Reads body doing camel-case conversion. If body is empty, sends internal error.
+     * */
     getRequestBody(request, response) {
         const requestBody = request.body;
         if (_.isEmpty(requestBody)) {

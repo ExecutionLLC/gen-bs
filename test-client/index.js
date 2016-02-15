@@ -4,6 +4,8 @@ const Request = require('request');
 const Read = require('read');
 const Async = require('async');
 const _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
 
 const env = process.env;
 
@@ -288,6 +290,51 @@ operations.add('Get data', (callback) => {
         } else {
           console.log('Response: ' + stringify(response));
           console.log('Body: ' + stringify(JSON.parse(body)));
+        }
+        callback(null);
+      });
+    }
+  ], callback);
+});
+
+operations.add('Upload file', (callback) => {
+  waterfall([
+    (callback) => {
+      askSession(callback)
+    },
+    (sessionId, callback) => {
+      read('File path: ', __dirname + '/../examples/vcf-header-validation/test.vcf', (error, filePath) => {
+        callback(error, {
+          filePath,
+          sessionId
+        });
+      });
+    },
+    (result, callback) => {
+      const headers = createHeaders({
+        sessionId: result.sessionId,
+        languId: DefaultLangu[0].id
+      });
+
+      const formData = {
+        sample: {
+          value: fs.createReadStream(result.filePath),
+          options: {
+            filename: path.basename(result.filePath)
+          }
+        }
+      };
+
+      Request.post({
+        url: urls.uploadSample(),
+        headers,
+        formData
+      }, (error, response, body) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Response: ' + stringify(response));
+          console.log('Body: ' + stringify(body));
         }
         callback(null);
       });

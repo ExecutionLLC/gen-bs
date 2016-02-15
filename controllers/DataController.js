@@ -38,11 +38,7 @@ class DataController extends ControllerBase {
         });
       }
     }, (error, results) => {
-      if (error) {
-        this.sendInternalError(response, error);
-      } else {
-        this.sendJson(response, results);
-      }
+      this.sendErrorOrJson(response, error, results);
     });
   }
 

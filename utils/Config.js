@@ -6,6 +6,9 @@ const SETTINGS = {
     port: ENV.GEN_WS_PORT || 5000,
     enableCORS: ENV.GEN_WS_CORS_ENABLE || true,
     forceOverrideRedisToLocalhost: ENV.GEN_WS_FORCE_OVERRIDE_REDIS_TO_LOCALHOST || false,
+    uploadPath: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/',
+    uploadMaxSizeInBytes: ENV.GEN_WS_UPLOAD_MAX_SIZE || 25 * 1024 * 1024,
+    uploadMaxCount: ENV.GEN_WS_UPLOAD_MAX_COUNT || 5,
     applicationServer: {
         host: ENV.GEN_WS_AS_HOST || 'localhost',
         port: ENV.GEN_WS_AS_PORT || 8888

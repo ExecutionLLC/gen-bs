@@ -2,19 +2,23 @@
 
 const _ = require('lodash');
 const async = require('async');
+const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
 
 const AppServerViewUtils = require('../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../utils/AppServerFilterUtils');
+const AppServerUploadUtils = require('../utils/AppServerUploadUtils');
 
 const METHODS = {
     getSourcesList: 'v1.get_sources',
     getSourceMetadata: 'v1.get_source_metadata',
     openSearchSession: 'v1.open_session',
-    closeSearchSession: 'v1.close_session',
-    searchInResults: 'v1.search_in_results'
+    closeSession: 'v1.close_session',
+    searchInResults: 'v1.search_in_results',
+    uploadSample: 'v1.upload_file',
+    processSample: 'v1.convert_file'
 };
 
 /**
@@ -28,7 +32,7 @@ class ApplicationServerService extends ServiceBase {
 
         this.requestSourcesList = this.requestSourcesList.bind(this);
         this.requestSourceMetadata = this.requestSourceMetadata.bind(this);
-        this.requestCloseSearchSession = this.requestCloseSearchSession.bind(this);
+        this.requestCloseSession = this.requestCloseSession.bind(this);
         this.requestOpenSearchSession = this.requestOpenSearchSession.bind(this);
         this.requestSearchInResults = this.requestSearchInResults.bind(this);
         this._requestOperations = this._requestOperations.bind(this);
@@ -47,26 +51,26 @@ class ApplicationServerService extends ServiceBase {
     }
 
     requestSourcesList(sessionId, callback) {
-        const operationTypes = this.services.operations.operationTypes();
         const method = METHODS.getSourcesList;
-        this.services.operations.add(sessionId, operationTypes.SYSTEM, method, (error, operation) => {
-            this._rpcSend(operation.id, method, null, callback);
-        });
+        async.waterfall([
+            (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (operation, callback) => this._rpcSend(operation.getId(), method, null, callback)
+        ], callback);
     }
 
     requestSourceMetadata(sessionId, sourceName, callback) {
         const method = METHODS.getSourceMetadata;
-        const operationTypes = this.services.operations.operationTypes();
-        this.services.operations.add(sessionId, operationTypes.SYSTEM, method, (error, operation) => {
-            this._rpcSend(operation.id, method, sourceName, callback);
-        });
+        async.waterfall([
+            (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (operation, callback) => this._rpcSend(operation.getId(), method, sourceName, callback)
+        ], callback);
     }
 
     /**
      * Opens a new search session.
      * @param sessionId Id of the session in which the operation should be opened.
      * @param params All the params necessary to open search session.
-     * @param callback callback
+     * @param callback (error, operationId)
      * */
     requestOpenSearchSession(sessionId, params, callback) {
         const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
@@ -84,37 +88,85 @@ class ApplicationServerService extends ServiceBase {
             viewSortOrder: appServerSortOrder
         };
 
-        const operationTypes = this.services.operations.operationTypes();
-        this._closePreviousSearchIfAny(sessionId, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                const operationData = {
-                    sampleId: params.sample.id,
-                    userId: params.userId,
-                    offset: params.offset,
-                    limit: params.limit
-                };
-                this.services.operations.add(sessionId, operationTypes.SEARCH, method, operationData, (error, operation) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        this._rpcSend(operation.id, method, searchSessionRequest, callback);
-                    }
-                });
-            }
-        });
+        async.waterfall([
+            (callback) => this._closePreviousSearchIfAny(sessionId, (error) => callback(error)),
+            (callback) => {
+                this.services.operations.addSearchOperation(sessionId, method, callback);
+            },
+            (operation, callback) => {
+                operation.setSampleId(params.sample.id);
+                operation.setUserId(params.userId);
+                operation.setOffset(params.offset);
+                operation.setLimit(params.limit);
+                callback(null, operation);
+            },
+            (operation, callback) => this._rpcSend(operation.getId(), method, searchSessionRequest, callback)
+        ], callback);
     }
 
-    requestCloseSearchSession(sessionId, operationId, callback) {
-        this.services.operations.find(sessionId, operationId, (error, operation) => {
-            if (error) {
-                callback(error);
-            } else {
-                const method = METHODS.closeSearchSession;
-                this._rpcSend(operation.id, method, null, callback);
+    /**
+     * Sends specified file sample to application server.
+     *
+     * @param sessionId Id of the session to which the file belongs.
+     * @param sampleId Id of the sample.
+     * @param user Session owner.
+     * @param sampleLocalPath Full local path to the sample file.
+     * @param sampleFileName Original name of the sample file.
+     * @param callback (error, operationId)
+     * */
+    uploadSample(sessionId, sampleId, user, sampleLocalPath, sampleFileName, callback) {
+        async.waterfall([
+            (callback) => this.services.operations.addUploadOperation(sessionId, METHODS.uploadSample, callback),
+            (operation, callback) => {
+                operation.setSampleId(sampleId);
+                operation.setSampleFileName(sampleFileName);
+                callback(null, operation);
+            },
+            (operation, callback) => {
+                const config = this.services.config;
+                const url = AppServerUploadUtils.createUploadUrl(
+                    config.applicationServer.host,
+                    config.applicationServer.port,
+                    sampleId,
+                    operation.getId()
+                );
+                AppServerUploadUtils.uploadFile(url, sampleLocalPath, (error) => callback(error, operation.getId()));
             }
-        });
+        ], callback);
+    }
+
+    /**
+     * Sends request to process previously uploaded sample. Results will be sent by AS web socket.
+     *
+     * @param sessionId Id of the session the request is related to.
+     * @param operationId Id of the upload operation.
+     * @param callback (error, operationId)
+     * */
+    requestSampleProcessing(sessionId, operationId, callback) {
+        async.waterfall([
+            (callback) => this.services.operations.find(sessionId, operationId, callback),
+            (operation, callback) => {
+                const method = METHODS.processSample;
+                this._rpcSend(operationId, method, null, callback);
+            }
+        ], callback);
+    }
+
+    /**
+     * Requests AS to close the specified operation.
+     *
+     * @param sessionId Id of the session the operation is related to.
+     * @param operationId Id of the operation to close.
+     * @param callback (error, operationId)
+     * */
+    requestCloseSession(sessionId, operationId, callback) {
+        async.waterfall([
+            (callback) => this.services.operations.find(sessionId, operationId, callback),
+            (operation, callback) => {
+                const method = METHODS.closeSession;
+                this._rpcSend(operation.getId(), method, null, callback);
+            }
+        ], callback);
     }
 
     requestSearchInResults(sessionId, operationId, params, callback) {
@@ -124,12 +176,9 @@ class ApplicationServerService extends ServiceBase {
             },
             (operation, callback) => {
                 // save necessary data to the operation to be able to fetch required amount of data.
-                const operationData = _.cloneDeep(operation.data);
-                operationData.limit = params.limit;
-                operationData.offset = params.offset;
-                this.services.operations.setData(sessionId, operationId, operationData, (error) => {
-                    callback(error, operation);
-                });
+                operation.setLimit(params.limit);
+                operation.setOffset(params.offset);
+                callback(null, operation);
             },
             (operation, callback) => {
                 const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue,
@@ -226,7 +275,7 @@ class ApplicationServerService extends ServiceBase {
                 } else {
                     // Expect the only search operation here.
                     const searchOperation = operations[0];
-                    this.services.operations.remove(sessionId, searchOperation.id, callback);
+                    this.services.operations.remove(sessionId, searchOperation.getId(), callback);
                 }
             }
         });

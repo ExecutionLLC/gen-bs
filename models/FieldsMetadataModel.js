@@ -49,6 +49,44 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    /**
+     * Finds id of the existing field metadata which has the same name, dimension and value type.
+     * If there is no such metadata, sends null as result.
+     *
+     * @param fieldMetadata Field metadata to search for.
+     * @param trx Knex transaction object.
+     * @param callback (error, fieldMetadataId or null)
+     * */
+    findIdOfTheSameAsOrNullInTransaction(fieldMetadata, trx, callback) {
+        trx.select('id')
+            .from(this.baseTableName)
+            .where('name', fieldMetadata.name)
+            .andWhere('value_type', fieldMetadata.valueType)
+            .andWhere('dimension', fieldMetadata.dimension)
+            .asCallback((error, idArray) => {
+                const existingMetadataId = (idArray && idArray.length != null) ? idArray[0].id : null;
+                callback(error, existingMetadataId);
+            });
+    }
+
+    /**
+     * Finds all editable fields.
+     *
+     * @param trx Knex transaction object.
+     * @param callback (error, fieldsMetadata)
+     * */
+    findEditableFieldsInTransaction(trx, callback) {
+        async.waterfall([
+            (callback) => {
+                trx.select()
+                    .from(this.baseTableName)
+                    .where('is_editable', true)
+                    .asCallback(callback);
+            },
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
+        ], callback);
+    }
+
     findByUserAndSampleId(userId, sampleId, callback) {
         async.waterfall([
             (callback) => {
@@ -95,39 +133,81 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    addInTransaction(trx, languId, metadata, shouldGenerateId, callback) {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = {
+                    id: (shouldGenerateId ? this._generateId() : metadata.id),
+                    name: metadata.name,
+                    sourceName: metadata.sourceName,
+                    valueType: metadata.valueType,
+                    isMandatory: metadata.isMandatory,
+                    isEditable: metadata.isEditable,
+                    isInvisible: metadata.isInvisible,
+                    dimension: metadata.dimension
+                };
+                this._insert(dataToInsert, trx, callback);
+            },
+            (metadataId, callback) => {
+                const dataToInsert = {
+                    fieldId: metadataId,
+                    languId: languId,
+                    description: metadata.description,
+                    label: metadata.label
+                };
+                this._unsafeInsert('field_text', dataToInsert, trx, (error) => {
+                    callback(error, metadataId);
+                });
+            },
+            (metadataId, callback) => {
+                this._addAvailableValues(metadataId, metadata, shouldGenerateId, trx, (error) => {
+                    callback(error, metadataId);
+                });
+            }
+        ], callback);
+    }
+
+    /**
+     * Adds missing fields from the specified collection. Result will contain fields with ids.
+     *
+     * @param languId Language for the description.
+     * @param fieldsMetadata Collection of the fields metadata to check.
+     * @param trx Knex transaction object.
+     * @param callback (error, results) where results - array, item.id - new or existing field metadata id,
+     * item.fieldMetadata - input metadata.
+     * */
+    addMissingFields(languId, fieldsMetadata, trx, callback) {
+        async.waterfall([
+            (callback) => {
+                // First, for each field try to find existing one.
+                async.mapSeries(fieldsMetadata, (fieldMetadata, callback) => {
+                    this.findIdOfTheSameAsOrNullInTransaction(fieldMetadata, trx, (error, id) => {
+                        callback(error, {
+                            fieldMetadata,
+                            id
+                        });
+                    });
+                }, callback);
+            },
+            (fieldsWithIds, callback) => {
+                // Second, insert each of the missing fields and update their ids.
+                async.mapSeries(fieldsWithIds, (fieldWithId, callback) => {
+                    if (!fieldWithId.id) {
+                        this._add(languId, fieldWithId.fieldMetadata, true, (error, insertedField) => {
+                            fieldWithId.id = (insertedField) ? insertedField.id : null;
+                            callback(error, fieldWithId);
+                        });
+                    } else {
+                        callback(null, fieldWithId);
+                    }
+                }, callback);
+            }
+        ], callback);
+    }
+
     _add(languId, metadata, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = {
-                        id: (shouldGenerateId ? this._generateId() : metadata.id),
-                        name: metadata.name,
-                        sourceName: metadata.sourceName,
-                        valueType: metadata.valueType,
-                        isMandatory: metadata.isMandatory,
-                        isEditable: metadata.isEditable,
-                        isInvisible: metadata.isInvisible,
-                        dimension: metadata.dimension
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                },
-                (metadataId, callback) => {
-                    const dataToInsert = {
-                        fieldId: metadataId,
-                        languId: languId,
-                        description: metadata.description,
-                        label: metadata.label
-                    };
-                    this._unsafeInsert('field_text', dataToInsert, trx, (error) => {
-                        callback(error, metadataId);
-                    });
-                },
-                (metadataId, callback) => {
-                    this._addAvailableValues(metadataId, metadata, shouldGenerateId, trx, (error) => {
-                        callback(error, metadataId);
-                    });
-                }
-            ], callback);
+            this.addInTransaction(trx, languId, metadata, shouldGenerateId, callback);
         }, callback);
     }
 
@@ -173,7 +253,7 @@ class FieldsMetadataModel extends ModelBase {
                     } else {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(metadata[0]));
                     }
-            });
+                });
         }, callback);
     }
 
