@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap';
 
 import FileUploadHeader from './FileUpload/FileUploadHeader';
+import FileUploadFooter from './FileUpload/FileUploadFooter';
 import FileUpload from './FileUpload/FileUpload';
 
 
@@ -20,6 +21,7 @@ class FileUploadModal extends Component {
           <Modal.Body>
             <FileUpload {...this.props} />
           </Modal.Body>
+          <FileUploadFooter />
         </Modal>
     )
   }
