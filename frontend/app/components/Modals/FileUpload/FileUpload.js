@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 
+import FileUploadProgressBar from './FileUploadProgressBar'
+
 import { changeFileForUpload } from '../../../actions/fileUpload'
 
 
@@ -46,6 +48,7 @@ export default class FileUpload extends Component {
                 <div className="small btn-link-default">.vcf, .vcf.gz</div>
             </div>
 
+            <FileUploadProgressBar />
             <div className="progress hidden">
                 <div className="progress progress-striped">
                 <div style={{width: '40%'}} aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" className="progress-bar progress-bar-primary progress-bar-primary">

@@ -34,10 +34,19 @@ export function uploadFile(files) {
 
     dispatch(requestFileUpload())
 
+    const formData = new FormData()
+    formData.append('sample', getState().fileUpload.files[0]);
+    console.log('upload formData file', getState().fileUpload.files[0])
+
+    var request = new XMLHttpRequest();
+    request.open("POST", config.URLS.FILE_UPLOAD);
+    request.send(formData);
+
+    /*
     return $.ajax(config.URLS.FILE_UPLOAD, {
         'type': 'POST',
         'headers': { "X-Session-Id": getState().auth.sessionId },
-        'data': JSON.stringify(getState().fileUpload.files[0]),
+        'data': formData,
         'contentType': 'multipart/form-data',
         'processData': false
       })
@@ -47,6 +56,7 @@ export function uploadFile(files) {
       .fail(err => {
         console.error('UPDATE View FAILED: ', err.responseText);
       });
+      */
   }
 
 }
