@@ -49,7 +49,7 @@ class SamplesModel extends SecureModelBase {
                 this._fetchSamplesByIds(sampleIds, callback);
             },
             (samples, callback) => {
-                if (samples.length == samples.length) {
+                if (samples.length === sampleIds.length) {
                     callback(null, samples);
                 } else {
                     callback('Some samples not found: ' + sampleIds + ', userId: ' + userId);
