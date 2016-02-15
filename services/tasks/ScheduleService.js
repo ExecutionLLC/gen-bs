@@ -1,11 +1,11 @@
 'use strict';
 
 const _ = require('lodash');
-const async = require('async');
 
 const ServiceBase = require('../ServiceBase');
 
 const CheckSessionsTask = require('./CheckSessionsTask');
+const ImportSourceMetadataTask = require('./ImportSourceMetadataTask');
 
 class ScheduleService extends ServiceBase {
     constructor(services, models) {
@@ -15,9 +15,11 @@ class ScheduleService extends ServiceBase {
         this.logger = this.services.logger;
 
         this.checkSessionTask = new CheckSessionsTask(services, models);
+        this.importSourceMetadataTask = new ImportSourceMetadataTask(services, models);
 
         this.tasks = [
-            this.checkSessionTask
+            this.checkSessionTask,
+            this.importSourceMetadataTask
         ];
     }
 

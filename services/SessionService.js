@@ -117,6 +117,17 @@ class SessionService extends ServiceBase {
         ], callback);
     }
 
+    findSystemSession(callback) {
+        const systemSession = _.find(this.sessions, (session) => {
+            return session.systemUser === true;
+        });
+        if (!systemSession) {
+            callback(new Error("System session not found"));
+        } else {
+            callback(null, systemSession);
+        }
+    }
+
     findSessionUserId(sessionId, callback) {
         this.findById(sessionId, (error, sessionId) => {
             if (error) {
@@ -186,7 +197,7 @@ class SessionService extends ServiceBase {
 
     getMinimumActivityDate() {
         const sessions = _.remove(this.sessions, (session) => {
-            session.systemUser == true;
+            session.systemUser === true;
         });
 
         const lastActivityDates = _.pluck(sessions, 'lastActivity');

@@ -11,7 +11,6 @@ const TASK_TIMEOUT = 30; // Task timeout, in seconds
 class CheckSessionsTask extends ScheduleTaskBase {
     constructor(services, models) {
         super(TASK_NAME, TASK_TIMEOUT, services, models);
-        this.execute = this.execute.bind(this);
     }
 
     execute() {

@@ -13,6 +13,8 @@ class ScheduleTaskBase {
         this.enabled = true;
 
         this.pID = null;
+
+        this.execute = this.execute.bind(this);
     }
 
     enable() {

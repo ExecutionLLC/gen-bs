@@ -41,7 +41,7 @@ class ServiceFacade {
 
         this.scheduler = new ScheduleService(this, models);
         if (this.config.schedule.enabled) {
-            this.scheduler.start(this.config.schedule.interval);
+            this.scheduler.start();
         }
     }
 }
