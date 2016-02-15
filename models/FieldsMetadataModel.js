@@ -69,6 +69,24 @@ class FieldsMetadataModel extends ModelBase {
             });
     }
 
+    /**
+     * Finds all editable fields.
+     *
+     * @param trx Knex transaction object.
+     * @param callback (error, fieldsMetadata)
+     * */
+    findEditableFieldsInTransaction(trx, callback) {
+        async.waterfall([
+            (callback) => {
+                trx.select()
+                    .from(this.baseTableName)
+                    .where('is_editable', true)
+                    .asCallback(callback);
+            },
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
+        ], callback);
+    }
+
     findByUserAndSampleId(userId, sampleId, callback) {
         async.waterfall([
             (callback) => {

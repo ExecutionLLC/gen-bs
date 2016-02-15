@@ -73,16 +73,29 @@ class SamplesModel extends SecureModelBase {
     addSampleWithMetadata(userId, languId, sample, fieldsMetadata, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
+                // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
                 (callback) => {
-                    // Add missing fields metadata
                     this.models.fields.addMissingFields(languId, fieldsMetadata, trx, (error, fieldsWithIds) => {
                         callback(error, fieldsWithIds);
                     });
                 },
-                // TODO: Load and add editable fields here.
+                // Add editable fields to the field list.
                 (fieldsWithIds, callback) => {
-                    // Create entries for 'vcf_file_sample_values' table.
-                    sample.values = _.map(fieldsWithIds, fieldWithId => {
+                    this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
+                        const mappedFields = _.map(fieldsMetadata || [], fieldMetadata => {
+                            return {
+                                id: fieldMetadata.id,
+                                fieldMetadata
+                            }
+                        });
+                        const aggregatedFields = fieldsWithIds.concat(mappedFields);
+                        callback(error, aggregatedFields);
+                    });
+                },
+                // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
+                (fieldsWithIds, callback) => {
+                    const sampleWithValues = _.cloneDeep(sample);
+                    sampleWithValues.values = _.map(fieldsWithIds, fieldWithId => {
                         return {
                             fieldId: fieldWithId.id,
                             value: null
@@ -90,8 +103,8 @@ class SamplesModel extends SecureModelBase {
                     });
 
                     // Add sample entries.
-                    this._addInTransaction(userId, languId, sample, false, trx, (error, sample) => {
-                        callback(error, sample);
+                    this._addInTransaction(userId, languId, sampleWithValues, false, trx, (error, resultSample) => {
+                        callback(error, resultSample);
                     });
                 }
             ], callback);
