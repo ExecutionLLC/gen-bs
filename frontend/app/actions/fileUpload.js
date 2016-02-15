@@ -16,9 +16,17 @@ export function changeFileForUpload(files) {
   }
 }
 
-export function requestFileUpload(files) {
+function requestFileUpload() {
   return {
     type: REQUEST_FILE_UPLOAD
+  }
+}
+
+export function uploadFile(files) {
+  return ( dispatch, getState )  => {
+
+    dispatch(requestFileUpload())
+
   }
 }
 

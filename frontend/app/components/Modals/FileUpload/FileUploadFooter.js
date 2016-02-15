@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import { requestFileUpload } from '../../../actions/fileUpload';
+import { uploadFile } from '../../../actions/fileUpload';
 
 
 export default class FileUploadFooter extends Component {
@@ -26,7 +26,7 @@ export default class FileUploadFooter extends Component {
 
           <button
             onClick={ () => {
-              dispatch(requestFileUpload())
+              dispatch(uploadFile())
             }}
             type="button"
             className="btn btn-primary"

@@ -21,7 +21,7 @@ class FileUploadModal extends Component {
           <Modal.Body>
             <FileUpload {...this.props} />
           </Modal.Body>
-          <FileUploadFooter />
+          <FileUploadFooter {...this.props} />
         </Modal>
     )
   }
