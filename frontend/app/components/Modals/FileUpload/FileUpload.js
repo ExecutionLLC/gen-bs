@@ -13,14 +13,6 @@ export default class FileUpload extends Component {
     this.refs.fileInput.click()
   }
 
-  uploadInputHandler(event) {
-    if(event.target.files[0]) {
-      const file = event.target.files[0]
-      console.log('input handler event', event)
-      console.log('input handler fileName', file)
-    }
-  }
-
   render() {
     const { dispatch } = this.props
     const { files } = this.props.fileUpload

@@ -17,6 +17,7 @@ const config = {
     SEARCH_IN_RESULTS: (operationId) => `http://${HOST}:${PORT}/api/search/${operationId}`,
     VIEWS: `http://${HOST}:${PORT}/api/views`,
     FILTERS: `http://${HOST}:${PORT}/api/filters`,
+    SAMPLES: `http://${HOST}:${PORT}/api/samples`,
     FILE_UPLOAD: `http://${HOST}:${PORT}/api/samples/upload`
   }
 }

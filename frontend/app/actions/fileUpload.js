@@ -1,4 +1,6 @@
 import config from '../../config'
+import { closeModal } from './modalWindows'
+import { fetchSamples } from './userData'
 
 /*
  * action types
@@ -73,6 +75,16 @@ export function uploadFile(files) {
 
 
 export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS) {
+  return ( dispatch, getState )  => {
+    dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS))
+    if (progressStatusFromAS === 'ready') {
+      dispatch(closeModal('upload'));
+      dispatch(fetchSamples());
+    }
+  }
+}
+
+function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS) {
   return {
     type: FILE_UPLOAD_CHANGE_PROGRESS,
     progressValueFromAS,

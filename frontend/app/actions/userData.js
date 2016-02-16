@@ -14,6 +14,9 @@ export const REQUEST_VIEWS= 'REQUEST_VIEWS'
 export const RECEIVE_FILTERS = 'RECEIVE_FILTERS'
 export const REQUEST_FILTERS = 'REQUEST_FILTERS'
 
+export const RECEIVE_SAMPLES = 'RECEIVE_SAMPLES'
+export const REQUEST_SAMPLES = 'REQUEST_SAMPLES'
+
 
 
 /*
@@ -44,15 +47,14 @@ export function fetchUserdata() {
          'headers': { "X-Session-Id": getState().auth.sessionId}
       })
       .then(json => {
-        const sampleId = json.samples[0].id || null
         const view = json.views[0] || null
-        const sample = json.samples[0] || null
+        const sampleId = json.samples.pop().id || null
         const filter = json.filters[0] || null
         dispatch(receiveUserdata(json))
         dispatch(changeView(view.id))
         dispatch(changeFilter(filter.id))
-        dispatch(changeSample(json.samples, sample.id))
-        dispatch(analyze(sample.id, view.id, filter.id))
+        dispatch(changeSample(json.samples, sampleId))
+        dispatch(analyze(sampleId, view.id, filter.id))
         dispatch(fetchFields(sampleId))
         dispatch(fetchSourceFields())
       })
@@ -127,6 +129,42 @@ export function fetchFilters(filterId) {
 
         dispatch(receiveFilters(json))
         dispatch(changeFilter(filterId))
+      })
+
+      // TODO:
+      // catch any error in the network call.
+  }
+}
+
+function requestSamples() {
+  return {
+    type: REQUEST_SAMPLES
+  }
+}
+
+function receiveSamples(json) {
+  return {
+    type: RECEIVE_SAMPLES,
+    samples: json,
+    receivedAt: Date.now()
+  }
+}
+
+export function fetchSamples() {
+
+  return function(dispatch, getState ) {
+    dispatch(requestSamples())
+
+    return $.ajax(config.URLS.SAMPLES, {
+        'type': 'GET',
+         'headers': { "X-Session-Id": getState().auth.sessionId}
+      })
+      .then(function(json) {
+        const sample = getState().ui.currentSample || json[0] || null
+        const sampleId = sample.id
+
+        dispatch(receiveSamples(json))
+        dispatch(changeSample(json, sampleId))
       })
 
       // TODO:
