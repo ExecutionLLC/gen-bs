@@ -9,6 +9,11 @@ const SETTINGS = {
     sessionHeader: ENV.GEN_WS_SESSION_HEADER || 'X-Session-Id',
     languageHeader: ENV.GEN_WS_LANGUAGE_HEADER || 'X-Langu-Id',
     forceOverrideRedisToLocalhost: ENV.GEN_WS_FORCE_OVERRIDE_REDIS_TO_LOCALHOST || false,
+    upload: {
+        path: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/', // Temporary path for uploaded samples.
+        maxSizeInBytes: ENV.GEN_WS_UPLOAD_MAX_SIZE || 25 * 1024 * 1024, // Max size of the uploaded sample.
+        maxCount: ENV.GEN_WS_UPLOAD_MAX_COUNT || 5 // Max parallel uploads count.
+    },
     applicationServer: {
         host: ENV.GEN_WS_AS_HOST || 'localhost',
         port: ENV.GEN_WS_AS_PORT || 8888

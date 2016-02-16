@@ -24,11 +24,7 @@ class UserEntityControllerBase extends ControllerBase {
         const user = request.user;
         const itemId = request.params.id;
         this.theService.find(user, itemId, (error, item) => {
-           if (error) {
-               this.sendInternalError(response, error);
-           } else {
-               this.sendJson(response, item);
-           }
+            this.sendErrorOrJson(response, error, item);
         });
     }
 
@@ -38,12 +34,8 @@ class UserEntityControllerBase extends ControllerBase {
         }
 
         const user = request.user;
-        this.theService.findAll(user, (error, views) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, views);
-            }
+        this.theService.findAll(user, (error, items) => {
+            this.sendErrorOrJson(response, error, items);
         });
     }
 
@@ -62,11 +54,7 @@ class UserEntityControllerBase extends ControllerBase {
         item.id = itemId;
 
         this.theService.update(user, item, (error, updatedItem) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, updatedItem);
-            }
+            this.sendErrorOrJson(response, error, updatedItem);
         });
     }
 
@@ -82,11 +70,7 @@ class UserEntityControllerBase extends ControllerBase {
             return;
         }
         this.theService.add(user, languId, item, (error, insertedItem) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, insertedItem);
-            }
+            this.sendErrorOrJson(response, error, insertedItem);
         });
     }
 
@@ -98,11 +82,7 @@ class UserEntityControllerBase extends ControllerBase {
         const user = request.user;
         const itemId = request.params.id;
         this.theService.remove(user, itemId, (error, item) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, item);
-            }
+            this.sendErrorOrJson(response, error, item);
         });
     }
 

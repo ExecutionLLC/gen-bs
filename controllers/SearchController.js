@@ -37,13 +37,9 @@ class SearchController extends ControllerBase {
 
         this.services.search
             .sendSearchRequest(user, sessionId, languId, sampleId, viewId, filterId, limit, offset, (error, operationId) => {
-                if (error) {
-                    this.sendInternalError(response, error);
-                } else {
-                    this.sendJson(response, {
-                        operationId: operationId
-                    });
-                }
+                this.sendErrorOrJson(response, error, {
+                    operationId
+                });
             });
     }
 
@@ -68,13 +64,9 @@ class SearchController extends ControllerBase {
 
         this.services.search.searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues,
                 sortValues, limit, offset, (error, operationId) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, {
-                    operationId: operationId
-                });
-            }
+            this.sendErrorOrJson(response, error, {
+                operationId
+            });
         });
     }
 
@@ -95,14 +87,9 @@ class SearchController extends ControllerBase {
         }
 
         this.services.search.loadResultsPage(user, sessionId, operationId, limit, offset, (error) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                // The actual data will be sent by WebSocket connection.
-                this.sendJson(response, {
-                    operationId
-                });
-            }
+            this.sendErrorOrJson(response, error, {
+                operationId
+            });
         });
     }
 

@@ -45,7 +45,7 @@ class Logger {
         if (!metadata) metadata = {};
 
         if (typeof metadata !== 'object') {
-            metadata = {metadata: metadata};
+            metadata = {metadata};
         }
 
         return metadata;

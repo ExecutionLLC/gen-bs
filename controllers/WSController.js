@@ -5,7 +5,11 @@ const _ = require('lodash');
 const ControllerBase = require('./ControllerBase');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
-// TODO: Move it to the model layer.
+/**
+ * This controller handles client web socket connections,
+ * associates them with sessions and sends application server
+ * responses to proper client web sockets.
+ * */
 class WSController extends ControllerBase {
     constructor(services) {
         super(services);

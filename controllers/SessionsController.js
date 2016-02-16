@@ -25,13 +25,9 @@ class SessionsController extends ControllerBase {
         const password = body.password;
 
         const createSessionCallback = (error, sessionId) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, {
-                    sessionId
-                });
-            }
+            this.sendErrorOrJson(response, error, {
+                sessionId
+            });
         };
 
         if (userName && password) {
@@ -46,24 +42,16 @@ class SessionsController extends ControllerBase {
         const sessionId = this.getSessionId(request);
 
         this.services.sessions.findById(sessionId, (error, sessionId) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, {
-                    sessionId
-                });
-            }
-        })
+            this.sendErrorOrJson(response, error, {
+                sessionId
+            });
+        });
     }
 
     close(request, response) {
         const sessionId = this.getSessionId(request);
         this.services.sessions.destroySession(sessionId, (error) => {
-            if (error) {
-                this.sendInternalError(response, error);
-            } else {
-                this.sendJson(response, {});
-            }
+            this.sendErrorOrJson(response, error, {});
         });
     }
 
