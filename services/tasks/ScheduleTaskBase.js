@@ -12,35 +12,34 @@ class ScheduleTaskBase {
         this.timeout = timeout;
         this.enabled = true;
 
-        this.pID = null;
+        this.timeoutId = null;
 
         this.execute = this.execute.bind(this);
     }
 
     enable() {
-        this.logger.info("Task enabled: " + this.name);
+        this.logger.info('Task enabled: ' + this.name);
         this.enabled = true;
     }
 
     disable() {
+        this.stop();
         this.enabled = false;
-        this.logger.info("Task disabled: " + this.name);
-    }
-
-    start() {
-        if (this.enabled) {
-            this.logger.info("Task started: " + this.name);
-            this.pID = setTimeout(this.execute, this.timeout * 1000);
-        }
+        this.logger.info('Task disabled: ' + this.name);
     }
 
     stop() {
-        clearTimeout(this.pID);
-        this.logger.info("Task stopped: " + this.name);
+        clearTimeout(this.timeoutId);
+        this.logger.info('Task stopped: ' + this.name);
     }
 
     // Execute task stub
-    execute() {
+    execute(callback) {
+        callback(new Error('Cannot run base task execute method stub.'));
+    }
+
+    calculateTimeout() {
+        return this.timeout;
     }
 }
 

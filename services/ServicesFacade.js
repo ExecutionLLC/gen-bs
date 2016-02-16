@@ -14,7 +14,7 @@ const ApplicationServerService = require('./ApplicationServerService');
 const ApplicationServerReplyService = require('./ApplicationServerReplyService');
 const SearchService = require('./SearchService');
 const TokenService = require('./TokenService');
-const ScheduleService = require('./tasks/ScheduleService');
+const SchedulerService = require('./tasks/SchedulerService');
 
 class ServiceFacade {
     constructor(config, logger, models) {
@@ -39,8 +39,8 @@ class ServiceFacade {
         this.redis = new RedisService(this, models);
         this.tokens = new TokenService(this, models);
 
-        this.scheduler = new ScheduleService(this, models);
-        if (this.config.schedule.enabled) {
+        this.scheduler = new SchedulerService(this, models);
+        if (this.config.scheduler.enabled) {
             this.scheduler.start();
         }
     }

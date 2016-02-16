@@ -15,26 +15,21 @@ class ImportSourceMetadataTask extends ScheduleTaskBase {
         //this.services.applicationServer.requestSourcesList = this.services.applicationServer.requestSourcesList.bind(this);
     }
 
-    execute() {
+    execute(callback) {
         async.waterfall([
             (callback) => {
                 this.services.sessions.findSystemSession(callback);
             },
             (systemSession, callback) => {
-                this.services.applicationServer.requestSourcesList(systemSession.id, (error, result) => {
-                    callback(error, result);
-                });
+                this.services.applicationServer.requestSourcesList(systemSession.id, callback);
             },
             (sourcesList, callback) => {
                 console.log(JSON.stringify(sourcesList, null, 2));
 
                 callback(null, sourcesList);
             }
-        ], (error, result) => {
-            setTimeout(this.execute, this.timeout);
-        });
+        ], callback);
     }
-
 }
 
 module.exports = ImportSourceMetadataTask;

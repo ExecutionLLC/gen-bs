@@ -43,8 +43,8 @@ class ApplicationServerReplyService extends ServiceBase {
 
     onRpcReplyReceived(rpcError, rpcMessage, callback) {
         if (rpcError && !rpcMessage) {
-            console.error('RPC request error! %s', rpcError);
-            console.log('The RPC event will be ignored, as there is no message received, only error.');
+            this.logger.error('RPC request error! %s', rpcError);
+            this.logger.warn('The RPC event will be ignored, as there is no message received, only error.');
         } else {
             async.waterfall([
                 (callback) => {
@@ -71,7 +71,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 }
             ], (error, resultWithOperation) => {
                 if (!resultWithOperation || !resultWithOperation.operation) {
-                    console.error('No operation is found. Error: ' + error);
+                    this.logger.error('No operation is found. Error: ' + error);
                 } else if (resultWithOperation && resultWithOperation.operationResult) {
                     // Fire only progress events here, for which operationResult != null.
                     // Redis has it's own event to indicate the data retrieval finish,
@@ -122,15 +122,50 @@ class ApplicationServerReplyService extends ServiceBase {
                 this._processUploadSampleResult(operation, rpcMessage, callback);
                 break;
 
+            case events.getSourcesList:
+                this._processGetSourcesListResult(operation, rpcMessage, callback);
+                break;
+
             default:
-                console.error('Unexpected result came from the application server, send as is.');
+                this.logger.error('Unexpected result came from the application server, send as is.');
                 callback(null, rpcMessage.result);
                 break;
         }
     }
 
+    _processGetSourcesListResult(operation, message, callback) {
+        this.logger.info('Processing get sources list result for operation ' + operation.getId());
+        if (!message || !message.result) {
+            this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            callback(null, {
+                result: message
+            });
+        } else {
+            const result = message.result;
+            //const status = result.status;
+            //const progress = result.progress;
+
+            //// If not ready, just send the progress up
+            //if (status !== SESSION_STATUS.READY) {
+            //    callback(null, {
+            //        status,
+            //        progress,
+            //        shouldCompleteOperation: false
+            //    });
+            //} else {
+
+
+                async.waterfall([
+                    (callback) => {
+
+                    }
+                ], callback);
+            //}
+        }
+    }
+
     _processUploadSampleResult(operation, message, callback) {
-        this.services.logger.info('Processing upload result for operation ' + operation.getId());
+        this.logger.info('Processing upload result for operation ' + operation.getId());
         if (!message || !message.result || !message.result.status) {
             this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
@@ -180,7 +215,7 @@ class ApplicationServerReplyService extends ServiceBase {
      * */
     _processOpenSearchResult(operation, message, callback) {
         if (!message || !message.result || !message.result.sessionState) {
-            console.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            this.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
                 result: message
             });

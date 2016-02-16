@@ -145,7 +145,7 @@ class SessionService extends ServiceBase {
                 this._checkSessionExists(sessionId, callback);
             },
             (session, callback) => {
-                if (this._sessionExpired(Date.now(), session)) {
+                if (this._isSessionExpired(session)) {
                     callback(new Error('Session is not found'));
                 } else {
                     callback(null, session)
@@ -196,11 +196,11 @@ class SessionService extends ServiceBase {
     }
 
     getMinimumActivityDate() {
-        const sessions = _.remove(this.sessions, (session) => {
-            session.systemUser === true;
+        const usersSessions = _.remove(this.sessions, (session) => {
+            return session.systemUser === true;
         });
 
-        const lastActivityDates = _.pluck(sessions, 'lastActivity');
+        const lastActivityDates = _.pluck(usersSessions, 'lastActivity');
         if (lastActivityDates.length > 0) {
             return _.min(lastActivityDates);
         } else {
@@ -231,10 +231,9 @@ class SessionService extends ServiceBase {
         }
     }
 
-    // 0 expiration time for non-expired sessions
     _isSessionExpired(session) {
         let result = false;
-        const expirationTime = session.lastActivity + this.config.sessions.sessionTimeout * 1000;
+        const expirationTime = session.lastActivity + this.config.sessions.sessionTimeoutSec * 1000;
         if (!session.systemUser && (Date.now() > expirationTime)) {
             return true;
         }

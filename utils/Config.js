@@ -26,9 +26,9 @@ const SETTINGS = {
     },
     sessions: {
         allowMultipleUserSessions: ENV.GEN_WS_ALLOW_MULTIPLE_USER_SESSIONS || true,
-        sessionTimeout: ENV.GEN_WS_USER_SESSION_TIMEOUT || 300
+        sessionTimeoutSec: ENV.GEN_WS_USER_SESSION_TIMEOUT || 300
     },
-    schedule: {
+    scheduler: {
         enabled: ENV.GEN_WS_SCHEDULE_ENABLED || true
     },
     logger: {

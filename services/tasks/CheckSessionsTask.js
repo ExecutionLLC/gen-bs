@@ -13,7 +13,7 @@ class CheckSessionsTask extends ScheduleTaskBase {
         super(TASK_NAME, TASK_TIMEOUT, services, models);
     }
 
-    execute() {
+    execute(callback) {
         async.waterfall([
             (callback) => {
                 this.services.sessions.findExpiredSessions(callback);
@@ -30,17 +30,10 @@ class CheckSessionsTask extends ScheduleTaskBase {
                     });
                 }, callback);
             }
-        ], (error) => {
-            if (error) {
-                this.logger.error("Task " + this.name + ' error: ' + error);
-            } else {
-                this.logger.info("Task " + this.name + ' processed.');
-            }
-            setTimeout(this.execute, this._calculateTimeout());
-        });
+        ], callback);
     }
 
-    _calculateTimeout() {
+    calculateTimeout() {
         const defaultTimeout = this.timeout * 1000;
         const lastActivityDate = this.services.sessions.getMinimumActivityDate();
 
