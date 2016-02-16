@@ -49,13 +49,6 @@ export default class FileUpload extends Component {
             </div>
 
             <FileUploadProgressBar {...this.props} />
-            <div className="progress hidden">
-                <div className="progress progress-striped">
-                <div style={{width: '40%'}} aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" className="progress-bar progress-bar-primary progress-bar-primary">
-                <span className="sr-only">40% <span data-localize="general.complete">Complete</span> (<span data-localize="general.success_simple">success</span>)</span>
-                </div>
-                </div>
-            </div>
           </div>
 
 

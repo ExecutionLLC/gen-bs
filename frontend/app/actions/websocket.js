@@ -42,7 +42,7 @@ function progressMessageRouter(wsData) {
     dispatch(progressMessage(wsData))
 
     if (getState().fileUpload.operationId === wsData.operationId) {
-      dispatch(changeFileUploadProgress(wsData.result.progress))
+      dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status))
     }
   }
 }

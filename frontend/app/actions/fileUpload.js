@@ -35,6 +35,7 @@ export function uploadFile(files) {
   return ( dispatch, getState )  => {
 
     dispatch(requestFileUpload())
+    dispatch(changeFileUploadProgress(0, 'ajax'))
 
     const formData = new FormData()
     formData.append('sample', getState().fileUpload.files[0]);
@@ -44,7 +45,21 @@ export function uploadFile(files) {
         'headers': { "X-Session-Id": getState().auth.sessionId },
         'data': formData,
         'contentType': false,
-        'processData': false
+        'processData': false,
+         'xhrFields': {
+          // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
+            'onprogress': function(progress) {
+              console.log(progress);
+              // calculate upload progress
+              var percentage = Math.floor((progress.total / progress.total) * 100);
+              // log upload progress to console
+              console.log('progress', percentage);
+              dispatch(changeFileUploadProgress(percentage, 'ajax'))
+              if (percentage === 100) {
+                  console.log('DONE!');
+              }
+            }
+        }
       })
       .done(json => {
         dispatch(receiveFileUpload(json));
@@ -56,10 +71,12 @@ export function uploadFile(files) {
 
 }
 
-export function changeFileUploadProgress(progressValueFromAS) {
+
+export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS) {
   return {
     type: FILE_UPLOAD_CHANGE_PROGRESS,
-    progressValueFromAS
+    progressValueFromAS,
+    progressStatusFromAS
   }
 }
 

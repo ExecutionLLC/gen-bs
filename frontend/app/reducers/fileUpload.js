@@ -2,6 +2,7 @@ import * as ActionTypes from '../actions/fileUpload'
 
 export default function fileUpload(state = {
   progressValueFromAS: 0,
+  progressStatusFromAS: null,
   operationId: null,
   isFetching: false,
   files: []
@@ -27,7 +28,8 @@ export default function fileUpload(state = {
 
     case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS:
       return Object.assign({}, state, {
-        progressValueFromAS: action.progressValueFromAS
+        progressValueFromAS: action.progressValueFromAS,
+        progressStatusFromAS: action.progressStatusFromAS
       });
 
     default:
