@@ -1,4 +1,5 @@
-import {initSearchInResultsParams} from './variantsTable'
+import { initSearchInResultsParams } from './variantsTable'
+import { changeFileUploadProgress } from './fileUpload'
 /*
  * action types
  */
@@ -36,6 +37,16 @@ function tableMessage(wsData) {
   }
 }
 
+function progressMessageRouter(wsData) {
+  return (dispatch, getState) => {
+    dispatch(progressMessage(wsData))
+
+    if (getState().fileUpload.operationId === wsData.operationId) {
+      dispatch(changeFileUploadProgress(wsData.result.progress))
+    }
+  }
+}
+
 function progressMessage(wsData) {
   return {
     type: WS_PROGRESS_MESSAGE,
@@ -67,14 +78,15 @@ function otherMessage(wsData) {
 function receiveMessage(msg) {
   return (dispatch, getState) => {
     const wsData = JSON.parse(JSON.parse(msg));
-    console.log('wsData', wsData.result);
+    console.log('wsData.result', wsData.result);
+    console.log('wsData.operationId', wsData.operationId);
     if (wsData.result) {
       if (wsData.result.sampleId) {
 
         dispatch(tableMessage(wsData))
 
       } else if(wsData.result.progress) {
-        dispatch(progressMessage(wsData));
+        dispatch(progressMessageRouter(wsData));
       } else if(wsData.result.error) {
         dispatch(asError(wsData.result.error));
       } else {

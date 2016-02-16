@@ -3,9 +3,10 @@ import config from '../../config'
 /*
  * action types
  */
-export const CHANGE_FILE_FOR_UPLOAD = 'CHANGE_FILE_FOR_UPLOAD'
-export const REQUEST_FILE_UPLOAD = 'REQUEST_FILE_UPLOAD'
-export const RECEIVE_FILE_UPLOAD = 'RECEIVE_FILE_UPLOAD'
+export const CHANGE_FILE_FOR_UPLOAD      = 'CHANGE_FILE_FOR_UPLOAD'
+export const REQUEST_FILE_UPLOAD         = 'REQUEST_FILE_UPLOAD'
+export const RECEIVE_FILE_UPLOAD         = 'RECEIVE_FILE_UPLOAD'
+export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS'
 
 /*
  * action creators
@@ -54,4 +55,12 @@ export function uploadFile(files) {
   }
 
 }
+
+export function changeFileUploadProgress(progressValueFromAS) {
+  return {
+    type: FILE_UPLOAD_CHANGE_PROGRESS,
+    progressValueFromAS
+  }
+}
+
 

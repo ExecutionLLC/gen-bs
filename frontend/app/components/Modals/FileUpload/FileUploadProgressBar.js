@@ -5,10 +5,11 @@ export default class FileUploadProgressBar extends Component {
 
   render() {
 
+    const { progressValueFromAS } = this.props.fileUpload
 
     return (
 
-      <ProgressBar now={60} label="%(percent)s%" />
+      <ProgressBar now={progressValueFromAS} label="%(percent)s%" />
 
     )
   }
