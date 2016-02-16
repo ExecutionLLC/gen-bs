@@ -103,9 +103,7 @@ class SamplesModel extends SecureModelBase {
                     });
 
                     // Add sample entries.
-                    this._addInTransaction(userId, languId, sampleWithValues, false, trx, (error, resultSample) => {
-                        callback(error, resultSample);
-                    });
+                    this._addInTransaction(userId, languId, sampleWithValues, false, trx, callback);
                 }
             ], callback);
         }, callback);
