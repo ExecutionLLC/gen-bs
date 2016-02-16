@@ -3,12 +3,12 @@
 const _ = require('lodash');
 const async = require('async');
 
-const ScheduleTaskBase = require('./ScheduleTaskBase');
+const SchedulerTaskBase = require('./SchedulerTaskBase');
 
 const TASK_NAME = 'CheckSessions';
 const TASK_TIMEOUT = 30; // Task timeout, in seconds
 
-class CheckSessionsTask extends ScheduleTaskBase {
+class CheckSessionsTask extends SchedulerTaskBase {
     constructor(services, models) {
         super(TASK_NAME, true, TASK_TIMEOUT, services, models);
     }
@@ -24,7 +24,7 @@ class CheckSessionsTask extends ScheduleTaskBase {
                         if (error) {
                             this.logger.error('Error destroying existing session: %s', error);
                         } else {
-                            this.logger.info('Existing session is destroyed: ' + sessionId);
+                            this.logger.info('Session is destroyed by timeout: ' + sessionId);
                         }
                         callback(null, sessionId);
                     });
@@ -36,17 +36,9 @@ class CheckSessionsTask extends ScheduleTaskBase {
     calculateTimeout() {
         const defaultTimeoutSecs = this.defaultTimeoutSecs;
         const lastActivityDate = this.services.sessions.getMinimumActivityTimestamp();
-
-        let timeout;
-        if (_.isNull(lastActivityDate)) {
-            timeout = defaultTimeoutSecs;
-        } else {
-            timeout = Date.now() - lastActivityDate;
-            if (timeout < 0) {
-                timeout = defaultTimeoutSecs;
-            }
-        }
-        return Math.min(timeout, defaultTimeoutSecs);
+        const msecsBeforeNextRun = _.isNull(lastActivityDate) ?
+            defaultTimeoutSecs * 1000 : (Date.now() - lastActivityDate);
+        return Math.min(msecsBeforeNextRun, defaultTimeoutSecs);
     }
 }
 

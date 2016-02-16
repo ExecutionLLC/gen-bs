@@ -1,6 +1,6 @@
 'use strict';
 
-class ScheduleTaskBase {
+class SchedulerTaskBase {
     constructor(name, isEnabled, defaultTimeoutSecs, services, models) {
         this.services = services;
         this.models = models;
@@ -37,4 +37,4 @@ class ScheduleTaskBase {
     }
 }
 
-module.exports = ScheduleTaskBase;
+module.exports = SchedulerTaskBase;

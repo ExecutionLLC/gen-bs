@@ -33,14 +33,21 @@ class SchedulerService extends ServiceBase {
 
         this.logger.info('Schedule service is started.');
 
-        const activeTasks = this._getActiveTasks();
+        const activeTasks = this._getEnabledTasks();
         _.each(activeTasks, (task) => {
             this._executeTask(task);
         });
     }
 
+    stop() {
+        _.each(this.tasks, (task) => {
+            this._stopTask(task);
+        });
+        this.logger.info('Schedule service is stopped.');
+    }
+
     _executeTask(task) {
-        if (!task.enabled) {
+        if (!task.isEnabled) {
             this.logger.warn('Task ' + task.name + ' is disabled, do nothing.');
         } else {
             this.logger.info('Processing task: ' + task.name + '...');
@@ -59,20 +66,10 @@ class SchedulerService extends ServiceBase {
         if (task.timeoutId) {
             clearTimeout(task.timeoutId);
         }
-        task.stop();
     }
 
-    stop() {
-        _.each(this.tasks, (task) => {
-            this._stopTask(task);
-        });
-        this.logger.info('Schedule service is stopped.');
-    }
-
-    _getActiveTasks() {
-        return _.filter(this.tasks, (task) => {
-            return task.enabled;
-        });
+    _getEnabledTasks() {
+        return _.filter(this.tasks, (task) => task.isEnabled);
     }
 }
 
