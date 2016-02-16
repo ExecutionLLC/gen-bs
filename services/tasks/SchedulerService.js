@@ -14,20 +14,20 @@ class SchedulerService extends ServiceBase {
         this.config = this.services.config;
         this.logger = this.services.logger;
 
-        this.checkSessionTask = new CheckSessionsTask(services, models);
+        this.checkSessionsTask = new CheckSessionsTask(services, models);
         this.importSourceMetadataTask = new ImportSourceMetadataTask(services, models);
 
         this.tasks = [
-            this.checkSessionTask,
+            this.checkSessionsTask,
             this.importSourceMetadataTask
         ];
 
-        this.executeTask = this.executeTask.bind(this);
+        this._executeTask = this._executeTask.bind(this);
     }
 
     start() {
         if (!this.config.scheduler.enabled) {
-            logger.warn('Cannot start schedule tasks: scheduler disabled.');
+            this.logger.error('Scheduler is disabled in config.');
             return;
         }
 
@@ -35,13 +35,13 @@ class SchedulerService extends ServiceBase {
 
         const activeTasks = this._getActiveTasks();
         _.each(activeTasks, (task) => {
-            this.executeTask(task);
+            this._executeTask(task);
         });
     }
 
-    executeTask(task) {
+    _executeTask(task) {
         if (!task.enabled) {
-            this.logger.warn('Task disabled: ' + task.name);
+            this.logger.warn('Task ' + task.name + ' is disabled, do nothing.');
         } else {
             this.logger.info('Processing task: ' + task.name + '...');
             task.execute((error) => {
@@ -50,27 +50,23 @@ class SchedulerService extends ServiceBase {
                 } else {
                     this.logger.info('Task ' + task.name + ' processed.');
                 }
-                task.timeoutId = setTimeout(this.executeTask, task.calculateTimeout(), task);
+                task.timeoutId = setTimeout(this._executeTask, task.calculateTimeout(), task);
             });
         }
-
     }
 
-    stopTask(task) {
+    _stopTask(task) {
+        if (task.timeoutId) {
+            clearTimeout(task.timeoutId);
+        }
         task.stop();
     }
 
     stop() {
         _.each(this.tasks, (task) => {
-            this.stopTask(task);
+            this._stopTask(task);
         });
         this.logger.info('Schedule service is stopped.');
-    }
-
-    findTask(taskName) {
-        return _.find(this.tasks, (task) => {
-            return task.name === taskName;
-        });
     }
 
     _getActiveTasks() {

@@ -10,7 +10,7 @@ const TASK_TIMEOUT = 30; // Task timeout, in seconds
 
 class CheckSessionsTask extends ScheduleTaskBase {
     constructor(services, models) {
-        super(TASK_NAME, TASK_TIMEOUT, services, models);
+        super(TASK_NAME, true, TASK_TIMEOUT, services, models);
     }
 
     execute(callback) {
@@ -34,19 +34,19 @@ class CheckSessionsTask extends ScheduleTaskBase {
     }
 
     calculateTimeout() {
-        const defaultTimeout = this.timeout * 1000;
-        const lastActivityDate = this.services.sessions.getMinimumActivityDate();
+        const defaultTimeoutSecs = this.defaultTimeoutSecs;
+        const lastActivityDate = this.services.sessions.getMinimumActivityTimestamp();
 
-        let timeout = Date.now();
+        let timeout;
         if (_.isNull(lastActivityDate)) {
-            timeout = defaultTimeout;
+            timeout = defaultTimeoutSecs;
         } else {
-            timeout = timeout - lastActivityDate;
+            timeout = Date.now() - lastActivityDate;
             if (timeout < 0) {
-                timeout = defaultTimeout;
+                timeout = defaultTimeoutSecs;
             }
         }
-        return Math.min(timeout, defaultTimeout);
+        return Math.min(timeout, defaultTimeoutSecs);
     }
 }
 

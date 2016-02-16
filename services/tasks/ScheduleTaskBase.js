@@ -1,7 +1,7 @@
 'use strict';
 
 class ScheduleTaskBase {
-    constructor(name, timeout, services, models) {
+    constructor(name, isEnabled, defaultTimeoutSecs, services, models) {
         this.services = services;
         this.models = models;
 
@@ -9,8 +9,8 @@ class ScheduleTaskBase {
         this.logger = this.services.logger;
 
         this.name = name;
-        this.timeout = timeout;
-        this.enabled = true;
+        this.defaultTimeoutSecs = defaultTimeoutSecs;
+        this.isEnabled = isEnabled;
 
         this.timeoutId = null;
 
@@ -18,19 +18,13 @@ class ScheduleTaskBase {
     }
 
     enable() {
-        this.logger.info('Task enabled: ' + this.name);
-        this.enabled = true;
+        this.logger.info('Task marked as enabled: ' + this.name);
+        this.isEnabled = true;
     }
 
     disable() {
-        this.stop();
-        this.enabled = false;
-        this.logger.info('Task disabled: ' + this.name);
-    }
-
-    stop() {
-        clearTimeout(this.timeoutId);
-        this.logger.info('Task stopped: ' + this.name);
+        this.isEnabled = false;
+        this.logger.info('Task marked as disabled: ' + this.name);
     }
 
     // Execute task stub
@@ -39,7 +33,7 @@ class ScheduleTaskBase {
     }
 
     calculateTimeout() {
-        return this.timeout;
+        return this.defaultTimeoutSecs;
     }
 }
 

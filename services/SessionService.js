@@ -6,6 +6,12 @@ const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 
+const SESSION_TYPES = {
+    USER: 'USER',
+    DEMO: 'DEMO',
+    SYSTEM: 'SYSTEM'
+};
+
 class SessionService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
@@ -38,25 +44,21 @@ class SessionService extends ServiceBase {
                 });
             }),
             (result, callback) => {
-                // Check and remove existing user session.
                 const userId = result.userId;
-                let existingSession = _.find(this.sessions, session => session.userId === userId);
-                if (existingSession && !this.services.config.sessions.allowMultipleUserSessions) {
-                    this.destroySession(existingSession.id, (error) => {
-                        if (error) {
-                            this.logger.error('Error destroying existing session: %s', error);
-                        } else {
-                            this.logger.info('Existing session for user ' + userName + ' is destroyed.');
-                        }
-                    });
-                }
-                callback(null, result);
+                this._removeExistingUserSessionIfNeeded(userId, (error) => {
+                    if (error) {
+                        this.logger.error('Error destroying existing session: %s', error);
+                    } else {
+                        this.logger.info('Existing session for user ' + userName + ' is destroyed.');
+                    }
+                    callback(null, result);
+                });
             },
             (result, callback) => {
                 // Create new session for user.
                 const userId = result.userId;
                 const token = result.token;
-                this._createSession(token, userId, (error, session) => {
+                this._createSession(token, userId, SESSION_TYPES.USER, (error, session) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -77,10 +79,9 @@ class SessionService extends ServiceBase {
                 this.services.users.findDemoUser(callback);
             },
             (demoUser, callback) => {
-                this._createSession(null, demoUser.id, callback);
+                this._createSession(null, demoUser.id, SESSION_TYPES.DEMO, callback);
             },
             (session, callback) => {
-                this.sessions[session.id].demoUser = true;
                 callback(null, session.id);
             }
         ], callback);
@@ -96,53 +97,44 @@ class SessionService extends ServiceBase {
                 this.services.users.findSystemUser(callback);
             },
             (systemUser, callback) => {
-                this._createSession(null, systemUser.id, callback);
+                this._createSession(null, systemUser.id, SESSION_TYPES.SYSTEM, callback);
             },
             (session, callback) => {
-                this.sessions[session.id].systemUser = true;
                 callback(null, session.id);
             }
         ], callback);
     }
 
     findById(sessionId, callback) {
-        async.waterfall([
-            (callback) => {
-                this.checkSession(sessionId, callback);
-            },
-            (session, callback) => {
-                this.sessions[session.id].lastActivity = Date.now();
-                callback(null, session.id);
-            }
-        ], callback);
+        this._updateLastActivity(sessionId, (error, session) => {
+            const sessionId = (error) ? null : session.id;
+            callback(error, sessionId);
+        });
     }
 
     findSystemSession(callback) {
-        const systemSession = _.find(this.sessions, (session) => {
-            return session.systemUser === true;
-        });
+        const systemSession = _.find(this.sessions, (session) => session.type === SESSION_TYPES.SYSTEM);
         if (!systemSession) {
-            callback(new Error("System session not found"));
+            callback(new Error("System session is not found"));
         } else {
             callback(null, systemSession);
         }
     }
 
     findSessionUserId(sessionId, callback) {
-        this.findById(sessionId, (error, sessionId) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => this.findById(sessionId, callback),
+            (sessionId, callback) => {
                 const session = this.sessions[sessionId];
                 callback(null, session.userId);
             }
-        })
+        ], callback);
     }
 
     checkSession(sessionId, callback) {
         async.waterfall([
             (callback) => {
-                this._checkSessionExists(sessionId, callback);
+                this._findSession(sessionId, callback);
             },
             (session, callback) => {
                 if (this._isSessionExpired(session)) {
@@ -157,7 +149,7 @@ class SessionService extends ServiceBase {
     destroySession(sessionId, callback) {
         async.waterfall([
             (callback) => {
-                this._checkSessionExists(sessionId, callback);
+                this._findSession(sessionId, callback);
             },
             (session, callback) => {
                 // Destroy the local session information.
@@ -173,7 +165,7 @@ class SessionService extends ServiceBase {
                     });
                 }
 
-                // Clear active session operatations.
+                // Clear active session operations.
                 this.services.operations.removeAll(sessionId, callback);
             }
         ], callback);
@@ -188,41 +180,43 @@ class SessionService extends ServiceBase {
     }
 
     findExpiredSessions(callback) {
-        const expiredSessions = _.filter(this.sessions, (session) => {
-            return this._isSessionExpired(session);
-        });
-        const expiredSessionIds = _.pluck(expiredSessions, 'id');
+        const expiredSessionIds =
+            _(this.sessions)
+            .filter(this._isSessionExpired.bind(this))
+            .map(session => session.id);
         callback(null, expiredSessionIds);
     }
 
-    getMinimumActivityDate() {
-        const usersSessions = _.remove(this.sessions, (session) => {
-            return session.systemUser === true;
-        });
-
-        const lastActivityDates = _.pluck(usersSessions, 'lastActivity');
-        if (lastActivityDates.length > 0) {
-            return _.min(lastActivityDates);
-        } else {
-            return null;
+    /**
+     * Returns minimum by last activity timestamps in all user sessions.
+     * Returns null if there are no user sessions active.
+     * */
+    getMinimumActivityTimestamp() {
+        const lastUserActivityTimestamps =
+            _(this.sessions)
+            .filter(session => session.type !== SESSION_TYPES.SYSTEM)
+            .map(session => session.lastActivityTimestamp);
+        if (lastUserActivityTimestamps && lastUserActivityTimestamps.length) {
+            return _.min(lastUserActivityTimestamps);
         }
+        return null;
     }
 
-    _createSession(token, userId, callback) {
+    _createSession(token, userId, sessionType, callback) {
         const sessionId = Uuid.v4();
         const session = {
             id: sessionId,
             userId,
             token,
-            lastActivity: Date.now(),
-            operations: {}
+            type: sessionType,
+            lastActivityTimestamp: Date.now()
         };
 
         this.sessions[sessionId] = session;
         callback(null, session);
     }
 
-    _checkSessionExists(sessionId, callback) {
+    _findSession(sessionId, callback) {
         const sessionDescriptor = this.sessions[sessionId];
         if (!sessionDescriptor) {
             callback(new Error('Session is not found'));
@@ -231,13 +225,45 @@ class SessionService extends ServiceBase {
         }
     }
 
-    _isSessionExpired(session) {
-        let result = false;
-        const expirationTime = session.lastActivity + this.config.sessions.sessionTimeoutSec * 1000;
-        if (!session.systemUser && (Date.now() > expirationTime)) {
-            return true;
+    /**
+     * Removes existing session (by calling this.destroySession()) for the specified user, if needed.
+     * @param userId User identifier
+     * @param callback (error)
+     * */
+    _removeExistingUserSessionIfNeeded(userId, callback) {
+        let existingSession = _.find(
+            this.sessions,
+            session => session.type === SESSION_TYPES.USER && session.userId === userId
+        );
+        if (existingSession && !this.services.config.sessions.allowMultipleUserSessions) {
+            this.destroySession(existingSession.id, (error) => callback(error));
+        } else {
+            callback(null);
         }
-        return result;
+    }
+
+    /**
+     * Finds specified session and updates the last activity timestamp.
+     * @param sessionId Session identifier.
+     * @param callback (error, session)
+     * */
+    _updateLastActivity(sessionId, callback) {
+        async.waterfall([
+            (callback) => this._findSession(sessionId, callback),
+            (session, callback) => {
+                session.lastActivityTimestamp = Date.now();
+                callback(null, session);
+            }
+        ], callback);
+    }
+
+    _isSessionExpired(session) {
+        if (session.type === SESSION_TYPES.SYSTEM) {
+            return false;
+        }
+
+        const sessionLifetimeMs = this.config.sessions.sessionTimeoutSec * 1000;
+        return (Date.now() - session.lastActivityTimestamp) > sessionLifetimeMs;
     }
 }
 
