@@ -183,7 +183,8 @@ class SessionService extends ServiceBase {
         const expiredSessionIds =
             _(this.sessions)
             .filter(this._isSessionExpired.bind(this))
-            .map(session => session.id);
+            .map(session => session.id)
+            .values();
         callback(null, expiredSessionIds);
     }
 
@@ -195,7 +196,8 @@ class SessionService extends ServiceBase {
         const lastUserActivityTimestamps =
             _(this.sessions)
             .filter(session => session.type !== SESSION_TYPES.SYSTEM)
-            .map(session => session.lastActivityTimestamp);
+            .map(session => session.lastActivityTimestamp)
+            .values();
         if (lastUserActivityTimestamps && lastUserActivityTimestamps.length) {
             return _.min(lastUserActivityTimestamps);
         }
