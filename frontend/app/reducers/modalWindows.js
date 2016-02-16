@@ -2,7 +2,8 @@ import * as ActionTypes from '../actions/modalWindows'
 
 export default function modalWindows(state = {
   views: { showModal: false  },
-  filters: { showModal: false  }
+  filters: { showModal: false  },
+  upload: { showModal: false  }
   }, action) {
 
   switch (action.type) {
