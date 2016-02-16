@@ -1,6 +1,7 @@
 import * as ActionTypes from '../actions/fileUpload'
 
 export default function fileUpload(state = {
+  operationId: null,
   isFetching: false,
   files: []
 }, action) {
@@ -19,7 +20,8 @@ export default function fileUpload(state = {
 
     case ActionTypes.RECEIVE_FILE_UPLOAD:
       return Object.assign({}, state, {
-        isFetching: false 
+        isFetching: false,
+        operationId: action.operationId
       });
 
     default:

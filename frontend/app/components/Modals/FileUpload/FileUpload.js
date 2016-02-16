@@ -35,7 +35,7 @@ export default class FileUpload extends Component {
                     ref="fileInput"
                     id="file-select"
                     type="file"
-                    accept=".vcf"
+                    accept=".gz"
                     name="files[]"
                   />
                      <i className="fa fa-3x fa-cloud-upload"></i>

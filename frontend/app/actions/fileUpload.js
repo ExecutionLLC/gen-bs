@@ -23,9 +23,10 @@ function requestFileUpload() {
   }
 }
 
-function receiveFileUpload() {
+function receiveFileUpload(json) {
   return {
-    type: RECEIVE_FILE_UPLOAD
+    type: RECEIVE_FILE_UPLOAD,
+    operationId: json.operation_id,
   }
 }
 
