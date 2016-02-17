@@ -83,7 +83,7 @@ class ApplicationServerReplyService extends ServiceBase {
                         sessionId: operation.getSessionId(),
                         result
                     };
-                    this.eventEmitter.emit(EVENTS.onOperationResultReceived, eventData);
+                    this.eventEmitter.emit(result.eventName, eventData);
                     callback(error, result);
                 } else {
                     callback(error, null);
@@ -154,12 +154,14 @@ class ApplicationServerReplyService extends ServiceBase {
             //    });
             //} else {
 
+            callback(null, result);
 
-                async.waterfall([
-                    (callback) => {
 
-                    }
-                ], callback);
+                //async.waterfall([
+                //    (callback) => {
+                //
+                //    }
+                //], callback);
             //}
         }
     }
@@ -181,6 +183,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 callback(null, {
                     status,
                     progress,
+                    eventName: EVENTS.onOperationResultReceived,
                     shouldCompleteOperation: false
                 });
             } else {
@@ -203,6 +206,7 @@ class ApplicationServerReplyService extends ServiceBase {
                     callback(error, {
                         status,
                         progress,
+                        eventName: EVENTS.onOperationResultReceived,
                         shouldCompleteOperation: true
                     });
                 });
@@ -232,7 +236,8 @@ class ApplicationServerReplyService extends ServiceBase {
                 callback(null, {
                     status: sessionState.status,
                     progress: sessionState.progress,
-                    shouldCompleteOperation: false
+                    shouldCompleteOperation: false,
+                    eventName: EVENTS.onOperationResultReceived
                 });
             } else {
                 // Get data from Redis

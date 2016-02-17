@@ -35,7 +35,7 @@ class ScheduleTaskBase {
 
     // Execute task stub
     execute(callback) {
-        callback(new Error('Cannot run base task execute method stub.'));
+        throw new Error('Cannot run base task execute method stub.');
     }
 
     calculateTimeout() {

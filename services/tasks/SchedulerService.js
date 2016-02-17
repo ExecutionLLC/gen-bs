@@ -27,11 +27,11 @@ class SchedulerService extends ServiceBase {
 
     start() {
         if (!this.config.scheduler.enabled) {
-            logger.warn('Cannot start schedule tasks: scheduler disabled.');
+            logger.warn('Cannot start schedule tasks: scheduler is disabled.');
             return;
         }
 
-        this.logger.info('Schedule service is started.');
+        this.logger.info('Scheduler service is started.');
 
         const activeTasks = this._getActiveTasks();
         _.each(activeTasks, (task) => {
@@ -41,7 +41,7 @@ class SchedulerService extends ServiceBase {
 
     executeTask(task) {
         if (!task.enabled) {
-            this.logger.warn('Task disabled: ' + task.name);
+            this.logger.warn('Cannot process disabled task: ' + task.name);
         } else {
             this.logger.info('Processing task: ' + task.name + '...');
             task.execute((error) => {
@@ -64,7 +64,7 @@ class SchedulerService extends ServiceBase {
         _.each(this.tasks, (task) => {
             this.stopTask(task);
         });
-        this.logger.info('Schedule service is stopped.');
+        this.logger.info('Scheduler service is stopped.');
     }
 
     findTask(taskName) {
