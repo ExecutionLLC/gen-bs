@@ -17,35 +17,26 @@ class SessionService extends ServiceBase {
      * Creates a new session for the specified user with token.
      * Currently, also destroys existing sessions of the same user, if any.
      * */
-    startForUser(userName, password, callback) {
+    startForEmail(email, callback) {
         async.waterfall([
-            (callback) => this.services.tokens.login(userName, password, callback),
-            (token, callback) => this.services.tokens.findUserIdByToken(token, (error, userId) => {
-                callback(error, {
-                    userId,
-                    token
-                });
-            }),
-            (result, callback) => {
+            (callback) => this.services.users.findIdByEmail(email, callback),
+            (userId, callback) => {
                 // Check and remove existing user session.
-                const userId = result.userId;
                 let existingSession = _.find(this.sessions, session => session.userId === userId);
                 if (existingSession && !this.services.config.allowMultipleUserSessions) {
                     this.destroySession(existingSession.id, (error) => {
                         if (error) {
                             console.error('Error destroying existing session: %s', error);
                         } else {
-                            console.log('Existing session for user ' + userName + ' is destroyed.');
+                            console.log('Existing session for user ' + email + ' is destroyed.');
                         }
                     });
                 }
-                callback(null, result);
+                callback(null, userId);
             },
-            (result, callback) => {
+            (userId, callback) => {
                 // Create new session for user.
-                const userId = result.userId;
-                const token = result.token;
-                this._createSession(token, userId, (error, session) => {
+                this._createSession(userId, (error, session) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -128,14 +119,12 @@ class SessionService extends ServiceBase {
         callback(null, sessionIds);
     }
 
-    _createSession(token, userId, callback) {
+    _createSession(userId, callback) {
         const sessionId = Uuid.v4();
         const session = {
             id: sessionId,
             userId,
-            token,
-            lastActivity: Date.now(),
-            operations: {}
+            lastActivity: Date.now()
         };
 
         this.sessions[sessionId] = session;

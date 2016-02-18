@@ -21,6 +21,10 @@ class UserService extends ServiceBase {
         callback(null, DEMO_USER);
     }
 
+    findIdByEmail(email, callback) {
+        this.models.users.findIdByEmail(email, callback);
+    }
+
     find(userId, callback) {
         if (userId === DEMO_USER.id) {
             callback(null, DEMO_USER);

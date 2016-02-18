@@ -21,6 +21,28 @@ class UserModel extends RemovableModelBase {
         super(models, 'user', mappedColumns);
     }
 
+    findIdByEmail(email, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => trx.select('id')
+                    .from(this.baseTableName)
+                    .where('email', email)
+                    .asCallback(callback),
+                (results, callback) => {
+                    if (results && results.length) {
+                        if (results.length > 1) {
+                            callback(new Error('Too many users found'));
+                        } else {
+                            callback(null, results[0].id);
+                        }
+                    } else {
+                        callback(new Error('User is not found'));
+                    }
+                }
+            ], callback);
+        }, callback);
+    }
+
     add(user, languId, callback) {
         this._add(user, languId, true, callback);
     }
