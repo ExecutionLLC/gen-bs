@@ -10,10 +10,18 @@ export const CHANGE_FILE_FOR_UPLOAD      = 'CHANGE_FILE_FOR_UPLOAD'
 export const REQUEST_FILE_UPLOAD         = 'REQUEST_FILE_UPLOAD'
 export const RECEIVE_FILE_UPLOAD         = 'RECEIVE_FILE_UPLOAD'
 export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS'
+export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR'
 
 /*
  * action creators
  */
+export function fileUploadError(msg) {
+  return {
+    type: FILE_UPLOAD_ERROR,
+    msg
+  }
+}
+
 export function changeFileForUpload(files) {
   const theFile = files[0]
   return ( dispatch, getState )  => {
@@ -25,7 +33,8 @@ export function changeFileForUpload(files) {
         dispatch(changeFileForUploadAfterGzip([file]))
       })
     } else {
-      console.error('WRONG file type. Type must be text/vcard')
+      console.error('Wrong file type. Type must be vcard or gzip')
+      dispatch(fileUploadError('Wrong file type. Type must be vcard or gzip'))
     }
   }
 }

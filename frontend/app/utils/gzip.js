@@ -2,10 +2,10 @@ import pako from 'pako'
 /**
  * gzip file
  * @param {File} file - File for gzip.
- * @returns {Blob} - Blob with gzipped file and with name = file.name + '.gz'
+ * @returns {Promise} - When resolved promise returns File with gzipped file and with name = file.name + '.gz'
  */
 export default function gzip(file) {
-  const zip = new JSZip;
+
   const reader = new FileReader();
 
   const promise = new Promise((resolve, reject) => {

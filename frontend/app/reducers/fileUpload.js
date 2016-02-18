@@ -5,14 +5,22 @@ export default function fileUpload(state = {
   progressStatusFromAS: null,
   operationId: null,
   isFetching: false,
-  files: []
+  files: [],
+  error: null
 }, action) {
 
   switch (action.type) {
 
+    case ActionTypes.FILE_UPLOAD_ERROR:
+      return Object.assign({}, state, {
+        files: [],
+        error: action.msg
+      });
+
     case ActionTypes.CHANGE_FILE_FOR_UPLOAD:
       return Object.assign({}, state, {
-        files: action.files
+        files: action.files,
+        error: null
       });
 
     case ActionTypes.REQUEST_FILE_UPLOAD:
