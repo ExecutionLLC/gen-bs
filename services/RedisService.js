@@ -179,7 +179,6 @@ class RedisService extends ServiceBase {
                 }, {});
                 callback(null, fieldNameToFieldHash);
             },
-            // TODO: Add sources field metadata
             (fieldNameToFieldHash, callback) => {
                 const mappedData = _.map(rawData, (rowObject) => {
                     const fieldIdToValueObject = {};

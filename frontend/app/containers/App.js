@@ -8,6 +8,7 @@ import NavbarCreateQuery from '../components/Header/NavbarCreateQuery'
 
 import ViewsModal from '../components/Modals/ViewsModal'
 import FiltersModal from '../components/Modals/FiltersModal'
+import FileUploadModal from '../components/Modals/FileUploadModal'
 
 import { login } from '../actions/auth'
 import { openModal, closeModal } from '../actions/modalWindows'
@@ -70,6 +71,10 @@ class App extends Component {
         />
         <FiltersModal 
           showModal={this.props.modalWindows.filters.showModal}
+          closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+        />
+        <FileUploadModal 
+          showModal={this.props.modalWindows.upload.showModal}
           closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
         />
       </div>

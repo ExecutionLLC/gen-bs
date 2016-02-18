@@ -244,16 +244,16 @@ class ApplicationServerReplyService extends ServiceBase {
                 });
             } else {
                 // Get data from Redis
-                const redisAddress = this._parseRedisAddress(sessionState.redisDb.url);
+                const redisInfo = sessionState.redisDb;
                 const redisParams = {
-                    host: redisAddress.host,
-                    port: redisAddress.port,
+                    host: redisInfo.host,
+                    port: redisInfo.port,
                     sampleId,
                     userId,
                     operationId: operation.getId(),
                     sessionId: operation.getSessionId(),
-                    databaseNumber: sessionState.redisDb.number,
-                    dataIndex: sessionState.redisDb.resultIndex,
+                    databaseNumber: redisInfo.number,
+                    dataIndex: redisInfo.resultIndex,
                     offset,
                     limit
                 };
@@ -302,16 +302,6 @@ class ApplicationServerReplyService extends ServiceBase {
         } else {
             callback(null, operation);
         }
-    }
-
-    _parseRedisAddress(hostAddress) {
-        const addressParts = hostAddress.split(':');
-        const host = addressParts[0];
-        const port = addressParts[1];
-        return {
-            host,
-            port
-        };
     }
 }
 
