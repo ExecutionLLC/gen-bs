@@ -956,22 +956,33 @@ body {
              .btn-group-vertical { 
                position: absolute;
                right: 2px;
-               top:0;
+               top:6px;
              }
              .btnSort { 
-               color: #ccc;
-              height: 16px;
-              width: 16px;
-              margin-bottom: 1px;
-              &.acs:before{
-                left: 3px;
-                  top: 6px;
+              border-radius: 3px;
+              color: #ccc;
+              height: 24px;
+              width: 24px;
+              &.asc:before{
+                left: 4px;
+                top: 5px;
               }
-               &.desc:before{
-                left: 3px;
-                top: -8px;;
+              &.desc:before{
+                left: 4px;
+                top: 5px;;
               }
-
+              
+              > span { 
+                border-radius: 50%;
+    color: #fff;
+    background: @brand-info;
+    font-size: 11px;
+    line-height: 1;
+    padding: 0 0.3em 0.1em 0.2em;
+    position: absolute;
+    right: -3px;
+    top: -5px;
+              }
              }
              }
       
@@ -1162,28 +1173,8 @@ body {
 
 
 
-.table.table-variants thead > tr > th .btnSort { 
-                color: #ccc;
-                height: 16px;
-                width: 16px;
-                margin-bottom: 1px;
-               &.active { 
-                 color: lighten(@brand-primary, 10%);
-               }
-             } 
-.table.table-variants thead > tr > th .btnSort:hover { 
-               &:before {
-                  opacity: 1; 
-               }
-            } 
-.table.table-variants thead > tr > th .btnSort.asc:before {
-left: 3px;
-    top: 6px;
-}
-.table.table-variants thead > tr > th .btn-Sort.desc:before {
-left: 3px;
-    top: -8px;
-}
+
+
 .table-files-wrapper { 
   .table { 
      tbody,
@@ -1648,27 +1639,39 @@ select.select2.temp-active {
 //
 
 .loader { 
-  background: fade(@modal-backdrop-bg, 70%);
+    background: @brand-primary;
     bottom: 0;
     left: 0;
     position: fixed;
     right: 0;
     top: 0;
     z-index: 3000;
-     color: darken( @light-primary-color, 5%);
+    color: #fff;
+    content: "Loading";
   &:before { 
-    .fa();
-   -webkit-animation: fa-spin 2s infinite linear;
-   animation: fa-spin 2s infinite linear;
-   content: "\f021";
-   position: relative;
-   left: 50%;
-   margin: 10px;
-   font-size: 70px;
-   color: darken( @light-primary-color, 5%);
-   top: 50%;
+-webkit-animation: progress-bar-stripes 2s linear infinite;
+     -moz-animation: progress-bar-stripes 2s linear infinite;
+      -ms-animation: progress-bar-stripes 2s linear infinite;
+       -o-animation: progress-bar-stripes 2s linear infinite;
+          animation: progress-bar-stripes 2s linear infinite;
+
+  #gradient > .striped-thin();
+  background-size: 40px 40px;
+  content: "";
+  display: block;
+  height: 50%;
+  }
+  &:after { 
+      content: "";
+      display: block;
+       height: 200px;
+    margin-top: -200px;
+    position: relative;
+    z-index: 1;
+      #gradient > .vertical(@start-color: fade(@brand-primary, 0%); @end-color: @brand-primary);
+
+  }
    
-  } 
   span { 
   display: block;
     font-size: 30px;
