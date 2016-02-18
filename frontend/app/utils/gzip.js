@@ -1,7 +1,8 @@
+import pako from 'pako'
 /**
  * gzip file
  * @param {File} file - File for gzip.
- * @returns {Blob}
+ * @returns {Blob} - Blob with gzipped file and with name = file.name + '.gz'
  */
 export default function gzip(file) {
   const zip = new JSZip;
@@ -10,13 +11,13 @@ export default function gzip(file) {
   const promise = new Promise((resolve, reject) => {
     reader.onload = (e => {
       var content = null;
+      var theFile = null;
       const ch = new Uint8Array(e.target.result);
 
-      zip.file('hello111.txt', ch);
-      content = zip.generate({type:"blob"});
-      content.lastModifiedDate = new Date();
-      content.name = file.name + '.gz';
-      resolve(content)
+      content = pako.gzip(ch)
+
+      theFile = new File([content], file.name + '.gz', {type: 'application/gzip', lastModified: new Date()})
+      resolve(theFile)
     });
   })
   

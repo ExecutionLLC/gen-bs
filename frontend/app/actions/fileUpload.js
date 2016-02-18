@@ -1,6 +1,7 @@
 import config from '../../config'
 import { closeModal } from './modalWindows'
 import { fetchSamples } from './userData'
+import gzip from '../utils/gzip'
 
 /*
  * action types
@@ -14,6 +15,22 @@ export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS'
  * action creators
  */
 export function changeFileForUpload(files) {
+  const theFile = files[0]
+  return ( dispatch, getState )  => {
+    if (theFile.type === 'application/gzip') {
+      dispatch(changeFileForUploadAfterGzip(files))
+    } else if (theFile.type === 'text/vcard') {
+      console.log('Not gzipped vcf')
+      gzip(theFile).then( file => {
+        dispatch(changeFileForUploadAfterGzip([file]))
+      })
+    } else {
+      console.error('WRONG file type. Type must be text/vcard')
+    }
+  }
+}
+
+function changeFileForUploadAfterGzip(files) {
   return {
     type: CHANGE_FILE_FOR_UPLOAD,
     files
