@@ -3,14 +3,15 @@
 const _ = require('lodash');
 const async = require('async');
 
-const ScheduleTaskBase = require('./ScheduleTaskBase');
+const SchedulerTaskBase = require('./SchedulerTaskBase');
 
 const TASK_NAME = 'CheckSessions';
-const TASK_TIMEOUT = 30; // Task timeout, in seconds
 
-class CheckSessionsTask extends ScheduleTaskBase {
+class CheckSessionsTask extends SchedulerTaskBase {
     constructor(services, models) {
-        super(TASK_NAME, TASK_TIMEOUT, services, models);
+        const isEnabled = services.config.scheduler.tasks[TASK_NAME].isEnabled;
+        const taskTimeout = services.config.scheduler.tasks[TASK_NAME].taskTimeout;
+        super(TASK_NAME, isEnabled, taskTimeout, services, models);
     }
 
     execute(callback) {
@@ -24,7 +25,7 @@ class CheckSessionsTask extends ScheduleTaskBase {
                         if (error) {
                             this.logger.error('Error destroying existing session: %s', error);
                         } else {
-                            this.logger.info('Existing session is destroyed: ' + sessionId);
+                            this.logger.info('Session is destroyed by timeout: ' + sessionId);
                         }
                         callback(null, sessionId);
                     });
@@ -34,19 +35,11 @@ class CheckSessionsTask extends ScheduleTaskBase {
     }
 
     calculateTimeout() {
-        const defaultTimeout = this.timeout * 1000;
-        const lastActivityDate = this.services.sessions.getMinimumActivityDate();
-
-        let timeout = Date.now();
-        if (_.isNull(lastActivityDate)) {
-            timeout = defaultTimeout;
-        } else {
-            timeout = timeout - lastActivityDate;
-            if (timeout < 0) {
-                timeout = defaultTimeout;
-            }
-        }
-        return Math.min(timeout, defaultTimeout);
+        const defaultTimeoutMsecs = this.defaultTimeoutSecs * 1000;
+        const lastActivityDate = this.services.sessions.getMinimumActivityTimestamp();
+        const msecsBeforeNextRun = _.isNull(lastActivityDate) ?
+            defaultTimeoutMsecs : (Date.now() - lastActivityDate);
+        return Math.min(msecsBeforeNextRun, defaultTimeoutMsecs);
     }
 }
 

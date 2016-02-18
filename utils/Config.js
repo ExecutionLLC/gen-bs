@@ -31,7 +31,17 @@ const SETTINGS = {
         sessionTimeoutSec: ENV.GEN_WS_USER_SESSION_TIMEOUT || 300
     },
     scheduler: {
-        enabled: ENV.GEN_WS_SCHEDULE_ENABLED || true
+        enabled: ENV.GEN_WS_SCHEDULE_ENABLED || true,
+        tasks: {
+            CheckSessions: {
+                isEnabled: true,
+                taskTimeout: 30
+            },
+            ImportSourceMetadata: {
+                isEnabled: true,
+                taskTimeout: 60 * 60
+            }
+        }
     },
     logger: {
         app_name: 'genomix',

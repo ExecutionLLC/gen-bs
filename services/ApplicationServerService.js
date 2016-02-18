@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const async = require('async');
-const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
@@ -48,6 +47,10 @@ class ApplicationServerService extends ServiceBase {
 
     registeredEvents() {
         return METHODS;
+    }
+
+    isRPCConnected() {
+        return this.rpcProxy.isConnected();
     }
 
     requestSourcesList(sessionId, callback) {

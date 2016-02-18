@@ -126,6 +126,10 @@ class ApplicationServerReplyService extends ServiceBase {
                 this._processGetSourcesListResult(operation, rpcMessage, callback);
                 break;
 
+            case events.getSourceMetadata:
+                this._processGetSourceMetadataResult(operation, rpcMessage, callback);
+                break;
+
             default:
                 this.logger.error('Unexpected result came from the application server, send as is.');
                 callback(null, rpcMessage.result);
@@ -141,28 +145,27 @@ class ApplicationServerReplyService extends ServiceBase {
                 result: message
             });
         } else {
-            const result = message.result;
-            //const status = result.status;
-            //const progress = result.progress;
+            const sourcesList = message.result;
+            callback(null, {
+                eventName: EVENTS.onSourcesListReceived,
+                sourcesList: sourcesList
+            });
+        }
+    }
 
-            //// If not ready, just send the progress up
-            //if (status !== SESSION_STATUS.READY) {
-            //    callback(null, {
-            //        status,
-            //        progress,
-            //        shouldCompleteOperation: false
-            //    });
-            //} else {
-
-            callback(null, result);
-
-
-                //async.waterfall([
-                //    (callback) => {
-                //
-                //    }
-                //], callback);
-            //}
+    _processGetSourceMetadataResult(operation, message, callback) {
+        this.logger.info('Processing get sources list result for operation ' + operation.getId());
+        if (!message || !message.result) {
+            this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            callback(null, {
+                result: message
+            });
+        } else {
+            const sourcesMetadata = message.result;
+            callback(null, {
+                eventName: EVENTS.onSourceMetadataReceived,
+                sourcesMetadata: sourcesMetadata
+            });
         }
     }
 
