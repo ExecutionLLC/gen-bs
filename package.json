@@ -39,6 +39,8 @@
     "morgan": "1.6.1",
     "multer": "1.1.0",
     "node-uuid": "1.4.7",
+    "passport": "0.3.2",
+    "passport-google-oauth20": "1.0.0",
     "pg": "4.4.3",
     "redis": "2.4.2",
     "ws": "1.0.1"

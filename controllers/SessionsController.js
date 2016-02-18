@@ -1,6 +1,8 @@
 'use strict';
 
 const Express = require('express');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const ControllerBase = require('./ControllerBase');
 
@@ -11,6 +13,10 @@ class SessionsController extends ControllerBase {
         this.open = this.open.bind(this);
         this.check = this.check.bind(this);
         this.close = this.close.bind(this);
+    }
+
+    authenticateWithGoogle(request, response, next) {
+
     }
 
     /**
@@ -56,7 +62,30 @@ class SessionsController extends ControllerBase {
     }
 
     createRouter() {
+        const baseUrl = this.services.config.baseUrl;
+        const googleClientId = this.services.config.google.clientId;
+        const googleClientSecret = this.services.config.google.clientSecret;
+        const googleRelativeRedirectUrl = ;
+        const googleFullRedirectUrl = baseUrl + googleRelativeRedirectUrl;
+
+        passport.use(new GoogleStrategy({
+            clientID: googleClientId,
+            clientSecret: googleClientSecret,
+            callbackURL: googleFullRedirectUrl
+        }));
+
         const router = new Express();
+
+        router.use(passport.initialize());
+        router.get('/google', passport.authenticate('google', {
+            scope: [
+                'https://www.googleapis.com/auth/plus.profile.emails.read'
+            ],
+            returnURL: googleFullRedirectUrl,
+            realm: baseUrl,
+            session: false
+        }));
+        router.get(googleRelativeRedirectUrl)
 
         router.post('/', this.open);
         router.put('/', this.check);
