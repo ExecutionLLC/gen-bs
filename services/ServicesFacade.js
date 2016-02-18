@@ -40,9 +40,7 @@ class ServiceFacade {
         this.tokens = new TokenService(this, models);
 
         this.scheduler = new SchedulerService(this, models);
-        if (this.config.scheduler.enabled) {
-            this.scheduler.start();
-        }
+        this.scheduler.start();
     }
 }
 

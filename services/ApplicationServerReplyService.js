@@ -145,10 +145,10 @@ class ApplicationServerReplyService extends ServiceBase {
                 result: message
             });
         } else {
-            const sourcesList = message.result;
+            const sourcesList = _.map(message.result, (sourceName) => sourceName.replace('.h5', ''));
             callback(null, {
                 eventName: EVENTS.onSourcesListReceived,
-                sourcesList: sourcesList
+                sourcesList
             });
         }
     }
@@ -164,7 +164,7 @@ class ApplicationServerReplyService extends ServiceBase {
             const sourcesMetadata = message.result;
             callback(null, {
                 eventName: EVENTS.onSourceMetadataReceived,
-                sourcesMetadata: sourcesMetadata
+                sourcesMetadata
             });
         }
     }

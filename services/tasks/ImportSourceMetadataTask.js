@@ -5,7 +5,8 @@ const async = require('async');
 
 const SchedulerTaskBase = require('./SchedulerTaskBase');
 
-const TASK_NAME = 'ImportSourceMetadata';
+const TASK_NAME = 'importSourceMetadata';
+const WS_WAIT_TIMEOUT = 5000;
 
 class ImportSourceMetadataTask extends SchedulerTaskBase {
     constructor(services, models) {
@@ -21,7 +22,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
         this._onSourceMetadataReceived = this._onSourceMetadataReceived.bind(this);
 
         this.waitForConnection = false;
-        this.requestedSources = [];
+        this.requestedSources = null;
     }
 
     execute(callback) {
@@ -46,39 +47,52 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
     calculateTimeout() {
         if (this.waitForConnection) {
             this.logger.warn('Waiting web socket connection for 5 seconds...');
-            return 5000; // waiting for 5 seconds
+            return WS_WAIT_TIMEOUT; // waiting for reconnection
         } else {
             return super.calculateTimeout();
         }
     }
 
-    _onSourcesListReceived(reply) {
+    _getMissingSourceNames(availableSourceNames, callback) {
         async.waterfall([
             (callback) => {
                 this.models.fields.findSourcesMetadata(callback);
             },
             (sourcesMetadata, callback) => {
-                const repliedSourcesList = reply.result.sourcesList;
-                const databaseSourcesList = _.map(_.uniq(_.pluck(sourcesMetadata, 'sourceName')), (source) => {
-                    return source + '.h5';
-                });
-                const sourcesList = _.xor(repliedSourcesList, databaseSourcesList);
-                callback(null, sourcesList);
-            },
-            (sourcesList, callback) => {
-                if (sourcesList.length > 0) {
-                    this.services.sessions.findSystemSession((error, systemSession) => {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            this.requestedSources = _.map(sourcesList, (source) => {
-                                return source.replace('.h5', '');
-                            });
-                            this.this.services.applicationServer.requestSourceMetadata(systemSession.id, sourcesList, callback);
-                        }
-                    });
+                const existingSourceNames = _.uniq(_.pluck(sourcesMetadata, 'sourceName'));
+                const missingSourceNames = _.xor(availableSourceNames, existingSourceNames);
+                callback(null, missingSourceNames);
+            }
+        ], callback);
+    }
+
+    _onSourcesListReceived(reply) {
+        async.waterfall([
+            (callback) => {
+                if (!_.isNull(this.requestedSources)) {
+                    callback(new Error('Internal error: requested sources already defined.'));
                 } else {
-                    this.logger.info(this.name + ': there are no sources to import.');
+                    callback(null);
+                }
+            },
+            (callback) => {
+                this._getMissingSourceNames(reply.result.sourcesList, callback);
+            },
+            (missingSourceNames, callback) => {
+                if (missingSourceNames.length > 0) {
+                    async.waterfall([
+                        (callback) => {
+                            this.services.sessions.findSystemSession(callback);
+                        },
+                        (systemSession, callback) => {
+                            // Metadata will be received without source names in the same order,
+                            // so save the list here to find the source name later.
+                            this.requestedSources = missingSourceNames;
+                            this.services.applicationServer.requestSourceMetadata(systemSession.id, missingSourceNames, callback);
+                        }
+                    ], callback);
+                } else {
+                    this.logger.info('There are no sources to import.');
                     callback(null);
                 }
             }
@@ -99,15 +113,26 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
             },
             (sourcesMetadata, callback) => {
                 async.map(sourcesMetadata, (sourceMetadata, callback) => {
-                    const sourceName = this.requestedSources[sourcesMetadata.indexOf(sourceMetadata)];
-                    this._processSourceMetadata(sourceName, sourceMetadata, (error, result) => {
-                        if (error) {
-                            this.logger.error('Error import source ' + sourceName + ': ' + error)
-                        } else {
-                            this.logger.info('Source imported: ' + sourceName);
+                    async.waterfall([
+                        (callback) => {
+                            if (_.isNull(this.requestedSources)) {
+                                callback(new Error('Internal error: requested sources is not defined.'));
+                            } else {
+                                const sourceName = this.requestedSources[sourcesMetadata.indexOf(sourceMetadata)];
+                                callback(null, sourceName);
+                            }
+                        },
+                        (sourceName, callback) => {
+                            this._processSourceMetadata(sourceName, sourceMetadata, (error, result) => {
+                                if (error) {
+                                    this.logger.error('Error import source ' + sourceName + ': ' + error)
+                                } else {
+                                    this.logger.info('Source imported: ' + sourceName);
+                                }
+                                callback(error, result);
+                            });
                         }
-                        callback(error, result);
-                    });
+                    ], callback);
                 }, callback);
             }
         ], (error) => {
@@ -116,22 +141,14 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
     }
 
     _complete(error) {
-        this.requestedSources = [];
+        this.requestedSources = null;
         this.onCompleteCallback(error);
     }
 
     _processSourceMetadata(sourceName, sourceMetadata, callback) {
-        async.forEachOf(sourceMetadata, (fieldMetadata, fieldName, callback) => {
-            const dataToInsert = {
-                name: fieldName,
-                sourceName: sourceName,
-                valueType: fieldMetadata.type,
-                isMandatory: fieldMetadata.isMandatory,
-                isEditable: false,
-                description: fieldMetadata.desc,
-                dimension: fieldMetadata.num
-            };
-            this.models.fields.add(this.config.defaultLanguId, dataToInsert, callback);
+        async.map(sourceMetadata, (fieldMetadata, callback) => {
+            const metadata = this.services.fieldsMetadata.createFieldMetadata(sourceName, false, fieldMetadata);
+            this.models.fields.add(this.config.defaultLanguId, metadata, callback);
         }, callback);
     }
 }

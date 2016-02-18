@@ -61,11 +61,11 @@ class ApplicationServerService extends ServiceBase {
         ], callback);
     }
 
-    requestSourceMetadata(sessionId, sourceName, callback) {
+    requestSourceMetadata(sessionId, sourceNames, callback) {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
             (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
-            (operation, callback) => this._rpcSend(operation.getId(), method, sourceName, callback)
+            (operation, callback) => this._rpcSend(operation.getId(), method, _.map(sourceNames, (sourceName) => { return sourceName + '.h5'}), callback)
         ], callback);
     }
 

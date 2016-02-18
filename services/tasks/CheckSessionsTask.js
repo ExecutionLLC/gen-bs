@@ -5,7 +5,7 @@ const async = require('async');
 
 const SchedulerTaskBase = require('./SchedulerTaskBase');
 
-const TASK_NAME = 'CheckSessions';
+const TASK_NAME = 'checkSessions';
 
 class CheckSessionsTask extends SchedulerTaskBase {
     constructor(services, models) {

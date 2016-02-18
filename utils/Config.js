@@ -33,11 +33,11 @@ const SETTINGS = {
     scheduler: {
         enabled: ENV.GEN_WS_SCHEDULE_ENABLED || true,
         tasks: {
-            CheckSessions: {
+            checkSessions: {
                 isEnabled: true,
                 taskTimeout: 30
             },
-            ImportSourceMetadata: {
+            importSourceMetadata: {
                 isEnabled: true,
                 taskTimeout: 60 * 60
             }

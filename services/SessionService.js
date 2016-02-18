@@ -191,7 +191,7 @@ class SessionService extends ServiceBase {
             _(this.sessions)
             .filter(session => session.type !== SESSION_TYPES.SYSTEM)
             .map(session => session.lastActivityTimestamp)
-            .values();
+            .value();
         if (lastUserActivityTimestamps && lastUserActivityTimestamps.length) {
             return _.min(lastUserActivityTimestamps);
         }
