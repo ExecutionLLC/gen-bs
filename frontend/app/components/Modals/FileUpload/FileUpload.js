@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import FileUploadProgressBar from './FileUploadProgressBar'
 
-import { changeFileForUpload } from '../../../actions/fileUpload'
+import { clearUploadState, changeFileForUpload } from '../../../actions/fileUpload'
 
 
 
 export default class FileUpload extends Component {
+
+  componentWillMount() {
+    this.props.dispatch(clearUploadState())
+  }
 
   uploadClickHandler(event) {
     this.refs.fileInput.click()
@@ -16,6 +21,7 @@ export default class FileUpload extends Component {
   render() {
     const { dispatch } = this.props
     const { files, error } = this.props.fileUpload
+
     return (
           <div className="well text-center">
             <div>

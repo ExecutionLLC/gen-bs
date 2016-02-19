@@ -1,16 +1,21 @@
 import * as ActionTypes from '../actions/fileUpload'
 
-export default function fileUpload(state = {
+const initialState = {
   progressValueFromAS: 0,
   progressStatusFromAS: null,
   operationId: null,
   isFetching: false,
   files: [],
   error: null
-}, action) {
+}
+
+export default function fileUpload(state = initialState, action) {
 
   switch (action.type) {
 
+    case ActionTypes.CLEAR_UPLOAD_STATE:
+      return initialState
+      
     case ActionTypes.FILE_UPLOAD_ERROR:
       return Object.assign({}, state, {
         files: [],

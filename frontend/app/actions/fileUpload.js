@@ -11,10 +11,17 @@ export const REQUEST_FILE_UPLOAD         = 'REQUEST_FILE_UPLOAD'
 export const RECEIVE_FILE_UPLOAD         = 'RECEIVE_FILE_UPLOAD'
 export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS'
 export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR'
+export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE'
 
 /*
  * action creators
  */
+export function clearUploadState() {
+  return {
+    type: CLEAR_UPLOAD_STATE
+  }
+}
+
 export function fileUploadError(msg) {
   return {
     type: FILE_UPLOAD_ERROR,
@@ -25,6 +32,7 @@ export function fileUploadError(msg) {
 export function changeFileForUpload(files) {
   const theFile = files[0]
   return ( dispatch, getState )  => {
+    dispatch(clearUploadState())
     if (theFile.type === 'application/gzip') {
       dispatch(changeFileForUploadAfterGzip(files))
     } else if (theFile.type === 'text/vcard') {
