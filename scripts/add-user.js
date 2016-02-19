@@ -14,12 +14,19 @@ const services = new ServicesFacade(Config, logger, models);
 
 if (args.name && args.lastName && args.speciality
     && args.email && args.defaultLanguage && args.numberPaidSamples) {
-    services.user.add(args.defaultLanguage, args.name, args.lastName,
+    services.users.add(args.defaultLanguage, args.name, args.lastName,
         args.email, args.speciality, args.numberPaidSamples, (error, userId) => {
-            console.log('User ' + args.name + ' is added with id: ' + userId);
+            if (error) {
+                console.error(error);
+                process.exit(1);
+            } else {
+                console.log('User ' + args.name + ' is added with id: ' + userId);
+                process.exit(0);
+            }
         });
 } else {
-    console.error('Usage: --name "UserFirstName" --lastName "UserLastName" --speciality "JobName" '
+    console.error('Usage: -- --name "UserFirstName" --lastName "UserLastName" --speciality "JobName" '
         + '--defaultLanguage "en" --numberPaidSamples N');
+    console.error('Note the "--" before all params, it is required.');
     process.exit(1);
 }

@@ -23,23 +23,15 @@ class UserModel extends RemovableModelBase {
 
     findIdByEmail(email, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => trx.select('id')
-                    .from(this.baseTableName)
-                    .where('email', email)
-                    .asCallback(callback),
-                (results, callback) => {
-                    if (results && results.length) {
-                        if (results.length > 1) {
-                            callback(new Error('Too many users found'));
-                        } else {
-                            callback(null, results[0].id);
-                        }
-                    } else {
-                        callback(new Error('User is not found'));
-                    }
+            this._findIdsByEmailInTransaction(email, trx, (error, userIds) => {
+                if (userIds.length > 1) {
+                    callback(new Error('Too many users'));
+                } else if (userIds.length) {
+                    callback(null, userIds[0]);
+                } else {
+                    callback(new Error('User is not found'));
                 }
-            ], callback);
+            });
         }, callback);
     }
 
@@ -56,7 +48,7 @@ class UserModel extends RemovableModelBase {
         userToUpdate.id = userId;
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._checkFieldsUnique(userToUpdate, callback),
+                (callback) => this._checkFieldsUnique(userToUpdate, trx, callback),
                 (callback) => {
                     const dataToUpdate = {
                         numberPaidSamples: userToUpdate.numberPaidSamples,
@@ -83,12 +75,12 @@ class UserModel extends RemovableModelBase {
         userToInsert.id = shouldGenerateId ? this._generateId() : user.id;
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._checkFieldsUnique(userToInsert, callback),
+                (callback) => this._checkFieldsUnique(userToInsert, trx, callback),
                 (callback) => {
                     const dataToInsert = {
-                        id: user.id,
-                        numberPaidSamples: user.numberPaidSamples,
-                        email: user.email,
+                        id: userToInsert.id,
+                        numberPaidSamples: userToInsert.numberPaidSamples,
+                        email: userToInsert.email,
                         defaultLanguId: languId
                     };
                     this._insert(dataToInsert, trx, callback);
@@ -97,9 +89,9 @@ class UserModel extends RemovableModelBase {
                     const dataToInsert = {
                         userId: userId,
                         languId: languId,
-                        name: user.name,
-                        lastName: user.lastName,
-                        speciality: user.speciality
+                        name: userToInsert.name,
+                        lastName: userToInsert.lastName,
+                        speciality: userToInsert.speciality
                     };
                     this._unsafeInsert('user_text', dataToInsert, trx, (error) => {
                         callback(error, userId);
@@ -116,6 +108,29 @@ class UserModel extends RemovableModelBase {
             .asCallback((error) => {
                 callback(error, userId);
             });
+    }
+
+    /**
+     * Tries to find users by specified email.
+     * Returns empty array if no users found.
+     * @param email Email to search for.
+     * @param trx Knex transaction.
+     * @param callback (error, userIds || [])
+     * */
+    _findIdsByEmailInTransaction(email, trx, callback) {
+        async.waterfall([
+            (callback) => trx.select('id')
+                .from(this.baseTableName)
+                .where('email', email)
+                .asCallback(callback),
+            (results, callback) => {
+                if (results && results.length) {
+                    callback(null, _.map(results, obj => obj.id));
+                } else {
+                    callback(null, []);
+                }
+            }
+        ], callback);
     }
 
     _fetch(userId, callback) {
@@ -139,13 +154,15 @@ class UserModel extends RemovableModelBase {
     /**
      * Checks that unique fields, ex. email, are unique across users collection.
      * */
-    _checkFieldsUnique(user, callback) {
+    _checkFieldsUnique(user, trx, callback) {
         async.waterfall([
-            (callback) => this.findIdByEmail(user.email, (error, userId) => {
-                if (error || userId === user.id) {
-                    callback(null);
-                } else {
+            (callback) => this._findIdsByEmailInTransaction(user.email, trx, (error, userIds) => {
+                if (error) {
+                    callback(error);
+                } else if (userIds.length) {
                     callback(new Error('Duplicate e-mail.'));
+                } else {
+                    callback(null);
                 }
             })
         ], callback);
