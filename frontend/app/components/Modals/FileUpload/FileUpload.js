@@ -47,13 +47,13 @@ export default class FileUpload extends Component {
                     <small style={{opacity:'.6'}}>Or click here</small>
                 </button>
                 { files[0] &&
-                  <p>{files[0].name}</p>
+                  <h2 style={{color: '#2363a1'}}>{files[0].name}</h2>
                 }
                 <div className="small btn-link-default">.vcf, .vcf.gz</div>
             </div>
 
             { isArchiving &&
-              <div><h2>Archiving...</h2><i className="fa fa-spinner fa-spin"></i></div>
+              <div><h2 style={{color: '#2363a1'}}>Archiving...</h2><i className="fa fa-spinner fa-spin"></i></div>
             }
             { !error &&
               <FileUploadProgressBar {...this.props} />
