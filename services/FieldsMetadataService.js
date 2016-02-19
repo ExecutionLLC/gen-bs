@@ -1,6 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
+
 const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
@@ -8,6 +10,7 @@ const ServiceBase = require('./ServiceBase');
 class FieldsMetadataService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
+        this.availableSources = [];
     }
 
     findByUserAndSampleId(user, sampleId, callback) {
@@ -28,6 +31,38 @@ class FieldsMetadataService extends ServiceBase {
 
     findMany(fieldIds, callback) {
         this.models.fields.findMany(fieldIds, callback);
+    }
+
+    addSourceReferences(sourcesList, callback) {
+        async.map(sourcesList, (source, callback) => {
+            this.addSourceReference(source, callback);
+        }, callback);
+    }
+
+    addSourceReference(source, callback) {
+        async.waterfall([
+            (callback) => this.findSourceReference(source.name, callback),
+            (findedSource, callback) => {
+                if (findedSource) {
+                    callback(new Error('Cannot add source reference. Source ' + source.name + 'already exists.'));
+                } else {
+                    this.availableSources.push(source);
+                    callback(null, source);
+                }
+            }
+        ], callback);
+    }
+
+    findSourceReference(sourceName, callback) {
+        callback(null, _.find(this.availableSources, (availableSource) => {
+            return availableSource.sourceName === sourceName;
+        }));
+    }
+
+    findReferenceSources(referenceName, callback) {
+        callback(null, _.filter(this.availableSources, (availableSource) => {
+            return availableSource.reference === referenceName;
+        }));
     }
 
     static createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {

@@ -46,7 +46,7 @@ class SchedulerService extends ServiceBase {
             this.logger.info('Processing task: ' + task.name + '...');
             task.execute((error) => {
                 if (error) {
-                    this.logger.error('Task ' + task.name + ' error: ' + error);
+                    this.logger.error('Task ' + task.name + ' error: ' + JSON.stringify(error, null, 2));
                 } else {
                     this.logger.info('Task ' + task.name + ' processed.');
                 }

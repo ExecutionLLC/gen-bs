@@ -4,6 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const SchedulerTaskBase = require('./SchedulerTaskBase');
+const FieldsMetadataService = require('../FieldsMetadataService.js');
 
 const TASK_NAME = 'importSourceMetadata';
 const WS_WAIT_TIMEOUT = 5000;
@@ -22,6 +23,8 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
         this._onSourceMetadataReceived = this._onSourceMetadataReceived.bind(this);
 
         this.waitForConnection = false;
+        this.completed = false;
+
         this.requestedSources = null;
     }
 
@@ -76,7 +79,11 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 }
             },
             (callback) => {
-                this._getMissingSourceNames(reply.result.sourcesList, callback);
+                this.services.fieldsMetadata.addSourceReferences(reply.result.sourcesList, callback);
+            },
+            (availableSources, callback) => {
+                const availableSourceNames = _.pluck(availableSources, 'sourceName');
+                this._getMissingSourceNames(availableSourceNames, callback);
             },
             (missingSourceNames, callback) => {
                 if (missingSourceNames.length > 0) {
@@ -93,6 +100,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                     ], callback);
                 } else {
                     this.logger.info('There are no sources to import.');
+                    this.completed = true;
                     callback(null);
                 }
             }
@@ -104,6 +112,13 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
     _onSourceMetadataReceived(reply) {
         async.waterfall([
             (callback) => {
+                if (_.isNull(this.requestedSources)) {
+                    callback(new Error('Internal error: requested sources is not defined.'));
+                } else {
+                    callback(null);
+                }
+            },
+            (callback) => {
                 const sourcesMetadata = reply.result.sourcesMetadata;
                 if (sourcesMetadata.error) {
                     callback(sourcesMetadata.error);
@@ -113,41 +128,35 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
             },
             (sourcesMetadata, callback) => {
                 async.map(sourcesMetadata, (sourceMetadata, callback) => {
-                    async.waterfall([
-                        (callback) => {
-                            if (_.isNull(this.requestedSources)) {
-                                callback(new Error('Internal error: requested sources is not defined.'));
-                            } else {
-                                const sourceName = this.requestedSources[sourcesMetadata.indexOf(sourceMetadata)];
-                                callback(null, sourceName);
-                            }
-                        },
-                        (sourceName, callback) => {
-                            this._processSourceMetadata(sourceName, sourceMetadata, (error, result) => {
-                                if (error) {
-                                    this.logger.error('Error import source ' + sourceName + ': ' + error)
-                                } else {
-                                    this.logger.info('Source imported: ' + sourceName);
-                                }
-                                callback(error, result);
-                            });
+                    const sourceName = this.requestedSources[sourcesMetadata.indexOf(sourceMetadata)];
+                    this._processSourceMetadata(sourceName, sourceMetadata, (error, result) => {
+                        if (error) {
+                            this.logger.error('Error import source ' + sourceName + ': ' + error);
+                        } else {
+                            this.logger.info('Source imported: ' + sourceName);
                         }
-                    ], callback);
+                        callback(error, result);
+                    });
                 }, callback);
             }
         ], (error) => {
+            this.requestedSources = null;
+            this.completed = true;
             this._complete(error);
         });
     }
 
     _complete(error) {
-        this.requestedSources = null;
-        this.onCompleteCallback(error);
+        if (this.completed || error) {
+            this.completed = false;
+            this.onCompleteCallback(error);
+        }
     }
 
     _processSourceMetadata(sourceName, sourceMetadata, callback) {
-        async.map(sourceMetadata, (fieldMetadata, callback) => {
-            const metadata = this.services.fieldsMetadata.createFieldMetadata(sourceName, false, fieldMetadata);
+        const fieldMetadataArray = _.map(sourceMetadata, (fieldMetadata) => fieldMetadata);
+        async.map(fieldMetadataArray, (fieldMetadata, callback) => {
+            const metadata = FieldsMetadataService.createFieldMetadata(sourceName, false, fieldMetadata);
             this.models.fields.add(this.config.defaultLanguId, metadata, callback);
         }, callback);
     }
