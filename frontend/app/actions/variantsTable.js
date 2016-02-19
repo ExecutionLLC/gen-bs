@@ -53,11 +53,9 @@ export function changeVariantsFilter(variants, fieldId, filterValue) {
 export function sortVariants(fieldId, sortOrder, sortDirection) {
   return dispatch => {
     dispatch(changeVariantsSort(fieldId, sortOrder, sortDirection))
-    /*
     setTimeout(() => {
       dispatch(searchInResults())
     }, 1000)
-    */
   }
 }
 
