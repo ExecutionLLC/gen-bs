@@ -81,7 +81,7 @@ class ApiController extends ControllerBase {
         ], (error) => next(error));
     }
 
-    createRouter(controllersFacade) {
+    createRouter(controllersFacade, controllerRelativePath) {
         const sessionsControllerPath = '/session';
         // Create child routers
         const sampleRouter = controllersFacade.samplesController.createRouter();
@@ -90,7 +90,7 @@ class ApiController extends ControllerBase {
         const filtersRouter = controllersFacade.filtersController.createRouter();
 
         const searchRouter = controllersFacade.searchController.createRouter();
-        const sessionsRouter = controllersFacade.sessionsController.createRouter(sessionsControllerPath);
+        const sessionsRouter = controllersFacade.sessionsController.createRouter(controllerRelativePath + sessionsControllerPath);
 
         const demoDataRouter = controllersFacade.demoDataController.createRouter();
         const dataRouter = controllersFacade.dataController.createRouter();

@@ -23,7 +23,10 @@ class KnexTransaction {
             this.logger.warn('ROLLING BACK TRANSACTION ' + this.id +': ' + error);
             this.transaction
                 .rollback()
-                .asCallback(error => {
+                .asCallback((rollbackError) => {
+                    if (rollbackError) {
+                        this.logger.error('ROLLBACK ERROR: ' + rollbackError);
+                    }
                     callback(error);
                 });
         } else {

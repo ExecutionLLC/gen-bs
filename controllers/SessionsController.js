@@ -75,7 +75,7 @@ class SessionsController extends ControllerBase {
         this.services.logger.info('Creating session for user ' + userEmail);
         this.services.sessions.startForEmail(userEmail, (error, sessionId) => {
             if (error) {
-                next(error);
+                response.redirect('/?error=' + error.message);
             } else {
                 return response.redirect('/?sessionId=' + sessionId);
             }
@@ -87,13 +87,13 @@ class SessionsController extends ControllerBase {
         const googleClientId = this.services.config.google.clientId;
         const googleClientSecret = this.services.config.google.clientSecret;
         const googleRelativeRedirectUrl = '/auth/google/callback';
-        const googleFullRedirectUrl = controllerRelativePath + googleRelativeRedirectUrl;
+        const googleFullRedirectUrl = baseUrl + controllerRelativePath + googleRelativeRedirectUrl;
 
         passport.use(new GoogleStrategy({
             clientID: googleClientId,
             clientSecret: googleClientSecret,
             callbackURL: googleFullRedirectUrl
-        }), this._parseGoogleProfile.bind(this));
+        }, this._parseGoogleProfile.bind(this)));
 
         router.use(passport.initialize());
         router.get('/auth/google', passport.authenticate('google', {
@@ -118,6 +118,11 @@ class SessionsController extends ControllerBase {
 
         this._configurePassport(router, controllerRelativePath);
 
+        router.get('/', (request, response) => {
+            response.json({
+                hello: 'world'
+            });
+        });
         router.post('/', this.open);
         router.put('/', this.check);
         router.delete('/', this.close);

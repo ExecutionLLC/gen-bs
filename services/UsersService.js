@@ -22,7 +22,7 @@ class UserService extends ServiceBase {
     }
 
     findIdByEmail(email, callback) {
-        this.models.users.findIdByEmail(email, callback);
+        this.models.user.findIdByEmail(email, callback);
     }
 
     find(userId, callback) {
