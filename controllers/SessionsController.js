@@ -65,21 +65,23 @@ class SessionsController extends ControllerBase {
 
     _processUserLogin(error, userEmail, request, response, next) {
         if (error) {
-            return next(error);
-        }
-        if (!userEmail) {
-            // User cancelled authentication.
-            return response.redirect('/');
-        }
-        // User is logged in to Google, try creating session.
-        this.services.logger.info('Creating session for user ' + userEmail);
-        this.services.sessions.startForEmail(userEmail, (error, sessionId) => {
-            if (error) {
-                response.redirect('/?error=' + error.message);
+            next(error);
+        } else {
+            if (!userEmail) {
+                // User cancelled authentication.
+                response.redirect('/?error=Cancelled');
             } else {
-                return response.redirect('/?sessionId=' + sessionId);
+                // User is logged in to Google, try creating session.
+                this.services.logger.info('Creating session for user ' + userEmail);
+                this.services.sessions.startForEmail(userEmail, (error, sessionId) => {
+                    if (error) {
+                        response.redirect('/?error=' + error.message);
+                    } else {
+                        response.redirect('/?sessionId=' + sessionId);
+                    }
+                });
             }
-        });
+        }
     }
 
     _configurePassport(router, controllerRelativePath) {
@@ -118,11 +120,6 @@ class SessionsController extends ControllerBase {
 
         this._configurePassport(router, controllerRelativePath);
 
-        router.get('/', (request, response) => {
-            response.json({
-                hello: 'world'
-            });
-        });
         router.post('/', this.open);
         router.put('/', this.check);
         router.delete('/', this.close);
