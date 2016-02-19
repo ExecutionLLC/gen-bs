@@ -45,7 +45,6 @@ export default class VariantsTableHead extends Component {
   render() {
     const { dispatch, variants, fields } = this.props
     const { sort } = this.props.variantsTable.searchInResultsParams
-    console.log('sort Array', sort)
 
     let variantsColumns = null;
     let head = [];
@@ -88,7 +87,9 @@ export default class VariantsTableHead extends Component {
           let name = '';
           let fieldMetadata = '';
           let columnSortParams = _.find(sort, sortItem => sortItem.field_id === tableFieldId)
-          console.log('columnSortParams', columnSortParams)
+          if(columnSortParams) {
+            console.log('columnSortParams', columnSortParams)
+          }
 
           let sortClassAsc = classNames(
             'btn', 'btn-default', 'btnSort', 'asc', {
