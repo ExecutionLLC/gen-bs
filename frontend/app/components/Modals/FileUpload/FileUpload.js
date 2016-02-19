@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import FileUploadProgressBar from './FileUploadProgressBar'
 
-import { changeFileForUpload } from '../../../actions/fileUpload'
+import { clearUploadState, changeFileForUpload } from '../../../actions/fileUpload'
 
 
 
 export default class FileUpload extends Component {
+
+  componentWillMount() {
+    this.props.dispatch(clearUploadState())
+  }
 
   uploadClickHandler(event) {
     this.refs.fileInput.click()
@@ -15,10 +20,17 @@ export default class FileUpload extends Component {
 
   render() {
     const { dispatch } = this.props
-    const { files } = this.props.fileUpload
+    const { files, error, isArchiving } = this.props.fileUpload
+
     return (
           <div className="well text-center">
             <div>
+
+              { error &&
+                <div>
+                  <h2 class="text-center" style={{color: 'red'}} >{error}</h2>
+                </div>
+              }
            
                 <button onClick={this.uploadClickHandler.bind(this)} data-target="#fileOpen" data-toggle="modal" className="btn-link-default" style={{paddingBottom: '40px', height: '280px'}}>
                   <input 
@@ -27,7 +39,7 @@ export default class FileUpload extends Component {
                     ref="fileInput"
                     id="file-select"
                     type="file"
-                    accept=".gz"
+                    accept=".vcf,.gz"
                     name="files[]"
                   />
                      <i className="fa fa-3x fa-cloud-upload"></i>
@@ -35,12 +47,17 @@ export default class FileUpload extends Component {
                     <small style={{opacity:'.6'}}>Or click here</small>
                 </button>
                 { files[0] &&
-                  <p>{files[0].name}</p>
+                  <h2 style={{color: '#2363a1'}}>{files[0].name}</h2>
                 }
                 <div className="small btn-link-default">.vcf, .vcf.gz</div>
             </div>
 
-            <FileUploadProgressBar {...this.props} />
+            { isArchiving &&
+              <div><h2 style={{color: '#2363a1'}}>Archiving...</h2><i className="fa fa-spinner fa-spin"></i></div>
+            }
+            { !error &&
+              <FileUploadProgressBar {...this.props} />
+            }
           </div>
 
 

@@ -71,10 +71,10 @@ export default class VariantsTableHead extends Component {
                       </a>
 
                       <div className="btn-group-vertical" role="group" data-toggle="buttons">
-                        <button className="btn btn-link btnSort asc" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'asc')) }>
-                          <input type="radio" name="options" id="option1" />
+                        <button className="btn btn-default btnSort asc" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'asc')) }>
+                          <input type="radio" name="options" id="option1" /><span class="badge">1</span>
                         </button>
-                        <button className="btn btn-link btnSort desc " onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'desc')) }>
+                        <button className="btn btn-default btnSort desc " onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'desc')) }>
                           <input type="radio" name="options" id="option2" />
                         </button>
                       </div>
@@ -107,10 +107,10 @@ export default class VariantsTableHead extends Component {
                       </a>
 
                       <div className="btn-group-vertical" role="group" data-toggle="buttons">
-                        <button className="btn btn-link btnSort asc" onClick={ e => dispatch(sort(tableFieldId, 1, 'asc')) }>
+                        <button className="btn btn-default btnSort asc" onClick={ e => dispatch(sort(tableFieldId, 1, 'asc')) }>
                           <input type="radio" name="options" id="option1" />
                         </button>
-                        <button className="btn btn-link btnSort desc " onClick={ e => dispatch(sort(tableFieldId, 1, 'desc')) }>
+                        <button className="btn btn-default btnSort desc " onClick={ e => dispatch(sort(tableFieldId, 1, 'desc')) }>
                           <input type="radio" name="options" id="option2" />
                         </button>
                       </div>
