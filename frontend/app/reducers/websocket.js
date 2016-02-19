@@ -52,6 +52,7 @@ export default function websocket(state = {
           isVariantsLoaded: false,
           isVariantsValid: false
         })
+
     case ActionTypes.WS_RECEIVE_ERROR:
         return Object.assign({}, state, {
           errors: [

@@ -1,6 +1,7 @@
 import config from '../../config'
 import { closeModal } from './modalWindows'
 import { fetchSamples } from './userData'
+import gzip from '../utils/gzip'
 
 /*
  * action types
@@ -9,11 +10,59 @@ export const CHANGE_FILE_FOR_UPLOAD      = 'CHANGE_FILE_FOR_UPLOAD'
 export const REQUEST_FILE_UPLOAD         = 'REQUEST_FILE_UPLOAD'
 export const RECEIVE_FILE_UPLOAD         = 'RECEIVE_FILE_UPLOAD'
 export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS'
+export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR'
+export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE'
+export const REQUEST_GZIP = 'REQUEST_GZIP'
+export const RECEIVE_GZIP = 'RECEIVE_GZIP'
 
 /*
  * action creators
  */
+export function clearUploadState() {
+  return {
+    type: CLEAR_UPLOAD_STATE
+  }
+}
+
+export function fileUploadError(msg) {
+  return {
+    type: FILE_UPLOAD_ERROR,
+    msg
+  }
+}
+
+function requestGzip() {
+  return {
+    type: REQUEST_GZIP
+  }
+}
+
+function receiveGzip() {
+  return {
+    type: RECEIVE_GZIP
+  }
+}
 export function changeFileForUpload(files) {
+  const theFile = files[0]
+  return ( dispatch, getState )  => {
+    dispatch(clearUploadState())
+    if (theFile.type === 'application/gzip') {
+      dispatch(changeFileForUploadAfterGzip(files))
+    } else if (theFile.type === 'text/vcard') {
+      console.log('Not gzipped vcf')
+      dispatch(requestGzip())
+      gzip(theFile).then( file => {
+        dispatch(changeFileForUploadAfterGzip([file]))
+        dispatch(receiveGzip())
+      })
+    } else {
+      console.error('Wrong file type. Type must be vcard or gzip')
+      dispatch(fileUploadError('Wrong file type. Type must be vcard or gzip'))
+    }
+  }
+}
+
+function changeFileForUploadAfterGzip(files) {
   return {
     type: CHANGE_FILE_FOR_UPLOAD,
     files
