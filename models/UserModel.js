@@ -52,35 +52,41 @@ class UserModel extends RemovableModelBase {
     }
 
     update(userId, languId, user, callback) {
+        const userToUpdate = _.cloneDeep(user);
+        userToUpdate.id = userId;
         this.db.transactionally((trx, callback) => {
             async.waterfall([
+                (callback) => this._checkFieldsUnique(userToUpdate, callback),
                 (callback) => {
                     const dataToUpdate = {
-                        numberPaidSamples: user.numberPaidSamples,
-                        email: user.email,
+                        numberPaidSamples: userToUpdate.numberPaidSamples,
+                        email: userToUpdate.email,
                         defaultLanguId: languId
                     };
-                    this._unsafeUpdate(userId, dataToUpdate, trx, callback);
+                    this._unsafeUpdate(userToUpdate.id, dataToUpdate, trx, callback);
                 },
                 (id, callback) => {
                     const dataToUpdate = {
                         languId: languId,
-                        name: user.name,
-                        lastName: user.lastName,
-                        speciality: user.speciality
+                        name: userToUpdate.name,
+                        lastName: userToUpdate.lastName,
+                        speciality: userToUpdate.speciality
                     };
-                    this._updateUserText(userId, dataToUpdate, trx, callback);
+                    this._updateUserText(userToUpdate.id, dataToUpdate, trx, callback);
                 }
             ], callback);
         }, callback);
     }
 
     _add(user, languId, shouldGenerateId, callback) {
+        const userToInsert = _.cloneDeep(user);
+        userToInsert.id = shouldGenerateId ? this._generateId() : user.id;
         this.db.transactionally((trx, callback) => {
             async.waterfall([
+                (callback) => this._checkFieldsUnique(userToInsert, callback),
                 (callback) => {
                     const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : user.id,
+                        id: user.id,
                         numberPaidSamples: user.numberPaidSamples,
                         email: user.email,
                         defaultLanguId: languId
@@ -128,6 +134,21 @@ class UserModel extends RemovableModelBase {
                 }
             });
         }, callback);
+    }
+
+    /**
+     * Checks that unique fields, ex. email, are unique across users collection.
+     * */
+    _checkFieldsUnique(user, callback) {
+        async.waterfall([
+            (callback) => this.findIdByEmail(user.email, (error, userId) => {
+                if (error || userId === user.id) {
+                    callback(null);
+                } else {
+                    callback(new Error('Duplicate e-mail.'));
+                }
+            })
+        ], callback);
     }
 }
 
