@@ -55,10 +55,20 @@ export default function variantsTable(
 
       if (action.filterValue !== '') {
         if (sortFieldIndex !== -1) {
-          sortArray = state.searchInResultsParams.sort.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection} )
+          sortArray = [
+            ...sortArray.slice(0, sortFieldIndex),
+            ...sortArray.slice(sortFieldIndex + 1)
+          ]
+          //sortArray = state.searchInResultsParams.sort.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection} )
         } else {
-          //sortArray.push({field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection })
-          sortArray = [{field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection }]
+          if (action.sortOrder === 1) {
+            sortArray = [{field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection }]
+          } else if (action.sortOrder === 2) {
+            if (sortArray.length === 2) {
+              sortArray.pop()
+            }
+            sortArray.push({field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection })
+          }
         }
       } else {
         sortArray.splice(fieldIndex,1)
