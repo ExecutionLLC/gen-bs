@@ -1,5 +1,7 @@
 'use strict';
 
+const Uuid = require('node-uuid');
+
 const ServiceBase = require('./ServiceBase');
 
 const DEMO_USER = {
@@ -15,6 +17,29 @@ const DEMO_USER = {
 class UserService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
+    }
+
+    /**
+     * Adds a new user with specified params.
+     * @param defaultLanguId User's default language.
+     * @param name First name.
+     * @param lastName Last name.
+     * @param speciality User's job position name.
+     * @param numberPaidSamples Number of times user is allowed to analyze a new sample.
+     * @param email User email.
+     * @param callback (error, userId)
+     * */
+    add(defaultLanguId, name, lastName, email, speciality, numberPaidSamples, callback) {
+        const user = {
+            name,
+            lastName,
+            email,
+            speciality,
+            language: defaultLanguId,
+            numberPaidSamples
+        };
+
+        this.models.user.add(user, defaultLanguId, callback);
     }
 
     findDemoUser(callback) {

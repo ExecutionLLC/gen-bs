@@ -14,7 +14,7 @@ class SessionService extends ServiceBase {
     }
 
     /**
-     * Creates a new session for the specified user with token.
+     * Creates a new session for a user with the specified email.
      * Currently, also destroys existing sessions of the same user, if any.
      * */
     startForEmail(email, callback) {
