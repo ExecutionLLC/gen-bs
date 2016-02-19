@@ -20,15 +20,15 @@ export default class FileUpload extends Component {
 
   render() {
     const { dispatch } = this.props
-    const { files, error } = this.props.fileUpload
+    const { files, error, isArchiving } = this.props.fileUpload
 
     return (
           <div className="well text-center">
             <div>
 
               { error &&
-                <div className="alert alert-danger">
-                  {error}
+                <div>
+                  <h2 class="text-center" style={{color: 'red'}} >{error}</h2>
                 </div>
               }
            
@@ -52,6 +52,9 @@ export default class FileUpload extends Component {
                 <div className="small btn-link-default">.vcf, .vcf.gz</div>
             </div>
 
+            { isArchiving &&
+              <div><h2>Archiving...</h2><i className="fa fa-spinner fa-spin"></i></div>
+            }
             { !error &&
               <FileUploadProgressBar {...this.props} />
             }

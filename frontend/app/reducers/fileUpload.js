@@ -6,7 +6,8 @@ const initialState = {
   operationId: null,
   isFetching: false,
   files: [],
-  error: null
+  error: null,
+  isArchiving: false
 }
 
 export default function fileUpload(state = initialState, action) {
@@ -16,6 +17,16 @@ export default function fileUpload(state = initialState, action) {
     case ActionTypes.CLEAR_UPLOAD_STATE:
       return initialState
       
+    case ActionTypes.REQUEST_GZIP:
+      return Object.assign({}, state, {
+        isArchiving: true
+      });
+
+    case ActionTypes.RECEIVE_GZIP:
+      return Object.assign({}, state, {
+        isArchiving: false
+      });
+
     case ActionTypes.FILE_UPLOAD_ERROR:
       return Object.assign({}, state, {
         files: [],

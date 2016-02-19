@@ -12,6 +12,8 @@ export const RECEIVE_FILE_UPLOAD         = 'RECEIVE_FILE_UPLOAD'
 export const FILE_UPLOAD_CHANGE_PROGRESS = 'FILE_UPLOAD_CHANGE_PROGRESS'
 export const FILE_UPLOAD_ERROR = 'FILE_UPLOAD_ERROR'
 export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE'
+export const REQUEST_GZIP = 'REQUEST_GZIP'
+export const RECEIVE_GZIP = 'RECEIVE_GZIP'
 
 /*
  * action creators
@@ -29,6 +31,17 @@ export function fileUploadError(msg) {
   }
 }
 
+function requestGzip() {
+  return {
+    type: REQUEST_GZIP
+  }
+}
+
+function receiveGzip() {
+  return {
+    type: RECEIVE_GZIP
+  }
+}
 export function changeFileForUpload(files) {
   const theFile = files[0]
   return ( dispatch, getState )  => {
@@ -37,8 +50,10 @@ export function changeFileForUpload(files) {
       dispatch(changeFileForUploadAfterGzip(files))
     } else if (theFile.type === 'text/vcard') {
       console.log('Not gzipped vcf')
+      dispatch(requestGzip())
       gzip(theFile).then( file => {
         dispatch(changeFileForUploadAfterGzip([file]))
+        dispatch(receiveGzip())
       })
     } else {
       console.error('Wrong file type. Type must be vcard or gzip')
