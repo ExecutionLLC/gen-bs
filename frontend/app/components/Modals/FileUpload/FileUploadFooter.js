@@ -10,6 +10,12 @@ export default class FileUploadFooter extends Component {
   render() {
 
     const { dispatch, closeModal } = this.props
+    const { files } = this.props.fileUpload
+
+    var disabledClass = classNames({
+      'disabled': (files.length === 0) ? 'disabled':''
+    });
+
 
 
     return (
@@ -25,6 +31,7 @@ export default class FileUploadFooter extends Component {
           </button>
 
           <button
+            disabled={disabledClass} 
             onClick={ () => {
               dispatch(uploadFile())
             }}
