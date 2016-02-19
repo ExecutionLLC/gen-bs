@@ -57,7 +57,8 @@ export default function variantsTable(
         if (sortFieldIndex !== -1) {
           sortArray = state.searchInResultsParams.sort.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection} )
         } else {
-          sortArray.push({field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection })
+          //sortArray.push({field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection })
+          sortArray = [{field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection }]
         }
       } else {
         sortArray.splice(fieldIndex,1)

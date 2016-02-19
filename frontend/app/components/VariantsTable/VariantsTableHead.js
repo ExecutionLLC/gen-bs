@@ -69,15 +69,6 @@ export default class VariantsTableHead extends Component {
                       <a type="button" className="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div className="popover variants-table-th-filter" role="tooltip"><div className="popover-content"></div></div>' data-content='<input type="text" className="form-control">'>
                           COMMENT
                       </a>
-
-                      <div className="btn-group-vertical" role="group" data-toggle="buttons">
-                        <button className="btn btn-default btnSort asc" onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'asc')) }>
-                          <input type="radio" name="options" id="option1" /><span class="badge">1</span>
-                        </button>
-                        <button className="btn btn-default btnSort desc " onClick={ e => dispatch(changeVariantsSort(tableFieldId, 1, 'desc')) }>
-                          <input type="radio" name="options" id="option2" />
-                        </button>
-                      </div>
                   </div>
                 </div>
                 <div>
@@ -106,9 +97,10 @@ export default class VariantsTableHead extends Component {
                         {firstCharToUpperCase(name)}
                       </a>
 
+
                       <div className="btn-group-vertical" role="group" data-toggle="buttons">
                         <button className="btn btn-default btnSort asc" onClick={ e => dispatch(sort(tableFieldId, 1, 'asc')) }>
-                          <input type="radio" name="options" id="option1" />
+                          <input type="radio" name="options" id="option1" /><span className="badge">1</span>
                         </button>
                         <button className="btn btn-default btnSort desc " onClick={ e => dispatch(sort(tableFieldId, 1, 'desc')) }>
                           <input type="radio" name="options" id="option2" />
