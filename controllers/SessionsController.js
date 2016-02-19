@@ -23,8 +23,6 @@ class SessionsController extends ControllerBase {
         if (!body) {
             return;
         }
-        const userName = body.userName;
-        const password = body.password;
 
         const createSessionCallback = (error, sessionId) => {
             this.sendErrorOrJson(response, error, {
@@ -32,12 +30,8 @@ class SessionsController extends ControllerBase {
             });
         };
 
-        if (userName && password) {
-            this.services.sessions.startForUser(userName, password, createSessionCallback);
-        } else {
-            // open demo session
-            this.services.sessions.startDemo(createSessionCallback);
-        }
+        // open demo session.
+        this.services.sessions.startDemo(createSessionCallback);
     }
 
     check(request, response) {
