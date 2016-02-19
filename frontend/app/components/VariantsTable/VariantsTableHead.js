@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
+
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { changeVariantsFilter, sort, searchInResults } from '../../actions/variantsTable'
+import { changeVariantsFilter, sortVariants, searchInResults } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
 
@@ -42,8 +44,12 @@ export default class VariantsTableHead extends Component {
 
   render() {
     const { dispatch, variants, fields } = this.props
+    const { sort } = this.props.variantsTable.searchInResultsParams
+    console.log('sort Array', sort)
+
     let variantsColumns = null;
     let head = [];
+
 
 
     const filterFunc = (label) => {
@@ -81,6 +87,18 @@ export default class VariantsTableHead extends Component {
       variantsColumns.filter( filterFunc ).map( (tableFieldId) => {
           let name = '';
           let fieldMetadata = '';
+          let columnSortParams = _.find(sort, sortItem => sortItem.field_id === tableFieldId)
+          console.log('columnSortParams', columnSortParams)
+
+          let sortClassAsc = classNames(
+            'btn', 'btn-default', 'btnSort', 'asc', {
+            'active': columnSortParams && columnSortParams.direction === 'asc' 
+          });
+          let sortClassDesc = classNames(
+            'btn', 'btn-default', 'btnSort', 'desc',
+            {
+            'active': columnSortParams && columnSortParams.direction === 'desc' 
+          });
 
           fieldMetadata =
             _.find(fields.list, (field) => field.id === tableFieldId) ||
@@ -88,6 +106,8 @@ export default class VariantsTableHead extends Component {
 
 
           name = (fieldMetadata === undefined) ? tableFieldId : fieldMetadata.name
+
+
           
           head.push(
               <th data-label={tableFieldId} key={tableFieldId} > 
@@ -99,11 +119,15 @@ export default class VariantsTableHead extends Component {
 
 
                       <div className="btn-group-vertical" role="group" data-toggle="buttons">
-                        <button className="btn btn-default btnSort asc" onClick={ e => dispatch(sort(tableFieldId, 1, 'asc')) }>
-                          <input type="radio" name="options" id="option1" /><span className="badge">1</span>
+                        <button className={sortClassAsc} onClick={ e => dispatch(sortVariants(tableFieldId, 1, 'asc')) }>
+                          {columnSortParams && columnSortParams.direction === 'asc' &&
+                            <span className="badge">{columnSortParams.order}</span>
+                          }
                         </button>
-                        <button className="btn btn-default btnSort desc " onClick={ e => dispatch(sort(tableFieldId, 1, 'desc')) }>
-                          <input type="radio" name="options" id="option2" />
+                        <button className={sortClassDesc} onClick={ e => dispatch(sortVariants(tableFieldId, 1, 'desc')) }>
+                          {columnSortParams && columnSortParams.direction === 'desc' &&
+                            <span className="badge">{columnSortParams.order}</span>
+                          }
                         </button>
                       </div>
                   </div>

@@ -50,12 +50,14 @@ export function changeVariantsFilter(variants, fieldId, filterValue) {
   }
 }
 
-export function sort(fieldId, sortOrder, sortDirection) {
+export function sortVariants(fieldId, sortOrder, sortDirection) {
   return dispatch => {
     dispatch(changeVariantsSort(fieldId, sortOrder, sortDirection))
+    /*
     setTimeout(() => {
       dispatch(searchInResults())
     }, 1000)
+    */
   }
 }
 
@@ -65,16 +67,6 @@ export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
     fieldId,
     sortOrder,
     sortDirection
-  }
-}
-
-
-export function sortVariants(variants, columnKey, sortOrder) {
-  return {
-    type: SORT_VARIANTS,
-    variants: variants,
-    columnKey: columnKey,
-    sortOrder: sortOrder
   }
 }
 
