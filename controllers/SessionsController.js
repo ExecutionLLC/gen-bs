@@ -63,15 +63,15 @@ class SessionsController extends ControllerBase {
         } else {
             if (!userEmail) {
                 // User cancelled authentication.
-                response.redirect('/?error=Cancelled');
+                response.redirect('/?error=' + encodeURIComponent('User cancelled authentication.'));
             } else {
                 // User is logged in to Google, try creating session.
                 this.services.logger.info('Creating session for user ' + userEmail);
                 this.services.sessions.startForEmail(userEmail, (error, sessionId) => {
                     if (error) {
-                        response.redirect('/?error=' + error.message);
+                        response.redirect('/?error=' + encodeURIComponent(error.message));
                     } else {
-                        response.redirect('/?sessionId=' + sessionId);
+                        response.redirect('/?sessionId=' + encodeURIComponent(sessionId));
                     }
                 });
             }
