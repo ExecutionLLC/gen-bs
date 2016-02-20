@@ -10,7 +10,8 @@
     "defaults:import": "node ./scripts/import-defaults.js",
     "start": "node index.js",
     "defaults:generate": "node ./defaults/build-initial-data.js",
-    "client": "node test-client/index.js"
+    "client": "node test-client/index.js",
+    "user:add": "node ./scripts/add-user.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,9 @@
     "morgan": "1.6.1",
     "multer": "1.1.0",
     "node-uuid": "1.4.7",
+    "optimist": "0.6.1",
+    "passport": "0.3.2",
+    "passport-google-oauth20": "1.0.0",
     "pg": "4.4.3",
     "redis": "2.4.2",
     "ws": "1.0.1"
