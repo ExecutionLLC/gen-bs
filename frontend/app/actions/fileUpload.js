@@ -46,9 +46,9 @@ export function changeFileForUpload(files) {
   const theFile = files[0]
   return ( dispatch, getState )  => {
     dispatch(clearUploadState())
-    if (theFile.type === 'application/gzip') {
+    if (theFile.type === 'application/gzip'  || theFile.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz') {
       dispatch(changeFileForUploadAfterGzip(files))
-    } else if (theFile.type === 'text/vcard') {
+    } else if (theFile.type === 'text/vcard' || theFile.type === 'text/directory' || file.name.split('.').pop() === 'vcf') {
       console.log('Not gzipped vcf')
       dispatch(requestGzip())
       gzip(theFile).then( file => {
