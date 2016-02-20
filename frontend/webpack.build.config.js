@@ -87,9 +87,7 @@ module.exports = {
 
     new webpack.DefinePlugin({
       API_PORT: JSON.stringify(API_PORT),
-      API_HOST: JSON.stringify(API_HOST),
-      //API_PORT: JSON.stringify(8888),
-      //API_HOST: JSON.stringify('localhost'),
+      API_HOST: JSON.stringify(API_HOST)
     })
 
   ]
