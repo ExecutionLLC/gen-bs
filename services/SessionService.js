@@ -56,7 +56,7 @@ class SessionService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-                this._createSession(null, demoUser.id, (error, session) => {
+                this._createSession(demoUser.id, (error, session) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -95,16 +95,6 @@ class SessionService extends ServiceBase {
         } else {
             // Destroy the local session information.
             delete this.sessions[sessionId];
-
-            if (sessionDescriptor.token) {
-                // Destroy the associated user token.
-                this.services.tokens.logout(sessionDescriptor.token, (error) => {
-                    if (error) {
-                        console.log(error);
-                    }
-                    // continue, just log the error here.
-                });
-            }
 
             // Clear active session operatations.
             this.services.operations.removeAll(sessionId, callback);
