@@ -1,8 +1,8 @@
 'use strict';
 
-const ServiceBase = require('./ServiceBase');
+const async = require('async');
 
-const USER_UNDEFINED = 'User cannot be undefined here.';
+const ServiceBase = require('./ServiceBase');
 
 class UserEntityServiceBase extends ServiceBase {
     constructor(services, models, theModel) {
@@ -12,72 +12,49 @@ class UserEntityServiceBase extends ServiceBase {
     }
 
     add(user, languId, item, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        if (user) {
-            const actualLanguId = languId || user.languId;
-            this.theModel.add(user.id, actualLanguId, item, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        const actualLanguId = languId || user.languId;
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.add(user.id, actualLanguId, item, callback)
+        ], callback);
     }
 
     update(user, item, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        if (user) {
-            this.theModel.update(user.id, item.id, item, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.update(user.id, item.id, item, callback)
+        ], callback);
     }
 
     find(user, itemId, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        if (user) {
-            this.theModel.find(user.id, itemId, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.theModel.find(user.id, itemId, callback)
+        ], callback);
     }
 
     findMany(user, itemIds, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        if (user) {
-            this.theModel.findMany(user.id, itemIds, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.theModel.findMany(user.id, itemIds, callback)
+        ], callback);
     }
 
     findAll(user, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        if (user) {
-            this.theModel.findAll(user.id, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        async.waterfall([
+            (callback) => this._checkUserIsSet(),
+            (callback) => this.theModel.findAll(user.id, callback)
+        ], callback);
     }
 
     remove(user, itemId, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        this.theModel.remove(user, itemId, callback);
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.remove(user, itemId, callback)
+        ], callback);
     }
 }
 
