@@ -143,17 +143,6 @@ class SessionService extends ServiceBase {
             (session, callback) => {
                 // Destroy the local session information.
                 delete this.sessions[sessionId];
-
-                if (session.token) {
-                    // Destroy the associated user token.
-                    this.services.tokens.logout(session.token, (error) => {
-                        if (error) {
-                            this.logger.error('Error logout: ' + error + ', token: ' + session.token);
-                        }
-                        // continue, just log the error here.
-                    });
-                }
-
                 // Clear active session operations.
                 this.services.operations.removeAll(sessionId, callback);
             }

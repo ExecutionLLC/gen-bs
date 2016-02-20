@@ -2,15 +2,7 @@
 
 const ServiceBase = require('./ServiceBase');
 
-const DEMO_USER = {
-    "id": "00000000-0000-0000-0000-000000000000",
-    "name": "Doctor",
-    "last_name": "Demo",
-    "email": "demo@demo.com",
-    "speciality": "doctor",
-    "language": "en",
-    "number_paid_samples": 0
-};
+const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000';
 
 const SYSTEM_USER = {
     "id": "00000000-0000-0000-0000-000000000001",
@@ -25,6 +17,14 @@ const SYSTEM_USER = {
 class UserService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
+
+        this.models.user.find(DEMO_USER_ID, (error, user) => {
+            if (error) {
+                throw new Error('Cannot find demo user: ' + error);
+            } else {
+                this.demoUser = user;
+            }
+        });
     }
 
     /**
@@ -50,8 +50,15 @@ class UserService extends ServiceBase {
         this.models.user.add(user, defaultLanguId, callback);
     }
 
+    /**
+     * Returns true if the specified user id is id of the demo user.
+     * */
+    isDemoUserId(userId) {
+        return userId === DEMO_USER_ID;
+    }
+
     findDemoUser(callback) {
-        callback(null, DEMO_USER);
+        callback(null, this.demoUser);
     }
 
     findSystemUser(callback) {
@@ -63,8 +70,8 @@ class UserService extends ServiceBase {
     }
 
     find(userId, callback) {
-        if (userId === DEMO_USER.id) {
-            callback(null, DEMO_USER);
+        if (userId === DEMO_USER_ID) {
+            callback(null, this.demoUser);
         } else if (userId === SYSTEM_USER.id) {
             callback(null, SYSTEM_USER);
         } else {

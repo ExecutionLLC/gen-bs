@@ -26,8 +26,11 @@ const controllers = new ControllersFacade(logger, services);
 const httpServer = Http.createServer();
 const app = new Express();
 
+logger.info('Server config:');
+logger.info(Config);
+
 if (Config.enableCORS) {
-  console.error('Cross-origin resource sharing enabled!');
+  logger.error('Cross-origin resource sharing enabled!');
   app.use(cors());
 }
 
@@ -61,5 +64,5 @@ httpServer.listen(app.get('port'), function() {
   const host = httpServer.address().address;
   const port = httpServer.address().port;
 
-  console.log('Welcome to Genomix WebServer! The server is started on http://%s:%s', host, port);
+  logger.info('Welcome to Genomix WebServer! The server is started on http://' + host + ':' + port);
 });
