@@ -110,6 +110,29 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    getExistingSourceNames(callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetchExistingSourceNames(callback);
+            },
+            (existingSources, callback) => {
+                callback(null, _.pluck(existingSources, 'source_name'));
+            }
+        ], callback);
+    }
+
+    _fetchExistingSourceNames(callback) {
+        this.db.asCallback((knex, callback) => {
+            knex(this.baseTableName)
+                .distinct('source_name')
+                .select()
+                .whereNot({
+                    source_name: 'sample'
+                })
+                .asCallback(callback);
+        }, callback);
+    }
+
     findMetadataBySourceName(sourceName, callback) {
         async.waterfall([
             (callback) => {
