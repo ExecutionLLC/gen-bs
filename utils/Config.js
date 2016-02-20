@@ -30,11 +30,11 @@ const SETTINGS = {
     logger: {
         app_name: 'genomix',
         console: {
-            level: 'trace'
+            level: ENV.GEN_WS_CONSOLE_LOG_LEVEL || 'trace'
         },
         file: {
-            level: 'trace',
-            path: 'logs/genomix.log'
+            level: ENV.GEN_WS_LOG_LEVEL || 'trace',
+            path: ENV.GEN_WS_LOG_PATH || __dirname + '/../logs/genomix.log'
         }
     },
     defaultLanguId: 'en'
