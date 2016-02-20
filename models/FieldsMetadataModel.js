@@ -63,8 +63,8 @@ class FieldsMetadataModel extends ModelBase {
             .where('name', fieldMetadata.name)
             .andWhere('value_type', fieldMetadata.valueType)
             .andWhere('dimension', fieldMetadata.dimension)
-            .asCallback((error, idArray) => {
-                const existingMetadataId = (idArray && idArray.length != null) ? idArray[0].id : null;
+            .asCallback((error, results) => {
+                const existingMetadataId = (results && results.length) ? results[0].id : null;
                 callback(error, existingMetadataId);
             });
     }

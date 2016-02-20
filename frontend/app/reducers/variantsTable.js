@@ -53,14 +53,30 @@ export default function variantsTable(
       var sortArray = [...state.searchInResultsParams.sort]
       const sortFieldIndex = _.findIndex(state.searchInResultsParams.sort, {field_id: action.fieldId})
 
-      if (action.filterValue !== '') {
-        if (sortFieldIndex !== -1) {
-          sortArray = state.searchInResultsParams.sort.map(e => e.field_id !== action.fieldId ? e : {field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection} )
-        } else {
+      // Disable sort if we click on sorted element.
+      if (sortFieldIndex !== -1 && sortArray[sortFieldIndex].direction === action.sortDirection) {
+        sortArray = [
+          ...sortArray.slice(0, sortFieldIndex),
+          ...sortArray.slice(sortFieldIndex + 1)
+        ]
+        sortArray = [Object.assign({}, sortArray[0], {order: 1})]
+      } else if (sortFieldIndex !== -1 && sortArray[sortFieldIndex].direction !== action.sortDirection) {
+        sortArray = [
+          ...sortArray.slice(0, sortFieldIndex),
+          Object.assign({}, sortArray[sortFieldIndex], {direction: action.sortDirection}),
+          ...sortArray.slice(sortFieldIndex + 1)
+        ]
+      } else {
+        // if click without Ctrl just replace sort with new item
+        if (action.sortOrder === 1) {
+          sortArray = [{field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection }]
+        } else if (action.sortOrder === 2) { // Ctrl click
+          // Delete previous element with sortOrder: 2
+          if (sortArray.length === 2) {
+            sortArray.pop()
+          }
           sortArray.push({field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection })
         }
-      } else {
-        sortArray.splice(fieldIndex,1)
       }
 
       return Object.assign({}, state, {

@@ -50,12 +50,15 @@ export function changeVariantsFilter(variants, fieldId, filterValue) {
   }
 }
 
-export function sort(fieldId, sortOrder, sortDirection) {
-  return dispatch => {
-    dispatch(changeVariantsSort(fieldId, sortOrder, sortDirection))
-    setTimeout(() => {
-      dispatch(searchInResults())
-    }, 1000)
+export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
+  console.log('ctrlKeyPressed', ctrlKeyPressed )
+  return (dispatch, getState) => {
+    dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection))
+    if (getState().variantsTable.searchInResultsParams.sort.length > 0) {
+      setTimeout(() => {
+          dispatch(searchInResults())
+      }, 1000)
+    }
   }
 }
 
@@ -65,16 +68,6 @@ export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
     fieldId,
     sortOrder,
     sortDirection
-  }
-}
-
-
-export function sortVariants(variants, columnKey, sortOrder) {
-  return {
-    type: SORT_VARIANTS,
-    variants: variants,
-    columnKey: columnKey,
-    sortOrder: sortOrder
   }
 }
 

@@ -1,11 +1,12 @@
 import { initSearchInResultsParams } from './variantsTable'
-import { changeFileUploadProgress } from './fileUpload'
+import { changeFileUploadProgress, fileUploadError } from './fileUpload'
 /*
  * action types
  */
 export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
+export const WS_RECEIVE_AS_UPLOAD_ERROR = 'WS_RECEIVE_AS_UPLOAD_ERROR';
 export const WS_RECEIVE_CLOSE= 'WS_RECEIVE_MESSAGE';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
@@ -61,6 +62,17 @@ function receiveError(err) {
   };
 }
 
+function asErrorRouter(wsData) {
+  return (dispatch, getState) => {
+
+    if (getState().fileUpload.operationId === wsData.operationId) {
+      dispatch(fileUploadError(wsData.result.error.message))
+    } else {
+      dispatch(asError(wsData.result.error))
+    }
+  }
+}
+
 function asError(err) {
   return {
     type: WS_RECEIVE_AS_ERROR,
@@ -88,7 +100,7 @@ function receiveMessage(msg) {
       } else if(wsData.result.progress) {
         dispatch(progressMessageRouter(wsData));
       } else if(wsData.result.error) {
-        dispatch(asError(wsData.result.error));
+        dispatch(asErrorRouter(wsData));
       } else {
         dispatch(otherMessage(wsData));
       }

@@ -48,7 +48,7 @@ class KnexWrapper {
             (cb) => {
                 // 1. Create transaction
                 // 2. Open transaction
-                let trx = new KnexTransaction(this.knex, this.logger);
+                const trx = new KnexTransaction(this.knex, this.logger);
                 trx.openTransaction((error, knex) => {
                     cb(error, {
                         trx,

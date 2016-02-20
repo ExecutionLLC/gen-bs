@@ -5,6 +5,8 @@ const ENV = process.env;
 const SETTINGS = {
     port: ENV.GEN_WS_PORT || 5000,
     enableCORS: ENV.GEN_WS_CORS_ENABLE || true,
+    // If true, redis host will be ignored and localhost will always be used.
+    // This is convenient when port forwarding to Redis server is used.
     forceOverrideRedisToLocalhost: ENV.GEN_WS_FORCE_OVERRIDE_REDIS_TO_LOCALHOST || false,
     upload: {
         path: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/', // Temporary path for uploaded samples.
@@ -56,4 +58,11 @@ const SETTINGS = {
     defaultLanguId: 'en'
 };
 
+// Add computational fields
+SETTINGS.baseUrl = ENV.GEN_WS_BASE_URL || 'http://localhost:' + SETTINGS.port;
+SETTINGS.google = {
+    // Google Application parameters
+    clientId: ENV.GEN_WS_GOOGLE_CLIENT_ID || '1051611087780-4eo3v6k4oboivgha2l8jbi9jd6b0bfe9.apps.googleusercontent.com',
+    clientSecret: ENV.GEN_WS_GOOGLE_CLIENT_SECRET || '7U3OeIgx-wO86CAGT7xYOGIz'
+};
 module.exports = SETTINGS;
