@@ -40,7 +40,9 @@ class FieldsMetadataService extends ServiceBase {
     addSourceReferences(sourcesList, callback) {
         async.map(sourcesList, (source, callback) => {
             this.addSourceReference(source, callback);
-        }, callback);
+        }, (error) => {
+            callback(error, this.availableSources);
+        });
     }
 
     addSourceReference(source, callback) {
@@ -54,9 +56,7 @@ class FieldsMetadataService extends ServiceBase {
                     callback(null, source);
                 }
             }
-        ], (error) => {
-            callback(error, this.availableSources);
-        });
+        ], callback);
     }
 
     findSourceReference(sourceName, callback) {
