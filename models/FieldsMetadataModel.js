@@ -111,14 +111,22 @@ class FieldsMetadataModel extends ModelBase {
     }
 
     getExistingSourceNames(callback) {
-        async.waterfall([
-            (callback) => {
-                this._fetchExistingSourceNames(callback);
-            },
-            (existingSources, callback) => {
-                callback(null, _.pluck(existingSources, 'sourceName'));
-            }
-        ], callback);
+        this.db.asCallback((knex, callback) => {
+            knex(this.baseTableName)
+                .distinct('source_name')
+                .select()
+                .whereNot({
+                    source_name: 'sample'
+                })
+                .asCallback((error, sources) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        const sourceNames = _.pluck(sources, 'sourceName');
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(sourceNames));
+                    }
+                });
+        }, callback);
     }
 
     findMetadataBySourceName(sourceName, callback) {
@@ -294,24 +302,6 @@ class FieldsMetadataModel extends ModelBase {
                         callback(error);
                     } else {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
-                    }
-                });
-        }, callback);
-    }
-
-    _fetchExistingSourceNames(callback) {
-        this.db.asCallback((knex, callback) => {
-            knex(this.baseTableName)
-                .distinct('source_name')
-                .select()
-                .whereNot({
-                    source_name: 'sample'
-                })
-                .asCallback((error, sourceNames) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(sourceNames));
                     }
                 });
         }, callback);
