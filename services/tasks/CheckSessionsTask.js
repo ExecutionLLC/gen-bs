@@ -43,4 +43,4 @@ class CheckSessionsTask extends SchedulerTaskBase {
     }
 }
 
-module.export
+module.exports = CheckSessionsTask;

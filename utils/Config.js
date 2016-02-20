@@ -65,4 +65,5 @@ SETTINGS.google = {
     clientId: ENV.GEN_WS_GOOGLE_CLIENT_ID || '1051611087780-4eo3v6k4oboivgha2l8jbi9jd6b0bfe9.apps.googleusercontent.com',
     clientSecret: ENV.GEN_WS_GOOGLE_CLIENT_SECRET || '7U3OeIgx-wO86CAGT7xYOGIz'
 };
+
 module.exports = SETTINGS;
