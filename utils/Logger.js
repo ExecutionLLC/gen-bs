@@ -2,9 +2,21 @@
 
 const _ = require('lodash');
 const bunyan = require('bunyan');
-const path   = require('path');
 
 const LEVELS = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
+
+class ConsoleStream {
+    write(recordString) {
+        const record = JSON.parse(recordString);
+        const outputFunc = record.level > 30 ? console.error : console.log;
+        outputFunc(
+            '[%s] %s: %s',
+            record.time,
+            bunyan.nameFromLevel[record.level],
+            record.msg
+        );
+    }
+}
 
 class Logger {
     constructor(params) {
@@ -18,7 +30,7 @@ class Logger {
 
         if (params.console) {
             streams.push({
-                stream: process.stdout,
+                stream: new ConsoleStream(),
                 level:  params.console.level || "trace"
             });
         }
