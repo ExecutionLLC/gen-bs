@@ -64,5 +64,5 @@ httpServer.listen(app.get('port'), function() {
   const host = httpServer.address().address;
   const port = httpServer.address().port;
 
-  logger.info('Welcome to Genomix WebServer! The server is started on http://%s:%s', host, port);
+  logger.info('Welcome to Genomix WebServer! The server is started on http://' + host + ':' + port);
 });
