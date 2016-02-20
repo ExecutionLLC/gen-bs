@@ -122,8 +122,8 @@ class FieldsMetadataModel extends ModelBase {
                     if (error) {
                         callback(error);
                     } else {
-                        const sourceNames = _.pluck(sources, 'sourceName');
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(sourceNames));
+                        const sourceNames = _.pluck(ChangeCaseUtil.convertKeysToCamelCase(sources), 'sourceName');
+                        callback(null, sourceNames);
                     }
                 });
         }, callback);
