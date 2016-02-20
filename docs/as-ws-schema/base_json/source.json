@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "description of the source structure",
+  "type": "object",
+  "properties": {
+    "sourceName": {
+      "type": "string",
+      "description": "The name of the source"
+    },
+    "reference": {
+      "type": "string",
+      "description": "The name of the reference for source specified"
+    }
+  }
+}

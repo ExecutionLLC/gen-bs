@@ -15,8 +15,8 @@
         "result": {
             "type": "array",
             "items": {
-                "type": "string",
-                "description": "filename of the source"
+                "$ref": "base_json/source.json#",
+                "description": "Source and its reference object representation"
             }
         }
     }
