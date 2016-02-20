@@ -41,16 +41,18 @@ class FieldsMetadataService extends ServiceBase {
 
     addSourceReference(source, callback) {
         async.waterfall([
-            (callback) => this.findSourceReference(source.name, callback),
+            (callback) => this.findSourceReference(source.sourceName, callback),
             (findedSource, callback) => {
                 if (findedSource) {
-                    callback(new Error('Cannot add source reference. Source ' + source.name + 'already exists.'));
+                    callback(null);
                 } else {
                     this.availableSources.push(source);
                     callback(null, source);
                 }
             }
-        ], callback);
+        ], (error) => {
+            callback(error, this.availableSources);
+        });
     }
 
     findSourceReference(sourceName, callback) {
