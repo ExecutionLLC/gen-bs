@@ -3,7 +3,7 @@
   "title": "description of the source structure",
   "type": "object",
   "properties": {
-    "sourceName": {
+    "source_name": {
       "type": "string",
       "description": "The name of the source"
     },
