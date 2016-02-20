@@ -285,7 +285,8 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _rpcReply(rpcError, rpcMessage) {
-        console.log('RPC REPLY, error: ', JSON.stringify(rpcError, null, 2), ', message: ', JSON.stringify(rpcMessage, null, 2));
+        this.logger.info('RPC REPLY, error: ' + JSON.stringify(rpcError, null, 2) + ', message: ' + JSON.stringify(rpcMessage, null, 2));
+        //console.log('RPC REPLY, error: ', JSON.stringify(rpcError, null, 2), ', message: ', JSON.stringify(rpcMessage, null, 2));
         this.services.applicationServerReply.onRpcReplyReceived(rpcError, rpcMessage, (error) => {
             if (error) {
                 console.error('Error processing RPC reply', error);
