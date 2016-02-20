@@ -47,6 +47,20 @@ class UserService extends ServiceBase {
         return userId === DEMO_USER_ID;
     }
 
+    /**
+     * If the specified user id is of demo user, calls back with error,
+     * otherwise callbacks with null.
+     * @param userId User id to check.
+     * @param callback (error || null)
+     * */
+    ensureUserIsNotDemo(userId, callback) {
+        if (this.isDemoUserId(userId)) {
+            callback(new Error('The action is not allowed for demo user.'));
+        } else {
+            callback(null);
+        }
+    }
+
     findDemoUser(callback) {
         callback(null, this.demoUser);
     }
