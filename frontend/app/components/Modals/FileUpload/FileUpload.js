@@ -28,7 +28,7 @@ export default class FileUpload extends Component {
 
               { error &&
                 <div>
-                  <h2 class="text-center" style={{color: 'red'}} >{error}</h2>
+                  <h2 className="text-center" style={{color: 'red'}} >{error}</h2>
                 </div>
               }
            

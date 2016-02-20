@@ -46,9 +46,9 @@ export function changeFileForUpload(files) {
   const theFile = files[0]
   return ( dispatch, getState )  => {
     dispatch(clearUploadState())
-    if (theFile.type === 'application/gzip'  || theFile.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz') {
+    if (theFile.type === 'application/gzip'  || theFile.type === 'application/x-gzip' || theFile.name.split('.').pop() === 'gz') {
       dispatch(changeFileForUploadAfterGzip(files))
-    } else if (theFile.type === 'text/vcard' || theFile.type === 'text/directory' || file.name.split('.').pop() === 'vcf') {
+    } else if (theFile.type === 'text/vcard' || theFile.type === 'text/directory' || theFile.name.split('.').pop() === 'vcf') {
       console.log('Not gzipped vcf')
       dispatch(requestGzip())
       gzip(theFile).then( file => {
@@ -57,7 +57,7 @@ export function changeFileForUpload(files) {
       })
     } else {
       console.error('Wrong file type. Type must be vcard or gzip')
-      dispatch(fileUploadError('Wrong file type. Type must be vcard or gzip'))
+      dispatch(fileUploadError('Unsupported file type: must be Variant Calling Format (VCF) 4.1 or higher or VCF compressed with gzip'))
     }
   }
 }
