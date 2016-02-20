@@ -1,5 +1,14 @@
 [
   {
+    "id": "00000000-0000-0000-0000-000000000000",
+    "name": "Demo",
+    "last_name": "Demo",
+    "email": "demo@demo.com",
+    "speciality": "doctor",
+    "language": "en",
+    "number_paid_samples": 0
+  },
+  {
     "id": "373116ac-a0e8-4afd-aa48-3c0bf7614951",
     "name": "Valarie",
     "last_name": "Vaughn",
