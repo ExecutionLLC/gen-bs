@@ -7,7 +7,7 @@ const SchedulerTaskBase = require('./SchedulerTaskBase');
 const FieldsMetadataService = require('../FieldsMetadataService.js');
 
 const TASK_NAME = 'importSourceMetadata';
-const WS_WAIT_TIMEOUT = 5000;
+const AS_DISCONNECTED_TIMEOUT = 5000;
 
 class ImportSourceMetadataTask extends SchedulerTaskBase {
     constructor(services, models) {
@@ -50,7 +50,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
     calculateTimeout() {
         if (this.waitForConnection) {
             this.logger.warn('Waiting web socket connection for 5 seconds...');
-            return WS_WAIT_TIMEOUT; // waiting for reconnection
+            return AS_DISCONNECTED_TIMEOUT; // waiting for reconnection
         } else {
             return super.calculateTimeout();
         }
@@ -59,10 +59,9 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
     _getMissingSourceNames(availableSourceNames, callback) {
         async.waterfall([
             (callback) => {
-                this.models.fields.findSourcesMetadata(callback);
+                this.models.fields.getExistingSourceNames(callback);
             },
-            (sourcesMetadata, callback) => {
-                const existingSourceNames = _.uniq(_.pluck(sourcesMetadata, 'sourceName'));
+            (existingSourceNames, callback) => {
                 const missingSourceNames = _.xor(availableSourceNames, existingSourceNames);
                 callback(null, missingSourceNames);
             }

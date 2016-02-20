@@ -29,6 +29,10 @@ class FieldsMetadataService extends ServiceBase {
         this.models.fields.findSourcesMetadata(callback);
     }
 
+    getExistingSourceNames(callback) {
+        this.models.fields.getExistingSourceNames(callback);
+    }
+
     findMany(fieldIds, callback) {
         this.models.fields.findMany(fieldIds, callback);
     }

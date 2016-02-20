@@ -13,6 +13,9 @@ class KnexTransaction {
     openTransaction(callback) {
         this.knex.transaction((trx) => {
             this.logger.info('OPENING TRANSACTION ' + this.id);
+            if (this.transaction) {
+                throw new Error('Transaction is already opened. No subtransaction support is implemented in wrapper.');
+            }
             this.transaction = trx;
             callback(null, trx);
         });
@@ -23,7 +26,11 @@ class KnexTransaction {
             this.logger.warn('ROLLING BACK TRANSACTION ' + this.id +': ' + error);
             this.transaction
                 .rollback()
-                .asCallback(error => {
+                .asCallback((rollbackError) => {
+                    this.transaction = null;
+                    if (rollbackError) {
+                        this.logger.error('ROLLBACK ERROR: ' + rollbackError);
+                    }
                     callback(error);
                 });
         } else {
@@ -31,6 +38,7 @@ class KnexTransaction {
             this.transaction
                 .commit()
                 .asCallback((error) => {
+                    this.transaction = null;
                     callback(error, data);
                 });
         }

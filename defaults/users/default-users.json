@@ -20,5 +20,49 @@
     "number_paid_samples": 11,
     "login": "maria",
     "password": "password"
+  },
+  {
+    "id": "9ca148e5-548a-4a78-8e92-ca7563f78775",
+    "name": "Vasily",
+    "last_name": "Loginov",
+    "email": "loginov.vasily@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "vasily",
+    "password": "zxcasdqwe"
+  },
+  {
+    "id": "5f639c9a-b080-4cf6-a185-28db95d1b489",
+    "name": "Elena",
+    "last_name": "Baranova",
+    "email": "e.elfairy@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "elena",
+    "password": "zxcasdqwe"
+  },
+  {
+    "id": "3ba433bd-72c8-454e-9822-174a03aa0ba3",
+    "name": "Igor",
+    "last_name": "Kalgin",
+    "email": "ivkalgin@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "igor",
+    "password": "zxcasdqwe"
+  },
+  {
+    "id": "9e35c2df-489f-44fa-a0da-3fe3cce41906",
+    "name": "Maxim",
+    "last_name": "Borshev",
+    "email": "mtunetworks@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "maxim",
+    "password": "zxcasdqwe"
   }
 ]

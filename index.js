@@ -43,8 +43,9 @@ app.use(morgan('combined'));
 
 app.use('/', Express.static('public'));
 
-const mainRouter = controllers.apiController.createRouter(controllers);
-app.use('/api', mainRouter);
+const mainRouterRelativePath = '/api';
+const mainRouter = controllers.apiController.createRouter(controllers, mainRouterRelativePath);
+app.use(mainRouterRelativePath, mainRouter);
 
 // Initialize web socket server
 const webSocketServer = new WebSocketServer({

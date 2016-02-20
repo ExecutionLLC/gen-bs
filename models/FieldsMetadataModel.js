@@ -63,8 +63,8 @@ class FieldsMetadataModel extends ModelBase {
             .where('name', fieldMetadata.name)
             .andWhere('value_type', fieldMetadata.valueType)
             .andWhere('dimension', fieldMetadata.dimension)
-            .asCallback((error, idArray) => {
-                const existingMetadataId = (idArray && idArray.length != null) ? idArray[0].id : null;
+            .asCallback((error, results) => {
+                const existingMetadataId = (results && results.length) ? results[0].id : null;
                 callback(error, existingMetadataId);
             });
     }
@@ -108,6 +108,29 @@ class FieldsMetadataModel extends ModelBase {
                 this._mapFieldsMetadata(fieldsMetadata, callback);
             }
         ], callback);
+    }
+
+    getExistingSourceNames(callback) {
+        async.waterfall([
+            (callback) => {
+                this._fetchExistingSourceNames(callback);
+            },
+            (existingSources, callback) => {
+                callback(null, _.pluck(existingSources, 'source_name'));
+            }
+        ], callback);
+    }
+
+    _fetchExistingSourceNames(callback) {
+        this.db.asCallback((knex, callback) => {
+            knex(this.baseTableName)
+                .distinct('source_name')
+                .select()
+                .whereNot({
+                    source_name: 'sample'
+                })
+                .asCallback(callback);
+        }, callback);
     }
 
     findMetadataBySourceName(sourceName, callback) {
