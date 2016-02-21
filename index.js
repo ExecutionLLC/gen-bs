@@ -27,7 +27,7 @@ const httpServer = Http.createServer();
 const app = new Express();
 
 logger.info('Server config:');
-logger.info(Config);
+logger.info(JSON.stringify(Config, null, 2));
 
 if (Config.enableCORS) {
   logger.error('Cross-origin resource sharing enabled!');
@@ -64,5 +64,5 @@ httpServer.listen(app.get('port'), function() {
   const host = httpServer.address().address;
   const port = httpServer.address().port;
 
-  logger.info('Welcome to Genomix WebServer! The server is started on http://%s:%s', host, port);
+  logger.info('Welcome to Genomix WebServer! The server is started on http://' + host + ':' + port);
 });
