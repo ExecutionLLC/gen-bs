@@ -25,22 +25,23 @@ class SavedFileModel extends SecureModelBase {
 
     // Collets all saved files for user
     findAll(userId, callback) {
-        this._fetchUserFiles(userId, (error, filesData) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                this._fetchUserFiles(userId, callback);
+            },
+            (filesData, callback) => {
                 async.map(filesData, (fileData, callback) => {
                     callback(null, this._mapColumns(fileData));
                 }, callback);
             }
-        });
+        ], callback);
     }
 
     findMany(userId, fileIds, callback) {
         async.waterfall([
             (callback) => { this._fetchSavedFiles(fileIds, callback); },
             (filesData, callback) => {
-                if (filesData.length == fileIds.length) {
+                if ((filesData.length == fileIds.length) && (_.every(filesData, 'isDeleted', false))) {
                     callback(null, filesData);
                 } else {
                     callback('Some saved files not found: ' + fileIds + ', userId: ' + userId);
@@ -124,14 +125,15 @@ class SavedFileModel extends SecureModelBase {
     }
 
     _fetch(userId, fileId, callback) {
-        this._fetchSavedFile(fileId, (error, data) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                this._fetchSavedFile(fileId, callback);
+            },
+            (fileData, callback) => {
                 const secureInfo = {userId: userId};
-                this._secureCheck(data, secureInfo, callback);
+                this._secureCheck(fileData, secureInfo, callback);
             }
-        });
+        ], callback);
     }
 
     _fetchSavedFile(fileId, callback) {

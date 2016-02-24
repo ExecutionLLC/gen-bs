@@ -25,23 +25,25 @@ class CommentsModel extends SecureModelBase {
 
     // Собирает все comments для текущего пользователя
     findAll(userId, callback) {
-        this._fetchUserComments(userId, (error, commentsData) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                this._fetchUserComments(userId, callback);
+            },
+            (commentsData, callback) => {
                 async.map(commentsData, (commentData, callback) => {
                     callback(null, this._mapColumns(commentData));
                 }, callback);
             }
-        });
+        ], callback);
     }
 
     findMany(userId, commentIds, callback) {
         async.waterfall([
             (callback) => { this._fetchComments(commentIds, callback); },
             (commentsData, callback) => {
-                if (commentsData.length == commentIds.length) {
-                    callback(null, commentsData);
+                if ((commentsData.length == commentIds.length) &&
+                    (_.every(commentsData, 'isDeleted', false))) {
+                        callback(null, commentsData);
                 } else {
                     callback('Some comments not found: ' + commentIds + ', userId: ' + userId);
                 }
@@ -124,14 +126,15 @@ class CommentsModel extends SecureModelBase {
     }
 
     _fetch(userId, commentId, callback) {
-        this._fetchComment(commentId, (error, data) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                this._fetchComment(commentId, callback);
+            },
+            (commentData, callback) => {
                 const secureInfo = {userId: userId};
-                this._secureCheck(data, secureInfo, callback);
+                this._secureCheck(commentData, secureInfo, callback);
             }
-        });
+        ], callback);
     }
 
     _fetchComment(commentId, callback) {

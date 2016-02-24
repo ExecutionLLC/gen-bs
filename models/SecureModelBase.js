@@ -5,6 +5,8 @@ const async = require('async');
 
 const RemovableModelBase = require('./RemovableModelBase');
 
+const ITEM_NOT_FOUND = 'Item not found.';
+
 class SecureModelBase extends RemovableModelBase {
     /**
      * @param models Reference to the models facade
@@ -49,7 +51,11 @@ class SecureModelBase extends RemovableModelBase {
                 this._fetch(userId, id, callback);
             },
             (itemData, callback) => {
-                this._update(userId, itemData, item, callback);
+                if (itemData.isDeleted) {
+                    callback(new Error(ITEM_NOT_FOUND));
+                } else {
+                    this._update(userId, itemData, item, callback);
+                }
             },
             (itemId, callback) => {
                 this.find(userId, itemId, callback);
@@ -58,45 +64,52 @@ class SecureModelBase extends RemovableModelBase {
     }
 
     find(userId, id, callback) {
-        this._fetch(userId, id, (error, data) => {
-            if (error) {
-                callback(error);
-            } else {
-                callback(null, this._mapColumns(data));
+        async.waterfall([
+            (callback) => {
+                this._fetch(userId, id, callback);
+            },
+            (itemData, callback) => {
+                if (itemData.isDeleted) {
+                    callback(new Error(ITEM_NOT_FOUND))
+                } else {
+                    callback(null, this._mapColumns(itemData));
+                }
             }
-        });
+        ], callback);
     }
 
     // Set is_deleted = true
     remove(userId, id, callback) {
-        this._fetch(userId, id, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                super.remove(id, callback);
+        async.waterfall([
+            (callback) => {
+                this._fetch(userId, id, callback);
+            },
+            (itemData, callback) => {
+                super.remove(itemData.id, callback);
             }
-        });
+        ], callback);
     }
 
     // Default data, which is available for everybody, has creator set to null
-    _secureCheck(data, secureInfo, callback) {
-        if (_.isNull(data.creator)
-            || secureInfo.userId === data.creator) {
-            callback(null, data);
+    _secureCheck(itemData, secureInfo, callback) {
+        if (_.isNull(itemData.creator)
+            || secureInfo.userId === itemData.creator) {
+                callback(null, itemData);
         } else {
             callback(new Error('Entity access denied.'));
         }
     }
 
     _fetch(userId, id, callback) {
-        super._fetch(id, (error, data) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                super._fetch(id, callback);
+            },
+            (itemData, callback) => {
                 const secureInfo = {userId: userId};
-                this._secureCheck(data, secureInfo, callback);
+                this._secureCheck(itemData, secureInfo, callback);
             }
-        });
+        ], callback);
     }
 }
 

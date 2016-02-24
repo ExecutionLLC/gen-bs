@@ -133,6 +133,45 @@ describe('Views', () => {
             });
         });
 
+        it('should fail to get and update deleted user view', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                assert.ifError(error);
+                assert.equal(response.status, HttpStatus.OK);
+                const views = response.body;
+                assert.ok(views);
+                const view = views[0];
+                view.name = 'Test View ' + Uuid.v4();
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    assert.ifError(error);
+                    assert.equal(response.status, HttpStatus.OK);
+                    const addedView = response.body;
+                    assert.ok(addedView);
+
+                    // Delete created view
+                    viewsClient.remove(sessionId, addedView.id, (error, response) => {
+                        assert.ifError(error);
+                        assert.equal(response.status, HttpStatus.OK);
+
+                        viewsClient.get(sessionId, addedView.id, (error, response) => {
+                            assert.ifError(error);
+                            assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+
+                            // Trying to update created view.
+                            const viewToUpdate = _.cloneDeep(addedView);
+                            viewToUpdate.name = 'Test View ' + Uuid.v4();
+
+                            viewsClient.update(sessionId, viewToUpdate, (error, response) => {
+                                assert.ifError(error);
+                                assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
         it('should fail to get list in incorrect session', (done) => {
             viewsClient.getAll(UnknownSessionId, (error, response) => {
                 assert.ifError(error);

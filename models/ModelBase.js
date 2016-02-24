@@ -49,11 +49,11 @@ class ModelBase {
             knex.select()
             .from(this.baseTableName)
             .where('id', id)
-            .asCallback((error, data) => {
+            .asCallback((error, itemData) => {
                 if (error) {
                     callback(error);
                 } else {
-                    callback(null, (data.length > 0));
+                    callback(null, (itemData.length > 0));
                 }
             });
         }, callback);
@@ -64,8 +64,8 @@ class ModelBase {
             (callback) => {
                 this._fetch(id, callback);
             },
-            (data, callback) => {
-                callback(null, this._mapColumns(data));
+            (itemData, callback) => {
+                callback(null, this._mapColumns(itemData));
             }
         ], callback);
     }
@@ -88,11 +88,11 @@ class ModelBase {
             knex.select()
                 .from(this.baseTableName)
                 .where('id', id)
-                .asCallback((error, data) => {
-                    if (error || !data.length) {
+                .asCallback((error, itemData) => {
+                    if (error || !itemData.length) {
                         callback(error || new Error('Item not found: ' + id));
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemData[0]));
                     }
                 });
         }, callback);

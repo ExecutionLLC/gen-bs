@@ -2,7 +2,7 @@
 
 const KnexWrapper = require('../utils/KnexWrapper');
 
-const LanguModel = require('./LanguModel');
+const LanguageModel = require('./LanguageModel');
 const UserModel = require('./UserModel');
 const ViewsModel = require('./ViewsModel');
 const KeywordsModel = require('./KeywordsModel');
@@ -18,7 +18,7 @@ class ModelsFacade {
         // KnexWrapper instance should only be created once for ModelsFacade
         this.db = new KnexWrapper(config, logger);
 
-        this.langu = new LanguModel(this);
+        this.langu = new LanguageModel(this);
         this.user = new UserModel(this);
         this.keywords = new KeywordsModel(this);
         this.views = new ViewsModel(this);

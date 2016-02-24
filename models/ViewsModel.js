@@ -6,6 +6,8 @@ const async = require('async');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const SecureModelBase = require('./SecureModelBase');
 
+const ITEM_NOT_FOUND = 'Item not found.';
+
 const mappedColumns = [
     'id',
     'originalViewId',
@@ -27,13 +29,18 @@ class ViewsModel extends SecureModelBase {
         async.waterfall([
             (callback) => { this._fetch(userId, viewId, callback); },
             (view, callback) => {
-                this._fetchViewItems(viewId, (error, viewItems) => {
-                    if (error) {
-                        callback(error);
-                    } else {
+                async.waterfall([
+                    (callback) => {
+                        if (view.isDeleted) {
+                            callback(new Error(ITEM_NOT_FOUND));
+                        } else {
+                            this._fetchViewItems(view.id, callback);
+                        }
+                    },
+                    (viewItems, callback) => {
                         this._mapView(view, viewItems, callback);
                     }
-                });
+                ], callback);
             }
         ], callback);
     }
@@ -43,11 +50,12 @@ class ViewsModel extends SecureModelBase {
         async.waterfall([
             (callback) => { this._fetchUserViews(userId, callback); },
             (viewsData, callback) => {
-                const viewIds = _.pluck(viewsData, 'id');
-                this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
+                async.waterfall([
+                    (callback) => {
+                        const viewIds = _.pluck(viewsData, 'id');
+                        this._fetchViewItemsByIds(viewIds, callback);
+                    },
+                    (viewItemsData, callback) => {
                         let viewItems = _.groupBy(viewItemsData, (viewItem) => {
                             return viewItem.viewId;
                         });
@@ -55,7 +63,7 @@ class ViewsModel extends SecureModelBase {
                             this._mapView(viewData, viewItems[viewData.id], callback);
                         }, callback);
                     }
-                });
+                ], callback);
             }
         ], callback);
     }
@@ -64,7 +72,7 @@ class ViewsModel extends SecureModelBase {
         async.waterfall([
             (callback) => { this._fetchViews(viewIds, callback); },
             (views, callback) => {
-                if (views.length == viewIds.length) {
+                if ((views.length == viewIds.length) && (_.every(views, 'isDeleted', false))) {
                     callback(null, views);
                 } else {
                     callback('Some views not found: ' + viewIds + ', userId: ' + userId);
@@ -78,10 +86,11 @@ class ViewsModel extends SecureModelBase {
                 }
             },
             (views, callback) => {
-                this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
+                async.waterfall([
+                    (callback) => {
+                        this._fetchViewItemsByIds(viewIds, callback);
+                    },
+                    (viewItemsData, callback) => {
                         let viewItems = _.groupBy(viewItemsData, (viewItem) => {
                             return viewItem.viewId;
                         });
@@ -89,7 +98,7 @@ class ViewsModel extends SecureModelBase {
                             this._mapView(viewData, viewItems[view.id], callback);
                         }, callback);
                     }
-                });
+                ], callback);
             }
         ], callback);
     }
@@ -132,24 +141,25 @@ class ViewsModel extends SecureModelBase {
     }
 
     _addViewItem(viewId, viewItem, trx, callback) {
-        const dataToInsert = {
-            id: this._generateId(),
-            viewId: viewId,
-            fieldId: viewItem.fieldId,
-            order: viewItem.order,
-            sortOrder: viewItem.sortOrder,
-            sortDirection: viewItem.sortDirection,
-            filterControlEnable: viewItem.filterControlEnable || false
-        };
-        this._unsafeInsert('view_item', dataToInsert, trx, (error, viewItemId) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = {
+                    id: this._generateId(),
+                    viewId: viewId,
+                    fieldId: viewItem.fieldId,
+                    order: viewItem.order,
+                    sortOrder: viewItem.sortOrder,
+                    sortDirection: viewItem.sortDirection,
+                    filterControlEnable: viewItem.filterControlEnable || false
+                };
+                this._unsafeInsert('view_item', dataToInsert, trx, callback);
+            },
+            (viewItemId, callback) => {
                 this._addKeywords(viewItemId, viewItem.keywords, trx, (error) => {
                     callback(error, viewItemId);
                 });
             }
-        });
+        ], callback);
     }
 
     _addKeywords(viewItemId, keywords, trx, callback) {
@@ -200,14 +210,15 @@ class ViewsModel extends SecureModelBase {
     }
 
     _fetch(userId, viewId, callback) {
-        this._fetchView(viewId, (error, data) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                this._fetchView(viewId, callback);
+            },
+            (view, callback) => {
                 const secureInfo = {userId: userId};
-                this._secureCheck(data, secureInfo, callback);
+                this._secureCheck(view, secureInfo, callback);
             }
-        });
+        ], callback);
     }
 
     _fetchView(viewId, callback) {
@@ -262,45 +273,45 @@ class ViewsModel extends SecureModelBase {
     }
 
     _mapView(view, viewItems, callback) {
-        this._mapViewItems(viewItems, (error, viewItemsData) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                this._mapViewItems(viewItems, callback);
+            },
+            (viewItemsData, callback) => {
                 view.viewListItems = viewItemsData;
                 callback(null, this._mapColumns(view));
             }
-        });
+        ], callback);
     }
 
     _mapViewItems(viewItems, callback) {
         async.map(viewItems, (viewItem, callback) => {
-            this._fetchViewItemKeywords(viewItem.id, (error, keywords) => {
-                if (error) {
-                    callback(error);
-                } else {
-                    this._mapKeywords(keywords, (error, result) => {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            viewItem.keywords = result;
-                            callback(null, viewItem);
-                        }
-                    });
+            async.waterfall([
+                (callback) => {
+                    this._fetchViewItemKeywords(viewItem.id, callback);
+                },
+                (keywords, callback) => {
+                    this._mapKeywords(keywords, callback);
+                },
+                (result, callback) => {
+                    viewItem.keywords = result;
+                    callback(null, viewItem);
                 }
-            });
+            ], callback);
         }, callback);
     }
 
     _mapKeywords(keywords, callback) {
         async.map(keywords, (keyword, callback) => {
-            this.models.keywords.fetchKeywordSynonyms(keyword.id, (error, synonyms) => {
-                if (error) {
-                    callback(error);
-                } else {
+            async.waterfall([
+                (callback) => {
+                    this.models.keywords.fetchKeywordSynonyms(keyword.id, callback);
+                },
+                (synonyms, callback) => {
                     keyword.synonyms = synonyms;
                     callback(null, keyword);
                 }
-            });
+            ], callback);
         }, callback);
     }
 

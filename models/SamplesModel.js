@@ -6,6 +6,8 @@ const async = require('async');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const SecureModelBase = require('./SecureModelBase');
 
+const ITEM_NOT_FOUND = 'Item not found.';
+
 const mappedColumns = [
     'id',
     'fileName',
@@ -25,7 +27,11 @@ class SamplesModel extends SecureModelBase {
         async.waterfall([
             (callback) => { this._fetch(userId, sampleId, callback); },
             (sample, callback) => {
-                this._mapFileSampleValues(sample, callback);
+                if (sample.isDeleted) {
+                    callback(new Error(ITEM_NOT_FOUND));
+                } else {
+                    this._mapFileSampleValues(sample, callback);
+                }
             }
         ], callback);
     }
@@ -49,7 +55,7 @@ class SamplesModel extends SecureModelBase {
                 this._fetchSamplesByIds(sampleIds, callback);
             },
             (samples, callback) => {
-                if (samples.length === sampleIds.length) {
+                if ((samples.length === sampleIds.length) && (_.every(samples, 'isDeleted', false))) {
                     callback(null, samples);
                 } else {
                     callback('Some samples not found: ' + sampleIds + ', userId: ' + userId);
@@ -110,15 +116,20 @@ class SamplesModel extends SecureModelBase {
     }
 
     makeAnalyzed(userId, sampleId, callback) {
-        this._fetch(userId, sampleId, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.db.transactionally((trx, callback) => {
-                    this._setAnalyzed(sampleId, true, trx, callback);
-                }, callback);
+        async.waterfall([
+            (callback) => {
+                this._fetch(userId, sampleId, callback);
+            },
+            (sample, callback) => {
+                if (sample.isDeleted) {
+                    callback(new Error(ITEM_NOT_FOUND));
+                } else {
+                    this.db.transactionally((trx, callback) => {
+                        this._setAnalyzed(sample.id, true, trx, callback);
+                    }, callback);
+                }
             }
-        });
+        ], callback);
     }
 
     _setAnalyzed(sampleId, value, trx, callback) {
@@ -189,14 +200,15 @@ class SamplesModel extends SecureModelBase {
     }
 
     _mapFileSampleValues(sample, callback) {
-        this._fetchFileSampleValues(sample.id, (error, values) => {
-            if (error) {
-                callback(error);
-            } else {
-                sample.values = values;
+        async.waterfall([
+            (callback) => {
+                this._fetchFileSampleValues(sample.id, callback);
+            },
+            (sampleValues, callback) => {
+                sample.values = sampleValues;
                 callback(null, this._mapColumns(sample));
             }
-        });
+        ], callback);
     }
 
     _addNewFileSampleVersion(sampleId, trx, callback) {
