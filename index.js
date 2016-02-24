@@ -17,8 +17,8 @@ const controllers = new ControllersFacade(logger, services);
 
 const serviceHost = new ServiceHost(controllers, services, models);
 serviceHost.start((error) => {
-  if (error) {
-    logger.error(error);
-    process.exit(1);
-  }
+    if (error) {
+        logger.error(error);
+        process.exit(1);
+    }
 });
