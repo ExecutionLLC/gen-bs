@@ -26,9 +26,9 @@ class SessionService extends ServiceBase {
                 if (existingSession && !this.services.config.allowMultipleUserSessions) {
                     this.destroySession(existingSession.id, (error) => {
                         if (error) {
-                            console.error('Error destroying existing session: %s', error);
+                            this.logger.error('Error destroying existing session: %s', error);
                         } else {
-                            console.log('Existing session for user ' + email + ' is destroyed.');
+                            this.logger.info('Existing session for user ' + email + ' is destroyed.');
                         }
                     });
                 }

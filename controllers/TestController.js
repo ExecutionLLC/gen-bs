@@ -24,21 +24,21 @@ class TestController extends ControllerBase {
     }
 
     onSourcesListReceived(operationResult) {
-        console.log(operationResult);
+        this.logger.debug(operationResult);
 
         _.each(operationResult.result, (source) => {
             this.services.applicationServer.requestSourceMetadata(operationResult.sessionId, source, (error, result) => {
                 if (error) {
-                    console.log(error);
+                    this.logger.error(error);
                 } else {
-                    console.log(result);
+                    this.logger.info(result);
                 }
             });
         });
     }
 
     onSourceMetadataReceived(operationResult) {
-        console.log(operationResult);
+        this.logger.debug(operationResult);
     }
 
     testSources(request, response) {
