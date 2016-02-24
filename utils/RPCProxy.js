@@ -19,7 +19,7 @@ class RPCProxy {
 
         this.host = host;
         this.port = port;
-        
+
         this.send = this.send.bind(this);
         this.logger = logger;
 
