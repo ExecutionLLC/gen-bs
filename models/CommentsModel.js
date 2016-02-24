@@ -23,7 +23,7 @@ class CommentsModel extends SecureModelBase {
         super(models, 'comment', mappedColumns);
     }
 
-    // Собирает все comments для текущего пользователя
+    // It collects the latest version of each comment for the current user
     findAll(userId, callback) {
         async.waterfall([
             (callback) => {
