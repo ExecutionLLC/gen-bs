@@ -119,13 +119,13 @@ export default class VariantsTableHead extends Component {
                       </a>
 
 
-                      <div className="btn-group-vertical" role="group" data-toggle="buttons">
-                        <button className={sortClassAsc} onClick={ e => dispatch(sortVariants(tableFieldId, 'asc', e.ctrlKey)) }>
+                      <div className="btn-group btn-group-sort" role="group" data-toggle="buttons">
+                        <button className={sortClassAsc} onClick={ e => dispatch(sortVariants(tableFieldId, 'asc', e.ctrlKey || e.metaKey)) }>
                           {columnSortParams && columnSortParams.direction === 'asc' &&
                             <span className="badge">{columnSortParams.order}</span>
                           }
                         </button>
-                        <button className={sortClassDesc} onClick={ e => dispatch(sortVariants(tableFieldId, 'desc', e.ctrlKey)) }>
+                        <button className={sortClassDesc} onClick={ e => dispatch(sortVariants(tableFieldId, 'desc', e.ctrlKey || e.metaKey)) }>
                           {columnSortParams && columnSortParams.direction === 'desc' &&
                             <span className="badge">{columnSortParams.order}</span>
                           }

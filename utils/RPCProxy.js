@@ -12,7 +12,7 @@ const SocketState = {
 };
 
 class RPCProxy {
-    constructor(host, port, connectCallback, disconnectCallback, replyCallback) {
+    constructor(host, port, logger, connectCallback, disconnectCallback, replyCallback) {
         this.connectCallback = connectCallback;
         this.disconnectCallback = disconnectCallback;
         this.replyCallback = replyCallback;
@@ -21,6 +21,7 @@ class RPCProxy {
         this.port = port;
 
         this.send = this.send.bind(this);
+        this.logger = logger;
 
         // Try to reconnect automatically if connection is closed
         this.connected = false;
@@ -53,15 +54,15 @@ class RPCProxy {
                 id: message.id, result: message.result
             });
         } else {
-            console.error('No callback is registered for RPC reply');
+            this.logger.error('No callback is registered for RPC reply');
         }
     }
 
     _close(event) {
         if (event.wasClean) {
-            console.log('Socket closed (clean)', event);
+            this.logger.info('Socket closed (clean)', event);
         } else {
-            console.log('Socket closed (unclean)', event);
+            this.logger.info('Socket closed (unclean)', event);
         }
 
         if (this.disconnectCallback) {
@@ -77,7 +78,7 @@ class RPCProxy {
         if (this.ws.readyState != SocketState.CONNECTED) {
             this.connected = false;
         }
-        console.log('Socket error', event, this.ws.readyState);
+        this.logger.error('Socket error', event, this.ws.readyState);
     }
 
     _connect() {
@@ -85,7 +86,7 @@ class RPCProxy {
 
         const address = this._address();
         this.ws = new WebSocket(address);
-        console.log('Connecting to the socket server on ' + address);
+        this.logger.info('Connecting to the socket server on ' + address);
 
         this.connected = true;
 

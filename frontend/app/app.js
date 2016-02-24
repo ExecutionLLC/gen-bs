@@ -18,7 +18,7 @@ import './assets/vendor/matchMedia/matchMedia.addListener.js';
 import './assets/vendor/jquery-localize/dist/jquery.localize.js';
 
 
-import './assets/css/index.less';
+
 
 import './components/localize/jquerylocalize.js';
 
@@ -30,7 +30,7 @@ import Root from './containers/Root'
 
 import gzip from './utils/gzip'
 window.gzip = gzip
-
+import './assets/css/index.less';
 render(
   <Root />,
   document.getElementById('root')

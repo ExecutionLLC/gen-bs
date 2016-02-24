@@ -42,7 +42,7 @@ class ApplicationServerService extends ServiceBase {
         this.host = this.services.config.applicationServer.host;
         this.port = this.services.config.applicationServer.port;
 
-        this.rpcProxy = new RPCProxy(this.host, this.port, this._requestOperations, null, this._rpcReply);
+        this.rpcProxy = new RPCProxy(this.host, this.port, this.logger, this._requestOperations, null, this._rpcReply);
     }
 
     registeredEvents() {
@@ -196,14 +196,14 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _requestOperations() {
-        console.log('Requesting operations...');
+        this.logger.info('Requesting operations...');
         this.services.sessions.findAll((error, sessionIds) => {
             _.each(sessionIds, sessionId => {
                 this.services.operations.findAll(sessionId, (error, operationIds) => {
                     _.each(operationIds, operationId => {
                         this._requestOperationState(operationId, (error) => {
                             if (error) {
-                                console.error('Error requesting operation state: ' + error);
+                                this.logger.error('Error requesting operation state: ' + error);
                             }
                         });
                     });
@@ -285,10 +285,10 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _rpcReply(rpcError, rpcMessage) {
-        console.log('RPC REPLY, error: ', JSON.stringify(rpcError, null, 2), ', message: ', JSON.stringify(rpcMessage, null, 2));
+        this.logger.error('RPC REPLY, error: ', JSON.stringify(rpcError, null, 2), ', message: ', JSON.stringify(rpcMessage, null, 2));
         this.services.applicationServerReply.onRpcReplyReceived(rpcError, rpcMessage, (error) => {
             if (error) {
-                console.error('Error processing RPC reply', error);
+                this.logger.error('Error processing RPC reply', error);
             }
         });
     }
@@ -298,8 +298,8 @@ class ApplicationServerService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-                console.log('RPC SEND: ', operationId, method);
-                console.log('Params:', JSON.stringify(params, null, 2));
+                this.logger.info('RPC SEND: ', operationId, method);
+                this.logger.info('Params:', JSON.stringify(params, null, 2));
                 callback(null, operationId);
             }
         });

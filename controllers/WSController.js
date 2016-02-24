@@ -21,17 +21,17 @@ class WSController extends ControllerBase {
 
     addWebSocketServerCallbacks(webSocketServer) {
         webSocketServer.on('connection', (ws) => {
-            console.log('WS client connected');
+            this.logger.info('WS client connected');
             ws.on('message', (messageString) => {
                 try {
                     const message = JSON.parse(messageString);
                     const clientDescriptor = this._findClientByWs(ws);
                     const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
-                    console.log('Received: ' + JSON.stringify(message, null, 2));
-                    console.log('In session: ' + clientDescriptor.sessionId);
+                    this.logger.info('Received: ' + JSON.stringify(message, null, 2));
+                    this.logger.info('In session: ' + clientDescriptor.sessionId);
                     this._onClientMessage(ws, convertedMessage);
                 } catch (e) {
-                    console.error('Client WS message parse error: ' + JSON.stringify(e));
+                    this.logger.error('Client WS message parse error: ' + JSON.stringify(e));
                     const error = {
                         result: {
                             error:'Error parsing message:' + JSON.stringify(e)
@@ -39,16 +39,16 @@ class WSController extends ControllerBase {
                     };
                     ws.send(JSON.stringify(error), null, (error) => {
                         if (error) {
-                            console.error('Error sending response to the client: ' + JSON.stringify(error));
+                            this.logger.error('Error sending response to the client: ' + JSON.stringify(error));
                         }
                     });
                 }
             });
             ws.on('error', error => {
-                console.log('Error in client socket: ' + JSON.stringify(error, null, 2));
+                this.logger.error('Error in client socket: ' + JSON.stringify(error, null, 2));
             });
             ws.on('close', () => {
-                console.log('WS client disconnected');
+                this.logger.info('WS client disconnected');
                 this._removeClientByWs(ws);
             });
 
@@ -62,7 +62,7 @@ class WSController extends ControllerBase {
     _onClientMessage(clientWs, message) {
         const sessionId = message.sessionId;
         if (sessionId) {
-            console.log('Connecting client WS to session ' + sessionId);
+            this.logger.info('Connecting client WS to session ' + sessionId);
             const clientDescriptor = this._findClientByWs(clientWs);
             clientDescriptor.sessionId = sessionId;
         }
@@ -78,7 +78,7 @@ class WSController extends ControllerBase {
                 }
             });
         } else {
-            console.log('No client WS is found for session ' + sessionId);
+            this.logger.warn('No client WS is found for session ' + sessionId);
         }
     }
 

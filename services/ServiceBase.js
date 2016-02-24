@@ -5,8 +5,8 @@ class ServiceBase {
         this.services = services;
         this.models = models;
 
-        this.config = this.services.config;
-        this.logger = this.services.logger;
+        this.config = services.config;
+        this.logger = services.logger;
     }
 
     _checkUserIsSet(user, errorCallback) {
