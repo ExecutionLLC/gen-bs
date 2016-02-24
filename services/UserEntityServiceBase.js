@@ -44,7 +44,7 @@ class UserEntityServiceBase extends ServiceBase {
 
     findAll(user, callback) {
         async.waterfall([
-            (callback) => this._checkUserIsSet(),
+            (callback) => this._checkUserIsSet(user, callback),
             (callback) => this.theModel.findAll(user.id, callback)
         ], callback);
     }
