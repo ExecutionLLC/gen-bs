@@ -38,37 +38,18 @@ class FieldsMetadataService extends ServiceBase {
     }
 
     addSourceReferences(sourcesList, callback) {
-        async.map(sourcesList, (source, callback) => {
-            this.addSourceReference(source, callback);
-        }, (error) => {
-            callback(error, this.availableSources);
-        });
-    }
-
-    addSourceReference(source, callback) {
-        async.waterfall([
-            (callback) => this.findSourceReference(source.sourceName, callback),
-            (findedSource, callback) => {
-                if (findedSource) {
-                    callback(null);
-                } else {
-                    this.availableSources.push(source);
-                    callback(null, source);
-                }
+        _.each(sourcesList, (source) => {
+            if (!this._findSourceReference(source.sourceName)) {
+                this.availableSources.push(source);
             }
-        ], callback);
+        });
+        callback(null, this.availableSources);
     }
 
-    findSourceReference(sourceName, callback) {
-        callback(null, _.find(this.availableSources, (availableSource) => {
+    _findSourceReference(sourceName) {
+        return _.find(this.availableSources, (availableSource) => {
             return availableSource.sourceName === sourceName;
-        }));
-    }
-
-    findReferenceSources(referenceName, callback) {
-        callback(null, _.filter(this.availableSources, (availableSource) => {
-            return availableSource.reference === referenceName;
-        }));
+        });
     }
 
     static createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {
