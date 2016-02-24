@@ -19,11 +19,10 @@ class AppServerFilterUtils {
         } else {
             const mappedColumns = _(filterRulesObject)
                 .keys()
+                // Ignore fields that don't exist, to be able to apply filters formed on other samples.
+                .filter(fieldId => fieldIdToMetadata[fieldId])
                 .map(fieldId => {
                     const field = fieldIdToMetadata[fieldId];
-                    if (!field) {
-                        throw new Error('Field is not found for id ' + fieldId);
-                    }
                     const condition = filterRulesObject[fieldId];
                     return {
                         columnName: field.name,

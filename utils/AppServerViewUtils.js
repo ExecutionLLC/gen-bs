@@ -8,19 +8,20 @@ const _ = require('lodash');
 class AppServerViewUtils {
     static createAppServerView(view, fieldIdToMetadata) {
         // Map list items' field ids to pair (field name, source name).
-        const listItems = _.map(view.viewListItems, listItem => {
-            const field = fieldIdToMetadata[listItem.fieldId];
-            if (!field) {
-                throw new Error('Field is not found with id ' + listItem.fieldId);
-            }
-            return {
-                fieldName: field.name,
-                sourceName: field.sourceName,
-                order: listItem.order,
-                sortOrder: listItem.sortOrder,
-                sortDirection: listItem.sortDirection
-            };
-        });
+        const listItems = _(view.viewListItems)
+            // Ignore missing fields, to be able to apply views generated for a different sample, with unique fields.
+            .filter(listItem => fieldIdToMetadata[listItem.fieldId])
+            .map(listItem => {
+                const field = fieldIdToMetadata[listItem.fieldId];
+                return {
+                    fieldName: field.name,
+                    sourceName: field.sourceName,
+                    order: listItem.order,
+                    sortOrder: listItem.sortOrder,
+                    sortDirection: listItem.sortDirection
+                };
+            })
+            .value();
         // Group view items by source name.
         const itemsBySource = _.groupBy(listItems, (listItem) => listItem.sourceName);
 
