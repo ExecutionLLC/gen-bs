@@ -20,15 +20,16 @@ class QueryHistoryModel extends SecureModelBase {
 
     // Собирает все comments для текущего пользователя
     findAll(userId, callback) {
-        this._fetchUserQueries(userId, (error, queriesData) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                this._fetchUserQueries(userId, callback);
+            },
+            (queriesData, callback) => {
                 async.map(queriesData, (queryData, callback) => {
                     callback(null, this._mapColumns(queryData));
                 }, callback);
             }
-        });
+        ], callback);
     }
 
     findMany(userId, queryIds, callback) {
