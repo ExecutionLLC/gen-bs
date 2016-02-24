@@ -48,7 +48,7 @@ export function fetchUserdata() {
       })
       .then(json => {
         const view = json.views[0] || null
-        const sampleId = json.samples.pop().id || null
+        const sampleId = json.samples.length ? json.samples[json.samples.length - 1].id : null
         const filter = json.filters[0] || null
         dispatch(receiveUserdata(json))
         dispatch(changeView(view.id))
