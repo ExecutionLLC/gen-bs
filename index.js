@@ -27,7 +27,7 @@ const httpServer = Http.createServer();
 const app = new Express();
 
 logger.info('Server config:');
-logger.info(Config);
+logger.info(JSON.stringify(Config, null, 2));
 
 if (Config.enableCORS) {
   logger.error('Cross-origin resource sharing enabled!');

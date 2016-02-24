@@ -44,7 +44,7 @@ class ApplicationServerReplyService extends ServiceBase {
     onRpcReplyReceived(rpcError, rpcMessage, callback) {
         if (rpcError && !rpcMessage) {
             this.logger.error('RPC request error! %s', rpcError);
-            this.logger.warn('The RPC event will be ignored, as there is no message received, only error.');
+            this.logger.info('The RPC event will be ignored, as there is no message received, only error.');
         } else {
             async.waterfall([
                 (callback) => {

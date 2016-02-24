@@ -212,8 +212,8 @@ class FieldsMetadataModel extends ModelBase {
                 // Second, insert each of the missing fields and update their ids.
                 async.mapSeries(fieldsWithIds, (fieldWithId, callback) => {
                     if (!fieldWithId.id) {
-                        this.addInTransaction(languId, fieldWithId.fieldMetadata, true, (error, insertedField) => {
-                            fieldWithId.id = (insertedField) ? insertedField.id : null;
+                        this.addInTransaction(trx, languId, fieldWithId.fieldMetadata, true, (error, insertedFieldId) => {
+                            fieldWithId.id = (insertedFieldId) ? insertedFieldId : null;
                             callback(error, fieldWithId);
                         });
                     } else {
