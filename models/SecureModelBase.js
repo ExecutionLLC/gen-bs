@@ -96,12 +96,12 @@ class SecureModelBase extends RemovableModelBase {
                 super._fetch(id, callback);
             },
             (itemData, callback) => {
-                this._checkUserIsCorect(userId, itemData, callback);
+                this._checkUserIsCorrect(userId, itemData, callback);
             }
         ], callback);
     }
 
-    _checkUserIsCorect(userId, itemData, callback) {
+    _checkUserIsCorrect(userId, itemData, callback) {
         const secureInfo = {userId};
         this._secureCheck(itemData, secureInfo, callback);
     }

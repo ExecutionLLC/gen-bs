@@ -124,7 +124,7 @@ class FiltersModel extends SecureModelBase {
                 this._fetchFilter(filterId, callback);
             },
             (filter, callback) => {
-                this._checkUserIsCorect(userId, filter, callback);
+                this._checkUserIsCorrect(userId, filter, callback);
             }
         ], callback);
     }

@@ -215,7 +215,7 @@ class ViewsModel extends SecureModelBase {
                 this._fetchView(viewId, callback);
             },
             (view, callback) => {
-                this._checkUserIsCorect(userId, view, callback);
+                this._checkUserIsCorrect(userId, view, callback);
             }
         ], callback);
     }

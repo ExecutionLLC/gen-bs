@@ -131,7 +131,7 @@ class CommentsModel extends SecureModelBase {
                 this._fetchComment(commentId, callback);
             },
             (commentData, callback) => {
-                this._checkUserIsCorect(userId, commentData, callback);
+                this._checkUserIsCorrect(userId, commentData, callback);
             }
         ], callback);
     }
