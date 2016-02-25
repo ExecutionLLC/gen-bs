@@ -7,7 +7,7 @@ const morgan = require('morgan');
 const Http = require('http');
 const WebSocketServer = require('ws').Server;
 
-class ServiceHost {
+class WebServerHost {
     constructor(controllers, services, models) {
         this.controllers = controllers;
         this.services = services;
@@ -98,4 +98,4 @@ class ServiceHost {
     }
 }
 
-module.exports = ServiceHost;
+module.exports = WebServerHost;

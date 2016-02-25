@@ -7,7 +7,7 @@ const ModelsFacade = require('./models/ModelsFacade');
 const ServicesFacade = require('./services/ServicesFacade');
 const ControllersFacade = require('./controllers/ControllersFacade');
 
-const ServiceHost = require('./ServiceHost');
+const WebServerHost = require('./WebServerHost');
 
 const logger = new Logger(Config.logger);
 
@@ -15,8 +15,8 @@ const models = new ModelsFacade(Config, logger);
 const services = new ServicesFacade(Config, logger, models);
 const controllers = new ControllersFacade(logger, services);
 
-const serviceHost = new ServiceHost(controllers, services, models);
-serviceHost.start((error) => {
+const webServerHost = new WebServerHost(controllers, services, models);
+webServerHost.start((error) => {
     if (error) {
         logger.error(error);
         process.exit(1);
