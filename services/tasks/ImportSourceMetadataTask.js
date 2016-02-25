@@ -78,7 +78,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 }
             },
             (callback) => {
-                this.services.fieldsMetadata.addSourceReferences(reply.result.sourcesList, callback);
+                this.services.fieldsMetadata.addMissingSourceReferences(reply.result.sourcesList, callback);
             },
             (availableSources, callback) => {
                 const availableSourceNames = _.pluck(availableSources, 'sourceName');

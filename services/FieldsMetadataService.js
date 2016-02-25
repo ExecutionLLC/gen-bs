@@ -37,16 +37,16 @@ class FieldsMetadataService extends ServiceBase {
         this.models.fields.findMany(fieldIds, callback);
     }
 
-    addSourceReferences(sourcesList, callback) {
+    addMissingSourceReferences(sourcesList, callback) {
         _.each(sourcesList, (source) => {
-            if (!this._findSourceReference(source.sourceName)) {
+            if (!this._findSource(source.sourceName)) {
                 this.availableSources.push(source);
             }
         });
         callback(null, this.availableSources);
     }
 
-    _findSourceReference(sourceName) {
+    _findSource(sourceName) {
         return _.find(this.availableSources, (availableSource) => {
             return availableSource.sourceName === sourceName;
         });

@@ -37,7 +37,7 @@ const SETTINGS = {
         tasks: {
             checkSessions: {
                 isEnabled: true,
-                taskTimeout: 30
+                taskTimeout: 300
             },
             importSourceMetadata: {
                 isEnabled: true,
