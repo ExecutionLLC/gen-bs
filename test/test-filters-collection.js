@@ -17,8 +17,7 @@ const filtersClient = new FiltersClient(urls);
 const languId = Config.defaultLanguId;
 
 const TestUser = {
-    userName: 'valarie',
-    password: 'password'
+    userEmail: 'valarievaughn@electonic.com'
 };
 
 const UnknownFilterId = Uuid.v4();
@@ -37,7 +36,7 @@ describe('Filters', () => {
     let sessionId = null;
 
     before((done) => {
-        sessionsClient.openSession(TestUser.userName, TestUser.password, (error, response) => {
+        sessionsClient.openSession(TestUser.userEmail, (error, response) => {
             assert.ifError(error);
             sessionId = SessionsClient.getSessionFromResponse(response);
             done();

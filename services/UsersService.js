@@ -8,7 +8,7 @@ class UserService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
 
-        this.models.user.find(DEMO_USER_ID, (error, user) => {
+        this.models.users.find(DEMO_USER_ID, (error, user) => {
             if (error) {
                 throw new Error('Cannot find demo user: ' + error);
             } else {
@@ -37,7 +37,7 @@ class UserService extends ServiceBase {
             numberPaidSamples
         };
 
-        this.models.user.add(user, defaultLanguId, callback);
+        this.models.users.add(user, defaultLanguId, callback);
     }
 
     /**
@@ -66,14 +66,14 @@ class UserService extends ServiceBase {
     }
 
     findIdByEmail(email, callback) {
-        this.models.user.findIdByEmail(email, callback);
+        this.models.users.findIdByEmail(email, callback);
     }
 
     find(userId, callback) {
         if (userId === DEMO_USER_ID) {
             callback(null, this.demoUser);
         } else {
-            this.models.user.find(userId, callback);
+            this.models.users.find(userId, callback);
         }
     }
 }

@@ -16,22 +16,15 @@ class SessionsController extends ControllerBase {
     }
 
     /**
-     * Opens new session, either demo or user, depending on the user name and password presence in the request.
+     * Opens new demo session.
      * */
     open(request, response) {
-        const body = this.getRequestBody(request, response);
-        if (!body) {
-            return;
-        }
-
-        const createSessionCallback = (error, sessionId) => {
+        // open demo session.
+        this.services.sessions.startDemo((error, sessionId) => {
             this.sendErrorOrJson(response, error, {
                 sessionId
             });
-        };
-
-        // open demo session.
-        this.services.sessions.startDemo(createSessionCallback);
+        });
     }
 
     check(request, response) {

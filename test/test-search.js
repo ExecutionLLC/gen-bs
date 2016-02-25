@@ -22,8 +22,7 @@ const searchClient = new SearchClient(urls);
 const webSocketClient = new WebSocketClient('localhost', Config.port);
 
 const TestUser = {
-    userName: 'valarie',
-    password: 'password'
+    userEmail: 'valarievaughn@electonic.com'
 };
 
 describe('Search', function() {
@@ -32,7 +31,7 @@ describe('Search', function() {
     let sessionId = null;
 
     before((done) => {
-        sessionsClient.openSession(TestUser.userName, TestUser.password, (error, response) => {
+        sessionsClient.openSession(TestUser.userEmail, (error, response) => {
             assert.ifError(error);
             sessionId = SessionsClient.getSessionFromResponse(response);
             webSocketClient.associateSession(sessionId);

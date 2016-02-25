@@ -15,6 +15,8 @@ class WebServerHost {
 
         this.config = this.services.config;
         this.logger = this.services.logger;
+
+        this.httpServer = Http.createServer();
     }
 
     /**
@@ -23,7 +25,6 @@ class WebServerHost {
      * */
     start(callback) {
         // Create service
-        const httpServer = Http.createServer();
         const app = new Express();
 
         this._printServerConfig();
@@ -36,10 +37,15 @@ class WebServerHost {
 
         this._initRouters(app);
 
-        this._initWebSocketServer(httpServer);
+        this._initWebSocketServer(this.httpServer);
 
-        this._startHttpServer(httpServer, app);
+        this._startHttpServer(this.httpServer, app);
 
+        callback(null);
+    }
+
+    stop(callback) {
+        this.httpServer.close();
         callback(null);
     }
 

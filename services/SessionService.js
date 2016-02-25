@@ -16,6 +16,8 @@ class SessionService extends ServiceBase {
     /**
      * Creates a new session for a user with the specified email.
      * Currently, also destroys existing sessions of the same user, if any.
+     * @param email User email.
+     * @param callback (error, sessionId)
      * */
     startForEmail(email, callback) {
         async.waterfall([

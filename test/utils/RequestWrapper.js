@@ -40,14 +40,18 @@ class RequestClient {
 
     static _createResponseConverter(callback) {
         return (error, response, body) => {
-            const status = response.statusCode;
-            if (typeof body === 'string' && status < 400) {
-                body = JSON.parse(body);
+            if (error) {
+                callback(error);
+            } else {
+                const status = response.statusCode;
+                if (typeof body === 'string' && status < 400) {
+                    body = JSON.parse(body);
+                }
+                callback(null, {
+                    status,
+                    body: ChangeCaseUtil.convertKeysToCamelCase(body)
+                });
             }
-            callback(error, {
-                status,
-                body: ChangeCaseUtil.convertKeysToCamelCase(body)
-            })
         };
     }
 }
