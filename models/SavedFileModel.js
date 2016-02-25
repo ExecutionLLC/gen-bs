@@ -130,8 +130,7 @@ class SavedFileModel extends SecureModelBase {
                 this._fetchSavedFile(fileId, callback);
             },
             (fileData, callback) => {
-                const secureInfo = {userId: userId};
-                this._secureCheck(fileData, secureInfo, callback);
+                this._checkUserIsCorect(userId, fileData, callback);
             }
         ], callback);
     }

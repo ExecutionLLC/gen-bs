@@ -90,6 +90,22 @@ class SecureModelBase extends RemovableModelBase {
         ], callback);
     }
 
+    _fetch(userId, id, callback) {
+        async.waterfall([
+            (callback) => {
+                super._fetch(id, callback);
+            },
+            (itemData, callback) => {
+                this._checkUserIsCorect(userId, itemData, callback);
+            }
+        ], callback);
+    }
+
+    _checkUserIsCorect(userId, itemData, callback) {
+        const secureInfo = {userId};
+        this._secureCheck(itemData, secureInfo, callback);
+    }
+
     // Default data, which is available for everybody, has creator set to null
     _secureCheck(itemData, secureInfo, callback) {
         if (_.isNull(itemData.creator)
@@ -98,18 +114,6 @@ class SecureModelBase extends RemovableModelBase {
         } else {
             callback(new Error('Entity access denied.'));
         }
-    }
-
-    _fetch(userId, id, callback) {
-        async.waterfall([
-            (callback) => {
-                super._fetch(id, callback);
-            },
-            (itemData, callback) => {
-                const secureInfo = {userId: userId};
-                this._secureCheck(itemData, secureInfo, callback);
-            }
-        ], callback);
     }
 }
 
