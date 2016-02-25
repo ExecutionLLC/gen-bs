@@ -285,10 +285,10 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _rpcReply(rpcError, rpcMessage) {
-        this.logger.info('RPC REPLY, error: ', JSON.stringify(rpcError, null, 2), ', message: ', JSON.stringify(rpcMessage, null, 2));
+        this.logger.info('RPC REPLY, error: ' + JSON.stringify(rpcError, null, 2) + ', message: ' + JSON.stringify(rpcMessage, null, 2));
         this.services.applicationServerReply.onRpcReplyReceived(rpcError, rpcMessage, (error) => {
             if (error) {
-                this.logger.error('Error processing RPC reply', error);
+                this.logger.error('Error processing RPC reply: ' + error);
             }
         });
     }
@@ -298,8 +298,8 @@ class ApplicationServerService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-                this.logger.info('RPC SEND: ', operationId, method);
-                this.logger.info('Params:', JSON.stringify(params, null, 2));
+                this.logger.info('RPC SEND: ' + operationId + ' ' + method);
+                this.logger.info('Params: ' + JSON.stringify(params, null, 2));
                 callback(null, operationId);
             }
         });

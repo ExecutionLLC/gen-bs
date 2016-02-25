@@ -145,24 +145,15 @@ class ApplicationServerReplyService extends ServiceBase {
                 result: message
             });
         } else {
-            // TODO: delete stub when correct data will return
-            //const sourcesList = _.map(message.result, (sourceName) => sourceName.replace('.h5', ''));
-            const sourcesList = this._generateSourcesListReferenceStub(message.result);
+            const sourcesList = _.map(message.result, (source) => {
+                source.sourceName = source.sourceName.replace('.h5', '');
+                return source;
+            });
             callback(null, {
                 eventName: EVENTS.onSourcesListReceived,
                 sourcesList
             });
         }
-    }
-
-    // TODO: delete stub when correct data will return
-    _generateSourcesListReferenceStub(sourcesList) {
-        return _.map(sourcesList, (sourceName) => {
-            return {
-                sourceName: sourceName.replace('.h5', ''),
-                reference: 'hg18'
-            };
-        });
     }
 
     _processGetSourceMetadataResult(operation, message, callback) {
