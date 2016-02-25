@@ -21,9 +21,7 @@ class SessionsController extends ControllerBase {
     open(request, response) {
         // open demo session.
         this.services.sessions.startDemo((error, sessionId) => {
-            this.sendErrorOrJson(response, error, {
-                sessionId
-            });
+            this.sendErrorOrJson(response, error, {sessionId});
         });
     }
 
@@ -31,16 +29,14 @@ class SessionsController extends ControllerBase {
         const sessionId = this.getSessionId(request);
 
         this.services.sessions.findById(sessionId, (error, sessionId) => {
-            this.sendErrorOrJson(response, error, {
-                sessionId
-            });
+            this.sendErrorOrJson(response, error, {sessionId});
         });
     }
 
     close(request, response) {
         const sessionId = this.getSessionId(request);
         this.services.sessions.destroySession(sessionId, (error) => {
-            this.sendErrorOrJson(response, error, {});
+            this.sendErrorOrJson(response, error, {sessionId});
         });
     }
 
