@@ -19,7 +19,7 @@ class ModelsFacade {
         this.db = new KnexWrapper(config, logger);
 
         this.langu = new LanguModel(this);
-        this.user = new UserModel(this);
+        this.users = new UserModel(this);
         this.keywords = new KeywordsModel(this);
         this.views = new ViewsModel(this);
         this.filters = new FiltersModel(this);
