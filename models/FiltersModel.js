@@ -29,10 +29,8 @@ class FiltersModel extends SecureModelBase {
             (callback) => {
                 this._fetchUserFilters(userId, callback);
             },
-            (filtersData, callback) => {
-                async.map(filtersData, (filterData, callback) => {
-                    callback(null, this._mapColumns(filterData));
-                }, callback);
+            (filters, callback) => {
+                this._mapFilters(filters, callback);
             }
         ], callback);
     }
@@ -47,17 +45,15 @@ class FiltersModel extends SecureModelBase {
                     callback('Some filters not found: ' + filterIds + ', userId: ' + userId);
                 }
             },
-            (filtersData, callback) => {
-                if (_.every(filtersData, 'creator', userId)) {
-                    callback(null, filtersData);
+            (filters, callback) => {
+                if (_.every(filters, 'creator', userId)) {
+                    callback(null, filters);
                 } else {
                     callback('Unauthorized access to filters: ' + filterIds + ', userId: ' + userId);
                 }
             },
-            (filtersData, callback) => {
-                async.map(filtersData, (filterData, callback) => {
-                    callback(null, this._mapColumns(filterData));
-                }, callback);
+            (filters, callback) => {
+                this._mapFilters(filters, callback);
             }
         ], callback);
     }
@@ -158,6 +154,12 @@ class FiltersModel extends SecureModelBase {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData));
                     }
                 });
+        }, callback);
+    }
+
+    _mapFilters(filters, callback) {
+        async.map(filters, (filter, callback) => {
+            callback(null, this._mapColumns(filter));
         }, callback);
     }
 
