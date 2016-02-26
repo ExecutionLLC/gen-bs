@@ -73,6 +73,9 @@ class ApiController extends ControllerBase {
     }
 
     _handleErrors(error, request, response, next) {
+        if (response.headersSent) {
+            return next(error);
+        }
         const message = ErrorUtils.createErrorMessage(error);
         this.logger.error(message);
         if (error.stack) {
