@@ -3,6 +3,7 @@
 const _ = require('lodash');
 
 const ServiceBase = require('../ServiceBase');
+const ErrorUtils = require('../../utils/ErrorUtils');
 
 const CheckSessionsTask = require('./CheckSessionsTask');
 const ImportSourceMetadataTask = require('./ImportSourceMetadataTask');
@@ -46,7 +47,8 @@ class SchedulerService extends ServiceBase {
             this.logger.info('Processing task: ' + task.name + '...');
             task.execute((error) => {
                 if (error) {
-                    this.logger.error('Task ' + task.name + ': ' + error);
+                    const message = ErrorUtils.createErrorMessage(error);
+                    this.logger.error('Task ' + task.name + ': ' + message);
                 } else {
                     this.logger.info('Task ' + task.name + ' processed.');
                 }
