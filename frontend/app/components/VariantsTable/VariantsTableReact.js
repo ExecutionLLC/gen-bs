@@ -67,11 +67,5 @@ function mapStateToProps(state) {
   }
 }
 
-//function mapDispatchToProps(dispatch) {
-//  return {
-//    onLoad: () => dispatch(increment())
-//  }
-//}
-
 export default connect(mapStateToProps)(VariantsTableReact)
 
