@@ -30,14 +30,15 @@ const SETTINGS = {
     },
     sessions: {
         allowMultipleUserSessions: ENV.GEN_WS_ALLOW_MULTIPLE_USER_SESSIONS || true,
-        sessionTimeoutSec: ENV.GEN_WS_USER_SESSION_TIMEOUT || 300
+        sessionTimeoutSec: ENV.GEN_WS_USER_SESSION_TIMEOUT || 5 * 60
     },
     scheduler: {
         enabled: ENV.GEN_WS_SCHEDULE_ENABLED || true,
         tasks: {
+            // Task timeouts in seconds.
             checkSessions: {
                 isEnabled: true,
-                taskTimeout: 30
+                taskTimeout: 5 * 60
             },
             importSourceMetadata: {
                 isEnabled: true,

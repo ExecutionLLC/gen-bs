@@ -145,7 +145,10 @@ class ApplicationServerReplyService extends ServiceBase {
                 result: message
             });
         } else {
-            const sourcesList = _.map(message.result, (sourceName) => sourceName.replace('.h5', ''));
+            const sourcesList = _.map(message.result, (source) => {
+                source.sourceName = source.sourceName.replace('.h5', '');
+                return source;
+            });
             callback(null, {
                 eventName: EVENTS.onSourcesListReceived,
                 sourcesList
@@ -161,11 +164,24 @@ class ApplicationServerReplyService extends ServiceBase {
                 result: message
             });
         } else {
-            const sourcesMetadata = message.result;
-            callback(null, {
-                eventName: EVENTS.onSourceMetadataReceived,
-                sourcesMetadata
-            });
+            const messageResult = message.result;
+            if (messageResult.error) {
+                callback(null, {
+                    eventName: EVENTS.onSourceMetadataReceived,
+                    error: messageResult.error
+                });
+            } else {
+                const convertedSourcesMetadata = _.map(messageResult, sourceMetadata => {
+                    return {
+                        fieldsMetadata: sourceMetadata.columns,
+                        reference: sourceMetadata.reference
+                    };
+                });
+                callback(null, {
+                    eventName: EVENTS.onSourceMetadataReceived,
+                    sourcesMetadata: convertedSourcesMetadata
+                });
+            }
         }
     }
 
