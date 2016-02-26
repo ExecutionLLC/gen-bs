@@ -155,7 +155,9 @@ class ApplicationServerReplyService extends ServiceBase {
                 // 2. Send a message to the frontend to indicate the processing is fully completed.
                 // 3. Close the operation.
                 const sampleId = operation.getSampleId();
-                const fieldsMetadata = result.metadata;
+                const sampleMetadata = result.metadata;
+                const fieldsMetadata = sampleMetadata.columns;
+                const sampleReference = sampleMetadata.reference;
                 const sampleFileName = operation.getSampleFileName();
                 const sessionId = operation.getSessionId();
 
@@ -163,7 +165,7 @@ class ApplicationServerReplyService extends ServiceBase {
                     (callback) => this.services.sessions.findSessionUserId(sessionId, callback),
                     (userId, callback) => this.services.users.find(userId, callback),
                     (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
-                        sampleFileName, fieldsMetadata, callback)
+                        sampleFileName, sampleReference, fieldsMetadata, callback)
                 ], (error) => {
                     callback(error, {
                         status,
