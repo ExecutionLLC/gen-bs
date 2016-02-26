@@ -12,8 +12,8 @@ class RemovableModelBase extends ModelBase {
         super(models, baseTableName, mappedColumns);
     }
 
-    remove(id, callback) {
-        super._unsafeUpdate(id, {isDeleted: true}, callback);
+    remove(itemId, callback) {
+        super._unsafeUpdate(itemId, {isDeleted: true}, callback);
     }
 }
 

@@ -16,7 +16,7 @@ class SamplesService extends UserEntityServiceBase {
      * Sends sample to application server for processing.
      * */
     upload(sessionId, user, localFileInfo, callback) {
-        this.services.logger.info('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
+        this.logger.info('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         const sampleId = Uuid.v4();
         async.waterfall([
             (callback) => this.services.applicationServer.uploadSample(sessionId, sampleId, user,
@@ -36,7 +36,11 @@ class SamplesService extends UserEntityServiceBase {
             hash: null
         };
 
-        this.models.samples.addSampleWithMetadata(user.id, user.language, sample, fieldsMetadata, callback);
+        this.theModel.addSampleWithMetadata(user.id, user.language, sample, fieldsMetadata, callback);
+    }
+
+    makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {
+        this.theModel.makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback);
     }
 }
 

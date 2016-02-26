@@ -21,8 +21,8 @@ class SecureModelBase extends RemovableModelBase {
             (callback) => {
                 this._add(userId, languId, item, true, callback);
             },
-            (id, callback) => {
-                this.find(userId, id, callback);
+            (itemId, callback) => {
+                this.find(userId, itemId, callback);
             }
         ], callback);
     }
@@ -33,8 +33,8 @@ class SecureModelBase extends RemovableModelBase {
             (callback) => {
                 this._add(userId, languId, item, false, callback);
             },
-            (id, callback) => {
-                this.find(userId, id, callback);
+            (itemId, callback) => {
+                this.find(userId, itemId, callback);
             }
         ], callback);
     }
@@ -43,10 +43,10 @@ class SecureModelBase extends RemovableModelBase {
         this._add(userId, languId, filter, false, callback);
     }
 
-    update(userId, id, item, callback) {
+    update(userId, itemId, item, callback) {
         async.waterfall([
             (callback) => {
-                this._fetch(userId, id, callback);
+                this._fetch(userId, itemId, callback);
             },
             (itemData, callback) => {
                 this._update(userId, itemData, item, callback);
@@ -57,44 +57,44 @@ class SecureModelBase extends RemovableModelBase {
         ], callback);
     }
 
-    find(userId, id, callback) {
-        this._fetch(userId, id, (error, data) => {
+    find(userId, itemId, callback) {
+        this._fetch(userId, itemId, (error, itemData) => {
             if (error) {
                 callback(error);
             } else {
-                callback(null, this._mapColumns(data));
+                callback(null, this._mapColumns(itemData));
             }
         });
     }
 
     // Set is_deleted = true
-    remove(userId, id, callback) {
-        this._fetch(userId, id, (error) => {
+    remove(userId, itemId, callback) {
+        this._fetch(userId, itemId, (error) => {
             if (error) {
                 callback(error);
             } else {
-                super.remove(id, callback);
+                super.remove(itemId, callback);
             }
         });
     }
 
     // Default data, which is available for everybody, has creator set to null
-    _secureCheck(data, secureInfo, callback) {
-        if (_.isNull(data.creator)
-            || secureInfo.userId === data.creator) {
-            callback(null, data);
+    _secureCheck(itemData, secureInfo, callback) {
+        if (_.isNull(itemData.creator)
+            || secureInfo.userId === itemData.creator) {
+            callback(null, itemData);
         } else {
             callback(new Error('Entity access denied.'));
         }
     }
 
-    _fetch(userId, id, callback) {
-        super._fetch(id, (error, data) => {
+    _fetch(userId, itemId, callback) {
+        super._fetch(itemId, (error, itemData) => {
             if (error) {
                 callback(error);
             } else {
                 const secureInfo = {userId: userId};
-                this._secureCheck(data, secureInfo, callback);
+                this._secureCheck(itemData, secureInfo, callback);
             }
         });
     }

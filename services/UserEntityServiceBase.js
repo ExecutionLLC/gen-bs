@@ -2,8 +2,6 @@
 
 const ServiceBase = require('./ServiceBase');
 
-const USER_UNDEFINED = 'User cannot be undefined here.';
-
 class UserEntityServiceBase extends ServiceBase {
     constructor(services, models, theModel) {
         super(services, models);
@@ -16,12 +14,8 @@ class UserEntityServiceBase extends ServiceBase {
             return;
         }
 
-        if (user) {
-            const actualLanguId = languId || user.languId;
-            this.theModel.add(user.id, actualLanguId, item, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        const actualLanguId = languId || user.languId;
+        this.theModel.add(user.id, actualLanguId, item, callback);
     }
 
     update(user, item, callback) {
@@ -29,11 +23,7 @@ class UserEntityServiceBase extends ServiceBase {
             return;
         }
 
-        if (user) {
-            this.theModel.update(user.id, item.id, item, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        this.theModel.update(user.id, item.id, item, callback);
     }
 
     find(user, itemId, callback) {
@@ -41,11 +31,7 @@ class UserEntityServiceBase extends ServiceBase {
             return;
         }
 
-        if (user) {
-            this.theModel.find(user.id, itemId, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        this.theModel.find(user.id, itemId, callback);
     }
 
     findMany(user, itemIds, callback) {
@@ -53,11 +39,7 @@ class UserEntityServiceBase extends ServiceBase {
             return;
         }
 
-        if (user) {
-            this.theModel.findMany(user.id, itemIds, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        this.theModel.findMany(user.id, itemIds, callback);
     }
 
     findAll(user, callback) {
@@ -65,11 +47,7 @@ class UserEntityServiceBase extends ServiceBase {
             return;
         }
 
-        if (user) {
-            this.theModel.findAll(user.id, callback);
-        } else {
-            callback(new Error(USER_UNDEFINED));
-        }
+        this.theModel.findAll(user.id, callback);
     }
 
     remove(user, itemId, callback) {

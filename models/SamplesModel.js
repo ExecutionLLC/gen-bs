@@ -109,16 +109,32 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
-    makeAnalyzed(userId, sampleId, callback) {
-        this._fetch(userId, sampleId, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                this.db.transactionally((trx, callback) => {
-                    this._setAnalyzed(sampleId, true, trx, callback);
-                }, callback);
-            }
-        });
+    makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => {
+                    this._fetch(userId, sampleId, callback);
+                },
+                (sample, callback) => {
+                    const isAnalyzed = sample.isAnalyzed || false;
+                    if (!isAnalyzed) {
+                        async.waterfall([
+                            (callback) => {
+                                this._setAnalyzed(sample.id, true, trx, callback);
+                            },
+                            (sampleId, callback) => {
+                                this.models.user.reduceForOnePaidSample(userId, trx, callback);
+                            },
+                            (paidSamplesCount, callback) => {
+                                callback(null, true);
+                            }
+                        ], callback);
+                    } else {
+                        callback(null, false);
+                    }
+                }
+            ], callback);
+        }, callback);
     }
 
     _setAnalyzed(sampleId, value, trx, callback) {

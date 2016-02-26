@@ -27,8 +27,8 @@ class ModelBase {
             (callback) => {
                 this._add(languId, item, true, callback);
             },
-            (id, callback) => {
-                this.find(id, callback);
+            (itemId, callback) => {
+                this.find(itemId, callback);
             }
         ], callback);
     }
@@ -38,34 +38,34 @@ class ModelBase {
             (callback) => {
                 this._add(languId, item, false, callback);
             },
-            (id, callback) => {
-                this.find(id, callback);
+            (itemId, callback) => {
+                this.find(itemId, callback);
             }
         ], callback);
     }
 
-    exists(id, callback) {
+    exists(itemId, callback) {
         this.db.asCallback((knex, callback) => {
-            knex.select()
+            knex.select('id')
             .from(this.baseTableName)
-            .where('id', id)
-            .asCallback((error, data) => {
+            .where('id', itemId)
+            .asCallback((error, itemData) => {
                 if (error) {
                     callback(error);
                 } else {
-                    callback(null, (data.length > 0));
+                    callback(null, (itemData.length > 0));
                 }
             });
         }, callback);
     }
 
-    find(id, callback) {
+    find(itemId, callback) {
         async.waterfall([
             (callback) => {
-                this._fetch(id, callback);
+                this._fetch(itemId, callback);
             },
-            (data, callback) => {
-                callback(null, this._mapColumns(data));
+            (itemData, callback) => {
+                callback(null, this._mapColumns(itemData));
             }
         ], callback);
     }
@@ -83,16 +83,16 @@ class ModelBase {
         }, {});
     }
 
-    _fetch(id, callback) {
+    _fetch(itemId, callback) {
         this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
-                .where('id', id)
-                .asCallback((error, data) => {
-                    if (error || !data.length) {
-                        callback(error || new Error('Item not found: ' + id));
+                .where('id', itemId)
+                .asCallback((error, itemData) => {
+                    if (error || !itemData.length) {
+                        callback(error || new Error('Item not found: ' + itemId));
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(data[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemData[0]));
                     }
                 });
         }, callback);
@@ -110,12 +110,12 @@ class ModelBase {
             });
     };
 
-    _unsafeUpdate(id, dataToUpdate, trx, callback) {
+    _unsafeUpdate(itemId, dataToUpdate, trx, callback) {
         trx(this.baseTableName)
-            .where('id', id)
+            .where('id', itemId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
             .asCallback((error) => {
-                callback(error, id);
+                callback(error, itemId);
             });
     }
 }
