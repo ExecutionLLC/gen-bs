@@ -168,4 +168,10 @@ describe('Demo Users', () => {
             })
         });
     });
+
+    describe('Parallel access', (done) => {
+        it('should be possible to create at least 50 demo user search sessions', (done) => {
+            assert.fail('Not implemented');
+        });
+    });
 });
