@@ -12,7 +12,13 @@ class AppServerFilterUtils {
             filterRulesObject['$or'] ? '$or' : null;
         if (operator) {
             const operands = filterRulesObject[operator];
-            const mappedOperands = _.map(operands, (operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata));
+            const mappedOperands = _(operands)
+                .map((operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata))
+                .filter(operand => operand)
+                .value();
+            if (!mappedOperands) {
+                return null;
+            }
             const result = {};
             result[operator] = mappedOperands;
             return result;
@@ -31,8 +37,8 @@ class AppServerFilterUtils {
                     };
                 })
                 .value();
-            if (mappedColumns.length != 1) {
-                throw new Error('Unexpected filter format: there should be only one field condition per object.');
+            if (!mappedColumns.length) {
+                return null;
             } else {
                 return mappedColumns[0];
             }

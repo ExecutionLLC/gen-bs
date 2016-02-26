@@ -10,8 +10,6 @@ const FieldsMetadataController = require('./FieldsMetadataController');
 
 const SearchController = require('./SearchController');
 
-const TestController = require('./TestController');
-
 const WSController = require('./WSController');
 const SessionsController = require('./SessionsController');
 const ApiController = require('./ApiController');
@@ -32,9 +30,6 @@ class ControllersFacade {
         this.sessionsController = new SessionsController(services);
 
         this.wsController = new WSController(services);
-
-        this.testController = new TestController(services);
-
         this.apiController = new ApiController(services);
     }
 }

@@ -2,8 +2,8 @@
 
 const Config = require('../../utils/Config');
 
-const SESSION_HEADER = Config.sessionHeader;
-const LANGUAGE_HEADER = Config.languageHeader;
+const SESSION_HEADER = Config.headers.sessionHeader;
+const LANGUAGE_HEADER = Config.headers.languageHeader;
 
 class ClientBase {
     constructor(urls) {

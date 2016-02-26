@@ -110,6 +110,25 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    getExistingSourceNames(callback) {
+        this.db.asCallback((knex, callback) => {
+            knex(this.baseTableName)
+                .distinct('source_name')
+                .select()
+                .whereNot({
+                    source_name: 'sample'
+                })
+                .asCallback((error, sources) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        const sourceNames = _.pluck(ChangeCaseUtil.convertKeysToCamelCase(sources), 'sourceName');
+                        callback(null, sourceNames);
+                    }
+                });
+        }, callback);
+    }
+
     findMetadataBySourceName(sourceName, callback) {
         async.waterfall([
             (callback) => {
@@ -131,6 +150,14 @@ class FieldsMetadataModel extends ModelBase {
                 this.models.keywords.findMany(keywordIds, callback);
             }
         ], callback);
+    }
+
+    addMany(languId, fieldsMetadata, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.map(fieldsMetadata, (fieldMetadata, callback) => {
+                this.addInTransaction(trx, languId, fieldMetadata, false, callback);
+            }, callback);
+        }, callback);
     }
 
     addInTransaction(trx, languId, metadata, shouldGenerateId, callback) {
@@ -193,8 +220,8 @@ class FieldsMetadataModel extends ModelBase {
                 // Second, insert each of the missing fields and update their ids.
                 async.mapSeries(fieldsWithIds, (fieldWithId, callback) => {
                     if (!fieldWithId.id) {
-                        this.addInTransaction(languId, fieldWithId.fieldMetadata, true, (error, insertedField) => {
-                            fieldWithId.id = (insertedField) ? insertedField.id : null;
+                        this.addInTransaction(trx, languId, fieldWithId.fieldMetadata, true, (error, insertedFieldId) => {
+                            fieldWithId.id = (insertedFieldId) ? insertedFieldId : null;
                             callback(error, fieldWithId);
                         });
                     } else {
