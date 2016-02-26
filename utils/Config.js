@@ -19,7 +19,7 @@ const SETTINGS = {
     },
     database: {
         host: ENV.GEN_WS_DATABASE_SERVER || 'localhost',
-        port: ENV.GEN_WS_DATABASE_PORT | 5432,
+        port: ENV.GEN_WS_DATABASE_PORT || 5432,
         user: ENV.GEN_WS_DATABASE_USER || 'postgres',
         password: ENV.GEN_WS_DATABASE_PASSWORD || 'zxcasdqwe',
         databaseName: ENV.GEN_WS_DATABASE_NAME || 'genomixdb'
