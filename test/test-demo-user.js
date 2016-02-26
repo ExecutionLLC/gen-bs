@@ -145,7 +145,7 @@ describe('Demo Users', () => {
                 const viewToUpdate = _.cloneDeep(originalView);
                 viewToUpdate.id = null;
                 viewToUpdate.name = 'Test view ' + Uuid.v4();
-                viewsClient.update(sessionId, viewToUpdate, (error, response) => {
+                viewsClient.add(sessionId, languId, viewToUpdate, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
                     done();
@@ -160,7 +160,7 @@ describe('Demo Users', () => {
                 const filterToUpdate = _.cloneDeep(originalFilter);
                 filterToUpdate.id = null;
                 filterToUpdate.name = 'Test filter ' + Uuid.v4();
-                filtersClient.update(sessionId, filterToUpdate, (error, response) => {
+                filtersClient.add(sessionId, languId, filterToUpdate, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
 
                     done();
