@@ -118,17 +118,29 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 }
             },
             (callback) => {
-                const sourcesMetadata = reply.result.sourcesMetadata;
-                if (sourcesMetadata.error) {
-                    callback(sourcesMetadata.error);
+                const replyResult = reply.result;
+                if (replyResult.error) {
+                    callback(replyResult.error);
                 } else {
-                    callback(null, sourcesMetadata);
+                    callback(null, replyResult.sourcesMetadata);
                 }
             },
             (sourcesMetadata, callback) => {
-                async.map(sourcesMetadata, (sourceMetadata, callback) => {
-                    const sourceName = this.requestedSources[sourcesMetadata.indexOf(sourceMetadata)];
-                    this._processSourceMetadata(sourceName, sourceMetadata, (error, result) => {
+                // Indices of the returned sources are the same as in the requested sources array.
+                const mappedSourcesMetadata = _.map(sourcesMetadata, (sourceMetadata, index) => {
+                    const sourceName = this.requestedSources[index];
+                    return {
+                        sourceName,
+                        fieldsMetadata:sourceMetadata.fieldsMetadata,
+                        reference: sourceMetadata.reference
+                    };
+                });
+                callback(null, mappedSourcesMetadata);
+            },
+            (mappedSourcesMetadata, callback) => {
+                async.map(mappedSourcesMetadata, (sourceMetadata, callback) => {
+                    const sourceName = sourceMetadata.sourceName;
+                    this._processSourceMetadata(sourceName, sourceMetadata.fieldsMetadata, (error, result) => {
                         if (error) {
                             this.logger.error('Error import source ' + sourceName + ': ' + error);
                         } else {
@@ -152,12 +164,16 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
         }
     }
 
-    _processSourceMetadata(sourceName, sourceMetadata, callback) {
-        const fieldMetadataArray = _.map(sourceMetadata, (fieldMetadata) => fieldMetadata);
-        async.map(fieldMetadataArray, (fieldMetadata, callback) => {
-            const metadata = FieldsMetadataService.createFieldMetadata(sourceName, false, fieldMetadata);
-            this.models.fields.add(this.config.defaultLanguId, metadata, callback);
-        }, callback);
+    _processSourceMetadata(sourceName, appServerFieldsMetadata, callback) {
+        const fieldsMetadata = _.map(
+            appServerFieldsMetadata,
+            appServerFieldMetadata => FieldsMetadataService.createFieldMetadata(
+                sourceName,
+                false,
+                appServerFieldMetadata
+            )
+        );
+        this.services.fieldsMetadata.addSourceFields(this.config.defaultLanguId, fieldsMetadata, callback);
     }
 }
 

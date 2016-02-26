@@ -152,6 +152,14 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    addMany(languId, fieldsMetadata, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.map(fieldsMetadata, (fieldMetadata, callback) => {
+                this.addInTransaction(trx, languId, fieldMetadata, false, callback);
+            }, callback);
+        }, callback);
+    }
+
     addInTransaction(trx, languId, metadata, shouldGenerateId, callback) {
         async.waterfall([
             (callback) => {

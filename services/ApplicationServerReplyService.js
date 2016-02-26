@@ -164,11 +164,24 @@ class ApplicationServerReplyService extends ServiceBase {
                 result: message
             });
         } else {
-            const sourcesMetadata = message.result;
-            callback(null, {
-                eventName: EVENTS.onSourceMetadataReceived,
-                sourcesMetadata
-            });
+            const messageResult = message.result;
+            if (messageResult.error) {
+                callback(null, {
+                    eventName: EVENTS.onSourceMetadataReceived,
+                    error: messageResult.error
+                });
+            } else {
+                const convertedSourcesMetadata = _.map(messageResult, sourceMetadata => {
+                    return {
+                        fieldsMetadata: sourceMetadata.columns,
+                        reference: sourceMetadata.reference
+                    };
+                });
+                callback(null, {
+                    eventName: EVENTS.onSourceMetadataReceived,
+                    sourcesMetadata: convertedSourcesMetadata
+                });
+            }
         }
     }
 
