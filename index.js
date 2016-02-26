@@ -34,8 +34,8 @@ if (Config.enableCORS) {
   app.use(cors());
 }
 
-if (Config.allowMultipleUserSessions) {
-  logger.error('Multiple user sessions enabled!');
+if (Config.sessions.allowMultipleUserSessions) {
+  console.error('Multiple user sessions enabled!');
 }
 
 app.set('port', Config.port);

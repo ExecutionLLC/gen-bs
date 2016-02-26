@@ -4,6 +4,16 @@ const ServiceBase = require('./ServiceBase');
 
 const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000';
 
+const SYSTEM_USER = {
+    "id": "00000000-0000-0000-0000-000000000001",
+    "name": "System",
+    "last_name": "Super",
+    "email": "system@genomix.com",
+    "speciality": "system",
+    "language": "en",
+    "number_paid_samples": 0
+};
+
 class UserService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
@@ -51,6 +61,10 @@ class UserService extends ServiceBase {
         callback(null, this.demoUser);
     }
 
+    findSystemUser(callback) {
+        callback(null, SYSTEM_USER);
+    }
+
     findIdByEmail(email, callback) {
         this.models.user.findIdByEmail(email, callback);
     }
@@ -58,6 +72,8 @@ class UserService extends ServiceBase {
     find(userId, callback) {
         if (userId === DEMO_USER_ID) {
             callback(null, this.demoUser);
+        } else if (userId === SYSTEM_USER.id) {
+            callback(null, SYSTEM_USER);
         } else {
             this.models.user.find(userId, callback);
         }
