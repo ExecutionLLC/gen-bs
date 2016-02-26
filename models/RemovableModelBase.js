@@ -13,7 +13,9 @@ class RemovableModelBase extends ModelBase {
     }
 
     remove(itemId, callback) {
-        super._unsafeUpdate(itemId, {isDeleted: true}, callback);
+        this.db.transactionally((trx, callback) => {
+            super._unsafeUpdate(itemId, {isDeleted: true}, trx, callback);
+        }, callback);
     }
 }
 
