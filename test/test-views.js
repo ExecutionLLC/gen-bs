@@ -7,6 +7,7 @@ const HttpStatus = require('http-status');
 
 const Config = require('../utils/Config');
 const Urls = require('./utils/Urls');
+const ClientBase = require('./utils/ClientBase');
 const SessionsClient = require('./utils/SessionsClient');
 const ViewsClient = require('./utils/ViewsClient');
 
@@ -46,9 +47,7 @@ describe('Views', () => {
     describe('positive tests', () => {
         it('should get all views', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
-                assert.ifError(error);
-                assert.equal(response.status, HttpStatus.OK);
-                const views = response.body;
+                const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 assert.ok(Array.isArray(views));
                 _.each(views, view => checkView(view));
@@ -58,16 +57,12 @@ describe('Views', () => {
 
         it('should get existing view', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
-                assert.ifError(error);
-                assert.equal(response.status, HttpStatus.OK);
-                const views = response.body;
+                const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const firstView = views[0];
 
                 viewsClient.get(sessionId, firstView.id, (error, response) => {
-                    assert.ifError(error);
-                    assert.equal(response.status, HttpStatus.OK);
-                    const view = response.body;
+                    const view = ClientBase.readBodyWithCheck(error, response);
                     assert.ok(view);
                     checkView(view);
                     done();
@@ -77,17 +72,13 @@ describe('Views', () => {
 
         it('should create and update existing user view', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
-                assert.ifError(error);
-                assert.equal(response.status, HttpStatus.OK);
-                const views = response.body;
+                const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const view = views[0];
                 view.name = 'Test View ' + Uuid.v4();
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
-                    assert.ifError(error);
-                    assert.equal(response.status, HttpStatus.OK);
-                    const addedView = response.body;
+                    const addedView = ClientBase.readBodyWithCheck(error, response);
                     assert.ok(addedView);
                     assert.notEqual(addedView.id, view.id, 'View id is not changed.');
                     assert.equal(addedView.name, view.name);
@@ -99,9 +90,7 @@ describe('Views', () => {
                     viewToUpdate.type = 'advanced';
 
                     viewsClient.update(sessionId, viewToUpdate, (error, response) => {
-                        assert.ifError(error);
-                        assert.equal(response.status, HttpStatus.OK);
-                        const updatedView = response.body;
+                        const updatedView = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(updatedView);
                         assert.notEqual(updatedView.id, viewToUpdate.id);
                         assert.equal(updatedView.name, viewToUpdate.name);
@@ -116,17 +105,14 @@ describe('Views', () => {
     describe('failure tests', () => {
         it('should fail to update non-user view', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
-                assert.ifError(error);
-                assert.equal(response.status, HttpStatus.OK);
-                const views = response.body;
+                const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
                 const nonUserView = _.find(views, view => view.type !== 'user');
                 assert.ok(nonUserView, 'Cannot find any non-user view');
                 nonUserView.name = 'Test Name' + Uuid.v4();
 
                 viewsClient.update(sessionId, nonUserView, (error, response) => {
-                    assert.ifError(error);
-                    assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+                    ClientBase.expectErrorResponse(error, response);
                     done();
                 });
             });
@@ -134,18 +120,14 @@ describe('Views', () => {
 
         it('should fail to get list in incorrect session', (done) => {
             viewsClient.getAll(UnknownSessionId, (error, response) => {
-                assert.ifError(error);
-                assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
-                assert.ok(response.body);
+                ClientBase.expectErrorResponse(error, response);
                 done();
             })
         });
 
         it('should fail to get unknown view', (done) => {
             viewsClient.get(sessionId, UnknownViewId, (error, response) => {
-                assert.ifError(error);
-                assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
-                assert.ok(response.body);
+                ClientBase.expectErrorResponse(error, response);
                 done();
             });
         });

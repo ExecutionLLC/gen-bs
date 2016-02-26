@@ -6,6 +6,7 @@
 const assert = require('assert');
 const HttpStatus = require('http-status');
 
+const ClientBase = require('./utils/ClientBase');
 const SessionsClient = require('./utils/SessionsClient');
 const Config = require('../utils/Config');
 const Urls = require('./utils/Urls');
@@ -56,12 +57,10 @@ describe('Sessions', () => {
                 assert.ifError(error);
                 const sessionId = SessionsClient.getSessionFromResponse(response);
                 sessionsClient.closeSession(sessionId, (error, response) => {
-                    assert.ifError(error);
-                    assert.equal(response.status, HttpStatus.OK);
+                    ClientBase.readBodyWithCheck(error, response);
                     // Check that session is now invalid.
                     sessionsClient.checkSession(sessionId, (error, response) => {
-                        assert.ifError(error);
-                        assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+                        ClientBase.expectErrorResponse(error, response);
                         done();
                     });
                 });
