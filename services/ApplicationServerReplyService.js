@@ -71,7 +71,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 }
             ], (error, resultWithOperation) => {
                 if (!resultWithOperation || !resultWithOperation.operation) {
-                    console.error('No operation is found. Error: ' + error);
+                    this.logger.error('No operation is found. Error: ' + error);
                 } else if (resultWithOperation && resultWithOperation.operationResult) {
                     // Fire only progress events here, for which operationResult != null.
                     // Redis has it's own event to indicate the data retrieval finish,
@@ -83,7 +83,7 @@ class ApplicationServerReplyService extends ServiceBase {
                         sessionId: operation.getSessionId(),
                         result
                     };
-                    this.eventEmitter.emit(EVENTS.onOperationResultReceived, eventData);
+                    this.eventEmitter.emit(result.eventName, eventData);
                     callback(error, result);
                 } else {
                     callback(error, null);
@@ -122,15 +122,71 @@ class ApplicationServerReplyService extends ServiceBase {
                 this._processUploadSampleResult(operation, rpcMessage, callback);
                 break;
 
+            case events.getSourcesList:
+                this._processGetSourcesListResult(operation, rpcMessage, callback);
+                break;
+
+            case events.getSourceMetadata:
+                this._processGetSourceMetadataResult(operation, rpcMessage, callback);
+                break;
+
             default:
-                console.error('Unexpected result came from the application server, send as is.');
+                this.logger.error('Unexpected result came from the application server, send as is.');
                 callback(null, rpcMessage.result);
                 break;
         }
     }
 
+    _processGetSourcesListResult(operation, message, callback) {
+        this.logger.info('Processing get sources list result for operation ' + operation.getId());
+        if (!message || !message.result) {
+            this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            callback(null, {
+                result: message
+            });
+        } else {
+            const sourcesList = _.map(message.result, (source) => {
+                source.sourceName = source.sourceName.replace('.h5', '');
+                return source;
+            });
+            callback(null, {
+                eventName: EVENTS.onSourcesListReceived,
+                sourcesList
+            });
+        }
+    }
+
+    _processGetSourceMetadataResult(operation, message, callback) {
+        this.logger.info('Processing get sources list result for operation ' + operation.getId());
+        if (!message || !message.result) {
+            this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            callback(null, {
+                result: message
+            });
+        } else {
+            const messageResult = message.result;
+            if (messageResult.error) {
+                callback(null, {
+                    eventName: EVENTS.onSourceMetadataReceived,
+                    error: messageResult.error
+                });
+            } else {
+                const convertedSourcesMetadata = _.map(messageResult, sourceMetadata => {
+                    return {
+                        fieldsMetadata: sourceMetadata.columns,
+                        reference: sourceMetadata.reference
+                    };
+                });
+                callback(null, {
+                    eventName: EVENTS.onSourceMetadataReceived,
+                    sourcesMetadata: convertedSourcesMetadata
+                });
+            }
+        }
+    }
+
     _processUploadSampleResult(operation, message, callback) {
-        this.services.logger.info('Processing upload result for operation ' + operation.getId());
+        this.logger.info('Processing upload result for operation ' + operation.getId());
         if (!message || !message.result || !message.result.status) {
             this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
@@ -146,6 +202,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 callback(null, {
                     status,
                     progress,
+                    eventName: EVENTS.onOperationResultReceived,
                     shouldCompleteOperation: false
                 });
             } else {
@@ -155,7 +212,9 @@ class ApplicationServerReplyService extends ServiceBase {
                 // 2. Send a message to the frontend to indicate the processing is fully completed.
                 // 3. Close the operation.
                 const sampleId = operation.getSampleId();
-                const fieldsMetadata = result.metadata;
+                const sampleMetadata = result.metadata;
+                const fieldsMetadata = sampleMetadata.columns;
+                const sampleReference = sampleMetadata.reference;
                 const sampleFileName = operation.getSampleFileName();
                 const sessionId = operation.getSessionId();
 
@@ -163,11 +222,12 @@ class ApplicationServerReplyService extends ServiceBase {
                     (callback) => this.services.sessions.findSessionUserId(sessionId, callback),
                     (userId, callback) => this.services.users.find(userId, callback),
                     (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
-                        sampleFileName, fieldsMetadata, callback)
+                        sampleFileName, sampleReference, fieldsMetadata, callback)
                 ], (error) => {
                     callback(error, {
                         status,
                         progress,
+                        eventName: EVENTS.onOperationResultReceived,
                         shouldCompleteOperation: true
                     });
                 });
@@ -180,7 +240,7 @@ class ApplicationServerReplyService extends ServiceBase {
      * */
     _processOpenSearchResult(operation, message, callback) {
         if (!message || !message.result || !message.result.sessionState) {
-            console.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            this.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
                 result: message
             });
@@ -197,7 +257,8 @@ class ApplicationServerReplyService extends ServiceBase {
                 callback(null, {
                     status: sessionState.status,
                     progress: sessionState.progress,
-                    shouldCompleteOperation: false
+                    shouldCompleteOperation: false,
+                    eventName: EVENTS.onOperationResultReceived
                 });
             } else {
                 // Get data from Redis

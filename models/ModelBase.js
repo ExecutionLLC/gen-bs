@@ -7,6 +7,8 @@ const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
+const ITEM_NOT_FOUND = 'Item not found.';
+
 class ModelBase {
     /**
      * @param models Reference to the models facade
@@ -27,8 +29,8 @@ class ModelBase {
             (callback) => {
                 this._add(languId, item, true, callback);
             },
-            (id, callback) => {
-                this.find(id, callback);
+            (itemId, callback) => {
+                this.find(itemId, callback);
             }
         ], callback);
     }
@@ -38,17 +40,17 @@ class ModelBase {
             (callback) => {
                 this._add(languId, item, false, callback);
             },
-            (id, callback) => {
-                this.find(id, callback);
+            (itemId, callback) => {
+                this.find(itemId, callback);
             }
         ], callback);
     }
 
-    exists(id, callback) {
+    exists(itemId, callback) {
         this.db.asCallback((knex, callback) => {
-            knex.select()
+            knex.select('id')
             .from(this.baseTableName)
-            .where('id', id)
+            .where('id', itemId)
             .asCallback((error, itemData) => {
                 if (error) {
                     callback(error);
@@ -59,10 +61,10 @@ class ModelBase {
         }, callback);
     }
 
-    find(id, callback) {
+    find(itemId, callback) {
         async.waterfall([
             (callback) => {
-                this._fetch(id, callback);
+                this._fetch(itemId, callback);
             },
             (itemData, callback) => {
                 callback(null, this._mapColumns(itemData));
@@ -76,21 +78,29 @@ class ModelBase {
     }
 
     _mapColumns(item) {
-        const data = ChangeCaseUtil.convertKeysToCamelCase(item);
+        const itemData = ChangeCaseUtil.convertKeysToCamelCase(item);
         return _.reduce(this.mappedColumns, (memo, column) => {
-            memo[column] = data[column];
+            memo[column] = itemData[column];
             return memo;
         }, {});
     }
 
-    _fetch(id, callback) {
+    _ensureItemNotDeleted(item, callback) {
+        if (!item.isDeleted) {
+            callback(null, item);
+        } else {
+            callback(new Error(ITEM_NOT_FOUND));
+        }
+    }
+
+    _fetch(itemId, callback) {
         this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
-                .where('id', id)
+                .where('id', itemId)
                 .asCallback((error, itemData) => {
                     if (error || !itemData.length) {
-                        callback(error || new Error('Item not found: ' + id));
+                        callback(error || new Error('Item not found: ' + itemId));
                     } else {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemData[0]));
                     }
@@ -110,12 +120,12 @@ class ModelBase {
             });
     };
 
-    _unsafeUpdate(id, dataToUpdate, trx, callback) {
+    _unsafeUpdate(itemId, dataToUpdate, trx, callback) {
         trx(this.baseTableName)
-            .where('id', id)
+            .where('id', itemId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
             .asCallback((error) => {
-                callback(error, id);
+                callback(error, itemId);
             });
     }
 }

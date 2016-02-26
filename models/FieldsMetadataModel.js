@@ -110,6 +110,25 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    getExistingSourceNames(callback) {
+        this.db.asCallback((knex, callback) => {
+            knex(this.baseTableName)
+                .distinct('source_name')
+                .select()
+                .whereNot({
+                    source_name: 'sample'
+                })
+                .asCallback((error, sources) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        const sourceNames = _.pluck(ChangeCaseUtil.convertKeysToCamelCase(sources), 'sourceName');
+                        callback(null, sourceNames);
+                    }
+                });
+        }, callback);
+    }
+
     findMetadataBySourceName(sourceName, callback) {
         async.waterfall([
             (callback) => {
@@ -131,6 +150,14 @@ class FieldsMetadataModel extends ModelBase {
                 this.models.keywords.findMany(keywordIds, callback);
             }
         ], callback);
+    }
+
+    addMany(languId, fieldsMetadata, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.map(fieldsMetadata, (fieldMetadata, callback) => {
+                this.addInTransaction(trx, languId, fieldMetadata, false, callback);
+            }, callback);
+        }, callback);
     }
 
     addInTransaction(trx, languId, metadata, shouldGenerateId, callback) {

@@ -19,7 +19,7 @@ class ApiController extends ControllerBase {
      * Tries to get user by session id from header. If failed, user is kept undefined.
      * */
     _findAndSetUserAndSessionId(request, callback) {
-        const sessionHeaderName = this.services.config.sessionHeader;
+        const sessionHeaderName = this.services.config.headers.sessionHeader;
         const sessionId = request.get(sessionHeaderName);
 
         if (!sessionId) {
@@ -41,7 +41,7 @@ class ApiController extends ControllerBase {
      * If no language is provided by header, tries to get either user or system-default language.
      * */
     _findAndSetLanguage(user, request, callback) {
-        const languageHeaderName = this.services.config.languageHeader;
+        const languageHeaderName = this.services.config.headers.languageHeader;
         const languId = request.get(languageHeaderName);
 
         async.waterfall([
@@ -95,8 +95,6 @@ class ApiController extends ControllerBase {
         const demoDataRouter = controllersFacade.demoDataController.createRouter();
         const dataRouter = controllersFacade.dataController.createRouter();
 
-        const testRouter = controllersFacade.testController.createRouter();
-
         const router = new Express();
 
         // Install Express middleware
@@ -111,8 +109,6 @@ class ApiController extends ControllerBase {
         router.use('/filters', filtersRouter);
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);
-
-        router.use('/test', testRouter);
 
         return router;
     }

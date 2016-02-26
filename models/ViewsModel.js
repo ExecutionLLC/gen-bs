@@ -49,21 +49,18 @@ class ViewsModel extends SecureModelBase {
     findAll(userId, callback) {
         async.waterfall([
             (callback) => { this._fetchUserViews(userId, callback); },
-            (viewsData, callback) => {
-                async.waterfall([
-                    (callback) => {
-                        const viewIds = _.pluck(viewsData, 'id');
-                        this._fetchViewItemsByIds(viewIds, callback);
-                    },
-                    (viewItemsData, callback) => {
-                        let viewItems = _.groupBy(viewItemsData, (viewItem) => {
-                            return viewItem.viewId;
-                        });
-                        async.map(viewsData, (viewData, callback) => {
-                            this._mapView(viewData, viewItems[viewData.id], callback);
-                        }, callback);
+            (views, callback) => {
+                const viewIds = _.pluck(views, 'id');
+                this._fetchViewItemsByIds(viewIds, (error, viewItems) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, views, viewItems);
                     }
-                ], callback);
+                });
+            },
+            (views, viewItems, callback) => {
+                this._mapViews(views, viewItems, callback);
             }
         ], callback);
     }
@@ -86,19 +83,17 @@ class ViewsModel extends SecureModelBase {
                 }
             },
             (views, callback) => {
-                async.waterfall([
-                    (callback) => {
-                        this._fetchViewItemsByIds(viewIds, callback);
-                    },
-                    (viewItemsData, callback) => {
-                        let viewItems = _.groupBy(viewItemsData, (viewItem) => {
-                            return viewItem.viewId;
-                        });
-                        async.map(views, (view, callback) => {
-                            this._mapView(viewData, viewItems[view.id], callback);
-                        }, callback);
+                const viewIds = _.pluck(views, 'id');
+                this._fetchViewItemsByIds(viewIds, (error, viewItems) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, views, viewItems);
                     }
-                ], callback);
+                });
+            },
+            (views, viewItems, callback) => {
+                this._mapViews(views, viewItems, callback);
             }
         ], callback);
     }
@@ -268,6 +263,15 @@ class ViewsModel extends SecureModelBase {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData.rows));
                     }
             });
+        }, callback);
+    }
+
+    _mapViews(views, viewItems, callback) {
+        let viewItemsData = _.groupBy(viewItems, (viewItem) => {
+            return viewItem.viewId;
+        });
+        async.map(views, (view, callback) => {
+            this._mapView(view, viewItemsData[view.id], callback);
         }, callback);
     }
 

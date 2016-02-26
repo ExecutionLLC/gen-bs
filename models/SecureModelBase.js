@@ -5,8 +5,6 @@ const async = require('async');
 
 const RemovableModelBase = require('./RemovableModelBase');
 
-const ITEM_NOT_FOUND = 'Item not found.';
-
 class SecureModelBase extends RemovableModelBase {
     /**
      * @param models Reference to the models facade
@@ -23,8 +21,8 @@ class SecureModelBase extends RemovableModelBase {
             (callback) => {
                 this._add(userId, languId, item, true, callback);
             },
-            (id, callback) => {
-                this.find(userId, id, callback);
+            (itemId, callback) => {
+                this.find(userId, itemId, callback);
             }
         ], callback);
     }
@@ -35,8 +33,8 @@ class SecureModelBase extends RemovableModelBase {
             (callback) => {
                 this._add(userId, languId, item, false, callback);
             },
-            (id, callback) => {
-                this.find(userId, id, callback);
+            (itemId, callback) => {
+                this.find(userId, itemId, callback);
             }
         ], callback);
     }
@@ -45,17 +43,16 @@ class SecureModelBase extends RemovableModelBase {
         this._add(userId, languId, filter, false, callback);
     }
 
-    update(userId, id, item, callback) {
+    update(userId, itemId, item, callback) {
         async.waterfall([
             (callback) => {
-                this._fetch(userId, id, callback);
+                this._fetch(userId, itemId, callback);
             },
             (itemData, callback) => {
-                if (itemData.isDeleted) {
-                    callback(new Error(ITEM_NOT_FOUND));
-                } else {
-                    this._update(userId, itemData, item, callback);
-                }
+                this._ensureItemNotDeleted(itemData, callback);
+            },
+            (itemData, callback) => {
+                this._update(userId, itemData, item, callback);
             },
             (itemId, callback) => {
                 this.find(userId, itemId, callback);
@@ -63,26 +60,25 @@ class SecureModelBase extends RemovableModelBase {
         ], callback);
     }
 
-    find(userId, id, callback) {
+    find(userId, itemId, callback) {
         async.waterfall([
             (callback) => {
-                this._fetch(userId, id, callback);
+                this._fetch(userId, itemId, callback);
             },
             (itemData, callback) => {
-                if (itemData.isDeleted) {
-                    callback(new Error(ITEM_NOT_FOUND))
-                } else {
-                    callback(null, this._mapColumns(itemData));
-                }
+                this._ensureItemNotDeleted(itemData, callback);
+            },
+            (itemData, callback) => {
+                callback(null, this._mapColumns(itemData));
             }
         ], callback);
     }
 
     // Set is_deleted = true
-    remove(userId, id, callback) {
+    remove(userId, itemId, callback) {
         async.waterfall([
             (callback) => {
-                this._fetch(userId, id, callback);
+                this._fetch(userId, itemId, callback);
             },
             (itemData, callback) => {
                 super.remove(itemData.id, callback);
@@ -90,10 +86,10 @@ class SecureModelBase extends RemovableModelBase {
         ], callback);
     }
 
-    _fetch(userId, id, callback) {
+    _fetch(userId, itemId, callback) {
         async.waterfall([
             (callback) => {
-                super._fetch(id, callback);
+                super._fetch(itemId, callback);
             },
             (itemData, callback) => {
                 this._checkUserIsCorrect(userId, itemData, callback);

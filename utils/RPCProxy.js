@@ -20,11 +20,16 @@ class RPCProxy {
         this.host = host;
         this.port = port;
 
+        this.send = this.send.bind(this);
         this.logger = logger;
 
         // Try to reconnect automatically if connection is closed
         this.connected = false;
         setInterval(() => this._connect(), 1000);
+    }
+
+    isConnected() {
+        return this.connected;
     }
 
     send(operationId, method, params, callback) {

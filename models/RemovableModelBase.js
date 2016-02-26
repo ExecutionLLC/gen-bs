@@ -16,24 +16,20 @@ class RemovableModelBase extends ModelBase {
         super(models, baseTableName, mappedColumns);
     }
 
-    find(id, callback) {
+    find(itemId, callback) {
         async.waterfall([
             (callback) => {
-                super.find(id, callback);
+                super.find(itemId, callback);
             },
             (itemData, callback) => {
-                if (itemData.isDeleted) {
-                    callback(new Error(ITEM_NOT_FOUND));
-                } else {
-                    callback(null, itemData);
-                }
+                this._ensureItemNotDeleted(itemData, callback);
             }
         ], callback);
     }
 
-    remove(id, callback) {
+    remove(itemId, callback) {
         this.db.transactionally((trx, callback) => {
-            super._unsafeUpdate(id, {isDeleted: true}, trx, callback);
+            super._unsafeUpdate(itemId, {isDeleted: true}, trx, callback);
         }, callback);
     }
 }
