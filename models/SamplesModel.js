@@ -6,8 +6,6 @@ const async = require('async');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const SecureModelBase = require('./SecureModelBase');
 
-const ITEM_NOT_FOUND = 'Item not found.';
-
 const mappedColumns = [
     'id',
     'fileName',
@@ -25,54 +23,30 @@ class SamplesModel extends SecureModelBase {
 
     find(userId, sampleId, callback) {
         async.waterfall([
-            (callback) => { this._fetch(userId, sampleId, callback); },
-            (sample, callback) => {
-                if (sample.isDeleted) {
-                    callback(new Error(ITEM_NOT_FOUND));
-                } else {
-                    this._mapFileSampleValues(sample, callback);
-                }
-            }
+            (callback) => this._fetch(userId, sampleId, callback),
+            (sample, callback) => this._ensureItemNotDeleted(sample, callback),
+            (sample, callback) => this._mapFileSampleValues(sample, callback)
         ], callback);
     }
 
     findAll(userId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchSamplesByUserId(userId, callback);
-            },
-            (samples, callback) => {
-                async.map(samples, (sample, callback) => {
-                    this._mapFileSampleValues(sample, callback);
-                }, callback);
-            }
+            (callback) => this._fetchSamplesByUserId(userId, callback),
+            (samples, callback) => this._mapSamples(samples, callback)
         ], callback);
     }
 
     findMany(userId, sampleIds, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchSamplesByIds(sampleIds, callback);
-            },
-            (samples, callback) => {
-                if ((samples.length === sampleIds.length) && (_.every(samples, 'isDeleted', false))) {
-                    callback(null, samples);
-                } else {
-                    callback('Some samples not found: ' + sampleIds + ', userId: ' + userId);
-                }
-            },
-            (samples, callback) => {
-                if (_.every(samples, 'creator', userId)) {
-                    callback(null, samples);
-                } else {
-                    callback('Unauthorized access to samples: ' + sampleIds + ', userId: ' + userId);
-                }
-            },
-            (samples, callback) => {
-                async.map(samples, (sample, callback) => {
-                    this._mapFileSampleValues(sample, callback);
-                }, callback);
-            }
+            (callback) => this._fetchSamplesByIds(sampleIds, callback),
+            (samples, callback) => this._ensureAllItemsFound(samples, sampleIds, callback),
+            (samples, callback) => async.map(samples, (sample, callback) => {
+                this._ensureItemNotDeleted(sample, callback);
+            }, callback),
+            (samples, callback) => async.map(samples, (sample, callback) => {
+                this._checkUserIsCorrect(userId, sample, callback);
+            }, callback),
+            (samples, callback) => this._mapSamples(samples, callback)
         ], callback);
     }
 
@@ -117,17 +91,12 @@ class SamplesModel extends SecureModelBase {
 
     makeAnalyzed(userId, sampleId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetch(userId, sampleId, callback);
-            },
+            (callback) => this._fetch(userId, sampleId, callback),
+            (sample, callback) => this._ensureItemNotDeleted(sample, callback),
             (sample, callback) => {
-                if (sample.isDeleted) {
-                    callback(new Error(ITEM_NOT_FOUND));
-                } else {
-                    this.db.transactionally((trx, callback) => {
-                        this._setAnalyzed(sample.id, true, trx, callback);
-                    }, callback);
-                }
+                this.db.transactionally((trx, callback) => {
+                    this._setAnalyzed(sample.id, true, trx, callback);
+                }, callback);
             }
         ], callback);
     }
@@ -157,9 +126,7 @@ class SamplesModel extends SecureModelBase {
                 const dataToInsert = this._createDataToInsert(userId, sample, shouldGenerateId);
                 this._insert(dataToInsert, trx, callback);
             },
-            (sampleId, callback) => {
-                this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback);
-            },
+            (sampleId, callback) => this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback),
             (sampleId, callback) => {
                 this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
                     callback(error, {
@@ -168,11 +135,9 @@ class SamplesModel extends SecureModelBase {
                     });
                 });
             },
-            (sampleObj, callback) => {
-                this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
+            (sampleObj, callback) => this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
                     callback(error, sampleObj.sampleId);
-                });
-            }
+                })
         ], callback);
     }
 
@@ -186,24 +151,22 @@ class SamplesModel extends SecureModelBase {
                     };
                     this._unsafeUpdate(sample.id, dataToUpdate, trx, callback);
                 },
-                (sampleId, callback) => {
-                    this._setAnalyzed(sampleId, sampleToUpdate.isAnalyzed || false, trx, callback);
-                },
-                (sampleId, callback) => {
-                    this._addNewFileSampleVersion(sampleId, trx, callback);
-                },
-                (versionId, callback) => {
-                    this._addFileSampleValues(versionId, sampleToUpdate.values, trx, callback);
-                }
+                (sampleId, callback) => this._setAnalyzed(sampleId, sampleToUpdate.isAnalyzed || false, trx, callback),
+                (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
+                (versionId, callback) => this._addFileSampleValues(versionId, sampleToUpdate.values, trx, callback)
             ], callback);
+        }, callback);
+    }
+
+    _mapSamples(samples, callback) {
+        async.map(samples, (sample, callback) => {
+            this._mapFileSampleValues(sample, callback);
         }, callback);
     }
 
     _mapFileSampleValues(sample, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchFileSampleValues(sample.id, callback);
-            },
+            (callback) => this._fetchFileSampleValues(sample.id, callback),
             (sampleValues, callback) => {
                 sample.values = sampleValues;
                 callback(null, this._mapColumns(sample));
@@ -308,12 +271,8 @@ class SamplesModel extends SecureModelBase {
 
     _fetchFileSampleValues(sampleId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchLastSampleVersion(sampleId, callback);
-            },
-            (sampleVersion, callback) => {
-                this._fetchMetadataForSampleVersion(sampleVersion.id, callback);
-            }
+            (callback) => this._fetchLastSampleVersion(sampleId, callback),
+            (sampleVersion, callback) => this._fetchMetadataForSampleVersion(sampleVersion.id, callback)
         ], callback);
     }
 

@@ -26,35 +26,22 @@ class FiltersModel extends SecureModelBase {
     // It collects the latest version of each filter for the current user
     findAll(userId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchUserFilters(userId, callback);
-            },
-            (filters, callback) => {
-                this._mapFilters(filters, callback);
-            }
+            (callback) => this._fetchUserFilters(userId, callback),
+            (filters, callback) => this._mapItems(filters, callback)
         ], callback);
     }
 
     findMany(userId, filterIds, callback) {
         async.waterfall([
             (callback) => { this._fetchFilters(filterIds, callback); },
-            (filtersData, callback) => {
-                if ((filtersData.length == filterIds.length) && (_.every(filtersData, 'isDeleted', false))) {
-                    callback(null, filtersData);
-                } else {
-                    callback('Some filters not found: ' + filterIds + ', userId: ' + userId);
-                }
-            },
-            (filters, callback) => {
-                if (_.every(filters, 'creator', userId)) {
-                    callback(null, filters);
-                } else {
-                    callback('Unauthorized access to filters: ' + filterIds + ', userId: ' + userId);
-                }
-            },
-            (filters, callback) => {
-                this._mapFilters(filters, callback);
-            }
+            (filters, callback) => this._ensureAllItemsFound(filters, filterIds, callback),
+            (filters, callback) => async.map(filters, (filter, callback) => {
+                this._ensureItemNotDeleted(filter, callback);
+            }, callback),
+            (filters, callback) => async.map(filters, (filter, callback) => {
+                this._checkUserIsCorrect(userId, filter, callback);
+            }, callback),
+            (filters, callback) => this._mapItems(filters, callback)
         ], callback);
     }
 
@@ -116,12 +103,8 @@ class FiltersModel extends SecureModelBase {
 
     _fetch(userId, filterId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchFilter(filterId, callback);
-            },
-            (filter, callback) => {
-                this._checkUserIsCorrect(userId, filter, callback);
-            }
+            (callback) => this._fetchFilter(filterId, callback),
+            (filter, callback) => this._checkUserIsCorrect(userId, filter, callback)
         ], callback);
     }
 
@@ -154,12 +137,6 @@ class FiltersModel extends SecureModelBase {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData));
                     }
                 });
-        }, callback);
-    }
-
-    _mapFilters(filters, callback) {
-        async.map(filters, (filter, callback) => {
-            callback(null, this._mapColumns(filter));
         }, callback);
     }
 

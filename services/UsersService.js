@@ -49,7 +49,7 @@ class UserService extends ServiceBase {
             numberPaidSamples
         };
 
-        this.models.user.add(user, defaultLanguId, callback);
+        this.models.user.add(defaultLanguId, user, callback);
     }
 
     /**

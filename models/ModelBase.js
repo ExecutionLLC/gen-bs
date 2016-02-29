@@ -7,8 +7,6 @@ const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
-const ITEM_NOT_FOUND = 'Item not found.';
-
 class ModelBase {
     /**
      * @param models Reference to the models facade
@@ -24,25 +22,17 @@ class ModelBase {
         this.db = models.db;
     }
 
-    add(languId, item, callback) {
+    add(item, languId, callback) {
         async.waterfall([
-            (callback) => {
-                this._add(languId, item, true, callback);
-            },
-            (itemId, callback) => {
-                this.find(itemId, callback);
-            }
+            (callback) => this._add(item, languId, true, callback),
+            (itemId, callback) => this.find(itemId, callback)
         ], callback);
     }
 
-    addWithId(languId, item, callback) {
+    addWithId(item, languId, callback) {
         async.waterfall([
-            (callback) => {
-                this._add(languId, item, false, callback);
-            },
-            (itemId, callback) => {
-                this.find(itemId, callback);
-            }
+            (callback) => this._add(item, languId, false, callback),
+            (itemId, callback) => this.find(itemId, callback)
         ], callback);
     }
 
@@ -63,9 +53,7 @@ class ModelBase {
 
     find(itemId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetch(itemId, callback);
-            },
+            (callback) => this._fetch(itemId, callback),
             (itemData, callback) => {
                 callback(null, this._mapColumns(itemData));
             }
@@ -85,12 +73,18 @@ class ModelBase {
         }, {});
     }
 
-    _ensureItemNotDeleted(item, callback) {
-        if (!item.isDeleted) {
-            callback(null, item);
+    _ensureAllItemsFound(itemsFound, itemIdsToFind, callback) {
+        if (itemsFound && itemsFound.length === itemIdsToFind.length) {
+            callback(null, itemsFound);
         } else {
-            callback(new Error(ITEM_NOT_FOUND));
+            callback('Part of the items is not found: ' + itemIdsToFind);
         }
+    }
+
+    _mapItems(items, callback) {
+        async.map(items, (item, callback) => {
+            callback(null, this._mapColumns(item));
+        }, callback);
     }
 
     _fetch(itemId, callback) {
