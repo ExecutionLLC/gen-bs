@@ -35,8 +35,8 @@ class ServiceFacade {
         this.applicationServer = new ApplicationServerService(this, models);
         this.applicationServerReply = new ApplicationServerReplyService(this, models);
 
-        this.search = new SearchService(this, models);
         this.redis = new RedisService(this, models);
+        this.search = new SearchService(this, models);
         this.tokens = new TokenService(this, models);
 
         this.scheduler = new SchedulerService(this, models);

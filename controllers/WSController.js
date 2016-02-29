@@ -100,10 +100,10 @@ class WSController extends ControllerBase {
      * */
     _subscribeAppServerReplyEvents() {
         const appServerReplyEvents = this.services.applicationServerReply.registeredEvents();
-        const redisEvents = this.services.redis.registeredEvents();
+        const searchEvents = this.services.search.registeredEvents();
 
         this.services.applicationServerReply.on(appServerReplyEvents.onOperationResultReceived, this._onServerReply.bind(this));
-        this.services.redis.on(redisEvents.dataReceived, this._onServerReply.bind(this));
+        this.services.search.on(searchEvents.onDataReceived, this._onServerReply.bind(this));
     }
 }
 

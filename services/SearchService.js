@@ -4,10 +4,32 @@ const _ = require('lodash');
 const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
+const EventProxy = require('../utils/EventProxy');
+
+const EVENTS = {
+    onDataReceived: 'onDataReceived'
+};
 
 class SearchService extends ServiceBase {
     constructor(services) {
         super(services);
+
+        this._onRedisDataReceived = this._onRedisDataReceived.bind(this);
+
+        this.eventEmitter = new EventProxy(EVENTS);
+        this._subscribeToRedisEvents();
+    }
+
+    registeredEvents() {
+        return EVENTS;
+    }
+
+    on(eventName, callback) {
+        this.eventEmitter.on(eventName, callback);
+    }
+
+    off(eventName, callback) {
+        this.eventEmitter.off(eventName, callback);
     }
 
     sendSearchRequest(user, sessionId, languId, sampleId, viewId, filterId, limit, offset, callback) {
@@ -86,6 +108,26 @@ class SearchService extends ServiceBase {
                 callback(null, operationId);
             }
         ], callback);
+    }
+
+    _subscribeToRedisEvents() {
+        const redisEvents = this.services.redis.registeredEvents();
+        this.services.redis.on(redisEvents.onRedisDataReceived, this._onRedisDataReceived.bind(this));
+    }
+
+    _onRedisDataReceived(replyInfo) {
+        const fieldIdToValueArray = replyInfo.result.fieldIdToValueArray;
+
+        this.eventEmitter.emit(EVENTS.onDataReceived, {
+            sessionId: replyInfo.sessionId,
+            operationId: replyInfo.operationId,
+            result: {
+                sampleId: replyInfo.result.sampleId,
+                limit: replyInfo.result.limit,
+                offset: replyInfo.result.offset,
+                data: fieldIdToValueArray
+            }
+        });
     }
 
     _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
