@@ -33,7 +33,24 @@
 					"description": "Array of objects, each describing a separate row.",
 					"items": {
 						"type": "object",
-						"description": "Object containing 'field Id -> field value' hash for the row"
+						"properties": {
+							"search_key": {
+								"type": "string",
+								"description": "Identifier by which the comment is matched during sample loading. Comments can be shared between samples if the search_key is the same. The value is calculated by the application server."
+							},
+							"fields": {
+								"type": "object",
+								"description": "Object containing 'field Id -> field value' hash for the row"
+							},
+							"comments": {
+								"type": "array",
+								"description": "An array of comments for the row.",
+								"items": {
+									"type": "string",
+									"description": "Comment text."
+								}
+							}
+						}
 					}
 				}
 			}
