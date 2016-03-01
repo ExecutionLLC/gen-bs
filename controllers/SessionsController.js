@@ -29,12 +29,11 @@ class SessionsController extends ControllerBase {
             (callback) => this.sessions.startDemo(callback),
             (sessionId, callback) => this.sessions.findSessionType(
                 sessionId,
-                (error, sessionType) => callback(error, sessionId, sessionType)
-            ),
-            (sessionId, sessionType, callback) => callback(null, {
-                sessionId,
-                sessionType
-            })
+                (error, sessionType) => callback(error, {
+                    sessionId,
+                    sessionType
+                })
+            )
         ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 
@@ -45,12 +44,11 @@ class SessionsController extends ControllerBase {
             (callback) =>this.sessions.findById(sessionId, callback),
             (sessionId, callback) => this.sessions.findSessionType(
                 sessionId,
-                (error, sessionType) => callback(error, sessionId, sessionType)
-            ),
-            (sessionId, sessionType, callback) => callback(null, {
-                sessionId,
-                sessionType
-            })
+                (error, sessionType) => callback(error, {
+                    sessionId,
+                    sessionType
+                })
+            )
         ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 
