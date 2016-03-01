@@ -108,9 +108,11 @@ export function login2() {
     if (queryString[0] === 'sessionId') {
       console.log('google auth success', queryString[1])
       _processLoginData(dispatch, queryString[1], false)
+      history.pushState({}, null, 'http://localhost:8080')
     } else if (queryString[0] === 'error') {
       console.log('google auth error', decodeURIComponent(queryString[1]))
       _checkCookieSessionAndLogin(dispatch, sessionId)
+      history.pushState({}, null, 'http://localhost:8080')
     } else {
       console.log('Not from google, maybe demo may be from cookie')
       _checkCookieSessionAndLogin(dispatch, sessionId)
