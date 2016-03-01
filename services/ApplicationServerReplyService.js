@@ -108,6 +108,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 operationId: operation.getId(),
                 error: rpcError,
                 result: rpcMessage,
+                eventName: EVENTS.onOperationResultReceived,
                 shouldCompleteOperation
             });
             return;

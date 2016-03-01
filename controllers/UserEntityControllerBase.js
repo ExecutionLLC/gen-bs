@@ -14,6 +14,7 @@ class UserEntityControllerBase extends ControllerBase {
         this.findAll = this.findAll.bind(this);
         this.add = this.add.bind(this);
         this.update = this.update.bind(this);
+        this.remove = this.remove.bind(this);
     }
 
     find(request, response) {

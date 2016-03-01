@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 const ServiceBase = require('./ServiceBase');
 
 class UserEntityServiceBase extends ServiceBase {
@@ -55,7 +57,7 @@ class UserEntityServiceBase extends ServiceBase {
             return;
         }
 
-        this.theModel.remove(user, itemId, callback);
+        this.theModel.remove(user.id, itemId, callback);
     }
 }
 

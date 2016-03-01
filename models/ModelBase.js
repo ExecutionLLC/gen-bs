@@ -22,25 +22,17 @@ class ModelBase {
         this.db = models.db;
     }
 
-    add(languId, item, callback) {
+    add(item, languId, callback) {
         async.waterfall([
-            (callback) => {
-                this._add(languId, item, true, callback);
-            },
-            (itemId, callback) => {
-                this.find(itemId, callback);
-            }
+            (callback) => this._add(item, languId, true, callback),
+            (itemId, callback) => this.find(itemId, callback)
         ], callback);
     }
 
-    addWithId(languId, item, callback) {
+    addWithId(item, languId, callback) {
         async.waterfall([
-            (callback) => {
-                this._add(languId, item, false, callback);
-            },
-            (itemId, callback) => {
-                this.find(itemId, callback);
-            }
+            (callback) => this._add(item, languId, false, callback),
+            (itemId, callback) => this.find(itemId, callback)
         ], callback);
     }
 
@@ -61,9 +53,7 @@ class ModelBase {
 
     find(itemId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetch(itemId, callback);
-            },
+            (callback) => this._fetch(itemId, callback),
             (itemData, callback) => {
                 callback(null, this._mapColumns(itemData));
             }
@@ -76,11 +66,25 @@ class ModelBase {
     }
 
     _mapColumns(item) {
-        const data = ChangeCaseUtil.convertKeysToCamelCase(item);
+        const itemData = ChangeCaseUtil.convertKeysToCamelCase(item);
         return _.reduce(this.mappedColumns, (memo, column) => {
-            memo[column] = data[column];
+            memo[column] = itemData[column];
             return memo;
         }, {});
+    }
+
+    _ensureAllItemsFound(itemsFound, itemIdsToFind, callback) {
+        if (itemsFound && itemsFound.length === itemIdsToFind.length) {
+            callback(null, itemsFound);
+        } else {
+            callback('Part of the items is not found: ' + itemIdsToFind);
+        }
+    }
+
+    _mapItems(items, callback) {
+        async.map(items, (item, callback) => {
+            callback(null, this._mapColumns(item));
+        }, callback);
     }
 
     _fetch(itemId, callback) {
