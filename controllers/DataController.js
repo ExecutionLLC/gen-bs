@@ -17,6 +17,7 @@ class DataController extends ControllerBase {
     const user = request.user;
     const sessionId = request.sessionId;
     async.parallel({
+      profileMetadata: (callback) => callback(null, user),
       views: (callback) => {
         this.services.views.findAll(user, callback);
       },
