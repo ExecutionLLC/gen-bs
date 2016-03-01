@@ -140,7 +140,8 @@ class SearchService extends ServiceBase {
                                 fieldId,
                                 value: fieldIdToValueHash[fieldId]
                             }
-                        });
+                        })
+                        .value();
                     const searchKey = fieldIdToValueHash[this.searchKeyFieldName];
                     const comments = searchKeyToCommentsArrayHash[searchKey];
                     return {
