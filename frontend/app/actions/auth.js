@@ -8,6 +8,7 @@ import { createWsConnection, subscribeToWs, send } from './websocket'
  */
 export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 /*
  * action creators
@@ -108,11 +109,12 @@ export function login2() {
     if (queryString[0] === 'sessionId') {
       console.log('google auth success', queryString[1])
       _processLoginData(dispatch, queryString[1], false)
-      history.pushState({}, null, 'http://localhost:8080')
+      history.pushState({}, null, `http://${location.host}`)
     } else if (queryString[0] === 'error') {
       console.log('google auth error', decodeURIComponent(queryString[1]))
+      dispatch(loginError(decodeURIComponent(queryString[1])))
       _checkCookieSessionAndLogin(dispatch, sessionId)
-      history.pushState({}, null, 'http://localhost:8080')
+      history.pushState({}, null, `http://${location.host}`)
     } else {
       console.log('Not from google, maybe demo may be from cookie')
       _checkCookieSessionAndLogin(dispatch, sessionId)
@@ -121,3 +123,9 @@ export function login2() {
   }
 }
 
+function loginError(errorMessage) {
+  return {
+    type: LOGIN_ERROR,
+    errorMessage
+  }
+}

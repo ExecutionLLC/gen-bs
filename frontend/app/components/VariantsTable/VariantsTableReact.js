@@ -46,7 +46,7 @@ class VariantsTableReact extends Component {
           { !isVariantsLoaded && !isVariantsEmpty && isVariantsValid &&
             <div className="table-variants-container">
               { auth.isDemo &&
-                <DemoModeMessage />
+                <DemoModeMessage errorMessage={auth.errorMessage} />
               }
               <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
                 <VariantsTableHead variants={variants} fields={fields} {...this.props} />

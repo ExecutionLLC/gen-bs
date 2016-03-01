@@ -4,7 +4,8 @@ export default function auth(state = {
   isFetching: false,
   sessionId: null,
   isAuthenticated: false,
-  isDemo: false
+  isDemo: false,
+  errorMessage: null
 }, action) {
 
   switch (action.type) {
@@ -21,6 +22,11 @@ export default function auth(state = {
         isAuthenticated: action.isAuthenticated,
         isDemo: action.isDemo,
         lastUpdated: action.receivedAt
+      });
+
+    case ActionTypes.LOGIN_ERROR:
+      return Object.assign({}, state, {
+        errorMessage: action.errorMessage
       });
 
 
