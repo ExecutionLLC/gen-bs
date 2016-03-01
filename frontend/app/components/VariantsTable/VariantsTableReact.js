@@ -7,6 +7,7 @@ import { fetchVariants, searchInResults } from '../../actions/variantsTable'
 import VariantsTableHead from './VariantsTableHead'
 import VariantsTableRows from './VariantsTableRows'
 import VariantsTableEmpty from './VariantsTableEmpty'
+import DemoModeMessage from '../Errors/DemoModeMessage'
 
 
 import VariantsTableLoadError from '../Errors/VariantsTableLoadError'
@@ -16,7 +17,7 @@ import VariantsTableLoadError from '../Errors/VariantsTableLoadError'
 class VariantsTableReact extends Component {
 
   render() {
-    const { dispatch, views, fields, ui } = this.props
+    const { dispatch, auth, views, fields, ui } = this.props
     const { variants, isVariantsLoaded, isVariantsEmpty, isVariantsValid, errors } = this.props.ws
 
     var tableWrapperClass = classNames({
@@ -44,6 +45,9 @@ class VariantsTableReact extends Component {
           }
           { !isVariantsLoaded && !isVariantsEmpty && isVariantsValid &&
             <div className="table-variants-container">
+              { auth.isDemo &&
+                <DemoModeMessage />
+              }
               <table className="table table-hover table-bordered table-striped table-variants table-resposive" id="variants_table">
                 <VariantsTableHead variants={variants} fields={fields} {...this.props} />
                 <VariantsTableRows variants={variants} fields={fields} {...this.props} />
@@ -58,9 +62,10 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-  const { websocket, ui, variantsTable } = state
+  const { auth, websocket, ui, variantsTable } = state
 
   return {
+    auth,
     ws: websocket,
     ui,
     variantsTable

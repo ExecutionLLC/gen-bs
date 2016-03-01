@@ -3,7 +3,8 @@ import * as ActionTypes from '../actions/auth'
 export default function auth(state = {
   isFetching: false,
   sessionId: null,
-  isAuthenticated: false
+  isAuthenticated: false,
+  isDemo: false
 }, action) {
 
   switch (action.type) {
@@ -18,6 +19,7 @@ export default function auth(state = {
         isFetching: false,
         sessionId: action.sessionId,
         isAuthenticated: action.isAuthenticated,
+        isDemo: action.isDemo,
         lastUpdated: action.receivedAt
       });
 
