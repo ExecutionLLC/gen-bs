@@ -23,7 +23,6 @@ function receiveSession(json, isDemo) {
   const isAuthenticated = (sessionId !== null);
 
   document.cookie = `sessionId=${sessionId}`;
-  document.cookie = `isDemo=${isDemo}`;
 
   return {
     type: RECEIVE_SESSION,
@@ -50,7 +49,7 @@ function _processLoginData(dispatch, sessionId, isDemo) {
   
 }
 
-function _checkSession(dispatch, cb, sessionId, isDemo){
+function _checkSession(dispatch, cb, sessionId){
   return $.ajax(config.URLS.SESSION, {
       'type': 'PUT',
       'headers': { "X-Session-Id": sessionId },
@@ -59,7 +58,7 @@ function _checkSession(dispatch, cb, sessionId, isDemo){
     })
     .done(json => {
       console.log('cookie session VALID', sessionId);
-      cb(dispatch, sessionId, isDemo)
+      cb(dispatch, sessionId, json.session_type === 'DEMO')
     })
     .fail(json => {
       console.log('cookie session INVALID', sessionId);
@@ -84,20 +83,16 @@ function _newDemoSession(dispatch, cb) {
   // catch any error in the network call.
 };
 
-export function demoLogin(name, password) {
-  return dispatch => {
 
-    const sessionId = getCookie('sessionId');
-
+function _checkCookieSessionAndLogin(dispatch, sessionId) {
     dispatch(requestSession());
 
     // null for debug purpose
     if (sessionId && sessionId !== 'null') {
         _checkSession(dispatch, _processLoginData, sessionId, true)
     } else {
-        newDemoSession(dispatch, _processLoginData)
+        _newDemoSession(dispatch, _processLoginData)
     }
-  }
 }
 
 export function login2() {
@@ -107,8 +102,6 @@ export function login2() {
   const queryString = location.search.slice(1).split('=')
 
   const sessionId = getCookie('sessionId');
-  const isDemoFromCookie = getCookie('isDemo') === 'true';
-  console.log('isDemo from cookie', isDemoFromCookie)
 
   return dispatch => {
 
@@ -117,15 +110,10 @@ export function login2() {
       _processLoginData(dispatch, queryString[1], false)
     } else if (queryString[0] === 'error') {
       console.log('google auth error', decodeURIComponent(queryString[1]))
-      dispatch(demoLogin('valarie', 'password'))
+      _checkCookieSessionAndLogin(dispatch, sessionId)
     } else {
-      console.log('Not from google, maybe demo')
-      //dispatch(demoLogin())
-      if (sessionId && sessionId !== 'null') {
-          _checkSession(dispatch, _processLoginData, sessionId, isDemoFromCookie)
-      } else {
-          newDemoSession(dispatch, _processLoginData)
-      }
+      console.log('Not from google, maybe demo may be from cookie')
+      _checkCookieSessionAndLogin(dispatch, sessionId)
     }
 
   }
