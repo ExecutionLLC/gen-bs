@@ -1,6 +1,7 @@
 'use strict';
 
 const Uuid = require('node-uuid');
+const async = require('async');
 const Express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -16,6 +17,7 @@ class SessionsController extends ControllerBase {
         this.close = this.close.bind(this);
 
         this.config = this.services.config;
+        this.sessions = this.services.sessions;
         this.authStates = {};
     }
 
@@ -23,35 +25,41 @@ class SessionsController extends ControllerBase {
      * Opens new session, either demo or user, depending on the user name and password presence in the request.
      * */
     open(request, response) {
-        const body = this.getRequestBody(request, response);
-        if (!body) {
-            return;
-        }
-
-        const createSessionCallback = (error, sessionId) => {
-            this.sendErrorOrJson(response, error, {
-                sessionId
-            });
-        };
-
-        // open demo session.
-        this.services.sessions.startDemo(createSessionCallback);
+        async.waterfall([
+            (callback) => this.sessions.startDemo(callback),
+            (sessionId, callback) => this.sessions.findSessionType(
+                sessionId,
+                (error, sessionType) => callback(error, sessionId, sessionType)
+            ),
+            (sessionId, sessionType, callback) => callback(null, {
+                sessionId,
+                sessionType
+            })
+        ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 
     check(request, response) {
         const sessionId = this.getSessionId(request);
 
-        this.services.sessions.findById(sessionId, (error, sessionId) => {
-            this.sendErrorOrJson(response, error, {
-                sessionId
-            });
-        });
+        async.waterfall([
+            (callback) =>this.sessions.findById(sessionId, callback),
+            (sessionId, callback) => this.sessions.findSessionType(
+                sessionId,
+                (error, sessionType) => callback(error, sessionId, sessionType)
+            ),
+            (sessionId, sessionType, callback) => callback(null, {
+                sessionId,
+                sessionType
+            })
+        ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 
     close(request, response) {
         const sessionId = this.getSessionId(request);
         this.services.sessions.destroySession(sessionId, (error) => {
-            this.sendErrorOrJson(response, error, {});
+            this.sendErrorOrJson(response, error, {
+                sessionId
+            });
         });
     }
 
