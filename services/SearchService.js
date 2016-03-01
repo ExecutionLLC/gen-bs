@@ -128,7 +128,7 @@ class SearchService extends ServiceBase {
                 ),
             // TODO: Store languId from request in the session to use here.
             (userId, callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
-            (user, callback) => this._loadComments(user.id, user.language, fieldIdToValueArray, callback),
+            (user, callback) => this._loadRowsComments(user.id, user.language, fieldIdToValueArray, callback),
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.
                 const rows = _.map(fieldIdToValueArray, fieldIdToValueHash => {
@@ -189,12 +189,12 @@ class SearchService extends ServiceBase {
      * @param redisRows Array of hash[fieldId] = fieldValue objects.
      * @param callback (error, hash[searchKey] = commentsArray)
      * */
-    _loadComments(userId, languId, redisRows, callback) {
-        // Extract search keys for each row.
+    _loadRowsComments(userId, languId, redisRows, callback) {
+        // Extract search keys from all rows.
         const searchKeys = _.map(redisRows, row => row[this.searchKeyFieldName]);
 
         async.waterfall([
-            // Load comments for search keys from all rows.
+            // Load comments for all search keys.
             (callback) => this.models.comments.findAllBySearchKeys(userId, languId, searchKeys, callback),
 
             // Group comments by search key.
@@ -211,7 +211,8 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
+    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
+                                          fieldSearchValues, sortValues, limit, offset, callback) {
         async.parallel({
             fieldSearchValues: (callback) => {
                 this._createAppServerFieldSearchValues(fieldSearchValues, callback);
