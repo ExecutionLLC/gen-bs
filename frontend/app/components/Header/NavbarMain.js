@@ -33,7 +33,7 @@ class NavbarMain extends Component {
              <SavedFiles />
              <Language />
              <Buy />
-             <Auth />
+             <Auth {...this.props} />
            </div>
          </nav>
   
@@ -43,9 +43,11 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-  const { ui } = state
+  const { auth, userData, ui } = state
 
   return {
+    auth,
+    userData,
     ui
   }
 }
