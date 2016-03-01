@@ -30,6 +30,10 @@ class RedisService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
+    getSearchKeyFieldName() {
+        return 'search_key';
+    }
+
     fetch(redisParams, callback) {
         async.waterfall([
             (callback) => {
@@ -158,7 +162,7 @@ class RedisService extends ServiceBase {
     /**
      * Converts fields names into field ids.
      * */
-    _convertFields(rawData, user, sampleId, callback) {
+    _convertFields(rawRedisRows, user, sampleId, callback) {
         async.waterfall([
             (callback) => {
                 this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fields) => {
@@ -181,7 +185,7 @@ class RedisService extends ServiceBase {
                 callback(null, fieldNameToFieldHash);
             },
             (fieldNameToFieldHash, callback) => {
-                const fieldIdToValueArray = _.map(rawData, (rowObject) => {
+                const fieldIdToValueArray = _.map(rawRedisRows, (rowObject) => {
                     const fieldIdToValueObject = {};
                     const fieldNames = _.keys(rowObject);
                     _.each(fieldNames, fieldName => {
@@ -189,7 +193,7 @@ class RedisService extends ServiceBase {
                         const fieldValue = this._mapFieldValue(rowObject[fieldName]);
 
                         // Keep the search key and transfer it to the client as is.
-                        if (fieldName === 'search_key') {
+                        if (fieldName === this.getSearchKeyFieldName()) {
                             fieldIdToValueObject[fieldName] = fieldValue;
                         } else if (field) {
                             fieldIdToValueObject[field.id] = fieldValue;

@@ -23,10 +23,10 @@ class CommentsModel extends SecureModelBase {
         super(models, 'comment', mappedColumns);
     }
 
-    findAllBySearchKey(userId, languId, searchKey, callback) {
+    findAllBySearchKeys(userId, languId, searchKeys, callback) {
         this.db.asCallback((knex, callback) => {
             this._prepareCommentsBaseSelectQuery(knex, userId, languId)
-                .where('search_key', searchKey)
+                .whereIn('search_key', searchKeys)
                 .asCallback((error, commentsData) => {
                     if (error) {
                         callback(error);

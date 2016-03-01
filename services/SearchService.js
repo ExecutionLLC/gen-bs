@@ -17,6 +17,7 @@ class SearchService extends ServiceBase {
         this._onRedisDataReceived = this._onRedisDataReceived.bind(this);
 
         this.eventEmitter = new EventProxy(EVENTS);
+        this.searchKeyFieldName = this.services.redis.getSearchKeyFieldName();
         this._subscribeToRedisEvents();
     }
 
@@ -117,17 +118,97 @@ class SearchService extends ServiceBase {
 
     _onRedisDataReceived(replyInfo) {
         const fieldIdToValueArray = replyInfo.result.fieldIdToValueArray;
+        const sessionId = replyInfo.sessionId;
 
-        this.eventEmitter.emit(EVENTS.onDataReceived, {
-            sessionId: replyInfo.sessionId,
-            operationId: replyInfo.operationId,
-            result: {
-                sampleId: replyInfo.result.sampleId,
-                limit: replyInfo.result.limit,
-                offset: replyInfo.result.offset,
-                data: fieldIdToValueArray
+        async.waterfall([
+            (callback) =>
+                this.services.sessions.findSessionUserId(
+                    sessionId,
+                    (error, userId) => callback(error, userId)
+                ),
+            // TODO: Store languId from request in the session to use here.
+            (userId, callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
+            (user, callback) => this._loadComments(user.id, user.language, fieldIdToValueArray, callback),
+            (searchKeyToCommentsArrayHash, callback) => {
+                // Transform fields to the client representation.
+                const rows = _.map(fieldIdToValueArray, fieldIdToValueHash => {
+                    const fieldValueObjects = _(fieldIdToValueHash)
+                        .keys()
+                        .filter(key => key != this.searchKeyFieldName)
+                        .map(fieldId => {
+                            return {
+                                fieldId,
+                                value: fieldIdToValueHash[fieldId]
+                            }
+                        });
+                    const searchKey = fieldIdToValueHash[this.searchKeyFieldName];
+                    const comments = searchKeyToCommentsArrayHash[searchKey];
+                    return {
+                        searchKey,
+                        comments,
+                        fields: fieldValueObjects
+                    };
+                });
+                callback(null, rows);
             }
-        });
+        ], (error, convertedRows) => this._emitDataReceivedEvent(error, replyInfo, convertedRows));
+    }
+
+    _emitDataReceivedEvent(error, redisReply, convertedRows) {
+        const sessionId = redisReply.sessionId;
+        const operationId = redisReply.operationId;
+        const sampleId = redisReply.result.sampleId;
+        if (error) {
+            this.eventEmitter.emit(EVENTS.onDataReceived, {
+                sessionId,
+                operationId,
+                result: {
+                    sampleId,
+                    error
+                }
+            });
+        } else {
+            this.eventEmitter.emit(EVENTS.onDataReceived, {
+                sessionId,
+                operationId,
+                result: {
+                    sampleId,
+                    limit: redisReply.result.limit,
+                    offset: redisReply.result.offset,
+                    data: convertedRows
+                }
+            });
+        }
+    }
+
+    /**
+     * Loads comments for all rows into hash[searchKey] = commentsArray object.
+     *
+     * @param userId Id of the user results are for.
+     * @param languId Language id.
+     * @param redisRows Array of hash[fieldId] = fieldValue objects.
+     * @param callback (error, hash[searchKey] = commentsArray)
+     * */
+    _loadComments(userId, languId, redisRows, callback) {
+        // Extract search keys for each row.
+        const searchKeys = _.map(redisRows, row => row[this.searchKeyFieldName]);
+
+        async.waterfall([
+            // Load comments for search keys from all rows.
+            (callback) => this.models.comments.findAllBySearchKeys(userId, languId, searchKeys, callback),
+
+            // Group comments by search key.
+            (comments, callback) => {
+                const searchKeyToCommentHash = _.reduce(comments, (result, comment) => {
+                    const searchKey = comment.searchKey;
+                    if (!result[searchKey]) {
+                        result[searchKey] = [];
+                    }
+                    result[searchKey].push(comment);
+                }, {});
+                callback(null, searchKeyToCommentHash);
+            }
+        ], callback);
     }
 
     _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
