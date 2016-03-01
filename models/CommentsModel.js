@@ -23,41 +23,25 @@ class CommentsModel extends SecureModelBase {
         super(models, 'comment', mappedColumns);
     }
 
-    // Собирает все comments для текущего пользователя
+    // It collects each comment for the current user
     findAll(userId, callback) {
-        this._fetchUserComments(userId, (error, commentsData) => {
-            if (error) {
-                callback(error);
-            } else {
-                async.map(commentsData, (commentData, callback) => {
-                    callback(null, this._mapColumns(commentData));
-                }, callback);
-            }
-        });
+        async.waterfall([
+            (callback) => this._fetchUserComments(userId, callback),
+            (comments, callback) => this._mapItems(comments, callback)
+        ], callback);
     }
 
     findMany(userId, commentIds, callback) {
         async.waterfall([
-            (callback) => { this._fetchComments(commentIds, callback); },
-            (commentsData, callback) => {
-                if (commentsData.length == commentIds.length) {
-                    callback(null, commentsData);
-                } else {
-                    callback('Some comments not found: ' + commentIds + ', userId: ' + userId);
-                }
-            },
-            (commentsData, callback) => {
-                if (_.every(commentsData, 'creator', userId)) {
-                    callback(null, commentsData);
-                } else {
-                    callback('Unauthorized access to comments: ' + commentIds + ', userId: ' + userId);
-                }
-            },
-            (commentsData, callback) => {
-                async.map(commentsData, (commentData, callback) => {
-                    callback(null, this._mapColumns(commentData));
-                }, callback);
-            }
+            (callback) => this._fetchComments(commentIds, callback),
+            (comments, callback) => this._ensureAllItemsFound(comments, commentIds, callback),
+            (comments, callback) => async.map(comments, (comment, callback) => {
+                this._ensureItemNotDeleted(comment, callback);
+            }, callback),
+            (comments, callback) => async.map(comments, (comment, callback) => {
+                this._checkUserIsCorrect(userId, comment, callback);
+            }, callback),
+            (comments, callback) => this._mapItems(comments, callback)
         ], callback);
     }
 
@@ -124,14 +108,10 @@ class CommentsModel extends SecureModelBase {
     }
 
     _fetch(userId, commentId, callback) {
-        this._fetchComment(commentId, (error, data) => {
-            if (error) {
-                callback(error);
-            } else {
-                const secureInfo = {userId: userId};
-                this._secureCheck(data, secureInfo, callback);
-            }
-        });
+        async.waterfall([
+            (callback) => this._fetchComment(commentId, callback),
+            (commentData, callback) => this._checkUserIsCorrect(userId, commentData, callback)
+        ], callback);
     }
 
     _fetchComment(commentId, callback) {

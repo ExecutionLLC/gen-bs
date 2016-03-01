@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 const ServiceBase = require('./ServiceBase');
 
 const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000';
@@ -47,7 +49,7 @@ class UserService extends ServiceBase {
             numberPaidSamples
         };
 
-        this.models.user.add(user, defaultLanguId, callback);
+        this.models.user.add(defaultLanguId, user, callback);
     }
 
     /**
@@ -70,13 +72,24 @@ class UserService extends ServiceBase {
     }
 
     find(userId, callback) {
-        if (userId === DEMO_USER_ID) {
-            callback(null, this.demoUser);
-        } else if (userId === SYSTEM_USER.id) {
-            callback(null, SYSTEM_USER);
-        } else {
-            this.models.user.find(userId, callback);
-        }
+        async.waterfall([
+            (callback) => {
+                if (userId === DEMO_USER_ID) {
+                    callback(null, this.demoUser);
+                } else if (userId === SYSTEM_USER.id) {
+                    callback(null, SYSTEM_USER);
+                } else {
+                    this.models.user.find(userId, callback);
+                }
+            },
+            (user, callback) => {
+                if (user.isDeleted) {
+                    callback(new Error('User not found.'));
+                } else {
+                    callback(null, user);
+                }
+            }
+        ], callback);
     }
 }
 
