@@ -32,7 +32,7 @@ function receiveSession(json) {
   }
 }
 
-export function login(name, password) {
+export function demoLogin(name, password) {
 
   var processData = (dispatch, sessionId) => {
     var conn = new WebSocket(config.URLS.WS);
@@ -95,6 +95,26 @@ export function login(name, password) {
     } else {
         newSession(dispatch, processData)
       }
+  }
+}
+
+export function login2() {
+
+  console.log('query sessionId or Error', location.search.slice(1).split('='));
+  const queryString = location.search.slice(1).split('=')
+  if (queryString[0] === 'sessionId') {
+    console.log('google auth success', queryString[1])
+  } else if (queryString[0] === 'error') {
+    console.log('google auth error', decodeURIComponent(queryString[1]))
+  } else {
+    console.log('Not from google, maybe demo')
+  }
+
+  return dispatch => {
+
+    const sessionId = getCookie('sessionId');
+    dispatch(demoLogin('valarie', 'password'))
+
   }
 }
 
