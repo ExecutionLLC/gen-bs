@@ -1,5 +1,6 @@
 'use strict';
 
+const Uuid = require('node-uuid');
 const Express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -13,6 +14,9 @@ class SessionsController extends ControllerBase {
         this.open = this.open.bind(this);
         this.check = this.check.bind(this);
         this.close = this.close.bind(this);
+
+        this.config = this.services.config;
+        this.authStates = {};
     }
 
     /**
@@ -63,25 +67,40 @@ class SessionsController extends ControllerBase {
         } else {
             if (!userEmail) {
                 // User cancelled authentication.
-                response.redirect('/?error=' + encodeURIComponent('User cancelled authentication.'));
+                this._onAuthCompleted(request, response, new Error('User cancelled authentication.'), null);
             } else {
                 // User is logged in to Google, try creating session.
-                this.services.logger.info('Creating session for user ' + userEmail);
-                this.services.sessions.startForEmail(userEmail, (error, sessionId) => {
-                    if (error) {
-                        response.redirect('/?error=' + encodeURIComponent(error.message));
-                    } else {
-                        response.redirect('/?sessionId=' + encodeURIComponent(sessionId));
-                    }
-                });
+                this.logger.info('Creating session for user ' + userEmail);
+                this.services.sessions.startForEmail(
+                    userEmail,
+                    (error, sessionId) => this._onAuthCompleted(request, response, error, sessionId)
+                );
             }
         }
     }
 
+    _onAuthCompleted(request, response, error, sessionId) {
+        let baseAddress = '/';
+        if (this.config.enableAuthCallbackPorts) {
+            const authStateKey = request.query.state;
+            if (this.authStates[authStateKey]) {
+                const callbackPort = this.authStates[authStateKey].callbackPort;
+                baseAddress = 'http://localhost:' + callbackPort + '/';
+                delete this.authStates[authStateKey];
+            }
+        }
+
+        if (error) {
+            response.redirect(baseAddress + '?error=' + encodeURIComponent(error.message));
+        } else {
+            response.redirect(baseAddress + '?sessionId=' + encodeURIComponent(sessionId));
+        }
+    }
+
     _configurePassport(router, controllerRelativePath) {
-        const baseUrl = this.services.config.baseUrl;
-        const googleClientId = this.services.config.google.clientId;
-        const googleClientSecret = this.services.config.google.clientSecret;
+        const baseUrl = this.config.baseUrl;
+        const googleClientId = this.config.google.clientId;
+        const googleClientSecret = this.config.google.clientSecret;
         const googleRelativeRedirectUrl = '/auth/google/callback';
         const googleFullRedirectUrl = baseUrl + controllerRelativePath + googleRelativeRedirectUrl;
 
@@ -92,14 +111,28 @@ class SessionsController extends ControllerBase {
         }, this._parseGoogleProfile.bind(this)));
 
         router.use(passport.initialize());
-        router.get('/auth/google', passport.authenticate('google', {
-            scope: [
-                'https://www.googleapis.com/auth/plus.profile.emails.read'
-            ],
-            returnURL: googleFullRedirectUrl,
-            realm: baseUrl,
-            session: false
-        }));
+        router.get('/auth/google', (request, response, next) => {
+            const callbackPort = request.query['callbackPort'];
+            let state = undefined;
+            if (callbackPort && this.config.enableAuthCallbackPorts) {
+                const authStateKey = Uuid.v4();
+                this.authStates[authStateKey] = {
+                    callbackPort
+                };
+                state = authStateKey;
+            }
+
+            passport.authenticate('google', {
+                scope: [
+                    'https://www.googleapis.com/auth/plus.profile.emails.read'
+                ],
+                returnURL: googleFullRedirectUrl,
+                realm: baseUrl,
+                session: false,
+                state
+            })(request, response, next);
+        });
+
         router.get(googleRelativeRedirectUrl, (request, response, next) => {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
