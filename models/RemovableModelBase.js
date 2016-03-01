@@ -18,12 +18,8 @@ class RemovableModelBase extends ModelBase {
 
     find(itemId, callback) {
         async.waterfall([
-            (callback) => {
-                super.find(itemId, callback);
-            },
-            (itemData, callback) => {
-                this._ensureItemNotDeleted(itemData, callback);
-            }
+            (callback) => super.find(itemId, callback),
+            (itemData, callback) => this._ensureItemNotDeleted(itemData, callback)
         ], callback);
     }
 
@@ -31,6 +27,14 @@ class RemovableModelBase extends ModelBase {
         this.db.transactionally((trx, callback) => {
             super._unsafeUpdate(itemId, {isDeleted: true}, trx, callback);
         }, callback);
+    }
+
+    _ensureItemNotDeleted(item, callback) {
+        if (!item.isDeleted) {
+            callback(null, item);
+        } else {
+            callback(new Error(ITEM_NOT_FOUND));
+        }
     }
 }
 

@@ -36,14 +36,6 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
-    add(user, languId, callback) {
-        this._add(user, languId, true, callback);
-    }
-
-    addWithId(user, languId, callback) {
-        this._add(user, languId, false, callback);
-    }
-
     update(userId, languId, user, callback) {
         const userToUpdate = _.cloneDeep(user);
         userToUpdate.id = userId;
@@ -71,7 +63,7 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
-    _add(user, languId, shouldGenerateId, callback) {
+    _add(languId, user, shouldGenerateId, callback) {
         const userToInsert = _.cloneDeep(user);
         userToInsert.id = shouldGenerateId ? this._generateId() : user.id;
         this.db.transactionally((trx, callback) => {

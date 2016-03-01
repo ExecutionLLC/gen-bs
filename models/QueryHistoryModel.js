@@ -21,39 +21,22 @@ class QueryHistoryModel extends SecureModelBase {
     // Собирает все comments для текущего пользователя
     findAll(userId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchUserQueries(userId, callback);
-            },
-            (queriesData, callback) => {
-                async.map(queriesData, (queryData, callback) => {
-                    callback(null, this._mapColumns(queryData));
-                }, callback);
-            }
+            (callback) => this._fetchUserQueries(userId, callback),
+            (queries, callback) => this._mapItems(queries, callback)
         ], callback);
     }
 
     findMany(userId, queryIds, callback) {
         async.waterfall([
             (callback) => { this._fetchQueries(queryIds, callback); },
-            (queriesData, callback) => {
-                if (queriesData.length == queryIds.length) {
-                    callback(null, queriesData);
-                } else {
-                    callback('Some queries not found: ' + queryIds + ', userId: ' + userId);
-                }
-            },
-            (queriesData, callback) => {
-                if (_.every(queriesData, 'creator', userId)) {
-                    callback(null, queriesData);
-                } else {
-                    callback('Unauthorized access to queries: ' + queryIds + ', userId: ' + userId);
-                }
-            },
-            (queriesData, callback) => {
-                async.map(queriesData, (queryData, callback) => {
-                    callback(null, this._mapColumns(queryData));
-                }, callback);
-            }
+            (queries, callback) => this._ensureAllItemsFound(queries, queryIds, callback),
+            (queries, callback) => async.map(queries, (query, callback) => {
+                this._ensureItemNotDeleted(query, callback);
+            }, callback),
+            (queries, callback) => async.map(queries, (query, callback) => {
+                this._checkUserIsCorrect(userId, query, callback);
+            }, callback),
+            (queries, callback) => this._mapItems(queries, callback)
         ], callback);
     }
 

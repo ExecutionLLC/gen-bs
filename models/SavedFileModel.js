@@ -26,39 +26,22 @@ class SavedFileModel extends SecureModelBase {
     // Collets all saved files for user
     findAll(userId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchUserFiles(userId, callback);
-            },
-            (filesData, callback) => {
-                async.map(filesData, (fileData, callback) => {
-                    callback(null, this._mapColumns(fileData));
-                }, callback);
-            }
+            (callback) => this._fetchUserFiles(userId, callback),
+            (files, callback) => this._mapItems(files, calback)
         ], callback);
     }
 
     findMany(userId, fileIds, callback) {
         async.waterfall([
-            (callback) => { this._fetchSavedFiles(fileIds, callback); },
-            (filesData, callback) => {
-                if ((filesData.length == fileIds.length) && (_.every(filesData, 'isDeleted', false))) {
-                    callback(null, filesData);
-                } else {
-                    callback('Some saved files not found: ' + fileIds + ', userId: ' + userId);
-                }
-            },
-            (filesData, callback) => {
-                if (_.every(filesData, 'creator', userId)) {
-                    callback(null, filesData);
-                } else {
-                    callback('Unauthorized access to saved files: ' + fileIds + ', userId: ' + userId);
-                }
-            },
-            (filesData, callback) => {
-                async.map(filesData, (fileData, callback) => {
-                    callback(null, this._mapColumns(fileData));
-                }, callback);
-            }
+            (callback) => this._fetchSavedFiles(fileIds, callback),
+            (files, callback) => this._ensureAllItemsFound(files, fileIds, callback),
+            (files, callback) => async.map(files, (file, callback) => {
+                this._ensureItemNotDeleted(file, callback);
+            }, callback),
+            (files, callback) => async.map(files, (file, callback) => {
+                this._checkUserIsCorrect(userId, file, callback);
+            }, callback),
+            (files, callback) => this._mapItems(files, callback)
         ], callback);
     }
 
@@ -126,12 +109,8 @@ class SavedFileModel extends SecureModelBase {
 
     _fetch(userId, fileId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchSavedFile(fileId, callback);
-            },
-            (fileData, callback) => {
-                this._checkUserIsCorrect(userId, fileData, callback);
-            }
+            (callback) => this._fetchSavedFile(fileId, callback),
+            (file, callback) => this._checkUserIsCorrect(userId, file, callback)
         ], callback);
     }
 
@@ -141,11 +120,11 @@ class SavedFileModel extends SecureModelBase {
                 .from(this.baseTableName)
                 .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
                 .where('id', fileId)
-                .asCallback((error, fileData) => {
-                    if (error || !fileData.length) {
+                .asCallback((error, file) => {
+                    if (error || !file.length) {
                         callback(error || new Error('Item not found: ' + fileId));
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fileData[0]));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(file[0]));
                     }
                 });
         }, callback);
@@ -158,11 +137,11 @@ class SavedFileModel extends SecureModelBase {
                 .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
                 .where('creator', userId)
                 .andWhere('is_deleted', false)
-                .asCallback((error, filesData) => {
+                .asCallback((error, files) => {
                     if (error) {
                         callback(error);
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(filesData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(files));
                     }
                 });
         }, callback);
@@ -174,11 +153,11 @@ class SavedFileModel extends SecureModelBase {
                 .from(this.baseTableName)
                 .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
                 .whereIn('id', fileIds)
-                .asCallback((error, filesData) => {
+                .asCallback((error, files) => {
                     if (error) {
                         callback(error);
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(filesData));
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(files));
                     }
                 });
         }, callback);
