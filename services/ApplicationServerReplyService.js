@@ -143,6 +143,7 @@ class ApplicationServerReplyService extends ServiceBase {
         if (!message || !message.result) {
             this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
+                eventName: EVENTS.onSourcesListReceived,
                 result: message
             });
         } else {
@@ -162,7 +163,8 @@ class ApplicationServerReplyService extends ServiceBase {
         if (!message || !message.result) {
             this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
-                result: message
+                result: message,
+                eventName: EVENTS.onSourceMetadataReceived
             });
         } else {
             const messageResult = message.result;
@@ -191,7 +193,9 @@ class ApplicationServerReplyService extends ServiceBase {
         if (!message || !message.result || !message.result.status) {
             this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
-                result: message
+                result: message,
+                eventName: EVENTS.onOperationResultReceived,
+                shouldCompleteOperation: true
             });
         } else {
             const result = message.result;
@@ -243,7 +247,9 @@ class ApplicationServerReplyService extends ServiceBase {
         if (!message || !message.result || !message.result.sessionState) {
             this.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
-                result: message
+                result: message,
+                shouldCompleteOperation: false,
+                eventName: EVENTS.onOperationResultReceived
             });
         } else {
             const sessionState = message.result.sessionState;
