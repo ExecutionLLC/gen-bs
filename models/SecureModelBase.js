@@ -83,17 +83,6 @@ class SecureModelBase extends RemovableModelBase {
             callback(new Error('Entity access denied.'));
         }
     }
-
-    _fetch(userId, itemId, callback) {
-        super._fetch(itemId, (error, itemData) => {
-            if (error) {
-                callback(error);
-            } else {
-                const secureInfo = {userId: userId};
-                this._secureCheck(itemData, secureInfo, callback);
-            }
-        });
-    }
 }
 
 module.exports = SecureModelBase;
