@@ -30,6 +30,14 @@ class SessionService extends ServiceBase {
         });
     }
 
+    findSessionType(sessionId, callback) {
+        async.waterfall([
+            (callback) => this.findById(sessionId, callback),
+            (sessionId, callback) => this._findSession(sessionId, callback),
+            (session, callback) => callback(null, session.type)
+        ], callback);
+    }
+
     /**
      * Creates a new session for a user with the specified email.
      * Currently, also destroys existing sessions of the same user, if any.

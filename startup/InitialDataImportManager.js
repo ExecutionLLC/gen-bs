@@ -115,7 +115,7 @@ class InitialDataImportManager {
         const keywordsString = FsUtils.getFileContentsAsString(keywordsFilePath);
         const keywords = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(keywordsString));
         async.map(keywords, (keyword, cb) => {
-            this.models.keywords.addWithId(this.config.defaultLanguId, keyword, cb)
+            this.models.keywords.addWithId(keyword, this.config.defaultLanguId, cb);
         }, callback);
     }
 
@@ -123,7 +123,7 @@ class InitialDataImportManager {
         const viewsString = FsUtils.getFileContentsAsString(viewsFilePath);
         const views = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(viewsString));
         async.map(views, (view, cb) => {
-            this.models.views.internalAdd(null, this.config.defaultLanguId, view, cb)
+            this.models.views.internalAdd(null, this.config.defaultLanguId, view, cb);
         }, callback);
     }
 
@@ -131,7 +131,7 @@ class InitialDataImportManager {
         const filtersString = FsUtils.getFileContentsAsString(filtersFilePath);
         const filters = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(filtersString));
         async.map(filters, (filter, cb) => {
-            this.models.filters.internalAdd(null, this.config.defaultLanguId, filter, cb)
+            this.models.filters.internalAdd(null, this.config.defaultLanguId, filter, cb);
         }, callback);
     }
 

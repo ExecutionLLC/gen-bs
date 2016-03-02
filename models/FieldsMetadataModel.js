@@ -29,23 +29,15 @@ class FieldsMetadataModel extends ModelBase {
 
     find(metadataId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetch(metadataId, callback);
-            },
-            (fieldMetadata, callback) => {
-                this._mapFieldMetadata(fieldMetadata, callback);
-            }
+            (callback) => this._fetch(metadataId, callback),
+            (fieldMetadata, callback) => this._mapFieldMetadata(fieldMetadata, callback)
         ], callback);
     }
 
     findMany(metadataIds, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchByIds(metadataIds, callback);
-            },
-            (fieldsMetadata, callback) => {
-                this._mapFieldsMetadata(fieldsMetadata, callback);
-            }
+            (callback) => this._fetchByIds(metadataIds, callback),
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
         ], callback);
     }
 
@@ -89,9 +81,7 @@ class FieldsMetadataModel extends ModelBase {
 
     findByUserAndSampleId(userId, sampleId, callback) {
         async.waterfall([
-            (callback) => {
-                this.models.samples.find(userId, sampleId, callback);
-            },
+            (callback) => this.models.samples.find(userId, sampleId, callback),
             (sample, callback) => {
                 const fieldIds = _.pluck(sample.values, 'fieldId');
                 this.findMany(fieldIds, callback);
@@ -101,12 +91,8 @@ class FieldsMetadataModel extends ModelBase {
 
     findSourcesMetadata(callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchSourcesMetadata(callback);
-            },
-            (fieldsMetadata, callback) => {
-                this._mapFieldsMetadata(fieldsMetadata, callback);
-            }
+            (callback) => this._fetchSourcesMetadata(callback),
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
         ], callback);
     }
 
@@ -131,20 +117,14 @@ class FieldsMetadataModel extends ModelBase {
 
     findMetadataBySourceName(sourceName, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchMetadataBySourceName(sourceName, callback);
-            },
-            (fieldsMetadata, callback) => {
-                this._mapFieldsMetadata(fieldsMetadata, callback);
-            }
+            (callback) => this._fetchMetadataBySourceName(sourceName, callback),
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
         ], callback);
     }
 
     findMetadataKeywords(metadataId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchMetadataKeywords(metadataId, callback);
-            },
+            (callback) => this._fetchMetadataKeywords(metadataId, callback),
             (keywords, callback) => {
                 const keywordIds = _.pluck(viewsData, 'id');
                 this.models.keywords.findMany(keywordIds, callback);

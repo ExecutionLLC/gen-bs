@@ -118,6 +118,45 @@ describe('Filters', () => {
             });
         });
 
+        it('should fail to get and update deleted user filter', (done) => {
+            filtersClient.getAll(sessionId, (error, response) => {
+                assert.ifError(error);
+                assert.equal(response.status, HttpStatus.OK);
+                const filters = response.body;
+                assert.ok(filters);
+                const filter = filters[0];
+                filter.name = 'Test Filter ' + Uuid.v4();
+
+                filtersClient.add(sessionId, languId, filter, (error, response) => {
+                    assert.ifError(error);
+                    assert.equal(response.status, HttpStatus.OK);
+                    const addedFilter = response.body;
+                    assert.ok(addedFilter);
+
+                    // Delete created filter
+                    filtersClient.remove(sessionId, addedFilter.id, (error, response) => {
+                        assert.ifError(error);
+                        assert.equal(response.status, HttpStatus.OK);
+
+                        filtersClient.get(sessionId, addedFilter.id, (error, response) => {
+                            assert.ifError(error);
+                            assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+
+                            // Trying to update created filter.
+                            const filterToUpdate = _.cloneDeep(addedFilter);
+                            filterToUpdate.name = 'Test Filter ' + Uuid.v4();
+
+                            filtersClient.update(sessionId, filterToUpdate, (error, response) => {
+                                assert.ifError(error);
+                                assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
         it('should fail to get list in incorrect session', (done) => {
             filtersClient.getAll(UnknownSessionId, (error, response) => {
                 ClientBase.expectErrorResponse(error, response);
