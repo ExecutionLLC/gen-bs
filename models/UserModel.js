@@ -63,6 +63,40 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
+    appendPaidSamples(userId, samplesCount, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => {
+                    this._getNumberPaidSamplesInTransaction(userId, trx, callback);
+                },
+                (currentPaidSamplesCount, callback) => {
+                    const numberPaidSamples = currentPaidSamplesCount + samplesCount;
+                    this._unsafeUpdate(userId, {numberPaidSamples}, trx, (error) => {
+                        callback(error, numberPaidSamples);
+                    });
+                }
+            ], callback);
+        }, callback);
+    }
+
+    reduceForOnePaidSample(userId, trx, callback) {
+        async.waterfall([
+            (callback) => {
+                this._getNumberPaidSamplesInTransaction(userId, trx, callback);
+            },
+            (currentPaidSamplesCount, callback) => {
+                if (currentPaidSamplesCount > 0) {
+                    const numberPaidSamples = currentPaidSamplesCount - 1;
+                    this._unsafeUpdate(userId, {numberPaidSamples}, trx, (error) => {
+                        callback(error, numberPaidSamples);
+                    });
+                } else {
+                    callback(new Error('An insufficient paid samples count.'));
+                }
+            }
+        ], callback);
+    }
+
     _add(user, languId, shouldGenerateId, callback) {
         const userToInsert = _.cloneDeep(user);
         userToInsert.id = shouldGenerateId ? this._generateId() : user.id;
@@ -124,6 +158,19 @@ class UserModel extends RemovableModelBase {
                 }
             }
         ], callback);
+    }
+
+    _getNumberPaidSamplesInTransaction(userId, trx, callback) {
+        trx.select('number_paid_samples')
+            .from(this.baseTableName)
+            .where('id', userId)
+            .asCallback((error, itemData) => {
+                if (error || !itemData.length) {
+                    callback(error || new Error('User not found: ' + userId));
+                } else {
+                    callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemData[0]).numberPaidSamples);
+                }
+            });
     }
 
     _fetch(userId, callback) {

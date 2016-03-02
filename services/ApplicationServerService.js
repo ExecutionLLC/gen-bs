@@ -103,6 +103,9 @@ class ApplicationServerService extends ServiceBase {
                 operation.setLimit(params.limit);
                 callback(null, operation);
             },
+            (operation, callback) => this.services.samples.makeSampleIsAnalyzedIfNeeded(params.userId, params.sample.id, (error) => {
+                callback(error, operation);
+            }),
             (operation, callback) => this._rpcSend(operation.getId(), method, searchSessionRequest, callback)
         ], callback);
     }
