@@ -93,7 +93,7 @@ class UserService extends ServiceBase {
                 } else if (userId === SYSTEM_USER.id) {
                     callback(null, SYSTEM_USER);
                 } else {
-                    this.models.user.find(userId, callback);
+                    this.models.users.find(userId, callback);
                 }
             },
             // TODO: Move check to a separate method in service base.

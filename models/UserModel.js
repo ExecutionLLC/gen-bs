@@ -63,7 +63,7 @@ class UserModel extends RemovableModelBase {
         }, callback);
     }
 
-    _add(languId, user, shouldGenerateId, callback) {
+    _add(user, languId, shouldGenerateId, callback) {
         const userToInsert = _.cloneDeep(user);
         userToInsert.id = shouldGenerateId ? this._generateId() : user.id;
         this.db.transactionally((trx, callback) => {
