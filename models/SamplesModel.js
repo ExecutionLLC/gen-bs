@@ -89,6 +89,14 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
+    /**
+     * Marks sample as analyzed and reduces available sample count for the user,
+     * if sample is not yet marked as analyzed.
+     *
+     * @param userId Id of the user doing request.
+     * @param sampleId Id of the sample in request.
+     * @param callback (error, isSampleMarkedAsAnalyzed)
+     * */
     makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
