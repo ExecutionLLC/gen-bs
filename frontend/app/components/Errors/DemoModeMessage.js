@@ -9,8 +9,8 @@ export default class DemoModeMessage extends Component {
         { this.props.errorMessage &&
           <h3 className="text-center">{this.props.errorMessage}</h3>
         }
-          <h3 className="text-center">Demo Mode.</h3>
-          <h3 className="text-center">Please, login.</h3>
+          <h3 className="text-center">Demo Mode</h3>
+          <h3 className="text-center">Please, login</h3>
       </div>
     )
   }
