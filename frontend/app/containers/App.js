@@ -10,7 +10,7 @@ import ViewsModal from '../components/Modals/ViewsModal'
 import FiltersModal from '../components/Modals/FiltersModal'
 import FileUploadModal from '../components/Modals/FileUploadModal'
 
-import { login2 } from '../actions/auth'
+import { login } from '../actions/auth'
 import { openModal, closeModal } from '../actions/modalWindows'
 import { fetchUserdata } from '../actions/userData'
 
@@ -18,7 +18,7 @@ import { fetchUserdata } from '../actions/userData'
 class App extends Component {
 
   componentDidMount() {
-    this.props.dispatch(login2())
+    this.props.dispatch(login())
   }
 
   render() {

@@ -8,6 +8,10 @@ import { createWsConnection, subscribeToWs, send } from './websocket'
  */
 export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
+
+export const RECEIVE_LOGOUT = 'RECEIVE_LOGOUT';
+export const REQUEST_LOGOUT = 'REQUEST_LOGOUT';
+
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 /*
@@ -70,6 +74,7 @@ function _checkSession(dispatch, cb, sessionId){
   };
 
 function _newDemoSession(dispatch, cb) {
+  console.log('newDemoSession')
   return $.ajax(config.URLS.SESSION, {
       'data': JSON.stringify({user_name: 'valarie', password: 'password'}),
       'type': 'POST',
@@ -96,12 +101,9 @@ function _checkCookieSessionAndLogin(dispatch, sessionId) {
     }
 }
 
-export function login2() {
-
-  console.log('query sessionId or Error', location.search.slice(1).split('='));
+export function login() {
 
   const queryString = location.search.slice(1).split('=')
-
   const sessionId = getCookie('sessionId');
 
   return dispatch => {
@@ -129,3 +131,27 @@ function loginError(errorMessage) {
     errorMessage
   }
 }
+
+export function logout() {
+  const sessionId = getCookie('sessionId');
+  return dispatch => {
+    return $.ajax(config.URLS.SESSION, {
+      'type': 'DELETE',
+      'headers': { "X-Session-Id": sessionId },
+      'processData': false,
+      'contentType': 'application/json'
+    })
+    .done(json => {
+      console.log('session DELETE SUCCESS', sessionId);
+      //_newDemoSession(dispatch, _processLoginData)
+      location.replace(location.origin)
+    })
+    .fail(json => {
+      console.log('ERROR While DELETE session', sessionId);
+    });
+  }
+}
+
+
+
+
