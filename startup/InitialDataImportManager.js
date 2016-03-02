@@ -99,7 +99,7 @@ class InitialDataImportManager {
         const languagesString = FsUtils.getFileContentsAsString(languFilePath);
         const languages = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(languagesString));
         async.map(languages, (langu, cb) => {
-            this.models.langu.add(langu, cb);
+            this.models.langu.add(langu, cb)
         }, callback);
     }
 
@@ -107,7 +107,7 @@ class InitialDataImportManager {
         const usersString = FsUtils.getFileContentsAsString(usersFilePath);
         const users = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(usersString));
         async.map(users, (user, cb) => {
-            this.models.user.addWithId(user.language, user, cb);
+            this.models.users.addWithId(user, user.language, cb)
         }, callback);
     }
 

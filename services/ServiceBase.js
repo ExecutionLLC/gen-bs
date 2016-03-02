@@ -9,12 +9,12 @@ class ServiceBase {
         this.logger = services.logger;
     }
 
-    _checkUserIsSet(user, errorCallback) {
+    _checkUserIsSet(user, callback) {
         if (!user) {
-            errorCallback(new Error('User undefined'));
-            return false;
+            callback(new Error('User undefined'));
+        } else {
+            callback(null);
         }
-        return true;
     }
 }
 

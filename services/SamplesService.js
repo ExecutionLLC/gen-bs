@@ -19,6 +19,7 @@ class SamplesService extends UserEntityServiceBase {
         this.logger.info('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         const sampleId = Uuid.v4();
         async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.applicationServer.uploadSample(sessionId, sampleId, user,
                 localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
             (operationId, callback) => this.services.applicationServer.requestSampleProcessing(sessionId, operationId, callback)

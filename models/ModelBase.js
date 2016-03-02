@@ -60,6 +60,10 @@ class ModelBase {
         ], callback);
     }
 
+    _add(item, languId, shouldGenerateId, callback) {
+        throw new Error('Method is abstract.');
+    }
+
     _generateId() {
         // Generate random UUID
         return Uuid.v4();

@@ -22,7 +22,7 @@ class SessionsController extends ControllerBase {
     }
 
     /**
-     * Opens new session, either demo or user, depending on the user name and password presence in the request.
+     * Opens new demo session.
      * */
     open(request, response) {
         async.waterfall([
