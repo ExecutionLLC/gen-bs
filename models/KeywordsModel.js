@@ -20,46 +20,16 @@ class KeywordsModel extends ModelBase {
 
     find(keywordId, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetch(keywordId, callback);
-            },
-            (keyword, callback) => {
-                this.fetchKeywordSynonyms(keywordId, (error, synonyms) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        keyword.synonyms = synonyms;
-                        callback(null, this._mapColumns(keyword));
-                    }
-                });
-            }
+            (callback) => this._fetch(keywordId, callback),
+            (keyword, callback) => this._mapKeyword(keyword, callback)
         ], callback);
     }
 
     findMany(keywordIds, callback) {
         async.waterfall([
-            (callback) => {
-                this._fetchKeywords(keywordIds, callback);
-            },
-            (keywords, callback) => {
-                if (keywords.length == keywordIds.length) {
-                    callback(null, keywords);
-                } else {
-                    callback('Some keywords not found: ' + keywordIds);
-                }
-            },
-            (keywords, callback) => {
-                async.map(keywords, (keyword, callback) => {
-                    this.fetchKeywordSynonyms(keywordId, (error, synonyms) => {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            keyword.synonyms = synonyms;
-                            callback(null, this._mapColumns(keyword));
-                        }
-                    });
-                }, callback);
-            }
+            (callback) => this._fetchKeywords(keywordIds, callback),
+            (keywords, callback) => this._ensureAllItemsFound(keywords, keywordIds, callback),
+            (keywords, callback) => this._mapKeywords(keywords, callback)
         ], callback);
     }
 
@@ -78,7 +48,7 @@ class KeywordsModel extends ModelBase {
         }, callback);
     }
 
-    _add(languId, keyword, shouldGenerateId, callback) {
+    _add(keyword, languId, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => {
@@ -123,6 +93,23 @@ class KeywordsModel extends ModelBase {
                     }
                 });
         }, callback);
+    }
+
+    _mapKeywords(keywords, callback) {
+        async.map(keywords, (keyword, callback) => {
+            this._mapKeyword(keyword, callback)
+        }, callback);
+    }
+
+    _mapKeyword(keyword, callback) {
+        this.fetchKeywordSynonyms(keyword.id, (error, synonyms) => {
+            if (error) {
+                callback(error);
+            } else {
+                keyword.synonyms = synonyms;
+                callback(null, this._mapColumns(keyword));
+            }
+        });
     }
 }
 
