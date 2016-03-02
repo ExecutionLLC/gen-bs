@@ -66,7 +66,8 @@ class UserService extends ServiceBase {
      * @param callback (error || null)
      * */
     ensureUserIsNotDemo(userId, callback) {
-        if (this.isDemoUserId(userId)) {
+        if (this.isDemoUserId(userId)
+            && !this.services.config.enableFullRightsForDemoUsers) {
             callback(new Error('The action is not allowed for demo user.'));
         } else {
             callback(null);

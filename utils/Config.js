@@ -15,6 +15,10 @@ const SETTINGS = {
     // If true, samples will not be marked as analyzed, and there will be no fee from the user.
     // TODO: add report to the application start after demo-users-support branch is merged.
     disableMakeAnalyzed: ENV.GEN_WS_DISABLE_MAKE_ANALYZED || false,
+    // If enabled, demo users will have rights to create and delete filters and samples.
+    // These filters and samples will be shared between them, as there is only one demo-user in the system.
+    // TODO: add report to the application start after demo-users-support branch is merged.
+    enableFullRightsForDemoUsers: ENV.GEN_WS_ENABLE_FULL_RIGHTS_FOR_DEMO_USERS || false,
     upload: {
         path: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/', // Temporary path for uploaded samples.
         maxSizeInBytes: ENV.GEN_WS_UPLOAD_MAX_SIZE || 25 * 1024 * 1024, // Max size of the uploaded sample.
