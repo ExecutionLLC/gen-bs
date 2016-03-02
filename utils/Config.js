@@ -12,6 +12,9 @@ const SETTINGS = {
     // If true, Redis host will be ignored in the data received from AS, and localhost
     // will always be used. This is convenient when port forwarding to Redis server is used.
     forceOverrideRedisToLocalhost: ENV.GEN_WS_FORCE_OVERRIDE_REDIS_TO_LOCALHOST || false,
+    // If true, samples will not be marked as analyzed, and there will be no fee from the user.
+    // TODO: add report to the application start after demo-users-support branch is merged.
+    disableMakeAnalyzed: ENV.GEN_WS_DISABLE_MAKE_ANALYZED || false,
     upload: {
         path: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/', // Temporary path for uploaded samples.
         maxSizeInBytes: ENV.GEN_WS_UPLOAD_MAX_SIZE || 25 * 1024 * 1024, // Max size of the uploaded sample.
