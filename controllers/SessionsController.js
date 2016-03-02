@@ -96,11 +96,16 @@ class SessionsController extends ControllerBase {
             }
         }
 
+        let targetUrl = null;
         if (error) {
-            response.redirect(baseAddress + '?error=' + encodeURIComponent(error.message));
+            targetUrl = baseAddress + '?error=' + encodeURIComponent(error.message);
+            this.logger.debug('Auth error: ' + error);
         } else {
-            response.redirect(baseAddress + '?sessionId=' + encodeURIComponent(sessionId));
+            targetUrl = baseAddress + '?sessionId=' + encodeURIComponent(sessionId);
+            this.logger.debug('Auth successful');
         }
+        this.logger.info('Redirecting to ' + targetUrl);
+        response.redirect(targetUrl);
     }
 
     _configurePassport(router, controllerRelativePath) {
