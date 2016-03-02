@@ -31,7 +31,7 @@ class WebServerHost {
 
         this._enableCORSIfNeeded(app);
 
-        this._warnMultipleUserSessionsEnabled();
+        this._warnAboutSettingsIfNeeded();
 
         this._addMiddleware(app);
 
@@ -57,10 +57,17 @@ class WebServerHost {
         app.use('/', Express.static('public'));
     }
 
-    _warnMultipleUserSessionsEnabled() {
-        if (this.config.allowMultipleUserSessions) {
-            this.logger.error('Multiple user sessions enabled!');
-        }
+    /**
+     * Displays errors when security-critical settings are enabled.
+     * */
+    _warnAboutSettingsIfNeeded() {
+        const showErrorFunc = (boolTrigger, errorMessage) => (boolTrigger) ? this.logger.error(errorMessage) : null;
+        showErrorFunc(this.config.allowMultipleUserSessions, 'Multiple user sessions enabled!');
+        showErrorFunc(this.config.enableAuthCallbackPorts, 'Authorization callback ports are enabled!');
+        showErrorFunc(this.config.enableCORS, 'Cross-origin resource sharing enabled!');
+        showErrorFunc(this.config.forceOverrideRedisToLocalhost, 'Forced override Redis host to localhost.');
+        showErrorFunc(this.config.disableMakeAnalyzed, 'User fees are disabled!');
+        showErrorFunc(this.config.enableFullRightsForDemoUsers, 'Demo users have full rights!');
     }
 
     _printServerConfig() {
@@ -98,7 +105,6 @@ class WebServerHost {
 
     _enableCORSIfNeeded(app) {
         if (this.config.enableCORS) {
-            this.logger.error('Cross-origin resource sharing enabled!');
             app.use(cors());
         }
     }

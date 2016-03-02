@@ -7,17 +7,14 @@ const SETTINGS = {
     enableCORS: ENV.GEN_WS_CORS_ENABLE || true,
     // If true, the 'callbackPort' variable will be supported in the SessionsController.
     // This setting is very security-critical and should be set to false in production.
-    // TODO: add report to the application start after the demo-users-support branch is merged.
     enableAuthCallbackPorts: ENV.GEN_WS_ENABLE_AUTH_CALLBACK_PORTS || false,
     // If true, Redis host will be ignored in the data received from AS, and localhost
     // will always be used. This is convenient when port forwarding to Redis server is used.
     forceOverrideRedisToLocalhost: ENV.GEN_WS_FORCE_OVERRIDE_REDIS_TO_LOCALHOST || false,
     // If true, samples will not be marked as analyzed, and there will be no fee from the user.
-    // TODO: add report to the application start after demo-users-support branch is merged.
     disableMakeAnalyzed: ENV.GEN_WS_DISABLE_MAKE_ANALYZED || false,
     // If enabled, demo users will have rights to create and delete filters and samples.
     // These filters and samples will be shared between them, as there is only one demo-user in the system.
-    // TODO: add report to the application start after demo-users-support branch is merged.
     enableFullRightsForDemoUsers: ENV.GEN_WS_ENABLE_FULL_RIGHTS_FOR_DEMO_USERS || false,
     upload: {
         path: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/', // Temporary path for uploaded samples.
