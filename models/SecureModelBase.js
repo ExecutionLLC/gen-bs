@@ -70,14 +70,8 @@ class SecureModelBase extends RemovableModelBase {
     }
 
     _checkUserIsCorrect(userId, itemData, callback) {
-        const secureInfo = {userId};
-        this._secureCheck(itemData, secureInfo, callback);
-    }
-
-    // Default data, which is available for everybody, has creator set to null
-    _secureCheck(itemData, secureInfo, callback) {
         if (_.isNull(itemData.creator)
-            || itemData.creator === secureInfo.userId) {
+            || itemData.creator === userId) {
             callback(null, itemData);
         } else {
             callback(new Error('Entity access denied.'));

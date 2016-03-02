@@ -12,52 +12,49 @@ class UserEntityServiceBase extends ServiceBase {
     }
 
     add(user, languId, item, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
         const actualLanguId = languId || user.languId;
-        this.theModel.add(user.id, actualLanguId, item, callback);
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.add(user.id, actualLanguId, item, callback)
+        ], callback);
     }
 
     update(user, item, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        this.theModel.update(user.id, item.id, item, callback);
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.update(user.id, item.id, item, callback)
+        ], callback);
     }
 
     find(user, itemId, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        this.theModel.find(user.id, itemId, callback);
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.theModel.find(user.id, itemId, callback)
+        ], callback);
     }
 
     findMany(user, itemIds, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        this.theModel.findMany(user.id, itemIds, callback);
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.theModel.findMany(user.id, itemIds, callback)
+        ], callback);
     }
 
     findAll(user, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        this.theModel.findAll(user.id, callback);
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.theModel.findAll(user.id, callback)
+        ], callback);
     }
 
     remove(user, itemId, callback) {
-        if (!this._checkUserIsSet(user, callback)) {
-            return;
-        }
-
-        this.theModel.remove(user.id, itemId, callback);
+        async.waterfall([
+            (callback) => this._checkUserIsSet(user, callback),
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => this.theModel.remove(user.id, itemId, callback)
+        ], callback);
     }
 }
 
