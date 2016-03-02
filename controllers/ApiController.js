@@ -4,6 +4,7 @@ const Express = require('express');
 const async = require('async');
 
 const ControllerBase = require('./ControllerBase');
+const ErrorUtils = require('../utils/ErrorUtils');
 
 /**
  * Contains routing logic and common middleware for all API calls.
@@ -13,6 +14,7 @@ class ApiController extends ControllerBase {
         super(services);
 
         this._initHeaders = this._initHeaders.bind(this);
+        this._handleErrors = this._handleErrors.bind(this);
     }
 
     /**
@@ -70,6 +72,18 @@ class ApiController extends ControllerBase {
         ], callback);
     }
 
+    _handleErrors(error, request, response, next) {
+        if (response.headersSent) {
+            return next(error);
+        }
+        const message = ErrorUtils.createErrorMessage(error);
+        this.logger.error(message);
+        if (error.stack) {
+            this.logger.debug(error.stack);
+        }
+        this.sendInternalError(response, 'Unexpected error occurred, see the server logs for details.');
+    }
+
     _initHeaders(request, response, next) {
         async.waterfall([
             (callback) => {
@@ -109,6 +123,9 @@ class ApiController extends ControllerBase {
         router.use('/filters', filtersRouter);
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);
+
+        // Initialize error handling.
+        router.use(this._handleErrors);
 
         return router;
     }
