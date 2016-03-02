@@ -43,6 +43,8 @@ class SamplesService extends UserEntityServiceBase {
     makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {
         if (!this.services.config.disableMakeAnalyzed) {
             this.theModel.makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback);
+        } else {
+            callback(null, false);
         }
     }
 }
