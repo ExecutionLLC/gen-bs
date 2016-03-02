@@ -1,0 +1,33 @@
+[
+  {
+    "id": "00000000-0000-0000-0000-000000000000",
+    "name": "Demo",
+    "last_name": "Demo",
+    "email": "demo@demo.com",
+    "speciality": "doctor",
+    "language": "en",
+    "number_paid_samples": 0
+  },
+  {
+    "id": "373116ac-a0e8-4afd-aa48-3c0bf7614951",
+    "name": "Valarie",
+    "last_name": "Vaughn",
+    "email": "valarievaughn@electonic.com",
+    "speciality": "doctor",
+    "language": "en",
+    "number_paid_samples": 10,
+    "login": "valarie",
+    "password": "password"
+  },
+  {
+    "id": "421214ac-a1e9-5afd-aa48-3c0bf7614123",
+    "name": "Maria",
+    "last_name": "Kuri",
+    "email": "mariakuri@electonic.com",
+    "speciality": "assistant",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "maria",
+    "password": "password"
+  }
+]

@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const async = require('async');
-const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
 const RPCProxy = require('../utils/RPCProxy');
@@ -50,6 +49,10 @@ class ApplicationServerService extends ServiceBase {
         return METHODS;
     }
 
+    isRPCConnected() {
+        return this.rpcProxy.isConnected();
+    }
+
     requestSourcesList(sessionId, callback) {
         const method = METHODS.getSourcesList;
         async.waterfall([
@@ -58,11 +61,11 @@ class ApplicationServerService extends ServiceBase {
         ], callback);
     }
 
-    requestSourceMetadata(sessionId, sourceName, callback) {
+    requestSourceMetadata(sessionId, sourceNames, callback) {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
             (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
-            (operation, callback) => this._rpcSend(operation.getId(), method, sourceName, callback)
+            (operation, callback) => this._rpcSend(operation.getId(), method, _.map(sourceNames, (sourceName) => { return sourceName + '.h5'}), callback)
         ], callback);
     }
 
@@ -100,6 +103,9 @@ class ApplicationServerService extends ServiceBase {
                 operation.setLimit(params.limit);
                 callback(null, operation);
             },
+            (operation, callback) => this.services.samples.makeSampleIsAnalyzedIfNeeded(params.userId, params.sample.id, (error) => {
+                callback(error, operation);
+            }),
             (operation, callback) => this._rpcSend(operation.getId(), method, searchSessionRequest, callback)
         ], callback);
     }
@@ -282,10 +288,10 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _rpcReply(rpcError, rpcMessage) {
-        this.logger.error('RPC REPLY, error: ', JSON.stringify(rpcError, null, 2), ', message: ', JSON.stringify(rpcMessage, null, 2));
+        this.logger.info('RPC REPLY, error: ' + JSON.stringify(rpcError, null, 2) + ', message: ' + JSON.stringify(rpcMessage, null, 2));
         this.services.applicationServerReply.onRpcReplyReceived(rpcError, rpcMessage, (error) => {
             if (error) {
-                this.logger.error('Error processing RPC reply', error);
+                this.logger.error('Error processing RPC reply: ' + error);
             }
         });
     }
@@ -295,8 +301,8 @@ class ApplicationServerService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-                this.logger.info('RPC SEND: ', operationId, method);
-                this.logger.info('Params:', JSON.stringify(params, null, 2));
+                this.logger.info('RPC SEND: ' + operationId + ' ' + method);
+                this.logger.info('Params: ' + JSON.stringify(params, null, 2));
                 callback(null, operationId);
             }
         });

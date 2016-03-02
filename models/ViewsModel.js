@@ -25,9 +25,10 @@ class ViewsModel extends SecureModelBase {
 
     find(userId, viewId, callback) {
         async.waterfall([
-            (callback) => { this._fetch(userId, viewId, callback); },
+            (callback) => this._fetch(userId, viewId, callback),
+            (view, callback) => this._ensureItemNotDeleted(view, callback),
             (view, callback) => {
-                this._fetchViewItems(viewId, (error, viewItems) => {
+                this._fetchViewItems(view.id, (error, viewItems) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -41,22 +42,8 @@ class ViewsModel extends SecureModelBase {
     // It collects the latest version of each view for the current user
     findAll(userId, callback) {
         async.waterfall([
-            (callback) => { this._fetchUserViews(userId, callback); },
-            (viewsData, callback) => {
-                const viewIds = _.pluck(viewsData, 'id');
-                this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        let viewItems = _.groupBy(viewItemsData, (viewItem) => {
-                            return viewItem.viewId;
-                        });
-                        async.map(viewsData, (viewData, callback) => {
-                            this._mapView(viewData, viewItems[viewData.id], callback);
-                        }, callback);
-                    }
-                });
-            }
+            (callback) => this._fetchUserViews(userId, callback),
+            (views, callback) => this._mapViewsByIds(views, callback)
         ], callback);
     }
 
@@ -64,33 +51,15 @@ class ViewsModel extends SecureModelBase {
         async.waterfall([
             (callback) => { this._fetchViews(viewIds, callback); },
             (views, callback) => {
-                if (views.length == viewIds.length) {
-                    callback(null, views);
-                } else {
-                    callback('Some views not found: ' + viewIds + ', userId: ' + userId);
-                }
+                this._ensureAllItemsFound(views, viewIds, callback);
             },
-            (views, callback) => {
-                if (_.every(views, 'creator', userId)) {
-                    callback(null, views);
-                } else {
-                    callback('Unauthorized access to views: ' + viewIds + ', userId: ' + userId);
-                }
-            },
-            (views, callback) => {
-                this._fetchViewItemsByIds(viewIds, (error, viewItemsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        let viewItems = _.groupBy(viewItemsData, (viewItem) => {
-                            return viewItem.viewId;
-                        });
-                        async.map(views, (view, callback) => {
-                            this._mapView(viewData, viewItems[view.id], callback);
-                        }, callback);
-                    }
-                });
-            }
+            (views, callback) => async.map(views, (view, callback) => {
+                this._ensureItemNotDeleted(view, callback);
+            }, callback),
+            (views, callback) => async.map(views, (view, callback) => {
+                this._checkUserIsCorrect(userId, view, callback);
+            }, callback),
+            (views, callback) => this._mapViewsByIds(views, callback)
         ], callback);
     }
 
@@ -132,24 +101,25 @@ class ViewsModel extends SecureModelBase {
     }
 
     _addViewItem(viewId, viewItem, trx, callback) {
-        const dataToInsert = {
-            id: this._generateId(),
-            viewId: viewId,
-            fieldId: viewItem.fieldId,
-            order: viewItem.order,
-            sortOrder: viewItem.sortOrder,
-            sortDirection: viewItem.sortDirection,
-            filterControlEnable: viewItem.filterControlEnable || false
-        };
-        this._unsafeInsert('view_item', dataToInsert, trx, (error, viewItemId) => {
-            if (error) {
-                callback(error);
-            } else {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = {
+                    id: this._generateId(),
+                    viewId: viewId,
+                    fieldId: viewItem.fieldId,
+                    order: viewItem.order,
+                    sortOrder: viewItem.sortOrder,
+                    sortDirection: viewItem.sortDirection,
+                    filterControlEnable: viewItem.filterControlEnable || false
+                };
+                this._unsafeInsert('view_item', dataToInsert, trx, callback);
+            },
+            (viewItemId, callback) => {
                 this._addKeywords(viewItemId, viewItem.keywords, trx, (error) => {
                     callback(error, viewItemId);
                 });
             }
-        });
+        ], callback);
     }
 
     _addKeywords(viewItemId, keywords, trx, callback) {
@@ -200,14 +170,14 @@ class ViewsModel extends SecureModelBase {
     }
 
     _fetch(userId, viewId, callback) {
-        this._fetchView(viewId, (error, data) => {
-            if (error) {
-                callback(error);
-            } else {
-                const secureInfo = {userId: userId};
-                this._secureCheck(data, secureInfo, callback);
+        async.waterfall([
+            (callback) => {
+                this._fetchView(viewId, callback);
+            },
+            (view, callback) => {
+                this._checkUserIsCorrect(userId, view, callback);
             }
-        });
+        ], callback);
     }
 
     _fetchView(viewId, callback) {
@@ -261,46 +231,62 @@ class ViewsModel extends SecureModelBase {
         }, callback);
     }
 
-    _mapView(view, viewItems, callback) {
-        this._mapViewItems(viewItems, (error, viewItemsData) => {
+    _mapViewsByIds(views, callback) {
+        const viewIds = _.pluck(views, 'id');
+        this._fetchViewItemsByIds(viewIds, (error, viewItems) => {
             if (error) {
                 callback(error);
             } else {
-                view.viewListItems = viewItemsData;
-                callback(null, this._mapColumns(view));
+                this._mapViews(views, viewItems, callback);
             }
         });
     }
 
+    _mapViews(views, viewItems, callback) {
+        let viewItemsData = _.groupBy(viewItems, (viewItem) => {
+            return viewItem.viewId;
+        });
+        async.map(views, (view, callback) => {
+            this._mapView(view, viewItemsData[view.id], callback);
+        }, callback);
+    }
+
+    _mapView(view, viewItems, callback) {
+        async.waterfall([
+            (callback) => this._mapViewItems(viewItems, callback),
+            (viewItemsData, callback) => {
+                view.viewListItems = viewItemsData;
+                callback(null, this._mapColumns(view));
+            }
+        ], callback);
+    }
+
     _mapViewItems(viewItems, callback) {
         async.map(viewItems, (viewItem, callback) => {
-            this._fetchViewItemKeywords(viewItem.id, (error, keywords) => {
-                if (error) {
-                    callback(error);
-                } else {
-                    this._mapKeywords(keywords, (error, result) => {
-                        if (error) {
-                            callback(error);
-                        } else {
-                            viewItem.keywords = result;
-                            callback(null, viewItem);
-                        }
-                    });
+            async.waterfall([
+                (callback) => {
+                    this._fetchViewItemKeywords(viewItem.id, callback);
+                },
+                (keywords, callback) => {
+                    this._mapKeywords(keywords, callback);
+                },
+                (result, callback) => {
+                    viewItem.keywords = result;
+                    callback(null, viewItem);
                 }
-            });
+            ], callback);
         }, callback);
     }
 
     _mapKeywords(keywords, callback) {
         async.map(keywords, (keyword, callback) => {
-            this.models.keywords.fetchKeywordSynonyms(keyword.id, (error, synonyms) => {
-                if (error) {
-                    callback(error);
-                } else {
+            async.waterfall([
+                (callback) => this.models.keywords.fetchKeywordSynonyms(keyword.id, callback),
+                (synonyms, callback) => {
                     keyword.synonyms = synonyms;
                     callback(null, keyword);
                 }
-            });
+            ], callback);
         }, callback);
     }
 

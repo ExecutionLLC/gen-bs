@@ -3,7 +3,9 @@ import * as ActionTypes from '../actions/auth'
 export default function auth(state = {
   isFetching: false,
   sessionId: null,
-  isAuthenticated: false
+  isAuthenticated: false,
+  isDemo: false,
+  errorMessage: null
 }, action) {
 
   switch (action.type) {
@@ -18,7 +20,13 @@ export default function auth(state = {
         isFetching: false,
         sessionId: action.sessionId,
         isAuthenticated: action.isAuthenticated,
+        isDemo: action.isDemo,
         lastUpdated: action.receivedAt
+      });
+
+    case ActionTypes.LOGIN_ERROR:
+      return Object.assign({}, state, {
+        errorMessage: action.errorMessage
       });
 
 

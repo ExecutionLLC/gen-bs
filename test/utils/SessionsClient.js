@@ -11,10 +11,9 @@ class SessionsClient extends ClientBase {
         super(urls);
     }
 
-    openSession(userName, password, callback) {
+    openSession(userEmail, callback) {
         RequestWrapper.post(this.urls.session(), null, {
-            userName,
-            password
+            email: userEmail
         }, callback);
     }
 

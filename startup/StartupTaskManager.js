@@ -1,7 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
-
 const InitialDataImportManager = require('./InitialDataImportManager');
 
 class StartupTaskManager {

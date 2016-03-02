@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "Answer to session open and check.",
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "Id of the session."
+    },
+    "session_type": {
+      "type": "string",
+      "description": "Session type.",
+      "enum": [
+        "DEMO",
+        "USER"
+      ]
+    }
+  }
+}
