@@ -84,5 +84,38 @@
     "number_paid_samples": 11,
     "login": "vatic",
     "password": "zxcasdqwe"
+  },
+  {
+    "id": "9638820a-384a-4bbd-98ea-dacc968832a3",
+    "name": "Aleksandr",
+    "last_name": "Kirienko",
+    "email": "aleksandr.kirienko@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "bizoin",
+    "password": "zxcasdqwe"
+  },
+  {
+    "id": "2c40179b-3c05-402b-82d1-a76f87ec9b56",
+    "name": "Petr",
+    "last_name": "Ponomarev",
+    "email": "pon.petr@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "pon.petr",
+    "password": "zxcasdqwe"
+  },
+  {
+    "id": "2b2d3136-a50f-434c-a679-f6e700eec1bb",
+    "name": "Yaroslav",
+    "last_name": "Poltavskiy",
+    "email": "poltavskyyi@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "poltavskyyi",
+    "password": "zxcasdqwe"
   }
 ]
