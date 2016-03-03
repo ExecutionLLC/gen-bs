@@ -36,21 +36,6 @@ const closeSessionWithCheck = (sessionId, done) => {
     });
 };
 
-const checkDemoCollectionValid = (collection, expectedCollection) => {
-    assert.ok(!_.isEmpty(collection));
-    if (expectedCollection) {
-        assert.equal(collection.length, expectedCollection.length);
-    }
-    _.each(collection, item => {
-        if (expectedCollection) {
-            assert.ok(_.any(expectedCollection, expectedItem => expectedItem.id === item.id),
-                'Item with id ' + item.id + ' is not found in the expected collection.');
-        }
-        assert.ok(_.includes(['standard', 'advanced'], item.type),
-            'There should be no types except "standard" and "advanced", but got ' + item.type);
-    });
-};
-
 describe('Demo Users', () => {
     describe('Open/close demo session', () => {
         let sessionId = null;
@@ -144,7 +129,7 @@ describe('Demo Users', () => {
         });
     });
 
-    describe('Parallel access', (done) => {
+    describe('Parallel access', () => {
         it('should be possible to create at least 50 demo user search sessions', (done) => {
             assert.fail('Not implemented');
         });
