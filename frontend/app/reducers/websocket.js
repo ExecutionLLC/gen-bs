@@ -10,6 +10,7 @@ export default function websocket(state = {
   isVariantsEmpty: false,
   isVariantsValid: true,
   isVariantsLoaded: false,
+  isNextDataLoading: false,
   progress: null
 }, action) {
   switch (action.type) {
