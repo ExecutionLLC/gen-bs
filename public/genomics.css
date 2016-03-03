@@ -14083,3 +14083,7 @@ fieldset[disabled] .query-builder .query-builder .form-control {
 .query-builder .rule-container .rule-value-container {
   margin-left: 10px;
 }
+.table-variants-container {
+  height: 700px;
+  overflow-y: scroll;
+}
