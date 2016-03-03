@@ -64,8 +64,18 @@
 								"type": "array",
 								"description": "An array of comments for the row.",
 								"items": {
-									"type": "string",
-									"description": "Comment text."
+									"type": "object",
+									"description": "Comment object.",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "Identifier of the comment."
+										},
+										"comment": {
+											"type": "string",
+											"description": "Comment text"
+										}
+									}
 								}
 							}
 						}
