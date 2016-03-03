@@ -18,9 +18,11 @@ export default class VariantsTableRows extends Component {
   handleScroll(e) {
     //console.log('scroll', e);
     const el = e.target
+    const { currentSample, currentView, currentFilter } = this.props.ui
     if (el.scrollHeight - el.scrollTop === el.clientHeight) {
       console.log('scrolled');
-      this.props.dispatch(getNextPartOfData())
+      this.props.dispatch(getNextPartOfData(currentSample, currentView, currentFilter)) 
+                                           
     }
   }
 

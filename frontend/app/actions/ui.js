@@ -60,15 +60,15 @@ export function changeFilter(filterId) {
   }
 }
 
-export function analyze(sampleId, viewId, filterId) {
+export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
   return ( dispatch, getState )  => {
 
     const searchParams = {
       sampleId: sampleId,
       viewId: viewId,
       filterId: filterId,
-      limit: 100,
-      offset: 0
+      limit: limit,
+      offset: offset
     }
 
     dispatch(clearSearchParams())
