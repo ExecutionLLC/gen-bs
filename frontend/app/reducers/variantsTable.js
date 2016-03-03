@@ -9,7 +9,8 @@ export default function variantsTable(
       limit: 100,
       offset: 0,
       top_search: ''
-    }
+    },
+    scrollPos: 0
   }, action) {
   switch (action.type) {
 
