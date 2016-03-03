@@ -1,6 +1,5 @@
 import config from '../../config'
 import { requestAnalyze } from './websocket'
-import { analyze } from './ui'
 
 /*
  * action types
@@ -45,16 +44,11 @@ export function getNextPartOfData(currentSample, currentView, currentFilter ) {
     const limit = getState().ui.currentLimit + 100
     const offset = getState().ui.currentOffset
 
-    // Dirty hack. Because backend returns empty results on empty filtes in search in results
-    if (getState().variantsTable.searchInResultsParams.search.length === 0) {
-      dispatch(analyze(currentSample.id, currentView.id, currentFilter.id, limit, offset))
-    } else {
-      dispatch(changeVariantsLimit())
+    dispatch(changeVariantsLimit())
 
-      setTimeout(() => {
-        dispatch(searchInResults())
-      }, 500)
-    }
+    setTimeout(() => {
+      dispatch(searchInResults())
+    }, 500)
 
 
   }
