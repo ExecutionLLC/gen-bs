@@ -23,6 +23,7 @@ export default class VariantsTableRows extends Component {
         let row = [];
         const columnNames = Object.keys(rowData)
 
+        row.push(<td key="row_linenumber">{i+1}</td>);
         row.push(<td key="row_checkbox"><input type="checkbox"/></td>);
         row.push(<td className="comment" key="comment">{rowData['comment']}</td>);
 
