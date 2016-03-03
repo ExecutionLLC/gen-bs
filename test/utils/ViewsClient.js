@@ -4,7 +4,7 @@ const UserEntityClientBase = require('./UserEntityClientBase');
 
 class ViewsClient extends UserEntityClientBase {
     constructor(urls) {
-        super(urls, urls.viewsUrls);
+        super(urls, urls.viewsUrls());
     }
 }
 

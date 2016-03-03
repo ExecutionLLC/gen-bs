@@ -8,4 +8,4 @@ class CommentsService extends UserEntityServiceBase {
     }
 }
 
-module.exports = UserEntityServiceBase;
+module.exports = CommentsService;

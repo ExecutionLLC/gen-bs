@@ -6,6 +6,7 @@ const DemoDataController = require('./DemoDataController');
 const SampleController = require('./SampleController');
 const ViewController = require('./ViewController');
 const FilterController = require('./FilterController');
+const CommentsController = require('./CommentsController');
 const FieldsMetadataController = require('./FieldsMetadataController');
 
 const SearchController = require('./SearchController');
@@ -21,6 +22,7 @@ class ControllersFacade {
         this.dataController = new DataController(services);
         this.demoDataController = new DemoDataController(services);
 
+        this.commentsController = new CommentsController(services);
         this.samplesController = new SampleController(services);
         this.viewsController = new ViewController(services);
         this.filtersController = new FilterController(services);

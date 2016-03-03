@@ -99,6 +99,7 @@ class ApiController extends ControllerBase {
         const sessionsControllerPath = '/session';
         // Create child routers
         const sampleRouter = controllersFacade.samplesController.createRouter();
+        const commentsRouter = controllersFacade.commentsController.createRouter();
         const viewsRouter = controllersFacade.viewsController.createRouter();
         const fieldsRouter = controllersFacade.fieldsMetadataController.createRouter();
         const filtersRouter = controllersFacade.filtersController.createRouter();
@@ -118,6 +119,7 @@ class ApiController extends ControllerBase {
         router.use('/demo/data', demoDataRouter);
         router.use('/data', dataRouter);
         router.use(sessionsControllerPath, sessionsRouter);
+        router.use('/comments', commentsRouter);
         router.use('/search', searchRouter);
         router.use('/samples', sampleRouter);
         router.use('/filters', filtersRouter);

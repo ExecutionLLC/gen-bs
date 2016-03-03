@@ -7,3 +7,5 @@ class CommentsClient extends UserEntityClientBase {
         super(urls, urls.commentsUrls());
     }
 }
+
+module.exports = CommentsClient;
