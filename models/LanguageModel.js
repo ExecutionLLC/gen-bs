@@ -6,7 +6,7 @@ const ModelBase = require('./ModelBase');
 
 const mappedColumns = ['id', 'description'];
 
-class LanguModel extends ModelBase {
+class LanguageModel extends ModelBase {
     constructor(models) {
         super(models, 'langu', mappedColumns);
     }
@@ -50,4 +50,4 @@ class LanguModel extends ModelBase {
     }
 }
 
-module.exports = LanguModel;
+module.exports = LanguageModel;

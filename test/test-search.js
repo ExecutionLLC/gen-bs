@@ -4,6 +4,7 @@ const assert = require('assert');
 const _ = require('lodash');
 const HttpStatus = require('http-status');
 
+const ClientBase = require('./utils/ClientBase');
 const SessionsClient = require('./utils/SessionsClient');
 const FiltersClient = require('./utils/FiltersClient');
 const ViewsClient = require('./utils/ViewsClient');
@@ -22,8 +23,7 @@ const searchClient = new SearchClient(urls);
 const webSocketClient = new WebSocketClient('localhost', Config.port);
 
 const TestUser = {
-    userName: 'valarie',
-    password: 'password'
+    userEmail: 'valarievaughn@electonic.com'
 };
 
 describe('Search', function() {
@@ -32,7 +32,7 @@ describe('Search', function() {
     let sessionId = null;
 
     before((done) => {
-        sessionsClient.openSession(TestUser.userName, TestUser.password, (error, response) => {
+        sessionsClient.openSession(TestUser.userEmail, (error, response) => {
             assert.ifError(error);
             sessionId = SessionsClient.getSessionFromResponse(response);
             webSocketClient.associateSession(sessionId);
@@ -47,8 +47,7 @@ describe('Search', function() {
 
     after((done) => {
         sessionsClient.closeSession(sessionId, (error, response) => {
-            assert.ifError(error);
-            assert.equal(response.status, HttpStatus.OK);
+            ClientBase.readBodyWithCheck(error, response);
             done();
         });
     });
@@ -99,30 +98,20 @@ describe('Search', function() {
         });
 
         filtersClient.getAll(sessionId, (error, response) => {
-            assert.ifError(error);
-            assert.equal(response.status, HttpStatus.OK);
-            const filters = response.body;
+            const filters = ClientBase.readBodyWithCheck(error, response);
 
             viewsClient.getAll(sessionId, (error, response) => {
-                assert.ifError(error);
-                assert.equal(response.status, HttpStatus.OK);
-                const views = response.body;
+                const views = ClientBase.readBodyWithCheck(error, response);
 
                 samplesClient.getAll(sessionId, (error, response) => {
-                    assert.ifError(error);
-                    assert.equal(response.status, HttpStatus.OK);
-                    const samples = response.body;
+                    const samples = ClientBase.readBodyWithCheck(error, response);
                     const sample = samples[0];
 
                     samplesClient.getFields(sessionId, sample.id, (error, response) => {
-                        assert.ifError(error);
-                        assert.equal(response.status, HttpStatus.OK);
-                        const sampleFields = response.body;
+                        const sampleFields = ClientBase.readBodyWithCheck(error, response);
 
                         samplesClient.getSourcesFields(sessionId, (error, response) => {
-                            assert.ifError(error);
-                            assert.equal(response.status, HttpStatus.OK, response.body);
-                            const sourcesFields = response.body;
+                            const sourcesFields = ClientBase.readBodyWithCheck(error, response);
 
                             wsState.filter = filters[0];
                             wsState.view = views[0];
@@ -131,9 +120,9 @@ describe('Search', function() {
                             wsState.sampleFields = sampleFields;
 
                             searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, wsState.sample.id, wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset, (error, response) => {
-                                assert.ifError(error);
-                                const operationId = response.body.operationId;
-                                assert.ok(operationId, JSON.stringify(response.body));
+                                const body = ClientBase.readBodyWithCheck(error, response);
+                                const operationId = body.operationId;
+                                assert.ok(operationId);
                                 wsState.operationId = operationId;
                             });
                         });

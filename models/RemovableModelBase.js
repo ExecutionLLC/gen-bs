@@ -1,6 +1,10 @@
 'use strict';
 
+const async = require('async');
+
 const ModelBase = require('./ModelBase');
+
+const ITEM_NOT_FOUND = 'Item not found.';
 
 class RemovableModelBase extends ModelBase {
     /**
@@ -12,8 +16,25 @@ class RemovableModelBase extends ModelBase {
         super(models, baseTableName, mappedColumns);
     }
 
-    remove(id, callback) {
-        super._unsafeUpdate(id, {isDeleted: true}, callback);
+    find(itemId, callback) {
+        async.waterfall([
+            (callback) => super.find(itemId, callback),
+            (itemData, callback) => this._ensureItemNotDeleted(itemData, callback)
+        ], callback);
+    }
+
+    remove(itemId, callback) {
+        this.db.transactionally((trx, callback) => {
+            super._unsafeUpdate(itemId, {isDeleted: true}, trx, callback);
+        }, callback);
+    }
+
+    _ensureItemNotDeleted(item, callback) {
+        if (!item.isDeleted) {
+            callback(null, item);
+        } else {
+            callback(new Error(ITEM_NOT_FOUND));
+        }
     }
 }
 

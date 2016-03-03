@@ -31,7 +31,8 @@ import Root from './containers/Root'
 import gzip from './utils/gzip'
 window.gzip = gzip
 import './assets/css/index.less';
+
 render(
   <Root />,
   document.getElementById('root')
-);
+)

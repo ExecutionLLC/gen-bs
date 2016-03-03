@@ -16,16 +16,17 @@ class SamplesService extends UserEntityServiceBase {
      * Sends sample to application server for processing.
      * */
     upload(sessionId, user, localFileInfo, callback) {
-        this.services.logger.info('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
+        this.logger.info('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         const sampleId = Uuid.v4();
         async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.applicationServer.uploadSample(sessionId, sampleId, user,
                 localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
             (operationId, callback) => this.services.applicationServer.requestSampleProcessing(sessionId, operationId, callback)
         ], callback);
     }
 
-    createMetadataForUploadedSample(user, sampleId, sampleFileName, applicationServerFieldsMetadata, callback) {
+    createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference, applicationServerFieldsMetadata, callback) {
         // Map AS fields metadata format into local.
         const fieldsMetadata = _.map(applicationServerFieldsMetadata,
             appServerFieldMetadata => FieldsMetadataService.createFieldMetadata(sampleId, true, appServerFieldMetadata));
@@ -36,7 +37,15 @@ class SamplesService extends UserEntityServiceBase {
             hash: null
         };
 
-        this.models.samples.addSampleWithMetadata(user.id, user.language, sample, fieldsMetadata, callback);
+        this.theModel.addSampleWithMetadata(user.id, user.language, sample, fieldsMetadata, callback);
+    }
+
+    makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {
+        if (!this.services.config.disableMakeAnalyzed) {
+            this.theModel.makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback);
+        } else {
+            callback(null, false);
+        }
     }
 }
 

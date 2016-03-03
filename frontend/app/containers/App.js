@@ -18,12 +18,14 @@ import { fetchUserdata } from '../actions/userData'
 class App extends Component {
 
   componentDidMount() {
-    this.props.dispatch(login('valarie', 'password'))
+    this.props.dispatch(login())
   }
 
   render() {
     const { isAuthenticated, samples, isFetching } = this.props.userData;
     const { dispatch, ui } = this.props;
+    //console.log('query', this.context.router.getCurrentQuery());
+    //console.log('query sessionId or Error', location.search.slice(1).split('='));
 
     var mainDivClass = classNames({
       'main': true,

@@ -12,6 +12,9 @@ class ControllerBase {
     constructor(services) {
         this.services = services;
 
+        this.config = services.config;
+        this.logger = services.logger;
+
         this.getSessionId = this.getSessionId.bind(this);
         this.getLanguageId = this.getLanguageId.bind(this);
     }
@@ -69,11 +72,11 @@ class ControllerBase {
     }
 
     getSessionId(request) {
-        return request.get(this.services.config.sessionHeader);
+        return request.get(this.services.config.headers.sessionHeader);
     }
 
     getLanguageId(request) {
-        return request.get(this.services.config.languageHeader);
+        return request.get(this.services.config.headers.languageHeader);
     }
 
     checkUserIsDefined(request, response) {

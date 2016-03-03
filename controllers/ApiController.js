@@ -4,6 +4,7 @@ const Express = require('express');
 const async = require('async');
 
 const ControllerBase = require('./ControllerBase');
+const ErrorUtils = require('../utils/ErrorUtils');
 
 /**
  * Contains routing logic and common middleware for all API calls.
@@ -13,13 +14,14 @@ class ApiController extends ControllerBase {
         super(services);
 
         this._initHeaders = this._initHeaders.bind(this);
+        this._handleErrors = this._handleErrors.bind(this);
     }
 
     /**
      * Tries to get user by session id from header. If failed, user is kept undefined.
      * */
     _findAndSetUserAndSessionId(request, callback) {
-        const sessionHeaderName = this.services.config.sessionHeader;
+        const sessionHeaderName = this.services.config.headers.sessionHeader;
         const sessionId = request.get(sessionHeaderName);
 
         if (!sessionId) {
@@ -41,7 +43,7 @@ class ApiController extends ControllerBase {
      * If no language is provided by header, tries to get either user or system-default language.
      * */
     _findAndSetLanguage(user, request, callback) {
-        const languageHeaderName = this.services.config.languageHeader;
+        const languageHeaderName = this.services.config.headers.languageHeader;
         const languId = request.get(languageHeaderName);
 
         async.waterfall([
@@ -70,6 +72,18 @@ class ApiController extends ControllerBase {
         ], callback);
     }
 
+    _handleErrors(error, request, response, next) {
+        if (response.headersSent) {
+            return next(error);
+        }
+        const message = ErrorUtils.createErrorMessage(error);
+        this.logger.error(message);
+        if (error.stack) {
+            this.logger.debug(error.stack);
+        }
+        this.sendInternalError(response, 'Unexpected error occurred, see the server logs for details.');
+    }
+
     _initHeaders(request, response, next) {
         async.waterfall([
             (callback) => {
@@ -95,8 +109,6 @@ class ApiController extends ControllerBase {
         const demoDataRouter = controllersFacade.demoDataController.createRouter();
         const dataRouter = controllersFacade.dataController.createRouter();
 
-        const testRouter = controllersFacade.testController.createRouter();
-
         const router = new Express();
 
         // Install Express middleware
@@ -112,7 +124,8 @@ class ApiController extends ControllerBase {
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);
 
-        router.use('/test', testRouter);
+        // Initialize error handling.
+        router.use(this._handleErrors);
 
         return router;
     }

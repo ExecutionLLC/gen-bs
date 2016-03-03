@@ -1,6 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
+const async = require('async');
+
 const Uuid = require('node-uuid');
 
 const ServiceBase = require('./ServiceBase');
@@ -8,6 +10,7 @@ const ServiceBase = require('./ServiceBase');
 class FieldsMetadataService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
+        this.availableSources = [];
     }
 
     findByUserAndSampleId(user, sampleId, callback) {
@@ -26,8 +29,33 @@ class FieldsMetadataService extends ServiceBase {
         this.models.fields.findSourcesMetadata(callback);
     }
 
+    getExistingSourceNames(callback) {
+        this.models.fields.getExistingSourceNames(callback);
+    }
+
     findMany(fieldIds, callback) {
         this.models.fields.findMany(fieldIds, callback);
+    }
+
+    addMissingSourceReferences(sourcesList, callback) {
+        _.each(sourcesList, (source) => {
+            if (!this._findSource(source.sourceName)) {
+                this.availableSources.push(source);
+            }
+        });
+        callback(null, this.availableSources);
+    }
+
+    addSourceFields(languId, sourceFieldsMetadata, callback) {
+        // Add all non-mandatory source fields without trying to match them to existing fields.
+        const fieldsMetadataToAdd = _.filter(sourceFieldsMetadata, fieldMetadata => !fieldMetadata.isMandatory);
+        this.models.fields.addMany(languId, fieldsMetadataToAdd, callback);
+    }
+
+    _findSource(sourceName) {
+        return _.find(this.availableSources, (availableSource) => {
+            return availableSource.sourceName === sourceName;
+        });
     }
 
     static createFieldMetadata(sourceName, isSample, appServerFieldMetadata) {
