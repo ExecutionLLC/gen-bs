@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 const _ = require('lodash');
-const HttpStatus = require('http-status');
 
 const ClientBase = require('./utils/ClientBase');
 const SessionsClient = require('./utils/SessionsClient');
