@@ -1,7 +1,28 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
+import { getNextPartOfData } from '../../actions/variantsTable'
+
 export default class VariantsTableRows extends Component {
+
+  componentDidMount() {
+    const scrollElement = document.getElementsByClassName('table-variants-container').item(0)
+    scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
+  }
+
+  componentWillUnmount() {
+    const scrollElement = document.getElementsByClassName('table-variants-container').item(0)
+    scrollElement.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll(e) {
+    //console.log('scroll', e);
+    const el = e.target
+    if (el.scrollHeight - el.scrollTop === el.clientHeight) {
+      console.log('scrolled');
+      this.props.dispatch(getNextPartOfData())
+    }
+  }
 
   render() {
     const { variants, fields } = this.props
