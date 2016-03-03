@@ -40,7 +40,7 @@ class App extends Component {
           <div >&nbsp;</div>
         }
         {isAuthenticated && isFetching && samples.length === 0 &&
-          <div className="loader"></div>
+          <div className="loader"><h1>Analize...</h1></div>
         }
         {isAuthenticated && !isFetching && samples.length === 0 &&
           <h2>Empty.</h2>

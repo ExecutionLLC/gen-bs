@@ -29,7 +29,7 @@ class VariantsTableReact extends Component {
 
         <div className={tableWrapperClass}>
           { isVariantsLoaded &&
-            <div className="loader"></div>
+            <div className="loader"><h1>Loading</h1></div>
           }
 
           { !isVariantsLoaded && !isVariantsValid &&
@@ -71,12 +71,6 @@ function mapStateToProps(state) {
     variantsTable
   }
 }
-
-//function mapDispatchToProps(dispatch) {
-//  return {
-//    onLoad: () => dispatch(increment())
-//  }
-//}
 
 export default connect(mapStateToProps)(VariantsTableReact)
 

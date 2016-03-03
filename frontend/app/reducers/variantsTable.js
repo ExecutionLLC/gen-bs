@@ -30,6 +30,14 @@ export default function variantsTable(
         searchInResultsParams: action.searchInResultsParams
       })
 
+    case ActionTypes.CHANGE_VARIANTS_LIMIT:
+      return Object.assign({}, state, {
+        searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+          //offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
+          limit: state.searchInResultsParams.limit + 100 
+        })
+      })
+
     case ActionTypes.CHANGE_VARIANTS_FILTER:
       var searchArray = [...state.searchInResultsParams.search]
       const fieldIndex = _.findIndex(state.searchInResultsParams.search, {field_id: action.fieldId})
