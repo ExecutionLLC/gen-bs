@@ -8,6 +8,7 @@ const ViewsModel = require('./ViewsModel');
 const KeywordsModel = require('./KeywordsModel');
 const FiltersModel = require('./FiltersModel');
 const SamplesModel = require('./SamplesModel');
+const CommentsModel = require('./CommentsModel');
 const FieldsMetadataModel = require('./FieldsMetadataModel');
 
 class ModelsFacade {
@@ -25,6 +26,7 @@ class ModelsFacade {
         this.filters = new FiltersModel(this);
         this.samples = new SamplesModel(this);
         this.fields = new FieldsMetadataModel(this);
+        this.comments = new CommentsModel(this);
     }
 }
 

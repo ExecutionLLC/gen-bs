@@ -1,16 +1,10 @@
 'use strict';
 
-const Express = require('express');
+const UserEntityControllerBase = require('./UserEntityControllerBase');
 
-const ControllerBase = require('./ControllerBase');
-
-class CommentsController extends ControllerBase {
+class CommentsController extends UserEntityControllerBase {
     constructor(services) {
-        super(services)
-    }
-
-    createRouter() {
-
+        super(services, services.comments);
     }
 }
 
