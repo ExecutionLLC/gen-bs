@@ -11,8 +11,8 @@ const EVENTS = {
 };
 
 class SearchService extends ServiceBase {
-    constructor(services) {
-        super(services);
+    constructor(services, models) {
+        super(services, models);
 
         this._onRedisDataReceived = this._onRedisDataReceived.bind(this);
 

@@ -19,7 +19,6 @@ const filtersClient = new FiltersClient(urls);
 const viewsClient = new ViewsClient(urls);
 const samplesClient = new SamplesClient(urls);
 const searchClient = new SearchClient(urls);
-const webSocketClient = new WebSocketClient('localhost', Config.port);
 
 const TestUser = {
     userEmail: 'valarievaughn@electonic.com'
@@ -29,13 +28,18 @@ describe('Search', function() {
     // Search should fit into 30 seconds
     this.timeout(30000);
     let sessionId = null;
+    let webSocketClient = null;
 
     before((done) => {
         sessionsClient.openSession(TestUser.userEmail, (error, response) => {
             assert.ifError(error);
             sessionId = SessionsClient.getSessionFromResponse(response);
-            webSocketClient.associateSession(sessionId);
-            done();
+            webSocketClient = new WebSocketClient('localhost', Config.port);
+            console.log('Waiting for the socket client to init...');
+            setTimeout(() => {
+                webSocketClient.associateSession(sessionId);
+                done();
+            }, 3000);
         });
     });
 
@@ -118,7 +122,9 @@ describe('Search', function() {
                             wsState.sourcesFields = sourcesFields;
                             wsState.sampleFields = sampleFields;
 
-                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, wsState.sample.id, wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset, (error, response) => {
+                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, wsState.sample.id,
+                                wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset,
+                                (error, response) => {
                                 const body = ClientBase.readBodyWithCheck(error, response);
                                 const operationId = body.operationId;
                                 assert.ok(operationId);
