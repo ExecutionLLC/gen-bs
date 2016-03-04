@@ -36,7 +36,6 @@
 
 .table-variants-container {
   height: 700px;
-  overflow-y: scroll;
 }
 
 .table-variants-container table>th,td{
@@ -47,17 +46,31 @@ thead.variants_table_head {
   position: fixed;
 }
 
- .table.table-variants thead, tbody, tfoot {
-      tr { 
-       td,th,tf { 
-         width: 150px important!;
-         min-width: 150px;
-         max-width: 150px;
-       }
-       td.comment {
-         width: 150px important!;
-         min-width: 150px;
-         max-width: 150px;
-       }
-     }
-    }
+.table.table-variants thead, tbody, tfoot {
+  tr { 
+   td,th,tf { 
+     width: 150px important!;
+     min-width: 150px;
+     max-width: 150px;
+   }
+   td.comment {
+     width: 150px important!;
+     min-width: 150px;
+     max-width: 150px;
+   }
+  }
+}
+
+.table.table-variants tbody {
+  margin-top: 150px;
+  overflow-y: scroll;
+}
+
+.table.table-variants tbody:before {
+    content: "-";
+    display: block;
+    line-height: 70px;
+    color: transparent;
+}
+
+

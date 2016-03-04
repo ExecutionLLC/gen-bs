@@ -37,8 +37,8 @@ export default function variantsTable(
     case ActionTypes.CHANGE_VARIANTS_LIMIT:
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          //offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
-          limit: state.searchInResultsParams.limit + 100 
+          offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
+          //limit: state.searchInResultsParams.limit + 100 
         })
       })
 
@@ -58,7 +58,10 @@ export default function variantsTable(
 
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          search: searchArray })
+          search: searchArray,
+          limit: 100,
+          offset: 0
+        })
       })
 
     case ActionTypes.CHANGE_VARIANTS_SORT:
@@ -93,7 +96,10 @@ export default function variantsTable(
 
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          sort: sortArray })
+          sort: sortArray,
+          limit: 100,
+          offset: 0
+        })
       })
 
     case ActionTypes.REQUEST_VARIANTS:

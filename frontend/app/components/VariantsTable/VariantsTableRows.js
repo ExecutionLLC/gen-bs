@@ -19,21 +19,22 @@ export default class VariantsTableRows extends Component {
     //console.log('scroll', e);
     const el = e.target
     const { currentSample, currentView, currentFilter } = this.props.ui
-    const { variants } = this.props.ws
-    const variantsLength = (variants === null) ? 0 : variants.length
-    if (el.scrollHeight - el.scrollTop === el.clientHeight && variants && variantsLength > 99) {
+    const { currentVariants } = this.props.ws
+    const variantsLength = (currentVariants === null) ? 0 : currentVariants.length
+
+    if (el.scrollHeight - el.scrollTop === el.clientHeight && currentVariants && variantsLength > 99) {
       this.props.dispatch(getNextPartOfData()) 
-                                           
     }
   }
 
   render() {
     const { variants, fields } = this.props
+    const { currentVariants } = this.props.ws
     const { sort } = this.props.variantsTable.searchInResultsParams
     const { isFilteringOrSorting, isNextDataLoading } = this.props.variantsTable 
     let rows;
     let tbody;
-    const variantsLength = (variants === null) ? 0 : variants.length
+    const variantsLength = (currentVariants === null) ? 0 : currentVariants.length
 
     const filterFunc = (label) => {
       return (
@@ -43,7 +44,7 @@ export default class VariantsTableRows extends Component {
     }
 
 
-    if (!variants) {
+    if (!currentVariants) {
       rows = null;
     } else {
       rows = this.props.variants.map(function(rowData, i) {
