@@ -51,8 +51,9 @@ export default class VariantsTableRows extends Component {
         let row = [];
         const columnNames = Object.keys(rowData)
 
-        row.push(<td className="row_linenumber" key="row_linenumber">{i+1}</td>);
-        row.push(<td className="row_checkbox" key="row_checkbox"><input type="checkbox"/></td>);
+        row.push(<td className="row_checkbox" key="row_checkbox"><input type="checkbox" />
+          <span style={{marginLeft: '20px'}}>{i+1}</span></td>
+        );
         row.push(<td className="comment" key="comment">{rowData['comment']}</td>);
 
         columnNames.filter(filterFunc).map( (key) => {

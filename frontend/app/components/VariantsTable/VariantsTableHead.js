@@ -66,7 +66,6 @@ export default class VariantsTableHead extends Component {
 
       //head.push(<th key="row_linenumber" className="row_linenumber"></th>);
 
-      head.push(<th  key="row_num"></th>);
       head.push(<th  className="row_checkbox" data-label="checkbox" key="row_checkbox"></th>);
 
       head.push(
