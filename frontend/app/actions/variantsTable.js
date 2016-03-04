@@ -154,7 +154,7 @@ export function searchInResults() {
   return (dispatch, getState) => {
 
     dispatch(requestSearchedResults())
-    dispatch(requestAnalyze())
+    //dispatch(requestAnalyze())
     
     const clearedJson = getState().variantsTable.searchInResultsParams
 

@@ -10,7 +10,9 @@ export default function variantsTable(
       offset: 0,
       top_search: ''
     },
-    scrollPos: 0
+    scrollPos: 0,
+    isNextDataLoading: false,
+
   }, action) {
   switch (action.type) {
 
@@ -107,11 +109,13 @@ export default function variantsTable(
 
     case ActionTypes.REQUEST_SEARCHED_RESULTS:
       return Object.assign({}, state, {
+        isNextDataLoading: true,
         isFetching: true
       })
 
     case ActionTypes.RECEIVE_SEARCHED_RESULTS:
       return Object.assign({}, state, {
+        isNextDataLoading: false,
         isFetching: false,
         lastUpdated: action.receivedAt
       })

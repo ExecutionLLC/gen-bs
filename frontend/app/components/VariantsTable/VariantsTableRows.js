@@ -71,7 +71,19 @@ export default class VariantsTableRows extends Component {
     }
 
     return (
-      <tbody id="variants_table_body">{rows}</tbody>
+      <tbody id="variants_table_body">
+        <tr>
+          <td rowspan="10">
+            <table>
+            	<tr>
+                <td>
+                  <h2 style={{color: '#2363a1'}}>Loading...</h2><i className="fa fa-spinner fa-spin"></i>
+                </td>
+            	</tr>
+            </table>
+          </td>
+        </tr>
+              </tbody>
     )
   }
 }
