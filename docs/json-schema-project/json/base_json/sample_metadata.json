@@ -17,14 +17,26 @@
 		"hash": {
 			"type": "string"
 		},
-		"fields": {
+		"values": {
 			"type": "array",
+			"description": "Values of the editable fields for the sample.",
 			"items": {
-				"$ref": "../base_json/field_metadata.json#"
+				"type": "object",
+				"properties": {
+					"field_id": {
+						"type": "string",
+						"description": "Field identifier."
+					},
+					"value": {
+						"type": "string",
+						"description": "Field value."
+					}
+				}
 			}
 		},
 		"type": {
 			"type": "string",
+			"description": "Standard - default, available for demo-users. Advanced - default, available for registered. User - uploaded by a particular user.",
 			"enum": [
 				"standard",
 				"advanced",
