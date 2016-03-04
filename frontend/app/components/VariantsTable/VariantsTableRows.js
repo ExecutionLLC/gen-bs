@@ -6,12 +6,15 @@ import { getNextPartOfData } from '../../actions/variantsTable'
 export default class VariantsTableRows extends Component {
 
   componentDidMount() {
-    const scrollElement = document.getElementsByClassName('table-variants-container').item(0)
+    const containerElement = document.getElementsByClassName('table-variants-container').item(0)
+    const scrollElement = this.refs.variantsTableBody
+    scrollElement.style.height = `${containerElement.clientHeight - 50}px`
+
     scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
   }
 
   componentWillUnmount() {
-    const scrollElement = document.getElementsByClassName('table-variants-container').item(0)
+    const scrollElement = this.refs.variantsTableBody
     scrollElement.removeEventListener('scroll', this.handleScroll);
   }
 
@@ -91,7 +94,7 @@ export default class VariantsTableRows extends Component {
 
 
     return (
-      <tbody id="variants_table_body">
+      <tbody className="table-variants-body" id="variants_table_body" ref="variantsTableBody">
         {tbody}
         { !isFilteringOrSorting && variantsLength > 99 &&
           <tr>
