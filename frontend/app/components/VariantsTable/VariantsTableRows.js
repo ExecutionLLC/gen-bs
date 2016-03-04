@@ -19,8 +19,9 @@ export default class VariantsTableRows extends Component {
     //console.log('scroll', e);
     const el = e.target
     const { currentSample, currentView, currentFilter } = this.props.ui
-    if (el.scrollHeight - el.scrollTop === el.clientHeight) {
-      console.log('scrolled');
+    const { variants } = this.props.ws
+    const variantsLength = (variants === null) ? 0 : variants.length
+    if (el.scrollHeight - el.scrollTop === el.clientHeight && variants && variantsLength > 99) {
       this.props.dispatch(getNextPartOfData()) 
                                            
     }
@@ -31,7 +32,8 @@ export default class VariantsTableRows extends Component {
     const { sort } = this.props.variantsTable.searchInResultsParams
     const { isFilteringOrSorting, isNextDataLoading } = this.props.variantsTable 
     let rows;
-    let columnsNumber;
+    let tbody;
+    const variantsLength = (variants === null) ? 0 : variants.length
 
     const filterFunc = (label) => {
       return (
@@ -48,8 +50,8 @@ export default class VariantsTableRows extends Component {
         let row = [];
         const columnNames = Object.keys(rowData)
 
-        row.push(<td key="row_linenumber">{i+1}</td>);
-        row.push(<td key="row_checkbox"><input type="checkbox"/></td>);
+        row.push(<td className="row_linenumber" key="row_linenumber">{i+1}</td>);
+        row.push(<td className="row_checkbox" key="row_checkbox"><input type="checkbox"/></td>);
         row.push(<td className="comment" key="comment">{rowData['comment']}</td>);
 
         columnNames.filter(filterFunc).map( (key) => {
@@ -62,7 +64,6 @@ export default class VariantsTableRows extends Component {
             <td className={sortedActiveClass} key={key}>{rowData[key]}</td>
           );
         })
-        
 
         return (
           <tr key={i}>
@@ -70,9 +71,8 @@ export default class VariantsTableRows extends Component {
           </tr>
         )
       })
-    }
 
-    let tbody;
+    }
 
     if ( isFilteringOrSorting ) {
       tbody = (
@@ -84,12 +84,21 @@ export default class VariantsTableRows extends Component {
         </tr>
       )
     } else {
-       tbody = rows 
+        tbody = rows 
     }
+
 
     return (
       <tbody id="variants_table_body">
         {tbody}
+        { !isFilteringOrSorting && variantsLength > 99 &&
+          <tr>
+            <td colSpan="100">
+              <h2 className="text-center" style={{color: '#2363a1'}}>Loading...<i className="text-center fa fa-spinner fa-spin fa-3x"></i>
+              </h2>
+            </td>
+          </tr>
+        }
       </tbody>
     )
   }

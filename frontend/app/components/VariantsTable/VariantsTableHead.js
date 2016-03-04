@@ -64,9 +64,10 @@ export default class VariantsTableHead extends Component {
     } else {
       variantsColumns = Object.keys(variants[0]);
 
-      head.push(<th key="row_linenumber"></th>);
+      //head.push(<th key="row_linenumber" className="row_linenumber"></th>);
 
-      head.push(<th data-label="checkbox" key="row_checkbox"></th>);
+      head.push(<th  key="row_num"></th>);
+      head.push(<th  className="row_checkbox" data-label="checkbox" key="row_checkbox"></th>);
 
       head.push(
               <th data-label="comment" key="comment" > 
@@ -142,7 +143,7 @@ export default class VariantsTableHead extends Component {
     }
 
     return (
-      <thead id="variants_table_head"><tr>{head}</tr></thead>
+      <thead className="variants_table_head" id="variants_table_head"><tr>{head}</tr></thead>
     )
   }
 }

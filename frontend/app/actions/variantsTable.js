@@ -48,7 +48,7 @@ export function getNextPartOfData(currentSample, currentView, currentFilter ) {
 
     setTimeout(() => {
       dispatch(searchInResultsNextData())
-    }, 500)
+    }, 100)
 
 
   }
@@ -81,8 +81,8 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection))
     if (getState().variantsTable.searchInResultsParams.sort.length > 0) {
       setTimeout(() => {
-          dispatch(_searchInResultsNextData())
-      }, 1000)
+        dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
+      }, 100)
     }
   }
 }
