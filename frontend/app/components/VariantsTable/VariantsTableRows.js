@@ -8,7 +8,9 @@ export default class VariantsTableRows extends Component {
   componentDidMount() {
     const containerElement = document.getElementsByClassName('table-variants-container').item(0)
     const scrollElement = this.refs.variantsTableBody
-    scrollElement.style.height = `${containerElement.clientHeight - 50}px`
+    console.log('scrollElement', scrollElement )
+    console.log('containerElement', containerElement.clientHeight )
+    scrollElement.style.height = `${containerElement.clientHeight - 100}px`
 
     scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
   }
