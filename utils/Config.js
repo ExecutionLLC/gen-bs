@@ -19,7 +19,10 @@ const SETTINGS = {
     upload: {
         path: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/', // Temporary path for uploaded samples.
         maxSizeInBytes: ENV.GEN_WS_UPLOAD_MAX_SIZE || 25 * 1024 * 1024, // Max size of the uploaded sample.
-        maxCount: ENV.GEN_WS_UPLOAD_MAX_COUNT || 5 // Max parallel uploads count.
+        maxCount: ENV.GEN_WS_UPLOAD_MAX_COUNT || 5, // Max parallel uploads count.
+        amazonS3AccessKeyId: ENV.GEN_WS_S3_ACCESS_KEY_ID || 'AKIAJKA73IEQR3ECGPVA',
+        amazonS3AccessKeySecret: ENV.GEN_WS_S3_ACCESS_KEY_SECRET || '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',
+        amazonS3RegionName: ENV.GEN_WS_S3_REGION_NAME || 'us-east-1'
     },
     applicationServer: {
         host: ENV.GEN_WS_AS_HOST || 'localhost',
