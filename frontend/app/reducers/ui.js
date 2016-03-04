@@ -6,6 +6,8 @@ export default function ui(state = {
   currentSample: null,
   currentView: null,
   currentFilter: null,
+  currentLimit: 100,
+  currentOffset: 0,
   isAnalyzeTooltipVisible: false
 }, action) {
 

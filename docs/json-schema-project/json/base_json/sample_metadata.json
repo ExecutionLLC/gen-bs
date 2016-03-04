@@ -1,48 +1,60 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"type": "object",
-	"properties": {
-		"modified_timestamp": {
-			"type": "string",
-			"description": "Timestamp indicating the time this exact version has been created."
-		},
-		"id": {
-			"type": "string",
-			"description": "UUID, the unique identifier for the sample metadata"
-		},
-		"file_name": {
-			"type": "string",
-			"description": "Name of the file as it was during upload"
-		},
-		"hash": {
-			"type": "string"
-		},
-		"fields": {
-			"type": "array",
-			"items": {
-				"$ref": "../base_json/field_metadata.json#"
-			}
-		},
-		"type": {
-			"type": "string",
-			"enum": [
-				"standard",
-				"advanced",
-				"user"
-			]
-		},
-		"is_analyzed": {
-			"type": "boolean"
-		},
-		"analyzed_timestamp": {
-			"type": "string"
-		}
-	},
-	"required": [
-		"id",
-		"hash",
-		"is_analyzed",
-		"is_standard",
-		"is_advanced"
-	]
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "modified_timestamp": {
+      "type": "string",
+      "description": "Timestamp indicating the time this exact version has been created."
+    },
+    "id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the sample metadata"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Name of the file as it was during upload"
+    },
+    "hash": {
+      "type": "string"
+    },
+    "values": {
+      "type": "array",
+      "description": "Values of the editable fields for the sample.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field_id": {
+            "type": "string",
+            "description": "Field identifier."
+          },
+          "value": {
+            "type": "string",
+            "description": "Field value."
+          }
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "Standard - default, available for demo-users. Advanced - default, available for registered. User - uploaded by a particular user.",
+      "enum": [
+        "standard",
+        "advanced",
+        "user"
+      ]
+    },
+    "is_analyzed": {
+      "type": "boolean"
+    },
+    "analyzed_timestamp": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "hash",
+    "is_analyzed",
+    "is_standard",
+    "is_advanced"
+  ]
 }

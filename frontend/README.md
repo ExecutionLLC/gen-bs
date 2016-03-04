@@ -37,5 +37,20 @@ App consists of:
 - Run `npm run build`
 - After running `npm start` at `../` folder ( at root of WS ) you wil see app at `http://localhost:5000/`
 
-   Result of the build webserver wil see at `../public` folder.
+Frontend depends on web server API and should be built with knowledge about the API host and port.
+
+To configure it during build, you can use the following environment variables:
+
+- `GEN_FRONTEND_API_HOST` - API host, ex. `localhost`
+- `GEN_FRONTEND_API_PORT` - API port, ex. `8888`
+
+To build frontend for a specific host and port use the following command:
+
+```
+    GEN_FRONTEND_API_HOST=ec2-52-90-189-83.compute-1.amazonaws.com GEN_FRONTEND_API_PORT=8080 npm run build
+```
+
+Or, just put the proper values into your `.bashrc` or whatever file.
+
+   Result of the build will be available at the `../public` folder, which is served by WS as static content.
 

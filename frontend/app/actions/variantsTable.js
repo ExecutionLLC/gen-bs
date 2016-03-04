@@ -21,6 +21,9 @@ export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS'
 export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS'
 export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS'
 
+export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT'
+export const RECEIVE_NEXT_PART_OF_DATA = 'RECEIVE_NEXT_PART_OF_DATA'
+
 
 
 
@@ -28,6 +31,29 @@ export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS'
 /*
  * action creators
  */
+
+
+function changeVariantsLimit() {
+  return {
+    type: CHANGE_VARIANTS_LIMIT
+  }
+}
+
+export function getNextPartOfData(currentSample, currentView, currentFilter ) {
+  return (dispatch, getState) => {
+    const limit = getState().ui.currentLimit + 100
+    const offset = getState().ui.currentOffset
+
+    dispatch(changeVariantsLimit())
+
+    setTimeout(() => {
+      dispatch(searchInResults())
+    }, 500)
+
+
+  }
+}
+
 export function initSearchInResultsParams(searchInResultsParams) {
   return {
     type: INIT_SEARCH_IN_RESULTS_PARAMS,
@@ -51,7 +77,6 @@ export function changeVariantsFilter(variants, fieldId, filterValue) {
 }
 
 export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
-  console.log('ctrlKeyPressed', ctrlKeyPressed )
   return (dispatch, getState) => {
     dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection))
     if (getState().variantsTable.searchInResultsParams.sort.length > 0) {
