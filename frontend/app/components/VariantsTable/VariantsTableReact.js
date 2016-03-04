@@ -29,7 +29,7 @@ class VariantsTableReact extends Component {
 
         <div className={tableWrapperClass}>
           { isVariantsLoaded &&
-            <div className="loader"><h1>Loading</h1></div>
+            <div className="loader"></div>
           }
 
           { !isVariantsLoaded && !isVariantsValid &&
