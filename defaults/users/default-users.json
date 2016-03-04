@@ -117,5 +117,16 @@
     "number_paid_samples": 11,
     "login": "poltavskyyi",
     "password": "zxcasdqwe"
+  },
+  {
+    "id": "609a68f6-e41d-4eba-8a62-f390e23e1ab7",
+    "name": "Vladimir",
+    "last_name": "Ponomarev",
+    "email": "ponomarev.vl90@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "vladimir.ponomarev",
+    "password": "zxcasdqwe"
   }
 ]

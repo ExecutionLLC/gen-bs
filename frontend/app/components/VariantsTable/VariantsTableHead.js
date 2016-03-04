@@ -64,6 +64,7 @@ export default class VariantsTableHead extends Component {
     } else {
       variantsColumns = Object.keys(variants[0]);
 
+      head.push(<th key="row_linenumber"></th>);
 
       head.push(<th data-label="checkbox" key="row_checkbox"></th>);
 
