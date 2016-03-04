@@ -47,7 +47,7 @@ export function getNextPartOfData(currentSample, currentView, currentFilter ) {
     dispatch(changeVariantsLimit())
 
     setTimeout(() => {
-      dispatch(searchInResults())
+      dispatch(searchInResultsNextData())
     }, 500)
 
 
@@ -81,7 +81,7 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection))
     if (getState().variantsTable.searchInResultsParams.sort.length > 0) {
       setTimeout(() => {
-          dispatch(searchInResults())
+          dispatch(_searchInResultsNextData())
       }, 1000)
     }
   }
@@ -136,9 +136,11 @@ export function fetchVariants(searchParams) {
   }
 }
 
-function requestSearchedResults() {
+function requestSearchedResults(flags) {
   return {
-    type: REQUEST_SEARCHED_RESULTS
+    type: REQUEST_SEARCHED_RESULTS,
+    isNextDataLoading: flags.isNextDataLoading,
+    isFilteringOrSorting: flags.isFilteringOrSorting
   }
 }
 
@@ -149,11 +151,23 @@ function receiveSearchedResults(json) {
   }
 }
 
-export function searchInResults() {
+export function searchInResultsSortFilter() {
+  return (dispatch, getState) => {
+    dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
+  }
+}
+
+export function searchInResultsNextData() {
+  return (dispatch, getState) => {
+    dispatch(searchInResults({isNextDataLoading: true, isFilteringOrSorting: false}))
+  }
+}
+
+export function searchInResults(flags) {
 
   return (dispatch, getState) => {
 
-    dispatch(requestSearchedResults())
+    dispatch(requestSearchedResults(flags))
     //dispatch(requestAnalyze())
     
     const clearedJson = getState().variantsTable.searchInResultsParams

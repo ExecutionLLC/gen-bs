@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { changeVariantsFilter, sortVariants, searchInResults } from '../../actions/variantsTable'
+import { changeVariantsFilter, sortVariants, searchInResultsSortFilter } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
 
@@ -26,7 +26,7 @@ export default class VariantsTableHead extends Component {
               inputValue
             }
             onChange={(e) => dispatch(changeVariantsFilter(variants, fieldId, e.target.value))}
-            onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResults() ): null }
+            onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResultsSortFilter() ): null }
           />
         </div>
       )

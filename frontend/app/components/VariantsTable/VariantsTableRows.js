@@ -29,7 +29,9 @@ export default class VariantsTableRows extends Component {
   render() {
     const { variants, fields } = this.props
     const { sort } = this.props.variantsTable.searchInResultsParams
+    const { isFilteringOrSorting, isNextDataLoading } = this.props.variantsTable 
     let rows;
+    let columnsNumber;
 
     const filterFunc = (label) => {
       return (
@@ -70,20 +72,25 @@ export default class VariantsTableRows extends Component {
       })
     }
 
-    return (
-      <tbody id="variants_table_body">
+    let tbody;
+
+    if ( isFilteringOrSorting ) {
+      tbody = (
         <tr>
-          <td rowspan="10">
-            <table>
-            	<tr>
-                <td>
-                  <h2 style={{color: '#2363a1'}}>Loading...</h2><i className="fa fa-spinner fa-spin"></i>
-                </td>
-            	</tr>
-            </table>
+          <td colSpan="100">
+            <h2 className="text-center" style={{color: '#2363a1'}}>Loading...<i className="text-center fa fa-spinner fa-spin fa-5x"></i>
+            </h2>
           </td>
         </tr>
-              </tbody>
+      )
+    } else {
+       tbody = rows 
+    }
+
+    return (
+      <tbody id="variants_table_body">
+        {tbody}
+      </tbody>
     )
   }
 }
