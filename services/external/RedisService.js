@@ -4,8 +4,8 @@ const async = require('async');
 const _ = require('lodash');
 const Redis = require('redis');
 
-const ServiceBase = require('./ServiceBase');
-const EventEmitter = require('../utils/EventProxy');
+const ServiceBase = require('../ServiceBase');
+const EventEmitter = require('../../utils/EventProxy');
 
 const EVENTS = {
     onRedisDataReceived: 'onRedisDataReceived'

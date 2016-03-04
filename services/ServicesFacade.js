@@ -7,12 +7,12 @@ const ViewsService = require('./ViewsService');
 const FiltersService = require('./FiltersService');
 const CommentsService = require('./CommentsService');
 const SamplesService = require('./SamplesService');
-const RedisService = require('./RedisService');
+const RedisService = require('./external/RedisService');
 const SessionService = require('./SessionService');
 const OperationService = require('./operations/OperationsService');
 const FieldsMetadataService = require('./FieldsMetadataService');
-const ApplicationServerService = require('./ApplicationServerService');
-const ApplicationServerReplyService = require('./ApplicationServerReplyService');
+const ApplicationServerService = require('./external/ApplicationServerService');
+const ApplicationServerReplyService = require('./external/ApplicationServerReplyService');
 const SearchService = require('./SearchService');
 const SchedulerService = require('./tasks/SchedulerService');
 
