@@ -23,11 +23,10 @@ class SavedFileModel extends SecureModelBase {
         super(models, 'saved_file', mappedColumns);
     }
 
-    // Collets all saved files for user
     findAll(userId, callback) {
         async.waterfall([
             (callback) => this._fetchUserFiles(userId, callback),
-            (files, callback) => this._mapItems(files, calback)
+            (files, callback) => this._mapItems(files, callback)
         ], callback);
     }
 
@@ -60,6 +59,7 @@ class SavedFileModel extends SecureModelBase {
                     };
                     this._insert(dataToInsert, trx, callback);
                 },
+                // TODO: Insert filters to 'saved_file_filter'.
                 (fileId, callback) => {
                     const dataToInsert = {
                         commentId: fileId,
@@ -67,7 +67,7 @@ class SavedFileModel extends SecureModelBase {
                         description: file.description
                     };
                     this._unsafeInsert('saved_file_text', dataToInsert, trx, (error) => {
-                        callback(error, commentId);
+                        callback(error, fileId);
                     });
                 }
             ], callback);

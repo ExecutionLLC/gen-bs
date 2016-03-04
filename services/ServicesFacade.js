@@ -14,7 +14,6 @@ const FieldsMetadataService = require('./FieldsMetadataService');
 const ApplicationServerService = require('./ApplicationServerService');
 const ApplicationServerReplyService = require('./ApplicationServerReplyService');
 const SearchService = require('./SearchService');
-const TokenService = require('./TokenService');
 const SchedulerService = require('./tasks/SchedulerService');
 
 class ServiceFacade {
@@ -39,7 +38,6 @@ class ServiceFacade {
 
         this.redis = new RedisService(this, models);
         this.search = new SearchService(this, models);
-        this.tokens = new TokenService(this, models);
 
         this.scheduler = new SchedulerService(this, models);
         this.scheduler.start();
