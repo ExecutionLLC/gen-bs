@@ -85,11 +85,13 @@ describe('Search', function() {
 
                 // Check that all field ids from the data lay either in sample or in source fields.
                 _.each(rows, row => {
-                    _(row)
-                        .keys()
-                        .each((key) => {
-                            assert.ok(fieldIdToMetadata[key], 'Field ' + key + ' is not found!');
+                    _.each(row.fields, (rowField) => {
+                            const fieldId = rowField.fieldId;
+                            assert.ok(fieldId);
+                            assert.ok(fieldIdToMetadata[fieldId], 'Field ' + fieldId + ' is not found!');
                         });
+                    assert.ok(row.comments);
+                    assert.ok(row.searchKey);
                 });
 
                 done();
