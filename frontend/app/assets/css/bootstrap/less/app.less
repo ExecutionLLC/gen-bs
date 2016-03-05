@@ -1,10 +1,10 @@
+
 body { 
  overflow: hidden; 
 }
 
 //main color navbar
 .navbar-main {
-  background: transparent;
   height: 0;
   margin: 0; 
   border-bottom: none;
@@ -1681,7 +1681,7 @@ select.select2.temp-active {
 //
 
 .loader { 
-    background: @brand-primary;
+    background: fade(darken(@brand-primary, 10%), 90%);
     bottom: 0;
     left: 0;
     position: fixed;
@@ -1690,43 +1690,14 @@ select.select2.temp-active {
     z-index: 3000;
     color: #fff;
     content: "Loading";
-  &:before { 
--webkit-animation: progress-bar-stripes 2s linear infinite;
-     -moz-animation: progress-bar-stripes 2s linear infinite;
-      -ms-animation: progress-bar-stripes 2s linear infinite;
-       -o-animation: progress-bar-stripes 2s linear infinite;
-          animation: progress-bar-stripes 2s linear infinite;
-
-  #gradient > .striped-thin();
-  background-size: 40px 40px;
-  content: "";
-  display: block;
-  height: 60%;
-  }
-  &:after { 
-      content: "";
-      display: block;
-       height: 400px;
-    margin-top: -400px;
-    position: relative;
-    z-index: 1;
-      #gradient > .vertical(@start-color: fade(@brand-primary, 0%); @end-color: @brand-primary);
-
-  }
+    .spinner { 
+      top:50%;
+      left: 50%;
+      position: absolute;
+    }
    
-  span { 
-  display: block;
-    font-size: 30px;
-    left: 50%;
-    margin-left: -100px;
-    margin-top: 100px;
-    position: absolute;
-    text-align: center;
-    top: 50%;
-    width: 300px;
-  } 
   h1 {
- font-size: 1.6em;
+    font-size: 1.6em;
     font-weight: 300;
     height: 3em;
     left: 0;
@@ -1738,6 +1709,7 @@ select.select2.temp-active {
     text-align: center;
     top: 50%;
     z-index: 2;
+    
   }
 }
 
