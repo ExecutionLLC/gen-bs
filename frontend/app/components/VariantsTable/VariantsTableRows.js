@@ -83,12 +83,8 @@ export default class VariantsTableRows extends Component {
 
     if ( isFilteringOrSorting ) {
       tbody = (
-        <tr>
-          <td colSpan="100">
             <h2 className="text-center" style={{color: '#2363a1'}}>Loading...<i className="text-center fa fa-spinner fa-spin fa-5x"></i>
             </h2>
-          </td>
-        </tr>
       )
     } else {
         tbody = rows 
