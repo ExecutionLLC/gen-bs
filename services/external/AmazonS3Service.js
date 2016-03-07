@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 const ServiceBase = require('../ServiceBase');
 const AWS = require('aws-sdk');
 
@@ -8,12 +10,14 @@ class AmazonS3Service extends ServiceBase {
         super(services, models);
 
         this.config = this.services.config;
+
         this._configureAws();
+
+        this.s3 = new AWS.S3();
     }
 
-    upload(bucketName, keyName, fileStream, callback) {
-        const s3 = new AWS.S3();
-        s3.upload(
+    uploadObject(bucketName, keyName, fileStream, callback) {
+        this.s3.upload(
             {
                 Bucket: bucketName,
                 Body: fileStream,
@@ -27,6 +31,21 @@ class AmazonS3Service extends ServiceBase {
                 this.logger.info('Progress:', evt.loaded, '/', evt.total);
             })
             .send((error) => callback(error));
+    }
+
+    createObjectStream(bucketName, keyName, callback) {
+        const objectDescriptor = {
+            Bucket: bucketName,
+            Key: keyName
+        };
+        async.waterfall([
+            // CHeck object exists.
+            (callback) => this.s3.headObject(objectDescriptor, (error) => callback(error)),
+            (callback) => {
+                const request = this.s3.getObject(objectDescriptor);
+                callback(null, request.createReadStream());
+            }
+        ], callback);
     }
 
     _configureAws() {

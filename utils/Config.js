@@ -22,7 +22,9 @@ const SETTINGS = {
         maxCount: ENV.GEN_WS_UPLOAD_MAX_COUNT || 5, // Max parallel uploads count.
         amazonS3AccessKeyId: ENV.GEN_WS_S3_ACCESS_KEY_ID || 'AKIAJKA73IEQR3ECGPVA',
         amazonS3AccessKeySecret: ENV.GEN_WS_S3_ACCESS_KEY_SECRET || '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',
-        amazonS3RegionName: ENV.GEN_WS_S3_REGION_NAME || 'us-east-1'
+        amazonS3RegionName: ENV.GEN_WS_S3_REGION_NAME || 'us-east-1',
+        // Bucket for saved files.
+        amazonS3UploadBucketName: ENV.GEN_WS_S3_UPLOAD_BUCKET || 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b'
     },
     applicationServer: {
         host: ENV.GEN_WS_AS_HOST || 'localhost',

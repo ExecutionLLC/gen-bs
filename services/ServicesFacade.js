@@ -14,6 +14,7 @@ const FieldsMetadataService = require('./FieldsMetadataService');
 const ApplicationServerService = require('./external/ApplicationServerService');
 const ApplicationServerReplyService = require('./external/ApplicationServerReplyService');
 const SearchService = require('./SearchService');
+const AmazonS3Service = require('./external/AmazonS3Service');
 const SchedulerService = require('./tasks/SchedulerService');
 
 class ServiceFacade {
@@ -32,6 +33,8 @@ class ServiceFacade {
 
         this.sessions = new SessionService(this, models);
         this.operations = new OperationService(this, models);
+
+        this.amazonS3 = new AmazonS3Service(this, models);
 
         this.applicationServer = new ApplicationServerService(this, models);
         this.applicationServerReply = new ApplicationServerReplyService(this, models);
