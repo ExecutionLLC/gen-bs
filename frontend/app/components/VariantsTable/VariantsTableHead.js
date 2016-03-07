@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { changeVariantsFilter, sortVariants, searchInResults } from '../../actions/variantsTable'
+import { changeVariantsFilter, sortVariants, searchInResultsSortFilter } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
 
@@ -26,7 +26,7 @@ export default class VariantsTableHead extends Component {
               inputValue
             }
             onChange={(e) => dispatch(changeVariantsFilter(variants, fieldId, e.target.value))}
-            onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResults() ): null }
+            onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResultsSortFilter() ): null }
           />
         </div>
       )
@@ -64,9 +64,9 @@ export default class VariantsTableHead extends Component {
     } else {
       variantsColumns = Object.keys(variants[0]);
 
-      head.push(<th key="row_linenumber"></th>);
+      //head.push(<th key="row_linenumber" className="row_linenumber"></th>);
 
-      head.push(<th data-label="checkbox" key="row_checkbox"></th>);
+      head.push(<th  className="row_checkbox" data-label="checkbox" key="row_checkbox"></th>);
 
       head.push(
               <th data-label="comment" key="comment" > 
@@ -142,7 +142,7 @@ export default class VariantsTableHead extends Component {
     }
 
     return (
-      <thead id="variants_table_head"><tr>{head}</tr></thead>
+      <thead className="variants_table_head" id="variants_table_head"><tr>{head}</tr></thead>
     )
   }
 }
