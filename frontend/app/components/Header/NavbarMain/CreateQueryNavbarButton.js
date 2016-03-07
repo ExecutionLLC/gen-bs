@@ -13,7 +13,7 @@ export default class CreateQeuryNavbarButton extends Component {
          <div className="visible-xs"><a type="button" href="#" className="btn navbar-btn" data-toggle="collapse" data-target="#sidebarLeft"><i className="fa fa-lg fa-filter"></i></a></div>
          
          <div className="hidden-xs"  data-localize="query.help" data-toggle="tooltip" data-placement="right" title="Open navbar and create new analises query" data-container="body" data-trigger="hover">
-           <a onClick={this.props.toggleQueryNavbar} type="button" href="#" className="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse"><i className="fa fa-lg fa-filter"></i>
+           <a onClick={this.props.toggleQueryNavbar} type="button" href="#" className="btn navbar-btn" id="btnToggle" data-target="#subnav" data-toggle="collapse">Analysis
          </a></div>
       </div>
 

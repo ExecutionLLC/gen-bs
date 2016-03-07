@@ -17,7 +17,7 @@
   background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
   border: 1px solid transparent;
   white-space: nowrap;
-  .button-size(@padding-base-vertical; @padding-base-horizontal; @font-size-base; @line-height-base; @btn-border-radius-base);
+  .button-size(@padding-base-vertical; @padding-base-horizontal; @font-size-base; @line-height-base; @border-radius-small);
   .user-select(none);
 
   &,
@@ -57,21 +57,34 @@
   }
 }
 
-.btn-rounded {
-   .border-radius(4px);
-}
+
 // Alternate buttons
 // --------------------------------------------------
 
 .btn-default {
   .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
+  box-shadow: @btn-default-shadow;
+  &:hover { 
+    background-color: lighten(@default-max-light, 5%);
+    border-color: lighten(@default-max-light, 5%); 
+  }
   &:active,
   &.active,
   .open > .dropdown-toggle& {
-    background-color: #eee;
-    border-color: #d5d5d5;
-  }
-}
+   background-color: lighten(@gray-lighter, 5%);
+   border-color: lighten(@gray-lighter, 5%);
+   border-top-color: @gray-lighter;
+   box-shadow: none;
+    &:hover,
+        &:focus,
+        &.focus {
+          background-color: @gray-lighter;
+          border-color:  @gray-lighter;
+           border-top-color:@gray-lighter;
+           box-shadow: none;
+        }
+      }
+    }
 .btn-dark-default {
   .button-variant(@btn-dark-default-color; @btn-dark-default-bg; @btn-dark-default-border);
 }
@@ -108,15 +121,17 @@
 // Link buttons
 // -------------------------
 
-// Make a button look and behave like a link
-.btn-link {
-  color: @link-color;
+
+.btn-link-variant(@color)  {
+  color: @color;
   font-weight: normal;
   border-radius: 0;
   text-decoration: none;
-  padding-left: 0;
-  padding-right: 0;
+ 
   vertical-align: middle;
+  border: none;
+  font-size: @font-size-small;
+
   &,
   &:active,
   &.active,
@@ -133,24 +148,50 @@
   }
   &:hover,
   &:focus {
-    color: @link-hover-color;
-    text-decoration:none /* @link-hover-decoration */;
+   color: lighten(@color, 10%);
+    text-decoration:none ;
     background-color: transparent;
   }
   &[disabled],
   fieldset[disabled] & {
     &:hover,
     &:focus {
-      color: @btn-link-disabled-color;
+     color: lighten(@color, 15%);
       text-decoration: none;
     }
   }
 
-  small { 
+}
+
+.btn-link {
+ .btn-link-variant(@brand-primary);
+}
+
+.btn-link-default { 
+ .btn-link-variant(@gray-dark); 
+}
+.btn-link-light-default { 
+ .btn-link-variant(@gray-light); 
+}
+.btn-link-warning {
+   .btn-link-variant(@brand-warning); 
+}
+  .btn-link-success {
+   .btn-link-variant(@brand-success); 
+}
+  .btn-link-info {
+   .btn-link-variant(@brand-info); 
+}
+  .btn-link-muted {
+   .btn-link-variant(@text-muted); 
+}
+
+
+.btn-link  small { 
     color: @text-muted;
     text-decoration: underline;
-  }
-}
+ }
+ 
 label.btn-link { 
   text-decoration: none;
   span { 
@@ -162,13 +203,14 @@ label.btn-link {
     max-width: 160px;
     padding-left: 5px;
     vertical-align: top;
-  font-weight: bold; color: @text-muted; font-size: @font-size-small }
+  font-weight: bold; color: @text-muted; font-size: @font-size-small;
+   }
 // Button Sizes
 // --------------------------------------------------
 
 .btn-lg {
   // line-height: ensure even-numbered height of button next to large input
-  .button-size(@padding-large-vertical; @padding-large-horizontal; @font-size-large; @line-height-large; @btn-border-radius-large);
+  .button-size(@padding-large-vertical; @padding-large-horizontal; @font-size-large; @line-height-large; @btn-border-radius-small);
 }
 .btn-sm {
   // line-height: ensure proper height of button next to small input
@@ -219,14 +261,20 @@ input[type="button"] {
  
   .btn-group { 
     display: table-cell;
-    vertical-align: middle;
+    vertical-align: top;
     padding-right: 5px;
     width: 1%;
+    white-space: nowrap;
+    
+    .btn { 
+      float: none;
+      +.btn { 
+      margin-left: -0.4em;
+      }
+    }
     +.btn-group { 
       width: 100%;
-      .select2-container { 
-        width: 100% !important;
-      }
+    
     }
     +.btn-group +.btn-group { 
       width: 1%;
@@ -284,7 +332,7 @@ input[type="button"] {
       margin-left: 5px; 
     }
   }
-   .btn-sort, .btnSort { 
+   .btn-sort { 
       position: relative;
       &:after { 
           
@@ -301,10 +349,32 @@ input[type="button"] {
     text-transform: capitalize;
     top: 1px;
     width: 12px;
-
           }
      }
+     &.level1 { 
+    
+   .btn-sort {  
+      &:after { 
+          display: block; 
+            content: "1";
 
+        }
+      
+    }
+   }
+     &.level2 { 
+       > div:first-child { 
+        //padding-left: 20px;   
+      }
+       .btn-sort { 
+         position: relative;
+          &:after { 
+            display: block; 
+              content: "2";
+  
+          }
+      }
+     }
   }
    .grid-toolbar.nobg { background: none; }
    @media (max-width: @screen-xss-max) {
@@ -343,37 +413,37 @@ input[type="button"] {
     }
   
 }
-.btn-sort, .btnSort  { 
+.btn-sort { 
 
     background-position: center center;
     background-repeat: no-repeat;
     height: 33px;
     width: 33px;
     position: relative;
-       color: @text-color;
+ 
     &:before { 
       .fa(); 
       position: absolute;
-      left: 11px;
-        top: 6px;
-       content: "\f0dc";
+      left: 5px;
+      top: 2px;
+      content: "\f0ec";
       opacity: .2;
-  
+      .rotate(90deg);
    
     }
   }
-.btn-sort.asc, .btnSort.asc {
+.btn-sort.asc {
    &:before { 
    content: "\f160";
     opacity: 1;
-   top: 11px;
+   .rotate(0deg);
    }
             }
-.btn-sort.desc, .btnSort.desc {
+.btn-sort.desc {
    &:before { 
-      content: "\f161";
+     content: "\f161";
       opacity: 1;
-
+   .rotate(0deg);
    }
   }
 
@@ -424,4 +494,155 @@ input[type="button"] {
 }
 .btn-width-fix { 
   min-width: 105px;
+}
+.btn-select-file {
+  padding-bottom: 40px; height: 200px;
+  .fa + span {
+    display:block; margin: 10px 0 0
+  }
+ 
+  > small {
+     opacity:.6;
+  }
+}
+.btn-select-file {
+  padding-bottom: 40px; height: 200px;
+  .fa + span {
+    display:block; margin: 10px 0 0
+  }
+ 
+  > small {
+     opacity:.6;
+  }
+}
+.btn-uppercase { 
+  text-transform: uppercase;
+}
+
+.btn { 
+  .md-i { 
+    margin: -2px;
+  }
+}
+
+.btnDrag { 
+       position: relative;
+        &:after { 
+          
+            background: lighten(@brand-primary, 20%);
+    border-radius: 8px;
+    color: #fff;
+    display: none;
+    font-size: 11px;
+    height: 13px;
+    line-height: 13px;
+    position: absolute;
+    right: 5px;
+    top: -2px;
+    width: 13px;   
+          }
+     }
+     
+     
+     .btn-info-sign { 
+ border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    color: #608fba;
+    display: block;
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 16px;
+    margin: 13px 12px 0;
+    min-width: 0 !important;
+    padding: 0 5px;
+    text-align: center;
+    background: none;
+    
+ + .dropdown-menu {
+   left: -130px;
+    margin-top: 36px;
+    max-width: 300px;
+    width: 300px;
+    padding: 15px;
+    color: @text-color;
+   
+    dl { 
+      margin-bottom: 8px; 
+    }
+    dt { 
+      font-weight: normal;
+    }
+    dd { 
+      color: @text-muted;
+    }
+ }
+  &:hover{ 
+    + .dropdown-menu { 
+      
+      display: block;
+    }
+  }
+}
+
+.btn-with-pic { 
+  
+  img { 
+   border: 1px solid #ddd;
+    display: block;
+    margin: 0 0 8px;
+    max-width: 100%;
+    + span { border-bottom: medium none !important;
+    color: #2363a1 !important;
+    display: block;
+    text-align: left;}
+  }
+}
+
+.btn-share-block { 
+ bottom: 7px;
+    position: absolute;
+    right: 10px;
+    top: auto;
+}
+
+.btn-check { 
+  position: relative;
+  padding-left: 16px;
+  &:before { 
+    position: absolute;
+    left:0;
+    top:8px;
+   .fa();
+    content: "\f096"; 
+  }
+  &.active {
+   &:before {
+   content: "\f14a";
+  }
+  }
+}
+
+.table { 
+  >tbody {
+       .btn-link { 
+         margin: -(@table-cell-padding);
+         padding: 5px 11px;
+       }
+       .btn-link { 
+         .i-star:before {
+           &:extend(.md-i); 
+           color: @gray-light;
+           font-size: 18px;
+           content: 'star_border';
+         
+        }
+         &.active { 
+         .i-star:before { 
+            color: @brand-warning;
+            content: 'star';
+           
+        }
+       }
+      }
+  }
 }

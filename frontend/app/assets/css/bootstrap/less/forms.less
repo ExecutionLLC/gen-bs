@@ -130,7 +130,7 @@ output {
   .form-control-focus();
 
   // Placeholder
-  .placeholder();
+  .placeholder(@color:@gray-lighter);
 
   // Unstyle the caret on `<select>`s in IE10+.
   &::-ms-expand {
@@ -146,7 +146,7 @@ output {
   &[disabled],
   &[readonly],
   fieldset[disabled] & {
-    background: @input-bg-disabled;
+    background-color: @input-bg-disabled;
     opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
   }
 
@@ -161,13 +161,102 @@ output {
   }
 }
 
+.material-input {
+  padding-left: 0;
+  border: 0;
+  -webkit-border-radius: 0;
+          border-radius: 0;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(@brand-primary), to(@brand-primary)), -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter));
+  background-image: -webkit-linear-gradient(@brand-primary, @brand-primary), -webkit-linear-gradient(@gray-lighter, @gray-lighter);
+  background-image: linear-gradient(@brand-primary, @brand-primary), linear-gradient(@gray-lighter, @gray-lighter);
+  background-size: 0 2px,100% 1px;
+  background-repeat: no-repeat;
+  background-position: center bottom, center -webkit-calc(100% - 1px);
+  background-position: center bottom, center calc(100% - 1px);
+  background-color: transparent;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+       font-size: 15px;
+       height: 48px;
+       padding: 20px 0 6px;
+       z-index: 1;
+          &:focus { 
+              .placeholder(@color:transparent);
+               + .material-label { 
+               
+               font-size: @font-size-x-small;
+               color: @input-color-placeholder;
+               z-index: 2;
+              }
+               
+      }   
+  }
 
+.material-input:focus {
+      outline: none;
+      -webkit-animation: input-highlight .5s forwards;
+              animation: input-highlight .5s forwards;
+      -webkit-box-shadow: none;
+          box-shadow: none;
+     + .material-label { 
+       top:0;
+       color:@brand-primary;
+       opacity: 1;
+       font-style: @font-size-base;
+      }        
+     }
+
+
+@-webkit-keyframes input-highlight {
+  0% {
+    background-size: 0 2px, 100% 1px;
+  }
+  100% {
+    background-size: 100% 2px, 100% 1px;
+  }
+}
+
+@keyframes input-highlight {
+  0% {
+    background-size: 0 2px, 100% 1px;
+  }
+  100% {
+    background-size: 100% 2px, 100% 1px;
+  }
+}
+ 
+.material-label { 
+            position: absolute;
+            z-index: 1;
+            top:1.5em;
+            font-size: @font-size-base;
+            color: @input-color-placeholder;
+            .transition(top .15s linear);
+            .transition(color .15s linear);
+            .transition(font .15s linear);
+             opacity: 0;
+             z-index: 0;
+            }
+
+.material-input-group { 
+    position: relative;
+}
+.material-select { 
+  .select2-container--default .select2-selection--single { 
+    background: transparent;
+    border-radius: 0;
+    padding-left: 0;
+    border-color: @input-border;
+  }
+}
 // Search inputs in iOS
 //
 // This overrides the extra rounded corners on search inputs in iOS so that our
 // `.form-control` class can properly style them. Note that this cannot simply
 // be added to `.form-control` as it's not specific enough. For details, see
 // https://github.com/twbs/bootstrap/issues/11586.
+
+
 
 input[type="search"] {
   -webkit-appearance: none;
@@ -219,82 +308,7 @@ input[type="search"] {
 //
 // Indent the labels to position radios/checkboxes as hanging controls.
 
-.radio,
-.checkbox {
-  position: relative;
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 10px;
 
-  label {
-    min-height: @line-height-computed; // Ensure the input doesn't jump when there is no text
-    padding-left: 20px;
-    margin-bottom: 0;
-    font-weight: normal;
-    cursor: pointer;
-  }
-}
-.radio input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"] {
-  position: absolute;
-  margin-left: -20px;
-  margin-top: 4px \9;
-}
-
-.radio + .radio,
-.checkbox + .checkbox {
-  margin-top: -5px; // Move up sibling radios or checkboxes for tighter spacing
-}
-
-// Radios and checkboxes on same line
-.radio-inline,
-.checkbox-inline {
-  position: relative;
-  display: inline-block;
-  padding-left: 20px;
-  margin-bottom: 0;
-  vertical-align: middle;
-  font-weight: normal;
-  cursor: pointer;
-}
-.radio-inline + .radio-inline,
-.checkbox-inline + .checkbox-inline {
-  margin-top: 0;
-  margin-left: 10px; // space out consecutive inline controls
-}
-
-// Apply same disabled cursor tweak as for inputs
-// Some special care is needed because <label>s don't inherit their parent's `cursor`.
-//
-// Note: Neither radios nor checkboxes can be readonly.
-input[type="radio"],
-input[type="checkbox"] {
-  &[disabled],
-  &.disabled,
-  fieldset[disabled] & {
-    cursor: @cursor-disabled;
-  }
-}
-// These classes are used directly on <label>s
-.radio-inline,
-.checkbox-inline {
-  &.disabled,
-  fieldset[disabled] & {
-    cursor: @cursor-disabled;
-  }
-}
-// These classes are used on elements with <label> descendants
-.radio,
-.checkbox {
-  &.disabled,
-  fieldset[disabled] & {
-    label {
-      cursor: @cursor-disabled;
-    }
-  }
-}
 
 
 // Static form control text
@@ -644,10 +658,22 @@ input[type="checkbox"] {
     }
   }
 }
-.form-control.text-primary { 
+.form-control {
+
+&.text-primary { 
   color: @brand-primary;
+
+}
+&.text-success { 
+  color: @brand-success;
   font-weight: bold;
 }
+&.text-danger { 
+  color: @brand-success;
+  font-weight: bold;
+}  
+}
+
 .form-horizontal-rows { 
       background: #f4f4f4;
       padding: 10px 15px;
@@ -687,9 +713,7 @@ input[type="checkbox"] {
       &.btn-group-select2 .btn-group { 
         &:first-child { 
           min-width: 40px;
-          .btn { 
-            //width: 100%;
-          }
+          
         }
       }
     }
@@ -717,5 +741,260 @@ input[type="checkbox"] {
   }
     
     
+  }
+}
+
+
+.form-control[readonly]{
+  background: transparent;
+  border: none;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+
+
+.form-heading  { 
+  color: desaturate(@brand-primary, 20%);
+
+  margin-bottom: 15px;
+}
+
+
+
+// temp
+.col-xs-6.control-label { 
+  text-align: right;
+  padding-right: 20px;
+  padding-top: 5px;
+}
+
+
+.row.grid-toolbar { 
+  .btn-link { 
+   padding:@padding-base-vertical;
+   color: @text-muted;
+    }
+}
+.form-horizontal {
+ 
+@media (min-width: @screen-sm) {
+  .row.grid-toolbar > div { 
+    padding-right: 0;
+  }
+  }
+}
+
+.analysis-pic {
+  text-align: center;
+   margin: 20px;
+
+  > i {
+   color: #ededed; font-size: 140px;
+   + i { 
+     font-size: 80px; position: relative; color: rgb(237, 237, 237); text-shadow: -2px -2px 0px rgb(255, 255, 255); left: -120px; top:40px;
+   } 
+  }
+  @media (min-width: @screen-sm) { 
+    margin: 20px 0 40px;
+ 
+  }
+}
+
+//////
+
+
+.editor-container {
+  position: relative; 
+  
+  >.btn-toolbar { 
+    visibility: hidden;
+    position: absolute;
+    top:-34px;
+    right: 0;
+    z-index: 1;
+    +.editor { 
+      padding: 50px 15px 15px;
+      background: #fff; 
+    }
+  }
+  &:hover{ 
+    >.btn-toolbar { 
+      visibility: visible;
+    }
+  }
+}
+
+.form-text-file { 
+   background: #fff none repeat scroll 0 0;
+   margin: 0 -40px 40px;
+   .page-section { 
+      padding: 10px 50px;
+      position: relative;
+    
+    + .page-section {
+      border-bottom: 1px dotted #ddd;
+    }
+      &.table-data { 
+        //padding: 20px 0;
+        .table-bordered { 
+          border-color:#000;
+        }
+        .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td { 
+            border-color:#000;
+        }
+      }
+    >.btn-group-vertical { 
+    position: absolute;
+    right: 0;
+    top:0;
+    z-index: 1;
+  }
+    .rel {
+      .btn-group-tools {
+        right: -30px; top:30px
+      }
+    }
+    &:hover { 
+      .btn-group-tools  { 
+        visibility: visible;
+      }
+    }
+   }
+  .file-page-header { 
+ 
+    padding: 10px 50px;
+  }
+   .file-page-content { 
+    padding: 40px;
+    padding: 10px 50px;
+   }
+     .file-page-header  { 
+       
+     } 
+}
+.edit-block { 
+    border: 2px dashed #eee;
+    margin: 0 0 10px;
+    position: relative;
+
+  &:hover, 
+   &:focus,
+    &:active { 
+    border: solid 1px  #ccc;
+    background: @edit-bg;
+    
+  }
+}
+@edit-bg: spin(lighten(@brand-warning, 30%), 10);
+.edit-inline {
+  display: inline-block; 
+  background: @component-active-bg;
+  color: #888;
+  margin: 1px -3px;
+  padding: 0 3px;
+   line-height: 1.4;
+    &:hover,
+    &:active,
+    &:focus { 
+      cursor: text;
+      background:@edit-bg ;
+     }
+    }
+    
+    
+    .select-for-drop-area { 
+ border: 1px solid #e3e3e3;
+    margin: 0 0 -1px;
+    padding: 10px 60px 10px 10px;
+}
+
+
+.form-settings {
+  > .row {
+    padding: 15px 0;
+  } 
+  > .row + .row { 
+    border-top: solid 1px #eee;
+  }
+}
+
+
+.form-rows  {
+     margin-left: -15px;
+    padding-left: 28px;
+    padding-right: 56px;
+   .grid-toolbar { 
+     position: relative;
+ 
+   }
+   .btn-group-select2 { 
+     padding-left: 0;
+     > .btn-group { 
+       width: 100%;
+         .btn-sort { 
+           height: 36px;
+           width: 36px;
+         }
+       .btn-sort:before { 
+         left: 8px;
+         top: 6px;
+       }
+       + .btn-group { 
+         width: 1%;
+        
+         .btn-link { 
+           padding: 0;
+         }
+       }
+     }
+   }
+   .btn-group-left { 
+    left: -24px;
+    position: absolute;
+    top: 0;
+    .btn { 
+      float: left;
+    }
+  }
+   .btn-group-right { 
+   position: absolute;
+    right: -56px;
+    width: 56px;
+   
+    .btn { 
+      float: left;
+    }
+    
+  }
+   .select2-results > .select2-results__options {
+    max-height: 400px;
+  }
+ @media(min-width: @screen-sm) { 
+   .grid-toolbar { 
+     .btn-link { 
+       padding-left: 0;
+       padding-right: 0;
+     }
+   }
+ }
+ @media(min-width: @screen-md) { 
+    .sort-settings  { 
+      .grid-toolbar { 
+          margin-bottom: 15px;
+          &.nobg { 
+            display: none;
+          }
+          >div { 
+            + div {
+              padding-left:0;
+            }
+           + div + div {
+              padding-right: 48px;
+           } 
+          }
+          
+      } 
+    } 
   }
 }

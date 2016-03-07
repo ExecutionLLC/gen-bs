@@ -1,0 +1,108 @@
+//query-builder overwriting
+.query-builder { 
+ .drag-handle,
+ .error-container,
+ .rule-container .rule-filter-container,
+ .rule-container .rule-operator-container,
+ .rule-container .rule-value-container {
+  .select2-container { 
+    width: 100%!important;
+  } 
+
+}
+
+ .rule-container .rule-filter-container {
+    width: 220px;
+    vertical-align: top;
+       margin: 5px 0;
+}
+ .rule-container .rule-operator-container { 
+   width: 140px;
+      vertical-align: top;
+      margin: 5px 0;
+}
+ .rule-container .rule-value-container {
+  
+     vertical-align: top;
+     margin: 5px 0;
+       .form-control { 
+        width: 160px; 
+      }
+      span.select2 { 
+        width: 160px!important;
+      }
+}
+
+ 
+
+.builder-basic-filters { 
+  .rule-container .rule-value-container {
+     min-width: 300px;
+     border-left: none; 
+    }
+}
+ .rules-group-container .rules-group-header .group-actions { 
+   .btn { 
+     margin-left: 2px;
+   
+   }
+ }
+@media (max-width: @screen-xss-max) {
+    .rule-container .rule-filter-container  {
+     width: 100%; 
+    }
+   .rule-container .rule-operator-container { 
+    width: 100%;
+    }
+    .rule-container .rule-value-container {
+     width: 100%;
+       .form-control { 
+        width: 100%; 
+      }
+  
+      span.select2 { 
+        width: 100%!important;
+      }
+     }
+
+}
+@media (min-width: @screen-sm) { 
+    .rule-container .rule-filter-container  {
+     margin: 0 5px 5px 0; 
+    }
+   .rule-container .rule-operator-container { 
+     margin: 0 5px 5px 0;
+    }
+    .rule-container .rule-value-container {
+      margin: 0 5px 5px 0;
+     }
+
+}
+@media (min-width: @screen-md) { 
+    .rule-container .rule-filter-container  {
+  margin: 0 5px 0 0; 
+    }
+   .rule-container .rule-operator-container { 
+     margin: 0 5px 0 0;
+    }
+    .rule-container .rule-value-container {
+      margin: 0 5px 0 0;
+     }
+
+    
+}
+}
+
+.combine-options { 
+  .query-builder .rule-container .rule-value-container {
+    span.select2 { 
+    width: 380px !important;
+    }
+    @media (max-width: @screen-xss-max) { 
+     span.select2 { 
+        width: 100%!important;
+      }
+    }
+  }
+
+}

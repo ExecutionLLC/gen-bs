@@ -129,6 +129,10 @@
   .btn-block + .btn-block {
     margin-left: 0;
   }
+    &.modal-footer-thin { 
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 
 // Measure scrollbar width for padding body during modal show/hide
@@ -155,9 +159,10 @@
   .modal-sm { width: @modal-sm; }
 }
 .modal-lg {
-  width: 100%;
+  width: auto;
    @media (min-width: @modal-lg) {
-    width: @modal-lg;
+    margin: 30px 10%;
+    
   }
 }
 
@@ -172,10 +177,10 @@
 
   }
   .modal-body{ 
-    background: #f4f4f4;
+   background: @default-max-light;
     }
     .modal-footer { 
-      background: #f9f9f9;
+    background: @default-max-light;
     }
 }
 .modal-header { 
@@ -236,8 +241,15 @@
    &.modal-header-with-tabs { 
      padding-bottom: 0;
    }
-   &.modal-header-with-nav { 
+   .modal-header-with-nav { 
     padding: 0; 
+   }
+   .navbar { 
+     border-radius: 0;
+   }
+   .navbar-inverse { 
+     
+     .modal-title { color:@navbar-inverse-color; }
    }
   .nav-tabs-primary { 
     margin-bottom: -15px;
@@ -311,7 +323,10 @@
       white-space: nowrap;
     }
   }
-  .table-row > div:first-child {
+  
+  @media(min-width:@screen-sm) {
+   .table-row > div:first-child {
     min-width: 250px;
+    } 
   }
 }
