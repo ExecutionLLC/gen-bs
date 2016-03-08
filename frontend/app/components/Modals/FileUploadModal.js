@@ -2,14 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap';
 
+import { fetchFields } from '../../actions/fields';
+
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadFooter from './FileUpload/FileUploadFooter';
 import FileUpload from './FileUpload/FileUpload';
-
+import FileUploadSamples from './FileUpload/FileUploadSamples'
 
 class FileUploadModal extends Component {
-  render() {
+  componentDidMount() {
+    const { samples } = this.props;
+    if (samples[0]) {
+      this.props.dispatch(samples[0].id);
+    }
+  }
 
+  render() {
     return (
         <Modal
           dialogClassName="modal-dialog-primary"
@@ -20,6 +28,7 @@ class FileUploadModal extends Component {
           <FileUploadHeader />
           <Modal.Body>
             <FileUpload {...this.props} />
+            {this.props.fieldsList.length && <FileUploadSamples {...this.props} />}
           </Modal.Body>
           <FileUploadFooter {...this.props} />
         </Modal>
@@ -28,11 +37,13 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-  const { ui, fileUpload } = state
+  const { ui, fileUpload, userData: { samples }, fields: { list } } = state;
 
   return {
     ui,
-    fileUpload
+    fileUpload,
+    samples,
+    fieldsList: _.filter(list, 'is_editable', true)
   }
 }
 
