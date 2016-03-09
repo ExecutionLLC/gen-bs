@@ -80,10 +80,10 @@ class SavedFileModel extends SecureModelBase {
                     id: shouldGenerateId ? this._generateId() : fileMetadata.id,
                     creator: userId,
                     viewId: fileMetadata.viewId,
-                    vcfFileSampleVersionId: file.vcfFileSampleVersionId,
+                    vcfFileSampleVersionId: fileMetadata.vcfFileSampleVersionId,
                     name: fileMetadata.name,
                     url: fileMetadata.url,
-                    totalResults: file.totalResults
+                    totalResults: fileMetadata.totalResults
                 };
                 this._insert(dataToInsert, trx, callback);
             },

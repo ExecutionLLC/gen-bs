@@ -17,6 +17,8 @@ class WebServerHost {
         this.logger = this.services.logger;
 
         this.httpServer = Http.createServer();
+
+        this._handleErrors = this._handleErrors.bind(this);
     }
 
     /**
@@ -40,6 +42,9 @@ class WebServerHost {
         this._initWebSocketServer(this.httpServer);
 
         this._startHttpServer(this.httpServer, app);
+
+        // Initialize error handling.
+        app.use(this._handleErrors);
 
         callback(null);
     }
@@ -101,6 +106,18 @@ class WebServerHost {
         const mainRouterRelativePath = '/api';
         const mainRouter = this.controllers.apiController.createRouter(this.controllers, mainRouterRelativePath);
         app.use(mainRouterRelativePath, mainRouter);
+    }
+
+    _handleErrors(error, request, response, next) {
+        if (response.headersSent) {
+            return next(error);
+        }
+        const message = ErrorUtils.createErrorMessage(error);
+        this.logger.error(message);
+        if (error.stack) {
+            this.logger.debug(error.stack);
+        }
+        this.sendInternalError(response, 'Unexpected error occurred, see the server logs for details.');
     }
 
     _enableCORSIfNeeded(app) {
