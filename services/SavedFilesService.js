@@ -9,7 +9,7 @@ class SavedFilesService extends UserEntityServiceBase {
         super(services, models);
 
         this.config = this.services.config;
-        this.amazonBucket = this.config.upload.amazonS3BucketName;
+        this.amazonBucket = this.config.savedFilesUpload.amazonS3BucketName;
     }
 
     add(user, languId, fileMetadata, fileStream, callback) {

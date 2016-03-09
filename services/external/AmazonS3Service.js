@@ -54,9 +54,9 @@ class AmazonS3Service extends ServiceBase {
     }
 
     _configureAws() {
-        AWS.config.accessKeyId = this.config.amazonS3AccessKeyId;
-        AWS.config.secretAccessKey = this.config.amazonS3AccessKeySecret;
-        AWS.config.region = this.config.amazonS3RegionName;
+        AWS.config.accessKeyId = this.config.savedFilesUpload.amazonS3AccessKeyId;
+        AWS.config.secretAccessKey = this.config.savedFilesUpload.amazonS3AccessKeySecret;
+        AWS.config.region = this.config.savedFilesUpload.amazonS3RegionName;
         AWS.config.logger = this.services.logger.info.bind(this);
     }
 }

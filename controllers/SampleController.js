@@ -46,10 +46,10 @@ class SampleController extends UserEntityControllerBase {
         const router = super.createRouter();
 
         const Upload = multer({
-            dest: this.services.config.upload.path,
+            dest: this.services.config.samplesUpload.path,
             limits: {
-                fileSize: this.services.config.upload.maxSizeInBytes,
-                files: this.services.config.upload.maxCount
+                fileSize: this.services.config.samplesUpload.maxSizeInBytes,
+                files: this.services.config.samplesUpload.maxCount
             }
         });
 
