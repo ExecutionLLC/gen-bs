@@ -33,6 +33,11 @@ class AmazonS3Service extends ServiceBase {
             .send((error) => callback(error));
     }
 
+    /**
+     * @param bucketName Name of the Amazon S3 bucket to use.
+     * @param keyName Key in the bucket.
+     * @param callback (error, readStream)
+     * */
     createObjectStream(bucketName, keyName, callback) {
         const objectDescriptor = {
             Bucket: bucketName,

@@ -103,6 +103,7 @@ class ApiController extends ControllerBase {
         const viewsRouter = controllersFacade.viewsController.createRouter();
         const fieldsRouter = controllersFacade.fieldsMetadataController.createRouter();
         const filtersRouter = controllersFacade.filtersController.createRouter();
+        const savedFilesRouter = controllersFacade.savedFilesController.createRouter();
 
         const searchRouter = controllersFacade.searchController.createRouter();
         const sessionsRouter = controllersFacade.sessionsController.createRouter(controllerRelativePath + sessionsControllerPath);
@@ -125,6 +126,7 @@ class ApiController extends ControllerBase {
         router.use('/filters', filtersRouter);
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);
+        router.use('/files', savedFilesRouter);
 
         // Initialize error handling.
         router.use(this._handleErrors);

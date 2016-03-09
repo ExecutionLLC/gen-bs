@@ -8,6 +8,7 @@ const ViewController = require('./ViewController');
 const FilterController = require('./FilterController');
 const CommentsController = require('./CommentsController');
 const FieldsMetadataController = require('./FieldsMetadataController');
+const SavedFilesController = require('./SavedFilesController');
 
 const SearchController = require('./SearchController');
 
@@ -27,6 +28,7 @@ class ControllersFacade {
         this.viewsController = new ViewController(services);
         this.filtersController = new FilterController(services);
         this.fieldsMetadataController = new FieldsMetadataController(services);
+        this.savedFilesController = new SavedFilesController(services);
 
         this.searchController = new SearchController(services);
         this.sessionsController = new SessionsController(services);

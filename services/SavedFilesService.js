@@ -27,6 +27,14 @@ class SavedFilesService extends UserEntityServiceBase {
         });
     }
 
+    download(user, languId, fileId, callback) {
+        async.waterfall([
+            (callback) => this.models.savedFiles.find(user.id, fileId, (error) => callback(error)),
+            (callback) => callback(null, this._generateBucketKeyForFile(fileId)),
+            (keyName, callback) => this.services.amazonS3.createObjectStream(this.amazonBucket, keyName, callback)
+        ], (error, readStream) => callback(error, readStream));
+    }
+
     update() {
         throw new Error('Operation is not supported');
     }
