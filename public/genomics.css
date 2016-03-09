@@ -12466,7 +12466,6 @@ body {
 .table-variants-wrapper .table-variants-container {
   height: 100%;
   position: relative;
-  overflow: auto;
 }
 .table-variants-wrapper .table-container .empty,
 .table-variants-wrapper .table-variants-container .empty {
@@ -12584,7 +12583,9 @@ body {
 .table.table-variants thead tr tf,
 .table.table-variants tbody tr tf,
 .table.table-variants tfoot tr tf {
-  max-width: 100px;
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -12698,7 +12699,6 @@ fieldset[disabled] .table.table-variants thead > tr > th > div + div .form-contr
   color: #2363a1;
 }
 .table.table-variants tbody tr td.comment {
-  width: 200px;
   cursor: pointer;
 }
 .table.table-variants tbody tr td.comment .table.table-variants tbody tr td.comment:hover .expand-animated {
@@ -13616,67 +13616,44 @@ fieldset[disabled] .query-builder .query-builder .form-control {
   }
 }
 .loader {
-  background: #2363a1;
+  background: rgba(84, 98, 112, 0.7);
   bottom: 0;
   left: 0;
   position: fixed;
   right: 0;
   top: 0;
   z-index: 3000;
-  color: #fff;
-  content: "Loading";
+  color: #c5d8ea;
 }
 .loader:before {
-  -webkit-animation: progress-bar-stripes 2s linear infinite;
-  -moz-animation: progress-bar-stripes 2s linear infinite;
-  -ms-animation: progress-bar-stripes 2s linear infinite;
-  -o-animation: progress-bar-stripes 2s linear infinite;
-  animation: progress-bar-stripes 2s linear infinite;
-  background-image: -webkit-linear-gradient(33deg, rgba(255, 255, 255, 0.15) 10%, transparent 10%, transparent 20%, rgba(255, 255, 255, 0.15) 20%, rgba(255, 255, 255, 0.15) 30%, transparent 30%, transparent 40%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0.15) 50%, transparent 50%, transparent 60%, rgba(255, 255, 255, 0.15) 60%, rgba(255, 255, 255, 0.15) 70%, transparent 70%, transparent 80%, rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.15) 90%, transparent 90%, transparent);
-  background-image: -o-linear-gradient(33deg, rgba(255, 255, 255, 0.15) 10%, transparent 10%, transparent 20%, rgba(255, 255, 255, 0.15) 20%, rgba(255, 255, 255, 0.15) 30%, transparent 30%, transparent 40%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0.15) 50%, transparent 50%, transparent 60%, rgba(255, 255, 255, 0.15) 60%, rgba(255, 255, 255, 0.15) 70%, transparent 70%, transparent 80%, rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.15) 90%, transparent 90%, transparent);
-  background-image: linear-gradient(33deg, rgba(255, 255, 255, 0.15) 10%, transparent 10%, transparent 20%, rgba(255, 255, 255, 0.15) 20%, rgba(255, 255, 255, 0.15) 30%, transparent 30%, transparent 40%, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0.15) 50%, transparent 50%, transparent 60%, rgba(255, 255, 255, 0.15) 60%, rgba(255, 255, 255, 0.15) 70%, transparent 70%, transparent 80%, rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.15) 90%, transparent 90%, transparent);
-  background-size: 40px 40px;
-  content: "";
-  display: block;
-  height: 60%;
-}
-.loader:after {
-  content: "";
-  display: block;
-  height: 400px;
-  margin-top: -400px;
+  font-family: "FontAwesome";
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+  content: "\F021";
   position: relative;
-  z-index: 1;
-  background-image: -webkit-linear-gradient(top, rgba(35, 99, 161, 0) 0%, #2363a1 100%);
-  background-image: -o-linear-gradient(top, rgba(35, 99, 161, 0) 0%, #2363a1 100%);
-  background-image: linear-gradient(to bottom, rgba(35, 99, 161, 0) 0%, #2363a1 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#002363a1', endColorstr='#ff2363a1', GradientType=0);
-}
-.loader span {
-  display: block;
-  font-size: 30px;
   left: 50%;
-  margin-left: -100px;
-  margin-top: 100px;
-  position: absolute;
-  text-align: center;
+  margin: 10px;
+  font-size: 70px;
+  color: #c5d8ea;
   top: 50%;
-  width: 300px;
 }
-.loader h1 {
-  font-size: 1.6em;
-  font-weight: 300;
-  height: 3em;
-  left: 0;
-  letter-spacing: 0.2em;
-  margin-top: -1.5em;
-  opacity: 0.7;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 50%;
-  z-index: 2;
+.loader:before.fa-pull-left {
+  margin-right: .3em;
+}
+.loader:before.fa-pull-right {
+  margin-left: .3em;
+}
+.loader:before.pull-left {
+  margin-right: .3em;
+}
+.loader:before.pull-right {
+  margin-left: .3em;
 }
 .list-group-header {
   padding: 10px 20px;
@@ -14085,5 +14062,41 @@ fieldset[disabled] .query-builder .query-builder .form-control {
 }
 .table-variants-container {
   height: 700px;
+}
+.table-variants-container .table-variants {
+  table-layout: fixed;
+}
+.table-variants-container table > th,
+td {
+  width: 50px;
+}
+.table.table-variants thead tr td,
+tbody tr td,
+tfoot tr td,
+.table.table-variants thead tr th,
+tbody tr th,
+tfoot tr th,
+.table.table-variants thead tr tf,
+tbody tr tf,
+tfoot tr tf {
+  width: 160px important!;
+  min-width: 160px;
+  max-width: 160px;
+}
+.table.table-variants thead tr td.comment,
+tbody tr td.comment,
+tfoot tr td.comment {
+  width: 160px important!;
+  min-width: 160px;
+  max-width: 160px;
+}
+.table.table-variants thead,
+tbody {
+  display: block;
+}
+.table.table-variants tbody {
   overflow-y: scroll;
+}
+.table.table-variants > thead > tr > th:first-child {
+  width: 50px;
 }

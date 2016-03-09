@@ -805,7 +805,7 @@ body {
    .table-variants-container {
      height: 100%;
       position: relative;
-      overflow: auto;
+      //overflow: auto;
       
       .empty { 
         align-items: center;
@@ -921,7 +921,9 @@ body {
     tfoot { 
       tr { 
        td,th,tf { 
-          max-width: 100px;
+          width: 160px;
+          min-width: 160px;
+          max-width: 160px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -1020,7 +1022,7 @@ body {
         } 
 
          td.comment {
-          width: 200px;
+          //width: 200px;
           cursor: pointer;
           //padding: 0;
           //vertical-align: top;
@@ -1681,65 +1683,28 @@ select.select2.temp-active {
 //
 
 .loader { 
-    background: @brand-primary;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 3000;
-    color: #fff;
-    content: "Loading";
+  background: fade(@modal-backdrop-bg, 70%);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 3000;
+   color: darken( @light-primary-color, 5%);
   &:before { 
--webkit-animation: progress-bar-stripes 2s linear infinite;
-     -moz-animation: progress-bar-stripes 2s linear infinite;
-      -ms-animation: progress-bar-stripes 2s linear infinite;
-       -o-animation: progress-bar-stripes 2s linear infinite;
-          animation: progress-bar-stripes 2s linear infinite;
-
-  #gradient > .striped-thin();
-  background-size: 40px 40px;
-  content: "";
-  display: block;
-  height: 60%;
-  }
-  &:after { 
-      content: "";
-      display: block;
-       height: 400px;
-    margin-top: -400px;
+     .fa();
+    -webkit-animation: fa-spin 2s infinite linear;
+    animation: fa-spin 2s infinite linear;
+    content: "\f021";
     position: relative;
-    z-index: 1;
-      #gradient > .vertical(@start-color: fade(@brand-primary, 0%); @end-color: @brand-primary);
-
-  }
-   
-  span { 
-  display: block;
-    font-size: 30px;
     left: 50%;
-    margin-left: -100px;
-    margin-top: 100px;
-    position: absolute;
-    text-align: center;
+    margin: 10px;
+    font-size: 70px;
+    color: darken( @light-primary-color, 5%);
     top: 50%;
-    width: 300px;
-  } 
-  h1 {
- font-size: 1.6em;
-    font-weight: 300;
-    height: 3em;
-    left: 0;
-    letter-spacing: 0.2em;
-    margin-top: -1.5em;
-    opacity: 0.7;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    top: 50%;
-    z-index: 2;
   }
 }
+
 
 .list-group-header {
   padding: 10px 20px;

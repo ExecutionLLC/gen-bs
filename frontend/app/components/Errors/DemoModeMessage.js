@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 export default class DemoModeMessage extends Component {
 
   render() {
-    console.log('err', this.props.errorMessage)
     return (
       <div className="alert alert-inverse alert-fixed" role="alert">
         { this.props.errorMessage &&

@@ -80,3 +80,5 @@ Part of the default data is imported from the external JSON files and needs some
 The scripts generating the actual defaults are also kept at the `defaults/` folder. These scripts can be launched by running the following command:
 
     npm run defaults:generate
+    
+This needs to be done every time when the default data is changed. The process changes indices of the default fields, users and data, so you'll finish with a lot of files changes even if you did no changes.
