@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --progress --colors --hot --inline --content-base app/",
-    "build": "GEN_FRONTEND_API_HOST=${GEN_FRONTEND_API_HOST:-'ec2-52-91-59-42.compute-1.amazonaws.com'} GEN_FRONTEND_API_PORT=${GEN_FRONTEND_API_PORT:-'8080'} webpack --progress --colors --config webpack.build.config.js",
-    "stage_build": "GEN_FRONTEND_API_HOST=${GEN_FRONTEND_API_HOST:-'ec2-52-90-189-83.compute-1.amazonaws.com'} GEN_FRONTEND_API_PORT=${GEN_FRONTEND_API_PORT:-'8080'} webpack --progress --colors --config webpack.build.config.js"
+    "build": "GEN_FRONTEND_API_HOST=${GEN_FRONTEND_API_HOST:-'localhost'} GEN_FRONTEND_API_PORT=${GEN_FRONTEND_API_PORT:-'5000'} webpack --progress --colors --config webpack.build.config.js",
+    "stage_build": "GEN_FRONTEND_API_HOST=${GEN_FRONTEND_API_HOST:-'localhost'} GEN_FRONTEND_API_PORT=${GEN_FRONTEND_API_PORT:-'5000'} webpack --progress --colors --config webpack.build.config.js"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,6 @@
   },
   "keywords": [],
   "author": "Execution LLC",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ExecutionLLC/gen-bs/issues"
   },
