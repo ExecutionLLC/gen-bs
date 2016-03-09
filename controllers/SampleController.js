@@ -2,6 +2,7 @@
 
 const multer = require('multer');
 const fs = require('fs');
+const async = require('async');
 
 const UserEntityControllerBase = require('./UserEntityControllerBase');
 
@@ -11,26 +12,27 @@ class SampleController extends UserEntityControllerBase {
     }
 
     upload(request, response, next) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                const sessionId = request.sessionId;
 
-        const user = request.user;
-        const sessionId = request.sessionId;
+                const sampleFile = request.file;
+                const fileInfo = {
+                    localFilePath: sampleFile.path,
+                    fileSize: sampleFile.size,
+                    originalFileName: sampleFile.originalname
+                };
 
-        const sampleFile = request.file;
-        const fileInfo = {
-            localFilePath: sampleFile.path,
-            fileSize: sampleFile.size,
-            originalFileName: sampleFile.originalname
-        };
-
-        this.services.samples.upload(sessionId, user, fileInfo, (error, operationId) => {
-            // Try removing local file anyway.
-            this._removeSampleFile(fileInfo.localFilePath);
-            this.sendErrorOrJson(response, error, {
-                operationId
-            });
+                this.services.samples.upload(sessionId, user, fileInfo, (error, operationId) => {
+                    // Try removing local file anyway.
+                    this._removeSampleFile(fileInfo.localFilePath);
+                    callback(error, operationId);
+                });
+            }
+        ], (error, operationId) => {
+            this.sendErrorOrJson(response, error, {operationId});
         });
     }
 

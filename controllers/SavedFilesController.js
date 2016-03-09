@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 const UserEntityControllerBase = require('./UserEntityControllerBase');
 
 class SavedFilesController extends UserEntityControllerBase {
@@ -8,16 +10,17 @@ class SavedFilesController extends UserEntityControllerBase {
     }
 
     download(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        const user = request.user;
-        const languId = request.languId;
-        const fileId = request.params.id;
-        this.services.savedFiles.download(user, languId, fileId, (error, readStream) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                const languId = request.languId;
+                const fileId = request.params.id;
+                this.services.savedFiles.download(user, languId, fileId, callback);
+            }
+        ], (error, readStream) => {
             if (error) {
-                this.sendInternalError(request, error);
+                this.sendInternalError(response, error);
             } else {
                 readStream.pipe(response);
             }

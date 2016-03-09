@@ -108,7 +108,6 @@ class ApiController extends ControllerBase {
         const searchRouter = controllersFacade.searchController.createRouter();
         const sessionsRouter = controllersFacade.sessionsController.createRouter(controllerRelativePath + sessionsControllerPath);
 
-        const demoDataRouter = controllersFacade.demoDataController.createRouter();
         const dataRouter = controllersFacade.dataController.createRouter();
 
         const router = new Express();
@@ -117,7 +116,6 @@ class ApiController extends ControllerBase {
         router.use(this._initHeaders);
 
         // Initialize child routes
-        router.use('/demo/data', demoDataRouter);
         router.use('/data', dataRouter);
         router.use(sessionsControllerPath, sessionsRouter);
         router.use('/comments', commentsRouter);

@@ -15,6 +15,6 @@ const sessionsClient = new SessionsClient(urls);
 
 describe('Saved Files', () => {
     it('should correctly upload exported file', (done) => {
-
+        assert.fail('Not implemented');
     });
 });

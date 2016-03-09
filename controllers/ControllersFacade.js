@@ -1,7 +1,6 @@
 'use strict';
 
 const DataController = require('./DataController');
-const DemoDataController = require('./DemoDataController');
 
 const SampleController = require('./SampleController');
 const ViewController = require('./ViewController');
@@ -21,7 +20,6 @@ class ControllersFacade {
         this.logger = logger;
 
         this.dataController = new DataController(services);
-        this.demoDataController = new DemoDataController(services);
 
         this.commentsController = new CommentsController(services);
         this.samplesController = new SampleController(services);
