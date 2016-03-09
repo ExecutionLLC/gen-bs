@@ -41,6 +41,17 @@ class CollectionUrls {
     }
 }
 
+class SavedFilesUrls extends CollectionUrls {
+    constructor(baseUrl, host, port) {
+        super(baseUrl, host, port);
+    }
+
+    download(itemId) {
+        const itemUrl = this._createUrlForId(itemId);
+        return itemUrl + '/download';
+    }
+}
+
 class Urls {
     constructor(host, port) {
         this.host = host;
@@ -93,6 +104,10 @@ class Urls {
 
     commentsUrls() {
         return new CollectionUrls('/comments', this.host, this.port);
+    }
+
+    savedFilesUrls() {
+        return new SavedFilesUrls('/files', this.host, this.port);
     }
 
     _constructApiUrl(subUrl) {

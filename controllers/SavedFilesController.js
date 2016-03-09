@@ -19,9 +19,7 @@ class SavedFilesController extends UserEntityControllerBase {
             if (error) {
                 this.sendInternalError(request, error);
             } else {
-                response
-                    .pipe(readStream)
-                    .end();
+                readStream.pipe(response);
             }
         });
     }
