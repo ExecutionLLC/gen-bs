@@ -9,7 +9,6 @@ const KeywordsModel = require('./KeywordsModel');
 const FiltersModel = require('./FiltersModel');
 const SamplesModel = require('./SamplesModel');
 const CommentsModel = require('./CommentsModel');
-const SavedFileModel = require('./SavedFileModel');
 const FieldsMetadataModel = require('./FieldsMetadataModel');
 const SavedFileModel = require('./SavedFileModel');
 
