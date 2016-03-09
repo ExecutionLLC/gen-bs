@@ -36,3 +36,5 @@ class AmazonS3Service extends ServiceBase {
         AWS.config.logger = this.services.logger.info.bind(this);
     }
 }
+
+module.exports = AmazonS3Service;

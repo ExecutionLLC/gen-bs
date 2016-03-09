@@ -14,7 +14,7 @@ class KnexTransaction {
         this.knex.transaction((trx) => {
             this.logger.info('OPENING TRANSACTION ' + this.id);
             if (this.transaction) {
-                throw new Error('Transaction is already opened. No subtransaction support is implemented in wrapper.');
+                throw new Error('Transaction is already opened.');
             }
             this.transaction = trx;
             callback(null, trx);

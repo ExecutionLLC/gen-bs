@@ -43,15 +43,32 @@ class KnexWrapper {
         query(this.knex, callback);
     }
 
+    /**
+     * @param callback (error, transactionWrapper, knex)
+     * */
+    beginTransaction(callback) {
+        const trx = new KnexTransaction(this.knex, this.logger);
+        trx.openTransaction((error, knex) => {
+            callback(error, trx, knex);
+        });
+    }
+
+    /**
+     * @param trx Transaction as result of beginTransaction method.
+     * @param error Error, if any, occurred in transaction body.
+     * @param data Result of the transaction.
+     * @param callback (error, data)
+     * */
+    endTransaction(trx, error, data, callback) {
+        trx.complete(error, data, callback);
+    }
+
     transactionally(query, callback) {
         async.waterfall([
             (callback) => {
                 // 1. Create transaction
                 // 2. Open transaction
-                const trx = new KnexTransaction(this.knex, this.logger);
-                trx.openTransaction((error, knex) => {
-                    callback(error, trx, knex);
-                });
+                this.beginTransaction(callback);
             },
             (trx, knex, callback) => {
                 // 3. Execute query with the transaction

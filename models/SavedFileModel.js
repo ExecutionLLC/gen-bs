@@ -44,34 +44,69 @@ class SavedFileModel extends SecureModelBase {
         ], callback);
     }
 
+    /**
+     * Inserts metadata into database and calls back with state
+     * which should be used to either commit or rollback the action.
+     *
+     * @param userId Id of the user uploading file.
+     * @param languId Current language.
+     * @param fileMetadata Metadata of the exported file.
+     * @param callback (error, fileId, transactionState)
+     * */
+    startAddition(userId, languId, fileMetadata, callback) {
+        async.waterfall([
+            (callback) => this.db.beginTransaction(callback),
+            (trx, knex, callback) => this._insertFileMetadata(userId, languId, fileMetadata, true, (error, fileId) => {
+                callback(error, trx, fileId)
+            }),
+            (trx, fileId, callback) => {
+                const transactionState = {
+                    _trx: trx
+                };
+                callback(null, fileId, transactionState);
+            }
+        ], callback);
+    }
+
+    completeAddition(transactionState, error, fileId, callback) {
+        const trx = transactionState._trx;
+        this.db.endTransaction(trx, error, fileId, callback);
+    }
+
+    _insertFileMetadata(userId, languId, fileMetadata, shouldGenerateId, trx, callback) {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = {
+                    id: shouldGenerateId ? this._generateId() : fileMetadata.id,
+                    creator: userId,
+                    viewId: fileMetadata.viewId,
+                    vcfFileSampleVersionId: file.vcfFileSampleVersionId,
+                    name: fileMetadata.name,
+                    url: fileMetadata.url,
+                    totalResults: file.totalResults
+                };
+                this._insert(dataToInsert, trx, callback);
+            },
+            // TODO: Insert filters to 'saved_file_filter'.
+            (fileId, callback) => {
+                const dataToInsert = {
+                    commentId: fileId,
+                    languId: languId,
+                    description: fileMetadata.description
+                };
+                this._unsafeInsert('saved_file_text', dataToInsert, trx, (error) => {
+                    callback(error, fileId);
+                });
+            }
+        ], callback);
+    }
+
     _add(userId, languId, file, shouldGenerateId, callback) {
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : file.id,
-                        creator: userId,
-                        viewId: file.viewId,
-                        vcfFileSampleVersionId: file.vcfFileSampleVersionId,
-                        name: file.name,
-                        url: file.url,
-                        totalResults: file.totalResults
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                },
-                // TODO: Insert filters to 'saved_file_filter'.
-                (fileId, callback) => {
-                    const dataToInsert = {
-                        commentId: fileId,
-                        languId: languId,
-                        description: file.description
-                    };
-                    this._unsafeInsert('saved_file_text', dataToInsert, trx, (error) => {
-                        callback(error, fileId);
-                    });
-                }
-            ], callback);
-        }, callback);
+        this.db.transactionally(
+            (trx, callback) =>
+                this._insertFileMetadata(userId, languId, file, shouldGenerateId, trx, callback),
+            callback
+        );
     }
 
     _update(userId, file, fileToUpdate, callback) {
