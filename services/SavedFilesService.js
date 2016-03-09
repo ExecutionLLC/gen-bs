@@ -14,17 +14,9 @@ class SavedFilesService extends UserEntityServiceBase {
 
     add(user, languId, fileMetadata, fileStream, callback) {
         async.waterfall([
-            (callback) => this.models.savedFiles.startAddition(user.id, languId, fileMetadata, callback),
-            (fileId, transaction, callback) => {
-                const keyName = this._generateBucketKeyForFile(fileId);
-                this.services.amazonS3.uploadObject(this.amazonBucket, keyName, fileStream,
-                    (error) => callback(error, fileId, transaction));
-            }
-        ], (error, fieldId, transaction) => {
-            if (transaction) {
-                this.models.savedFiles.completeAddition(transaction, error, fieldId, callback)
-            }
-        });
+            (callback) => this._createAndUploadFile(user, languId, fileMetadata, fileStream, callback),
+            (fileId, callback) => this.find(user, fileId, callback)
+        ], callback);
     }
 
     download(user, languId, fileId, callback) {
@@ -37,6 +29,22 @@ class SavedFilesService extends UserEntityServiceBase {
 
     update() {
         throw new Error('Operation is not supported');
+    }
+
+    _createAndUploadFile(user, languId, fileMetadata, fileStream, callback) {
+        async.waterfall([
+            (callback) => this.models.savedFiles.startAddition(user.id, languId, fileMetadata, callback),
+            (fileId, transaction, callback) => {
+                const keyName = this._generateBucketKeyForFile(fileId);
+                this.services.amazonS3.uploadObject(this.amazonBucket, keyName, fileStream,
+                    (error) => callback(error, fileId, transaction));
+            }
+        ], (error, fieldId, transaction) => {
+            if (transaction) {
+                this.models.savedFiles.completeAddition(transaction, error, fieldId, callback)
+            }
+            callback(error, fieldId);
+        });
     }
 
     _generateBucketKeyForFile(fileId) {
