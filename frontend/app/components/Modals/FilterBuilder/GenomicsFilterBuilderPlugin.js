@@ -16,7 +16,7 @@ var QueryBuilder = $.fn.queryBuilder;
 QueryBuilder.defaults({
     genomicsOperators: {
         equal:            function(v) { return { '$eq': v[0] }; },
-        not_equal:        function(v) { return { '$ne': v[0] }; },
+        not_equal:        function(v) { return { '$neq': v[0] }; },
         in:               function(v) { return { '$in': v }; },
         not_in:           function(v) { return { '$nin': v }; },
         less:             function(v) { return { '$lt': v[0] }; },
@@ -32,9 +32,9 @@ QueryBuilder.defaults({
         ends_with:        function(v) { return { '$end_with': v[0] }; },
         not_ends_with:    function(v) { return { '$nend_with': v[0] }; },
         is_empty:         function(v) { return { '$eq': '' }; },
-        is_not_empty:     function(v) { return { '$ne': '' }; },
+        is_not_empty:     function(v) { return { '$neq': '' }; },
         is_null:          function(v) { return { '$eq': null }; },
-        is_not_null:      function(v) { return { '$ne': null }; }
+        is_not_null:      function(v) { return { '$neq': null }; }
     },
 
     genomicsRuleOperators: {
@@ -45,8 +45,8 @@ QueryBuilder.defaults({
                 'op': v === null ? 'is_null' : (v === '' ? 'is_empty' : 'equal')
             };
         },
-        $ne: function(v) {
-            v = v.$ne;
+        $neq: function(v) {
+            v = v.$neq;
             return {
                 'val': v,
                 'op': v === null ? 'is_not_null' : (v === '' ? 'is_not_empty' : 'not_equal')
@@ -57,7 +57,7 @@ QueryBuilder.defaults({
         $lt: function(v) { return { 'val': v.$lt, 'op': 'less' }; },
         $lte: function(v) { return { 'val': v.$lte, 'op': 'less_or_equal' }; },
         $gt: function(v) { return { 'val': v.$gt, 'op': 'greater' }; },
-        $gte: function(v) { return { 'val': v.$gte, 'op': 'greater_or_equal' }; }
+        $gte: function(v) { return { 'val': v.$gte, 'op': 'greater_or_equal' }; },
         $begin_with: function(v) { return { 'val': v.$begin_with, 'op': 'begins_with' }; },
         $nbegin_with: function(v) { return { 'val': v.$nbegin_with, 'op': 'not_begins_with' }; },
         $contains: function(v) { return { 'val': v.$contains, 'op': 'contains' }; },
