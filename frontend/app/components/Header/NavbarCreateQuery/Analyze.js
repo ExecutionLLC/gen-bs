@@ -20,11 +20,11 @@ export default class Analyze extends Component {
     return (
 
         <div className="table-cell">
-            <div className="btn-group btn-group-submit"
+            <div className="btn-group-submit"
               data-localize="query.analyze.help"
               ref="analyze_tooltip_target"
               >  
-              <button className="btn btn-rounded btn-alt-primary" type="button" onClick={this.props.clicked}>
+              <button className="btn btn-primary" type="button" onClick={this.props.clicked}>
                  <span data-localize="query.analyze.title">Analyze</span>
               </button>
             <Overlay {...overlayProps} placement="bottom">

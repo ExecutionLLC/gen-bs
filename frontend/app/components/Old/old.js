@@ -222,7 +222,7 @@ $('#userEditBtn').on('click', function (e) {
 $('.usrViewActBtn').on('click', function (e) {
    $('.user-view').toggleClass('hidden')
 });
-$('.btnSort.active').on('click', function (e) { 
+$('.btn-sort.active').on('click', function (e) { 
    $(this).toggleClass('asc').toggleClass('desc');
 });
 

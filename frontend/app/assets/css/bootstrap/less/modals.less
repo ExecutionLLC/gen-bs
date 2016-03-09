@@ -160,8 +160,12 @@
 }
 .modal-lg {
   width: auto;
-   @media (min-width: @modal-lg) {
+   @media (min-width: @screen-md) {
     margin: 30px 10%;
+  }
+  @media (min-width: @screen-lg) {
+    margin: 30px auto;
+    max-width: @screen-lg;
     
   }
 }
@@ -174,8 +178,10 @@
     .modal-header { 
       background: @brand-primary;
       color: #fff;
-
-  }
+   }
+   .modal-title { 
+      color: #fff;
+   }
   .modal-body{ 
    background: @default-max-light;
     }

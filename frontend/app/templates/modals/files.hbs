@@ -1,12 +1,24 @@
 <div class="modal fade" id="exporthistory" tabindex="-1" role="dialog" aria-labelledby="exportLabel">
   <div class="modal-dialog modal-lg modal-dialog-primary" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              
-          
-          <h4 class="modal-title" id="historyLabel" data-localize="files.heading">Saved files</h4>
-        </div>
+        
+        <div class="modal-header modal-header-with-nav">
+				<div class="navbar navbar-inverse table-row">
+					<div>
+						<h4 class="modal-title">Saved files</h4>
+					</div>
+					<div style="" class="navbar-search max-width">
+						<div class="input-group navbar-search-field">
+							<input type="text" id="hshortcuts" class="form-control placeholder-inverse" placeholder="">
+						</div>
+					</div>
+					<div>
+						<button type="button" class="btn navbar-btn" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true"><i class="md-i">close</i></span></button>
+					</div>
+				</div>
+			</div>
+        
+
         <div class="modal-body table-content">
            
              <table class="table table-condensed">

@@ -311,24 +311,25 @@ table {
 }
 
 .table { 
-  &.table-grid {
+  &.table-variants {
    margin-top: 0!important;
    background:#fff;
-
-    thead {
+   table-layout: fixed;
+   margin: 0;
+   width: auto;
+   min-width: 100%;
+    .variants_table_head {
        > tr { 
-         > th { 
+         > th, td { 
            background: #fff;
            border: solid 1px @default-max-light;
            padding-bottom: 0;
            color: @gray-darker;
-           > div { 
-              width: 108px;
-         
-           }
+           font-weight: normal;
+           
            > div + div { 
                position: relative;
-                margin: 0 -8px;
+              
                 height: 33px;
                
               &:before {
@@ -341,16 +342,17 @@ table {
               }
               .form-control { 
                   .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @input-border-radius-small);
-                   padding-left: 24px;
+                   padding-left: 16px;
                    font-size: 12px;
                    border-radius: 0;
                    border-width: 0;
                    background: transparent;
+                    font-weight: normal;
                     &[disabled],
                     &[readonly],
                     fieldset[disabled] & {
                       background: #fff;
-                      color: #bbb;
+                      color:@gray-lighter;
                    }
                 }
               
@@ -365,7 +367,7 @@ table {
             } 
            .variants-table-header-label { 
               position: relative;
-              >.btn-link { 
+              > .btn-link { 
               display: block;
               font-size: 12px;
               line-height: 22px;
@@ -414,48 +416,77 @@ table {
               }
              }
            
-           &:first-child,
-           &:first-child + th {
-              width: 24px;
-             > div { width: 24px; }
-             > div + div { width: 24px;}
-             > div + div:before { 
-               display: none;
-             }
-            }
+
           }
        }
      }
-    thead,
-    tbody,
-    tfoot { 
+    .variants_table_head,
+    .table-variants-body { 
+        background: #fff;
       tr { 
-       td, th, tf { 
+         td { 
           font-size: @font-size-small;
           width: 120px;
-          max-width: 120px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          &:first-child,
-           &:first-child + th {
-             width: 24px;
+          > div { 
+               margin: 0 -8px;
+               padding: 0 8px;
+               width: 118px; 
            }
- 
-       }
-     }
-    }
-    tbody { 
-      background: #fff;
+          &:first-child  {
+             width: 90px;
+             text-align: right;
+             > div { 
+               width: 88px; 
+            }
+            
+             label { 
+               float: left;
+               margin: 0 5px 0 0;
+             }
+             .btn-link { 
+                float: right;
+               margin: -4px -8px;
+             }
+             > span { 
+               float: left;
+               line-height: 24px;
+             }
+           }
+          &.comment {
+          width: 160px;
+          > div { 
+             width: 158px; 
+           }
+        }
+      }
+      .table-variants-body { 
+    
       tr {
         &:hover { 
          cursor: pointer; 
         } 
 
-         td.comment {
-          width:120px;
-          cursor: pointer;
-       
+      
+                
+         td:first-child { 
+           label { 
+             display: inline-block;
+           }
+         }
+      }
+    }
+     }
+   }
+  }
+}
+
+.table-variants-body { 
+ overflow: auto;      
+ .comment {
+          cursor: pointer;       
          .nocomment { 
           color: @gray-lighter;
           display: block;
@@ -469,7 +500,7 @@ table {
            text-overflow: ellipsis;
            overflow: hidden;
            position: relative;
-           width: 107px;
+           width: px;
            div {
              display: none;
              margin: 0;
@@ -531,46 +562,25 @@ table {
            } 
           }
         }
-                
-         td:first-child { 
-           label { 
-             display: inline-block;
-           }
-         }
-      }
-    }
-    
-     &.table-resposive {
-        thead,
-        tbody,
-        tfoot { 
-         > tr {  
-          &:before { 
-            .fa();
-            padding: 12px;
-            color: @brand-primary;
-            content: "\f055";
-            font-size: 16px;               
-           }
-          }
-        }      
-        thead,
-        tfoot {
-        > tr { 
-         &:before {
-            visibility: hidden;
-          }
-         }
-        }
-        thead {
-        border-bottom: solid 1px #ddd;
-        th {
-          border-bottom: solid 1px #ddd;
-        }
-      }
-   }
-    }
- }
+}
+
+
+.table-container {
+    height: 100%;
+    position: relative;
+  }  
+.table-variants-container {
+  height:700px;
+  overflow-x: auto;
+}
+.table.table-variants thead, tbody {
+  display: block;
+}
+.table.table-variants tbody.table-variants-body {
+  overflow-y: scroll;
+}
+
+
 
 .table-wrapper { 
   overflow: hidden;
@@ -587,24 +597,24 @@ table {
    }
  }
 
-.table-container {
-    height: 100%;
-    position: relative;
-    
-  } 
+
 .table-fix-thead {
   overflow: hidden; position: relative; width: 100%;
   }
-.table-scroll-tbody {
-  width: 100%; overflow: auto; min-height: 500px; bottom: 0px; top: 75px; position: absolute;
-  .table {
-    left: 0;
-    position: absolute;
-    top: -75px;
-    width: 100%;
-  }
-}
 
+.table-files-wrapper { 
+  .table { 
+     tbody,
+        tfoot { 
+         > tr { 
+           th, td, tf  { 
+             vertical-align: top;
+              padding: 5px 0;
+             }
+           }
+  }
+   }
+}
 
  //temp
 .variants-table-th-sort.left {
@@ -744,19 +754,7 @@ table {
  }
 ///
 
-.table-files-wrapper { 
-  .table { 
-     tbody,
-        tfoot { 
-         > tr { 
-           th, td, tf  { 
-             vertical-align: top;
-              padding: 5px 0;
-             }
-           }
-  }
-}
- }
+
 
 .empty {
   background: rgb(247, 247, 247) none repeat scroll 0% 0%; margin: -5px -5px -5px -32px; text-align: center; padding: 150px 0px; color: rgb(170, 170, 170);

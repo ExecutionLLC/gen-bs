@@ -8,7 +8,6 @@ window.JSZip = JSZip;
 //window.jQuery = $;
 //window.$ = $;
 
-import './assets/vendor/jQuery-QueryBuilder/dist/css/query-builder.default.min.css';
 import './assets/css/bootstrap/js/bootstrap.js';
 import './assets/vendor/select2-4.0.1-rc.1/dist/js/select2.full.min.js';
 
