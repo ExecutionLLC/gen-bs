@@ -17,7 +17,7 @@ class SavedFilesService extends UserEntityServiceBase {
             (callback) => this.models.savedFiles.startAddition(user.id, languId, fileMetadata, callback),
             (fileId, transaction, callback) => {
                 const keyName = this._generateBucketKeyForFile(fileId);
-                this.services.amazonS3.upload(this.amazonBucket, keyName, fileStream,
+                this.services.amazonS3.uploadObject(this.amazonBucket, keyName, fileStream,
                     (error) => callback(error, fileId, transaction));
             }
         ], (error, fieldId, transaction) => {
