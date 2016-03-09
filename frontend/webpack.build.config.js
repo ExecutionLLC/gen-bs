@@ -13,7 +13,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ENV = process.env;
 
 var API_HOST = ENV.GEN_FRONTEND_API_HOST || 'localhost';
-var API_PORT = ENV.GEN_FRONTEND_API_PORT || 8888;
+var API_PORT = ENV.GEN_FRONTEND_API_PORT || 5000;
 
 console.log('-> API host: ', API_HOST);
 console.log('-> API port: ', API_PORT);
@@ -71,7 +71,7 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx','.css', 'less']
   },
-  
+
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin("genomics.css", {
