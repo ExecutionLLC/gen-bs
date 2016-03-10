@@ -32,16 +32,18 @@ class SavedFilesService extends UserEntityServiceBase {
     }
 
     _createAndUploadFile(user, languId, fileMetadata, fileStream, callback) {
+        let transactionState = null;
         async.waterfall([
             (callback) => this.models.savedFiles.startAddition(user.id, languId, fileMetadata, callback),
             (fileId, transaction, callback) => {
+                transactionState = transaction;
                 const keyName = this._generateBucketKeyForFile(fileId);
                 this.services.amazonS3.uploadObject(this.amazonBucket, keyName, fileStream,
-                    (error) => callback(error, fileId, transaction));
+                    (error) => callback(error, fileId));
             }
-        ], (error, fieldId, transaction) => {
-            if (transaction) {
-                this.models.savedFiles.completeAddition(transaction, error, fieldId, callback)
+        ], (error, fieldId) => {
+            if (transactionState) {
+                this.models.savedFiles.completeAddition(transactionState, error, fieldId, callback)
             }
             callback(error, fieldId);
         });

@@ -56,12 +56,11 @@ class SavedFileModel extends SecureModelBase {
     startAddition(userId, languId, fileMetadata, callback) {
         async.waterfall([
             (callback) => this.db.beginTransaction(callback),
-            (trx, knex, callback) => this._insertFileMetadata(userId, languId, fileMetadata, true, (error, fileId) => {
-                callback(error, trx, fileId)
-            }),
-            (trx, fileId, callback) => {
+            (transactionWrapper, knexTransaction, callback) => this._insertFileMetadata(userId, languId, fileMetadata, true,
+                knexTransaction, (error, fileId) => callback(error, transactionWrapper, fileId)),
+            (transactionWrapper, fileId, callback) => {
                 const transactionState = {
-                    _trx: trx
+                    _transactionWrapper: transactionWrapper
                 };
                 callback(null, fileId, transactionState);
             }
@@ -69,7 +68,7 @@ class SavedFileModel extends SecureModelBase {
     }
 
     completeAddition(transactionState, error, fileId, callback) {
-        const trx = transactionState._trx;
+        const trx = transactionState._transactionWrapper;
         this.db.endTransaction(trx, error, fileId, callback);
     }
 

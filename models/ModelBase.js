@@ -116,7 +116,7 @@ class ModelBase {
             .asCallback((error) => {
                 callback(error, dataToInsert.id);
             });
-    };
+    }
 
     _unsafeUpdate(itemId, dataToUpdate, trx, callback) {
         trx(this.baseTableName)
