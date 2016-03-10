@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { changeSample, updateSampleValue } from '../../../actions/ui'
+
 import FileUploadSamplesRow from './FileUploadSamplesRow';
 
 export default class FileUploadSamples extends Component {
@@ -10,7 +12,8 @@ export default class FileUploadSamples extends Component {
   render() {
     let { samples } = this.props;
     if (this.state.searchWord.length > 0) {
-      samples = samples.filter(el => ~el.file_name.indexOf(this.state.searchWord));
+      let searchWord = this.state.searchWord.toLowerCase();
+      samples = samples.filter(el => ~el.file_name.toLocaleLowerCase().indexOf(searchWord));
     }
     return (
       <div>
@@ -21,7 +24,15 @@ export default class FileUploadSamples extends Component {
         </div>
         <div className="panel-group">
           {samples.map(
-            sample => <FileUploadSamplesRow sample={sample} fields={this.props.fieldsList} key={sample.id}/>
+            sample => (
+              <FileUploadSamplesRow
+                sample={sample}
+                fields={this.props.fieldsList}
+                key={sample.id}
+                onSelectSample={() => this.props.dispatch(changeSample(samples, sample.id))}
+                onUpdateSampleValue={(valueFieldId, value) => this.props.dispatch(updateSampleValue(sample.id, valueFieldId, value))}
+              />
+            )
           )}
         </div>
       </div>

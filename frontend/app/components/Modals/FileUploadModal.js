@@ -13,11 +13,12 @@ class FileUploadModal extends Component {
   componentDidMount() {
     const { samples } = this.props;
     if (samples[0]) {
-      this.props.dispatch(samples[0].id);
+      this.props.fetchFields(samples[0].id);
     }
   }
 
   render() {
+    console.log(121, this.props);
     return (
         <Modal
           dialogClassName="modal-dialog-primary"

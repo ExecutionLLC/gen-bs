@@ -28,7 +28,7 @@ export default class FileUploadSamplesRow extends Component {
       <div className="panel panel-default">
         <div className="panel-heading">
           <div className="btn-group pull-right">
-            <a onClick={e => this.clickShowValues(e)} className="btn btn-default btn-choose" role="button">
+            <a onClick={() => this.props.onSelectSample()} className="btn btn-default btn-choose" role="button">
               <span data-localize="samples.settings.select.title">Select for analysis</span>
             </a>
             <a onClick={e => this.clickShowValues(e)} className="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -63,16 +63,23 @@ export default class FileUploadSamplesRow extends Component {
     const { sample } = this.props;
     const values = _.indexBy(sample.values, 'field_id');
     return (
-      <Panel collapsible expanded={this.state.showValues} className="samples-values">
+      <Panel collapsible expanded={this.state.showValues} className="samples-values form-horizontal-rows">
         <div className="flex">
           {this.props.fields.map(field => {
             if (!values[field.id]) {
-              console.log(field.id)
+              console.log('unknown field', field.id)
             }
             return (
               <dl key={field.id}>
                 <dt>{field.label}</dt>
-                <dd><input type="text" className="form-contrl" value={values[field.id] && values[field.id].values}/></dd>
+                <dd>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={values[field.id] && values[field.id].values}
+                    onChange={(e) => this.props.onUpdateSampleValue(field.id, e.target.value)}
+                  />
+                </dd>
               </dl>
             );
           })}
