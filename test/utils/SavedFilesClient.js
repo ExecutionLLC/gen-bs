@@ -21,16 +21,9 @@ class SavedFilesClient extends UserEntityClientBase {
     }
 
     add(languId, sessionId, fileMetadata, fileStream, callback) {
-        const formData = {
-            file: {
-                value: fileStream
-            },
-            viewId: fileMetadata.viewId,
-            vcfFileSampleVersionId: fileMetadata.vcfFileSampleVersionId,
-            name: fileMetadata.name,
-            url: fileMetadata.url,
-            totalResults: fileMetadata.totalResults,
-            description: fileMetadata.description
+        const formData = _.cloneDeep(fileMetadata);
+        formData.file = {
+            value: fileStream
         };
         RequestWrapper.post(
             this.collectionUrls.create(),

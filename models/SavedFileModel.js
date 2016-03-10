@@ -24,24 +24,22 @@ class SavedFileModel extends SecureModelBase {
     }
 
     findAll(userId, callback) {
-        async.waterfall([
-            (callback) => this._fetchUserFiles(userId, callback),
-            (files, callback) => this._mapItems(files, callback)
-        ], callback);
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._fetchSavedFiles(trx, null, userId, true, callback),
+                (files, callback) => this._mapItems(files, callback)
+            ], callback);
+        }, callback);
     }
 
     findMany(userId, fileIds, callback) {
-        async.waterfall([
-            (callback) => this._fetchSavedFiles(fileIds, callback),
-            (files, callback) => this._ensureAllItemsFound(files, fileIds, callback),
-            (files, callback) => async.map(files, (file, callback) => {
-                this._ensureItemNotDeleted(file, callback);
-            }, callback),
-            (files, callback) => async.map(files, (file, callback) => {
-                this._checkUserIsCorrect(userId, file, callback);
-            }, callback),
-            (files, callback) => this._mapItems(files, callback)
-        ], callback);
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._fetchSavedFiles(trx, fileIds, userId, true, callback),
+                (files, callback) => this._ensureAllItemsFound(files, fileIds, callback),
+                (files, callback) => this._mapItems(files, callback)
+            ], callback);
+        }, callback);
     }
 
     /**
@@ -75,6 +73,14 @@ class SavedFileModel extends SecureModelBase {
     _insertFileMetadata(userId, languId, fileMetadata, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
+                if (!fileMetadata.filterIds) {
+                    callback(new Error('No filters specified for the exported file.'));
+                } else {
+                    callback(null);
+                }
+            },
+            (callback) => {
+                // Insert file metadata.
                 const dataToInsert = {
                     id: shouldGenerateId ? this._generateId() : fileMetadata.id,
                     creator: userId,
@@ -86,8 +92,18 @@ class SavedFileModel extends SecureModelBase {
                 };
                 this._insert(dataToInsert, trx, callback);
             },
-            // TODO: Insert filters to 'saved_file_filter'.
             (fileId, callback) => {
+                // Insert filters.
+                async.eachSeries(fileMetadata.filterIds, (filterId, callback) => {
+                    const dataToInsert = {
+                        savedFileId: fileId,
+                        filterId
+                    };
+                    this._unsafeInsert('saved_file_filter', dataToInsert, trx, callback);
+                }, (error) => callback(error, fileId));
+            },
+            (fileId, callback) => {
+                // Insert translated description.
                 const dataToInsert = {
                     savedFileId: fileId,
                     languId: languId,
@@ -108,93 +124,36 @@ class SavedFileModel extends SecureModelBase {
         );
     }
 
-    _update(userId, file, fileToUpdate, callback) {
+    find(userId, fileId, callback) {
         this.db.transactionally((trx, callback) => {
+            const fileIds = [fileId];
             async.waterfall([
-                (callback) => {
-                    const dataToUpdate = {
-                        viewId: fileToUpdate.viewId,
-                        vcfFileSampleVersionId: fileToUpdate.vcfFileSampleVersionId,
-                        name: fileToUpdate.name,
-                        url: fileToUpdate.url,
-                        totalResults: fileToUpdate.totalResults
-                    };
-                    this._unsafeUpdate(file.id, dataToUpdate, trx, callback);
-                },
-                (fileId, callback) => {
-                    const dataToUpdate = {
-                        languId: file.languId,
-                        description: fileToUpdate.description
-                    };
-                    this._updateSavedFileText(fileId, dataToUpdate, trx, callback);
-                }
+                (callback) => this._fetchSavedFiles(trx, fileIds, userId, false, callback),
+                (files, callback) => this._ensureAllItemsFound(files, fileIds, callback),
+                (files, callback) => callback(null, files[0])
             ], callback);
         }, callback);
     }
 
-    _updateSavedFileText(fileId, dataToUpdate, trx, callback) {
-        trx('comment_text')
-            .where('saved_file_id', fileId)
-            .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
-            .asCallback((error) => {
-                callback(error, fileId);
-            });
-    }
+    _fetchSavedFiles(trx, fileIdsOrNull, userIdOrNull, shouldExcludeDeletedEntries, callback) {
+        let baseQuery = trx.select()
+            .from(this.baseTableName)
+            .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
+            .whereRaw('true = true'); // To use andWhere/orWhere below.
 
-    _fetch(userId, fileId, callback) {
-        async.waterfall([
-            (callback) => this._fetchSavedFile(fileId, callback),
-            (file, callback) => this._checkUserIsCorrect(userId, file, callback)
-        ], callback);
-    }
+        if (fileIdsOrNull) {
+            baseQuery = baseQuery.andWhere('id', 'in', fileIdsOrNull);
+        }
 
-    _fetchSavedFile(fileId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
-                .where('id', fileId)
-                .asCallback((error, file) => {
-                    if (error || !file.length) {
-                        callback(error || new Error('Item not found: ' + fileId));
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(file[0]));
-                    }
-                });
-        }, callback);
-    }
+        if (shouldExcludeDeletedEntries) {
+            baseQuery = baseQuery.andWhere('is_deleted', false);
+        }
 
-    _fetchUserFiles(userId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
-                .where('creator', userId)
-                .andWhere('is_deleted', false)
-                .asCallback((error, files) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(files));
-                    }
-                });
-        }, callback);
-    }
+        if (userIdOrNull) {
+            baseQuery = baseQuery.andWhere('creator', userIdOrNull);
+        }
 
-    _fetchSavedFiles(fileIds, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
-                .whereIn('id', fileIds)
-                .asCallback((error, files) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(files));
-                    }
-                });
-        }, callback);
+        baseQuery.asCallback((error, files) => callback(error, ChangeCaseUtil.convertKeysToCamelCase(files)));
     }
 }
 
