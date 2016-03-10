@@ -20,7 +20,7 @@ class ControllerBase {
     }
 
     sendInternalError(response, message) {
-        this.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, message);
+        ControllerBase.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 
     sendOk(response) {
@@ -37,11 +37,11 @@ class ControllerBase {
         }
     }
 
-    sendError(response, httpError, message) {
+    static sendError(response, httpError, message) {
+        console.error(message);
         if (message && typeof message !== 'string') {
             message = message.toString();
         }
-        console.error(message);
         response
             .status(httpError)
             .json({

@@ -6,7 +6,7 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 
 class SavedFilesService extends UserEntityServiceBase {
     constructor(services, models) {
-        super(services, models);
+        super(services, models, models.savedFiles);
 
         this.config = this.services.config;
         this.amazonBucket = this.config.savedFilesUpload.amazonS3BucketName;
@@ -44,8 +44,9 @@ class SavedFilesService extends UserEntityServiceBase {
         ], (error, fieldId) => {
             if (transactionState) {
                 this.models.savedFiles.completeAddition(transactionState, error, fieldId, callback)
+            } else {
+                callback(error, fieldId);
             }
-            callback(error, fieldId);
         });
     }
 

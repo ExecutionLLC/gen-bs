@@ -5,7 +5,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const Http = require('http');
+const HttpStatus = require('http-status');
 const WebSocketServer = require('ws').Server;
+
+const ErrorUtils = require('./utils/ErrorUtils');
+const ControllerBase = require('./controllers/ControllerBase');
 
 class WebServerHost {
     constructor(controllers, services, models) {
@@ -117,7 +121,11 @@ class WebServerHost {
         if (error.stack) {
             this.logger.debug(error.stack);
         }
-        this.sendInternalError(response, 'Unexpected error occurred, see the server logs for details.');
+        ControllerBase.sendError(
+            response,
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            'Unexpected error occurred, see the server logs for details.'
+        );
     }
 
     _enableCORSIfNeeded(app) {

@@ -25,11 +25,10 @@ class FieldsMetadataController extends ControllerBase {
     }
 
     getSourcesMetadata(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        this.services.fieldsMetadata.findSourcesMetadata((error, fieldsMetadata) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
+        ], (error, fieldsMetadata) => {
             this.sendErrorOrJson(response, error, fieldsMetadata);
         });
     }

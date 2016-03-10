@@ -13,6 +13,7 @@ const ClientBase = require('./utils/ClientBase');
 
 const DefaultViews = require('../defaults/views/default-views.json');
 const DefaultFilters = require('../defaults/filters/default-filters.json');
+const Sample = require('../defaults/samples/Sample_vcf4.1.vcf.gz.json').sample;
 
 const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
@@ -29,7 +30,7 @@ const testFilterId = DefaultFilters[0].id;
 
 const generateFileMetadata = () => {
     return {
-        vcfFileSampleVersionId: '',
+        sampleId: Sample.id,
         viewId: testViewId,
         filterIds: [testFilterId],
         name: 'TestExport_' + Uuid.v4(),

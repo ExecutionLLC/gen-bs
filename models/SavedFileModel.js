@@ -79,7 +79,7 @@ class SavedFileModel extends SecureModelBase {
                     id: shouldGenerateId ? this._generateId() : fileMetadata.id,
                     creator: userId,
                     viewId: fileMetadata.viewId,
-                    vcfFileSampleVersionId: fileMetadata.vcfFileSampleVersionId,
+                    vcfFileSampleVersionId: fileMetadata.sampleId,
                     name: fileMetadata.name,
                     url: fileMetadata.url,
                     totalResults: fileMetadata.totalResults
@@ -89,7 +89,7 @@ class SavedFileModel extends SecureModelBase {
             // TODO: Insert filters to 'saved_file_filter'.
             (fileId, callback) => {
                 const dataToInsert = {
-                    commentId: fileId,
+                    savedFileId: fileId,
                     languId: languId,
                     description: fileMetadata.description
                 };
