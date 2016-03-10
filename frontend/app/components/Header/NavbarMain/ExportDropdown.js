@@ -13,8 +13,8 @@ export default class ExportDropdown extends Component {
 
     <a className="btn navbar-btn" type="button" id="dropdownMenu1" data-toggle="modal" data-target="#filename">
       <span className="hidden-xxs" data-localize="files.export.title">Export</span>
-      <span className="visible-xxs"><i className="fa fa-lg fa-cloud-download"></i></span>
-    <span className="label label-warning">7</span>
+      <span className="visible-xxs"><i class="md-i">file_download</i></span>
+    <span className="badge badge-warning">7</span>
     </a>
 
 </div>

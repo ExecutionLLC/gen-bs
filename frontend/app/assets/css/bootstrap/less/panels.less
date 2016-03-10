@@ -7,7 +7,7 @@
 .panel {
   margin-bottom: @line-height-computed;
   background-color: @panel-bg;
-  //border: 1px solid transparent;
+  border: 1px solid @panel-default-border;
   border-radius: @panel-border-radius;
 }
 
@@ -20,7 +20,7 @@
 // Optional heading
 .panel-heading {
   padding: @panel-heading-padding;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid @panel-default-border;
   .border-top-radius((@panel-border-radius - 1));
 
   > .dropdown .dropdown-toggle {
@@ -50,6 +50,7 @@
   background-color: @panel-footer-bg;
   border-top: 1px solid @panel-inner-border;
   .border-bottom-radius((@panel-border-radius - 1));
+  &:extend(.clearfix);
 }
 
 
@@ -227,12 +228,12 @@
     border-radius: @panel-border-radius;
 
     + .panel {
-      margin-top: 2px;
+      margin-top:-1px;
     }
   }
 
   .panel-heading {
-    border-bottom: 0;
+    
 
     + .panel-collapse > .panel-body,
     + .panel-collapse > .list-group {
@@ -252,16 +253,6 @@
 // Contextual variations
 .panel-default {
   .panel-variant(@panel-default-border; @panel-default-text; @panel-default-heading-bg; @panel-default-border; @panel-default-state-icon);
-  .panel-heading { 
-    padding-left: 15px;
-    &:before { 
-      background-color: transparent;
-      content: "";
-    }
-    button, .btn-link, .btn-default {
-       .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
-    }
-  }
 }
 .panel-primary {
   .panel-variant(@panel-primary-border; @panel-primary-text; @panel-primary-heading-bg; @panel-primary-border; @panel-primary-state-icon);

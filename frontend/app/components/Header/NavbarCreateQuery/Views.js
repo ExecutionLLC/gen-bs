@@ -13,7 +13,7 @@ export default class Views extends Component {
     const currentView = this.props.ui.currentView
     return (
 
-      <div className="table-cell table-cell100">
+      <div className="table-cell max-width">
       <div className="btn-group btn-group-select100 view-select" data-localize="views.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available views">
 
         <Select

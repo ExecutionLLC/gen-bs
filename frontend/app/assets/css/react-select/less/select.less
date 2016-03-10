@@ -30,19 +30,19 @@
 
 @select-padding-vertical:          @padding-base-vertical;
 @select-padding-horizontal:        @padding-base-horizontal;
-
+@select-default-shadow:            @btn-default-shadow;
 // menu options
 @select-menu-zindex:               3;
 @select-menu-max-height:           200px;
 
 @select-option-color:              @select-text-color;
 @select-option-bg:                 @select-input-bg;
-@select-option-focused-color:      #fff;
-@select-option-focused-bg:         lighten(@select-primary-color, 10%);
+@select-option-focused-color:      @dropdown-link-hover-color;
+@select-option-focused-bg:         @dropdown-link-hover-bg;
 @select-option-disabled-color:     lighten(@select-text-color, 60%);
 
 @select-noresults-color:           lighten(@select-text-color, 40%);
-
+@select-dropdown-shadow:           @dropdown-shadow;
 // clear "x" button
 @select-clear-size:                floor((@select-input-height / 2));
 @select-clear-color:               #999;

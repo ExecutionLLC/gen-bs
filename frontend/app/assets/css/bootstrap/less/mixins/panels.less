@@ -6,7 +6,7 @@
   & > .panel-heading {
     color: @heading-text-color;
     background-color: @heading-bg-color;
-    border-color: @heading-bg-color;
+    border-color: @heading-border;
 
     + .panel-collapse > .panel-body {
       border-top-color: @border;
@@ -15,9 +15,7 @@
       color: @heading-bg-color;
       background-color: @heading-text-color;
     }
-    button, .btn-link, .btn-default { 
-       .button-variant(@heading-text-color; @heading-border; @heading-text-color);
-    }
+
   }
   & > .panel-footer {
     + .panel-collapse > .panel-body {
