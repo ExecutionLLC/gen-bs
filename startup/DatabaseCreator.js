@@ -421,10 +421,12 @@ class DatabaseCreator {
                     .primary();
                 table.uuid('vcf_file_sample_version_id')
                     .references('id')
-                    .inTable('vcf_file_sample_version');
+                    .inTable('vcf_file_sample_version')
+                    .notNullable();
                 table.uuid('view_id')
                     .references('id')
-                    .inTable('view');
+                    .inTable('view')
+                    .notNullable();
                 table.string('name', 50);
                 table.string('url', 2048);
                 table.integer('total_results');
