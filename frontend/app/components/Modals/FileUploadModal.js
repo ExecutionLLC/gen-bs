@@ -18,7 +18,6 @@ class FileUploadModal extends Component {
   }
 
   render() {
-    console.log(121, this.props);
     return (
         <Modal
           dialogClassName="modal-dialog-primary"
