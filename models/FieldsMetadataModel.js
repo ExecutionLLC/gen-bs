@@ -175,13 +175,14 @@ class FieldsMetadataModel extends ModelBase {
     }
 
     /**
-     * Adds missing fields from the specified collection. Result will contain fields with ids.
+     * Adds missing fields from the specified collection.
+     * Result will contain both existing and new fields with ids.
      *
      * @param languId Language for the description.
      * @param fieldsMetadata Collection of the fields metadata to check.
      * @param trx Knex transaction object.
-     * @param callback (error, results) where results - array, item.id - new or existing field metadata id,
-     * item.fieldMetadata - input metadata.
+     * @param callback (error, results) where results - array,
+     * item.id - new or existing field metadata id, item.fieldMetadata - input metadata.
      * */
     addMissingFields(languId, fieldsMetadata, trx, callback) {
         async.waterfall([

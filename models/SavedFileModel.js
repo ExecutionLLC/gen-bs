@@ -18,9 +18,15 @@ const mappedColumns = [
     'description'
 ];
 
+const SavedFileTables = {
+    SavedFiles: 'saved_file',
+    Filters: 'saved_file_filter',
+    Texts: 'saved_file_text'
+};
+
 class SavedFileModel extends SecureModelBase {
     constructor(models) {
-        super(models, 'saved_file', mappedColumns);
+        super(models, SavedFileTables.SavedFiles, mappedColumns);
     }
 
     findAll(userId, callback) {
@@ -44,7 +50,8 @@ class SavedFileModel extends SecureModelBase {
 
     /**
      * Inserts metadata into database and calls back with state
-     * which should be used to either commit or rollback the action.
+     * which should be used to either commit or rollback the action
+     * using completeAddition() method.
      *
      * @param userId Id of the user uploading file.
      * @param languId Current language.
@@ -99,7 +106,7 @@ class SavedFileModel extends SecureModelBase {
                         savedFileId: fileId,
                         filterId
                     };
-                    this._unsafeInsert('saved_file_filter', dataToInsert, trx, callback);
+                    this._unsafeInsert(SavedFileTables.Filters, dataToInsert, trx, callback);
                 }, (error) => callback(error, fileId));
             },
             (fileId, callback) => {
@@ -109,7 +116,7 @@ class SavedFileModel extends SecureModelBase {
                     languId: languId,
                     description: fileMetadata.description
                 };
-                this._unsafeInsert('saved_file_text', dataToInsert, trx, (error) => {
+                this._unsafeInsert(SavedFileTables.Texts, dataToInsert, trx, (error) => {
                     callback(error, fileId);
                 });
             }
@@ -135,11 +142,11 @@ class SavedFileModel extends SecureModelBase {
         }, callback);
     }
 
-    _fetchSavedFiles(trx, fileIdsOrNull, userIdOrNull, shouldExcludeDeletedEntries, callback) {
+    _fetchSavedFiles(trx, fileIdsOrNull, userId, shouldExcludeDeletedEntries, callback) {
         let baseQuery = trx.select()
             .from(this.baseTableName)
-            .innerJoin('saved_file_text', 'saved_file_text.saved_file_id', this.baseTableName + '.id')
-            .whereRaw('true = true'); // To use andWhere/orWhere below.
+            .innerJoin(SavedFileTables.Texts, SavedFileTables.Texts + '.saved_file_id', this.baseTableName + '.id')
+            .where('creator', userId);
 
         if (fileIdsOrNull) {
             baseQuery = baseQuery.andWhere('id', 'in', fileIdsOrNull);
@@ -149,11 +156,49 @@ class SavedFileModel extends SecureModelBase {
             baseQuery = baseQuery.andWhere('is_deleted', false);
         }
 
-        if (userIdOrNull) {
-            baseQuery = baseQuery.andWhere('creator', userIdOrNull);
-        }
+        async.waterfall([
+            (callback) => baseQuery.asCallback((error, files) => callback(error, files)),
+            (files, callback) => this._toCamelCase(files, callback),
+            (files, callback) => {
+                const fileIds = _.pluck(files, 'id');
+                this._findSavedFilesFilters(trx, fileIds,
+                    (error, fileIdToFilterIdsHash) => callback(error, files, fileIdToFilterIdsHash))
+            },
+            (files, fileIdToFilterIdsHash, callback) => {
+                const mappedFiles = _.map(files, file => {
+                    const fileWithFilters = _.cloneDeep(file);
+                    fileWithFilters.filterIds = fileIdToFilterIdsHash[file.id];
+                    return fileWithFilters;
+                });
 
-        baseQuery.asCallback((error, files) => callback(error, ChangeCaseUtil.convertKeysToCamelCase(files)));
+                callback(null, mappedFiles);
+            }
+        ], callback);
+    }
+
+    /**
+     * @param trx Knex transaction
+     * @param fileIds Ids of the saved files to find filters for.
+     * @param callback (error, hash[fileId] = [filterIds]).
+     * */
+    _findSavedFilesFilters(trx, fileIds, callback) {
+        async.waterfall([
+            (callback) => trx.select('saved_file_id', 'filter_id')
+                .from(SavedFileTables.Filters)
+                .whereIn('saved_file_id', fileIds)
+                .asCallback((error, rows) => callback(error, rows)),
+            (rows, callback) => this._toCamelCase(rows, callback),
+            (rows, callback) => {
+                const hash = _.reduce(rows, (result, row) => {
+                    if (!result[row.savedFileId]) {
+                        result[row.savedFileId] = [];
+                    }
+                    result[row.savedFileId].push(row.filterId);
+                    return result;
+                }, {});
+                callback(null, hash);
+            }
+        ], callback);
     }
 }
 
