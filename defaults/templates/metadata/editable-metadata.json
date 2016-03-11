@@ -33,7 +33,25 @@
     "is_mandatory": false,
     "value_type": "string",
     "description": "Family information (proband (default)/mother/father/sibling)",
-    "dimension": 1
+    "dimension": 1,
+    "available_values": [
+      {
+        "langu_id": "en",
+        "value": "Proband"
+      },
+      {
+        "langu_id": "en",
+        "value": "Mother"
+      },
+      {
+        "langu_id": "en",
+        "value": "Father"
+      },
+      {
+        "langu_id": "en",
+        "value": "Sibling"
+      }
+    ]
   },
   {
     "id": "00000000-0000-0000-0000-000000000012",
@@ -44,7 +62,21 @@
     "is_mandatory": false,
     "value_type": "string",
     "description": "Gender (Male/Female/Unknown (default))",
-    "dimension": 1
+    "dimension": 1,
+    "available_values": [
+      {
+        "langu_id": "en",
+        "value": "Unknown"
+      },
+      {
+        "langu_id": "en",
+        "value": "Male"
+      },
+      {
+        "langu_id": "en",
+        "value": "Female"
+      }
+    ]
   },
   {
     "id": "00000000-0000-0000-0000-000000000013",
@@ -55,7 +87,21 @@
     "is_mandatory": false,
     "value_type": "string",
     "description": "Phenotype (Big ears (hpo1)/Small ears (hpo2))",
-    "dimension": 1
+    "dimension": 1,
+    "available_values": [
+      {
+        "langu_id": "en",
+        "value": "Unknown"
+      },
+      {
+        "langu_id": "en",
+        "value": "Big ears (hpo1)"
+      },
+      {
+        "langu_id": "en",
+        "value": "Small ears (hpo2)"
+      }
+    ]
   },
   {
     "id": "00000000-0000-0000-0000-000000000014",
