@@ -1,0 +1,35 @@
+
+.loader { 
+  background: fade(@modal-backdrop-bg, 70%);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 3000;
+     color: darken( @light-primary-color, 5%);
+  &:before { 
+    .fa();
+   -webkit-animation: fa-spin 2s infinite linear;
+   animation: fa-spin 2s infinite linear;
+   content: "\f021";
+   position: relative;
+   left: 50%;
+   margin: 10px;
+   font-size: 70px;
+   color: darken( @light-primary-color, 5%);
+   top: 50%;
+   
+  } 
+  span { 
+  display: block;
+    font-size: 30px;
+    left: 50%;
+    margin-left: -100px;
+    margin-top: 100px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 300px;
+  } 
+}

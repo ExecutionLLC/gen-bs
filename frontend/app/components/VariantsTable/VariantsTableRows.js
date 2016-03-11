@@ -56,8 +56,8 @@ export default class VariantsTableRows extends Component {
         let row = [];
         const columnNames = Object.keys(rowData)
 
-        row.push(<td className="row_checkbox" key="row_checkbox"><input type="checkbox" />
-          <span style={{marginLeft: '20px'}}>{i+1}</span></td>
+        row.push(<td className="row_checkbox" key="row_checkbox"><label className="checkbox"><input type="checkbox" /><i></i></label>
+          <span>{i+1}</span><button data-toggle="button" className="btn btn-link"><i className="i-star"></i></button></td>
         );
         row.push(<td className="comment" key="comment">{rowData['comment']}</td>);
 

@@ -15,7 +15,7 @@ export default class NavbarSearch extends Component {
           <input
             type="text"
             data-localize="results.search"
-            className="form-control"
+            className="form-control placeholder-inverse"
             placeholder="Search for mutations of current sample analysis"
             data-localize=""
           />

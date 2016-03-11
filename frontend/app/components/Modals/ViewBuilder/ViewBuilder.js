@@ -52,7 +52,7 @@ export default class ViewBuilder extends Component {
                   />
                 </div>
                 <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip" data-placement="bottom" data-container="body" title="Desc/Asc Descending">
-                   <button type="button" className="btn btn-default btnSort active desc" disabled></button>
+                   <button type="button" className="btn btn-default btn-sort active desc" disabled></button>
                 </div>   
                 
                 </div>
