@@ -32,7 +32,10 @@ class SamplesModel extends SecureModelBase {
            async.waterfall([
                (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
                (sampleId, callback) => this._findSamplesMetadata(trx, userId, [sampleId],
-                   true, callback),
+                   true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleId)),
+               (samplesMetadata, sampleId, callback) => this._ensureAllItemsFound(samplesMetadata, [sampleId], callback),
+               (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback),
+               (samplesMetadata, callback) => callback(null, samplesMetadata[0]),
                (sampleMetadata, callback) => this._findSampleVersionValues(trx, sampleVersionId,
                    (error, values) => callback(error, sampleMetadata, values)),
                (sampleMetadata, values, callback) => {
@@ -52,29 +55,7 @@ class SamplesModel extends SecureModelBase {
             async.waterfall([
                 // Find samples metadata.
                 (callback) => this._findSamplesMetadata(trx, userId, null, true, callback),
-                // Find last versions for each sample.
-                (samplesMetadata, callback) => {
-                    const sampleIds = _.map(samplesMetadata, sampleMetadata => sampleMetadata.id);
-                    this._findLastVersionIdsBySampleIds(trx, sampleIds,
-                        (error, versions) => callback(error, samplesMetadata, versions));
-                },
-                // Create sampleId -> versionId hash.
-                (samplesMetadata, versions, callback) => {
-                    const sampleIdToVersionIdHash = _.reduce(versions, (result, version) => {
-                        result[version.sampleId] = version.versionId;
-                        return result;
-                    }, {});
-                    callback(null, samplesMetadata, sampleIdToVersionIdHash);
-                },
-                // Replace sample id with id of the last version.
-                (samplesMetadata, sampleIdToVersionIdHash, callback) => {
-                    const samplesWithVersion = _.map(samplesMetadata, sampleMetadata => {
-                        const sampleWithVersion = _.cloneDeep(sampleMetadata);
-                        sampleWithVersion.id = sampleIdToVersionIdHash[sampleMetadata.id];
-                        return sampleWithVersion;
-                    });
-                    callback(null, samplesWithVersion);
-                }
+                (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback)
             ], callback);
         }, callback);
     }
@@ -153,6 +134,34 @@ class SamplesModel extends SecureModelBase {
                 }
             ], callback);
         }, callback);
+    }
+
+    _replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback) {
+        async.waterfall([
+            // Find last versions for each sample.
+            (callback) => {
+                const sampleIds = _.map(samplesMetadata, sampleMetadata => sampleMetadata.id);
+                this._findLastVersionIdsBySampleIds(trx, sampleIds,
+                    (error, versions) => callback(error, samplesMetadata, versions));
+            },
+            // Create sampleId -> versionId hash.
+            (samplesMetadata, versions, callback) => {
+                const sampleIdToVersionIdHash = _.reduce(versions, (result, version) => {
+                    result[version.sampleId] = version.versionId;
+                    return result;
+                }, {});
+                callback(null, samplesMetadata, sampleIdToVersionIdHash);
+            },
+            // Replace sample id with id of the last version.
+            (samplesMetadata, sampleIdToVersionIdHash, callback) => {
+                const samplesWithVersion = _.map(samplesMetadata, sampleMetadata => {
+                    const sampleWithVersion = _.cloneDeep(sampleMetadata);
+                    sampleWithVersion.id = sampleIdToVersionIdHash[sampleMetadata.id];
+                    return sampleWithVersion;
+                });
+                callback(null, samplesWithVersion);
+            }
+        ], callback);
     }
 
     _setAnalyzed(sampleId, value, trx, callback) {
@@ -242,17 +251,18 @@ class SamplesModel extends SecureModelBase {
 
     _findSampleIdByVersionId(trx, sampleVersionId, callback) {
         async.waterfall([
-            (callback) => trx.select('id', 'vcf_file_sample_id')
+            (callback) => trx.select('vcf_file_sample_id')
                 .from(SampleTableNames.Versions)
                 .where('id', sampleVersionId)
                 .orderBy('timestamp', 'desc')
                 .limit(1)
-                .asCallback((error, results) => callback(error, results))
+                .asCallback((error, results) => callback(error, results)),
+            (results, callback) => this._toCamelCase(results, callback)
         ], (error, results) => {
             if (error || !results || !results.length) {
                 callback(error || new Error('Sample is not found.'));
             } else {
-                callback(null, results[0]);
+                callback(null, results[0].vcfFileSampleId);
             }
         });
     }

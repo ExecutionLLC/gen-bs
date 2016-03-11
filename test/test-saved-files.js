@@ -83,4 +83,13 @@ describe('Saved Files', () => {
             done();
         });
     });
+
+    it('should list all available files.', (done) => {
+        savedFilesClient.getAll(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+
+            done();
+        });
+    });
+
 });
