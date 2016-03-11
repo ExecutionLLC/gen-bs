@@ -432,6 +432,8 @@ class DatabaseCreator {
                 table.integer('total_results');
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
+                table.boolean('is_deleted')
+                    .defaultTo(false);
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
