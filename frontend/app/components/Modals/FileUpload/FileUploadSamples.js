@@ -11,6 +11,10 @@ export default class FileUploadSamples extends Component {
   }
   render() {
     let { samples } = this.props;
+    if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
+        console.error('No editable fields found');
+        return null;
+    }
     if (this.state.searchWord.length > 0) {
       let searchWord = this.state.searchWord.toLowerCase();
       samples = samples.filter(el => ~el.file_name.toLocaleLowerCase().indexOf(searchWord));
@@ -27,7 +31,7 @@ export default class FileUploadSamples extends Component {
             sample => (
               <FileUploadSamplesRow
                 sample={sample}
-                fields={this.props.fieldsList}
+                fields={this.props.editableFieldsList}
                 key={sample.id}
                 onSelectSample={() => this.props.dispatch(changeSample(samples, sample.id))}
                 onUpdateSampleValue={(valueFieldId, value) => this.props.dispatch(updateSampleValue(sample.id, valueFieldId, value))}

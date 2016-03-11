@@ -10,13 +10,6 @@ import FileUpload from './FileUpload/FileUpload';
 import FileUploadSamples from './FileUpload/FileUploadSamples'
 
 class FileUploadModal extends Component {
-  componentDidMount() {
-    const { samples } = this.props;
-    if (samples[0]) {
-      this.props.dispatch(fetchFields(samples[0].id));
-    }
-  }
-
   render() {
     return (
         <Modal
@@ -28,7 +21,7 @@ class FileUploadModal extends Component {
           <FileUploadHeader />
           <Modal.Body>
             <FileUpload {...this.props} />
-            {this.props.fieldsList.length && <FileUploadSamples {...this.props} />}
+            <FileUploadSamples {...this.props} />
           </Modal.Body>
           <FileUploadFooter {...this.props} />
         </Modal>
@@ -43,7 +36,7 @@ function mapStateToProps(state) {
     ui,
     fileUpload,
     samples,
-    fieldsList: _.filter(list, 'is_editable', true)
+    editableFieldsList: _.filter(list, 'is_editable', true)
   }
 }
 
