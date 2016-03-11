@@ -136,6 +136,24 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
+    update(userId, sampleVersionId, sampleToUpdate, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._ensureVersionIsLatest(trx, sampleVersionId, callback),
+                (callback) => this._findSampleIdByVersionId(trx, sampleVersionId),
+                (callback) => {
+                    const dataToUpdate = {
+                        fileName: sampleToUpdate.fileName
+                    };
+                    this._unsafeUpdate(sample.id, dataToUpdate, trx, callback);
+                },
+                (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
+                (versionId, callback) => this._addFileSampleValues(trx, versionId, sampleToUpdate.values,
+                    (error) => callback(error, versionId))
+            ], callback);
+        }, callback);
+    }
+
     _replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback) {
         async.waterfall([
             // Find last versions for each sample.
@@ -197,25 +215,10 @@ class SamplesModel extends SecureModelBase {
                     });
                 });
             },
-            (sampleObj, callback) => this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
+            (sampleObj, callback) => this._addFileSampleValues(trx, sampleObj.versionId, sample.values, (error) => {
                     callback(error, sampleObj.sampleId);
                 })
         ], callback);
-    }
-
-    _update(userId, sample, sampleToUpdate, callback) {
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToUpdate = {
-                        fileName: sampleToUpdate.fileName
-                    };
-                    this._unsafeUpdate(sample.id, dataToUpdate, trx, callback);
-                },
-                (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
-                (versionId, callback) => this._addFileSampleValues(versionId, sampleToUpdate.values, trx, callback)
-            ], callback);
-        }, callback);
     }
 
     _addNewFileSampleVersion(sampleId, trx, callback) {
@@ -234,19 +237,38 @@ class SamplesModel extends SecureModelBase {
      * @param trx Knex transaction object.
      * @param callback (error, resulting values list)
      * */
-    _addFileSampleValues(versionId, values, trx, callback) {
+    _addFileSampleValues(trx, versionId, values, callback) {
         async.map(values, (value, callback) => {
-            this._addFileSampleValue(versionId, value, trx, callback);
+            const dataToInsert = {
+                vcfFileSampleVersionId: versionId,
+                fieldId: value.fieldId,
+                values: value.values
+            };
+            this._unsafeInsert(SampleTableNames.Values, dataToInsert, trx, callback);
         }, callback);
     }
 
-    _addFileSampleValue(versionId, value, trx, callback) {
-        const dataToInsert = {
-            vcfFileSampleVersionId: versionId,
-            fieldId: value.fieldId,
-            values: value.values
-        };
-        this._unsafeInsert(SampleTableNames.Values, dataToInsert, trx, callback);
+    /**
+     * Ensures the specified version is the latest version of the sample it is related to.
+     *
+     * @param trx Knex transaction
+     * @param sampleVersionId Id of the sample version to check.
+     * @param callback (error)
+     * */
+    _ensureVersionIsLatest(trx, sampleVersionId, callback) {
+        // Find last version and compare with the specified.
+        async.waterfall([
+            (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
+            (sampleId, callback) => this._findLastVersionIdsBySampleIds(trx, [sampleId],
+                (error, lastVersions) => callback(error, _.first(lastVersions))),
+            (version, callback) => {
+                if (version.versionId === sampleVersionId) {
+                    callback(null);
+                } else {
+                    callback(new Error('Action cannot be performed on an old version of the sample.'));
+                }
+            }
+        ], callback);
     }
 
     _findSampleIdByVersionId(trx, sampleVersionId, callback) {
@@ -315,6 +337,7 @@ class SamplesModel extends SecureModelBase {
                 .from(SampleTableNames.Versions)
                 .where('vcf_file_sample_id', 'in', sampleIds)
                 .asCallback((error, versions) => callback(error, versions)),
+            (versions, callback) => this._ensureAllItemsFound(versions, sampleIds, callback),
             (versions, callback) => this._toCamelCase(versions, callback),
             (versions, callback) => {
                 const mappedVersions = _.map(versions, (version) => {
