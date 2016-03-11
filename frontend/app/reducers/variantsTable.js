@@ -9,7 +9,11 @@ export default function variantsTable(
       limit: 100,
       offset: 0,
       top_search: ''
-    }
+    },
+    scrollPos: 0,
+    isNextDataLoading: false,
+    isFilteringOrSorting: false,
+
   }, action) {
   switch (action.type) {
 
@@ -33,8 +37,8 @@ export default function variantsTable(
     case ActionTypes.CHANGE_VARIANTS_LIMIT:
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          //offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
-          limit: state.searchInResultsParams.limit + 100 
+          offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
+          //limit: state.searchInResultsParams.limit + 100 
         })
       })
 
@@ -54,7 +58,10 @@ export default function variantsTable(
 
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          search: searchArray })
+          search: searchArray,
+          limit: 100,
+          offset: 0
+        })
       })
 
     case ActionTypes.CHANGE_VARIANTS_SORT:
@@ -89,7 +96,10 @@ export default function variantsTable(
 
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-          sort: sortArray })
+          sort: sortArray,
+          limit: 100,
+          offset: 0
+        })
       })
 
     case ActionTypes.REQUEST_VARIANTS:
@@ -106,11 +116,15 @@ export default function variantsTable(
 
     case ActionTypes.REQUEST_SEARCHED_RESULTS:
       return Object.assign({}, state, {
+        isNextDataLoading: action.isNextDataLoading,
+        isFilteringOrSorting: action.isFilteringOrSorting,
         isFetching: true
       })
 
     case ActionTypes.RECEIVE_SEARCHED_RESULTS:
       return Object.assign({}, state, {
+        isNextDataLoading: false,
+        isFilteringOrSorting: false,
         isFetching: false,
         lastUpdated: action.receivedAt
       })

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import  { firstCharToUpperCase } from '../../utils/stringUtils'
 
-import { changeVariantsFilter, sortVariants, searchInResults } from '../../actions/variantsTable'
+import { changeVariantsFilter, sortVariants, searchInResultsSortFilter } from '../../actions/variantsTable'
 
 export default class VariantsTableHead extends Component {
 
@@ -26,7 +26,7 @@ export default class VariantsTableHead extends Component {
               inputValue
             }
             onChange={(e) => dispatch(changeVariantsFilter(variants, fieldId, e.target.value))}
-            onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResults() ): null }
+            onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResultsSortFilter() ): null }
           />
         </div>
       )
@@ -64,12 +64,12 @@ export default class VariantsTableHead extends Component {
     } else {
       variantsColumns = Object.keys(variants[0]);
 
-      head.push(<th key="row_linenumber"></th>);
+      //head.push(<th key="row_linenumber" className="row_linenumber"></th>);
 
-      head.push(<th data-label="checkbox" key="row_checkbox"></th>);
+      head.push(<td className="row_checkbox" data-label="checkbox" key="row_checkbox"><div></div></td>);
 
       head.push(
-              <th data-label="comment" key="comment" > 
+              <td data-label="comment" key="comment" className="comment"> 
                 <div>
                   <div className="variants-table-header-label">
                       <a type="button" className="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div className="popover variants-table-th-filter" role="tooltip"><div className="popover-content"></div></div>' data-content='<input type="text" className="form-control">'>
@@ -82,7 +82,7 @@ export default class VariantsTableHead extends Component {
                     value=""
                   />
                 </div>
-              </th>
+              </td>
       )
       variantsColumns.filter( filterFunc ).map( (tableFieldId) => {
           let name = '';
@@ -93,11 +93,11 @@ export default class VariantsTableHead extends Component {
           }
 
           let sortClassAsc = classNames(
-            'btn', 'btn-default', 'btnSort', 'asc', {
+            'btn', 'btn-sort', 'asc', {
             'active': columnSortParams && columnSortParams.direction === 'asc' 
           });
           let sortClassDesc = classNames(
-            'btn', 'btn-default', 'btnSort', 'desc',
+            'btn', 'btn-sort', 'desc',
             {
             'active': columnSortParams && columnSortParams.direction === 'desc' 
           });
@@ -112,7 +112,7 @@ export default class VariantsTableHead extends Component {
 
           
           head.push(
-              <th data-label={tableFieldId} key={tableFieldId} > 
+              <td data-label={tableFieldId} key={tableFieldId} > 
                 <div>
                   <div className="variants-table-header-label">
                       <a type="button" className="btn btn-link" data-toggle="popover" data-html="true" data-container="body" data-placement="bottom" data-template='<div className="popover variants-table-th-filter" role="tooltip"><div className="popover-content"></div></div>' data-content='<input type="text" className="form-control">'>
@@ -135,14 +135,14 @@ export default class VariantsTableHead extends Component {
                   </div>
                 </div>
                 {this._filterInputs(tableFieldId)}
-              </th>
+              </td>
           )
       });
 
     }
 
     return (
-      <thead id="variants_table_head"><tr>{head}</tr></thead>
+      <tbody className="variants_table_head" id="variants_table_head"><tr>{head}</tr></tbody>
     )
   }
 }

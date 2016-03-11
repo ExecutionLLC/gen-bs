@@ -15,6 +15,8 @@ export const WS_PROGRESS_MESSAGE = 'WS_PROGRESS_MESSAGE';
 export const WS_OTHER_MESSAGE = 'WS_OTHER_MESSAGE';
 export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 
+export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
+
 
 /*
  * other consts
@@ -24,6 +26,12 @@ export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 /*
  * action creators
  */
+export function clearVariants() {
+  return {
+    type: WS_CLEAR_VARIANTS
+  }
+}
+
 export function createWsConnection(wsConn) {
   return {
     type: WS_CREATE_CONNECTION,

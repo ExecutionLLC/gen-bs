@@ -9,6 +9,8 @@ export const CHANGE_SAMPLE = 'CHANGE_SAMPLE'
 export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW'
 export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER'
 
+export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE'
+
 export const ANALYZE = 'ANALYZE'
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP'
 
@@ -27,6 +29,15 @@ export function changeSample(samples, sampleId) {
     type: CHANGE_SAMPLE,
     samples,
     sampleId
+  }
+}
+
+export function updateSampleValue(sampleId, valueFieldId, value) {
+  return {
+    type: UPDATE_SAMPLE_VALUE,
+    sampleId,
+    valueFieldId,
+    value
   }
 }
 
