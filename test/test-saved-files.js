@@ -64,7 +64,7 @@ describe('Saved Files', () => {
 
             samplesClient.getAll(sessionId, (error, response) => {
                 const samples = ClientBase.readBodyWithCheck(error, response);
-                const sample = _.find(samples, sample => sample.fileName === Sample.file_name)
+                const sample = _.find(samples, sample => sample.fileName === Sample.file_name);
                 sampleId = sample.id;
 
                 done();
