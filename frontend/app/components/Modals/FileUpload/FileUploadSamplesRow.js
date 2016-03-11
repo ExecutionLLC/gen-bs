@@ -31,11 +31,14 @@ export default class FileUploadSamplesRow extends Component {
             <a onClick={() => this.props.onSelectSample()} className="btn btn-default btn-choose" role="button">
               <span data-localize="samples.settings.select.title">Select for analysis</span>
             </a>
-            <a onClick={e => this.clickShowValues(e)} className="btn btn-default collapsed" role="button"
-                  data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false"
+            {sample.type === 'user'
+            && <a onClick={e => this.clickShowValues(e)}
+                  className="btn btn-default collapsed" role="button"
+                  data-toggle="collapse" data-parent="#accordion"
+                  href="#collapseOne" aria-expanded="false"
                   aria-controls="collapseOne">
               <i className="fa fa-pencil"></i>
-            </a>
+            </a>}
           </div>
           <div className="flex">
             <dl>
@@ -69,7 +72,7 @@ export default class FileUploadSamplesRow extends Component {
         <div className="flex">
           {this.props.fields.map(field => {
             if (!values[field.id]) {
-              console.log('unknown field', field.id)
+              console.error('unknown field', field.id)
             }
             return (
               <dl key={field.id}>
