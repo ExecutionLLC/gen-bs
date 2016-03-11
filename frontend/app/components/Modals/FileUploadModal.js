@@ -13,7 +13,7 @@ class FileUploadModal extends Component {
   componentDidMount() {
     const { samples } = this.props;
     if (samples[0]) {
-      this.props.fetchFields(samples[0].id);
+      this.props.dispatch(fetchFields(samples[0].id));
     }
   }
 
