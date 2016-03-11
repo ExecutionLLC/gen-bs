@@ -4,8 +4,8 @@
 
 .label {
   display: inline;
-  padding: 0.2em 0.45em;
-  font-size: 75%;
+  padding: 0.2em 0.45em .35em;
+  font-size: 90%;
   font-weight: bold;
   line-height: 1;
   color: @label-color;
@@ -61,4 +61,8 @@
 
 .label-danger {
   .label-variant(@label-danger-bg);
+}
+.label-inverse {
+  background: fade(#fff, 80%);
+  color: @brand-primary;
 }

@@ -184,6 +184,14 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
                 sampleFieldIds.push(fieldMetadata.id);
             }
         });
+        // Add editable fields for samples.
+        if (isSample) {
+            const editableFieldsIds = _(fieldsMetadata)
+                .filter('isEditable', true)
+                .pluck('id')
+                .value();
+            sampleFieldIds.push.apply(sampleFieldIds, editableFieldsIds);
+        }
         this._storeSampleMetadata(sample, sampleFieldIds, outputDir, callback);
     }
 

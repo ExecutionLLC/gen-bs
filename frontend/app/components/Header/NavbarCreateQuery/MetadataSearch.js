@@ -12,8 +12,8 @@ export default class MetadataSearch extends Component {
     const samples = this.props.userData.samples
     return (
 
-        <div className="table-cell table-cell100">
-            <div className="btn-group" data-localize="samples.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Click here and type to search field symbols containing in metadata of available samples">
+        <div className="table-cell max-width">
+            <div className="btn-group" data-localize="samples.help">
               <Select2
                className="sample-search"
                multiple={false}

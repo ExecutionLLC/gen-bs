@@ -535,6 +535,7 @@
 .navbar-inverse {
   background-color: @navbar-inverse-bg;
   border-color: @navbar-inverse-border;
+   color: @navbar-inverse-color;
 
   .navbar-brand {
     color: @navbar-inverse-brand-color;
@@ -687,3 +688,349 @@
     } 
 
 }
+
+.right-dropdown {
+      .arrow {
+      left: auto;
+      right: 13px;
+       }
+  .dropdown-menu { 
+     min-width: 400px;
+     left: auto;
+     padding: 0;
+     color: @text-color;
+      background: transparent;
+   .btn-default { 
+     color: @btn-default-color!important;
+   }
+    
+  }
+  .panel {
+    margin: 0;
+    border: none;
+    background: transparent;
+    .table-row {
+      padding: 0 10px; 
+      > div { 
+        padding:5px;
+      }
+    }
+    .panel-body {
+      padding: 15px;
+    }
+    .btn { 
+      &:extend(.btn-sm);
+    }
+    dl:last-child { 
+      margin: 0;
+    }
+    }
+  }
+  
+  .navbar-default { 
+   .navbar-search-field { 
+     background: #f8f8f9 none repeat scroll 0 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.6);
+    border-right: 1px solid rgba(0, 0, 0, 0.01);
+   }
+    .navbar-search-toogle { 
+      
+    }
+} 
+
+.navbar-search {
+    position: relative;  
+
+
+ .navbar-search-field {
+         
+      display: table;
+      width: 100%;
+     &:before { 
+        .fa();
+        content: "\f002";
+        position: absolute;
+        top:11px;
+        left: 9px;
+        opacity: .6;
+      }
+      .placeholder { 
+        
+        display: table-cell;
+        height:@navbar-height - 2;
+        line-height:@navbar-height - 2;
+        padding:0 0 0 28px;
+        background: none;
+        border: none;
+        text-align: left;
+        
+
+       + .popover {
+
+          border: medium none;
+          margin-top: 44px;
+          max-width: 700px;
+          width: auto;
+          color: @text-color;
+          border: none;
+         
+    > div  {
+       word-break: break-word;
+    }
+    dl { 
+      margin-bottom: 8px; 
+    }
+    dt { 
+      font-weight: normal;
+    }
+    > dt { 
+         padding-left: 24px;
+         position: relative;
+         white-space: nowrap;
+         i { 
+           position: absolute;
+           left: -24px;
+           
+         }
+       }
+    dd { 
+      color: @text-muted;
+    }
+    > dl { 
+       
+     }
+ }
+       &:hover{ 
+    + .popover { 
+      
+      display: block;
+    }
+  }
+      }
+      
+      .form-control { 
+      display: table-cell;
+      border-radius: 0;
+      border: none ;
+      background: transparent;
+  
+      box-shadow: none;
+   
+      height:@navbar-height;
+      line-height:@navbar-height;
+      padding-left: 28px;
+      text-overflow: ellipsis;
+      &.placeholder-inverse { 
+           color: @navbar-inverse-color;
+      background: fade(#000, 5%);
+        .inverse-placeholder();
+        
+       &:focus { 
+        color: #fff;
+       }
+      } 
+    
+    
+    }
+  
+ }
+ .navbar-search-toogle { 
+   background: fade(#000, 5%);
+  .btn { 
+     background: transparent;
+     border-color:transparent;  
+  } 
+ }
+ 
+ }
+ 
+ //main color navbar
+.navbar-main {
+
+  height: 0;
+  margin: 0; 
+  border-bottom: none;
+ .transition(all .25s linear);
+  box-shadow: 0 0 10px rgba(107, 118, 137, 0.3);
+
+ .dropdown-menu {
+   margin: 2px 0 0;
+   .flex { 
+     color: @text-color;
+     -moz-columns: 1 auto;-webkit-columns: 1 auto; columns: 1 auto;
+    min-width: 320px;
+    padding: 12px;
+   }
+    }      
+ .brand { 
+    width: 75px;
+    padding: 0 15px;
+    font-size: 22px;
+    float: none;
+    line-height: 42px;
+    color: @navbar-inverse-color ;
+  
+    sup {
+     font-size: 15px;
+    font-weight: bold;
+    left: 0.15em;
+    opacity: 0.7;
+    top: -0.75em;
+    font-style: italic;
+  }
+
+    &:hover { 
+      opacity: .8;
+      sup { 
+        text-decoration: underline;
+      }
+   
+   }
+
+ }
+ .language { 
+   .dropdown-toggle { 
+     position: relative;
+   }
+   .dropdown-menu {
+       min-width: 0;
+       > li {
+       > a { 
+          padding:10px 12px;      
+        }
+       } 
+    }
+   .open .dropdown-menu { 
+      position: absolute;
+      background-color:@dropdown-bg;
+    }
+   
+   //
+   span.select2 { 
+    .select2-selection--single { 
+         
+          border-radius: 0;
+          border: none;
+          background: transparent;
+       
+          .select2-selection__rendered { 
+           line-height: @navbar-height;
+               color: @navbar-inverse-color;
+           }
+           .select2-selection__arrow { 
+             height:  @navbar-height;
+           }
+        .select2-selection__arrow b {
+         border-color: @navbar-inverse-color transparent transparent;
+         
+        }
+     }
+   }
+ }
+ .navbar-inner {
+    position: relative;
+    z-index: 3;
+    display: table;
+   > div { 
+     display: table-cell;
+     //padding-left: 1px;
+     vertical-align: top;
+     width: 1%;
+     &:last-child { 
+       padding-right: 15px;
+     }
+     &.width100 { 
+        width: 100%;
+     }
+     > a, > div > a, .btn {
+       white-space: nowrap;
+       position: relative;
+       min-width: @navbar-height; 
+       color: @navbar-inverse-color;
+   
+       .badge { 
+      border-radius: 20px;
+      position: absolute;
+      right: -6px;
+      top: 0px;
+      z-index: 1;
+       }
+
+       &:hover { 
+        opacity: .8;
+      }      
+     }
+    &.navbar-search {
+      padding-left: 0;
+    width: 100%;
+ 
+
+   }
+  }
+    .dropdown { 
+     position: relative;
+     z-index: 4;
+   }
+  }
+ a:hover,
+ a:focus { 
+   text-decoration: none;
+ }
+ .fa-cog + .fa-caret-right {
+    left: 5px;
+    margin-right: -5px;
+    margin-bottom: -2px;
+    position: relative;
+    top: 2px;
+ }
+
+
+@media (max-width: @screen-xss-max) {
+
+ .navbar-inner { 
+   > div { 
+      &.navbar-search { 
+        width: 1%;
+      }
+      &.visible-xxs { 
+       display: table-cell !important;
+     }
+     span.user {
+       max-width: 80px;
+       display: block; 
+       width: 100%;
+       overflow: hidden;
+       text-overflow: ellipsis;
+       white-space: nowrap;
+     }
+     > a, > div > a, .btn {
+        padding-left: 0;
+       padding-right: 0;
+       min-width:0;
+        &.brand { 
+          width: auto;
+          padding: 0 8px;
+          font-size: 18px;
+      }
+       .caret { 
+         position: absolute;
+         right: 1px;
+         top: 25px;
+        }
+       }
+     
+     
+   }
+ } 
+ 
+}
+
+
+
+
+
+
+
+}
+
+

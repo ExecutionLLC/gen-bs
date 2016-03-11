@@ -7,12 +7,18 @@ export default function websocket(state = {
   errors: [],
   closed: true,
   variants: null,
+  currentVariants: null,
   isVariantsEmpty: false,
   isVariantsValid: true,
   isVariantsLoaded: false,
   progress: null
 }, action) {
   switch (action.type) {
+    case ActionTypes.WS_CLEAR_VARIANTS:
+        return Object.assign({}, state, {
+          variants: null,
+          currentVariants: null
+        })
     case ActionTypes.WS_CREATE_CONNECTION:
         return Object.assign({}, state, {
           wsConn: action.wsConn
@@ -23,7 +29,8 @@ export default function websocket(state = {
             ...state.messages,
             action.wsData
           ],
-          variants: action.wsData.result.data,
+          variants: (state.variants === null) ? action.wsData.result.data : [...state.variants, ...action.wsData.result.data],
+          currentVariants: action.wsData.result.data,
           isVariantsEmpty: (action.wsData.result.data.length === 0),
           isVariantsLoaded: false,
           isVariantsValid: true

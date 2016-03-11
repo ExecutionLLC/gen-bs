@@ -16,7 +16,7 @@ export default class Filters extends Component {
 
     return (
 
-     <div className="table-cell table-cell100">
+     <div className="table-cell max-width">
           <div className="btn-group filter-select"  data-localize="filters.help" data-toggle="tooltip" data-placement="bottom"  data-container="body" title="Select one or more from available filters">
 
             <Select

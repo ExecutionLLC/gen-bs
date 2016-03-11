@@ -1,11 +1,19 @@
 <div class="modal fade" id="filter"  role="dialog" aria-labelledby="filterLabel">
   <div class="modal-dialog modal-dialog-primary modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        
-     <button type="button" class="close pull-right" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-       <h4 class="modal-title" data-localize="filters.setup.title">Setup Filters</h4>
-      </div>
+      
+      <div class="modal-header modal-header-with-nav ui-draggable-handle">
+				<div class="navbar navbar-inverse table-row">
+					<div class="max-width">
+						<h4 class="modal-title"  data-localize="filters.setup.title">Setup Filters</h4>
+					</div>
+					<div>
+						<button type="button" class="btn navbar-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="md-i">close</i></span></button>
+					</div>
+				</div>
+			</div>
+      
+    
       <div class="modal-body">
          <div class="collapse in copyfilter" id="newfilterField">
            <div class="row grid-toolbar">

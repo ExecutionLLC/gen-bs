@@ -27,7 +27,7 @@
         outline: none;
       }
       img {
-      max-width: 100%;
+      //max-width: 100%;
      }
     }
 
@@ -123,7 +123,7 @@
     // Links rendered as pills
     > a {
       border-radius: @nav-pills-border-radius;
-      padding: 8px 40px;
+      padding: 8px 30px;
     }
     + li {
       margin-left: 2px;
@@ -198,16 +198,16 @@
     margin-right: 0;
     border-radius: @border-radius-base;
   }
-
   > .active > a,
   > .active > a:hover,
   > .active > a:focus {
-    border: 1px solid @nav-tabs-justified-link-border-color;
+    border-top: 4px solid @nav-tabs-justified-link-border-color;
+    margin-top: -4px;
   }
 
   @media (min-width: @screen-sm-min) {
     > li > a {
-      border-bottom: 1px solid @nav-tabs-justified-link-border-color;
+      //border-bottom: 1px solid @nav-tabs-justified-link-border-color;
       border-radius: @border-radius-base @border-radius-base 0 0;
     }
     > .active > a,
@@ -252,15 +252,16 @@
 }
 .modal-header  { 
   .nav-tabs {
-    margin:-5px 15px;
+    //margin:-5px 15px;
     }
   } 
 .modal {
   .nav-tabs { 
-   margin:-(@modal-inner-padding + 1) -(@modal-inner-padding) 0;
+   //margin:-(@modal-inner-padding + 1) -(@modal-inner-padding) 0;
    
- + .tab-content { 
-        margin:0 -(@modal-inner-padding) -(@modal-inner-padding);
+ + .tab-content {
+   margin: 0; 
+        //margin:0 -(@modal-inner-padding) -(@modal-inner-padding);
     .tab-pane {
     background: #fff; 
     padding:@modal-inner-padding;
@@ -336,6 +337,20 @@
   > li:first-child { 
     > a { 
       
+    }
+  }
+}
+
+.tab-analyze-types { 
+  .grid-toolbar { 
+    .btn-group {
+      position: absolute;
+    top: 6px;
+    width: 130px;
+    white-space: nowrap;
+    .btn-link { 
+      float: left;
+     }
     }
   }
 }
