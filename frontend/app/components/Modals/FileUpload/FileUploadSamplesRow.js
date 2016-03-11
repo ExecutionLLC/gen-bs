@@ -31,7 +31,9 @@ export default class FileUploadSamplesRow extends Component {
             <a onClick={() => this.props.onSelectSample()} className="btn btn-default btn-choose" role="button">
               <span data-localize="samples.settings.select.title">Select for analysis</span>
             </a>
-            <a onClick={e => this.clickShowValues(e)} className="btn btn-default collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            <a onClick={e => this.clickShowValues(e)} className="btn btn-default collapsed" role="button"
+                  data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false"
+                  aria-controls="collapseOne">
               <i className="fa fa-pencil"></i>
             </a>
           </div>
