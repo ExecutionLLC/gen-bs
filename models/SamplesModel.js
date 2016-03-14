@@ -196,11 +196,11 @@ class SamplesModel extends SecureModelBase {
 
     _add(userId, languId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._addInTransaction(userId, languId, sample, shouldGenerateId, trx, callback);
+            this._addInTransaction(userId, sample, shouldGenerateId, trx, callback);
         }, callback);
     }
 
-    _addInTransaction(userId, languId, sample, shouldGenerateId, trx, callback) {
+    _addInTransaction(userId, sample, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
                 const dataToInsert = this._createDataToInsert(userId, sample, shouldGenerateId);
