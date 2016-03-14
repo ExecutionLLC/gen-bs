@@ -427,6 +427,7 @@ table {
          td { 
           font-size: @font-size-small;
           width: 120px;
+           max-width: 120px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -437,9 +438,11 @@ table {
            }
           &:first-child  {
              width: 90px;
+              max-width: 90px;
              text-align: right;
              > div { 
                width: 88px; 
+                max-width: 88px;
             }
             
              label { 
@@ -457,8 +460,10 @@ table {
            }
           &.comment {
           width: 160px;
+           max-width: 160px;
           > div { 
              width: 158px; 
+              max-width:  158px;
            }
         }
       }
