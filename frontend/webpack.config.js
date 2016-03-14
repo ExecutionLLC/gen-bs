@@ -21,7 +21,7 @@ console.log('-> API port: ', API_PORT);
 
 module.exports = {
 
-  devtool: "#eval",
+  devtool: "source-map",
 
   entry: [
     'webpack/hot/dev-server',
