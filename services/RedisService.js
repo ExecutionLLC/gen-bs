@@ -8,7 +8,7 @@ const ServiceBase = require('./ServiceBase');
 const EventEmitter = require('../utils/EventProxy');
 
 const EVENTS = {
-    dataReceived: 'dataReceived'
+    onRedisDataReceived: 'onRedisDataReceived'
 };
 
 class RedisService extends ServiceBase {
@@ -28,6 +28,10 @@ class RedisService extends ServiceBase {
 
     off(eventName, callback) {
         this.eventEmitter.off(eventName, callback);
+    }
+
+    getSearchKeyFieldName() {
+        return 'search_key';
     }
 
     fetch(redisParams, callback) {
@@ -51,13 +55,14 @@ class RedisService extends ServiceBase {
             (dataWithUser, callback) => {
                 this._convertFields(dataWithUser.rawData, dataWithUser.user, redisParams.sampleId, callback);
             },
-            (data, callback) => {
-                this._emitDataReceivedEvent(redisParams.sessionId, redisParams.operationId, redisParams.sampleId, redisParams.offset, redisParams.limit, data, callback);
+            (fieldIdToValueArray, callback) => {
+                this._emitDataReceivedEvent(redisParams.sessionId, redisParams.operationId, redisParams.sampleId,
+                    redisParams.offset, redisParams.limit, fieldIdToValueArray, callback);
             }
         ], callback);
     }
 
-    _emitDataReceivedEvent(sessionId, operationId, sampleId, offset, limit, data, callback) {
+    _emitDataReceivedEvent(sessionId, operationId, sampleId, offset, limit, fieldIdToValueArray, callback) {
         const reply = {
             sessionId,
             operationId,
@@ -65,12 +70,12 @@ class RedisService extends ServiceBase {
                 sampleId,
                 offset,
                 limit,
-                data
+                fieldIdToValueArray
             }
         };
 
         // Send data to both event listeners and callback.
-        this.eventEmitter.emit(EVENTS.dataReceived, reply);
+        this.eventEmitter.emit(EVENTS.onRedisDataReceived, reply);
         callback(null, reply);
     }
 
@@ -157,7 +162,7 @@ class RedisService extends ServiceBase {
     /**
      * Converts fields names into field ids.
      * */
-    _convertFields(rawData, user, sampleId, callback) {
+    _convertFields(rawRedisRows, user, sampleId, callback) {
         async.waterfall([
             (callback) => {
                 this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fields) => {
@@ -180,7 +185,7 @@ class RedisService extends ServiceBase {
                 callback(null, fieldNameToFieldHash);
             },
             (fieldNameToFieldHash, callback) => {
-                const mappedData = _.map(rawData, (rowObject) => {
+                const fieldIdToValueArray = _.map(rawRedisRows, (rowObject) => {
                     const fieldIdToValueObject = {};
                     const fieldNames = _.keys(rowObject);
                     _.each(fieldNames, fieldName => {
@@ -188,7 +193,7 @@ class RedisService extends ServiceBase {
                         const fieldValue = this._mapFieldValue(rowObject[fieldName]);
 
                         // Keep the search key and transfer it to the client as is.
-                        if (fieldName === 'search_key') {
+                        if (fieldName === this.getSearchKeyFieldName()) {
                             fieldIdToValueObject[fieldName] = fieldValue;
                         } else if (field) {
                             fieldIdToValueObject[field.id] = fieldValue;
@@ -198,7 +203,7 @@ class RedisService extends ServiceBase {
                     });
                     return fieldIdToValueObject;
                 });
-                callback(null, mappedData);
+                callback(null, fieldIdToValueArray);
             }
         ], callback);
     }

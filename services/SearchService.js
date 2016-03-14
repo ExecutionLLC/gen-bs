@@ -4,10 +4,33 @@ const _ = require('lodash');
 const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
+const EventProxy = require('../utils/EventProxy');
+
+const EVENTS = {
+    onDataReceived: 'onDataReceived'
+};
 
 class SearchService extends ServiceBase {
-    constructor(services) {
-        super(services);
+    constructor(services, models) {
+        super(services, models);
+
+        this._onRedisDataReceived = this._onRedisDataReceived.bind(this);
+
+        this.eventEmitter = new EventProxy(EVENTS);
+        this.searchKeyFieldName = this.services.redis.getSearchKeyFieldName();
+        this._subscribeToRedisEvents();
+    }
+
+    registeredEvents() {
+        return EVENTS;
+    }
+
+    on(eventName, callback) {
+        this.eventEmitter.on(eventName, callback);
+    }
+
+    off(eventName, callback) {
+        this.eventEmitter.off(eventName, callback);
     }
 
     sendSearchRequest(user, sessionId, languId, sampleId, viewId, filterId, limit, offset, callback) {
@@ -88,7 +111,115 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
+    _subscribeToRedisEvents() {
+        const redisEvents = this.services.redis.registeredEvents();
+        this.services.redis.on(redisEvents.onRedisDataReceived, this._onRedisDataReceived.bind(this));
+    }
+
+    _onRedisDataReceived(replyInfo) {
+        const fieldIdToValueArray = replyInfo.result.fieldIdToValueArray;
+        const sessionId = replyInfo.sessionId;
+
+        async.waterfall([
+            (callback) =>
+                this.services.sessions.findSessionUserId(
+                    sessionId,
+                    (error, userId) => callback(error, userId)
+                ),
+            // TODO: Store languId from request in the session to use here.
+            (userId, callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
+            (user, callback) => this._loadRowsComments(user.id, user.language, fieldIdToValueArray, callback),
+            (searchKeyToCommentsArrayHash, callback) => {
+                // Transform fields to the client representation.
+                const rows = _.map(fieldIdToValueArray, fieldIdToValueHash => {
+                    const fieldValueObjects = _(fieldIdToValueHash)
+                        .keys()
+                        .filter(key => key != this.searchKeyFieldName)
+                        .map(fieldId => {
+                            return {
+                                fieldId,
+                                value: fieldIdToValueHash[fieldId]
+                            }
+                        })
+                        .value();
+                    const searchKey = fieldIdToValueHash[this.searchKeyFieldName];
+                    const comments = _.map(searchKeyToCommentsArrayHash[searchKey], comment => {
+                        return {
+                            id: comment.id,
+                            comment: comment.comment
+                        };
+                    });
+
+                    return {
+                        searchKey,
+                        comments,
+                        fields: fieldValueObjects
+                    };
+                });
+                callback(null, rows);
+            }
+        ], (error, convertedRows) => this._emitDataReceivedEvent(error, replyInfo, convertedRows));
+    }
+
+    _emitDataReceivedEvent(error, redisReply, convertedRows) {
+        const sessionId = redisReply.sessionId;
+        const operationId = redisReply.operationId;
+        const sampleId = redisReply.result.sampleId;
+        if (error) {
+            this.eventEmitter.emit(EVENTS.onDataReceived, {
+                sessionId,
+                operationId,
+                result: {
+                    sampleId,
+                    error
+                }
+            });
+        } else {
+            this.eventEmitter.emit(EVENTS.onDataReceived, {
+                sessionId,
+                operationId,
+                result: {
+                    sampleId,
+                    limit: redisReply.result.limit,
+                    offset: redisReply.result.offset,
+                    data: convertedRows
+                }
+            });
+        }
+    }
+
+    /**
+     * Loads comments for all rows into hash[searchKey] = commentsArray object.
+     *
+     * @param userId Id of the user results are for.
+     * @param languId Language id.
+     * @param redisRows Array of hash[fieldId] = fieldValue objects.
+     * @param callback (error, hash[searchKey] = commentsArray)
+     * */
+    _loadRowsComments(userId, languId, redisRows, callback) {
+        // Extract search keys from all rows.
+        const searchKeys = _.map(redisRows, row => row[this.searchKeyFieldName]);
+
+        async.waterfall([
+            // Load comments for all search keys.
+            (callback) => this.models.comments.findAllBySearchKeys(userId, languId, searchKeys, callback),
+
+            // Group comments by search key.
+            (comments, callback) => {
+                const searchKeyToCommentHash = _.reduce(comments, (result, comment) => {
+                    const searchKey = comment.searchKey;
+                    if (!result[searchKey]) {
+                        result[searchKey] = [];
+                    }
+                    result[searchKey].push(comment);
+                }, {});
+                callback(null, searchKeyToCommentHash);
+            }
+        ], callback);
+    }
+
+    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
+                                          fieldSearchValues, sortValues, limit, offset, callback) {
         async.parallel({
             fieldSearchValues: (callback) => {
                 this._createAppServerFieldSearchValues(fieldSearchValues, callback);

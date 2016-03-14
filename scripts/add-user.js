@@ -26,7 +26,7 @@ if (args.name && args.lastName && args.speciality
         });
 } else {
     console.error('Usage: -- --name "UserFirstName" --lastName "UserLastName" --speciality "JobName" '
-        + '--defaultLanguage "en" --numberPaidSamples N');
+        + '--defaultLanguage "en" --numberPaidSamples N --email "email@gmail.com"');
     console.error('Note the "--" before all params, it is required.');
     process.exit(1);
 }

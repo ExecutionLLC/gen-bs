@@ -339,6 +339,8 @@ class DatabaseCreator {
                 // Field is needed to fetch comments. The comment is currently assigned to the search key,
                 // which can be the same for different samples. Comments should be fetched by that search key.
                 table.bigInteger('search_key');
+                table.boolean('is_deleted')
+                    .defaultTo(false);
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');

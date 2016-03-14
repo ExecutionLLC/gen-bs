@@ -91,6 +91,10 @@ class Urls {
         return new CollectionUrls('/samples', this.host, this.port);
     }
 
+    commentsUrls() {
+        return new CollectionUrls('/comments', this.host, this.port);
+    }
+
     _constructApiUrl(subUrl) {
         return _constructApiUrl(subUrl, this.host, this.port);
     }
