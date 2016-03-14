@@ -41,7 +41,7 @@ function receiveSession(json, isDemo) {
 function _processLoginData(dispatch, sessionId, isDemo) {
 
   var conn = new WebSocket(config.URLS.WS);
-  dispatch(receiveSession({session_id: sessionId}, isDemo))
+  dispatch(receiveSession({session_id: sessionId}, isDemo));
   dispatch(createWsConnection(conn));
   dispatch(subscribeToWs(sessionId));
   $.ajaxSetup({
@@ -71,7 +71,7 @@ function _checkSession(dispatch, cb, sessionId){
     });
   // TODO:
   // catch any error in the network call.
-  };
+  }
 
 function _newDemoSession(dispatch, cb) {
   console.log('newDemoSession')
@@ -87,7 +87,7 @@ function _newDemoSession(dispatch, cb) {
     });
   // TODO:
   // catch any error in the network call.
-};
+}
 
 
 function _checkCookieSessionAndLogin(dispatch, sessionId) {

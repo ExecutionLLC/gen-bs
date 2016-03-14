@@ -1,8 +1,8 @@
 
 //const HOST = window.location.hostname;
-const HOST = API_HOST
+const HOST = API_HOST;
 const PORT = API_PORT;
-console.log('API_PORT: ', API_PORT)
+console.log(`Using API ${HOST}:${PORT}`);
 
 const config = {
   HOST: HOST,
@@ -20,7 +20,7 @@ const config = {
     SAMPLES: `http://${HOST}:${PORT}/api/samples`,
     FILE_UPLOAD: `http://${HOST}:${PORT}/api/samples/upload`
   }
-}
+};
 
 export default config
 

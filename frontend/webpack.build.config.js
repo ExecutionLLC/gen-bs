@@ -3,12 +3,7 @@
 var webpack = require("webpack");
 var path = require("path");
 
-var node_dir = __dirname + '/node_modules';
-var vendor_dir = __dirname + '/vendor';
-var bundle_dir = __dirname + '/build';
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HandlebarsPlugin = require("handlebars-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var ENV = process.env;
 
@@ -26,12 +21,9 @@ module.exports = {
     'webpack/hot/dev-server',
     "./app/app.js"],
 
-
-
   output: {
     path: path.resolve(__dirname, '../public'),
     filename: 'genomics.js'
-
   },
   module: {
     loaders: [
@@ -89,8 +81,5 @@ module.exports = {
       API_PORT: JSON.stringify(API_PORT),
       API_HOST: JSON.stringify(API_HOST)
     })
-
   ]
-
-
 };
