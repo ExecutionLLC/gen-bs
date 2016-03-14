@@ -77,6 +77,10 @@ class ModelBase {
         }, {});
     }
 
+    _toCamelCase(itemOrItems, callback) {
+        callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemOrItems));
+    }
+
     _ensureAllItemsFound(itemsFound, itemIdsToFind, callback) {
         if (itemsFound && itemsFound.length === itemIdsToFind.length) {
             callback(null, itemsFound);
@@ -116,7 +120,7 @@ class ModelBase {
             .asCallback((error) => {
                 callback(error, dataToInsert.id);
             });
-    };
+    }
 
     _unsafeUpdate(itemId, dataToUpdate, trx, callback) {
         trx(this.baseTableName)

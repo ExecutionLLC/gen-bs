@@ -1,6 +1,7 @@
 'use strict';
 
 const Express = require('express');
+const async = require('async');
 
 const ControllerBase = require('./ControllerBase');
 
@@ -18,71 +19,67 @@ class UserEntityControllerBase extends ControllerBase {
     }
 
     find(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        const user = request.user;
-        const itemId = request.params.id;
-        this.theService.find(user, itemId, (error, item) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                const itemId = request.params.id;
+                this.theService.find(user, itemId, callback);
+            }
+        ], (error, item) => {
             this.sendErrorOrJson(response, error, item);
         });
     }
 
     findAll(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        const user = request.user;
-        this.theService.findAll(user, (error, items) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                this.theService.findAll(user, callback);
+            }
+        ], (error, items) => {
             this.sendErrorOrJson(response, error, items);
         });
     }
 
     update(request, response) {
-        if (!this.checkUserIsDefined(request)) {
-            return;
-        }
-
-        const user = request.user;
-        const itemId = request.params.id ;
-        const item = this.getRequestBody(request, response);
-        if (!item) {
-            return;
-        }
-
-        item.id = itemId;
-
-        this.theService.update(user, item, (error, updatedItem) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.getRequestBody(request, callback),
+            (item, callback) => {
+                const user = request.user;
+                item.id = request.params.id;
+                this.theService.update(user, item, callback);
+            }
+        ], (error, updatedItem) => {
             this.sendErrorOrJson(response, error, updatedItem);
         });
     }
 
     add(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        const languId = request.languId;
-        const user = request.user;
-        const item = this.getRequestBody(request, response);
-        if (!item) {
-            return;
-        }
-        this.theService.add(user, languId, item, (error, insertedItem) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.getRequestBody(request, callback),
+            (item, callback) => {
+                const languId = request.languId;
+                const user = request.user;
+                this.theService.add(user, languId, item, callback);
+            }
+        ], (error, insertedItem) => {
             this.sendErrorOrJson(response, error, insertedItem);
         });
     }
 
     remove(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        const user = request.user;
-        const itemId = request.params.id;
-        this.theService.remove(user, itemId, (error, item) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                const itemId = request.params.id;
+                this.theService.remove(user, itemId, callback);
+            }
+        ], (error, item) => {
             this.sendErrorOrJson(response, error, item);
         });
     }

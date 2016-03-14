@@ -43,34 +43,40 @@ class KnexWrapper {
         query(this.knex, callback);
     }
 
+    /**
+     * @param callback (error, transactionWrapper, knex)
+     * */
+    beginTransaction(callback) {
+        const trx = new KnexTransaction(this.knex, this.logger);
+        trx.openTransaction((error, knex) => {
+            callback(error, trx, knex);
+        });
+    }
+
+    /**
+     * @param trx Transaction as result of beginTransaction method.
+     * @param error Error, if any, occurred in transaction body.
+     * @param data Result of the transaction.
+     * @param callback (error, data)
+     * */
+    endTransaction(trx, error, data, callback) {
+        trx.complete(error, data, callback);
+    }
+
     transactionally(query, callback) {
         async.waterfall([
-            (cb) => {
+            (callback) => {
                 // 1. Create transaction
                 // 2. Open transaction
-                const trx = new KnexTransaction(this.knex, this.logger);
-                trx.openTransaction((error, knex) => {
-                    cb(error, {
-                        trx,
-                        knex
-                    });
-                });
+                this.beginTransaction(callback);
             },
-            (result, cb) => {
-                const trx = result.trx;
+            (trx, knex, callback) => {
                 // 3. Execute query with the transaction
-                query(result.knex, (error, data) => {
-                    cb(null, {
-                        trx,
-                        error,
-                        data
-                    });
-                });
+                query(knex, (error, data) => callback(null, trx, error, data));
             },
-            (result, cb) => {
+            (trx, error, data, callback) => {
                 // 4. Complete transaction
-                let trx = result.trx;
-                trx.complete(result.error, result.data, cb);
+                trx.complete(error, data, callback);
             }
         ], callback);
     }

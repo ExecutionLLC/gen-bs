@@ -1,13 +1,13 @@
 'use strict';
 
 const DataController = require('./DataController');
-const DemoDataController = require('./DemoDataController');
 
 const SampleController = require('./SampleController');
 const ViewController = require('./ViewController');
 const FilterController = require('./FilterController');
 const CommentsController = require('./CommentsController');
 const FieldsMetadataController = require('./FieldsMetadataController');
+const SavedFilesController = require('./SavedFilesController');
 
 const SearchController = require('./SearchController');
 
@@ -20,13 +20,13 @@ class ControllersFacade {
         this.logger = logger;
 
         this.dataController = new DataController(services);
-        this.demoDataController = new DemoDataController(services);
 
         this.commentsController = new CommentsController(services);
         this.samplesController = new SampleController(services);
         this.viewsController = new ViewController(services);
         this.filtersController = new FilterController(services);
         this.fieldsMetadataController = new FieldsMetadataController(services);
+        this.savedFilesController = new SavedFilesController(services);
 
         this.searchController = new SearchController(services);
         this.sessionsController = new SessionsController(services);

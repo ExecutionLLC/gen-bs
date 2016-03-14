@@ -14,6 +14,7 @@ class WSController extends ControllerBase {
     constructor(services) {
         super(services);
 
+        this.logger = this.services.logger;
         this.clients = [];
 
         this._subscribeAppServerReplyEvents();
@@ -72,14 +73,20 @@ class WSController extends ControllerBase {
         const sessionId = reply.sessionId;
         const client = this._findClientBySessionId(sessionId);
         if (client && client.ws) {
-            client.ws.send(JSON.stringify(reply), null, (error) => {
-                if (error) {
-                    console.error('Error sending client WS reply: ' + JSON.stringify(error));
-                }
-            });
+            this._sendClientMessage(client.ws, reply);
         } else {
             this.logger.warn('No client WS is found for session ' + sessionId);
         }
+    }
+
+    _sendClientMessage(clientWs, messageObject) {
+        const preparedMessage = ChangeCaseUtil.convertKeysToSnakeCase(messageObject);
+        const messageString = JSON.stringify(preparedMessage);
+        clientWs.send(messageString, null, (error) => {
+            if (error) {
+                this.logger.error('Error sending client WS reply: ' + error);
+            }
+        });
     }
 
     _findClientByWs(clientWs) {

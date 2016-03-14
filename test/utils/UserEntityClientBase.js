@@ -11,7 +11,7 @@ class UserEntityClientBase extends ClientBase {
 
     getAll(sessionId, callback) {
         RequestWrapper.get(this.collectionUrls.getAll(),
-            this._makeHeaders({sessionId}, null), null, null, callback);
+            this._makeHeaders({sessionId}), null, null, callback);
     }
 
     get(sessionId, itemId, callback) {

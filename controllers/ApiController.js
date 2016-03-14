@@ -14,7 +14,6 @@ class ApiController extends ControllerBase {
         super(services);
 
         this._initHeaders = this._initHeaders.bind(this);
-        this._handleErrors = this._handleErrors.bind(this);
     }
 
     /**
@@ -72,18 +71,6 @@ class ApiController extends ControllerBase {
         ], callback);
     }
 
-    _handleErrors(error, request, response, next) {
-        if (response.headersSent) {
-            return next(error);
-        }
-        const message = ErrorUtils.createErrorMessage(error);
-        this.logger.error(message);
-        if (error.stack) {
-            this.logger.debug(error.stack);
-        }
-        this.sendInternalError(response, 'Unexpected error occurred, see the server logs for details.');
-    }
-
     _initHeaders(request, response, next) {
         async.waterfall([
             (callback) => {
@@ -103,11 +90,11 @@ class ApiController extends ControllerBase {
         const viewsRouter = controllersFacade.viewsController.createRouter();
         const fieldsRouter = controllersFacade.fieldsMetadataController.createRouter();
         const filtersRouter = controllersFacade.filtersController.createRouter();
+        const savedFilesRouter = controllersFacade.savedFilesController.createRouter();
 
         const searchRouter = controllersFacade.searchController.createRouter();
         const sessionsRouter = controllersFacade.sessionsController.createRouter(controllerRelativePath + sessionsControllerPath);
 
-        const demoDataRouter = controllersFacade.demoDataController.createRouter();
         const dataRouter = controllersFacade.dataController.createRouter();
 
         const router = new Express();
@@ -116,7 +103,6 @@ class ApiController extends ControllerBase {
         router.use(this._initHeaders);
 
         // Initialize child routes
-        router.use('/demo/data', demoDataRouter);
         router.use('/data', dataRouter);
         router.use(sessionsControllerPath, sessionsRouter);
         router.use('/comments', commentsRouter);
@@ -125,9 +111,7 @@ class ApiController extends ControllerBase {
         router.use('/filters', filtersRouter);
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);
-
-        // Initialize error handling.
-        router.use(this._handleErrors);
+        router.use('/files', savedFilesRouter);
 
         return router;
     }

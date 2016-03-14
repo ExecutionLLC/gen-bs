@@ -7,6 +7,7 @@ const Config = require('../utils/Config');
 const Urls = require('./utils/Urls');
 const ClientBase = require('./utils/ClientBase');
 const SessionsClient = require('./utils/SessionsClient');
+const SamplesClient = require('./utils/SamplesClient');
 const DataClient = require('./utils/DataClient');
 const CollectionUtils = require('./utils/CollectionUtils');
 
@@ -63,6 +64,8 @@ describe('User Data', () => {
             const samples = body.samples;
             CollectionUtils.checkCollectionIsValid(samples, null, false);
 
+            _.each(samples, sample => SamplesClient.verifySampleFormat(sample, false));
+
             done();
         });
     });
@@ -86,6 +89,8 @@ describe('User Data', () => {
             // Only default samples.
             const samples = body.samples;
             CollectionUtils.checkCollectionIsValid(samples, null, true);
+
+            _.each(samples, sample => SamplesClient.verifySampleFormat(sample, false));
 
             done();
         });

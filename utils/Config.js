@@ -16,10 +16,19 @@ const SETTINGS = {
     // If enabled, demo users will have rights to create and delete filters and samples.
     // These filters and samples will be shared between them, as there is only one demo-user in the system.
     enableFullRightsForDemoUsers: ENV.GEN_WS_ENABLE_FULL_RIGHTS_FOR_DEMO_USERS || false,
-    upload: {
+    samplesUpload: {
         path: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/', // Temporary path for uploaded samples.
         maxSizeInBytes: ENV.GEN_WS_UPLOAD_MAX_SIZE || 25 * 1024 * 1024, // Max size of the uploaded sample.
         maxCount: ENV.GEN_WS_UPLOAD_MAX_COUNT || 5 // Max parallel uploads count.
+    },
+    savedFilesUpload: {
+        maxSizeInBytes: ENV.GEN_WS_SAVED_FILES_MAX_SIZE || 1024 * 1024,
+        maxCount: ENV.GEN_WS_SAVED_FILES_MAX_COUNT || 2,
+        path: ENV.GEN_WS_SAVED_FILES_PATH || __dirname + '/../uploads/',
+        amazonS3BucketName: ENV.GEN_WS_S3_BUCKET_NAME || 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b',
+        amazonS3AccessKeyId: ENV.GEN_WS_S3_ACCESS_KEY_ID || 'AKIAJKA73IEQR3ECGPVA',
+        amazonS3AccessKeySecret: ENV.GEN_WS_S3_ACCESS_KEY_SECRET || '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',
+        amazonS3RegionName: ENV.GEN_WS_S3_REGION_NAME || 'us-east-1'
     },
     applicationServer: {
         host: ENV.GEN_WS_AS_HOST || 'localhost',
