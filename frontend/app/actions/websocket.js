@@ -50,7 +50,7 @@ function progressMessageRouter(wsData) {
   return (dispatch, getState) => {
     dispatch(progressMessage(wsData))
 
-    if (getState().fileUpload.operationId === wsData.operationId) {
+    if (getState().fileUpload.operationId === wsData.operation_id) {
       dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status))
     }
   }
@@ -73,7 +73,7 @@ function receiveError(err) {
 function asErrorRouter(wsData) {
   return (dispatch, getState) => {
 
-    if (getState().fileUpload.operationId === wsData.operationId) {
+    if (getState().fileUpload.operationId === wsData.operation_id) {
       dispatch(fileUploadError(wsData.result.error.message))
     } else {
       dispatch(asError(wsData.result.error))
@@ -99,13 +99,13 @@ function receiveMessage(msg) {
   return (dispatch, getState) => {
     const wsData = JSON.parse(JSON.parse(msg));
     console.log('wsData.result', wsData.result);
-    console.log('wsData.operationId', wsData.operationId);
+    console.log('wsData.operation_id', wsData.operation_id);
     if (wsData.result) {
-      if (wsData.result.sampleId) {
+      if (wsData.result.sample_id) {
 
         dispatch(tableMessage(wsData))
 
-      } else if(wsData.result.progress) {
+      } else if (wsData.result.progress !== undefined) {
         dispatch(progressMessageRouter(wsData));
       } else if(wsData.result.error) {
         dispatch(asErrorRouter(wsData));
