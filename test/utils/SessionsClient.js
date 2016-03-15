@@ -40,10 +40,11 @@ class SessionsClient extends ClientBase {
         assert.equal(response.status, HttpStatus.OK);
 
         const sessionId = response.body.sessionId;
+        assert.ok(sessionId, 'Session is undefined.');
+
         if (checkSessionType) {
             const SessionTypes = ['USER', 'DEMO'];
             const sessionType = response.body.sessionType;
-            assert.ok(sessionId, 'Session is undefined.');
             assert.ok(_.includes(SessionTypes, sessionType));
 
             if (checkSessionIsNotDemo) {
