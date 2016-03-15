@@ -14,7 +14,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ENV = process.env;
 
 var API_HOST = ENV.GEN_FRONTEND_API_HOST || 'localhost';
-var API_PORT = ENV.GEN_FRONTEND_API_PORT || 8888;
+var API_PORT = ENV.GEN_FRONTEND_API_PORT || 5000;
 
 console.log('-> API host: ', API_HOST);
 console.log('-> API port: ', API_PORT);
@@ -38,7 +38,6 @@ module.exports = {
       //{ test: /\.hbs/, loader: "handlebars-template-loader" },
       //{test: /\.html$/, loader: "file?name=[name].[ext]"},
       {test: /\.json$/, loader: "file?name=[name].[ext]"},
-        
       //{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
       //{ test: /\.js?$/, exclude: /node_modules|bower_components/, loaders: ['react-hot', 'jsx', 'babel?stage=0'] },
       {
@@ -79,7 +78,6 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx','.css', 'less']
   },
-  
   //resolve: {
   //  alias: {
   //    'bootstrap-table': node_dir + '/bootstrap-table/dist/bootstrap-table.js',

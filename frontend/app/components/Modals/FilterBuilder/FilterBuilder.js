@@ -24,7 +24,7 @@ export default class FilterBuilder extends Component {
       filters: builderFilters,
       operators: filterOperators
     });
-    window.$(el).queryBuilder('setRulesFromMongo', filter.rules);
+    window.$(el).queryBuilder('setRulesFromGenomics', filter.rules);
     if(filter.type === 'standard') {
       window.$('input[name*="builder-basic_rule"],select[name*="builder-basic_rule"]').prop('disabled', true)
     }
@@ -44,7 +44,7 @@ export default class FilterBuilder extends Component {
       ];
 
     if(rulesRequested) {
-      rules = window.$(el).queryBuilder('getMongo');
+      rules = window.$(el).queryBuilder('getGenomics');
       console.log('rules',JSON.stringify(rules));
       dispatch(filterBuilderReceiveRules(rules))
     } else {
@@ -52,7 +52,7 @@ export default class FilterBuilder extends Component {
         filters: builderFilters,
         operators: filterOperators
       });
-      window.$(el).queryBuilder('setRulesFromMongo', filter.rules);
+      window.$(el).queryBuilder('setRulesFromGenomics', filter.rules);
       if(filter.type === 'standard') {
         window.$('input[name*="builder-basic_rule"],select[name*="builder-basic_rule"]').prop('disabled', true);
       }
