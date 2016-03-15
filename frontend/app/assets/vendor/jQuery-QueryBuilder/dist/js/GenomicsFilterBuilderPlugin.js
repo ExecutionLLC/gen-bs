@@ -1,4 +1,3 @@
-console.log('IOIOIOIOIOIOIOIOI!!!!!!!!!!!!!');
 // Register plugin
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
