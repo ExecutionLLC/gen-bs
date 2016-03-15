@@ -12,6 +12,10 @@ class SamplesService extends UserEntityServiceBase {
         super(services, models, models.samples);
     }
 
+    add(user, languId, sample, callback) {
+        callback(new Error('The method is not supported.'));
+    }
+
     /**
      * Sends sample to application server for processing.
      * */

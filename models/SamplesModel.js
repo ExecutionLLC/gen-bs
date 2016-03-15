@@ -92,7 +92,7 @@ class SamplesModel extends SecureModelBase {
                     });
 
                     // Add sample entries.
-                    this._addInTransaction(userId, languId, sampleWithValues, false, trx, callback);
+                    this._addInTransaction(userId, sampleWithValues, false, trx, callback);
                 }
             ], callback);
         }, callback);
@@ -292,8 +292,10 @@ class SamplesModel extends SecureModelBase {
     _findSamplesMetadata(trx, userId, sampleIdsOrNull, shouldExcludeDeletedEntries, callback) {
         let baseQuery = trx.select()
             .from(SampleTableNames.Metadata)
-            .where('creator', userId)
-            .orWhere('creator', null);
+            .where(function() {
+                this.where('creator', userId)
+                    .orWhere('creator', null)
+            });
         if (sampleIdsOrNull) {
             baseQuery = baseQuery.andWhere('id', 'in', sampleIdsOrNull);
         }

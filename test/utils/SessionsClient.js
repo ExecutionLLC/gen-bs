@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const assert = require('assert');
 const HttpStatus = require('http-status');
 
@@ -27,10 +28,29 @@ class SessionsClient extends ClientBase {
             this._makeHeaders({sessionId}), null, callback);
     }
 
-    static getSessionFromResponse(response) {
+    /**
+     * Gets session from the response.
+     *
+     * @param response Server response object got from RequestWrapper
+     * @param checkSessionType If true, session type will be checked.
+     * @param checkSessionIsNotDemo If this and <param>checkSessionType</param>
+     * are both true, will check the session type is not demo.
+     * */
+    static getSessionFromResponse(response, checkSessionType, checkSessionIsNotDemo) {
         assert.equal(response.status, HttpStatus.OK);
+
         const sessionId = response.body.sessionId;
-        assert.ok(sessionId, 'Session is undefined.');
+        if (checkSessionType) {
+            const SessionTypes = ['USER', 'DEMO'];
+            const sessionType = response.body.sessionType;
+            assert.ok(sessionId, 'Session is undefined.');
+            assert.ok(_.includes(SessionTypes, sessionType));
+
+            if (checkSessionIsNotDemo) {
+                assert.equal(sessionType, 'USER');
+            }
+        }
+
         return sessionId;
     }
 }
