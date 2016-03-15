@@ -174,6 +174,7 @@ class SamplesModel extends SecureModelBase {
             (samplesMetadata, sampleIdToVersionIdHash, callback) => {
                 const samplesWithVersion = _.map(samplesMetadata, sampleMetadata => {
                     const sampleWithVersion = _.cloneDeep(sampleMetadata);
+                    sampleWithVersion.originalId = sampleWithVersion.id;
                     sampleWithVersion.id = sampleIdToVersionIdHash[sampleMetadata.id];
                     return sampleWithVersion;
                 });
