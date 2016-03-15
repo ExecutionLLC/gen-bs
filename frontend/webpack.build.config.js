@@ -63,7 +63,6 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx','.css', 'less']
   },
-
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin("genomics.css", {
