@@ -339,6 +339,8 @@ class DatabaseCreator {
                 // Field is needed to fetch comments. The comment is currently assigned to the search key,
                 // which can be the same for different samples. Comments should be fetched by that search key.
                 table.bigInteger('search_key');
+                table.boolean('is_deleted')
+                    .defaultTo(false);
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');
@@ -419,15 +421,19 @@ class DatabaseCreator {
                     .primary();
                 table.uuid('vcf_file_sample_version_id')
                     .references('id')
-                    .inTable('vcf_file_sample_version');
+                    .inTable('vcf_file_sample_version')
+                    .notNullable();
                 table.uuid('view_id')
                     .references('id')
-                    .inTable('view');
+                    .inTable('view')
+                    .notNullable();
                 table.string('name', 50);
                 table.string('url', 2048);
                 table.integer('total_results');
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
+                table.boolean('is_deleted')
+                    .defaultTo(false);
                 table.uuid('creator')
                     .references('id')
                     .inTable('user');

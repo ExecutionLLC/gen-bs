@@ -1,6 +1,7 @@
 'use strict';
 
 const Express = require('express');
+const async = require('async');
 
 const ControllerBase = require('./ControllerBase');
 
@@ -10,23 +11,24 @@ class FieldsMetadataController extends ControllerBase {
     }
 
     getSampleMetadata(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-        const user = request.user;
-        const sampleId = request.params.sampleId;
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                const sampleId = request.params.sampleId;
 
-        this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fieldsMetadata) => {
+                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+            }
+        ], (error, fieldsMetadata) => {
             this.sendErrorOrJson(response, error, fieldsMetadata);
         });
     }
 
     getSourcesMetadata(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        this.services.fieldsMetadata.findSourcesMetadata((error, fieldsMetadata) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
+        ], (error, fieldsMetadata) => {
             this.sendErrorOrJson(response, error, fieldsMetadata);
         });
     }

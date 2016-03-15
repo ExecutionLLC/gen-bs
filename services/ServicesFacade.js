@@ -5,16 +5,18 @@ const KeywordsService = require('./KeywordsService');
 const UsersService = require('./UsersService');
 const ViewsService = require('./ViewsService');
 const FiltersService = require('./FiltersService');
+const CommentsService = require('./CommentsService');
 const SamplesService = require('./SamplesService');
-const RedisService = require('./RedisService');
+const RedisService = require('./external/RedisService');
+const AmazonS3Service = require('./external/AmazonS3Service');
 const SessionService = require('./SessionService');
 const OperationService = require('./operations/OperationsService');
 const FieldsMetadataService = require('./FieldsMetadataService');
-const ApplicationServerService = require('./ApplicationServerService');
-const ApplicationServerReplyService = require('./ApplicationServerReplyService');
+const ApplicationServerService = require('./external/ApplicationServerService');
+const ApplicationServerReplyService = require('./external/ApplicationServerReplyService');
 const SearchService = require('./SearchService');
-const TokenService = require('./TokenService');
 const SchedulerService = require('./tasks/SchedulerService');
+const SavedFilesService = require('./SavedFilesService');
 
 class ServiceFacade {
     constructor(config, logger, models) {
@@ -26,8 +28,10 @@ class ServiceFacade {
         this.views = new ViewsService(this, models);
         this.filters = new FiltersService(this, models);
         this.users = new UsersService(this, models);
+        this.comments = new CommentsService(this, models);
         this.samples = new SamplesService(this, models);
         this.fieldsMetadata = new FieldsMetadataService(this, models);
+        this.savedFiles = new SavedFilesService(this, models);
 
         this.sessions = new SessionService(this, models);
         this.operations = new OperationService(this, models);
@@ -35,9 +39,9 @@ class ServiceFacade {
         this.applicationServer = new ApplicationServerService(this, models);
         this.applicationServerReply = new ApplicationServerReplyService(this, models);
 
-        this.search = new SearchService(this, models);
         this.redis = new RedisService(this, models);
-        this.tokens = new TokenService(this, models);
+        this.amazonS3 = new AmazonS3Service(this, models);
+        this.search = new SearchService(this, models);
 
         this.scheduler = new SchedulerService(this, models);
         this.scheduler.start();

@@ -20,7 +20,7 @@ class ControllerBase {
     }
 
     sendInternalError(response, message) {
-        this.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, message);
+        ControllerBase.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 
     sendOk(response) {
@@ -37,11 +37,11 @@ class ControllerBase {
         }
     }
 
-    sendError(response, httpError, message) {
+    static sendError(response, httpError, message) {
+        console.error(message);
         if (message && typeof message !== 'string') {
             message = message.toString();
         }
-        console.error(message);
         response
             .status(httpError)
             .json({
@@ -60,15 +60,16 @@ class ControllerBase {
 
     /**
      * Reads body doing camel-case conversion. If body is empty, sends internal error.
+     *
      * */
-    getRequestBody(request, response) {
+    getRequestBody(request, callback) {
         const requestBody = request.body;
         if (_.isEmpty(requestBody)) {
-            this.sendInternalError(response, 'Request body is empty');
-            return null;
+            callback('Request body is empty');
+        } else {
+            const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(requestBody);
+            callback(null, camelCasedBody);
         }
-        const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(requestBody);
-        return camelCasedBody;
     }
 
     getSessionId(request) {
@@ -79,12 +80,12 @@ class ControllerBase {
         return request.get(this.services.config.headers.languageHeader);
     }
 
-    checkUserIsDefined(request, response) {
+    checkUserIsDefined(request, callback) {
         if (!request.user) {
-            this.sendInternalError(response, 'User is undefined.');
-            return false;
+            callback('User is undefined.');
+        } else {
+            callback(null);
         }
-        return true;
     }
 }
 

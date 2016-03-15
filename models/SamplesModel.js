@@ -16,49 +16,58 @@ const mappedColumns = [
     'values'
 ];
 
+const SampleTableNames = {
+    Metadata: 'vcf_file_sample',
+    Versions: 'vcf_file_sample_version',
+    Values: 'vcf_file_sample_value'
+};
+
 class SamplesModel extends SecureModelBase {
     constructor(models) {
-        super(models, 'vcf_file_sample', mappedColumns);
+        super(models, SampleTableNames.Metadata, mappedColumns);
     }
 
-    find(userId, sampleId, callback) {
-        async.waterfall([
-            (callback) => this._fetch(userId, sampleId, callback),
-            (sample, callback) => this._ensureItemNotDeleted(sample, callback),
-            (sample, callback) => this._mapFileSampleValues(sample, callback)
-        ], callback);
+    find(userId, sampleVersionId, callback) {
+       this.db.transactionally((trx, callback) => {
+           async.waterfall([
+               (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
+               (sampleId, callback) => this._findSamplesMetadata(trx, userId, [sampleId],
+                   true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleId)),
+               (samplesMetadata, sampleId, callback) => this._ensureAllItemsFound(samplesMetadata, [sampleId], callback),
+               (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback),
+               (samplesMetadata, callback) => callback(null, samplesMetadata[0]),
+               (sampleMetadata, callback) => this._findSampleVersionValues(trx, sampleVersionId,
+                   (error, values) => callback(error, sampleMetadata, values)),
+               (sampleMetadata, values, callback) => {
+                   const resultSample = _.cloneDeep(sampleMetadata);
+                   resultSample.values = values;
+                   callback(null, resultSample);
+               }
+           ], (error, resultSample) => {
+               callback(error, resultSample);
+           });
+       }, callback);
     }
 
     findAll(userId, callback) {
-        async.waterfall([
-            (callback) => this._fetchSamplesByUserId(userId, callback),
-            (samples, callback) => this._mapSamples(samples, callback)
-        ], callback);
+        // We need only metadata here, but the actual sample id should be replaced with the latest version id.
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                // Find samples metadata.
+                (callback) => this._findSamplesMetadata(trx, userId, null, true, callback),
+                (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback)
+            ], callback);
+        }, callback);
     }
 
-    findMany(userId, sampleIds, callback) {
-        async.waterfall([
-            (callback) => this._fetchSamplesByIds(sampleIds, callback),
-            (samples, callback) => this._ensureAllItemsFound(samples, sampleIds, callback),
-            (samples, callback) => async.map(samples, (sample, callback) => {
-                this._ensureItemNotDeleted(sample, callback);
-            }, callback),
-            (samples, callback) => async.map(samples, (sample, callback) => {
-                this._checkUserIsCorrect(userId, sample, callback);
-            }, callback),
-            (samples, callback) => this._mapSamples(samples, callback)
-        ], callback);
-    }
-
-    addSampleWithMetadata(userId, languId, sample, fieldsMetadata, callback) {
+    addSampleWithFields(userId, languId, sample, fieldsMetadata, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
-                (callback) => {
+                (callback) =>
                     this.models.fields.addMissingFields(languId, fieldsMetadata, trx, (error, fieldsWithIds) => {
                         callback(error, fieldsWithIds);
-                    });
-                },
+                    }),
                 // Add editable fields to the field list.
                 (fieldsWithIds, callback) => {
                     this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
@@ -94,15 +103,17 @@ class SamplesModel extends SecureModelBase {
      * if sample is not yet marked as analyzed.
      *
      * @param userId Id of the user doing request.
-     * @param sampleId Id of the sample in request.
+     * @param sampleVersionId Id of the sample version in request.
      * @param callback (error, isSampleMarkedAsAnalyzed)
      * */
-    makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {
+    makeSampleIsAnalyzedIfNeeded(userId, sampleVersionId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => {
-                    this._fetch(userId, sampleId, callback);
-                },
+                (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
+                (sampleId, callback) => this._findSamplesMetadata(trx, userId, [sampleId], true,
+                    (error, samplesMetadata) => callback(error, sampleId, samplesMetadata)),
+                (sampleId, samplesMetadata, callback) => this._ensureAllItemsFound(samplesMetadata, [sampleId], callback),
+                (samplesMetadata, callback) => callback(null, samplesMetadata[0]),
                 (sample, callback) => {
                     const isAnalyzed = sample.isAnalyzed || false;
                     if (!isAnalyzed) {
@@ -125,6 +136,52 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
+    update(userId, sampleVersionId, sampleToUpdate, callback) {
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._ensureVersionIsLatest(trx, sampleVersionId, callback),
+                (callback) => this._findSampleIdByVersionId(trx, sampleVersionId),
+                (callback) => {
+                    const dataToUpdate = {
+                        fileName: sampleToUpdate.fileName
+                    };
+                    this._unsafeUpdate(sample.id, dataToUpdate, trx, callback);
+                },
+                (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
+                (versionId, callback) => this._addFileSampleValues(trx, versionId, sampleToUpdate.values,
+                    (error) => callback(error, versionId))
+            ], callback);
+        }, callback);
+    }
+
+    _replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback) {
+        async.waterfall([
+            // Find last versions for each sample.
+            (callback) => {
+                const sampleIds = _.map(samplesMetadata, sampleMetadata => sampleMetadata.id);
+                this._findLastVersionIdsBySampleIds(trx, sampleIds,
+                    (error, versions) => callback(error, samplesMetadata, versions));
+            },
+            // Create sampleId -> versionId hash.
+            (samplesMetadata, versions, callback) => {
+                const sampleIdToVersionIdHash = _.reduce(versions, (result, version) => {
+                    result[version.sampleId] = version.versionId;
+                    return result;
+                }, {});
+                callback(null, samplesMetadata, sampleIdToVersionIdHash);
+            },
+            // Replace sample id with id of the last version.
+            (samplesMetadata, sampleIdToVersionIdHash, callback) => {
+                const samplesWithVersion = _.map(samplesMetadata, sampleMetadata => {
+                    const sampleWithVersion = _.cloneDeep(sampleMetadata);
+                    sampleWithVersion.id = sampleIdToVersionIdHash[sampleMetadata.id];
+                    return sampleWithVersion;
+                });
+                callback(null, samplesWithVersion);
+            }
+        ], callback);
+    }
+
     _setAnalyzed(sampleId, value, trx, callback) {
         trx(this.baseTableName)
             .where('id', sampleId)
@@ -137,14 +194,13 @@ class SamplesModel extends SecureModelBase {
             });
     }
 
-    // languId is used for interface compatibility
     _add(userId, languId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._addInTransaction(userId, languId, sample, shouldGenerateId, trx, callback);
+            this._addInTransaction(userId, sample, shouldGenerateId, trx, callback);
         }, callback);
     }
 
-    _addInTransaction(userId, languId, sample, shouldGenerateId, trx, callback) {
+    _addInTransaction(userId, sample, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
                 const dataToInsert = this._createDataToInsert(userId, sample, shouldGenerateId);
@@ -159,42 +215,9 @@ class SamplesModel extends SecureModelBase {
                     });
                 });
             },
-            (sampleObj, callback) => this._addFileSampleValues(sampleObj.versionId, sample.values, trx, (error) => {
+            (sampleObj, callback) => this._addFileSampleValues(trx, sampleObj.versionId, sample.values, (error) => {
                     callback(error, sampleObj.sampleId);
                 })
-        ], callback);
-    }
-
-    _update(userId, sample, sampleToUpdate, callback) {
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToUpdate = {
-                        fileName: sampleToUpdate.fileName,
-                        hash: sampleToUpdate.hash
-                    };
-                    this._unsafeUpdate(sample.id, dataToUpdate, trx, callback);
-                },
-                (sampleId, callback) => this._setAnalyzed(sampleId, sampleToUpdate.isAnalyzed || false, trx, callback),
-                (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
-                (versionId, callback) => this._addFileSampleValues(versionId, sampleToUpdate.values, trx, callback)
-            ], callback);
-        }, callback);
-    }
-
-    _mapSamples(samples, callback) {
-        async.map(samples, (sample, callback) => {
-            this._mapFileSampleValues(sample, callback);
-        }, callback);
-    }
-
-    _mapFileSampleValues(sample, callback) {
-        async.waterfall([
-            (callback) => this._fetchFileSampleValues(sample.id, callback),
-            (sampleValues, callback) => {
-                sample.values = sampleValues;
-                callback(null, this._mapColumns(sample));
-            }
         ], callback);
     }
 
@@ -203,7 +226,7 @@ class SamplesModel extends SecureModelBase {
             id: this._generateId(),
             vcfFileSampleId: sampleId
         };
-        this._unsafeInsert('vcf_file_sample_version', dataToInsert, trx, callback);
+        this._unsafeInsert(SampleTableNames.Versions, dataToInsert, trx, callback);
     }
 
     /**
@@ -214,90 +237,120 @@ class SamplesModel extends SecureModelBase {
      * @param trx Knex transaction object.
      * @param callback (error, resulting values list)
      * */
-    _addFileSampleValues(versionId, values, trx, callback) {
+    _addFileSampleValues(trx, versionId, values, callback) {
         async.map(values, (value, callback) => {
-            this._addFileSampleValue(versionId, value, trx, callback);
+            const dataToInsert = {
+                vcfFileSampleVersionId: versionId,
+                fieldId: value.fieldId,
+                values: value.values
+            };
+            this._unsafeInsert(SampleTableNames.Values, dataToInsert, trx, callback);
         }, callback);
     }
 
-    _addFileSampleValue(versionId, value, trx, callback) {
-        const dataToInsert = {
-            vcfFileSampleVersionId: versionId,
-            fieldId: value.fieldId,
-            values: value.values
-        };
-        this._unsafeInsert('vcf_file_sample_value', dataToInsert, trx, callback);
+    /**
+     * Ensures the specified version is the latest version of the sample it is related to.
+     *
+     * @param trx Knex transaction
+     * @param sampleVersionId Id of the sample version to check.
+     * @param callback (error)
+     * */
+    _ensureVersionIsLatest(trx, sampleVersionId, callback) {
+        // Find last version and compare with the specified.
+        async.waterfall([
+            (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
+            (sampleId, callback) => this._findLastVersionIdsBySampleIds(trx, [sampleId],
+                (error, lastVersions) => callback(error, _.first(lastVersions))),
+            (version, callback) => {
+                if (version.versionId === sampleVersionId) {
+                    callback(null);
+                } else {
+                    callback(new Error('Action cannot be performed on an old version of the sample.'));
+                }
+            }
+        ], callback);
     }
 
-    _fetchSamplesByUserId(userId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .where('creator', userId)
-                .orWhereNull('creator')
-                .andWhere('is_deleted', false)
-                .asCallback((error, samplesData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(samplesData));
-                    }
-                });
-        }, callback);
-    }
-
-    _fetchSamplesByIds(sampleIds, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .whereIn('id', sampleIds)
-                .asCallback((error, samplesData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(samplesData));
-                    }
-                });
-        }, callback);
-    }
-
-    _fetchLastSampleVersion(sampleId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from('vcf_file_sample_version')
-                .where('vcf_file_sample_id', sampleId)
+    _findSampleIdByVersionId(trx, sampleVersionId, callback) {
+        async.waterfall([
+            (callback) => trx.select('vcf_file_sample_id')
+                .from(SampleTableNames.Versions)
+                .where('id', sampleVersionId)
                 .orderBy('timestamp', 'desc')
                 .limit(1)
-                .asCallback((error, sampleData) => {
-                    if (error || !sampleData.length) {
-                        callback(error || new Error('Item not found: ' + sampleId));
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(sampleData[0]));
-                    }
-                });
-        }, callback);
+                .asCallback((error, results) => callback(error, results)),
+            (results, callback) => this._toCamelCase(results, callback)
+        ], (error, results) => {
+            if (error || !results || !results.length) {
+                callback(error || new Error('Sample is not found.'));
+            } else {
+                callback(null, results[0].vcfFileSampleId);
+            }
+        });
     }
 
-    _fetchMetadataForSampleVersion(versionId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from('vcf_file_sample_value')
-                .where('vcf_file_sample_version_id', versionId)
-                .asCallback((error, result) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(result));
-                    }
-                });
-        }, callback);
-    }
+    _findSamplesMetadata(trx, userId, sampleIdsOrNull, shouldExcludeDeletedEntries, callback) {
+        let baseQuery = trx.select()
+            .from(SampleTableNames.Metadata)
+            .where('creator', userId)
+            .orWhere('creator', null);
+        if (sampleIdsOrNull) {
+            baseQuery = baseQuery.andWhere('id', 'in', sampleIdsOrNull);
+        }
 
-    _fetchFileSampleValues(sampleId, callback) {
+        if (shouldExcludeDeletedEntries) {
+            baseQuery = baseQuery.andWhereNot('is_deleted', true);
+        }
+
         async.waterfall([
-            (callback) => this._fetchLastSampleVersion(sampleId, callback),
-            (sampleVersion, callback) => this._fetchMetadataForSampleVersion(sampleVersion.id, callback)
-        ], callback);
+            (callback) => baseQuery.asCallback((error, samplesMetadata) => callback(error, samplesMetadata)),
+            (samplesMetadata, callback) => callback(null, ChangeCaseUtil.convertKeysToCamelCase(samplesMetadata)),
+            (samplesMetadata, callback) => this._mapItems(samplesMetadata, callback)
+        ], (error, samplesMetadata) => {
+            callback(error, samplesMetadata);
+        });
+    }
+
+    _findSampleVersionValues(trx, sampleVersionId, callback) {
+        async.waterfall([
+            (callback) => trx.select('field_id', 'values')
+                .from(SampleTableNames.Values)
+                .where('vcf_file_sample_version_id', sampleVersionId)
+                .asCallback((error, rows) => callback(error, rows)),
+            (rows, callback) => this._toCamelCase(rows, callback)
+        ], (error, rows) => {
+            callback(error, rows);
+        });
+    }
+
+    /**
+     * Finds last version id for each sample id in array.
+     *
+     * @param trx Knex transaction.
+     * @param sampleIds Array of sample ids to search versions for.
+     * @param callback (error, versions). Each version is an object
+     * which has 'sampleId' and 'versionId' fields.
+     * */
+    _findLastVersionIdsBySampleIds(trx, sampleIds, callback) {
+        async.waterfall([
+            (callback) => trx.select('id', 'vcf_file_sample_id')
+                .from(SampleTableNames.Versions)
+                .where('vcf_file_sample_id', 'in', sampleIds)
+                .asCallback((error, versions) => callback(error, versions)),
+            (versions, callback) => this._ensureAllItemsFound(versions, sampleIds, callback),
+            (versions, callback) => this._toCamelCase(versions, callback),
+            (versions, callback) => {
+                const mappedVersions = _.map(versions, (version) => {
+                    return {
+                        sampleId: version.vcfFileSampleId,
+                        versionId: version.id
+                    };
+                });
+                callback(null, mappedVersions);
+            }
+        ], (error, versions) => {
+            callback(error, versions);
+        });
     }
 
     _createDataToInsert(userId, sample, shouldGenerateId) {

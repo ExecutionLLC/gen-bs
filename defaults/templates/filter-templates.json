@@ -13,7 +13,7 @@
             "value_type": "string"
           },
           "condition": {
-            "$ne": "A"
+            "$neq": "A"
           }
         },
         {
@@ -22,7 +22,9 @@
             "name": "FILTER",
             "value_type": "string"
           },
-          "condition": "PASS"
+          "condition": {
+	    "$eq": "PASS"
+	  }
         },
         {
           "$and": [
@@ -33,7 +35,7 @@
                 "value_type": "string"
               },
               "condition": {
-                "$ne": "ABC"
+                "$neq": "ABC"
               }
             }
           ]
@@ -55,7 +57,7 @@
             "value_type": "string"
           },
           "condition": {
-            "$ne": "A"
+            "$neq": "A"
           }
         },
         {
@@ -64,7 +66,9 @@
             "name": "FILTER",
             "value_type": "string"
           },
-          "condition": "PASS"
+          "condition": {
+	    "$eq": "PASS"
+	  }
         }
       ]
     }
