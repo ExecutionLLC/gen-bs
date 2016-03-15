@@ -122,7 +122,7 @@ class SamplesModel extends SecureModelBase {
                                 this._setAnalyzed(sample.id, true, trx, callback);
                             },
                             (sampleId, callback) => {
-                                this.models.user.reduceForOnePaidSample(userId, trx, callback);
+                                this.models.users.reduceForOnePaidSample(userId, trx, callback);
                             },
                             (paidSamplesCount, callback) => {
                                 callback(null, true);
