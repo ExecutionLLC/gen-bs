@@ -60,6 +60,15 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
+    /**
+     * Adds sample with specified params.
+     *
+     * @param userId The owner
+     * @param languId Language to use for texts.
+     * @param sample Sample metadata
+     * @param fieldsMetadata Fields metadata. New fields will be added, existing fields will be reused.
+     * @param callback (error, sampleVersionId)
+     * */
     addSampleWithFields(userId, languId, sample, fieldsMetadata, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
@@ -91,7 +100,7 @@ class SamplesModel extends SecureModelBase {
                         }
                     });
 
-                    // Add sample entries.
+                    // Add sample entries and return version id.
                     this._addInTransaction(userId, sampleWithValues, false, trx, callback);
                 }
             ], callback);
@@ -201,6 +210,13 @@ class SamplesModel extends SecureModelBase {
         }, callback);
     }
 
+    /**
+     * @param userId The owner
+     * @param sample Sample metadata to add.
+     * @param shouldGenerateId If true, id will be generated.
+     * @param trx Knex transaction
+     * @param callback (error, sampleVersionId)
+     * */
     _addInTransaction(userId, sample, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
@@ -208,16 +224,14 @@ class SamplesModel extends SecureModelBase {
                 this._insert(dataToInsert, trx, callback);
             },
             (sampleId, callback) => this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback),
-            (sampleId, callback) => {
-                this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
+            (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
                     callback(error, {
                         sampleId,
                         versionId
                     });
-                });
-            },
+                }),
             (sampleObj, callback) => this._addFileSampleValues(trx, sampleObj.versionId, sample.values, (error) => {
-                    callback(error, sampleObj.sampleId);
+                    callback(error, sampleObj.versionId);
                 })
         ], callback);
     }

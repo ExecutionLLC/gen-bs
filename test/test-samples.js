@@ -64,24 +64,34 @@ describe('Samples', function() {
     });
 
     it('should correctly upload sample', (done) => {
+        const sampleFileName = 'Sample_vcf4.1_custom_field.vcf.gz';
+        const sampleFileStream = fs.createReadStream(__dirname + '/mocks/' + sampleFileName);
         const wsState = {
             operationId: null
         };
 
         webSocketClient.onMessage((message) => {
             console.log('Upload Message: ', message);
+            assert.equal(message.operationId, wsState.operationId);
             const result = message.result;
             if (result && result.status === 'ready') {
                 assert.equal(result.progress, 100);
 
-                done();
+                const sampleId = result.sampleId;
+                assert.ok(sampleId);
+
+                samplesClient.get(sessionId, sampleId, (error, response) => {
+                    const sampleMetadata = ClientBase.readBodyWithCheck(error, response);
+                    SamplesClient.verifySampleFormat(sampleMetadata, true);
+                    assert.equal(sampleMetadata.fileName, sampleFileName);
+
+                    done();
+                });
             } else if (result.error) {
                 assert.fail(result.error);
             }
         });
 
-        const sampleFileName = 'Sample_vcf4.1_custom_field.vcf.gz';
-        const sampleFileStream = fs.createReadStream(__dirname + '/mocks/' + sampleFileName);
         samplesClient.add(sessionId, sampleFileName, sampleFileStream, (error, response) => {
             const body = ClientBase.readBodyWithCheck(error, response);
             wsState.operationId = body.operationId;
