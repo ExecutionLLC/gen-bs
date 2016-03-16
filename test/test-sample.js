@@ -16,6 +16,7 @@ const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
 const samplesClient = new SamplesClient(urls);
 
+const EditableFieldsTemplates = require('../defaults/templates/metadata/editable-metadata.json');
 const TestUser = require('./mocks/mock-users.json')[1];
 
 describe('One Sample', function() {
@@ -82,16 +83,61 @@ describe('One Sample', function() {
         });
     });
 
-    it('should get sample fields', (done) => {
-        samplesClient.get(sessionId, sampleId, (error, response) => {
-            const sample = ClientBase.readBodyWithCheck(error, response);
+    describe('Sample Fields', () => {
+        let sample = null;
+        let sampleFields = null;
+        let sampleEditableFields = null;
+        let sampleNonEditableFields = null;
 
-            samplesClient.getFields(sessionId, sampleId, (error, response) => {
-                const sampleFields = ClientBase.readBodyWithCheck(error, response);
+        before((done) => {
+            samplesClient.get(sessionId, sampleId, (error, response) => {
+                sample = ClientBase.readBodyWithCheck(error, response);
+                SamplesClient.verifySampleFormat(sample, true);
 
-                SamplesClient.verifySampleFields(sampleFields, sample);
-                done();
+                samplesClient.getFields(sessionId, sampleId, (error, response) => {
+                    sampleFields = ClientBase.readBodyWithCheck(error, response);
+                    SamplesClient.verifySampleFields(sampleFields, sample);
+
+                    const groups = _.groupBy(sampleFields, field => field.isEditable ? 'editable' : 'readonly');
+                    sampleEditableFields = groups['editable'];
+                    assert.ok(sampleEditableFields && sampleEditableFields.length === EditableFieldsTemplates.length);
+
+                    sampleNonEditableFields = groups['readonly'];
+                    assert.ok(sampleNonEditableFields && sampleNonEditableFields.length);
+
+                    done();
+                });
             });
+        });
+
+        it('should update editable fields', (done) => {
+            const genderField = _.filter(sampleEditableFields, field => field.name === 'GENDER');
+            const sampleToUpdate = _.cloneDeep(sample);
+            const genderFieldValue = _.filter(sampleToUpdate.values, value => value.fieldId === genderField.id);
+            assert.ok(genderFieldValue);
+
+            let genderValueToSet;
+            if (genderFieldValue.values && genderFieldValue.values === 'Female') {
+                 genderValueToSet = 'Male';
+            } else {
+                genderValueToSet = 'Female';
+            }
+
+            genderFieldValue.values = genderValueToSet;
+
+            samplesClient.update(sessionId, sampleToUpdate, (error, response) => {
+                const updatedSample = ClientBase.readBodyWithCheck(error, response);
+                SamplesClient.verifySampleFormat(updatedSample, true);
+
+                const updatedGenderFieldValue = _.filter(updatedSample.values, value.fieldId === genderField.id);
+                assert.equal(updatedGenderFieldValue.values, genderValueToSet);
+
+                done();
+            })
+        });
+
+        it('should fail to update non-editable fields', (done) => {
+            assert.fail('Not implemented');
         });
     });
 });

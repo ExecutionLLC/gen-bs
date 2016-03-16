@@ -22,7 +22,7 @@ class ClientBase {
 
     static readBodyWithCheck(error, response) {
         assert.ifError(error);
-        assert.equal(response.status, HttpStatus.OK);
+        assert.equal(response.status, HttpStatus.OK, JSON.stringify(response.body));
         return response.body;
     }
 

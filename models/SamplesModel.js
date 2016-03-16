@@ -36,7 +36,7 @@ class SamplesModel extends SecureModelBase {
                (samplesMetadata, sampleId, callback) => this._ensureAllItemsFound(samplesMetadata, [sampleId], callback),
                (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback),
                (samplesMetadata, callback) => callback(null, samplesMetadata[0]),
-               (sampleMetadata, callback) => this._findSampleVersionValues(trx, sampleVersionId,
+               (sampleMetadata, callback) => this._findValuesForVersion(trx, sampleVersionId,
                    (error, values) => callback(error, sampleMetadata, values)),
                (sampleMetadata, values, callback) => {
                    const resultSample = _.cloneDeep(sampleMetadata);
@@ -149,12 +149,12 @@ class SamplesModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._ensureVersionIsLatest(trx, sampleVersionId, callback),
-                (callback) => this._findSampleIdByVersionId(trx, sampleVersionId),
-                (callback) => {
+                (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
+                (sampleId, callback) => {
                     const dataToUpdate = {
                         fileName: sampleToUpdate.fileName
                     };
-                    this._unsafeUpdate(sample.id, dataToUpdate, trx, callback);
+                    this._unsafeUpdate(sampleId, dataToUpdate, trx, callback);
                 },
                 (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
                 (versionId, callback) => this._addFileSampleValues(trx, versionId, sampleToUpdate.values,
@@ -328,7 +328,7 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    _findSampleVersionValues(trx, sampleVersionId, callback) {
+    _findValuesForVersion(trx, sampleVersionId, callback) {
         async.waterfall([
             (callback) => trx.select('field_id', 'values')
                 .from(SampleTableNames.Values)
@@ -349,18 +349,27 @@ class SamplesModel extends SecureModelBase {
      * which has 'sampleId' and 'versionId' fields.
      * */
     _findLastVersionIdsBySampleIds(trx, sampleIds, callback) {
+        const sampleIdsInQuotes = _.map(sampleIds, id => '\'' + id + '\'');
         async.waterfall([
-            (callback) => trx.select('id', 'vcf_file_sample_id')
-                .from(SampleTableNames.Versions)
-                .where('vcf_file_sample_id', 'in', sampleIds)
-                .asCallback((error, versions) => callback(error, versions)),
+            (callback) => trx.raw(
+                'SELECT DISTINCT ON (vcf_file_sample_id)'
+                + ' vcf_file_sample_id'
+                + ', LAST_VALUE(id) OVER wnd AS last_version_id'
+                + ', LAST_VALUE(timestamp) OVER wnd AS last_version_timestamp'
+                + ' FROM vcf_file_sample_version'
+                + ' WHERE vcf_file_sample_id IN'
+                + ' (' + sampleIdsInQuotes.join(', ') + ')'
+                + ' WINDOW wnd AS'
+                + ' (PARTITION BY vcf_file_sample_id ORDER BY timestamp DESC)'
+            )
+                .asCallback((error, results) => callback(error, results && results.rows)),
             (versions, callback) => this._ensureAllItemsFound(versions, sampleIds, callback),
             (versions, callback) => this._toCamelCase(versions, callback),
             (versions, callback) => {
                 const mappedVersions = _.map(versions, (version) => {
                     return {
                         sampleId: version.vcfFileSampleId,
-                        versionId: version.id
+                        versionId: version.lastVersionId
                     };
                 });
                 callback(null, mappedVersions);
