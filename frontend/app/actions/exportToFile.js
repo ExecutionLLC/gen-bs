@@ -1,4 +1,3 @@
-
 export const EXPORT_TO_FILE = 'EXPORT_TO_FILE'
 
 
@@ -7,12 +6,12 @@ export const EXPORT_TO_FILE = 'EXPORT_TO_FILE'
  */
 
 export const fileTypes = {
-  NONE: null,
-  EXCEL: {type: 'xlsx', ext: 'xlsx' },
-  CSV: {type: 'csv', ext: 'csv' }, 
-  SQL: {type: 'sql', ext: 'sql' },
-  JSON: {type: 'json', ext: 'json' },
-  XML: {type: 'xml', ext: 'xml' }
+    NONE: null,
+    EXCEL: {type: 'xlsx', ext: 'xlsx'},
+    CSV: {type: 'csv', ext: 'csv'},
+    SQL: {type: 'sql', ext: 'sql'},
+    JSON: {type: 'json', ext: 'json'},
+    XML: {type: 'xml', ext: 'xml'}
 }
 
 /*
@@ -20,10 +19,10 @@ export const fileTypes = {
  */
 
 export function exportToFile(fileType, fileName) {
-  return {
-    type: EXPORT_TO_FILE,
-    fileType,
-    fileName
-  }
+    return {
+        type: EXPORT_TO_FILE,
+        fileType,
+        fileName
+    }
 }
 

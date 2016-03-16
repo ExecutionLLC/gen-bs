@@ -18,75 +18,75 @@ export const LOGIN_ERROR = 'LOGIN_ERROR';
  * action creators
  */
 function requestSession() {
-  return {
-    type: REQUEST_SESSION
-  }
+    return {
+        type: REQUEST_SESSION
+    }
 }
 
 function receiveSession(json, isDemo) {
-  const sessionId = json.session_id || null;
-  const isAuthenticated = (sessionId !== null);
+    const sessionId = json.session_id || null;
+    const isAuthenticated = (sessionId !== null);
 
-  document.cookie = `sessionId=${sessionId}`;
+    document.cookie = `sessionId=${sessionId}`;
 
-  return {
-    type: RECEIVE_SESSION,
-    sessionId: sessionId,
-    isAuthenticated: isAuthenticated,
-    isDemo: isDemo,
-    receivedAt: Date.now()
-  }
+    return {
+        type: RECEIVE_SESSION,
+        sessionId: sessionId,
+        isAuthenticated: isAuthenticated,
+        isDemo: isDemo,
+        receivedAt: Date.now()
+    }
 }
 
 function _processLoginData(dispatch, sessionId, isDemo) {
 
-  var conn = new WebSocket(config.URLS.WS);
-  dispatch(receiveSession({session_id: sessionId}, isDemo));
-  dispatch(createWsConnection(conn));
-  dispatch(subscribeToWs(sessionId));
-  $.ajaxSetup({
-    headers: {
-      'X-Session-Id': sessionId,
-      'X-Language-Id': 'en'
-    }
-  });
-  dispatch(fetchUserdata())
-  
+    var conn = new WebSocket(config.URLS.WS);
+    dispatch(receiveSession({session_id: sessionId}, isDemo));
+    dispatch(createWsConnection(conn));
+    dispatch(subscribeToWs(sessionId));
+    $.ajaxSetup({
+        headers: {
+            'X-Session-Id': sessionId,
+            'X-Language-Id': 'en'
+        }
+    });
+    dispatch(fetchUserdata())
+
 }
 
-function _checkSession(dispatch, cb, sessionId){
-  return $.ajax(config.URLS.SESSION, {
-      'type': 'PUT',
-      'headers': { "X-Session-Id": sessionId },
-      'processData': false,
-      'contentType': 'application/json'
-    })
-    .done(json => {
-      console.log('cookie session VALID', sessionId);
-      cb(dispatch, sessionId, json.session_type === 'DEMO')
-    })
-    .fail(json => {
-      console.log('cookie session INVALID', sessionId);
-      _newDemoSession(dispatch, _processLoginData)
-    });
-  // TODO:
-  // catch any error in the network call.
-  }
+function _checkSession(dispatch, cb, sessionId) {
+    return $.ajax(config.URLS.SESSION, {
+            'type': 'PUT',
+            'headers': {"X-Session-Id": sessionId},
+            'processData': false,
+            'contentType': 'application/json'
+        })
+        .done(json => {
+            console.log('cookie session VALID', sessionId);
+            cb(dispatch, sessionId, json.session_type === 'DEMO')
+        })
+        .fail(json => {
+            console.log('cookie session INVALID', sessionId);
+            _newDemoSession(dispatch, _processLoginData)
+        });
+    // TODO:
+    // catch any error in the network call.
+}
 
 function _newDemoSession(dispatch, cb) {
-  console.log('newDemoSession')
-  return $.ajax(config.URLS.SESSION, {
-      'data': JSON.stringify({user_name: 'valarie', password: 'password'}),
-      'type': 'POST',
-      'processData': false,
-      'contentType': 'application/json'
-    })
-    .then(json => {
-      console.log('GET new session from server', json.session_id)
-      cb(dispatch, json.session_id, true)
-    });
-  // TODO:
-  // catch any error in the network call.
+    console.log('newDemoSession')
+    return $.ajax(config.URLS.SESSION, {
+            'data': JSON.stringify({user_name: 'valarie', password: 'password'}),
+            'type': 'POST',
+            'processData': false,
+            'contentType': 'application/json'
+        })
+        .then(json => {
+            console.log('GET new session from server', json.session_id)
+            cb(dispatch, json.session_id, true)
+        });
+    // TODO:
+    // catch any error in the network call.
 }
 
 
@@ -103,53 +103,53 @@ function _checkCookieSessionAndLogin(dispatch, sessionId) {
 
 export function login() {
 
-  const queryString = location.search.slice(1).split('=')
-  const sessionId = getCookie('sessionId');
+    const queryString = location.search.slice(1).split('=')
+    const sessionId = getCookie('sessionId');
 
-  return dispatch => {
+    return dispatch => {
 
-    if (queryString[0] === 'sessionId') {
-      console.log('google auth success', queryString[1])
-      _processLoginData(dispatch, queryString[1], false)
-      history.pushState({}, null, `http://${location.host}`)
-    } else if (queryString[0] === 'error') {
-      console.log('google auth error', decodeURIComponent(queryString[1]))
-      dispatch(loginError(decodeURIComponent(queryString[1])))
-      _checkCookieSessionAndLogin(dispatch, sessionId)
-      history.pushState({}, null, `http://${location.host}`)
-    } else {
-      console.log('Not from google, maybe demo may be from cookie')
-      _checkCookieSessionAndLogin(dispatch, sessionId)
+        if (queryString[0] === 'sessionId') {
+            console.log('google auth success', queryString[1])
+            _processLoginData(dispatch, queryString[1], false)
+            history.pushState({}, null, `http://${location.host}`)
+        } else if (queryString[0] === 'error') {
+            console.log('google auth error', decodeURIComponent(queryString[1]))
+            dispatch(loginError(decodeURIComponent(queryString[1])))
+            _checkCookieSessionAndLogin(dispatch, sessionId)
+            history.pushState({}, null, `http://${location.host}`)
+        } else {
+            console.log('Not from google, maybe demo may be from cookie')
+            _checkCookieSessionAndLogin(dispatch, sessionId)
+        }
+
     }
-
-  }
 }
 
 function loginError(errorMessage) {
-  return {
-    type: LOGIN_ERROR,
-    errorMessage
-  }
+    return {
+        type: LOGIN_ERROR,
+        errorMessage
+    }
 }
 
 export function logout() {
-  const sessionId = getCookie('sessionId');
-  return dispatch => {
-    return $.ajax(config.URLS.SESSION, {
-      'type': 'DELETE',
-      'headers': { "X-Session-Id": sessionId },
-      'processData': false,
-      'contentType': 'application/json'
-    })
-    .done(json => {
-      console.log('session DELETE SUCCESS', sessionId);
-      //_newDemoSession(dispatch, _processLoginData)
-      location.replace(location.origin)
-    })
-    .fail(json => {
-      console.log('ERROR While DELETE session', sessionId);
-    });
-  }
+    const sessionId = getCookie('sessionId');
+    return dispatch => {
+        return $.ajax(config.URLS.SESSION, {
+                'type': 'DELETE',
+                'headers': {"X-Session-Id": sessionId},
+                'processData': false,
+                'contentType': 'application/json'
+            })
+            .done(json => {
+                console.log('session DELETE SUCCESS', sessionId);
+                //_newDemoSession(dispatch, _processLoginData)
+                location.replace(location.origin)
+            })
+            .fail(json => {
+                console.log('ERROR While DELETE session', sessionId);
+            });
+    }
 }
 
 
