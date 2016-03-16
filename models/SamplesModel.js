@@ -29,23 +29,7 @@ class SamplesModel extends SecureModelBase {
 
     find(userId, sampleVersionId, callback) {
        this.db.transactionally((trx, callback) => {
-           async.waterfall([
-               (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
-               (sampleId, callback) => this._findSamplesMetadata(trx, userId, [sampleId],
-                   true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleId)),
-               (samplesMetadata, sampleId, callback) => this._ensureAllItemsFound(samplesMetadata, [sampleId], callback),
-               (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback),
-               (samplesMetadata, callback) => callback(null, samplesMetadata[0]),
-               (sampleMetadata, callback) => this._findValuesForVersion(trx, sampleVersionId,
-                   (error, values) => callback(error, sampleMetadata, values)),
-               (sampleMetadata, values, callback) => {
-                   const resultSample = _.cloneDeep(sampleMetadata);
-                   resultSample.values = values;
-                   callback(null, resultSample);
-               }
-           ], (error, resultSample) => {
-               callback(error, resultSample);
-           });
+           this._findInTransaction(trx, userId, sampleVersionId, callback);
        }, callback);
     }
 
@@ -158,7 +142,8 @@ class SamplesModel extends SecureModelBase {
                 },
                 (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
                 (versionId, callback) => this._addFileSampleValues(trx, versionId, sampleToUpdate.values,
-                    (error) => callback(error, versionId))
+                    (error) => callback(error, versionId)),
+                (versionId, callback) => this._findInTransaction(trx, userId, versionId, callback)
             ], callback);
         }, callback);
     }
@@ -284,6 +269,26 @@ class SamplesModel extends SecureModelBase {
                 }
             }
         ], callback);
+    }
+
+    _findInTransaction(trx, userId, sampleVersionId, callback) {
+        async.waterfall([
+            (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
+            (sampleId, callback) => this._findSamplesMetadata(trx, userId, [sampleId],
+                true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleId)),
+            (samplesMetadata, sampleId, callback) => this._ensureAllItemsFound(samplesMetadata, [sampleId], callback),
+            (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback),
+            (samplesMetadata, callback) => callback(null, samplesMetadata[0]),
+            (sampleMetadata, callback) => this._findValuesForVersion(trx, sampleVersionId,
+                (error, values) => callback(error, sampleMetadata, values)),
+            (sampleMetadata, values, callback) => {
+                const resultSample = _.cloneDeep(sampleMetadata);
+                resultSample.values = values;
+                callback(null, resultSample);
+            }
+        ], (error, resultSample) => {
+            callback(error, resultSample);
+        });
     }
 
     _findSampleIdByVersionId(trx, sampleVersionId, callback) {

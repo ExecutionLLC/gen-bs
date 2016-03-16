@@ -111,9 +111,9 @@ describe('One Sample', function() {
         });
 
         it('should update editable fields', (done) => {
-            const genderField = _.filter(sampleEditableFields, field => field.name === 'GENDER');
+            const genderField = _.find(sampleEditableFields, field => field.name === 'GENDER');
             const sampleToUpdate = _.cloneDeep(sample);
-            const genderFieldValue = _.filter(sampleToUpdate.values, value => value.fieldId === genderField.id);
+            const genderFieldValue = _.find(sampleToUpdate.values, value => value.fieldId === genderField.id);
             assert.ok(genderFieldValue);
 
             let genderValueToSet;
@@ -129,7 +129,7 @@ describe('One Sample', function() {
                 const updatedSample = ClientBase.readBodyWithCheck(error, response);
                 SamplesClient.verifySampleFormat(updatedSample, true);
 
-                const updatedGenderFieldValue = _.filter(updatedSample.values, value.fieldId === genderField.id);
+                const updatedGenderFieldValue = _.find(updatedSample.values, value => value.fieldId === genderField.id);
                 assert.equal(updatedGenderFieldValue.values, genderValueToSet);
 
                 done();
