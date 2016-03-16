@@ -46,10 +46,10 @@ class App extends Component {
           <h2>Empty.</h2>
         }
         {samples.length > 0 &&
-            <div className="main-frame">
+            <div className="container-fluid">
 
-                <div className="main-width-wrapper">
-                    <div className="container-fluid" id="maintable">
+               
+                   
                         <NavbarMain />
                         <div className="collapse collapse-subnav" id="subnav">
                             <NavbarCreateQuery
@@ -58,15 +58,16 @@ class App extends Component {
                             />
                         </div>    
                         <VariantsTableReact {...this.props} />
-                    </div>
+                    
 
                     <div id="fav-message" className="hidden">
                         You can export these items to file
                     </div>
-                </div>
-
-            </div>
+                
+                    </div>
+            
         }
+     
         <ViewsModal 
           showModal={this.props.modalWindows.views.showModal}
           closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
@@ -79,8 +80,8 @@ class App extends Component {
           showModal={this.props.modalWindows.upload.showModal}
           closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
         />
-      </div>
-
+    
+        </div>
     )
   }
 }

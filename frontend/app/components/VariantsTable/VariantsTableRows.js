@@ -39,8 +39,8 @@ export default class VariantsTableRows extends Component {
   renderTableBody(rows, sortState, isFilteringOrSorting) {
     if (isFilteringOrSorting) {
       return (
-          <h2 className="text-center" style={{color: '#2363a1'}}>Loading...<i className="text-center fa fa-spinner fa-spin fa-5x"></i>
-          </h2>
+          <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+            </div>
       );
     } else {
       return _.map(rows, (row, index) => this.renderRow(row, index, sortState));
@@ -64,21 +64,26 @@ export default class VariantsTableRows extends Component {
 
     return (
         <tr key={rowIndex}>
-          <td className="row_checkbox"
+          <td className="btntd row_checkbox"
               key="row_checkbox">
-            <label className="checkbox">
+            <div><label className="checkbox hidden">
               <input type="checkbox" />
               <i></i>
             </label>
             <span>{rowIndex + 1}</span>
+            </div>
+            </td>
+            <td className="btntd">
+            <div>
             <button data-toggle="button"
-                    className="btn btn-link">
+                    className="btn btn-link reset-padding">
               <i className="i-star"></i>
             </button>
+            </div>
           </td>
           <td className="comment"
               key="comment">
-            {comments}
+            <div><a href="#" class="btn-link-default comment-link" data-type="textarea" data-pk="1" data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
           </td>
           {_.map(rowFields, (field) => this.renderFieldValue(field, sortState))}
         </tr>
@@ -95,8 +100,9 @@ export default class VariantsTableRows extends Component {
 
     return (
         <td className={sortedActiveClass}
-            key={fieldId}>
+            key={fieldId}><div>
           {field.value}
+          </div>
         </td>
     );
   }
@@ -107,8 +113,8 @@ export default class VariantsTableRows extends Component {
       return (
         <tr>
           <td colSpan="100">
-            <h2 className="text-center" style={{color: '#2363a1'}}>Loading...<i className="text-center fa fa-spinner fa-spin fa-3x"></i>
-            </h2>
+            <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+            </div>
           </td>
         </tr>
       );

@@ -9,9 +9,7 @@
          dt {
             font-weight: normal;
          }
-         > dd {
-           color: @text-muted;
-         }
+      
      .btn-link {
       > span { 
       color: @gray;
@@ -146,129 +144,30 @@
           }
        }
     }
-.card-list { 
-        list-style: none;
-        .panel {
-          border-radius: 0;
-          border-width: 1px 0 0 0;
-        }
-        .panel:first-child { 
-              border-top:none;
-            
-        }
-        .group-heading { 
-            padding: 0 @modal-inner-padding;
-            line-height: @line-height-computed*1.5;
-            text-align: center;
-            font-family: "Roboto-Light";
-            border-top: 1px solid @panel-default-border;
-            margin: 0;
-            font-style: 13px;
-            line-height: 28px;
-          } 
-        
-        .panel-heading { 
-     
-        .table-cell { 
-          padding: 5px;
-          color: @gray-light;
-          font-size: @font-size-small;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-           vertical-align: middle;
-          &:first-child {
-            padding-left: @modal-inner-padding;
-          }
-          &:last-child {
-            
-            padding:0 @modal-inner-padding 0 5px;
-            .btn { 
-             border: none;
 
-              &.active { 
-                background: @btn-primary-bg;
-                border-color: @btn-primary-border;
-                color: @btn-primary-color; 
-              } 
-            }
-           }
-        }
-          .btn-toggle {
-            font-size: @font-size-base;
-            font-weight: normal;
-            font-family: "Roboto-Medium";
-          }
-          
-         }
-        .panel-body { 
-          position: relative;
-          padding: 30px;
-         
-          
-        }
-        .panel-footer { 
-          text-align: right;
-          padding: 0  @modal-inner-padding;
-        
-          .btn-group {
-            display: none;
-          }
-        }
-        .btn-right { 
-          bottom: 11px;
-          padding: 8px 12px;
-          position: absolute;
-          right: 11px;
-          z-index: 1;
-           > .btn-edit {
-            
-             +.btn-group { 
-                display: none;
-             }
-           }
-          
-            }
-         dl {
-          .dl-horizontal();
-         margin-bottom: 8px;
-         dt {
-            font-weight: normal;
-             color: @gray-light;
-             width: 25%;
-         }
-         > dd {
-          margin-left: 25%;
-          padding-left: 20px;
-         }
-     
-         span.select2 {
-      width: 100%!important;
-      }
-         dd + dd { 
-      display: none;
-    }
-        }
-   
-       .panel.active { 
-         background: @component-active-bg;
-         color: desaturate(darken(@component-active-bg, 60%), 10%);
-         border-top-color: desaturate(darken(@component-active-bg, 10%), 10%);
-       * {
-         color: desaturate(darken(@component-active-bg, 60%), 10%);
-       }
+dl.editable {
+    .dl-horizontal();
+   margin-bottom: 8px;
+   dt {
+      font-weight: normal;
+       color: @gray-light;
+       width: 25%;
+   }
+   > dd {
+    margin-left: 25%;
+    padding-left: 20px;
+   }
 
-          &:after { 
-           .fa();
-            content: "\f00c"; 
-            position: absolute;
-            right: 10px;
-            bottom: 20px;
-          }
-        }
-       .panel.edit-mode { 
-         background: @default-max-light;
-         dl.editable { 
+   span.select2 {
+   width: 100%!important;
+  }
+   dd + dd { 
+     display: none;
+  }
+}
+
+.edit-mode {
+      dl.editable { 
      
            dd {
              display: none;
@@ -277,52 +176,70 @@
              }
            }
          }
-         .panel-footer { 
-           background: transparent;
-           > .btn {
-             display: none;
-             
-           }
-           .btn-group { 
-               display: inline-block;
-             }
-         }
-         .panel-heading {
-          background: transparent; 
-         }
-       }
-       .row.collected { 
-          &:after { 
-           .fa();
-             content: "\f005"; 
-            position: absolute;
-            right: 30px;
-            top: 15px;
-            color: @brand-warning;
-          }
+}
+.card-list { 
+  .flex-grid { 
+
+    > div { 
+        padding: @padding-large-vertical;
+       .panel { 
+        margin: 0 ;
+        height: 100%;
+        min-height: 200px;
+        .box-shadow(none);
+        &:before {
+          position: absolute;
+          left: 8px;
+          right: 8px;
+          bottom: 8px;
+          top:8px;
+          content: '';
+          display: block;
+          background-color: @panel-bg;
+          .box-shadow(@shadow-paper-1);
+           border-radius: @panel-border-radius;
         }
-       @media (max-width: 540px) { 
-         .row {
-           position: relative;
-           border-bottom: 2px solid #e5e5e5;
-           .btn-toggle {
-           visibility: visible;
-           }
-            .btn-group-vertical { 
-              .btn { 
-                visibility: visible;
-                 }
-                }
-            
-         
-         } 
-          li.collected { 
-          &:after {
-            top:60px;
-          }
-          }
        }
+       .panel:hover {
+         .box-shadow(none);
+         &:before{ 
+            .box-shadow(@panel-hover-shadow);
+         }
+       }
+       
+       .panel-footer { 
+         position: absolute;
+          bottom: 8px;
+          left: 8px;
+          right: 8px;
+      }      
+       .panel-body { 
+         display: flex;
+        flex-flow: row wrap;
+        margin-bottom: 52px;
+        position: relative;
+        .dl-horizontal { 
+          width: 100%;
+        }
+       }
+       .panel-heading { 
+         position: relative;
+       }
+       .panel-title { 
+        margin-right: 72px;
+        word-wrap: break-word;
+      }
+      .btn-select-file  {
+         position: absolute;
+         bottom: 8px;
+          left: 8px;
+          right: 8px;
+          top:8px;
+      }
     }
+  }
+} 
+
 
 
 .list-group-results { 
@@ -342,7 +259,7 @@
 
 .modal-body { 
   .card-list { 
-    margin: -@modal-inner-padding;
+    //margin: -@modal-inner-padding;
   }
 }
 

@@ -29,17 +29,31 @@
 }
 
 
-
 .well { 
-   background: rgba(255,255,255, .75);
- 
+   background: rgba(255,255,255, .35); 
 }
-.well-case {
-  border-left: solid 3px @brand-danger;
+
+.well-primary {
+  .well-variant(@brand-primary);
 }
-.well-control {
-  border-left: solid 3px @brand-success;
+
+.well-danger {
+  .well-variant(@brand-danger);
 }
+
+.well-success {
+  .well-variant(@brand-success);
+}
+
+.well-warning {
+  .well-variant(@brand-warning);
+}
+
+.well-variant(@border-color) {
+  border-left: solid 3px @border-color;
+}
+
+
 .well-case,
 .well-control {
   .btn-link { 
