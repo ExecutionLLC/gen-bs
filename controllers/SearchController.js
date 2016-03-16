@@ -1,7 +1,7 @@
 'use strict';
 
 const Express = require('express');
-const _ = require('lodash');
+const async = require('async');
 
 const ControllerBase = require('./ControllerBase');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
@@ -16,80 +16,69 @@ class SearchController extends ControllerBase {
     }
 
     analyze(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.getRequestBody(request, callback),
+            (body, callback) => {
+                const user = request.user;
+                const sessionId = request.sessionId;
+                const languId = request.languId;
 
-        const body = this.getRequestBody(request, response);
-        if (!body) {
-            return;
-        }
+                const sampleId = body.sampleId;
+                const viewId = body.viewId;
+                const filterId = body.filterId;
+                const limit = body.limit;
+                const offset = body.offset;
 
-        const user = request.user;
-        const sessionId = request.sessionId;
-        const languId = request.languId;
-
-        const sampleId = body.sampleId;
-        const viewId = body.viewId;
-        const filterId = body.filterId;
-        const limit = body.limit;
-        const offset = body.offset;
-
-        this.services.search
-            .sendSearchRequest(user, sessionId, languId, sampleId, viewId, filterId, limit, offset, (error, operationId) => {
-                this.sendErrorOrJson(response, error, {
-                    operationId
-                });
-            });
+                this.services.search
+                    .sendSearchRequest(user, sessionId, languId,
+                        sampleId, viewId, filterId, limit, offset, callback);
+            }
+        ], (error, operationId) => {
+            this.sendErrorOrJson(response, error, {operationId});
+        });
     }
 
     searchInResults(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
-
-        const user = request.user;
-        const operationId = request.params.operationId;
-        const sessionId = request.sessionId;
-        const body = this.getRequestBody(request, response);
-        if (!body) {
-            return;
-        }
-
-        const globalSearchValue = body.topSearch;
-        const fieldSearchValues = body.search;
-        const sortValues = body.sort;
-        const limit = body.limit;
-        const offset = body.offset;
-
-        this.services.search.searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues,
-                sortValues, limit, offset, (error, operationId) => {
-            this.sendErrorOrJson(response, error, {
-                operationId
-            });
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.getRequestBody(request, callback),
+            (body, callback) => {
+                const user = request.user;
+                const operationId = request.params.operationId;
+                const sessionId = request.sessionId;
+                const globalSearchValue = body.topSearch;
+                const fieldSearchValues = body.search;
+                const sortValues = body.sort;
+                const limit = body.limit;
+                const offset = body.offset;
+                this.services.search.searchInResults(user, sessionId, operationId,
+                    globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback);
+            }
+        ], (error, operationId) => {
+            this.sendErrorOrJson(response, error, {operationId});
         });
     }
 
     getResultsPage(request, response) {
-        if (!this.checkUserIsDefined(request, response)) {
-            return;
-        }
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => {
+                const user = request.user;
+                const operationId = request.params.operationId;
+                const sessionId = request.sessionId;
+                const limit = request.query.limit;
+                const offset = request.query.offset;
 
-        const user = request.user;
-        const operationId = request.params.operationId;
-        const sessionId = request.sessionId;
-        const limit = request.query.limit;
-        const offset = request.query.offset;
-
-        if (!limit || !offset) {
-            this.sendInternalError(response, new Error('Please set "limit" and "offset" query parameters.'));
-            return;
-        }
-
-        this.services.search.loadResultsPage(user, sessionId, operationId, limit, offset, (error) => {
-            this.sendErrorOrJson(response, error, {
-                operationId
-            });
+                if (!limit || !offset) {
+                    callback(new Error('Please set "limit" and "offset" query parameters.'));
+                } else {
+                    this.services.search.loadResultsPage(user, sessionId, operationId,
+                        limit, offset, (error) => callback(error, operationId));
+                }
+            }
+        ], (error, operationId) => {
+            this.sendErrorOrJson(response, error, {operationId});
         });
     }
 

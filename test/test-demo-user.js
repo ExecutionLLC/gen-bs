@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 const _ = require('lodash');
-const HttpStatus = require('http-status');
 const Uuid = require('node-uuid');
 
 const Config = require('../utils/Config');
@@ -14,6 +13,7 @@ const DataClient = require('./utils/DataClient');
 const FiltersClient = require('./utils/FiltersClient');
 const ViewsClient = require('./utils/ViewsClient');
 const SamplesClient = require('./utils/SamplesClient');
+const CollectionUtils = require('./utils/CollectionUtils');
 
 const DefaultFilters = require('../defaults/filters/default-filters.json');
 const DefaultViews = require('../defaults/views/default-views.json');
@@ -22,7 +22,6 @@ const languId = Config.defaultLanguId;
 
 const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
-const dataClient = new DataClient(urls);
 const viewsClient = new ViewsClient(urls);
 const filtersClient = new FiltersClient(urls);
 const samplesClient = new SamplesClient(urls);
@@ -34,21 +33,6 @@ const closeSessionWithCheck = (sessionId, done) => {
         assert.equal(closedSessionId, sessionId);
 
         done();
-    });
-};
-
-const checkDemoCollectionValid = (collection, expectedCollection) => {
-    assert.ok(!_.isEmpty(collection));
-    if (expectedCollection) {
-        assert.equal(collection.length, expectedCollection.length);
-    }
-    _.each(collection, item => {
-        if (expectedCollection) {
-            assert.ok(_.any(expectedCollection, expectedItem => expectedItem.id === item.id),
-                'Item with id ' + item.id + ' is not found in the expected collection.');
-        }
-        assert.ok(_.includes(['standard', 'advanced'], item.type),
-            'There should be no types except "standard" and "advanced", but got ' + item.type);
     });
 };
 
@@ -84,35 +68,11 @@ describe('Demo Users', () => {
             closeSessionWithCheck(sessionId, done);
         });
 
-        it('should get demo user data', (done) => {
-            dataClient.getUserData(sessionId, languId, (error, response) => {
-                const body = ClientBase.readBodyWithCheck(error, response);
-
-                // No session operations.
-                const operations = body.activeOperations;
-                assert.ok(_.isEmpty(operations), 'There should be no operations for the newly created demo session');
-
-                // Only default filters.
-                const filters = body.filters;
-                checkDemoCollectionValid(filters, DefaultFilters);
-
-                // Only default views.
-                const views = body.views;
-                checkDemoCollectionValid(views, DefaultViews);
-
-                // Only default samples.
-                const samples = body.samples;
-                checkDemoCollectionValid(samples, null);
-
-                done();
-            });
-        });
-
         it('should be able to get filters', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(filters);
-                checkDemoCollectionValid(filters, DefaultFilters);
+                CollectionUtils.checkCollectionIsValid(filters, DefaultFilters, true);
 
                 done();
             });
@@ -122,7 +82,7 @@ describe('Demo Users', () => {
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
-                checkDemoCollectionValid(views, DefaultViews);
+                CollectionUtils.checkCollectionIsValid(views, DefaultViews, true);
 
                 done();
             })
@@ -132,7 +92,7 @@ describe('Demo Users', () => {
             samplesClient.getAll(sessionId, (error, response) => {
                 const samples = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(samples);
-                checkDemoCollectionValid(samples, null);
+                CollectionUtils.checkCollectionIsValid(samples, null, true);
 
                 done();
             });
@@ -169,7 +129,7 @@ describe('Demo Users', () => {
         });
     });
 
-    describe('Parallel access', (done) => {
+    describe('Parallel access', () => {
         it('should be possible to create at least 50 demo user search sessions', (done) => {
             assert.fail('Not implemented');
         });

@@ -3,17 +3,12 @@
 var webpack = require("webpack");
 var path = require("path");
 
-var node_dir = __dirname + '/node_modules';
-var vendor_dir = __dirname + '/vendor';
-var bundle_dir = __dirname + '/build';
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HandlebarsPlugin = require("handlebars-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var ENV = process.env;
 
 var API_HOST = ENV.GEN_FRONTEND_API_HOST || 'localhost';
-var API_PORT = ENV.GEN_FRONTEND_API_PORT || 8888;
+var API_PORT = ENV.GEN_FRONTEND_API_PORT || 5000;
 
 console.log('-> API host: ', API_HOST);
 console.log('-> API port: ', API_PORT);
@@ -26,12 +21,9 @@ module.exports = {
     'webpack/hot/dev-server',
     "./app/app.js"],
 
-
-
   output: {
     path: path.resolve(__dirname, '../public'),
     filename: 'genomics.js'
-
   },
   module: {
     loaders: [
@@ -71,7 +63,6 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx','.css', 'less']
   },
-  
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin("genomics.css", {
@@ -89,8 +80,5 @@ module.exports = {
       API_PORT: JSON.stringify(API_PORT),
       API_HOST: JSON.stringify(API_HOST)
     })
-
   ]
-
-
 };

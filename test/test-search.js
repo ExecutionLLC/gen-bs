@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 const _ = require('lodash');
-const HttpStatus = require('http-status');
 
 const ClientBase = require('./utils/ClientBase');
 const SessionsClient = require('./utils/SessionsClient');
@@ -20,7 +19,6 @@ const filtersClient = new FiltersClient(urls);
 const viewsClient = new ViewsClient(urls);
 const samplesClient = new SamplesClient(urls);
 const searchClient = new SearchClient(urls);
-const webSocketClient = new WebSocketClient('localhost', Config.port);
 
 const TestUser = {
     userEmail: 'valarievaughn@electonic.com'
@@ -30,13 +28,18 @@ describe('Search', function() {
     // Search should fit into 30 seconds
     this.timeout(30000);
     let sessionId = null;
+    let webSocketClient = null;
 
     before((done) => {
         sessionsClient.openSession(TestUser.userEmail, (error, response) => {
             assert.ifError(error);
             sessionId = SessionsClient.getSessionFromResponse(response);
-            webSocketClient.associateSession(sessionId);
-            done();
+            webSocketClient = new WebSocketClient('localhost', Config.port);
+            console.log('Waiting for the socket client to init...');
+            setTimeout(() => {
+                webSocketClient.associateSession(sessionId);
+                done();
+            }, 3000);
         });
     });
 
@@ -82,11 +85,13 @@ describe('Search', function() {
 
                 // Check that all field ids from the data lay either in sample or in source fields.
                 _.each(rows, row => {
-                    _(row)
-                        .keys()
-                        .each((key) => {
-                            assert.ok(fieldIdToMetadata[key], 'Field ' + key + ' is not found!');
+                    _.each(row.fields, (rowField) => {
+                            const fieldId = rowField.fieldId;
+                            assert.ok(fieldId);
+                            assert.ok(fieldIdToMetadata[fieldId], 'Field ' + fieldId + ' is not found!');
                         });
+                    assert.ok(row.comments);
+                    assert.ok(row.searchKey);
                 });
 
                 done();
@@ -119,7 +124,9 @@ describe('Search', function() {
                             wsState.sourcesFields = sourcesFields;
                             wsState.sampleFields = sampleFields;
 
-                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, wsState.sample.id, wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset, (error, response) => {
+                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, wsState.sample.id,
+                                wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset,
+                                (error, response) => {
                                 const body = ClientBase.readBodyWithCheck(error, response);
                                 const operationId = body.operationId;
                                 assert.ok(operationId);

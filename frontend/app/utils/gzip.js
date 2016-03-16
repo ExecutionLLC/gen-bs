@@ -19,9 +19,9 @@ export default function gzip(file) {
       theFile = new File([content], file.name + '.gz', {type: 'application/gzip', lastModified: new Date()})
       resolve(theFile)
     });
-  })
+  });
   
   reader.readAsArrayBuffer(file);
-  return(promise)
+  return promise;
 }
 

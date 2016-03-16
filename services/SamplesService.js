@@ -37,7 +37,7 @@ class SamplesService extends UserEntityServiceBase {
             hash: null
         };
 
-        this.theModel.addSampleWithMetadata(user.id, user.language, sample, fieldsMetadata, callback);
+        this.theModel.addSampleWithFields(user.id, user.language, sample, fieldsMetadata, callback);
     }
 
     makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {

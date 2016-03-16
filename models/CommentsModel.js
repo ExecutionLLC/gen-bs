@@ -23,7 +23,21 @@ class CommentsModel extends SecureModelBase {
         super(models, 'comment', mappedColumns);
     }
 
-    // It collects each comment for the current user
+    findAllBySearchKeys(userId, languId, searchKeys, callback) {
+        this.db.asCallback((knex, callback) => {
+            this._prepareCommentsBaseSelectQuery(knex, userId, languId)
+                .whereIn('search_key', searchKeys)
+                .asCallback((error, commentsData) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        const comments = _.map(commentsData || [], commentData => this._mapColumns(commentData));
+                        callback(null, comments);
+                    }
+                });
+        }, callback);
+    }
+
     findAll(userId, callback) {
         async.waterfall([
             (callback) => this._fetchUserComments(userId, callback),
@@ -116,9 +130,7 @@ class CommentsModel extends SecureModelBase {
 
     _fetchComment(commentId, callback) {
         this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
+            this._prepareCommentsBaseSelectQuery(knex)
                 .where('id', commentId)
                 .asCallback((error, commentData) => {
                     if (error || !commentData.length) {
@@ -132,9 +144,7 @@ class CommentsModel extends SecureModelBase {
 
     _fetchUserComments(userId, callback) {
         this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
+            this._prepareCommentsBaseSelectQuery(knex)
                 .where('creator', userId)
                 .andWhere('is_deleted', false)
                 .asCallback((error, commentsData) => {
@@ -149,9 +159,7 @@ class CommentsModel extends SecureModelBase {
 
     _fetchComments(commentIds, callback) {
         this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
+            this._prepareCommentsBaseSelectQuery(knex)
                 .whereIn('id', commentIds)
                 .asCallback((error, commentsData) => {
                     if (error) {
@@ -161,6 +169,25 @@ class CommentsModel extends SecureModelBase {
                     }
                 });
         }, callback);
+    }
+
+    /**
+     * Creates query for `comment` table joined with `comment_text` table, with optional user id and langu id params.
+     * */
+    _prepareCommentsBaseSelectQuery(knex, userId, languId) {
+        let query = knex
+            .select()
+            .from(this.baseTableName)
+            .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id');
+        if (userId) {
+            query = query
+                .where('creator', userId);
+        }
+        if (languId) {
+            query = query
+                .where('comment_text.langu_id', languId);
+        }
+        return query;
     }
 }
 
