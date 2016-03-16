@@ -80,9 +80,8 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
   return (dispatch, getState) => {
     dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection))
     if (getState().variantsTable.searchInResultsParams.sort.length > 0) {
-      setTimeout(() => {
-        dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
-      }, 100)
+      dispatch(clearVariants())
+      dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
     }
   }
 }
@@ -165,11 +164,10 @@ export function searchInResultsNextData() {
 }
 
 export function searchInResults(flags) {
-
   return (dispatch, getState) => {
 
     dispatch(requestSearchedResults(flags))
-    
+
     const clearedJson = getState().variantsTable.searchInResultsParams
 
     $.ajax(config.URLS.SEARCH_IN_RESULTS(getState().variantsTable.operationId), {
@@ -198,5 +196,3 @@ export function selectTableRow(rowId) {
     rowId
   }
 }
-
-

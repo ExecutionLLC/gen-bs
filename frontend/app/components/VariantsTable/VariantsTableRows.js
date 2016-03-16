@@ -54,7 +54,7 @@ export default class VariantsTableRows extends Component {
     const variantsLength = (currentVariants === null) ? 0 : currentVariants.length;
 
     if (el.scrollHeight - el.scrollTop === el.clientHeight && currentVariants && variantsLength > 99) {
-      this.props.dispatch(getNextPartOfData()) 
+      this.props.dispatch(getNextPartOfData())
     }
   }
 
