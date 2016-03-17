@@ -29,8 +29,8 @@ export default class NewFilterInputs extends Component {
                         />
 
                         { !newFilter.name &&
-                        <div className="help-text text-danger" data-localize="views.setup.new.name.error">Name filter
-                            can not be empty
+                        <div className="help-text text-danger" data-localize="views.setup.new.name.error">
+                            Filter name cannot be empty
                         </div>
                         }
 

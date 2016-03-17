@@ -28,8 +28,8 @@ export default class NewViewInputs extends Component {
                             onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: e.target.value, desctription: newView.desctription, })) }
                         />
                         { !newView.name &&
-                        <div className="help-text text-danger" data-localize="views.setup.new.name.error">Name view
-                            can not be empty
+                        <div className="help-text text-danger" data-localize="views.setup.new.name.error">
+                            View name cannot be empty
                         </div>
                         }
                     </div>
