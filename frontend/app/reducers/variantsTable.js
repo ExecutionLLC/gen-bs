@@ -82,15 +82,16 @@ export default function variantsTable(
           ...sortArray.slice(sortFieldIndex + 1)
         ]
       } else {
+        const sortOrder = sortArray.length === 0 ? 1 : action.sortOrder
         // if click without Ctrl just replace sort with new item
-        if (action.sortOrder === 1) {
-          sortArray = [{field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection }]
-        } else if (action.sortOrder === 2) { // Ctrl click
+        if (sortOrder === 1) {
+          sortArray = [{field_id: action.fieldId, order: sortOrder, direction: action.sortDirection }]
+        } else if (sortOrder === 2) { // Ctrl click
           // Delete previous element with sortOrder: 2
           if (sortArray.length === 2) {
             sortArray.pop()
           }
-          sortArray.push({field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection })
+          sortArray.push({field_id: action.fieldId, order: sortOrder, direction: action.sortDirection })
         }
       }
 
