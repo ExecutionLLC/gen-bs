@@ -1,9 +1,10 @@
 'use strict';
 
-const webpack = require("webpack");
-const path = require("path");
+const webpack = require('webpack');
+const path = require('path');
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const ENV = process.env;
 
@@ -73,6 +74,12 @@ module.exports = {
 
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
+        // Cleanup target folder.
+        new CleanWebpackPlugin(['public'], {
+            root: __dirname + '/../',
+            verbose: true,
+            dry: false
+        }),
         new ExtractTextPlugin('genomics.css', {
             allChunks: true
         }),
