@@ -137,7 +137,17 @@ describe('One Sample', function() {
         });
 
         it('should fail to update non-editable fields', (done) => {
-            assert.fail('Not implemented');
+            const altField = _.find(sampleNonEditableFields, field => field.name === 'ALT');
+            assert.ok(altField);
+            const sampleToUpdate = _.cloneDeep(sample);
+            const altFieldValue = _.find(sampleToUpdate.values, value => value.fieldId === altField.id);
+            assert.ok(altFieldValue.values === null);
+            altFieldValue.values = 'Test value';
+            samplesClient.update(sessionId, sampleToUpdate, (error, response) => {
+                ClientBase.expectErrorResponse(error, response);
+
+                done();
+            });
         });
     });
 });
