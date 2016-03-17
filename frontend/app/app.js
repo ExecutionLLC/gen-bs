@@ -17,7 +17,8 @@ import './components/localize/jquerylocalize.js';
 
 require('file?name=[path][name].[ext]&context=./app'
     + '!./assets/vendor/jQuery-QueryBuilder/dist/js/genomics-query-builder.standalone.js');
-
+require('file?name=[path][name].[ext]&context=./app'
+    + '!./assets/vendor/font-awesome/css/font-awesome.min.css');
 
 import React from 'react'
 import { render } from 'react-dom'
