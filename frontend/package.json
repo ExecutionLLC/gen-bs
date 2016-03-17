@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --progress --colors --hot --inline --content-base app/",
-    "build": "GEN_FRONTEND_API_HOST=${GEN_FRONTEND_API_HOST:-'localhost'} GEN_FRONTEND_API_PORT=${GEN_FRONTEND_API_PORT:-'5000'} webpack --progress --colors --config webpack.build.config.js",
-    "stage_build": "GEN_FRONTEND_API_HOST=${GEN_FRONTEND_API_HOST:-'localhost'} GEN_FRONTEND_API_PORT=${GEN_FRONTEND_API_PORT:-'5000'} webpack --progress --colors --config webpack.build.config.js"
+    "start": "GEN_FRONTEND_ENABLE_SOURCE_MAPS=${GEN_FRONTEND_ENABLE_SOURCE_MAPS:-'true'} webpack-dev-server --progress --colors --hot --inline --content-base app/",
+    "build": "GEN_FRONTEND_ENABLE_SOURCE_MAPS=${GEN_FRONTEND_ENABLE_SOURCE_MAPS:-'false'} GEN_FRONTEND_API_HOST=${GEN_FRONTEND_API_HOST:-'localhost'} GEN_FRONTEND_API_PORT=${GEN_FRONTEND_API_PORT:-'5000'} webpack --progress --colors --config webpack.config.js"
   },
   "repository": {
     "type": "git",

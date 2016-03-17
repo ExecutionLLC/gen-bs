@@ -1,34 +1,36 @@
 'use strict';
 
-var webpack = require("webpack");
-var path = require("path");
+const webpack = require("webpack");
+const path = require("path");
 
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var ENV = process.env;
+const ENV = process.env;
 
-var API_HOST = ENV.GEN_FRONTEND_API_HOST || 'localhost';
-var API_PORT = ENV.GEN_FRONTEND_API_PORT || 5000;
+const API_HOST = ENV.GEN_FRONTEND_API_HOST || 'localhost';
+const API_PORT = ENV.GEN_FRONTEND_API_PORT || 5000;
+const ENABLE_SOURCE_MAPS = ENV.GEN_FRONTEND_ENABLE_SOURCE_MAPS || false;
+const devtool = (ENABLE_SOURCE_MAPS) ? 'source-map' : '#eval';
 
+console.log('-> Source maps ' + (ENABLE_SOURCE_MAPS ? 'ENABLED!' : 'disabled.'));
 console.log('-> API host: ', API_HOST);
 console.log('-> API port: ', API_PORT);
 
 module.exports = {
 
-    devtool: "source-map",
+    devtool,
 
     entry: [
         'webpack/hot/dev-server',
         "./app/app.js"],
 
     output: {
-        path: path.resolve(__dirname, '../dev_build'),
+        path: path.resolve(__dirname, '../public'),
         filename: 'genomics.js'
     },
     module: {
         loaders: [
             {test: /\.json$/, loader: "file?name=[name].[ext]"},
-
             {
                 test: /\.js?$/,
                 exclude: /(node_modules|bower_components|vendor)/,
@@ -39,10 +41,10 @@ module.exports = {
             },
             {test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery'},
 
-            {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff"},
-            {test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff"},
-            {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream"},
-            {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file"},
+            {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?name=[name].[ext]&limit=10000&mimetype=application/font-woff"},
+            {test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: "url?name=[name].[ext]&limit=10000&mimetype=application/font-woff"},
+            {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?name=[name].[ext]&limit=10000&mimetype=application/octet-stream"},
+            {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file?name=[name].[ext]"},
             {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "file?name=[name].[ext]"},
 
             {test: /\.png$/, loader: "url-loader?limit=100000"},
@@ -76,11 +78,6 @@ module.exports = {
             jQuery: "jquery",
             "window.jQuery": "jquery",
             _: "lodash"
-        }),
-
-        new webpack.DefinePlugin({
-            API_URL: JSON.stringify("http://localhost:8000"),
-            DP_API_URL: JSON.stringify("http://localhost:3001")
         }),
 
         new webpack.DefinePlugin({
