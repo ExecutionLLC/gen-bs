@@ -38,7 +38,7 @@ export default function variantsTable(
       return Object.assign({}, state, {
         searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
           offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
-          //limit: state.searchInResultsParams.limit + 100 
+          //limit: state.searchInResultsParams.limit + 100
         })
       })
 
@@ -74,7 +74,7 @@ export default function variantsTable(
           ...sortArray.slice(0, sortFieldIndex),
           ...sortArray.slice(sortFieldIndex + 1)
         ]
-        sortArray = [Object.assign({}, sortArray[0], {order: 1})]
+        sortArray = sortArray.length === 0 ? [] : [Object.assign({}, sortArray[0], {order: 1})]
       } else if (sortFieldIndex !== -1 && sortArray[sortFieldIndex].direction !== action.sortDirection) {
         sortArray = [
           ...sortArray.slice(0, sortFieldIndex),
