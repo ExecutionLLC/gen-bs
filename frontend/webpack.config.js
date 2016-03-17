@@ -3,13 +3,7 @@
 var webpack = require("webpack");
 var path = require("path");
 
-//var bower_dir = __dirname + '/bower_components';
-var node_dir = __dirname + '/node_modules';
-var vendor_dir = __dirname + '/vendor';
-var bundle_dir = __dirname + '/build';
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HandlebarsPlugin = require("handlebars-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var ENV = process.env;
 
@@ -29,18 +23,12 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, '../dev_build'),
-        filename: 'genomics.js',
-        //publicPath: 'http://localhost:8080/assets'
-
+        filename: 'genomics.js'
     },
     module: {
         loaders: [
-            //{ test: /\.hbs/, loader: "handlebars-template-loader" },
-            //{test: /\.html$/, loader: "file?name=[name].[ext]"},
             {test: /\.json$/, loader: "file?name=[name].[ext]"},
 
-            //{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
-            //{ test: /\.js?$/, exclude: /node_modules|bower_components/, loaders: ['react-hot', 'jsx', 'babel?stage=0'] },
             {
                 test: /\.js?$/,
                 exclude: /(node_modules|bower_components|vendor)/,
@@ -69,22 +57,13 @@ module.exports = {
             {
                 test: /\.less$/,
                 loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
-            },
-
-            //{ test: /\.js$/, loader: 'expose?$' },
-            //{ test: /\.js$/, loader: 'expose?jQuery' }
+            }
         ]
     },
 
     resolve: {
         extensions: ['', '.js', '.jsx', '.css', 'less']
     },
-
-    //resolve: {
-    //  alias: {
-    //    'bootstrap-table': node_dir + '/bootstrap-table/dist/bootstrap-table.js',
-    //  }
-    //},
 
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
@@ -104,44 +83,9 @@ module.exports = {
             DP_API_URL: JSON.stringify("http://localhost:3001")
         }),
 
-        /*
-         new HandlebarsPlugin({
-         // path to main hbs template
-         entry: path.join(process.cwd(), "app", "index.hbs"),
-         // filepath to result
-         output: path.join(process.cwd(), "app", "index.html"),
-
-         // data passed to main hbs template: `main-template(data)`
-         //data: require("./app/data/project.json"),
-
-         // globbed path to partials, where folder/filename is unique
-         partials: [
-         path.join(process.cwd(), "app", "templates", "*", "*.hbs"),
-         path.join(process.cwd(), "app", "templates", "*", "*", "*.hbs"),
-         path.join(process.cwd(), "app", "templates", "*", "*", "*", "*.hbs")
-         ],
-
-         // register custom helpers
-         //helpers: {
-         //    nameOfHbsHelper: Function.prototype,
-         //    path.join(process.cwd(), "app", "helpers", "*.helper.js")
-         //},
-
-         // hooks
-         onBeforeSetup: function (Handlebars) {},
-         onBeforeAddPartials: function (Handlebars, partialsMap) {},
-         onBeforeCompile: function (Handlebars, templateContent) {},
-         onBeforeRender: function (Handlebars, data) {},
-         onBeforeSave: function (Handlebars, resultHtml) {},
-         onDone: function (Handlebars) {}
-         }),
-         */
-
         new webpack.DefinePlugin({
             API_PORT: JSON.stringify(API_PORT),
             API_HOST: JSON.stringify(API_HOST)
         })
     ]
-
-
 };
