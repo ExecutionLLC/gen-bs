@@ -143,7 +143,7 @@ function requestSearchedResults(flags) {
   }
 }
 
-function receiveSearchedResults(json) {
+export function receiveSearchedResults() {
   return {
     type: RECEIVE_SEARCHED_RESULTS,
     receivedAt: Date.now()
@@ -152,7 +152,6 @@ function receiveSearchedResults(json) {
 
 export function searchInResultsSortFilter() {
   return (dispatch, getState) => {
-    dispatch(clearVariants())
     dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
   }
 }
@@ -176,13 +175,9 @@ export function searchInResults(flags) {
       'processData': false,
       'contentType': 'application/json'
     })
-    .then(json => {
-      console.log('search', json)
-      dispatch(receiveSearchedResults(json))
-    })
     .fail(json => {
       console.log('search fail', json)
-      dispatch(receiveSearchedResults(json))
+      dispatch(receiveSearchedResults())
     })
 
       // TODO:

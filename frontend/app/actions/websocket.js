@@ -1,4 +1,4 @@
-import { initSearchInResultsParams } from './variantsTable'
+import { initSearchInResultsParams, receiveSearchedResults } from './variantsTable'
 import { changeFileUploadProgress, fileUploadError } from './fileUpload'
 /*
  * action types
@@ -66,7 +66,7 @@ function progressMessage(wsData) {
 function receiveError(err) {
   return {
     type: WS_RECEIVE_ERROR,
-    err 
+    err
   };
 }
 
@@ -84,7 +84,7 @@ function asErrorRouter(wsData) {
 function asError(err) {
   return {
     type: WS_RECEIVE_AS_ERROR,
-    err 
+    err
   };
 }
 
@@ -102,9 +102,8 @@ function receiveMessage(msg) {
     console.log('wsData.operation_id', wsData.operation_id);
     if (wsData.result) {
       if (wsData.result.sample_id) {
-
         dispatch(tableMessage(wsData))
-
+        dispatch(receiveSearchedResults())
       } else if (wsData.result.progress !== undefined) {
         dispatch(progressMessageRouter(wsData));
       } else if(wsData.result.error) {
@@ -121,7 +120,7 @@ function receiveMessage(msg) {
 function receiveClose(msg) {
   return {
     type: WS_RECEIVE_CLOSE,
-    msg 
+    msg
   }
 }
 
@@ -158,5 +157,3 @@ export function requestAnalyze() {
     type: REQUEST_ANALYZE
   };
 }
-
-
