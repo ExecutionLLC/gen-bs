@@ -17,10 +17,7 @@ import './assets/vendor/matchMedia/matchMedia.addListener.js';
 import './assets/vendor/jquery-localize/dist/jquery.localize.js';
 
 
-
-
 import './components/localize/jquerylocalize.js';
-
 
 
 import React from 'react'
@@ -32,6 +29,6 @@ window.gzip = gzip
 import './assets/css/index.less';
 
 render(
-  <Root />,
-  document.getElementById('root')
+    <Root />,
+    document.getElementById('root')
 )
