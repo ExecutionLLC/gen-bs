@@ -9,13 +9,14 @@ export default class FilterBuilderFooter extends Component {
 
   render() {
 
-    const { dispatch, closeModal } = this.props
+    const { dispatch, auth, closeModal } = this.props
     const { editOrNew, editedFilter, newFilter } = this.props.filterBuilder
     const filter = editOrNew ? (editedFilter):(newFilter)
 
     var disabledClass = classNames({
-      'disabled': (filter.type === 'standard') ? 'disabled':''
+      'disabled': (filter.type === 'advanced' && auth.isDemo) ? 'disabled':''
     })
+      var title = (filter.type === 'advanced' && auth.isDemo) ? 'Login or registry to select advanced filters':''
 
 
     return (
@@ -31,7 +32,8 @@ export default class FilterBuilderFooter extends Component {
           </button>
 
           <button
-            disabled={disabledClass} 
+            disabled={disabledClass}
+            title={title}
             onClick={ () => {
               dispatch(filterBuilderRequestRules())
             }}

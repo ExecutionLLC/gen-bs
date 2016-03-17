@@ -100,22 +100,30 @@ export function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestUpdateFilter())
+        const state = getState()
+        if (state.auth.isDemo||
+            state.filterBuilder.currentFilter.type=='advanced'||
+            state.filterBuilder.currentFilter.type=='standard') {
+            dispatch(closeModal('filters'))
+            dispatch(fetchFilters(state.filterBuilder.currentFilter.id))}
+        else{
+            return $.ajax(`${config.URLS.FILTERS}/${getState().filterBuilder.editedFilter.id}`, {
+                    'type': 'PUT',
+                    'headers': {"X-Session-Id": getState().auth.sessionId},
+                    'data': JSON.stringify(getState().filterBuilder.editedFilter),
+                    'processData': false,
+                    'contentType': 'application/json'
+                })
+                .done(json => {
+                    dispatch(filterBuilderReceiveUpdateFilter(json))
+                    dispatch(closeModal('filters'))
+                    dispatch(fetchFilters(json.id))
+                })
+                .fail(err => {
+                    console.error('UPDATE Filter FAILED: ', err.responseText)
+                })
+        }
 
-        return $.ajax(`${config.URLS.FILTERS}/${getState().filterBuilder.editedFilter.id}`, {
-                'type': 'PUT',
-                'headers': {"X-Session-Id": getState().auth.sessionId},
-                'data': JSON.stringify(getState().filterBuilder.editedFilter),
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .done(json => {
-                dispatch(filterBuilderReceiveUpdateFilter(json))
-                dispatch(closeModal('filters'))
-                dispatch(fetchFilters(json.id))
-            })
-            .fail(err => {
-                console.error('UPDATE Filter FAILED: ', err.responseText)
-            })
     }
 }
 
