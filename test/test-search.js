@@ -25,7 +25,7 @@ const TestUser = {
 };
 
 describe('Search', function() {
-    // Search should fit into 30 seconds
+    // Search should fit into 60 seconds
     this.timeout(60000);
     let sessionId = null;
     let webSocketClient = null;
