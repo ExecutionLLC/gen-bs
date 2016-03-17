@@ -29,7 +29,7 @@ export default function filterBuilder(state = {
                 editOrNew: action.editOrNew,
                 editedFilter: action.editOrNew ? state.currentFilter : null,
                 newFilter: !action.editOrNew ? Object.assign({}, state.currentFilter, {
-                    type: 'advanced',
+                    type: 'user',
                     name: `Copy of ${state.currentFilter.name}`
                 }) : null,
             });
