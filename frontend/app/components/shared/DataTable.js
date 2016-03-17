@@ -1,4 +1,3 @@
-
 import 'datatables.net-bs';
 //import 'datatables.net-bs/css/dataTables.bootstrap.css';
 import 'datatables.net-responsive';
@@ -15,9 +14,9 @@ import 'datatables.net-select-bs/css/select.bootstrap.css';
 
 
 export default class DTable {
-  constructor(domNode, dtConfig) {
-    this.node = domNode;
-    this.config = dtConfig;
-    this.table = domNode.DataTable( dtConfig );
-  }
+    constructor(domNode, dtConfig) {
+        this.node = domNode;
+        this.config = dtConfig;
+        this.table = domNode.DataTable(dtConfig);
+    }
 }

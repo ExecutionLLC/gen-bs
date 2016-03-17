@@ -6,11 +6,11 @@ import App from './App'
 const store = configureStore()
 
 export default class Root extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <App />
-      </Provider>
-    )
-  }
+    render() {
+        return (
+            <Provider store={store}>
+                <App />
+            </Provider>
+        )
+    }
 }
