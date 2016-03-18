@@ -13,9 +13,6 @@ export default function fields(state = {
     sourceFieldsList: []
 }, action) {
 
-    let Fields;
-    let sourceFields;
-
     switch (action.type) {
 
         case ActionTypes.REQUEST_FIELDS:
@@ -26,12 +23,12 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_FIELDS:
-            Fields = action.fields.map(updateFieldsSamples);
+            let fields = action.fields.map(updateFieldsSamples);
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     samples: false
                 }),
-                list: Fields,
+                list: fields,
                 lastUpdated: action.receivedAt
             });
 
@@ -43,7 +40,7 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_SOURCE_FIELDS:
-            sourceFields = action.sourceFields.map(updateFieldsSamples);
+            let sourceFields = action.sourceFields.map(updateFieldsSamples);
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: false
