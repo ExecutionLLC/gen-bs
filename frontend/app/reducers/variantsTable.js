@@ -10,6 +10,7 @@ export default function variantsTable(state = {
         top_search: ''
     },
     scrollPos: 0,
+    needUpdate: false,
     isNextDataLoading: false,
     isFilteringOrSorting: false,
 
@@ -47,6 +48,10 @@ export default function variantsTable(state = {
 
             if (action.filterValue !== '') {
                 if (fieldIndex !== -1) {
+                    currentFilterValue = state.searchInResultsParams.search[fieldIndex]
+                    if (currentFilterValue === action.filterValue) {
+                        return state
+                    }
                     searchArray = state.searchInResultsParams.search.map(e => e.field_id !== action.fieldId ? e : {
                         field_id: action.fieldId,
                         value: action.filterValue
@@ -63,7 +68,8 @@ export default function variantsTable(state = {
                     search: searchArray,
                     limit: 100,
                     offset: 0
-                })
+                }),
+                needUpdate: true
             })
 
         case ActionTypes.CHANGE_VARIANTS_SORT:
@@ -72,6 +78,9 @@ export default function variantsTable(state = {
 
             // Disable sort if we click on sorted element.
             if (sortFieldIndex !== -1 && sortArray[sortFieldIndex].direction === action.sortDirection) {
+                if (sortArray.length <= 1) {
+                    return state
+                }
                 sortArray = [
                     ...sortArray.slice(0, sortFieldIndex),
                     ...sortArray.slice(sortFieldIndex + 1)
@@ -102,7 +111,8 @@ export default function variantsTable(state = {
                     sort: sortArray,
                     limit: 100,
                     offset: 0
-                })
+                }),
+                needUpdate: true
             })
 
         case ActionTypes.REQUEST_VARIANTS:
@@ -121,7 +131,8 @@ export default function variantsTable(state = {
             return Object.assign({}, state, {
                 isNextDataLoading: action.isNextDataLoading,
                 isFilteringOrSorting: action.isFilteringOrSorting,
-                isFetching: true
+                isFetching: true,
+                needUpdate: false
             })
 
         case ActionTypes.RECEIVE_SEARCHED_RESULTS:
