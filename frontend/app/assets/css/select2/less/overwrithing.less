@@ -128,3 +128,24 @@ select.select2.temp-active {
     color: @text-muted;
   }
 }
+
+.select2-btn-default { 
+  + .select2-container--default .select2-selection--single { 
+      border-left: 2px solid @gray-lighter;
+  }
+}
+.select2-btn-primary { 
+  + .select2-container--default .select2-selection--single { 
+      border-left: 2px solid @brand-primary;
+  }
+}
+.select2-btn-success { 
+  + .select2-container--default .select2-selection--single { 
+      border-left: 2px solid @brand-success;
+  }
+}
+
+
+.select2-results__option { 
+  //padding: 16px;
+}

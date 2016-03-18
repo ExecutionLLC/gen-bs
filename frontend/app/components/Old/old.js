@@ -1,3 +1,11 @@
+$('.comment-link').editable({
+        showbuttons: 'bottom'
+});
+
+
+
+
+
 //th filter&sort
 $('.variants-table-header-label').each(function () {
     var button = $(this);
