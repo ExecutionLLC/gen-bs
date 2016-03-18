@@ -36,7 +36,7 @@ export default class ExistentFilterSelect extends Component {
                 <div className="row grid-toolbar">
                     <div className="col-sm-6">
                         <Select
-                            options={filters.map( v => { return {value: v.id, label: v.name} } )}
+                            options={filters.map( filter => { return {value: filter.id, label: filter.name} } )}
                             value={currentFilter.id}
                             clearable={false}
                             onChange={ (val) => dispatch(filterBuilderSelectFilter(filters, val.value, true))}
