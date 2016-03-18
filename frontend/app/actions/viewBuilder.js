@@ -90,22 +90,30 @@ export function viewBuilderUpdateView(viewItemIndex) {
 
     return (dispatch, getState) => {
         dispatch(viewBuilderRequestUpdateView());
+        if (getState().auth.isDemo ||
+            getState().viewBuilder.currentView.type == 'advanced' ||
+            getState().viewBuilder.currentView.type == 'standard') {
+            dispatch(closeModal('views'))
+            dispatch(fetchViews(getState().viewBuilder.currentView.id))
+        }
+        else {
 
-        return $.ajax(`${config.URLS.VIEWS}/${getState().viewBuilder.editedView.id}`, {
-                'type': 'PUT',
-                'headers': {"X-Session-Id": getState().auth.sessionId},
-                'data': JSON.stringify(getState().viewBuilder.editedView),
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .done(json => {
-                dispatch(viewBuilderReceiveUpdateView(json));
-                dispatch(closeModal('views'));
-                dispatch(fetchViews(json.id));
-            })
-            .fail(err => {
-                console.error('UPDATE View FAILED: ', err.responseText);
-            });
+            return $.ajax(`${config.URLS.VIEWS}/${getState().viewBuilder.editedView.id}`, {
+                    'type': 'PUT',
+                    'headers': {"X-Session-Id": getState().auth.sessionId},
+                    'data': JSON.stringify(getState().viewBuilder.editedView),
+                    'processData': false,
+                    'contentType': 'application/json'
+                })
+                .done(json => {
+                    dispatch(viewBuilderReceiveUpdateView(json));
+                    dispatch(closeModal('views'));
+                    dispatch(fetchViews(json.id));
+                })
+                .fail(err => {
+                    console.error('UPDATE View FAILED: ', err.responseText);
+                });
+        }
     }
 }
 
