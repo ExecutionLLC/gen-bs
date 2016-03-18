@@ -28,7 +28,7 @@ export default function viewBuilder(state = {
                 editOrNew: action.editOrNew,
                 editedView: action.editOrNew ? state.currentView : null,
                 newView: !action.editOrNew ? Object.assign({}, state.currentView, {
-                    type: 'advanced',
+                    type: 'user',
                     name: `Copy of ${state.currentView.name}`
                 }) : null,
             })
