@@ -4,20 +4,20 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 
-import { filterBuilderSelectFilter, filterBuilderToggleNewEdit } from '../../../actions/filterBuilder'
+import { filterBuilderSelectFilter, filterBuilderToggleNewEdit} from '../../../actions/filterBuilder'
 
 
 export default class ExistentFilterSelect extends Component {
 
     render() {
 
-        const { dispatch,auth, showModal, closeModal } = this.props
+        const { dispatch, auth } = this.props
         const { currentFilter} = this.props.filterBuilder
         const { samples, filters, isValid } = this.props.userData
         var disabledClass = classNames({
-            'disabled': (auth.isDemo) ? 'disabled':''
+            'disabled': (auth.isDemo) ? 'disabled' : ''
         })
-        var title = (auth.isDemo) ? 'Login or registry to create filters':'Сopy this to a new'
+        var title = (auth.isDemo) ? 'Login or registry to create filters' : 'Сopy this to a new'
 
         return (
 
@@ -41,7 +41,8 @@ export default class ExistentFilterSelect extends Component {
                         />
                     </div>
                     <div className="col-sm-6">
-                        <div className="btn-group" data-localize="actions.duplicate.help" data-toggle="tooltip" data-placement="bottom" data-container="body" >
+                        <div className="btn-group" data-localize="actions.duplicate.help" data-toggle="tooltip"
+                             data-placement="bottom" data-container="body">
                             <button type="button"
                                     className="btn btn-default collapse in copyview"
                                     data-toggle="collapse" data-target=".copyview"
@@ -58,19 +59,23 @@ export default class ExistentFilterSelect extends Component {
                         }
                         { currentFilter.type == 'user' &&
                         <div className="btn-group ">
-                            <button className="btn btn-default">
-                                <span data-localize="views.setup.reset.title" >Reset Filter</span>
+                            <button type="button" className="btn btn-default"
+                                    onClick={ () => {
+                                        console.debug("presses reset");
+                                        dispatch(filterBuilderSelectFilter(filters, currentFilter.id, true))
+                                        }
+                                    }
+                            >
+                                <span data-localize="views.setup.reset.title">Reset Filter</span>
                             </button>
                         </div>
                         }
-                        { currentFilter.type  == 'user' &&
+                        { currentFilter.type == 'user' &&
                         <div className="btn-group ">
                             <button type="button" className="btn btn-link">
-                                <span data-localize="views.setup.delete.title" >Delete Filter</span>
+                                <span data-localize="views.setup.delete.title">Delete Filter</span>
                             </button>
                         </div>
-                        }
-                        { //<!-- / -->
                         }
                     </div>
                 </div>
