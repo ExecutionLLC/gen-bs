@@ -2,8 +2,9 @@ import * as ActionTypes from '../actions/fields'
 
 function updateFieldsSamples(field) {
     // patch field because some properties may not exists
-    field.label = field.label !== undefined ? field.label : field.name;
-    return field
+    return Object.assign({}, field, {
+        label: field.label ? field.label : field.name
+    });
 }
 
 export default function fields(state = {
@@ -11,7 +12,9 @@ export default function fields(state = {
     list: [],
     sourceFieldsList: []
 }, action) {
-    var sourceFields;
+
+    let Fields;
+    let sourceFields;
 
     switch (action.type) {
 
@@ -23,12 +26,12 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_FIELDS:
-            sourceFields = action.fields.map(updateFieldsSamples);
+            Fields = action.fields.map(updateFieldsSamples);
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     samples: false
                 }),
-                list: sourceFields,
+                list: Fields,
                 lastUpdated: action.receivedAt
             });
 
@@ -45,7 +48,7 @@ export default function fields(state = {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: false
                 }),
-                sourceFieldsList: action.sourceFields,
+                sourceFieldsList: sourceFields,
                 lastUpdated: action.receivedAt
             });
 
