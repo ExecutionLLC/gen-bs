@@ -11,13 +11,14 @@ export default class ExistentFilterSelect extends Component {
 
     render() {
 
-        const { dispatch, auth } = this.props
-        const { currentFilter} = this.props.filterBuilder
-        const { samples, filters, isValid } = this.props.userData
-        var disabledClass = classNames({
+        const { dispatch, auth } = this.props;
+        const { currentFilter} = this.props.filterBuilder;
+        const { filters } = this.props.userData;
+        const disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
-        })
-        var title = (auth.isDemo) ? 'Login or registry to create filters' : 'Сopy this to a new'
+        });
+        const title = (auth.isDemo) ? 'Login or register to create filters' : 'Make a copy for editing';
+        const isFilterEditable = (currentFilter.type === 'user');
 
         return (
 
@@ -27,14 +28,15 @@ export default class ExistentFilterSelect extends Component {
                         <label data-localize="views.setup.selector.label">Available Filters</label>
                     </div>
                 </div>
-                { currentFilter.type === 'standard' &&
-                <div className="alert alert-help"><span data-localize="views.setup.selector.description">Standard filter are not edited, duplicate it for custom</span>
-                </div>
+                { isFilterEditable &&
+                    <div className="alert alert-help">
+                        <span data-localize="views.setup.selector.description">This filter is not editable, duplicate it to make changes.</span>
+                    </div>
                 }
                 <div className="row grid-toolbar">
                     <div className="col-sm-6">
                         <Select
-                            options={filters.map( v => { return {value: v.id, label: v.name} } )}
+                            options={filters.map( filter => { return {value: filter.id, label: filter.name} } )}
                             value={currentFilter.id}
                             clearable={false}
                             onChange={ (val) => dispatch(filterBuilderSelectFilter(filters, val.value, true))}
@@ -57,20 +59,16 @@ export default class ExistentFilterSelect extends Component {
                         {
                             //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                         }
-                        { currentFilter.type == 'user' &&
+                        { isFilterEditable &&
                         <div className="btn-group ">
                             <button type="button" className="btn btn-default"
-                                    onClick={ () => {
-                                        console.debug("presses reset");
-                                        dispatch(filterBuilderSelectFilter(filters, currentFilter.id, true))
-                                        }
-                                    }
+                                    onClick={() => dispatch(filterBuilderSelectFilter(filters, currentFilter.id, true))}
                             >
                                 <span data-localize="views.setup.reset.title">Reset Filter</span>
                             </button>
                         </div>
                         }
-                        { currentFilter.type == 'user' &&
+                        { isFilterEditable &&
                         <div className="btn-group ">
                             <button type="button" className="btn btn-link">
                                 <span data-localize="views.setup.delete.title">Delete Filter</span>
