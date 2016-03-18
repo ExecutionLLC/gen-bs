@@ -1,5 +1,12 @@
 import * as ActionTypes from '../actions/fields'
 
+function updateFieldsSamples(field) {
+    // patch field because some properties may not exists
+    return Object.assign({}, field, {
+        label: field.label ? field.label : field.name
+    });
+}
+
 export default function fields(state = {
     isFetching: {samples: false, sources: false},
     list: [],
@@ -16,11 +23,12 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_FIELDS:
+            let fields = action.fields.map(updateFieldsSamples);
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     samples: false
                 }),
-                list: action.fields,
+                list: fields,
                 lastUpdated: action.receivedAt
             });
 
@@ -32,11 +40,12 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_SOURCE_FIELDS:
+            let sourceFields = action.sourceFields.map(updateFieldsSamples);
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: false
                 }),
-                sourceFieldsList: action.sourceFields,
+                sourceFieldsList: sourceFields,
                 lastUpdated: action.receivedAt
             });
 
