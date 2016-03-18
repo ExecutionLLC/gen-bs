@@ -29,7 +29,7 @@ export default function websocket(state = {
                     ...state.messages,
                     action.wsData
                 ],
-                variants: (state.variants === null) ? action.wsData.result.data : [...state.variants, ...action.wsData.result.data],
+                variants: state.variants === null ? action.wsData.result.data : [...state.variants, ...action.wsData.result.data],
                 currentVariants: action.wsData.result.data,
                 isVariantsEmpty: (action.wsData.result.data.length === 0),
                 isVariantsLoaded: false,

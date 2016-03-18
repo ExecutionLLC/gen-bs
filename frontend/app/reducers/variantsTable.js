@@ -10,6 +10,7 @@ export default function variantsTable(state = {
         top_search: ''
     },
     scrollPos: 0,
+    needUpdate: false,
     isNextDataLoading: false,
     isFilteringOrSorting: false,
 
@@ -41,20 +42,26 @@ export default function variantsTable(state = {
                 })
             })
 
-        case ActionTypes.CHANGE_VARIANTS_FILTER:
-            var searchArray = [...state.searchInResultsParams.search]
-            const fieldIndex = _.findIndex(state.searchInResultsParams.search, {field_id: action.fieldId})
+        case ActionTypes.CHANGE_VARIANTS_FILTER: {
+            // copy search array
+            var searchArray = [...state.searchInResultsParams.search];
+            const fieldIndex = _.findIndex(searchArray, {field_id: action.fieldId});
 
             if (action.filterValue !== '') {
                 if (fieldIndex !== -1) {
-                    searchArray = state.searchInResultsParams.search.map(e => e.field_id !== action.fieldId ? e : {
-                        field_id: action.fieldId,
-                        value: action.filterValue
-                    })
+                    const currentFilterValue = searchArray[fieldIndex].value
+                    if (currentFilterValue === action.filterValue) {
+                        // filter value is the same
+                        return state
+                    }
+                    // update current filter
+                    searchArray[fieldIndex].value = action.filterValue
                 } else {
+                    // it is new filter
                     searchArray.push({field_id: action.fieldId, value: action.filterValue})
                 }
             } else {
+                // filter value is empty, so we should remove filter
                 searchArray.splice(fieldIndex, 1)
             }
 
@@ -63,37 +70,51 @@ export default function variantsTable(state = {
                     search: searchArray,
                     limit: 100,
                     offset: 0
-                })
+                }),
+                needUpdate: true
             })
+        }
+        case ActionTypes.CHANGE_VARIANTS_SORT: {
+            // copy sort array
+            var sortArray = [...state.searchInResultsParams.sort];
+            var fieldIndex = _.findIndex(sortArray, {field_id: action.fieldId});
 
-        case ActionTypes.CHANGE_VARIANTS_SORT:
-            var sortArray = [...state.searchInResultsParams.sort]
-            const sortFieldIndex = _.findIndex(state.searchInResultsParams.sort, {field_id: action.fieldId})
-
-            // Disable sort if we click on sorted element.
-            if (sortFieldIndex !== -1 && sortArray[sortFieldIndex].direction === action.sortDirection) {
-                sortArray = [
-                    ...sortArray.slice(0, sortFieldIndex),
-                    ...sortArray.slice(sortFieldIndex + 1)
-                ]
-                sortArray = [Object.assign({}, sortArray[0], {order: 1})]
-            } else if (sortFieldIndex !== -1 && sortArray[sortFieldIndex].direction !== action.sortDirection) {
-                sortArray = [
-                    ...sortArray.slice(0, sortFieldIndex),
-                    Object.assign({}, sortArray[sortFieldIndex], {direction: action.sortDirection}),
-                    ...sortArray.slice(sortFieldIndex + 1)
-                ]
-            } else {
-                // if click without Ctrl just replace sort with new item
-                if (action.sortOrder === 1) {
-                    sortArray = [{field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection}]
-                } else if (action.sortOrder === 2) { // Ctrl click
-                    // Delete previous element with sortOrder: 2
-                    if (sortArray.length === 2) {
-                        sortArray.pop()
-                    }
-                    sortArray.push({field_id: action.fieldId, order: action.sortOrder, direction: action.sortDirection})
+            if (fieldIndex === -1) {
+                // it is new column for sorting
+                const newItem = {field_id: action.fieldId, direction: action.sortDirection }
+                if (sortArray.length < action.sortOrder) {
+                    // put new item to the end of array
+                    fieldIndex = sortArray.length;
+                } else {
+                    // replace existent item, which has the same order
+                    fieldIndex = action.sortOrder - 1;
+                    // remove sorting with higer order
+                    // NOTE: if you want to save state of the sorting with higher order, then
+                    // just remove next line  
+                    sortArray = sortArray.slice(0, fieldIndex)
                 }
+                sortArray[fieldIndex] = newItem;
+            } else {
+                // user clicked on the column and want to remove sorting or change direction
+                // NOTE: we do not allow to change order of the existent items, because it
+                // is clashed with change direction, remove sorting logic
+                if (sortArray[fieldIndex].direction !== action.sortDirection) {
+                    // user want to change sort direction
+                    sortArray[fieldIndex].direction = action.sortDirection;
+                } else {
+                    // user want to remove sorting
+                    if (sortArray.length === 1) {
+                        // we do not allow remove all sorting
+                        return state;
+                    }
+                    sortArray.splice(fieldIndex, 1);
+                }
+            }
+            // update sort order parameter
+            // NOTE: actually I don't understand why we hold order in attribute of the obj
+            // (our array already hold order as index)
+            for (var i = 0; i < sortArray.length; i++) {
+                sortArray[i].order = i + 1;
             }
 
             return Object.assign({}, state, {
@@ -101,9 +122,10 @@ export default function variantsTable(state = {
                     sort: sortArray,
                     limit: 100,
                     offset: 0
-                })
+                }),
+                needUpdate: true
             })
-
+        }
         case ActionTypes.REQUEST_VARIANTS:
             return Object.assign({}, state, {
                 isFetching: true
@@ -120,7 +142,8 @@ export default function variantsTable(state = {
             return Object.assign({}, state, {
                 isNextDataLoading: action.isNextDataLoading,
                 isFilteringOrSorting: action.isFilteringOrSorting,
-                isFetching: true
+                isFetching: true,
+                needUpdate: false
             })
 
         case ActionTypes.RECEIVE_SEARCHED_RESULTS:
