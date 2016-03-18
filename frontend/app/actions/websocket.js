@@ -102,12 +102,9 @@ function receiveMessage(msg) {
         console.log('wsData.operation_id', wsData.operation_id);
         if (wsData.result) {
             if (wsData.result.sample_id) {
+                dispatch(tableMessage(wsData))
                 if (getState().variantsTable.isFilteringOrSorting) {
-                    dispatch(clearVariants())
-                    dispatch(tableMessage(wsData))
                     dispatch(receiveSearchedResults())
-                } else {
-                    dispatch(tableMessage(wsData))
                 }
             } else if (wsData.result.progress !== undefined) {
                 dispatch(progressMessageRouter(wsData));

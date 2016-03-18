@@ -77,6 +77,7 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     return (dispatch, getState) => {
         dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection))
         if (getState().variantsTable.searchInResultsParams.sort.length > 0) {
+            dispatch(clearVariants())
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
         }
     }
@@ -139,7 +140,7 @@ function requestSearchedResults(flags) {
     }
 }
 
-export function receiveSearchedResults(json) {
+export function receiveSearchedResults() {
     return {
         type: RECEIVE_SEARCHED_RESULTS,
         receivedAt: Date.now()
@@ -148,6 +149,7 @@ export function receiveSearchedResults(json) {
 
 export function searchInResultsSortFilter() {
     return (dispatch, getState) => {
+        dispatch(clearVariants())
         dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
     }
 }
