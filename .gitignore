@@ -19,3 +19,4 @@ logs/
 .pydevproject
 
 uploads/
+public/*

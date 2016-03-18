@@ -274,3 +274,34 @@
     text-align: left;
   }
 }
+
+.dropdown-menu-componets {
+  padding: 0; 
+  > li {
+    > a { 
+      white-space: normal;
+      display: block;
+      overflow: hidden;
+     padding: 16px 20px 16px 32px;
+    position: relative;
+    border-top: 1px solid @dropdown-divider-bg; 
+    }
+  }
+  .link-right { 
+     display: block;
+    float: right;
+    font-size: 80%;
+    max-width: 25%;
+    text-align: right;
+    white-space: normal;
+    color: @gray-light;
+  }
+  .link-label { 
+    color: @gray-base;
+    display: block;
+  }
+  .link-desc { 
+    color: @text-muted;
+      display: block;
+    }
+}
