@@ -2,17 +2,23 @@
 
 const _ = require('lodash');
 const bunyan = require('bunyan');
+const colors = require('colors/safe');
 
 const LEVELS = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
 
 class ConsoleStream {
     write(recordString) {
         const record = JSON.parse(recordString);
-        const outputFunc = record.level > 30 ? console.error : console.log;
+        const isErrorMessage = record.level > 30;
+        const outputFunc = isErrorMessage ? console.error : console.log;
+        const timeString = colors.cyan(record.time);
+        const levelString = bunyan.nameFromLevel[record.level];
+        const levelFormattedString = colors.bold(isErrorMessage ? colors.red(levelString) : colors.green(levelString));
+
         outputFunc(
             '[%s] %s: %s',
-            record.time,
-            bunyan.nameFromLevel[record.level],
+            timeString,
+            levelFormattedString,
             record.msg
         );
     }
