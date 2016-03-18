@@ -6,22 +6,22 @@ import pako from 'pako'
  */
 export default function gzip(file) {
 
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  const promise = new Promise((resolve, reject) => {
-    reader.onload = (e => {
-      var content = null;
-      var theFile = null;
-      const ch = new Uint8Array(e.target.result);
+    const promise = new Promise((resolve, reject) => {
+        reader.onload = (e => {
+            var content = null;
+            var theFile = null;
+            const ch = new Uint8Array(e.target.result);
 
-      content = pako.gzip(ch)
+            content = pako.gzip(ch)
 
-      theFile = new File([content], file.name + '.gz', {type: 'application/gzip', lastModified: new Date()})
-      resolve(theFile)
+            theFile = new File([content], file.name + '.gz', {type: 'application/gzip', lastModified: new Date()})
+            resolve(theFile)
+        });
     });
-  });
-  
-  reader.readAsArrayBuffer(file);
-  return promise;
+
+    reader.readAsArrayBuffer(file);
+    return promise;
 }
 

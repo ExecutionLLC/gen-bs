@@ -14,69 +14,69 @@ export const RECEIVE_SOURCE_FIELDS = 'RECEIVE_SOURCE_FIELDS'
  * action creators
  */
 function requestFields() {
-  return {
-    type: REQUEST_FIELDS
-  }
+    return {
+        type: REQUEST_FIELDS
+    }
 }
 
 function receiveFields(json) {
-  return {
-    type: RECEIVE_FIELDS,
-    fields: json,
-    receivedAt: Date.now()
-  }
+    return {
+        type: RECEIVE_FIELDS,
+        fields: json,
+        receivedAt: Date.now()
+    }
 }
 
 export function fetchFields(sampleId) {
 
-  return ( dispatch, getState )  => {
+    return (dispatch, getState) => {
 
-    dispatch(requestFields())
+        dispatch(requestFields())
 
-    return $.ajax(config.URLS.FIELDS(sampleId), {
-        'type': 'GET',
-         'headers': { "X-Session-Id": getState().auth.sessionId}
-      })
-      .then(json => {
-        dispatch(receiveFields(json))
-      })
+        return $.ajax(config.URLS.FIELDS(sampleId), {
+                'type': 'GET',
+                'headers': {"X-Session-Id": getState().auth.sessionId}
+            })
+            .then(json => {
+                dispatch(receiveFields(json))
+            })
 
-      // TODO:
-      // catch any error in the network call.
-  }
+        // TODO:
+        // catch any error in the network call.
+    }
 }
 
 function requestSourceFields() {
-  return {
-    type: REQUEST_SOURCE_FIELDS
-  }
+    return {
+        type: REQUEST_SOURCE_FIELDS
+    }
 }
 
 function receiveSourceFields(json) {
-  return {
-    type: RECEIVE_SOURCE_FIELDS,
-    sourceFields: json,
-    receivedAt: Date.now()
-  }
+    return {
+        type: RECEIVE_SOURCE_FIELDS,
+        sourceFields: json,
+        receivedAt: Date.now()
+    }
 }
 
 export function fetchSourceFields(sampleId) {
 
-  return ( dispatch, getState )  => {
+    return (dispatch, getState) => {
 
-    dispatch(requestSourceFields())
+        dispatch(requestSourceFields())
 
-    return $.ajax(config.URLS.SOURCE_FIELDS, {
-        'type': 'GET',
-         'headers': { "X-Session-Id": getState().auth.sessionId}
-      })
-      .then(json => {
-        dispatch(receiveSourceFields(json))
-      })
+        return $.ajax(config.URLS.SOURCE_FIELDS, {
+                'type': 'GET',
+                'headers': {"X-Session-Id": getState().auth.sessionId}
+            })
+            .then(json => {
+                dispatch(receiveSourceFields(json))
+            })
 
-      // TODO:
-      // catch any error in the network call.
-  }
+        // TODO:
+        // catch any error in the network call.
+    }
 }
 
 
