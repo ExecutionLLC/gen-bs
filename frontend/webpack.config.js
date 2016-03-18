@@ -2,6 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const colors = require('colors/safe');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -16,9 +17,10 @@ const API_PORT = ENV.GEN_FRONTEND_API_PORT || 5000;
 const ENABLE_SOURCE_MAPS = ENV.GEN_FRONTEND_ENABLE_SOURCE_MAPS || false;
 const devtool = (ENABLE_SOURCE_MAPS) ? 'source-map' : '#eval';
 
-console.log('-> Source maps ' + (ENABLE_SOURCE_MAPS ? 'ENABLED!' : 'disabled.'));
-console.log('-> API host: ', API_HOST);
-console.log('-> API port: ', API_PORT);
+console.log(colors.bold('-> Source maps ' + (ENABLE_SOURCE_MAPS ? 'ENABLED!' : 'disabled.')));
+console.log(colors.bold('-> API host: ', API_HOST));
+console.log(colors.bold('-> API port: ', API_PORT));
+console.log('');
 
 module.exports = {
 
