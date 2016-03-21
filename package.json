@@ -12,7 +12,8 @@
     "start": "node index.js",
     "defaults:generate": "node ./defaults/build-initial-data.js",
     "client": "node test-client/index.js",
-    "user:add": "node ./scripts/add-user.js"
+    "user:add": "node ./scripts/add-user.js",
+    "frontend": "cd frontend; npm start"
   },
   "repository": {
     "type": "git",
