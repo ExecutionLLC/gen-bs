@@ -639,14 +639,7 @@ table {
                 text-overflow: ellipsis;
                 white-space: nowrap; 
                 &.table-loader {
-                  height: 35px;
-                  width: auto;
-                  text-align: center; 
-                  color: @gray;
-                  i { 
-                    vertical-align: middle;
-                    margin-left: .25em;
-                  }
+                   width: auto;
                 }
            }
           &.btntd {
@@ -796,7 +789,16 @@ left: 0;
   }
 }
   }
-
+.table-loader {
+    height: 35px;
+      line-height: 35px;
+    text-align: center; 
+    color: @gray;
+    i { 
+      vertical-align: middle;
+      margin-left: .25em;
+    }
+ }                 
 .empty {
   background: rgb(247, 247, 247) none repeat scroll 0% 0%; margin: -5px -5px -5px -32px; text-align: center; padding: 150px 0px; color: rgb(170, 170, 170);
   border-top: 1px solid #eee;
