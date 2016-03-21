@@ -109,13 +109,6 @@ class DatabaseCreator {
             'desc'
         ];
 
-        // Status of the sample upload process. Pending samples will
-        // be removed when the service starts.
-        const sampleStatusEnumValues = [
-            'pending',  // The sample is somewhere in the middle.
-            'ready'     // Sample is ready for search requests.
-        ];
-
         return databaseKnex.schema
 
             // Language
@@ -370,10 +363,11 @@ class DatabaseCreator {
             .createTable('vcf_file_sample', table => {
                 table.uuid('id')
                     .primary();
-                table.string('file_name', 50);
+                table.string('file_name', 50)
+                    .notNullable();
                 table.string('hash', 50);
-                table.enu('type', entityTypeEnumValues);
-                table.enu('status', sampleStatusEnumValues);
+                table.enu('type', entityTypeEnumValues)
+                    .notNullable();
                 table.boolean('is_analyzed')
                     .defaultTo(false);
                 table.boolean('is_deleted')

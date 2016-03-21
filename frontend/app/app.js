@@ -2,11 +2,9 @@ import 'babel-polyfill'
 import 'jszip'
 
 
-//const $ = require('jquery');
+require('file?name=index.html!./index.html');
 const JSZip = require('jszip');
 window.JSZip = JSZip;
-//window.jQuery = $;
-//window.$ = $;
 
 import './assets/css/bootstrap/js/bootstrap.js';
 import './assets/vendor/select2-4.0.1-rc.1/dist/js/select2.full.min.js';
@@ -15,22 +13,22 @@ import './assets/vendor/matchMedia/matchMedia.js';
 import './assets/vendor/matchMedia/matchMedia.addListener.js';
 
 import './assets/vendor/jquery-localize/dist/jquery.localize.js';
-//import '.assets/vendor/bootstrap3-editable/js/bootstrap-editable.js';
-
-
-
 import './components/localize/jquerylocalize.js';
 
+require('file?name=[path][name].[ext]&context=./app'
+    + '!./assets/vendor/jQuery-QueryBuilder/dist/js/genomics-query-builder.standalone.js');
+require('file?name=[path][name].[ext]&context=./app'
+    + '!./assets/vendor/font-awesome/css/font-awesome.min.css');
 
 import React from 'react'
 import { render } from 'react-dom'
 import Root from './containers/Root'
 
 import gzip from './utils/gzip'
-window.gzip = gzip
+window.gzip = gzip;
 import './assets/css/index.less';
-//import './components/tempJqueryactions.js';
+
 render(
-  <Root />,
-  document.getElementById('root')
-)
+    <Root />,
+    document.getElementById('root')
+);

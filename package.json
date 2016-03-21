@@ -12,7 +12,8 @@
     "start": "node index.js",
     "defaults:generate": "node ./defaults/build-initial-data.js",
     "client": "node test-client/index.js",
-    "user:add": "node ./scripts/add-user.js"
+    "user:add": "node ./scripts/add-user.js",
+    "frontend": "cd frontend; npm start"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
     "body-parser": "1.14.1",
     "bunyan": "1.5.1",
     "change-case": "2.3.1",
+    "colors": "1.1.2",
     "cors": "2.7.1",
     "express": "4.13.3",
     "http-status": "0.2.0",

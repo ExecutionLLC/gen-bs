@@ -14,66 +14,67 @@ import ViewBuilder from './ViewBuilder/ViewBuilder'
 class ViewsModal extends Component {
 
 
-  render() {
+    render() {
 
-    const { dispatch, showModal, closeModal } = this.props
-    const { currentSample, currentView } = this.props.ui
-    const { samples, views, isValid } = this.props.userData
-    const { editOrNew, editedView, newView } = this.props.viewBuilder
+        const { dispatch, showModal, closeModal } = this.props
+        const { currentSample, currentView } = this.props.ui
+        const { samples, views, isValid } = this.props.userData
+        const { editOrNew, editedView, newView } = this.props.viewBuilder
 
-    return (
+        return (
 
-      
-        <Modal
-          dialogClassName="modal-dialog-primary"
-          bsSize="lg"
-          show={this.props.showModal}
-          onHide={ () => {this.props.closeModal('views')} }
-        >
-            { !isValid &&
-              <div >&nbsp;</div>
-            }
-            { isValid &&
-              <div>
-                  <ViewBuilderHeader />
-                  <form>
-                    <Modal.Body>
-                      { !editOrNew &&
-                        <div>
-                          <NewViewInputs  {...this.props} />
-                          <ViewBuilder
-                            {...this.props}
-                          />
-                        </div>
-                      }
-                      { editOrNew &&
-                        <div>
-                          <ExistentViewSelect {...this.props} />
-                          <ViewBuilder
-                            {...this.props}
-                          />
-                        </div>
-                      }
-                    </Modal.Body>
-                    <ViewBuilderFooter {...this.props} />
-                  </form>
-              </div>
-            }
-        </Modal>
 
-    )
-  }
+            <Modal
+                dialogClassName="modal-dialog-primary"
+                bsSize="lg"
+                show={this.props.showModal}
+                onHide={ () => {this.props.closeModal('views')} }
+            >
+                { !isValid &&
+                <div >&nbsp;</div>
+                }
+                { isValid &&
+                <div>
+                    <ViewBuilderHeader />
+                    <form>
+                        <Modal.Body>
+                            { !editOrNew &&
+                            <div>
+                                <NewViewInputs  {...this.props} />
+                                <ViewBuilder
+                                    {...this.props}
+                                />
+                            </div>
+                            }
+                            { editOrNew &&
+                            <div>
+                                <ExistentViewSelect {...this.props} />
+                                <ViewBuilder
+                                    {...this.props}
+                                />
+                            </div>
+                            }
+                        </Modal.Body>
+                        <ViewBuilderFooter {...this.props} />
+                    </form>
+                </div>
+                }
+            </Modal>
+
+        )
+    }
 }
 
 function mapStateToProps(state) {
-  const { viewBuilder, ui, userData, fields } = state
+    const { viewBuilder, ui, auth, userData, fields } = state
 
-  return {
-    userData,
-    fields,
-    ui,
-    viewBuilder
-  }
+    return {
+        userData,
+        fields,
+        ui,
+        viewBuilder,
+        auth
+    }
 }
 
 export default connect(mapStateToProps)(ViewsModal)

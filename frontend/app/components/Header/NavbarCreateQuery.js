@@ -15,55 +15,54 @@ import { changeSample, changeView, changeFilter, analyze } from '../../actions/u
 
 class NavbarCreateQuery extends Component {
 
-  render() {
+    render() {
 
-    const { dispatch, samples, views } = this.props
-    const { currentSample, currentView, currentFilter } = this.props.ui
+        const { dispatch, samples, views } = this.props;
+        const { currentSample, currentView, currentFilter } = this.props.ui;
+        const currentSampleId = currentSample ? currentSample.id : null;
+        return (
 
+            <nav className="navbar navbar-fixed-top navbar-default">
+                <div className="container-fluid">
+                    <div className="table-row">
+                        <Upload  {...this.props} />
+                        <MetadataSearch samples={samples}
+                                        currentSampleId={currentSampleId}
+                                        onSampleChangeRequested={(sampleId) => dispatch(changeSample(samples, sampleId))}
+                        />
+                        <FiltersSetup {...this.props} />
+                        <Filters
+                            {...this.props}
+                        />
 
-    return (
+                        <ViewsSetup {...this.props} />
+                        <Views
+                            {...this.props}
+                        />
 
-        <nav className="navbar navbar-fixed-top navbar-default">
-            <div className="container-fluid">
-                <div className="table-row">
-                  <Upload  {...this.props} />
-                  <MetadataSearch
-                    {...this.props}
-                    sampleSelected={ (e) => dispatch(changeSample(samples, $(e.target).val()))}
-                  />
-                  <FiltersSetup {...this.props} />
-                  <Filters
-                    {...this.props}
-                  />
-
-                  <ViewsSetup {...this.props} />
-                  <Views
-                    {...this.props}
-                  />
-
-                  <Analyze 
-                    {...this.props}
-                    clicked ={ (e) => dispatch(analyze(currentSample.id, currentView.id, currentFilter.id))}
-                  />
-                  <LoadHistory />
+                        <Analyze
+                            {...this.props}
+                            clicked={ (e) => dispatch(analyze(currentSample.id, currentView.id, currentFilter.id))}
+                        />
+                        <LoadHistory />
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
-    )
-  }
+        )
+    }
 }
 
 function mapStateToProps(state) {
-  const { modalWindows, userData, ui} = state
+    const { modalWindows, userData, ui} = state
 
-  return {
-    modalWindows,
-    samples: userData.samples,
-    views: userData.views,
-    filters: userData.filters,
-    ui
-  }
+    return {
+        modalWindows,
+        samples: userData.samples,
+        views: userData.views,
+        filters: userData.filters,
+        ui
+    }
 }
 
 export default connect(mapStateToProps)(NavbarCreateQuery)

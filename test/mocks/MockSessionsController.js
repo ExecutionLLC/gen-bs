@@ -29,10 +29,13 @@ class MockApiController {
         } else {
             const email = body.email;
             async.waterfall([
-                (callback) => services.sessions.startForEmail(email, callback)
-            ], (error, sessionId) => {
+                (callback) => services.sessions.startForEmail(email, callback),
+                (sessionId, callback) => services.sessions.findSessionType(sessionId,
+                    (error, sessionType) => callback(error, sessionId, sessionType))
+            ], (error, sessionId, sessionType) => {
                 this.sessionsController.sendErrorOrJson(response, error, {
-                    sessionId
+                    sessionId,
+                    sessionType
                 });
             });
         }

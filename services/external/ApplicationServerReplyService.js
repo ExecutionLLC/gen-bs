@@ -228,10 +228,11 @@ class ApplicationServerReplyService extends ServiceBase {
                     (userId, callback) => this.services.users.find(userId, callback),
                     (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
                         sampleFileName, sampleReference, fieldsMetadata, callback)
-                ], (error) => {
+                ], (error, sampleVersionId) => {
                     callback(error, {
                         status,
                         progress,
+                        sampleId: sampleVersionId,
                         eventName: EVENTS.onOperationResultReceived,
                         shouldCompleteOperation: true
                     });

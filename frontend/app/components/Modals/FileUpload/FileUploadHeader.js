@@ -9,7 +9,7 @@ export default class FileUploadHeader extends Component {
 
           <Modal.Header closeButton>
             <Modal.Title data-localize="views.heading">
-              Upload vcf 
+              Upload VCF Files
             </Modal.Title>
           </Modal.Header>
 

@@ -4,22 +4,11 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const RequestWrapper = require('./RequestWrapper');
-const ClientBase = require('./ClientBase');
+const UserEntityClientBase = require('./UserEntityClientBase');
 
-class SamplesClient extends ClientBase {
+class SamplesClient extends UserEntityClientBase {
     constructor(urls) {
-        super(urls);
-        this.samplesUrls = this.urls.samplesUrls();
-    }
-
-    getAll(sessionId, callback) {
-        RequestWrapper.get(this.samplesUrls.getAll(),
-            this._makeHeaders({sessionId}), null, null, callback);
-    }
-
-    get(sessionId, sampleId, callback) {
-        RequestWrapper.get(this.samplesUrls.get(sampleId),
-            this._makeHeaders({sessionId}), null, null, callback);
+        super(urls, urls.samplesUrls());
     }
 
     getFields(sessionId, sampleId, callback) {
@@ -32,16 +21,22 @@ class SamplesClient extends ClientBase {
             this._makeHeaders({sessionId}), null, null, callback);
     }
 
-    remove(sessionId, sampleId, callback) {
-        RequestWrapper.del(this.viewsUrls.remove(sampleId),
-            this._makeHeaders({sessionId}), null, callback);
+    add(sessionId, fileName, fileStream, callback) {
+        RequestWrapper.upload(this.collectionUrls.upload(),
+            'sample',
+            fileName,
+            fileStream,
+            this._makeHeaders({sessionId}),
+            {},
+            callback
+        );
     }
 
-    static verifySampleFormat(sample, shouldCheckValues) {
+    static verifySampleFormat(sample, shouldCheckFieldValues) {
         assert.ok(sample.id);
         assert.ok(_.includes(['standard', 'advanced', 'user'], sample.type));
         assert.ok(sample.fileName);
-        if (shouldCheckValues) {
+        if (shouldCheckFieldValues) {
             assert.ok(sample.values && sample.values.length);
             _.each(sample.values, sampleValue => {
                 assert.ok(sampleValue.fieldId);
