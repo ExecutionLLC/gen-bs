@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import FileUploadProgressBar from './FileUploadProgressBar'
+import FileUploadProgressBar from './FileUploadProgressBar';
 
-import { clearUploadState, changeFileForUpload } from '../../../actions/fileUpload'
-
+import { clearUploadState, changeFileForUpload } from '../../../actions/fileUpload';
 
 
 export default class FileUpload extends Component {
@@ -15,18 +14,19 @@ export default class FileUpload extends Component {
   }
 
   uploadClickHandler(event) {
-    this.refs.fileInput.click()
+    this.refs.fileInput.click();
   }
 
   render() {
-    const { dispatch, auth } = this.props
-    const { files, error, isArchiving } = this.props.fileUpload
+    const { dispatch, auth } = this.props;
+    const { files, error, isArchiving } = this.props.fileUpload;
     if (auth.isDemo){
         return (
             <div className="well text-center">
                 Please login or register to upload new samples
-                </div>)
-    }else
+            </div>
+        );
+    } else {
         return (
           <div className="well text-center">
             <div>
@@ -64,9 +64,7 @@ export default class FileUpload extends Component {
               <FileUploadProgressBar {...this.props} />
             }
           </div>
-
-
-
-    )
+        );
+    }
   }
 }
