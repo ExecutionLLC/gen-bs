@@ -52,6 +52,16 @@ class SavedFilesUrls extends CollectionUrls {
     }
 }
 
+class SamplesUrls extends CollectionUrls {
+    constructor(baseUrl, host, port) {
+        super(baseUrl, host, port);
+    }
+
+    upload() {
+        return this._constructApiUrl('/upload');
+    }
+}
+
 class Urls {
     constructor(host, port) {
         this.host = host;
@@ -99,7 +109,7 @@ class Urls {
     }
 
     samplesUrls() {
-        return new CollectionUrls('/samples', this.host, this.port);
+        return new SamplesUrls('/samples', this.host, this.port);
     }
 
     commentsUrls() {
