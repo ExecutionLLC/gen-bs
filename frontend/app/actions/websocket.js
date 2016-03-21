@@ -101,8 +101,8 @@ function receiveMessage(msg) {
         console.log('wsData.result', wsData.result);
         console.log('wsData.operation_id', wsData.operation_id);
         if (wsData.result) {
-            if (wsData.result.sample_id) {
-                dispatch(tableMessage(wsData))
+            if (wsData.result.sample_id && getState().fileUpload.operationId !== wsData.operation_id) {
+                dispatch(tableMessage(wsData));
                 if (getState().variantsTable.isFilteringOrSorting) {
                     dispatch(receiveSearchedResults())
                 }
