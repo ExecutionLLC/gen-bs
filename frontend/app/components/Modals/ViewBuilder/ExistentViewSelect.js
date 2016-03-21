@@ -19,7 +19,7 @@ export default class ExistentViewSelect extends Component {
         var disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
         })
-        var title = (auth.isDemo) ? 'Login or register to create view' : 'Сopy this to a new'
+        var title = (auth.isDemo) ? 'Login or register to create view' : 'Make a copy for editing'
 
         return (
 
