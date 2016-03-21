@@ -90,15 +90,17 @@ export default class FieldHeaderControls extends Component {
                 <div className={inputGroupClasses}>
                     <span className="input-group-btn">
                         <button className="btn btn-link-light-default"
-                                onClick={() => this.onSearchInputToggle()}>
+                                onClick={() => this.setFilterOpened(true)}>
                             <i className="md-i">search</i>
                         </button>
                     </span>
                     <input type="text"
                            className="form-control material-input"
                            value={searchString}
+                           ref={(input) => this.focusInput(input)}
                            onChange={(e) => this.onSearchInputChanged(e)}
                            onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
+                           onBlur={(e) => this.setFilterOpened(false)}
                     />
                 </div>
             );
@@ -132,9 +134,15 @@ export default class FieldHeaderControls extends Component {
         );
     }
 
-    onSearchInputToggle() {
+    focusInput(input) {
+        if (this.state.isFilterOpened && input !== null) {
+            input.focus();
+        }
+    }
+
+    setFilterOpened(isOpened) {
         this.setState({
-            isFilterOpened: !this.state.isFilterOpened
+            isFilterOpened: isOpened
         });
     }
 
