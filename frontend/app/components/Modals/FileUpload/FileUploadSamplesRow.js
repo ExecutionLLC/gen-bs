@@ -32,8 +32,8 @@ export default class FileUploadSamplesRow extends Component {
 
             <button
                 onClick={() => {
-                dispatch(changeSample(samples, sample.id));
-                closeModal('upload')
+                  dispatch(changeSample(samples, sample.id));
+                  closeModal('upload');
                 }}
                 class="btn btn-default btn-choose"
                 type="button" >
