@@ -7,11 +7,10 @@ import { filterBuilderReceiveRules, filterBuilderUpdateFilter, filterBuilderCrea
 export default class FilterBuilder extends Component {
 
   componentDidMount() {
-    const { dispatch, fields } = this.props;
-    const { editOrNew, rulesRequested, editedFilter, newFilter } = this.props.filterBuilder;
+    const { fields } = this.props;
+    const { editOrNew, editedFilter, newFilter } = this.props.filterBuilder;
     const filter = editOrNew ? (editedFilter):(newFilter);
     var el = this.refs.builder;
-    var rules = [];
 
     const builderFilters = [
 
@@ -24,16 +23,34 @@ export default class FilterBuilder extends Component {
       filters: builderFilters,
       operators: filterOperators
     });
+    this.disableFilter(filter,el);
+  }
+
+  disableFilter(filter,el) {
     window.$(el).queryBuilder('setRulesFromGenomics', filter.rules);
-    if(filter.type === 'standard') {
-      window.$('input[name*="builder-basic_rule"],select[name*="builder-basic_rule"]').prop('disabled', true)
+    if (filter.type === 'standard' || filter.type == 'advanced') {
+      //inputs and selects
+      window.$('input[name*="builder-basic_rule"],select[name*="builder-basic_rule"]')
+          .prop('disabled', true);
+      //and, or operators
+      window.$('div[class*="group-conditions"]')
+          .children()
+          .children()
+          .prop('disabled', true);
+      //add rule ,add group
+      window.$('div[class*="group-actions"]')
+          .children()
+          .prop('disabled', true);
+      window.$('div[class*="rule-actions"]')
+          .children()
+          .prop('disabled', true);
     }
   }
 
   componentWillUpdate(nextProps) {
-    const { dispatch, fields } = nextProps
-    const { editOrNew, rulesRequested, rulesPrepared, editedFilter, newFilter } = nextProps.filterBuilder
-    const filter = editOrNew ? (editedFilter):(newFilter)
+    const { dispatch, fields } = nextProps;
+    const { editOrNew, rulesRequested, editedFilter, newFilter } = nextProps.filterBuilder;
+    const filter = editOrNew ? (editedFilter):(newFilter);
     var el = this.refs.builder;
     var rules = [];
     const builderFilters = [
@@ -52,10 +69,7 @@ export default class FilterBuilder extends Component {
         filters: builderFilters,
         operators: filterOperators
       });
-      window.$(el).queryBuilder('setRulesFromGenomics', filter.rules);
-      if(filter.type === 'standard') {
-        window.$('input[name*="builder-basic_rule"],select[name*="builder-basic_rule"]').prop('disabled', true);
-      }
+      this.disableFilter(filter,el);
     }
   }
 

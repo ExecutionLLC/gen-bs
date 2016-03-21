@@ -160,28 +160,37 @@
 }
 .modal-lg {
   width: auto;
-   @media (min-width: @screen-md) {
+   @media (min-width: @modal-lg) {
     margin: 30px 10%;
-  }
-  @media (min-width: @screen-lg) {
-    margin: 30px auto;
-    max-width: @screen-lg;
     
   }
 }
 
 
 .modal-dialog-primary { 
+  .modal-title { 
+    color: #fff;
+  }
+  .close { 
+    color: #fff;
+    opacity: .8;
+    span { 
+      display: none;
+    }
+    
+    &:before {
+      &:extend(.md-i);
+      content: "close";
+    } 
+  }
   .modal-content { 
    background-color: transparent;  
   }
     .modal-header { 
       background: @brand-primary;
       color: #fff;
-   }
-   .modal-title { 
-      color: #fff;
-   }
+
+  }
   .modal-body{ 
    background: @default-max-light;
     }
@@ -233,9 +242,13 @@
     opacity: .7;
   }
   .modal-dialog { 
-    margin-top: 100px;
      position: relative;
     z-index: 1041;
+  }
+  @media(min-width: @screen-sm){
+    .modal-dialog { 
+    margin-top: 100px;
+    }
   }
 }
 .modal { 
@@ -335,4 +348,7 @@
     min-width: 250px;
     } 
   }
+}
+.modal.modal-third-layer { 
+    z-index: @zindex-modal + 2;
 }

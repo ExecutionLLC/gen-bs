@@ -178,9 +178,9 @@ output {
           box-shadow: none;
        font-size: 15px;
        height: 48px;
-       padding: 20px 0 6px;
+       padding: 16px 0;
        z-index: 1;
-          &:focus { 
+  &:focus { 
               .placeholder(@color:transparent);
                + .material-label { 
                
@@ -189,7 +189,21 @@ output {
                z-index: 2;
               }
                
-      }   
+      }  
+          
+  &[disabled],
+  &[readonly],
+  fieldset[disabled] & {
+    background-color: transparent;
+    opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
+      background-image: -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter)), -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter));
+  background-image: -webkit-linear-gradient(@gray-lighter, @gray-lighter), -webkit-linear-gradient(@gray-lighter, @gray-lighter);
+  background-image: linear-gradient(@gray-lighter, @gray-lighter), linear-gradient(@gray-lighter, @gray-lighter);
+  color: lighten(@gray-lighter, 5%);
+   .placeholder(@color:@gray-lighter);
+  }
+
+  
   }
 
 .material-input:focus {
@@ -215,7 +229,6 @@ output {
     background-size: 100% 2px, 100% 1px;
   }
 }
-
 @keyframes input-highlight {
   0% {
     background-size: 0 2px, 100% 1px;
@@ -224,6 +237,30 @@ output {
     background-size: 100% 2px, 100% 1px;
   }
 }
+
+
+.material-select { 
+  + .select2-container--default { 
+     .select2-selection--single { 
+       border-width: 0 0 1px;
+       border-color:  @gray-lighter;
+       box-shadow: none;
+       background:transparent;
+       border-radius: 0;
+       .select2-selection__rendered { 
+         padding-left: 0;
+         padding-right: 0;
+       }
+       .select2-selection__arrow b {
+       border-color: @gray transparent transparent;
+       
+       }
+  }
+
+     }
+}
+
+
  
 .material-label { 
             position: absolute;
@@ -702,18 +739,17 @@ input[type="search"] {
 
 .row.grid-toolbar { 
  clear: both;
+
     > div { 
-      margin: 0 0 5px;
       .select2-container { 
-      width: 100%!important;
-    }
+        width: 100%!important;
+      }
       + div { 
         padding-top: 0;
       }
       &.btn-group-select2 .btn-group { 
         &:first-child { 
           min-width: 40px;
-          
         }
       }
     }
@@ -726,12 +762,12 @@ input[type="search"] {
    
   @media (min-width: @screen-sm) {
     margin:0;
-  > div { 
+  > div[class*="col-"] { 
     padding: 0 5px 0 0;
     .select2-container { 
       width: 100%!important;
     }
-    + div { 
+    + div[class*="col-"] { 
       padding-left: 5px;
       margin: 0 0 5px;
     }
@@ -739,7 +775,10 @@ input[type="search"] {
       padding-right: 0;
     }
   }
-    
+    .group-label { 
+      padding-right: 50px;
+
+    }
     
   }
 }
@@ -773,7 +812,7 @@ input[type="search"] {
 .row.grid-toolbar { 
   .btn-link { 
    padding:@padding-base-vertical;
-   color: @text-muted;
+   color: @text-color;
     }
 }
 .form-horizontal {
@@ -919,13 +958,22 @@ input[type="search"] {
   }
 }
 
-
+.form-horizontal { 
+  .grid-toolbar {
+    + .grid-toolbar { 
+      margin-top: 8px;
+    }
+  }
+}
 .form-rows  {
-     margin-left: -15px;
-    padding-left: 28px;
-    padding-right: 56px;
+    padding-left: 40px;
+    padding-right: 80px;
+    &.form-rows-in-grid  { 
+      margin-left: -45px;
+    }
    .grid-toolbar { 
      position: relative;
+     margin-bottom: 5px;
  
    }
    .btn-group-select2 { 
@@ -950,18 +998,18 @@ input[type="search"] {
      }
    }
    .btn-group-left { 
-    left: -24px;
+    left: -40px;
     position: absolute;
-    top: 0;
+    top: 6px;
     .btn { 
       float: left;
     }
   }
    .btn-group-right { 
-   position: absolute;
-    right: -56px;
-    width: 56px;
-   
+    position: absolute;
+    right: -90px;
+    width: 80px;
+    top: 6px;
     .btn { 
       float: left;
     }
@@ -985,7 +1033,7 @@ input[type="search"] {
           &.nobg { 
             display: none;
           }
-          >div { 
+          > div { 
             + div {
               padding-left:0;
             }

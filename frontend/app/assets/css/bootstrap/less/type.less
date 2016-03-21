@@ -54,6 +54,10 @@ body {
    font-family: "Roboto-Regular" 
 }
 
+strong { 
+  font-family: "Roboto-Medium";
+  font-weight: normal;
+}
 // Headings
 // -------------------------
 
@@ -253,6 +257,7 @@ dd {
 }
 dt {
   font-weight: normal;
+   color: @text-muted;
 }
 dd {
   margin-left: 0; // Undo browser default
@@ -264,6 +269,7 @@ dd {
 // grid breakpoint is reached (default of ~768px).
 
 .dl-horizontal {
+  margin-bottom: @padding-large-vertical;
   dd {
     &:extend(.clearfix all); // Clear the floated `dt` if an empty `dd` is present
   }
@@ -273,11 +279,12 @@ dd {
       float: left;
       width: (@dl-horizontal-offset - 20);
       clear: left;
-      text-align: right;
+      
       .text-overflow();
     }
     dd {
       margin-left: @dl-horizontal-offset;
+      text-align: right;
     }
   }
 }
@@ -367,3 +374,4 @@ address {
   font-size: @font-size-h4;
   color: @gray-light;
 }
+
