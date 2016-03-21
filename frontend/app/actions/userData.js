@@ -162,8 +162,9 @@ export function fetchSamples() {
                 const sample = getState().ui.currentSample || json[0] || null
                 const sampleId = sample.id
 
-                dispatch(receiveSamples(json))
-                dispatch(changeSample(json, sampleId))
+                dispatch(receiveSamples(json));
+                dispatch(changeSample(json, sampleId));
+                dispatch(fetchSourceFields());                
             })
 
         // TODO:
