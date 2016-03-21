@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
-import { getNextPartOfData } from '../../actions/variantsTable'
+import VariantsTableEmpty from './VariantsTableEmpty';
+
+import { getNextPartOfData } from '../../actions/variantsTable';
 
 export default class VariantsTableRows extends Component {
 
@@ -37,10 +39,14 @@ export default class VariantsTableRows extends Component {
     }
 
   renderTableBody(rows, sortState, isFilteringOrSorting) {
-    if (isFilteringOrSorting) {
+      if (isFilteringOrSorting) {
       return (
-          <div className="table-loader">Loading...<i className="md-i">autorenew</i>
-          </div>
+          <tr>
+              <td colSpan="100">
+                <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+                </div>
+              </td>
+          </tr>
       );
     } else {
       return _.map(rows, (row, index) => this.renderRow(row, index, sortState));
