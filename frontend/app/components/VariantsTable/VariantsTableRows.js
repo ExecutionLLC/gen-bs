@@ -114,7 +114,7 @@ export default class VariantsTableRows extends Component {
   }
 
   renderWaitingIfNeeded(isFilteringOrSorting, currentVariants) {
-    const variantsLength = (currentVariants === null) ? 0 : currentVariants.length;
+    const variantsLength = (!currentVariants) ? 0 : currentVariants.length;
     if (!isFilteringOrSorting && variantsLength > 99) {
       return (
         <tr>

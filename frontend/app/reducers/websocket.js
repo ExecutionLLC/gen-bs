@@ -18,23 +18,24 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 variants: null,
                 currentVariants: null
-            })
+            });
         case ActionTypes.WS_CREATE_CONNECTION:
             return Object.assign({}, state, {
                 wsConn: action.wsConn
-            })
+            });
         case ActionTypes.WS_TABLE_MESSAGE:
+            const resultData = action.wsData.result.data;
             return Object.assign({}, state, {
                 messages: [
                     ...state.messages,
                     action.wsData
                 ],
-                variants: state.variants === null ? action.wsData.result.data : [...state.variants, ...action.wsData.result.data],
-                currentVariants: action.wsData.result.data,
-                isVariantsEmpty: (action.wsData.result.data.length === 0),
+                variants: state.variants === null ? resultData : [...state.variants, ...(resultData || [])],
+                currentVariants: resultData,
+                isVariantsEmpty: (resultData && resultData.length === 0),
                 isVariantsLoaded: false,
                 isVariantsValid: true
-            })
+            });
         case ActionTypes.WS_PROGRESS_MESSAGE:
             return Object.assign({}, state, {
                 messages: [
@@ -42,14 +43,14 @@ export default function websocket(state = {
                     action.wsData
                 ],
                 progress: action.wsData.result.progress
-            })
+            });
         case ActionTypes.WS_OTHER_MESSAGE:
             return Object.assign({}, state, {
                 messages: [
                     ...state.messages,
                     action.wsData
-                ],
-            })
+                ]
+            });
         case ActionTypes.WS_RECEIVE_AS_ERROR:
             return Object.assign({}, state, {
                 errors: [
@@ -58,7 +59,7 @@ export default function websocket(state = {
                 ],
                 isVariantsLoaded: false,
                 isVariantsValid: false
-            })
+            });
 
         case ActionTypes.WS_RECEIVE_ERROR:
             return Object.assign({}, state, {
@@ -66,16 +67,16 @@ export default function websocket(state = {
                     ...state.errors,
                     action.err
                 ],
-                isVariantsLoaded: false,
-            })
+                isVariantsLoaded: false
+            });
         case ActionTypes.WS_RECEIVE_CLOSE:
             return Object.assign({}, state, {
                 closed: true
-            })
+            });
         case ActionTypes.WS_SEND_MESSAGE:
             return Object.assign({}, state, {
                 lastMessageSended: action.msg
-            })
+            });
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
                 variants: null,
