@@ -261,7 +261,7 @@ class ApplicationServerService extends ServiceBase {
      * */
     _getAppServerSampleId(sample) {
         return sample.type === 'standard' || sample.type === 'advanced' ?
-                sample.fileName : sample.id;
+                sample.fileName : sample.originalId;
     }
 
     _getPrefixedFieldName(fieldMetadata) {

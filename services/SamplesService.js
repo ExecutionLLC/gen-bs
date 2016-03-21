@@ -6,10 +6,27 @@ const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
+const EditableFields = require('../defaults/templates/metadata/editable-metadata.json');
 
 class SamplesService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.samples);
+
+        this.editableFields = _.reduce(EditableFields, (result, field) => {
+            result[field.id] = field;
+            return result;
+        }, {});
+    }
+
+    add(user, languId, sample, callback) {
+        callback(new Error('The method is not supported.'));
+    }
+
+    update(user, sample, callback) {
+        async.waterfall([
+            (callback) => this._ensureOnlyEditableFieldsHaveValues(sample, callback),
+            (callback) => super.update(user, sample, callback)
+        ], callback);
     }
 
     /**
@@ -46,6 +63,32 @@ class SamplesService extends UserEntityServiceBase {
         } else {
             callback(null, false);
         }
+    }
+
+    _ensureOnlyEditableFieldsHaveValues(sample, callback) {
+        const values = sample.values;
+        async.waterfall([
+            (callback) => {
+                if (!values) {
+                    callback(new Error('Sample metadata should have "values" property.'));
+                } else {
+                    callback(null);
+                }
+            },
+            (callback) => {
+                const onlyEditableHaveValues = _.all(
+                    values,
+                    value => this.editableFields[value.fieldId] || !value.fieldValue
+                );
+
+                if (!onlyEditableHaveValues) {
+                    callback(new Error('Only editable fields can have a value.'));
+                } else {
+                    callback(null);
+                }
+            }
+        ], callback);
+
     }
 }
 

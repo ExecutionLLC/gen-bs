@@ -677,9 +677,9 @@
 .navbar-inverse {
 
       .navbar-btn {
-      //color: @navbar-inverse-link-color;
-      //border-right: rgba(0,0,0, .1) solid 1px;
-      //background-color: @navbar-inverse-bg;
+      color: @navbar-inverse-link-color;
+      
+      background-color: @navbar-inverse-bg;
       &:hover,
       &:focus {
         color: @navbar-inverse-link-hover-color;
@@ -699,7 +699,7 @@
      left: auto;
      padding: 0;
      color: @text-color;
-      background: transparent;
+    
    .btn-default { 
      color: @btn-default-color!important;
    }
@@ -760,7 +760,7 @@
         height:@navbar-height - 2;
         line-height:@navbar-height - 2;
         padding:0 0 0 28px;
-        background: none;
+        background-color:transparent;
         border: none;
         text-align: left;
         
@@ -812,7 +812,7 @@
       display: table-cell;
       border-radius: 0;
       border: none ;
-      background: transparent;
+      background-color: transparent;
   
       box-shadow: none;
    
@@ -951,8 +951,8 @@
        .badge { 
       border-radius: 20px;
       position: absolute;
-      right: -6px;
-      top: 0px;
+        right: 0;
+        top: 4px;
       z-index: 1;
        }
 

@@ -64,8 +64,8 @@
 @line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
 
 //** By default, this inherits from the `<body>`.
-@headings-font-family:    inherit;
-@headings-font-weight:    500;
+@headings-font-family:    "Roboto-Medium";
+@headings-font-weight:    400;
 @headings-line-height:    1.1;
 @headings-color:          inherit;
 
@@ -89,10 +89,10 @@
 @padding-base-vertical:     7px;
 @padding-base-horizontal:   16px;
 
-@padding-large-vertical:    9px;
-@padding-large-horizontal:  16px;
+@padding-large-vertical:    8px;
+@padding-large-horizontal:  24px;
 
-@padding-small-vertical:    5px;
+@padding-small-vertical:    4px;
 @padding-small-horizontal:  8px;
 
 @padding-xs-vertical:       1px;
@@ -130,14 +130,14 @@
 //** Default background color used for all tables.
 @table-bg:                      #fff;
 //** Background color used for `.table-striped`.
-@table-bg-accent:               @default-max-light;
+@table-bg-accent:              lighten(@default-max-light, 1%);
 //** Background color used for `.table-hover`.
-@table-bg-hover:                @default-max-light;
-@table-bg-active:               @active;
+@table-bg-hover:               lighten(@default-max-light, 1%);
+@table-bg-active:               darken(@table-bg-accent,3%);
 
 //** Border color for table and cell borders.
-@table-border-color:           darken(@default-max-light, 2%);
-@table-th-bg:                   @default-max-light;
+@table-border-color:           lighten(@default-max-light, 1%);
+@table-th-bg:                  #fff;
 @table-primary-border-color:   @brand-primary;
 @table-primary-th-bg:      darken(@brand-primary, 5%);
 @table-primary-th-color: #fff;
@@ -233,7 +233,7 @@
 @input-height-small:             (floor(@font-size-small * @line-height-small) + (@padding-small-vertical * 2) + 2);
 
 //** `.form-group` margin
-@form-group-margin-bottom:       15px;
+@form-group-margin-bottom:       @padding-base-horizontal;
 
 @legend-color:                   @gray-dark;
 @legend-border-color:            @gray-lighter;
@@ -255,7 +255,7 @@
 @dropdown-bg:                    #fff;
 //** Dropdown menu `border-color`.
 @dropdown-border:                 #fff;
-@dropdown-shadow:     0 2px 3px fade(@gray-base, 20%);
+@dropdown-shadow:     @shadow-paper-1;
 //** Dropdown menu `border-color` **for IE8**.
 @dropdown-fallback-border:       @gray-ligher-max;
 //** Divider color for between dropdown items.
@@ -283,6 +283,12 @@
 @dropdown-caret-color:           @gray-base;
 
 
+
+//Shadow master list 
+
+@shadow-paper-1:  0 0 2px fade(@gray-base, 15%);
+@shadow-paper-2:  0 1px 2px fade(@gray-base, 25%);
+@shadow-paper-3:  0 1px 4px fade(@gray-base, 25%);
 //-- Z-index master list
 //
 // Warning: Avoid customizing these values. They're used for a bird's eye view
@@ -346,7 +352,7 @@
 //** Number of columns in the grid.
 @grid-columns:              12;
 //** Padding between columns. Gets divided in half for the left and right.
-@grid-gutter-width:         30px;
+@grid-gutter-width:         32px;
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
 @grid-float-breakpoint:     @screen-sm-min;
@@ -417,7 +423,7 @@
 @navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
 
 // Inverted navbar links
-@navbar-inverse-link-color:                 @light-primary-color;
+@navbar-inverse-link-color:                #fff;
 @navbar-inverse-link-hover-color:           #fff;
 @navbar-inverse-link-hover-bg:              transparent;
 @navbar-inverse-link-active-color:          @navbar-inverse-link-hover-color;
@@ -441,7 +447,7 @@
 //##
 
 //=== Shared nav styles
-@nav-link-padding:                          10px 15px;
+@nav-link-padding:                          10px @padding-base-horizontal;
 @nav-link-hover-bg:                         transparent;
 
 @nav-disabled-link-color:                   @gray-light;
@@ -492,7 +498,7 @@
 
 @pager-bg:                             @pagination-bg;
 @pager-border:                         @pagination-border;
-@pager-border-radius:                  15px;
+@pager-border-radius:                  @padding-base-horizontal;
 
 @pager-hover-bg:                       @pagination-hover-bg;
 
@@ -555,12 +561,12 @@
 //** Popover maximum width
 @popover-max-width:                   276px;
 //** Popover border color
-@popover-border-color:                rgba(0,0,0,.2);
+@popover-border-color:               transparent;
 //** Popover fallback border color
-@popover-fallback-border-color:       @gray-ligher-max;
+@popover-fallback-border-color:       transparent;
 
 //** Popover title background color
-@popover-title-bg:                    darken(@popover-bg, 3%);
+@popover-title-bg:                    transparent;
 
 //** Popover arrow width
 @popover-arrow-width:                 10px;
@@ -573,14 +579,14 @@
 @popover-arrow-outer-color:           fadein(@popover-border-color, 5%);
 //** Popover outer arrow fallback color
 @popover-arrow-outer-fallback-color:  darken(@popover-fallback-border-color, 20%);
-
+@popover-shadow:        @shadow-paper-1;
 
 //== Labels
 //
 //##
 
 //** Default label background color
-@label-default-bg:            @gray-light;
+@label-default-bg:            @gray-lighter;
 @label-default-light-bg:      darken(@default-max-light, 5%);
 //** Primary label background color
 @label-primary-bg:            @brand-primary;
@@ -605,13 +611,13 @@
 //##
 
 //** Padding applied to the modal body
-@modal-inner-padding:         15px;
+@modal-inner-padding:         @padding-base-horizontal;
 
 //** Padding applied to the modal title
 @modal-header-bg:              transparent;
 
 @modal-title-color:            @text-color;
-@modal-title-padding:         15px;
+@modal-title-padding:         @padding-base-horizontal;
 //** Modal title line-height
 @modal-title-line-height:     @line-height-base;
 
@@ -634,14 +640,14 @@
 
 @modal-lg:                    900px;
 @modal-md:                    600px;
-@modal-sm:                    300px;
+@modal-sm:                    480px;
 
 
 //== Alerts
 //
 //## Define alert colors, border radius, and padding.
 
-@alert-padding:               9px 0 15px 20px;
+@alert-padding:               9px 0 @padding-base-horizontal 20px;
 @alert-icon-font-family:     "FontAwesome";  
 @alert-border-radius:         @border-radius-base;
 @alert-link-font-weight:      bold;
@@ -738,18 +744,20 @@
 //##
 
 @panel-bg:                    #fff;
-@panel-body-padding:          15px;
-@panel-heading-padding:       0;
+@panel-body-padding:          @padding-base-horizontal;
+@panel-heading-padding:       @padding-base-horizontal ;
 @panel-icon-font-family:     "FontAwesome";      
-@panel-footer-padding:        @panel-heading-padding;
+@panel-footer-padding:        @padding-large-vertical 0;
 @panel-border-radius:         @border-radius-small;
+@panel-shadow:        @shadow-paper-1;
+@panel-hover-shadow:  @shadow-paper-3;
 
 //** Border color for elements within panels
 @panel-inner-border:          @gray-ligher-max;
 @panel-footer-bg:             #fff;
 
 @panel-default-text:          @gray-dark;
-@panel-default-border:        @gray-lighter;
+@panel-default-border:        #fff;
 @panel-default-heading-bg:    #fff;
 @panel-default-state-icon:     " "; 
 

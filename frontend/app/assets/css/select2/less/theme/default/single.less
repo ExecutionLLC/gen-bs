@@ -82,7 +82,11 @@
   .select2-selection--single {
     border-color: @brand-primary;
     outline: 0;
-    .select2-selection__arrow {
+
+  // WebKit
+  outline: 0px auto -webkit-focus-ring-color;
+  outline-offset: 0px;
+      .select2-selection__arrow {
       b {
         border-color: transparent transparent @gray  transparent;
         border-width: 0 4px 5px 4px;

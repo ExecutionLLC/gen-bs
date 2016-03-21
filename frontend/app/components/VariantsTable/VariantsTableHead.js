@@ -21,7 +21,7 @@ export default class VariantsTableHead extends Component {
         const currentView = _.find(ui.views,view => view.id===searchParams.viewId) ;
         if (!currentView) {
             return (
-                <tbody className="variants_table_head" id="variants_table_head">
+                <tbody className="table-variants-head" id="variants_table_head">
                 <tr></tr>
                 </tbody>
             );
@@ -30,24 +30,26 @@ export default class VariantsTableHead extends Component {
         const fieldIds = _.map(currentView.view_list_items, item => item.field_id);
 
         return (
-            <tbody className="variants_table_head" id="variants_table_head">
+            <tbody className="table-variants-head" id="variants_table_head">
             <tr>
-                <td className="row_checkbox" data-label="checkbox" key="row_checkbox">
+                <td className="btntd row_checkbox" data-label="checkbox" key="row_checkbox">
+                    <div></div>
+                </td>
+                <td className="btntd">
                     <div></div>
                 </td>
                 <td data-label="comment" key="comment" className="comment">
                     <div>
                         <div className="variants-table-header-label">
-                            <a type="button" className="btn btn-link" data-toggle="popover" data-html="true"
-                               data-container="body" data-placement="bottom"
-                               data-template='<div className="popover variants-table-th-filter" role="tooltip"><div className="popover-content"></div></div>'
-                               data-content='<input type="text" className="form-control">'>
-                                COMMENT
+                            <a type="button" className="btn-link-default">
+                                Comment
                             </a>
+                            
                         </div>
                     </div>
-                    <div>
-                        <input type="text" className="form-control"
+                    <div className="variants-table-search-field input-group">
+                       <span className="input-group-btn"><button className="btn btn-link-light-default"><i className="md-i">search</i></button></span>
+                        <input type="text" className="form-control material-input"
                                value=""
                         />
                     </div>
@@ -85,10 +87,7 @@ export default class VariantsTableHead extends Component {
             <td data-label={fieldId} key={fieldId}>
                 <div>
                     <div className="variants-table-header-label">
-                        <a type="button" className="btn btn-link" data-toggle="popover" data-html="true"
-                           data-container="body" data-placement="bottom"
-                           data-template='<div className="popover variants-table-th-filter" role="tooltip"><div className="popover-content"></div></div>'
-                           data-content='<input type="text" className="form-control">'>
+                        <a type="button" className="btn-link-default">
                             {name}
                         </a>
 
@@ -97,13 +96,13 @@ export default class VariantsTableHead extends Component {
                             <button className={sortClassAsc}
                                     onClick={ e => dispatch(sortVariants(fieldId, 'asc', e.ctrlKey || e.metaKey)) }>
                                 {columnSortParams && columnSortParams.direction === 'asc' &&
-                                <span className="badge">{columnSortParams.order}</span>
+                                <span className="text-info">{columnSortParams.order}</span>
                                 }
                             </button>
                             <button className={sortClassDesc}
                                     onClick={ e => dispatch(sortVariants(fieldId, 'desc', e.ctrlKey || e.metaKey)) }>
                                 {columnSortParams && columnSortParams.direction === 'desc' &&
-                                <span className="badge">{columnSortParams.order}</span>
+                                <span className="text-info">{columnSortParams.order}</span>
                                 }
                             </button>
                         </div>
@@ -122,8 +121,9 @@ export default class VariantsTableHead extends Component {
             var searchObj = _.find([...this.props.variantsTable.searchInResultsParams.search], {field_id: fieldId});
             var inputValue = searchObj ? searchObj.value : '';
             return (
-                <div>
-                    <input type="text" className="form-control"
+                <div className="variants-table-search-field input-group">
+                    <span className="input-group-btn"><button className="btn btn-link-light-default"><i className="md-i">search</i></button></span>
+                    <input type="text" className="form-control material-input"
                            value={inputValue}
                            onChange={(e) => dispatch(changeVariantsFilter(variants, fieldId, e.target.value))}
                            onKeyPress={(e) => e.charCode === 13 ? dispatch( searchInResultsSortFilter() ): null }
@@ -132,8 +132,9 @@ export default class VariantsTableHead extends Component {
             )
         } else {
             return (
-                <div>
-                    <input type="text" className="form-control"
+                <div className="variants-table-search-field input-group">
+                    <span className="input-group-btn"><button className="btn btn-link-light-default"><i className="md-i">search</i></button></span>
+                    <input type="text" className="form-control material-input"
                            value="Non-filtered type"
                            disabled
                     />

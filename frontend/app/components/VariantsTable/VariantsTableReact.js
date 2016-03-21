@@ -41,7 +41,7 @@ class VariantsTableReact extends Component {
                     { auth.isDemo &&
                     <DemoModeMessage errorMessage={auth.errorMessage} {...this.props} />
                     }
-                    <table className="table table-hover table-bordered table-variants header-fixed" id="variants_table"
+                    <table className="table table-striped table-variants header-fixed" id="variants_table"
                            ref="variantsTable">
                         <VariantsTableHead variants={variants} fields={fields} {...this.props} />
                         { !isVariantsEmpty &&
@@ -74,4 +74,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(VariantsTableReact)
-

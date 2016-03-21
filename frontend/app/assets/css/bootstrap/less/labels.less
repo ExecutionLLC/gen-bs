@@ -4,15 +4,16 @@
 
 .label {
   display: inline;
-  padding: 0.2em 0.45em .35em;
+  padding: 0.4em 1em;
   font-size: 90%;
-  font-weight: bold;
+  font-weight: normal;
   line-height: 1;
   color: @label-color;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: .25em;
+  border-radius: 1.6em;
+  font-family: "Roboto-Medium";
 
   // Add hover effects, but only for links
   a& {
@@ -41,6 +42,7 @@
 
 .label-default {
   .label-variant(@label-default-bg);
+  color: @text-color;
 }
 
 .label-primary {

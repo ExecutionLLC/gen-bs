@@ -25,8 +25,8 @@ const TestUser = {
 };
 
 describe('Search', function() {
-    // Search should fit into 30 seconds
-    this.timeout(30000);
+    // Search should fit into 60 seconds
+    this.timeout(60000);
     let sessionId = null;
     let webSocketClient = null;
 
@@ -38,6 +38,7 @@ describe('Search', function() {
             console.log('Waiting for the socket client to init...');
             setTimeout(() => {
                 webSocketClient.associateSession(sessionId);
+
                 done();
             }, 3000);
         });

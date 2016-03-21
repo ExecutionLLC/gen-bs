@@ -38,17 +38,16 @@ export default class VariantsTableRows extends Component {
         scrollElement.removeEventListener('scroll', this.handleScroll);
     }
 
-    renderTableBody(rows, sortState, isFilteringOrSorting,currentView) {
-        if (isFilteringOrSorting||!currentView) {
-            return (
-                <h2 className="text-center" style={{color: '#2363a1'}}>Loading...<i
-                    className="text-center fa fa-spinner fa-spin fa-5x"></i>
-                </h2>
-            );
-        } else {
-            return _.map(rows, (row, index) => this.renderRow(row, index, sortState,currentView));
-        }
+  renderTableBody(rows, sortState, isFilteringOrSorting,currentView) {
+    if (isFilteringOrSorting||!currentView) {
+      return (
+          <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+          </div>
+      );
+    } else {
+      return _.map(rows, (row, index) => this.renderRow(row, index, sortState,currentView));
     }
+  }
 
     handleScroll(e) {
         //console.log('scroll', e);
@@ -66,28 +65,34 @@ export default class VariantsTableRows extends Component {
         const comments = row.comments;
         const viewFields = currentView.view_list_items
 
-        return (
-            <tr key={rowIndex}>
-                <td className="row_checkbox"
-                    key="row_checkbox">
-                    <label className="checkbox">
-                        <input type="checkbox"/>
-                        <i></i>
-                    </label>
-                    <span>{rowIndex + 1}</span>
-                    <button data-toggle="button"
-                            className="btn btn-link">
-                        <i className="i-star"></i>
-                    </button>
-                </td>
-                <td className="comment"
-                    key="comment">
-                    {comments}
-                </td>
-                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState,rowFields))}
-            </tr>
-        );
-    }
+
+    return (
+        <tr key={rowIndex}>
+          <td className="btntd row_checkbox"
+              key="row_checkbox">
+            <div><label className="checkbox hidden">
+              <input type="checkbox" />
+              <i></i>
+            </label>
+            <span>{rowIndex + 1}</span>
+            </div>
+            </td>
+            <td className="btntd">
+            <div>
+            <button data-toggle="button"
+                    className="btn btn-link reset-padding">
+              <i className="i-star"></i>
+            </button>
+            </div>
+          </td>
+          <td className="comment"
+              key="comment">
+            <div><a href="#" class="btn-link-default comment-link" data-type="textarea" data-pk="1" data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
+          </td>
+          {_.map(viewFields, (field) => this.renderFieldValue(field, sortState,rowFields))}
+        </tr>
+    );
+  }
 
     renderFieldValue(field, sortState,rowFields) {
         const fieldId = field.field_id;
@@ -98,28 +103,29 @@ export default class VariantsTableRows extends Component {
             'active': columnSortParams
         });
 
-        return (
-            <td className={sortedActiveClass}
-                key={fieldId}>
+    return (
+        <td className={sortedActiveClass}
+            key={fieldId}>
+            <div>
                 {(resultField === null) ? '' : resultField.value}
-            </td>
-        );
-    }
+            </div>
+        </td>
+    );
+  }
 
-    renderWaitingIfNeeded(isFilteringOrSorting, currentVariants) {
-        const variantsLength = (currentVariants === null) ? 0 : currentVariants.length;
-        if (!isFilteringOrSorting && variantsLength > 99) {
-            return (
-                <tr>
-                    <td colSpan="100">
-                        <h2 className="text-center" style={{color: '#2363a1'}}>Loading...<i
-                            className="text-center fa fa-spinner fa-spin fa-3x"></i>
-                        </h2>
-                    </td>
-                </tr>
-            );
-        } else {
-            return null;
-        }
+  renderWaitingIfNeeded(isFilteringOrSorting, currentVariants) {
+    const variantsLength = (currentVariants === null) ? 0 : currentVariants.length;
+    if (!isFilteringOrSorting && variantsLength > 99) {
+      return (
+        <tr>
+          <td colSpan="100">
+            <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+            </div>
+          </td>
+        </tr>
+      );
+    } else {
+      return null;
     }
+  }
 }

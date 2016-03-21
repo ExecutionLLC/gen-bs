@@ -71,9 +71,6 @@ export default class FileUploadSamplesRow extends Component {
       <Panel collapsible expanded={this.state.showValues} className="samples-values form-horizontal-rows">
         <div className="flex">
           {this.props.fields.map(field => {
-            if (!values[field.id]) {
-              console.error('unknown field', field.id)
-            }
             return (
               <dl key={field.id}>
                 <dt>{field.label}</dt>

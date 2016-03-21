@@ -11,19 +11,28 @@ class SampleController extends UserEntityControllerBase {
         super(services, services.samples);
     }
 
+    add(request, response) {
+        this.sendInternalError(response, 'Method is not supported, use upload');
+    }
+
     upload(request, response, next) {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
-                const user = request.user;
-                const sessionId = request.sessionId;
-
                 const sampleFile = request.file;
+                if (sampleFile && sampleFile.path) {
+                    callback(null, sampleFile);
+                } else {
+                    callback(new Error('Sample file is not specified.'));
+                }
+            }, (sampleFile, callback) => {
                 const fileInfo = {
                     localFilePath: sampleFile.path,
                     fileSize: sampleFile.size,
                     originalFileName: sampleFile.originalname
                 };
+                const user = request.user;
+                const sessionId = request.sessionId;
 
                 this.services.samples.upload(sessionId, user, fileInfo, (error, operationId) => {
                     // Try removing local file anyway.
