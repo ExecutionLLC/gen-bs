@@ -13,13 +13,13 @@ export default class VariantsTableRows extends Component {
         const { sort } = this.props.variantsTable.searchInResultsParams;
         const { isFilteringOrSorting} = this.props.variantsTable;
         const { searchParams,ui } = this.props;
-        const currentView = searchParams?_.find(ui.views,view => view.id===searchParams.viewId):null ;
+        const currentView = searchParams ? _.find(ui.views, view => view.id === searchParams.viewId) : null;
 
         return (
             <tbody className="table-variants-body"
                    id="variants_table_body"
                    ref="variantsTableBody">
-            {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,currentView)}
+            {this.renderTableBody(sampleRows, sort, isFilteringOrSorting, currentView)}
             {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
             </tbody>
         );
@@ -66,41 +66,42 @@ export default class VariantsTableRows extends Component {
         }
     }
 
-    renderRow(row, rowIndex, sortState,currentView) {
+    renderRow(row, rowIndex, sortState, currentView) {
         const rowFields = row.fields;
         const comments = row.comments;
         const viewFields = currentView.view_list_items;
 
 
-    return (
-        <tr key={rowIndex}>
-          <td className="btntd row_checkbox"
-              key="row_checkbox">
-            <div><label className="checkbox hidden">
-              <input type="checkbox" />
-              <i></i>
-            </label>
-            <span>{rowIndex + 1}</span>
-            </div>
-            </td>
-            <td className="btntd">
-            <div>
-            <button data-toggle="button"
-                    className="btn btn-link reset-padding">
-              <i className="i-star"></i>
-            </button>
-            </div>
-          </td>
-          <td className="comment"
-              key="comment">
-            <div><a href="#" class="btn-link-default comment-link" data-type="textarea" data-pk="1" data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
-          </td>
-          {_.map(viewFields, (field) => this.renderFieldValue(field, sortState,rowFields))}
-        </tr>
-    );
-  }
+        return (
+            <tr key={rowIndex}>
+                <td className="btntd row_checkbox"
+                    key="row_checkbox">
+                    <div><label className="checkbox hidden">
+                        <input type="checkbox"/>
+                        <i></i>
+                    </label>
+                        <span>{rowIndex + 1}</span>
+                    </div>
+                </td>
+                <td className="btntd">
+                    <div>
+                        <button data-toggle="button"
+                                className="btn btn-link reset-padding">
+                            <i className="i-star"></i>
+                        </button>
+                    </div>
+                </td>
+                <td className="comment"
+                    key="comment">
+                    <div><a href="#" class="btn-link-default comment-link" data-type="textarea" data-pk="1"
+                            data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
+                </td>
+                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFields))}
+            </tr>
+        );
+    }
 
-    renderFieldValue(field, sortState,rowFields) {
+    renderFieldValue(field, sortState, rowFields) {
         const fieldId = field.field_id;
         const resultField = _.find(rowFields, rowField => rowField.field_id === fieldId);
         let columnSortParams = _.find(sortState, sortItem => sortItem.field_id === fieldId);
@@ -109,15 +110,15 @@ export default class VariantsTableRows extends Component {
             'active': columnSortParams
         });
 
-    return (
-        <td className={sortedActiveClass}
-            key={fieldId}>
-            <div>
-                {(resultField === null) ? '' : resultField.value}
-            </div>
-        </td>
-    );
-  }
+        return (
+            <td className={sortedActiveClass}
+                key={fieldId}>
+                <div>
+                    {(resultField === null) ? '' : resultField.value}
+                </div>
+            </td>
+        );
+    }
 
     renderWaitingIfNeeded(isFilteringOrSorting, currentVariants) {
         const variantsLength = (!currentVariants) ? 0 : currentVariants.length;
