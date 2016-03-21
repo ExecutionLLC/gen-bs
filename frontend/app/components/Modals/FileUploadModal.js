@@ -30,9 +30,10 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { ui, fileUpload, userData: { samples }, fields: { list } } = state;
+    const { auth,ui, fileUpload, userData: { samples }, fields: { list } } = state;
 
     return {
+        auth,
         ui,
         fileUpload,
         samples,
