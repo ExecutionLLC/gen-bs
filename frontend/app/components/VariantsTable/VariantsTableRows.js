@@ -10,12 +10,14 @@ export default class VariantsTableRows extends Component {
         const { currentVariants } = this.props.ws;
         const { sort } = this.props.variantsTable.searchInResultsParams;
         const { isFilteringOrSorting} = this.props.variantsTable;
+        const { searchParams,ui } = this.props;
+        const currentView = searchParams?_.find(ui.views,view => view.id===searchParams.viewId):null ;
 
         return (
             <tbody className="table-variants-body"
                    id="variants_table_body"
                    ref="variantsTableBody">
-            {this.renderTableBody(sampleRows, sort, isFilteringOrSorting)}
+            {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,currentView)}
             {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
             </tbody>
         );
@@ -36,15 +38,15 @@ export default class VariantsTableRows extends Component {
         scrollElement.removeEventListener('scroll', this.handleScroll);
     }
 
-    renderTableBody(rows, sortState, isFilteringOrSorting) {
-        if (isFilteringOrSorting) {
+    renderTableBody(rows, sortState, isFilteringOrSorting,currentView) {
+        if (isFilteringOrSorting||!currentView) {
             return (
                 <h2 className="text-center" style={{color: '#2363a1'}}>Loading...<i
                     className="text-center fa fa-spinner fa-spin fa-5x"></i>
                 </h2>
             );
         } else {
-            return _.map(rows, (row, index) => this.renderRow(row, index, sortState));
+            return _.map(rows, (row, index) => this.renderRow(row, index, sortState,currentView));
         }
     }
 
@@ -59,9 +61,10 @@ export default class VariantsTableRows extends Component {
         }
     }
 
-    renderRow(row, rowIndex, sortState) {
+    renderRow(row, rowIndex, sortState,currentView) {
         const rowFields = row.fields;
         const comments = row.comments;
+        const viewFields = currentView.view_list_items
 
         return (
             <tr key={rowIndex}>
@@ -81,13 +84,14 @@ export default class VariantsTableRows extends Component {
                     key="comment">
                     {comments}
                 </td>
-                {_.map(rowFields, (field) => this.renderFieldValue(field, sortState))}
+                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState,rowFields))}
             </tr>
         );
     }
 
-    renderFieldValue(field, sortState) {
+    renderFieldValue(field, sortState,rowFields) {
         const fieldId = field.field_id;
+        const resultField = _.find(rowFields, rowField => rowField.field_id === fieldId);
         let columnSortParams = _.find(sortState, sortItem => sortItem.field_id === fieldId);
 
         let sortedActiveClass = classNames({
@@ -97,7 +101,7 @@ export default class VariantsTableRows extends Component {
         return (
             <td className={sortedActiveClass}
                 key={fieldId}>
-                {field.value}
+                {(resultField === null) ? '' : resultField.value}
             </td>
         );
     }
