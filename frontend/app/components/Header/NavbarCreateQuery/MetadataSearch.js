@@ -1,33 +1,41 @@
 import React, { Component } from 'react';
 import Select2 from 'react-select2-wrapper';
 import Select from 'react-select';
-import { changeSample} from '../../../actions/ui'
+import { changeSample} from '../../../actions/ui';
 
 
 export default class MetadataSearch extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {
-        const samples = this.props.userData.samples
-        const currentSample = this.props.ui.currentSample
-        const dispatch = this.props.dispatch
+        const {samples, currentSampleId, onSampleChangeRequested} = this.props;
         return (
 
             <div className="table-cell max-width">
-                <div className="btn-group sample-search" data-localize="samples.help" data-toggle="tooltip"
-                     data-placement="bottom" data-container="body" title="Select one from available samples">
-                    <Select
-                        options={samples.map( s => { return {value: s.id, label: s.file_name} } )}
-                        clearable={false}
-                        value={currentSample ? currentSample.id: null}
-                        onChange={ (val) => dispatch(changeSample(samples,val.value) )}
+                <div className="btn-group sample-search"
+                     data-localize="samples.help"
+                     data-toggle="tooltip"
+                     data-placement="bottom"
+                     data-container="body"
+                     title="Select one from available samples"
+                >
+                    <Select options={samples.map( s => { return {value: s.id, label: s.file_name} } )}
+                            clearable={false}
+                            value={currentSampleId}
+                            onChange={ (sampleId) => onSampleChangeRequested(sampleId)}
                     />
                 </div>
             </div>
-
-        )
+        );
     }
 }
+
+MetadataSearch.propTypes = {
+    samples: React.PropTypes.array.isRequired,
+    currentSampleId: React.PropTypes.string,
+    // callback(sampleId)
+    onSampleChangeRequested: React.PropTypes.func.isRequired
+};

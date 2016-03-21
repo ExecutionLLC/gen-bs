@@ -17,18 +17,18 @@ class NavbarCreateQuery extends Component {
 
     render() {
 
-        const { dispatch, samples, views } = this.props
-        const { currentSample, currentView, currentFilter } = this.props.ui
-
-
+        const { dispatch, samples, views } = this.props;
+        const { currentSample, currentView, currentFilter } = this.props.ui;
+        const currentSampleId = currentSample ? currentSample.id : null;
         return (
 
             <nav className="navbar navbar-fixed-top navbar-default">
                 <div className="container-fluid">
                     <div className="table-row">
                         <Upload  {...this.props} />
-                        <MetadataSearch
-                            {...this.props}
+                        <MetadataSearch samples={samples}
+                                        currentSampleId={currentSampleId}
+                                        onSampleChangeRequested={(sampleId) => dispatch(changeSample(samples, sampleId))}
                         />
                         <FiltersSetup {...this.props} />
                         <Filters
