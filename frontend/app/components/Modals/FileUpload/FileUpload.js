@@ -23,7 +23,8 @@ export default class FileUpload extends Component {
     const { files, error, isArchiving } = this.props.fileUpload
     if (auth.isDemo){
         return (
-            <div>
+            <div className="well text-center">
+                Please login or register to upload new samples
                 </div>)
     }else
         return (
