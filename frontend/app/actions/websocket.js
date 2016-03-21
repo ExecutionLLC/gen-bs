@@ -153,9 +153,10 @@ export function send(msg) {
     };
 }
 
-export function requestAnalyze() {
+export function requestAnalyze(searchParams) {
     return {
-        type: REQUEST_ANALYZE
+        type: REQUEST_ANALYZE,
+        searchParams
     };
 }
 
