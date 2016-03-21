@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
+import { changeSample} from '../../../actions/ui'
 
 export default class FileUploadSamplesRow extends Component {
   constructor(...args) {
@@ -23,14 +24,21 @@ export default class FileUploadSamplesRow extends Component {
   }
 
   renderMain() {
-    const { sample } = this.props;
+    const { sample,samples,dispatch,closeModal } = this.props;
     return (
       <div className="panel panel-default">
         <div className="panel-heading">
           <div className="btn-group pull-right">
-            <a onClick={() => this.props.onSelectSample()} className="btn btn-default btn-choose" role="button">
+
+            <button
+                onClick={() => {
+                dispatch(changeSample(samples, sample.id));
+                closeModal('upload')
+                }}
+                class="btn btn-default btn-choose"
+                type="button" >
               <span data-localize="samples.settings.select.title">Select for analysis</span>
-            </a>
+            </button>
             {sample.type === 'user'
             && <a onClick={e => this.clickShowValues(e)}
                   className="btn btn-default collapsed" role="button"

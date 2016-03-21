@@ -10,7 +10,7 @@ export default class FileUploadSamples extends Component {
     this.state = { searchWord: '' };
   }
   render() {
-    let { samples } = this.props;
+    let { samples,dispatch, closeModal } = this.props;
     if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
         console.error('No editable fields found');
         return null;
@@ -33,8 +33,10 @@ export default class FileUploadSamples extends Component {
                 sample={sample}
                 fields={this.props.editableFieldsList}
                 key={sample.id}
-                onSelectSample={() => this.props.dispatch(changeSample(samples, sample.id))}
-                onUpdateSampleValue={(valueFieldId, value) => this.props.dispatch(updateSampleValue(sample.id, valueFieldId, value))}
+                samples={samples}
+              dispatch = {dispatch}
+                closeModal={closeModal}
+                onUpdateSampleValue={(valueFieldId, value) => dispatch(updateSampleValue(sample.id, valueFieldId, value))}
               />
             )
           )}

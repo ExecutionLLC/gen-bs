@@ -29,7 +29,6 @@ class NavbarCreateQuery extends Component {
                         <Upload  {...this.props} />
                         <MetadataSearch
                             {...this.props}
-                            sampleSelected={ (e) => dispatch(changeSample(samples, $(e.target).val()))}
                         />
                         <FiltersSetup {...this.props} />
                         <Filters
