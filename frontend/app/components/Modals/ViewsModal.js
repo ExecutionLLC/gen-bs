@@ -66,13 +66,14 @@ class ViewsModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { viewBuilder, ui, userData, fields } = state
+    const { viewBuilder, ui, auth, userData, fields } = state
 
     return {
         userData,
         fields,
         ui,
-        viewBuilder
+        viewBuilder,
+        auth
     }
 }
 
