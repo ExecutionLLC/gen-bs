@@ -85,7 +85,6 @@ export default class FieldHeaderControls extends Component {
         );
 
         if (fieldValueType === 'string') {
-
             return (
                 <div className={inputGroupClasses}>
                     <span className="input-group-btn">
@@ -100,7 +99,7 @@ export default class FieldHeaderControls extends Component {
                            ref={(input) => this.focusInput(input)}
                            onChange={(e) => this.onSearchInputChanged(e)}
                            onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
-                           onBlur={(e) => this.setFilterOpened(false)}
+                           onBlur={(e) => this.onSearchInputBlur()}
                     />
                 </div>
             );
@@ -140,6 +139,12 @@ export default class FieldHeaderControls extends Component {
         }
     }
 
+    onSearchInputBlur() {
+        const {fieldId, onSearchValueChanged} = this.props;
+        onSearchValueChanged(fieldId, this.state.searchString);
+        this.setFilterOpened(false);
+    }
+
     setFilterOpened(isOpened) {
         this.setState({
             isFilterOpened: isOpened
@@ -169,6 +174,8 @@ FieldHeaderControls.propTypes = {
     fieldId: React.PropTypes.string.isRequired,
     fields: React.PropTypes.object.isRequired,
     sortState: React.PropTypes.array.isRequired,
+    // callback(fieldId, searchString)
+    onSearchValueChanged: React.PropTypes.func.isRequired,
     // callback(fieldId, searchString)
     onSearchRequested: React.PropTypes.func.isRequired,
     // callback(fieldId, direction, isControlKeyPressed), where direction in ['asc', 'desc']

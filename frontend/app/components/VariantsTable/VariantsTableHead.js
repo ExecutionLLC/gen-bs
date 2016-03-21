@@ -61,6 +61,7 @@ export default class VariantsTableHead extends Component {
             dispatch(changeVariantsFilter(fieldId, searchValue));
             dispatch(searchInResultsSortFilter());
         };
+        const onSearchValueChanged = (fieldId, searchValue) => dispatch(changeVariantsFilter(fieldId, searchValue));
         return (
             <FieldHeaderControls key={fieldId}
                                  fieldId={fieldId}
@@ -68,6 +69,7 @@ export default class VariantsTableHead extends Component {
                                  sortState={sortState}
                                  onSortRequested={sendSortRequestedAction}
                                  onSearchRequested={sendSearchRequest}
+                                 onSearchValueChanged={onSearchValueChanged}
             />
         );
     }
