@@ -19,10 +19,14 @@ export default class FileUpload extends Component {
   }
 
   render() {
-    const { dispatch } = this.props
+    const { dispatch, auth } = this.props
     const { files, error, isArchiving } = this.props.fileUpload
-
-    return (
+    if (auth.isDemo){
+        return (
+            <div>
+                </div>)
+    }else
+        return (
           <div className="well text-center">
             <div>
 
@@ -31,9 +35,9 @@ export default class FileUpload extends Component {
                   <h2 className="text-center" style={{color: 'red'}} >{error}</h2>
                 </div>
               }
-           
-                <button onClick={this.uploadClickHandler.bind(this)} data-target="#fileOpen" data-toggle="modal" className="btn-link-default" style={{paddingBottom: '40px', height: '280px'}}>
-                  <input 
+
+                <button onClick={this.uploadClickHandler.bind(this)} data-target="#fileOpen" data-toggle="modal" className="btn-link-default" >
+                  <input
                     onChange={ (e) => dispatch(changeFileForUpload(e.target.files))}
                     style={{display: 'none'}}
                     ref="fileInput"
@@ -49,7 +53,7 @@ export default class FileUpload extends Component {
                 { files[0] &&
                   <h2 style={{color: '#2363a1'}}>{files[0].name}</h2>
                 }
-                <div className="small btn-link-default">.vcf, .vcf.gz</div>
+                <div className="small">.vcf, .vcf.gz</div>
             </div>
 
             { isArchiving &&
