@@ -26,7 +26,7 @@ export default class FileUploadSamples extends Component {
           <input type="text" onChange={e => this.setState({ searchWord: e.target.value })} className="form-control"/>
           <span className="form-control-feedback"><i className="fa fa-lg fa-search text-muted"/></span>
         </div>
-        <div className="panel-group">
+        <div className="panel-group" style={{overflow: 'scroll', height: '400px'}}>
           {samples.map(
             sample => (
               <FileUploadSamplesRow
