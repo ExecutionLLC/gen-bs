@@ -545,12 +545,12 @@ table {
                 display: table;
                 left: 0;
                 margin-right: 16px;
-                width: auto!important;
+                width: 104px!important;
                 .input-group-btn { 
                   display: none;
                  }
                 }
-               button { 
+                button { 
                  padding: 4px;
                  border-radius: 0;
                  
@@ -616,17 +616,19 @@ table {
               }
              }
              &.comment {
-             
-            }
+              .variants-table-search-field { 
+                &.open {
+                  width: 144!important;
+                  }
+                } 
+             }
+          
  
           }
        }
      }
     .table-variants-head,
-    .table-variants-body { 
-         
-               
-        
+    .table-variants-body {         
       tr { 
          td { 
           font-size: @font-size-small;
@@ -718,8 +720,6 @@ table {
         background-size: 100% 70px;
         background-attachment: local; 
 
-       //#gradient > .directional(@start-color: #fff; @end-color: @gray-lighter; @deg: 175deg);
-
       tr { 
          td {
            > div {
@@ -767,6 +767,8 @@ table {
 .table-variants-head { 
 left: 0;
     top: 44px;
+    
+    
 }
 .table-variants-body {
  bottom: 0;
