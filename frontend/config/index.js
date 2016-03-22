@@ -17,7 +17,8 @@ const config = {
         VIEWS: `http://${HOST}:${PORT}/api/views`,
         FILTERS: `http://${HOST}:${PORT}/api/filters`,
         SAMPLES: `http://${HOST}:${PORT}/api/samples`,
-        FILE_UPLOAD: `http://${HOST}:${PORT}/api/samples/upload`
+        FILE_UPLOAD: `http://${HOST}:${PORT}/api/samples/upload`,
+        COMMENTS:`http://${HOST}:${PORT}/api/comments`
     }
 };
 

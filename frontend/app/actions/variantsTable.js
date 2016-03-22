@@ -105,6 +105,35 @@ function receiveVariants(json) {
     }
 }
 
+
+export function createComment(alt,pos,ref,chrom,searchkey) {
+
+    return (dispatch, getState) => {
+
+        const clearedJson = {
+            'alt':alt,
+            'pos':pos,
+            'ref':ref,
+            'chrom':chrom,
+            'searchkey':searchkey,
+        }
+
+        $.ajax(config.URLS.COMMENTS(getState().variantsTable.operationId), {
+                'data': JSON.stringify(clearedJson),
+                'type': 'POST',
+                'processData': false,
+                'contentType': 'application/json'
+            })
+            .fail(json => {
+                console.log('createComment fail', json)
+            })
+            .then(json=> {
+                console.log('createComment success', json)
+            })
+
+    }
+}
+
 export function fetchVariants(searchParams) {
 
     return dispatch => {

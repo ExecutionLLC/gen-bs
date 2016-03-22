@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import {OverlayTrigger,Popover,Button} from 'react-bootstrap'
 import classNames from 'classnames';
 
 import VariantsTableEmpty from './VariantsTableEmpty';
 
-import { getNextPartOfData } from '../../actions/variantsTable';
+import { getNextPartOfData, createComment } from '../../actions/variantsTable';
 
 export default class VariantsTableRows extends Component {
 
@@ -93,12 +94,56 @@ export default class VariantsTableRows extends Component {
                 </td>
                 <td className="comment"
                     key="comment">
-                    <div><a href="#" class="btn-link-default comment-link" data-type="textarea" data-pk="1"
-                            data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
+                    <OverlayTrigger
+                        trigger="click"
+                        placement="top"
+                        rootClose = {true}
+                        placement="right"
+                        overlay={<Popover id ="popover134675">{this.test()}</Popover>}>
+                        <a title=""
+                           data-original-title=""
+                           class="btn-link-default comment-link editable editable-pre-wrapped editable-click editable-open"
+                           data-type="textarea"
+                           data-pk="1"
+                           data-placeholder="Your comments here..."
+                           data-placement="right">Add Comment</a>
+                    </OverlayTrigger>
                 </td>
                 {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFields))}
             </tr>
         );
+    }
+
+    test(dispatch,alt,pos,ref,chrom,searchkey) {
+        return <div id="popover134675"
+                    class="popover fade right in editable-container editable-popup" role="tooltip">
+            <div  class="arrow"></div>
+            <h3 class="popover-title"></h3>
+            <div class="popover-content">
+                <div>
+                    <div class="editableform-loading"></div>
+                    <form class="form-inline editableform">
+                        <div class="control-group form-group">
+                            <div>
+                                <div class="editable-input"><textarea rows="7" placeholder="Your comments here..."
+                                                                      class="form-control material-input input-large"></textarea>
+                                </div>
+                                <div class="editable-buttons editable-buttons-bottom">
+                                    <button type="button"
+                                            class="btn btn-uppercase btn-link editable-submit"
+                                            onClick={()=>dispatch(createComment(alt,pos,ref,chrom,searchkey))}
+                                    >Save
+                                    </button>
+                                    <button type="button" class="btn btn-uppercase btn-link editable-cancel">Cancel
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="editable-error-block help-block"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     }
 
     renderFieldValue(field, sortState, rowFields) {
