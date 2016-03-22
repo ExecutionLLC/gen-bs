@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import VariantsTableEmpty from './VariantsTableEmpty';
+import VariantsTableRow from './VariantsTableRow';
 
 import { getNextPartOfData } from '../../actions/variantsTable';
 
@@ -71,56 +72,13 @@ export default class VariantsTableRows extends Component {
     }
 
     renderRow(row, rowIndex, sortState, currentView) {
-        const rowFields = row.fields;
-        const comments = row.comments;
-        const viewFields = currentView.view_list_items;
-
-
         return (
-            <tr key={rowIndex}>
-                <td className="btntd row_checkbox"
-                    key="row_checkbox">
-                    <div><label className="checkbox hidden">
-                        <input type="checkbox"/>
-                        <i></i>
-                    </label>
-                        <span>{rowIndex + 1}</span>
-                    </div>
-                </td>
-                <td className="btntd">
-                    <div>
-                        <button data-toggle="button"
-                                className="btn btn-link reset-padding">
-                            <i className="i-star"></i>
-                        </button>
-                    </div>
-                </td>
-                <td className="comment"
-                    key="comment">
-                    <div><a href="#" className="btn-link-default comment-link" data-type="textarea" data-pk="1"
-                            data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
-                </td>
-                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFields))}
-            </tr>
-        );
-    }
-
-    renderFieldValue(field, sortState, rowFields) {
-        const fieldId = field.field_id;
-        const resultField = _.find(rowFields, rowField => rowField.field_id === fieldId);
-        let columnSortParams = _.find(sortState, sortItem => sortItem.field_id === fieldId);
-
-        let sortedActiveClass = classNames({
-            'active': columnSortParams
-        });
-
-        return (
-            <td className={sortedActiveClass}
-                key={fieldId}>
-                <div>
-                    {(resultField === null) ? '' : resultField.value}
-                </div>
-            </td>
+            <VariantsTableRow key={rowIndex}
+                              row={row}
+                              rowIndex={rowIndex}
+                              sortState={sortState}
+                              currentView={currentView}
+            />
         );
     }
 
