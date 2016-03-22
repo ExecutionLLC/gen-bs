@@ -29,6 +29,7 @@ export default function fields(state = {
                     samples: false
                 }),
                 list: fields,
+                editableFields: _.filter(fields, 'is_editable', true),
                 lastUpdated: action.receivedAt
             });
 

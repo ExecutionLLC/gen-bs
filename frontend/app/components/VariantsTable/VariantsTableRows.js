@@ -35,6 +35,10 @@ export default class VariantsTableRows extends Component {
         scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.variants !== nextProps.variants;
+    }
+
     componentWillUnmount() {
         const scrollElement = this.refs.variantsTableBody;
         scrollElement.removeEventListener('scroll', this.handleScroll);
