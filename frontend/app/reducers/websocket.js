@@ -80,8 +80,9 @@ export default function websocket(state = {
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
                 variants: null,
-                isVariantsLoaded: true
-            });
+                isVariantsLoaded: true,
+                searchParams:action.searchParams
+            })
 
         default:
             return state

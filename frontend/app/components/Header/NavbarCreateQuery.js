@@ -16,17 +16,17 @@ import { changeSample, changeView, changeFilter, analyze } from '../../actions/u
 
 class NavbarCreateQuery extends Component {
 
-    onSampleSelected(e) {
-        const { dispatch, samples } = this.props
-        const sampleId = $(e.target).val();
-        dispatch(changeSample(samples, sampleId));
-        dispatch(fetchFields(sampleId));
-    }
+  onSampleSelected(sampleId) {
+      const { dispatch, samples } = this.props;
+      dispatch(changeSample(samples, sampleId));
+      dispatch(fetchFields(sampleId));
+  }
 
     render() {
 
-        const { dispatch, samples, views } = this.props
-        const { currentSample, currentView, currentFilter } = this.props.ui
+        const { dispatch, samples, views } = this.props;
+        const { currentSample, currentView, currentFilter } = this.props.ui;
+        const currentSampleId = currentSample ? currentSample.id : null;
 
         return (
 
@@ -34,9 +34,10 @@ class NavbarCreateQuery extends Component {
                 <div className="container-fluid">
                     <div className="table-row">
                         <Upload  {...this.props} />
-                        <MetadataSearch
-                            {...this.props}
-                            sampleSelected={ (e) => this.onSampleSelected(e) }
+
+                        <MetadataSearch samples={samples}
+                                        currentSampleId={currentSampleId}
+                                        onSampleChangeRequested={(sampleId) => this.onSampleSelected(sampleId) }
                         />
                         <FiltersSetup {...this.props} />
                         <Filters

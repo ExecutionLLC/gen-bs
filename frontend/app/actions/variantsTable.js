@@ -64,10 +64,9 @@ export function clearSearchParams() {
     }
 }
 
-export function changeVariantsFilter(variants, fieldId, filterValue) {
+export function changeVariantsFilter(fieldId, filterValue) {
     return {
         type: CHANGE_VARIANTS_FILTER,
-        variants: variants,
         fieldId: fieldId,
         filterValue: filterValue
     }

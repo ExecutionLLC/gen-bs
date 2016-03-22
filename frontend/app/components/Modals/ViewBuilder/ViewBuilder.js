@@ -15,6 +15,8 @@ export default class ViewBuilder extends Component {
             'disabled': (view.type !== 'user') ? 'disabled' : ''
         });
 
+        const isDisableEditing = view.type !== 'user';
+
         const selects = view.view_list_items.map(function (viewItem, index) {
 
             var currentValue =
@@ -52,7 +54,7 @@ export default class ViewBuilder extends Component {
                                 value={currentValue}
                                 clearable={false}
                                 onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
-                                disabled={disabledClass}
+                                disabled={isDisableEditing}
                             />
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
@@ -68,7 +70,7 @@ export default class ViewBuilder extends Component {
                   </span>
 
                         <input type="text" className="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""
-                               readonly="" data-localize="views.setup.settings.keywords"/>
+                               readOnly="" data-localize="views.setup.settings.keywords"/>
                     </div>
 
                     <div className="col-xs-1">
