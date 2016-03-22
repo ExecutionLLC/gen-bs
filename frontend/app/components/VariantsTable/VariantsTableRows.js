@@ -93,7 +93,7 @@ export default class VariantsTableRows extends Component {
                 </td>
                 <td className="comment"
                     key="comment">
-                    <div><a href="#" class="btn-link-default comment-link" data-type="textarea" data-pk="1"
+                    <div><a href="#" className="btn-link-default comment-link" data-type="textarea" data-pk="1"
                             data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
                 </td>
                 {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFields))}
