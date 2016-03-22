@@ -164,7 +164,7 @@ export function fetchSamples() {
 
                 dispatch(receiveSamples(json));
                 dispatch(changeSample(json, sampleId));
-                dispatch(fetchSourceFields());                
+                dispatch(fetchFields(sampleId));                
             })
 
         // TODO:
