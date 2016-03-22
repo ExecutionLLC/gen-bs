@@ -9,6 +9,7 @@ import ViewsSetup from './NavbarCreateQuery/ViewsSetup'
 import Views from './NavbarCreateQuery/Views'
 import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
+import {fetchFields} from '../../actions/fields'
 
 import { changeSample, changeView, changeFilter, analyze } from '../../actions/ui'
 
@@ -20,7 +21,6 @@ class NavbarCreateQuery extends Component {
         const { dispatch, samples, views } = this.props
         const { currentSample, currentView, currentFilter } = this.props.ui
 
-
         return (
 
             <nav className="navbar navbar-fixed-top navbar-default">
@@ -29,7 +29,11 @@ class NavbarCreateQuery extends Component {
                         <Upload  {...this.props} />
                         <MetadataSearch
                             {...this.props}
-                            sampleSelected={ (e) => dispatch(changeSample(samples, $(e.target).val()))}
+                            sampleSelected={ (e) => {
+                                const sampleId = $(e.target).val();
+                                dispatch(changeSample(samples, sampleId));
+                                dispatch(fetchFields(sampleId));
+                            }}
                         />
                         <FiltersSetup {...this.props} />
                         <Filters
@@ -67,4 +71,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(NavbarCreateQuery)
-
