@@ -16,11 +16,11 @@ import { changeSample, changeView, changeFilter, analyze } from '../../actions/u
 
 class NavbarCreateQuery extends Component {
 
-  onSampleSelected(sampleId) {
-      const { dispatch, samples } = this.props;
-      dispatch(changeSample(samples, sampleId));
-      dispatch(fetchFields(sampleId));
-  }
+    onSampleSelected(sampleId) {
+        const { dispatch, samples } = this.props;
+        dispatch(changeSample(samples, sampleId));
+        dispatch(fetchFields(sampleId));
+    }
 
     render() {
 
