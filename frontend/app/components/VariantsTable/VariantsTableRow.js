@@ -58,6 +58,10 @@ export default class VariantsTableRow extends ComponentBase {
             </td>
         );
     }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.row !== nextProps.row;
+    }
 }
 
 VariantsTableRow.propTypes = {
