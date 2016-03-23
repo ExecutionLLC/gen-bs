@@ -1,5 +1,5 @@
 import config from '../../config'
-import { requestAnalyze, clearVariants } from './websocket'
+import { requestAnalyze, clearVariants, addComment, changeComment } from './websocket'
 
 /*
  * action types
@@ -129,7 +129,7 @@ export function createComment(alt,pos,ref,chrom,searchkey,comment) {
                 console.log('createComment fail', json)
             })
             .then(json=> {
-                console.log('createComment success', json)
+                dispatch(addComment(json))
             })
 
     }
@@ -158,7 +158,7 @@ export function updateComment(id,alt,pos,ref,chrom,searchkey,comment) {
                 console.log('createComment fail', json)
             })
             .then(json=> {
-                console.log('createComment success', json)
+                dispatch(changeComment(json))
             })
 
     }

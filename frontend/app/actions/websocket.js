@@ -16,6 +16,8 @@ export const WS_OTHER_MESSAGE = 'WS_OTHER_MESSAGE';
 export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
+export const WS_ADD_COMMENT = 'WS_ADD_COMMENT'
+export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT'
 
 
 /*
@@ -26,6 +28,21 @@ export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 /*
  * action creators
  */
+
+export  function addComment(commentData){
+    return {
+        type: WS_ADD_COMMENT,
+        commentData
+    }
+}
+
+export  function changeComment(commentData){
+    return {
+        type: WS_UPDATE_COMMENT,
+        commentData
+    }
+}
+
 export function clearVariants() {
     return {
         type: WS_CLEAR_VARIANTS
