@@ -3,7 +3,7 @@
 const changeCase = require('change-case');
 const _ = require('lodash');
 
-class ChangeCaseUtil {
+export default class ChangeCaseUtil {
   static convertKeysToCamelCase(obj) {
       return ChangeCaseUtil._processObjectKeys(obj, changeCase.camelCase);
   }
@@ -50,5 +50,3 @@ class ChangeCaseUtil {
         || (charCode >= code('0') && charCode <= code('9'));
   }
 }
-
-module.exports = ChangeCaseUtil;
