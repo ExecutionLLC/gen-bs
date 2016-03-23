@@ -3,7 +3,7 @@ import {OverlayTrigger,Popover,Button} from 'react-bootstrap'
 import classNames from 'classnames';
 
 import VariantsTableEmpty from './VariantsTableEmpty';
-import CommentEditPopover from './CommentEditPopover';
+import CommentEditPopover from './VariantsTableComment';
 
 import { getNextPartOfData, createComment } from '../../actions/variantsTable';
 
