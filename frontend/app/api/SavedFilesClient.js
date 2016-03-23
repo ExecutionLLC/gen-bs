@@ -1,9 +1,9 @@
 'use strict';
 
-const _ = require('lodash');
+import _ from 'lodash';
 
-const UserEntityClientBase = require('./UserEntityClientBase');
-const RequestWrapper = require('./RequestWrapper');
+import UserEntityClientBase from './UserEntityClientBase';
+import RequestWrapper from './RequestWrapper';
 
 export default class SavedFilesClient extends UserEntityClientBase {
     constructor(urls) {

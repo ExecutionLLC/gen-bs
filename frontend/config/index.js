@@ -19,6 +19,10 @@ const config = {
         SAMPLES: `http://${HOST}:${PORT}/api/samples`,
         FILE_UPLOAD: `http://${HOST}:${PORT}/api/samples/upload`
     },
+    HEADERS: {
+        SESSION: 'X-Session-Id',
+        LANGUAGE: 'X-Langu-Id'
+    },
     LOGIN_URL: `http://${HOST}:${PORT}/api/session/auth/google?callbackPort=8080`
 };
 

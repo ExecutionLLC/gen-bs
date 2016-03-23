@@ -32,31 +32,45 @@ export default class SamplesClient extends UserEntityClientBase {
         );
     }
 
-    static verifySampleFormat(sample, shouldCheckFieldValues) {
-        assert.ok(sample.id);
-        assert.ok(_.includes(['standard', 'advanced', 'user'], sample.type));
-        assert.ok(sample.fileName);
-        if (shouldCheckFieldValues) {
-            assert.ok(sample.values && sample.values.length);
-            _.each(sample.values, sampleValue => {
-                assert.ok(sampleValue.fieldId);
-            });
+    static isValidSample(sample, shouldCheckFieldValues) {
+        if (!sample.id || !sample.fileName) {
+            return false;
         }
+        if (!_.includes(['standard', 'advanced', 'user'], sample.type)) {
+            return false;
+        }
+        if (shouldCheckFieldValues) {
+            if (!sample.values || !sample.values.length) {
+                return false;
+            }
+            if (_.any(sample.values, sampleValue => {!sampleValue.fieldId;})) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    static verifySampleFields(fieldsMetadata, sampleOrNull) {
-        assert.ok(fieldsMetadata && fieldsMetadata.length);
+    static isValidSampleMetadata(fieldsMetadata, sampleOrNull) {
+        if (!fieldsMetadata || !fieldsMetadata.length) {
+            return false;
+        }
         // Should contain editable fields.
-        assert.ok(_.filter(fieldsMetadata, 'isEditable', true).length);
+        if (!_.filter(fieldsMetadata, 'isEditable', true).length) {
+            return false;
+        }
         // Should contain mandatory fields.
-        assert.ok(_.filter(fieldsMetadata, 'isMandatory', true).length);
+        if (!_.filter(fieldsMetadata, 'isMandatory', true).length) {
+            return false;
+        }
 
         if (sampleOrNull) {
             const values = sampleOrNull.values;
-            _.each(values, value => {
-                assert.ok(_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId),
-                'Field from sample values is not found in the fields metadata collection: ' + value.fieldId);
+            var ok = _.each(values, value => {
+                !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId));
             });
+            return ok;
         }
+        return true;
     }
 }

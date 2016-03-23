@@ -1,7 +1,7 @@
 'use strict';
 
-const ClientBase = require('./ClientBase');
-const RequestWrapper = require('./RequestWrapper');
+import ClientBase from './ClientBase';
+import RequestWrapper from './RequestWrapper';
 
 export default class DataClient extends ClientBase {
     constructor(urls) {

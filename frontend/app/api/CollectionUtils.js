@@ -1,7 +1,7 @@
 'use strict';
 
-const assert = require('assert');
-const _ = require('lodash');
+import assert from 'assert';
+import _ from 'lodash';
 
 export default class CollectionUtils {
     static checkCollectionIsValid(collection, expectedCollection, isDemoUser) {

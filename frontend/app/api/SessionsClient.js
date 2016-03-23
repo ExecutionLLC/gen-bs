@@ -1,11 +1,10 @@
 'use strict';
 
-const _ = require('lodash');
-const assert = require('assert');
-const HttpStatus = require('http-status');
+import _ from 'lodash';
+import HttpStatus from 'http-status';
 
-const RequestWrapper = require('./RequestWrapper');
-const ClientBase = require('./ClientBase');
+import RequestWrapper from './RequestWrapper';
+import ClientBase from './ClientBase';
 
 export default class SessionsClient extends ClientBase {
     constructor(urls) {

@@ -1,7 +1,7 @@
 'use strict';
 
-const changeCase = require('change-case');
-const _ = require('lodash');
+import changeCase from 'change-case';
+import _ from 'lodash';
 
 export default class ChangeCaseUtil {
     static convertKeysToCamelCase(obj) {

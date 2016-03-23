@@ -1,9 +1,8 @@
 'use strict';
 
-const assert = require('assert');
-const Request = require('browser-request');
+import Request from 'browser-request';
 
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+import ChangeCaseUtil from '../utils/ChangeCaseUtil';
 
 export default class RequestWrapper {
     static post(url, headers, bodyObject, callback) {
@@ -62,9 +61,8 @@ export default class RequestWrapper {
                     try {
                         body = JSON.parse(body);
                     } catch (e) {
-                        assert.fail('Error parsing request body: ' + body);
+                        callback('Error parsing request body: ' + body);
                     }
-
                 }
                 callback(null, {
                     status,
