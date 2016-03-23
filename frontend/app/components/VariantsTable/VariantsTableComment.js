@@ -8,9 +8,9 @@ import { createComment,updateComment } from '../../actions/variantsTable';
 export default class CommentEditPopover extends Component {
     constructor(props) {
         super(props);
-
+        const {comments} = this.props;
         this.state = {
-            comment: ''
+            comment: (_.isEmpty(comments)) ? '' : comments[0].comment
         };
     }
 
@@ -25,7 +25,7 @@ export default class CommentEditPopover extends Component {
     }
 
     render() {
-        const {auth, comments} = this.props;
+        const {auth, comments, search_key} = this.props;
         if (auth.isDemo) {
             return (
                 this.renderDemoComment()
@@ -38,7 +38,7 @@ export default class CommentEditPopover extends Component {
                         rootClose={true}
                         placement="right"
                         overlay={
-                            <Popover>
+                            <Popover id={search_key}>
                                 {this.renderCommentPopover()}
                             </Popover>
                         }
@@ -74,9 +74,7 @@ export default class CommentEditPopover extends Component {
 
         const comment = this.state.comment
 
-        return (<div className="fade right in editable-container editable-popup" role="tooltip">
-            <div className="arrow"></div>
-            <div className="popover-content">
+        return (
                 <div>
                     <form className="form-inline editableform">
                         <div className="control-group form-group">
@@ -94,10 +92,10 @@ export default class CommentEditPopover extends Component {
                                             className="btn btn-uppercase btn-link editable-submit"
                                             onClick={()=>{
                                                 if(_.isEmpty(comments)){
-                                                     this.props.dispatch(createComment(alt,pos,reference,chrom,search_key,comment))
+                                                     this.props.dispatch(createComment(alt,pos,reference,chrom,search_key,comment));
                                                 }else {
-                                                    this.props.dispatch(updateComment(comments[0].id,alt,pos,reference,chrom,search_key,comment))
-                                                  }
+                                                    this.props.dispatch(updateComment(comments[0].id,alt,pos,reference,chrom,search_key,comment));
+                                                }
                                             }}
                                     >Save
                                     </button>
@@ -110,7 +108,6 @@ export default class CommentEditPopover extends Component {
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>);
+        );
     }
 }
