@@ -106,21 +106,51 @@ function receiveVariants(json) {
 }
 
 
-export function createComment(alt,pos,ref,chrom,searchkey) {
+export function createComment(alt,pos,ref,chrom,searchkey,comment) {
 
     return (dispatch, getState) => {
 
         const clearedJson = {
             'alt':alt,
             'pos':pos,
-            'ref':ref,
+            'reference':ref,
             'chrom':chrom,
-            'searchkey':searchkey,
+            'searchKey':searchkey,
+            'comment':comment
         }
 
-        $.ajax(config.URLS.COMMENTS(getState().variantsTable.operationId), {
+        $.ajax(config.URLS.COMMENTS, {
                 'data': JSON.stringify(clearedJson),
                 'type': 'POST',
+                'processData': false,
+                'contentType': 'application/json'
+            })
+            .fail(json => {
+                console.log('createComment fail', json)
+            })
+            .then(json=> {
+                console.log('createComment success', json)
+            })
+
+    }
+}
+
+export function updateComment(id,alt,pos,ref,chrom,searchkey,comment) {
+
+    return (dispatch, getState) => {
+
+        const clearedJson = {
+            'id':id,
+            'alt':alt,
+            'pos':pos,
+            'reference':ref,
+            'chrom':chrom,
+            'searchKey':searchkey,
+            'comment':comment
+        }
+        $.ajax(`${config.URLS.COMMENTS}/${id}`, {
+                'data': JSON.stringify(clearedJson),
+                'type': 'PUT',
                 'processData': false,
                 'contentType': 'application/json'
             })

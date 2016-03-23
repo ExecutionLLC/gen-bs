@@ -212,6 +212,7 @@ class SearchService extends ServiceBase {
                         result[searchKey] = [];
                     }
                     result[searchKey].push(comment);
+                    return result;
                 }, {});
                 callback(null, searchKeyToCommentHash);
             }
