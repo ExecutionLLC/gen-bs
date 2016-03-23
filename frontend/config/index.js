@@ -18,8 +18,8 @@ const config = {
         FILTERS: `http://${HOST}:${PORT}/api/filters`,
         SAMPLES: `http://${HOST}:${PORT}/api/samples`,
         FILE_UPLOAD: `http://${HOST}:${PORT}/api/samples/upload`
-    }
+    },
+    LOGIN_URL: `http://${HOST}:${PORT}/api/session/auth/google?callbackPort=8080`
 };
 
 export default config
-
