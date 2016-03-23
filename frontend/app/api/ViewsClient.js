@@ -1,6 +1,6 @@
 'use strict';
 
-const UserEntityClientBase = require('./UserEntityClientBase');
+import UserEntityClientBase from './UserEntityClientBase';
 
 export default class ViewsClient extends UserEntityClientBase {
     constructor(urls) {

@@ -1,7 +1,7 @@
 'use strict';
 
-const RequestWrapper = require('./RequestWrapper');
-const ClientBase = require('./ClientBase');
+import RequestWrapper from './RequestWrapper';
+import ClientBase from './ClientBase';
 
 export default class UserEntityClientBase extends ClientBase {
     constructor(urls, collectionUrls) {
