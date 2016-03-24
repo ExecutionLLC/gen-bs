@@ -15,8 +15,11 @@ export default class ViewBuilder extends Component {
             'disabled': (view.type !== 'user') ? 'disabled' : ''
         });
 
-        const isDisableEditing = view.type !== 'user';
+        const previously_selected_fields = view.view_list_items.map(function (viewItem) {
+            return viewItem.field_id
+        });
 
+        const isDisableEditing = view.type !== 'user';
         const selects = view.view_list_items.map(function (viewItem, index) {
 
             var currentValue =
@@ -26,11 +29,11 @@ export default class ViewBuilder extends Component {
 
             const selectOptions = [
 
-                ...fields.list.filter((f) => f.id !== currentValue.id).map((f) => {
+                ...fields.list.filter((f) => !_.includes(previously_selected_fields, f.id)).map((f) => {
                     return {value: f.id, label: `${f.name} -- ${f.source_name}`}
                 }),
 
-                ...fields.sourceFieldsList.filter((f) => (f.id !== currentValue.id) && (f.source_name !== 'sample')).map((f) => {
+                ...fields.sourceFieldsList.filter((f) => !_.includes(previously_selected_fields, f.id) && (f.source_name !== 'sample')).map((f) => {
                     return {value: f.id, label: `${f.name} -- ${f.source_name}`}
                 })
 
