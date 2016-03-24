@@ -18,6 +18,7 @@ export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 export const WS_ADD_COMMENT = 'WS_ADD_COMMENT'
 export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT'
+export const WS_DELETE_COMMENT='WS_DELETE_COMMENT'
 
 
 /*
@@ -43,6 +44,13 @@ export  function changeComment(commentData){
     }
 }
 
+export  function deleteComment(commentData,search_key){
+    return {
+        type: WS_DELETE_COMMENT,
+        commentData,
+        search_key
+    }
+}
 export function clearVariants() {
     return {
         type: WS_CLEAR_VARIANTS

@@ -2,7 +2,7 @@ import React,{Component}  from 'react';
 import {Popover,OverlayTrigger} from 'react-bootstrap'
 
 
-import { createComment,updateComment } from '../../actions/variantsTable';
+import { createComment,updateComment,removeComment } from '../../actions/variantsTable';
 
 
 export default class CommentEditPopover extends Component {
@@ -92,9 +92,16 @@ export default class CommentEditPopover extends Component {
                                             className="btn btn-uppercase btn-link editable-submit"
                                             onClick={()=>{
                                                 if(_.isEmpty(comments)){
-                                                     this.props.dispatch(createComment(alt,pos,reference,chrom,search_key,comment));
+                                                    if(comment){
+                                                        this.props.dispatch(createComment(alt,pos,reference,chrom,search_key,comment));
+                                                    }
+
                                                 }else {
-                                                    this.props.dispatch(updateComment(comments[0].id,alt,pos,reference,chrom,search_key,comment));
+                                                    if (comment){
+                                                        this.props.dispatch(updateComment(comments[0].id,alt,pos,reference,chrom,search_key,comment));
+                                                    }else {
+                                                        this.props.dispatch(removeComment(comments[0].id,search_key));
+                                                    }
                                                 }
                                             }}
                                     >Save

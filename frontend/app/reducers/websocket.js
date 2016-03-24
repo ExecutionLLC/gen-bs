@@ -14,6 +14,13 @@ export default function websocket(state = {
     progress: null
 }, action) {
     switch (action.type) {
+        case  ActionTypes.WS_DELETE_COMMENT:
+            const deleteCommentVariants = state.variants;
+            const deleteVariant = _.find(deleteCommentVariants, variant => variant.search_key === action.search_key);
+            deleteVariant.comments.splice(0, 1);
+            return Object.assign({}, state, {
+                variants: deleteCommentVariants,
+            });
         case ActionTypes.WS_UPDATE_COMMENT:
             const updateCommentVariants = state.variants;
             const updatedVariant = _.find(updateCommentVariants, variant => variant.search_key === action.commentData.search_key);

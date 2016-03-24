@@ -1,5 +1,5 @@
 import config from '../../config'
-import { requestAnalyze, clearVariants, addComment, changeComment } from './websocket'
+import { requestAnalyze, clearVariants, addComment, changeComment, deleteComment } from './websocket'
 
 /*
  * action types
@@ -159,6 +159,26 @@ export function updateComment(id,alt,pos,ref,chrom,searchkey,comment) {
             })
             .then(json=> {
                 dispatch(changeComment(json))
+            })
+
+    }
+}
+
+export function removeComment(id,search_key) {
+
+    return (dispatch, getState) => {
+
+        $.ajax(`${config.URLS.COMMENTS}/${id}`, {
+                'type': 'DELETE',
+                'processData': false,
+                'contentType': 'application/json'
+            })
+            .fail(json => {
+                console.log('createComment fail', json)
+            })
+            .then(json=> {
+                console.log('createComment sucess', json)
+                dispatch(deleteComment(json,search_key))
             })
 
     }
