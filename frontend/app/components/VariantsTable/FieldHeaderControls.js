@@ -76,15 +76,17 @@ export default class FieldHeaderControls extends Component {
         const {searchString, isFilterOpened} = this.state;
         const fieldMetadata = FieldUtils.find(fieldId, fields);
         const fieldValueType = fieldMetadata ? fieldMetadata.value_type : null;
+        const isFieldSearchable = fieldValueType === 'string';
         const inputGroupClasses = classNames(
             'variants-table-search-field',
             'input-group',
             {
-                'open': isFilterOpened
+                'open': isFilterOpened,
+                'invisible': !isFieldSearchable
             }
         );
 
-        if (fieldValueType === 'string') {
+        if (isFieldSearchable) {
             return (
                 <div className={inputGroupClasses}>
                     <span className="input-group-btn">
