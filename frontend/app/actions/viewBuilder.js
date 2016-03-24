@@ -89,19 +89,26 @@ function viewBuilderReceiveUpdateView(json) {
 export function viewBuilderUpdateView(viewItemIndex) {
 
     return (dispatch, getState) => {
-        dispatch(viewBuilderRequestUpdateView());
-        if (getState().auth.isDemo ||
-            getState().viewBuilder.currentView.type == 'advanced' ||
-            getState().viewBuilder.currentView.type == 'standard') {
-            dispatch(closeModal('views'))
-            dispatch(fetchViews(getState().viewBuilder.currentView.id))
-        }
-        else {
 
-            return $.ajax(`${config.URLS.VIEWS}/${getState().viewBuilder.editedView.id}`, {
+        const currState = getState();
+        currState.viewBuilder.editedView.view_list_items = _.filter(
+            currState.viewBuilder.editedView.view_list_items, function(item) {
+                return item.field_id
+            }
+        );
+
+        dispatch(viewBuilderRequestUpdateView());
+        if (currState.auth.isDemo ||
+            currState.viewBuilder.currentView.type == 'advanced' ||
+            currState.viewBuilder.currentView.type == 'standard') {
+            dispatch(closeModal('views'))
+            dispatch(fetchViews(currState.viewBuilder.currentView.id))
+        } else {
+
+            return $.ajax(`${config.URLS.VIEWS}/${currState.viewBuilder.editedView.id}`, {
                     'type': 'PUT',
-                    'headers': {"X-Session-Id": getState().auth.sessionId},
-                    'data': JSON.stringify(getState().viewBuilder.editedView),
+                    'headers': {"X-Session-Id": currState.auth.sessionId},
+                    'data': JSON.stringify(currState.viewBuilder.editedView),
                     'processData': false,
                     'contentType': 'application/json'
                 })
