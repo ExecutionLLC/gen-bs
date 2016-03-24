@@ -35,7 +35,10 @@ export default function viewBuilder(state = {
 
         case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW:
             return Object.assign({}, state, {
-                isFetching: true
+                isFetching: true,
+                editedView: state.editedView ? Object.assign({}, state.editedView, {
+                    view_list_items: _.filter(state.editedView.view_list_items, item => item.field_id)
+                }) : null,
             })
 
         case ActionTypes.VBUILDER_RECEIVE_UPDATE_VIEW:
@@ -46,7 +49,10 @@ export default function viewBuilder(state = {
 
         case ActionTypes.VBUILDER_REQUEST_CREATE_VIEW:
             return Object.assign({}, state, {
-                isFetching: true
+                isFetching: true,
+                newView: state.newView ? Object.assign({}, state.newView, {
+                    view_list_items: _.filter(state.newView.view_list_items, item => item.field_id)
+                }) : null
             })
 
         case ActionTypes.VBUILDER_RECEIVE_CREATE_VIEW:

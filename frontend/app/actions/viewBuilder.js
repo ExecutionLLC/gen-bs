@@ -91,11 +91,6 @@ export function viewBuilderUpdateView(viewItemIndex) {
     return (dispatch, getState) => {
 
         const currState = getState();
-        currState.viewBuilder.editedView.view_list_items = _.filter(
-            currState.viewBuilder.editedView.view_list_items, function(item) {
-                return item.field_id
-            }
-        );
 
         dispatch(viewBuilderRequestUpdateView());
         if (currState.auth.isDemo ||
