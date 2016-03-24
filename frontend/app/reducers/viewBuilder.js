@@ -82,22 +82,25 @@ export default function viewBuilder(state = {
             })
 
         case ActionTypes.VBUILDER_ADD_COLUMN:
+
+            const emptyField = {field_id: null}
+
             return Object.assign({}, state, {
                 editedView: state.editedView ? Object.assign({}, state.editedView, {
                     view_list_items: [
                         ...state.editedView.view_list_items.slice(0, action.viewItemIndex),
-                        state.editedView.view_list_items[action.viewItemIndex],
+                        emptyField,
                         ...state.editedView.view_list_items.slice(action.viewItemIndex)
                     ]
                 }) : null,
                 newView: state.newView ? Object.assign({}, state.newView, {
                     view_list_items: [
                         ...state.newView.view_list_items.slice(0, action.viewItemIndex),
-                        state.newView.view_list_items[action.viewItemIndex],
+                        emptyField,
                         ...state.newView.view_list_items.slice(action.viewItemIndex)
                     ]
                 }) : null
-            })
+            });
 
         case ActionTypes.VBUILDER_CHANGE_ATTR:
             return Object.assign({}, state, {
