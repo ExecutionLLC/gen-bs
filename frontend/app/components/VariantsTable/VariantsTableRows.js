@@ -63,13 +63,15 @@ export default class VariantsTableRows extends Component {
     handleScroll(e) {
         //console.log('scroll', e);
         const { currentVariants } = this.props.ws;
-        if (currentVariants) {
-            const el = e.target;
-            const variantsLength = currentVariants.length;
+        if (!currentVariants) {
+            return;
+        }
+        const el = e.target;
+        const variantsLength = currentVariants.length;
 
-            if (el.scrollHeight - el.scrollTop === el.clientHeight && variantsLength > 99) {
-                this.props.dispatch(getNextPartOfData());
-            }
+        if (el.scrollHeight - el.scrollTop === el.clientHeight
+            && variantsLength > this.props.variantsTable.searchInResultsParams.limit - 1) {
+            this.props.dispatch(getNextPartOfData());
         }
     }
 

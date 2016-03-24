@@ -38,7 +38,6 @@ export default function variantsTable(state = {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
-                    //limit: state.searchInResultsParams.limit + 100
                 })
             })
 
