@@ -7,7 +7,7 @@ import ComponentBase from '../shared/ComponentBase';
 export default class VariantsTableRow extends ComponentBase {
     render() {
         const {row, rowIndex, currentView, sortState} = this.props;
-        const rowFields = row.fields;
+        const rowFieldsHash = row.fieldsHash;
         const comments = row.comments;
         const viewFields = currentView.view_list_items;
 
@@ -35,14 +35,14 @@ export default class VariantsTableRow extends ComponentBase {
                     <div><a href="#" className="btn-link-default comment-link" data-type="textarea" data-pk="1"
                             data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
                 </td>
-                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFields))}
+                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
             </tr>
         );
     }
 
     renderFieldValue(field, sortState, rowFields) {
         const fieldId = field.field_id;
-        const resultField = _.find(rowFields, rowField => rowField.field_id === fieldId);
+        const resultFieldValue = rowFields[fieldId];
         let columnSortParams = _.find(sortState, sortItem => sortItem.field_id === fieldId);
 
         let sortedActiveClass = classNames({
@@ -53,7 +53,7 @@ export default class VariantsTableRow extends ComponentBase {
             <td className={sortedActiveClass}
                 key={fieldId}>
                 <div>
-                    {(resultField === null) ? '' : resultField.value}
+                    {resultFieldValue || ''}
                 </div>
             </td>
         );

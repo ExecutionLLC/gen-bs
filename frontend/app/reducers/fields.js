@@ -23,13 +23,19 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_FIELDS:
-            let fields = action.fields.map(updateFieldsSamples);
+            const fields = action.fields.map(updateFieldsSamples);
+            const editableFields = _.filter(fields, 'is_editable', true);
+            const idToFieldHash = _.reduce(fields, (result, field) => {
+                result[field.id] = field;
+                return result;
+            });
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     samples: false
                 }),
                 list: fields,
-                editableFields: _.filter(fields, 'is_editable', true),
+                editableFields,
+                idToFieldHash,
                 lastUpdated: action.receivedAt
             });
 
