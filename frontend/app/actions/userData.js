@@ -159,11 +159,11 @@ export function fetchSamples() {
                 'headers': {"X-Session-Id": getState().auth.sessionId}
             })
             .then(function (json) {
-                const sample = getState().ui.currentSample || json[0] || null
-                const sampleId = sample.id
+                const sample = getState().ui.currentSample || json[0] || null;
+                const sampleId = sample.id;
 
-                dispatch(receiveSamples(json))
-                dispatch(changeSample(json, sampleId))
+                dispatch(receiveSamples(json));
+                dispatch(changeSample(json, sampleId));
             })
 
         // TODO:
