@@ -2,23 +2,22 @@ import * as ActionTypes from '../actions/errorHandler'
 
 export default function errorHandler(
     state = {
-        errorQueue: []
+        showErrorWindow: false,
+        lastError: null
     },
     action
 ) {
     switch (action.type) {
         case ActionTypes.HANDLE_ERROR: {
-            // add new error to the end of the queue
-            const updatedQueue = [...state.errorQueue, action.error || []];
             return Object.assign({}, state, {
-                errorQueue: updatedQueue
+                showErrorWindow: action.error ? true : false,
+                lastError: action.error
             });
         }
         case ActionTypes.LAST_ERROR_RESOLVED: {
-            // remove last error
-            const updatedQueue = state.errorQueue.slice().shift();
             return Object.assign({}, state, {
-                errorQueue: updatedQueue
+                showErrorWindow: false,
+                lastError: null
             });
         }
     }
