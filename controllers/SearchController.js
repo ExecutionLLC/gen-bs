@@ -70,11 +70,11 @@ class SearchController extends ControllerBase {
                 const limit = request.query.limit;
                 const offset = request.query.offset;
 
-                if (!limit || !offset) {
-                    callback(new Error('Please set "limit" and "offset" query parameters.'));
+                if (!limit || !offset || isNaN(limit) || isNaN(offset)) {
+                    callback(new Error('Please set "limit" and "offset" query parameters to valid numbers.'));
                 } else {
                     this.services.search.loadResultsPage(user, sessionId, operationId,
-                        limit, offset, (error) => callback(error, operationId));
+                        parseInt(limit), parseInt(offset), (error) => callback(error, operationId));
                 }
             }
         ], (error, operationId) => {
