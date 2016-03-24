@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import VariantsTableEmpty from './VariantsTableEmpty';
 import CommentEditPopover from './VariantsTableComment';
+import VariantsTableRow from './VariantsTableRow';
 
 import { getNextPartOfData, createComment } from '../../actions/variantsTable';
 
@@ -37,6 +38,10 @@ export default class VariantsTableRows extends Component {
         scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.variants !== nextProps.variants;
+    }
+
     componentWillUnmount() {
         const scrollElement = this.refs.variantsTableBody;
         scrollElement.removeEventListener('scroll', this.handleScroll);
@@ -59,12 +64,16 @@ export default class VariantsTableRows extends Component {
 
     handleScroll(e) {
         //console.log('scroll', e);
-        const el = e.target;
         const { currentVariants } = this.props.ws;
-        const variantsLength = (currentVariants === null) ? 0 : currentVariants.length;
+        if (!currentVariants) {
+            return;
+        }
+        const el = e.target;
+        const variantsLength = currentVariants.length;
 
-        if (el.scrollHeight - el.scrollTop === el.clientHeight && currentVariants && variantsLength > 99) {
-            this.props.dispatch(getNextPartOfData())
+        if (el.scrollHeight - el.scrollTop === el.clientHeight
+            && variantsLength > this.props.variantsTable.searchInResultsParams.limit - 1) {
+            this.props.dispatch(getNextPartOfData());
         }
     }
 
@@ -74,65 +83,13 @@ export default class VariantsTableRows extends Component {
     }
 
     renderRow(row, rowIndex, sortState, currentView) {
-        const auth = this.props.auth;
-        const rowFields = row.fields;
-        const comments = row.comments;
-        const viewFields = currentView.view_list_items;
-        const pos = this.getMainFieldValue('POS',rowFields);
-        const alt = this.getMainFieldValue('ALT',rowFields);
-        const chrom = this.getMainFieldValue('CHROM',rowFields);
-        const ref = this.getMainFieldValue('REF',rowFields);
-        const search_key = row.search_key;
-
         return (
-            <tr key={rowIndex}>
-                <td className="btntd row_checkbox"
-                    key="row_checkbox">
-                    <div><label className="checkbox hidden">
-                        <input type="checkbox"/>
-                        <i></i>
-                    </label>
-                        <span>{rowIndex + 1}</span>
-                    </div>
-                </td>
-                <td className="btntd">
-                    <div>
-                        <button data-toggle="button"
-                                className="btn btn-link reset-padding">
-                            <i className="i-star"></i>
-                        </button>
-                    </div>
-                </td>
-                <CommentEditPopover alt={alt}
-                                    pos={pos}
-                                    reference={ref}
-                                    chrom={chrom}
-                                    search_key={search_key}
-                                    dispatch = {this.props.dispatch}
-                                    auth = {auth}
-                                    comments = {comments}
-                ></CommentEditPopover>
-                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFields))}
-            </tr>
-        );
-    }
-
-    renderFieldValue(field, sortState, rowFields) {
-        const fieldId = field.field_id;
-        const resultField = _.find(rowFields, rowField => rowField.field_id === fieldId);
-        let columnSortParams = _.find(sortState, sortItem => sortItem.field_id === fieldId);
-
-        let sortedActiveClass = classNames({
-            'active': columnSortParams
-        });
-
-        return (
-            <td className={sortedActiveClass}
-                key={fieldId}>
-                <div>
-                    {(resultField === null) ? '' : resultField.value}
-                </div>
-            </td>
+            <VariantsTableRow key={rowIndex}
+                              row={row}
+                              rowIndex={rowIndex}
+                              sortState={sortState}
+                              currentView={currentView}
+            />
         );
     }
 

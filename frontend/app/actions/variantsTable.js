@@ -38,9 +38,6 @@ function changeVariantsLimit() {
 
 export function getNextPartOfData(currentSample, currentView, currentFilter) {
     return (dispatch, getState) => {
-        const limit = getState().ui.currentLimit + 100
-        const offset = getState().ui.currentOffset
-
         dispatch(changeVariantsLimit())
 
         setTimeout(() => {

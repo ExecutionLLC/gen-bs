@@ -545,12 +545,12 @@ table {
                 display: table;
                 left: 0;
                 margin-right: 16px;
-                width: auto!important;
+                width: 104px!important;
                 .input-group-btn { 
                   display: none;
                  }
                 }
-               button { 
+                button { 
                  padding: 4px;
                  border-radius: 0;
                  
@@ -559,6 +559,9 @@ table {
                   .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @input-border-radius-small);                  
                 }
               
+             }
+             .variants-table-search-field.invisible {
+               visibility: hidden;
              }
              .variants-table-search-field.active { 
               &:before { 
@@ -616,17 +619,19 @@ table {
               }
              }
              &.comment {
-             
-            }
+              .variants-table-search-field { 
+                &.open {
+                  width: 144!important;
+                  }
+                } 
+             }
+          
  
           }
        }
      }
     .table-variants-head,
-    .table-variants-body { 
-         
-               
-        
+    .table-variants-body {         
       tr { 
          td { 
           font-size: @font-size-small;
@@ -639,14 +644,7 @@ table {
                 text-overflow: ellipsis;
                 white-space: nowrap; 
                 &.table-loader {
-                  height: 35px;
-                  width: auto;
-                  text-align: center; 
-                  color: @gray;
-                  i { 
-                    vertical-align: middle;
-                    margin-left: .25em;
-                  }
+                   width: auto;
                 }
            }
           &.btntd {
@@ -725,8 +723,6 @@ table {
         background-size: 100% 70px;
         background-attachment: local; 
 
-       //#gradient > .directional(@start-color: #fff; @end-color: @gray-lighter; @deg: 175deg);
-
       tr { 
          td {
            > div {
@@ -774,6 +770,8 @@ table {
 .table-variants-head { 
 left: 0;
     top: 44px;
+    
+    
 }
 .table-variants-body {
  bottom: 0;
@@ -796,7 +794,16 @@ left: 0;
   }
 }
   }
-
+.table-loader {
+    height: 35px;
+      line-height: 35px;
+    text-align: center; 
+    color: @gray;
+    i { 
+      vertical-align: middle;
+      margin-left: .25em;
+    }
+ }                 
 .empty {
   background: rgb(247, 247, 247) none repeat scroll 0% 0%; margin: -5px -5px -5px -32px; text-align: center; padding: 150px 0px; color: rgb(170, 170, 170);
   border-top: 1px solid #eee;
