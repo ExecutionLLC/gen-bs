@@ -68,9 +68,8 @@ export default class ErrorModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { errorHandler: { showErrorWindow, lastError } } = state;
+    const { errorHandler: { lastError } } = state;
     return {
-        showModal: showErrorWindow,
         lastError
     }
 }
