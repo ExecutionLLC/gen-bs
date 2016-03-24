@@ -35,6 +35,7 @@ export default class CommentEditPopover extends Component {
                 <td className="comment">
                     <OverlayTrigger
                         trigger="click"
+                        ref="overlay"
                         rootClose={true}
                         placement="right"
                         overlay={
@@ -103,10 +104,13 @@ export default class CommentEditPopover extends Component {
                                                         this.props.dispatch(removeComment(comments[0].id,search_key));
                                                     }
                                                 }
+                                                this.refs.overlay.toggle();
                                             }}
                                     >Save
                                     </button>
-                                    <button type="button" className="btn btn-uppercase btn-link editable-cancel">
+                                    <button type="button"
+                                            onClick={()=>this.refs.overlay.toggle()}
+                                            className="btn btn-uppercase btn-link editable-cancel">
                                         Cancel
                                     </button>
                                 </div>
