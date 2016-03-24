@@ -49,7 +49,7 @@ export default class VariantsTableHead extends Component {
                             
                         </div>
                     </div>
-                    <div className="variants-table-search-field input-group">
+                    <div className="variants-table-search-field input-group invisible">
                        <span className="input-group-btn"><button className="btn btn-link-light-default"><i className="md-i">search</i></button></span>
                         <input type="text" className="form-control material-input"
                                value=""
