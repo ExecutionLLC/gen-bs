@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
-import FieldHeaderControls from './FieldHeaderControls';
+import FieldHeader from './FieldHeader';
 import  { firstCharToUpperCase } from '../../utils/stringUtils';
 import FieldUtils from '../../utils/fieldUtils';
 
@@ -71,13 +71,13 @@ export default class VariantsTableHead extends Component {
         };
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(changeVariantsFilter(fieldId, searchValue));
         return (
-            <FieldHeaderControls key={fieldId}
-                                 fieldId={fieldId}
-                                 fields={fields}
-                                 sortState={sortState}
-                                 onSortRequested={sendSortRequestedAction}
-                                 onSearchRequested={sendSearchRequest}
-                                 onSearchValueChanged={onSearchValueChanged}
+            <FieldHeader key={fieldId}
+                         fieldId={fieldId}
+                         fields={fields}
+                         sortState={sortState}
+                         onSortRequested={sendSortRequestedAction}
+                         onSearchRequested={sendSearchRequest}
+                         onSearchValueChanged={onSearchValueChanged}
             />
         );
     }
