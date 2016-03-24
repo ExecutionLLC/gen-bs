@@ -31,7 +31,8 @@ export default class RequestWrapper {
     }
 
     static del(url, headers, bodyObject, callback) {
-        Request.del({
+        Request({
+            method: 'DELETE',
             url,
             headers,
             json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
