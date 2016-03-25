@@ -8,7 +8,7 @@ import VariantsTableComment from './VariantsTableComment';
 
 export default class VariantsTableRow extends ComponentBase {
     render() {
-        const {row,auth, rowIndex, currentView, sortState,fields} = this.props;
+        const {row, auth, rowIndex, currentView, sortState, fields} = this.props;
         const rowFieldsHash = row.fieldsHash;
         const rowFields = row.fields;
         const comments = row.comments;
@@ -26,7 +26,7 @@ export default class VariantsTableRow extends ComponentBase {
                     key="row_checkbox">
                     <div><label className="checkbox hidden">
                         <input type="checkbox"/>
-                        <i></i>
+                        <i/>
                     </label>
                         <span>{rowIndex + 1}</span>
                     </div>
@@ -35,7 +35,7 @@ export default class VariantsTableRow extends ComponentBase {
                     <div>
                         <button data-toggle="button"
                                 className="btn btn-link reset-padding">
-                            <i className="i-star"></i>
+                            <i className="i-star"/>
                         </button>
                     </div>
                 </td>
@@ -47,7 +47,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       dispatch = {this.props.dispatch}
                                       auth = {auth}
                                       comments = {comments}
-                ></VariantsTableComment>
+                />
                 {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
             </tr>
         );
@@ -79,7 +79,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return  this.props.row !== nextProps.row;
+        return this.props.row !== nextProps.row;
     }
 }
 

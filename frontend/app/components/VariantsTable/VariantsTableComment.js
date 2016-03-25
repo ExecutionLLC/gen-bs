@@ -73,25 +73,25 @@ export default class VariantsTableComment extends Component {
             comments
             } = this.props;
 
-        const comment = this.state.comment
+        const comment = this.state.comment;
 
         return (
-                <div>
-                    <form className="form-inline editableform">
-                        <div className="control-group form-group">
-                            <div>
-                                <div className="">
+            <div>
+                <form className="form-inline editableform">
+                    <div className="control-group form-group">
+                        <div>
+                            <div className="">
                                     <textarea rows="7"
                                               placeholder="Your comments here..."
                                               className="form-control material-input input-large"
                                               onChange={(e) => this.onCommentChanged(e)}
                                               defaultValue={(_.isEmpty(comments)) ? '' : comments[0].comment}
                                     />
-                                </div>
-                                <div className="editable-buttons editable-buttons-bottom">
-                                    <button type="button"
-                                            className="btn btn-uppercase btn-link editable-submit"
-                                            onClick={()=>{
+                            </div>
+                            <div className="editable-buttons editable-buttons-bottom">
+                                <button type="button"
+                                        className="btn btn-uppercase btn-link editable-submit"
+                                        onClick={()=>{
                                                 if(_.isEmpty(comments)){
                                                     if(comment){
                                                         this.props.dispatch(createComment(alt,pos,reference,chrom,search_key,comment));
@@ -106,19 +106,19 @@ export default class VariantsTableComment extends Component {
                                                 }
                                                 this.refs.overlay.toggle();
                                             }}
-                                    >Save
-                                    </button>
-                                    <button type="button"
-                                            onClick={()=>this.refs.overlay.toggle()}
-                                            className="btn btn-uppercase btn-link editable-cancel">
-                                        Cancel
-                                    </button>
-                                </div>
+                                >Save
+                                </button>
+                                <button type="button"
+                                        onClick={()=>this.refs.overlay.toggle()}
+                                        className="btn btn-uppercase btn-link editable-cancel">
+                                    Cancel
+                                </button>
                             </div>
-                            <div className="editable-error-block help-block"></div>
                         </div>
-                    </form>
-                </div>
+                        <div className="editable-error-block help-block"></div>
+                    </div>
+                </form>
+            </div>
         );
     }
 }
