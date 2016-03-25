@@ -15,30 +15,54 @@ export default function websocket(state = {
 }, action) {
     switch (action.type) {
         case  ActionTypes.WS_DELETE_COMMENT:
-            const deleteCommentVariants = state.variants;
-            const deleteVariant = _.find(deleteCommentVariants, variant => variant.search_key === action.search_key);
-            let newComments = deleteVariant.comments.slice(1,deleteVariant.comments.length);
-            deleteVariant.comments = newComments;
+            const deleteCommentVariants = state.variants.slice(0,state.variants.length);
+            const deleteVariantIndex = _.findIndex(deleteCommentVariants, variant => variant.search_key === action.search_key);
+            const deleteVariant = deleteCommentVariants[deleteVariantIndex];
+            let newDeleteComments = deleteVariant.comments.slice(1,deleteVariant.comments.length);
+            const newDeleteVariant = {
+                comments:newDeleteComments,
+                fields:deleteVariant.fields,
+                fieldsHash:deleteVariant.fieldsHash,
+                search_key:deleteVariant.search_key
+            };
+            deleteCommentVariants[deleteVariantIndex] = newDeleteVariant;
             return Object.assign({}, state, {
-                    variants: deleteCommentVariants,
+                    variants: deleteCommentVariants
             });
         case ActionTypes.WS_UPDATE_COMMENT:
-            const updateCommentVariants = state.variants;
-            const updatedVariant = _.find(updateCommentVariants, variant => variant.search_key === action.commentData.search_key);
-            updatedVariant.comments[0].comment = action.commentData.comment;
+            const updateCommentVariants = state.variants.slice(0,state.variants.length);
+            const updatedVariantIndex = _.findIndex(updateCommentVariants, variant => variant.search_key === action.commentData.search_key);
+            const updatedVariant = updateCommentVariants[updatedVariantIndex];
+            let newUpdateComments = updatedVariant.comments.slice(0,updatedVariant.comments.length);
+            newUpdateComments[0].comment = action.commentData.comment;
+            const newUpdateVariant = {
+                comments:newUpdateComments,
+                fields:updatedVariant.fields,
+                fieldsHash:updatedVariant.fieldsHash,
+                search_key:updatedVariant.search_key
+            };
+            updateCommentVariants[updatedVariantIndex] = newUpdateVariant;
             return Object.assign({}, state, {
-                variants: updateCommentVariants,
+                variants: updateCommentVariants
             });
         case ActionTypes.WS_ADD_COMMENT:
-            const addCommentVarionts = state.variants;
-            const addCommentVariant = _.find(addCommentVarionts, variant => variant.search_key === action.commentData.search_key);
-            addCommentVariant.comments.push({
+            const addCommentVariants = state.variants.slice(0,state.variants.length);
+            const addCommentVariantIndex = _.findIndex(addCommentVariants, variant => variant.search_key === action.commentData.search_key);
+            const addVariant = addCommentVariants[addCommentVariantIndex];
+            let newAddComments = addVariant.comments.slice(0,addVariant.comments.length);
+            newAddComments.push({
                 'id':action.commentData.id,
                 'comment':action.commentData.comment
             });
-            const test3 = '';
+            const newAddVariant = {
+                comments:newAddComments,
+                fields:addVariant.fields,
+                fieldsHash:addVariant.fieldsHash,
+                search_key:addVariant.search_key
+            };
+            addCommentVariants[addCommentVariantIndex] = newAddVariant;
             return Object.assign({}, state, {
-                variants: addCommentVarionts,
+                variants: addCommentVariants
             });
         case ActionTypes.WS_CLEAR_VARIANTS:
             return Object.assign({}, state, {

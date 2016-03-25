@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import ComponentBase from '../shared/ComponentBase';
 
-import CommentEditPopover from './VariantsTableComment';
+import VariantsTableComment from './VariantsTableComment';
 
 
 export default class VariantsTableRow extends ComponentBase {
@@ -79,7 +79,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.row !== nextProps.row ||this.props.row.comments!==nextProps.row.comments;
+        return  this.props.row !== nextProps.row;
     }
 }
 

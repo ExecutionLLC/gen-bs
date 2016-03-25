@@ -46,7 +46,7 @@ export default class VariantsTableComment extends Component {
                     >
                         <a title=""
                            data-original-title=""
-                           class="btn-link-default comment-link editable editable-pre-wrapped editable-click editable-open"
+                           className="btn-link-default comment-link editable editable-pre-wrapped editable-click editable-open"
                            data-type="textarea"
                            data-pk="1"
                            data-placeholder="Your comments here..."
@@ -83,7 +83,7 @@ export default class VariantsTableComment extends Component {
                                 <div className="">
                                     <textarea rows="7"
                                               placeholder="Your comments here..."
-                                              class="form-control material-input input-large"
+                                              className="form-control material-input input-large"
                                               onChange={(e) => this.onCommentChanged(e)}
                                               defaultValue={(_.isEmpty(comments)) ? '' : comments[0].comment}
                                     />
