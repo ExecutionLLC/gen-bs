@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actions/fields'
 
-function updateFieldsSamples(field) {
-    // patch field because some properties may not exists
+// Patch field label because it may not exist
+function updateFieldLabelIfNeeded(field) {
     return Object.assign({}, field, {
         label: field.label ? field.label : field.name
     });
@@ -24,7 +24,7 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_FIELDS:
-            const fields = action.fields.map(updateFieldsSamples);
+            const fields = action.fields.map(updateFieldLabelIfNeeded);
             const editableFields = _.filter(fields, 'is_editable', true);
             const idToFieldHash = _.reduce(fields, (result, field) => {
                 result[field.id] = field;
@@ -48,7 +48,7 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_SOURCE_FIELDS:
-            let totalFields = action.fields.map(updateFieldsSamples);
+            let totalFields = action.fields.map(updateFieldLabelIfNeeded);
             let sourceFields = _.filter(totalFields,function(field) { return field.source_name != 'sample' });
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
