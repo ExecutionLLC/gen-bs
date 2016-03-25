@@ -149,3 +149,45 @@ select.select2.temp-active {
 .select2-results__option { 
   //padding: 16px;
 }
+
+.select2-dropdown--below { 
+ margin-top: -40px;
+}
+.select2-results__options { 
+  
+}
+
+.select2-results__option[title="child"],
+.select2-results__option[title="male"],
+.select2-results__option[title="female"],
+.select2-selection__rendered[title="child"],
+.select2-selection__rendered[title="male"],
+.select2-selection__rendered[title="female"] { 
+  position: relative;
+  color: transparent!important;
+  width: 46px;
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0; 
+  &:before { 
+    .fa(); 
+    position: absolute;
+    left: 16px;
+    top: 0; 
+    color: @gray;
+  }
+} 
+ 
+.select2-results__option[title="child"]:before,
+.select2-selection__rendered[title="child"]:before {
+   content: "\f1ae";
+  
+}
+.select2-results__option[title="male"]:before,
+.select2-selection__rendered[title="male"]:before {
+   content: "\f183";  
+}
+.select2-results__option[title="female"]:before,
+.select2-selection__rendered[title="female"]:before {
+   content: "\f182";
+}

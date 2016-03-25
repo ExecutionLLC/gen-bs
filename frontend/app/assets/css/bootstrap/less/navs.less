@@ -78,7 +78,6 @@
 
 // Give the tabs something to sit on
 .nav-tabs {
-  background: @nav-tabs-bg-color;
 
   > li {
     float: left;
@@ -86,9 +85,11 @@
     // Actual tabs (as links)
     > a {
       margin-right: 2px;
-      line-height: @line-height-base;
+      line-height: 48px;
       color: @text-color;
-      padding: 12px 25px;
+      padding: 0 12px;
+      text-transform: uppercase;
+      font-family: "Roboto-Medium";
       &:hover {
         color: @nav-tabs-active-link-hover-color;
       }
@@ -99,8 +100,8 @@
       &,
       &:hover,
       &:focus {
-        color:@text-color;
-        background-color: @nav-tabs-active-link-hover-bg;
+        color:@nav-tabs-active-link-hover-color;
+        border-bottom: solid 2px @nav-tabs-active-link-hover-border-color;
         cursor: default;
       }
     }
@@ -111,6 +112,7 @@
     .nav-tabs-justified();
   }
 }
+
 
 
 // Pills
@@ -147,7 +149,6 @@
   > li {
     float: none;
     + li {
-      margin-top: 2px;
       margin-left: 0; // no need for this gap between nav items
     }
   }
@@ -354,3 +355,74 @@
     }
   }
 }
+.nav-tabs.nav-componets  {
+    background: #fff; 
+}
+.nav-componets {
+  padding: 0;
+
+  > li {
+    > a { 
+       white-space: normal;
+       display: block;
+       overflow: hidden;
+       padding: 16px 20px 16px 48px;
+       position: relative;
+       border-bottom:none; 
+       > label { 
+         position: absolute;
+        
+          left: @padding-base-horizontal; top: @padding-large-vertical;
+       }
+    }
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus {
+      background-color:@default-max-light;
+
+          }
+    
+    &.nav-header { 
+      color: @gray-lighter;
+      padding: @padding-large-vertical  @padding-large-vertical  @padding-base-vertical;
+      border-top: solid 1px @default-max-light;
+  
+      
+    }
+    &.nav-header:first-child { 
+      border-top:none;
+    }
+  }
+  .link-right { 
+     display: block;
+    float: right;
+    font-size: 80%;
+    max-width: 25%;
+    text-align: right;
+    white-space: normal;
+    color: @gray-light;
+  }
+  .link-label { 
+    color: @text-color;
+    display: block;
+     word-wrap: break-word;
+  }
+  .link-desc { 
+    color: @text-muted;
+      display: block;
+    }
+  @media(min-width: @screen-sm){   
+    &.nav-radios { 
+      > li { 
+        a { 
+            padding-left: 32px;
+          label { 
+            display: none;
+          }
+        }
+      }
+    }
+   }
+}
+
+
