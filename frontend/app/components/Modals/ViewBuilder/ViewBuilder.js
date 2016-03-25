@@ -17,24 +17,22 @@ export default class ViewBuilder extends Component {
 
         const previouslySelectedFieldIds = view.view_list_items.map(viewItem => viewItem.field_id);
         const isDisableEditing = view.type !== 'user';
+        const allAvailableFields = fields.list.concat(fields.sourceFieldsList);
+        // Exclude editable fields and fields that are already selected.
+        const fieldsForSelection = _.filter(allAvailableFields, field => !field.is_editable
+            && !_.includes(previouslySelectedFieldIds, field.id));
         const selects = view.view_list_items.map(function (viewItem, index) {
 
             var currentValue =
-                _.find(fields.list, {id: viewItem.field_id}) ||
-                _.find(fields.sourceFieldsList, {id: viewItem.field_id}) ||
-                {id: null}
+                _.find(allAvailableFields, {id: viewItem.field_id}) ||
+                {id: null};
 
             const selectOptions = [
 
-                ...fields.list.filter((f) => !_.includes(previouslySelectedFieldIds, f.id)).map((f) => {
-                    return {value: f.id, label: `${f.name} -- ${f.source_name}`}
-                }),
-
-                ...fields.sourceFieldsList.filter((f) => !_.includes(previouslySelectedFieldIds, f.id) && (f.source_name !== 'sample')).map((f) => {
+                ...fieldsForSelection.map((f) => {
                     return {value: f.id, label: `${f.name} -- ${f.source_name}`}
                 })
-
-            ]
+            ];
 
             return (
 
