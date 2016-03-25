@@ -5,7 +5,7 @@ import {Popover,OverlayTrigger} from 'react-bootstrap'
 import { createComment,updateComment,removeComment } from '../../actions/variantsTable';
 
 
-export default class CommentEditPopover extends Component {
+export default class VariantsTableComment extends Component {
     constructor(props) {
         super(props);
         const {comments} = this.props;

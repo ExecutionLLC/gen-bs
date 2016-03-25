@@ -17,9 +17,10 @@ export default function websocket(state = {
         case  ActionTypes.WS_DELETE_COMMENT:
             const deleteCommentVariants = state.variants;
             const deleteVariant = _.find(deleteCommentVariants, variant => variant.search_key === action.search_key);
-            deleteVariant.comments.splice(0, 1);
+            let newComments = deleteVariant.comments.slice(1,deleteVariant.comments.length);
+            deleteVariant.comments = newComments;
             return Object.assign({}, state, {
-                variants: deleteCommentVariants,
+                    variants: deleteCommentVariants,
             });
         case ActionTypes.WS_UPDATE_COMMENT:
             const updateCommentVariants = state.variants;
@@ -54,7 +55,7 @@ export default function websocket(state = {
                     fieldsHash: _.reduce(row.fields, (result, fieldValue) => {
                         result[fieldValue.field_id] = fieldValue.value;
                         return result;
-                    })
+                    }, {})
                 });
             });
             return Object.assign({}, state, {

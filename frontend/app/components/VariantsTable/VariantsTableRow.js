@@ -3,13 +3,22 @@ import classNames from 'classnames';
 
 import ComponentBase from '../shared/ComponentBase';
 
+import CommentEditPopover from './VariantsTableComment';
+
 
 export default class VariantsTableRow extends ComponentBase {
     render() {
-        const {row, rowIndex, currentView, sortState} = this.props;
+        const {row,auth, rowIndex, currentView, sortState,fields} = this.props;
         const rowFieldsHash = row.fieldsHash;
+        const rowFields = row.fields;
         const comments = row.comments;
         const viewFields = currentView.view_list_items;
+
+        const pos = this.getMainFieldValue('POS',rowFields,fields);
+        const alt = this.getMainFieldValue('ALT',rowFields,fields);
+        const chrom = this.getMainFieldValue('CHROM',rowFields,fields);
+        const ref = this.getMainFieldValue('REF',rowFields,fields);
+        const search_key = row.search_key;
 
         return (
             <tr>
@@ -30,15 +39,25 @@ export default class VariantsTableRow extends ComponentBase {
                         </button>
                     </div>
                 </td>
-                <td className="comment"
-                    key="comment">
-                    <div><a href="#" className="btn-link-default comment-link" data-type="textarea" data-pk="1"
-                            data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
-                </td>
+                <VariantsTableComment alt={alt}
+                                      pos={pos}
+                                      reference={ref}
+                                      chrom={chrom}
+                                      search_key={search_key}
+                                      dispatch = {this.props.dispatch}
+                                      auth = {auth}
+                                      comments = {comments}
+                ></VariantsTableComment>
                 {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
             </tr>
         );
     }
+
+    getMainFieldValue(col_name,row_fields,fields){
+        const mainField = _.find( fields.list, field => field.name === col_name);
+        return _.find( row_fields, field => field.field_id === mainField.id).value
+    }
+
 
     renderFieldValue(field, sortState, rowFields) {
         const fieldId = field.field_id;
@@ -60,7 +79,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.row !== nextProps.row;
+        return this.props.row !== nextProps.row ||this.props.row.comments!==nextProps.row.comments;
     }
 }
 

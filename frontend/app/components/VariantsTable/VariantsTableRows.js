@@ -3,7 +3,6 @@ import {OverlayTrigger,Popover,Button} from 'react-bootstrap'
 import classNames from 'classnames';
 
 import VariantsTableEmpty from './VariantsTableEmpty';
-import CommentEditPopover from './VariantsTableComment';
 import VariantsTableRow from './VariantsTableRow';
 
 import { getNextPartOfData, createComment } from '../../actions/variantsTable';
@@ -15,14 +14,14 @@ export default class VariantsTableRows extends Component {
         const { currentVariants } = this.props.ws;
         const { sort } = this.props.variantsTable.searchInResultsParams;
         const { isFilteringOrSorting} = this.props.variantsTable;
-        const { searchParams,ui } = this.props;
+        const { searchParams,ui,fields } = this.props;
         const currentView = searchParams ? _.find(ui.views, view => view.id === searchParams.viewId) : null;
 
         return (
             <tbody className="table-variants-body"
                    id="variants_table_body"
                    ref="variantsTableBody">
-            {this.renderTableBody(sampleRows, sort, isFilteringOrSorting, currentView)}
+            {this.renderTableBody(sampleRows, sort, isFilteringOrSorting, currentView,fields)}
             {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
             </tbody>
         );
@@ -47,7 +46,7 @@ export default class VariantsTableRows extends Component {
         scrollElement.removeEventListener('scroll', this.handleScroll);
     }
 
-    renderTableBody(rows, sortState, isFilteringOrSorting, currentView) {
+    renderTableBody(rows, sortState, isFilteringOrSorting, currentView,fields) {
         if (isFilteringOrSorting || !currentView) {
             return (
                 <tr>
@@ -58,7 +57,7 @@ export default class VariantsTableRows extends Component {
                 </tr>
             );
         } else {
-            return _.map(rows, (row, index) => this.renderRow(row, index, sortState, currentView));
+            return _.map(rows, (row, index) => this.renderRow(row, index, sortState, currentView,fields));
         }
     }
 
@@ -77,18 +76,16 @@ export default class VariantsTableRows extends Component {
         }
     }
 
-    getMainFieldValue(col_name,row_fields){
-        const mainField = _.find( this.props.fields.list, field => field.name === col_name);
-        return _.find( row_fields, field => field.field_id === mainField.id).value
-    }
-
-    renderRow(row, rowIndex, sortState, currentView) {
+    renderRow(row, rowIndex, sortState, currentView,fields) {
         return (
             <VariantsTableRow key={rowIndex}
                               row={row}
                               rowIndex={rowIndex}
                               sortState={sortState}
                               currentView={currentView}
+                              fields={fields}
+                              auth = {this.props.auth}
+                              dispatch = {this.props.dispatch}
             />
         );
     }
