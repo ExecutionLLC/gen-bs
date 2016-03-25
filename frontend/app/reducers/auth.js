@@ -29,7 +29,6 @@ export default function auth(state = {
                 errorMessage: action.errorMessage
             });
 
-
         default:
             return state
     }
