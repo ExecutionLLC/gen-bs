@@ -235,7 +235,8 @@ class ApplicationServerService extends ServiceBase {
     }
 
     _createAppServerViewSortOrder(view, fieldIdToMetadata) {
-        const viewListItems = view.viewListItems;
+        // Keep only items whose fields exist in the current sample.
+        const viewListItems = _.filter(view.viewListItems, listItem => fieldIdToMetadata[listItem.fieldId]);
 
         // Get all items which specify sort order.
         const sortItems = _.filter(viewListItems, listItem => !!listItem.sortOrder);

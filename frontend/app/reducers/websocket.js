@@ -24,7 +24,14 @@ export default function websocket(state = {
                 wsConn: action.wsConn
             });
         case ActionTypes.WS_TABLE_MESSAGE:
-            const resultData = action.wsData.result.data;
+            const resultData = _.map(action.wsData.result.data, row => {
+                return Object.assign({}, row, {
+                    fieldsHash: _.reduce(row.fields, (result, fieldValue) => {
+                        result[fieldValue.field_id] = fieldValue.value;
+                        return result;
+                    })
+                });
+            });
             return Object.assign({}, state, {
                 messages: [
                     ...state.messages,

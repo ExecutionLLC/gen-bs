@@ -30,14 +30,14 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, ui, fileUpload, userData: { samples }, fields: { list } } = state;
+    const { auth,ui, fileUpload, userData: { samples }, fields: { list, editableFields } } = state;
 
     return {
         auth,
         ui,
         fileUpload,
         samples,
-        editableFieldsList: _.filter(list, 'is_editable', true)
+        editableFieldsList: editableFields
     }
 }
 

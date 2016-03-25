@@ -35,7 +35,7 @@ export default class FileUploadSamplesRow extends Component {
                   dispatch(changeSample(samples, sample.id));
                   closeModal('upload');
                 }}
-                class="btn btn-default btn-choose"
+                className="btn btn-default btn-choose"
                 type="button" >
               <span data-localize="samples.settings.select.title">Select for analysis</span>
             </button>

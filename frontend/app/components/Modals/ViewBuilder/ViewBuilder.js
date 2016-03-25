@@ -15,24 +15,24 @@ export default class ViewBuilder extends Component {
             'disabled': (view.type !== 'user') ? 'disabled' : ''
         });
 
+        const previouslySelectedFieldIds = view.view_list_items.map(viewItem => viewItem.field_id);
+        const isDisableEditing = view.type !== 'user';
+        const allAvailableFields = fields.list.concat(fields.sourceFieldsList);
+        // Exclude editable fields and fields that are already selected.
+        const fieldsForSelection = _.filter(allAvailableFields, field => !field.is_editable
+            && !_.includes(previouslySelectedFieldIds, field.id));
         const selects = view.view_list_items.map(function (viewItem, index) {
 
             var currentValue =
-                _.find(fields.list, {id: viewItem.field_id}) ||
-                _.find(fields.sourceFieldsList, {id: viewItem.field_id}) ||
-                {id: null}
+                _.find(allAvailableFields, {id: viewItem.field_id}) ||
+                {id: null};
 
             const selectOptions = [
 
-                ...fields.list.filter((f) => f.id !== currentValue.id).map((f) => {
-                    return {value: f.id, label: `${f.name} -- ${f.source_name}`}
-                }),
-
-                ...fields.sourceFieldsList.filter((f) => (f.id !== currentValue.id) && (f.source_name !== 'sample')).map((f) => {
+                ...fieldsForSelection.map((f) => {
                     return {value: f.id, label: `${f.name} -- ${f.source_name}`}
                 })
-
-            ]
+            ];
 
             return (
 
@@ -52,7 +52,7 @@ export default class ViewBuilder extends Component {
                                 value={currentValue}
                                 clearable={false}
                                 onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
-                                disabled={disabledClass}
+                                disabled={isDisableEditing}
                             />
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
@@ -68,7 +68,7 @@ export default class ViewBuilder extends Component {
                   </span>
 
                         <input type="text" className="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""
-                               readonly="" data-localize="views.setup.settings.keywords"/>
+                               readOnly="" data-localize="views.setup.settings.keywords"/>
                     </div>
 
                     <div className="col-xs-1">

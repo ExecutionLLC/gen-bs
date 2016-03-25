@@ -78,5 +78,3 @@ export function fetchSourceFields(sampleId) {
         // catch any error in the network call.
     }
 }
-
-

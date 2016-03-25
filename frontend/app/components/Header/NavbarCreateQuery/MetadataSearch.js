@@ -25,7 +25,7 @@ export default class MetadataSearch extends Component {
                     <Select options={samples.map( s => { return {value: s.id, label: s.file_name} } )}
                             clearable={false}
                             value={currentSampleId}
-                            onChange={ (sampleId) => onSampleChangeRequested(sampleId)}
+                            onChange={ (item) => onSampleChangeRequested(item.value)}
                     />
                 </div>
             </div>

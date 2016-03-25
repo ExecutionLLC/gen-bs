@@ -7,8 +7,24 @@ const _ = require('lodash');
  * */
 class AppServerViewUtils {
     static createAppServerView(view, fieldIdToMetadata) {
+        const viewListItems = view.viewListItems;
+
+        // Mandatory fields should always be in the results (ex. for comments).
+        const mandatoryFields = _.filter(fieldIdToMetadata, field => field.isMandatory);
+        const missingMandatoryFieldsListItems = _(mandatoryFields)
+            .filter(mandatoryField => !_.any(viewListItems, listItem => listItem.fieldId === mandatoryField.id))
+            .map(field => {
+                return {
+                    fieldId: field.id,
+                    sourceName: field.sourceName
+                };
+            })
+            .value();
+
+        const allListItems = view.viewListItems.concat(missingMandatoryFieldsListItems);
+
         // Map list items' field ids to pair (field name, source name).
-        const listItems = _(view.viewListItems)
+        const listItems = _(allListItems)
             // Ignore missing fields, to be able to apply views generated for a different sample, with unique fields.
             .filter(listItem => fieldIdToMetadata[listItem.fieldId])
             .map(listItem => {

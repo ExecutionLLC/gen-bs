@@ -26,6 +26,11 @@ export default class FilterBuilder extends Component {
     this.disableFilter(filter,el);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.fields !== nextProps.fields
+      || this.props.filterBuilder !== nextProps.filterBuilder;
+  }
+
   disableFilter(filter,el) {
     window.$(el).queryBuilder('setRulesFromGenomics', filter.rules);
     if (filter.type === 'standard' || filter.type == 'advanced') {
