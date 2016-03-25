@@ -40,16 +40,16 @@ export default function fields(state = {
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.REQUEST_SOURCE_FIELDS:
+        case ActionTypes.REQUEST_TOTAL_FIELDS:
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: true
                 })
             });
 
-        case ActionTypes.RECEIVE_SOURCE_FIELDS:
+        case ActionTypes.RECEIVE_TOTAL_FIELDS:
             let totalFields = action.fields.map(updateFieldLabelIfNeeded);
-            let sourceFields = _.filter(totalFields,function(field) { return field.source_name != 'sample' });
+            let sourceFields = _.filter(totalFields, (field) => field.source_name !== 'sample');
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: false
