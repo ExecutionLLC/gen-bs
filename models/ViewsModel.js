@@ -103,16 +103,20 @@ class ViewsModel extends SecureModelBase {
     _addViewItem(viewId, viewItem, trx, callback) {
         async.waterfall([
             (callback) => {
-                const dataToInsert = {
-                    id: this._generateId(),
-                    viewId: viewId,
-                    fieldId: viewItem.fieldId,
-                    order: viewItem.order,
-                    sortOrder: viewItem.sortOrder,
-                    sortDirection: viewItem.sortDirection,
-                    filterControlEnable: viewItem.filterControlEnable || false
-                };
-                this._unsafeInsert('view_item', dataToInsert, trx, callback);
+                if (viewItem.fieldId == null){
+                    callback(new Error('Can\'t add view item with null field value'));
+                }else {
+                    const dataToInsert = {
+                        id: this._generateId(),
+                        viewId: viewId,
+                        fieldId: viewItem.fieldId,
+                        order: viewItem.order,
+                        sortOrder: viewItem.sortOrder,
+                        sortDirection: viewItem.sortDirection,
+                        filterControlEnable: viewItem.filterControlEnable || false
+                    };
+                    this._unsafeInsert('view_item', dataToInsert, trx, callback);
+                }
             },
             (viewItemId, callback) => {
                 this._addKeywords(viewItemId, viewItem.keywords, trx, (error) => {
