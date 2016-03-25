@@ -11,6 +11,7 @@ const config = {
         SESSION: `http://${HOST}:${PORT}/api/session`,
         FIELDS: (sampleId) => `http://${HOST}:${PORT}/api/fields/${sampleId}`,
         SOURCE_FIELDS: `http://${HOST}:${PORT}/api/fields/sources`,
+        TOTAL_FIELDS: `http://${HOST}:${PORT}/api/fields`,
         USERDATA: `http://${HOST}:${PORT}/api/data`,
         SEARCH: `http://${HOST}:${PORT}/api/search`,
         SEARCH_IN_RESULTS: (operationId) => `http://${HOST}:${PORT}/api/search/${operationId}`,

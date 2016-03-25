@@ -52,10 +52,10 @@ function requestSourceFields() {
     }
 }
 
-function receiveSourceFields(json) {
+function receiveTotalFields(json) {
     return {
         type: RECEIVE_SOURCE_FIELDS,
-        sourceFields: json,
+        fields: json,
         receivedAt: Date.now()
     }
 }
@@ -66,12 +66,12 @@ export function fetchSourceFields(sampleId) {
 
         dispatch(requestSourceFields())
 
-        return $.ajax(config.URLS.SOURCE_FIELDS, {
+        return $.ajax(config.URLS.TOTAL_FIELDS, {
                 'type': 'GET',
                 'headers': {"X-Session-Id": getState().auth.sessionId}
             })
             .then(json => {
-                dispatch(receiveSourceFields(json))
+                dispatch(receiveTotalFields(json))
             })
 
         // TODO:

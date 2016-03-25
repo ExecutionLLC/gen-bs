@@ -9,8 +9,9 @@ function updateFieldsSamples(field) {
 
 export default function fields(state = {
     isFetching: {samples: false, sources: false},
-    list: [],
-    sourceFieldsList: []
+    sampleFieldsList: [],
+    sourceFieldsList: [],
+    totalFieldsList:[]
 }, action) {
 
     switch (action.type) {
@@ -33,7 +34,7 @@ export default function fields(state = {
                 isFetching: Object.assign({}, state.isFetching, {
                     samples: false
                 }),
-                list: fields,
+                sampleFieldsList: fields,
                 editableFields,
                 idToFieldHash,
                 lastUpdated: action.receivedAt
@@ -47,11 +48,13 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_SOURCE_FIELDS:
-            let sourceFields = action.sourceFields.map(updateFieldsSamples);
+            let totalFields = action.fields.map(updateFieldsSamples);
+            let sourceFields = _.filter(totalFields,function(field) { return field.source_name != 'sample' });
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: false
                 }),
+                totalFieldsList:totalFields,
                 sourceFieldsList: sourceFields,
                 lastUpdated: action.receivedAt
             });
