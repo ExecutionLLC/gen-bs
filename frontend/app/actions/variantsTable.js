@@ -71,9 +71,9 @@ export function changeVariantsFilter(fieldId, filterValue) {
 
 export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     return (dispatch, getState) => {
-        dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection))
+        dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection));
         if (getState().variantsTable.needUpdate) {
-            dispatch(clearVariants())
+            dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
         }
     }
@@ -200,7 +200,7 @@ export function fetchVariants(searchParams) {
                     console.log('search', json)
                     dispatch(receiveVariants(json))
                 })
-        }, 1000)
+        }, 1000);
 
         // TODO:
         // catch any error in the network call.
@@ -225,24 +225,37 @@ export function receiveSearchedResults() {
 export function searchInResultsSortFilter() {
     return (dispatch, getState) => {
         if (getState().variantsTable.needUpdate) {
-            dispatch(clearVariants())
-            dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
+            dispatch(clearVariants());
+            dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}));
         }
     }
 }
 
 export function searchInResultsNextData() {
     return (dispatch, getState) => {
-        dispatch(searchInResults({isNextDataLoading: true, isFilteringOrSorting: false}))
+
+        dispatch(requestSearchedResults({isNextDataLoading: true, isFilteringOrSorting: false}));
+
+        const state = getState();
+        const {offset, limit} = state.variantsTable.searchInResultsParams;
+        $.ajax(config.URLS.SEARCH_IN_RESULTS(state.variantsTable.operationId), {
+            data: {limit, offset},
+            type: 'GET',
+            processData: true,
+            contentType: 'application/json'
+            })
+            .fail(json => {
+                console.log('search fail', json);
+            });
     }
 }
 
 export function searchInResults(flags) {
     return (dispatch, getState) => {
 
-        dispatch(requestSearchedResults(flags))
+        dispatch(requestSearchedResults(flags));
 
-        const clearedJson = getState().variantsTable.searchInResultsParams
+        const clearedJson = getState().variantsTable.searchInResultsParams;
 
         $.ajax(config.URLS.SEARCH_IN_RESULTS(getState().variantsTable.operationId), {
                 'data': JSON.stringify(clearedJson),
@@ -251,9 +264,9 @@ export function searchInResults(flags) {
                 'contentType': 'application/json'
             })
             .fail(json => {
-                console.log('search fail', json)
+                console.log('search fail', json);
                 dispatch(receiveSearchedResults())
-            })
+            });
 
         // TODO:
         // catch any error in the network call.

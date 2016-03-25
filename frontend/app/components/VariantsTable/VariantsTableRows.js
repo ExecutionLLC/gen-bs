@@ -38,7 +38,8 @@ export default class VariantsTableRows extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.variants !== nextProps.variants;
+        return this.props.variants !== nextProps.variants
+            || this.props.variantsTable.isFilteringOrSorting !== nextProps.variantsTable.isFilteringOrSorting;
     }
 
     componentWillUnmount() {
