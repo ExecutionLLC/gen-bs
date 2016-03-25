@@ -1,5 +1,11 @@
 import * as ActionTypes from '../actions/viewBuilder'
 
+const EMPTY_VIEW_ITEM = {field_id: null};
+
+function filterEmptyListItems(viewListItems) {
+    return _.filter(viewListItems, item => item !== EMPTY_VIEW_ITEM);
+}
+
 export default function viewBuilder(state = {
     isReceivedViews: false,
     currentView: null,
@@ -35,8 +41,11 @@ export default function viewBuilder(state = {
 
         case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW:
             return Object.assign({}, state, {
-                isFetching: true
-            })
+                isFetching: true,
+                editedView: state.editedView ? Object.assign({}, state.editedView, {
+                    view_list_items: filterEmptyListItems(state.editedView.view_list_items)
+                }) : null
+            });
 
         case ActionTypes.VBUILDER_RECEIVE_UPDATE_VIEW:
             return Object.assign({}, state, {
@@ -46,7 +55,10 @@ export default function viewBuilder(state = {
 
         case ActionTypes.VBUILDER_REQUEST_CREATE_VIEW:
             return Object.assign({}, state, {
-                isFetching: true
+                isFetching: true,
+                newView: state.newView ? Object.assign({}, state.newView, {
+                    view_list_items: filterEmptyListItems(state.newView.view_list_items)
+                }) : null
             })
 
         case ActionTypes.VBUILDER_RECEIVE_CREATE_VIEW:
@@ -82,22 +94,23 @@ export default function viewBuilder(state = {
             })
 
         case ActionTypes.VBUILDER_ADD_COLUMN:
+
             return Object.assign({}, state, {
                 editedView: state.editedView ? Object.assign({}, state.editedView, {
                     view_list_items: [
                         ...state.editedView.view_list_items.slice(0, action.viewItemIndex),
-                        state.editedView.view_list_items[action.viewItemIndex],
+                        EMPTY_VIEW_ITEM,
                         ...state.editedView.view_list_items.slice(action.viewItemIndex)
                     ]
                 }) : null,
                 newView: state.newView ? Object.assign({}, state.newView, {
                     view_list_items: [
                         ...state.newView.view_list_items.slice(0, action.viewItemIndex),
-                        state.newView.view_list_items[action.viewItemIndex],
+                        EMPTY_VIEW_ITEM,
                         ...state.newView.view_list_items.slice(action.viewItemIndex)
                     ]
                 }) : null
-            })
+            });
 
         case ActionTypes.VBUILDER_CHANGE_ATTR:
             return Object.assign({}, state, {
