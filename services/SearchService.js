@@ -88,7 +88,7 @@ class SearchService extends ServiceBase {
                 this.services.operations.find(sessionId, operationId, callback);
             },
             (operation, callback) => {
-                const redisData = operation.data.redis;
+                const redisData = operation.getRedisParams();
                 const userId = user.id;
                 const redisParams = {
                     sessionId,
