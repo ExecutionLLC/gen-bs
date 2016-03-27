@@ -32,6 +32,41 @@ const LOGIN_SERVER_ERROR = 'Authorization failed (internal server error). You ca
 const LOGIN_GOOGLE_ERROR = 'Google authorization failed.'
 
 /*
+ * Start keep alive task, which update session on the WS.
+ */
+
+class CreateKeepAliveTask {
+    constructor(period) {
+        this.period = period;
+        this.keepAliveTaskId = null;
+    }
+
+    start() {
+        this._scheduleTask();
+    }
+
+    stop() {
+        clearTimeout(this.keepAliveTaskId);
+    }
+
+    _scheduleTask() {
+        this.keepAliveTaskId = setTimeout(() => {
+            //const currentSessionId = store.getState().auth.sessionId;
+            const currentSessionId = getCookie('sessionId');
+            if (currentSessionId) {
+                // update session on the web server
+                checkSession(currentSessionId, null);
+            }
+            // reschedule task
+            this._scheduleTask();
+        }, this.period);
+    }
+}
+
+const keepAliveTask = new CreateKeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
+keepAliveTask.start()
+
+/*
  * action creators
  */
 
@@ -105,6 +140,9 @@ function openDemoSession(dispatch) {
 function checkSession(sessionId, callback) {
     console.log('checkSession');
     sessionsClient.checkSession(sessionId, (error, response) => {
+        if (!callback) {
+            return;
+        }
         if (!error) {
             const isValidSession = response.status === HttpStatus.OK;
             const isDemoSession = isValidSession ? response.sessionType === 'DEMO' : null;
