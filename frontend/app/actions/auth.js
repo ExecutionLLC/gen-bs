@@ -35,24 +35,31 @@ const LOGIN_GOOGLE_ERROR = 'Google authorization failed.'
  * Start keep alive task, which update session on the WS.
  */
 
-class CreateKeepAliveTask {
+class KeepAliveTask {
     constructor(period) {
         this.period = period;
         this.keepAliveTaskId = null;
     }
 
+    isRunning () {
+        return this.keepAliveTaskId !== null;
+    }
+
     start() {
-        this._scheduleTask();
+        if (!this.isRunning()) {
+            this._scheduleTask();
+        }
     }
 
     stop() {
-        clearTimeout(this.keepAliveTaskId);
+        if (this.isRunning()) {
+            clearTimeout(this.keepAliveTaskId);
+        }
     }
 
     _scheduleTask() {
         this.keepAliveTaskId = setTimeout(() => {
-            //const currentSessionId = store.getState().auth.sessionId;
-            const currentSessionId = getCookie('sessionId');
+            const currentSessionId = window.reduxStore.getState().auth.sessionId;
             if (currentSessionId) {
                 // update session on the web server
                 checkSession(currentSessionId, null);
@@ -63,7 +70,7 @@ class CreateKeepAliveTask {
     }
 }
 
-const keepAliveTask = new CreateKeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
+const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
 keepAliveTask.start()
 
 /*
