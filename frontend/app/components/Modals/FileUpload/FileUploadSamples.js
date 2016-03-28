@@ -22,13 +22,16 @@ export default class FileUploadSamples extends Component {
         }
         return (
             <div>
-                <h4 data-localize="samples.search.label">Search for available samples</h4>
-                <div className="form-group has-feedback">
-                    <input type="text" onChange={e => this.setState({ searchWord: e.target.value })}
-                           className="form-control"/>
-                    <span className="form-control-feedback"><i className="fa fa-lg fa-search text-muted"/></span>
+                <h4 data-localize="samples.search.label">Search available samples</h4>
+                <div className="navbar navbar-search-full">
+                    <div className="navbar-search">
+                        <div className="navbar-search-field">
+                          <input type="text" onChange={e => this.setState({ searchWord: e.target.value })}
+                               className="form-control"/>
+                        </div>
+                    </div>
                 </div>
-                <div className="panel-group" style={{overflow: 'scroll', height: '400px'}}>
+                <div className="panel-group panel-group-scroll">
                     {samples.map(
                         sample => (
                             <FileUploadSamplesRow

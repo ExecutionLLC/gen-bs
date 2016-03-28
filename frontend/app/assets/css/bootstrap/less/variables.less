@@ -47,7 +47,7 @@
 
 @font-size-base:          14px;
 @font-size-large:         ceil((@font-size-base * 1.1)); 
-@font-size-small:         ceil((@font-size-base * 0.88)); 
+@font-size-small:         ceil((@font-size-base * 0.8)); 
 @font-size-x-small:       ceil((@font-size-base * 0.78));
 
 @font-size-h1:            floor((@font-size-base * 1.75)); 
@@ -64,7 +64,7 @@
 @line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
 
 //** By default, this inherits from the `<body>`.
-@headings-font-family:    "Roboto-Medium";
+@headings-font-family:    "Roboto-Regular";
 @headings-font-weight:    400;
 @headings-line-height:    1.1;
 @headings-color:          inherit;
@@ -86,10 +86,10 @@
 //
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
-@padding-base-vertical:     7px;
+@padding-base-vertical:     8px;
 @padding-base-horizontal:   16px;
 
-@padding-large-vertical:    8px;
+@padding-large-vertical:    16px;
 @padding-large-horizontal:  24px;
 
 @padding-small-vertical:    4px;
@@ -153,9 +153,9 @@
 @btn-default-shadow:             0 1px 1px fade(@gray, 15%);
 @btn-color-shadow:               0 1px 1px fade(@gray, 25%);
 
-@btn-dark-default-color:              @gray-darker;
-@btn-dark-default-bg:                 @gray-lighter;
-@btn-dark-default-border:             @gray-lighter;
+@btn-dark-default-color:              @text-color;
+@btn-dark-default-bg:                 @default-max-light;
+@btn-dark-default-border:             @default-max-light;
 
 @btn-primary-color:              #fff;
 @btn-primary-bg:                 @brand-primary;
@@ -246,7 +246,29 @@
 //** Disabled cursor for form controls and buttons.
 @cursor-disabled:                not-allowed;
 
+@material-input-border-radius: 0;
+@material-input-padding-horizontal: 0;
+ 
 
+@material-input-font-size: 16px;
+@material-input-height: 48px;
+@material-input-line-height: 24px;
+@material-input-padding: 16px 0 8px;
+
+@material-input-bottom-indent: @padding-base-vertical;
+
+
+@material-input-sm-font-size: 13px;
+@material-input-sm-height: 40px;
+@material-input-sm-line-height: 20px;
+@material-input-sm-padding: 16px 0 4px;
+
+@material-input-sm-bottom-indent: @padding-small-vertical;
+ 
+@material-input-group-height: 72px;
+@material-input-group-sm-height: 60px;
+ 
+ 
 //== Dropdowns
 //
 //## Dropdown menu container and contents.
@@ -454,15 +476,15 @@
 @nav-disabled-link-hover-color:             @gray-light;
 
 //== Tabs
-@nav-tabs-bg-color:                     @default-max-light;
+@nav-tabs-bg-color:                         @default-max-light;
 
 
-@nav-tabs-active-link-hover-bg:             #fff;
+@nav-tabs-active-link-hover-bg:             transparent;
 @nav-tabs-active-link-hover-color:          @brand-primary;
-@nav-tabs-active-link-hover-border-color:   @default-max-light;
+@nav-tabs-active-link-hover-border-color:   @brand-primary;
 
-@nav-tabs-justified-link-border-color:            @default-max-light;
-@nav-tabs-justified-active-link-border-color:     @default-max-light;
+@nav-tabs-justified-link-border-color:      @default-max-light;
+@nav-tabs-justified-active-link-border-color: @default-max-light;
 
 
 //== Pills
@@ -747,7 +769,7 @@
 @panel-body-padding:          @padding-base-horizontal;
 @panel-heading-padding:       @padding-base-horizontal ;
 @panel-icon-font-family:     "FontAwesome";      
-@panel-footer-padding:        @padding-large-vertical 0;
+@panel-footer-padding:        @padding-base-vertical 0;
 @panel-border-radius:         @border-radius-small;
 @panel-shadow:        @shadow-paper-1;
 @panel-hover-shadow:  @shadow-paper-3;
@@ -809,8 +831,8 @@
 //
 //##
 
-@well-bg:                     @gray-ligher-max;
-@well-border:                 darken(@well-bg, 7%);
+@well-bg:                     #fff;
+@well-border:                 @default-max-light;
 
 
 //== Badges
@@ -960,3 +982,4 @@
 @radio-size-small: 14px;
 @radio-size-base: 16px;
 @radio-size-large: 22px;
+

@@ -19,62 +19,49 @@ export default class FileUploadSamplesRow extends Component {
 
     render() {
         return (
-            <div>
-                {this.renderMain()}
+            <div className="panel">
+                {this.renderHeader()}
                 {this.renderValues()}
+                {this.renderFooter()}
             </div>
         );
     }
 
-    renderMain() {
-        const { sample,samples,dispatch,closeModal } = this.props;
+    renderHeader() {
+        const { sample } = this.props;
         return (
-          <div className="panel panel-default">
-            <div className="panel-heading">
-              <div className="btn-group pull-right">
-
-                <button
-                    onClick={() => {
-                      dispatch(changeSample(samples, sample.id));
-                      closeModal('upload');
-                    }}
-                    className="btn btn-default btn-choose"
-                    type="button" >
-                  <span data-localize="samples.settings.select.title">Select for analysis</span>
-                </button>
-                {sample.type === 'user'
-                && <a onClick={e => this.clickShowValues(e)}
-                      className="btn btn-default collapsed" role="button"
-                      data-toggle="collapse" data-parent="#accordion"
-                      href="#collapseOne" aria-expanded="false"
-                      aria-controls="collapseOne">
-                  <i className="fa fa-pencil"></i>
-                </a>}
+          <div>
+              <div className="panel-heading">
+                  <h3 className="panel-title">{sample.file_name}<span>{sample.description}</span></h3>
               </div>
-              <div className="flex">
-                <dl>
-                  <dt>Name</dt>
-                  <dd>{sample.file_name}</dd>
-                </dl>
-                <dl>
-                  <dt>Version</dt>
-                  <dd><i>unknown</i></dd>
-                </dl>
-                <dl>
-                  <dt>Type</dt>
-                  <dd>{sample.type}</dd>
-                </dl>
-                <dl>
-                  <dt>Description</dt>
-                  <dd><i>empty</i></dd>
-                </dl>
-              </div>
-            </div>
           </div>
         );
 
     }
+    renderFooter() {
+        const { sample,samples,dispatch,closeModal } = this.props;
+        return (
+            <div className="panel-footer">
 
+              <a onClick={() => {
+                    dispatch(changeSample(samples, sample.id));
+                    closeModal('upload');
+                  }}
+                  className="btn btn-link btn-uppercase"
+                  type="button" >
+                <span data-localize="samples.settings.select.title">Select for analysis</span>
+              </a>
+              {sample.type === 'user'
+              && <a onClick={e => this.clickShowValues(e)}
+                    className="btn btn-link btn-uppercase" role="button"
+                    data-toggle="collapse" data-parent="#accordion"
+                    href="#collapseOne" aria-expanded="false"
+                    aria-controls="collapseOne">Edit
+              </a>}
+            </div>
+          );
+
+    }
     renderSelectField(field) {
 
         const selectOptions = field.available_values.map(
@@ -82,7 +69,7 @@ export default class FileUploadSamplesRow extends Component {
         );
 
         return (
-            <dl key={field.id}>
+            <dl key={field.id} className="dl-horizontal">
             <dt>{field.label}</dt>
             <dd>
             <Select
@@ -98,7 +85,7 @@ export default class FileUploadSamplesRow extends Component {
 
     renderTextField(values, field) {
         return (
-            <dl key={field.id}>
+            <dl key={field.id} className="dl-horizontal">
             <dt>{field.label}</dt>
             <dd>
             <input

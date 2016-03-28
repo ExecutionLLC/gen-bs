@@ -241,18 +241,16 @@
   }
 
   .panel-heading {
-    
-
-    + .panel-collapse > .panel-body,
-    + .panel-collapse > .list-group {
-      border-top: 1px solid @panel-inner-border;
-    }
+      border-bottom: 1px solid @panel-inner-border;
   }
-
+  .panel-title { 
+    font-size: @font-size-h4;
+  }
   .panel-footer {
 
     + .panel-collapse .panel-body {
       border-bottom: 1px solid @panel-inner-border;
+      padding: @padding-large-vertical;
     }
   }
   
@@ -270,7 +268,7 @@
              }
          }
          .panel-heading {
-          background: transparent; 
+          background: #fff; 
          }
        }
   .panel.active { 
@@ -281,6 +279,13 @@
          color: desaturate(darken(@component-active-bg, 60%), 10%);
        }
     }
+  .panel-collapse { 
+    .panel-body { 
+      background: @default-max-light;
+      padding: @padding-large-vertical;
+    }
+  }
+  
 }
 
 
@@ -348,4 +353,25 @@
       margin:@line-height-computed/2;
     }
   }
+}
+
+//bootstrap react fix
+
+.panel { 
+  .panel,
+  .panel-default {
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    border-radius:0;
+  }
+}
+
+.panel-group-scroll { 
+ overflow-y: 'auto';
+ overflow-x: 'hidden';
+ height: '400px';
 }
