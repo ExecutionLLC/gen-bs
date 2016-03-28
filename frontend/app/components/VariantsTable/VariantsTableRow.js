@@ -3,13 +3,22 @@ import classNames from 'classnames';
 
 import ComponentBase from '../shared/ComponentBase';
 
+import VariantsTableComment from './VariantsTableComment';
+
 
 export default class VariantsTableRow extends ComponentBase {
     render() {
-        const {row, rowIndex, currentView, sortState} = this.props;
+        const {row, auth, rowIndex, currentView, sortState, fields} = this.props;
         const rowFieldsHash = row.fieldsHash;
+        const rowFields = row.fields;
         const comments = row.comments;
         const viewFields = currentView.view_list_items;
+
+        const pos = this.getMainFieldValue('POS', rowFields, fields);
+        const alt = this.getMainFieldValue('ALT', rowFields, fields);
+        const chrom = this.getMainFieldValue('CHROM', rowFields, fields);
+        const ref = this.getMainFieldValue('REF', rowFields, fields);
+        const searchKey = row.search_key;
 
         return (
             <tr>
@@ -17,7 +26,7 @@ export default class VariantsTableRow extends ComponentBase {
                     key="row_checkbox">
                     <div><label className="checkbox hidden">
                         <input type="checkbox"/>
-                        <i></i>
+                        <i/>
                     </label>
                         <span>{rowIndex + 1}</span>
                     </div>
@@ -26,19 +35,29 @@ export default class VariantsTableRow extends ComponentBase {
                     <div>
                         <button data-toggle="button"
                                 className="btn btn-link reset-padding">
-                            <i className="i-star"></i>
+                            <i className="i-star"/>
                         </button>
                     </div>
                 </td>
-                <td className="comment"
-                    key="comment">
-                    <div><a href="#" className="btn-link-default comment-link" data-type="textarea" data-pk="1"
-                            data-placeholder="Your comments here..." data-placement="right">{comments}</a></div>
-                </td>
+                <VariantsTableComment alt={alt}
+                                      pos={pos}
+                                      reference={ref}
+                                      chrom={chrom}
+                                      searchKey={searchKey}
+                                      dispatch={this.props.dispatch}
+                                      auth={auth}
+                                      comments={comments}
+                />
                 {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
             </tr>
         );
     }
+
+    getMainFieldValue(col_name, row_fields, fields) {
+        const mainField = _.find(fields.list, field => field.name === col_name);
+        return _.find(row_fields, field => field.field_id === mainField.id).value
+    }
+
 
     renderFieldValue(field, sortState, rowFields) {
         const fieldId = field.field_id;
