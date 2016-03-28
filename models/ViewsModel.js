@@ -103,7 +103,7 @@ class ViewsModel extends SecureModelBase {
     _addViewItem(viewId, viewItem, trx, callback) {
         async.waterfall([
             (callback) => {
-                if (viewItem.fieldId == null){
+                if (!viewItem.fieldId){
                     callback(new Error('Can\'t add view item with null field value'));
                 }else {
                     const dataToInsert = {
