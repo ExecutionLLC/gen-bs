@@ -14,10 +14,10 @@ export default class VariantsTableRow extends ComponentBase {
         const comments = row.comments;
         const viewFields = currentView.view_list_items;
 
-        const pos = this.getMainFieldValue('POS',rowFields,fields);
-        const alt = this.getMainFieldValue('ALT',rowFields,fields);
-        const chrom = this.getMainFieldValue('CHROM',rowFields,fields);
-        const ref = this.getMainFieldValue('REF',rowFields,fields);
+        const pos = this.getMainFieldValue('POS', rowFields, fields);
+        const alt = this.getMainFieldValue('ALT', rowFields, fields);
+        const chrom = this.getMainFieldValue('CHROM', rowFields, fields);
+        const ref = this.getMainFieldValue('REF', rowFields, fields);
         const searchKey = row.search_key;
 
         return (
@@ -44,18 +44,18 @@ export default class VariantsTableRow extends ComponentBase {
                                       reference={ref}
                                       chrom={chrom}
                                       searchKey={searchKey}
-                                      dispatch = {this.props.dispatch}
-                                      auth = {auth}
-                                      comments = {comments}
+                                      dispatch={this.props.dispatch}
+                                      auth={auth}
+                                      comments={comments}
                 />
                 {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
             </tr>
         );
     }
 
-    getMainFieldValue(col_name,row_fields,fields){
-        const mainField = _.find( fields.list, field => field.name === col_name);
-        return _.find( row_fields, field => field.field_id === mainField.id).value
+    getMainFieldValue(col_name, row_fields, fields) {
+        const mainField = _.find(fields.list, field => field.name === col_name);
+        return _.find(row_fields, field => field.field_id === mainField.id).value
     }
 
 

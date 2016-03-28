@@ -1,8 +1,8 @@
-import React,{Component}  from 'react';
-import {Popover,OverlayTrigger} from 'react-bootstrap'
+import React, {Component}  from 'react';
+import {Popover, OverlayTrigger} from 'react-bootstrap'
 
 
-import { createComment,updateComment,removeComment } from '../../actions/variantsTable';
+import {createComment, updateComment, removeComment} from '../../actions/variantsTable';
 
 
 export default class VariantsTableComment extends Component {
@@ -71,7 +71,7 @@ export default class VariantsTableComment extends Component {
             chrom,
             searchKey,
             comments
-            } = this.props;
+        } = this.props;
 
         const comment = this.state.comment;
 
