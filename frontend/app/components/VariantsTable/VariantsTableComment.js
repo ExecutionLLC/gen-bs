@@ -58,6 +58,20 @@ export default class VariantsTableComment extends Component {
         });
     }
 
+    onSaveClick(alt, pos, reference, chrom, searchKey, comment, comments) {
+        if (_.isEmpty(comments)) {
+            if(comment){
+                this.props.dispatch(createComment(alt,pos,reference,chrom,searchKey,comment));
+            }
+        } else if (comment) {
+            this.props.dispatch(updateComment(comments[0].id,alt,pos,reference,chrom,searchKey,comment));
+        } else {
+            this.props.dispatch(removeComment(comments[0].id,searchKey));
+        }
+
+        this.refs.overlay.toggle();
+    }
+
     renderCommentPopover() {
         const {
             alt,
@@ -86,21 +100,8 @@ export default class VariantsTableComment extends Component {
                             <div className="editable-buttons editable-buttons-bottom">
                                 <button type="button"
                                         className="btn btn-uppercase btn-link editable-submit"
-                                        onClick={()=>{
-                                                if(_.isEmpty(comments)){
-                                                    if(comment){
-                                                        this.props.dispatch(createComment(alt,pos,reference,chrom,searchKey,comment));
-                                                    }
-
-                                                }else {
-                                                    if (comment){
-                                                        this.props.dispatch(updateComment(comments[0].id,alt,pos,reference,chrom,searchKey,comment));
-                                                    }else {
-                                                        this.props.dispatch(removeComment(comments[0].id,searchKey));
-                                                    }
-                                                }
-                                                this.refs.overlay.toggle();
-                                            }}
+                                        onClick={()=> this.onSaveClick(alt, pos,
+                                            reference, chrom, searchKey, comment, comments)}
                                 >Save
                                 </button>
                                 <button type="button"
