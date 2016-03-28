@@ -54,7 +54,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     getMainFieldValue(col_name, row_fields, fields) {
-        const mainField = _.find(fields.list, field => field.name === col_name);
+        const mainField = _.find(fields.totalFieldsList, field => field.name === col_name);
         return _.find(row_fields, field => field.field_id === mainField.id).value
     }
 
