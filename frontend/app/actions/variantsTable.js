@@ -1,5 +1,5 @@
 import config from '../../config'
-import { requestAnalyze, clearVariants, addComment, changeComment, deleteComment } from './websocket'
+import {requestAnalyze, clearVariants, addComment, changeComment, deleteComment} from './websocket'
 
 /*
  * action types
@@ -71,7 +71,7 @@ export function changeVariantsFilter(fieldId, filterValue) {
 
 export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     return (dispatch, getState) => {
-        dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection));
+        dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2 : 1, sortDirection));
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
@@ -103,21 +103,21 @@ function receiveVariants(json) {
 }
 
 
-export function createComment(alt,pos,ref,chrom,searchkey,comment) {
+export function createComment(alt, pos, ref, chrom, searchKey, comment) {
 
     return (dispatch, getState) => {
 
-        const clearedJson = {
-            'alt':alt,
-            'pos':pos,
-            'reference':ref,
-            'chrom':chrom,
-            'searchKey':searchkey,
-            'comment':comment
-        }
+        const commentObject = {
+            alt,
+            pos,
+            'reference': ref,
+            chrom,
+            searchKey,
+            comment
+        };
 
         $.ajax(config.URLS.COMMENTS, {
-                'data': JSON.stringify(clearedJson),
+                'data': JSON.stringify(commentObject),
                 'type': 'POST',
                 'processData': false,
                 'contentType': 'application/json'
@@ -132,21 +132,21 @@ export function createComment(alt,pos,ref,chrom,searchkey,comment) {
     }
 }
 
-export function updateComment(id,alt,pos,ref,chrom,searchkey,comment) {
+export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
 
     return (dispatch, getState) => {
 
-        const clearedJson = {
-            'id':id,
-            'alt':alt,
-            'pos':pos,
-            'reference':ref,
-            'chrom':chrom,
-            'searchKey':searchkey,
-            'comment':comment
-        }
+        const commentObject = {
+            id,
+            alt,
+            pos,
+            'reference': ref,
+            chrom,
+            searchKey,
+            comment
+        };
         $.ajax(`${config.URLS.COMMENTS}/${id}`, {
-                'data': JSON.stringify(clearedJson),
+                'data': JSON.stringify(commentObject),
                 'type': 'PUT',
                 'processData': false,
                 'contentType': 'application/json'
@@ -161,7 +161,7 @@ export function updateComment(id,alt,pos,ref,chrom,searchkey,comment) {
     }
 }
 
-export function removeComment(id,search_key) {
+export function removeComment(id, search_key) {
 
     return (dispatch, getState) => {
 
@@ -175,7 +175,7 @@ export function removeComment(id,search_key) {
             })
             .then(json=> {
                 console.log('createComment sucess', json)
-                dispatch(deleteComment(json,search_key))
+                dispatch(deleteComment(json, search_key))
             })
 
     }
@@ -239,10 +239,10 @@ export function searchInResultsNextData() {
         const state = getState();
         const {offset, limit} = state.variantsTable.searchInResultsParams;
         $.ajax(config.URLS.SEARCH_IN_RESULTS(state.variantsTable.operationId), {
-            data: {limit, offset},
-            type: 'GET',
-            processData: true,
-            contentType: 'application/json'
+                data: {limit, offset},
+                type: 'GET',
+                processData: true,
+                contentType: 'application/json'
             })
             .fail(json => {
                 console.log('search fail', json);
