@@ -44,13 +44,8 @@ export default class VariantsTableComment extends Component {
                             </Popover>
                         }
                     >
-                        <a title=""
-                           data-original-title=""
-                           className="btn-link-default comment-link editable editable-pre-wrapped editable-click editable-open"
-                           data-type="textarea"
-                           data-pk="1"
-                           data-placeholder="Your comments here..."
-                           data-placement="right">{(_.isEmpty(comments)) ? 'Add Comment' : comments[0].comment}</a>
+                        <a className="btn-link-default comment-link editable editable-pre-wrapped editable-click editable-open">
+                            {(_.isEmpty(comments)) ? 'Add Comment' : comments[0].comment}</a>
                     </OverlayTrigger>
                 </td>
             );
