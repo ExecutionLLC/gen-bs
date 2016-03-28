@@ -81,18 +81,12 @@ export default class FileUploadSamplesRow extends Component {
             option => { return {value: option.id, label: option.value}}
         );
 
-        const options = [
-	        { value: 'one', label: 'One' },
-	        { value: 'two', label: 'Two' }
-        ];
-
-        console.log('selectOptions =', selectOptions);
         return (
             <dl key={field.id}>
             <dt>{field.label}</dt>
             <dd>
             <Select
-                options={options}
+                options={selectOptions}
                 clearable={false}
                 value="one"
                 onChange={(e) => this.props.onUpdateSampleValue(field.id, e.target.value)}
