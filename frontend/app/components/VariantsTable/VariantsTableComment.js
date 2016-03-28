@@ -118,3 +118,12 @@ export default class VariantsTableComment extends Component {
         );
     }
 }
+
+VariantsTableComment.propTypes = {
+    comments: React.PropTypes.array.isRequired,
+    comment: React.PropTypes.string,
+    reference: React.PropTypes.string.isRequired,
+    pos: React.PropTypes.string.isRequired,
+    alt: React.PropTypes.string.isRequired,
+    searchKey: React.PropTypes.string.isRequired
+};

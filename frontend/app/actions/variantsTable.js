@@ -154,7 +154,7 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
             .fail(json => {
                 console.log('createComment fail', json)
             })
-            .then(json=> {
+            .then(json => {
                 dispatch(changeComment(json))
             })
 
