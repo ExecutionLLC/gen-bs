@@ -14,7 +14,7 @@ export default class VariantsTableComment extends Component {
         };
     }
 
-    renderDemoComment() {
+    renderComment() {
         const {comments} = this.props;
         return (
             <td className="comment">
@@ -28,7 +28,7 @@ export default class VariantsTableComment extends Component {
         const {auth, comments, searchKey} = this.props;
         if (auth.isDemo) {
             return (
-                this.renderDemoComment()
+                this.renderComment()
             );
         } else {
             return (
