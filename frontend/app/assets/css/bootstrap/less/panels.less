@@ -17,7 +17,7 @@
 
 // Panel contents
 .panel-body {
-  padding:0 @panel-body-padding;
+  padding: @panel-body-padding;
   &:extend(.clearfix all);
 }
 
@@ -371,7 +371,9 @@
 }
 
 .panel-group-scroll { 
- overflow-y: 'auto';
- overflow-x: 'hidden';
- height: '400px';
+    height: 400px;
+    margin-right: -16px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: 3px;
 }

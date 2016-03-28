@@ -22,12 +22,11 @@ export default class FileUploadSamples extends Component {
         }
         return (
             <div>
-                <h4 data-localize="samples.search.label">Search available samples</h4>
                 <div className="navbar navbar-search-full">
                     <div className="navbar-search">
                         <div className="navbar-search-field">
-                          <input type="text" onChange={e => this.setState({ searchWord: e.target.value })}
-                               className="form-control"/>
+                          <input type="text" placeholder="Search available samples" onChange={e => this.setState({ searchWord: e.target.value })}
+                               className="form-control material-input"/>
                         </div>
                     </div>
                 </div>
