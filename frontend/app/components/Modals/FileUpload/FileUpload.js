@@ -55,16 +55,17 @@ export default class FileUpload extends Component {
                      <span>.vcf, .vcf.gz</span>
                 </button>
                 { files[0] &&
-                  <strong style={{color: '#2363a1'}}>{files[0].name}</strong>
+                  <div className="text-center"><strong style={{color: '#2363a1'}}>{files[0].name}</strong></div>
                 }
-            </div>
+            
 
             { isArchiving &&
-              <div><strong style={{color: '#2363a1'}}>Archiving...</strong><i className="fa fa-spinner fa-spin"></i></div>
+              <div className="text-center"><strong style={{color: '#2363a1'}}>Archiving...</strong><i className="fa fa-spinner fa-spin"></i></div>
             }
             { !error &&
               <FileUploadProgressBar {...this.props} />
             }
+            </div>
           </div>
         );
     }
