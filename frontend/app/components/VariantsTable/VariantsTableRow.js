@@ -18,7 +18,7 @@ export default class VariantsTableRow extends ComponentBase {
         const alt = this.getMainFieldValue('ALT',rowFields,fields);
         const chrom = this.getMainFieldValue('CHROM',rowFields,fields);
         const ref = this.getMainFieldValue('REF',rowFields,fields);
-        const search_key = row.search_key;
+        const searchKey = row.search_key;
 
         return (
             <tr>
@@ -43,7 +43,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       pos={pos}
                                       reference={ref}
                                       chrom={chrom}
-                                      search_key={search_key}
+                                      searchKey={searchKey}
                                       dispatch = {this.props.dispatch}
                                       auth = {auth}
                                       comments = {comments}

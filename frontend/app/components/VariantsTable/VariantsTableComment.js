@@ -25,7 +25,7 @@ export default class VariantsTableComment extends Component {
     }
 
     render() {
-        const {auth, comments, search_key} = this.props;
+        const {auth, comments, searchKey} = this.props;
         if (auth.isDemo) {
             return (
                 this.renderDemoComment()
@@ -39,7 +39,7 @@ export default class VariantsTableComment extends Component {
                         rootClose={true}
                         placement="right"
                         overlay={
-                            <Popover id={search_key}>
+                            <Popover id={searchKey}>
                                 {this.renderCommentPopover()}
                             </Popover>
                         }
@@ -69,7 +69,7 @@ export default class VariantsTableComment extends Component {
             pos,
             reference,
             chrom,
-            search_key,
+            searchKey,
             comments
             } = this.props;
 
@@ -94,14 +94,14 @@ export default class VariantsTableComment extends Component {
                                         onClick={()=>{
                                                 if(_.isEmpty(comments)){
                                                     if(comment){
-                                                        this.props.dispatch(createComment(alt,pos,reference,chrom,search_key,comment));
+                                                        this.props.dispatch(createComment(alt,pos,reference,chrom,searchKey,comment));
                                                     }
 
                                                 }else {
                                                     if (comment){
-                                                        this.props.dispatch(updateComment(comments[0].id,alt,pos,reference,chrom,search_key,comment));
+                                                        this.props.dispatch(updateComment(comments[0].id,alt,pos,reference,chrom,searchKey,comment));
                                                     }else {
-                                                        this.props.dispatch(removeComment(comments[0].id,search_key));
+                                                        this.props.dispatch(removeComment(comments[0].id,searchKey));
                                                     }
                                                 }
                                                 this.refs.overlay.toggle();
