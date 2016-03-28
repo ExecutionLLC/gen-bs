@@ -104,7 +104,7 @@ class ViewsModel extends SecureModelBase {
         async.waterfall([
             (callback) => {
                 if (!viewItem.fieldId){
-                    callback(new Error('Can\'t add view item with null field value'));
+                    callback(new Error('Can\'t add view item with no field id'));
                 }else {
                     const dataToInsert = {
                         id: this._generateId(),
