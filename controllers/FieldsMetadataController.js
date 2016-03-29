@@ -33,11 +33,21 @@ class FieldsMetadataController extends ControllerBase {
         });
     }
 
+    getTotalMetadata(request, response) {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.services.fieldsMetadata.findTotalMetadata(callback)
+        ], (error, fieldsMetadata) => {
+            this.sendErrorOrJson(response, error, fieldsMetadata);
+        });
+    }
+
     createRouter() {
         const router = new Express();
 
         router.get('/sources', this.getSourcesMetadata.bind(this));
         router.get('/:sampleId', this.getSampleMetadata.bind(this));
+        router.get('/', this.getTotalMetadata.bind(this));
 
         return router;
     }

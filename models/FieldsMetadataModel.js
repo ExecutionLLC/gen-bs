@@ -96,6 +96,14 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    findTotalMetadata(callback) {
+        async.waterfall([
+            (callback) => this._fetchTotalMetadata(callback),
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
+        ], callback);
+    }
+
+
     getExistingSourceNames(callback) {
         this.db.asCallback((knex, callback) => {
             knex(this.baseTableName)
@@ -286,6 +294,20 @@ class FieldsMetadataModel extends ModelBase {
             knex.select()
                 .from(this.baseTableName)
                 .whereNot('source_name', 'sample')
+                .asCallback((error, fieldsMetadata) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
+                    }
+                });
+        }, callback);
+    }
+
+    _fetchTotalMetadata(callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from(this.baseTableName)
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
                         callback(error);
