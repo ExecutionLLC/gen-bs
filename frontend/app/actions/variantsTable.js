@@ -273,9 +273,11 @@ export function searchInResults(flags) {
     }
 }
 
-export function selectTableRow(rowId) {
+export function selectTableRow(row, rowIndex, isSelected) {
     return {
         type: SELECT_VARIANTS_ROW,
-        rowId
+        row,
+        rowIndex,
+        isSelected
     }
 }

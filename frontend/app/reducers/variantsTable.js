@@ -13,10 +13,9 @@ export default function variantsTable(state = {
     needUpdate: false,
     isNextDataLoading: false,
     isFilteringOrSorting: false,
-
+    selectedSearchKeysToVariants: {}
 }, action) {
     switch (action.type) {
-
 
         case ActionTypes.CLEAR_SEARCH_PARAMS:
             return Object.assign({}, state, {
@@ -27,19 +26,19 @@ export default function variantsTable(state = {
                     offset: 0,
                     top_search: ''
                 }
-            })
+            });
 
         case ActionTypes.INIT_SEARCH_IN_RESULTS_PARAMS:
             return Object.assign({}, state, {
                 searchInResultsParams: action.searchInResultsParams
-            })
+            });
 
         case ActionTypes.CHANGE_VARIANTS_LIMIT:
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
                 })
-            })
+            });
 
         case ActionTypes.CHANGE_VARIANTS_FILTER: {
             // copy search array
@@ -143,7 +142,7 @@ export default function variantsTable(state = {
                 isFilteringOrSorting: action.isFilteringOrSorting,
                 isFetching: true,
                 needUpdate: false
-            })
+            });
 
         case ActionTypes.RECEIVE_SEARCHED_RESULTS:
             return Object.assign({}, state, {
@@ -151,18 +150,22 @@ export default function variantsTable(state = {
                 isFilteringOrSorting: false,
                 isFetching: false,
                 lastUpdated: action.receivedAt
-            })
-
-        case ActionTypes.SELECT_VARIANTS_ROW:
-            return Object.assign({}, state, {
-                clickedRow: {_fid: action.rowId},
-                filteredVariants: state.filteredVariants.map((o) => {
-                    if (action.rowId == o._fid) {
-                        o._selected = !o._selected
-                    }
-                    return o;
-                })
             });
+
+        case ActionTypes.SELECT_VARIANTS_ROW: {
+            const {row, isSelected} = action;
+            const newSelectedSearchKeysToVariants = Object.assign({}, state.selectedSearchKeysToVariants);
+            const searchKey = row.search_key;
+            if (isSelected) {
+                newSelectedSearchKeysToVariants[searchKey] = row;
+            } else {
+                delete newSelectedSearchKeysToVariants[searchKey];
+            }
+
+            return Object.assign({}, state, {
+                selectedSearchKeysToVariants: newSelectedSearchKeysToVariants
+            });
+        }
 
         default:
             return state
