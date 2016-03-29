@@ -1,4 +1,4 @@
-import { initSearchInResultsParams, receiveSearchedResults } from './variantsTable'
+import { receiveSearchedResults } from './variantsTable'
 import { changeFileUploadProgress, fileUploadError } from './fileUpload'
 /*
  * action types
