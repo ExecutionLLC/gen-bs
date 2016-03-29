@@ -50,8 +50,9 @@ function changeHeaderView(views, viewId) {
 
 export function changeView(viewId) {
     return (dispatch, getState) => {
-        dispatch(changeHeaderView(getState().userData.views, viewId));
-        dispatch(viewBuilderSelectView(getState().userData.views, viewId, true))
+        const {userData: {views}} = getState();
+        dispatch(changeHeaderView(views, viewId));
+        dispatch(viewBuilderSelectView(views, viewId, true));
     }
 }
 
@@ -65,8 +66,9 @@ export function changeHeaderFilter(filters, filterId) {
 
 export function changeFilter(filterId) {
     return (dispatch, getState) => {
-        dispatch(changeHeaderFilter(getState().userData.filters, filterId));
-        dispatch(filterBuilderSelectFilter(getState().userData.filters, filterId, true))
+        const {userData: {filters}} = getState();
+        dispatch(changeHeaderFilter(filters, filterId));
+        dispatch(filterBuilderSelectFilter(filters, filterId, true));
     }
 }
 
