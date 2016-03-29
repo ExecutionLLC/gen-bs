@@ -10,10 +10,11 @@ export default class ExportDropdown extends Component {
     }
 
     render() {
+        const exportDropdownTitle = this.renderExportButtonTitle();
         return (
             <div>
                 <Nav>
-                    <NavDropdown title="Export"
+                    <NavDropdown title={exportDropdownTitle}
                                  id="export-dropdown"
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
 
@@ -23,55 +24,62 @@ export default class ExportDropdown extends Component {
                         <MenuItem eventKey="txt">Text</MenuItem>
                     </NavDropdown>
                 </Nav>
-                {
-                    // <div data-localize="files.export.help"
-                    //      data-toggle="tooltip"
-                    //      data-placement="right"
-                    //      title="Select several mutations in the table and save to file. There are indicate the number of already selected recordings"
-                    //      data-container="body"
-                    //      data-trigger="hover">
-                    //
-                    //     <a className="btn navbar-btn" type="button" id="dropdownMenu1" data-toggle="modal"
-                    //        data-target="#filename">
-                    //         <span className="hidden-xxs" data-localize="files.export.title">Export</span>
-                    //         <span className="visible-xxs"><i className="md-i">file_download</i></span>
-                    //         <span className="badge badge-warning">7</span>
-                    //     </a>
-                    // </div>
-                }
             </div>
         );
+    }
+
+    renderExportButtonTitle() {
+        const {selectedSearchKeysToVariants} = this.props;
+        const selectedVariantsCount = Object.keys(selectedSearchKeysToVariants).length;
+
+        if (!selectedVariantsCount) {
+            return (<span>Export</span>);
+        } else {
+            return (<span>Export<span className="badge badge-warning">{selectedVariantsCount}</span></span>);
+        }
     }
 
     onExportItemSelected(event, selectedKey) {
         event.preventDefault();
 
-        const exporter = ExportUtils.createExporter(selectedKey);
-        if (!exporter) {
-            console.error('No exporter of type "' + ofType + '" is found');
+        const {selectedSearchKeysToVariants, currentView} = this.props;
+        if (_.isEmpty(selectedSearchKeysToVariants)) {
+            console.error('No rows selected for export.');
             return;
         }
-        const columns = [
-            {
-                id: 1,
-                name: 'Column1'
-            },
-            {
-                id: 2,
-                name: 'Column2'
-            }
-        ];
-        const data = [
-            {
-                '1': 'asd',
-                '2': 'qwe'
-            }, {
-                '1': 'qwea',
-                '2': 'aaaa'
-            }
-        ];
+        if (!currentView) {
+            console.error('No current view is specified.');
+            return;
+        }
 
-        const blob = exporter.build(columns, data);
-        ExportUtils.downloadBlob(blob);
+        // TODO: get fields and map field id to field name.
+        const columns = _.map(currentView.view_list_items, listItem => {
+            return {
+                id: listItem.field_id,
+                name: 'Column' + listItem.field_id
+            }
+        });
+
+        // The export data should be array of objects in {field_id -> field_value} format.
+        const dataToExport = _(selectedSearchKeysToVariants)
+            .sortBy(item => item.rowIndex)
+            .map(item => item.row.fieldsHash)
+            .value();
+
+        const exporter = ExportUtils.createExporter(selectedKey);
+        if (!exporter) {
+            console.error('No exporter of type "' + selectedKey + '" is found');
+            return;
+        }
+
+        const blob = exporter.build(columns, dataToExport);
+        
+        // TODO: Use current sample name here.
+        ExportUtils.downloadBlob(blob, `Genom-${new Date()}.${selectedKey}`);
     }
 }
+
+ExportDropdown.propTypes = {
+    selectedSearchKeysToVariants: React.PropTypes.object.isRequired,
+    currentView: React.PropTypes.object.isRequired
+};

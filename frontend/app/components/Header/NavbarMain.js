@@ -19,7 +19,7 @@ class NavbarMain extends Component {
     }
 
     render() {
-        const { dispatch, ui } = this.props
+        const { dispatch, ui: {currentView}, ws, variantsTable: {selectedSearchKeysToVariants} } = this.props;
         return (
 
             <nav className="navbar navbar-inverse navbar-fixed-top navbar-main">
@@ -32,7 +32,9 @@ class NavbarMain extends Component {
 
                     <CreateQueryNavbarButton toggleQueryNavbar={ () => { dispatch(toggleQueryNavbar()) } }/>
                     <NavbarSearch />
-                    <ExportDropdown />
+                    <ExportDropdown selectedSearchKeysToVariants={selectedSearchKeysToVariants}
+                                    currentView={currentView}
+                    />
                     <SavedFiles />
                     <Language />
                     <Buy />
@@ -46,12 +48,14 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, ui } = state
+    const { auth, userData, ui, ws, variantsTable } = state;
 
     return {
         auth,
         userData,
-        ui
+        ui,
+        ws,
+        variantsTable
     }
 }
 

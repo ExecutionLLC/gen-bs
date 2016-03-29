@@ -12,8 +12,9 @@ export default class VariantsTableHead extends Component {
     render() {
         const { dispatch, fields, ws, searchParams } = this.props;
         const { sort } = this.props.variantsTable.searchInResultsParams;
-        const currentView = searchParams ? _.find(ui.views,view => view.id === searchParams.viewId) : null;
-        if(!searchParams || !currentView){
+        const currentView = ws.variantsView;
+
+        if (!searchParams || !currentView) {
             return (
                 <tbody className="table-variants-head" id="variants_table_head">
                 <tr />

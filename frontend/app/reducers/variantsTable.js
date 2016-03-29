@@ -153,11 +153,14 @@ export default function variantsTable(state = {
             });
 
         case ActionTypes.SELECT_VARIANTS_ROW: {
-            const {row, isSelected} = action;
+            const {row, rowIndex, isSelected} = action;
             const newSelectedSearchKeysToVariants = Object.assign({}, state.selectedSearchKeysToVariants);
             const searchKey = row.search_key;
             if (isSelected) {
-                newSelectedSearchKeysToVariants[searchKey] = row;
+                newSelectedSearchKeysToVariants[searchKey] = {
+                    rowIndex,
+                    row
+                };
             } else {
                 delete newSelectedSearchKeysToVariants[searchKey];
             }
