@@ -65,7 +65,11 @@ export class KeepAliveTask {
             const currentSessionId = window.reduxStore.getState().auth.sessionId;
             if (currentSessionId) {
                 // update session on the web server
-                checkSession(currentSessionId, null);
+                checkSession(currentSessionId, (error, isValidSession, isDemoSession) => {
+                    if (error) {
+                        console.log('got unexpected error in keep alive task', error);
+                    }
+                });
             }
             // reschedule task
             this._scheduleTask();
@@ -147,9 +151,6 @@ function openDemoSession(dispatch) {
 function checkSession(sessionId, callback) {
     console.log('checkSession');
     sessionsClient.checkSession(sessionId, (error, response) => {
-        if (!callback) {
-            return;
-        }
         if (!error) {
             const isValidSession = response.status === HttpStatus.OK;
             const isDemoSession = isValidSession ? response.sessionType === 'DEMO' : null;
