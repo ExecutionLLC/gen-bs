@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import classNames from 'classnames';
 
-import  { firstCharToUpperCase } from '../../utils/stringUtils'
+import  {firstCharToUpperCase} from '../../utils/stringUtils'
 import FieldUtils from '../../utils/fieldUtils'
 
 export default class FieldHeaderControls extends Component {
@@ -13,7 +13,7 @@ export default class FieldHeaderControls extends Component {
             isFilterOpened: false
         };
     }
-    
+
     isFieldExists(fieldId) {
         const {currentVariants} = this.props;
         if (_.isEmpty(currentVariants)) {
@@ -35,7 +35,7 @@ export default class FieldHeaderControls extends Component {
         const isFilterOpened = this.state.isFilterOpened;
         const currentDirection = columnSortParams ? columnSortParams.direction : null;
         const order = columnSortParams ? columnSortParams.order : null;
-        const isExists =this.isFieldExists(fieldId);
+        const isExists = this.isFieldExists(fieldId);
         const ascSortBtnClasses = classNames(
             'btn',
             'btn-sort', 'asc', {
@@ -135,7 +135,7 @@ export default class FieldHeaderControls extends Component {
         }
     }
 
-    renderSortButton(direction, currentDirection, sortButtonClass, order ,isExists) {
+    renderSortButton(direction, currentDirection, sortButtonClass, order, isExists) {
         return (
             <button className={sortButtonClass}
                     key={direction}
@@ -147,8 +147,8 @@ export default class FieldHeaderControls extends Component {
         );
     }
 
-    onSortClick(isExists,direction,isControlKeyPressed){
-        if(isExists){
+    onSortClick(isExists, direction, isControlKeyPressed) {
+        if (isExists) {
             this.onSearchClick(direction, isControlKeyPressed)
         }
     }
