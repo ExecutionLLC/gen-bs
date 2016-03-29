@@ -24,10 +24,11 @@ export default class VariantsTableRow extends ComponentBase {
             <tr>
                 <td className="btntd row_checkbox"
                     key="row_checkbox">
-                    <div><label className="checkbox hidden">
-                        <input type="checkbox"/>
-                        <i/>
-                    </label>
+                    <div>
+                        <label className="checkbox">
+                            <input type="checkbox"/>
+                            <i/>
+                        </label>
                         <span>{rowIndex + 1}</span>
                     </div>
                 </td>
