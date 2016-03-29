@@ -3,14 +3,6 @@ import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 
 export default class AutoLogoutModal extends Component {
-    componentDidMount() {
-        console.log('AutoLogoutModal mount');
-    }
-
-    componentWillUnmount() {
-        console.log('AutoLogoutModal unmount');
-    }
-
     renderHeader() {
         return (
             <Modal.Header>
