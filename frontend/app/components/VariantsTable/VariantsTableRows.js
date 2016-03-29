@@ -15,7 +15,7 @@ export default class VariantsTableRows extends Component {
         const { sort } = this.props.variantsTable.searchInResultsParams;
         const { isFilteringOrSorting} = this.props.variantsTable;
         const { searchParams,ui,fields } = this.props;
-        const currentView = searchParams ? _.find(ui.views, view => view.id === searchParams.viewId) : null;
+        const currentView = this.props.ws.variantsView;
 
         return (
             <tbody className="table-variants-body"
