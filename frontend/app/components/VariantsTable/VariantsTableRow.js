@@ -22,6 +22,7 @@ export default class VariantsTableRow extends ComponentBase {
 
         return (
             <tr>
+                <td className="btntd row_checkbox">{rowIndex + 1}</td>
                 <td className="btntd row_checkbox"
                     key="row_checkbox">
                     <div>
@@ -29,7 +30,7 @@ export default class VariantsTableRow extends ComponentBase {
                             <input type="checkbox"/>
                             <i/>
                         </label>
-                        <span>{rowIndex + 1}</span>
+                        <span />
                     </div>
                 </td>
                 <td className="btntd">

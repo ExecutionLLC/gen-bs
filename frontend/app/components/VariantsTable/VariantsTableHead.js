@@ -26,7 +26,8 @@ export default class VariantsTableHead extends Component {
         return (
             <tbody className="table-variants-head" id="variants_table_head">
             <tr>
-                <td className="btntd row_checkbox" data-label="checkbox" key="row_checkbox">
+                <td className="btntd"></td>
+                <td className="btntd row_checkbox" key="row_checkbox">
                     <div></div>
                 </td>
                 <td className="btntd">
