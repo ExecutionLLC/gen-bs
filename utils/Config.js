@@ -42,8 +42,8 @@ const SETTINGS = {
         databaseName: ENV.GEN_WS_DATABASE_NAME || 'genomixdb'
     },
     headers: {
-        sessionHeader: ENV.GEN_WS_SESSION_HEADER || 'X-Session-Id',
-        languageHeader: ENV.GEN_WS_LANGUAGE_HEADER || 'X-Langu-Id'
+        sessionHeader: ENV.GEN_SESSION_HEADER || 'X-Session-Id',
+        languageHeader: ENV.GEN_LANGUAGE_HEADER || 'X-Langu-Id'
     },
     sessions: {
         allowMultipleUserSessions: ENV.GEN_WS_ALLOW_MULTIPLE_USER_SESSIONS || true,
