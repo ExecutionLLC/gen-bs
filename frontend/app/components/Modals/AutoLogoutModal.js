@@ -29,7 +29,7 @@ export default class AutoLogoutModal extends Component {
                  type="button"
                  className="btn btn-default"
                  data-dismiss="modal"
-                 localize-data="actions.extendSession"
+                 localize-data="action.extendSession"
                 >
                     <span>Extend session</span>
                 </button>
