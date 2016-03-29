@@ -10,13 +10,13 @@ import { changeVariantsFilter, sortVariants, searchInResultsSortFilter } from '.
 export default class VariantsTableHead extends Component {
 
     render() {
-        const { dispatch, fields, ui, searchParams } = this.props;
+        const { dispatch, fields, ws, searchParams } = this.props;
         const { sort } = this.props.variantsTable.searchInResultsParams;
         const currentView = searchParams ? _.find(ui.views,view => view.id === searchParams.viewId) : null;
         if(!searchParams || !currentView){
             return (
                 <tbody className="table-variants-head" id="variants_table_head">
-                <tr></tr>
+                <tr />
                 </tbody>
             );
         }
@@ -39,11 +39,15 @@ export default class VariantsTableHead extends Component {
                             <a type="button" className="btn-link-default">
                                 Comment
                             </a>
-                            
+
                         </div>
                     </div>
                     <div className="variants-table-search-field input-group invisible">
-                       <span className="input-group-btn"><button className="btn btn-link-light-default"><i className="md-i">search</i></button></span>
+                       <span className="input-group-btn">
+                           <button className="btn btn-link-light-default">
+                               <i className="md-i">search</i>
+                           </button>
+                       </span>
                         <input type="text" className="form-control material-input"
                                value=""
                         />
@@ -71,6 +75,7 @@ export default class VariantsTableHead extends Component {
                          onSortRequested={sendSortRequestedAction}
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
+                         currentVariants = {this.props.ws.currentVariants}
             />
         );
     }

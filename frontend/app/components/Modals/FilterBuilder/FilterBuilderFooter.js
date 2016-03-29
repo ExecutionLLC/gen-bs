@@ -25,7 +25,7 @@ export default class FilterBuilderFooter extends Component {
             className="btn btn-default"
             data-dismiss="modal"
           >
-            <span  data-localize="actions.cancel" />Cancel
+            <span  data-localize="actions.cancel">Cancel</span>
           </button>
 
           <button
