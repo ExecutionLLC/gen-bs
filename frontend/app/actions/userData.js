@@ -80,19 +80,19 @@ function receiveViews(json) {
 export function fetchViews(viewId) {
 
     return function (dispatch, getState) {
-        dispatch(requestViews())
+        dispatch(requestViews());
 
         return $.ajax(config.URLS.VIEWS, {
                 'type': 'GET',
                 'headers': {"X-Session-Id": getState().auth.sessionId}
             })
             .then(function (json) {
-                const view = json[0] || null
-                const viewId = getState().viewBuilder.currentView.id || view.id
+                const view = json[0] || null;
+                const viewId = getState().viewBuilder.currentView.id || view.id;
 
-                dispatch(receiveViews(json))
+                dispatch(receiveViews(json));
                 dispatch(changeView(viewId))
-            })
+            });
 
         // TODO:
         // catch any error in the network call.

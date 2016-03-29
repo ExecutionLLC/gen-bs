@@ -1,5 +1,5 @@
 import { fetchVariants, clearSearchParams } from './variantsTable'
-import { requestAnalyze } from './websocket'
+import { requestAnalyze , requestChangeView} from './websocket'
 import { viewBuilderSelectView } from './viewBuilder'
 import { filterBuilderSelectFilter} from './filterBuilder'
 
@@ -85,6 +85,10 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(clearSearchParams())
 
         dispatch(requestAnalyze(searchParams))
+
+        const searchView = _.find(getState().ui.views , {id: viewId});
+
+        dispatch(requestChangeView(searchView))
 
         dispatch(fetchVariants(searchParams))
 

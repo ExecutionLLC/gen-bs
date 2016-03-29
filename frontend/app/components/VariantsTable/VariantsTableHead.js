@@ -10,7 +10,7 @@ import { changeVariantsFilter, sortVariants, searchInResultsSortFilter } from '.
 export default class VariantsTableHead extends Component {
 
     render() {
-        const { dispatch, fields, ui, searchParams } = this.props;
+        const { dispatch, fields, ui, ws, searchParams } = this.props;
         const { sort } = this.props.variantsTable.searchInResultsParams;
         if(!searchParams){
             return (
@@ -20,7 +20,7 @@ export default class VariantsTableHead extends Component {
             );
         }
 
-        const currentView = _.find(ui.views,view => view.id===searchParams.viewId) ;
+        const currentView = ws.variantsView;
         if (!currentView) {
             return (
                 <tbody className="table-variants-head" id="variants_table_head">

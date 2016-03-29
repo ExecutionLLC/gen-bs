@@ -7,6 +7,7 @@ export default function websocket(state = {
     errors: [],
     closed: true,
     variants: null,
+    variantsView:null,
     currentVariants: null,
     isVariantsEmpty: false,
     isVariantsValid: true,
@@ -142,7 +143,13 @@ export default function websocket(state = {
                 variants: null,
                 isVariantsLoaded: true,
                 searchParams:action.searchParams
-            })
+            });
+        case ActionTypes.REQUEST_CHANGE_VIEW:
+        {
+            return Object.assign({}, state, {
+                variantsView: action.view
+            });
+        }
 
         default:
             return state
