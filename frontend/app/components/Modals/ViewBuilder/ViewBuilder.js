@@ -76,7 +76,7 @@ export default class ViewBuilder extends Component {
                                 onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
                             className="fa fa-lg fa-minus-circle"></i></button>
                         <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index)) }><i
+                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
                             className="fa fa-lg fa-plus-circle"></i></button>
                     </div>
                 </div>
