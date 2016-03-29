@@ -29,7 +29,7 @@ const config = {
         LOGOUT_TIMEOUT: SESSION_LOGOUT_TIMEOUT,
         LOGOUT_WARNING_TIMEOUT: SESSION_LOGOUT_WARNING_TIMEOUT
     },
-    LOGIN_URL: `http://${HOST}:${PORT}/api/session/auth/google?callbackPort=8080`
+    LOGIN_URL: `http://${HOST}:${PORT}/api/session/auth/google?callbackPort=${LOGIN_CALLBACK_PORT}`
 };
 
 export default config

@@ -14,9 +14,10 @@ const ENV = process.env;
 // webpack is running directly, without npm run scripts.
 const API_HOST = ENV.GEN_FRONTEND_API_HOST || 'localhost';
 const API_PORT = ENV.GEN_FRONTEND_API_PORT || 5000;
+const LOGIN_CALLBACK_PORT = ENV.GEN_LOGIN_CALLBACK_PORT || 8080;
 // Keep alive timeout in seconds
 const SESSION_KEEP_ALIVE_TIMEOUT = ENV.GEN_SESSION_KEEP_ALIVE_TIMEOUT || 60;
-const SESSION_LOGOUT_TIMEOUT = ENV.GEN_SESSION_LOGOUT_TIMEOUT || 5*60;
+const SESSION_LOGOUT_TIMEOUT = ENV.GEN_SESSION_LOGOUT_TIMEOUT || 15*60;
 const SESSION_LOGOUT_WARNING_TIMEOUT = ENV.GEN_SESSION_LOGOUT_WARNING_TIMEOUT || 15;
 const HEADER_SESSION = ENV.GEN_HEADER_SESSION || 'X-Session-Id';
 const HEADER_LANGUAGE = ENV.GEN_HEADER_LANGUAGE || 'X-Language-Id';
@@ -103,6 +104,7 @@ module.exports = {
         new webpack.DefinePlugin({
             API_PORT: JSON.stringify(API_PORT),
             API_HOST: JSON.stringify(API_HOST),
+            LOGIN_CALLBACK_PORT: JSON.stringify(LOGIN_CALLBACK_PORT),
             HEADER_SESSION: JSON.stringify(HEADER_SESSION),
             HEADER_LANGUAGE: JSON.stringify(HEADER_LANGUAGE),
             SESSION_KEEP_ALIVE_TIMEOUT: JSON.stringify(SESSION_KEEP_ALIVE_TIMEOUT),
