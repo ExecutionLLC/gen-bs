@@ -130,17 +130,17 @@ function openDemoSession(dispatch) {
     sessionsClient.openSession(null, (error, response) => {
         if (error) {
             dispatch(loginError(error));
-            dispatch(handleError(null, LOGIN_NETWORK_ERROR, null));
+            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
         } else if (response.status !== HttpStatus.OK) {
             dispatch(loginError(response.body));
-            dispatch(handleError(null, LOGIN_SERVER_ERROR, null));
+            dispatch(handleError(null, LOGIN_SERVER_ERROR));
         } else {
             const sessionId = SessionsClient.getSessionFromResponse(response);
             if (sessionId) {
                 updateLoginData(dispatch, sessionId, true);
             } else {
                 dispatch(loginError('Session id is empty'));
-                dispatch(handleError(null, LOGIN_SERVER_ERROR, null));
+                dispatch(handleError(null, LOGIN_SERVER_ERROR));
             }
         }
     });
@@ -173,7 +173,7 @@ function checkCookieSessionAndLogin(dispatch) {
             if (error) {
                 // it is fatal network error
                 dispatch(loginError(error));
-                dispatch(handleError(null, LOGIN_NETWORK_ERROR, null));
+                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
             } else if (isValidSession) {
                 // restore old session
                 updateLoginData(dispatch, sessionIdFromCookie, isDemoSession);
@@ -232,7 +232,7 @@ export function login() {
                 // it is error from google authorization page (detected by URL parameters)
                 console.log('google authorization failed', errorFromParams);
                 dispatch(loginError(errorFromParams));
-                dispatch(handleError(null, LOGIN_GOOGLE_ERROR, null));
+                dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
                 history.pushState({}, null, `http://${location.host}`);
             }
             // try to restore old session

@@ -5,22 +5,6 @@ import { Modal } from 'react-bootstrap';
 import { lastErrorResolved } from '../../actions/errorHandler'
 
 export default class ErrorModal extends Component {
-    renderButton(label, localize, action, isDefault) {
-        const classNameData = "btn" + (isDefault ? " btn-default" : "");
-        const localizeData = localize || "";
-        return (
-            <button
-             onClick={ action }
-             type="button"
-             className={ classNameData }
-             data-dismiss="modal"
-             localize-data={ localizeData }
-            >
-                <span>{ label }</span>
-            </button>
-        )
-    }
-
     renderHeader() {
         return (
             <Modal.Header>
@@ -46,7 +30,15 @@ export default class ErrorModal extends Component {
     renderFooter() {
         return (
             <Modal.Footer>
-                { this.renderButton("Close", "action.close", this.props.closeModal, true) }
+                <button
+                 onClick={ () => {this.props.closeModal()} }
+                 type="button"
+                 className="btn btn-default"
+                 data-dismiss="modal"
+                 localize-data="action.close"
+                >
+                    <span>Close</span>
+                </button>
             </Modal.Footer>
         )
     }
