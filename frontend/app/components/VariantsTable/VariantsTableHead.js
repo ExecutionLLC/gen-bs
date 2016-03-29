@@ -78,6 +78,7 @@ export default class VariantsTableHead extends Component {
                          onSortRequested={sendSortRequestedAction}
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
+                         currentVariants = {this.props.ws.currentVariants}
             />
         );
     }

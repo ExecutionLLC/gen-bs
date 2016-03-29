@@ -13,6 +13,16 @@ export default class FieldHeaderControls extends Component {
             isFilterOpened: false
         };
     }
+    
+    isFieldExists(fieldId) {
+        const {currentVariants} = this.props;
+        if (_.isEmpty(currentVariants)) {
+            return false;
+        } else {
+            const variantField = _.find(currentVariants[0].fields, field=>field.field_id == fieldId);
+            return (variantField) ? true : false;
+        }
+    }
 
     render() {
         const {fieldId, fields, sortState} = this.props;
@@ -25,11 +35,13 @@ export default class FieldHeaderControls extends Component {
         const isFilterOpened = this.state.isFilterOpened;
         const currentDirection = columnSortParams ? columnSortParams.direction : null;
         const order = columnSortParams ? columnSortParams.order : null;
+        const isExists =this.isFieldExists(fieldId);
         const ascSortBtnClasses = classNames(
             'btn',
             'btn-sort', 'asc', {
                 'active': currentDirection === 'asc'
-            });
+            }
+        );
         const descSortBtnClasses = classNames(
             'btn',
             'btn-sort',
@@ -61,17 +73,17 @@ export default class FieldHeaderControls extends Component {
                             {name}
                         </a>
                         <div className={buttonGroupClasses} role="group" data-toggle="buttons">
-                            {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order)}
-                            {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order)}
+                            {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, isExists)}
+                            {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order, isExists)}
                         </div>
                     </div>
                 </div>
-                {this.renderFilterInput()}
+                {this.renderFilterInput(isExists)}
             </td>
         );
     }
 
-    renderFilterInput() {
+    renderFilterInput(isExists) {
         const {fieldId, fields} = this.props;
         const {searchString, isFilterOpened} = this.state;
         const fieldMetadata = FieldUtils.find(fieldId, fields);
@@ -86,7 +98,7 @@ export default class FieldHeaderControls extends Component {
             }
         );
 
-        if (isFieldSearchable) {
+        if (isFieldSearchable && isExists) {
             return (
                 <div className={inputGroupClasses}>
                     <span className="input-group-btn">
@@ -123,16 +135,22 @@ export default class FieldHeaderControls extends Component {
         }
     }
 
-    renderSortButton(direction, currentDirection, sortButtonClass, order) {
+    renderSortButton(direction, currentDirection, sortButtonClass, order ,isExists) {
         return (
             <button className={sortButtonClass}
                     key={direction}
-                    onClick={ e => this.onSearchClick(direction, e.ctrlKey || e.metaKey) }>
+                    onClick={ e => {this.onSortClick(isExists, direction, e.ctrlKey || e.metaKey) }}>
                 {direction === currentDirection &&
                 <span className="text-info">{order}</span>
                 }
             </button>
         );
+    }
+
+    onSortClick(isExists,direction,isControlKeyPressed){
+        if(isExists){
+            this.onSearchClick(direction, isControlKeyPressed)
+        }
     }
 
     focusInput(input) {
