@@ -38,7 +38,7 @@ const LOGIN_GOOGLE_ERROR = 'Google authorization failed.'
  * Start keep alive task, which update session on the WS.
  */
 
-class KeepAliveTask {
+export class KeepAliveTask {
     constructor(period) {
         this.period = period;
         this.keepAliveTaskId = null;
@@ -72,9 +72,6 @@ class KeepAliveTask {
         }, this.period);
     }
 }
-
-const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
-keepAliveTask.start();
 
 /*
  * action creators

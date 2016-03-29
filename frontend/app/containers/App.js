@@ -15,7 +15,7 @@ import FileUploadModal from '../components/Modals/FileUploadModal';
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
 
-import { login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
+import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import { fetchUserdata } from '../actions/userData';
@@ -30,6 +30,9 @@ class App extends Component {
         const autoLogoutTimeout = config.SESSION.LOGOUT_TIMEOUT*1000;
         const autoLogoutFn = () => { dispatch(startAutoLogoutTimer()); };
         dispatch(addTimeout(autoLogoutTimeout, WATCH_ALL, autoLogoutFn));
+
+        const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
+        keepAliveTask.start();
     }
 
     render() {
