@@ -7,7 +7,7 @@ export default class FilterBuilderHeader extends Component {
         return (
             <Modal.Header closeButton>
                 <Modal.Title data-localize="filters.heading">
-                    Setup filters
+                    Setup Filters
                 </Modal.Title>
             </Modal.Header>
         )

@@ -7,7 +7,7 @@ export default class AutoLogoutModal extends Component {
         return (
             <Modal.Header>
                 <Modal.Title data-localize="autoLogout.heading">
-                    Auto logout.
+                    Auto Logout
                 </Modal.Title>
             </Modal.Header>
         )
