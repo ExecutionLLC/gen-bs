@@ -3,6 +3,7 @@ import { addTimeout, removeTimeout } from 'redux-timeout';
 
 import config from '../../config';
 import { getCookie } from '../utils/cookie';
+import { getUrlParameterByName } from '../utils/stringUtils'
 
 import { fetchUserdata } from './userData';
 import { createWsConnection, subscribeToWs, send } from './websocket';
@@ -186,26 +187,6 @@ function checkCookieSessionAndLogin(dispatch) {
     }
 }
 
-// see http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-function _getUrlParameterByName(name, url) {
-    if (!url) {
-        url = location.href;
-    }
-    // This is just to avoid case sensitiveness
-    url = url.toLowerCase();
-    // This is just to avoid case sensitiveness for query parameter name
-    name = name.replace(/[\[\]]/g, "\\$&").toLowerCase();
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-    var results = regex.exec(url);
-    if (!results) {
-        return null;
-    }
-    if (!results[2]) {
-        return '';
-    }
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
 // Algorithm:
 // 1. If we stay on the URL returned by google and sessionId is valid, then
 // we should login as real user (not demo).
@@ -216,8 +197,8 @@ function _getUrlParameterByName(name, url) {
 //
 // It is legacy of previous developer :)
 export function login() {
-    const sessionIdFromParams = _getUrlParameterByName('sessionId');
-    const errorFromParams = _getUrlParameterByName('error');
+    const sessionIdFromParams = getUrlParameterByName('sessionId');
+    const errorFromParams = getUrlParameterByName('error');
 
     return dispatch => {
         if (!errorFromParams && sessionIdFromParams) {
