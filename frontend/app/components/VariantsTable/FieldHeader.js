@@ -139,7 +139,7 @@ export default class FieldHeaderControls extends Component {
         return (
             <button className={sortButtonClass}
                     key={direction}
-                    onClick={ e => {this.onSortClick(isExists, direction, e.ctrlKey || e.metaKey) }}>
+                    onClick={ e => this.onSortClick(isExists, direction, e.ctrlKey || e.metaKey) }>
                 {direction === currentDirection &&
                 <span className="text-info">{order}</span>
                 }
