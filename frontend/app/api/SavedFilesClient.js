@@ -19,17 +19,4 @@ export default class SavedFilesClient extends UserEntityClientBase {
             callback
         );
     }
-
-    add(languId, sessionId, fileMetadata, fileStream, callback) {
-        const formData = _.cloneDeep(fileMetadata);
-        formData.file = {
-            value: fileStream
-        };
-        RequestWrapper.post(
-            this.collectionUrls.create(),
-            this._makeHeaders({sessionId, languId}),
-            formData,
-            callback
-        )
-    }
 }

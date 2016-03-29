@@ -39,19 +39,6 @@ export default class RequestWrapper {
         }, RequestWrapper._createResponseConverter(callback));
     }
 
-    static upload(url, fileParamName, fileName, fileStream, headers, bodyObject, callback) {
-        const fileDescriptor = {};
-        fileDescriptor[fileParamName] = {
-            value: fileStream,
-            options: {
-                filename: fileName
-            }
-        };
-
-        const formData = Object.assign({}, bodyObject, fileDescriptor);
-        Request.post({url, formData, headers}, RequestWrapper._createResponseConverter(callback));
-    }
-
     static _createResponseConverter(callback) {
         return (error, response, body) => {
             if (error) {

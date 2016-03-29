@@ -11,10 +11,8 @@ export default class SessionsClient extends ClientBase {
         super(urls);
     }
 
-    openSession(userEmail, callback) {
-        RequestWrapper.post(this.urls.session(), null, {
-            email: userEmail
-        }, callback);
+    openDemoSession(callback) {
+        RequestWrapper.post(this.urls.session(), null, null, callback);
     }
 
     checkSession(sessionId, callback) {

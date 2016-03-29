@@ -128,7 +128,7 @@ function updateLoginData(dispatch, sessionId, isDemo) {
 // Create new demo session.
 function openDemoSession(dispatch) {
     console.log('loginAsDemoUser');
-    sessionsClient.openSession(null, (error, response) => {
+    sessionsClient.openDemoSession((error, response) => {
         if (error) {
             dispatch(loginError(error));
             dispatch(handleError(null, LOGIN_NETWORK_ERROR));
