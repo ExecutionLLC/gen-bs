@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import { logout } from '../../../actions/auth'
-import config from '../../../../config'
+import { logout } from '../../../actions/auth';
+import config from '../../../../config';
 
-const AUTHORIZED_USER_TITLE = ''
+const AUTHORIZED_USER_TITLE = '';
 const DEMO_USER_TITLE = 'Register or login for access to featured options';
 
 export default class Auth extends Component {
