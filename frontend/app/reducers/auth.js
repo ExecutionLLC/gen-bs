@@ -5,6 +5,8 @@ export default function auth(state = {
     sessionId: null,
     isAuthenticated: false,
     isDemo: false,
+    showAutoLogoutDialog: false,
+    secondsToAutoLogout: null,
     errorMessage: null
 }, action) {
 
@@ -23,6 +25,14 @@ export default function auth(state = {
                 isDemo: action.isDemo,
                 lastUpdated: action.receivedAt
             });
+
+        case ActionTypes.UPDATE_AUTOLOGOUT_TIMER:
+            const showAutoLogoutDialog = action.secondsToAutoLogout !== null;
+            return Object.assign({}, state, {
+                showAutoLogoutDialog,
+                secondsToAutoLogout: action.secondsToAutoLogout
+            });
+
 
         case ActionTypes.LOGIN_ERROR:
             return Object.assign({}, state, {

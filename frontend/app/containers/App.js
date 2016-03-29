@@ -1,26 +1,35 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import classNames from 'classnames'
+import { connect } from 'react-redux';
+import { addTimeout, WATCH_ALL } from 'redux-timeout';
+import classNames from 'classnames';
 
-import VariantsTableReact from '../components/VariantsTable/VariantsTableReact'
-import NavbarMain from '../components/Header/NavbarMain'
-import NavbarCreateQuery from '../components/Header/NavbarCreateQuery'
+import config from '../../config';
 
-import ViewsModal from '../components/Modals/ViewsModal'
-import FiltersModal from '../components/Modals/FiltersModal'
-import FileUploadModal from '../components/Modals/FileUploadModal'
-import ErrorModal from '../components/Modals/ErrorModal'
+import VariantsTableReact from '../components/VariantsTable/VariantsTableReact';
+import NavbarMain from '../components/Header/NavbarMain';
+import NavbarCreateQuery from '../components/Header/NavbarCreateQuery';
 
-import { login } from '../actions/auth'
-import { openModal, closeModal } from '../actions/modalWindows'
-import { lastErrorResolved } from '../actions/errorHandler'
-import { fetchUserdata } from '../actions/userData'
+import ViewsModal from '../components/Modals/ViewsModal';
+import FiltersModal from '../components/Modals/FiltersModal';
+import FileUploadModal from '../components/Modals/FileUploadModal';
+import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
+import ErrorModal from '../components/Modals/ErrorModal';
+
+import { login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
+import { openModal, closeModal } from '../actions/modalWindows';
+import { lastErrorResolved } from '../actions/errorHandler';
+import { fetchUserdata } from '../actions/userData';
 
 
 class App extends Component {
 
     componentDidMount() {
-        this.props.dispatch(login())
+        const dispatch = this.props.dispatch;
+        dispatch(login());
+
+        const autoLogoutTimeout = config.SESSION.LOGOUT_TIMEOUT*1000;
+        const autoLogoutFn = () => { dispatch(startAutoLogoutTimer()); };
+        dispatch(addTimeout(autoLogoutTimeout, WATCH_ALL, autoLogoutFn));
     }
 
     render() {
@@ -63,6 +72,10 @@ class App extends Component {
                     showModal={this.props.showErrorWindow}
                     closeModal={ () => { this.props.dispatch(lastErrorResolved()) } }
                 />
+                <AutoLogoutModal
+                    showModal={this.props.auth.showAutoLogoutDialog}
+                    closeModal={ () => { this.props.dispatch(stopAutoLogoutTimer()) } }
+                />
                 <ViewsModal
                     showModal={this.props.modalWindows.views.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
@@ -81,7 +94,7 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, modalWindows, views, fields, ui, errorHandler: { showErrorWindow } } = state
+    const { auth, userData, modalWindows, views, fields, ui, errorHandler: { showErrorWindow } } = state;
 
     return {
         auth,
@@ -94,4 +107,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(App);

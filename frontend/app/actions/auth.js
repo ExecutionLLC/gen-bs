@@ -1,4 +1,5 @@
 import HttpStatus from 'http-status';
+import { addTimeout, removeTimeout } from 'redux-timeout';
 
 import config from '../../config';
 import { getCookie } from '../utils/cookie';
@@ -20,6 +21,8 @@ export const RECEIVE_LOGOUT = 'RECEIVE_LOGOUT';
 export const REQUEST_LOGOUT = 'REQUEST_LOGOUT';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
+
+export const UPDATE_AUTOLOGOUT_TIMER = 'UPDATE_AUTOLOGOUT_TIMER';
 
 const sessionsClient = apiFacade.sessionsClient;
 
@@ -71,7 +74,7 @@ class KeepAliveTask {
 }
 
 const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
-keepAliveTask.start()
+keepAliveTask.start();
 
 /*
  * action creators
@@ -251,4 +254,49 @@ export function logout() {
         }
         location.replace(location.origin);
     });
+}
+
+export function startAutoLogoutTimer() {
+    return (dispatch, getState) => {
+        // auto logout works only with authorized users
+        if (getState().auth.isDemo) {
+            return;
+        }
+        const secondsToAutoLogout = getState().auth.secondsToAutoLogout;
+        if (secondsToAutoLogout === null) {
+            // if secondsToAutoLogout !== null, then auto logout is alredy started
+            dispatch(addTimeout(1000, UPDATE_AUTOLOGOUT_TIMER, () => { dispatch(updateAutoLogoutTimer()) } ));
+            dispatch(updateAutoLogoutTimer());
+        }
+    }
+}
+
+function _updateAutoLogoutTimer(secondsToAutoLogout) {
+    return {
+        type: UPDATE_AUTOLOGOUT_TIMER,
+        secondsToAutoLogout
+    }
+}
+
+function updateAutoLogoutTimer() {
+    return (dispatch, getState) => {
+        const secondsToAutoLogout = getState().auth.secondsToAutoLogout;
+        let nextSecondsToAutoLogout =  secondsToAutoLogout === null ? config.SESSION.LOGOUT_WARNING_TIMEOUT : secondsToAutoLogout - 1;
+        if (nextSecondsToAutoLogout < 0) {
+            // if auto logout timer is expired, then we should start logout procedure
+            dispatch(stopAutoLogoutTimer());
+            logout();
+            return;
+        }
+        // updates timer
+        dispatch(_updateAutoLogoutTimer(nextSecondsToAutoLogout));
+    }
+}
+
+export function stopAutoLogoutTimer() {
+    // stops auto logout timer and reset auto logout state
+    return (dispatch) => {
+        dispatch(removeTimeout(UPDATE_AUTOLOGOUT_TIMER));
+        dispatch(_updateAutoLogoutTimer(null));
+    }
 }
