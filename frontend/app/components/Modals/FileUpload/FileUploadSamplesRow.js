@@ -76,7 +76,7 @@ export default class FileUploadSamplesRow extends Component {
                 options={selectOptions}
                 clearable={false}
                 value="one"
-                onChange={(e) => this.props.onUpdateSampleValue(field.id, e.target.value)}
+                onChange={(e) => this.props.onUpdateSampleValue(field.id, e.value)}
             />
             </dd>
             </dl>
@@ -92,7 +92,7 @@ export default class FileUploadSamplesRow extends Component {
                 type="text"
                 className="form-control"
                 value={values[field.id] && values[field.id].values}
-                onChange={(e) => this.props.onUpdateSampleValue(field.id, e.target.value)}
+                onChange={(e) => this.props.onUpdateSampleValue(field.id, e.value)}
             />
             </dd>
             </dl>
