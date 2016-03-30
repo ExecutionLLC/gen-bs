@@ -154,7 +154,7 @@ function checkSession(sessionId, callback) {
     sessionsClient.checkSession(sessionId, (error, response) => {
         if (!error) {
             const isValidSession = response.status === HttpStatus.OK;
-            const isDemoSession = isValidSession ? response.sessionType === 'DEMO' : null;
+            const isDemoSession = isValidSession ? response.body.sessionType === 'DEMO' : false;
             callback(null, isValidSession, isDemoSession);
         } else {
             callback(error);
@@ -226,7 +226,7 @@ export function logout() {
         if (error || response.status !== HttpStatus.OK) {
             // We close session on the frontend and don't care about returned
             // status, becouse now it is problem of the web server
-            message = error || response.body;
+            const message = error || response.body;
             console.log('cannot close session', sessionId, message);
         } else {
             console.log('session closed', sessionId);
