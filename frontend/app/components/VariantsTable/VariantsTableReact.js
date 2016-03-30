@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 
 import { fetchVariants, searchInResults } from '../../actions/variantsTable'
@@ -43,9 +44,11 @@ class VariantsTableReact extends Component {
                     }
                     <table className="table table-striped table-variants header-fixed" id="variants_table"
                            ref="variantsTable">
-                        <VariantsTableHead variants={variants} fields={fields} {...this.props} />
+                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHead"/>
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} {...this.props} />
+                        <VariantsTableRows variants={variants} fields={fields} {...this.props}
+                                           xScrollListener={ (scrollLeft) => { this.tableXScrollListener(scrollLeft) } }
+                        />
                         }
                     </table>
                     { isVariantsEmpty &&
@@ -57,6 +60,14 @@ class VariantsTableReact extends Component {
             </div>
 
         )
+    }
+
+    tableXScrollListener(scrollLeft) {
+        const variantsTableHead = ReactDOM.findDOMNode(this.refs.variantsTableHead);
+        if (variantsTableHead) {
+            // we should move header manually, because "position" attribute of header equal "fixed"
+            variantsTableHead.scrollLeft = scrollLeft;
+        }
     }
 }
 
