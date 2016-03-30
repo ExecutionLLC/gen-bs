@@ -22,17 +22,13 @@ const SESSION_LOGOUT_WARNING_TIMEOUT = ENV.GEN_FRONTEND_SESSION_LOGOUT_WARNING_T
 const HEADER_SESSION = ENV.GEN_HEADER_SESSION || 'X-Session-Id';
 const HEADER_LANGUAGE = ENV.GEN_HEADER_LANGUAGE || 'X-Language-Id';
 
-const ENABLE_SOURCE_MAPS = ENV.GEN_FRONTEND_ENABLE_SOURCE_MAPS || false;
-const devtool = (ENABLE_SOURCE_MAPS) ? 'source-map' : '#eval';
-
-console.log(colors.bold('-> Source maps ' + (ENABLE_SOURCE_MAPS ? 'ENABLED!' : 'disabled.')));
 console.log(colors.bold('-> API host: ', API_HOST));
 console.log(colors.bold('-> API port: ', API_PORT));
 console.log('');
 
 module.exports = {
 
-    devtool,
+    devtool: '#eval',
 
     entry: [
         'webpack/hot/dev-server',
