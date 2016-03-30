@@ -75,8 +75,8 @@ export default class VariantsTableRows extends Component {
             this.props.dispatch(getNextPartOfData());
         }
 
-        if(this.props.horizontalScrollListener) {
-            this.props.horizontalScrollListener(el.scrollLeft);
+        if(this.props.xScrollListener) {
+            this.props.xScrollListener(el.scrollLeft);
         }
     }
 

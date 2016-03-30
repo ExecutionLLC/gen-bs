@@ -43,10 +43,10 @@ class VariantsTableReact extends Component {
                     }
                     <table className="table table-striped table-variants header-fixed" id="variants_table"
                            ref="variantsTable">
-                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHeader"/>
+                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHead"/>
                         { !isVariantsEmpty &&
                         <VariantsTableRows variants={variants} fields={fields} {...this.props}
-                                           horizontalScrollListener={ (deltaX) => { this.rowsHorizontalScrollListener(deltaX) } }
+                                           xScrollListener={ (scrollLeft) => { this.tableXScrollListener(scrollLeft) } }
                         />
                         }
                     </table>
@@ -61,11 +61,11 @@ class VariantsTableReact extends Component {
         )
     }
 
-    rowsHorizontalScrollListener(deltaX) {
-        console.log('rowsHorizontalScrollListener', deltaX);
-        const variantsTableHeader = React.findDOMNode(this.refs.variantsTableHeader);
-        if (variantsTableHeader) {
-            variantsTableHeader.scrollLeft = deltaX;
+    tableXScrollListener(scrollLeft) {
+        const variantsTableHead = React.findDOMNode(this.refs.variantsTableHead);
+        if (variantsTableHead) {
+            // we should move header manually, because "position" attribute of header equal "fixed"
+            variantsTableHead.scrollLeft = scrollLeft;
         }
     }
 }
