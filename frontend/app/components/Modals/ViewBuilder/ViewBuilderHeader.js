@@ -9,7 +9,7 @@ export default class ViewBuilderHeader extends Component {
 
           <Modal.Header closeButton>
             <Modal.Title data-localize="views.heading">
-              Setup views
+              Setup Views
             </Modal.Title>
           </Modal.Header>
 

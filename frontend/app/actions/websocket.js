@@ -1,4 +1,4 @@
-import { initSearchInResultsParams, receiveSearchedResults } from './variantsTable'
+import { receiveSearchedResults } from './variantsTable'
 import { changeFileUploadProgress, fileUploadError } from './fileUpload'
 /*
  * action types
@@ -16,6 +16,10 @@ export const WS_OTHER_MESSAGE = 'WS_OTHER_MESSAGE';
 export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
+export const WS_ADD_COMMENT = 'WS_ADD_COMMENT';
+export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT';
+export const WS_DELETE_COMMENT='WS_DELETE_COMMENT';
+export const REQUEST_CHANGE_VIEW='REQUEST_CHANGE_VIEW';
 
 
 /*
@@ -26,6 +30,28 @@ export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 /*
  * action creators
  */
+
+export  function addComment(commentData){
+    return {
+        type: WS_ADD_COMMENT,
+        commentData
+    }
+}
+
+export  function changeComment(commentData){
+    return {
+        type: WS_UPDATE_COMMENT,
+        commentData
+    }
+}
+
+export  function deleteComment(commentData,search_key){
+    return {
+        type: WS_DELETE_COMMENT,
+        commentData,
+        search_key
+    }
+}
 export function clearVariants() {
     return {
         type: WS_CLEAR_VARIANTS
@@ -48,10 +74,10 @@ function tableMessage(wsData) {
 
 function progressMessageRouter(wsData) {
     return (dispatch, getState) => {
-        dispatch(progressMessage(wsData))
+        dispatch(progressMessage(wsData));
 
         if (getState().fileUpload.operationId === wsData.operation_id) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status))
+            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
         }
     }
 }
@@ -158,5 +184,12 @@ export function requestAnalyze(searchParams) {
     return {
         type: REQUEST_ANALYZE,
         searchParams
+    };
+}
+
+export function requestChangeView(view) {
+    return {
+        type: REQUEST_CHANGE_VIEW,
+        view
     };
 }

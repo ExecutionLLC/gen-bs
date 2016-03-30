@@ -178,14 +178,15 @@ class CommentsModel extends SecureModelBase {
         let query = knex
             .select()
             .from(this.baseTableName)
-            .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id');
+            .innerJoin('comment_text', 'comment_text.comment_id', this.baseTableName + '.id')
+            .where('is_deleted', false);
         if (userId) {
             query = query
-                .where('creator', userId);
+                .andWhere('creator', userId);
         }
         if (languId) {
             query = query
-                .where('comment_text.langu_id', languId);
+                .andWhere('comment_text.langu_id', languId);
         }
         return query;
     }

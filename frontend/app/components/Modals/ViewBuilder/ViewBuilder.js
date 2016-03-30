@@ -17,7 +17,7 @@ export default class ViewBuilder extends Component {
 
         const previouslySelectedFieldIds = view.view_list_items.map(viewItem => viewItem.field_id);
         const isDisableEditing = view.type !== 'user';
-        const allAvailableFields = fields.list.concat(fields.sourceFieldsList);
+        const allAvailableFields = fields.sampleFieldsList.concat(fields.sourceFieldsList);
         // Exclude editable fields and fields that are already selected.
         const fieldsForSelection = _.filter(allAvailableFields, field => !field.is_editable
             && !_.includes(previouslySelectedFieldIds, field.id));
@@ -76,7 +76,7 @@ export default class ViewBuilder extends Component {
                                 onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
                             className="fa fa-lg fa-minus-circle"></i></button>
                         <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index)) }><i
+                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
                             className="fa fa-lg fa-plus-circle"></i></button>
                     </div>
                 </div>

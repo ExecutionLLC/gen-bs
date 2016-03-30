@@ -1,5 +1,5 @@
 import config from '../../config'
-import { requestAnalyze, clearVariants } from './websocket'
+import {requestAnalyze, clearVariants, addComment, changeComment, deleteComment} from './websocket'
 
 /*
  * action types
@@ -71,7 +71,7 @@ export function changeVariantsFilter(fieldId, filterValue) {
 
 export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     return (dispatch, getState) => {
-        dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2:1, sortDirection));
+        dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2 : 1, sortDirection));
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
@@ -99,6 +99,85 @@ function receiveVariants(json) {
         type: RECEIVE_VARIANTS,
         operationId: json.operation_id,
         receivedAt: Date.now()
+    }
+}
+
+
+export function createComment(alt, pos, ref, chrom, searchKey, comment) {
+
+    return (dispatch, getState) => {
+
+        const commentObject = {
+            alt,
+            pos,
+            'reference': ref,
+            chrom,
+            searchKey,
+            comment
+        };
+
+        $.ajax(config.URLS.COMMENTS, {
+                'data': JSON.stringify(commentObject),
+                'type': 'POST',
+                'processData': false,
+                'contentType': 'application/json'
+            })
+            .fail(json => {
+                console.log('createComment fail', json)
+            })
+            .then(json=> {
+                dispatch(addComment(json))
+            })
+
+    }
+}
+
+export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
+
+    return (dispatch, getState) => {
+
+        const commentObject = {
+            id,
+            alt,
+            pos,
+            'reference': ref,
+            chrom,
+            searchKey,
+            comment
+        };
+        $.ajax(`${config.URLS.COMMENTS}/${id}`, {
+                'data': JSON.stringify(commentObject),
+                'type': 'PUT',
+                'processData': false,
+                'contentType': 'application/json'
+            })
+            .fail(json => {
+                console.log('createComment fail', json)
+            })
+            .then(json => {
+                dispatch(changeComment(json))
+            })
+
+    }
+}
+
+export function removeComment(id, search_key) {
+
+    return (dispatch, getState) => {
+
+        $.ajax(`${config.URLS.COMMENTS}/${id}`, {
+                'type': 'DELETE',
+                'processData': false,
+                'contentType': 'application/json'
+            })
+            .fail(json => {
+                console.log('createComment fail', json)
+            })
+            .then(json=> {
+                console.log('createComment sucess', json)
+                dispatch(deleteComment(json, search_key))
+            })
+
     }
 }
 
@@ -160,10 +239,10 @@ export function searchInResultsNextData() {
         const state = getState();
         const {offset, limit} = state.variantsTable.searchInResultsParams;
         $.ajax(config.URLS.SEARCH_IN_RESULTS(state.variantsTable.operationId), {
-            data: {limit, offset},
-            type: 'GET',
-            processData: true,
-            contentType: 'application/json'
+                data: {limit, offset},
+                type: 'GET',
+                processData: true,
+                contentType: 'application/json'
             })
             .fail(json => {
                 console.log('search fail', json);

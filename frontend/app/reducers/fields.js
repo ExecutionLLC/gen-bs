@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actions/fields'
 
-function updateFieldsSamples(field) {
-    // patch field because some properties may not exists
+// Patch field label because it may not exist
+function updateFieldLabelIfNeeded(field) {
     return Object.assign({}, field, {
         label: field.label ? field.label : field.name
     });
@@ -9,8 +9,10 @@ function updateFieldsSamples(field) {
 
 export default function fields(state = {
     isFetching: {samples: false, sources: false},
-    list: [],
-    sourceFieldsList: []
+    sampleFieldsList: [],
+    sourceFieldsList: [],
+    totalFieldsList:[],
+    notEditableFields:[],
 }, action) {
 
     switch (action.type) {
@@ -23,8 +25,9 @@ export default function fields(state = {
             });
 
         case ActionTypes.RECEIVE_FIELDS:
-            const fields = action.fields.map(updateFieldsSamples);
+            const fields = action.fields.map(updateFieldLabelIfNeeded);
             const editableFields = _.filter(fields, 'is_editable', true);
+            const notEditableSampleFields = _.filter(fields, 'is_editable', false);
             const idToFieldHash = _.reduce(fields, (result, field) => {
                 result[field.id] = field;
                 return result;
@@ -33,25 +36,28 @@ export default function fields(state = {
                 isFetching: Object.assign({}, state.isFetching, {
                     samples: false
                 }),
-                list: fields,
+                sampleFieldsList: fields,
                 editableFields,
+                notEditableFields:notEditableSampleFields,
                 idToFieldHash,
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.REQUEST_SOURCE_FIELDS:
+        case ActionTypes.REQUEST_TOTAL_FIELDS:
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: true
                 })
             });
 
-        case ActionTypes.RECEIVE_SOURCE_FIELDS:
-            let sourceFields = action.sourceFields.map(updateFieldsSamples);
+        case ActionTypes.RECEIVE_TOTAL_FIELDS:
+            let totalFields = action.fields.map(updateFieldLabelIfNeeded);
+            let sourceFields = _.filter(totalFields, (field) => field.source_name !== 'sample');
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: false
                 }),
+                totalFieldsList:totalFields,
                 sourceFieldsList: sourceFields,
                 lastUpdated: action.receivedAt
             });

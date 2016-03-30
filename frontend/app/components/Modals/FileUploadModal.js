@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 
 import { fetchFields } from '../../actions/fields';
@@ -7,7 +7,7 @@ import { fetchFields } from '../../actions/fields';
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadFooter from './FileUpload/FileUploadFooter';
 import FileUpload from './FileUpload/FileUpload';
-import FileUploadSamples from './FileUpload/FileUploadSamples'
+import FileUploadSamples from './FileUpload/FileUploadSamples';
 
 class FileUploadModal extends Component {
     render() {
@@ -30,7 +30,7 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth,ui, fileUpload, userData: { samples }, fields: { list, editableFields } } = state;
+    const { auth, ui, fileUpload, userData: { samples }, fields: { list, editableFields } } = state;
 
     return {
         auth,
@@ -42,4 +42,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(FileUploadModal)
-
