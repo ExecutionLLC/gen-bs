@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap';
 
-import { viewBuilderSelectView } from '../../actions/viewBuilder'
-import { viewBuilderChangeColumn } from '../../actions/viewBuilder'
-
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader'
 import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter'
 import NewViewInputs from './ViewBuilder/NewViewInputs'
@@ -16,10 +13,8 @@ class ViewsModal extends Component {
 
     render() {
 
-        const { dispatch, showModal, closeModal } = this.props
-        const { currentSample, currentView } = this.props.ui
-        const { samples, views, isValid } = this.props.userData
-        const { editOrNew, editedView, newView } = this.props.viewBuilder
+        const { views, isValid } = this.props.userData;
+        const { editOrNew } = this.props.viewBuilder;
 
         return (
 
@@ -66,7 +61,7 @@ class ViewsModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { viewBuilder, ui, auth, userData, fields } = state
+    const { viewBuilder, ui, auth, userData, fields } = state;
 
     return {
         userData,

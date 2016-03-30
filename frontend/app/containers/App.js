@@ -14,6 +14,7 @@ import FiltersModal from '../components/Modals/FiltersModal';
 import FileUploadModal from '../components/Modals/FileUploadModal';
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
+import SavedFilesModal from '../components/Modals/SavedFilesModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
@@ -90,6 +91,10 @@ class App extends Component {
                 <FileUploadModal
                     showModal={this.props.modalWindows.upload.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+                />
+                <SavedFilesModal
+                    showModal={true}
+                    closeModal={ (modalName) => this.props.dispatch(closeModal(modalName)) }
                 />
             </div>
         )
