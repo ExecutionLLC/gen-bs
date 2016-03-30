@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 
 import { fetchVariants, searchInResults } from '../../actions/variantsTable'
@@ -62,7 +63,7 @@ class VariantsTableReact extends Component {
     }
 
     tableXScrollListener(scrollLeft) {
-        const variantsTableHead = React.findDOMNode(this.refs.variantsTableHead);
+        const variantsTableHead = ReactDOM.findDOMNode(this.refs.variantsTableHead);
         if (variantsTableHead) {
             // we should move header manually, because "position" attribute of header equal "fixed"
             variantsTableHead.scrollLeft = scrollLeft;
