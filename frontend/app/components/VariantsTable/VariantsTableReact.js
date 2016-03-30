@@ -43,9 +43,11 @@ class VariantsTableReact extends Component {
                     }
                     <table className="table table-striped table-variants header-fixed" id="variants_table"
                            ref="variantsTable">
-                        <VariantsTableHead variants={variants} fields={fields} {...this.props} />
+                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHeader"/>
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} {...this.props} />
+                        <VariantsTableRows variants={variants} fields={fields} {...this.props}
+                                           horizontalScrollListener={ (deltaX) => { this.rowsHorizontalScrollListener(deltaX) } }
+                        />
                         }
                     </table>
                     { isVariantsEmpty &&
@@ -57,6 +59,14 @@ class VariantsTableReact extends Component {
             </div>
 
         )
+    }
+
+    rowsHorizontalScrollListener(deltaX) {
+        console.log('rowsHorizontalScrollListener', deltaX);
+        const variantsTableHeader = React.findDOMNode(this.refs.variantsTableHeader);
+        if (variantsTableHeader) {
+            variantsTableHeader.scrollLeft = deltaX;
+        }
     }
 }
 

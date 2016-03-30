@@ -63,7 +63,6 @@ export default class VariantsTableRows extends Component {
     }
 
     handleScroll(e) {
-        //console.log('scroll', e);
         const { currentVariants } = this.props.ws;
         if (!currentVariants) {
             return;
@@ -74,6 +73,10 @@ export default class VariantsTableRows extends Component {
         if (el.scrollHeight - el.scrollTop === el.clientHeight
             && variantsLength > this.props.variantsTable.searchInResultsParams.limit - 1) {
             this.props.dispatch(getNextPartOfData());
+        }
+
+        if(this.props.horizontalScrollListener) {
+            this.props.horizontalScrollListener(el.scrollLeft);
         }
     }
 
