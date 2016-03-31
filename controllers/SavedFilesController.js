@@ -35,11 +35,13 @@ class SavedFilesController extends UserEntityControllerBase {
             // File metadata should lay in the request body.
             (callback) => this.getRequestBody(request, callback),
             // The file itself should be downloaded locally. Create read stream for it.
-            (fileMetadata, callback) => {
-                if (!fileMetadata.file) {
+            (body, callback) => {
+                const fileMetadata = body.metadata;
+                const file = body.file;
+                if (!file) {
                     callback(new Error('No file body is found.'));
                 } else {
-                    const filePath = fileMetadata.file.value.path;
+                    const filePath = file.value.path;
                     const fileStream = fs.createReadStream(filePath);
                     callback(null, fileMetadata, fileStream);
                 }
