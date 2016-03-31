@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 
 
 export default class NavbarSearch extends Component {
@@ -10,6 +11,7 @@ export default class NavbarSearch extends Component {
     }
 
     render() {
+        const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
         return (
             <div className="navbar-search">
                 <div className="navbar-search-field width">
@@ -22,6 +24,7 @@ export default class NavbarSearch extends Component {
                      onChange={(e) => this.onGlobalSearchInputChanged(e)}
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={(e) => this.onGlobalSearchInputBlur()}
+                     disabled={!isEnabled}
                     />
                 </div>
             </div>
@@ -50,7 +53,16 @@ export default class NavbarSearch extends Component {
     }
 }
 
+function mapStateToProps(state) {
+    const { websocket: {isVariantsLoading, isVariantsValid} } = state;
+    return { isVariantsLoading, isVariantsValid };
+}
+
+export default connect(mapStateToProps)(NavbarSearch);
+
 NavbarSearch.propTypes = {
+    isVariantsLoading: React.PropTypes.bool.isRequired,
+    isVariantsValid: React.PropTypes.bool.isRequired,
     // callback(globalSearchString)
     onGlobalSearchRequested: React.PropTypes.func.isRequired,
     // callback(globalSearchString)
