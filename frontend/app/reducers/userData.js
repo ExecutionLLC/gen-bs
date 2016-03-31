@@ -4,7 +4,6 @@ export default function userData(state = {
     isFetching: false,
     isValid: false,
     profileMetadata: {},
-    samples: [],
     filters: [],
     views: [],
     samples: []
@@ -26,7 +25,6 @@ export default function userData(state = {
                 samples: action.userData.samples,
                 filters: action.userData.filters,
                 views: action.userData.views,
-                savedFiles: action.userData.savedFiles,
 
                 lastUpdated: action.receivedAt
             });

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Nav, NavDropdown, MenuItem} from 'react-bootstrap';
 
-import ExportUtils from '../../../utils/exportUtils';
+import {exportToFile} from '../../../actions/savedFiles';
 
 export default class ExportDropdown extends Component {
 
@@ -16,6 +16,7 @@ export default class ExportDropdown extends Component {
                 <Nav>
                     <NavDropdown title={exportDropdownTitle}
                                  id="export-dropdown"
+                                 className="btn navbar-btn"
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
 
                     >
@@ -42,44 +43,21 @@ export default class ExportDropdown extends Component {
     onExportItemSelected(event, selectedKey) {
         event.preventDefault();
 
-        const {selectedSearchKeysToVariants, currentView} = this.props;
+        const {
+            dispatch,
+            selectedSearchKeysToVariants
+        } = this.props;
+
         if (_.isEmpty(selectedSearchKeysToVariants)) {
-            console.error('No rows selected for export.');
-            return;
-        }
-        if (!currentView) {
-            console.error('No current view is specified.');
+            console.log('Nothing is selected for export.');
             return;
         }
 
-        // TODO: get fields and map field id to field name.
-        const columns = _.map(currentView.view_list_items, listItem => {
-            return {
-                id: listItem.field_id,
-                name: 'Column' + listItem.field_id
-            }
-        });
-
-        // The export data should be array of objects in {field_id -> field_value} format.
-        const dataToExport = _(selectedSearchKeysToVariants)
-            .sortBy(item => item.rowIndex)
-            .map(item => item.row.fieldsHash)
-            .value();
-
-        const exporter = ExportUtils.createExporter(selectedKey);
-        if (!exporter) {
-            console.error('No exporter of type "' + selectedKey + '" is found');
-            return;
-        }
-
-        const blob = exporter.build(columns, dataToExport);
-        
-        // TODO: Use current sample name here.
-        ExportUtils.downloadBlob(blob, `Genom-${new Date()}.${selectedKey}`);
+        dispatch(exportToFile(selectedKey));
     }
 }
 
 ExportDropdown.propTypes = {
-    selectedSearchKeysToVariants: React.PropTypes.object.isRequired,
-    currentView: React.PropTypes.object.isRequired
+    dispatch: React.PropTypes.func.isRequired,
+    selectedSearchKeysToVariants: React.PropTypes.object.isRequired
 };

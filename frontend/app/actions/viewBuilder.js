@@ -96,8 +96,8 @@ export function viewBuilderUpdateView(viewItemIndex) {
         if (currState.auth.isDemo ||
             currState.viewBuilder.currentView.type == 'advanced' ||
             currState.viewBuilder.currentView.type == 'standard') {
-            dispatch(closeModal('views'))
-            dispatch(fetchViews(currState.viewBuilder.currentView.id))
+            dispatch(closeModal('views'));
+            dispatch(fetchViews());
         } else {
 
             return $.ajax(`${config.URLS.VIEWS}/${currState.viewBuilder.editedView.id}`, {
@@ -110,7 +110,7 @@ export function viewBuilderUpdateView(viewItemIndex) {
                 .done(json => {
                     dispatch(viewBuilderReceiveUpdateView(json));
                     dispatch(closeModal('views'));
-                    dispatch(fetchViews(json.id));
+                    dispatch(fetchViews());
                 })
                 .fail(err => {
                     console.error('UPDATE View FAILED: ', err.responseText);
@@ -134,7 +134,7 @@ export function viewBuilderCreateView(viewItemIndex) {
             .done(json => {
                 dispatch(viewBuilderReceiveCreateView(json));
                 dispatch(closeModal('views'));
-                dispatch(fetchViews(json.id));
+                dispatch(fetchViews());
             })
             .fail(err => {
                 console.error('CREATE View FAILED: ', err.responseText)

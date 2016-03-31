@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
 import DialogBase from './DialogBase';
+import {closeSavedFilesDialog} from '../../actions/savedFiles';
 
 class SavedFilesModal extends DialogBase {
     constructor(props) {
@@ -19,9 +20,9 @@ class SavedFilesModal extends DialogBase {
         const haveSavedFiles = !_.isEmpty(savedFiles);
         if (haveSavedFiles) {
             return (
-                <div>
+                <table>
                     {_.map(savedFiles, savedFile => this.renderSavedFileRow(savedFile))}
-                </div>
+                </table>
             );
         } else {
             return (
@@ -33,11 +34,10 @@ class SavedFilesModal extends DialogBase {
     renderFooterContents() {
         return (
             <button
-                onClick={ () => {this.props.closeModal('savedFiles')} }
+                onClick={ () => this.onCloseModal() }
                 type="button"
                 className="btn btn-default"
                 data-dismiss="modal"
-                localize-data="action.extendSession"
             >
                 <span>Okay</span>
             </button>
@@ -46,16 +46,20 @@ class SavedFilesModal extends DialogBase {
 
     renderSavedFileRow(savedFile) {
         return (
-            <div>Saved file row goes here.</div>
+            <tr>
+                <td>{savedFile.file_name}</td>
+            </tr>
         );
+    }
+
+    onCloseModal() {
+        const {dispatch} = this.props;
+        dispatch(closeSavedFilesDialog());
     }
 }
 
 SavedFilesModal.propTypes = {
-    savedFiles: React.PropTypes.array.isRequired,
-    showModal: React.PropTypes.bool.isRequired,
-    // callback ('savedFiles')
-    closeModal: React.PropTypes.func.isRequired
+    showModal: React.PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {

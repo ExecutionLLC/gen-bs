@@ -1,6 +1,7 @@
 import config from '../../config'
 import { analyze, changeSample, changeView, changeFilter } from './ui'
 import { fetchFields, fetchSourceFields } from './fields'
+import { receiveSavedFilesList } from './savedFiles';
 
 /*
  * action types
@@ -50,16 +51,14 @@ export function fetchUserdata() {
                 const sampleId = json.samples.length ? json.samples[json.samples.length - 1].id : null;
                 const filter = json.filters[0] || null;
                 dispatch(receiveUserdata(json));
+                dispatch(receiveSavedFilesList(json.savedFiles));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
                 dispatch(changeSample(json.samples, sampleId));
                 dispatch(analyze(sampleId, view.id, filter.id));
                 dispatch(fetchFields(sampleId));
                 dispatch(fetchSourceFields())
-            })
-
-        // TODO:
-        // catch any error in the network call.
+            });
     }
 }
 
@@ -77,7 +76,7 @@ function receiveViews(json) {
     }
 }
 
-export function fetchViews(viewId) {
+export function fetchViews() {
 
     return function (dispatch, getState) {
         dispatch(requestViews());
@@ -93,9 +92,6 @@ export function fetchViews(viewId) {
                 dispatch(receiveViews(json));
                 dispatch(changeView(viewId))
             });
-
-        // TODO:
-        // catch any error in the network call.
     }
 }
 
@@ -113,7 +109,7 @@ function receiveFilters(json) {
     }
 }
 
-export function fetchFilters(filterId) {
+export function fetchFilters() {
 
     return function (dispatch, getState) {
         dispatch(requestFilters());

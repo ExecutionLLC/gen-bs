@@ -19,7 +19,7 @@ class NavbarMain extends Component {
     }
 
     render() {
-        const { dispatch, ui: {currentView}, ws, variantsTable: {selectedSearchKeysToVariants} } = this.props;
+        const { dispatch, variantsTable: {selectedSearchKeysToVariants} } = this.props;
         return (
 
             <nav className="navbar navbar-inverse navbar-fixed-top navbar-main">
@@ -32,10 +32,10 @@ class NavbarMain extends Component {
 
                     <CreateQueryNavbarButton toggleQueryNavbar={ () => { dispatch(toggleQueryNavbar()) } }/>
                     <NavbarSearch />
-                    <ExportDropdown selectedSearchKeysToVariants={selectedSearchKeysToVariants}
-                                    currentView={currentView}
+                    <ExportDropdown dispatch={this.props.dispatch}
+                                    selectedSearchKeysToVariants={selectedSearchKeysToVariants}
                     />
-                    <SavedFiles />
+                    <SavedFiles dispatch={this.props.dispatch} />
                     <Language />
                     <Buy />
                     <Auth {...this.props} />

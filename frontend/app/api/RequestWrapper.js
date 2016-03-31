@@ -6,11 +6,18 @@ import ChangeCaseUtil from '../utils/ChangeCaseUtil';
 
 export default class RequestWrapper {
     static post(url, headers, bodyObject, callback) {
-        Request.post({
+        const options = {
             url,
-            headers,
-            json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
-        }, RequestWrapper._createResponseConverter(callback));
+            headers
+        };
+
+        if (bodyObject && bodyObject.constructor === FormData) {
+            options.form = bodyObject;
+        } else {
+            options.json = ChangeCaseUtil.convertKeysToSnakeCase(bodyObject);
+        }
+
+        Request.post(options, RequestWrapper._createResponseConverter(callback));
     }
 
     static get(url, headers, queryParams, bodyObject, callback) {

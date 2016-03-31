@@ -10,7 +10,7 @@ export default class CsvExporter {
      * @param columnsArray Array of objects, each has {id, name}
      * @param data Array of objects, each has {columnId, value}
      * */
-    build(columnsArray, data) {
+    buildBlob(columnsArray, data) {
         const columns = _.map(columnsArray, col => col.name);
         const headerRow = this._createRow(columns);
         const rows = _.map(data, row => {

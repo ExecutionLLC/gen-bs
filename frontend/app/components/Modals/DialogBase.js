@@ -4,8 +4,6 @@ import { Modal } from 'react-bootstrap';
 export default class DialogBase extends Component {
     constructor(props, dialogName) {
         super(props);
-
-        this.dialogName = dialogName;
     }
 
     renderTitleContents() {
@@ -23,13 +21,13 @@ export default class DialogBase extends Component {
     renderFooterContents() {
         return (
             <button
-                onClick={ () => {this.props.closeModal(this.dialogName)} }
+                onClick={ () => {this.onCloseModal()} }
                 type="button"
                 className="btn btn-default"
                 data-dismiss="modal"
                 localize-data="action.extendSession"
             >
-                <span>Okay</span>
+                <span>Ok</span>
             </button>
         );
     }
@@ -60,12 +58,16 @@ export default class DialogBase extends Component {
         );
     }
 
+    onCloseModal() {
+        console.error('The method should be overridden');
+    }
+
     render() {
         return (
             <Modal dialogClassName="modal-dialog-primary"
                    bsSize="lg"
                    show={this.props.showModal}
-                   onHide={ () => {this.props.closeModal(this.dialogName)} }
+                   onHide={ () => {this.onCloseModal()} }
             >
                 {this.renderHeader()}
                 {this.renderBody()}
@@ -77,7 +79,5 @@ export default class DialogBase extends Component {
 
 DialogBase.propTypes = {
     savedFiles: React.PropTypes.array.isRequired,
-    showModal: React.PropTypes.bool.isRequired,
-    // callback (dialogName)
-    closeModal: React.PropTypes.func.isRequired
+    showModal: React.PropTypes.bool.isRequired
 };
