@@ -12,11 +12,9 @@ export default function variantsTable(state = {
     scrollPos: 0,
     needUpdate: false,
     isNextDataLoading: false,
-    isFilteringOrSorting: false,
-
+    isFilteringOrSorting: false
 }, action) {
     switch (action.type) {
-
 
         case ActionTypes.CLEAR_SEARCH_PARAMS:
             return Object.assign({}, state, {
@@ -27,20 +25,34 @@ export default function variantsTable(state = {
                     offset: 0,
                     top_search: ''
                 }
-            })
+            });
 
         case ActionTypes.INIT_SEARCH_IN_RESULTS_PARAMS:
             return Object.assign({}, state, {
                 searchInResultsParams: action.searchInResultsParams
-            })
+            });
 
         case ActionTypes.CHANGE_VARIANTS_LIMIT:
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
                 })
-            })
+            });
 
+        case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
+            const currentGlobalSearchString = state.searchInResultsParams.top_search;
+            if (currentGlobalSearchString === action.globalSearchString) {
+                return state;
+            }
+            return Object.assign({}, state, {
+                searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+                    top_search: action.globalSearchString,
+                    limit: 100,
+                    offset: 0
+                }),
+                needUpdate: true
+            });
+        }
         case ActionTypes.CHANGE_VARIANTS_FILTER: {
             // copy search array
             var searchArray = [...state.searchInResultsParams.search];
@@ -48,20 +60,20 @@ export default function variantsTable(state = {
 
             if (action.filterValue !== '') {
                 if (fieldIndex !== -1) {
-                    const currentFilterValue = searchArray[fieldIndex].value
+                    const currentFilterValue = searchArray[fieldIndex].value;
                     if (currentFilterValue === action.filterValue) {
                         // filter value is the same
-                        return state
+                        return state;
                     }
                     // update current filter
-                    searchArray[fieldIndex].value = action.filterValue
+                    searchArray[fieldIndex].value = action.filterValue;
                 } else {
                     // it is new filter
-                    searchArray.push({field_id: action.fieldId, value: action.filterValue})
+                    searchArray.push({field_id: action.fieldId, value: action.filterValue});
                 }
             } else {
                 // filter value is empty, so we should remove filter
-                searchArray.splice(fieldIndex, 1)
+                searchArray.splice(fieldIndex, 1);
             }
 
             return Object.assign({}, state, {
@@ -71,7 +83,7 @@ export default function variantsTable(state = {
                     offset: 0
                 }),
                 needUpdate: true
-            })
+            });
         }
         case ActionTypes.CHANGE_VARIANTS_SORT: {
             // copy sort array
@@ -80,7 +92,7 @@ export default function variantsTable(state = {
 
             if (fieldIndex === -1) {
                 // it is new column for sorting
-                const newItem = {field_id: action.fieldId, direction: action.sortDirection }
+                const newItem = {field_id: action.fieldId, direction: action.sortDirection };
                 if (sortArray.length < action.sortOrder) {
                     // put new item to the end of array
                     fieldIndex = sortArray.length;
@@ -90,7 +102,7 @@ export default function variantsTable(state = {
                     // remove sorting with higer order
                     // NOTE: if you want to save state of the sorting with higher order, then
                     // just remove next line  
-                    sortArray = sortArray.slice(0, fieldIndex)
+                    sortArray = sortArray.slice(0, fieldIndex);
                 }
                 sortArray[fieldIndex] = newItem;
             } else {
@@ -123,7 +135,7 @@ export default function variantsTable(state = {
                     offset: 0
                 }),
                 needUpdate: true
-            })
+            });
         }
         case ActionTypes.REQUEST_VARIANTS:
             return Object.assign({}, state, {
@@ -143,7 +155,7 @@ export default function variantsTable(state = {
                 isFilteringOrSorting: action.isFilteringOrSorting,
                 isFetching: true,
                 needUpdate: false
-            })
+            });
 
         case ActionTypes.RECEIVE_SEARCHED_RESULTS:
             return Object.assign({}, state, {
@@ -151,7 +163,7 @@ export default function variantsTable(state = {
                 isFilteringOrSorting: false,
                 isFetching: false,
                 lastUpdated: action.receivedAt
-            })
+            });
 
         case ActionTypes.SELECT_VARIANTS_ROW:
             return Object.assign({}, state, {
@@ -165,6 +177,6 @@ export default function variantsTable(state = {
             });
 
         default:
-            return state
+            return state;
     }
 }
