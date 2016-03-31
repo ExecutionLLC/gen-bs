@@ -29,8 +29,8 @@ class SearchController extends ControllerBase {
                 const filterId = body.filterId;
                 const limit = body.limit;
                 const offset = body.offset;
-                const queryHistory = this._createQueryHistory(sampleId, viewId, [filterId]);
                 if (!this.services.users.isDemoUserId(user.id)) {
+                    const queryHistory = SearchController._createQueryHistory(sampleId, viewId, [filterId]);
                     this.services.queryHistory.add(
                         user,
                         languageId,
@@ -56,12 +56,12 @@ class SearchController extends ControllerBase {
         });
     }
 
-    _createQueryHistory(sampleId, viewId, filters) {
+    static _createQueryHistory(sampleId, viewId, filterIds) {
         return {
             vcfFileSampleVersionId: sampleId,
             viewId: viewId,
             totalResults: 0,
-            filters: filters
+            filters: filterIds
         }
     }
 
