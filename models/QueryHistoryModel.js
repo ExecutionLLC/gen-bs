@@ -13,96 +13,58 @@ const mappedColumns = [
     'totalResults'
 ];
 
+const QueryHistoryTableNames = {
+    QueryHistory: 'query_history',
+    Filters: 'query_history_filter'
+};
+
 class QueryHistoryModel extends SecureModelBase {
+
     constructor(models) {
-        super(models, 'query_history', mappedColumns);
+        super(models, QueryHistoryTableNames.QueryHistory, mappedColumns);
     }
 
-    // Собирает все comments для текущего пользователя
-    findAll(userId, callback) {
+    _add(userId, languageId, query, shouldGenerateId, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._addInTransaction(userId, query, shouldGenerateId, trx, callback);
+        }, callback);
+    }
+
+    _addInTransaction(userId, query, shouldGenerateId, trx, callback) {
         async.waterfall([
-            (callback) => this._fetchUserQueries(userId, callback),
-            (queries, callback) => this._mapItems(queries, callback)
+            (callback) => {
+                const dataToInsert = this._createDataToInsert(userId, query, shouldGenerateId);
+                this._insert(dataToInsert, trx, callback);
+            },
+            (queryHistoryId, callback) => {
+                _.forEach(query.filters, (filterId) => {
+                        this._addNewQueryHistoryFilter(queryHistoryId, filterId, trx, callback);
+                    }
+                );
+                callback(null, queryHistoryId);
+            }
         ], callback);
     }
 
-    findMany(userId, queryIds, callback) {
-        async.waterfall([
-            (callback) => { this._fetchQueries(queryIds, callback); },
-            (queries, callback) => this._ensureAllItemsFound(queries, queryIds, callback),
-            (queries, callback) => async.map(queries, (query, callback) => {
-                this._ensureItemNotDeleted(query, callback);
-            }, callback),
-            (queries, callback) => async.map(queries, (query, callback) => {
-                this._checkUserIsCorrect(userId, query, callback);
-            }, callback),
-            (queries, callback) => this._mapItems(queries, callback)
-        ], callback);
+    _addNewQueryHistoryFilter(queryHistoryId, filterId, trx, callback) {
+        const dataToInsert = {
+            queryHistoryId: queryHistoryId,
+            filterId: filterId
+        };
+        this._unsafeInsert(QueryHistoryTableNames.Filters, dataToInsert, trx, callback);
     }
 
-    // languId is used for interface compatibility
-    _add(userId, languId, query, shouldGenerateId, callback) {
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : query.id,
-                        creator: userId,
-                        viewId: query.viewId,
-                        vcfFileSampleVersionId: query.vcfFileSampleVersionId,
-                        totalResults: query.totalResults
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                }
-            ], callback);
-        }, callback);
+    _createDataToInsert(userId, query, shouldGenerateId) {
+        return {
+            id: shouldGenerateId ? this._generateId() : query.id,
+            creator: userId,
+            vcfFileSampleVersionId: query.vcfFileSampleVersionId,
+            viewId: query.viewId,
+            totalResults: query.totalResults
+        };
     }
 
-    _update(userId, query, queryToUpdate, callback) {
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToUpdate = {
-                        viewId: queryToUpdate.viewId,
-                        vcfFileSampleVersionId: queryToUpdate.vcfFileSampleVersionId,
-                        totalResults: queryToUpdate.totalResults
-                    };
-                    this._unsafeUpdate(query.id, dataToUpdate, trx, callback);
-                }
-            ], callback);
-        }, callback);
-    }
 
-    _fetchUserQueries(userId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .where('creator', userId)
-                .andWhere('is_deleted', false)
-                .asCallback((error, queriesData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(queriesData));
-                    }
-                });
-        }, callback);
-    }
-
-    _fetchQueries(queryIds, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .whereIn('id', queryIds)
-                .asCallback((error, queriesData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(queriesData));
-                    }
-                });
-        }, callback);
-    }
 }
 
 module.exports = QueryHistoryModel;

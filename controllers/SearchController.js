@@ -19,24 +19,50 @@ class SearchController extends ControllerBase {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
-            (body, callback) => {
+            (body, callback)=> {
                 const user = request.user;
                 const sessionId = request.sessionId;
-                const languId = request.languId;
+                const languageId = request.languId;
 
                 const sampleId = body.sampleId;
                 const viewId = body.viewId;
                 const filterId = body.filterId;
                 const limit = body.limit;
                 const offset = body.offset;
+                const queryHistory = this._createQueryHistory(sampleId, viewId, [filterId]);
+                if (!this.services.users.isDemoUserId(user.id)) {
+                    this.services.queryHistory.add(
+                        user,
+                        languageId,
+                        queryHistory,
+                        (error) => callback(error, user, sessionId, languageId,
+                            sampleId, viewId, filterId, limit, offset
+                        )
+                    );
+                } else {
+                    callback(null, user, sessionId, languageId,
+                        sampleId, viewId, filterId, limit, offset
+                    )
+                }
+            },
+            (user, sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) => {
 
                 this.services.search
-                    .sendSearchRequest(user, sessionId, languId,
+                    .sendSearchRequest(user, sessionId, languageId,
                         sampleId, viewId, filterId, limit, offset, callback);
             }
         ], (error, operationId) => {
             this.sendErrorOrJson(response, error, {operationId});
         });
+    }
+
+    _createQueryHistory(sampleId, viewId, filters) {
+        return {
+            vcfFileSampleVersionId: sampleId,
+            viewId: viewId,
+            totalResults: 0,
+            filters: filters
+        }
     }
 
     searchInResults(request, response) {
