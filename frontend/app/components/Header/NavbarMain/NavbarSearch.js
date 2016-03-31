@@ -49,3 +49,10 @@ export default class NavbarSearch extends Component {
         onGlobalSearchStringChanged(globalSearchString);
     }
 }
+
+NavbarSearch.propTypes = {
+    // callback(globalSearchString)
+    onGlobalSearchRequested: React.PropTypes.func.isRequired,
+    // callback(globalSearchString)
+    onGlobalSearchStringChanged: React.PropTypes.func.isRequired
+};
