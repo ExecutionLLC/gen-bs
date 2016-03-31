@@ -9,16 +9,16 @@ import VariantsTableReact from '../components/VariantsTable/VariantsTableReact';
 import NavbarMain from '../components/Header/NavbarMain';
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery';
 
-import ViewsModal from '../components/Modals/ViewsModal';
-import FiltersModal from '../components/Modals/FiltersModal';
-import FileUploadModal from '../components/Modals/FileUploadModal';
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
+import FiltersModal from '../components/Modals/FiltersModal';
+import FileUploadModal from '../components/Modals/FileUploadModal';
+import QueryHistoryModal from '../components/Modals/QueryHistoryModal'
+import ViewsModal from '../components/Modals/ViewsModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-import { fetchUserdata } from '../actions/userData';
 
 
 class App extends Component {
@@ -89,6 +89,10 @@ class App extends Component {
                 />
                 <FileUploadModal
                     showModal={this.props.modalWindows.upload.showModal}
+                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+                />
+                <QueryHistoryModal
+                    showModal={this.props.modalWindows.queryHistory.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
                 />
             </div>
