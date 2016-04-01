@@ -14,6 +14,7 @@ class SavedFilesService extends UserEntityServiceBase {
 
     add(user, languId, fileMetadata, fileStream, callback) {
         async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this._createAndUploadFile(user, languId, fileMetadata, fileStream, callback),
             (fileId, callback) => this.find(user, fileId, callback)
         ], callback);
@@ -21,6 +22,7 @@ class SavedFilesService extends UserEntityServiceBase {
 
     download(user, languId, fileId, callback) {
         async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.models.savedFiles.find(user.id, fileId, (error) => callback(error)),
             (callback) => callback(null, this._generateBucketKeyForFile(fileId)),
             (keyName, callback) => this.services.amazonS3.createObjectStream(this.amazonBucket, keyName, callback)
@@ -29,6 +31,7 @@ class SavedFilesService extends UserEntityServiceBase {
 
     find(user, savedFileId, callback) {
         async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => super.find(user, savedFileId, callback),
             (savedFile, callback) => this._loadAdditionalEntities(user, savedFile, callback)
         ], (error, savedFile) => callback(error, savedFile));
@@ -36,6 +39,7 @@ class SavedFilesService extends UserEntityServiceBase {
 
     findAll(user, callback) {
         async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => super.findAll(user, callback),
             (savedFiles, callback) => {
                 async.mapSeries(savedFiles, (savedFile, callback) => {
