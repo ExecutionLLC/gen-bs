@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
 import DialogBase from './DialogBase';
-import {closeSavedFilesDialog} from '../../actions/savedFiles';
+import {closeSavedFilesDialog, downloadSavedFile} from '../../actions/savedFiles';
 
 class SavedFilesModal extends DialogBase {
     constructor(props) {
@@ -21,7 +21,9 @@ class SavedFilesModal extends DialogBase {
         if (haveSavedFiles) {
             return (
                 <table>
+                    <tbody>
                     {_.map(savedFiles, savedFile => this.renderSavedFileRow(savedFile))}
+                    </tbody>
                 </table>
             );
         } else {
@@ -45,11 +47,30 @@ class SavedFilesModal extends DialogBase {
     }
 
     renderSavedFileRow(savedFile) {
+        const {name, filter, view, sample, timestamp} = savedFile;
         return (
             <tr>
-                <td>{savedFile.file_name}</td>
+                <td>{name}</td>
+                <td>{filter.name}</td>
+                <td>{view.name}</td>
+                <td>{sample.name}</td>
+                <td>{timestamp}</td>
+                <td>
+                    <button
+                        onClick={() => this.onDownloadClick(savedFile)}
+                        type="button"
+                        className="btn btn-default"
+                    >
+                        <span>Download</span>
+                    </button>
+                </td>
             </tr>
         );
+    }
+    
+    onDownloadClick(savedFile) {
+        const {dispatch} = this.props;
+        dispatch(downloadSavedFile(savedFile));
     }
 
     onCloseModal() {
@@ -63,10 +84,10 @@ SavedFilesModal.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { userData: {savedFiles} } = state;
+    const { savedFiles: {list} } = state;
 
     return {
-        savedFiles
+        savedFiles: list
     };
 }
 

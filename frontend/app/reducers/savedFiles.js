@@ -4,7 +4,7 @@ import ExportUtils from '../utils/exportUtils';
 
 export default function savedFiles(state = {
     showSavedFilesModal: false,
-    savedFiles: []
+    list: []
 }, action) {
     switch (action.type) {
         case ActionTypes.CREATE_EXPORT_DOWNLOAD: {
@@ -19,7 +19,7 @@ export default function savedFiles(state = {
             
         case ActionTypes.RECEIVE_SAVED_FILES_LIST: {
             return Object.assign({}, state, {
-                savedFiles: action.savedFilesList
+                list: action.savedFilesList
             });
         }
 
@@ -27,10 +27,16 @@ export default function savedFiles(state = {
             // Put newly added file to the beginning of the array.
             const {savedFiles} = state;
             const {savedFile} = action;
-            const newSavedFiles = [savedFile].concat(savedFiles.slice());
+            const newSavedFiles = [savedFile].concat((savedFiles || []).slice());
             return Object.assign({}, state, {
-                savedFiles: newSavedFiles
+                list: newSavedFiles
             });
+        }
+
+        case ActionTypes.SAVED_FILE_DOWNLOAD_RESULT_RECEIVED: {
+            const {savedFileBlob, fileName} = action;
+            ExportUtils.downloadBlob(savedFileBlob, fileName);
+            return state;
         }
 
         case ActionTypes.SHOW_SAVED_FILES_DIALOG: {

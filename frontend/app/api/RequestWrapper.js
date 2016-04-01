@@ -21,13 +21,31 @@ export default class RequestWrapper {
         RequestWrapper._prepareAndExecuteRequest(Request.del(url), headers, null, bodyObject, callback);
     }
 
+    static download(url, headers, queryParams, callback) {
+        let request = RequestWrapper._prepareRequest(Request.get(url), headers, queryParams, null);
+        request = request.responseType('blob');
+        RequestWrapper._sendRequest(request, (error, response) => {
+            if (error) {
+                callback(error);
+            } else {
+                const {status} = response;
+                const blob = response.response.xhr.response; // Hell yeah
+                callback(null, {
+                    status,
+                    blob,
+                    response
+                });
+            }
+        });
+    }
+
     static uploadMultipart(url, headers, queryParams, formObject, callback) {
         const request = RequestWrapper._prepareRequest(Request.post(url), headers, queryParams, null);
         const formFields = _.keys(formObject);
         _.each(formFields, fieldName => {
             const fieldValue = formObject[fieldName];
             if (fieldValue
-                && (fieldValue.constructor === Blob)) {
+                && (fieldValue instanceof Blob)) {
                 request.attach(fieldName, fieldValue);
             } else {
                 request.field(fieldName, fieldValue);
@@ -75,10 +93,14 @@ export default class RequestWrapper {
                     } catch (e) {
                         callback('Error parsing request body: ' + body);
                     }
+                } else if (body && body.constructor !== Blob) {
+                    body = ChangeCaseUtil.convertKeysToCamelCase(body);
                 }
+
                 callback(null, {
                     status,
-                    body: ChangeCaseUtil.convertKeysToCamelCase(body)
+                    body,
+                    response
                 });
             }
         };

@@ -1,9 +1,11 @@
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
+import {handleError} from './errorHandler';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';
 export const SAVED_FILE_UPLOAD_RESULT_RECEIVED = 'SAVED_FILE_UPLOAD_RESULT_RECEIVED';
+export const SAVED_FILE_DOWNLOAD_RESULT_RECEIVED = 'SAVED_FILE_DOWNLOAD_RESULT_RECEIVED';
 export const SHOW_SAVED_FILES_DIALOG = 'SHOW_SAVED_FILES_DIALOG';
 export const CLOSE_SAVED_FILES_DIALOG = 'CLOSE_SAVED_FILES_DIALOG';
 
@@ -58,6 +60,14 @@ function savedFileUploadResultReceived(savedFile) {
     }
 }
 
+function savedFileDownloadResultReceived(savedFileBlob, fileName) {
+    return {
+        type: SAVED_FILE_DOWNLOAD_RESULT_RECEIVED,
+        savedFileBlob,
+        fileName
+    }
+}
+
 export function showSavedFilesModal() {
     return {
         type: SHOW_SAVED_FILES_DIALOG
@@ -75,6 +85,26 @@ export function receiveSavedFilesList(savedFilesList) {
         type: RECEIVE_SAVED_FILES_LIST,
         savedFilesList
     };
+}
+
+export function downloadSavedFile(savedFile) {
+    return (dispatch, getState) => {
+        const {
+            auth: {
+                sessionId,
+            },
+            ui: {
+                language
+            }
+        } = getState();
+        savedFilesClient.download(language, sessionId, savedFile.id, (error, response) => {
+            if (error) {
+                dispatch(handleError(error))
+            } else {
+                dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name));
+            }
+        });
+    }
 }
 
 export function exportToFile(exportType) {

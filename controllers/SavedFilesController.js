@@ -95,7 +95,7 @@ class SavedFilesController extends UserEntityControllerBase {
             }
         ];
         router.post('/upload', upload.fields(uploadFields), this.upload.bind(this));
-        router.get('/:id/download', this.download);
+        router.get('/:id/download', this.download.bind(this));
 
         return router;
     }

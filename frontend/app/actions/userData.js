@@ -51,7 +51,7 @@ export function fetchUserdata() {
                 const sampleId = json.samples.length ? json.samples[json.samples.length - 1].id : null;
                 const filter = json.filters[0] || null;
                 dispatch(receiveUserdata(json));
-                dispatch(receiveSavedFilesList(json.savedFiles));
+                dispatch(receiveSavedFilesList(json.saved_files));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
                 dispatch(changeSample(json.samples, sampleId));

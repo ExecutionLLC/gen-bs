@@ -11,10 +11,9 @@ export default class SavedFilesClient extends UserEntityClientBase {
     }
 
     download(languId, sessionId, itemId, callback) {
-        RequestWrapper.get(
+        RequestWrapper.download(
             this.collectionUrls.download(itemId),
             this._makeHeaders({sessionId, languId}),
-            null,
             null,
             callback
         );

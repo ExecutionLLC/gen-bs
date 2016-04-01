@@ -38,6 +38,12 @@ class SavedFilesService extends UserEntityServiceBase {
     }
 
     findAll(user, callback) {
+        // Demo users currently don't have any access to saved files.
+        if (this.services.users.isDemoUserId(user.id)) {
+            callback(null, []);
+            return;
+        }
+
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => super.findAll(user, callback),
