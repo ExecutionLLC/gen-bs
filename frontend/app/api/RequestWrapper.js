@@ -1,56 +1,73 @@
 'use strict';
 
-import Request from 'browser-request';
+import Request from 'superagent';
 
 import ChangeCaseUtil from '../utils/ChangeCaseUtil';
 
 export default class RequestWrapper {
     static post(url, headers, bodyObject, callback) {
-        const options = {
-            url,
-            headers
-        };
-
-        if (bodyObject && bodyObject.constructor === FormData) {
-            options.form = bodyObject;
-        } else {
-            options.json = ChangeCaseUtil.convertKeysToSnakeCase(bodyObject);
-        }
-
-        Request.post(options, RequestWrapper._createResponseConverter(callback));
+        RequestWrapper._prepareAndExecuteRequest(Request.post(url), headers, null, bodyObject, callback);
     }
 
     static get(url, headers, queryParams, bodyObject, callback) {
-        Request.get({
-            url,
-            headers,
-            qs: ChangeCaseUtil.convertKeysToSnakeCase(queryParams),
-            json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
-        }, RequestWrapper._createResponseConverter(callback))
+        RequestWrapper._prepareAndExecuteRequest(Request.get(url), headers, queryParams, bodyObject, callback);
     }
 
     static put(url, headers, bodyObject, callback) {
-        Request.put({
-            url,
-            headers,
-            json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
-        }, RequestWrapper._createResponseConverter(callback));
+        RequestWrapper._prepareAndExecuteRequest(Request.put(url), headers, null, bodyObject, callback);
     }
 
     static del(url, headers, bodyObject, callback) {
-        Request({
-            method: 'DELETE',
-            url,
-            headers,
-            json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
-        }, RequestWrapper._createResponseConverter(callback));
+        RequestWrapper._prepareAndExecuteRequest(Request.del(url), headers, null, bodyObject, callback);
+    }
+
+    static uploadMultipart(url, headers, queryParams, formObject, callback) {
+        const request = RequestWrapper._prepareRequest(Request.post(url), headers, queryParams, null);
+        const formFields = _.keys(formObject);
+        _.each(formFields, fieldName => {
+            const fieldValue = formObject[fieldName];
+            if (fieldValue
+                && (fieldValue.constructor === Blob)) {
+                request.attach(fieldName, fieldValue);
+            } else {
+                request.field(fieldName, fieldValue);
+            }
+        });
+        RequestWrapper._sendRequest(request, callback);
+    }
+
+    static _prepareRequest(request, headers, queryParams, bodyObject) {
+        if (headers) {
+            request = request.set(headers);
+        }
+
+        if (queryParams) {
+            request = request.query(queryParams);
+        }
+
+        if (bodyObject) {
+            request = request.send(ChangeCaseUtil.convertKeysToSnakeCase(bodyObject));
+        }
+
+        return request;
+    }
+
+    static _sendRequest(request, callback) {
+        request.end(RequestWrapper._createResponseConverter(callback));
+    }
+
+    static _prepareAndExecuteRequest(request, headers, queryParams, bodyObject, callback) {
+        request = RequestWrapper._prepareRequest(request, headers, queryParams, bodyObject);
+        RequestWrapper._sendRequest(request, callback);
     }
 
     static _createResponseConverter(callback) {
-        return (error, response, body) => {
-            if (error) {
+        return (error, response) => {
+            if (error && !error.response) {
+                // Network error, send it as it is.
                 callback(error);
             } else {
+                let body = response.body;
                 const status = response.statusCode;
                 if (typeof body === 'string') {
                     try {

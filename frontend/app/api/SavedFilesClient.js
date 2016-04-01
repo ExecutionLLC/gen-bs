@@ -21,13 +21,15 @@ export default class SavedFilesClient extends UserEntityClientBase {
     }
 
     add(languId, sessionId, fileMetadata, fileBlob, callback) {
-        const formData = new FormData();
-        formData.append('file', fileBlob);
-        formData.append('metadata', fileMetadata);
+        const formData = {
+            file: fileBlob,
+            metadata: JSON.stringify(fileMetadata)
+        };
 
-        RequestWrapper.post(
-            this.collectionUrls.create(),
+        RequestWrapper.uploadMultipart(
+            this.collectionUrls.upload(),
             this._makeHeaders({sessionId, languId}),
+            null,
             formData,
             callback
         );
