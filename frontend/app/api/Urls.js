@@ -116,6 +116,10 @@ export default class Urls {
         return new CollectionUrls('/comments', this.host, this.port);
     }
 
+    historyUrls() {
+        return new CollectionUrls('/history', this.host, this.port);
+    }
+
     savedFilesUrls() {
         return new SavedFilesUrls('/files', this.host, this.port);
     }
