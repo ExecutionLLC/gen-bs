@@ -9,6 +9,10 @@ class QueryHistoryService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.queryHistory);
     }
+    
+    findQueryHistories(user, limit, offset, callback){
+        throw new Error('Method is not implemented.');
+    }
 
     add(user, languageId, query, callback) {
         async.waterfall(
