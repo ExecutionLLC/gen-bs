@@ -80,6 +80,14 @@ class ControllerBase {
         return request.get(this.services.config.headers.languageHeader);
     }
 
+    parseJson(jsonString, callback) {
+        try {
+            callback(null, JSON.parse(jsonString));
+        } catch (exception) {
+            callback(exception);
+        }
+    }
+
     checkUserIsDefined(request, callback) {
         if (!request.user) {
             callback('User is undefined.');
