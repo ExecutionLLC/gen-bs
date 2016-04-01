@@ -19,7 +19,7 @@ import ViewsModal from '../components/Modals/ViewsModal';
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-
+import { closeQueryHistoryModal } from '../actions/queryHistory'
 
 class App extends Component {
 
@@ -92,8 +92,8 @@ class App extends Component {
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
                 />
                 <QueryHistoryModal
-                    showModal={this.props.modalWindows.queryHistory.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+                    showModal={this.props.showQueryHistoryModal}
+                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()) } }
                 />
             </div>
         )
@@ -101,7 +101,14 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, modalWindows, views, fields, ui, errorHandler: { showErrorWindow } } = state;
+    const { auth,
+            userData,
+            modalWindows,
+            views,
+            fields,
+            ui,
+            errorHandler: { showErrorWindow },
+            queryHistory: { showQueryHistoryModal } } = state;
 
     return {
         auth,
@@ -110,7 +117,8 @@ function mapStateToProps(state) {
         views,
         fields,
         ui,
-        showErrorWindow
+        showErrorWindow,
+        showQueryHistoryModal
     }
 }
 

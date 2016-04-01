@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { showQueryHistoryModal } from '../../../actions/queryHistory'
 
 export default class LoadHistory extends Component {
 
@@ -19,7 +19,7 @@ export default class LoadHistory extends Component {
                 >
                     <button className="btn btn-default"
                             type="button"
-                            onClick={ () => {this.props.openModal('queryHistory')} }
+                            onClick={ () => { this.props.dispatch(showQueryHistoryModal()) } }
                     >
                         <span data-localize="history.title">
                             Load history

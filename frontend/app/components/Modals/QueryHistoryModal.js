@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 
 export default class QueryHistoryModal extends Component {
@@ -20,6 +21,9 @@ export default class QueryHistoryModal extends Component {
                         Datetime
                     </th>
                     <th>
+                        Sample
+                    </th>
+                    <th>
                         Filters
                     </th>
                     <th>
@@ -32,14 +36,50 @@ export default class QueryHistoryModal extends Component {
     }
 
     renderHistoryTableBody() {
+        const history = this.props.history;
+        if (history.length === 0) {
+            return (
+                <tbody>
+                    <tr>
+                        <td collspan="5">
+                            History is empty.
+                        </td>
+                    </tr>
+                </tbody>
+            )
+        }
         return (
             <tbody>
+                { _.map(history, (historyItem) => this.renderHistoryTableRow(historyItem)) }
             </tbody>
         )
     }
 
-    renderHistoryTableRow() {
+    renderRenewButton(historyItemId) {
+        return (
+            <button className="btn btn-uppercase btn-link"
+                    onClick={ () => { this.onRenewButtonClicked(historyItemId) } }
+            >
+                Renew
+            </button>
+        )
+    }
 
+    renderHistoryTableRow(historyItem) {
+        const itemId = historyItem.id;
+        const datetime = historyItem.timestamp.toString();
+        const sample = historyItem.sample;
+        const filters = historyItem.filters;
+        const view = historyItem.view;
+        return (
+            <tr key={ itemId }>
+                <td>{ datetime }</td>
+                <td>{ sample }</td>
+                <td>{ filters }</td>
+                <td>{ view }</td>
+                <td>{ this.renderRenewButton(historyItem.id) }</td>
+            </tr>
+        )
     }
 
     renderHistoryTable() {
@@ -64,7 +104,7 @@ export default class QueryHistoryModal extends Component {
                 dialogClassName="modal-dialog-primary"
                 bsSize="lg"
                 show={ this.props.showModal }
-                onHide={ () => {this.props.closeModal('queryHistory')} }
+                onHide={ () => {this.props.closeModal()} }
             >
                 { this.renderHeader() }
                 { this.renderHistoryTable() }
@@ -72,4 +112,17 @@ export default class QueryHistoryModal extends Component {
             </Modal>
         )
     }
+
+    onRenewButtonClicked(historyItemId) {
+        console.log("onRenewButtonClicked", historyItemId);
+    }
 }
+
+function mapStateToProps(state) {
+    const { queryHistory: { history } } = state;
+    return {
+        history
+    }
+}
+
+export default connect(mapStateToProps)(QueryHistoryModal);
