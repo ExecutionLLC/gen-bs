@@ -1,4 +1,4 @@
-import { initSearchInResultsParams, receiveSearchedResults } from './variantsTable'
+import { receiveSearchedResults } from './variantsTable'
 import { changeFileUploadProgress, fileUploadError } from './fileUpload'
 /*
  * action types
@@ -19,6 +19,7 @@ export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 export const WS_ADD_COMMENT = 'WS_ADD_COMMENT';
 export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT';
 export const WS_DELETE_COMMENT='WS_DELETE_COMMENT';
+export const REQUEST_CHANGE_VIEW='REQUEST_CHANGE_VIEW';
 
 
 /*
@@ -183,5 +184,12 @@ export function requestAnalyze(searchParams) {
     return {
         type: REQUEST_ANALYZE,
         searchParams
+    };
+}
+
+export function requestChangeView(view) {
+    return {
+        type: REQUEST_CHANGE_VIEW,
+        view
     };
 }

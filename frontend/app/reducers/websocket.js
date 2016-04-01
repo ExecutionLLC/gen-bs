@@ -7,10 +7,11 @@ export default function websocket(state = {
     errors: [],
     closed: true,
     variants: null,
+    variantsView:null,
     currentVariants: null,
     isVariantsEmpty: false,
     isVariantsValid: true,
-    isVariantsLoaded: false,
+    isVariantsLoading: false,
     progress: null
 }, action) {
     switch (action.type) {
@@ -93,7 +94,7 @@ export default function websocket(state = {
                 variants: state.variants === null ? resultData : [...state.variants, ...(resultData || [])],
                 currentVariants: resultData,
                 isVariantsEmpty: (resultData && resultData.length === 0),
-                isVariantsLoaded: false,
+                isVariantsLoading: false,
                 isVariantsValid: true
             });
         case ActionTypes.WS_PROGRESS_MESSAGE:
@@ -117,7 +118,7 @@ export default function websocket(state = {
                     ...state.errors,
                     action.err
                 ],
-                isVariantsLoaded: false,
+                isVariantsLoading: false,
                 isVariantsValid: false
             });
 
@@ -127,7 +128,7 @@ export default function websocket(state = {
                     ...state.errors,
                     action.err
                 ],
-                isVariantsLoaded: false
+                isVariantsLoading: false
             });
         case ActionTypes.WS_RECEIVE_CLOSE:
             return Object.assign({}, state, {
@@ -140,9 +141,15 @@ export default function websocket(state = {
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
                 variants: null,
-                isVariantsLoaded: true,
+                isVariantsLoading: true,
                 searchParams:action.searchParams
-            })
+            });
+        case ActionTypes.REQUEST_CHANGE_VIEW:
+        {
+            return Object.assign({}, state, {
+                variantsView: action.view
+            });
+        }
 
         default:
             return state

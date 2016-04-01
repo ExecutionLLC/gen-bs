@@ -11,7 +11,8 @@ export default function fields(state = {
     isFetching: {samples: false, sources: false},
     sampleFieldsList: [],
     sourceFieldsList: [],
-    totalFieldsList:[]
+    totalFieldsList:[],
+    notEditableFields:[],
 }, action) {
 
     switch (action.type) {
@@ -26,6 +27,7 @@ export default function fields(state = {
         case ActionTypes.RECEIVE_FIELDS:
             const fields = action.fields.map(updateFieldLabelIfNeeded);
             const editableFields = _.filter(fields, 'is_editable', true);
+            const notEditableSampleFields = _.filter(fields, 'is_editable', false);
             const idToFieldHash = _.reduce(fields, (result, field) => {
                 result[field.id] = field;
                 return result;
@@ -36,6 +38,7 @@ export default function fields(state = {
                 }),
                 sampleFieldsList: fields,
                 editableFields,
+                notEditableFields:notEditableSampleFields,
                 idToFieldHash,
                 lastUpdated: action.receivedAt
             });
