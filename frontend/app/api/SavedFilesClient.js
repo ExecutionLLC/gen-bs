@@ -1,7 +1,5 @@
 'use strict';
 
-import _ from 'lodash';
-
 import UserEntityClientBase from './UserEntityClientBase';
 import RequestWrapper from './RequestWrapper';
 
