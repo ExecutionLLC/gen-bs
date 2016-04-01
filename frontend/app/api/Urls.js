@@ -76,6 +76,10 @@ export default class Urls {
         return this._constructApiUrl('/data');
     }
 
+    history() {
+        return this._constructApiUrl('/history', this.host, this.port);
+    }
+    
     startSearch() {
         return this._constructApiUrl('/search');
     }
@@ -114,10 +118,6 @@ export default class Urls {
 
     commentsUrls() {
         return new CollectionUrls('/comments', this.host, this.port);
-    }
-
-    historyUrls() {
-        return new CollectionUrls('/history', this.host, this.port);
     }
 
     savedFilesUrls() {
