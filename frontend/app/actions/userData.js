@@ -1,6 +1,7 @@
 import config from '../../config'
 import { analyze, changeSample, changeView, changeFilter } from './ui'
 import { fetchFields, fetchSourceFields } from './fields'
+import { updateQueryHistory } from './queryHistory'
 
 /*
  * action types
@@ -55,8 +56,9 @@ export function fetchUserdata() {
                 dispatch(changeSample(json.samples, sampleId));
                 dispatch(analyze(sampleId, view.id, filter.id));
                 dispatch(fetchFields(sampleId));
-                dispatch(fetchSourceFields())
-            })
+                dispatch(fetchSourceFields());
+                dispatch(updateQueryHistory());
+            });
 
         // TODO:
         // catch any error in the network call.
