@@ -19,7 +19,7 @@ class SearchController extends ControllerBase {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
-            (body, callback)=> {
+            (body, callback) => {
                 const user = request.user;
                 const sessionId = request.sessionId;
                 const languageId = request.languId;

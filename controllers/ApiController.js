@@ -113,7 +113,7 @@ class ApiController extends ControllerBase {
         router.use('/views', viewsRouter);
         router.use('/fields', fieldsRouter);
         router.use('/files', savedFilesRouter);
-        router.use('/query_history', queryHistoryRouter)
+        router.use('/history', queryHistoryRouter);
 
         return router;
     }
