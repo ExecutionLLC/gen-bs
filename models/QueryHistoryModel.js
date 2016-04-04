@@ -50,6 +50,7 @@ class QueryHistoryModel extends SecureModelBase {
         const totalResults = camelcaseFilterData[0].totalResults;
         const vcfFileSampleVersionId = camelcaseFilterData[0].vcfFileSampleVersionId;
         const viewId = camelcaseFilterData[0].viewId;
+        const timestamp = camelcaseFilterData[0].timestamp;
         const filters = [];
         _.forEach(camelcaseFilterData, (data) => {
                 filters.push(data.filterId);
@@ -57,6 +58,7 @@ class QueryHistoryModel extends SecureModelBase {
         );
         return {
             id: id,
+            timestamp:timestamp,
             totalResults: totalResults,
             vcfFileSampleVersionId: vcfFileSampleVersionId,
             viewId: viewId,

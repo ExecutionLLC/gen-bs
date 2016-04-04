@@ -58,13 +58,13 @@ class QueryHistoryController extends ControllerBase {
                     resultQueryHistory.push(
                         {
                             id: queryHistory.id,
-                            timestamp: queryHistory.timeStamp,
+                            timestamp: queryHistory.timestamp,
                             view: _.find(views, view => view.id = queryHistory.viewId),
                             filters: _.filter(filters, filter => {
-                                    _.includes(queryHistory.filters, filter.id);
+                                    return _.includes(queryHistory.filters, filter.id);
                                 }
                             ),
-                            sample: samples[queryHistory.vcfFileSampleVersionId]
+                            sample: _.find(samples,sample =>sample.id = queryHistory.vcfFileSampleVersionId)
                         }
                     );
                 });
