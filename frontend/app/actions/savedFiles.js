@@ -1,3 +1,5 @@
+import Moment from 'moment';
+
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleError} from './errorHandler';
@@ -138,7 +140,8 @@ export function exportToFile(exportType) {
 
         const exporter = ExportUtils.createExporter(exportType);
         const fileBlob = exporter.buildBlob(columns, dataToExport);
-        const fileName = `${currentSample.file_name}_chunk_${new Date()}.${exportType}`;
+        const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
+        const fileName = `${currentSample.file_name}_chunk_${createdDate}.${exportType}`;
         const count = selectedSearchKeysToVariants.length;
 
         dispatch(createUserDownload(fileBlob, fileName));
