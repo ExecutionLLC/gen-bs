@@ -1,7 +1,6 @@
 import config from '../../config'
 import { analyze, changeSample, changeView, changeFilter } from './ui'
 import { fetchFields, fetchSourceFields } from './fields'
-import { updateQueryHistory } from './queryHistory'
 
 /*
  * action types
@@ -57,7 +56,6 @@ export function fetchUserdata() {
                 dispatch(analyze(sampleId, view.id, filter.id));
                 dispatch(fetchFields(sampleId));
                 dispatch(fetchSourceFields());
-                dispatch(updateQueryHistory());
             });
 
         // TODO:
