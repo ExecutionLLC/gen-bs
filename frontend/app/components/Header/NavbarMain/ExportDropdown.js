@@ -2,11 +2,17 @@ import React, {Component} from 'react';
 import {Nav, NavDropdown, MenuItem} from 'react-bootstrap';
 
 import {exportToFile} from '../../../actions/savedFiles';
+import ComponentBase from '../../shared/ComponentBase';
 
-export default class ExportDropdown extends Component {
+export default class ExportDropdown extends ComponentBase {
 
     constructor(props) {
         super(props)
+    }
+
+    get haveSelectedVariants() {
+        const {selectedSearchKeysToVariants} = this.props;
+        return !!Object.keys(selectedSearchKeysToVariants).length;
     }
 
     render() {
@@ -16,9 +22,8 @@ export default class ExportDropdown extends Component {
                 <Nav>
                     <NavDropdown title={exportDropdownTitle}
                                  id="export-dropdown"
-                                 className="btn navbar-btn"
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
-
+                                 disabled={!this.haveSelectedVariants}
                     >
                         <MenuItem eventKey="csv">CSV</MenuItem>
                         <MenuItem eventKey="sql">SQL</MenuItem>
@@ -30,12 +35,11 @@ export default class ExportDropdown extends Component {
     }
 
     renderExportButtonTitle() {
-        const {selectedSearchKeysToVariants} = this.props;
-        const selectedVariantsCount = Object.keys(selectedSearchKeysToVariants).length;
-
-        if (!selectedVariantsCount) {
+        if (!this.haveSelectedVariants) {
             return (<span>Export</span>);
         } else {
+            const {selectedSearchKeysToVariants} = this.props;
+            const selectedVariantsCount = Object.keys(selectedSearchKeysToVariants).length;
             return (<span>Export<span className="badge badge-warning">{selectedVariantsCount}</span></span>);
         }
     }

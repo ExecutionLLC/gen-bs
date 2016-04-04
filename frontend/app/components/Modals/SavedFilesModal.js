@@ -33,17 +33,28 @@ class SavedFilesModal extends DialogBase {
         }
     }
 
-    renderBodyContents() {
-        if (!this.haveSavedFiles) {
+    renderEmptyContents() {
+        const {isDemo} = this.props;
+        if (isDemo) {
+            return (
+                <div>Please register to access your saved files here.</div>
+            );
+        } else {
             return (
                 <div>Here will be the files you have exported, but there are no such files for now.</div>
             );
+        }
+    }
+
+    renderBodyContents() {
+        if (!this.haveSavedFiles) {
+            return this.renderEmptyContents();
         }
         const {savedFiles} = this.props;
         // Now just take last ten elements.
         // TODO: Add pagination for saved files.
         const sortedFiles = _(savedFiles)
-            .sortBy(file => -file.timestamp)
+            .sortBy(file => -Moment(file.timestamp).valueOf())
             .take(10)
             .value();
         return (
@@ -72,7 +83,10 @@ class SavedFilesModal extends DialogBase {
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
-                <td>{sample.file_name}</td>
+                {
+                    // TODO: Remove after snake-camel-hell is gone.
+                }
+                <td>{sample.file_name || sample.fileName}</td>
                 <td>{filter.name}</td>
                 <td>{view.name}</td>
                 <td>
@@ -104,10 +118,11 @@ SavedFilesModal.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { savedFiles: {list} } = state;
+    const { savedFiles: {list}, auth: {isDemo} } = state;
 
     return {
-        savedFiles: list
+        savedFiles: list,
+        isDemo
     };
 }
 

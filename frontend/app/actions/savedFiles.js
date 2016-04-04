@@ -112,6 +112,9 @@ export function downloadSavedFile(savedFile) {
 export function exportToFile(exportType) {
     return (dispatch, getState) => {
         const {
+            auth: {
+                isDemo
+            },
             ui: {
                 currentView,
                 currentSample
@@ -157,6 +160,9 @@ export function exportToFile(exportType) {
         const count = selectedSearchKeysToVariants.length;
 
         dispatch(createUserDownload(fileBlob, fileName));
-        dispatch(saveExportedFileToServer(fileBlob, fileName, count));
+
+        if (!isDemo) {
+            dispatch(saveExportedFileToServer(fileBlob, fileName, count));
+        }
     };
 }
