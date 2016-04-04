@@ -12,7 +12,6 @@ class QueryHistoryController extends ControllerBase {
     }
 
     getQueryHistories(request, response) {
-        const test = '';
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
@@ -64,7 +63,7 @@ class QueryHistoryController extends ControllerBase {
                                     return _.includes(queryHistory.filters, filter.id);
                                 }
                             ),
-                            sample: _.find(samples,sample =>sample.id == queryHistory.vcfFileSampleVersionId)
+                            sample: _.find(samples, sample =>sample.id == queryHistory.vcfFileSampleVersionId)
                         }
                     );
                 });

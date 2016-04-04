@@ -289,7 +289,7 @@ class SamplesModel extends SecureModelBase {
                     true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleVersions)),
             (samplesMetadata, sampleVersions, callback) =>
                 this._replaceSampleIdWithCurrentVersionId(
-                    trx, samplesMetadata, sampleVersions, callback
+                    samplesMetadata, sampleVersions, callback
                 ),
             (sampleMetadata, callback) => this._findValuesForVersions(trx, sampleVersionIds,
                 (error, values) => callback(error, sampleMetadata, values)),
@@ -297,10 +297,8 @@ class SamplesModel extends SecureModelBase {
                 const samplesValues = _.groupBy(values, 'vcfFileSampleVersionId');
                 const resultSamples = _.cloneDeep(sampleMetadata);
                 _.forEach(resultSamples, resultSample => {
-                    const sampleValues = samplesValues[resultSample.id];
-                    resultSample.values = sampleValues;
+                    resultSample.values = samplesValues[resultSample.id];
                 });
-
                 callback(null, resultSamples);
             }
         ], (error, resultSample) => {
@@ -320,7 +318,7 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    _replaceSampleIdWithCurrentVersionId(trx,samplesMetadata, sampleVersions, callback) {
+    _replaceSampleIdWithCurrentVersionId(samplesMetadata, sampleVersions, callback) {
         const resultSampleList = [];
         _.forEach(sampleVersions, sampleVersion => {
             const sample = _.find(
