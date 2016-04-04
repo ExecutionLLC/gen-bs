@@ -10,12 +10,12 @@ export default function queryHistory(state={
                 history: action.history
             });
         }
-        case ActionTypes.SHOW_QUERY_HOSTORY_MODAL: {
+        case ActionTypes.SHOW_QUERY_HISTORY_MODAL: {
             return Object.assign({}, state, {
                 showQueryHistoryModal: true
             });
         }
-        case ActionTypes.CLOSE_QUERY_HOSTORY_MODAL: {
+        case ActionTypes.CLOSE_QUERY_HISTORY_MODAL: {
             return Object.assign({}, state, {
                 showQueryHistoryModal: false
             });

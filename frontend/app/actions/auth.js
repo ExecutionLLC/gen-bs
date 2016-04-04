@@ -8,6 +8,7 @@ import { getUrlParameterByName } from '../utils/stringUtils'
 import { fetchUserdata } from './userData';
 import { createWsConnection, subscribeToWs, send } from './websocket';
 import { handleError } from './errorHandler'
+import { clearQueryHistory, updateQueryHistory } from './queryHistory'
 
 import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient'
@@ -123,6 +124,11 @@ function updateLoginData(dispatch, sessionId, isDemo) {
             'X-Language-Id': 'en'
         }
     });
+    if (isDemo) {
+        dispatch(clearQueryHistory());
+    } else {
+        dispatch(updateQueryHistory());
+    }
     dispatch(fetchUserdata());
 }
 

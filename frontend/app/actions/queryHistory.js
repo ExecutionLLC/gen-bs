@@ -34,6 +34,12 @@ export function closeQueryHistoryModal() {
     }
 }
 
+export function clearQueryHistory() {
+    return (dispatch) => {
+        dispatch(receiveQueryHistory([]));
+    }
+}
+
 export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {auth: { sessionId }, ui: { language } } = getState();
@@ -42,6 +48,8 @@ export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSE
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, HISTORY_SERVER_ERROR));
+            } else {
+                dispatch(receiveQueryHistory(response.body.result));
             }
         });
     }
