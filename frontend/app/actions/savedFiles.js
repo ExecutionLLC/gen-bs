@@ -124,18 +124,30 @@ export function exportToFile(exportType) {
             }
         } = getState();
 
+        // Take fields in order they appear in the view
+        // and add comments as a separate field values.
         const columns = _.map(currentView.view_list_items, listItem => {
-            const field = totalFieldsHash[listItem.field_id];
-            return {
-                id: listItem.field_id,
-                name: field.label
-            }
-        });
+                const field = totalFieldsHash[listItem.field_id];
+                return {
+                    id: listItem.field_id,
+                    name: field.label
+                }
+            })
+            .concat([{
+                id: 'comment',
+                name: 'Comment'
+            }]);
 
         // The export data should be array of objects in {field_id -> field_value} format.
         const dataToExport = _(selectedSearchKeysToVariants)
             .sortBy(item => item.rowIndex)
-            .map(item => item.row.fieldsHash)
+            .map(item => {
+                // Add first comment.
+                const comment = _.isEmpty(item.row.comments) ? '' : item.row.comments[0].comment;
+                return Object.assign({}, item.row.fieldsHash, {
+                    comment
+                });
+            })
             .value();
 
         const exporter = ExportUtils.createExporter(exportType);

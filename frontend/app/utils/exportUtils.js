@@ -1,10 +1,14 @@
 import CsvExporter from './export/csvExporter';
+import TxtExporter from './export/txtExporter';
 
 export default class ExportUtils {
     static createExporter(ofType) {
         switch (ofType) {
             case 'csv': {
                 return new CsvExporter();
+            }
+            case 'txt': {
+                return new TxtExporter();
             }
             default:
                 return null;

@@ -6,15 +6,15 @@ export default class CsvExporter {
     }
 
     /**
-     * Creates new Blob containing 
+     * Creates new Blob containing data in specified format. 
      * @param columnsArray Array of objects, each has {id, name}
-     * @param data Array of objects, each has {columnId, value}
+     * @param data Array of objects, each is a hash {columnId->value}
      * */
     buildBlob(columnsArray, data) {
-        const columns = _.map(columnsArray, col => col.name);
-        const headerRow = this._createRow(columns);
+        const columnNames = _.map(columnsArray, col => col.name);
+        const headerRow = this._createRow(columnNames);
         const rows = _.map(data, row => {
-            const orderedValues = _.map(columnsArray, column => row[column.id] || null);
+            const orderedValues = _.map(columnsArray, column => row[column.id] || '');
             return this._createRow(orderedValues);
         });
 
@@ -23,6 +23,7 @@ export default class CsvExporter {
     }
 
     _createRow(rowValues) {
-        return rowValues.join(this.separator);
+        return _.map(rowValues, value => `"${value}"`)
+            .join(this.separator);
     }
 }
