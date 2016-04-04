@@ -67,10 +67,10 @@ export default class QueryHistoryModal extends Component {
 
     renderHistoryTableRow(historyItem) {
         const itemId = historyItem.id;
-        const datetime = historyItem.timestamp.toString();
-        const sample = historyItem.sample;
-        const filters = historyItem.filters;
-        const view = historyItem.view;
+        const datetime = historyItem.timestamp ? historyItem.timestamp.toString() : 'Unknown';
+        const sample = historyItem.sample ? historyItem.sample.name : 'Unknown';
+        const filters = historyItem.filters ? historyItem.filters : 'Unknown';
+        const view = historyItem.view ? historyItem.view.name : 'Unknown';
         return (
             <tr key={ itemId }>
                 <td>{ datetime }</td>
