@@ -1,29 +1,27 @@
-export default class CsvExporter {
+import ExporterBase from './ExporterBase';
+
+export default class CsvExporter extends ExporterBase {
     constructor() {
+        super('application/csv');
         this.separator = ',';
-        this.newLine = '\n';
-        this.mimeType = '"application/csv"';
     }
 
-    /**
-     * Creates new Blob containing data in specified format. 
-     * @param columnsArray Array of objects, each has {id, name}
-     * @param data Array of objects, each is a hash {columnId->value}
-     * */
-    buildBlob(columnsArray, data) {
+    buildHeaderRow(columnsArray, data) {
         const columnNames = _.map(columnsArray, col => col.name);
-        const headerRow = this._createRow(columnNames);
-        const rows = _.map(data, row => {
-            const orderedValues = _.map(columnsArray, column => row[column.id] || '');
-            return this._createRow(orderedValues);
-        });
+        return this._createRow(columnNames);
+    }
 
-        const documentBody = headerRow + this.newLine + rows.join(this.newLine);
-        return new Blob([documentBody], {type: this.mimeType});
+    buildRow(columnsArray, rowValues, data) {
+        return this._createRow(rowValues);
     }
 
     _createRow(rowValues) {
-        return _.map(rowValues, value => `"${value}"`)
+        return _.map(rowValues, value => this._preprocessRowValue(value))
             .join(this.separator);
+    }
+
+    _preprocessRowValue(value) {
+        value = (value || '').replace('"', '""');
+        return `"${value}"`;
     }
 }
