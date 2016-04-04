@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 
 import { fetchVariants, searchInResults } from '../../actions/variantsTable'
@@ -17,7 +18,7 @@ class VariantsTableReact extends Component {
 
     render() {
         const { dispatch, auth, views, fields, ui } = this.props
-        const { variants, isVariantsLoaded, isVariantsEmpty, isVariantsValid, errors } = this.props.ws
+        const { variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, errors } = this.props.ws
 
         var tableWrapperClass = classNames({
             'table-variants-wrapper': true,
@@ -27,25 +28,27 @@ class VariantsTableReact extends Component {
         return (
 
             <div className={tableWrapperClass}>
-                { isVariantsLoaded &&
+                { isVariantsLoading &&
                 <div className="loader"></div>
                 }
 
-                { !isVariantsLoaded && !isVariantsValid &&
+                { !isVariantsLoading && !isVariantsValid &&
                 <div className="col-xs-6 col-xs-offset-3">
                     <VariantsTableLoadError errors={errors}/>
                 </div>
                 }
-                { !isVariantsLoaded && isVariantsValid &&
+                { !isVariantsLoading && isVariantsValid &&
                 <div className="table-variants-container">
                     { auth.isDemo &&
                     <DemoModeMessage errorMessage={auth.errorMessage} {...this.props} />
                     }
                     <table className="table table-striped table-variants header-fixed" id="variants_table"
                            ref="variantsTable">
-                        <VariantsTableHead variants={variants} fields={fields} {...this.props} />
+                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHead"/>
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} {...this.props} />
+                        <VariantsTableRows variants={variants} fields={fields} {...this.props}
+                                           xScrollListener={ (scrollLeft) => { this.tableXScrollListener(scrollLeft) } }
+                        />
                         }
                     </table>
                     { isVariantsEmpty &&
@@ -57,6 +60,14 @@ class VariantsTableReact extends Component {
             </div>
 
         )
+    }
+
+    tableXScrollListener(scrollLeft) {
+        const variantsTableHead = ReactDOM.findDOMNode(this.refs.variantsTableHead);
+        if (variantsTableHead) {
+            // we should move header manually, because "position" attribute of header equal "fixed"
+            variantsTableHead.scrollLeft = scrollLeft;
+        }
     }
 }
 

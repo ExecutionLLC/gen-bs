@@ -10,7 +10,7 @@ import Buy from './NavbarMain/Buy'
 import Auth from './NavbarMain/Auth'
 
 import { toggleQueryNavbar } from '../../actions/ui'
-
+import { changeVariantsGlobalFilter, searchInResultsSortFilter } from '../../actions/variantsTable'
 
 class NavbarMain extends Component {
 
@@ -19,7 +19,14 @@ class NavbarMain extends Component {
     }
 
     render() {
-        const { dispatch, ui } = this.props
+        const { dispatch, ui } = this.props;
+        const changeGlobalSearchValue = (globalSearchString) => {
+            dispatch(changeVariantsGlobalFilter(globalSearchString));
+        };
+        const sendSearchRequest = (globalSearchString) => {
+            dispatch(changeVariantsGlobalFilter(globalSearchString));
+            dispatch(searchInResultsSortFilter());
+        };
         return (
 
             <nav className="navbar navbar-inverse navbar-fixed-top navbar-main">
@@ -31,7 +38,9 @@ class NavbarMain extends Component {
                         data-localize="brand.title">AGx</span><sup>i</sup></a></div>
 
                     <CreateQueryNavbarButton toggleQueryNavbar={ () => { dispatch(toggleQueryNavbar()) } }/>
-                    <NavbarSearch />
+                    <NavbarSearch onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString) } }
+                                  onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString) } }
+                    />
                     <ExportDropdown />
                     <SavedFiles />
                     <Language />
@@ -46,7 +55,7 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, ui } = state
+    const { auth, userData, ui } = state;
 
     return {
         auth,
@@ -55,5 +64,5 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(NavbarMain)
+export default connect(mapStateToProps)(NavbarMain);
 
