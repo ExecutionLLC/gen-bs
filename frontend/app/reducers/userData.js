@@ -152,8 +152,10 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
         if (!hasNewHistoryItem) {
             // if collection do not contain such item, we should insert it
             collection = [...collection, newHistoryItem];
+        } else {
+            return { collection, historyItemId: null};
         }
     }
-    
+
     return { collection, historyItemId: newHistoryItemId};
 }
