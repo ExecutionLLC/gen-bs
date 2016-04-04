@@ -1,5 +1,6 @@
 import CsvExporter from './export/csvExporter';
 import TxtExporter from './export/txtExporter';
+import SqlExporter from './export/sqlExporter';
 
 export default class ExportUtils {
     static createExporter(ofType) {
@@ -9,6 +10,9 @@ export default class ExportUtils {
             }
             case 'txt': {
                 return new TxtExporter();
+            }
+            case 'sql': {
+                return new SqlExporter();
             }
             default:
                 return null;
