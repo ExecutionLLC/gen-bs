@@ -134,7 +134,7 @@ export default function userData(state = {
 }
 
 function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
-    const newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
+    var newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
     if (oldHistoryItemId === newHistoryItemId) {
         // nothing to be changed
         return { collection, historyItemId: oldHistoryItemId };
@@ -146,14 +146,14 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
     }
 
     if (newHistoryItemId) {
-        const hasNewHistoryItem = _.find(collection, (item) => {
-            return item.id === newHistoryItemId
-        }) ? true : false;
+        const hasNewHistoryItem = _.some(collection, (item) => { return item.id === newHistoryItemId; });
         if (!hasNewHistoryItem) {
             // if collection do not contain such item, we should insert it
             collection = [...collection, newHistoryItem];
         } else {
-            return { collection, historyItemId: null};
+            // reset history id, because we already have this item in collection (so it is not from history, it is
+            // common item)
+            newHistoryItemId = null;
         }
     }
 
