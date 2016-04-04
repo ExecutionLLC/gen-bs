@@ -1,5 +1,6 @@
 import config from '../../config'
 import {requestAnalyze, clearVariants, addComment, changeComment, deleteComment} from './websocket'
+import { updateQueryHistory } from './queryHistory'
 
 /*
  * action types
@@ -191,12 +192,10 @@ export function removeComment(id, search_key) {
 
 export function fetchVariants(searchParams) {
 
-    return dispatch => {
+    return (dispatch, getState)=> {
+        console.log('fetchVariants: ', searchParams);
 
-        console.log('fetchVariants: ', searchParams)
-
-        dispatch(requestVariants())
-
+        dispatch(requestVariants());
         setTimeout(() => {
             $.ajax(config.URLS.SEARCH, {
                     'data': JSON.stringify(searchParams),
@@ -205,8 +204,12 @@ export function fetchVariants(searchParams) {
                     'contentType': 'application/json'
                 })
                 .then(json => {
-                    console.log('search', json)
-                    dispatch(receiveVariants(json))
+                    console.log('search', json);
+                    dispatch(receiveVariants(json));
+                    const isDemo = getState().auth.isDemo;
+                    if (!isDemo) {
+                        dispatch(updateQueryHistory());
+                    }
                 })
         }, 1000);
 
