@@ -294,10 +294,10 @@ class SamplesModel extends SecureModelBase {
             (sampleMetadata, callback) => this._findValuesForVersions(trx, sampleVersionIds,
                 (error, values) => callback(error, sampleMetadata, values)),
             (sampleMetadata, values, callback) => {
-                const samplesValues = _.groupBy(values, 'vcf_file_sample_version_id');
+                const samplesValues = _.groupBy(values, 'vcfFileSampleVersionId');
                 const resultSamples = _.cloneDeep(sampleMetadata);
                 _.forEach(resultSamples, resultSample => {
-                    const sampleValues = samplesValues[resultSamples.id];
+                    const sampleValues = samplesValues[resultSample.id];
                     resultSample.values = sampleValues;
                 });
 
@@ -310,7 +310,7 @@ class SamplesModel extends SecureModelBase {
 
     _findValuesForVersions(trx, sampleVersionIds, callback) {
         async.waterfall([
-            (callback) => trx.select('field_id', 'values')
+            (callback) => trx.select()
                 .from(SampleTableNames.Values)
                 .whereIn('vcf_file_sample_version_id', sampleVersionIds)
                 .asCallback((error, rows) => callback(error, rows)),
@@ -338,7 +338,7 @@ class SamplesModel extends SecureModelBase {
 
     _findSampleVersionsByVersionIds(trx, sampleVersionIds, callback) {
         async.waterfall([
-            (callback) => trx.select('id','vcf_file_sample_id')
+            (callback) => trx.select()
                 .from(SampleTableNames.Versions)
                 .whereIn('id', sampleVersionIds)
                 .orderBy('timestamp', 'desc')
