@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 
+import { renewHistoryItem } from '../../actions/queryHistory'
+
 export default class QueryHistoryModal extends Component {
     renderHeader() {
         return (
@@ -114,7 +116,8 @@ export default class QueryHistoryModal extends Component {
     }
 
     onRenewButtonClicked(historyItemId) {
-        console.log("onRenewButtonClicked", historyItemId);
+        this.props.dispatch(renewHistoryItem(historyItemId));
+        this.props.closeModal();
     }
 }
 
