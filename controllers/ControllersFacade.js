@@ -8,7 +8,7 @@ const FilterController = require('./FilterController');
 const CommentsController = require('./CommentsController');
 const FieldsMetadataController = require('./FieldsMetadataController');
 const SavedFilesController = require('./SavedFilesController');
-const QueryHistoryController = require('./QueryHistoryController')
+const QueryHistoryController = require('./QueryHistoryController');
 
 const SearchController = require('./SearchController');
 

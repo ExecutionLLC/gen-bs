@@ -160,6 +160,7 @@ class QueryHistoryModel extends SecureModelBase {
                     this.baseTableName + '.id'
                 )
                 .whereIn('id', queryHistoryIds)
+                .orderBy('timestamp', 'desc')
                 .asCallback((error, result) => {
                     const filterData = _.map(_.groupBy(result, 'id'), this._extractQueryHistory);
                     callback(null, filterData)

@@ -11,11 +11,7 @@ class QueryHistoryService extends UserEntityServiceBase {
     }
 
     findQueryHistories(user, limit, offset, callback) {
-        async.waterfall(
-            [
-                (callback) => this.models.queryHistory.findQueryHistories(user.id, limit, offset, callback)
-            ], callback
-        );
+        this.models.queryHistory.findQueryHistories(user.id, limit, offset, callback);
     }
 
     add(user, languageId, query, callback) {
