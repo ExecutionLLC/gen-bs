@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
-import { changeSample} from '../../../actions/ui'
+import { changeSample, updateSampleValue, resetSamplesList, requestUpdateSampleFields} from '../../../actions/ui'
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
@@ -36,8 +37,8 @@ export default class FileUploadSamplesRow extends Component {
               </div>
           </div>
         );
-
     }
+
     renderFooter() {
         const { sample,samples,dispatch,closeModal } = this.props;
         return (
@@ -45,6 +46,7 @@ export default class FileUploadSamplesRow extends Component {
 
               <a onClick={() => {
                     dispatch(changeSample(samples, sample.id));
+                    dispatch(initSamplesList(samples));
                     closeModal('upload');
                   }}
                   className="btn btn-link btn-uppercase"
@@ -60,13 +62,19 @@ export default class FileUploadSamplesRow extends Component {
               </a>}
             </div>
           );
-
     }
-    renderSelectField(field) {
 
+    renderSelectField(field) {
+        const { sample, dispatch, samplesList } = this.props;
+        const currentSampleIndex = _.findIndex(samplesList.Samples, {id: sample.id});
         const selectOptions = field.available_values.map(
             option => { return {value: option.id, label: option.value}}
         );
+
+        let currentValueId = '';
+
+        if (samplesList.Samples[currentSampleIndex].fields) {
+            currentValueId= samplesList.Samples[currentSampleIndex].fields[field.id];
 
         return (
             <dl key={field.id} className="dl-horizontal">
@@ -75,8 +83,8 @@ export default class FileUploadSamplesRow extends Component {
             <Select
                 options={selectOptions}
                 clearable={false}
-                value="one"
-                onChange={(e) => this.props.onUpdateSampleValue(field.id, e.value)}
+                value={currentValueId}
+                onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.value))}
             />
             </dd>
             </dl>
@@ -84,6 +92,14 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderTextField(values, field) {
+        const { sample, dispatch, samplesList } = this.props;
+        const currentSampleIndex = _.findIndex(samplesList.Samples, {id: sample.id});
+        let currentValue;
+        if (samplesList.Samples[currentSampleIndex].fields) {
+            currentValue = samplesList.Samples[currentSampleIndex].fields[field.id];
+        } else {
+            currentValue = '';
+        }
         return (
             <dl key={field.id} className="dl-horizontal">
             <dt>{field.label}</dt>
@@ -91,12 +107,35 @@ export default class FileUploadSamplesRow extends Component {
             <input
                 type="text"
                 className="form-control"
-                value={values[field.id] && values[field.id].values}
-                onChange={(e) => this.props.onUpdateSampleValue(field.id, e.value)}
+                value={currentValue}
+                onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.target.value)) }
             />
             </dd>
             </dl>
         );
+    }
+
+    renderRowButtons() {
+        const { sample, dispatch } = this.props;
+        return (
+            <div className="btn-group ">
+                <button
+                    onClick={ () => dispatch(resetSamplesList(sample.id)) }
+                    type="button"
+                    className="btn btn-default"
+                >
+                    <span data-localize="actions.save_select.title">Cancel</span>
+                </button>
+
+                <button
+                    onClick={ () => dispatch(requestUpdateSampleFields(sample.id, this.props.fields)) }
+                    type="button"
+                    className="btn btn-primary"
+                >
+                    <span data-localize="actions.save_select.title">Save</span>
+                </button>
+            </div>
+        )
     }
 
     renderValues() {
@@ -113,8 +152,19 @@ export default class FileUploadSamplesRow extends Component {
                         }
 
                   })}
+                  {this.renderRowButtons()}
                 </div>
                 </Panel>
             )
     }
 }
+
+function mapStateToProps(state) {
+    const { ui, samplesList } = state;
+    return {
+        ui,
+        samplesList
+    }
+}
+
+export default connect(mapStateToProps)(FileUploadSamplesRow)

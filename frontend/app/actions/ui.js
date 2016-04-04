@@ -10,8 +10,12 @@ export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
 export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
+export const REQUEST_UPDATE_SAMPLE_FIELDS = 'REQUEST_UPDATE_SAMPLE_FIELDS';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
+
+export const INIT_SAMPLES_LIST = 'INIT_SAMPLES_LIST'
+export const RESET_SAMPLES_LIST = 'RESET_SAMPLES_LIST'
 
 
 /*
@@ -37,6 +41,14 @@ export function updateSampleValue(sampleId, valueFieldId, value) {
         sampleId,
         valueFieldId,
         value
+    }
+}
+
+export function requestUpdateSampleFields(sampleId, fields) {
+    return {
+        type: REQUEST_UPDATE_SAMPLE_FIELDS,
+        sampleId,
+        fields,
     }
 }
 
@@ -71,6 +83,21 @@ export function changeFilter(filterId) {
         dispatch(filterBuilderSelectFilter(filters, filterId, true));
     }
 }
+
+export function initSamplesList(samples) {
+    return {
+        type: INIT_SAMPLES_LIST,
+        samples: samples
+    }
+}
+
+export function resetSamplesList(sampleId) {
+    return {
+        type: RESET_SAMPLES_LIST,
+        sampleId,
+    }
+}
+
 
 export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
     return (dispatch, getState) => {

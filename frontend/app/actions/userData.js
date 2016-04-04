@@ -1,5 +1,5 @@
 import config from '../../config'
-import { analyze, changeSample, changeView, changeFilter } from './ui'
+import { analyze, changeSample, changeView, changeFilter, initSamplesList } from './ui'
 import { fetchFields, fetchSourceFields } from './fields'
 
 /*
@@ -55,7 +55,8 @@ export function fetchUserdata() {
                 dispatch(changeSample(json.samples, sampleId));
                 dispatch(analyze(sampleId, view.id, filter.id));
                 dispatch(fetchFields(sampleId));
-                dispatch(fetchSourceFields())
+                dispatch(fetchSourceFields());
+                dispatch(initSamplesList(json.samples));
             })
 
         // TODO:
