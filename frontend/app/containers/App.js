@@ -9,17 +9,17 @@ import VariantsTableReact from '../components/VariantsTable/VariantsTableReact';
 import NavbarMain from '../components/Header/NavbarMain';
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery';
 
-import ViewsModal from '../components/Modals/ViewsModal';
-import FiltersModal from '../components/Modals/FiltersModal';
-import FileUploadModal from '../components/Modals/FileUploadModal';
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
+import FiltersModal from '../components/Modals/FiltersModal';
+import FileUploadModal from '../components/Modals/FileUploadModal';
+import QueryHistoryModal from '../components/Modals/QueryHistoryModal'
+import ViewsModal from '../components/Modals/ViewsModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-import { fetchUserdata } from '../actions/userData';
-
+import { closeQueryHistoryModal } from '../actions/queryHistory'
 
 class App extends Component {
 
@@ -91,13 +91,24 @@ class App extends Component {
                     showModal={this.props.modalWindows.upload.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
                 />
+                <QueryHistoryModal
+                    showModal={this.props.showQueryHistoryModal}
+                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()) } }
+                />
             </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, modalWindows, views, fields, ui, errorHandler: { showErrorWindow } } = state;
+    const { auth,
+            userData,
+            modalWindows,
+            views,
+            fields,
+            ui,
+            errorHandler: { showErrorWindow },
+            queryHistory: { showQueryHistoryModal } } = state;
 
     return {
         auth,
@@ -106,7 +117,8 @@ function mapStateToProps(state) {
         views,
         fields,
         ui,
-        showErrorWindow
+        showErrorWindow,
+        showQueryHistoryModal
     }
 }
 
