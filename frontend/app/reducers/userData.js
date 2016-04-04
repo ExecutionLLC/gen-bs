@@ -110,10 +110,10 @@ export default function userData(state = {
                 filterId = null;
             }
 
-            var viewId = state.attachedHistoryData.sampleId;
+            var viewId = state.attachedHistoryData.viewId;
             var views = state.views;
             if (action.detachView) {
-                views = changeHistoryItem(state.views, viewId, null).collection;
+                views = changeHistoryItem(views, viewId, null).collection;
                 viewId = null;
             }
 
