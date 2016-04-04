@@ -10,7 +10,7 @@ import Buy from './NavbarMain/Buy'
 import Auth from './NavbarMain/Auth'
 
 import { toggleQueryNavbar } from '../../actions/ui'
-
+import { changeVariantsGlobalFilter, searchInResultsSortFilter } from '../../actions/variantsTable'
 
 class NavbarMain extends Component {
 
@@ -19,7 +19,14 @@ class NavbarMain extends Component {
     }
 
     render() {
-        const { dispatch, variantsTable: {selectedSearchKeysToVariants} } = this.props;
+        const { dispatch, ui, variantsTable: {selectedSearchKeysToVariants} } = this.props;
+        const changeGlobalSearchValue = (globalSearchString) => {
+            dispatch(changeVariantsGlobalFilter(globalSearchString));
+        };
+        const sendSearchRequest = (globalSearchString) => {
+            dispatch(changeVariantsGlobalFilter(globalSearchString));
+            dispatch(searchInResultsSortFilter());
+        };
         return (
 
             <nav className="navbar navbar-inverse navbar-fixed-top navbar-main">
@@ -31,7 +38,9 @@ class NavbarMain extends Component {
                         data-localize="brand.title">AGx</span><sup>i</sup></a></div>
 
                     <CreateQueryNavbarButton toggleQueryNavbar={ () => { dispatch(toggleQueryNavbar()) } }/>
-                    <NavbarSearch />
+                    <NavbarSearch onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString) } }
+                                  onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString) } }
+                    />
                     <ExportDropdown dispatch={this.props.dispatch}
                                     selectedSearchKeysToVariants={selectedSearchKeysToVariants}
                     />
@@ -59,5 +68,5 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(NavbarMain)
+export default connect(mapStateToProps)(NavbarMain);
 

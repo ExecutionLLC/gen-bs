@@ -40,6 +40,20 @@ export default function variantsTable(state = {
                 })
             });
 
+        case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
+            const currentGlobalSearchString = state.searchInResultsParams.top_search;
+            if (currentGlobalSearchString === action.globalSearchString) {
+                return state;
+            }
+            return Object.assign({}, state, {
+                searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+                    top_search: action.globalSearchString,
+                    limit: 100,
+                    offset: 0
+                }),
+                needUpdate: true
+            });
+        }
         case ActionTypes.CHANGE_VARIANTS_FILTER: {
             // copy search array
             var searchArray = [...state.searchInResultsParams.search];
@@ -47,20 +61,20 @@ export default function variantsTable(state = {
 
             if (action.filterValue !== '') {
                 if (fieldIndex !== -1) {
-                    const currentFilterValue = searchArray[fieldIndex].value
+                    const currentFilterValue = searchArray[fieldIndex].value;
                     if (currentFilterValue === action.filterValue) {
                         // filter value is the same
-                        return state
+                        return state;
                     }
                     // update current filter
-                    searchArray[fieldIndex].value = action.filterValue
+                    searchArray[fieldIndex].value = action.filterValue;
                 } else {
                     // it is new filter
-                    searchArray.push({field_id: action.fieldId, value: action.filterValue})
+                    searchArray.push({field_id: action.fieldId, value: action.filterValue});
                 }
             } else {
                 // filter value is empty, so we should remove filter
-                searchArray.splice(fieldIndex, 1)
+                searchArray.splice(fieldIndex, 1);
             }
 
             return Object.assign({}, state, {
@@ -70,7 +84,7 @@ export default function variantsTable(state = {
                     offset: 0
                 }),
                 needUpdate: true
-            })
+            });
         }
         case ActionTypes.CHANGE_VARIANTS_SORT: {
             // copy sort array
@@ -79,7 +93,7 @@ export default function variantsTable(state = {
 
             if (fieldIndex === -1) {
                 // it is new column for sorting
-                const newItem = {field_id: action.fieldId, direction: action.sortDirection }
+                const newItem = {field_id: action.fieldId, direction: action.sortDirection };
                 if (sortArray.length < action.sortOrder) {
                     // put new item to the end of array
                     fieldIndex = sortArray.length;
@@ -89,7 +103,7 @@ export default function variantsTable(state = {
                     // remove sorting with higer order
                     // NOTE: if you want to save state of the sorting with higher order, then
                     // just remove next line  
-                    sortArray = sortArray.slice(0, fieldIndex)
+                    sortArray = sortArray.slice(0, fieldIndex);
                 }
                 sortArray[fieldIndex] = newItem;
             } else {
@@ -122,7 +136,7 @@ export default function variantsTable(state = {
                     offset: 0
                 }),
                 needUpdate: true
-            })
+            });
         }
         case ActionTypes.REQUEST_VARIANTS:
             return Object.assign({}, state, {
@@ -171,6 +185,6 @@ export default function variantsTable(state = {
         }
 
         default:
-            return state
+            return state;
     }
 }

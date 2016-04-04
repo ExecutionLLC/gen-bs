@@ -4,25 +4,26 @@ import {requestAnalyze, clearVariants, addComment, changeComment, deleteComment}
 /*
  * action types
  */
-export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS'
-export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER'
-export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT'
-export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS'
+export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
+export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
+export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER';
+export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
+export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
 
-export const FILTER_VARIANTS = 'FILTER_VARIANTS'
+export const FILTER_VARIANTS = 'FILTER_VARIANTS';
 
-export const SORT_VARIANTS = 'SORT_VARIANTS'
+export const SORT_VARIANTS = 'SORT_VARIANTS';
 
-export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW'
+export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
 
-export const REQUEST_VARIANTS = 'REQUEST_VARIANTS'
-export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS'
+export const REQUEST_VARIANTS = 'REQUEST_VARIANTS';
+export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS';
 
-export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS'
-export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS'
+export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS';
+export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
 
-export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT'
-export const RECEIVE_NEXT_PART_OF_DATA = 'RECEIVE_NEXT_PART_OF_DATA'
+export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT';
+export const RECEIVE_NEXT_PART_OF_DATA = 'RECEIVE_NEXT_PART_OF_DATA';
 
 
 /*
@@ -38,11 +39,11 @@ function changeVariantsLimit() {
 
 export function getNextPartOfData(currentSample, currentView, currentFilter) {
     return (dispatch, getState) => {
-        dispatch(changeVariantsLimit())
+        dispatch(changeVariantsLimit());
 
         setTimeout(() => {
             dispatch(searchInResultsNextData())
-        }, 100)
+        }, 100);
 
 
     }
@@ -85,6 +86,13 @@ export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
         fieldId,
         sortOrder,
         sortDirection
+    }
+}
+
+export function changeVariantsGlobalFilter(globalSearchString) {
+    return {
+        type: CHANGE_VARIANTS_GLOBAL_FILTER,
+        globalSearchString
     }
 }
 

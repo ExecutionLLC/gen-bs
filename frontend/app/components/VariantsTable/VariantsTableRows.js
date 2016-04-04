@@ -12,7 +12,7 @@ export default class VariantsTableRows extends Component {
         const { sort } = this.props.variantsTable.searchInResultsParams;
         const { isFilteringOrSorting, selectedSearchKeysToVariants} = this.props.variantsTable;
         const { searchParams,ui,fields } = this.props;
-        const currentView = searchParams ? _.find(ui.views, view => view.id === searchParams.viewId) : null;
+        const currentView = this.props.ws.variantsView;
 
         return (
             <tbody className="table-variants-body"
@@ -66,7 +66,6 @@ export default class VariantsTableRows extends Component {
     }
 
     handleScroll(e) {
-        //console.log('scroll', e);
         const { currentVariants } = this.props.ws;
         if (!currentVariants) {
             return;
@@ -77,6 +76,10 @@ export default class VariantsTableRows extends Component {
         if (el.scrollHeight - el.scrollTop === el.clientHeight
             && variantsLength > this.props.variantsTable.searchInResultsParams.limit - 1) {
             this.props.dispatch(getNextPartOfData());
+        }
+
+        if(this.props.xScrollListener) {
+            this.props.xScrollListener(el.scrollLeft);
         }
     }
 
