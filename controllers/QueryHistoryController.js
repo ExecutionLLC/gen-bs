@@ -12,13 +12,13 @@ class QueryHistoryController extends ControllerBase {
     }
 
     getQueryHistories(request, response) {
+        const test = '';
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
-            (callback) => this.getRequestBody(request, callback),
-            (body, callback) => {
+            (callback) => {
                 const user = request.user;
-                const limit = body.limit;
-                const offset = body.offset;
+                const limit = request.query.limit;
+                const offset = request.query.offset;
                 this.services.queryHistory.findQueryHistories(user, limit, offset,
                     (error, result)=>callback(error, result, user)
                 );
@@ -78,7 +78,7 @@ class QueryHistoryController extends ControllerBase {
     createRouter() {
         const router = new Express();
 
-        router.post('/', this.getQueryHistories.bind(this));
+        router.get('/', this.getQueryHistories.bind(this));
 
         return router;
     }
