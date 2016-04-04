@@ -13,96 +13,159 @@ const mappedColumns = [
     'totalResults'
 ];
 
+const QueryHistoryTableNames = {
+    QueryHistory: 'query_history',
+    Filters: 'query_history_filter'
+};
+
 class QueryHistoryModel extends SecureModelBase {
+
     constructor(models) {
-        super(models, 'query_history', mappedColumns);
+        super(models, QueryHistoryTableNames.QueryHistory, mappedColumns);
     }
 
-    // Собирает все comments для текущего пользователя
-    findAll(userId, callback) {
-        async.waterfall([
-            (callback) => this._fetchUserQueries(userId, callback),
-            (queries, callback) => this._mapItems(queries, callback)
-        ], callback);
-    }
-
-    findMany(userId, queryIds, callback) {
-        async.waterfall([
-            (callback) => { this._fetchQueries(queryIds, callback); },
-            (queries, callback) => this._ensureAllItemsFound(queries, queryIds, callback),
-            (queries, callback) => async.map(queries, (query, callback) => {
-                this._ensureItemNotDeleted(query, callback);
-            }, callback),
-            (queries, callback) => async.map(queries, (query, callback) => {
-                this._checkUserIsCorrect(userId, query, callback);
-            }, callback),
-            (queries, callback) => this._mapItems(queries, callback)
-        ], callback);
-    }
-
-    // languId is used for interface compatibility
-    _add(userId, languId, query, shouldGenerateId, callback) {
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToInsert = {
-                        id: shouldGenerateId ? this._generateId() : query.id,
-                        creator: userId,
-                        viewId: query.viewId,
-                        vcfFileSampleVersionId: query.vcfFileSampleVersionId,
-                        totalResults: query.totalResults
-                    };
-                    this._insert(dataToInsert, trx, callback);
-                }
-            ], callback);
-        }, callback);
-    }
-
-    _update(userId, query, queryToUpdate, callback) {
-        this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => {
-                    const dataToUpdate = {
-                        viewId: queryToUpdate.viewId,
-                        vcfFileSampleVersionId: queryToUpdate.vcfFileSampleVersionId,
-                        totalResults: queryToUpdate.totalResults
-                    };
-                    this._unsafeUpdate(query.id, dataToUpdate, trx, callback);
-                }
-            ], callback);
-        }, callback);
-    }
-
-    _fetchUserQueries(userId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
+    _findHistoryById(queryHistoryId, callback) {
+        this.db.asCallback((trx, callback) => {
+            trx.select()
                 .from(this.baseTableName)
-                .where('creator', userId)
-                .andWhere('is_deleted', false)
-                .asCallback((error, queriesData) => {
-                    if (error) {
-                        callback(error);
+                .innerJoin(QueryHistoryTableNames.Filters,
+                    QueryHistoryTableNames.Filters + '.query_history_id',
+                    this.baseTableName + '.id'
+                )
+                .where('id', queryHistoryId)
+                .asCallback((error, filterData) => {
+                    if (error || !filterData.length) {
+                        callback(error || new Error('Item not found: ' + queryHistoryId));
                     } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(queriesData));
+                        const query_history = this._extractQueryHistory(filterData);
+                        callback(null, query_history);
                     }
+                });
+        }, (error, result) => callback(error, result));
+    }
+
+    _extractQueryHistory(filterData) {
+        const camelcaseFilterData = ChangeCaseUtil.convertKeysToCamelCase(filterData);
+        const id = camelcaseFilterData[0].id;
+        const totalResults = camelcaseFilterData[0].totalResults;
+        const vcfFileSampleVersionId = camelcaseFilterData[0].vcfFileSampleVersionId;
+        const viewId = camelcaseFilterData[0].viewId;
+        const filters = [];
+        _.forEach(camelcaseFilterData, (data) => {
+                filters.push(data.filterId);
+            }
+        );
+        return {
+            id: id,
+            totalResults: totalResults,
+            vcfFileSampleVersionId: vcfFileSampleVersionId,
+            viewId: viewId,
+            filters: filters
+        };
+    };
+
+    getLastInsertedId(userId, callback) {
+        this.db.asCallback(
+            (trx, callback) => {
+                trx.select('id')
+                    .from(this.baseTableName)
+                    .where('creator', userId)
+                    .orderBy('timestamp', 'desc')
+                    .limit(1)
+                    .asCallback(
+                        (error, result) => callback(error, result)
+                    );
+            }, (error, ids) => {
+                const lastInsertedId = !_.isEmpty(ids) ? ids[0].id : null;
+                callback(error, lastInsertedId)
+            }
+        );
+    }
+
+    _add(userId, languageId, query, shouldGenerateId, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._addInTransaction(userId, query, shouldGenerateId, trx, callback);
+        }, callback);
+    }
+
+    _addInTransaction(userId, query, shouldGenerateId, trx, callback) {
+        async.waterfall([
+            (callback) => {
+                const dataToInsert = this._createDataToInsert(userId, query, shouldGenerateId);
+                this._insert(dataToInsert, trx, callback);
+            },
+            (queryHistoryId, callback) => {
+                _.forEach(query.filters, (filterId) => {
+                        this._addNewQueryHistoryFilter(queryHistoryId, filterId, trx, callback);
+                    }
+                );
+                callback(null, queryHistoryId);
+            }
+        ], callback);
+    }
+
+    _addNewQueryHistoryFilter(queryHistoryId, filterId, trx, callback) {
+        const dataToInsert = {
+            queryHistoryId: queryHistoryId,
+            filterId: filterId
+        };
+        this._unsafeInsert(QueryHistoryTableNames.Filters, dataToInsert, trx, callback);
+    }
+
+    _createDataToInsert(userId, query, shouldGenerateId) {
+        return {
+            id: shouldGenerateId ? this._generateId() : query.id,
+            creator: userId,
+            vcfFileSampleVersionId: query.vcfFileSampleVersionId,
+            viewId: query.viewId,
+            totalResults: query.totalResults
+        };
+    }
+
+    findQueryHistories(userId, limit, offset, callback) {
+        async.waterfall(
+            [
+                (callback) => this._findQueryHistoriesIds(userId, limit, offset, callback),
+                (queryHistoryIds, callback) => this._findQueryHistoriesByIds(queryHistoryIds, callback)
+            ], callback
+        );
+    }
+
+    _findQueryHistoriesIds(userId, limit, offset, callback) {
+        this.db.asCallback(
+            (trx, callback) => {
+                trx.select('id')
+                    .from(this.baseTableName)
+                    .where('creator', userId)
+                    .orderBy('timestamp', 'desc')
+                    .offset(offset)
+                    .limit(limit)
+                    .asCallback(
+                        (error, result) => callback(error, _.map(result, (item) => {
+                            return item.id;
+                        }))
+                    );
+            }, callback
+        );
+    }
+
+    _findQueryHistoriesByIds(queryHistoryIds, callback) {
+        this.db.asCallback((trx, callback) => {
+            trx.select()
+                .from(this.baseTableName)
+                .innerJoin(QueryHistoryTableNames.Filters,
+                    QueryHistoryTableNames.Filters + '.query_history_id',
+                    this.baseTableName + '.id'
+                )
+                .whereIn('id', queryHistoryIds)
+                .asCallback((error, result) => {
+                    const filterData = _.map(_.groupBy(result, 'id'), this._extractQueryHistory);
+                    callback(null, filterData)
                 });
         }, callback);
     }
 
-    _fetchQueries(queryIds, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .whereIn('id', queryIds)
-                .asCallback((error, queriesData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(queriesData));
-                    }
-                });
-        }, callback);
-    }
+
 }
 
 module.exports = QueryHistoryModel;
