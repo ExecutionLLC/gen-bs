@@ -277,9 +277,9 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
-    _findManyInTransaction(trx, userId, sampleVersionId, callback) {
+    _findManyInTransaction(trx, userId, sampleVersionIds, callback) {
         async.waterfall([
-            (callback) => this._findSampleVersionsByVersionIds(trx, sampleVersionId, callback),
+            (callback) => this._findSampleVersionsByVersionIds(trx, sampleVersionIds, callback),
             (sampleVersions, callback) =>
                 this._findSamplesMetadata(trx,
                     userId,
@@ -320,7 +320,7 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    _replaceSampleIdWithCurrentVersionId(samplesMetadata, sampleVersions, callback) {
+    _replaceSampleIdWithCurrentVersionId(trx,samplesMetadata, sampleVersions, callback) {
         const resultSampleList = [];
         _.forEach(sampleVersions, sampleVersion => {
             const sample = _.find(
@@ -329,8 +329,8 @@ class SamplesModel extends SecureModelBase {
             );
             const resultSample = _.cloneDeep(sample);
             resultSample.id = sampleVersion.id;
-            sample.timestamp = sampleVersion.timestamp;
-            resultSampleList.push(sample);
+            resultSample.timestamp = sampleVersion.timestamp;
+            resultSampleList.push(resultSample);
         });
         callback(null, resultSampleList);
     }
@@ -338,7 +338,7 @@ class SamplesModel extends SecureModelBase {
 
     _findSampleVersionsByVersionIds(trx, sampleVersionIds, callback) {
         async.waterfall([
-            (callback) => trx.select('vcf_file_sample_id')
+            (callback) => trx.select('id','vcf_file_sample_id')
                 .from(SampleTableNames.Versions)
                 .whereIn('id', sampleVersionIds)
                 .orderBy('timestamp', 'desc')
