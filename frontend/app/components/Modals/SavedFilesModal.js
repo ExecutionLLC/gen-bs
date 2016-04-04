@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Moment from 'moment';
 import { connect } from 'react-redux'
 
 import DialogBase from './DialogBase';
@@ -9,57 +10,76 @@ class SavedFilesModal extends DialogBase {
         super(props, 'savedFiles');
     }
 
+    get haveSavedFiles() {
+        const {savedFiles} = this.props;
+        return !_.isEmpty(savedFiles);
+    }
+
     renderTitleContents() {
         return (
             <div>Saved Files</div>
         );
     }
 
-    renderBodyContents() {
-        const {savedFiles} = this.props;
-        const haveSavedFiles = !_.isEmpty(savedFiles);
-        if (haveSavedFiles) {
-            return (
-                <table>
-                    <tbody>
-                    {_.map(savedFiles, savedFile => this.renderSavedFileRow(savedFile))}
-                    </tbody>
-                </table>
-            );
+    renderFooter() {
+        return null;
+    }
+
+    getBodyClassNames() {
+        if (this.haveSavedFiles) {
+            return ['table-content'];
         } else {
+            return [];
+        }
+    }
+
+    renderBodyContents() {
+        if (!this.haveSavedFiles) {
             return (
                 <div>Here will be the files you have exported, but there are no such files for now.</div>
             );
         }
-    }
-
-    renderFooterContents() {
+        const {savedFiles} = this.props;
+        // Now just take last ten elements.
+        // TODO: Add pagination for saved files.
+        const sortedFiles = _(savedFiles)
+            .sortBy(file => -file.timestamp)
+            .take(10)
+            .value();
         return (
-            <button
-                onClick={ () => this.onCloseModal() }
-                type="button"
-                className="btn btn-default"
-                data-dismiss="modal"
-            >
-                <span>Okay</span>
-            </button>
+            <div className="table-wrapper table-files-wrapper">
+                <div className="table-container table-variants-container">
+                    <table className="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Sample</th>
+                            <th>Filter</th>
+                            <th>View</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {_.map(sortedFiles, file => this.renderSavedFileRow(file))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         );
     }
 
     renderSavedFileRow(savedFile) {
-        const {name, filter, view, sample, timestamp} = savedFile;
+        const {filter, view, sample, timestamp} = savedFile;
         return (
-            <tr>
-                <td>{name}</td>
+            <tr key={savedFile.id}>
+                <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
+                <td>{sample.file_name}</td>
                 <td>{filter.name}</td>
                 <td>{view.name}</td>
-                <td>{sample.name}</td>
-                <td>{timestamp}</td>
                 <td>
                     <button
                         onClick={() => this.onDownloadClick(savedFile)}
                         type="button"
-                        className="btn btn-default"
+                        className="btn btn-uppercase btn-link"
                     >
                         <span>Download</span>
                     </button>

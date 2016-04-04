@@ -16,7 +16,7 @@ export default function savedFiles(state = {
             ExportUtils.downloadBlob(fileBlob, fileName);
             return state;
         }
-            
+
         case ActionTypes.RECEIVE_SAVED_FILES_LIST: {
             return Object.assign({}, state, {
                 list: action.savedFilesList
@@ -25,7 +25,7 @@ export default function savedFiles(state = {
 
         case ActionTypes.SAVED_FILE_UPLOAD_RESULT_RECEIVED: {
             // Put newly added file to the beginning of the array.
-            const {savedFiles} = state;
+            const savedFiles = state.list;
             const {savedFile} = action;
             const newSavedFiles = [savedFile].concat((savedFiles || []).slice());
             return Object.assign({}, state, {

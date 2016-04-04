@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
+import classnames from 'classnames';
 
-export default class DialogBase extends Component {
+import ComponentBase from '../shared/ComponentBase';
+
+export default class DialogBase extends ComponentBase {
     constructor(props, dialogName) {
         super(props);
+    }
+    
+    getBodyClassNames() {
+        return [];
     }
 
     renderTitleContents() {
@@ -34,7 +41,7 @@ export default class DialogBase extends Component {
 
     renderHeader() {
         return (
-            <Modal.Header>
+            <Modal.Header closeButton>
                 <Modal.Title>
                     {this.renderTitleContents()}
                 </Modal.Title>
@@ -43,8 +50,9 @@ export default class DialogBase extends Component {
     }
 
     renderBody() {
+        const bodyClassNames = classnames(this.getBodyClassNames());
         return (
-            <Modal.Body>
+            <Modal.Body className={bodyClassNames}>
                 {this.renderBodyContents()}
             </Modal.Body>
         );
