@@ -1,5 +1,5 @@
 import apiFacade from '../api/ApiFacade';
-import config from '../../config'
+import { handleError } from './errorHandler'
 import { clearVariants, addComment, changeComment, deleteComment } from './websocket'
 
 import HttpStatus from 'http-status';
@@ -150,9 +150,9 @@ export function createComment(alt, pos, ref, chrom, searchKey, comment) {
         commentsClient.add(sessionId, languageId, commentObject,
             (error, response) => {
                 if (error) {
-                    handleError(null, ADD_COMMENT_NETWORK_ERROR);
+                    dispatch(handleError(null, ADD_COMMENT_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
-                    handleError(null, ADD_COMMENT_SERVER_ERROR);
+                    dispatch(handleError(null, ADD_COMMENT_SERVER_ERROR));
                 } else {
                     dispatch(addComment(response.body));
                 }
@@ -175,13 +175,13 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
             comment
         };
 
-        const sessionId= getState().auth.sessionId;
+        const sessionId = getState().auth.sessionId;
         commentsClient.update(sessionId, commentObject,
             (error, response) => {
                 if (error) {
-                    handleError(null, UPDATE_COMMENT_NETWORK_ERROR);
+                    dispatch(handleError(null, UPDATE_COMMENT_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
-                    handleError(null, UPDATE_COMMENT_SERVER_ERROR);
+                    dispatch(handleError(null, UPDATE_COMMENT_SERVER_ERROR));
                 } else {
                     dispatch(changeComment(response.body));
                 }
@@ -193,13 +193,13 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
 export function removeComment(id, searchKey) {
 
     return (dispatch, getState) => {
-        const sessionId= getState().auth.sessionId;
+        const sessionId = getState().auth.sessionId;
         commentsClient.del(sessionId, id,
             (error, response) => {
                 if (error) {
-                    handleError(null, DELETE_COMMENT_NETWORK_ERROR);
+                    dispatch(handleError(null, DELETE_COMMENT_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
-                    handleError(null, DELETE_COMMENT_SERVER_ERROR);
+                    dispatch(handleError(null, DELETE_COMMENT_SERVER_ERROR));
                 } else {
                     dispatch(deleteComment(response.body, searchKey));
                 }
@@ -213,10 +213,10 @@ export function fetchVariants(searchParams) {
         console.log('fetchVariants: ', searchParams);
 
         dispatch(requestVariants());
-
-        const sessionId = getState().auth.sessionId;
+        const { auth: {sessionId}, ui: {languageId} } = getState();
         searchClient.sendSearchRequest(
             sessionId,
+            'en', //languageId,
             searchParams.sampleId,
             searchParams.viewId,
             searchParams.filterId,
@@ -224,9 +224,9 @@ export function fetchVariants(searchParams) {
             searchParams.offset,
             (error, response) => {
                 if (error) {
-                    handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR);
+                    dispatch(handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
-                    handleError(null, ANALYZE_SAMPLE_SERVER_ERROR);
+                    dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
                 } else {
                     dispatch(receiveVariants(response.body));
                 }
@@ -275,10 +275,10 @@ export function searchInResultsNextData() {
             limit,
             (error, response) => {
                 if (error) {
-                    handleError(null, NEXT_DATA_NETWORK_ERROR);
+                    dispatch(handleError(null, NEXT_DATA_NETWORK_ERROR));
                     dispatch(receiveSearchedResults());
                 } else if (response.status !== HttpStatus.OK) {
-                    handleError(null, NEXT_DATA_SERVER_ERROR);
+                    dispatch(handleError(null, NEXT_DATA_SERVER_ERROR));
                     dispatch(receiveSearchedResults());
                 }
             }
@@ -303,10 +303,10 @@ export function searchInResults(flags) {
             sort,
             (error, response) => {
                 if (error) {
-                    handleError(null, SEARCH_IN_RESULTS_NETWORK_ERROR);
+                    dispatch(handleError(null, SEARCH_IN_RESULTS_NETWORK_ERROR));
                     dispatch(receiveSearchedResults());
                 } else if (response.status !== HttpStatus.OK) {
-                    handleError(null, SEARCH_IN_RESULTS_SERVER_ERROR);
+                    dispatch(handleError(null, SEARCH_IN_RESULTS_SERVER_ERROR));
                     dispatch(receiveSearchedResults());
                 }
             }
