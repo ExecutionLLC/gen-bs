@@ -71,14 +71,14 @@ export function fetchUserdata() {
             } else {
                 const result = response.body;
                 const view = result.views[0] || null;
-                const sampleId = result.samples.length ? result.samples[result.samples.length - 1].id : null;
+                const sample = result.samples[0] || null;
                 const filter = result.filters[0] || null;
                 dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
-                dispatch(changeSample(result.samples, sampleId));
-                dispatch(analyze(sampleId, view.id, filter.id));
-                dispatch(fetchFields(sampleId));
+                dispatch(changeSample(result.samples, sample.id));
+                dispatch(analyze(sample.id, view.id, filter.id));
+                dispatch(fetchFields(sample.id));
                 dispatch(fetchTotalFields());
             }
         });
