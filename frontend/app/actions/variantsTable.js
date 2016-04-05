@@ -1,9 +1,13 @@
+import apiFacade from '../api/ApiFacade';
 import config from '../../config'
-import {requestAnalyze, clearVariants, addComment, changeComment, deleteComment} from './websocket'
+import { clearVariants, addComment, changeComment, deleteComment } from './websocket'
+
+import HttpStatus from 'http-status';
 
 /*
  * action types
  */
+
 export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
 export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER';
@@ -25,6 +29,16 @@ export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
 export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT';
 export const RECEIVE_NEXT_PART_OF_DATA = 'RECEIVE_NEXT_PART_OF_DATA';
 
+const ANALYZE_SAMPLE_NETWORK_ERROR = 'Cannot analyze data (network error). Please try again.';
+const ANALYZE_SAMPLE_SERVER_ERROR = 'Cannot analyze data (server error). Please try again.';
+
+const NEXT_DATA_NETWORK_ERROR = 'Cannot get next part of data (network error). Please try again.';
+const NEXT_DATA_SERVER_ERROR = 'Cannot get next part of data (server error). Please try again.';
+
+const SEARCH_IN_RESULTS_NETWORK_ERROR = 'Cannot analyze results (network error). Please try again.';
+const SEARCH_IN_RESULTS_SERVER_ERROR = 'Cannot analyze results (server error). Please try again.';
+
+const searchClient = apiFacade.searchClient;
 
 /*
  * action creators
@@ -38,14 +52,12 @@ function changeVariantsLimit() {
 }
 
 export function getNextPartOfData(currentSample, currentView, currentFilter) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(changeVariantsLimit());
 
         setTimeout(() => {
-            dispatch(searchInResultsNextData())
+            dispatch(searchInResultsNextData());
         }, 100);
-
-
     }
 }
 
@@ -179,39 +191,40 @@ export function removeComment(id, search_key) {
                 'contentType': 'application/json'
             })
             .fail(json => {
-                console.log('createComment fail', json)
+                console.log('createComment fail', json);
             })
             .then(json=> {
-                console.log('createComment sucess', json)
-                dispatch(deleteComment(json, search_key))
+                console.log('createComment sucess', json);
+                dispatch(deleteComment(json, search_key));
             })
 
     }
 }
 
 export function fetchVariants(searchParams) {
+    return (dispatch, getState) => {
+        console.log('fetchVariants: ', searchParams);
 
-    return dispatch => {
+        dispatch(requestVariants());
 
-        console.log('fetchVariants: ', searchParams)
-
-        dispatch(requestVariants())
-
-        setTimeout(() => {
-            $.ajax(config.URLS.SEARCH, {
-                    'data': JSON.stringify(searchParams),
-                    'type': 'POST',
-                    'processData': false,
-                    'contentType': 'application/json'
-                })
-                .then(json => {
-                    console.log('search', json)
-                    dispatch(receiveVariants(json))
-                })
-        }, 1000);
-
-        // TODO:
-        // catch any error in the network call.
+        const sessionId = getState().auth.sessionId;
+        searchClient.sendSearchRequest(
+            sessionId,
+            searchParams.sampleId,
+            searchParams.viewId,
+            searchParams.filterId,
+            searchParams.limit,
+            searchParams.offset,
+            (error, response) => {
+                if (error) {
+                    handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR);
+                } else if (response.statusCode !== HttpStatus.OK) {
+                    handleError(null, ANALYZE_SAMPLE_SERVER_ERROR);
+                } else {
+                    dispatch(receiveVariants(response.body));
+                }
+            }
+        );
     }
 }
 
@@ -241,43 +254,56 @@ export function searchInResultsSortFilter() {
 
 export function searchInResultsNextData() {
     return (dispatch, getState) => {
-
         dispatch(requestSearchedResults({isNextDataLoading: true, isFilteringOrSorting: false}));
 
         const state = getState();
+        const sessionId = state.auth.sessionId;
+        const operationId = state.variantsTable.operationId;
         const {offset, limit} = state.variantsTable.searchInResultsParams;
-        $.ajax(config.URLS.SEARCH_IN_RESULTS(state.variantsTable.operationId), {
-                data: {limit, offset},
-                type: 'GET',
-                processData: true,
-                contentType: 'application/json'
-            })
-            .fail(json => {
-                console.log('search fail', json);
-            });
+
+        searchClient.sendGetNextPartOfData(
+            sessionId,
+            operationId,
+            offset,
+            limit,
+            (error, response) => {
+                if (error) {
+                    handleError(null, NEXT_DATA_NETWORK_ERROR);
+                    dispatch(receiveSearchedResults());
+                } else if (response.statusCode !== HttpStatus.OK) {
+                    handleError(null, NEXT_DATA_SERVER_ERROR);
+                    dispatch(receiveSearchedResults());
+                }
+            }
+        );
     }
 }
 
 export function searchInResults(flags) {
     return (dispatch, getState) => {
-
         dispatch(requestSearchedResults(flags));
 
-        const clearedJson = getState().variantsTable.searchInResultsParams;
+        const state = getState();
+        const sessionId = state.auth.sessionId;
+        const operationId = state.variantsTable.operationId;
+        const { search, sort, topSearch } = state.variantsTable.searchInResultsParams;
 
-        $.ajax(config.URLS.SEARCH_IN_RESULTS(getState().variantsTable.operationId), {
-                'data': JSON.stringify(clearedJson),
-                'type': 'POST',
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .fail(json => {
-                console.log('search fail', json);
-                dispatch(receiveSearchedResults())
-            });
-
-        // TODO:
-        // catch any error in the network call.
+        sendSearchInResultsRequest(
+            sessionId,
+            operationId,
+            topSearch,
+            search,
+            sort,
+            (error, response) => {
+                if (error) {
+                    handleError(null, SEARCH_IN_RESULTS_NETWORK_ERROR);
+                    dispatch(receiveSearchedResults());
+                } else if (response.statusCode !== HttpStatus.OK) {
+                    handleError(null, SEARCH_IN_RESULTS_SERVER_ERROR);
+                    dispatch(receiveSearchedResults());
+                }
+            }
+        );
     }
 }
 
