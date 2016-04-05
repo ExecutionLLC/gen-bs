@@ -56,7 +56,7 @@ export function fetchFields(sampleId) {
     }
 }
 
-function requestSourceFields() {
+function requestTotalFields() {
     return {
         type: REQUEST_TOTAL_FIELDS
     }
@@ -70,13 +70,13 @@ function receiveTotalFields(json) {
     }
 }
 
-export function fetchSourceFields() {
+export function fetchTotalFields() {
 
     return (dispatch, getState) => {
-        dispatch(requestSourceFields());
+        dispatch(requestTotalFields());
 
         const sessionId = getState().auth.sessionId;
-        samplesClient.getSourcesFields(sessionId, (error, response) => {
+        samplesClient.getAllFields(sessionId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, SOURCE_FIELDS_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {

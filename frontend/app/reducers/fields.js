@@ -57,7 +57,7 @@ export default function fields(state = {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: false
                 }),
-                totalFieldsList:totalFields,
+                totalFieldsList: totalFields,
                 sourceFieldsList: sourceFields,
                 lastUpdated: action.receivedAt
             });

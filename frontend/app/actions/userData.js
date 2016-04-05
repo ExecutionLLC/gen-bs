@@ -2,7 +2,7 @@ import config from '../../config'
 
 import apiFacade from '../api/ApiFacade'
 import { handleError } from './errorHandler'
-import { fetchFields, fetchSourceFields } from './fields'
+import { fetchFields, fetchTotalFields } from './fields'
 import { analyze, changeSample, changeView, changeFilter } from './ui'
 
 import HttpStatus from 'http-status';
@@ -79,7 +79,7 @@ export function fetchUserdata() {
                 dispatch(changeSample(result.samples, sampleId));
                 dispatch(analyze(sampleId, view.id, filter.id));
                 dispatch(fetchFields(sampleId));
-                dispatch(fetchSourceFields());
+                dispatch(fetchTotalFields());
             }
         });
     }
