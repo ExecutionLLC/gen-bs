@@ -47,6 +47,9 @@ module.exports = {
                 include: [
                     path.resolve(__dirname, 'app'),
                     path.resolve(__dirname, 'config')
+                ],
+                exclude: [
+                    path.resolve(__dirname, 'app/assets')
                 ]
             }
         ],
