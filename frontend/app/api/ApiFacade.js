@@ -5,9 +5,10 @@ import config from '../../config';
 import Urls from './Urls';
 import DataClient from './DataClient';
 import FiltersClient from './FiltersClient';
-import SamplesClient from './SamplesClient'
+import SamplesClient from './SamplesClient';
+import SearchClient from './SearchClient';
 import SessionsClient from './SessionsClient';
-import ViewsClient from './ViewsClient'
+import ViewsClient from './ViewsClient';
 
 class ApiFacade {
     constructor() {
@@ -16,6 +17,7 @@ class ApiFacade {
         this._dataClient = new DataClient(urls);
         this._filtersClient = new FiltersClient(urls);
         this._samplesClient = new SamplesClient(urls);
+        this._searchClient = new SearchClient(urls);
         this._sessionsClient = new SessionsClient(urls);
         this._viewsClient = new ViewsClient(urls);
     }
@@ -29,7 +31,11 @@ class ApiFacade {
     }
 
     get samplesClient() {
-        return this._samplesClient;    
+        return this._samplesClient;
+    }
+
+    get searchClient() {
+        return this._searchClient;
     }
     
     get sessionsClient() {
