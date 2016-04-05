@@ -293,12 +293,14 @@ export function searchInResults(flags) {
         const state = getState();
         const sessionId = state.auth.sessionId;
         const operationId = state.variantsTable.operationId;
-        const { search, sort, topSearch } = state.variantsTable.searchInResultsParams;
+        const { search, sort, topSearch, limit, offset } = state.variantsTable.searchInResultsParams;
 
         searchClient.sendSearchInResultsRequest(
             sessionId,
             operationId,
             topSearch,
+            limit,
+            offset,
             search,
             sort,
             (error, response) => {
