@@ -31,7 +31,8 @@ module.exports = {
     devtool: '#eval',
 
     entry: [
-        'webpack/hot/dev-server',
+        'webpack-hot-middleware/client',
+        'babel-polyfill',
         './app/app.js'
     ],
 
@@ -58,10 +59,8 @@ module.exports = {
             {
                 test: /\.js?$/,
                 exclude: /(node_modules|bower_components|vendor)/,
-                loader: 'babel',
-                query: {
-                    presets: ['react', 'es2015']
-                }
+                loaders: ['react-hot', 'babel-loader'],
+                plugins: ['transform-runtime']
             },
             {test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery'},
 
