@@ -216,7 +216,7 @@ export function fetchVariants(searchParams) {
         const { auth: {sessionId}, ui: {languageId} } = getState();
         searchClient.sendSearchRequest(
             sessionId,
-            'en', //languageId,
+            languageId,
             searchParams.sampleId,
             searchParams.viewId,
             searchParams.filterId,
@@ -295,7 +295,7 @@ export function searchInResults(flags) {
         const operationId = state.variantsTable.operationId;
         const { search, sort, topSearch } = state.variantsTable.searchInResultsParams;
 
-        sendSearchInResultsRequest(
+        searchClient.sendSearchInResultsRequest(
             sessionId,
             operationId,
             topSearch,
