@@ -38,6 +38,7 @@ const NEXT_DATA_SERVER_ERROR = 'Cannot get next part of data (server error). Ple
 const SEARCH_IN_RESULTS_NETWORK_ERROR = 'Cannot analyze results (network error). Please try again.';
 const SEARCH_IN_RESULTS_SERVER_ERROR = 'Cannot analyze results (server error). Please try again.';
 
+const commentsClient = apiFacade.commentsClient;
 const searchClient = apiFacade.searchClient;
 
 /*

@@ -3,6 +3,7 @@
 import config from '../../config';
 
 import Urls from './Urls';
+import CommentsClient from './CommentsClient';
 import DataClient from './DataClient';
 import FiltersClient from './FiltersClient';
 import SamplesClient from './SamplesClient';
@@ -15,6 +16,7 @@ class ApiFacade {
         var urls = new Urls(config.HOST, config.PORT);
 
         this._dataClient = new DataClient(urls);
+        this._commentsClient = new CommentsClient(urls);
         this._filtersClient = new FiltersClient(urls);
         this._samplesClient = new SamplesClient(urls);
         this._searchClient = new SearchClient(urls);
@@ -24,6 +26,10 @@ class ApiFacade {
 
     get dataClient() {
         return this._dataClient;
+    }
+
+    get commentsClient() {
+        return this._commentsClient;
     }
 
     get filtersClient() {
