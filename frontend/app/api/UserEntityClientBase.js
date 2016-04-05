@@ -19,9 +19,9 @@ export default class UserEntityClientBase extends ClientBase {
             this._makeHeaders({sessionId}), null, null, callback);
     }
 
-    add(sessionId, languId, item, callback) {
+    add(sessionId, languageId, item, callback) {
         RequestWrapper.post(this.collectionUrls.create(),
-            this._makeHeaders({sessionId, languId}), item, callback);
+            this._makeHeaders({sessionId, languageId}), item, callback);
     }
 
     update(sessionId, item, callback) {
