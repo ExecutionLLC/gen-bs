@@ -7,6 +7,7 @@ import DataClient from './DataClient';
 import FiltersClient from './FiltersClient';
 import SamplesClient from './SamplesClient'
 import SessionsClient from './SessionsClient';
+import ViewsClient from './ViewsClient'
 
 class ApiFacade {
     constructor() {
@@ -16,7 +17,6 @@ class ApiFacade {
         this._filtersClient = new FiltersClient(urls);
         this._samplesClient = new SamplesClient(urls);
         this._sessionsClient = new SessionsClient(urls);
-        this._queryHistoryClient = new QueryHistoryClient(urls);
         this._viewsClient = new ViewsClient(urls);
     }
 
@@ -34,10 +34,6 @@ class ApiFacade {
     
     get sessionsClient() {
         return this._sessionsClient;
-    }
-    
-    get queryHistoryClient() {
-        return this._queryHistoryClient;
     }
 
     get viewsClient() {
