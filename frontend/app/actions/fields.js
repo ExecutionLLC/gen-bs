@@ -13,11 +13,11 @@ export const RECEIVE_FIELDS = 'RECEIVE_FIELDS';
 export const REQUEST_TOTAL_FIELDS = 'REQUEST_TOTAL_FIELDS';
 export const RECEIVE_TOTAL_FIELDS = 'RECEIVE_TOTAL_FIELDS';
 
-const SAMPLE_FIELDS_NETWORK_ERROR = '';
-const SAMPLE_FIELDS_SERVER_ERROR = '';
+const SAMPLE_FIELDS_NETWORK_ERROR = 'Cannot get sample fields (network error). You can reload page and try again.';
+const SAMPLE_FIELDS_SERVER_ERROR = 'Cannot get sample fields (server error). You can reload page and try again.';
 
-const SOURCE_FIELDS_NETWORK_ERROR = '';
-const SOURCE_FIELDS_SERVER_ERROR = '';
+const SOURCE_FIELDS_NETWORK_ERROR = 'Cannot get source fields (network error). You can reload page and try again.';
+const SOURCE_FIELDS_SERVER_ERROR = 'Cannot get source fields (server error). You can reload page and try again.';
 
 const samplesClient = apiFacade.samplesClient;
 
