@@ -40,6 +40,16 @@ module.exports = {
         filename: 'genomics.js'
     },
     module: {
+        preLoaders: [
+            {
+                test: /\.js$/,
+                loaders: ['eslint'],
+                include: [
+                    path.resolve(__dirname, 'app'),
+                    path.resolve(__dirname, 'config')
+                ]
+            }
+        ],
         loaders: [
             {test: /\.json$/, loader: 'file?name=[name].[ext]'},
             {
