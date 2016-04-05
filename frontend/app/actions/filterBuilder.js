@@ -1,28 +1,39 @@
 import config from '../../config'
 
-import { closeModal } from './modalWindows'
-import { changeFilter} from './ui'
-import { fetchFilters } from './userData'
+import apiFacade from '../api/ApiFacade';
+import { closeModal } from './modalWindows';
+import { handleError } from './errorHandler'
+import { fetchFilters } from './userData';
 
-export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER'
+import HttpStatus from 'http-status';
 
-export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR'
+export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
 
-export const FBUILDER_TOGGLE_NEW_EDIT = 'FBUILDER_TOGGLE_NEW_EDIT'
+export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR';
 
-export const FBUILDER_REQUEST_UPDATE_FILTER = 'FBUILDER_REQUEST_UPDATE_FILTER'
-export const FBUILDER_RECEIVE_UPDATE_FILTER = 'FBUILDER_RECEIVE_UPDATE_FILTER'
+export const FBUILDER_TOGGLE_NEW_EDIT = 'FBUILDER_TOGGLE_NEW_EDIT';
 
-export const FBUILDER_REQUEST_CREATE_FILTER = 'FBUILDER_REQUEST_CREATE_FILTER'
-export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER'
+export const FBUILDER_REQUEST_UPDATE_FILTER = 'FBUILDER_REQUEST_UPDATE_FILTER';
+export const FBUILDER_RECEIVE_UPDATE_FILTER = 'FBUILDER_RECEIVE_UPDATE_FILTER';
 
-export const FBUILDER_REQUEST_RULES = 'FBUILDER_REQUEST_RULES'
-export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES'
+export const FBUILDER_REQUEST_CREATE_FILTER = 'FBUILDER_REQUEST_CREATE_FILTER';
+export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
 
+export const FBUILDER_REQUEST_RULES = 'FBUILDER_REQUEST_RULES';
+export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
+
+const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
+const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Please try again.';
+
+const UPDATE_FILTER_NETWORK_ERROR = 'Cannot update filter (network error). Please try again.';
+const UPDATE_FILTER_SERVER_ERROR = 'Cannot update filter (server error). Please try again.';
+
+const filtersClient = apiFacade.filtersClient;
 
 /*
  * Action Creators
  */
+
 export function filterBuilderToggleNewEdit(editOrNew) {
     return {
         type: FBUILDER_TOGGLE_NEW_EDIT,
@@ -63,23 +74,21 @@ function filterBuilderReceiveCreateFilter(json) {
 export function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
-        dispatch(filterBuilderRequestUpdateFilter())
+        dispatch(filterBuilderRequestUpdateFilter());
 
-        return $.ajax(config.URLS.FILTERS, {
-                'type': 'POST',
-                'headers': {"X-Session-Id": getState().auth.sessionId},
-                'data': JSON.stringify(getState().filterBuilder.newFilter),
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .done(json => {
-                dispatch(filterBuilderReceiveUpdateFilter(json))
-                dispatch(closeModal('filters'))
-                dispatch(fetchFilters(json.id))
-            })
-            .fail(err => {
-                console.error('CREATE Filter FAILED: ', err.responseText)
-            })
+        const {auth: sessionId, filterBuilder: newFilter, ui: languageId} = getState();
+        filtersClient.add(sessionId, languageId, newFilter, (error, response) => {
+           if (error) {
+               dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
+           } else if (response.statusCode !== HttpStatus.OK) {
+               dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
+           } else {
+               const result = response.body;
+               dispatch(filterBuilderReceiveUpdateFilter(result));
+               dispatch(closeModal('filters'));
+               dispatch(fetchFilters(result.id));
+           }
+        });
     }
 }
 
@@ -99,31 +108,29 @@ function filterBuilderReceiveUpdateFilter(json) {
 export function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
-        dispatch(filterBuilderRequestUpdateFilter())
-        const state = getState()
-        if (state.auth.isDemo||
-            state.filterBuilder.currentFilter.type=='advanced'||
-            state.filterBuilder.currentFilter.type=='standard') {
-            dispatch(closeModal('filters'))
-            dispatch(fetchFilters(state.filterBuilder.currentFilter.id))}
-        else{
-            return $.ajax(`${config.URLS.FILTERS}/${getState().filterBuilder.editedFilter.id}`, {
-                    'type': 'PUT',
-                    'headers': {"X-Session-Id": getState().auth.sessionId},
-                    'data': JSON.stringify(getState().filterBuilder.editedFilter),
-                    'processData': false,
-                    'contentType': 'application/json'
-                })
-                .done(json => {
-                    dispatch(filterBuilderReceiveUpdateFilter(json))
-                    dispatch(closeModal('filters'))
-                    dispatch(fetchFilters(json.id))
-                })
-                .fail(err => {
-                    console.error('UPDATE Filter FAILED: ', err.responseText)
-                })
-        }
+        const state = getState();
+        const currentFilter = state.filterBuilder.currentFilter;
+        const isNotEditableFilter = _.some(['advanced', 'standard'], currentFilter.type);
 
+        if (state.auth.isDemo || isNotEditableFilter) {
+            dispatch(closeModal('filters'));
+        } else {
+            const sessionId = state.auth.sessionId;
+            const editedFilter = state.filterBuilder.editedFilter;
+            dispatch(filterBuilderRequestUpdateFilter());
+            filtersClient.update(sessionId, editedFilter, (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
+                } else if (response.statusCode) {
+                    dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
+                } else {
+                    const result = response.body;
+                    dispatch(filterBuilderReceiveUpdateFilter(result));
+                    dispatch(closeModal('filters'))
+                    dispatch(fetchFilters(result.id))
+                }
+            });
+        }
     }
 }
 
@@ -135,9 +142,12 @@ export function filterBuilderRequestRules() {
 
 export function filterBuilderReceiveRules(rules) {
     return (dispatch, getState) => {
-        dispatch(filterBuilderRules(rules))
-        getState().filterBuilder.editOrNew ?
-            dispatch(filterBuilderUpdateFilter()) : dispatch(filterBuilderCreateFilter())
+        dispatch(filterBuilderRules(rules));
+        if (getState().filterBuilder.editOrNew) {
+            dispatch(filterBuilderUpdateFilter());
+        } else {
+            dispatch(filterBuilderCreateFilter());
+        }
     }
 }
 
