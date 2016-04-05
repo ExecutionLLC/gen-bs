@@ -118,7 +118,7 @@ function requestVariants() {
 function receiveVariants(json) {
     return {
         type: RECEIVE_VARIANTS,
-        operationId: json.operation_id,
+        operationId: json.operationId,
         receivedAt: Date.now()
     }
 }
@@ -182,7 +182,7 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
     }
 }
 
-export function removeComment(id, search_key) {
+export function removeComment(id, searchKey) {
 
     return (dispatch, getState) => {
 
@@ -196,7 +196,7 @@ export function removeComment(id, search_key) {
             })
             .then(json=> {
                 console.log('createComment sucess', json);
-                dispatch(deleteComment(json, search_key));
+                dispatch(deleteComment(json, searchKey));
             })
 
     }

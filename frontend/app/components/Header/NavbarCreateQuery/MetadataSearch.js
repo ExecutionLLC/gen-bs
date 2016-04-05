@@ -22,7 +22,7 @@ export default class MetadataSearch extends Component {
                      data-container="body"
                      title="Select one from available samples"
                 >
-                    <Select options={samples.map( s => { return {value: s.id, label: s.file_name} } )}
+                    <Select options={samples.map( s => { return {value: s.id, label: s.fileName} } )}
                             clearable={false}
                             value={currentSampleId}
                             onChange={ (item) => onSampleChangeRequested(item.value)}
