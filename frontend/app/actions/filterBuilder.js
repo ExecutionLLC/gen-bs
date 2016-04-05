@@ -2,7 +2,7 @@ import config from '../../config'
 
 import apiFacade from '../api/ApiFacade';
 import { closeModal } from './modalWindows';
-import { handleError } from './errorHandler'
+import { handleError } from './errorHandler';
 import { fetchFilters } from './userData';
 
 import HttpStatus from 'http-status';

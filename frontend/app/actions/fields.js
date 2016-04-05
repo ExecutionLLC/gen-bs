@@ -1,14 +1,25 @@
-import config from '../../config'
+import apiFacade from '../api/ApiFacade'
+import { handleError } from './errorHandler';
+
+import HttpStatus from 'http-status';
 
 /*
  * action types
  */
+
 export const REQUEST_FIELDS = 'REQUEST_FIELDS';
 export const RECEIVE_FIELDS = 'RECEIVE_FIELDS';
 
 export const REQUEST_TOTAL_FIELDS = 'REQUEST_TOTAL_FIELDS';
 export const RECEIVE_TOTAL_FIELDS = 'RECEIVE_TOTAL_FIELDS';
 
+const SAMPLE_FIELDS_NETWORK_ERROR = '';
+const SAMPLE_FIELDS_SERVER_ERROR = '';
+
+const SOURCE_FIELDS_NETWORK_ERROR = '';
+const SOURCE_FIELDS_SERVER_ERROR = '';
+
+const samplesClient = apiFacade.samplesClient;
 
 /*
  * action creators
@@ -30,19 +41,18 @@ function receiveFields(json) {
 export function fetchFields(sampleId) {
 
     return (dispatch, getState) => {
-
         dispatch(requestFields());
 
-        return $.ajax(config.URLS.FIELDS(sampleId), {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(json => {
-                dispatch(receiveFields(json))
-            });
-
-        // TODO:
-        // catch any error in the network call.
+        const sessionId = getState().auth.sessionId;
+        samplesClient.getFields(sessionId, sampleId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));
+            } else if (response.statusCode !== HttpStatus.OK) {
+                dispatch(handleError(null, SAMPLE_FIELDS_SERVER_ERROR));
+            } else {
+                dispatch(receiveFields(response.body));
+            }
+        });
     }
 }
 
@@ -63,18 +73,17 @@ function receiveTotalFields(json) {
 export function fetchSourceFields() {
 
     return (dispatch, getState) => {
-
         dispatch(requestSourceFields());
 
-        return $.ajax(config.URLS.TOTAL_FIELDS, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(json => {
-                dispatch(receiveTotalFields(json))
-            });
-
-        // TODO:
-        // catch any error in the network call.
+        const sessionId = getState().auth.sessionId;
+        samplesClient.getSourcesFields(sessionId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, SOURCE_FIELDS_NETWORK_ERROR));
+            } else if (response.statusCode !== HttpStatus.OK) {
+                dispatch(handleError(null, SOURCE_FIELDS_SERVER_ERROR));
+            } else {
+                dispatch(receiveTotalFields(response.body));
+            }
+        });
     }
 }
