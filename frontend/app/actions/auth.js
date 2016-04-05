@@ -115,14 +115,6 @@ function updateLoginData(dispatch, sessionId, isDemo) {
     dispatch(receiveSession(sessionId, isDemo));
     dispatch(createWsConnection(conn));
     dispatch(subscribeToWs(sessionId));
-    // IMPORTANT: Do not touch the next line, until you remove all JQuery API
-    // requests.
-    $.ajaxSetup({
-        headers: {
-            'X-Session-Id': sessionId,
-            'X-Language-Id': 'en'
-        }
-    });
     dispatch(fetchUserdata());
 }
 
