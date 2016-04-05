@@ -26,7 +26,7 @@ export default class SearchClient extends ClientBase {
 
     sendSearchInResultsRequest(sessionId, operationId, globalSearch,
                                fieldIdToSearchObject, fieldIdToOrderAndDirection, callback) {
-        RequestWrapper.get(
+        RequestWrapper.post(
             this.urls.startSearchInResults(operationId),
             this._makeHeaders({sessionId}),
             null,
@@ -34,6 +34,19 @@ export default class SearchClient extends ClientBase {
                 topSearch: globalSearch,
                 search: fieldIdToSearchObject,
                 sort: fieldIdToOrderAndDirection
+            },
+            callback
+        );
+    }
+    
+    sendGetNextPartOfData(sessionId, operationId, offset, limit, callback) {
+        RequestWrapper.get(
+            this.urls.startSearchInResults(operationId),
+            this._makeHeaders({sessionId}),
+            null,
+            {
+                offset,
+                limit
             },
             callback
         );
