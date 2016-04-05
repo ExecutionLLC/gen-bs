@@ -129,11 +129,11 @@ export function viewBuilderCreateView(viewItemIndex) {
     return (dispatch, getState) => {
         dispatch(viewBuilderRequestCreateView());
 
-        const {auth: sessionId, viewBuilder: newView, ui: languageId} = getState();
+        const {auth: {sessionId}, viewBuilder: {newView}, ui: {languageId} } = getState();
         viewsClient.add(sessionId, languageId, newView, (error, response) => {
             if (error) {
                 dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
-            } else if (response.statusCode !== HttpStatus.OK) {
+            } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, CREATE_VIEW_SERVER_ERROR));
             } else {
                 const result = response.body;

@@ -62,11 +62,11 @@ export function fetchUserdata() {
 
     return (dispatch, getState) => {
         dispatch(requestUserdata());
-        const { auth: sessionId, ui: languageId } = getState();
+        const { auth: {sessionId}, ui: {languageId} } = getState();
         dataClient.getUserData(sessionId, languageId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_USER_DATA_NETWORK_ERROR));
-            } else if (response.statusCode !== HttpStatus.OK) {
+            } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
                 const result = response.body;
@@ -109,7 +109,7 @@ export function fetchViews(viewId) {
         viewsClient.getAll(sessionId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_VIEWS_NETWORK_ERROR));
-            } else if (response.statusCode !== HttpStatus.OK) {
+            } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, FETCH_VIEWS_SERVER_ERROR));
             } else {
                 const result = response.body;
@@ -147,7 +147,7 @@ export function fetchFilters(filterId) {
         filtersClient.getAll(sessionId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_FILTERS_NETWORK_ERROR));
-            } else if (response.statusCode !== HttpStatus.OK) {
+            } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, FETCH_FILTERS_SERVER_ERROR));
             } else {
                 const result = response.body;
@@ -184,7 +184,7 @@ export function fetchSamples() {
         samplesClient.getAll(sessionId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_SAMPLES_NETWORK_ERROR));
-            } else if (response.statusCode !== HttpStatus.OK) {
+            } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
             } else {
                 const result = response.body;

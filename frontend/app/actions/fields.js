@@ -47,7 +47,7 @@ export function fetchFields(sampleId) {
         samplesClient.getFields(sessionId, sampleId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));
-            } else if (response.statusCode !== HttpStatus.OK) {
+            } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, SAMPLE_FIELDS_SERVER_ERROR));
             } else {
                 dispatch(receiveFields(response.body));
@@ -79,7 +79,7 @@ export function fetchSourceFields() {
         samplesClient.getSourcesFields(sessionId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, SOURCE_FIELDS_NETWORK_ERROR));
-            } else if (response.statusCode !== HttpStatus.OK) {
+            } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, SOURCE_FIELDS_SERVER_ERROR));
             } else {
                 dispatch(receiveTotalFields(response.body));

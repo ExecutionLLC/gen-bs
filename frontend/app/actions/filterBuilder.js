@@ -76,11 +76,11 @@ export function filterBuilderCreateFilter() {
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestUpdateFilter());
 
-        const {auth: sessionId, filterBuilder: newFilter, ui: languageId} = getState();
+        const {auth: {sessionId}, filterBuilder: {newFilter}, ui: {languageId} } = getState();
         filtersClient.add(sessionId, languageId, newFilter, (error, response) => {
            if (error) {
                dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
-           } else if (response.statusCode !== HttpStatus.OK) {
+           } else if (response.status !== HttpStatus.OK) {
                dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
            } else {
                const result = response.body;

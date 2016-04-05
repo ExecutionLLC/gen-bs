@@ -146,12 +146,12 @@ export function createComment(alt, pos, ref, chrom, searchKey, comment) {
             comment
         };
 
-        const { auth: sessionId, ui: languageId } = getState();
+        const { auth: {sessionId}, ui: {languageId} } = getState();
         commentsClient.add(sessionId, languageId, commentObject,
             (error, response) => {
                 if (error) {
                     handleError(null, ADD_COMMENT_NETWORK_ERROR);
-                } else if (response.statusCode !== HttpStatus.OK) {
+                } else if (response.status !== HttpStatus.OK) {
                     handleError(null, ADD_COMMENT_SERVER_ERROR);
                 } else {
                     dispatch(addComment(response.body));
@@ -180,7 +180,7 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
             (error, response) => {
                 if (error) {
                     handleError(null, UPDATE_COMMENT_NETWORK_ERROR);
-                } else if (response.statusCode !== HttpStatus.OK) {
+                } else if (response.status !== HttpStatus.OK) {
                     handleError(null, UPDATE_COMMENT_SERVER_ERROR);
                 } else {
                     dispatch(changeComment(response.body));
@@ -198,7 +198,7 @@ export function removeComment(id, searchKey) {
             (error, response) => {
                 if (error) {
                     handleError(null, DELETE_COMMENT_NETWORK_ERROR);
-                } else if (response.statusCode !== HttpStatus.OK) {
+                } else if (response.status !== HttpStatus.OK) {
                     handleError(null, DELETE_COMMENT_SERVER_ERROR);
                 } else {
                     dispatch(deleteComment(response.body, searchKey));
@@ -225,7 +225,7 @@ export function fetchVariants(searchParams) {
             (error, response) => {
                 if (error) {
                     handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR);
-                } else if (response.statusCode !== HttpStatus.OK) {
+                } else if (response.status !== HttpStatus.OK) {
                     handleError(null, ANALYZE_SAMPLE_SERVER_ERROR);
                 } else {
                     dispatch(receiveVariants(response.body));
@@ -277,7 +277,7 @@ export function searchInResultsNextData() {
                 if (error) {
                     handleError(null, NEXT_DATA_NETWORK_ERROR);
                     dispatch(receiveSearchedResults());
-                } else if (response.statusCode !== HttpStatus.OK) {
+                } else if (response.status !== HttpStatus.OK) {
                     handleError(null, NEXT_DATA_SERVER_ERROR);
                     dispatch(receiveSearchedResults());
                 }
@@ -305,7 +305,7 @@ export function searchInResults(flags) {
                 if (error) {
                     handleError(null, SEARCH_IN_RESULTS_NETWORK_ERROR);
                     dispatch(receiveSearchedResults());
-                } else if (response.statusCode !== HttpStatus.OK) {
+                } else if (response.status !== HttpStatus.OK) {
                     handleError(null, SEARCH_IN_RESULTS_SERVER_ERROR);
                     dispatch(receiveSearchedResults());
                 }
