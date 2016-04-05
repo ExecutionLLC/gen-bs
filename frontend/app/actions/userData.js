@@ -65,9 +65,9 @@ export function fetchUserdata() {
         const { auth: sessionId, ui: languageId } = getState();
         dataClient.getUserData(sessionId, languageId, (error, response) => {
             if (error) {
-                dispatch(handleError(FETCH_USER_DATA_NETWORK_ERROR));
+                dispatch(handleError(null, FETCH_USER_DATA_NETWORK_ERROR));
             } else if (response.statusCode !== HttpStatus.OK) {
-                dispatch(handleError(FETCH_USER_DATA_SERVER_ERROR));
+                dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
                 const result = response.body;
                 const view = result.views[0] || null;
@@ -108,9 +108,9 @@ export function fetchViews(viewId) {
         const sessionId= getState().auth.sessionId;
         viewsClient.getAll(sessionId, (error, response) => {
             if (error) {
-                dispatch(handleError(FETCH_VIEWS_NETWORK_ERROR));
+                dispatch(handleError(null, FETCH_VIEWS_NETWORK_ERROR));
             } else if (response.statusCode !== HttpStatus.OK) {
-                dispatch(handleError(FETCH_VIEWS_SERVER_ERROR));
+                dispatch(handleError(null, FETCH_VIEWS_SERVER_ERROR));
             } else {
                 const result = response.body;
                 const view = result[0] || null;
@@ -146,9 +146,9 @@ export function fetchFilters(filterId) {
         const sessionId= getState().auth.sessionId;
         filtersClient.getAll(sessionId, (error, response) => {
             if (error) {
-                dispatch(handleError(FETCH_FILTERS_NETWORK_ERROR));
+                dispatch(handleError(null, FETCH_FILTERS_NETWORK_ERROR));
             } else if (response.statusCode !== HttpStatus.OK) {
-                dispatch(handleError(FETCH_FILTERS_SERVER_ERROR));
+                dispatch(handleError(null, FETCH_FILTERS_SERVER_ERROR));
             } else {
                 const result = response.body;
                 const filter = result[0] || null;
@@ -183,9 +183,9 @@ export function fetchSamples() {
         const sessionId= getState().auth.sessionId;
         samplesClient.getAll(sessionId, (error, response) => {
             if (error) {
-                dispatch(handleError(FETCH_SAMPLES_NETWORK_ERROR));
+                dispatch(handleError(null, FETCH_SAMPLES_NETWORK_ERROR));
             } else if (response.statusCode !== HttpStatus.OK) {
-                dispatch(handleError(FETCH_SAMPLES_SERVER_ERROR));
+                dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
             } else {
                 const result = response.body;
                 const sample = getState().ui.currentSample || result[0] || null;
