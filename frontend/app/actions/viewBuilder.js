@@ -2,6 +2,8 @@ import apiFacade from '../api/ApiFacade';
 import { closeModal } from './modalWindows';
 import { fetchViews } from './userData';
 
+import HttpStatus from 'http-status';
+
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW';
 
 export const VBUILDER_CHANGE_ATTR = 'VBUILDER_CHANGE_ATTR';
