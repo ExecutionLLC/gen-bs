@@ -194,7 +194,7 @@ export function removeComment(id, searchKey) {
 
     return (dispatch, getState) => {
         const sessionId = getState().auth.sessionId;
-        commentsClient.del(sessionId, id,
+        commentsClient.remove(sessionId, id,
             (error, response) => {
                 if (error) {
                     dispatch(handleError(null, DELETE_COMMENT_NETWORK_ERROR));
