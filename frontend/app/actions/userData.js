@@ -187,12 +187,12 @@ export function fetchSamples() {
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
             } else {
-                const result = response.body;
-                const sample = getState().ui.currentSample || result[0] || null;
+                const samples = response.body;
+                const sample = getState().ui.currentSample || samples[0] || null;
                 const sampleId = sample.id;
 
-                dispatch(receiveSamples(json));
-                dispatch(changeSample(json, sampleId));
+                dispatch(receiveSamples(samples));
+                dispatch(changeSample(samples, sampleId));
             }
         });
     }
