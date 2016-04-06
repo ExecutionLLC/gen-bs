@@ -56,6 +56,9 @@ export function fetchUserdata() {
                 dispatch(analyze(sampleId, view.id, filter.id));
                 dispatch(fetchFields(sampleId));
                 dispatch(fetchSourceFields());
+                console.log('-----------------------------------------------------------------------------------');
+                console.log('* (CHECK ME) json.samples = ', json.samples);
+                console.log('-----------------------------------------------------------------------------------');
                 dispatch(initSamplesList(json.samples));
             })
 

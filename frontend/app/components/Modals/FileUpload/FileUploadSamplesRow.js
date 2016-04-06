@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
-import { changeSample, updateSampleValue, resetSamplesList, requestUpdateSampleFields} from '../../../actions/ui'
+import { changeSample, updateSampleValue, resetSamplesList, updateSampleFields, requestUpdateSampleFields} from '../../../actions/ui'
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
@@ -65,16 +65,19 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderSelectField(field) {
+        let fieldValue;
         const { sample, dispatch, samplesList } = this.props;
-        const currentSampleIndex = _.findIndex(samplesList.Samples, {id: sample.id});
         const selectOptions = field.available_values.map(
             option => { return {value: option.id, label: option.value}}
         );
+        const currentSampleIndex = _.findIndex(samplesList.samples, {id: sample.id});
 
-        let currentValueId = '';
-
-        if (samplesList.Samples[currentSampleIndex].fields) {
-            currentValueId= samplesList.Samples[currentSampleIndex].fields[field.id];
+        if (currentSampleIndex >= 0) {
+            const storedValue = _.find(samplesList.samples[currentSampleIndex].values || [], item => item.fieldId === field.id);
+            fieldValue = storedValue ? storedValue.values : '';
+        } else {
+            fieldValue = '';
+        }
 
         return (
             <dl key={field.id} className="dl-horizontal">
@@ -83,7 +86,7 @@ export default class FileUploadSamplesRow extends Component {
             <Select
                 options={selectOptions}
                 clearable={false}
-                value={currentValueId}
+                value={fieldValue}
                 onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.value))}
             />
             </dd>
@@ -92,14 +95,17 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderTextField(values, field) {
+        let fieldValue;
         const { sample, dispatch, samplesList } = this.props;
-        const currentSampleIndex = _.findIndex(samplesList.Samples, {id: sample.id});
-        let currentValue;
-        if (samplesList.Samples[currentSampleIndex].fields) {
-            currentValue = samplesList.Samples[currentSampleIndex].fields[field.id];
+        const currentSampleIndex = _.findIndex(samplesList.samples, {id: sample.id});
+
+        if (currentSampleIndex >= 0) {
+            const storedValue = _.find(samplesList.samples[currentSampleIndex].values || [], item => item.fieldId === field.id);
+            fieldValue = storedValue ? storedValue.values : '';
         } else {
-            currentValue = '';
+            fieldValue = '';
         }
+
         return (
             <dl key={field.id} className="dl-horizontal">
             <dt>{field.label}</dt>
@@ -107,7 +113,7 @@ export default class FileUploadSamplesRow extends Component {
             <input
                 type="text"
                 className="form-control"
-                value={currentValue}
+                value={fieldValue}
                 onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.target.value)) }
             />
             </dd>

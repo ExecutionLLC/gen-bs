@@ -2,43 +2,63 @@ import * as ActionTypes from '../actions/ui'
 
 
 export default function samplesList(state = {
-    Samples: [],
+    samples: [],
     savedSamples: [],
 }, action) {
 
     let currentSampleIndex;
     let newSamples;
+    let newValues;
+    let sampleId;
 
     switch (action.type) {
         case ActionTypes.UPDATE_SAMPLE_VALUE:
-            currentSampleIndex = _.findIndex(state.Samples, {id: action.sampleId});
+            const {valueFieldId, value} = action;
+            sampleId = action.sampleId;
+            currentSampleIndex = _.findIndex(state.samples, {id: sampleId});
 
-            let newFields = state.Samples[currentSampleIndex].fields || {};
-            newFields[action.valueFieldId] = action.value;
+            newValues = [...state.samples[currentSampleIndex].values || []];
+            const valueIndex = _.findIndex(newValues, item => item.fieldId === valueFieldId);
+            const newValue = {fieldId: valueFieldId, values: value}
 
-            newSamples = state.Samples;
-            newSamples[currentSampleIndex].fields = newFields;
+            if (valueIndex >= 0) {
+                newValues[valueIndex] = newValue;
+            } else {
+                newValues.push(newValue);
+            }
 
-            return Object.assign({}, state, {Samples: newSamples});
+            newSamples = [...state.samples];
+            newSamples[currentSampleIndex].values = newValues;
 
-        case ActionTypes.REQUEST_UPDATE_SAMPLE_FIELDS:
+            return Object.assign({}, state, {samples: newSamples});
 
-            return state;
+        case ActionTypes.UPDATE_SAMPLE_FIELDS:
+            sampleId = action.sampleId;
+            currentSampleIndex = _.findIndex(state.savedSamples, {id: sampleId});
+
+            newValues = Object.assign({}, state.samples[currentSampleIndex].values || []);
+
+            newSamples = [...state.savedSamples];
+            newSamples[currentSampleIndex].values = newValues;
+
+            return Object.assign({}, state, {savedSamples: newSamples});
 
         case ActionTypes.INIT_SAMPLES_LIST:
+            const {samples} = action;
             return Object.assign({}, state, {
-                Samples: action.samples,
-                savedSamples: action.samples
+                samples: [...samples],
+                savedSamples: _.cloneDeep(samples),
             });
 
         case ActionTypes.RESET_SAMPLES_LIST:
-            currentSampleIndex = _.findIndex(state.Samples, {id: action.sampleId});
-            let restoredFields = state.savedSamples[currentSampleIndex].fields || {};
+            sampleId = action.sampleId;
+            currentSampleIndex = _.findIndex(state.samples, {id: sampleId});
+            const restoredValues = [...state.savedSamples[currentSampleIndex].values || []];
 
-            newSamples = state.Samples;
-            newSamples[currentSampleIndex].fields = newFields;
+            newSamples = [...state.samples];
+            newSamples[currentSampleIndex].values = restoredValues;
 
-            return Object.assign({}, state, {Samples: newSamples});
+            return Object.assign({}, state, {samples: newSamples});
 
         default:
             return state;

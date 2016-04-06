@@ -1,7 +1,13 @@
+import HttpStatus from 'http-status';
+
 import { fetchVariants, clearSearchParams } from './variantsTable'
 import { requestAnalyze , requestChangeView} from './websocket'
 import { viewBuilderSelectView } from './viewBuilder'
 import { filterBuilderSelectFilter} from './filterBuilder'
+import { handleError } from './errorHandler'
+
+import apiFacade from '../api/ApiFacade';
+
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
 
@@ -10,12 +16,18 @@ export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
 export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
-export const REQUEST_UPDATE_SAMPLE_FIELDS = 'REQUEST_UPDATE_SAMPLE_FIELDS';
+export const UPDATE_SAMPLE_FIELDS = 'UPDATE_SAMPLE_FIELDS';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
 export const INIT_SAMPLES_LIST = 'INIT_SAMPLES_LIST'
 export const RESET_SAMPLES_LIST = 'RESET_SAMPLES_LIST'
+
+
+const samplesClient = apiFacade.samplesClient;
+
+const NETWORK_ERROR = 'Network error. You can reload page and try again.'
+const SERVER_ERROR = 'Internal server error. You can reload page and try again.'
 
 
 /*
@@ -45,8 +57,32 @@ export function updateSampleValue(sampleId, valueFieldId, value) {
 }
 
 export function requestUpdateSampleFields(sampleId, fields) {
+    return (dispatch, getState) => {
+        const {auth: {sessionId}, samplesList: {samples}} = getState();
+        const currentSample = _.find(samples, {id: sampleId});
+        console.log('currentSample =', currentSample);
+        samplesClient.update(sessionId, currentSample, (error, response) => {
+            console.log(' *** requestUpdateSampleFields.error: ', error);
+            console.log(' *** requestUpdateSampleFields.response: ', response);
+            if (error) {
+                dispatch(handleError(null, NETWORK_ERROR));
+            } else {
+                if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, SERVER_ERROR));
+                } else {
+                    const newSample = response.body;
+                    console.log('newSample = ', newSample);
+                    dispatch(updateSampleFields(sampleId, fields));
+                }
+            }
+
+        });
+    }
+}
+
+export function updateSampleFields(sampleId, fields) {
     return {
-        type: REQUEST_UPDATE_SAMPLE_FIELDS,
+        type: UPDATE_SAMPLE_FIELDS,
         sampleId,
         fields,
     }
