@@ -11,8 +11,8 @@ export default class ExportDropdown extends ComponentBase {
     }
 
     get haveSelectedVariants() {
-        const {selectedSearchKeysToVariants} = this.props;
-        return !!Object.keys(selectedSearchKeysToVariants).length;
+        const {selectedRowIndices} = this.props;
+        return !_.isEmpty(selectedRowIndices);
     }
 
     render() {
@@ -38,8 +38,8 @@ export default class ExportDropdown extends ComponentBase {
         if (!this.haveSelectedVariants) {
             return (<span>Export</span>);
         } else {
-            const {selectedSearchKeysToVariants} = this.props;
-            const selectedVariantsCount = Object.keys(selectedSearchKeysToVariants).length;
+            const {selectedRowIndices} = this.props;
+            const selectedVariantsCount = selectedRowIndices.length;
             return (<span>Export<span className="badge badge-warning">{selectedVariantsCount}</span></span>);
         }
     }
@@ -49,10 +49,10 @@ export default class ExportDropdown extends ComponentBase {
 
         const {
             dispatch,
-            selectedSearchKeysToVariants
+            selectedRowIndices
         } = this.props;
 
-        if (_.isEmpty(selectedSearchKeysToVariants)) {
+        if (_.isEmpty(selectedRowIndices)) {
             console.log('Nothing is selected for export.');
             return;
         }
@@ -63,5 +63,5 @@ export default class ExportDropdown extends ComponentBase {
 
 ExportDropdown.propTypes = {
     dispatch: React.PropTypes.func.isRequired,
-    selectedSearchKeysToVariants: React.PropTypes.object.isRequired
+    selectedRowIndices: React.PropTypes.array.isRequired
 };

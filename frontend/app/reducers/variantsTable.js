@@ -13,7 +13,7 @@ const initialState = {
     needUpdate: false,
     isNextDataLoading: false,
     isFilteringOrSorting: false,
-    selectedSearchKeysToVariants: {}
+    selectedRowIndices: []
 };
 
 export default function variantsTable(state = initialState, action) {
@@ -169,26 +169,23 @@ export default function variantsTable(state = initialState, action) {
             });
 
         case ActionTypes.SELECT_VARIANTS_ROW: {
-            const {row, rowIndex, isSelected} = action;
-            const newSelectedSearchKeysToVariants = Object.assign({}, state.selectedSearchKeysToVariants);
-            const searchKey = row.searchKey;
+            const {rowIndex, isSelected} = action;
+            const {selectedRowIndices} = state;
+            let newSelectedRowIndices;
             if (isSelected) {
-                newSelectedSearchKeysToVariants[searchKey] = {
-                    rowIndex,
-                    row
-                };
+                newSelectedRowIndices = selectedRowIndices.concat([rowIndex]);
             } else {
-                delete newSelectedSearchKeysToVariants[searchKey];
+                newSelectedRowIndices = _.filter(selectedRowIndices, item => item !== rowIndex);
             }
 
             return Object.assign({}, state, {
-                selectedSearchKeysToVariants: newSelectedSearchKeysToVariants
+                selectedRowIndices: newSelectedRowIndices
             });
         }
 
         case ActionTypes.CLEAR_VARIANTS_ROWS_SELECTION: {
             return Object.assign({}, state, {
-                selectedSearchKeysToVariants: initialState.selectedSearchKeysToVariants
+                selectedRowIndices: initialState.selectedRowIndices
             });
         }
 

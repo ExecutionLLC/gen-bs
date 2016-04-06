@@ -63,8 +63,8 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     onRowSelectionChanged() {
-        const {onSelected, row, rowIndex, isSelected} = this.props;
-        onSelected(row, rowIndex, !isSelected);
+        const {onSelected, rowIndex, isSelected} = this.props;
+        onSelected(rowIndex, !isSelected);
     }
 
     getMainFieldValue(colName, rowFields, fields) {
@@ -106,6 +106,6 @@ VariantsTableRow.propTypes = {
     auth: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func.isRequired,
     isSelected: React.PropTypes.bool.isRequired,
-    // callback(row, rowIndex, isSelected)
+    // callback(rowIndex, isSelected)
     onSelected: React.PropTypes.func.isRequired
 };

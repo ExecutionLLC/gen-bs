@@ -320,10 +320,9 @@ export function searchInResults(flags) {
     }
 }
 
-export function selectTableRow(row, rowIndex, isSelected) {
+export function selectTableRow(rowIndex, isSelected) {
     return {
         type: SELECT_VARIANTS_ROW,
-        row,
         rowIndex,
         isSelected
     }

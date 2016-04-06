@@ -1,4 +1,5 @@
 import Moment from 'moment';
+import HttpStatus from 'http-status';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
@@ -12,6 +13,7 @@ export const SHOW_SAVED_FILES_DIALOG = 'SHOW_SAVED_FILES_DIALOG';
 export const CLOSE_SAVED_FILES_DIALOG = 'CLOSE_SAVED_FILES_DIALOG';
 
 const ERROR_UPLOADING_EXPORTED_FILE = 'Error while uploading exported file';
+const ERROR_DOWNLOADING_EXPORTED_FILE = 'Error downloading exported file';
 
 const savedFilesClient = apiFacade.savedFilesClient;
 
@@ -45,8 +47,8 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             totalResults
         };
         savedFilesClient.add(language, sessionId, fileMetadata, fileBlob, (error, response) => {
-            if (error) {
-                dispatch(handleError(`${ERROR_UPLOADING_EXPORTED_FILE}: ` + error));
+            if (error || response.status !== HttpStatus.OK) {
+                dispatch(handleError(response.status, ERROR_UPLOADING_EXPORTED_FILE));
             } else {
                 const savedFile = response.body;
                 dispatch(savedFileUploadResultReceived(savedFile));
@@ -100,8 +102,8 @@ export function downloadSavedFile(savedFile) {
             }
         } = getState();
         savedFilesClient.download(language, sessionId, savedFile.id, (error, response) => {
-            if (error) {
-                dispatch(handleError(error))
+            if (error || response.status !== HttpStatus.OK) {
+                dispatch(handleError(response.status, ERROR_DOWNLOADING_EXPORTED_FILE));
             } else {
                 dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name));
             }
@@ -119,8 +121,11 @@ export function exportToFile(exportType) {
                 currentView,
                 currentSample
             },
+            websocket: {
+                variants
+            },
             variantsTable: {
-                selectedSearchKeysToVariants
+                selectedRowIndices
             },
             fields: {
                 totalFieldsHash
@@ -142,8 +147,11 @@ export function exportToFile(exportType) {
             }]);
 
         // The export data should be array of objects in {field_id -> field_value} format.
-        const dataToExport = _(selectedSearchKeysToVariants)
-            .sortBy(item => item.rowIndex)
+        const dataToExport = _(selectedRowIndices.sort())
+            .map(rowIndex => Object.assign({}, rowIndex, {
+                rowIndex,
+                row: variants[rowIndex]
+            }))
             .map(item => {
                 // Add first comment.
                 const comment = _.isEmpty(item.row.comments) ? '' : item.row.comments[0].comment;
@@ -157,7 +165,7 @@ export function exportToFile(exportType) {
         const fileBlob = exporter.buildBlob(columns, dataToExport);
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
         const fileName = `${currentSample.fileName}_chunk_${createdDate}.${exportType}`;
-        const count = selectedSearchKeysToVariants.length;
+        const count = selectedRowIndices.length;
 
         dispatch(createUserDownload(fileBlob, fileName));
 
