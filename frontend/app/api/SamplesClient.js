@@ -70,7 +70,7 @@ export default class SamplesClient extends UserEntityClientBase {
 
         if (sampleOrNull) {
             const values = sampleOrNull.values;
-            return _.filter(
+            return !!_.filter(
                 values, 
                 value => !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId)
             );
