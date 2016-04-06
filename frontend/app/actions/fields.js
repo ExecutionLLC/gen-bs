@@ -16,8 +16,8 @@ export const RECEIVE_TOTAL_FIELDS = 'RECEIVE_TOTAL_FIELDS';
 const SAMPLE_FIELDS_NETWORK_ERROR = 'Cannot get sample fields (network error). You can reload page and try again.';
 const SAMPLE_FIELDS_SERVER_ERROR = 'Cannot get sample fields (server error). You can reload page and try again.';
 
-const SOURCE_FIELDS_NETWORK_ERROR = 'Cannot get source fields (network error). You can reload page and try again.';
-const SOURCE_FIELDS_SERVER_ERROR = 'Cannot get source fields (server error). You can reload page and try again.';
+const TOTAL_FIELDS_NETWORK_ERROR = 'Cannot get list of all fields (network error). You can reload page and try again.';
+const TOTAL_FIELDS_SERVER_ERROR = 'Cannot get list of all fields (server error). You can reload page and try again.';
 
 const samplesClient = apiFacade.samplesClient;
 
@@ -78,9 +78,9 @@ export function fetchTotalFields() {
         const sessionId = getState().auth.sessionId;
         samplesClient.getAllFields(sessionId, (error, response) => {
             if (error) {
-                dispatch(handleError(null, SOURCE_FIELDS_NETWORK_ERROR));
+                dispatch(handleError(null, TOTAL_FIELDS_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, SOURCE_FIELDS_SERVER_ERROR));
+                dispatch(handleError(null, TOTAL_FIELDS_SERVER_ERROR));
             } else {
                 dispatch(receiveTotalFields(response.body));
             }
