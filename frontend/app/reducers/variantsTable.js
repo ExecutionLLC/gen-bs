@@ -1,6 +1,6 @@
 import * as ActionTypes from '../actions/variantsTable'
 
-export default function variantsTable(state = {
+const initialState = {
     operationId: null,
     searchInResultsParams: {
         search: [],
@@ -14,7 +14,9 @@ export default function variantsTable(state = {
     isNextDataLoading: false,
     isFilteringOrSorting: false,
     selectedSearchKeysToVariants: {}
-}, action) {
+};
+
+export default function variantsTable(state = initialState, action) {
     switch (action.type) {
 
         case ActionTypes.CLEAR_SEARCH_PARAMS:
@@ -181,6 +183,12 @@ export default function variantsTable(state = {
 
             return Object.assign({}, state, {
                 selectedSearchKeysToVariants: newSelectedSearchKeysToVariants
+            });
+        }
+
+        case ActionTypes.CLEAR_VARIANTS_ROWS_SELECTION: {
+            return Object.assign({}, state, {
+                selectedSearchKeysToVariants: initialState.selectedSearchKeysToVariants
             });
         }
 
