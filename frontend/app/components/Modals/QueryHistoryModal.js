@@ -37,16 +37,24 @@ export default class QueryHistoryModal extends Component {
         )
     }
 
+    renderEmptyHistoryTableBody() {
+        const {isDemo} = this.props;
+        const message = isDemo ? "Please register to access your query history." : "History is empty.";
+        return (
+            <tr>
+                <td collspan="5">
+                    {message}
+                </td>
+            </tr>
+        )
+    }
+
     renderHistoryTableBody() {
         const history = this.props.history;
         if (history.length === 0) {
             return (
                 <tbody>
-                    <tr>
-                        <td collspan="5">
-                            History is empty.
-                        </td>
-                    </tr>
+                    { this.renderEmptyHistoryTableBody() }
                 </tbody>
             )
         }
@@ -122,8 +130,9 @@ export default class QueryHistoryModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { queryHistory: { history } } = state;
+    const { auth: { isDemo }, queryHistory: { history } } = state;
     return {
+        isDemo,
         history
     }
 }
