@@ -83,10 +83,7 @@ class SavedFilesModal extends DialogBase {
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
-                {
-                    // TODO: Remove after snake-camel-hell is gone.
-                }
-                <td>{sample.file_name || sample.fileName}</td>
+                <td>{sample.fileName}</td>
                 <td>{filter.name}</td>
                 <td>{view.name}</td>
                 <td>

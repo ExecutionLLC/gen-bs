@@ -84,7 +84,7 @@ export default class VariantsTableRows extends Component {
     }
 
     renderRow(row, rowIndex, sortState, currentView, fields, selectedSearchKeyToVariants) {
-        const isSelected = !!selectedSearchKeyToVariants[row.search_key];
+        const isSelected = !!selectedSearchKeyToVariants[row.searchKey];
         return (
             <VariantsTableRow key={rowIndex}
                               row={row}
