@@ -80,7 +80,7 @@ export function fetchUserdata() {
                 dispatch(analyze(sample.id, view.id, filter.id));
                 dispatch(fetchFields(sample.id));
                 dispatch(fetchTotalFields());
-                dispatch(initSamplesList(json.samples));
+                dispatch(initSamplesList(result.samples));
             }
         });
     }
