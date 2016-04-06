@@ -73,12 +73,11 @@ export default function userData(state = {
             });
 
         case ActionTypes.ATTACH_HISTORY_DATA: {
-            const oldSampleId = state.attachedHistoryData.sampleId;
-            const { collection: samples, historyItemId: newSampleId} = changeHistoryItem(state.samples, oldSampleId, action.sample);
-            const oldFilterId = state.attachedHistoryData.filterId;
-            const { collection: filters, historyItemId: newFilterId} = changeHistoryItem(state.filters, oldFilterId, action.filters[0]);
-            const oldViewId = state.attachedHistoryData.viewId;
-            const { collection: views, historyItemId: newViewId} = changeHistoryItem(state.views, oldViewId, action.view);
+            const { attachedHistoryData: { sampleId, filterId, viewId} } = state;
+
+            const {collection: samples, historyItemId: newSampleId} = changeHistoryItem(state.samples, sampleId, action.sample);
+            const {collection: filters, historyItemId: newFilterId} = changeHistoryItem(state.filters, filterId, action.filters[0]);
+            const {collection: views, historyItemId: newViewId} = changeHistoryItem(state.views, viewId, action.view);
 
             return Object.assign({}, state, {
                 samples,
@@ -96,35 +95,29 @@ export default function userData(state = {
                 return state;
             }
 
-            var sampleId = state.attachedHistoryData.sampleId;
-            var samples = state.samples;
-            if (action.detachSample) {
-                samples = changeHistoryItem(samples, sampleId, null).collection;
-                sampleId = null;
-            }
+            const { attachedHistoryData } = state;
 
-            var filterId = state.attachedHistoryData.filterId;
-            var filters = state.filters;
-            if (action.detachFilter) {
-                filters = changeHistoryItem(filters, filterId, null).collection;
-                filterId = null;
-            }
-
-            var viewId = state.attachedHistoryData.viewId;
-            var views = state.views;
-            if (action.detachView) {
-                views = changeHistoryItem(views, viewId, null).collection;
-                viewId = null;
-            }
+            const {
+                collection: samples,
+                historyItemId: sampleId
+            } = detachHistoryItemIfNeedIt(action.detachSample, state.samples, attachedHistoryData.sampleId, null);
+            const {
+                collection: filters,
+                historyItemId: filterId
+            } = detachHistoryItemIfNeedIt(action.detachFilter, state.filters, attachedHistoryData.filterId, null);
+            const {
+                collection: views,
+                historyItemId: viewId
+            } = detachHistoryItemIfNeedIt(action.detachView, state.views, attachedHistoryData.viewId, null);
 
             return Object.assign({}, state, {
                 samples,
                 filters,
                 views,
                 attachedHistoryData: {
-                    sampleId: sampleId,
-                    filterId: filterId,
-                    viewId: viewId
+                    sampleId,
+                    filterId,
+                    viewId
                 }
             });
         }
@@ -158,4 +151,11 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
     }
 
     return { collection, historyItemId: newHistoryItemId};
+}
+
+function detachHistoryItemIfNeedIt(needDetach, collection, historyItemId) {
+    if (needDetach) {
+        return changeHistoryItem(collection, historyItemId, null);
+    }
+    return { collection, historyItemId };
 }
