@@ -18,9 +18,13 @@ class QueryHistoryController extends ControllerBase {
                 const user = request.user;
                 const limit = request.query.limit;
                 const offset = request.query.offset;
-                this.services.queryHistory.findQueryHistories(user, limit, offset,
-                    (error, result)=>callback(error, result, user)
-                );
+                if (isNaN(limit) || isNaN(offset)) {
+                    callback(new Error('Offset or limit are not specified or incorrect'));
+                } else {
+                    this.services.queryHistory.findQueryHistories(user, limit, offset,
+                        (error, result)=>callback(error, result, user)
+                    );
+                }
             },
             (queryHistories, user, callback) => {
                 const viewIds = _.map(
