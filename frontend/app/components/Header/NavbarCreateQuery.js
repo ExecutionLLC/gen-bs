@@ -59,7 +59,7 @@ class NavbarCreateQuery extends Component {
                             clicked={ (e) => dispatch(analyze(currentSample.id, currentView.id, currentFilter.id))}
                         />
                         <LoadHistory
-                            {...this.props}
+                            dispatch={this.props.dispatch}
                         />
                     </div>
                 </div>
