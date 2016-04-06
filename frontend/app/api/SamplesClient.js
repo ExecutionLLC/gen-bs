@@ -20,6 +20,11 @@ export default class SamplesClient extends UserEntityClientBase {
             this._makeHeaders({sessionId}), null, null, callback);
     }
 
+    getAllFields(sessionId, callback) {
+        RequestWrapper.get(this.urls.getAllFields(),
+            this._makeHeaders({sessionId}), null, null, callback);
+    }
+
     add(sessionId, fileName, fileStream, callback) {
         RequestWrapper.upload(this.collectionUrls.upload(),
             'sample',
@@ -66,7 +71,7 @@ export default class SamplesClient extends UserEntityClientBase {
         if (sampleOrNull) {
             const values = sampleOrNull.values;
             var ok = _.each(values, value => {
-                !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId)
+                !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId);
             });
             return ok;
         }

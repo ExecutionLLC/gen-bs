@@ -32,9 +32,9 @@ const sessionsClient = apiFacade.sessionsClient;
  * login errors
  */
 
-const LOGIN_NETWORK_ERROR = 'Authorization failed (network error). You can reload page and try again.'
-const LOGIN_SERVER_ERROR = 'Authorization failed (internal server error). You can reload page and try again.'
-const LOGIN_GOOGLE_ERROR = 'Google authorization failed.'
+const LOGIN_NETWORK_ERROR = 'Authorization failed (network error). You can reload page and try again.';
+const LOGIN_SERVER_ERROR = 'Authorization failed (internal server error). You can reload page and try again.';
+const LOGIN_GOOGLE_ERROR = 'Google authorization failed.';
 
 /*
  * Start keep alive task, which update session on the WS.
@@ -116,19 +116,6 @@ function updateLoginData(dispatch, sessionId, isDemo) {
     dispatch(receiveSession(sessionId, isDemo));
     dispatch(createWsConnection(conn));
     dispatch(subscribeToWs(sessionId));
-    // IMPORTANT: Do not touch the next line, until you remove all JQuery API
-    // requests.
-    $.ajaxSetup({
-        headers: {
-            'X-Session-Id': sessionId,
-            'X-Language-Id': 'en'
-        }
-    });
-    if (isDemo) {
-        dispatch(clearQueryHistory());
-    } else {
-        dispatch(updateQueryHistory());
-    }
     dispatch(fetchUserdata());
 }
 
@@ -231,7 +218,7 @@ export function logout() {
     sessionsClient.closeSession(sessionId, (error, response) => {
         if (error || response.status !== HttpStatus.OK) {
             // We close session on the frontend and don't care about returned
-            // status, becouse now it is problem of the web server
+            // status, because now it is problem of the web server
             const message = error || response.body;
             console.log('cannot close session', sessionId, message);
         } else {
@@ -249,7 +236,7 @@ export function startAutoLogoutTimer() {
         }
         const secondsToAutoLogout = getState().auth.secondsToAutoLogout;
         if (secondsToAutoLogout === null) {
-            // if secondsToAutoLogout !== null, then auto logout is alredy started
+            // if secondsToAutoLogout !== null, then auto logout is already started
             dispatch(addTimeout(1000, UPDATE_AUTOLOGOUT_TIMER, () => { dispatch(updateAutoLogoutTimer()) } ));
             dispatch(updateAutoLogoutTimer());
         }

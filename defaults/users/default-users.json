@@ -64,28 +64,6 @@
     "password": "zxcasdqwe"
   },
   {
-    "id": "9e35c2df-489f-44fa-a0da-3fe3cce41906",
-    "name": "Maxim",
-    "last_name": "Borshev",
-    "email": "mtunetworks@gmail.com",
-    "speciality": "Developer",
-    "language": "en",
-    "number_paid_samples": 11,
-    "login": "maxim",
-    "password": "zxcasdqwe"
-  },
-  {
-    "id": "1036c2df-489f-45fa-a0da-3ae3cce41955",
-    "name": "Sergey",
-    "last_name": "Vatagin",
-    "email": "s.vatagin@gmail.com",
-    "speciality": "Developer",
-    "language": "en",
-    "number_paid_samples": 11,
-    "login": "vatic",
-    "password": "zxcasdqwe"
-  },
-  {
     "id": "9638820a-384a-4bbd-98ea-dacc968832a3",
     "name": "Aleksandr",
     "last_name": "Kirienko",

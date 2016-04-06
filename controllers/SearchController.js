@@ -78,8 +78,12 @@ class SearchController extends ControllerBase {
                 const sortValues = body.sort;
                 const limit = body.limit;
                 const offset = body.offset;
-                this.services.search.searchInResults(user, sessionId, operationId,
-                    globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback);
+                if (isNaN(limit) || isNaN(offset)) {
+                    callback(new Error('Offset or limit are not specified.'));
+                } else {
+                    this.services.search.searchInResults(user, sessionId, operationId,
+                        globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback);
+                }
             }
         ], (error, operationId) => {
             this.sendErrorOrJson(response, error, {operationId});
