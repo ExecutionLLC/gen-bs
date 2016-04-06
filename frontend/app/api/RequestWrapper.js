@@ -39,9 +39,7 @@ export default class RequestWrapper {
 
     static uploadMultipart(url, headers, queryParams, formObject, callback) {
         const request = RequestWrapper._prepareRequest(Request.post(url), headers, queryParams, null);
-        const formFields = _.keys(formObject);
-        _.each(formFields, fieldName => {
-            const fieldValue = formObject[fieldName];
+        _.each(formObject, (fieldValue, fieldName) => {
             if (fieldValue
                 && (fieldValue instanceof Blob)) {
                 request.attach(fieldName, fieldValue);
