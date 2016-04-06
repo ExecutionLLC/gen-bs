@@ -45,7 +45,7 @@ export  function changeComment(commentData){
     }
 }
 
-export  function deleteComment(commentData,searchKey){
+export  function deleteComment(commentData, searchKey){
     return {
         type: WS_DELETE_COMMENT,
         commentData,

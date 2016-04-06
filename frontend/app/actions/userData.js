@@ -105,7 +105,7 @@ export function fetchViews(viewId) {
     return (dispatch, getState) => {
         dispatch(requestViews());
 
-        const sessionId= getState().auth.sessionId;
+        const sessionId = getState().auth.sessionId;
         viewsClient.getAll(sessionId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_VIEWS_NETWORK_ERROR));
@@ -143,7 +143,7 @@ export function fetchFilters(filterId) {
     return (dispatch, getState) => {
         dispatch(requestFilters());
 
-        const sessionId= getState().auth.sessionId;
+        const sessionId = getState().auth.sessionId;
         filtersClient.getAll(sessionId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_FILTERS_NETWORK_ERROR));
@@ -180,7 +180,7 @@ export function fetchSamples() {
     return (dispatch, getState) => {
         dispatch(requestSamples());
 
-        const sessionId= getState().auth.sessionId;
+        const sessionId = getState().auth.sessionId;
         samplesClient.getAll(sessionId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_SAMPLES_NETWORK_ERROR));
