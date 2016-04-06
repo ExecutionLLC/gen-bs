@@ -30,7 +30,7 @@ class SavedFilesController extends UserEntityControllerBase {
         });
     }
 
-    upload(request, response, next) {
+    upload(request, response) {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.parseJson(request.body.metadata, callback),
