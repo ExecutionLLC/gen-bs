@@ -2,8 +2,6 @@
 
 import Request from 'superagent';
 
-import ChangeCaseUtil from '../utils/ChangeCaseUtil';
-
 export default class RequestWrapper {
     static post(url, headers, bodyObject, callback) {
         RequestWrapper._prepareAndExecuteRequest(Request.post(url), headers, null, bodyObject, callback);
@@ -64,7 +62,7 @@ export default class RequestWrapper {
         }
 
         if (bodyObject) {
-            request = request.send(ChangeCaseUtil.convertKeysToSnakeCase(bodyObject));
+            request = request.send(bodyObject);
         }
 
         return request;
@@ -93,8 +91,6 @@ export default class RequestWrapper {
                     } catch (e) {
                         callback('Error parsing request body: ' + body);
                     }
-                } else if (body && body.constructor !== Blob) {
-                    body = ChangeCaseUtil.convertKeysToCamelCase(body);
                 }
 
                 callback(null, {

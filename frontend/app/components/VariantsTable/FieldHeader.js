@@ -19,14 +19,14 @@ export default class FieldHeaderControls extends Component {
         if (_.isEmpty(currentVariants)) {
             return false;
         } else {
-            const variantField = _.find(currentVariants[0].fields, field=>field.field_id == fieldId);
+            const variantField = _.find(currentVariants[0].fields, field=>field.fieldId == fieldId);
             return (variantField) ? true : false;
         }
     }
 
     render() {
         const {fieldId, fields, sortState} = this.props;
-        const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.field_id === fieldId)
+        const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldId)
             : null;
         if (columnSortParams) {
             console.log('columnSortParams', columnSortParams)
@@ -87,7 +87,7 @@ export default class FieldHeaderControls extends Component {
         const {fieldId, fields} = this.props;
         const {searchString, isFilterOpened} = this.state;
         const fieldMetadata = FieldUtils.find(fieldId, fields);
-        const fieldValueType = fieldMetadata ? fieldMetadata.value_type : null;
+        const fieldValueType = fieldMetadata ? fieldMetadata.valueType : null;
         const isFieldSearchable = fieldValueType === 'string';
         const inputGroupClasses = classNames(
             'variants-table-search-field',

@@ -7,7 +7,7 @@ export default function variantsTable(state = {
         sort: [],
         limit: 100,
         offset: 0,
-        top_search: ''
+        topSearch: ''
     },
     scrollPos: 0,
     needUpdate: false,
@@ -24,7 +24,7 @@ export default function variantsTable(state = {
                     search: [],
                     limit: 100,
                     offset: 0,
-                    top_search: ''
+                    topSearch: ''
                 }
             });
 
@@ -41,13 +41,13 @@ export default function variantsTable(state = {
             });
 
         case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
-            const currentGlobalSearchString = state.searchInResultsParams.top_search;
+            const currentGlobalSearchString = state.searchInResultsParams.topSearch;
             if (currentGlobalSearchString === action.globalSearchString) {
                 return state;
             }
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-                    top_search: action.globalSearchString,
+                    topSearch: action.globalSearchString,
                     limit: 100,
                     offset: 0
                 }),
@@ -57,7 +57,7 @@ export default function variantsTable(state = {
         case ActionTypes.CHANGE_VARIANTS_FILTER: {
             // copy search array
             var searchArray = [...state.searchInResultsParams.search];
-            const fieldIndex = _.findIndex(searchArray, {field_id: action.fieldId});
+            const fieldIndex = _.findIndex(searchArray, {fieldId: action.fieldId});
 
             if (action.filterValue !== '') {
                 if (fieldIndex !== -1) {
@@ -70,7 +70,7 @@ export default function variantsTable(state = {
                     searchArray[fieldIndex].value = action.filterValue;
                 } else {
                     // it is new filter
-                    searchArray.push({field_id: action.fieldId, value: action.filterValue});
+                    searchArray.push({fieldId: action.fieldId, value: action.filterValue});
                 }
             } else {
                 // filter value is empty, so we should remove filter
@@ -89,11 +89,11 @@ export default function variantsTable(state = {
         case ActionTypes.CHANGE_VARIANTS_SORT: {
             // copy sort array
             var sortArray = [...state.searchInResultsParams.sort];
-            var fieldIndex = _.findIndex(sortArray, {field_id: action.fieldId});
+            var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId});
 
             if (fieldIndex === -1) {
                 // it is new column for sorting
-                const newItem = {field_id: action.fieldId, direction: action.sortDirection };
+                const newItem = {fieldId: action.fieldId, direction: action.sortDirection };
                 if (sortArray.length < action.sortOrder) {
                     // put new item to the end of array
                     fieldIndex = sortArray.length;

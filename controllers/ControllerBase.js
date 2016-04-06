@@ -3,8 +3,6 @@
 const _ = require('lodash');
 const HttpStatus = require('http-status');
 
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
-
 /**
  * Base class for all controllers.
  * */
@@ -52,23 +50,20 @@ class ControllerBase {
     }
 
     sendJson(response, obj) {
-      const snakeCasedObj = ChangeCaseUtil.convertKeysToSnakeCase(obj);
       response
-        .json(snakeCasedObj)
+        .json(obj)
         .end();
     }
 
     /**
-     * Reads body doing camel-case conversion. If body is empty, sends internal error.
-     *
+     * Reads body. If body is empty, sends internal error.
      * */
     getRequestBody(request, callback) {
         const requestBody = request.body;
         if (_.isEmpty(requestBody)) {
-            callback('Request body is empty');
+            callback(new Error('Request body is empty'));
         } else {
-            const camelCasedBody = ChangeCaseUtil.convertKeysToCamelCase(requestBody);
-            callback(null, camelCasedBody);
+            callback(null, requestBody);
         }
     }
 
@@ -90,7 +85,7 @@ class ControllerBase {
 
     checkUserIsDefined(request, callback) {
         if (!request.user) {
-            callback('User is undefined.');
+            callback(new Error('User is undefined.'));
         } else {
             callback(null);
         }

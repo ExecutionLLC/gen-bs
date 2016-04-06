@@ -208,7 +208,7 @@ class SessionService extends ServiceBase {
     _findSession(sessionId, callback) {
         const sessionDescriptor = this.sessions[sessionId];
         if (!sessionDescriptor) {
-            callback(new Error('Session is not found'));
+            callback(new Error('Session is not found: ' + sessionId));
         } else {
             callback(null, sessionDescriptor);
         }

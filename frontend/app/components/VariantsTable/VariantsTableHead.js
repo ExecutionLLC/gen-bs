@@ -22,7 +22,7 @@ export default class VariantsTableHead extends Component {
             );
         }
 
-        const fieldIds = _.map(currentView.view_list_items, item => item.field_id);
+        const fieldIds = _.map(currentView.viewListItems, item => item.fieldId);
 
         return (
             <tbody className="table-variants-head" id="variants_table_head">
