@@ -17,7 +17,7 @@ export default class ExistentFilterSelect extends Component {
         const disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
         });
-        const title = (auth.isDemo) ? 'Login or register to create filters' : 'Make a copy for editing';
+        const title = (auth.isDemo) ? 'Login or register to work with filter' : 'Make a copy for editing';
         const isFilterEditable = (currentFilter.type === 'user');
 
         return (
@@ -28,7 +28,7 @@ export default class ExistentFilterSelect extends Component {
                         <label data-localize="views.setup.selector.label">Available Filters</label>
                     </div>
                 </div>
-                { isFilterEditable &&
+                { !isFilterEditable &&
                     <div className="alert alert-help">
                         <span data-localize="views.setup.selector.description">This filter is not editable, duplicate it to make changes.</span>
                     </div>
