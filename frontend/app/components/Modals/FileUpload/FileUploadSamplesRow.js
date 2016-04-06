@@ -51,7 +51,7 @@ export default class FileUploadSamplesRow extends Component {
           <div className="flex">
             <dl>
               <dt>Name</dt>
-              <dd>{sample.file_name}</dd>
+              <dd>{sample.fileName}</dd>
             </dl>
             <dl>
               <dt>Version</dt>
@@ -74,7 +74,7 @@ export default class FileUploadSamplesRow extends Component {
 
   renderValues() {
     const { sample } = this.props;
-    const values = _.indexBy(sample.values, 'field_id');
+    const values = _.indexBy(sample.values, 'fieldId');
     return (
       <Panel collapsible expanded={this.state.showValues} className="samples-values form-horizontal-rows">
         <div className="flex">

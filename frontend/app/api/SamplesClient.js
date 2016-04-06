@@ -1,10 +1,9 @@
 'use strict';
 
-const assert = require('assert');
-const _ = require('lodash');
+import _ from 'lodash';
 
-const RequestWrapper = require('./RequestWrapper');
-const UserEntityClientBase = require('./UserEntityClientBase');
+import RequestWrapper from './RequestWrapper';
+import UserEntityClientBase from './UserEntityClientBase';
 
 export default class SamplesClient extends UserEntityClientBase {
     constructor(urls) {
@@ -18,6 +17,11 @@ export default class SamplesClient extends UserEntityClientBase {
 
     getSourcesFields(sessionId, callback) {
         RequestWrapper.get(this.urls.getSourcesFields(),
+            this._makeHeaders({sessionId}), null, null, callback);
+    }
+
+    getAllFields(sessionId, callback) {
+        RequestWrapper.get(this.urls.getAllFields(),
             this._makeHeaders({sessionId}), null, null, callback);
     }
 
@@ -67,7 +71,7 @@ export default class SamplesClient extends UserEntityClientBase {
         if (sampleOrNull) {
             const values = sampleOrNull.values;
             var ok = _.each(values, value => {
-                !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId));
+                !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId);
             });
             return ok;
         }
