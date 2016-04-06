@@ -12,13 +12,13 @@ export default class VariantsTableRow extends ComponentBase {
         const rowFieldsHash = row.fieldsHash;
         const rowFields = row.fields;
         const comments = row.comments;
-        const viewFields = currentView.view_list_items;
+        const viewFields = currentView.viewListItems;
 
         const pos = this.getMainFieldValue('POS', rowFields, fields);
         const alt = this.getMainFieldValue('ALT', rowFields, fields);
         const chrom = this.getMainFieldValue('CHROM', rowFields, fields);
         const ref = this.getMainFieldValue('REF', rowFields, fields);
-        const searchKey = row.search_key;
+        const searchKey = row.searchKey;
 
         return (
             <tr>
@@ -33,10 +33,6 @@ export default class VariantsTableRow extends ComponentBase {
                 </td>
                 <td className="btntd">
                     <div>
-                        <button data-toggle="button"
-                                className="btn btn-link reset-padding">
-                            <i className="i-star"/>
-                        </button>
                     </div>
                 </td>
                 <VariantsTableComment alt={alt}
@@ -53,16 +49,16 @@ export default class VariantsTableRow extends ComponentBase {
         );
     }
 
-    getMainFieldValue(col_name, row_fields, fields) {
-        const mainField = _.find(fields.totalFieldsList, field => field.name === col_name);
-        return _.find(row_fields, field => field.field_id === mainField.id).value
+    getMainFieldValue(colName, rowFields, fields) {
+        const mainField = _.find(fields.totalFieldsList, field => field.name === colName);
+        return _.find(rowFields, field => field.fieldId === mainField.id).value
     }
 
 
     renderFieldValue(field, sortState, rowFields) {
-        const fieldId = field.field_id;
+        const fieldId = field.fieldId;
         const resultFieldValue = rowFields[fieldId];
-        let columnSortParams = _.find(sortState, sortItem => sortItem.field_id === fieldId);
+        let columnSortParams = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
 
         let sortedActiveClass = classNames({
             'active': columnSortParams

@@ -26,7 +26,7 @@ class AppServerUploadUtils {
         }, (error, response, body) => {
             if (error) {
                 callback(error);
-            } else if (response.statusCode !== HttpStatus.OK) {
+            } else if (response.status !== HttpStatus.OK) {
                 callback(new Error('Unexpected AS POST HTTP status: ' + response.statusCode));
             } else {
                 callback(null, body);

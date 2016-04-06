@@ -1,6 +1,11 @@
 import config from '../../config'
+
+import apiFacade from '../api/ApiFacade'
+import { handleError } from './errorHandler'
+import { fetchFields, fetchTotalFields } from './fields'
 import { analyze, changeSample, changeView, changeFilter, initSamplesList } from './ui'
-import { fetchFields, fetchSourceFields } from './fields'
+
+import HttpStatus from 'http-status';
 
 /*
  * action types
@@ -18,9 +23,27 @@ export const RECEIVE_SAMPLES = 'RECEIVE_SAMPLES';
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
 
 
+const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
+const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
+
+const FETCH_FILTERS_NETWORK_ERROR = 'Cannot update filters data (network error). You can reload page and try again.';
+const FETCH_FILTERS_SERVER_ERROR = 'Cannot update filters data (server error). You can reload page and try again.';
+
+const FETCH_SAMPLES_NETWORK_ERROR = 'Cannot update samples data (network error). You can reload page and try again.';
+const FETCH_SAMPLES_SERVER_ERROR = 'Cannot update samples data (server error). You can reload page and try again.';
+
+const FETCH_VIEWS_NETWORK_ERROR = 'Cannot update views data (network error). You can reload page and try again.';
+const FETCH_VIEWS_SERVER_ERROR = 'Cannot update views data (server error). You can reload page and try again.';
+
+const dataClient = apiFacade.dataClient;
+const filtersClient = apiFacade.filtersClient;
+const samplesClient = apiFacade.samplesClient;
+const viewsClient = apiFacade.viewsClient;
+
 /*
  * action creators
  */
+
 function requestUserdata() {
     return {
         type: REQUEST_USERDATA
@@ -38,32 +61,28 @@ function receiveUserdata(json) {
 export function fetchUserdata() {
 
     return (dispatch, getState) => {
-
         dispatch(requestUserdata());
-
-        return $.ajax(config.URLS.USERDATA, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(json => {
-                const view = json.views[0] || null;
-                const sampleId = json.samples.length ? json.samples[json.samples.length - 1].id : null;
-                const filter = json.filters[0] || null;
-                dispatch(receiveUserdata(json));
+        const { auth: {sessionId}, ui: {languageId} } = getState();
+        dataClient.getUserData(sessionId, languageId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, FETCH_USER_DATA_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                const view = result.views[0] || null;
+                const sample = result.samples[0] || null;
+                const filter = result.filters[0] || null;
+                dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
-                dispatch(changeSample(json.samples, sampleId));
-                dispatch(analyze(sampleId, view.id, filter.id));
-                dispatch(fetchFields(sampleId));
-                dispatch(fetchSourceFields());
-                console.log('-----------------------------------------------------------------------------------');
-                console.log('* (CHECK ME) json.samples = ', json.samples);
-                console.log('-----------------------------------------------------------------------------------');
+                dispatch(changeSample(result.samples, sample.id));
+                dispatch(analyze(sample.id, view.id, filter.id));
+                dispatch(fetchFields(sample.id));
+                dispatch(fetchTotalFields());
                 dispatch(initSamplesList(json.samples));
-            })
-
-        // TODO:
-        // catch any error in the network call.
+            }
+        });
     }
 }
 
@@ -81,25 +100,27 @@ function receiveViews(json) {
     }
 }
 
+// FIXME: WTF??? Where we use viewId?
 export function fetchViews(viewId) {
 
-    return function (dispatch, getState) {
+    return (dispatch, getState) => {
         dispatch(requestViews());
 
-        return $.ajax(config.URLS.VIEWS, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(function (json) {
-                const view = json[0] || null;
+        const sessionId = getState().auth.sessionId;
+        viewsClient.getAll(sessionId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, FETCH_VIEWS_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, FETCH_VIEWS_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                const view = result[0] || null;
                 const viewId = getState().viewBuilder.currentView.id || view.id;
 
-                dispatch(receiveViews(json));
-                dispatch(changeView(viewId))
-            });
-
-        // TODO:
-        // catch any error in the network call.
+                dispatch(receiveViews(result));
+                dispatch(changeView(viewId));
+            }
+        });
     }
 }
 
@@ -117,25 +138,27 @@ function receiveFilters(json) {
     }
 }
 
+// FIXME: WTF??? Where we use filterId?
 export function fetchFilters(filterId) {
 
-    return function (dispatch, getState) {
+    return (dispatch, getState) => {
         dispatch(requestFilters());
 
-        return $.ajax(config.URLS.FILTERS, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(function (json) {
-                const filter = json[0] || null;
+        const sessionId = getState().auth.sessionId;
+        filtersClient.getAll(sessionId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, FETCH_FILTERS_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, FETCH_FILTERS_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                const filter = result[0] || null;
                 const filterId = getState().filterBuilder.currentFilter.id || filter.id;
 
-                dispatch(receiveFilters(json));
-                dispatch(changeFilter(filterId))
-            });
-
-        // TODO:
-        // catch any error in the network call.
+                dispatch(receiveFilters(result));
+                dispatch(changeFilter(filterId));
+            }
+        });
     }
 }
 
@@ -155,22 +178,23 @@ function receiveSamples(json) {
 
 export function fetchSamples() {
 
-    return function (dispatch, getState) {
+    return (dispatch, getState) => {
         dispatch(requestSamples());
 
-        return $.ajax(config.URLS.SAMPLES, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(function (json) {
-                const sample = getState().ui.currentSample || json[0] || null;
+        const sessionId = getState().auth.sessionId;
+        samplesClient.getAll(sessionId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, FETCH_SAMPLES_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                const sample = getState().ui.currentSample || result[0] || null;
                 const sampleId = sample.id;
 
                 dispatch(receiveSamples(json));
                 dispatch(changeSample(json, sampleId));
-            });
-
-        // TODO:
-        // catch any error in the network call.
+            }
+        });
     }
 }

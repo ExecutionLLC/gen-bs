@@ -1,11 +1,9 @@
 'use strict';
 
-const assert = require('assert');
-const _ = require('lodash');
+import _ from 'lodash';
 
 import RequestWrapper from './RequestWrapper';
 import UserEntityClientBase from './UserEntityClientBase';
-
 
 export default class SamplesClient extends UserEntityClientBase {
     constructor(urls) {
@@ -19,6 +17,11 @@ export default class SamplesClient extends UserEntityClientBase {
 
     getSourcesFields(sessionId, callback) {
         RequestWrapper.get(this.urls.getSourcesFields(),
+            this._makeHeaders({sessionId}), null, null, callback);
+    }
+
+    getAllFields(sessionId, callback) {
+        RequestWrapper.get(this.urls.getAllFields(),
             this._makeHeaders({sessionId}), null, null, callback);
     }
 

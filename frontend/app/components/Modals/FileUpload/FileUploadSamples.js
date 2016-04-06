@@ -18,7 +18,7 @@ export default class FileUploadSamples extends Component {
         }
         if (this.state.searchWord.length > 0) {
             let searchWord = this.state.searchWord.toLowerCase();
-            samples = samples.filter(el => ~el.file_name.toLocaleLowerCase().indexOf(searchWord));
+            samples = samples.filter(el => ~el.fileName.toLocaleLowerCase().indexOf(searchWord));
         }
         return (
             <div>
