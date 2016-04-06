@@ -4,6 +4,7 @@ import apiFacade from '../api/ApiFacade'
 import { handleError } from './errorHandler'
 import { fetchFields, fetchTotalFields } from './fields'
 import { analyze, changeSample, changeView, changeFilter } from './ui'
+import { receiveSavedFilesList } from './savedFiles';
 
 import HttpStatus from 'http-status';
 
@@ -76,6 +77,7 @@ export function fetchUserdata() {
                 dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
+                dispatch(receiveSavedFilesList(result.savedFiles));
                 dispatch(changeSample(result.samples, sample.id));
                 dispatch(analyze(sample.id, view.id, filter.id));
                 dispatch(fetchFields(sample.id));
@@ -99,8 +101,7 @@ function receiveViews(json) {
     }
 }
 
-// FIXME: WTF??? Where we use viewId?
-export function fetchViews(viewId) {
+export function fetchViews() {
 
     return (dispatch, getState) => {
         dispatch(requestViews());
@@ -137,8 +138,7 @@ function receiveFilters(json) {
     }
 }
 
-// FIXME: WTF??? Where we use filterId?
-export function fetchFilters(filterId) {
+export function fetchFilters() {
 
     return (dispatch, getState) => {
         dispatch(requestFilters());

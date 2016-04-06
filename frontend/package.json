@@ -53,6 +53,7 @@
     "jszip": "2.5.0",
     "lodash": "3.10.1",
     "material-ui": "0.14.4",
+    "moment": "2.12.0",
     "pako": "1.0.0",
     "react": "0.14.7",
     "react-addons-shallow-compare": "^0.14.7",
@@ -66,6 +67,7 @@
     "redux": "3.0.5",
     "redux-logger": "2.3.1",
     "redux-thunk": "1.0.2",
-    "redux-timeout": "2.0.0"
+    "redux-timeout": "2.0.0",
+    "superagent": "1.8.3"
   }
 }
