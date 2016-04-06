@@ -28,5 +28,6 @@ export default class ExportUtils {
         a.download = fileName;
         a.click();
         window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
     }
 }
