@@ -1,3 +1,4 @@
+import Moment from 'moment';
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
@@ -77,7 +78,7 @@ export default class QueryHistoryModal extends Component {
 
     renderHistoryTableRow(historyItem) {
         const itemId = historyItem.id;
-        const datetime = historyItem.timestamp ? (new Date(historyItem.timestamp)).toString() : 'Unknown';
+        const datetime = historyItem.timestamp ? Moment(historyItem.timestamp).format('YYYY-MM-DD-HH-mm-ss') : 'Unknown';
         const sample = historyItem.sample ? historyItem.sample.fileName : 'Unknown';
         const filters = historyItem.filters.length > 0 ? _.map(historyItem.filters, (item) => { return item.name }).join('</br>') : 'Unknown';
         const view = historyItem.view ? historyItem.view.name : 'Unknown';
