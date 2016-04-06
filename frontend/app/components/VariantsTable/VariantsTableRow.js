@@ -33,10 +33,6 @@ export default class VariantsTableRow extends ComponentBase {
                 </td>
                 <td className="btntd">
                     <div>
-                        <button data-toggle="button"
-                                className="btn btn-link reset-padding">
-                            <i className="i-star"/>
-                        </button>
                     </div>
                 </td>
                 <VariantsTableComment alt={alt}
