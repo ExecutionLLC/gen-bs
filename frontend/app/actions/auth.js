@@ -116,6 +116,11 @@ function updateLoginData(dispatch, sessionId, isDemo) {
     dispatch(receiveSession(sessionId, isDemo));
     dispatch(createWsConnection(conn));
     dispatch(subscribeToWs(sessionId));
+    if (isDemo) {
+        dispatch(clearQueryHistory());
+    } else {
+        dispatch(updateQueryHistory());
+    }
     dispatch(fetchUserdata());
 }
 
