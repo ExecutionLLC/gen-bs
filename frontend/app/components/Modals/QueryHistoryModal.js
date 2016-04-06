@@ -103,10 +103,7 @@ export default class QueryHistoryModal extends Component {
     }
 
     renderFooter() {
-        return (
-            <Modal.Footer>
-            </Modal.Footer>
-        )
+        return null;
     }
 
     render() {
