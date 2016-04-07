@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-import { changeSample, updateSampleValue } from '../../../actions/ui'
+import { connect } from 'react-redux';
 
 import FileUploadSamplesRow from './FileUploadSamplesRow';
 
@@ -11,7 +10,7 @@ export default class FileUploadSamples extends Component {
     }
 
     render() {
-        let { samples,dispatch, closeModal } = this.props;
+        let { dispatch, closeModal, samplesList: {samples}} = this.props;
         if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
             console.error('No editable fields found');
             return null;
@@ -40,7 +39,6 @@ export default class FileUploadSamples extends Component {
                                 samples={samples}
                                 dispatch={dispatch}
                                 closeModal={closeModal}
-                                onUpdateSampleValue={(valueFieldId, value) => dispatch(updateSampleValue(sample.id, valueFieldId, value))}
                             />
                         )
                     )}
@@ -49,3 +47,10 @@ export default class FileUploadSamples extends Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    const { samplesList } = state;
+    return { samplesList }
+}
+
+export default connect(mapStateToProps)(FileUploadSamples)

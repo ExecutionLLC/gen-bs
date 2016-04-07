@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
-import { changeSample, updateSampleValue, resetSamplesList, updateSampleFields, requestUpdateSampleFields} from '../../../actions/ui'
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+
+import { changeSample, updateSampleValue, resetSamplesList, updateSampleFields, requestUpdateSampleFields} from '../../../actions/samplesList'
 
 
 export default class FileUploadSamplesRow extends Component {
@@ -33,20 +34,20 @@ export default class FileUploadSamplesRow extends Component {
         return (
           <div>
               <div className="panel-heading">
-                  <h3 className="panel-title">{sample.file_name}<span>{sample.description}</span></h3>
+                  <h3 className="panel-title">{sample.fileName}<span>{sample.description}</span></h3>
               </div>
           </div>
         );
     }
 
     renderFooter() {
-        const { sample,samples,dispatch,closeModal } = this.props;
+        const { sample, samples, dispatch, closeModal } = this.props;
         return (
             <div className="panel-footer">
 
               <a onClick={() => {
-                    dispatch(changeSample(samples, sample.id));
                     dispatch(initSamplesList(samples));
+                    dispatch(changeSample(sample.id));
                     closeModal('upload');
                   }}
                   className="btn btn-link btn-uppercase"
@@ -67,7 +68,7 @@ export default class FileUploadSamplesRow extends Component {
     renderSelectField(field) {
         let fieldValue;
         const { sample, dispatch, samplesList } = this.props;
-        const selectOptions = field.available_values.map(
+        const selectOptions = field.availableValues.map(
             option => { return {value: option.id, label: option.value}}
         );
         const currentSampleIndex = _.findIndex(samplesList.samples, {id: sample.id});
@@ -134,7 +135,7 @@ export default class FileUploadSamplesRow extends Component {
                 </button>
 
                 <button
-                    onClick={ () => dispatch(requestUpdateSampleFields(sample.id, this.props.fields)) }
+                    onClick={ () => dispatch(requestUpdateSampleFields(sample.id)) }
                     type="button"
                     className="btn btn-primary"
                 >
@@ -146,12 +147,12 @@ export default class FileUploadSamplesRow extends Component {
 
     renderValues() {
         const { sample } = this.props;
-        const values = _.indexBy(sample.values, 'field_id');
+        const values = _.indexBy(sample.values, 'fieldId');
             return (
                 <Panel collapsible expanded={this.state.showValues} className="samples-values form-horizontal-rows">
                 <div className="flex">
                     {this.props.fields.map(field => {
-                        if (field.available_values) {
+                        if (field.availableValues) {
                             return this.renderSelectField(field);
                         } else {
                             return this.renderTextField(values, field);

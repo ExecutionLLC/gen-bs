@@ -3,7 +3,8 @@ import config from '../../config'
 import apiFacade from '../api/ApiFacade'
 import { handleError } from './errorHandler'
 import { fetchFields, fetchTotalFields } from './fields'
-import { analyze, changeSample, changeView, changeFilter, initSamplesList } from './ui'
+import { analyze, changeView, changeFilter } from './ui'
+import { changeSample, initSamplesList } from './samplesList'
 
 import HttpStatus from 'http-status';
 
@@ -76,11 +77,11 @@ export function fetchUserdata() {
                 dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
-                dispatch(changeSample(result.samples, sample.id));
                 dispatch(analyze(sample.id, view.id, filter.id));
                 dispatch(fetchFields(sample.id));
                 dispatch(fetchTotalFields());
                 dispatch(initSamplesList(result.samples));
+                dispatch(changeSample(sample.id));
             }
         });
     }
@@ -191,9 +192,9 @@ export function fetchSamples() {
                 const samples = response.body;
                 const sample = getState().ui.currentSample || samples[0] || null;
                 const sampleId = sample.id;
-
                 dispatch(receiveSamples(samples));
-                dispatch(changeSample(samples, sampleId));
+                dispatch(initSamplesList(samples));
+                dispatch(changeSample(sampleId));
             }
         });
     }

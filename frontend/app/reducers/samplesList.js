@@ -1,13 +1,15 @@
-import * as ActionTypes from '../actions/ui'
+import * as ActionTypes from '../actions/samplesList'
 
 
 export default function samplesList(state = {
     samples: [],
     savedSamples: [],
+    currentSample: null,
 }, action) {
 
     let currentSampleIndex;
     let newSamples;
+    let newSavedSamples;
     let newValues;
     let sampleId;
 
@@ -32,16 +34,17 @@ export default function samplesList(state = {
 
             return Object.assign({}, state, {samples: newSamples});
 
-        case ActionTypes.UPDATE_SAMPLE_FIELDS:
-            sampleId = action.sampleId;
-            currentSampleIndex = _.findIndex(state.savedSamples, {id: sampleId});
+        case ActionTypes.UPDATE_SAMPLES_LIST:
+            const {updatedSample} = action;
+            currentSampleIndex = _.findIndex(state.samples, {id: action.sampleId});
 
-            newValues = Object.assign({}, state.samples[currentSampleIndex].values || []);
+            newSamples = [...state.samples];
+            newSavedSamples = [...state.savedSamples];
 
-            newSamples = [...state.savedSamples];
-            newSamples[currentSampleIndex].values = newValues;
+            newSamples[currentSampleIndex] = updatedSample;
+            newSavedSamples[currentSampleIndex] = Object.assign({}, updatedSample);
 
-            return Object.assign({}, state, {savedSamples: newSamples});
+            return Object.assign({}, state, {samples: newSamples, savedSamples: newSavedSamples});
 
         case ActionTypes.INIT_SAMPLES_LIST:
             const {samples} = action;
@@ -59,6 +62,11 @@ export default function samplesList(state = {
             newSamples[currentSampleIndex].values = restoredValues;
 
             return Object.assign({}, state, {samples: newSamples});
+
+        case ActionTypes.CHANGE_SAMPLE:
+            return Object.assign({}, state, {
+                currentSample: _.find(samples, {id: action.sampleId})
+            });
 
         default:
             return state;
