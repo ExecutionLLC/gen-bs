@@ -37,7 +37,8 @@ class App extends Component {
     }
 
     render() {
-        const { isAuthenticated, samples, isFetching } = this.props.userData;
+        const { isAuthenticated, isFetching } = this.props.userData;
+        const {ui: {samples}} = this.props;
         const { ui } = this.props;
 
         var mainDivClass = classNames({
