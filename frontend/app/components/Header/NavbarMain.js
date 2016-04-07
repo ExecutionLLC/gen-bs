@@ -19,7 +19,7 @@ class NavbarMain extends Component {
     }
 
     render() {
-        const { dispatch, ui } = this.props;
+        const { dispatch, ui, variantsTable: {selectedRowIndices} } = this.props;
         const changeGlobalSearchValue = (globalSearchString) => {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
         };
@@ -41,8 +41,10 @@ class NavbarMain extends Component {
                     <NavbarSearch onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString) } }
                                   onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString) } }
                     />
-                    <ExportDropdown />
-                    <SavedFiles />
+                    <ExportDropdown dispatch={this.props.dispatch}
+                                    selectedRowIndices={selectedRowIndices}
+                    />
+                    <SavedFiles dispatch={this.props.dispatch} />
                     <Language />
                     <Buy />
                     <Auth {...this.props} />
@@ -55,12 +57,14 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, ui } = state;
+    const { auth, userData, ui, ws, variantsTable } = state;
 
     return {
         auth,
         userData,
-        ui
+        ui,
+        ws,
+        variantsTable
     }
 }
 

@@ -3,6 +3,7 @@ import config from '../../config'
 import apiFacade from '../api/ApiFacade'
 import { handleError } from './errorHandler'
 import { fetchFields, fetchTotalFields } from './fields'
+import { receiveSavedFilesList } from './savedFiles';
 import { analyze, changeView, changeFilter } from './ui'
 import { changeSample, initSamplesList } from './samplesList'
 
@@ -77,6 +78,7 @@ export function fetchUserdata() {
                 dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
+                dispatch(receiveSavedFilesList(result.savedFiles));
                 dispatch(analyze(sample.id, view.id, filter.id));
                 dispatch(fetchFields(sample.id));
                 dispatch(fetchTotalFields());
@@ -101,8 +103,7 @@ function receiveViews(json) {
     }
 }
 
-// FIXME: WTF??? Where we use viewId?
-export function fetchViews(viewId) {
+export function fetchViews() {
 
     return (dispatch, getState) => {
         dispatch(requestViews());
@@ -139,8 +140,7 @@ function receiveFilters(json) {
     }
 }
 
-// FIXME: WTF??? Where we use filterId?
-export function fetchFilters(filterId) {
+export function fetchFilters() {
 
     return (dispatch, getState) => {
         dispatch(requestFilters());
@@ -192,6 +192,7 @@ export function fetchSamples() {
                 const samples = response.body;
                 const sample = getState().ui.currentSample || samples[0] || null;
                 const sampleId = sample.id;
+
                 dispatch(receiveSamples(samples));
                 dispatch(initSamplesList(samples));
                 dispatch(changeSample(sampleId));

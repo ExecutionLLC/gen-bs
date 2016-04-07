@@ -8,7 +8,15 @@ import VariantsTableComment from './VariantsTableComment';
 
 export default class VariantsTableRow extends ComponentBase {
     render() {
-        const {row, auth, rowIndex, currentView, sortState, fields} = this.props;
+        const {
+            row,
+            auth,
+            rowIndex,
+            currentView,
+            sortState,
+            fields,
+            isSelected
+        } = this.props;
         const rowFieldsHash = row.fieldsHash;
         const rowFields = row.fields;
         const comments = row.comments;
@@ -22,13 +30,18 @@ export default class VariantsTableRow extends ComponentBase {
 
         return (
             <tr>
+                <td className="btntd row_checkbox">{rowIndex + 1}</td>
                 <td className="btntd row_checkbox"
                     key="row_checkbox">
-                    <div><label className="checkbox hidden">
-                        <input type="checkbox"/>
-                        <i/>
-                    </label>
-                        <span>{rowIndex + 1}</span>
+                    <div>
+                        <label className="checkbox">
+                            <input type="checkbox"
+                                   checked={isSelected}
+                                   onChange={() => this.onRowSelectionChanged()}
+                            />
+                            <i/>
+                        </label>
+                        <span />
                     </div>
                 </td>
                 <td className="btntd">
@@ -47,6 +60,11 @@ export default class VariantsTableRow extends ComponentBase {
                 {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
             </tr>
         );
+    }
+
+    onRowSelectionChanged() {
+        const {onSelected, rowIndex, isSelected} = this.props;
+        onSelected(rowIndex, !isSelected);
     }
 
     getMainFieldValue(colName, rowFields, fields) {
@@ -75,7 +93,8 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.row !== nextProps.row;
+        return this.props.row !== nextProps.row
+            || this.props.isSelected !== nextProps.isSelected;
     }
 }
 
@@ -83,5 +102,10 @@ VariantsTableRow.propTypes = {
     row: React.PropTypes.object.isRequired,
     rowIndex: React.PropTypes.number.isRequired,
     currentView: React.PropTypes.object.isRequired,
-    sortState: React.PropTypes.array.isRequired
+    sortState: React.PropTypes.array.isRequired,
+    auth: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+    isSelected: React.PropTypes.bool.isRequired,
+    // callback(rowIndex, isSelected)
+    onSelected: React.PropTypes.func.isRequired
 };

@@ -19,6 +19,7 @@ export const FILTER_VARIANTS = 'FILTER_VARIANTS';
 export const SORT_VARIANTS = 'SORT_VARIANTS';
 
 export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
+export const CLEAR_VARIANTS_ROWS_SELECTION = 'CLEAR_VARIANTS_ROWS_SELECTION';
 
 export const REQUEST_VARIANTS = 'REQUEST_VARIANTS';
 export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS';
@@ -213,6 +214,8 @@ export function fetchVariants(searchParams) {
         console.log('fetchVariants: ', searchParams);
 
         dispatch(requestVariants());
+        dispatch(clearTableRowsSelection());
+
         const { auth: {sessionId}, ui: {languageId} } = getState();
         searchClient.sendSearchRequest(
             sessionId,
@@ -289,6 +292,7 @@ export function searchInResultsNextData() {
 export function searchInResults(flags) {
     return (dispatch, getState) => {
         dispatch(requestSearchedResults(flags));
+        dispatch(clearTableRowsSelection());
 
         const state = getState();
         const sessionId = state.auth.sessionId;
@@ -316,9 +320,16 @@ export function searchInResults(flags) {
     }
 }
 
-export function selectTableRow(rowId) {
+export function selectTableRow(rowIndex, isSelected) {
     return {
         type: SELECT_VARIANTS_ROW,
-        rowId
+        rowIndex,
+        isSelected
     }
+}
+
+export function clearTableRowsSelection() {
+    return {
+        type: CLEAR_VARIANTS_ROWS_SELECTION
+    };
 }

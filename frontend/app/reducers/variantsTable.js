@@ -1,6 +1,6 @@
 import * as ActionTypes from '../actions/variantsTable'
 
-export default function variantsTable(state = {
+const initialState = {
     operationId: null,
     searchInResultsParams: {
         search: [],
@@ -12,8 +12,11 @@ export default function variantsTable(state = {
     scrollPos: 0,
     needUpdate: false,
     isNextDataLoading: false,
-    isFilteringOrSorting: false
-}, action) {
+    isFilteringOrSorting: false,
+    selectedRowIndices: []
+};
+
+export default function variantsTable(state = initialState, action) {
     switch (action.type) {
 
         case ActionTypes.CLEAR_SEARCH_PARAMS:
@@ -165,16 +168,26 @@ export default function variantsTable(state = {
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.SELECT_VARIANTS_ROW:
+        case ActionTypes.SELECT_VARIANTS_ROW: {
+            const {rowIndex, isSelected} = action;
+            const {selectedRowIndices} = state;
+            let newSelectedRowIndices;
+            if (isSelected) {
+                newSelectedRowIndices = selectedRowIndices.concat([rowIndex]);
+            } else {
+                newSelectedRowIndices = _.filter(selectedRowIndices, item => item !== rowIndex);
+            }
+
             return Object.assign({}, state, {
-                clickedRow: {_fid: action.rowId},
-                filteredVariants: state.filteredVariants.map((o) => {
-                    if (action.rowId == o._fid) {
-                        o._selected = !o._selected
-                    }
-                    return o;
-                })
+                selectedRowIndices: newSelectedRowIndices
             });
+        }
+
+        case ActionTypes.CLEAR_VARIANTS_ROWS_SELECTION: {
+            return Object.assign({}, state, {
+                selectedRowIndices: initialState.selectedRowIndices
+            });
+        }
 
         default:
             return state;
