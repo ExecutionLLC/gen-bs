@@ -284,7 +284,7 @@ class SamplesModel extends SecureModelBase {
                 this._findSamplesMetadata(trx,
                     userId,
                     _.map(
-                        sampleVersions, sampleVersion=>sampleVersion.vcfFileSampleId
+                        sampleVersions, sampleVersion => sampleVersion.vcfFileSampleId
                     ),
                     true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleVersions)),
             (samplesMetadata, sampleVersions, callback) =>
@@ -323,7 +323,7 @@ class SamplesModel extends SecureModelBase {
         _.forEach(sampleVersions, sampleVersion => {
             const sample = _.find(
                 samplesMetadata,
-                sampleMetadata=>sampleMetadata.id == sampleVersion.vcfFileSampleId
+                sampleMetadata=>sampleMetadata.id === sampleVersion.vcfFileSampleId
             );
             const resultSample = _.cloneDeep(sample);
             resultSample.id = sampleVersion.id;
