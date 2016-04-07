@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Select2 from 'react-select2-wrapper';
 import Select from 'react-select';
-import { changeSample} from '../../../actions/ui';
 
 
 export default class MetadataSearch extends Component {
