@@ -31,6 +31,9 @@ class DataController extends ControllerBase {
             queryHistory: (callback) => {
                 this.services.queryHistory.findAll(user, defaultLimit, 0, callback);
             },
+            savedFiles: (callback) => {
+                this.services.savedFiles.findAll(user, callback);
+            },
             activeOperations: (callback) => {
                 this.services.operations.findAll(sessionId, (error, operations) => {
                     const clientOperations = _.map(operations, operation => {

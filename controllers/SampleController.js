@@ -15,7 +15,7 @@ class SampleController extends UserEntityControllerBase {
         this.sendInternalError(response, 'Method is not supported, use upload');
     }
 
-    upload(request, response, next) {
+    upload(request, response) {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {

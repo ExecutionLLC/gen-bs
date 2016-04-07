@@ -47,7 +47,7 @@ export default class SamplesClient extends UserEntityClientBase {
             if (!sample.values || !sample.values.length) {
                 return false;
             }
-            if (_.any(sample.values, sampleValue => {!sampleValue.fieldId;})) {
+            if (_.any(sample.values, sampleValue => !sampleValue.fieldId)) {
                 return false;
             }
         }
@@ -70,10 +70,10 @@ export default class SamplesClient extends UserEntityClientBase {
 
         if (sampleOrNull) {
             const values = sampleOrNull.values;
-            var ok = _.each(values, value => {
-                !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId);
-            });
-            return ok;
+            return !!_.filter(
+                values, 
+                value => !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId)
+            );
         }
         return true;
     }

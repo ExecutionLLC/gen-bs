@@ -11,6 +11,7 @@ import SamplesClient from './SamplesClient';
 import SearchClient from './SearchClient';
 import SessionsClient from './SessionsClient';
 import ViewsClient from './ViewsClient';
+import SavedFilesClient from './SavedFilesClient';
 
 class ApiFacade {
     constructor() {
@@ -23,6 +24,7 @@ class ApiFacade {
         this._samplesClient = new SamplesClient(urls);
         this._searchClient = new SearchClient(urls);
         this._sessionsClient = new SessionsClient(urls);
+        this._savedFilesClient = new SavedFilesClient(urls);
         this._viewsClient = new ViewsClient(urls);
     }
 
@@ -52,6 +54,10 @@ class ApiFacade {
     
     get sessionsClient() {
         return this._sessionsClient;
+    }
+
+    get savedFilesClient() {
+        return this._savedFilesClient;
     }
 
     get viewsClient() {

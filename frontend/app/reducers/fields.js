@@ -12,7 +12,7 @@ export default function fields(state = {
     sampleFieldsList: [],
     sourceFieldsList: [],
     totalFieldsList:[],
-    notEditableFields:[],
+    notEditableFields:[]
 }, action) {
 
     switch (action.type) {
@@ -58,6 +58,10 @@ export default function fields(state = {
                     sources: false
                 }),
                 totalFieldsList: totalFields,
+                totalFieldsHash: _.reduce(totalFields, (result, field) => {
+                    result[field.id] = field;
+                    return result;
+                }, {}),
                 sourceFieldsList: sourceFields,
                 lastUpdated: action.receivedAt
             });

@@ -15,6 +15,7 @@ import FiltersModal from '../components/Modals/FiltersModal';
 import FileUploadModal from '../components/Modals/FileUploadModal';
 import QueryHistoryModal from '../components/Modals/QueryHistoryModal'
 import ViewsModal from '../components/Modals/ViewsModal';
+import SavedFilesModal from '../components/Modals/SavedFilesModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
@@ -37,9 +38,7 @@ class App extends Component {
 
     render() {
         const { isAuthenticated, samples, isFetching } = this.props.userData;
-        const { dispatch, ui } = this.props;
-        //console.log('query', this.context.router.getCurrentQuery());
-        //console.log('query sessionId or Error', location.search.slice(1).split('='));
+        const { ui } = this.props;
 
         var mainDivClass = classNames({
             'main': true,
@@ -91,6 +90,7 @@ class App extends Component {
                     showModal={this.props.modalWindows.upload.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
                 />
+                <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
                 <QueryHistoryModal
                     showModal={this.props.showQueryHistoryModal}
                     closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()) } }
@@ -106,6 +106,7 @@ function mapStateToProps(state) {
             modalWindows,
             views,
             fields,
+            savedFiles,
             ui,
             errorHandler: { showErrorWindow },
             queryHistory: { showQueryHistoryModal } } = state;
@@ -116,6 +117,7 @@ function mapStateToProps(state) {
         modalWindows,
         views,
         fields,
+        savedFiles,
         ui,
         showErrorWindow,
         showQueryHistoryModal
