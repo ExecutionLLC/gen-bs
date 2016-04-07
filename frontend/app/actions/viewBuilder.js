@@ -1,8 +1,8 @@
-import config from '../../config'
+import apiFacade from '../api/ApiFacade';
+import { closeModal } from './modalWindows';
+import { fetchViews } from './userData';
 
-import { closeModal } from './modalWindows'
-import { changeView } from './ui'
-import { fetchViews } from './userData'
+import HttpStatus from 'http-status';
 
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW';
 
@@ -23,6 +23,13 @@ export const VBUILDER_RECEIVE_DELETE_VIEW = 'VBUILDER_RECEIVE_DELETE_VIEW';
 
 export const VBUILDER_TOGGLE_NEW_EDIT = 'VBUILDER_TOGGLE_NEW_EDIT';
 
+const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
+const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
+
+const UPDATE_VIEW_NETWORK_ERROR = 'Cannot update view (network error). Please try again.';
+const UPDATE_VIEW_SERVER_ERROR = 'Cannot update view (server error). Please try again.';
+
+const viewsClient = apiFacade.viewsClient;
 
 /*
  * Action Creators
@@ -86,59 +93,57 @@ function viewBuilderReceiveUpdateView(json) {
     };
 }
 
+// FIXME: viewItemIndex is unused
 export function viewBuilderUpdateView(viewItemIndex) {
 
     return (dispatch, getState) => {
-
-        const currState = getState();
+        const state = getState();
+        const currentView = state.viewBuilder.currentView;
+        const isNotEditableView = _.some(['advanced', 'standard'], currentView.type);
 
         dispatch(viewBuilderRequestUpdateView());
-        if (currState.auth.isDemo ||
-            currState.viewBuilder.currentView.type == 'advanced' ||
-            currState.viewBuilder.currentView.type == 'standard') {
-            dispatch(closeModal('views'))
-            dispatch(fetchViews(currState.viewBuilder.currentView.id))
+        if (state.auth.isDemo || isNotEditableView) {
+            dispatch(closeModal('views'));
         } else {
+            const sessionId = state.auth.sessionId;
+            const editedView = state.viewBuilder.editedView;
 
-            return $.ajax(`${config.URLS.VIEWS}/${currState.viewBuilder.editedView.id}`, {
-                    'type': 'PUT',
-                    'headers': {"X-Session-Id": currState.auth.sessionId},
-                    'data': JSON.stringify(currState.viewBuilder.editedView),
-                    'processData': false,
-                    'contentType': 'application/json'
-                })
-                .done(json => {
-                    dispatch(viewBuilderReceiveUpdateView(json));
-                    dispatch(closeModal('views'));
-                    dispatch(fetchViews(json.id));
-                })
-                .fail(err => {
-                    console.error('UPDATE View FAILED: ', err.responseText);
-                });
+            dispatch(viewBuilderRequestUpdateView());
+            viewsClient.update(sessionId, editedView, (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, UPDATE_VIEW_NETWORK_ERROR));
+                } else if (response.statusCode) {
+                    dispatch(handleError(null, UPDATE_VIEW_SERVER_ERROR));
+                } else {
+                    const result = response.body;
+                    dispatch(viewBuilderReceiveUpdateView(result));
+                    dispatch(closeModal('views'))
+                    dispatch(fetchViews(result.id))
+                }
+            });
         }
     }
 }
 
+// FIXME: viewItemIndex is unused
 export function viewBuilderCreateView(viewItemIndex) {
 
     return (dispatch, getState) => {
         dispatch(viewBuilderRequestCreateView());
 
-        return $.ajax(config.URLS.VIEWS, {
-                'type': 'POST',
-                'headers': {"X-Session-Id": getState().auth.sessionId},
-                'data': JSON.stringify(getState().viewBuilder.newView),
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .done(json => {
-                dispatch(viewBuilderReceiveCreateView(json));
+        const {auth: {sessionId}, viewBuilder: {newView}, ui: {languageId} } = getState();
+        viewsClient.add(sessionId, languageId, newView, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, CREATE_VIEW_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                dispatch(viewBuilderReceiveCreateView(result));
                 dispatch(closeModal('views'));
-                dispatch(fetchViews(json.id));
-            })
-            .fail(err => {
-                console.error('CREATE View FAILED: ', err.responseText)
-            });
+                dispatch(fetchViews(result.id));
+            }
+        });
     }
 }
 
@@ -166,28 +171,5 @@ function viewBuilderReceiveDeleteView(json) {
     return {
         type: VBUILDER_RECEIVE_DELETE_VIEW,
         view: json
-    }
-}
-
-export function viewBuilderDeleteView(viewItemIndex) {
-
-    return (dispatch, getState) => {
-        dispatch(viewBuilderRequestCreateView());
-
-        return $.ajax(config.URLS.VIEWS, {
-                'type': 'DELETE',
-                'headers': {"X-Session-Id": getState().auth.sessionId},
-                'data': JSON.stringify(getState().viewBuilder.newView),
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .done(json => {
-                dispatch(viewBuilderReceiveDeleteView(json));
-                dispatch(closeModal('views'));
-                dispatch(fetchViews(json.id));
-            })
-            .fail(err => {
-                console.error('CREATE View FAILED: ', err.responseText)
-            })
     }
 }

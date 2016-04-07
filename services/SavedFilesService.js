@@ -14,6 +14,7 @@ class SavedFilesService extends UserEntityServiceBase {
 
     add(user, languId, fileMetadata, fileStream, callback) {
         async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this._createAndUploadFile(user, languId, fileMetadata, fileStream, callback),
             (fileId, callback) => this.find(user, fileId, callback)
         ], callback);
@@ -21,10 +22,37 @@ class SavedFilesService extends UserEntityServiceBase {
 
     download(user, languId, fileId, callback) {
         async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.models.savedFiles.find(user.id, fileId, (error) => callback(error)),
             (callback) => callback(null, this._generateBucketKeyForFile(fileId)),
             (keyName, callback) => this.services.amazonS3.createObjectStream(this.amazonBucket, keyName, callback)
         ], (error, readStream) => callback(error, readStream));
+    }
+
+    find(user, savedFileId, callback) {
+        async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => super.find(user, savedFileId, callback),
+            (savedFile, callback) => this._loadAdditionalEntities(user, savedFile, callback)
+        ], (error, savedFile) => callback(error, savedFile));
+    }
+
+    findAll(user, callback) {
+        // Demo users currently don't have any access to saved files.
+        if (this.services.users.isDemoUserId(user.id)) {
+            callback(null, []);
+            return;
+        }
+
+        async.waterfall([
+            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+            (callback) => super.findAll(user, callback),
+            (savedFiles, callback) => {
+                async.mapSeries(savedFiles, (savedFile, callback) => {
+                    this._loadAdditionalEntities(user, savedFile, callback)
+                }, callback);
+            }
+        ], callback);
     }
 
     update() {
@@ -52,6 +80,28 @@ class SavedFilesService extends UserEntityServiceBase {
 
     _generateBucketKeyForFile(fileId) {
         return 'saved_file_' + fileId;
+    }
+
+    _loadAdditionalEntities(user, savedFile, callback) {
+        async.waterfall([
+            (callback) => {
+                // Find the used entities themselves, as they may be absent on the frontend
+                // (ex. deleted or have different versions)
+                async.parallel({
+                    savedFile: (callback) => callback(null, savedFile),
+                    view: (callback) => this.services.views.find(user, savedFile.viewId, callback),
+                    filter: (callback) => this.services.filters.find(user, savedFile.filterIds[0], callback),
+                    sample: (callback) => this.services.samples.find(user, savedFile.sampleId, callback)
+                }, callback);
+            },
+            // Build saved file with view, filter and sample.
+            (fileWithEntities, callback) => callback(null,
+                Object.assign({}, fileWithEntities.savedFile, {
+                    view: fileWithEntities.view,
+                    filter: fileWithEntities.filter,
+                    sample: fileWithEntities.sample
+                }))
+        ], callback);
     }
 }
 

@@ -70,7 +70,8 @@ const SETTINGS = {
         },
         file: {
             level: ENV.GEN_WS_LOG_LEVEL || 'trace',
-            path: ENV.GEN_WS_LOG_PATH || __dirname + '/../logs/genomix.log'
+            path: ENV.GEN_WS_LOG_PATH || __dirname + '/../logs/genomix.log',
+            rotatingFilesCount: 7
         }
     },
     defaultLanguId: 'en'

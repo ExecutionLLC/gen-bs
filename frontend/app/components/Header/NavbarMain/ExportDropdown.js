@@ -1,27 +1,67 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import {Nav, NavDropdown, MenuItem} from 'react-bootstrap';
 
-export default class ExportDropdown extends Component {
+import {exportToFile} from '../../../actions/savedFiles';
+import ComponentBase from '../../shared/ComponentBase';
 
-  constructor(props) {
-    super(props)
-  }
+export default class ExportDropdown extends ComponentBase {
 
-  render() {
-    return (
-<div>
-<div data-localize="files.export.help" data-toggle="tooltip" data-placement="right" title="Select several mutations in the table and save to file. There are indicate the number of already selected recordings" data-container="body" data-trigger="hover">
+    constructor(props) {
+        super(props)
+    }
 
-    <a className="btn navbar-btn" type="button" id="dropdownMenu1" data-toggle="modal" data-target="#filename">
-      <span className="hidden-xxs" data-localize="files.export.title">Export</span>
-      <span className="visible-xxs"><i className="md-i">file_download</i></span>
-    <span className="badge badge-warning">7</span>
-    </a>
+    get haveSelectedVariants() {
+        const {selectedRowIndices} = this.props;
+        return !_.isEmpty(selectedRowIndices);
+    }
 
-</div>
+    render() {
+        const exportDropdownTitle = this.renderExportButtonTitle();
+        return (
+            <div>
+                <Nav>
+                    <NavDropdown title={exportDropdownTitle}
+                                 id="export-dropdown"
+                                 onSelect={(e, item) => this.onExportItemSelected(e, item)}
+                                 disabled={!this.haveSelectedVariants}
+                    >
+                        <MenuItem eventKey="csv">CSV</MenuItem>
+                        <MenuItem eventKey="sql">SQL</MenuItem>
+                        <MenuItem eventKey="txt">Text</MenuItem>
+                    </NavDropdown>
+                </Nav>
+            </div>
+        );
+    }
 
-</div>
+    renderExportButtonTitle() {
+        if (!this.haveSelectedVariants) {
+            return (<span>Export</span>);
+        } else {
+            const {selectedRowIndices} = this.props;
+            const selectedVariantsCount = selectedRowIndices.length;
+            return (<span>Export<span className="badge badge-warning">{selectedVariantsCount}</span></span>);
+        }
+    }
 
+    onExportItemSelected(event, selectedKey) {
+        event.preventDefault();
 
-    )
-  }
+        const {
+            dispatch,
+            selectedRowIndices
+        } = this.props;
+
+        if (_.isEmpty(selectedRowIndices)) {
+            console.log('Nothing is selected for export.');
+            return;
+        }
+
+        dispatch(exportToFile(selectedKey));
+    }
 }
+
+ExportDropdown.propTypes = {
+    dispatch: React.PropTypes.func.isRequired,
+    selectedRowIndices: React.PropTypes.array.isRequired
+};

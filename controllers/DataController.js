@@ -27,6 +27,9 @@ class DataController extends ControllerBase {
             samples: (callback) => {
                 this.services.samples.findAll(user, callback);
             },
+            savedFiles: (callback) => {
+                this.services.savedFiles.findAll(user, callback);
+            },
             activeOperations: (callback) => {
                 this.services.operations.findAll(sessionId, (error, operations) => {
                     const clientOperations = _.map(operations, operation => {
