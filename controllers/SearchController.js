@@ -29,24 +29,6 @@ class SearchController extends ControllerBase {
                 const filterId = body.filterId;
                 const limit = body.limit;
                 const offset = body.offset;
-                if (!this.services.users.isDemoUserId(user.id)) {
-                    const queryHistory = SearchController._createQueryHistory(sampleId, viewId, [filterId]);
-                    this.services.queryHistory.add(
-                        user,
-                        languageId,
-                        queryHistory,
-                        (error) => callback(error, user, sessionId, languageId,
-                            sampleId, viewId, filterId, limit, offset
-                        )
-                    );
-                } else {
-                    callback(null, user, sessionId, languageId,
-                        sampleId, viewId, filterId, limit, offset
-                    )
-                }
-            },
-            (user, sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) => {
-
                 this.services.search
                     .sendSearchRequest(user, sessionId, languageId,
                         sampleId, viewId, filterId, limit, offset, callback);
@@ -54,15 +36,6 @@ class SearchController extends ControllerBase {
         ], (error, operationId) => {
             this.sendErrorOrJson(response, error, {operationId});
         });
-    }
-
-    static _createQueryHistory(sampleId, viewId, filterIds) {
-        return {
-            vcfFileSampleVersionId: sampleId,
-            viewId: viewId,
-            totalResults: 0,
-            filters: filterIds
-        }
     }
 
     searchInResults(request, response) {

@@ -33,10 +33,10 @@ class SearchService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    sendSearchRequest(user, sessionId, languId, sampleId, viewId, filterId, limit, offset, callback) {
-        if (!_.some([languId, viewId, filterId, sampleId, limit, offset])) {
+    sendSearchRequest(user, sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) {
+        if (!_.some([languageId, viewId, filterId, sampleId, limit, offset])) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
-                    languId: languId || 'undefined',
+                    languId: languageId || 'undefined',
                     viewId: viewId || 'undefined',
                     filterId: filterId || 'undefined',
                     sampleId: sampleId || 'undefined',
@@ -45,11 +45,12 @@ class SearchService extends ServiceBase {
                 }, null, 2)));
         } else {
             async.waterfall([
+                (callback) => this._createQueryHistoryIfNeeded(user, languageId, sampleId, viewId, filterId, callback),
                 (callback) => {
                     this.services.sessions.findById(sessionId, callback);
                 },
                 (sessionId, callback) => {
-                    this._createAppServerSearchParams(sessionId, user, languId, sampleId, viewId, filterId, limit, offset, callback);
+                    this._createAppServerSearchParams(sessionId, user, languageId, sampleId, viewId, filterId, limit, offset, callback);
                 },
                 (appServerRequestParams, callback) => {
                     this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -109,6 +110,20 @@ class SearchService extends ServiceBase {
                 callback(null, operationId);
             }
         ], callback);
+    }
+
+    _createQueryHistoryIfNeeded(user, languageId, sampleId, viewId, filterId, callback) {
+        if (!this.services.users.isDemoUserId(user.id)) {
+            const queryHistory = SearchService._createQueryHistory(sampleId, viewId, [filterId]);
+            this.services.queryHistory.add(
+                user,
+                languageId,
+                queryHistory,
+                (error) => callback(error)
+            );
+        } else {
+            callback(null);
+        }
     }
 
     _subscribeToRedisEvents() {
@@ -336,6 +351,15 @@ class SearchService extends ServiceBase {
                 callback(null, appServerSearchParams);
             }
         });
+    }
+
+    static _createQueryHistory(sampleId, viewId, filterIds) {
+        return {
+            vcfFileSampleVersionId: sampleId,
+            viewId: viewId,
+            totalResults: 0,
+            filters: filterIds
+        }
     }
 }
 
