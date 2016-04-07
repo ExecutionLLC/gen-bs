@@ -40,7 +40,7 @@ export default class ViewBuilder extends Component {
 
                     <div className="col-xs-6 btn-group-select2">
                         <div className="btn-group">
-                            <button className="btn btn-link btnDrag" disabled="">
+                                <button className="btn btn-link btnDrag" disabled="" type="button">
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>

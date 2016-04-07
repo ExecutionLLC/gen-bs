@@ -15,19 +15,16 @@ export default function viewBuilder(state = {
     isFetching: false
 }, action) {
 
-    var currentView;
-    var viewItemIndex;
-
     switch (action.type) {
         case ActionTypes.VBUILDER_SELECT_VIEW:
-            currentView = _.find(action.views, {id: action.viewId}) || null
+            const currentView = _.find(action.views, {id: action.viewId}) || null;
             return Object.assign({}, state, {
                 currentView: currentView,
                 isReceivedViews: currentView !== null,
                 editedView: action.editOrNew ? currentView : null,
                 newView: !action.editOrNew ? currentView : null,
                 editOrNew: action.editOrNew
-            })
+            });
 
         case ActionTypes.VBUILDER_TOGGLE_NEW_EDIT:
             return Object.assign({}, state, {
@@ -36,8 +33,8 @@ export default function viewBuilder(state = {
                 newView: !action.editOrNew ? Object.assign({}, state.currentView, {
                     type: 'user',
                     name: `Copy of ${state.currentView.name}`
-                }) : null,
-            })
+                }) : null
+            });
 
         case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW:
             return Object.assign({}, state, {
@@ -51,7 +48,7 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 currentView: action.view
-            })
+            });
 
         case ActionTypes.VBUILDER_REQUEST_CREATE_VIEW:
             return Object.assign({}, state, {
@@ -59,23 +56,23 @@ export default function viewBuilder(state = {
                 newView: state.newView ? Object.assign({}, state.newView, {
                     view_list_items: filterEmptyListItems(state.newView.view_list_items)
                 }) : null
-            })
+            });
 
         case ActionTypes.VBUILDER_RECEIVE_CREATE_VIEW:
             return Object.assign({}, state, {
                 isFetching: false,
                 currentView: action.view
-            })
+            });
 
         case ActionTypes.VBUILDER_REQUEST_DELETE_VIEW:
             return Object.assign({}, state, {
                 isFetching: true
-            })
+            });
 
         case ActionTypes.VBUILDER_RECEIVE_DELETE_VIEW:
             return Object.assign({}, state, {
                 isFetching: false
-            })
+            });
 
         case ActionTypes.VBUILDER_DELETE_COLUMN:
             return Object.assign({}, state, {
@@ -91,7 +88,7 @@ export default function viewBuilder(state = {
                         ...state.newView.view_list_items.slice(action.viewItemIndex + 1)
                     ]
                 }) : null
-            })
+            });
 
         case ActionTypes.VBUILDER_ADD_COLUMN:
 
@@ -122,7 +119,7 @@ export default function viewBuilder(state = {
                     name: action.name,
                     description: action.description
                 }) : null
-            })
+            });
 
         case ActionTypes.VBUILDER_CHANGE_COLUMN:
             return Object.assign({}, state, {
@@ -148,7 +145,7 @@ export default function viewBuilder(state = {
                         ...state.newView.view_list_items.slice(action.viewItemIndex + 1)
                     ]
                 }) : null
-            })
+            });
 
         default:
             return state

@@ -9,20 +9,22 @@ export default class ViewBuilderFooter extends Component {
 
     render() {
 
-        const { dispatch,auth, closeModal } = this.props
-        const { editOrNew ,currentView} = this.props.viewBuilder
+        const { dispatch,auth, closeModal } = this.props;
+        const { editOrNew ,editedView, newView} = this.props.viewBuilder;
+        const view = editOrNew ? (editedView) : (newView);
         var disabledClass = classNames({
-            'disabled': (currentView.type === 'advanced' && auth.isDemo) ? 'disabled':''
+            'disabled': (view.type === 'advanced' && auth.isDemo) ? 'disabled':''
         })
-        var title = (currentView.type === 'advanced' && auth.isDemo) ?
-            'Login or register to select advanced view':''
-
+        var title = (view.type === 'advanced' && auth.isDemo) ?
+            'Login or register to select advanced view':'';
+        const isViewEditable = (view.type === 'user');
+        const selectButtonLabel = isViewEditable ? 'Save and Select': 'Select';
 
         return (
 
             <Modal.Footer>
                 <button
-                    onClick={ () => { this.props.closeModal('views')} }
+                    onClick={ () => { closeModal('views')} }
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
@@ -39,7 +41,7 @@ export default class ViewBuilderFooter extends Component {
                     disabled={disabledClass}
                     title={title}
                 >
-                    <span data-localize="actions.save_select.title">Save and Select</span>
+                    <span data-localize="actions.save_select.title">{selectButtonLabel}</span>
                 </button>
             </Modal.Footer>
 

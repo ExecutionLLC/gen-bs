@@ -12,14 +12,15 @@ export default class ExistentViewSelect extends Component {
 
     render() {
 
-        const { dispatch, auth, showModal, closeModal } = this.props
-        const { currentView } = this.props.viewBuilder
-        const { samples, views, isValid } = this.props.userData
+        const { dispatch, auth, showModal, closeModal } = this.props;
+        const { currentView } = this.props.viewBuilder;
+        const { samples, views, isValid } = this.props.userData;
 
         var disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
         })
-        var title = (auth.isDemo) ? 'Login or register to create view' : 'Make a copy for editing'
+        var title = (auth.isDemo) ? 'Login or register to work with view' : 'Make a copy for editing';
+        const isFilterEditable = (currentView.type === 'user');
 
         return (
 
@@ -29,10 +30,10 @@ export default class ExistentViewSelect extends Component {
                         <label data-localize="views.setup.selector.label">Available Views</label>
                     </div>
                 </div>
-                { currentView.type === 'standard' &&
+                { !isFilterEditable &&
                 <div className="alert alert-help">
                     <span data-localize="views.setup.selector.description">
-                        Standard view are not edited, duplicate it for custom
+                        This view is not editable, duplicate it to make changes.
                     </span>
                 </div>
                 }
