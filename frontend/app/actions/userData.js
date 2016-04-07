@@ -190,7 +190,7 @@ export function fetchSamples() {
                 dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
             } else {
                 const samples = response.body;
-                const sample = getState().ui.currentSample || samples[0] || null;
+                const sample = getState().samplesList.currentSample || samples[0] || null;
                 const sampleId = sample.id;
 
                 dispatch(receiveSamples(samples));

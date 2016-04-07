@@ -26,7 +26,8 @@ class NavbarCreateQuery extends Component {
     render() {
 
         const { dispatch, samples, views } = this.props;
-        const { currentSample, currentView, currentFilter } = this.props.ui;
+        const { currentView, currentFilter } = this.props.ui;
+        const { currentSample } = this.props.samplesList;
         const currentSampleId = currentSample ? currentSample.id : null;
 
         return (
@@ -64,14 +65,15 @@ class NavbarCreateQuery extends Component {
 }
 
 function mapStateToProps(state) {
-    const { modalWindows, userData, ui} = state
+    const { modalWindows, userData, ui, samplesList} = state
 
     return {
         modalWindows,
         samples: userData.samples,
         views: userData.views,
         filters: userData.filters,
-        ui
+        ui,
+        samplesList
     }
 }
 

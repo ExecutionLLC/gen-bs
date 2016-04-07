@@ -35,6 +35,5 @@ export default class MetadataSearch extends Component {
 MetadataSearch.propTypes = {
     samples: React.PropTypes.array.isRequired,
     currentSampleId: React.PropTypes.string,
-    // callback(sampleId)
     onSampleChangeRequested: React.PropTypes.func.isRequired
 };

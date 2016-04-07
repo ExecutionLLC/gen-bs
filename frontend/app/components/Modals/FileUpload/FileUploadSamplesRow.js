@@ -4,7 +4,10 @@ import { Panel } from 'react-bootstrap';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-import { changeSample, updateSampleValue, resetSamplesList, updateSampleFields, requestUpdateSampleFields} from '../../../actions/samplesList'
+import {
+    changeSample, initSamplesList, updateSampleValue, resetSamplesList,
+    updateSampleFields, requestUpdateSampleFields
+} from '../../../actions/samplesList'
 
 
 export default class FileUploadSamplesRow extends Component {

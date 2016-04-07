@@ -29,13 +29,15 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
     return (dispatch, getState) => {
         const {
             ui: {
-                currentSample,
                 currentView,
                 currentFilter,
                 language
             },
             auth: {
                 sessionId
+            },
+            samplesList: {
+                currentSample
             }
         } = getState();
         const fileMetadata = {
@@ -119,6 +121,8 @@ export function exportToFile(exportType) {
             },
             ui: {
                 currentView,
+            },
+            samplesList: {
                 currentSample
             },
             websocket: {
