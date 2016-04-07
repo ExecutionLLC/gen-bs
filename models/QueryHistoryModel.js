@@ -25,11 +25,23 @@ class QueryHistoryModel extends SecureModelBase {
         super(models, QueryHistoryTableNames.QueryHistory, mappedColumns);
     }
 
+    find(userId, historyItemId, callback) {
+        async.waterfall([
+            (callback) => this._findQueryHistoryByIds(userId, [historyItemId], callback),
+            (historyItems, callback) => {
+                if (historyItems && historyItems.length) {
+                    callback(null, historyItems[0])
+                } else {
+                    callback(new Error('History item is not found: ' + historyItemId))
+                }
+            }
+        ], (error, historyItem) => callback(error, historyItem));
+    }
+
     findAll(userId, limit, offset, callback) {
-        async.waterfall(
-            [
+        async.waterfall([
                 (callback) => this._findQueryHistoryIds(userId, limit, offset, callback),
-                (queryHistoryIds, callback) => this._findQueryHistoryByIds(queryHistoryIds, callback),
+                (queryHistoryIds, callback) => this._findQueryHistoryByIds(userId, queryHistoryIds, callback),
                 (queryHistoryItems, callback) => {
                     const viewIds = _.map(queryHistoryItems,
                         (queryHistoryItem) => queryHistoryItem.viewId
@@ -73,7 +85,9 @@ class QueryHistoryModel extends SecureModelBase {
                     });
                     callback(null, resultQueryHistory);
                 }
-            ], callback
+            ], (error, historyItems) =>  {
+                callback(error, historyItems);
+            }
         );
     }
 
@@ -108,7 +122,7 @@ class QueryHistoryModel extends SecureModelBase {
                 this._insert(dataToInsert, trx, callback);
             },
             (queryHistoryId, callback) => {
-                _.forEach(query.filters, (filterId) => {
+                _.forEach(query.filterIds, (filterId) => {
                         this._addNewQueryHistoryFilter(queryHistoryId, filterId, trx, callback);
                     }
                 );
@@ -129,31 +143,10 @@ class QueryHistoryModel extends SecureModelBase {
         return {
             id: shouldGenerateId ? this._generateId() : query.id,
             creator: userId,
-            vcfFileSampleVersionId: query.vcfFileSampleVersionId,
+            vcfFileSampleVersionId: query.sampleId,
             viewId: query.viewId,
             totalResults: query.totalResults
         };
-    }
-
-    _findQueryHistoryById(queryHistoryId, callback) {
-        this.db.asCallback((trx, callback) => {
-            trx.select()
-                .from(this.baseTableName)
-                .innerJoin(
-                    QueryHistoryTableNames.Filters,
-                    QueryHistoryTableNames.Filters + '.query_history_id',
-                    this.baseTableName + '.id'
-                )
-                .where('id', queryHistoryId)
-                .asCallback((error, rawQueryHistory) => {
-                    if (error || !rawQueryHistory.length) {
-                        callback(error || new Error('Item not found: ' + queryHistoryId));
-                    } else {
-                        const queryHistory = this._prepareQueryHistory(rawQueryHistory);
-                        callback(null, queryHistory);
-                    }
-                });
-        }, (error, result) => callback(error, result));
     }
 
     _findQueryHistoryIds(userId, limit, offset, callback) {
@@ -174,7 +167,7 @@ class QueryHistoryModel extends SecureModelBase {
         );
     }
 
-    _findQueryHistoryByIds(queryHistoryIds, callback) {
+    _findQueryHistoryByIds(userId, queryHistoryIds, callback) {
         this.db.asCallback((trx, callback) => {
             trx.select()
                 .from(this.baseTableName)
@@ -183,6 +176,7 @@ class QueryHistoryModel extends SecureModelBase {
                     this.baseTableName + '.id'
                 )
                 .whereIn('id', queryHistoryIds)
+                .andWhere('creator', userId)
                 .orderBy('timestamp', 'desc')
                 .asCallback((error, result) => {
                     const queryHistory = _.map(_.groupBy(result, 'id'), this._prepareQueryHistory);

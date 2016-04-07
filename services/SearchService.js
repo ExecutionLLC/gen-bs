@@ -45,7 +45,8 @@ class SearchService extends ServiceBase {
                 }, null, 2)));
         } else {
             async.waterfall([
-                (callback) => this._createQueryHistoryIfNeeded(user, languageId, sampleId, viewId, filterId, callback),
+                (callback) => this.services.queryHistory.add(user, languageId, sampleId, viewId, filterId,
+                    (error) => callback(error)),
                 (callback) => {
                     this.services.sessions.findById(sessionId, callback);
                 },
@@ -112,19 +113,6 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createQueryHistoryIfNeeded(user, languageId, sampleId, viewId, filterId, callback) {
-        if (!this.services.users.isDemoUserId(user.id)) {
-            const queryHistory = SearchService._createQueryHistory(sampleId, viewId, [filterId]);
-            this.services.queryHistory.add(
-                user,
-                languageId,
-                queryHistory,
-                (error) => callback(error)
-            );
-        } else {
-            callback(null);
-        }
-    }
 
     _subscribeToRedisEvents() {
         const redisEvents = this.services.redis.registeredEvents();
@@ -351,15 +339,6 @@ class SearchService extends ServiceBase {
                 callback(null, appServerSearchParams);
             }
         });
-    }
-
-    static _createQueryHistory(sampleId, viewId, filterIds) {
-        return {
-            vcfFileSampleVersionId: sampleId,
-            viewId: viewId,
-            totalResults: 0,
-            filters: filterIds
-        }
     }
 }
 
