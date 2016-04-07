@@ -141,8 +141,8 @@ class QueryHistoryModel extends SecureModelBase {
                 .whereIn('id', queryHistoryIds)
                 .orderBy('timestamp', 'desc')
                 .asCallback((error, result) => {
-                    const filterData = _.map(_.groupBy(result, 'id'), this._prepareQueryHistory);
-                    callback(null, filterData)
+                    const queryHistory = _.map(_.groupBy(result, 'id'), this._prepareQueryHistory);
+                    callback(null, queryHistory)
                 });
         }, callback);
     }
