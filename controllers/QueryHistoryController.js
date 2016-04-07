@@ -11,7 +11,7 @@ class QueryHistoryController extends ControllerBase {
         super(services);
     }
 
-    getQueryHistories(request, response) {
+    getQueryHistory(request, response) {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
@@ -21,55 +21,62 @@ class QueryHistoryController extends ControllerBase {
                 if (isNaN(limit) || isNaN(offset)) {
                     callback(new Error('Offset or limit are not specified or incorrect'));
                 } else {
-                    this.services.queryHistory.findQueryHistories(user, limit, offset,
-                        (error, result)=>callback(error, result, user)
+                    this.services.queryHistory.findQueryHistory(user, limit, offset,
+                        (error, result) => callback(error, result, user)
                     );
                 }
             },
-            (queryHistories, user, callback) => {
-                const viewIds = _.map(
-                    queryHistories, queryHistory => queryHistory.viewId
+            (queryHistory, user, callback) => {
+                const viewIds = _.map(queryHistory,
+                    (queryHistoryItem) => queryHistoryItem.viewId
                 );
-                const vcfFileSampleVersionIds = _.map(
-                    queryHistories, queryHistory => queryHistory.vcfFileSampleVersionId
+                const sampleIds = _.map(queryHistory,
+                    (queryHistoryItem) => queryHistoryItem.sampleId
                 );
-                const filtersIds = [];
-                _.forEach(queryHistories, queryHistory => {
-                    _.forEach(queryHistory.filters, filter=> {
-                        filtersIds.push(filter);
-                    })
-                });
+                const filterIds = _(queryHistory)
+                    .map(queryHistoryItem => queryHistoryItem.filterIds)
+                    .flatten()
+                    .value();
+
                 async.parallel(
                     {
                         samples: (callback) => {
-                            this.services.samples.findMany(user, _.uniq(vcfFileSampleVersionIds), callback);
+                            this.services.samples.findMany(user, _.uniq(sampleIds), callback);
                         },
                         views: (callback) => {
                             this.services.views.findMany(user, _.uniq(viewIds), callback);
                         },
                         filters: (callback) => {
-                            this.services.filters.findMany(user, _.uniq(filtersIds), callback);
+                            this.services.filters.findMany(user, _.uniq(filterIds), callback);
                         }
                     }, (error, result)=> {
-                        callback(error, result.samples, result.views, result.filters, queryHistories);
+                        callback(error, result.samples, result.views, result.filters, queryHistory);
                     }
                 );
             },
-            (samples, views, filters, queryHistories, callback)=> {
-                const resultQueryHistory = [];
-                _.forEach(queryHistories, queryHistory=> {
-                    resultQueryHistory.push(
-                        {
-                            id: queryHistory.id,
-                            timestamp: queryHistory.timestamp,
-                            view: _.find(views, view => view.id == queryHistory.viewId),
-                            filters: _.filter(filters, filter => {
-                                    return _.includes(queryHistory.filters, filter.id);
-                                }
-                            ),
-                            sample: _.find(samples, sample =>sample.id == queryHistory.vcfFileSampleVersionId)
-                        }
-                    );
+            (samples, views, filters, queryHistory, callback) => {
+                // Create hashes.
+                const samplesHash = _.reduce(samples, (result, sample) => {
+                    result[sample.id] = sample;
+                    return result;
+                }, {});
+                const filtersHash = _.reduce(filters, (result, filter) => {
+                    result[filter.id] = filter;
+                    return result;
+                }, {});
+                const viewsHash = _.reduce(views, (result, view) => {
+                    result[view.id] = view;
+                    return result;
+                }, {});
+                // Create resulting object.
+                const resultQueryHistory = _.map(queryHistory, query => {
+                    return {
+                        id: query.id,
+                        timestamp: query.timestamp,
+                        view: viewsHash[query.viewId],
+                        filters: _.map(query.filterIds, filterId => filtersHash[filterId]),
+                        sample: samplesHash[query.sampleId]
+                    };
                 });
                 callback(null, resultQueryHistory);
             }
@@ -81,7 +88,7 @@ class QueryHistoryController extends ControllerBase {
     createRouter() {
         const router = new Express();
 
-        router.get('/', this.getQueryHistories.bind(this));
+        router.get('/', this.getQueryHistory.bind(this));
 
         return router;
     }

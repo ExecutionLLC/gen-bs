@@ -24,47 +24,14 @@ class QueryHistoryModel extends SecureModelBase {
         super(models, QueryHistoryTableNames.QueryHistory, mappedColumns);
     }
 
-    _findHistoryById(queryHistoryId, callback) {
-        this.db.asCallback((trx, callback) => {
-            trx.select()
-                .from(this.baseTableName)
-                .innerJoin(QueryHistoryTableNames.Filters,
-                    QueryHistoryTableNames.Filters + '.query_history_id',
-                    this.baseTableName + '.id'
-                )
-                .where('id', queryHistoryId)
-                .asCallback((error, filterData) => {
-                    if (error || !filterData.length) {
-                        callback(error || new Error('Item not found: ' + queryHistoryId));
-                    } else {
-                        const query_history = this._extractQueryHistory(filterData);
-                        callback(null, query_history);
-                    }
-                });
-        }, (error, result) => callback(error, result));
-    }
-
-    _extractQueryHistory(filterData) {
-        const camelcaseFilterData = ChangeCaseUtil.convertKeysToCamelCase(filterData);
-        const id = camelcaseFilterData[0].id;
-        const totalResults = camelcaseFilterData[0].totalResults;
-        const vcfFileSampleVersionId = camelcaseFilterData[0].vcfFileSampleVersionId;
-        const viewId = camelcaseFilterData[0].viewId;
-        const timestamp = camelcaseFilterData[0].timestamp;
-        const filters = [];
-        _.forEach(camelcaseFilterData, (data) => {
-                filters.push(data.filterId);
-            }
+    findQueryHistory(userId, limit, offset, callback) {
+        async.waterfall(
+            [
+                (callback) => this._findQueryHistoryIds(userId, limit, offset, callback),
+                (queryHistoryIds, callback) => this._findQueryHistoryByIds(queryHistoryIds, callback)
+            ], callback
         );
-        return {
-            id: id,
-            timestamp:timestamp,
-            totalResults: totalResults,
-            vcfFileSampleVersionId: vcfFileSampleVersionId,
-            viewId: viewId,
-            filters: filters
-        };
-    };
+    }
 
     getLastInsertedId(userId, callback) {
         this.db.asCallback(
@@ -124,16 +91,28 @@ class QueryHistoryModel extends SecureModelBase {
         };
     }
 
-    findQueryHistories(userId, limit, offset, callback) {
-        async.waterfall(
-            [
-                (callback) => this._findQueryHistoriesIds(userId, limit, offset, callback),
-                (queryHistoryIds, callback) => this._findQueryHistoriesByIds(queryHistoryIds, callback)
-            ], callback
-        );
+    _findQueryHistoryById(queryHistoryId, callback) {
+        this.db.asCallback((trx, callback) => {
+            trx.select()
+                .from(this.baseTableName)
+                .innerJoin(
+                    QueryHistoryTableNames.Filters,
+                    QueryHistoryTableNames.Filters + '.query_history_id',
+                    this.baseTableName + '.id'
+                )
+                .where('id', queryHistoryId)
+                .asCallback((error, rawQueryHistory) => {
+                    if (error || !rawQueryHistory.length) {
+                        callback(error || new Error('Item not found: ' + queryHistoryId));
+                    } else {
+                        const queryHistory = this._prepareQueryHistory(rawQueryHistory);
+                        callback(null, queryHistory);
+                    }
+                });
+        }, (error, result) => callback(error, result));
     }
 
-    _findQueryHistoriesIds(userId, limit, offset, callback) {
+    _findQueryHistoryIds(userId, limit, offset, callback) {
         this.db.asCallback(
             (trx, callback) => {
                 trx.select('id')
@@ -151,7 +130,7 @@ class QueryHistoryModel extends SecureModelBase {
         );
     }
 
-    _findQueryHistoriesByIds(queryHistoryIds, callback) {
+    _findQueryHistoryByIds(queryHistoryIds, callback) {
         this.db.asCallback((trx, callback) => {
             trx.select()
                 .from(this.baseTableName)
@@ -162,13 +141,33 @@ class QueryHistoryModel extends SecureModelBase {
                 .whereIn('id', queryHistoryIds)
                 .orderBy('timestamp', 'desc')
                 .asCallback((error, result) => {
-                    const filterData = _.map(_.groupBy(result, 'id'), this._extractQueryHistory);
+                    const filterData = _.map(_.groupBy(result, 'id'), this._prepareQueryHistory);
                     callback(null, filterData)
                 });
         }, callback);
     }
 
+    _prepareQueryHistory(rawQueryHistory) {
+        const camelcaseRawQueryHistory = ChangeCaseUtil.convertKeysToCamelCase(rawQueryHistory);
 
+        const id = camelcaseRawQueryHistory[0].id;
+        const filterIds = _.map(camelcaseRawQueryHistory,
+            (rawQueryHistoryItem) => { return rawQueryHistoryItem.filterId; }
+        );
+        const sampleId = camelcaseRawQueryHistory[0].vcfFileSampleVersionId;
+        const timestamp = camelcaseRawQueryHistory[0].timestamp;
+        const totalResults = camelcaseRawQueryHistory[0].totalResults;
+        const viewId = camelcaseRawQueryHistory[0].viewId;
+
+        return {
+            id,
+            filterIds,
+            sampleId,
+            timestamp,
+            totalResults,
+            viewId
+        };
+    };
 }
 
 module.exports = QueryHistoryModel;

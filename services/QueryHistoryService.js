@@ -10,8 +10,8 @@ class QueryHistoryService extends UserEntityServiceBase {
         super(services, models, models.queryHistory);
     }
 
-    findQueryHistories(user, limit, offset, callback) {
-        this.models.queryHistory.findQueryHistories(user.id, limit, offset, callback);
+    findQueryHistory(user, limit, offset, callback) {
+        this.models.queryHistory.findQueryHistory(user.id, limit, offset, callback);
     }
 
     add(user, languageId, query, callback) {
@@ -34,12 +34,12 @@ class QueryHistoryService extends UserEntityServiceBase {
             [
                 (callback) => this.models.queryHistory.getLastInsertedId(user.id, callback),
                 (id, callback) => {
-                    if (id == null) {
+                    if (id) {
                         callback(null, false);
                     } else {
                         async.waterfall(
                             [
-                                (callback) => this.models.queryHistory._findHistoryById(id, callback),
+                                (callback) => this.models.queryHistory._findQueryHistoryById(id, callback),
                                 (queryHistory, callback) => {
                                     const isLastInserted = QueryHistoryService.isQueriesEquals(queryHistory, query);
                                     callback(null, isLastInserted)
@@ -53,8 +53,8 @@ class QueryHistoryService extends UserEntityServiceBase {
     }
 
     static isQueriesEquals(query1, query2) {
-        return query1.vcfFileSampleVersionId == query2.vcfFileSampleVersionId &&
-            query1.viewId == query2.viewId &&
+        return query1.vcfFileSampleVersionId === query2.vcfFileSampleVersionId &&
+            query1.viewId === query2.viewId &&
             _.isEmpty(_.difference(query1.filters, query2.filters)) &&
             _.isEmpty(_.difference(query2.filters, query1.filters))
     }
