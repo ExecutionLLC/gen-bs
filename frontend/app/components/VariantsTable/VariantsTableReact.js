@@ -72,8 +72,8 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, websocket, ui, variantsTable } = state
-    const { searchParams } = state.websocket
+    const { auth, websocket, ui, variantsTable } = state;
+    const { searchParams } = state.websocket;
 
     return {
         auth,

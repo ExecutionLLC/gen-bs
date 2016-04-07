@@ -44,8 +44,6 @@ const generateFileMetadata = (sampleId) => {
 };
 
 const checkFileMetadataEqual = (file1, file2) => {
-    assert.equal(file1.viewId, file2.viewId);
-    assert.deepEqual(file1.filterIds, file2.filterIds);
     assert.equal(file1.name, file2.name);
     assert.equal(file1.url, file2.url);
     assert.equal(file1.totalResults, file2.totalResults);
@@ -79,6 +77,9 @@ describe('Saved Files', () => {
             const insertedFileMetadata = ClientBase.readBodyWithCheck(error, response);
             assert.ok(insertedFileMetadata.id);
             checkFileMetadataEqual(fileMetadata, insertedFileMetadata);
+            assert.ok(insertedFileMetadata.view);
+            assert.ok(insertedFileMetadata.filter);
+            assert.ok(insertedFileMetadata.sample);
 
             done();
         });

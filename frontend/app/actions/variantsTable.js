@@ -1,9 +1,13 @@
-import config from '../../config'
-import {requestAnalyze, clearVariants, addComment, changeComment, deleteComment} from './websocket'
+import apiFacade from '../api/ApiFacade';
+import { handleError } from './errorHandler'
+import { clearVariants, addComment, changeComment, deleteComment } from './websocket'
+
+import HttpStatus from 'http-status';
 
 /*
  * action types
  */
+
 export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
 export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER';
@@ -15,6 +19,7 @@ export const FILTER_VARIANTS = 'FILTER_VARIANTS';
 export const SORT_VARIANTS = 'SORT_VARIANTS';
 
 export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
+export const CLEAR_VARIANTS_ROWS_SELECTION = 'CLEAR_VARIANTS_ROWS_SELECTION';
 
 export const REQUEST_VARIANTS = 'REQUEST_VARIANTS';
 export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS';
@@ -25,6 +30,26 @@ export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
 export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT';
 export const RECEIVE_NEXT_PART_OF_DATA = 'RECEIVE_NEXT_PART_OF_DATA';
 
+const ANALYZE_SAMPLE_NETWORK_ERROR = 'Cannot analyze data (network error). Please try again.';
+const ANALYZE_SAMPLE_SERVER_ERROR = 'Cannot analyze data (server error). Please try again.';
+
+const NEXT_DATA_NETWORK_ERROR = 'Cannot get next part of data (network error). Please try again.';
+const NEXT_DATA_SERVER_ERROR = 'Cannot get next part of data (server error). Please try again.';
+
+const SEARCH_IN_RESULTS_NETWORK_ERROR = 'Cannot analyze results (network error). Please try again.';
+const SEARCH_IN_RESULTS_SERVER_ERROR = 'Cannot analyze results (server error). Please try again.';
+
+const ADD_COMMENT_NETWORK_ERROR = 'Cannot add commentary (network error). Please try again.';
+const ADD_COMMENT_SERVER_ERROR = 'Cannot add commentary (server error). Please try again.';
+
+const UPDATE_COMMENT_NETWORK_ERROR = 'Cannot update commentary (network error). Please try again.';
+const UPDATE_COMMENT_SERVER_ERROR = 'Cannot update commentary (server error). Please try again.';
+
+const DELETE_COMMENT_NETWORK_ERROR = 'Cannot delete commentary (network error). Please try again.';
+const DELETE_COMMENT_SERVER_ERROR = 'Cannot delete commentary (server error). Please try again.';
+
+const commentsClient = apiFacade.commentsClient;
+const searchClient = apiFacade.searchClient;
 
 /*
  * action creators
@@ -38,14 +63,12 @@ function changeVariantsLimit() {
 }
 
 export function getNextPartOfData(currentSample, currentView, currentFilter) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(changeVariantsLimit());
 
         setTimeout(() => {
-            dispatch(searchInResultsNextData())
+            dispatch(searchInResultsNextData());
         }, 100);
-
-
     }
 }
 
@@ -105,7 +128,7 @@ function requestVariants() {
 function receiveVariants(json) {
     return {
         type: RECEIVE_VARIANTS,
-        operationId: json.operation_id,
+        operationId: json.operationId,
         receivedAt: Date.now()
     }
 }
@@ -124,19 +147,18 @@ export function createComment(alt, pos, ref, chrom, searchKey, comment) {
             comment
         };
 
-        $.ajax(config.URLS.COMMENTS, {
-                'data': JSON.stringify(commentObject),
-                'type': 'POST',
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .fail(json => {
-                console.log('createComment fail', json)
-            })
-            .then(json=> {
-                dispatch(addComment(json))
-            })
-
+        const { auth: {sessionId}, ui: {languageId} } = getState();
+        commentsClient.add(sessionId, languageId, commentObject,
+            (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, ADD_COMMENT_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, ADD_COMMENT_SERVER_ERROR));
+                } else {
+                    dispatch(addComment(response.body));
+                }
+            }
+        );
     }
 }
 
@@ -153,65 +175,66 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
             searchKey,
             comment
         };
-        $.ajax(`${config.URLS.COMMENTS}/${id}`, {
-                'data': JSON.stringify(commentObject),
-                'type': 'PUT',
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .fail(json => {
-                console.log('createComment fail', json)
-            })
-            .then(json => {
-                dispatch(changeComment(json))
-            })
 
+        const sessionId = getState().auth.sessionId;
+        commentsClient.update(sessionId, commentObject,
+            (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, UPDATE_COMMENT_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, UPDATE_COMMENT_SERVER_ERROR));
+                } else {
+                    dispatch(changeComment(response.body));
+                }
+            }
+        );
     }
 }
 
-export function removeComment(id, search_key) {
+export function removeComment(id, searchKey) {
 
     return (dispatch, getState) => {
-
-        $.ajax(`${config.URLS.COMMENTS}/${id}`, {
-                'type': 'DELETE',
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .fail(json => {
-                console.log('createComment fail', json)
-            })
-            .then(json=> {
-                console.log('createComment sucess', json)
-                dispatch(deleteComment(json, search_key))
-            })
-
+        const sessionId = getState().auth.sessionId;
+        commentsClient.remove(sessionId, id,
+            (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, DELETE_COMMENT_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, DELETE_COMMENT_SERVER_ERROR));
+                } else {
+                    dispatch(deleteComment(response.body, searchKey));
+                }
+            }
+        );
     }
 }
 
 export function fetchVariants(searchParams) {
+    return (dispatch, getState) => {
+        console.log('fetchVariants: ', searchParams);
 
-    return dispatch => {
+        dispatch(requestVariants());
+        dispatch(clearTableRowsSelection());
 
-        console.log('fetchVariants: ', searchParams)
-
-        dispatch(requestVariants())
-
-        setTimeout(() => {
-            $.ajax(config.URLS.SEARCH, {
-                    'data': JSON.stringify(searchParams),
-                    'type': 'POST',
-                    'processData': false,
-                    'contentType': 'application/json'
-                })
-                .then(json => {
-                    console.log('search', json)
-                    dispatch(receiveVariants(json))
-                })
-        }, 1000);
-
-        // TODO:
-        // catch any error in the network call.
+        const { auth: {sessionId}, ui: {languageId} } = getState();
+        searchClient.sendSearchRequest(
+            sessionId,
+            languageId,
+            searchParams.sampleId,
+            searchParams.viewId,
+            searchParams.filterId,
+            searchParams.limit,
+            searchParams.offset,
+            (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
+                } else {
+                    dispatch(receiveVariants(response.body));
+                }
+            }
+        );
     }
 }
 
@@ -241,49 +264,72 @@ export function searchInResultsSortFilter() {
 
 export function searchInResultsNextData() {
     return (dispatch, getState) => {
-
         dispatch(requestSearchedResults({isNextDataLoading: true, isFilteringOrSorting: false}));
 
         const state = getState();
+        const sessionId = state.auth.sessionId;
+        const operationId = state.variantsTable.operationId;
         const {offset, limit} = state.variantsTable.searchInResultsParams;
-        $.ajax(config.URLS.SEARCH_IN_RESULTS(state.variantsTable.operationId), {
-                data: {limit, offset},
-                type: 'GET',
-                processData: true,
-                contentType: 'application/json'
-            })
-            .fail(json => {
-                console.log('search fail', json);
-            });
+
+        searchClient.sendGetNextPartOfData(
+            sessionId,
+            operationId,
+            offset,
+            limit,
+            (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, NEXT_DATA_NETWORK_ERROR));
+                    dispatch(receiveSearchedResults());
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, NEXT_DATA_SERVER_ERROR));
+                    dispatch(receiveSearchedResults());
+                }
+            }
+        );
     }
 }
 
 export function searchInResults(flags) {
     return (dispatch, getState) => {
-
         dispatch(requestSearchedResults(flags));
+        dispatch(clearTableRowsSelection());
 
-        const clearedJson = getState().variantsTable.searchInResultsParams;
+        const state = getState();
+        const sessionId = state.auth.sessionId;
+        const operationId = state.variantsTable.operationId;
+        const { search, sort, topSearch, limit, offset } = state.variantsTable.searchInResultsParams;
 
-        $.ajax(config.URLS.SEARCH_IN_RESULTS(getState().variantsTable.operationId), {
-                'data': JSON.stringify(clearedJson),
-                'type': 'POST',
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .fail(json => {
-                console.log('search fail', json);
-                dispatch(receiveSearchedResults())
-            });
-
-        // TODO:
-        // catch any error in the network call.
+        searchClient.sendSearchInResultsRequest(
+            sessionId,
+            operationId,
+            topSearch,
+            limit,
+            offset,
+            search,
+            sort,
+            (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, SEARCH_IN_RESULTS_NETWORK_ERROR));
+                    dispatch(receiveSearchedResults());
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, SEARCH_IN_RESULTS_SERVER_ERROR));
+                    dispatch(receiveSearchedResults());
+                }
+            }
+        );
     }
 }
 
-export function selectTableRow(rowId) {
+export function selectTableRow(rowIndex, isSelected) {
     return {
         type: SELECT_VARIANTS_ROW,
-        rowId
+        rowIndex,
+        isSelected
     }
+}
+
+export function clearTableRowsSelection() {
+    return {
+        type: CLEAR_VARIANTS_ROWS_SELECTION
+    };
 }

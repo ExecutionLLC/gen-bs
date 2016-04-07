@@ -24,17 +24,31 @@ export default class SearchClient extends ClientBase {
         );
     }
 
-    sendSearchInResultsRequest(sessionId, operationId, globalSearch,
+    sendSearchInResultsRequest(sessionId, operationId, globalSearch, limit, offset,
                                fieldIdToSearchObject, fieldIdToOrderAndDirection, callback) {
-        RequestWrapper.get(
+        RequestWrapper.post(
             this.urls.startSearchInResults(operationId),
             this._makeHeaders({sessionId}),
-            null,
             {
                 topSearch: globalSearch,
                 search: fieldIdToSearchObject,
-                sort: fieldIdToOrderAndDirection
+                sort: fieldIdToOrderAndDirection,
+                limit,
+                offset
             },
+            callback
+        );
+    }
+    
+    sendGetNextPartOfData(sessionId, operationId, offset, limit, callback) {
+        RequestWrapper.get(
+            this.urls.startSearchInResults(operationId),
+            this._makeHeaders({sessionId}),
+            {
+                offset,
+                limit
+            },
+            null,
             callback
         );
     }

@@ -12,7 +12,7 @@ export default function fields(state = {
     sampleFieldsList: [],
     sourceFieldsList: [],
     totalFieldsList:[],
-    notEditableFields:[],
+    notEditableFields:[]
 }, action) {
 
     switch (action.type) {
@@ -26,8 +26,8 @@ export default function fields(state = {
 
         case ActionTypes.RECEIVE_FIELDS:
             const fields = action.fields.map(updateFieldLabelIfNeeded);
-            const editableFields = _.filter(fields, 'is_editable', true);
-            const notEditableSampleFields = _.filter(fields, 'is_editable', false);
+            const editableFields = _.filter(fields, 'isEditable', true);
+            const notEditableSampleFields = _.filter(fields, 'isEditable', false);
             const idToFieldHash = _.reduce(fields, (result, field) => {
                 result[field.id] = field;
                 return result;
@@ -52,12 +52,16 @@ export default function fields(state = {
 
         case ActionTypes.RECEIVE_TOTAL_FIELDS:
             let totalFields = action.fields.map(updateFieldLabelIfNeeded);
-            let sourceFields = _.filter(totalFields, (field) => field.source_name !== 'sample');
+            let sourceFields = _.filter(totalFields, (field) => field.sourceName !== 'sample');
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     sources: false
                 }),
-                totalFieldsList:totalFields,
+                totalFieldsList: totalFields,
+                totalFieldsHash: _.reduce(totalFields, (result, field) => {
+                    result[field.id] = field;
+                    return result;
+                }, {}),
                 sourceFieldsList: sourceFields,
                 lastUpdated: action.receivedAt
             });

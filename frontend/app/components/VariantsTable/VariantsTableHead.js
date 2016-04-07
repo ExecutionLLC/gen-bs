@@ -12,16 +12,9 @@ export default class VariantsTableHead extends Component {
     render() {
         const { dispatch, fields, ws, searchParams } = this.props;
         const { sort } = this.props.variantsTable.searchInResultsParams;
-        if(!searchParams){
-            return (
-                <tbody className="variants_table_head" id="variants_table_head">
-                <tr />
-                </tbody>
-            );
-        }
-
         const currentView = ws.variantsView;
-        if (!currentView) {
+
+        if (!searchParams || !currentView) {
             return (
                 <tbody className="table-variants-head" id="variants_table_head">
                 <tr />
@@ -29,12 +22,13 @@ export default class VariantsTableHead extends Component {
             );
         }
 
-        const fieldIds = _.map(currentView.view_list_items, item => item.field_id);
+        const fieldIds = _.map(currentView.viewListItems, item => item.fieldId);
 
         return (
             <tbody className="table-variants-head" id="variants_table_head">
             <tr>
-                <td className="btntd row_checkbox" data-label="checkbox" key="row_checkbox">
+                <td className="btntd"></td>
+                <td className="btntd row_checkbox" key="row_checkbox">
                     <div></div>
                 </td>
                 <td className="btntd">

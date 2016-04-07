@@ -78,7 +78,7 @@ function requestFileUpload() {
 function receiveFileUpload(json) {
     return {
         type: RECEIVE_FILE_UPLOAD,
-        operationId: json.operation_id,
+        operationId: json.operationId,
     }
 }
 

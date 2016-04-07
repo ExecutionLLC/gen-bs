@@ -4,7 +4,6 @@ export default function userData(state = {
     isFetching: false,
     isValid: false,
     profileMetadata: {},
-    samples: [],
     filters: [],
     views: [],
     samples: []
@@ -22,7 +21,7 @@ export default function userData(state = {
                 isFetching: false,
                 isValid: true,
 
-                profileMetadata: action.userData.profile_metadata,
+                profileMetadata: action.userData.profileMetadata,
                 samples: action.userData.samples,
                 filters: action.userData.filters,
                 views: action.userData.views,
