@@ -13,8 +13,8 @@ class QueryHistoryClient extends ClientBase {
             this.urls.queryHistory(),
             this._makeHeaders({sessionId}),
             {
-                limit: limit,
-                offset: offset
+                limit,
+                offset
             },
             null,
             callback
