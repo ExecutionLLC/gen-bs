@@ -55,7 +55,7 @@ describe('Query History', () => {
                     assert.ok(body.operationId);
                     historyClient.getClientQueryHistory(sessionId, 1, 0, (error, response) => {
                         const body = ClientBase.readBodyWithCheck(error, response);
-                        assert.equal(body.result.length, 1, 'Returned unexpected history value');
+                        assert.equal(body.result.length, 1, 'Unexpected history length');
                         const resultQuery = body.result[0];
                         assert.equal(resultQuery.sample.id, testSample.id, 'Sample id is not equal');
                         assert.equal(resultQuery.view.id, testView.id, 'View id is not equal');
