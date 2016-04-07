@@ -1,13 +1,15 @@
 import  * as ActionTypes from '../actions/queryHistory'
 
-export default function queryHistory(state={
+const initialState = {
     history: [],
     showQueryHistoryModal: false
-}, action) {
+};
+
+export default function queryHistory(state = initialState, action) {
     switch(action.type) {
         case ActionTypes.RECEIVE_QUERY_HISTORY: {
             return Object.assign({}, state, {
-                history: action.history
+                history: action.history || initialState.history
             });
         }
         case ActionTypes.SHOW_QUERY_HISTORY_MODAL: {

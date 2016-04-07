@@ -118,8 +118,6 @@ function updateLoginData(dispatch, sessionId, isDemo) {
     dispatch(subscribeToWs(sessionId));
     if (isDemo) {
         dispatch(clearQueryHistory());
-    } else {
-        dispatch(updateQueryHistory());
     }
     dispatch(fetchUserdata());
 }

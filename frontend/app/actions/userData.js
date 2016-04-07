@@ -1,9 +1,8 @@
-import config from '../../config'
-
 import apiFacade from '../api/ApiFacade'
 import { handleError } from './errorHandler'
 import { fetchFields, fetchTotalFields } from './fields'
 import { analyze, changeSample, changeView, changeFilter } from './ui'
+import { receiveQueryHistory } from './queryHistory';
 
 import HttpStatus from 'http-status';
 
@@ -82,6 +81,7 @@ export function fetchUserdata() {
                 dispatch(analyze(sample.id, view.id, filter.id));
                 dispatch(fetchFields(sample.id));
                 dispatch(fetchTotalFields());
+                dispatch(receiveQueryHistory(result.queryHistory));
             }
         });
     }
