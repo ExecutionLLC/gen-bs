@@ -4,6 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const CollectionUtils = require('../utils/CollectionUtils');
 const SecureModelBase = require('./SecureModelBase');
 
 const mappedColumns = [
@@ -39,7 +40,19 @@ class SamplesModel extends SecureModelBase {
             async.waterfall([
                 // Find samples metadata.
                 (callback) => this._findSamplesMetadata(trx, userId, null, true, callback),
-                (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback)
+                (samplesMetadata, callback) => {
+                    const sampleIds = _.map(samplesMetadata, sampleMetadata => sampleMetadata.id);
+                    this._findLastVersionIdsBySampleIds(trx, sampleIds,
+                        (error, versions) => callback(error, samplesMetadata, versions));
+                },
+                (samplesMetadata, versions, callback) => {
+                    const versionIds = _.map(versions, version => version.versionId);
+                    this._attachSamplesValues(trx, samplesMetadata, versionIds,
+                        (error, samplesMetadata) => callback(error, samplesMetadata, versions)
+                    )
+                },
+                (samplesMetadata, versions, callback) =>
+                    this._replaceSampleIdsWithVersionIds(samplesMetadata, versions, callback)
             ], callback);
         }, callback);
     }
@@ -162,24 +175,8 @@ class SamplesModel extends SecureModelBase {
                 this._findLastVersionIdsBySampleIds(trx, sampleIds,
                     (error, versions) => callback(error, samplesMetadata, versions));
             },
-            // Create sampleId -> versionId hash.
-            (samplesMetadata, versions, callback) => {
-                const sampleIdToVersionIdHash = _.reduce(versions, (result, version) => {
-                    result[version.sampleId] = version.versionId;
-                    return result;
-                }, {});
-                callback(null, samplesMetadata, sampleIdToVersionIdHash);
-            },
-            // Replace sample id with id of the last version.
-            (samplesMetadata, sampleIdToVersionIdHash, callback) => {
-                const samplesWithVersion = _.map(samplesMetadata, sampleMetadata => {
-                    const sampleWithVersion = _.cloneDeep(sampleMetadata);
-                    sampleWithVersion.originalId = sampleWithVersion.id;
-                    sampleWithVersion.id = sampleIdToVersionIdHash[sampleMetadata.id];
-                    return sampleWithVersion;
-                });
-                callback(null, samplesWithVersion);
-            }
+            (samplesMetadata, versions, callback) =>
+                this._replaceSampleIdsWithVersionIds(samplesMetadata, versions, callback)
         ], callback);
     }
 
@@ -202,11 +199,11 @@ class SamplesModel extends SecureModelBase {
     }
 
     /**
-     * @param userId The owner
-     * @param sample Sample metadata to add.
-     * @param shouldGenerateId If true, id will be generated.
-     * @param trx Knex transaction
-     * @param callback (error, sampleVersionId)
+     * @param {Uuid} userId The owner
+     * @param {Object} sample Sample metadata to add.
+     * @param {boolean} shouldGenerateId If true, id will be generated.
+     * @param {KnexTransaction} trx Knex transaction
+     * @param {function(Error, Uuid)} callback (error, sampleVersionId)
      * */
     _addInTransaction(userId, sample, shouldGenerateId, trx, callback) {
         async.waterfall([
@@ -238,10 +235,10 @@ class SamplesModel extends SecureModelBase {
     /**
      * Adds sample values into vcf_file_sample_value table.
      *
-     * @param versionId Id of the sample version.
-     * @param values array of the sample values, each of form {fieldId, values (string value for the table column)}.
-     * @param trx Knex transaction object.
-     * @param callback (error, resulting values list)
+     * @param {Object} trx Knex transaction object.
+     * @param {string} versionId Id of the sample version.
+     * @param {Array} values array of the sample values, each of form {fieldId, values (string value for the table column)}.
+     * @param {function(Error, Array)} callback (error, resulting values list)
      * */
     _addFileSampleValues(trx, versionId, values, callback) {
         async.map(values, (value, callback) => {
@@ -284,26 +281,31 @@ class SamplesModel extends SecureModelBase {
                 this._findSamplesMetadata(trx,
                     userId,
                     _.map(
-                        sampleVersions, sampleVersion => sampleVersion.vcfFileSampleId
+                        sampleVersions, sampleVersion => sampleVersion.sampleId
                     ),
                     true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleVersions)),
             (samplesMetadata, sampleVersions, callback) =>
                 this._replaceSampleIdsWithVersionIds(
                     samplesMetadata, sampleVersions, callback
                 ),
-            (sampleMetadata, callback) => this._findValuesForVersions(trx, sampleVersionIds,
-                (error, values) => callback(error, sampleMetadata, values)),
-            (sampleMetadata, values, callback) => {
+            (samplesMetadata, callback) => this._attachSamplesValues(trx, samplesMetadata, sampleVersionIds, callback)
+        ], (error, resultSample) => {
+            callback(error, resultSample);
+        });
+    }
+
+    _attachSamplesValues(trx, samplesMetadata, sampleVersionIds, callback) {
+        async.waterfall([
+            (callback) => this._findValuesForVersions(trx, sampleVersionIds, callback),
+            (values, callback) => {
                 const samplesValues = _.groupBy(values, 'vcfFileSampleVersionId');
-                const resultSamples = _.cloneDeep(sampleMetadata);
+                const resultSamples = _.cloneDeep(samplesMetadata);
                 _.forEach(resultSamples, resultSample => {
                     resultSample.values = samplesValues[resultSample.id];
                 });
                 callback(null, resultSamples);
             }
-        ], (error, resultSample) => {
-            callback(error, resultSample);
-        });
+        ], callback);
     }
 
     _findValuesForVersions(trx, sampleVersionIds, callback) {
@@ -319,18 +321,16 @@ class SamplesModel extends SecureModelBase {
     }
 
     _replaceSampleIdsWithVersionIds(samplesMetadata, sampleVersions, callback) {
-        const resultSampleList = [];
-        _.forEach(sampleVersions, sampleVersion => {
-            const sample = _.find(
-                samplesMetadata,
-                sampleMetadata=>sampleMetadata.id === sampleVersion.vcfFileSampleId
-            );
-            const resultSample = _.cloneDeep(sample);
-            resultSample.id = sampleVersion.id;
+        const sampleIdToVersionHash = CollectionUtils.createHashByKey(sampleVersions, 'sampleId');
+        const resultSamplesMetadata = _.map(samplesMetadata, sampleMetadata => {
+            const sampleVersion = sampleIdToVersionHash[sampleMetadata.id];
+            const resultSample = _.cloneDeep(sampleMetadata);
+            resultSample.originalId = resultSample.id;
+            resultSample.id = sampleVersion.versionId;
             resultSample.timestamp = sampleVersion.timestamp;
-            resultSampleList.push(resultSample);
+            return resultSample;
         });
-        callback(null, resultSampleList);
+        callback(null, resultSamplesMetadata);
     }
 
 
@@ -342,8 +342,10 @@ class SamplesModel extends SecureModelBase {
                 .orderBy('timestamp', 'desc')
                 .asCallback((error, results) => callback(error, results)),
             (results, callback) => this._toCamelCase(results, callback)
-        ], (error, results) => {
-            callback(null, results);
+        ], (error, versions) => {
+            const mappedVersions = _.map(versions, (version) =>
+                this._mapDatabaseSampleVersionToObject(version));
+            callback(error, mappedVersions);
         });
     }
 
@@ -378,7 +380,7 @@ class SamplesModel extends SecureModelBase {
             (results, callback) => this._toCamelCase(results, callback)
         ], (error, results) => {
             if (error || !results || !results.length) {
-                callback(error || new Error('Sample is not found.'));
+                callback(error || new Error('Sample is not found:' + sampleVersionId));
             } else {
                 callback(null, results[0].vcfFileSampleId);
             }
@@ -435,7 +437,7 @@ class SamplesModel extends SecureModelBase {
             (callback) => trx.raw(
                     'SELECT DISTINCT ON (vcf_file_sample_id)'
                     + ' vcf_file_sample_id'
-                    + ', LAST_VALUE(id) OVER wnd AS last_version_id'
+                    + ', LAST_VALUE(id) OVER wnd AS id'
                     + ', LAST_VALUE(timestamp) OVER wnd AS last_version_timestamp'
                     + ' FROM vcf_file_sample_version'
                     + ' WHERE vcf_file_sample_id IN'
@@ -447,17 +449,19 @@ class SamplesModel extends SecureModelBase {
             (versions, callback) => this._ensureAllItemsFound(versions, sampleIds, callback),
             (versions, callback) => this._toCamelCase(versions, callback),
             (versions, callback) => {
-                const mappedVersions = _.map(versions, (version) => {
-                    return {
-                        sampleId: version.vcfFileSampleId,
-                        versionId: version.lastVersionId
-                    };
-                });
+                const mappedVersions = _.map(versions, (version) => this._mapDatabaseSampleVersionToObject(version));
                 callback(null, mappedVersions);
             }
         ], (error, versions) => {
             callback(error, versions);
         });
+    }
+    
+    _mapDatabaseSampleVersionToObject(databaseVersion) {
+        return {
+            sampleId: databaseVersion.vcfFileSampleId,
+            versionId: databaseVersion.id
+        }
     }
 
     _createDataToInsert(userId, sample, shouldGenerateId) {
