@@ -4,6 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const CollectionUtils = require('../utils/CollectionUtils');
 const SecureModelBase = require('./SecureModelBase');
 
 const mappedColumns = [
@@ -24,11 +25,54 @@ class QueryHistoryModel extends SecureModelBase {
         super(models, QueryHistoryTableNames.QueryHistory, mappedColumns);
     }
 
-    findQueryHistory(userId, limit, offset, callback) {
+    findAll(userId, limit, offset, callback) {
         async.waterfall(
             [
                 (callback) => this._findQueryHistoryIds(userId, limit, offset, callback),
-                (queryHistoryIds, callback) => this._findQueryHistoryByIds(queryHistoryIds, callback)
+                (queryHistoryIds, callback) => this._findQueryHistoryByIds(queryHistoryIds, callback),
+                (queryHistoryItems, callback) => {
+                    const viewIds = _.map(queryHistoryItems,
+                        (queryHistoryItem) => queryHistoryItem.viewId
+                    );
+                    const sampleIds = _.map(queryHistoryItems,
+                        (queryHistoryItem) => queryHistoryItem.sampleId
+                    );
+                    const filterIds = _(queryHistoryItems)
+                        .map(queryHistoryItem => queryHistoryItem.filterIds)
+                        .flatten()
+                        .value();
+
+                    async.parallel({
+                        samples: (callback) => {
+                            this.models.samples.findMany(userId, _.uniq(sampleIds), callback);
+                        },
+                        views: (callback) => {
+                            this.models.views.findMany(userId, _.uniq(viewIds), callback);
+                        },
+                        filters: (callback) => {
+                            this.models.filters.findMany(userId, _.uniq(filterIds), callback);
+                        }
+                    }, (error, result)=> {
+                        callback(error, result.samples, result.views, result.filters, queryHistoryItems);
+                    });
+                },
+                (samples, views, filters, queryHistory, callback) => {
+                    // Create hashes.
+                    const samplesHash = CollectionUtils.createHashByKey(samples, 'id');
+                    const filtersHash = CollectionUtils.createHashByKey(filters, 'id');
+                    const viewsHash = CollectionUtils.createHashByKey(views, 'id');
+                    // Create resulting object.
+                    const resultQueryHistory = _.map(queryHistory, query => {
+                        return {
+                            id: query.id,
+                            timestamp: query.timestamp,
+                            view: viewsHash[query.viewId],
+                            filters: _.map(query.filterIds, filterId => filtersHash[filterId]),
+                            sample: samplesHash[query.sampleId]
+                        };
+                    });
+                    callback(null, resultQueryHistory);
+                }
             ], callback
         );
     }

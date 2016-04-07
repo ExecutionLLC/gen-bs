@@ -10,8 +10,8 @@ class QueryHistoryService extends UserEntityServiceBase {
         super(services, models, models.queryHistory);
     }
 
-    findQueryHistory(user, limit, offset, callback) {
-        this.models.queryHistory.findQueryHistory(user.id, limit, offset, callback);
+    findAll(user, limit, offset, callback) {
+        this.models.queryHistory.findAll(user.id, limit, offset, callback);
     }
 
     add(user, languageId, query, callback) {
