@@ -288,7 +288,7 @@ class SamplesModel extends SecureModelBase {
                     ),
                     true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleVersions)),
             (samplesMetadata, sampleVersions, callback) =>
-                this._replaceSampleIdWithCurrentVersionId(
+                this._replaceSampleIdsWithVersionIds(
                     samplesMetadata, sampleVersions, callback
                 ),
             (sampleMetadata, callback) => this._findValuesForVersions(trx, sampleVersionIds,
@@ -318,7 +318,7 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    _replaceSampleIdWithCurrentVersionId(samplesMetadata, sampleVersions, callback) {
+    _replaceSampleIdsWithVersionIds(samplesMetadata, sampleVersions, callback) {
         const resultSampleList = [];
         _.forEach(sampleVersions, sampleVersion => {
             const sample = _.find(
