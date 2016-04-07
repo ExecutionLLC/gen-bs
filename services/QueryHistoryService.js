@@ -15,7 +15,19 @@ class QueryHistoryService extends UserEntityServiceBase {
             // Demo users have no history.
             callback(null, []);
         } else {
-            this.models.queryHistory.findAll(user.id, limit, offset, callback);
+            async.waterfall([
+                (callback) => this.models.queryHistory.findAll(user.id, limit, offset, callback),
+                // Exclude last item.
+                (queryHistoryItems, callback) => this.models.queryHistory.getLastInsertedId(user.id,
+                    (error, lastInsertedId) => callback(error, queryHistoryItems, lastInsertedId)),
+                (queryHistoryItems, lastInsertedId, callback) => {
+                    if (lastInsertedId) {
+                        callback(null, _.filter(queryHistoryItems, item => item.id !== lastInsertedId));
+                    } else {
+                        callback(null, queryHistoryItems);
+                    }
+                }
+            ], callback);
         }
     }
 
