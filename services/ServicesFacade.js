@@ -17,6 +17,7 @@ const ApplicationServerReplyService = require('./external/ApplicationServerReply
 const SearchService = require('./SearchService');
 const SchedulerService = require('./tasks/SchedulerService');
 const SavedFilesService = require('./SavedFilesService');
+const QueryHistoryService = require('./QueryHistoryService');
 
 class ServiceFacade {
     constructor(config, logger, models) {
@@ -32,6 +33,7 @@ class ServiceFacade {
         this.samples = new SamplesService(this, models);
         this.fieldsMetadata = new FieldsMetadataService(this, models);
         this.savedFiles = new SavedFilesService(this, models);
+        this.queryHistory = new QueryHistoryService(this, models);
 
         this.sessions = new SessionService(this, models);
         this.operations = new OperationService(this, models);

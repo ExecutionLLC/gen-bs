@@ -12,6 +12,7 @@ import ui from './ui';
 import websocket from './websocket'
 import fileUpload from './fileUpload';
 import errorHandler from './errorHandler';
+import queryHistory from './queryHistory'
 
 const genApp = combineReducers({
     auth,
@@ -25,7 +26,8 @@ const genApp = combineReducers({
     ui,
     websocket,
     fileUpload,
-    errorHandler
+    errorHandler,
+    queryHistory
 });
 
 export default genApp;

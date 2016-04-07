@@ -8,6 +8,7 @@ import { getUrlParameterByName } from '../utils/stringUtils'
 import { fetchUserdata } from './userData';
 import { createWsConnection, subscribeToWs, send } from './websocket';
 import { handleError } from './errorHandler'
+import { clearQueryHistory, updateQueryHistory } from './queryHistory'
 
 import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient'
@@ -115,6 +116,9 @@ function updateLoginData(dispatch, sessionId, isDemo) {
     dispatch(receiveSession(sessionId, isDemo));
     dispatch(createWsConnection(conn));
     dispatch(subscribeToWs(sessionId));
+    if (isDemo) {
+        dispatch(clearQueryHistory());
+    }
     dispatch(fetchUserdata());
 }
 
