@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import auth from './auth';
 import userData from './userData';
 import variantsTable from './variantsTable';
-import exportToFile from './exportToFile';
+import savedFiles from './savedFiles';
 import modalWindows from './modalWindows';
 import viewBuilder from './viewBuilder';
 import filterBuilder from './filterBuilder';
@@ -12,12 +12,13 @@ import ui from './ui';
 import websocket from './websocket'
 import fileUpload from './fileUpload';
 import errorHandler from './errorHandler';
+import queryHistory from './queryHistory'
 
 const genApp = combineReducers({
     auth,
     userData,
     variantsTable,
-    exportToFile,
+    savedFiles,
     modalWindows,
     viewBuilder,
     filterBuilder,
@@ -25,7 +26,8 @@ const genApp = combineReducers({
     ui,
     websocket,
     fileUpload,
-    errorHandler
+    errorHandler,
+    queryHistory
 });
 
 export default genApp;

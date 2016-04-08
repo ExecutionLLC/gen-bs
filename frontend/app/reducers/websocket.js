@@ -19,7 +19,7 @@ export default function websocket(state = {
         {
             const commentVariants = state.variants.slice();
             const deletedVariantIndex = _.findIndex(
-                commentVariants, variant => variant.search_key === action.search_key
+                commentVariants, variant => variant.searchKey === action.searchKey
             );
             const deletedVariant = commentVariants[deletedVariantIndex];
             const newComments = deletedVariant.comments.slice(1);
@@ -35,7 +35,7 @@ export default function websocket(state = {
         {
             const commentVariants = state.variants.slice();
             const updatedVariantIndex = _.findIndex(
-                commentVariants, variant => variant.search_key === action.commentData.search_key
+                commentVariants, variant => variant.searchKey === action.commentData.searchKey
             );
             const updatedVariant = commentVariants[updatedVariantIndex];
             const newComments = updatedVariant.comments.slice();
@@ -52,7 +52,7 @@ export default function websocket(state = {
         {
             const commentVariants = state.variants.slice();
             const addCommentVariantIndex = _.findIndex(
-                commentVariants, variant => variant.search_key === action.commentData.search_key
+                commentVariants, variant => variant.searchKey === action.commentData.searchKey
             );
             const addVariant = commentVariants[addCommentVariantIndex];
             const newComments = addVariant.comments.slice();
@@ -81,7 +81,7 @@ export default function websocket(state = {
             const resultData = _.map(action.wsData.result.data, row => {
                 return Object.assign({}, row, {
                     fieldsHash: _.reduce(row.fields, (result, fieldValue) => {
-                        result[fieldValue.field_id] = fieldValue.value;
+                        result[fieldValue.fieldId] = fieldValue.value;
                         return result;
                     }, {})
                 });

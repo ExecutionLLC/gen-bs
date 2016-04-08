@@ -66,6 +66,8 @@ describe('User Data', () => {
 
             _.each(samples, sample => SamplesClient.verifySampleFormat(sample, false));
 
+            assert.ok(body.savedFiles);
+
             done();
         });
     });

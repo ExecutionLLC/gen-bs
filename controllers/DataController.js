@@ -16,6 +16,7 @@ class DataController extends ControllerBase {
     getData(request, response) {
         const user = request.user;
         const sessionId = request.sessionId;
+        const defaultLimit = 100;
         async.parallel({
             profileMetadata: (callback) => callback(null, user),
             views: (callback) => {
@@ -26,6 +27,12 @@ class DataController extends ControllerBase {
             },
             samples: (callback) => {
                 this.services.samples.findAll(user, callback);
+            },
+            queryHistory: (callback) => {
+                this.services.queryHistory.findAll(user, defaultLimit, 0, callback);
+            },
+            savedFiles: (callback) => {
+                this.services.savedFiles.findAll(user, callback);
             },
             activeOperations: (callback) => {
                 this.services.operations.findAll(sessionId, (error, operations) => {

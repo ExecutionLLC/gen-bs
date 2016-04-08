@@ -42,10 +42,18 @@ class Logger {
         }
 
         if (params.file) {
-            streams.push({
+            var streamConfig = {
                 path:   params.file.path,
                 level:  params.file.level || "trace"
-            });
+            };
+            if (params.file.rotatingFilesCount) {
+                Object.assign(streamConfig, {
+                    type:   'rotating-file',
+                    period: '1d',
+                    count:  params.file.rotatingFilesCount
+                });
+            }
+            streams.push(streamConfig);
         }
 
         this.filter_params = params['filter_params'] || [];
