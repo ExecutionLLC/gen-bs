@@ -1,9 +1,9 @@
 import apiFacade from '../api/ApiFacade'
-import { handleError } from './errorHandler'
-import { fetchFields, fetchTotalFields } from './fields'
-import { analyze, changeSample, changeView, changeFilter } from './ui'
-import { receiveSavedFilesList } from './savedFiles';
-import { receiveQueryHistory } from './queryHistory';
+import {handleError} from './errorHandler'
+import {fetchFields, fetchTotalFields} from './fields'
+import {analyze, changeSample, changeView, changeFilter} from './ui'
+import {receiveSavedFilesList} from './savedFiles';
+import {receiveQueryHistory} from './queryHistory';
 
 import HttpStatus from 'http-status';
 import * as _ from "lodash";
@@ -65,7 +65,7 @@ export function fetchUserdata() {
 
     return (dispatch, getState) => {
         dispatch(requestUserdata());
-        const { auth: {sessionId}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, ui: {languageId}} = getState();
         dataClient.getUserData(sessionId, languageId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_USER_DATA_NETWORK_ERROR));
@@ -73,9 +73,9 @@ export function fetchUserdata() {
                 dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
                 const result = response.body;
-                const view =_.find(result.views,view =>view.type == 'standard');
+                const view = _.find(result.views, view =>view.type == 'standard');
                 const sample = result.samples[0] || null;
-                const filter = _.find(result.filters,filter =>filter.type == 'standard');
+                const filter = _.find(result.filters, filter =>filter.type == 'standard');
                 dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));

@@ -1,6 +1,6 @@
 import apiFacade from '../api/ApiFacade';
-import { closeModal } from './modalWindows';
-import { fetchViews } from './userData';
+import {closeModal} from './modalWindows';
+import {fetchViews} from './userData';
 
 import HttpStatus from 'http-status';
 import {changeView} from "./ui";
@@ -23,7 +23,7 @@ export const VBUILDER_REQUEST_DELETE_VIEW = 'VBUILDER_REQUEST_DELETE_VIEW';
 export const VBUILDER_RECEIVE_DELETE_VIEW = 'VBUILDER_RECEIVE_DELETE_VIEW';
 
 export const VBUILDER_TOGGLE_NEW = 'VBUILDER_TOGGLE_NEW';
-export const VBUILDER_TOGGLE_EDIT =' VBUILDER_TOGGLE_EDIT';
+export const VBUILDER_TOGGLE_EDIT = ' VBUILDER_TOGGLE_EDIT';
 
 const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
 const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
@@ -140,7 +140,7 @@ export function viewBuilderCreateView(viewItemIndex) {
     return (dispatch, getState) => {
         dispatch(viewBuilderRequestCreateView());
 
-        const {auth: {sessionId}, viewBuilder: {editedView}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, viewBuilder: {editedView}, ui: {languageId}} = getState();
         viewsClient.add(sessionId, languageId, editedView, (error, response) => {
             if (error) {
                 dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Select from 'react-select';
 
-import { changeFilter } from '../../../actions/ui'
+import {changeFilter} from '../../../actions/ui'
 
 export default class Filters extends Component {
 
@@ -32,9 +32,9 @@ export default class Filters extends Component {
         )
     }
 
-    isFilterDisabled(filter){
+    isFilterDisabled(filter) {
         const {auth} = this.props;
-        return auth.isDemo &&filter.type=='advanced';
+        return auth.isDemo && filter.type == 'advanced';
     }
 
     getFilterOptions() {
