@@ -28,7 +28,7 @@ export default class FileUploadSamples extends Component {
                            className="form-control"/>
                     <span className="form-control-feedback"><i className="fa fa-lg fa-search text-muted"/></span>
                 </div>
-                <div className="panel-group" style={{overflow: 'scroll', height: '400px'}}>
+                <div className="panel-group samples-panel" >
                     {samples.map(
                         sample => (
                             <FileUploadSamplesRow
