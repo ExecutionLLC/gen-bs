@@ -43,8 +43,8 @@ export default class QueryHistoryModal extends Component {
         const message = isDemo ? "Please register to access your query history." : "History is empty.";
         return (
             <tr>
-                <td collspan="5">
-                    {message}
+                <td colSpan="5">
+                    <div className="empty"><h3><i className="md-i">hourglass_empty</i>{message}</h3></div>
                 </td>
             </tr>
         )

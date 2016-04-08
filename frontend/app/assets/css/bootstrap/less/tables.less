@@ -22,7 +22,6 @@ th {
 .table {
   width: 100%;
   max-width: 100%;
-  margin-bottom: @line-height-computed;
   // Cells
   > thead,
   > tbody,
@@ -331,7 +330,6 @@ table {
 
 .table { 
   &.table-variants {
-    
    margin-top: 0!important;
    background:#fff;
    table-layout: fixed;
@@ -470,9 +468,6 @@ table {
      }
     .table-variants-head,
     .table-variants-body { 
-         
-               
-        
       tr { 
          td { 
           font-size: ceil((@font-size-base * 0.92));
@@ -512,6 +507,9 @@ table {
             > div{ 
               width: 158px; 
               max-width:  158px;
+            }
+            .comment-link { 
+              &:extend(.btn-link-default);
             }
           
         }
@@ -644,17 +642,26 @@ left: 0;
     }
  }                 
 .empty {
-  background: rgb(247, 247, 247) none repeat scroll 0% 0%; margin: -5px -5px -5px -32px; text-align: center; padding: 150px 0px; color: rgb(170, 170, 170);
-  border-top: 1px solid #eee;
+  background: @default-max-light;
+  margin: -@table-condensed-cell-padding;
+  text-align: center;
+  color: @gray-light;
+  padding: 150px 0;
   h3 { 
     margin: 0 auto;
     max-width: 50%;
     text-align: left;
+     text-align: center;
     .subtext{ 
       font-size: @font-size-base;
       display: block;
      line-height: 1.4;
      margin: 0 @navbar-height;
+    }
+    .md-i { 
+      font-size: 2em;
+      vertical-align: middle;
+      margin-left: @padding-small-horizontal;
     }
   }
   .panel { 
@@ -669,20 +676,15 @@ left: 0;
       }
 
     h4 { 
-      font-size: 20px;
-     
-      
-          }
-    .dl { 
-     
+      font-size: 20px;  
+     }
+    .dl {      
       dt { 
         font-weight: normal;
+       }
       }
-      }
-    
     }
-     
-}
+  }
 .table-history { 
   dl {
     .dl-horizontal();
