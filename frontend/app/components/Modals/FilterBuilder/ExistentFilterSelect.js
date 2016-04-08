@@ -30,7 +30,9 @@ export default class ExistentFilterSelect extends Component {
                 </div>
                 { !isFilterEditable &&
                     <div className="alert alert-help">
-                        <span data-localize="views.setup.selector.description">This filter is not editable, duplicate it to make changes.</span>
+                        <span data-localize="views.setup.selector.description">
+                            This filter is not editable, duplicate it to make changes.(Only for registered users)
+                        </span>
                     </div>
                 }
                 <div className="row grid-toolbar">

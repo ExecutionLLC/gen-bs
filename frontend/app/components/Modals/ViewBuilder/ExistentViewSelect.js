@@ -32,7 +32,7 @@ export default class ExistentViewSelect extends React.Component {
                 { !isFilterEditable &&
                 <div className="alert alert-help">
                     <span data-localize="views.setup.selector.description">
-                        This view is not editable, duplicate it to make changes.
+                        This view is not editable, duplicate it to make changes.(Only for registered users)
                     </span>
                 </div>
                 }
