@@ -12,12 +12,12 @@ class FiltersModal extends Component {
     render() {
 
         const { dispatch, showModal, closeModal } = this.props;
-        const { currentSample, currentFilter } = this.props.ui;
+        const { currentFilter } = this.props.ui;
+        const { currentSample } = this.props.samplesList;
         const { samples, views, isValid } = this.props.userData;
         const { editOrNew, editedFilter, newFilter} = this.props.filterBuilder;
 
         return (
-
 
             <Modal
                 dialogClassName="modal-dialog-primary"
@@ -62,14 +62,15 @@ class FiltersModal extends Component {
 
 
 function mapStateToProps(state) {
-    const { filterBuilder, ui, auth, userData, fields } = state
+    const { filterBuilder, ui, auth, userData, fields, samplesList } = state
 
     return {
         userData,
         fields,
         ui,
         filterBuilder,
-        auth
+        auth,
+        samplesList
     }
 }
 

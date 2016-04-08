@@ -279,6 +279,7 @@ class FieldsMetadataModel extends ModelBase {
                 .from(this.baseTableName)
                 .innerJoin('field_text', 'field_text.field_id', this.baseTableName + '.id')
                 .whereIn('id', metadataIds)
+                .orderBy('name')
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
                         callback(error);
@@ -293,6 +294,7 @@ class FieldsMetadataModel extends ModelBase {
         this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
+                .orderBy('name')
                 .whereNot('source_name', 'sample')
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
@@ -308,6 +310,7 @@ class FieldsMetadataModel extends ModelBase {
         this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
+                .orderBy('name')
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
                         callback(error);
@@ -322,6 +325,7 @@ class FieldsMetadataModel extends ModelBase {
         this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
+                .orderBy('name')
                 .where('source_name', sourceName)
                 .asCallback((error, fieldsMetadata) => {
                     if (error) {
