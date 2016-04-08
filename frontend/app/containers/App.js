@@ -22,6 +22,7 @@ import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
 import { closeQueryHistoryModal } from '../actions/queryHistory'
 
+
 class App extends Component {
 
     componentDidMount() {
@@ -38,7 +39,7 @@ class App extends Component {
 
     render() {
         const { isAuthenticated, isFetching } = this.props.userData;
-        const {ui: {samples}} = this.props;
+        const {samplesList: {samples}} = this.props;
         const { ui } = this.props;
 
         var mainDivClass = classNames({
@@ -109,6 +110,7 @@ function mapStateToProps(state) {
             fields,
             savedFiles,
             ui,
+            samplesList,
             errorHandler: { showErrorWindow },
             queryHistory: { showQueryHistoryModal } } = state;
 
@@ -120,6 +122,7 @@ function mapStateToProps(state) {
         fields,
         savedFiles,
         ui,
+        samplesList,
         showErrorWindow,
         showQueryHistoryModal
     }

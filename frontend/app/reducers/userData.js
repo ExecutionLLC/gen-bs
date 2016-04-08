@@ -6,6 +6,7 @@ export default function userData(state = {
     profileMetadata: {},
     filters: [],
     views: [],
+    samples: [],
     attachedHistoryData: {
         sampleId: null,
         filterId: null,
