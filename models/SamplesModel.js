@@ -46,8 +46,7 @@ class SamplesModel extends SecureModelBase {
                         (error, versions) => callback(error, samplesMetadata, versions));
                 },
                 (samplesMetadata, versions, callback) => {
-                    const versionIds = _.map(versions, version => version.versionId);
-                    this._attachSamplesValues(trx, samplesMetadata, versionIds,
+                    this._attachSamplesValues(trx, samplesMetadata, versions,
                         (error, samplesMetadata) => callback(error, samplesMetadata, versions)
                     )
                 },
@@ -285,23 +284,28 @@ class SamplesModel extends SecureModelBase {
                     ),
                     true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleVersions)),
             (samplesMetadata, sampleVersions, callback) =>
+                this._attachSamplesValues(trx, samplesMetadata, sampleVersions,
+                    (error, resultSamples) => callback(error, resultSamples, sampleVersions)),
+            (samplesMetadata, sampleVersions, callback) =>
                 this._replaceSampleIdsWithVersionIds(
                     samplesMetadata, sampleVersions, callback
-                ),
-            (samplesMetadata, callback) => this._attachSamplesValues(trx, samplesMetadata, sampleVersionIds, callback)
+                )
         ], (error, resultSample) => {
             callback(error, resultSample);
         });
     }
 
-    _attachSamplesValues(trx, samplesMetadata, sampleVersionIds, callback) {
+    _attachSamplesValues(trx, samplesMetadata, sampleVersions, callback) {
+        const versionIds = _.map(sampleVersions, version => version.versionId);
         async.waterfall([
-            (callback) => this._findValuesForVersions(trx, sampleVersionIds, callback),
+            (callback) => this._findValuesForVersions(trx, versionIds, callback),
             (values, callback) => {
                 const samplesValues = _.groupBy(values, 'vcfFileSampleVersionId');
+                const sampleIdToVersionHash = CollectionUtils.createHashByKey(sampleVersions, 'sampleId');
                 const resultSamples = _.cloneDeep(samplesMetadata);
                 _.forEach(resultSamples, resultSample => {
-                    resultSample.values = samplesValues[resultSample.id];
+                    const sampleVersionId = sampleIdToVersionHash[resultSample.id].versionId;
+                    resultSample.values = samplesValues[sampleVersionId];
                 });
                 callback(null, resultSamples);
             }
