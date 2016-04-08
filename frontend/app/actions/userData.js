@@ -1,10 +1,10 @@
 import apiFacade from '../api/ApiFacade'
-import { handleError } from './errorHandler'
-import { fetchFields, fetchTotalFields } from './fields'
-import { receiveSavedFilesList } from './savedFiles';
-import { receiveQueryHistory } from './queryHistory';
-import { analyze, changeView, changeFilter } from './ui';
-import { changeSample, initSamplesList } from './samplesList';
+import {handleError} from './errorHandler'
+import {fetchFields, fetchTotalFields} from './fields'
+import {receiveSavedFilesList} from './savedFiles';
+import {receiveQueryHistory} from './queryHistory';
+import {analyze, changeView, changeFilter} from './ui';
+import {changeSample, initSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
 import * as _ from "lodash";
