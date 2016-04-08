@@ -14,7 +14,7 @@ export default class FiltersSetup extends Component {
             <div className="table-cell">
                 <div className="btn-group" data-localize="filters.setup.help" data-toggle="tooltip"
                      data-placement="bottom" data-container="body"
-                     title="Setup, create custom new filters">
+                     title="Select existing filter or create a new one">
                     <button
                         className="btn btn-default"
                         type="button"
