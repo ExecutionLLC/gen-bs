@@ -31,7 +31,7 @@ export default class ExistentFilterSelect extends Component {
                 { !isFilterEditable &&
                     <div className="alert alert-help">
                         <span data-localize="views.setup.selector.description">
-                            This filter is not editable, duplicate it to make changes.(Only for registered users)
+                            This filter is not editable, duplicate it to make changes. (Only for registered users)
                         </span>
                     </div>
                 }

@@ -32,7 +32,7 @@ export default class ExistentViewSelect extends React.Component {
                 { !isViewEditable &&
                 <div className="alert alert-help">
                     <span data-localize="views.setup.selector.description">
-                        This view is not editable, duplicate it to make changes.(Only for registered users)
+                        This view is not editable, duplicate it to make changes. (Only for registered users)
                     </span>
                 </div>
                 }
