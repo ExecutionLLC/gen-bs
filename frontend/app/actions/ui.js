@@ -4,16 +4,13 @@ import { viewBuilderSelectView } from './viewBuilder';
 import { filterBuilderSelectFilter} from './filterBuilder';
 import { detachHistoryData } from './userData';
 
+
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
 
-export const CHANGE_SAMPLE = 'CHANGE_SAMPLE';
 export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
 export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
-export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
-
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
-
 
 /*
  * Action Creators
@@ -21,23 +18,6 @@ export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 export function toggleQueryNavbar() {
     return {
         type: TOGGLE_QUERY_NAVBAR
-    }
-}
-
-export function changeSample(samples, sampleId) {
-    return {
-        type: CHANGE_SAMPLE,
-        samples,
-        sampleId
-    }
-}
-
-export function updateSampleValue(sampleId, valueFieldId, value) {
-    return {
-        type: UPDATE_SAMPLE_VALUE,
-        sampleId,
-        valueFieldId,
-        value
     }
 }
 

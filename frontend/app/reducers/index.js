@@ -9,6 +9,7 @@ import viewBuilder from './viewBuilder';
 import filterBuilder from './filterBuilder';
 import fields from './fields';
 import ui from './ui';
+import samplesList from './samplesList';
 import websocket from './websocket'
 import fileUpload from './fileUpload';
 import errorHandler from './errorHandler';
@@ -24,6 +25,7 @@ const genApp = combineReducers({
     filterBuilder,
     fields,
     ui,
+    samplesList,
     websocket,
     fileUpload,
     errorHandler,
