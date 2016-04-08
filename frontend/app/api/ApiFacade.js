@@ -6,6 +6,7 @@ import Urls from './Urls';
 import CommentsClient from './CommentsClient';
 import DataClient from './DataClient';
 import FiltersClient from './FiltersClient';
+import QueryHistoryClient from './QueryHistoryClient';
 import SamplesClient from './SamplesClient';
 import SearchClient from './SearchClient';
 import SessionsClient from './SessionsClient';
@@ -19,6 +20,7 @@ class ApiFacade {
         this._dataClient = new DataClient(urls);
         this._commentsClient = new CommentsClient(urls);
         this._filtersClient = new FiltersClient(urls);
+        this._queryHistoryClient = new QueryHistoryClient(urls);
         this._samplesClient = new SamplesClient(urls);
         this._searchClient = new SearchClient(urls);
         this._sessionsClient = new SessionsClient(urls);
@@ -37,6 +39,10 @@ class ApiFacade {
     get filtersClient() {
         return this._filtersClient;
     }
+
+    get queryHistoryClient() {
+        return this._queryHistoryClient;
+	}
 
     get samplesClient() {
         return this._samplesClient;

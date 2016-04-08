@@ -1,6 +1,7 @@
 import apiFacade from '../api/ApiFacade';
 import { handleError } from './errorHandler'
 import { clearVariants, addComment, changeComment, deleteComment } from './websocket'
+import { updateQueryHistory } from './queryHistory'
 
 import HttpStatus from 'http-status';
 
@@ -232,6 +233,10 @@ export function fetchVariants(searchParams) {
                     dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
                 } else {
                     dispatch(receiveVariants(response.body));
+                    const isDemo = getState().auth.isDemo;
+                    if (!isDemo) {
+                        dispatch(updateQueryHistory());
+                    }
                 }
             }
         );

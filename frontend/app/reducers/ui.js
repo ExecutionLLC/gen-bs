@@ -6,8 +6,8 @@ export default function ui(state = {
     currentFilter: null,
     currentLimit: 100,
     currentOffset: 0,
-    language: 'en',
-    isAnalyzeTooltipVisible: false
+    isAnalyzeTooltipVisible: false,
+    language: 'en'
 }, action) {
 
     switch (action.type) {

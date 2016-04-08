@@ -1,7 +1,8 @@
-import { fetchVariants, clearSearchParams } from './variantsTable'
-import { requestAnalyze , requestChangeView} from './websocket'
-import { viewBuilderSelectView } from './viewBuilder'
-import { filterBuilderSelectFilter} from './filterBuilder'
+import { fetchVariants, clearSearchParams } from './variantsTable';
+import { requestAnalyze , requestChangeView} from './websocket';
+import { viewBuilderSelectView } from './viewBuilder';
+import { filterBuilderSelectFilter} from './filterBuilder';
+import { detachHistoryData } from './userData';
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
@@ -62,16 +63,16 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
             limit: limit,
             offset: offset
         };
+        const historyData = getState().userData.attachedHistoryData;
+        const detachHistorySample = historyData.sampleId ? historyData.sampleId !== sampleId : false;
+        const detachHistoryFilter = historyData.filterId ? historyData.filterId !== filterId : false;
+        const detachHistoryView = historyData.viewId ? historyData.viewId !== viewId : false;
+        dispatch(detachHistoryData(detachHistorySample, detachHistoryFilter, detachHistoryView));
 
         dispatch(clearSearchParams());
-
         dispatch(requestAnalyze(searchParams));
-
         const searchView = _.find(getState().ui.views , {id: viewId});
-
         dispatch(requestChangeView(searchView));
-
         dispatch(fetchVariants(searchParams))
-
     }
 }

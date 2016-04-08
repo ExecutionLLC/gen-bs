@@ -35,18 +35,23 @@ class NavbarCreateQuery extends Component {
             <nav className="navbar navbar-fixed-top navbar-default">
                 <div className="container-fluid">
                     <div className="table-row">
-                        <Upload  {...this.props} />
+                        <Upload
+                            {...this.props}
+                        />
 
                         <MetadataSearch samples={samples}
                                         currentSampleId={currentSampleId}
                                         onSampleChangeRequested={(sampleId) => this.onSampleSelected(sampleId) }
                         />
-                        <FiltersSetup {...this.props} />
+                        <FiltersSetup
+                            {...this.props}
+                        />
                         <Filters
                             {...this.props}
                         />
-
-                        <ViewsSetup {...this.props} />
+                        <ViewsSetup
+                            {...this.props}
+                        />
                         <Views
                             {...this.props}
                         />
@@ -55,7 +60,9 @@ class NavbarCreateQuery extends Component {
                             {...this.props}
                             clicked={ (e) => dispatch(analyze(currentSample.id, currentView.id, currentFilter.id))}
                         />
-                        <LoadHistory />
+                        <LoadHistory
+                            dispatch={this.props.dispatch}
+                        />
                     </div>
                 </div>
             </nav>
