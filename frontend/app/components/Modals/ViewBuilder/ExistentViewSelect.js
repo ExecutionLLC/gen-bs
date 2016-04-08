@@ -1,26 +1,25 @@
-import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import React from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
+import {connect} from 'react-redux';
 
-import { viewBuilderSelectView, viewBuilderToggleNewEdit } from '../../../actions/viewBuilder'
+import { viewBuilderToggleEdit, viewBuilderSelectView, viewBuilderToggleNew} from '../../../actions/viewBuilder'
 
 
-export default class ExistentViewSelect extends Component {
+export default class ExistentViewSelect extends React.Component {
 
 
     render() {
 
-        const { dispatch, auth, showModal, closeModal } = this.props;
-        const { currentView } = this.props.viewBuilder;
-        const { samples, views, isValid } = this.props.userData;
+        const {dispatch, auth, viewBuilder, views} = this.props;
+        const view = viewBuilder.editedView;
 
         var disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
-        })
+        });
         var title = (auth.isDemo) ? 'Login or register to work with view' : 'Make a copy for editing';
-        const isFilterEditable = (currentView.type === 'user');
+        const isFilterEditable = (view.type === 'user');
 
         return (
 
@@ -41,9 +40,9 @@ export default class ExistentViewSelect extends Component {
                     <div className="col-sm-6">
                         <Select
                             options={views.map( v => { return {value: v.id, label: v.name} } )}
-                            value={currentView.id}
+                            value={view.id}
                             clearable={false}
-                            onChange={ (val) => dispatch(viewBuilderSelectView(views, val.value, true))}
+                            onChange={ (val) => dispatch(viewBuilderToggleEdit(views, val.value, true))}
                         />
                     </div>
                     <div className="col-sm-6">
@@ -54,7 +53,7 @@ export default class ExistentViewSelect extends Component {
                                     data-toggle="collapse"
                                     data-target=".copyview"
                                     id="dblBtn"
-                                    onClick={ () => dispatch(viewBuilderToggleNewEdit(false)) }
+                                    onClick={ () => dispatch(viewBuilderToggleNew()) }
                                     disabled={disabledClass}
                                     title={title}
                             >
@@ -64,29 +63,38 @@ export default class ExistentViewSelect extends Component {
                         {
                             //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                         }
-                        { currentView.type == 'user' &&
+                        { view.type == 'user' &&
                         <div className="btn-group ">
                             <button type="button"
                                     className="btn btn-default"
-                                    onClick={ () => dispatch(viewBuilderSelectView(views, currentView.id, true))}>
+                                    onClick={ () => dispatch(viewBuilderSelectView(views, view.id, true))}>
 
                                 <span data-localize="views.setup.reset.title">Reset View</span>
                             </button>
                         </div>
                         }
-                        { currentView.type == 'user' &&
+                        { view.type == 'user' &&
                         <div className="btn-group ">
                             <button type="button" className="btn btn-link">
                                 <span data-localize="views.setup.delete.title">Delete View</span>
                             </button>
                         </div>
                         }
-                        { //<!-- / -->
-                        }
                     </div>
                 </div>
             </div>
-
         )
     }
 }
+
+function mapStateToProps(state) {
+    const {viewBuilder, auth, userData} = state;
+    const views = userData.views;
+    return {
+        auth,
+        viewBuilder,
+        views
+    }
+}
+
+export default connect(mapStateToProps)(ExistentViewSelect);

@@ -3,6 +3,7 @@ import { closeModal } from './modalWindows';
 import { fetchViews } from './userData';
 
 import HttpStatus from 'http-status';
+import {changeView} from "./ui";
 
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW';
 
@@ -21,7 +22,8 @@ export const VBUILDER_RECEIVE_CREATE_VIEW = 'VBUILDER_RECEIVE_CREATE_VIEW';
 export const VBUILDER_REQUEST_DELETE_VIEW = 'VBUILDER_REQUEST_DELETE_VIEW';
 export const VBUILDER_RECEIVE_DELETE_VIEW = 'VBUILDER_RECEIVE_DELETE_VIEW';
 
-export const VBUILDER_TOGGLE_NEW_EDIT = 'VBUILDER_TOGGLE_NEW_EDIT';
+export const VBUILDER_TOGGLE_NEW = 'VBUILDER_TOGGLE_NEW';
+export const VBUILDER_TOGGLE_EDIT =' VBUILDER_TOGGLE_EDIT';
 
 const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
 const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
@@ -34,10 +36,9 @@ const viewsClient = apiFacade.viewsClient;
 /*
  * Action Creators
  */
-export function viewBuilderToggleNewEdit(editOrNew) {
+export function viewBuilderToggleNew() {
     return {
-        type: VBUILDER_TOGGLE_NEW_EDIT,
-        editOrNew
+        type: VBUILDER_TOGGLE_NEW
     };
 }
 
@@ -47,6 +48,14 @@ export function viewBuilderSelectView(views, viewId, editOrNew) {
         views,
         viewId,
         editOrNew
+    };
+}
+
+export function viewBuilderToggleEdit(views, viewId) {
+    return {
+        type: VBUILDER_TOGGLE_EDIT,
+        views,
+        viewId
     };
 }
 
@@ -98,15 +107,15 @@ export function viewBuilderUpdateView(viewItemIndex) {
 
     return (dispatch, getState) => {
         const state = getState();
-        const currentView = state.viewBuilder.currentView;
-        const isNotEditableView = _.some(['advanced', 'standard'], currentView.type);
+        const editedView = state.viewBuilder.editedView;
+        const isNotEditableView = _.includes(['advanced', 'standard'], editedView.type);
 
         dispatch(viewBuilderRequestUpdateView());
         if (state.auth.isDemo || isNotEditableView) {
             dispatch(closeModal('views'));
+            dispatch(changeView(editedView.id));
         } else {
             const sessionId = state.auth.sessionId;
-            const editedView = state.viewBuilder.editedView;
 
             dispatch(viewBuilderRequestUpdateView());
             viewsClient.update(sessionId, editedView, (error, response) => {
@@ -117,7 +126,7 @@ export function viewBuilderUpdateView(viewItemIndex) {
                 } else {
                     const result = response.body;
                     dispatch(viewBuilderReceiveUpdateView(result));
-                    dispatch(closeModal('views'))
+                    dispatch(closeModal('views'));
                     dispatch(fetchViews(result.id))
                 }
             });
@@ -131,8 +140,8 @@ export function viewBuilderCreateView(viewItemIndex) {
     return (dispatch, getState) => {
         dispatch(viewBuilderRequestCreateView());
 
-        const {auth: {sessionId}, viewBuilder: {newView}, ui: {languageId} } = getState();
-        viewsClient.add(sessionId, languageId, newView, (error, response) => {
+        const {auth: {sessionId}, viewBuilder: {editedView}, ui: {languageId} } = getState();
+        viewsClient.add(sessionId, languageId, editedView, (error, response) => {
             if (error) {
                 dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {

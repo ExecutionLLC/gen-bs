@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
+import {connect} from 'react-redux';
 
-import { viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn } from '../../../actions/viewBuilder'
+import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder'
 
 
-export default class ViewBuilder extends Component {
+export default class ViewBuilder extends React.Component {
 
     render() {
-        const { dispatch, fields } = this.props
-        const view = this.props.viewBuilder.editOrNew ? (this.props.viewBuilder.editedView) : (this.props.viewBuilder.newView)
+        const {dispatch, fields, viewBuilder} = this.props;
+        const view = viewBuilder.editedView;
         var disabledClass = classNames({
             'disabled': (view.type !== 'user') ? 'disabled' : ''
         });
@@ -20,7 +21,7 @@ export default class ViewBuilder extends Component {
         const allAvailableFields = fields.sampleFieldsList.concat(fields.sourceFieldsList);
         // Exclude editable fields and fields that are already selected.
         const fieldsForSelection = _.filter(allAvailableFields, field => !field.isEditable
-            && !_.includes(previouslySelectedFieldIds, field.id));
+        && !_.includes(previouslySelectedFieldIds, field.id));
         const selects = view.viewListItems.map(function (viewItem, index) {
 
             var currentValue =
@@ -33,17 +34,16 @@ export default class ViewBuilder extends Component {
                     return {value: f.id, label: `${f.name} -- ${f.sourceName}`}
                 })
             ];
-
             return (
 
                 <div className="row grid-toolbar" key={Math.round(Math.random()*100000000).toString()}>
 
                     <div className="col-xs-6 btn-group-select2">
                         <div className="btn-group">
-                                <button className="btn btn-link btnDrag" disabled="" type="button">
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
+                            <button className="btn btn-link btnDrag" disabled="" type="button">
+                                <span className="icon-bar"/>
+                                <span className="icon-bar"/>
+                                <span className="icon-bar"/>
                             </button>
                         </div>
                         <div className="btn-group">
@@ -57,7 +57,7 @@ export default class ViewBuilder extends Component {
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
                              data-placement="bottom" data-container="body" title="Desc/Asc Descending">
-                            <button type="button" className="btn btn-default btn-sort active desc" disabled></button>
+                            <button type="button" className="btn btn-default btn-sort active desc" disabled/>
                         </div>
 
                     </div>
@@ -74,14 +74,14 @@ export default class ViewBuilder extends Component {
                     <div className="col-xs-1">
                         <button className="btn-link" disabled={disabledClass}
                                 onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
-                            className="fa fa-lg fa-minus-circle"></i></button>
+                            className="fa fa-lg fa-minus-circle"/></button>
                         <button className="btn-link" disabled={disabledClass}
                                 onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
-                            className="fa fa-lg fa-plus-circle"></i></button>
+                            className="fa fa-lg fa-plus-circle"/></button>
                     </div>
                 </div>
             )
-        }.bind(this))
+        }.bind(this));
 
         return (
 
@@ -111,3 +111,15 @@ export default class ViewBuilder extends Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    const {viewBuilder, userData, fields} = state;
+    const views = userData.views;
+    return {
+        viewBuilder,
+        views,
+        fields
+    }
+}
+
+export default connect(mapStateToProps)(ViewBuilder);

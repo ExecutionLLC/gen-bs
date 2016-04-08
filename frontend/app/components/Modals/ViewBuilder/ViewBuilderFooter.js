@@ -1,30 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Modal } from 'react-bootstrap';
+import {connect} from 'react-redux';
 import classNames from 'classnames';
 
-import { viewBuilderUpdateView, viewBuilderCreateView } from '../../../actions/viewBuilder';
+import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} from '../../../actions/viewBuilder'
 
-
-export default class ViewBuilderFooter extends Component {
+export default class ViewBuilderFooter extends  React.Component {
 
     render() {
-
-        const { dispatch,auth, closeModal } = this.props;
-        const { editOrNew ,editedView, newView} = this.props.viewBuilder;
-        const view = editOrNew ? (editedView) : (newView);
+        const { auth, viewBuilder } = this.props;
+        const editedView = viewBuilder.editedView;
         var disabledClass = classNames({
-            'disabled': (view.type === 'advanced' && auth.isDemo) ? 'disabled':''
-        })
-        var title = (view.type === 'advanced' && auth.isDemo) ?
+            'disabled': (editedView.type === 'advanced' && auth.isDemo) ? 'disabled':''
+        });
+        var title = (editedView.type === 'advanced' && auth.isDemo) ?
             'Login or register to select advanced view':'';
-        const isViewEditable = (view.type === 'user');
+        const isViewEditable = (editedView.type === 'user');
         const selectButtonLabel = isViewEditable ? 'Save and Select': 'Select';
 
         return (
 
             <Modal.Footer>
                 <button
-                    onClick={ () => { closeModal('views')} }
+                    onClick={ () => {  this.cancelOnClick()}}
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
@@ -33,9 +31,7 @@ export default class ViewBuilderFooter extends Component {
                 </button>
 
                 <button
-                    onClick={ () => {
-              editOrNew ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView())
-            }}
+                    onClick={ () => {this.selectOnClick()}}
                     type="button"
                     className="btn btn-primary"
                     disabled={disabledClass}
@@ -47,4 +43,29 @@ export default class ViewBuilderFooter extends Component {
 
         )
     }
+
+    cancelOnClick(){
+        const {dispatch,closeModal,views,viewBuilder} =this.props;
+        const currentView = viewBuilder.currentView;
+        closeModal('views');
+        dispatch(viewBuilderSelectView(views, currentView.id, true));
+    }
+
+    selectOnClick(){
+        const {dispatch,viewBuilder} =this.props;
+        const editedView = viewBuilder.editedView;
+        editedView.id!==null ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView());
+    }
 }
+
+function mapStateToProps(state) {
+    const { auth, viewBuilder, userData } = state;
+    const views = userData.views;
+    return {
+        views,
+        auth,
+        viewBuilder
+    }
+}
+
+export default connect(mapStateToProps)(ViewBuilderFooter);

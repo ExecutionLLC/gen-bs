@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap';
 
@@ -8,22 +8,24 @@ import NewViewInputs from './ViewBuilder/NewViewInputs'
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect'
 import ViewBuilder from './ViewBuilder/ViewBuilder'
 
-class ViewsModal extends Component {
+class ViewsModal extends React.Component {
 
+    constructor(props) {
+        super(props);
+    }
 
     render() {
-
-        const { views, isValid } = this.props.userData;
-        const { editOrNew } = this.props.viewBuilder;
-
+        const {isValid, showModal, closeModal, viewBuilder} =this.props;
+        const editedView = viewBuilder.editedView;
+        const isNew = (editedView)?editedView.id === null:false;
         return (
 
 
             <Modal
                 dialogClassName="modal-dialog-primary"
                 bsSize="lg"
-                show={this.props.showModal}
-                onHide={ () => {this.props.closeModal('views')} }
+                show={showModal}
+                onHide={ () => {closeModal('views')} }
             >
                 { !isValid &&
                 <div >&nbsp;</div>
@@ -33,24 +35,20 @@ class ViewsModal extends Component {
                     <ViewBuilderHeader />
                     <form>
                         <Modal.Body>
-                            { !editOrNew &&
+                            { isNew &&
                             <div>
-                                <NewViewInputs  {...this.props} />
-                                <ViewBuilder
-                                    {...this.props}
-                                />
+                                <NewViewInputs  />
+                                <ViewBuilder />
                             </div>
                             }
-                            { editOrNew &&
+                            { !isNew &&
                             <div>
-                                <ExistentViewSelect {...this.props} />
-                                <ViewBuilder
-                                    {...this.props}
-                                />
+                                <ExistentViewSelect />
+                                <ViewBuilder />
                             </div>
                             }
                         </Modal.Body>
-                        <ViewBuilderFooter {...this.props} />
+                        <ViewBuilderFooter closeModal={closeModal}/>
                     </form>
                 </div>
                 }
@@ -61,14 +59,12 @@ class ViewsModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { viewBuilder, ui, auth, userData, fields } = state;
+    const {userData,viewBuilder} = state;
+    const isValid = userData.isValid;
 
     return {
-        userData,
-        fields,
-        ui,
-        viewBuilder,
-        auth
+        isValid,
+        viewBuilder
     }
 }
 

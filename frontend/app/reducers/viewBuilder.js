@@ -7,11 +7,8 @@ function filterEmptyListItems(viewListItems) {
 }
 
 export default function viewBuilder(state = {
-    isReceivedViews: false,
     currentView: null,
     editedView: null,
-    newView: null,
-    editOrNew: true,
     isFetching: false
 }, action) {
 
@@ -20,47 +17,51 @@ export default function viewBuilder(state = {
             const currentView = _.find(action.views, {id: action.viewId}) || null;
             return Object.assign({}, state, {
                 currentView: currentView,
-                isReceivedViews: currentView !== null,
-                editedView: action.editOrNew ? currentView : null,
-                newView: !action.editOrNew ? currentView : null,
-                editOrNew: action.editOrNew
+                editedView: currentView
             });
 
-        case ActionTypes.VBUILDER_TOGGLE_NEW_EDIT:
+        case ActionTypes.VBUILDER_TOGGLE_EDIT:
+            const editedView = _.find(action.views, {id: action.viewId}) || null;
             return Object.assign({}, state, {
-                editOrNew: action.editOrNew,
-                editedView: action.editOrNew ? state.currentView : null,
-                newView: !action.editOrNew ? Object.assign({}, state.currentView, {
+                editedView: editedView
+            });
+        case ActionTypes.VBUILDER_TOGGLE_NEW:
+            return Object.assign({}, state, {
+                editedView: Object.assign({}, state.editedView, {
+                    id: null,
                     type: 'user',
-                    name: `Copy of ${state.currentView.name}`
-                }) : null
+                    name: `Copy of ${state.editedView.name}`,
+                    originalViewId: state.editedView.id
+                })
             });
 
         case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW:
             return Object.assign({}, state, {
                 isFetching: true,
-                editedView: state.editedView ? Object.assign({}, state.editedView, {
-                    viewListItems: filterEmptyListItems(state.editedView.viewListItems)
-                }) : null
+                editedView: Object.assign({}, state.editedView, {
+                    view_list_items: filterEmptyListItems(state.editedView.view_list_items)
+                })
             });
 
         case ActionTypes.VBUILDER_RECEIVE_UPDATE_VIEW:
             return Object.assign({}, state, {
                 isFetching: false,
-                currentView: action.view
+                currentView: action.view,
+                editedView: action.view
             });
 
         case ActionTypes.VBUILDER_REQUEST_CREATE_VIEW:
             return Object.assign({}, state, {
                 isFetching: true,
-                newView: state.newView ? Object.assign({}, state.newView, {
-                    viewListItems: filterEmptyListItems(state.newView.viewListItems)
-                }) : null
+                editedView: Object.assign({}, state.editedView, {
+                    view_list_items: filterEmptyListItems(state.editedView.view_list_items)
+                })
             });
 
         case ActionTypes.VBUILDER_RECEIVE_CREATE_VIEW:
             return Object.assign({}, state, {
                 isFetching: false,
+                editedView: action.view,
                 currentView: action.view
             });
 
@@ -76,54 +77,37 @@ export default function viewBuilder(state = {
 
         case ActionTypes.VBUILDER_DELETE_COLUMN:
             return Object.assign({}, state, {
-                editedView: state.editedView ? Object.assign({}, state.editedView, {
+                editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
                         ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)
                     ]
-                }) : null,
-                newView: state.newView ? Object.assign({}, state.newView, {
-                    viewListItems: [
-                        ...state.newView.viewListItems.slice(0, action.viewItemIndex),
-                        ...state.newView.viewListItems.slice(action.viewItemIndex + 1)
-                    ]
-                }) : null
+                })
             });
 
         case ActionTypes.VBUILDER_ADD_COLUMN:
 
             return Object.assign({}, state, {
-                editedView: state.editedView ? Object.assign({}, state.editedView, {
+                editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
                         EMPTY_VIEW_ITEM,
                         ...state.editedView.viewListItems.slice(action.viewItemIndex)
                     ]
-                }) : null,
-                newView: state.newView ? Object.assign({}, state.newView, {
-                    viewListItems: [
-                        ...state.newView.viewListItems.slice(0, action.viewItemIndex),
-                        EMPTY_VIEW_ITEM,
-                        ...state.newView.viewListItems.slice(action.viewItemIndex)
-                    ]
-                }) : null
+                })
             });
 
         case ActionTypes.VBUILDER_CHANGE_ATTR:
             return Object.assign({}, state, {
-                editedView: state.editedView ? Object.assign({}, state.editedView, {
+                editedView: Object.assign({}, state.editedView, {
                     name: action.name,
                     description: action.description
-                }) : null,
-                newView: state.newView ? Object.assign({}, state.newView, {
-                    name: action.name,
-                    description: action.description
-                }) : null
+                })
             });
 
         case ActionTypes.VBUILDER_CHANGE_COLUMN:
             return Object.assign({}, state, {
-                editedView: state.editedView ? Object.assign({}, state.editedView, {
+                editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
 
@@ -133,18 +117,7 @@ export default function viewBuilder(state = {
 
                         ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)
                     ]
-                }) : null,
-                newView: state.newView ? Object.assign({}, state.newView, {
-                    viewListItems: [
-                        ...state.newView.viewListItems.slice(0, action.viewItemIndex),
-
-                        Object.assign({}, state.newView.viewListItems[action.viewItemIndex], {
-                            fieldId: action.fieldId
-                        }),
-
-                        ...state.newView.viewListItems.slice(action.viewItemIndex + 1)
-                    ]
-                }) : null
+                })
             });
 
         default:
