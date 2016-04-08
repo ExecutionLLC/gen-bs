@@ -769,7 +769,7 @@
 @panel-body-padding:          @padding-base-horizontal;
 @panel-heading-padding:       @padding-base-horizontal ;
 @panel-icon-font-family:     "FontAwesome";      
-@panel-footer-padding:        @padding-large-vertical 0;
+@panel-footer-padding:        @padding-base-vertical 0;
 @panel-border-radius:         @border-radius-small;
 @panel-shadow:        @shadow-paper-1;
 @panel-hover-shadow:  @shadow-paper-3;
@@ -784,27 +784,27 @@
 @panel-default-state-icon:     " "; 
 
 @panel-primary-text:          #fff;
-@panel-primary-border:        darken(@brand-primary, 10%);
-@panel-primary-heading-bg:    lighten(@brand-primary, 10%);
+@panel-primary-border:        @brand-primary;
+@panel-primary-heading-bg:    @brand-primary;
 @panel-primary-state-icon:    "\f061"; 
 
 @panel-success-text:          @state-success-text;
-@panel-success-border:        darken(@state-success-bg, 5%);
+@panel-success-border:        @state-success-bg;
 @panel-success-heading-bg:    @state-success-bg;
 @panel-success-state-icon:    "\f058";; 
 
 @panel-info-text:             @state-info-text;
-@panel-info-border:           darken(@state-info-bg, 5%);
+@panel-info-border:           @state-info-bg;
 @panel-info-heading-bg:       @state-info-bg;
 @panel-info-state-icon:       "\f059"; 
 
 @panel-warning-text:          @state-warning-text;
-@panel-warning-border:        darken(@state-warning-bg, 5%);
+@panel-warning-border:        @state-warning-bg;
 @panel-warning-heading-bg:    @state-warning-bg;
 @panel-warning-state-icon:    "\f071"; 
 
 @panel-danger-text:           @state-danger-text;
-@panel-danger-border:         darken(@state-danger-bg, 5%);
+@panel-danger-border:         @state-danger-bg;
 @panel-danger-heading-bg:     @state-danger-bg;
 @panel-danger-state-icon:     "\f05e";
 

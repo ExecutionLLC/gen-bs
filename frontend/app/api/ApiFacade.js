@@ -51,7 +51,7 @@ class ApiFacade {
     get searchClient() {
         return this._searchClient;
     }
-    
+
     get sessionsClient() {
         return this._sessionsClient;
     }

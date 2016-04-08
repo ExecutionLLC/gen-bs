@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
 
 import Upload from './NavbarCreateQuery/Upload'
 import MetadataSearch from './NavbarCreateQuery/MetadataSearch'
@@ -11,21 +11,23 @@ import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 import {fetchFields} from '../../actions/fields'
 
-import { changeSample, changeView, changeFilter, analyze } from '../../actions/ui'
+import { changeView, changeFilter, analyze } from '../../actions/ui'
+import { changeSample } from '../../actions/samplesList'
 
 
 class NavbarCreateQuery extends Component {
 
     onSampleSelected(sampleId) {
         const { dispatch, samples } = this.props;
-        dispatch(changeSample(samples, sampleId));
+        dispatch(changeSample(sampleId));
         dispatch(fetchFields(sampleId));
     }
 
     render() {
 
         const { dispatch, samples, views } = this.props;
-        const { currentSample, currentView, currentFilter } = this.props.ui;
+        const { currentView, currentFilter } = this.props.ui;
+        const { currentSample } = this.props.samplesList;
         const currentSampleId = currentSample ? currentSample.id : null;
 
         return (
@@ -70,14 +72,16 @@ class NavbarCreateQuery extends Component {
 }
 
 function mapStateToProps(state) {
-    const { modalWindows, userData, ui} = state
+    const {modalWindows, userData, ui, auth, samplesList} = state;
 
     return {
         modalWindows,
         samples: userData.samples,
         views: userData.views,
         filters: userData.filters,
-        ui
+        ui,
+        auth,
+        samplesList
     }
 }
 

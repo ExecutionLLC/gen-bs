@@ -40,7 +40,7 @@ export default class ExportDropdown extends ComponentBase {
         } else {
             const {selectedRowIndices} = this.props;
             const selectedVariantsCount = selectedRowIndices.length;
-            return (<span>Export<span className="badge badge-info">{selectedVariantsCount}</span></span>);
+            return (<span>Export  <span className="badge badge-warning">{selectedVariantsCount}</span></span>);
         }
     }
 

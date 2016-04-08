@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Select2 from 'react-select2-wrapper';
 import Select from 'react-select';
-import { changeSample} from '../../../actions/ui';
 
 
 export default class MetadataSearch extends Component {
@@ -36,6 +35,8 @@ export default class MetadataSearch extends Component {
 MetadataSearch.propTypes = {
     samples: React.PropTypes.array.isRequired,
     currentSampleId: React.PropTypes.string,
-    // callback(sampleId)
+    /**
+     * @type Function(Uuid sampleId)
+     * */
     onSampleChangeRequested: React.PropTypes.func.isRequired
 };
