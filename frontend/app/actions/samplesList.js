@@ -5,14 +5,14 @@ import apiFacade from '../api/ApiFacade';
 
 export const CHANGE_SAMPLE = 'CHANGE_SAMPLE';
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
-export const INIT_SAMPLES_LIST = 'INIT_SAMPLES_LIST'
-export const RESET_SAMPLES_LIST = 'RESET_SAMPLES_LIST'
-export const UPDATE_SAMPLES_LIST = 'UPDATE_SAMPLES_LIST'
+export const INIT_SAMPLES_LIST = 'INIT_SAMPLES_LIST';
+export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
+export const UPDATE_SAMPLE_IN_LIST = 'UPDATE_SAMPLE_IN_LIST';
 
 
 const samplesClient = apiFacade.samplesClient;
-const NETWORK_ERROR = 'Network error. You can reload page and try again.'
-const SERVER_ERROR = 'Internal server error. You can reload page and try again.'
+const NETWORK_ERROR = 'Network error. You can reload page and try again.';
+const SERVER_ERROR = 'Internal server error. You can reload page and try again.';
 
 
 /*
@@ -42,17 +42,17 @@ export function initSamplesList(samples) {
     }
 }
 
-export function resetSamplesList(sampleId) {
+export function resetSampleInList(sampleId) {
     return {
-        type: RESET_SAMPLES_LIST,
-        sampleId,
+        type: RESET_SAMPLE_IN_LIST,
+        sampleId
     }
 }
 
-export function updateSamplesList(sampleId, updatedSample) {
+export function updateSampleInList(sampleId, updatedSample) {
     return {
-        type: UPDATE_SAMPLES_LIST,
-        sampleId, sampleId,
+        type: UPDATE_SAMPLE_IN_LIST,
+        sampleId,
         updatedSample: updatedSample
     }
 }
@@ -68,10 +68,9 @@ export function requestUpdateSampleFields(sampleId) {
                 if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, SERVER_ERROR));
                 } else {
-                    dispatch(updateSamplesList(sampleId, response.body));
+                    dispatch(updateSampleInList(sampleId, response.body));
                 }
             }
-
         });
     }
 }

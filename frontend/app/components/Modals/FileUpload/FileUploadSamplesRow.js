@@ -5,7 +5,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
 import {
-    changeSample, initSamplesList, updateSampleValue, resetSamplesList,
+    changeSample, initSamplesList, updateSampleValue, resetSampleInList,
     updateSampleFields, requestUpdateSampleFields
 } from '../../../actions/samplesList'
 
@@ -130,7 +130,7 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div className="btn-group ">
                 <button
-                    onClick={ () => dispatch(resetSamplesList(sample.id)) }
+                    onClick={ () => dispatch(resetSampleInList(sample.id)) }
                     type="button"
                     className="btn btn-default"
                 >

@@ -4,7 +4,7 @@ import * as ActionTypes from '../actions/samplesList'
 export default function samplesList(state = {
     samples: [],
     savedSamples: [],
-    currentSample: null,
+    currentSample: null
 }, action) {
 
     let currentSampleIndex;
@@ -21,7 +21,7 @@ export default function samplesList(state = {
 
             newValues = [...state.samples[currentSampleIndex].values || []];
             const valueIndex = _.findIndex(newValues, item => item.fieldId === valueFieldId);
-            const newValue = {fieldId: valueFieldId, values: value}
+            const newValue = {fieldId: valueFieldId, values: value};
 
             if (valueIndex >= 0) {
                 newValues[valueIndex] = newValue;
@@ -34,7 +34,7 @@ export default function samplesList(state = {
 
             return Object.assign({}, state, {samples: newSamples});
 
-        case ActionTypes.UPDATE_SAMPLES_LIST:
+        case ActionTypes.UPDATE_SAMPLE_IN_LIST:
             const {updatedSample} = action;
             currentSampleIndex = _.findIndex(state.samples, {id: action.sampleId});
 
@@ -50,10 +50,10 @@ export default function samplesList(state = {
             const {samples} = action;
             return Object.assign({}, state, {
                 samples: [...samples],
-                savedSamples: _.cloneDeep(samples),
+                savedSamples: _.cloneDeep(samples)
             });
 
-        case ActionTypes.RESET_SAMPLES_LIST:
+        case ActionTypes.RESET_SAMPLE_IN_LIST:
             sampleId = action.sampleId;
             currentSampleIndex = _.findIndex(state.samples, {id: sampleId});
             const restoredValues = [...state.savedSamples[currentSampleIndex].values || []];
