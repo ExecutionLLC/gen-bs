@@ -1,6 +1,6 @@
 import React  from 'react';
-import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap';
+import {connect} from 'react-redux'
+import {Modal} from 'react-bootstrap';
 
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader'
 import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter'
@@ -17,7 +17,7 @@ class ViewsModal extends React.Component {
     render() {
         const {isValid, showModal, closeModal, viewBuilder} =this.props;
         const editedView = viewBuilder.editedView;
-        const isNew = (editedView)?editedView.id === null:false;
+        const isNew = (editedView) ? editedView.id === null : false;
         return (
 
 
@@ -59,7 +59,7 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {userData,viewBuilder} = state;
+    const {userData, viewBuilder} = state;
     const isValid = userData.isValid;
 
     return {

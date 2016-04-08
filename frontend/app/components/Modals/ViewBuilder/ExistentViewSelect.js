@@ -4,7 +4,7 @@ import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 
-import { viewBuilderToggleEdit, viewBuilderSelectView, viewBuilderToggleNew} from '../../../actions/viewBuilder'
+import {viewBuilderToggleEdit, viewBuilderSelectView, viewBuilderToggleNew} from '../../../actions/viewBuilder'
 
 
 export default class ExistentViewSelect extends React.Component {
@@ -19,7 +19,7 @@ export default class ExistentViewSelect extends React.Component {
             'disabled': (auth.isDemo) ? 'disabled' : ''
         });
         var title = (auth.isDemo) ? 'Login or register to work with view' : 'Make a copy for editing';
-        const isFilterEditable = (view.type === 'user');
+        const isViewEditable = (view.type === 'user');
 
         return (
 
@@ -29,7 +29,7 @@ export default class ExistentViewSelect extends React.Component {
                         <label data-localize="views.setup.selector.label">Available Views</label>
                     </div>
                 </div>
-                { !isFilterEditable &&
+                { !isViewEditable &&
                 <div className="alert alert-help">
                     <span data-localize="views.setup.selector.description">
                         This view is not editable, duplicate it to make changes.(Only for registered users)
