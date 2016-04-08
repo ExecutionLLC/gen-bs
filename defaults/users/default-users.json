@@ -117,5 +117,16 @@
     "number_paid_samples": 11,
     "login": "anton.konovalov",
     "password": "zxcasdqwe"
+  },
+  {
+    "id": "519a2634-e21d-aaaa-bbbb-f495e2201bc8",
+    "name": "Laura",
+    "last_name": "Li",
+    "email": "laurali001@gmail.com",
+    "speciality": "Doctor",
+    "language": "en",
+    "number_paid_samples": 11,
+    "login": "laura.li",
+    "password": "zxcasdqwe"
   }
 ]

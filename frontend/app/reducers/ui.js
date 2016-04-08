@@ -2,8 +2,6 @@ import * as ActionTypes from '../actions/ui'
 
 export default function ui(state = {
     queryNavbarClosed: true,
-    samples: [],
-    currentSample: null,
     currentView: null,
     currentFilter: null,
     currentLimit: 100,
@@ -17,12 +15,6 @@ export default function ui(state = {
         case ActionTypes.TOGGLE_QUERY_NAVBAR:
             return Object.assign({}, state, {
                 queryNavbarClosed: !state.queryNavbarClosed
-            });
-
-        case ActionTypes.CHANGE_SAMPLE:
-            return Object.assign({}, state, {
-                samples: action.samples,
-                currentSample: _.find(action.samples, {id: action.sampleId})
             });
 
         case ActionTypes.CHANGE_HEADER_VIEW:

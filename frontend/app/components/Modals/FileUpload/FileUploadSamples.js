@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-import { changeSample, updateSampleValue } from '../../../actions/ui'
+import { connect } from 'react-redux';
 
 import FileUploadSamplesRow from './FileUploadSamplesRow';
 
@@ -11,7 +10,7 @@ export default class FileUploadSamples extends Component {
     }
 
     render() {
-        let { samples,dispatch, closeModal } = this.props;
+        let { dispatch, closeModal, samplesList: {samples}} = this.props;
         if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
             console.error('No editable fields found');
             return null;
@@ -22,13 +21,15 @@ export default class FileUploadSamples extends Component {
         }
         return (
             <div>
-                <h4 data-localize="samples.search.label">Search for available samples</h4>
-                <div className="form-group has-feedback">
-                    <input type="text" onChange={e => this.setState({ searchWord: e.target.value })}
-                           className="form-control"/>
-                    <span className="form-control-feedback"><i className="fa fa-lg fa-search text-muted"/></span>
+                <div className="navbar navbar-search-full">
+                    <div className="navbar-search">
+                        <div className="navbar-search-field">
+                          <input type="text" placeholder="Search available samples" onChange={e => this.setState({ searchWord: e.target.value })}
+                               className="form-control material-input"/>
+                        </div>
+                    </div>
                 </div>
-                <div className="panel-group" style={{overflow: 'scroll', height: '400px'}}>
+                <div className="panel-group panel-group-scroll">
                     {samples.map(
                         sample => (
                             <FileUploadSamplesRow
@@ -38,7 +39,6 @@ export default class FileUploadSamples extends Component {
                                 samples={samples}
                                 dispatch={dispatch}
                                 closeModal={closeModal}
-                                onUpdateSampleValue={(valueFieldId, value) => dispatch(updateSampleValue(sample.id, valueFieldId, value))}
                             />
                         )
                     )}
@@ -47,3 +47,10 @@ export default class FileUploadSamples extends Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    const { samplesList } = state;
+    return { samplesList }
+}
+
+export default connect(mapStateToProps)(FileUploadSamples)
