@@ -32,21 +32,17 @@ export default class Filters extends Component {
         )
     }
 
-    isFilterDisable(filter){
+    isFilterDisabled(filter){
         const {auth} = this.props;
-        if (auth.isDemo &&filter.type=='advanced'){
-            return true;
-        }else {
-            return false;
-        }
+        return auth.isDemo &&filter.type=='advanced';
     }
 
     getFilterOptions() {
         const filters = this.props.userData.filters;
         return filters.map(f => {
-                const isDisable = this.isFilterDisable(f);
+                const isDisabled = this.isFilterDisabled(f);
                 return {
-                    value: f.id, label: f.name, disabled: isDisable
+                    value: f.id, label: f.name, disabled: isDisabled
                 }
             }
         )

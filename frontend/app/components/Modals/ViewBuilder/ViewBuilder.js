@@ -113,8 +113,7 @@ export default class ViewBuilder extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {viewBuilder, userData, fields} = state;
-    const views = userData.views;
+    const {viewBuilder, userData: {views}, fields} = state;
     return {
         viewBuilder,
         views,

@@ -30,22 +30,18 @@ export default class Views extends Component {
 
         )
     }
-    isViewDisable(view){
+    isViewDisabled(view){
         const {auth} = this.props
-        if (auth.isDemo &&view.type=='advanced'){
-            return true;
-        }else {
-            return false;
-        }
+        return auth.isDemo && view.type == 'advanced';
     }
 
     getViewOptions() {
         const views = this.props.views;
         return views.map(
             v => {
-                const isDisable = this.isViewDisable(v);
+                const isDisabled = this.isViewDisabled(v);
                 return {
-                    value: v.id, label: v.name, disabled: isDisable
+                    value: v.id, label: v.name, disabled: isDisabled
                 }
             }
         )

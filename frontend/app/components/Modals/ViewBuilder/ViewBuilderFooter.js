@@ -1,22 +1,22 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
 
 import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} from '../../../actions/viewBuilder'
 
-export default class ViewBuilderFooter extends  React.Component {
+export default class ViewBuilderFooter extends React.Component {
 
     render() {
-        const { auth, viewBuilder } = this.props;
+        const {auth, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
         var disabledClass = classNames({
-            'disabled': (editedView.type === 'advanced' && auth.isDemo) ? 'disabled':''
+            'disabled': (editedView.type === 'advanced' && auth.isDemo) ? 'disabled' : ''
         });
         var title = (editedView.type === 'advanced' && auth.isDemo) ?
-            'Login or register to select advanced view':'';
+            'Login or register to select advanced view' : '';
         const isViewEditable = (editedView.type === 'user');
-        const selectButtonLabel = isViewEditable ? 'Save and Select': 'Select';
+        const selectButtonLabel = isViewEditable ? 'Save and Select' : 'Select';
 
         return (
 
@@ -44,23 +44,22 @@ export default class ViewBuilderFooter extends  React.Component {
         )
     }
 
-    cancelOnClick(){
-        const {dispatch,closeModal,views,viewBuilder} =this.props;
+    cancelOnClick() {
+        const {dispatch, closeModal, views, viewBuilder} =this.props;
         const currentView = viewBuilder.currentView;
         closeModal('views');
         dispatch(viewBuilderSelectView(views, currentView.id, true));
     }
 
-    selectOnClick(){
-        const {dispatch,viewBuilder} =this.props;
+    selectOnClick() {
+        const {dispatch, viewBuilder} =this.props;
         const editedView = viewBuilder.editedView;
-        editedView.id!==null ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView());
+        editedView.id !== null ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView());
     }
 }
 
 function mapStateToProps(state) {
-    const { auth, viewBuilder, userData } = state;
-    const views = userData.views;
+    const {auth, viewBuilder, userData :{views}} = state;
     return {
         views,
         auth,

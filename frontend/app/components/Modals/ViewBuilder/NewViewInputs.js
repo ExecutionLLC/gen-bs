@@ -59,8 +59,7 @@ export default class NewViewInputs extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {viewBuilder, userData} = state;
-    const views = userData.views;
+    const {viewBuilder, userData: {views}} = state;
     return {
         views,
         viewBuilder
