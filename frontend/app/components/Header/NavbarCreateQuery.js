@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
 
 import Upload from './NavbarCreateQuery/Upload'
 import MetadataSearch from './NavbarCreateQuery/MetadataSearch'
@@ -72,7 +72,7 @@ class NavbarCreateQuery extends Component {
 }
 
 function mapStateToProps(state) {
-    const { modalWindows, userData, ui, samplesList} = state
+    const {modalWindows, userData, ui, auth, samplesList} = state;
 
     return {
         modalWindows,
@@ -80,6 +80,7 @@ function mapStateToProps(state) {
         views: userData.views,
         filters: userData.filters,
         ui,
+        auth,
         samplesList
     }
 }

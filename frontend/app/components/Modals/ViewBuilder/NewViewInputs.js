@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import React from 'react';
+import {connect} from 'react-redux';
+import {viewBuilderToggleEdit, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
 
-import { viewBuilderToggleNewEdit, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
 
-
-export default class NewViewInputs extends Component {
+export default class NewViewInputs extends React.Component {
 
     render() {
 
-        const { dispatch, showModal, closeModal } = this.props
-        const { views } = this.props.userData
-        const { newView } = this.props.viewBuilder
+        const {dispatch, viewBuilder, views} = this.props;
+        const newView = viewBuilder.editedView;
 
         return (
 
@@ -25,7 +23,7 @@ export default class NewViewInputs extends Component {
                             data-localize="views.setup.new.name.help"
                             placeholder="Set view name a copy"
                             value={newView.name}
-                            onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: e.target.value, desctription: newView.desctription, })) }
+                            onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: e.target.value, description: newView.description})) }
                         />
                         { !newView.name &&
                         <div className="help-text text-danger" data-localize="views.setup.new.name.error">
@@ -49,7 +47,7 @@ export default class NewViewInputs extends Component {
                     <div className="col-sm-1">
                         <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
                                 data-toggle="collapse" data-target=".copyview "
-                                onClick={ () => dispatch(viewBuilderToggleNewEdit(true)) }><span
+                                onClick={ () => dispatch(viewBuilderToggleEdit(views,newView.originalViewId)) }><span
                             data-localize="actions.cancel">Cancel</span></button>
                     </div>
 
@@ -59,3 +57,13 @@ export default class NewViewInputs extends Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    const {viewBuilder, userData: {views}} = state;
+    return {
+        views,
+        viewBuilder
+    }
+}
+
+export default connect(mapStateToProps)(NewViewInputs);
