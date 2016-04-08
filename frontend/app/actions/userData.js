@@ -74,9 +74,9 @@ export function fetchUserdata() {
                 dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
                 const result = response.body;
-                const view = _.find(result.views, view =>view.type == 'standard');
+                const view = _.find(result.views, view => view.type == 'standard');
                 const sample = result.samples[0] || null;
-                const filter = _.find(result.filters, filter =>filter.type == 'standard');
+                const filter = _.find(result.filters, filter => filter.type == 'standard');
                 dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
