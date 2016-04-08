@@ -1,10 +1,9 @@
-import config from '../../config'
-
 import apiFacade from '../api/ApiFacade'
 import { handleError } from './errorHandler'
 import { fetchFields, fetchTotalFields } from './fields'
 import { analyze, changeSample, changeView, changeFilter } from './ui'
 import { receiveSavedFilesList } from './savedFiles';
+import { receiveQueryHistory } from './queryHistory';
 
 import HttpStatus from 'http-status';
 
@@ -23,6 +22,8 @@ export const REQUEST_FILTERS = 'REQUEST_FILTERS';
 export const RECEIVE_SAMPLES = 'RECEIVE_SAMPLES';
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
 
+export const ATTACH_HISTORY_DATA = 'ATTACH_HISTORY_DATA';
+export const DETACH_HISTORY_DATA = 'DETACH_HISTORY_DATA';
 
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
@@ -82,6 +83,7 @@ export function fetchUserdata() {
                 dispatch(analyze(sample.id, view.id, filter.id));
                 dispatch(fetchFields(sample.id));
                 dispatch(fetchTotalFields());
+                dispatch(receiveQueryHistory(result.queryHistory));
             }
         });
     }
@@ -195,5 +197,23 @@ export function fetchSamples() {
                 dispatch(changeSample(samples, sampleId));
             }
         });
+    }
+}
+
+export function attachHistoryData(historyItem) {
+    return {
+        type: ATTACH_HISTORY_DATA,
+        sample: historyItem.sample,
+        view: historyItem.view,
+        filters: historyItem.filters
+    }
+}
+
+export function detachHistoryData(detachSample, detachFilter, detachView) {
+    return {
+        type: DETACH_HISTORY_DATA,
+        detachSample,
+        detachFilter,
+        detachView
     }
 }

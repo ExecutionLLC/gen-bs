@@ -76,6 +76,10 @@ class Urls {
         return this._constructApiUrl('/data');
     }
 
+    queryHistory() {
+        return this._constructApiUrl('/history');
+    }
+
     startSearch() {
         return this._constructApiUrl('/search');
     }
