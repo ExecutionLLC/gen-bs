@@ -6,6 +6,7 @@ import { receiveSavedFilesList } from './savedFiles';
 import { receiveQueryHistory } from './queryHistory';
 
 import HttpStatus from 'http-status';
+import * as _ from "lodash";
 
 /*
  * action types
@@ -72,9 +73,9 @@ export function fetchUserdata() {
                 dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
                 const result = response.body;
-                const view = result.views[0] || null;
+                const view =_.find(result.views,view =>view.type == 'standard');
                 const sample = result.samples[0] || null;
-                const filter = result.filters[0] || null;
+                const filter = _.find(result.filters,filter =>filter.type == 'standard');
                 dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));

@@ -10,7 +10,6 @@ export default class Filters extends Component {
     }
 
     render() {
-        const filters = this.props.userData.filters;
         const dispatch = this.props.dispatch;
         const currentFilter = this.props.ui.currentFilter;
 
@@ -23,13 +22,33 @@ export default class Filters extends Component {
                      data-container="body"
                      title="Select one or more from available filters"
                 >
-                    <Select options={filters.map( filter => { return {value: filter.id, label: filter.name} } )}
+                    <Select options={this.getFilterOptions()}
                             value={currentFilter ? currentFilter.id : null}
                             clearable={false}
                             onChange={(item) => dispatch(changeFilter(item.value))}
                     />
                 </div>
             </div>
+        )
+    }
+
+    isFilterDisable(filter){
+        const {auth} = this.props;
+        if (auth.isDemo &&filter.type=='advanced'){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    getFilterOptions() {
+        const filters = this.props.userData.filters;
+        return filters.map(f => {
+                const isDisable = this.isFilterDisable(f);
+                return {
+                    value: f.id, label: f.name, disabled: isDisable
+                }
+            }
         )
     }
 }
