@@ -19,6 +19,7 @@ export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER'
 export const FBUILDER_REQUEST_RULES = 'FBUILDER_REQUEST_RULES'
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES'
 
+export const FBUILDER_CHANGE_ALL = 'FBUILDER_CHANGE_ALL';
 
 /*
  * Action Creators
@@ -152,5 +153,11 @@ export function filterBuilderRules(rules) {
     }
 }
 
-
+export function filterBuilderChangeAll(data) {
+    console.log('filterBuilderChangeAll', data);
+    return {
+        type: FBUILDER_CHANGE_ALL,
+        rules: data
+    };
+}
 

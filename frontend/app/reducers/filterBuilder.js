@@ -86,6 +86,21 @@ export default function filterBuilder(state = {
                 currentFilter: action.filter
             })
 
+        case ActionTypes.FBUILDER_CHANGE_ALL: return (function() {
+            const { editOrNew, editedFilter, newFilter } = state;
+            const filter = editOrNew ? (editedFilter):(newFilter);
+
+            if (editOrNew) {
+                return Object.assign({}, state, {
+                    editedFilter: Object.assign({}, state.editedFilter, {rules: action.rules})
+                });
+            } else {
+                return Object.assign({}, state, {
+                    newFilter: Object.assign({}, state.newFilter, {rules: action.rules})
+                });
+            }
+        })();
+
         default:
             return state
     }
