@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 
-import { fetchFields } from '../../actions/fields';
-
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadFooter from './FileUpload/FileUploadFooter';
 import FileUpload from './FileUpload/FileUpload';
@@ -30,7 +28,7 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, ui, fileUpload, userData: { samples }, fields: { list, editableFields } } = state;
+    const {auth, ui, fileUpload, samplesList: {samples}, fields: {editableFields}} = state;
 
     return {
         auth,

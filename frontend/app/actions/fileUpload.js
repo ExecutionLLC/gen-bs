@@ -1,6 +1,6 @@
 import config from '../../config'
 import { closeModal } from './modalWindows'
-import { fetchSamples } from './userData'
+import {fetchSamples} from './samplesList';
 import gzip from '../utils/gzip'
 
 /*

@@ -5,8 +5,8 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
 import {
-    changeSample, initSamplesList, updateSampleValue, resetSampleInList,
-    updateSampleFields, requestUpdateSampleFields
+    changeSample, receiveSamplesList, updateSampleValue, resetSampleInList,
+    requestUpdateSampleFields
 } from '../../../actions/samplesList'
 
 
@@ -49,7 +49,7 @@ export default class FileUploadSamplesRow extends Component {
             <div className="panel-footer">
 
               <a onClick={() => {
-                    dispatch(initSamplesList(samples));
+                    dispatch(receiveSamplesList(samples));
                     dispatch(changeSample(sample.id));
                     closeModal('upload');
                   }}
