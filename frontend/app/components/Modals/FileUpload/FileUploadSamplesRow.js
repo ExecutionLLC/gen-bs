@@ -17,9 +17,43 @@ export default class FileUploadSamplesRow extends Component {
         this.state = {showValues: false};
     }
 
-    clickShowValues(e) {
+    onShowValuesClick(e) {
         e.preventDefault();
-        this.setState({showValues: !this.state.showValues});
+        this.setShowValuesState(!this.state.showValues);
+    }
+
+    onSelectForAnalyzisClick(e, sample) {
+        e.preventDefault();
+        const {dispatch, closeModal, samplesList: {samples}} = this.props;
+        dispatch(receiveSamplesList(samples));
+        dispatch(changeSample(sample.id));
+        closeModal('upload');
+    }
+
+    onSampleValueUpdated(sampleId, fieldId, newValue) {
+        const {dispatch} = this.props;
+        dispatch(updateSampleValue(sampleId, fieldId, newValue));
+    }
+
+    onCancelSampleEditingClick(e, sample) {
+        e.preventDefault();
+
+        const {dispatch} = this.props;
+        dispatch(resetSampleInList(sample.id));
+        this.setShowValuesState(false);
+    }
+
+    onSaveEditedSampleClick(e, sample) {
+        e.preventDefault();
+
+        const {dispatch} = this.props;
+        dispatch(requestUpdateSampleFields(sample.id))
+    }
+
+    setShowValuesState(showValues) {
+        this.setState({
+            showValues
+        });
     }
 
     render() {
@@ -44,21 +78,17 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderFooter() {
-        const {sample, samples, dispatch, closeModal} = this.props;
+        const {sample} = this.props;
         return (
             <div className="panel-footer">
 
-                <a onClick={() => {
-                    dispatch(receiveSamplesList(samples));
-                    dispatch(changeSample(sample.id));
-                    closeModal('upload');
-                  }}
+                <a onClick={(e) => this.onSelectForAnalyzisClick(e)}
                    className="btn btn-link btn-uppercase"
                    type="button">
                     <span data-localize="samples.settings.select.title">Select for analysis</span>
                 </a>
                 {sample.type === 'user'
-                && <a onClick={e => this.clickShowValues(e)}
+                && <a onClick={e => this.onShowValuesClick(e)}
                       className="btn btn-link btn-uppercase" role="button"
                       data-toggle="collapse" data-parent="#accordion"
                       href="#collapseOne" aria-expanded="false"
@@ -70,7 +100,7 @@ export default class FileUploadSamplesRow extends Component {
 
     renderSelectField(field) {
         let fieldValue;
-        const {sample, dispatch, samplesList} = this.props;
+        const {sample, samplesList} = this.props;
         const selectOptions = field.availableValues.map(
             option => {
                 return {value: option.id, label: option.value}
@@ -93,20 +123,20 @@ export default class FileUploadSamplesRow extends Component {
                         options={selectOptions}
                         clearable={false}
                         value={fieldValue}
-                        onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.value))}
+                        onChange={(e) => this.onSampleValueUpdated(sample.id, field.id, e.value)}
                     />
                 </dd>
             </dl>
         );
     }
 
-    renderTextField(values, field) {
+    renderTextField(field) {
         let fieldValue;
-        const {sample, dispatch, samplesList} = this.props;
-        const currentSampleIndex = _.findIndex(samplesList.samples, {id: sample.id});
+        const {sample, samplesList: {samples}} = this.props;
+        const currentSampleIndex = _.findIndex(samples, {id: sample.id});
 
         if (currentSampleIndex >= 0) {
-            const storedValue = _.find(samplesList.samples[currentSampleIndex].values || [], item => item.fieldId === field.id);
+            const storedValue = _.find(samples[currentSampleIndex].values || [], item => item.fieldId === field.id);
             fieldValue = storedValue ? storedValue.values : '';
         } else {
             fieldValue = '';
@@ -120,7 +150,7 @@ export default class FileUploadSamplesRow extends Component {
                         type="text"
                         className="form-control"
                         value={fieldValue}
-                        onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.target.value)) }
+                        onChange={(e) => this.onSampleValueUpdated(sample.id, field.id, e.target.value) }
                     />
                 </dd>
             </dl>
@@ -128,11 +158,11 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderRowButtons() {
-        const {sample, dispatch} = this.props;
+        const {sample} = this.props;
         return (
             <div className="btn-group ">
                 <button
-                    onClick={ () => dispatch(resetSampleInList(sample.id)) }
+                    onClick={ (e) => this.onCancelSampleEditingClick(e, sample) }
                     type="button"
                     className="btn btn-default"
                 >
@@ -140,7 +170,7 @@ export default class FileUploadSamplesRow extends Component {
                 </button>
 
                 <button
-                    onClick={ () => dispatch(requestUpdateSampleFields(sample.id)) }
+                    onClick={ (e) => this.onSaveEditedSampleClick(e, sample) }
                     type="button"
                     className="btn btn-primary"
                 >
@@ -151,8 +181,8 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderValues() {
-        const {sample} = this.props;
-        const values = _.indexBy(sample.values, 'fieldId');
+        // TODO: Refactor render*Field methods to move all the calculations
+        // to the upper level to do them only once.
         return (
             <Panel collapsible
                    expanded={this.state.showValues}
@@ -163,7 +193,7 @@ export default class FileUploadSamplesRow extends Component {
                         if (field.availableValues) {
                             return this.renderSelectField(field);
                         } else {
-                            return this.renderTextField(values, field);
+                            return this.renderTextField(field);
                         }
 
                     })}
