@@ -65,7 +65,9 @@ class ApplicationServerService extends ServiceBase {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
             (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
-            (operation, callback) => this._rpcSend(operation.getId(), method, _.map(sourceNames, (sourceName) => { return sourceName + '.h5'}), callback)
+            (operation, callback) => this._rpcSend(operation.getId(), method, _.map(sourceNames, (sourceName) => {
+                return sourceName + '.h5'
+            }), callback)
         ], callback);
     }
 
@@ -191,9 +193,9 @@ class ApplicationServerService extends ServiceBase {
                     params.globalSearchValue.excludedFields, (error, fields) => callback(error, fields, operation)
                 );
             },
-            (fields, operation, callback)=> {
-                const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue.filter, fields,
-                    params.fieldSearchValues, params.sortValues);
+            (excludedFields, operation, callback)=> {
+                const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue.filter,
+                    excludedFields, params.fieldSearchValues, params.sortValues);
                 this._rpcSend(operationId, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
@@ -233,8 +235,7 @@ class ApplicationServerService extends ServiceBase {
                         }
                     }
                 )
-            }
-            ,
+            },
             columnFilters: _.map(fieldSearchValues, fieldSearchValue => {
                 return {
                     columnName: this._getPrefixedFieldName(fieldSearchValue.fieldMetadata),
@@ -265,7 +266,7 @@ class ApplicationServerService extends ServiceBase {
             const field = fieldIdToMetadata[listItem.fieldId];
             return {
                 columnName: field.name,
-                isAscendingOrder: (listItem.sortDirection && listItem.sortDirection === 'asc')? true : false
+                isAscendingOrder: (listItem.sortDirection && listItem.sortDirection === 'asc') ? true : false
             };
         });
 
@@ -278,7 +279,7 @@ class ApplicationServerService extends ServiceBase {
      * */
     _getAppServerSampleId(sample) {
         return sample.type === 'standard' || sample.type === 'advanced' ?
-                sample.fileName : sample.originalId;
+            sample.fileName : sample.originalId;
     }
 
     _getPrefixedFieldName(fieldMetadata) {
