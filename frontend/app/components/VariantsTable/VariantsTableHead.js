@@ -5,7 +5,7 @@ import FieldHeader from './FieldHeader';
 import  { firstCharToUpperCase } from '../../utils/stringUtils';
 import FieldUtils from '../../utils/fieldUtils';
 
-import { changeVariantsFilter, sortVariants, searchInResultsSortFilter } from '../../actions/variantsTable';
+import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
 
 export default class VariantsTableHead extends Component {
 
@@ -66,10 +66,10 @@ export default class VariantsTableHead extends Component {
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
             dispatch(sortVariants(fieldId, direction, isControlKeyPressed));
         const sendSearchRequest = (fieldId, searchValue) => {
-            dispatch(changeVariantsFilter(fieldId, searchValue));
+            dispatch(setFieldFilter(fieldId, searchValue));
             dispatch(searchInResultsSortFilter());
         };
-        const onSearchValueChanged = (fieldId, searchValue) => dispatch(changeVariantsFilter(fieldId, searchValue));
+        const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, searchValue));
         return (
             <FieldHeader key={fieldId}
                          fieldId={fieldId}

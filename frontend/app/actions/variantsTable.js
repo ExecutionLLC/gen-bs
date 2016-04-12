@@ -11,7 +11,7 @@ import HttpStatus from 'http-status';
 
 export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
-export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER';
+export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
 export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
@@ -107,11 +107,11 @@ export function setExcludedFields(excludedFields) {
     }
 }
 
-export function changeVariantsFilter(fieldId, filterValue) {
+export function setFieldFilter(fieldId, filterValue) {
     return {
-        type: CHANGE_VARIANTS_FILTER,
-        fieldId: fieldId,
-        filterValue: filterValue
+        type: SET_FIELD_FILTER,
+        fieldId,
+        filterValue
     }
 }
 
