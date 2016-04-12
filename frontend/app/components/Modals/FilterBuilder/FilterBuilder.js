@@ -55,91 +55,7 @@ function makeKeyMaker() {
 
 
 const filterParser = {
-    condition: {
-        '$and': {isAnd: true},
-        '$or': {isAnd: false}
-    },
-    /**
-     * @param {string} id
-     * @returns {{isAnd: boolean}|null}
-     */
-    getGroupIdCondition: function(id) {
-        return this.condition[id]
-    },
-    /**
-     * @param {Object} item
-     * @returns {{group: {isAnd: boolean}, items: Array}|{id: string, item: Object}|null}
-     */
-    parseGroupRule: function(item) {
-        const ruleOnly = getOnlyProperty(item);
-        if (!ruleOnly) {
-            return null;
-        }
-        const condition = this.getGroupIdCondition(ruleOnly.key);
-        if (condition) {
-            return {
-                group: condition,
-                items: ruleOnly.val
-            };
-        }
-        return {
-            id: ruleOnly.key,
-            item: ruleOnly.val
-        };
-    },
     ops: {
-        genomicsOperators: {
-            equal:            function(v) { return { '$eq': v[0] }; },
-            not_equal:        function(v) { return { '$neq': v[0] }; },
-            in:               function(v) { return { '$in': v }; },
-            not_in:           function(v) { return { '$nin': v }; },
-            less:             function(v) { return { '$lt': v[0] }; },
-            less_or_equal:    function(v) { return { '$lte': v[0] }; },
-            greater:          function(v) { return { '$gt': v[0] }; },
-            greater_or_equal: function(v) { return { '$gte': v[0] }; },
-            between:          function(v) { return { '$between': v }; },
-            not_between:      function(v) { return { '$nbetween': v }; },
-            begins_with:      function(v) { return { '$begin_with': v[0] }; },
-            not_begins_with:  function(v) { return { '$nbegin_with': v[0] }; },
-            contains:         function(v) { return { '$contains': v[0] }; },
-            not_contains:     function(v) { return { '$ncontains': v[0] }; },
-            ends_with:        function(v) { return { '$end_with': v[0] }; },
-            not_ends_with:    function(v) { return { '$nend_with': v[0] }; },
-            is_empty:         function(v) { return { '$eq': '' }; },
-            is_not_empty:     function(v) { return { '$neq': '' }; },
-            is_null:          function(v) { return { '$eq': null }; },
-            is_not_null:      function(v) { return { '$neq': null }; }
-        },
-        genomicsRuleOperators: {
-            $eq: function(v) {
-                v = v.$eq;
-                return {
-                    'val': v,
-                    'op': v === null ? 'is_null' : (v === '' ? 'is_empty' : 'equal')
-                };
-            },
-            $neq: function(v) {
-                v = v.$neq;
-                return {
-                    'val': v,
-                    'op': v === null ? 'is_not_null' : (v === '' ? 'is_not_empty' : 'not_equal')
-                };
-            },
-            $in: function(v) { return { 'val': v.$in, 'op': 'in' }; },
-            $nin: function(v) { return { 'val': v.$nin, 'op': 'not_in' }; },
-            $lt: function(v) { return { 'val': v.$lt, 'op': 'less' }; },
-            $lte: function(v) { return { 'val': v.$lte, 'op': 'less_or_equal' }; },
-            $gt: function(v) { return { 'val': v.$gt, 'op': 'greater' }; },
-            $gte: function(v) { return { 'val': v.$gte, 'op': 'greater_or_equal' }; },
-            $begin_with: function(v) { return { 'val': v.$begin_with, 'op': 'begins_with' }; },
-            $nbegin_with: function(v) { return { 'val': v.$nbegin_with, 'op': 'not_begins_with' }; },
-            $contains: function(v) { return { 'val': v.$contains, 'op': 'contains' }; },
-            $ncontains: function(v) { return { 'val': v.$ncontains, 'op': 'not_contains' }; },
-            $between: function(v) { return { 'val': v.$between, 'op': 'between' }; },
-            $nbetween: function(v) { return { 'val': v.$nbetween, 'op': 'not_between' }; },
-            $end_with: function(v) { return { 'val': v.$end_with, 'op': 'ends_with' }; },
-            $nend_with: function(v) { return { 'val': v.$nend_with, 'op': 'not_ends_with' }; }
-        },
         genomicsRuleOperatorsLabels: {
             "equal": "equal",
             "not_equal": "not equal",
@@ -236,30 +152,42 @@ class FilterQueryBuilder extends Component {
 
         const fieldDefault = fields[Object.keys(fields)[0]].id;
 
+
+        function findSubrules(index) {
+            var searchIndex = index.slice();
+            var subrules = parsedRules;
+            var indexNow;
+            while (searchIndex.length) {
+                subrules = subrules.rules;
+                indexNow = searchIndex.shift();
+                subrules = subrules[indexNow];
+            }
+            return subrules;
+        }
+
+        function findSubrulesWIndex(index) {
+            var searchIndex = index.slice();
+            var subrules = parsedRules;
+            var indexIn = null;
+            while (searchIndex.length) {
+                subrules = subrules.rules;
+                indexIn = searchIndex.shift();
+                if (searchIndex.length) {
+                    subrules = subrules[indexIn];
+                }
+            }
+            return {subrules: subrules, indexIn: indexIn};
+        }
+
         const handlers = {
             onSwitch(index, isAnd) {
-
-                var searchIndex = index.slice();
-                var subrules = parsedRules;
-                var indexNow;
-                while (searchIndex.length) {
-                    subrules = subrules.rules;
-                    indexNow = searchIndex.shift();
-                    subrules = subrules[indexNow];
-                }
+                const subrules = findSubrules(index);
                 subrules.condition = isAnd ? 'AND' : 'OR';
 
                 dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
             },
             onAdd(index, isGroup) {
-                var searchIndex = index.slice();
-                var subrules = parsedRules;
-                var indexNow = null;
-                while (searchIndex.length) {
-                    subrules = subrules.rules;
-                    indexNow = searchIndex.shift();
-                    subrules = subrules[indexNow];
-                }
+                const subrules = findSubrules(index);
                 if (isGroup) {
                     subrules.rules.push({condition: 'AND', rules: [{id: fieldDefault, field: fieldDefault, operator: 'is_null', value: null}]});
                 } else {
@@ -268,30 +196,14 @@ class FilterQueryBuilder extends Component {
                 dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
             },
             onDeleteGroup(index) {
-                var searchIndex = index.slice();
-                var subrules = parsedRules;
-                var indexNow = null;
-                while (searchIndex.length) {
-                    subrules = subrules.rules;
-                    indexNow = searchIndex.shift();
-                    if (searchIndex.length) {
-                        subrules = subrules[indexNow];
-                    }
-                }
-                if (indexNow != null) {
-                    subrules.splice(indexNow, 1);
+                const {subrules, indexIn} = findSubrulesWIndex(index);
+                if (indexIn != null && subrules.length > 1) {
+                    subrules.splice(indexIn, 1);
                     dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
                 }
             },
             onDeleteItem(index, itemIndex) {
-                var searchIndex = index.slice();
-                var subrules = parsedRules;
-                var indexNow = null;
-                while (searchIndex.length) {
-                    subrules = subrules.rules;
-                    indexNow = searchIndex.shift();
-                    subrules = subrules[indexNow];
-                }
+                const subrules = findSubrules(index);
                 if (subrules.rules.length > 1) {
                     subrules.rules.splice(itemIndex, 1);
                     dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
@@ -309,18 +221,8 @@ class FilterQueryBuilder extends Component {
                     disabled={disabled}
                     onChange={ (item) => {
 
-                        var searchIndex = index.slice();
-                        var subrules = parsedRules;
-                        var indexNow;
-                        while (searchIndex.length) {
-                            subrules = subrules.rules;
-                            indexNow = searchIndex.shift();
-                            if (searchIndex.length) {
-                               subrules = subrules[indexNow];
-                            }
-                        }
-
-                        subrules[indexNow] = item;
+                        const {subrules, indexIn} = findSubrulesWIndex(index);
+                        subrules[indexIn] = item;
                         dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
                     }}
                 />
