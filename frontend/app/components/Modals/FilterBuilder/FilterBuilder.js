@@ -648,56 +648,9 @@ class NullFilterItem extends Component {
 
 export default class FilterBuilder extends Component {
 
-  componentDidMount() {
-    const { fields } = this.props;
-    const { editOrNew, editedFilter, newFilter } = this.props.filterBuilder;
-    const filter = editOrNew ? (editedFilter):(newFilter);
-    var el = this.refs.builder;
-
-    const builderFilters = this.makeFieldsList(fields);/*[
-
-        ...fields.notEditableFields.map( (f) => { return {id: f.id, label: `${f.name} -- ${f.source_name}`, type: f.value_type === 'float' ? 'double' : f.value_type} } ),
-        ...fields.sourceFieldsList.filter((f) => (f.source_name !== 'sample')).map( (f) => { return {id: f.id, label: `${f.name} -- source`, type: f.value_type === 'float' ? 'double' : f.value_type }} )
-
-      ];*/
-    window.$(el).queryBuilder({
-      filters: builderFilters,
-      operators: filterOperators
-    });
-    this.setFilterInfo(filter, el);
-    this.disableFilter(filter,el);
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.fields !== nextProps.fields
       || this.props.filterBuilder !== nextProps.filterBuilder;
-  }
-
-  setFilterInfo(filter,el) {
-    window.$(el).queryBuilder('setRulesFromGenomics', filter.rules);
-  }
-
-  disableFilter(filter,el) {
-/*
-    window.$(el).queryBuilder('setRulesFromGenomics', filter.rules);
-    if (filter.type === 'standard' || filter.type == 'advanced') {
-      //inputs and selects
-      window.$('input[name*="builder-basic_rule"],select[name*="builder-basic_rule"]')
-          .prop('disabled', true);
-      //and, or operators
-      window.$('div[class*="group-conditions"]')
-          .children()
-          .children()
-          .prop('disabled', true);
-      //add rule ,add group
-      window.$('div[class*="group-actions"]')
-          .children()
-          .prop('disabled', true);
-      window.$('div[class*="rule-actions"]')
-          .children()
-          .prop('disabled', true);
-    }
-*/
   }
 
   makeFieldsList(fields) {
@@ -733,39 +686,12 @@ There must be not editable fields to prevent select gender for the person
     ];
   }
 
-  componentWillUpdate(nextProps) {
-    const { dispatch, fields } = nextProps;
-    const { editOrNew, rulesRequested, editedFilter, newFilter } = nextProps.filterBuilder;
-    const filter = editOrNew ? (editedFilter):(newFilter);
-    var el = this.refs.builder;
-    var rules = [];
-    const builderFilters = this.makeFieldsList(fields);/*[
-
-        ...fields.sampleFieldsList.map( (f) => { return {id: f.id, label: `${f.label} -- ${f.source_name}`, type: f.value_type === 'float' ? 'double' : f.value_type} } ),
-        ...fields.sourceFieldsList.filter((f) => (f.source_name !== 'sample')).map( (f) => { return {id: f.id, label: `${f.label} -- source`, type: f.value_type === 'float' ? 'double' : f.value_type }} )
-
-      ];*/
-
-    if(rulesRequested) {
-      rules = window.$(el).queryBuilder('getGenomics');
-      dispatch(filterBuilderReceiveRules(rules))
-    } else {
-      window.$(el).queryBuilder({
-        filters: builderFilters,
-        operators: filterOperators
-      });
-      this.setFilterInfo(filter, el);
-      this.disableFilter(filter,el);
-    }
-  }
-
   render() {
     const { editOrNew, rulesRequested, editedFilter, newFilter } = this.props.filterBuilder;
     const filter = editOrNew ? (editedFilter):(newFilter);
     return (
       <div className="builder-wrapper">
           <div>{filter.type || 'no type' + typeof filter.type + '   ' + JSON.stringify(filter)}</div>
-        <div id="builder-basic" className="query-builder form-inline" ref="builder"></div>
         <FilterQueryBuilder
             fields={this.makeFieldsList(this.props.fields)}
             rules={filter.rules}
