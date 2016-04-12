@@ -4,7 +4,7 @@ import {fetchFields, fetchTotalFields} from './fields'
 import {receiveSavedFilesList} from './savedFiles';
 import {receiveQueryHistory} from './queryHistory';
 import {analyze, changeView, changeFilter} from './ui';
-import {changeSample, initSamplesList} from './samplesList';
+import {changeSample, receiveSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
 import * as _ from "lodash";
@@ -21,9 +21,6 @@ export const REQUEST_VIEWS = 'REQUEST_VIEWS';
 export const RECEIVE_FILTERS = 'RECEIVE_FILTERS';
 export const REQUEST_FILTERS = 'REQUEST_FILTERS';
 
-export const RECEIVE_SAMPLES = 'RECEIVE_SAMPLES';
-export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
-
 export const ATTACH_HISTORY_DATA = 'ATTACH_HISTORY_DATA';
 export const DETACH_HISTORY_DATA = 'DETACH_HISTORY_DATA';
 
@@ -33,15 +30,11 @@ const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). Yo
 const FETCH_FILTERS_NETWORK_ERROR = 'Cannot update filters data (network error). You can reload page and try again.';
 const FETCH_FILTERS_SERVER_ERROR = 'Cannot update filters data (server error). You can reload page and try again.';
 
-const FETCH_SAMPLES_NETWORK_ERROR = 'Cannot update samples data (network error). You can reload page and try again.';
-const FETCH_SAMPLES_SERVER_ERROR = 'Cannot update samples data (server error). You can reload page and try again.';
-
 const FETCH_VIEWS_NETWORK_ERROR = 'Cannot update views data (network error). You can reload page and try again.';
 const FETCH_VIEWS_SERVER_ERROR = 'Cannot update views data (server error). You can reload page and try again.';
 
 const dataClient = apiFacade.dataClient;
 const filtersClient = apiFacade.filtersClient;
-const samplesClient = apiFacade.samplesClient;
 const viewsClient = apiFacade.viewsClient;
 
 /*
@@ -76,16 +69,17 @@ export function fetchUserdata() {
                 const result = response.body;
                 const view = _.find(result.views, view => view.type == 'standard');
                 const sample = result.samples[0] || null;
+                const sampleId = sample ? sample.id : null;
                 const filter = _.find(result.filters, filter => filter.type == 'standard');
                 dispatch(receiveUserdata(result));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
                 dispatch(receiveSavedFilesList(result.savedFiles));
-                dispatch(analyze(sample.id, view.id, filter.id));
-                dispatch(fetchFields(sample.id));
+                dispatch(analyze(sampleId, view.id, filter.id));
+                dispatch(fetchFields(sampleId));
                 dispatch(fetchTotalFields());
-                dispatch(initSamplesList(result.samples));
-                dispatch(changeSample(sample.id));
+                dispatch(receiveSamplesList(result.samples));
+                dispatch(changeSample(sampleId));
                 dispatch(receiveQueryHistory(result.queryHistory));
             }
         });
@@ -161,44 +155,6 @@ export function fetchFilters() {
 
                 dispatch(receiveFilters(result));
                 dispatch(changeFilter(filterId));
-            }
-        });
-    }
-}
-
-function requestSamples() {
-    return {
-        type: REQUEST_SAMPLES
-    }
-}
-
-function receiveSamples(json) {
-    return {
-        type: RECEIVE_SAMPLES,
-        samples: json,
-        receivedAt: Date.now()
-    }
-}
-
-export function fetchSamples() {
-
-    return (dispatch, getState) => {
-        dispatch(requestSamples());
-
-        const sessionId = getState().auth.sessionId;
-        samplesClient.getAll(sessionId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, FETCH_SAMPLES_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
-            } else {
-                const samples = response.body;
-                const sample = getState().samplesList.currentSample || samples[0] || null;
-                const sampleId = sample.id;
-
-                dispatch(receiveSamples(samples));
-                dispatch(initSamplesList(samples));
-                dispatch(changeSample(sampleId));
             }
         });
     }

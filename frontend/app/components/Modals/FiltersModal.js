@@ -11,11 +11,8 @@ import NewFilterInputs from './FilterBuilder/NewFilterInputs'
 class FiltersModal extends Component {
     render() {
 
-        const { dispatch, showModal, closeModal } = this.props;
-        const { currentFilter } = this.props.ui;
-        const { currentSample } = this.props.samplesList;
-        const { samples, views, isValid } = this.props.userData;
-        const { editOrNew, editedFilter, newFilter} = this.props.filterBuilder;
+        const {isValid} = this.props.userData;
+        const {editOrNew} = this.props.filterBuilder;
 
         return (
 
