@@ -24,7 +24,7 @@ export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
 export const CLEAR_VARIANTS_ROWS_SELECTION = 'CLEAR_VARIANTS_ROWS_SELECTION';
 
 export const REQUEST_VARIANTS = 'REQUEST_VARIANTS';
-export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS';
+export const RECEIVE_ANALYSIS_OPERATION_ID = 'RECEIVE_ANALYSIS_OPERATION_ID';
 
 export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS';
 export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
@@ -147,10 +147,10 @@ function requestVariants() {
     }
 }
 
-function receiveVariants(json) {
+function receiveAnalysisOperationId(operationId) {
     return {
-        type: RECEIVE_VARIANTS,
-        operationId: json.operationId,
+        type: RECEIVE_ANALYSIS_OPERATION_ID,
+        operationId,
         receivedAt: Date.now()
     }
 }
@@ -253,7 +253,8 @@ export function fetchVariants(searchParams) {
                 } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
                 } else {
-                    dispatch(receiveVariants(response.body));
+                    const {operationId} = response.body;
+                    dispatch(receiveAnalysisOperationId(operationId));
                     const state = getState();
                     dispatch(changeExcludedFields(state.websocket.variantsView.id));
                     const isDemo = state.auth.isDemo;

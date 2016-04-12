@@ -173,7 +173,7 @@ export default function variantsTable(state = initialState, action) {
                 isFetching: true
             });
         }
-        case ActionTypes.RECEIVE_VARIANTS:
+        case ActionTypes.RECEIVE_ANALYSIS_OPERATION_ID:
         {
             return Object.assign({}, state, {
                 isFetching: false,
