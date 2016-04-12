@@ -114,7 +114,7 @@ export function fetchViews() {
             } else {
                 const result = response.body;
                 const view = result[0] || null;
-                const viewId = getState().viewBuilder.currentView.id || view.id;
+                const viewId = getState().viewBuilder.selectedView.id || view.id;
 
                 dispatch(receiveViews(result));
                 dispatch(changeView(viewId));
@@ -151,7 +151,7 @@ export function fetchFilters() {
             } else {
                 const result = response.body;
                 const filter = result[0] || null;
-                const filterId = getState().filterBuilder.currentFilter.id || filter.id;
+                const filterId = getState().filterBuilder.selectedFilter.id || filter.id;
 
                 dispatch(receiveFilters(result));
                 dispatch(changeFilter(filterId));

@@ -82,7 +82,7 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div className="panel-footer">
 
-                <a onClick={(e) => this.onSelectForAnalyzisClick(e)}
+                <a onClick={(e) => this.onSelectForAnalyzisClick(e, sample)}
                    className="btn btn-link btn-uppercase"
                    type="button">
                     <span data-localize="samples.settings.select.title">Select for analysis</span>

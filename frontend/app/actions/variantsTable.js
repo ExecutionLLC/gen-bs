@@ -64,7 +64,7 @@ function changeVariantsLimit() {
     }
 }
 
-export function getNextPartOfData(currentSample, currentView, currentFilter) {
+export function getNextPartOfData() {
     return (dispatch) => {
         dispatch(changeVariantsLimit());
 

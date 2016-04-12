@@ -109,8 +109,8 @@ export function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
         const state = getState();
-        const currentFilter = state.filterBuilder.currentFilter;
-        const isNotEditableFilter = _.some(['advanced', 'standard'], currentFilter.type);
+        const selectedFilter = state.filterBuilder.selectedFilter;
+        const isNotEditableFilter = _.some(['advanced', 'standard'], selectedFilter.type);
 
         if (state.auth.isDemo || isNotEditableFilter) {
             dispatch(closeModal('filters'));
@@ -126,7 +126,7 @@ export function filterBuilderUpdateFilter() {
                 } else {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
-                    dispatch(closeModal('filters'))
+                    dispatch(closeModal('filters'));
                     dispatch(fetchFilters(result.id))
                 }
             });

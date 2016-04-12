@@ -11,7 +11,7 @@ export default class Filters extends Component {
 
     render() {
         const dispatch = this.props.dispatch;
-        const currentFilter = this.props.ui.currentFilter;
+        const selectedFilter = this.props.ui.selectedFilter;
 
         return (
             <div className="table-cell max-width">
@@ -23,7 +23,7 @@ export default class Filters extends Component {
                      title="Select one or more from available filters"
                 >
                     <Select options={this.getFilterOptions()}
-                            value={currentFilter ? currentFilter.id : null}
+                            value={selectedFilter ? selectedFilter.id : null}
                             clearable={false}
                             onChange={(item) => dispatch(changeFilter(item.value))}
                     />
