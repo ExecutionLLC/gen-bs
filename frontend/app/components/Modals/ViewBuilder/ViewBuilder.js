@@ -62,10 +62,6 @@ export default class ViewBuilder extends React.Component {
 
                     </div>
                     <div className="col-xs-5 input-group">
-                  <span className="input-group-addon" data-localize="views.setup.settings.filter" data-toggle="tooltip"
-                        data-placement="bottom" data-container="body" title="Column Filter">
-                    <input type="checkbox" id="cCh1" checked="" disabled=""/>
-                  </span>
 
                         <input type="text" className="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""
                                readOnly="" data-localize="views.setup.settings.keywords"/>
