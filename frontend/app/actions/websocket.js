@@ -19,7 +19,7 @@ export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 export const WS_ADD_COMMENT = 'WS_ADD_COMMENT';
 export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT';
 export const WS_DELETE_COMMENT='WS_DELETE_COMMENT';
-export const REQUEST_CHANGE_VIEW='REQUEST_CHANGE_VIEW';
+export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 
 
 /*
@@ -187,9 +187,10 @@ export function requestAnalyze(searchParams) {
     };
 }
 
-export function requestChangeView(view) {
+export function requestSetCurrentParams(view, sampleFields) {
     return {
-        type: REQUEST_CHANGE_VIEW,
-        view
+        type: REQUEST_SET_CURRENT_PARAMS,
+        view,
+        sampleFields
     };
 }
