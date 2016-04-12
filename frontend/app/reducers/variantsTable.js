@@ -7,7 +7,10 @@ const initialState = {
         sort: [],
         limit: 100,
         offset: 0,
-        topSearch: ''
+        topSearch: {
+            filter: '',
+            excludedFields: []
+        }
     },
     scrollPos: 0,
     needUpdate: false,
@@ -20,43 +23,66 @@ export default function variantsTable(state = initialState, action) {
     switch (action.type) {
 
         case ActionTypes.CLEAR_SEARCH_PARAMS:
+        {
             return Object.assign({}, state, {
                 searchInResultsParams: {
                     sort: [],
                     search: [],
                     limit: 100,
                     offset: 0,
-                    topSearch: ''
+                    topSearch: {
+                        filter: '',
+                        excludedFields: []
+                    }
                 }
             });
+        }
+        case ActionTypes.SET_EXCLUDED_FIELDS:
+        {
+            return Object.assign({}, state, {
+                searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+                    topSearch: {
+                        filter: state.searchInResultsParams.topSearch.filter,
+                        excludedFields: action.excludedFields
+                    }
+                })
+            });
+        }
 
         case ActionTypes.INIT_SEARCH_IN_RESULTS_PARAMS:
+        {
             return Object.assign({}, state, {
                 searchInResultsParams: action.searchInResultsParams
             });
-
+        }
         case ActionTypes.CHANGE_VARIANTS_LIMIT:
+        {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
                 })
             });
-
-        case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
-            const currentGlobalSearchString = state.searchInResultsParams.topSearch;
+        }
+        case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER:
+        {
+            const currentGlobalSearchString = state.searchInResultsParams.topSearch.filter;
             if (currentGlobalSearchString === action.globalSearchString) {
                 return state;
             }
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-                    topSearch: action.globalSearchString,
+                    topSearch: {
+                        filter: action.globalSearchString,
+                        excludedFields: state.searchInResultsParams.topSearch.excludedFields
+                    },
                     limit: 100,
                     offset: 0
                 }),
                 needUpdate: true
             });
         }
-        case ActionTypes.CHANGE_VARIANTS_FILTER: {
+        case ActionTypes.CHANGE_VARIANTS_FILTER:
+        {
             // copy search array
             var searchArray = [...state.searchInResultsParams.search];
             const fieldIndex = _.findIndex(searchArray, {fieldId: action.fieldId});
@@ -88,14 +114,15 @@ export default function variantsTable(state = initialState, action) {
                 needUpdate: true
             });
         }
-        case ActionTypes.CHANGE_VARIANTS_SORT: {
+        case ActionTypes.CHANGE_VARIANTS_SORT:
+        {
             // copy sort array
             var sortArray = [...state.searchInResultsParams.sort];
             var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId});
 
             if (fieldIndex === -1) {
                 // it is new column for sorting
-                const newItem = {fieldId: action.fieldId, direction: action.sortDirection };
+                const newItem = {fieldId: action.fieldId, direction: action.sortDirection};
                 if (sortArray.length < action.sortOrder) {
                     // put new item to the end of array
                     fieldIndex = sortArray.length;
@@ -141,34 +168,40 @@ export default function variantsTable(state = initialState, action) {
             });
         }
         case ActionTypes.REQUEST_VARIANTS:
+        {
             return Object.assign({}, state, {
                 isFetching: true
             });
-
+        }
         case ActionTypes.RECEIVE_VARIANTS:
+        {
             return Object.assign({}, state, {
                 isFetching: false,
                 operationId: action.operationId,
                 lastUpdated: action.receivedAt
             });
+        }
 
         case ActionTypes.REQUEST_SEARCHED_RESULTS:
+        {
             return Object.assign({}, state, {
                 isNextDataLoading: action.isNextDataLoading,
                 isFilteringOrSorting: action.isFilteringOrSorting,
                 isFetching: true,
                 needUpdate: false
             });
-
+        }
         case ActionTypes.RECEIVE_SEARCHED_RESULTS:
+        {
             return Object.assign({}, state, {
                 isNextDataLoading: false,
                 isFilteringOrSorting: false,
                 isFetching: false,
                 lastUpdated: action.receivedAt
             });
-
-        case ActionTypes.SELECT_VARIANTS_ROW: {
+        }
+        case ActionTypes.SELECT_VARIANTS_ROW:
+        {
             const {rowIndex, isSelected} = action;
             const {selectedRowIndices} = state;
             let newSelectedRowIndices;
@@ -183,7 +216,8 @@ export default function variantsTable(state = initialState, action) {
             });
         }
 
-        case ActionTypes.CLEAR_VARIANTS_ROWS_SELECTION: {
+        case ActionTypes.CLEAR_VARIANTS_ROWS_SELECTION:
+        {
             return Object.assign({}, state, {
                 selectedRowIndices: initialState.selectedRowIndices
             });
