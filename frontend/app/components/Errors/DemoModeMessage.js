@@ -6,10 +6,10 @@ export default class DemoModeMessage extends Component {
         return (
             <div className="alert alert-inverse alert-fixed" role="alert">
                 { this.props.errorMessage &&
-                <h3 className="text-center">{this.props.errorMessage}</h3>
+                <p>{this.props.errorMessage}</p>
                 }
-                <h3 className="text-center">Demo Mode</h3>
-                <h3 className="text-center">Please, login</h3>
+                <p>Demo Mode</p>
+                <p>Please, login</p>
             </div>
         )
     }

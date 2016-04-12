@@ -9,16 +9,18 @@ import VariantsTableReact from '../components/VariantsTable/VariantsTableReact';
 import NavbarMain from '../components/Header/NavbarMain';
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery';
 
-import ViewsModal from '../components/Modals/ViewsModal';
-import FiltersModal from '../components/Modals/FiltersModal';
-import FileUploadModal from '../components/Modals/FileUploadModal';
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
+import FiltersModal from '../components/Modals/FiltersModal';
+import FileUploadModal from '../components/Modals/FileUploadModal';
+import QueryHistoryModal from '../components/Modals/QueryHistoryModal'
+import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
+import { closeQueryHistoryModal } from '../actions/queryHistory'
 
 
 class App extends Component {
@@ -36,7 +38,8 @@ class App extends Component {
     }
 
     render() {
-        const { isAuthenticated, samples, isFetching } = this.props.userData;
+        const { isAuthenticated, isFetching } = this.props.userData;
+        const {samplesList: {samples}} = this.props;
         const { ui } = this.props;
 
         var mainDivClass = classNames({
@@ -90,13 +93,26 @@ class App extends Component {
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
                 />
                 <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
+                <QueryHistoryModal
+                    showModal={this.props.showQueryHistoryModal}
+                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()) } }
+                />
             </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, savedFiles, modalWindows, views, fields, ui, errorHandler: { showErrorWindow } } = state;
+    const { auth,
+            userData,
+            modalWindows,
+            views,
+            fields,
+            savedFiles,
+            ui,
+            samplesList,
+            errorHandler: { showErrorWindow },
+            queryHistory: { showQueryHistoryModal } } = state;
 
     return {
         auth,
@@ -106,7 +122,9 @@ function mapStateToProps(state) {
         fields,
         savedFiles,
         ui,
-        showErrorWindow
+        samplesList,
+        showErrorWindow,
+        showQueryHistoryModal
     }
 }
 

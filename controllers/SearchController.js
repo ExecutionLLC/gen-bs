@@ -22,16 +22,15 @@ class SearchController extends ControllerBase {
             (body, callback) => {
                 const user = request.user;
                 const sessionId = request.sessionId;
-                const languId = request.languId;
+                const languageId = request.languId;
 
                 const sampleId = body.sampleId;
                 const viewId = body.viewId;
                 const filterId = body.filterId;
                 const limit = body.limit;
                 const offset = body.offset;
-
                 this.services.search
-                    .sendSearchRequest(user, sessionId, languId,
+                    .sendSearchRequest(user, sessionId, languageId,
                         sampleId, viewId, filterId, limit, offset, callback);
             }
         ], (error, operationId) => {

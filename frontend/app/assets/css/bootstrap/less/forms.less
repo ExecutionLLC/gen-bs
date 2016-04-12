@@ -592,12 +592,6 @@ input[type="search"] {
 .form-horizontal-rows { 
       background: #f4f4f4;
       padding: 10px 15px;
-       label, a, .btn-link {
-       //color: @state-warning-text;
-       }
-       a, .btn-link { 
-         //text-decoration: underline;
-         }
        .select2-container { 
          width: 100%!important;
        }
@@ -608,6 +602,8 @@ input[type="search"] {
      .flex{ 
         dl { 
         margin-bottom: 10px; 
+        overflow: visible;
+        min-height: 38px;
         dt { 
           padding-top: 8px;
         }
@@ -621,9 +617,6 @@ input[type="search"] {
     > div { 
       .select2-container { 
         width: 100%!important;
-      }
-      + div { 
-        //padding-top: 0;
       }
       &.btn-group-select2 .btn-group { 
         &:first-child { 
@@ -808,13 +801,52 @@ input[type="search"] {
     }
     
     
-    .select-for-drop-area { 
- border: 1px solid #e3e3e3;
+.select-for-drop-area { 
+    border: 1px solid #e3e3e3;
     margin: 0 0 -1px;
     padding: 10px 60px 10px 10px;
 }
 
-
+.row.grid-toolbar { 
+ clear: both;
+    > div { 
+      margin: 0 0 5px;
+      .select2-container { 
+      width: 100%!important;
+    }
+      + div { 
+        padding-top: 0;
+      }
+      &.btn-group-select2 .btn-group { 
+        &:first-child { 
+          min-width: 40px;
+        }
+      }
+    }
+    + .help-text { 
+      margin-bottom: 10px;
+     }  
+    + .alert { 
+      margin-top: 10px;
+    } 
+   
+  @media (min-width: @screen-sm) {
+    margin:0;
+  > div { 
+    padding: 0 5px 0 0;
+    .select2-container { 
+      width: 100%!important;
+    }
+    + div { 
+      padding-left: 5px;
+      margin: 0 0 5px;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+    }    
+  }
+}
 .form-settings {
   > .row {
     padding: 15px 0;
@@ -823,7 +855,6 @@ input[type="search"] {
     border-top: solid 1px #eee;
   }
 }
-
 .form-horizontal { 
   .grid-toolbar {
     + .grid-toolbar { 
