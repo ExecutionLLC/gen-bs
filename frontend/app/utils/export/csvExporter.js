@@ -3,7 +3,7 @@ import ExporterBase from './ExporterBase';
 export default class CsvExporter extends ExporterBase {
     constructor() {
         super('application/csv');
-        this.separator = ',';
+        this.separator = ';';
     }
 
     buildHeaderRow(columnsArray, data) {

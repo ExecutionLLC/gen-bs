@@ -26,7 +26,6 @@ export default function userData(state = {
                 isValid: true,
 
                 profileMetadata: action.userData.profileMetadata,
-                samples: action.userData.samples,
                 filters: action.userData.filters,
                 views: action.userData.views,
 
@@ -56,18 +55,6 @@ export default function userData(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 filters: action.filters,
-                lastUpdated: action.receivedAt
-            });
-
-        case ActionTypes.REQUEST_SAMPLES:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-
-        case ActionTypes.RECEIVE_SAMPLES:
-            return Object.assign({}, state, {
-                isFetching: false,
-                samples: action.samples,
                 lastUpdated: action.receivedAt
             });
 

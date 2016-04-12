@@ -71,8 +71,20 @@
           }
         },
         "global_filter": {
-          "type": "string",
-          "description": "global search string value"
+          "type": "object",
+          "properties": {
+            "filter": {
+              "type": "string",
+              "description": "Global search string value"
+            },
+            "excluded_fields": {
+              "type": "array",
+              "description": "List of excluded columns",
+              "items": {
+                "$ref": "base_json/excluded_column.json#"
+              }
+            }
+          }
         }
       }
     }
