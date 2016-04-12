@@ -1,7 +1,7 @@
 import apiFacade from '../api/ApiFacade';
-import { handleError } from './errorHandler'
-import { clearVariants, addComment, changeComment, deleteComment } from './websocket'
-import { updateQueryHistory } from './queryHistory'
+import {handleError} from './errorHandler'
+import {clearVariants, addComment, changeComment, deleteComment} from './websocket'
+import {updateQueryHistory} from './queryHistory'
 
 import HttpStatus from 'http-status';
 
@@ -14,6 +14,7 @@ export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
 export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
+export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
 
 export const FILTER_VARIANTS = 'FILTER_VARIANTS';
 
@@ -86,6 +87,26 @@ export function clearSearchParams() {
     }
 }
 
+export function changeExcludedFields(viewId) {
+    return (dispatch, getState) => {
+        const {fields:{sampleFieldsList}, userData:{views}}=getState();
+        const view = _.find(views, {id: viewId});
+        const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
+        const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);
+        const viewFieldIds = _.map(view.viewListItems, viewItem =>viewItem.fieldId);
+
+        const excludedMandatoryFields = _.difference(mandatoryFieldIds, viewFieldIds);
+        dispatch(setExcludedFields(excludedMandatoryFields))
+    };
+}
+
+export function setExcludedFields(excludedFields) {
+    return {
+        type: SET_EXCLUDED_FIELDS,
+        excludedFields
+    }
+}
+
 export function changeVariantsFilter(fieldId, filterValue) {
     return {
         type: CHANGE_VARIANTS_FILTER,
@@ -148,7 +169,7 @@ export function createComment(alt, pos, ref, chrom, searchKey, comment) {
             comment
         };
 
-        const { auth: {sessionId}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, ui: {languageId}} = getState();
         commentsClient.add(sessionId, languageId, commentObject,
             (error, response) => {
                 if (error) {
@@ -217,7 +238,7 @@ export function fetchVariants(searchParams) {
         dispatch(requestVariants());
         dispatch(clearTableRowsSelection());
 
-        const { auth: {sessionId}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, ui: {languageId}} = getState();
         searchClient.sendSearchRequest(
             sessionId,
             languageId,
@@ -233,7 +254,9 @@ export function fetchVariants(searchParams) {
                     dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
                 } else {
                     dispatch(receiveVariants(response.body));
-                    const isDemo = getState().auth.isDemo;
+                    const state = getState();
+                    dispatch(changeExcludedFields(state.websocket.variantsView.id));
+                    const isDemo = state.auth.isDemo;
                     if (!isDemo) {
                         dispatch(updateQueryHistory());
                     }
@@ -302,7 +325,7 @@ export function searchInResults(flags) {
         const state = getState();
         const sessionId = state.auth.sessionId;
         const operationId = state.variantsTable.operationId;
-        const { search, sort, topSearch, limit, offset } = state.variantsTable.searchInResultsParams;
+        const {search, sort, topSearch, limit, offset} = state.variantsTable.searchInResultsParams;
 
         searchClient.sendSearchInResultsRequest(
             sessionId,
