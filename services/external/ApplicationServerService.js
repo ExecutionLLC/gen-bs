@@ -187,7 +187,12 @@ class ApplicationServerService extends ServiceBase {
                 callback(null, operation);
             },
             (operation, callback) => {
-                const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue,
+                this.services.fieldsMetadata.findMany(
+                    params.globalSearchValue.excludedFields, (error, fields) => callback(error, fields, operation)
+                );
+            },
+            (fields, operation, callback)=> {
+                const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue.filter, fields,
                     params.fieldSearchValues, params.sortValues);
                 this._rpcSend(operationId, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
@@ -215,10 +220,21 @@ class ApplicationServerService extends ServiceBase {
         });
     }
 
-    _createSearchInResultsParams(globalSearchValue, fieldSearchValues, sortParams) {
+    _createSearchInResultsParams(globalSearchValue, excludedFields, fieldSearchValues, sortParams) {
         const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
         return {
-            globalFilter: globalSearchValue,
+            globalFilter: {
+                filter: globalSearchValue,
+                excludedFields: _.map(
+                    excludedFields, excludedField => {
+                        return {
+                            sourceName: excludedField.sourceName,
+                            columnName: excludedField.name
+                        }
+                    }
+                )
+            }
+            ,
             columnFilters: _.map(fieldSearchValues, fieldSearchValue => {
                 return {
                     columnName: this._getPrefixedFieldName(fieldSearchValue.fieldMetadata),
