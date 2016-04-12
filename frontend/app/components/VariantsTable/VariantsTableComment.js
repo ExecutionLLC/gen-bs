@@ -45,7 +45,7 @@ export default class VariantsTableComment extends Component {
                         }
                     >
                         <div>
-                            <a className="comment-link editable editable-pre-wrapped editable-click editable-open">
+                            <a className="btn-link-default editable editable-pre-wrapped editable-click editable-open">
                                 {(_.isEmpty(comments)) ? 'Add Comment' : comments[0].comment}</a>
 
                         </div>

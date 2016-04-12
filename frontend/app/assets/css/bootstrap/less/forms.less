@@ -161,131 +161,9 @@ output {
   }
 }
 
-.material-input {
-  padding-left: 0;
-  border: 0;
-  -webkit-border-radius: 0;
-          border-radius: 0;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(@brand-primary), to(@brand-primary)), -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter));
-  background-image: -webkit-linear-gradient(@brand-primary, @brand-primary), -webkit-linear-gradient(@gray-lighter, @gray-lighter);
-  background-image: linear-gradient(@brand-primary, @brand-primary), linear-gradient(@gray-lighter, @gray-lighter);
-  background-size: 0 2px,100% 1px;
-  background-repeat: no-repeat;
-  background-position: center bottom, center -webkit-calc(100% - 1px);
-  background-position: center bottom, center calc(100% - 1px);
-  background-color: transparent;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-       font-size: 15px;
-       height: 48px;
-       padding: 16px 0;
-       z-index: 1;
-  &:focus { 
-              .placeholder(@color:transparent);
-               + .material-label { 
-               
-               font-size: @font-size-x-small;
-               color: @input-color-placeholder;
-               z-index: 2;
-              }
-               
-      }  
-          
-  &[disabled],
-  &[readonly],
-  fieldset[disabled] & {
-    background-color: transparent;
-    opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
-      background-image: -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter)), -webkit-gradient(linear, left top, left bottom, from(@gray-lighter), to(@gray-lighter));
-  background-image: -webkit-linear-gradient(@gray-lighter, @gray-lighter), -webkit-linear-gradient(@gray-lighter, @gray-lighter);
-  background-image: linear-gradient(@gray-lighter, @gray-lighter), linear-gradient(@gray-lighter, @gray-lighter);
-  color: lighten(@gray-lighter, 5%);
-   .placeholder(@color:@gray-lighter);
-  }
-
-  
-  }
-
-.material-input:focus {
-      outline: none;
-      -webkit-animation: input-highlight .5s forwards;
-              animation: input-highlight .5s forwards;
-      -webkit-box-shadow: none;
-          box-shadow: none;
-     + .material-label { 
-       top:0;
-       color:@brand-primary;
-       opacity: 1;
-       font-style: @font-size-base;
-      }        
-     }
 
 
-@-webkit-keyframes input-highlight {
-  0% {
-    background-size: 0 2px, 100% 1px;
-  }
-  100% {
-    background-size: 100% 2px, 100% 1px;
-  }
-}
-@keyframes input-highlight {
-  0% {
-    background-size: 0 2px, 100% 1px;
-  }
-  100% {
-    background-size: 100% 2px, 100% 1px;
-  }
-}
 
-
-.material-select { 
-  + .select2-container--default { 
-     .select2-selection--single { 
-       border-width: 0 0 1px;
-       border-color:  @gray-lighter;
-       box-shadow: none;
-       background:transparent;
-       border-radius: 0;
-       .select2-selection__rendered { 
-         padding-left: 0;
-         padding-right: 0;
-       }
-       .select2-selection__arrow b {
-       border-color: @gray transparent transparent;
-       
-       }
-  }
-
-     }
-}
-
-
- 
-.material-label { 
-            position: absolute;
-            z-index: 1;
-            top:1.5em;
-            font-size: @font-size-base;
-            color: @input-color-placeholder;
-            .transition(top .15s linear);
-            .transition(color .15s linear);
-            .transition(font .15s linear);
-             opacity: 0;
-             z-index: 0;
-            }
-
-.material-input-group { 
-    position: relative;
-}
-.material-select { 
-  .select2-container--default .select2-selection--single { 
-    background: transparent;
-    border-radius: 0;
-    padding-left: 0;
-    border-color: @input-border;
-  }
-}
 // Search inputs in iOS
 //
 // This overrides the extra rounded corners on search inputs in iOS so that our
@@ -740,9 +618,6 @@ input[type="search"] {
       .select2-container { 
         width: 100%!important;
       }
-      + div { 
-        padding-top: 0;
-      }
       &.btn-group-select2 .btn-group { 
         &:first-child { 
           min-width: 40px;
@@ -758,19 +633,7 @@ input[type="search"] {
    
   @media (min-width: @screen-sm) {
     margin:0;
-  > div[class*="col-"] { 
-    padding: 0 5px 0 0;
-    .select2-container { 
-      width: 100%!important;
-    }
-    + div[class*="col-"] { 
-      padding-left: 5px;
-      margin: 0 0 5px;
-    }
-    &:last-child {
-      padding-right: 0;
-    }
-  }
+
     .group-label { 
       padding-right: 50px;
 
@@ -938,13 +801,52 @@ input[type="search"] {
     }
     
     
-    .select-for-drop-area { 
- border: 1px solid #e3e3e3;
+.select-for-drop-area { 
+    border: 1px solid #e3e3e3;
     margin: 0 0 -1px;
     padding: 10px 60px 10px 10px;
 }
 
-
+.row.grid-toolbar { 
+ clear: both;
+    > div { 
+      margin: 0 0 5px;
+      .select2-container { 
+      width: 100%!important;
+    }
+      + div { 
+        padding-top: 0;
+      }
+      &.btn-group-select2 .btn-group { 
+        &:first-child { 
+          min-width: 40px;
+        }
+      }
+    }
+    + .help-text { 
+      margin-bottom: 10px;
+     }  
+    + .alert { 
+      margin-top: 10px;
+    } 
+   
+  @media (min-width: @screen-sm) {
+    margin:0;
+  > div { 
+    padding: 0 5px 0 0;
+    .select2-container { 
+      width: 100%!important;
+    }
+    + div { 
+      padding-left: 5px;
+      margin: 0 0 5px;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+    }    
+  }
+}
 .form-settings {
   > .row {
     padding: 15px 0;
@@ -953,24 +855,30 @@ input[type="search"] {
     border-top: solid 1px #eee;
   }
 }
-
 .form-horizontal { 
   .grid-toolbar {
     + .grid-toolbar { 
-      margin-top: 8px;
+      //margin-top: 8px;
     }
   }
 }
 .form-rows  {
-    padding-left: 40px;
+    margin: @padding-large-vertical * 2 0;
     padding-right: 80px;
+    padding-left: 32px;
+    h5 { 
+      margin-right: -80px; 
+      .clearfix();
+    }
     &.form-rows-in-grid  { 
       margin-left: -45px;
     }
    .grid-toolbar { 
-     position: relative;
-     margin-bottom: 5px;
- 
+     margin: 0;
+    position: relative;    
+    > div { 
+      padding-left: 0;
+    }
    }
    .btn-group-select2 { 
      padding-left: 0;
@@ -993,27 +901,66 @@ input[type="search"] {
        }
      }
    }
-   .btn-group-left { 
-    left: -40px;
-    position: absolute;
-    top: 6px;
-    .btn { 
-      float: left;
+   .btn-group-left {
+        left: -48px;
+        position: absolute;
+        top: 0;
     }
-  }
-   .btn-group-right { 
-    position: absolute;
-    right: -90px;
-    width: 80px;
-    top: 6px;
-    .btn { 
-      float: left;
+   .btn-group-right {
+        position: absolute;
+        right: -90px;
+        top: 8px;
+        width: 80px;
     }
-    
-  }
+   .grid-toolbar + .grid-toolbar {
+     border-top: 1px solid @gray-lighter;
+
+    }
    .select2-results > .select2-results__options {
     max-height: 400px;
-  }
+   }
+   .select2-container { 
+     margin-bottom: -1px;
+   }
+   .btnDrag { 
+     .md-i {
+       font-size:21px; margin-left:-12px
+     }
+   }
+   .control-label { 
+    line-height: 16px;
+    text-align: left;
+     padding-left: 0;
+     padding-top: @padding-base-vertical;
+     padding-bottom: @padding-base-vertical;
+     display: inline-block;
+     }
+     .btn-group-for-label { 
+       margin-right:@padding-small-horizontal;
+       float: left;
+        margin-top: 4px;
+       + .control-label {
+         padding-left:@padding-small-horizontal;
+         display: block;
+         margin-left: 76px;
+       }
+     }
+     .material-input-sm { 
+      margin-bottom: -1px;
+    }
+   + .btn-toolbar{ 
+     margin: 32px 0;
+   }
+   .btn-group-head { 
+     float: right;
+     margin-right: -80px;
+       margin-bottom: -24px;
+   }
+   .material-select { 
+  + .select2-container--default {
+     
+    }
+   } 
  @media(min-width: @screen-sm) { 
    .grid-toolbar { 
      .btn-link { 
@@ -1041,4 +988,7 @@ input[type="search"] {
       } 
     } 
   }
+}
+.row.grid-toolbar > div .select-icons + .select2 {
+    width: 46px!important;
 }

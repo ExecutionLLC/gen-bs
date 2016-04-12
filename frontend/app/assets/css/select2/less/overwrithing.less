@@ -1,7 +1,6 @@
 .select2-results__option { 
-
   .row { 
-   border-top: 1px solid #eee;
+   border-top: 1px solid @gray-lighter;
     margin: -6px;
    > div { 
      padding: 5px 12px;
@@ -19,67 +18,9 @@
    color: #fff; 
   }
 }
-.select2-container--open {
-  .flex { 
-    border-top: solid 1px #eee;
-    margin: -6px;
-    padding: 10px;
-  }
-}
- select.select2.form-control + span.select2 { 
+
+select.select2.form-control + span.select2 { 
   width: 100%!important;
-}
-.select2-results__option[title="standard"]{
-  position: relative;
-   padding-right: 55px;
-  &:after { 
-    position: absolute;
-    content: "standard";
-    right: 8px;
-    top:8px;
-    font-size: x-small;
-    color: #ddd;
-  }
-}
-.select2-results__option[title="collected"]{
-  position: relative;
-   padding-right: 55px;
-  &:after { 
-    .fa();
-    position: absolute;
-    content: "\f005";
-    right: 8px;
-    top:8px;
-
-    color: @brand-warning;
-  }
-}
-
-body.ch { 
- .select2-results__option[title="standard"]{ 
-    &:after { 
-       content: "标准";
-    }
-  }
-}
-
-.select2-results__option[title="standard"]:hover,
-.select2-results__option[title="standard"]:focus,
-.select2-results__option[title="standard"]:active,
-.select2-results__option.select2-results__option--highlighted { 
-    &:after { 
-      color: #fff;
-    } 
-}
-select.select2.temp-active { 
- + span.select2 { 
-   &.select2-container--default .select2-selection--single .select2-selection__rendered { 
-     //.fadeOut();
-   }
-   &.select2-container--default .select2-selection--multiple .select2-selection__rendered .select2-selection__choice { 
-     //.fadeOut();
-   }
- } 
 }
 
 .btn-group-select2-wrap {
@@ -92,16 +33,15 @@ select.select2.temp-active {
 
 .table-row { 
   > div { 
-
    span.select2 { 
      width: 100%!important;
    }
    .select2-container--default .select2-selection--multiple .select2-selection__rendered { 
-   display: block;
+    display: block;
     white-space: nowrap;
    }
    .select2-container--default .select2-selection--multiple .select2-selection__choice { 
-  display: inline-block;
+     display: inline-block;
     float: none
    }
    .select2-container .select2-search--inline {
@@ -112,16 +52,14 @@ select.select2.temp-active {
   }
 }
 
-
 .select2-btn-primary { 
   .select2-container--default .select2-selection--single {
-  background-color:@btn-primary-bg;
-  color: @btn-primary-color;
+    background-color:@btn-primary-bg;
+    color: @btn-primary-color;
     border: 1px solid @btn-primary-border;
 
   }
 }
-
 
 .select2-results__option { 
   .fa {
@@ -143,9 +81,4 @@ select.select2.temp-active {
   + .select2-container--default .select2-selection--single { 
       border-left: 2px solid @brand-success;
   }
-}
-
-
-.select2-results__option { 
-  //padding: 16px;
 }
