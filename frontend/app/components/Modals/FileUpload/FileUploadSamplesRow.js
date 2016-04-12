@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Panel } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Panel} from 'react-bootstrap';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
@@ -14,7 +14,7 @@ export default class FileUploadSamplesRow extends Component {
 
     constructor(...args) {
         super(...args);
-        this.state = { showValues: false };
+        this.state = {showValues: false};
     }
 
     clickShowValues(e) {
@@ -33,46 +33,48 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderHeader() {
-        const { sample } = this.props;
+        const {sample} = this.props;
         return (
-          <div>
-              <div className="panel-heading">
-                  <h3 className="panel-title">{sample.fileName}<span>{sample.description}</span></h3>
-              </div>
-          </div>
+            <div>
+                <div className="panel-heading">
+                    <h3 className="panel-title">{sample.fileName}<span>{sample.description}</span></h3>
+                </div>
+            </div>
         );
     }
 
     renderFooter() {
-        const { sample, samples, dispatch, closeModal } = this.props;
+        const {sample, samples, dispatch, closeModal} = this.props;
         return (
             <div className="panel-footer">
 
-              <a onClick={() => {
+                <a onClick={() => {
                     dispatch(receiveSamplesList(samples));
                     dispatch(changeSample(sample.id));
                     closeModal('upload');
                   }}
-                  className="btn btn-link btn-uppercase"
-                  type="button" >
-                <span data-localize="samples.settings.select.title">Select for analysis</span>
-              </a>
-              {sample.type === 'user'
-              && <a onClick={e => this.clickShowValues(e)}
-                    className="btn btn-link btn-uppercase" role="button"
-                    data-toggle="collapse" data-parent="#accordion"
-                    href="#collapseOne" aria-expanded="false"
-                    aria-controls="collapseOne">Edit
-              </a>}
+                   className="btn btn-link btn-uppercase"
+                   type="button">
+                    <span data-localize="samples.settings.select.title">Select for analysis</span>
+                </a>
+                {sample.type === 'user'
+                && <a onClick={e => this.clickShowValues(e)}
+                      className="btn btn-link btn-uppercase" role="button"
+                      data-toggle="collapse" data-parent="#accordion"
+                      href="#collapseOne" aria-expanded="false"
+                      aria-controls="collapseOne">Edit
+                </a>}
             </div>
-          );
+        );
     }
 
     renderSelectField(field) {
         let fieldValue;
-        const { sample, dispatch, samplesList } = this.props;
+        const {sample, dispatch, samplesList} = this.props;
         const selectOptions = field.availableValues.map(
-            option => { return {value: option.id, label: option.value}}
+            option => {
+                return {value: option.id, label: option.value}
+            }
         );
         const currentSampleIndex = _.findIndex(samplesList.samples, {id: sample.id});
 
@@ -85,22 +87,22 @@ export default class FileUploadSamplesRow extends Component {
 
         return (
             <dl key={field.id} className="dl-horizontal">
-            <dt>{field.label}</dt>
-            <dd>
-            <Select
-                options={selectOptions}
-                clearable={false}
-                value={fieldValue}
-                onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.value))}
-            />
-            </dd>
+                <dt>{field.label}</dt>
+                <dd>
+                    <Select
+                        options={selectOptions}
+                        clearable={false}
+                        value={fieldValue}
+                        onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.value))}
+                    />
+                </dd>
             </dl>
         );
     }
 
     renderTextField(values, field) {
         let fieldValue;
-        const { sample, dispatch, samplesList } = this.props;
+        const {sample, dispatch, samplesList} = this.props;
         const currentSampleIndex = _.findIndex(samplesList.samples, {id: sample.id});
 
         if (currentSampleIndex >= 0) {
@@ -112,21 +114,21 @@ export default class FileUploadSamplesRow extends Component {
 
         return (
             <dl key={field.id} className="dl-horizontal">
-            <dt>{field.label}</dt>
-            <dd>
-            <input
-                type="text"
-                className="form-control"
-                value={fieldValue}
-                onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.target.value)) }
-            />
-            </dd>
+                <dt>{field.label}</dt>
+                <dd>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={fieldValue}
+                        onChange={(e) => dispatch(updateSampleValue(sample.id, field.id, e.target.value)) }
+                    />
+                </dd>
             </dl>
         );
     }
 
     renderRowButtons() {
-        const { sample, dispatch } = this.props;
+        const {sample, dispatch} = this.props;
         return (
             <div className="btn-group ">
                 <button
@@ -149,10 +151,13 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderValues() {
-        const { sample } = this.props;
+        const {sample} = this.props;
         const values = _.indexBy(sample.values, 'fieldId');
-            return (
-                <Panel collapsible expanded={this.state.showValues} className="samples-values form-horizontal-rows">
+        return (
+            <Panel collapsible
+                   expanded={this.state.showValues}
+                   className="samples-values form-horizontal-rows"
+            >
                 <div className="flex">
                     {this.props.fields.map(field => {
                         if (field.availableValues) {
@@ -161,16 +166,16 @@ export default class FileUploadSamplesRow extends Component {
                             return this.renderTextField(values, field);
                         }
 
-                  })}
-                  {this.renderRowButtons()}
+                    })}
+                    {this.renderRowButtons()}
                 </div>
-                </Panel>
-            )
+            </Panel>
+        )
     }
 }
 
 function mapStateToProps(state) {
-    const { ui, samplesList } = state;
+    const {ui, samplesList} = state;
     return {
         ui,
         samplesList
