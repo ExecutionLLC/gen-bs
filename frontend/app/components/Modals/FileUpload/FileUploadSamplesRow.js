@@ -35,12 +35,11 @@ export default class FileUploadSamplesRow extends Component {
         dispatch(updateSampleValue(sampleId, fieldId, newValue));
     }
 
-    onCancelSampleEditingClick(e, sample) {
+    onResetSampleClick(e, sample) {
         e.preventDefault();
 
         const {dispatch} = this.props;
         dispatch(resetSampleInList(sample.id));
-        this.setShowValuesState(false);
     }
 
     onSaveEditedSampleClick(e, sample) {
@@ -162,11 +161,11 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div className="btn-group ">
                 <button
-                    onClick={ (e) => this.onCancelSampleEditingClick(e, sample) }
+                    onClick={ (e) => this.onResetSampleClick(e, sample) }
                     type="button"
                     className="btn btn-default"
                 >
-                    <span data-localize="actions.save_select.title">Cancel</span>
+                    <span>Reset</span>
                 </button>
 
                 <button
