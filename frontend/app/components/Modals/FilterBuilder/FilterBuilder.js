@@ -78,10 +78,40 @@ const filterParser = {
             "is_null": "is null",
             "is_not_null": "is not null"
         },
-        genomicsRulesOperatorsList: filterOperators
+        genomicsRulesOperatorsList: filterOperators,
+        getOperatorWantedParams: function(operatorInfo) {
+            if (!operatorInfo.nb_inputs) {
+                return {noParams: true};
+            }
+            if (operatorInfo.nb_inputs <= 1 && !operatorInfo.multiple) {
+                return {single: true};
+            }
+            if (operatorInfo.multiple) {
+                return {arrayDynamic: true};
+            } else {
+                return {arraySize: operatorInfo.nb_inputs};
+            }
+        }
     }
 };
 
+const fieldUtils = {
+    getDefault(fields) {
+        return fields[Object.keys(fields)[0]].id;
+    },
+    getFieldJSType(field) {
+        const fieldType = field.type;
+        const jsType = {
+            'char': 'string',
+            'string': 'string',
+            'integer': 'number',
+            'float': 'number',
+            'double': 'number',
+            'boolean': 'boolean'
+        }[fieldType];
+        return jsType;
+    }
+};
 
 
 
