@@ -403,6 +403,10 @@ class FilterQueryBuilder extends Component {
 
         function makeFilterItem(index, item, disabled) {
 
+            const fieldJSType = fieldUtils.getFieldJSType(getFieldById(item.field));
+            const allowedOpsTypes = getValidOperationsTypesForJSType(fieldJSType);
+            const allowedFieldsIds = getValidFieldsIdsForOperation(fields, filterUtils.getOperatorByType(item.operator));
+            const allowedFields = (function() { var ret = []; fields.map( (f) => { if (allowedFieldsIds[f.id]) ret.push(f); } ); /*  var f; for (f in fields) { if (allowedFieldsIds[f.id]) ret.push(f); }*/ return ret; })();
             return (
                 <FieldFilterItem
                     index={index}
