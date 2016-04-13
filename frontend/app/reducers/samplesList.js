@@ -3,13 +3,13 @@ import * as ActionTypes from '../actions/samplesList'
 
 export default function samplesList(state = {
     samples: [],
-    savedSamples: [],
+    editedSamples: [],
     currentSample: null
 }, action) {
 
     let currentSampleIndex;
     let newSamples;
-    let newSavedSamples;
+    let newEditedSamples;
     let newValues;
     let sampleId;
 
@@ -44,24 +44,24 @@ export default function samplesList(state = {
             currentSampleIndex = _.findIndex(state.samples, {id: updatedSampleId});
 
             newSamples = [...state.samples];
-            newSavedSamples = [...state.savedSamples];
+            newEditedSamples = [...state.editedSamples];
 
             newSamples[currentSampleIndex] = updatedSample;
-            newSavedSamples[currentSampleIndex] = Object.assign({}, updatedSample);
+            newEditedSamples[currentSampleIndex] = Object.assign({}, updatedSample);
 
-            return Object.assign({}, state, {samples: newSamples, savedSamples: newSavedSamples});
+            return Object.assign({}, state, {samples: newSamples, editedSamples: newEditedSamples});
 
         case ActionTypes.RECEIVE_SAMPLES_LIST:
             const {samples} = action;
             return Object.assign({}, state, {
                 samples: [...samples],
-                savedSamples: _.cloneDeep(samples)
+                editedSamples: _.cloneDeep(samples)
             });
 
         case ActionTypes.RESET_SAMPLE_IN_LIST:
             sampleId = action.sampleId;
             currentSampleIndex = _.findIndex(state.samples, {id: sampleId});
-            const restoredValues = [...state.savedSamples[currentSampleIndex].values || []];
+            const restoredValues = [...state.editedSamples[currentSampleIndex].values || []];
 
             newSamples = [...state.samples];
             newSamples[currentSampleIndex].values = restoredValues;
