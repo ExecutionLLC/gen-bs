@@ -31,7 +31,7 @@ export default function fields(state = {
             const idToFieldHash = _.reduce(fields, (result, field) => {
                 result[field.id] = field;
                 return result;
-            });
+            }, {});
             return Object.assign({}, state, {
                 isFetching: Object.assign({}, state.isFetching, {
                     samples: false

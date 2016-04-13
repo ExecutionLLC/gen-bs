@@ -14,6 +14,11 @@ export default function samplesList(state = {
     let sampleId;
 
     switch (action.type) {
+        case ActionTypes.REQUEST_SAMPLES:
+            return Object.assign({}, state, {
+                isFetching: true
+            });
+        
         case ActionTypes.UPDATE_SAMPLE_VALUE:
             const {valueFieldId, value} = action;
             sampleId = action.sampleId;
@@ -34,9 +39,9 @@ export default function samplesList(state = {
 
             return Object.assign({}, state, {samples: newSamples});
 
-        case ActionTypes.UPDATE_SAMPLE_IN_LIST:
-            const {updatedSample} = action;
-            currentSampleIndex = _.findIndex(state.samples, {id: action.sampleId});
+        case ActionTypes.RECEIVE_UPDATED_SAMPLE:
+            const {updatedSample, updatedSampleId} = action;
+            currentSampleIndex = _.findIndex(state.samples, {id: updatedSampleId});
 
             newSamples = [...state.samples];
             newSavedSamples = [...state.savedSamples];
@@ -46,7 +51,7 @@ export default function samplesList(state = {
 
             return Object.assign({}, state, {samples: newSamples, savedSamples: newSavedSamples});
 
-        case ActionTypes.INIT_SAMPLES_LIST:
+        case ActionTypes.RECEIVE_SAMPLES_LIST:
             const {samples} = action;
             return Object.assign({}, state, {
                 samples: [...samples],
@@ -64,8 +69,9 @@ export default function samplesList(state = {
             return Object.assign({}, state, {samples: newSamples});
 
         case ActionTypes.CHANGE_SAMPLE:
+            let {sampleId} = action;
             return Object.assign({}, state, {
-                currentSample: _.find(state.samples, {id: action.sampleId})
+                currentSample: _.find(state.samples, {id: sampleId})
             });
 
         default:

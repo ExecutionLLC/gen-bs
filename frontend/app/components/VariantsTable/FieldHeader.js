@@ -104,7 +104,7 @@ export default class FieldHeaderControls extends Component {
                     <span className="input-group-btn">
                         <button className="btn btn-link-light-default"
                                 onClick={() => this.setFilterOpened(true)}>
-                            <i className="md-i">search</i>
+                            <i></i>
                         </button>
                     </span>
                     <input type="text"
@@ -122,7 +122,7 @@ export default class FieldHeaderControls extends Component {
                 <div className={inputGroupClasses}>
                     <span className="input-group-btn">
                         <button className="btn btn-link-light-default">
-                            <i className="md-i">search</i>
+                            <i></i>
                         </button>
                     </span>
                     <input type="text"
