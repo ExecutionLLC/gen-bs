@@ -98,13 +98,17 @@ export default class FileUploadSamplesRow extends Component {
             return result;
         }, {});
 
-        return (
-            <div>
-                <div className="flex">
-                    {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
+        if (_.some(sample.values, option => option.values)) {
+            return (
+                <div>
+                    <div className="flex">
+                        {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        } else {
+            return null;
+        }
     }
 
     renderReadOnlyField(field, fieldIdToValuesHash) {
