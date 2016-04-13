@@ -247,7 +247,97 @@ class FilterQueryBuilder extends Component {
             return validFieldsIds;
         }
 
+        function validateRules(rules) {
 
+            function validateRule(rule) {
+                if (!rule) {
+                    return {errorMessage: 'no rule'};
+                }
+                if (rule.condition) {
+                    return {isGroup: true};
+                }
+                if (!rule.field) {
+                    return({errorMessage: 'no field'});
+                }
+                if (!rule.operator) {
+                    return ({errorMessage: 'no operator'});
+                }
+
+                const field = getFieldById(rule.field);
+                const fieldJSType = fieldUtils.getFieldJSType(field);
+                const operatorType = rule.operator;
+                const operatorInfo = filterUtils.getOperatorByType(operatorType);
+
+                if (!isAllowedOperatorType(operatorInfo, fieldJSType)) {
+                    return {errorMessage: 'field "' + JSON.stringify(field) + '" of type "' + fieldJSType + '" not allowed for operator "' + operatorType + '"'};
+                }
+
+                const opWant = filterParser.ops.getOperatorWantedParams(operatorInfo);
+
+                const value = rule.value;
+                const castedValue = opWant.noParams ?
+                    null :
+                    opWant.single ?
+                        jsTypeCastValue(value, fieldJSType) :
+                        jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
+
+                return {validRule: {
+                    field: rule.field,
+                    operator: rule.operator,
+                    value: castedValue/*,
+                    valueType: fieldJSType,
+                    opWant: opWant*/
+                    /*,
+                    ops: getValidOperationsForField(field),
+                    fieldsAllowed: getValidFieldsIdsForOperation(fields, operatorInfo)*/
+                }};
+            }
+
+            function validateRules(rules, index, report) {
+                var validRules = [];
+                rules.map( (val, i) => {
+                    var validateRuleResult = validateRule(val);
+                    if (validateRuleResult.validRule) {
+                        validRules.push(validateRuleResult.validRule);
+                        return;
+                    }
+                    const ruleIndex = index.concat([i]);
+                    if (validateRuleResult.isGroup) {
+                        const validSubGroup = validateGroup(val, ruleIndex, report);
+                        if (!validSubGroup) {
+                            report.push({index: ruleIndex.slice(), message: 'invalid subgroup'});
+                            return;
+                        }
+                        validRules.push(validSubGroup);
+                        return;
+                    }
+                    report.push({index: ruleIndex, message: validateRuleResult.errorMessage});
+                });
+                return validRules;
+            }
+
+            function validateGroup(group, index, report) {
+                if (group.condition !== 'AND' && group.condition !== 'OR') {
+                    report.push({index: index.slice(), message: 'bad group condition "' + group.condition + '" (must be AND|OR)'});
+                    return null;
+                }
+                if (!group.rules || typeof group.rules !== 'object' || !group.rules.length) {
+                    report.push({index: index.slice(), message: 'group content (type ' + typeof group.rules + ', !!rule=' + !!group.rules + (group.rules ? ', len = ' + group.rules.length : '') + ')'});
+                    return null;
+                }
+                const validRules = validateRules(group.rules, index, report);
+                if (!validRules.length) {
+                    report.push({index: index.slice(), message: 'empty group'});
+                    return null;
+                }
+                return {condition: group.condition, rules: validRules};
+            }
+
+            var report = [];
+            var validRules = validateGroup(rules, [], report);
+
+            return {validRules: validRules, report: report};
+        }
 
         function findSubrules(index) {
             var searchIndex = index.slice();
