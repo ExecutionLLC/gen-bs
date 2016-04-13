@@ -987,6 +987,16 @@ export default class FilterBuilder extends Component {
       || this.props.filterBuilder !== nextProps.filterBuilder;
   }
 
+  componentWillUpdate(nextProps) {
+      const { dispatch } = nextProps;
+      const { editOrNew, rulesRequested, editedFilter, newFilter } = nextProps.filterBuilder;
+      const filter = editOrNew ? (editedFilter):(newFilter);
+
+      if(rulesRequested) {
+          dispatch(filterBuilderReceiveRules(filter.rules))
+      }
+  }
+    
   makeFieldsList(fields) {
 
 /*
