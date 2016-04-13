@@ -1,96 +1,67 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 
-import filterOperators from './filterOperators'
 import { filterBuilderReceiveRules, filterBuilderChangeAll } from '../../../actions/filterBuilder';
 
 import filterUtils from '../../../utils/filterUtils';
 
-/**
- * @template {T}
- * @param {Object.<string, T>} o
- * @returns {{key: string, val: T}|null}
- */
-function getOnlyProperty(o) {
-    var property;
-    var hasMore = _.some(o, (val, key) => {
-        if (property) {
-            property = null;
-            return true;
+
+const opsUtils = {
+    genomicsRuleOperatorsLabels: {
+        "equal": "equal",
+        "not_equal": "not equal",
+        "in": "in",
+        "not_in": "not in",
+        "less": "less",
+        "less_or_equal": "less or equal",
+        "greater": "greater",
+        "greater_or_equal": "greater or equal",
+        "between": "between",
+        "not_between": "not between",
+        "begins_with": "begins with",
+        "not_begins_with": "doesn't begin with",
+        "contains": "contains",
+        "not_contains": "doesn't contain",
+        "ends_with": "ends with",
+        "not_ends_with": "doesn't end with",
+        "is_empty": "is empty",
+        "is_not_empty": "is not empty",
+        "is_null": "is null",
+        "is_not_null": "is not null"
+    },
+    genomicsRulesOperatorsList: [
+        'equal',
+        'not_equal',
+        'in',
+        'not_in',
+        'less',
+        'less_or_equal',
+        'greater',
+        'greater_or_equal',
+        'between',
+        'not_between',
+        'begins_with',
+        'not_begins_with',
+        'contains',
+        'not_contains',
+        'ends_with',
+        'not_ends_with',
+        'is_empty',
+        'is_not_empty',
+        'is_null',
+        'is_not_null',
+    ],
+    getOperatorWantedParams: function(operatorInfo) {
+        if (!operatorInfo.nb_inputs) {
+            return {noParams: true};
         }
-        property = {
-            key: key,
-            val: val
-        };
-        return false;
-    });
-    if (!hasMore && property) {
-        return property;
-    } else {
-        return null;
-    }
-}
-
-function makeKeyMaker() {
-
-    function next(arr) {
-        const index = arr.length - 1;
-        arr[index]++;
-    }
-
-    function makeSubKey(prevArr) {
-        var arr = prevArr.concat(-1);
-        function retNext() {
-            next(arr);
-            return arr.slice();
+        if (operatorInfo.nb_inputs <= 1 && !operatorInfo.multiple) {
+            return {single: true};
         }
-        retNext.makeSubKeyMaker = function() {
-            return makeSubKey(arr);
-        };
-        return retNext;
-    }
-
-    return makeSubKey([]);
-}
-
-
-const filterParser = {
-    ops: {
-        genomicsRuleOperatorsLabels: {
-            "equal": "equal",
-            "not_equal": "not equal",
-            "in": "in",
-            "not_in": "not in",
-            "less": "less",
-            "less_or_equal": "less or equal",
-            "greater": "greater",
-            "greater_or_equal": "greater or equal",
-            "between": "between",
-            "not_between": "not between",
-            "begins_with": "begins with",
-            "not_begins_with": "doesn't begin with",
-            "contains": "contains",
-            "not_contains": "doesn't contain",
-            "ends_with": "ends with",
-            "not_ends_with": "doesn't end with",
-            "is_empty": "is empty",
-            "is_not_empty": "is not empty",
-            "is_null": "is null",
-            "is_not_null": "is not null"
-        },
-        genomicsRulesOperatorsList: filterOperators,
-        getOperatorWantedParams: function(operatorInfo) {
-            if (!operatorInfo.nb_inputs) {
-                return {noParams: true};
-            }
-            if (operatorInfo.nb_inputs <= 1 && !operatorInfo.multiple) {
-                return {single: true};
-            }
-            if (operatorInfo.multiple) {
-                return {arrayDynamic: true};
-            } else {
-                return {arraySize: operatorInfo.nb_inputs};
-            }
+        if (operatorInfo.multiple) {
+            return {arrayDynamic: true};
+        } else {
+            return {arraySize: operatorInfo.nb_inputs};
         }
     }
 };
@@ -112,18 +83,6 @@ const fieldUtils = {
         return jsType;
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -220,7 +179,6 @@ class FilterQueryBuilder extends Component {
         }
 
         function isAllowedOperatorType(operator, type) {
-            //return operator.allow[type]; // TODO: optimize
             return operator.apply_to.indexOf(type) >= 0;
         }
 
@@ -228,10 +186,6 @@ class FilterQueryBuilder extends Component {
             var ops = [];
             filterUtils.operators.map( (op) => { if (op.apply_to.indexOf(fieldJSType) >= 0) ops.push(op.type); } );
             return ops;
-        }
-
-        function getValidOperationsTypesForField(field) {
-            return getValidOperationsTypesForJSType(fieldUtils.getFieldJSType(field));
         }
 
         function getValidFieldsIdsForOperation(fields, operation) {
@@ -273,7 +227,7 @@ class FilterQueryBuilder extends Component {
                     return {errorMessage: 'field "' + JSON.stringify(field) + '" of type "' + fieldJSType + '" not allowed for operator "' + operatorType + '"'};
                 }
 
-                const opWant = filterParser.ops.getOperatorWantedParams(operatorInfo);
+                const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
 
                 const value = rule.value;
                 const castedValue = opWant.noParams ?
@@ -285,12 +239,7 @@ class FilterQueryBuilder extends Component {
                 return {validRule: {
                     field: rule.field,
                     operator: rule.operator,
-                    value: castedValue/*,
-                    valueType: fieldJSType,
-                    opWant: opWant*/
-                    /*,
-                    ops: getValidOperationsForField(field),
-                    fieldsAllowed: getValidFieldsIdsForOperation(fields, operatorInfo)*/
+                    value: castedValue
                 }};
             }
 
@@ -418,7 +367,7 @@ class FilterQueryBuilder extends Component {
             const fieldJSType = fieldUtils.getFieldJSType(getFieldById(item.field));
             const allowedOpsTypes = getValidOperationsTypesForJSType(fieldJSType);
             const allowedFieldsIds = getValidFieldsIdsForOperation(fields, filterUtils.getOperatorByType(item.operator));
-            const allowedFields = (function() { var ret = []; fields.map( (f) => { if (allowedFieldsIds[f.id]) ret.push(f); } ); /*  var f; for (f in fields) { if (allowedFieldsIds[f.id]) ret.push(f); }*/ return ret; })();
+            const allowedFields = (function() { var ret = []; fields.map( (f) => { if (allowedFieldsIds[f.id]) ret.push(f); } ); return ret; })();
             return (
                 <FieldFilterItem
                     index={index}
@@ -621,44 +570,6 @@ class RulesGroupBody extends Component {
             );
         }
 
-
-        function makeRuleContainer(indexNext, key, item, disabled, makeItemComponent, onDelete) {
-            return (
-                <li className="rule-container" key={key}>
-                    <div className="rule-header">
-                        <div className="btn-group pull-right rule-actions">
-                            {onDelete &&
-                            <button
-                                type="button"
-                                className="btn btn-xs btn-danger"
-                                onClick={() => { onDelete() }}
-                                disabled={disabled}
-                            >
-                                <i className="glyphicon glyphicon-remove"/> Delete
-                            </button>
-                            }
-                        </div>
-                    </div>
-                    <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
-                    {makeItemComponent(indexNext, item, disabled)}
-                </li>
-            );
-        }
-
-        function makeGroupContainer(index1, key, parsedRule, disabled, makeItemComponent) {
-            return (
-                <RulesGroupContainer
-                    index={index1}
-                    key={key}
-                    ruleItems={parsedRule.items}
-                    ruleIsAnd={parsedRule.group.isAnd}
-                    disabled={disabled}
-                    makeItemComponent={makeItemComponent}
-                    handlers={handlers}
-                />
-            );
-        }
-
         return (
             <dd className="rules-group-body">
                 <ul className="rules-list">
@@ -666,7 +577,6 @@ class RulesGroupBody extends Component {
                         items.map( (item, itemIndex) => {
                             const indexNext = index.concat(itemIndex);
                             if (item.condition) {
-                                //return <h1>{item.condition}</h1>
                                 return <RulesGroupContainer
                                     index={indexNext}
                                     key={itemIndex}
@@ -695,7 +605,9 @@ class RulesGroupBody extends Component {
 }
 
 
-
+/**
+ * Input field component with on blur and on enter firing onChange
+ */
 class Input extends Component {
     constructor(props) {
         super(props);
@@ -721,182 +633,9 @@ class Input extends Component {
 }
 
 
-
-class FieldFilterItem extends Component {
-    render() {
-        //return <span>{JSON.stringify(this.props.item)}</span>
-        /** {number[]} */
-        const index = this.props.index;
-        /** @type {{fieldId: string, fieldCondition: Object.<string, string|number|boolean|null|Array.<string|number>>}} */
-        const item = this.props.item;
-        /** @type {Array.<{id: string, label: string, type: string}>} */
-        const fields = this.props.fields;
-        /** @type {string[]} */
-        const allowedOpsTypes = this.props.allowedOpsTypes;
-        /** @type {string} */
-        const valueType = this.props.valueType;
-        /** @type {boolean} */
-        const disabled = this.props.disabled;
-        /** @type {function({fieldId: string, fieldCondition: Object.<string, string|number|boolean|null|Array.<string|number>>})} */
-        const onChange = this.props.onChange;
-
-        const selectOptionsList = fields.map( (field) => { return {value: field.id, label: field.label} } );
-        const selectOptionValue = item.field;
-
-        const opsListForSelect = allowedOpsTypes.map( (opname) => { return {value: opname, label: filterParser.ops.genomicsRuleOperatorsLabels[opname]}; });
-
-        function makeInputForSingleValue(value, disabled, onChange) {
-            var inputInfo = {
-                    'number': {attributes: {type: 'number', value: value}, getValue(el) { return +el.value; }, isText: true},
-                    'boolean': {attributes: {type: 'checkbox', checked: !!value}, getValue(el) { return el.checked; }, isText: false}
-                }[typeof value] || {attributes: {type: 'text', value: value}, getValue(el) { return el.value; }, isText: true };
-            return (
-                inputInfo.isText ?
-                    <Input
-                        className="form-control"
-                        {...inputInfo.attributes}
-                        disabled={disabled}
-                        onChange={ (val) => onChange(val) }
-                    /> :
-                    <input
-                        className="form-control"
-                        {...inputInfo.attributes}
-                        disabled={disabled}
-                        onChange={ (evt) => onChange(inputInfo.getValue(evt.target)) }
-                    />
-            );
-        }
-
-        function makeInputList(values, disabled, onChange) {
-            return (
-                <div className="rule-value-array">
-                    {values.map( (value, index) => {
-                        return (
-                            <div key={index} className="rule-value-array-item">
-                                {makeInputForSingleValue(value, disabled, (val) => onChange(index, val) )}
-                            </div>
-                        );
-                    })}
-                </div>
-            );
-        }
-
-        return (
-            <div>
-                <div className="rule-filter-container">
-                    <Select
-                        className="selectTree"
-                        options={selectOptionsList}
-                        value={selectOptionValue}
-                        clearable={false}
-                        disabled={disabled}
-                        onChange={(val) => {
-                            onChange({
-                                id: val.value,
-                                field: val.value,
-                                operator: item.operator,
-                                value: item.value
-                            });
-                        }}
-                    />
-                </div>
-                <div className="rule-operator-container rule-operator-container-operation">
-                    <Select
-                        className="select2"
-                        options={opsListForSelect}
-                        value={item.operator}
-                        clearable={false}
-                        disabled={disabled}
-                        onChange={ (val) => {
-                            onChange({
-                                id: item.id,
-                                field: item.field,
-                                operator: val.value,
-                                value: item.value
-                            });
-                        }}
-                    />
-                </div>
-                <div className="rule-value-container">
-                    {(function(value){
-
-                        const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
-
-                        if (typeof value === 'object') {
-                            if (!value) {
-                                return null;
-                            }
-
-                            const operatorInfo = filterUtils.getOperatorByType(item.operator);
-                            const opWant = filterParser.ops.getOperatorWantedParams(operatorInfo);
-                            if (opWant.arraySize) {
-                                return <div className="rule-value-array">
-                                    <InputArray
-                                        value={value}
-                                        type={valueType === 'number' ? 'number' : 'text'}
-                                        disabled={disabled}
-                                        onChange={ (vals) => onChange({
-                                            id: item.id,
-                                            field: item.field,
-                                            operator: item.operator,
-                                            value: vals
-                                        })}
-                                    />
-                                </div>
-                            } else {
-                                return <div className="rule-value-array">
-                                    <InputResizingArray
-                                        value={value}
-                                        type={valueType === 'number' ? 'number' : 'text'}
-                                        disabled={disabled}
-                                        onChange={ (vals) => onChange({
-                                            id: item.id,
-                                            field: item.field,
-                                            operator: item.operator,
-                                            value: vals
-                                        })}
-                                    />
-                                </div>
-                            }
-                        }
-                        if (typeof value === 'boolean') {
-                            return <input
-                                className="form-control"
-                                type="checkbox"
-                                checked={item.value}
-                                disabled={disabled}
-                                onChange={ (evt) => onChange({
-                                    id: item.id,
-                                    field: item.field,
-                                    operator: item.operator,
-                                    value: evt.target.checked
-                                })}
-                            />
-                        }
-                        return makeInputForSingleValue(
-                            value,
-                            disabled,
-                            (val) => onChange({
-                                id: item.id,
-                                field: item.field,
-                                operator: item.operator,
-                                value: getInputValue(val)
-                            })
-                        );
-
-                    })(item.value)}
-                </div>
-            </div>
-        )
-    }
-}
-
-
-class NullFilterItem extends Component {
-    render() {
-        return <div>item</div>
-    }
-}
+/**
+ * Input fields arrays, resizeable and fixed sized
+ */
 
 const makeKey = (function() {
     var key;
@@ -983,6 +722,176 @@ class InputArray extends Component {
     }
 }
 
+
+class FieldFilterItem extends Component {
+    render() {
+        /** {number[]} */
+        const index = this.props.index;
+        /** @type {{fieldId: string, fieldCondition: Object.<string, string|number|boolean|null|Array.<string|number>>}} */
+        const item = this.props.item;
+        /** @type {Array.<{id: string, label: string, type: string}>} */
+        const fields = this.props.fields;
+        /** @type {string[]} */
+        const allowedOpsTypes = this.props.allowedOpsTypes;
+        /** @type {string} */
+        const valueType = this.props.valueType;
+        /** @type {boolean} */
+        const disabled = this.props.disabled;
+        /** @type {function({fieldId: string, fieldCondition: Object.<string, string|number|boolean|null|Array.<string|number>>})} */
+        const onChange = this.props.onChange;
+
+        const selectOptionsList = fields.map( (field) => { return {value: field.id, label: field.label} } );
+        const selectOptionValue = item.field;
+
+        const opsListForSelect = allowedOpsTypes.map( (opname) => { return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]}; });
+
+        function makeInputForSingleValue(value, disabled, onChange) {
+            var inputInfo = {
+                    'number': {attributes: {type: 'number', value: value}, getValue(el) { return +el.value; }, isText: true},
+                    'boolean': {attributes: {type: 'checkbox', checked: !!value}, getValue(el) { return el.checked; }, isText: false}
+                }[typeof value] || {attributes: {type: 'text', value: value}, getValue(el) { return el.value; }, isText: true };
+            return (
+                inputInfo.isText ?
+                    <Input
+                        className="form-control"
+                        {...inputInfo.attributes}
+                        disabled={disabled}
+                        onChange={ (val) => onChange(val) }
+                    /> :
+                    <input
+                        className="form-control"
+                        {...inputInfo.attributes}
+                        disabled={disabled}
+                        onChange={ (evt) => onChange(inputInfo.getValue(evt.target)) }
+                    />
+            );
+        }
+
+        function makeInputList(values, disabled, onChange) {
+            return (
+                <div className="rule-value-array">
+                    {values.map( (value, index) => {
+                        return (
+                            <div key={index} className="rule-value-array-item">
+                                {makeInputForSingleValue(value, disabled, (val) => onChange(index, val) )}
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        }
+
+        return (
+            <div>
+                <div className="rule-filter-container">
+                    <Select
+                        className="selectTree"
+                        options={selectOptionsList}
+                        value={selectOptionValue}
+                        clearable={false}
+                        disabled={disabled}
+                        onChange={(val) => {
+                            onChange({
+                                id: val.value,
+                                field: val.value,
+                                operator: item.operator,
+                                value: item.value
+                            });
+                        }}
+                    />
+                </div>
+                <div className="rule-operator-container rule-operator-container-operation">
+                    <Select
+                        className="select2"
+                        options={opsListForSelect}
+                        value={item.operator}
+                        clearable={false}
+                        disabled={disabled}
+                        onChange={ (val) => {
+                            onChange({
+                                id: item.id,
+                                field: item.field,
+                                operator: val.value,
+                                value: item.value
+                            });
+                        }}
+                    />
+                </div>
+                <div className="rule-value-container">
+                    {(function(value){
+
+                        const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
+
+                        if (typeof value === 'object') {
+                            if (!value) {
+                                return null;
+                            }
+
+                            const operatorInfo = filterUtils.getOperatorByType(item.operator);
+                            const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
+                            if (opWant.arraySize) {
+                                return <div className="rule-value-array">
+                                    <InputArray
+                                        value={value}
+                                        type={valueType === 'number' ? 'number' : 'text'}
+                                        disabled={disabled}
+                                        onChange={ (vals) => onChange({
+                                            id: item.id,
+                                            field: item.field,
+                                            operator: item.operator,
+                                            value: vals
+                                        })}
+                                    />
+                                </div>
+                            } else {
+                                return <div className="rule-value-array">
+                                    <InputResizingArray
+                                        value={value}
+                                        type={valueType === 'number' ? 'number' : 'text'}
+                                        disabled={disabled}
+                                        onChange={ (vals) => onChange({
+                                            id: item.id,
+                                            field: item.field,
+                                            operator: item.operator,
+                                            value: vals
+                                        })}
+                                    />
+                                </div>
+                            }
+                        }
+                        if (typeof value === 'boolean') {
+                            return <input
+                                className="form-control"
+                                type="checkbox"
+                                checked={item.value}
+                                disabled={disabled}
+                                onChange={ (evt) => onChange({
+                                    id: item.id,
+                                    field: item.field,
+                                    operator: item.operator,
+                                    value: evt.target.checked
+                                })}
+                            />
+                        }
+                        return makeInputForSingleValue(
+                            value,
+                            disabled,
+                            (val) => onChange({
+                                id: item.id,
+                                field: item.field,
+                                operator: item.operator,
+                                value: getInputValue(val)
+                            })
+                        );
+
+                    })(item.value)}
+                </div>
+            </div>
+        )
+    }
+}
+
+
 export default class FilterBuilder extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -1028,7 +937,6 @@ There must be not editable fields to prevent select gender for the person
     const filter = editOrNew ? (editedFilter):(newFilter);
     return (
       <div className="builder-wrapper">
-          <div>{filter.type || 'no type' + typeof filter.type + '   ' + JSON.stringify(filter)}</div>
         <FilterQueryBuilder
             fields={this.makeFieldsList(this.props.fields)}
             rules={filter.rules}

@@ -136,6 +136,15 @@ export function filterBuilderUpdateFilter() {
     }
 }
 
+export function filterBuilderSaveAndSelectRules() {
+    return (dispatch, getState) => {
+        const rules = getState().filterBuilder.editOrNew ? getState().filterBuilder.editedFilter.rules : getState().filterBuilder.newFilter.rules;
+        dispatch(filterBuilderRules(rules));
+        getState().filterBuilder.editOrNew ?
+            dispatch(filterBuilderUpdateFilter()) : dispatch(filterBuilderCreateFilter())
+    };
+}
+
 export function filterBuilderRequestRules() {
     return {
         type: FBUILDER_REQUEST_RULES
