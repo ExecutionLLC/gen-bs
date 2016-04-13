@@ -39,6 +39,7 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div className="panel">
                 {this.renderHeader()}
+                {this.renderCurrentValues()}
                 {this.renderEditableValues()}
                 {this.renderFooter()}
             </div>
@@ -88,6 +89,44 @@ export default class FileUploadSamplesRow extends Component {
                                        editedSamples={editedSamples}
             />
         )
+    }
+
+    renderCurrentValues() {
+        const {sample, fields} = this.props;
+        const fieldIdToValuesHash = _.reduce(sample.values, (result, value) => {
+            result[value.fieldId] = value.values;
+            return result;
+        }, {});
+
+        return (
+            <div>
+                <div className="flex">
+                    {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
+                </div>
+            </div>
+        );
+    }
+
+    renderReadOnlyField(field, fieldIdToValuesHash) {
+        if (fieldIdToValuesHash[field.id]) {
+            let fieldValue = fieldIdToValuesHash[field.id];
+            // If field has available values, then the value is id of the actual option.
+            // We then need to retrieve the actual value corresponding to the option.
+            if (!_.isEmpty(field.availableValues)) {
+                const option = _.find(field.availableValues,
+                    availableValue => availableValue.id === fieldValue);
+                fieldValue = option.value;
+            }
+            return (
+                <dl key={field.id}
+                    className="dl-horizontal">
+                    <dt>{field.label}</dt>
+                    <dd>{fieldValue}</dd>
+                </dl>
+            );
+        } else {
+            return null;
+        }
     }
 }
 
