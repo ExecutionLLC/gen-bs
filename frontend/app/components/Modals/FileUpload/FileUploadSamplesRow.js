@@ -59,7 +59,7 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div className="panel">
                 {this.renderHeader()}
-                {this.renderValues()}
+                {this.renderEditableValues()}
                 {this.renderFooter()}
             </div>
         );
@@ -97,23 +97,12 @@ export default class FileUploadSamplesRow extends Component {
         );
     }
 
-    renderSelectField(field) {
-        let fieldValue;
-        const {sample, samplesList} = this.props;
+    renderSelectField(sampleId, field, fieldValue) {
         const selectOptions = field.availableValues.map(
             option => {
                 return {value: option.id, label: option.value}
             }
         );
-        const currentSampleIndex = _.findIndex(samplesList.editedSamples, {id: sample.id});
-
-        if (currentSampleIndex >= 0) {
-            const storedValue = _.find(samplesList.editedSamples[currentSampleIndex].values || [],
-                item => item.fieldId === field.id);
-            fieldValue = storedValue ? storedValue.values : '';
-        } else {
-            fieldValue = '';
-        }
 
         return (
             <dl key={field.id} className="dl-horizontal">
@@ -123,26 +112,14 @@ export default class FileUploadSamplesRow extends Component {
                         options={selectOptions}
                         clearable={false}
                         value={fieldValue}
-                        onChange={(e) => this.onSampleValueUpdated(sample.id, field.id, e.value)}
+                        onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.value)}
                     />
                 </dd>
             </dl>
         );
     }
 
-    renderTextField(field) {
-        let fieldValue;
-        const {sample, samplesList: {editedSamples}} = this.props;
-        const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
-
-        if (currentSampleIndex >= 0) {
-            const storedValue = _.find(editedSamples[currentSampleIndex].values || [],
-                item => item.fieldId === field.id);
-            fieldValue = storedValue ? storedValue.values : '';
-        } else {
-            fieldValue = '';
-        }
-
+    renderTextField(sampleId, field, fieldValue) {
         return (
             <dl key={field.id} className="dl-horizontal">
                 <dt>{field.label}</dt>
@@ -151,7 +128,7 @@ export default class FileUploadSamplesRow extends Component {
                         type="text"
                         className="form-control"
                         value={fieldValue}
-                        onChange={(e) => this.onSampleValueUpdated(sample.id, field.id, e.target.value) }
+                        onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.target.value) }
                     />
                 </dd>
             </dl>
@@ -181,27 +158,39 @@ export default class FileUploadSamplesRow extends Component {
         )
     }
 
-    renderValues() {
-        // TODO: Refactor render*Field methods to move all the calculations
-        // to the upper level to do them only once.
+    renderEditableValues() {
         return (
             <Panel collapsible
                    expanded={this.state.showValues}
                    className="samples-values form-horizontal-rows"
             >
                 <div className="flex">
-                    {this.props.fields.map(field => {
-                        if (field.availableValues) {
-                            return this.renderSelectField(field);
-                        } else {
-                            return this.renderTextField(field);
-                        }
-
-                    })}
+                    {this.props.fields.map(field => this.renderEditableField(field))}
                     {this.renderRowButtons()}
                 </div>
             </Panel>
         )
+    }
+
+    renderEditableField(field) {
+        let fieldValue;
+        const {sample, samplesList: {editedSamples}} = this.props;
+        const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
+        const sampleId = sample.id;
+
+        if (currentSampleIndex >= 0) {
+            const storedValue = _.find(editedSamples[currentSampleIndex].values || [],
+                item => item.fieldId === field.id);
+            fieldValue = storedValue ? storedValue.values : '';
+        } else {
+            fieldValue = '';
+        }
+
+        if (field.availableValues) {
+            return this.renderSelectField(sampleId, field, fieldValue);
+        } else {
+            return this.renderTextField(sampleId, field, fieldValue);
+        }
     }
 }
 
