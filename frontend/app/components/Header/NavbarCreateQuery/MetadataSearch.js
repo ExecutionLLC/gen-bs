@@ -10,7 +10,7 @@ export default class MetadataSearch extends Component {
     }
 
     render() {
-        const {samples, currentSampleId, onSampleChangeRequested} = this.props;
+        const {samples, selectedSampleId, onSampleChangeRequested} = this.props;
         return (
 
             <div className="table-cell max-width">
@@ -23,7 +23,7 @@ export default class MetadataSearch extends Component {
                 >
                     <Select options={samples.map( s => { return {value: s.id, label: s.fileName} } )}
                             clearable={false}
-                            value={currentSampleId}
+                            value={selectedSampleId}
                             onChange={ (item) => onSampleChangeRequested(item.value)}
                     />
                 </div>
@@ -34,7 +34,7 @@ export default class MetadataSearch extends Component {
 
 MetadataSearch.propTypes = {
     samples: React.PropTypes.array.isRequired,
-    currentSampleId: React.PropTypes.string,
+    selectedSampleId: React.PropTypes.string,
     /**
      * @type Function(Uuid sampleId)
      * */

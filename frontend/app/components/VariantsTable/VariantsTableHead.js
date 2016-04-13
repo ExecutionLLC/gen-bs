@@ -5,14 +5,17 @@ import FieldHeader from './FieldHeader';
 import  { firstCharToUpperCase } from '../../utils/stringUtils';
 import FieldUtils from '../../utils/fieldUtils';
 
-import { changeVariantsFilter, sortVariants, searchInResultsSortFilter } from '../../actions/variantsTable';
+import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
 
 export default class VariantsTableHead extends Component {
 
     render() {
         const { dispatch, fields, ws, searchParams } = this.props;
         const { sort } = this.props.variantsTable.searchInResultsParams;
-        const currentView = ws.variantsView;
+        const {
+            variantsView: currentView,
+            variantsSampleFieldsList: currentSampleFields
+        } = ws;
 
         if (!searchParams || !currentView) {
             return (
@@ -56,24 +59,25 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, sort, dispatch))}
+                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, currentSampleFields, sort, dispatch))}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, fields, sortState, dispatch) {
+    renderFieldHeader(fieldId, fields, currentSampleFields, sortState, dispatch) {
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
             dispatch(sortVariants(fieldId, direction, isControlKeyPressed));
         const sendSearchRequest = (fieldId, searchValue) => {
-            dispatch(changeVariantsFilter(fieldId, searchValue));
+            dispatch(setFieldFilter(fieldId, searchValue));
             dispatch(searchInResultsSortFilter());
         };
-        const onSearchValueChanged = (fieldId, searchValue) => dispatch(changeVariantsFilter(fieldId, searchValue));
+        const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, searchValue));
         return (
             <FieldHeader key={fieldId}
                          fieldId={fieldId}
                          fields={fields}
+                         currentSampleFields={currentSampleFields}
                          sortState={sortState}
                          onSortRequested={sendSortRequestedAction}
                          onSearchRequested={sendSearchRequest}

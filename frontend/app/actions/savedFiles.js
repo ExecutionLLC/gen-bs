@@ -29,21 +29,21 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
     return (dispatch, getState) => {
         const {
             ui: {
-                currentView,
-                currentFilter,
+                selectedView,
+                selectedFilter,
                 language
             },
             auth: {
                 sessionId
             },
             samplesList: {
-                currentSample
+                selectedSample
             }
         } = getState();
         const fileMetadata = {
-            sampleId: currentSample.id,
-            viewId: currentView.id,
-            filterIds: [currentFilter.id],
+            sampleId: selectedSample.id,
+            viewId: selectedView.id,
+            filterIds: [selectedFilter.id],
             name: fileName,
             url: null,
             totalResults
@@ -120,10 +120,10 @@ export function exportToFile(exportType) {
                 isDemo
             },
             ui: {
-                currentView,
+                selectedView,
             },
             samplesList: {
-                currentSample
+                selectedSample
             },
             websocket: {
                 variants
@@ -138,7 +138,7 @@ export function exportToFile(exportType) {
 
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
-        const columns = _.map(currentView.viewListItems, listItem => {
+        const columns = _.map(selectedView.viewListItems, listItem => {
                 const field = totalFieldsHash[listItem.fieldId];
                 return {
                     id: listItem.fieldId,
@@ -168,7 +168,7 @@ export function exportToFile(exportType) {
         const exporter = ExportUtils.createExporter(exportType);
         const fileBlob = exporter.buildBlob(columns, dataToExport);
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
-        const fileName = `${currentSample.fileName}_chunk_${createdDate}.${exportType}`;
+        const fileName = `${selectedSample.fileName}_chunk_${createdDate}.${exportType}`;
         const count = selectedRowIndices.length;
 
         dispatch(createUserDownload(fileBlob, fileName));

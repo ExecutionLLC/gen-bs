@@ -4,7 +4,7 @@ import * as ActionTypes from '../actions/samplesList'
 export default function samplesList(state = {
     samples: [],
     editedSamples: [],
-    currentSample: null
+    selectedSample: null
 }, action) {
 
     let currentSampleIndex;
@@ -71,7 +71,7 @@ export default function samplesList(state = {
         case ActionTypes.CHANGE_SAMPLE:
             let {sampleId} = action;
             return Object.assign({}, state, {
-                currentSample: _.find(state.samples, {id: sampleId})
+                selectedSample: _.find(state.samples, {id: sampleId})
             });
 
         default:
