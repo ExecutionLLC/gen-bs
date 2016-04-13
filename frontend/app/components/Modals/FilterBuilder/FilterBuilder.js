@@ -262,6 +262,9 @@ class FilterQueryBuilder extends Component {
                 }
 
                 const field = getFieldById(rule.field);
+                if (!field) {
+                    return {errorMessage: 'field id "' + rule.field + '" is invalid'};
+                }
                 const fieldJSType = fieldUtils.getFieldJSType(field);
                 const operatorType = rule.operator;
                 const operatorInfo = filterUtils.getOperatorByType(operatorType);
