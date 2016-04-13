@@ -8,21 +8,7 @@
     "is_mandatory": false,
     "value_type": "string",
     "description": "Family ",
-    "dimension": 1,
-    "available_values": [
-      {
-        "langu_id": "en",
-        "value": "abc1"
-      },
-      {
-        "langu_id": "en",
-        "value": "abc2"
-      },
-      {
-        "langu_id": "en",
-        "value": "abc3"
-      }
-    ]
+    "dimension": 1
   },
   {
     "id": "00000000-0000-0000-0000-000000000011",
@@ -133,8 +119,18 @@
     "is_editable": true,
     "is_mandatory": false,
     "value_type": "string",
-    "description": "Genome build (hg19 (default)/hg38)",
-    "dimension": 1
+    "description": "Genome build",
+    "dimension": 1,
+    "available_values": [
+      {
+        "langu_id": "en",
+        "value": "hg19"
+      },
+      {
+        "langu_id": "en",
+        "value": "hg38"
+      }
+    ]
   },
   {
     "id": "00000000-0000-0000-0000-000000000017",

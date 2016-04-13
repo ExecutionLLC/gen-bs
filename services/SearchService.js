@@ -33,10 +33,10 @@ class SearchService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    sendSearchRequest(user, sessionId, languId, sampleId, viewId, filterId, limit, offset, callback) {
-        if (!_.some([languId, viewId, filterId, sampleId, limit, offset])) {
+    sendSearchRequest(user, sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) {
+        if (!_.some([languageId, viewId, filterId, sampleId, limit, offset])) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
-                    languId: languId || 'undefined',
+                    languId: languageId || 'undefined',
                     viewId: viewId || 'undefined',
                     filterId: filterId || 'undefined',
                     sampleId: sampleId || 'undefined',
@@ -45,11 +45,13 @@ class SearchService extends ServiceBase {
                 }, null, 2)));
         } else {
             async.waterfall([
+                (callback) => this.services.queryHistory.add(user, languageId, sampleId, viewId, filterId,
+                    (error) => callback(error)),
                 (callback) => {
                     this.services.sessions.findById(sessionId, callback);
                 },
                 (sessionId, callback) => {
-                    this._createAppServerSearchParams(sessionId, user, languId, sampleId, viewId, filterId, limit, offset, callback);
+                    this._createAppServerSearchParams(sessionId, user, languageId, sampleId, viewId, filterId, limit, offset, callback);
                 },
                 (appServerRequestParams, callback) => {
                     this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -110,6 +112,7 @@ class SearchService extends ServiceBase {
             }
         ], callback);
     }
+
 
     _subscribeToRedisEvents() {
         const redisEvents = this.services.redis.registeredEvents();

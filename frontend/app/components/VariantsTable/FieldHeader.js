@@ -15,18 +15,18 @@ export default class FieldHeaderControls extends Component {
     }
 
     isFieldExists(fieldId) {
-        const {currentVariants} = this.props;
-        if (_.isEmpty(currentVariants)) {
+        const {currentSampleFields} = this.props;
+        if (_.isEmpty(currentSampleFields)) {
             return false;
         } else {
-            const variantField = _.find(currentVariants[0].fields, field=>field.field_id == fieldId);
+            const variantField = _.find(currentSampleFields, field => field.id == fieldId);
             return (variantField) ? true : false;
         }
     }
 
     render() {
         const {fieldId, fields, sortState} = this.props;
-        const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.field_id === fieldId)
+        const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldId)
             : null;
         if (columnSortParams) {
             console.log('columnSortParams', columnSortParams)
@@ -87,7 +87,7 @@ export default class FieldHeaderControls extends Component {
         const {fieldId, fields} = this.props;
         const {searchString, isFilterOpened} = this.state;
         const fieldMetadata = FieldUtils.find(fieldId, fields);
-        const fieldValueType = fieldMetadata ? fieldMetadata.value_type : null;
+        const fieldValueType = fieldMetadata ? fieldMetadata.valueType : null;
         const isFieldSearchable = fieldValueType === 'string';
         const inputGroupClasses = classNames(
             'variants-table-search-field',
@@ -104,7 +104,7 @@ export default class FieldHeaderControls extends Component {
                     <span className="input-group-btn">
                         <button className="btn btn-link-light-default"
                                 onClick={() => this.setFilterOpened(true)}>
-                            <i className="md-i">search</i>
+                            <i></i>
                         </button>
                     </span>
                     <input type="text"
@@ -122,7 +122,7 @@ export default class FieldHeaderControls extends Component {
                 <div className={inputGroupClasses}>
                     <span className="input-group-btn">
                         <button className="btn btn-link-light-default">
-                            <i className="md-i">search</i>
+                            <i></i>
                         </button>
                     </span>
                     <input type="text"
@@ -194,6 +194,7 @@ FieldHeaderControls.propTypes = {
     fieldId: React.PropTypes.string.isRequired,
     fields: React.PropTypes.object.isRequired,
     sortState: React.PropTypes.array.isRequired,
+    currentSampleFields: React.PropTypes.array.isRequired,
     // callback(fieldId, searchString)
     onSearchValueChanged: React.PropTypes.func.isRequired,
     // callback(fieldId, searchString)

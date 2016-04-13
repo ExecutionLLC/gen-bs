@@ -19,7 +19,7 @@ export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 export const WS_ADD_COMMENT = 'WS_ADD_COMMENT';
 export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT';
 export const WS_DELETE_COMMENT='WS_DELETE_COMMENT';
-export const REQUEST_CHANGE_VIEW='REQUEST_CHANGE_VIEW';
+export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 
 
 /*
@@ -45,11 +45,11 @@ export  function changeComment(commentData){
     }
 }
 
-export  function deleteComment(commentData,search_key){
+export  function deleteComment(commentData, searchKey){
     return {
         type: WS_DELETE_COMMENT,
         commentData,
-        search_key
+        searchKey
     }
 }
 export function clearVariants() {
@@ -76,7 +76,7 @@ function progressMessageRouter(wsData) {
     return (dispatch, getState) => {
         dispatch(progressMessage(wsData));
 
-        if (getState().fileUpload.operationId === wsData.operation_id) {
+        if (getState().fileUpload.operationId === wsData.operationId) {
             dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
         }
     }
@@ -99,7 +99,7 @@ function receiveError(err) {
 function asErrorRouter(wsData) {
     return (dispatch, getState) => {
 
-        if (getState().fileUpload.operationId === wsData.operation_id) {
+        if (getState().fileUpload.operationId === wsData.operationId) {
             dispatch(fileUploadError(wsData.result.error.message))
         } else {
             dispatch(asError(wsData.result.error))
@@ -125,9 +125,9 @@ function receiveMessage(msg) {
     return (dispatch, getState) => {
         const wsData = JSON.parse(JSON.parse(msg));
         console.log('wsData.result', wsData.result);
-        console.log('wsData.operation_id', wsData.operation_id);
+        console.log('wsData.operationId', wsData.operationId);
         if (wsData.result) {
-            if (wsData.result.sample_id && getState().fileUpload.operationId !== wsData.operation_id) {
+            if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
                 dispatch(tableMessage(wsData));
                 if (getState().variantsTable.isFilteringOrSorting) {
                     dispatch(receiveSearchedResults())
@@ -159,11 +159,11 @@ function sended(msg) {
     }
 }
 
-export function subscribeToWs(sid) {
+export function subscribeToWs(sessionId) {
     return (dispatch, getState) => {
         const conn = getState().websocket.wsConn;
-        conn.onopen = event => {
-            conn.send(JSON.stringify({session_id: sid}));
+        conn.onopen = () => {
+            conn.send(JSON.stringify({sessionId}));
         };
         conn.onmessage = event => dispatch(receiveMessage(JSON.stringify(event.data)));
         conn.onerror = event => dispatch(receiveError(event.data));
@@ -187,9 +187,10 @@ export function requestAnalyze(searchParams) {
     };
 }
 
-export function requestChangeView(view) {
+export function requestSetCurrentParams(view, sampleFields) {
     return {
-        type: REQUEST_CHANGE_VIEW,
-        view
+        type: REQUEST_SET_CURRENT_PARAMS,
+        view,
+        sampleFields
     };
 }

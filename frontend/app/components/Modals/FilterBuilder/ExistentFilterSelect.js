@@ -12,13 +12,13 @@ export default class ExistentFilterSelect extends Component {
     render() {
 
         const { dispatch, auth } = this.props;
-        const { currentFilter} = this.props.filterBuilder;
+        const {selectedFilter} = this.props.filterBuilder;
         const { filters } = this.props.userData;
         const disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
         });
-        const title = (auth.isDemo) ? 'Login or register to create filters' : 'Make a copy for editing';
-        const isFilterEditable = (currentFilter.type === 'user');
+        const title = (auth.isDemo) ? 'Login or register to work with filter' : 'Make a copy for editing';
+        const isFilterEditable = (selectedFilter.type === 'user');
 
         return (
 
@@ -30,14 +30,16 @@ export default class ExistentFilterSelect extends Component {
                 </div>
                 { !isFilterEditable &&
                     <div className="alert alert-help">
-                        <span data-localize="views.setup.selector.description">This filter is not editable, duplicate it to make changes.</span>
+                        <span data-localize="views.setup.selector.description">
+                            This filter is not editable, duplicate it to make changes. (Only for registered users)
+                        </span>
                     </div>
                 }
                 <div className="row grid-toolbar">
                     <div className="col-sm-6">
                         <Select
                             options={filters.map( filter => { return {value: filter.id, label: filter.name} } )}
-                            value={currentFilter.id}
+                            value={selectedFilter.id}
                             clearable={false}
                             onChange={ (val) => dispatch(filterBuilderSelectFilter(filters, val.value, true))}
                         />
@@ -62,7 +64,7 @@ export default class ExistentFilterSelect extends Component {
                         { isFilterEditable &&
                         <div className="btn-group ">
                             <button type="button" className="btn btn-default"
-                                    onClick={() => dispatch(filterBuilderSelectFilter(filters, currentFilter.id, true))}
+                                    onClick={() => dispatch(filterBuilderSelectFilter(filters, selectedFilter.id, true))}
                             >
                                 <span data-localize="views.setup.reset.title">Reset Filter</span>
                             </button>

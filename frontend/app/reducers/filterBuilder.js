@@ -2,7 +2,7 @@ import * as ActionTypes from '../actions/filterBuilder'
 
 export default function filterBuilder(state = {
     isReceivedFilters: false,
-    currentFilter: null,
+    selectedFilter: null,
     editedFilter: null,
     newFilter: null,
     editOrNew: true,
@@ -10,28 +10,27 @@ export default function filterBuilder(state = {
     rulesRequested: false
 }, action) {
 
-    var currentFilter;
-    var filterItemIndex;
+    var selectedFilter;
 
     switch (action.type) {
         case ActionTypes.FBUILDER_SELECT_FILTER:
-            currentFilter = _.find(action.filters, {id: action.filterId}) || null
+            selectedFilter = _.find(action.filters, {id: action.filterId}) || null
             return Object.assign({}, state, {
-                currentFilter: currentFilter,
-                isReceivedFilters: currentFilter !== null,
-                editedFilter: action.editOrNew ? currentFilter : null,
-                newFilter: !action.editOrNew ? currentFilter : null,
+                selectedFilter,
+                isReceivedFilters: selectedFilter !== null,
+                editedFilter: action.editOrNew ? selectedFilter : null,
+                newFilter: !action.editOrNew ? selectedFilter : null,
                 editOrNew: action.editOrNew
             });
 
         case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
             return Object.assign({}, state, {
                 editOrNew: action.editOrNew,
-                editedFilter: action.editOrNew ? state.currentFilter : null,
-                newFilter: !action.editOrNew ? Object.assign({}, state.currentFilter, {
+                editedFilter: action.editOrNew ? state.selectedFilter : null,
+                newFilter: !action.editOrNew ? Object.assign({}, state.selectedFilter, {
                     type: 'user',
-                    name: `Copy of ${state.currentFilter.name}`
-                }) : null,
+                    name: `Copy of ${state.selectedFilter.name}`
+                }) : null
             });
 
         case ActionTypes.FBUILDER_CHANGE_ATTR:
@@ -50,7 +49,7 @@ export default function filterBuilder(state = {
             return Object.assign({}, state, {
                 rulesRequested: true,
                 rulesPrepared: false
-            })
+            });
 
         case ActionTypes.FBUILDER_RECEIVE_RULES:
             return Object.assign({}, state, {
@@ -62,29 +61,29 @@ export default function filterBuilder(state = {
                 newFilter: state.newFilter ? Object.assign({}, state.newFilter, {
                     rules: action.rules
                 }) : null
-            })
+            });
 
         case ActionTypes.FBUILDER_REQUEST_UPDATE_FILTER:
             return Object.assign({}, state, {
                 isFetching: true
-            })
+            });
 
         case ActionTypes.FBUILDER_RECEIVE_UPDATE_FILTER:
             return Object.assign({}, state, {
                 isFetching: false,
-                currentFilter: action.filter
-            })
+                selectedFilter: action.filter
+            });
 
         case ActionTypes.FBUILDER_REQUEST_CREATE_FILTER:
             return Object.assign({}, state, {
                 isFetching: true
-            })
+            });
 
         case ActionTypes.FBUILDER_RECEIVE_CREATE_FILTER:
             return Object.assign({}, state, {
                 isFetching: false,
-                currentFilter: action.filter
-            })
+                selectedFilter: action.filter
+            });
 
         case ActionTypes.FBUILDER_CHANGE_ALL: return (function() {
             const { editOrNew, editedFilter, newFilter } = state;

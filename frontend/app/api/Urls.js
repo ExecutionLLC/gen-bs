@@ -41,7 +41,17 @@ class CollectionUrls {
     }
 }
 
-class SavedFilesUrls extends CollectionUrls {
+class UploadableEntityUrls extends CollectionUrls {
+    constructor(baseUrl, host, port) {
+        super(baseUrl, host, port);
+    }
+
+    upload() {
+        return this._constructApiUrl('/upload');
+    }
+}
+
+class SavedFilesUrls extends UploadableEntityUrls {
     constructor(baseUrl, host, port) {
         super(baseUrl, host, port);
     }
@@ -49,16 +59,6 @@ class SavedFilesUrls extends CollectionUrls {
     download(itemId) {
         const itemUrl = this._createUrlForId(itemId);
         return itemUrl + '/download';
-    }
-}
-
-class SamplesUrls extends CollectionUrls {
-    constructor(baseUrl, host, port) {
-        super(baseUrl, host, port);
-    }
-
-    upload() {
-        return this._constructApiUrl('/upload');
     }
 }
 
@@ -76,6 +76,10 @@ export default class Urls {
         return this._constructApiUrl('/data');
     }
 
+    history() {
+        return this._constructApiUrl('/history', this.host, this.port);
+    }
+    
     startSearch() {
         return this._constructApiUrl('/search');
     }
@@ -109,7 +113,7 @@ export default class Urls {
     }
 
     samplesUrls() {
-        return new SamplesUrls('/samples', this.host, this.port);
+        return new UploadableEntityUrls('/samples', this.host, this.port);
     }
 
     commentsUrls() {

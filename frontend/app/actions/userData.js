@@ -1,6 +1,13 @@
-import config from '../../config'
-import { analyze, changeSample, changeView, changeFilter } from './ui'
-import { fetchFields, fetchSourceFields } from './fields'
+import apiFacade from '../api/ApiFacade'
+import {handleError} from './errorHandler'
+import {receiveFields, receiveTotalFields} from './fields'
+import {receiveSavedFilesList} from './savedFiles';
+import {receiveQueryHistory} from './queryHistory';
+import {analyze, changeView, changeFilter} from './ui';
+import {changeSample, receiveSamplesList} from './samplesList';
+
+import HttpStatus from 'http-status';
+import * as _ from "lodash";
 
 /*
  * action types
@@ -14,13 +21,26 @@ export const REQUEST_VIEWS = 'REQUEST_VIEWS';
 export const RECEIVE_FILTERS = 'RECEIVE_FILTERS';
 export const REQUEST_FILTERS = 'REQUEST_FILTERS';
 
-export const RECEIVE_SAMPLES = 'RECEIVE_SAMPLES';
-export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
+export const ATTACH_HISTORY_DATA = 'ATTACH_HISTORY_DATA';
+export const DETACH_HISTORY_DATA = 'DETACH_HISTORY_DATA';
 
+const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
+const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
+
+const FETCH_FILTERS_NETWORK_ERROR = 'Cannot update filters data (network error). You can reload page and try again.';
+const FETCH_FILTERS_SERVER_ERROR = 'Cannot update filters data (server error). You can reload page and try again.';
+
+const FETCH_VIEWS_NETWORK_ERROR = 'Cannot update views data (network error). You can reload page and try again.';
+const FETCH_VIEWS_SERVER_ERROR = 'Cannot update views data (server error). You can reload page and try again.';
+
+const dataClient = apiFacade.dataClient;
+const filtersClient = apiFacade.filtersClient;
+const viewsClient = apiFacade.viewsClient;
 
 /*
  * action creators
  */
+
 function requestUserdata() {
     return {
         type: REQUEST_USERDATA
@@ -38,28 +58,40 @@ function receiveUserdata(json) {
 export function fetchUserdata() {
 
     return (dispatch, getState) => {
-
         dispatch(requestUserdata());
+        const {auth: {sessionId}, ui: {languageId}} = getState();
+        dataClient.getUserData(sessionId, languageId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, FETCH_USER_DATA_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
+            } else {
+                const userData = response.body;
+                const view = _.find(userData.views, view => view.type === 'standard');
+                const {
+                    samples,
+                    totalFields,
+                    savedFiles,
+                    queryHistory,
+                    lastSampleId,
+                    lastSampleFields
+                } = userData;
 
-        return $.ajax(config.URLS.USERDATA, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(json => {
-                const view = json.views[0] || null;
-                const sampleId = json.samples.length ? json.samples[json.samples.length - 1].id : null;
-                const filter = json.filters[0] || null;
-                dispatch(receiveUserdata(json));
+                const filter = _.find(userData.filters, filter => filter.type === 'standard');
+                const sample = _.find(samples, sample => sample.id === lastSampleId);
+                const sampleId = sample ? sample.id : null;
+                dispatch(receiveUserdata(userData));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
-                dispatch(changeSample(json.samples, sampleId));
+                dispatch(receiveSavedFilesList(savedFiles));
+                dispatch(receiveTotalFields(totalFields));
+                dispatch(receiveFields(lastSampleFields));
+                dispatch(receiveSamplesList(samples));
+                dispatch(changeSample(sampleId));
+                dispatch(receiveQueryHistory(queryHistory));
                 dispatch(analyze(sampleId, view.id, filter.id));
-                dispatch(fetchFields(sampleId));
-                dispatch(fetchSourceFields())
-            })
-
-        // TODO:
-        // catch any error in the network call.
+            }
+        });
     }
 }
 
@@ -77,25 +109,26 @@ function receiveViews(json) {
     }
 }
 
-export function fetchViews(viewId) {
+export function fetchViews() {
 
-    return function (dispatch, getState) {
+    return (dispatch, getState) => {
         dispatch(requestViews());
 
-        return $.ajax(config.URLS.VIEWS, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(function (json) {
-                const view = json[0] || null;
-                const viewId = getState().viewBuilder.currentView.id || view.id;
+        const sessionId = getState().auth.sessionId;
+        viewsClient.getAll(sessionId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, FETCH_VIEWS_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, FETCH_VIEWS_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                const view = result[0] || null;
+                const viewId = getState().viewBuilder.selectedView.id || view.id;
 
-                dispatch(receiveViews(json));
-                dispatch(changeView(viewId))
-            });
-
-        // TODO:
-        // catch any error in the network call.
+                dispatch(receiveViews(result));
+                dispatch(changeView(viewId));
+            }
+        });
     }
 }
 
@@ -113,60 +146,43 @@ function receiveFilters(json) {
     }
 }
 
-export function fetchFilters(filterId) {
+export function fetchFilters() {
 
-    return function (dispatch, getState) {
+    return (dispatch, getState) => {
         dispatch(requestFilters());
 
-        return $.ajax(config.URLS.FILTERS, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(function (json) {
-                const filter = json[0] || null;
-                const filterId = getState().filterBuilder.currentFilter.id || filter.id;
+        const sessionId = getState().auth.sessionId;
+        filtersClient.getAll(sessionId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, FETCH_FILTERS_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, FETCH_FILTERS_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                const filter = result[0] || null;
+                const filterId = getState().filterBuilder.selectedFilter.id || filter.id;
 
-                dispatch(receiveFilters(json));
-                dispatch(changeFilter(filterId))
-            });
-
-        // TODO:
-        // catch any error in the network call.
+                dispatch(receiveFilters(result));
+                dispatch(changeFilter(filterId));
+            }
+        });
     }
 }
 
-function requestSamples() {
+export function attachHistoryData(historyItem) {
     return {
-        type: REQUEST_SAMPLES
+        type: ATTACH_HISTORY_DATA,
+        sample: historyItem.sample,
+        view: historyItem.view,
+        filters: historyItem.filters
     }
 }
 
-function receiveSamples(json) {
+export function detachHistoryData(detachSample, detachFilter, detachView) {
     return {
-        type: RECEIVE_SAMPLES,
-        samples: json,
-        receivedAt: Date.now()
-    }
-}
-
-export function fetchSamples() {
-
-    return function (dispatch, getState) {
-        dispatch(requestSamples());
-
-        return $.ajax(config.URLS.SAMPLES, {
-                'type': 'GET',
-                'headers': {"X-Session-Id": getState().auth.sessionId}
-            })
-            .then(function (json) {
-                const sample = getState().ui.currentSample || json[0] || null;
-                const sampleId = sample.id;
-
-                dispatch(receiveSamples(json));
-                dispatch(changeSample(json, sampleId));
-            });
-
-        // TODO:
-        // catch any error in the network call.
+        type: DETACH_HISTORY_DATA,
+        detachSample,
+        detachFilter,
+        detachView
     }
 }

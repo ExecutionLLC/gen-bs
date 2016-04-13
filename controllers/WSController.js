@@ -3,7 +3,6 @@
 const _ = require('lodash');
 
 const ControllerBase = require('./ControllerBase');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 /**
  * This controller handles client web socket connections,
@@ -27,10 +26,9 @@ class WSController extends ControllerBase {
                 try {
                     const message = JSON.parse(messageString);
                     const clientDescriptor = this._findClientByWs(ws);
-                    const convertedMessage = ChangeCaseUtil.convertKeysToCamelCase(message);
                     this.logger.info('Received: ' + JSON.stringify(message, null, 2));
                     this.logger.info('In session: ' + clientDescriptor.sessionId);
-                    this._onClientMessage(ws, convertedMessage);
+                    this._onClientMessage(ws, message);
                 } catch (e) {
                     this.logger.error('Client WS message parse error: ' + JSON.stringify(e));
                     const error = {
@@ -80,8 +78,7 @@ class WSController extends ControllerBase {
     }
 
     _sendClientMessage(clientWs, messageObject) {
-        const preparedMessage = ChangeCaseUtil.convertKeysToSnakeCase(messageObject);
-        const messageString = JSON.stringify(preparedMessage);
+        const messageString = JSON.stringify(messageObject);
         clientWs.send(messageString, null, (error) => {
             if (error) {
                 this.logger.error('Error sending client WS reply: ' + error);

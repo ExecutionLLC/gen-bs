@@ -9,16 +9,18 @@ import VariantsTableReact from '../components/VariantsTable/VariantsTableReact';
 import NavbarMain from '../components/Header/NavbarMain';
 import NavbarCreateQuery from '../components/Header/NavbarCreateQuery';
 
-import ViewsModal from '../components/Modals/ViewsModal';
-import FiltersModal from '../components/Modals/FiltersModal';
-import FileUploadModal from '../components/Modals/FileUploadModal';
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
+import FiltersModal from '../components/Modals/FiltersModal';
+import FileUploadModal from '../components/Modals/FileUploadModal';
+import QueryHistoryModal from '../components/Modals/QueryHistoryModal'
+import ViewsModal from '../components/Modals/ViewsModal';
+import SavedFilesModal from '../components/Modals/SavedFilesModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-import { fetchUserdata } from '../actions/userData';
+import { closeQueryHistoryModal } from '../actions/queryHistory'
 
 
 class App extends Component {
@@ -36,13 +38,17 @@ class App extends Component {
     }
 
     render() {
-        const { isAuthenticated, samples, isFetching } = this.props.userData;
-        const { dispatch, ui } = this.props;
-        //console.log('query', this.context.router.getCurrentQuery());
-        //console.log('query sessionId or Error', location.search.slice(1).split('='));
+        const { isAuthenticated, isFetching } = this.props.userData;
+        const {samplesList: {samples}} = this.props;
+        const { ui } = this.props;
 
-        var mainDivClass = classNames({
+        const mainDivClass = classNames({
             'main': true,
+            'subnav-closed': ui.queryNavbarClosed
+        });
+
+        const navbarQueryClass = classNames({
+            'collapse-subnav': true,
             'subnav-closed': ui.queryNavbarClosed
         });
 
@@ -59,7 +65,7 @@ class App extends Component {
                 {samples.length > 0 &&
                  <div className="container-fluid">
                     <NavbarMain />
-                     <div className="collapse collapse-subnav" id="subnav">
+                     <div className={navbarQueryClass} id="subnav">
                          <NavbarCreateQuery
                           {...this.props}
                           openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
@@ -91,13 +97,27 @@ class App extends Component {
                     showModal={this.props.modalWindows.upload.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
                 />
+                <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
+                <QueryHistoryModal
+                    showModal={this.props.showQueryHistoryModal}
+                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()) } }
+                />
             </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, modalWindows, views, fields, ui, errorHandler: { showErrorWindow } } = state;
+    const { auth,
+            userData,
+            modalWindows,
+            views,
+            fields,
+            savedFiles,
+            ui,
+            samplesList,
+            errorHandler: { showErrorWindow },
+            queryHistory: { showQueryHistoryModal } } = state;
 
     return {
         auth,
@@ -105,8 +125,11 @@ function mapStateToProps(state) {
         modalWindows,
         views,
         fields,
+        savedFiles,
         ui,
-        showErrorWindow
+        samplesList,
+        showErrorWindow,
+        showQueryHistoryModal
     }
 }
 

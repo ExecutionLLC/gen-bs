@@ -1,6 +1,6 @@
 import config from '../../config'
 import { closeModal } from './modalWindows'
-import { fetchSamples } from './userData'
+import {fetchSamples} from './samplesList';
 import gzip from '../utils/gzip'
 
 /*
@@ -78,7 +78,7 @@ function requestFileUpload() {
 function receiveFileUpload(json) {
     return {
         type: RECEIVE_FILE_UPLOAD,
-        operationId: json.operation_id,
+        operationId: json.operationId,
     }
 }
 

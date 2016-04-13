@@ -29,12 +29,20 @@ class SavedFileModel extends SecureModelBase {
         super(models, SavedFileTables.SavedFiles, mappedColumns);
     }
 
+    find(userId, fileId, callback) {
+        this.db.transactionally((trx, callback) => {
+            const fileIds = [fileId];
+            async.waterfall([
+                (callback) => this._fetchSavedFiles(trx, fileIds, userId, false, callback),
+                (files, callback) => this._ensureAllItemsFound(files, fileIds, callback),
+                (files, callback) => callback(null, files[0])
+            ], callback);
+        }, callback);
+    }
+
     findAll(userId, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => this._fetchSavedFiles(trx, null, userId, true, callback),
-                (files, callback) => this._mapItems(files, callback)
-            ], callback);
+            this._fetchSavedFiles(trx, null, userId, true, callback);
         }, callback);
     }
 
@@ -131,17 +139,6 @@ class SavedFileModel extends SecureModelBase {
         );
     }
 
-    find(userId, fileId, callback) {
-        this.db.transactionally((trx, callback) => {
-            const fileIds = [fileId];
-            async.waterfall([
-                (callback) => this._fetchSavedFiles(trx, fileIds, userId, false, callback),
-                (files, callback) => this._ensureAllItemsFound(files, fileIds, callback),
-                (files, callback) => callback(null, files[0])
-            ], callback);
-        }, callback);
-    }
-
     _fetchSavedFiles(trx, fileIdsOrNull, userId, shouldExcludeDeletedEntries, callback) {
         let baseQuery = trx.select()
             .from(this.baseTableName)
@@ -165,8 +162,14 @@ class SavedFileModel extends SecureModelBase {
                     (error, fileIdToFilterIdsHash) => callback(error, files, fileIdToFilterIdsHash))
             },
             (files, fileIdToFilterIdsHash, callback) => {
+                // Transform objects loaded from database.
                 const mappedFiles = _.map(files, file => {
                     const fileWithFilters = _.cloneDeep(file);
+
+                    // Will be using sample version as sample id in the services layer.
+                    fileWithFilters.sampleId = file.vcfFileSampleVersionId;
+                    delete fileWithFilters.vcfFileSampleVersionId;
+
                     fileWithFilters.filterIds = fileIdToFilterIdsHash[file.id];
                     return fileWithFilters;
                 });

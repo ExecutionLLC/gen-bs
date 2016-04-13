@@ -15,9 +15,7 @@
     "email": "valarievaughn@electonic.com",
     "speciality": "doctor",
     "language": "en",
-    "number_paid_samples": 10,
-    "login": "valarie",
-    "password": "password"
+    "number_paid_samples": 10
   },
   {
     "id": "421214ac-a1e9-5afd-aa48-3c0bf7614123",
@@ -26,9 +24,7 @@
     "email": "mariakuri@electonic.com",
     "speciality": "assistant",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "maria",
-    "password": "password"
+    "number_paid_samples": 11
   },
   {
     "id": "9ca148e5-548a-4a78-8e92-ca7563f78775",
@@ -37,9 +33,7 @@
     "email": "loginov.vasily@gmail.com",
     "speciality": "Developer",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "vasily",
-    "password": "zxcasdqwe"
+    "number_paid_samples": 11
   },
   {
     "id": "5f639c9a-b080-4cf6-a185-28db95d1b489",
@@ -48,9 +42,7 @@
     "email": "e.elfairy@gmail.com",
     "speciality": "Developer",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "elena",
-    "password": "zxcasdqwe"
+    "number_paid_samples": 11
   },
   {
     "id": "3ba433bd-72c8-454e-9822-174a03aa0ba3",
@@ -59,31 +51,7 @@
     "email": "ivkalgin@gmail.com",
     "speciality": "Developer",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "igor",
-    "password": "zxcasdqwe"
-  },
-  {
-    "id": "9e35c2df-489f-44fa-a0da-3fe3cce41906",
-    "name": "Maxim",
-    "last_name": "Borshev",
-    "email": "mtunetworks@gmail.com",
-    "speciality": "Developer",
-    "language": "en",
-    "number_paid_samples": 11,
-    "login": "maxim",
-    "password": "zxcasdqwe"
-  },
-  {
-    "id": "1036c2df-489f-45fa-a0da-3ae3cce41955",
-    "name": "Sergey",
-    "last_name": "Vatagin",
-    "email": "s.vatagin@gmail.com",
-    "speciality": "Developer",
-    "language": "en",
-    "number_paid_samples": 11,
-    "login": "vatic",
-    "password": "zxcasdqwe"
+    "number_paid_samples": 11
   },
   {
     "id": "9638820a-384a-4bbd-98ea-dacc968832a3",
@@ -92,9 +60,7 @@
     "email": "aleksandr.kirienko@gmail.com",
     "speciality": "Developer",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "bizoin",
-    "password": "zxcasdqwe"
+    "number_paid_samples": 11
   },
   {
     "id": "2c40179b-3c05-402b-82d1-a76f87ec9b56",
@@ -103,9 +69,7 @@
     "email": "pon.petr@gmail.com",
     "speciality": "Developer",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "pon.petr",
-    "password": "zxcasdqwe"
+    "number_paid_samples": 11
   },
   {
     "id": "2b2d3136-a50f-434c-a679-f6e700eec1bb",
@@ -114,9 +78,7 @@
     "email": "poltavskyyi@gmail.com",
     "speciality": "Developer",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "poltavskyyi",
-    "password": "zxcasdqwe"
+    "number_paid_samples": 11
   },
   {
     "id": "609a68f6-e41d-4eba-8a62-f390e23e1ab7",
@@ -125,9 +87,7 @@
     "email": "ponomarev.vl90@gmail.com",
     "speciality": "Developer",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "vladimir.ponomarev",
-    "password": "zxcasdqwe"
+    "number_paid_samples": 11
   },
   {
     "id": "609a1654-e41d-aaaa-bbbb-f390e2381bc8",
@@ -136,8 +96,24 @@
     "email": "anton.konovalov1976@gmail.com",
     "speciality": "Developer",
     "language": "en",
-    "number_paid_samples": 11,
-    "login": "anton.konovalov",
-    "password": "zxcasdqwe"
+    "number_paid_samples": 11
+  },
+  {
+    "id": "519a2634-e21d-aaaa-bbbb-f495e2201bc8",
+    "name": "Laura",
+    "last_name": "Li",
+    "email": "laurali001@gmail.com",
+    "speciality": "Doctor",
+    "language": "en",
+    "number_paid_samples": 11
+  },
+  {
+    "id": "239a2432-e23d-aaaa-bbbb-f422e2768bc3",
+    "name": "Test",
+    "last_name": "Genomix",
+    "email": "agx.testuser@gmail.com",
+    "speciality": "Tester",
+    "language": "en",
+    "number_paid_samples": 11
   }
 ]

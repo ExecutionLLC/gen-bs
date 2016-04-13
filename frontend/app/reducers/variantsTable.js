@@ -1,62 +1,91 @@
 import * as ActionTypes from '../actions/variantsTable'
 
-export default function variantsTable(state = {
+const initialState = {
     operationId: null,
     searchInResultsParams: {
         search: [],
         sort: [],
         limit: 100,
         offset: 0,
-        top_search: ''
+        topSearch: {
+            filter: '',
+            excludedFields: []
+        }
     },
     scrollPos: 0,
     needUpdate: false,
     isNextDataLoading: false,
-    isFilteringOrSorting: false
-}, action) {
+    isFilteringOrSorting: false,
+    selectedRowIndices: []
+};
+
+export default function variantsTable(state = initialState, action) {
     switch (action.type) {
 
         case ActionTypes.CLEAR_SEARCH_PARAMS:
+        {
             return Object.assign({}, state, {
                 searchInResultsParams: {
                     sort: [],
                     search: [],
                     limit: 100,
                     offset: 0,
-                    top_search: ''
+                    topSearch: {
+                        filter: '',
+                        excludedFields: []
+                    }
                 }
             });
+        }
+        case ActionTypes.SET_EXCLUDED_FIELDS:
+        {
+            return Object.assign({}, state, {
+                searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+                    topSearch: {
+                        filter: state.searchInResultsParams.topSearch.filter,
+                        excludedFields: action.excludedFields
+                    }
+                })
+            });
+        }
 
         case ActionTypes.INIT_SEARCH_IN_RESULTS_PARAMS:
+        {
             return Object.assign({}, state, {
                 searchInResultsParams: action.searchInResultsParams
             });
-
+        }
         case ActionTypes.CHANGE_VARIANTS_LIMIT:
+        {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     offset: state.searchInResultsParams.offset + state.searchInResultsParams.limit
                 })
             });
-
-        case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
-            const currentGlobalSearchString = state.searchInResultsParams.top_search;
+        }
+        case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER:
+        {
+            const currentGlobalSearchString = state.searchInResultsParams.topSearch.filter;
             if (currentGlobalSearchString === action.globalSearchString) {
                 return state;
             }
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-                    top_search: action.globalSearchString,
+                    topSearch: {
+                        filter: action.globalSearchString,
+                        excludedFields: state.searchInResultsParams.topSearch.excludedFields
+                    },
                     limit: 100,
                     offset: 0
                 }),
                 needUpdate: true
             });
         }
-        case ActionTypes.CHANGE_VARIANTS_FILTER: {
+        case ActionTypes.SET_FIELD_FILTER:
+        {
             // copy search array
             var searchArray = [...state.searchInResultsParams.search];
-            const fieldIndex = _.findIndex(searchArray, {field_id: action.fieldId});
+            const fieldIndex = _.findIndex(searchArray, {fieldId: action.fieldId});
 
             if (action.filterValue !== '') {
                 if (fieldIndex !== -1) {
@@ -69,7 +98,7 @@ export default function variantsTable(state = {
                     searchArray[fieldIndex].value = action.filterValue;
                 } else {
                     // it is new filter
-                    searchArray.push({field_id: action.fieldId, value: action.filterValue});
+                    searchArray.push({fieldId: action.fieldId, value: action.filterValue});
                 }
             } else {
                 // filter value is empty, so we should remove filter
@@ -85,14 +114,15 @@ export default function variantsTable(state = {
                 needUpdate: true
             });
         }
-        case ActionTypes.CHANGE_VARIANTS_SORT: {
+        case ActionTypes.CHANGE_VARIANTS_SORT:
+        {
             // copy sort array
             var sortArray = [...state.searchInResultsParams.sort];
-            var fieldIndex = _.findIndex(sortArray, {field_id: action.fieldId});
+            var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId});
 
             if (fieldIndex === -1) {
                 // it is new column for sorting
-                const newItem = {field_id: action.fieldId, direction: action.sortDirection };
+                const newItem = {fieldId: action.fieldId, direction: action.sortDirection};
                 if (sortArray.length < action.sortOrder) {
                     // put new item to the end of array
                     fieldIndex = sortArray.length;
@@ -138,43 +168,60 @@ export default function variantsTable(state = {
             });
         }
         case ActionTypes.REQUEST_VARIANTS:
+        {
             return Object.assign({}, state, {
                 isFetching: true
             });
-
-        case ActionTypes.RECEIVE_VARIANTS:
+        }
+        case ActionTypes.RECEIVE_ANALYSIS_OPERATION_ID:
+        {
             return Object.assign({}, state, {
                 isFetching: false,
                 operationId: action.operationId,
                 lastUpdated: action.receivedAt
             });
+        }
 
         case ActionTypes.REQUEST_SEARCHED_RESULTS:
+        {
             return Object.assign({}, state, {
                 isNextDataLoading: action.isNextDataLoading,
                 isFilteringOrSorting: action.isFilteringOrSorting,
                 isFetching: true,
                 needUpdate: false
             });
-
+        }
         case ActionTypes.RECEIVE_SEARCHED_RESULTS:
+        {
             return Object.assign({}, state, {
                 isNextDataLoading: false,
                 isFilteringOrSorting: false,
                 isFetching: false,
                 lastUpdated: action.receivedAt
             });
-
+        }
         case ActionTypes.SELECT_VARIANTS_ROW:
+        {
+            const {rowIndex, isSelected} = action;
+            const {selectedRowIndices} = state;
+            let newSelectedRowIndices;
+            if (isSelected) {
+                newSelectedRowIndices = selectedRowIndices.concat([rowIndex]);
+            } else {
+                newSelectedRowIndices = _.filter(selectedRowIndices, item => item !== rowIndex);
+            }
+
             return Object.assign({}, state, {
-                clickedRow: {_fid: action.rowId},
-                filteredVariants: state.filteredVariants.map((o) => {
-                    if (action.rowId == o._fid) {
-                        o._selected = !o._selected
-                    }
-                    return o;
-                })
+                selectedRowIndices: newSelectedRowIndices
             });
+        }
+
+        case ActionTypes.CLEAR_VARIANTS_ROWS_SELECTION:
+        {
+            return Object.assign({}, state, {
+                selectedRowIndices: initialState.selectedRowIndices
+            });
+        }
 
         default:
             return state;
