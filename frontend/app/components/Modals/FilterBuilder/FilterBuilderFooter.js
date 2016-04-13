@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import { filterBuilderRequestRules } from '../../../actions/filterBuilder';
+import { filterBuilderRequestRules, filterBuilderSaveAndSelectRules } from '../../../actions/filterBuilder';
 
 
 export default class FilterBuilderFooter extends Component {
@@ -32,7 +32,7 @@ export default class FilterBuilderFooter extends Component {
             disabled={disabledClass}
             title={title}
             onClick={ () => {
-              dispatch(filterBuilderRequestRules())
+              dispatch(filterBuilderSaveAndSelectRules())
             }}
             type="button"
             className="btn btn-primary"
