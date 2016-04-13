@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 
-import filterOperators from './filterOperators'
 import { filterBuilderReceiveRules, filterBuilderChangeAll } from '../../../actions/filterBuilder';
 
 import filterUtils from '../../../utils/filterUtils';
@@ -78,7 +77,28 @@ const filterParser = {
             "is_null": "is null",
             "is_not_null": "is not null"
         },
-        genomicsRulesOperatorsList: filterOperators,
+        genomicsRulesOperatorsList: [
+            'equal',
+            'not_equal',
+            'in',
+            'not_in',
+            'less',
+            'less_or_equal',
+            'greater',
+            'greater_or_equal',
+            'between',
+            'not_between',
+            'begins_with',
+            'not_begins_with',
+            'contains',
+            'not_contains',
+            'ends_with',
+            'not_ends_with',
+            'is_empty',
+            'is_not_empty',
+            'is_null',
+            'is_not_null',
+        ],
         getOperatorWantedParams: function(operatorInfo) {
             if (!operatorInfo.nb_inputs) {
                 return {noParams: true};
