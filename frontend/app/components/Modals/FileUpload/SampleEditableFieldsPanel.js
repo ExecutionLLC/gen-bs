@@ -35,6 +35,9 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     render() {
+        if (!this.props.isExpanded) {
+            return null;
+        }
         const {sample, editedSamples} = this.props;
         const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
         const sampleId = sample.id;

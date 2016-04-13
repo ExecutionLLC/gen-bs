@@ -30,7 +30,7 @@ export default class FileUpload extends Component {
         );
     } else {
         return (
-          <div className="panel panel-default">
+            <div className="panel file-upload-panel panel-default">
                 <div className="panel-body">
 
               { error &&
