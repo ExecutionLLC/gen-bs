@@ -337,11 +337,20 @@ class FilterQueryBuilder extends Component {
             return {validRules: validRules, report: report};
         }
 
+        const fieldDefault = fieldUtils.getDefault(fields);
 
         const parsedRawRules = filterUtils.getRulesFromGenomics(rules);
-        const {validRules: parsedRules, report} = validateRules(parsedRawRules);
+        const validateRulesResult = validateRules(parsedRawRules);
 
-        const fieldDefault = fieldUtils.getDefault(fields);
+        var parsedRules = validateRulesResult.validRules ? validateRulesResult.validRules : {condition : 'AND', rules: [{field: fieldDefault, operator: 'is_null'}]};
+
+        if (validateRulesResult.report.length) {
+            console.error('Filter rules are invalid:');
+            console.error(JSON.stringify(parsedRawRules, null, 4));
+            console.error('Filter validation report:');
+            console.error(JSON.stringify(validateRulesResult.report, null, 4));
+        }
+
 
         function findSubrules(index) {
             var searchIndex = index.slice();
