@@ -78,7 +78,7 @@ export function fetchUserdata() {
                 } = userData;
 
                 const filter = _.find(userData.filters, filter => filter.type == 'standard');
-                const sample = _.find(samples, sample => sample.id == lastSampleId);
+                const sample = _.find(samples, sample => sample.id === lastSampleId);
                 const sampleId = sample ? sample.id : null;
                 dispatch(receiveUserdata(userData));
                 dispatch(changeView(view.id));
