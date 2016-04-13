@@ -22,9 +22,9 @@ export default function samplesList(state = {
         case ActionTypes.UPDATE_SAMPLE_VALUE:
             const {valueFieldId, value} = action;
             sampleId = action.sampleId;
-            currentSampleIndex = _.findIndex(state.samples, {id: sampleId});
+            currentSampleIndex = _.findIndex(state.editedSamples, {id: sampleId});
 
-            newValues = [...state.samples[currentSampleIndex].values || []];
+            newValues = [...state.editedSamples[currentSampleIndex].values || []];
             const valueIndex = _.findIndex(newValues, item => item.fieldId === valueFieldId);
             const newValue = {fieldId: valueFieldId, values: value};
 
@@ -34,10 +34,10 @@ export default function samplesList(state = {
                 newValues.push(newValue);
             }
 
-            newSamples = [...state.samples];
+            newSamples = [...state.editedSamples];
             newSamples[currentSampleIndex].values = newValues;
 
-            return Object.assign({}, state, {samples: newSamples});
+            return Object.assign({}, state, {editedSamples: newSamples});
 
         case ActionTypes.RECEIVE_UPDATED_SAMPLE:
             const {updatedSample, updatedSampleId} = action;
@@ -60,13 +60,13 @@ export default function samplesList(state = {
 
         case ActionTypes.RESET_SAMPLE_IN_LIST:
             sampleId = action.sampleId;
-            currentSampleIndex = _.findIndex(state.samples, {id: sampleId});
-            const restoredValues = [...state.editedSamples[currentSampleIndex].values || []];
+            currentSampleIndex = _.findIndex(state.editedSamples, {id: sampleId});
+            const restoredValues = [...state.samples[currentSampleIndex].values || []];
 
-            newSamples = [...state.samples];
-            newSamples[currentSampleIndex].values = restoredValues;
+            newEditedSamples = [...state.editedSamples];
+            newEditedSamples[currentSampleIndex].values = restoredValues;
 
-            return Object.assign({}, state, {samples: newSamples});
+            return Object.assign({}, state, {editedSamples: newEditedSamples});
 
         case ActionTypes.CHANGE_SAMPLE:
             let {sampleId} = action;

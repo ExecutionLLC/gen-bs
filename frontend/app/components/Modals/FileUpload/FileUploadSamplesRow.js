@@ -105,10 +105,11 @@ export default class FileUploadSamplesRow extends Component {
                 return {value: option.id, label: option.value}
             }
         );
-        const currentSampleIndex = _.findIndex(samplesList.samples, {id: sample.id});
+        const currentSampleIndex = _.findIndex(samplesList.editedSamples, {id: sample.id});
 
         if (currentSampleIndex >= 0) {
-            const storedValue = _.find(samplesList.samples[currentSampleIndex].values || [], item => item.fieldId === field.id);
+            const storedValue = _.find(samplesList.editedSamples[currentSampleIndex].values || [],
+                item => item.fieldId === field.id);
             fieldValue = storedValue ? storedValue.values : '';
         } else {
             fieldValue = '';
@@ -131,11 +132,12 @@ export default class FileUploadSamplesRow extends Component {
 
     renderTextField(field) {
         let fieldValue;
-        const {sample, samplesList: {samples}} = this.props;
-        const currentSampleIndex = _.findIndex(samples, {id: sample.id});
+        const {sample, samplesList: {editedSamples}} = this.props;
+        const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
 
         if (currentSampleIndex >= 0) {
-            const storedValue = _.find(samples[currentSampleIndex].values || [], item => item.fieldId === field.id);
+            const storedValue = _.find(editedSamples[currentSampleIndex].values || [],
+                item => item.fieldId === field.id);
             fieldValue = storedValue ? storedValue.values : '';
         } else {
             fieldValue = '';
