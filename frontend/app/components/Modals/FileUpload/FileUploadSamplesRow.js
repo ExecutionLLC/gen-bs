@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Panel} from 'react-bootstrap';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+
+import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 
 import {
-    changeSample, receiveSamplesList, updateSampleValue, resetSampleInList,
-    requestUpdateSampleFields
+    changeSample, receiveSamplesList
 } from '../../../actions/samplesList'
 
 
@@ -17,11 +16,6 @@ export default class FileUploadSamplesRow extends Component {
         this.state = {showValues: false};
     }
 
-    onShowValuesClick(e) {
-        e.preventDefault();
-        this.setShowValuesState(!this.state.showValues);
-    }
-
     onSelectForAnalyzisClick(e, sample) {
         e.preventDefault();
         const {dispatch, closeModal, samplesList: {samples}} = this.props;
@@ -30,29 +24,15 @@ export default class FileUploadSamplesRow extends Component {
         closeModal('upload');
     }
 
-    onSampleValueUpdated(sampleId, fieldId, newValue) {
-        const {dispatch} = this.props;
-        dispatch(updateSampleValue(sampleId, fieldId, newValue));
-    }
-
-    onResetSampleClick(e, sample) {
-        e.preventDefault();
-
-        const {dispatch} = this.props;
-        dispatch(resetSampleInList(sample.id));
-    }
-
-    onSaveEditedSampleClick(e, sample) {
-        e.preventDefault();
-
-        const {dispatch} = this.props;
-        dispatch(requestUpdateSampleFields(sample.id))
-    }
-
     setShowValuesState(showValues) {
         this.setState({
             showValues
         });
+    }
+
+    onShowValuesClick(e) {
+        e.preventDefault();
+        this.setShowValuesState(!this.state.showValues);
     }
 
     render() {
@@ -97,100 +77,17 @@ export default class FileUploadSamplesRow extends Component {
         );
     }
 
-    renderSelectField(sampleId, field, fieldValue) {
-        const selectOptions = field.availableValues.map(
-            option => {
-                return {value: option.id, label: option.value}
-            }
-        );
-
-        return (
-            <dl key={field.id} className="dl-horizontal">
-                <dt>{field.label}</dt>
-                <dd>
-                    <Select
-                        options={selectOptions}
-                        clearable={false}
-                        value={fieldValue}
-                        onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.value)}
-                    />
-                </dd>
-            </dl>
-        );
-    }
-
-    renderTextField(sampleId, field, fieldValue) {
-        return (
-            <dl key={field.id} className="dl-horizontal">
-                <dt>{field.label}</dt>
-                <dd>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={fieldValue}
-                        onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.target.value) }
-                    />
-                </dd>
-            </dl>
-        );
-    }
-
-    renderRowButtons() {
-        const {sample} = this.props;
-        return (
-            <div className="btn-group ">
-                <button
-                    onClick={ (e) => this.onResetSampleClick(e, sample) }
-                    type="button"
-                    className="btn btn-default"
-                >
-                    <span>Reset</span>
-                </button>
-
-                <button
-                    onClick={ (e) => this.onSaveEditedSampleClick(e, sample) }
-                    type="button"
-                    className="btn btn-primary"
-                >
-                    <span data-localize="actions.save_select.title">Save</span>
-                </button>
-            </div>
-        )
-    }
 
     renderEditableValues() {
+        const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props;
         return (
-            <Panel collapsible
-                   expanded={this.state.showValues}
-                   className="samples-values form-horizontal-rows"
-            >
-                <div className="flex">
-                    {this.props.fields.map(field => this.renderEditableField(field))}
-                    {this.renderRowButtons()}
-                </div>
-            </Panel>
+            <SampleEditableFieldsPanel dispatch={dispatch}
+                                       isExpanded={this.state.showValues}
+                                       fields={fields}
+                                       sample={sample}
+                                       editedSamples={editedSamples}
+            />
         )
-    }
-
-    renderEditableField(field) {
-        let fieldValue;
-        const {sample, samplesList: {editedSamples}} = this.props;
-        const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
-        const sampleId = sample.id;
-
-        if (currentSampleIndex >= 0) {
-            const storedValue = _.find(editedSamples[currentSampleIndex].values || [],
-                item => item.fieldId === field.id);
-            fieldValue = storedValue ? storedValue.values : '';
-        } else {
-            fieldValue = '';
-        }
-
-        if (field.availableValues) {
-            return this.renderSelectField(sampleId, field, fieldValue);
-        } else {
-            return this.renderTextField(sampleId, field, fieldValue);
-        }
     }
 }
 
