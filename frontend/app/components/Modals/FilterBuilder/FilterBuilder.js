@@ -179,6 +179,15 @@ class FilterQueryBuilder extends Component {
         const dispatch = this.props.dispatch;
 
         const parsedRules = filterUtils.getRulesFromGenomics(rules);
+/* check all fields types
+        (function() {
+            console.log('field types:');
+            var types = {};
+            var jsTypes = {};
+            fields.map( (f) => { types[f.type] = true; jsTypes[fieldUtils.getFieldJSType(f)] = true; } );
+            console.log(types, jsTypes);
+        })();
+*/
 
         const fieldDefault = fields[Object.keys(fields)[0]].id;
 
