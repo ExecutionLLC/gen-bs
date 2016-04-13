@@ -15,11 +15,11 @@ export default class FieldHeaderControls extends Component {
     }
 
     isFieldExists(fieldId) {
-        const {currentVariants} = this.props;
-        if (_.isEmpty(currentVariants)) {
+        const {currentSampleFields} = this.props;
+        if (_.isEmpty(currentSampleFields)) {
             return false;
         } else {
-            const variantField = _.find(currentVariants[0].fields, field=>field.fieldId == fieldId);
+            const variantField = _.find(currentSampleFields, field => field.id == fieldId);
             return (variantField) ? true : false;
         }
     }
@@ -194,6 +194,7 @@ FieldHeaderControls.propTypes = {
     fieldId: React.PropTypes.string.isRequired,
     fields: React.PropTypes.object.isRequired,
     sortState: React.PropTypes.array.isRequired,
+    currentSampleFields: React.PropTypes.array.isRequired,
     // callback(fieldId, searchString)
     onSearchValueChanged: React.PropTypes.func.isRequired,
     // callback(fieldId, searchString)

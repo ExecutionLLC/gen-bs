@@ -7,7 +7,7 @@ function filterEmptyListItems(viewListItems) {
 }
 
 export default function viewBuilder(state = {
-    currentView: null,
+    selectedView: null,
     editedView: null,
     isFetching: false
 }, action) {
@@ -15,10 +15,10 @@ export default function viewBuilder(state = {
     switch (action.type) {
         case ActionTypes.VBUILDER_SELECT_VIEW:
         {
-            const currentView = _.find(action.views, {id: action.viewId}) || null;
+            const selectedView = _.find(action.views, {id: action.viewId}) || null;
             return Object.assign({}, state, {
-                currentView: currentView,
-                editedView: currentView
+                selectedView: selectedView,
+                editedView: selectedView
             });
         }
         case ActionTypes.VBUILDER_TOGGLE_EDIT:
@@ -52,7 +52,7 @@ export default function viewBuilder(state = {
         {
             return Object.assign({}, state, {
                 isFetching: false,
-                currentView: action.view,
+                selectedView: action.view,
                 editedView: action.view
             });
         }
@@ -70,7 +70,7 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 editedView: action.view,
-                currentView: action.view
+                selectedView: action.view
             });
         }
         case ActionTypes.VBUILDER_REQUEST_DELETE_VIEW:

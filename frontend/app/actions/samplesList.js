@@ -58,15 +58,15 @@ export function fetchSamples() {
             } else {
                 const {
                     samplesList: {
-                        currentSample
+                        selectedSample
                     }
                 } = getState();
                 const samples = response.body;
 
                 dispatch(receiveSamplesList(samples));
 
-                if (currentSample) {
-                    dispatch(changeSample(currentSample.id));
+                if (selectedSample) {
+                    dispatch(changeSample(selectedSample.id));
                 } else if (samples && samples.length) {
                     dispatch(changeSample(samples[0].id));
                 }
@@ -78,7 +78,7 @@ export function fetchSamples() {
 export function receiveSamplesList(samples) {
     return {
         type: RECEIVE_SAMPLES_LIST,
-        samples: samples
+        samples: samples || []
     }
 }
 
@@ -99,7 +99,7 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
 
 export function requestUpdateSampleFields(sampleId) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, samplesList: {samples, currentSample}} = getState();
+        const {auth: {sessionId}, samplesList: {samples, selectedSample}} = getState();
         const sampleToUpdate = _.find(samples, {id: sampleId});
         samplesClient.update(sessionId, sampleToUpdate, (error, response) => {
             if (error) {
@@ -112,7 +112,7 @@ export function requestUpdateSampleFields(sampleId) {
                     dispatch(receiveUpdatedSample(sampleId, updatedSample));
                     // If updating current sample, remember the sample id is changed during update
                     // so select new version of the sample.
-                    if (currentSample && currentSample.id === sampleId) {
+                    if (selectedSample && selectedSample.id === sampleId) {
                         dispatch(changeSample(updatedSample.id))
                     }
                 }

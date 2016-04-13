@@ -144,10 +144,11 @@ export default function websocket(state = {
                 isVariantsLoading: true,
                 searchParams:action.searchParams
             });
-        case ActionTypes.REQUEST_CHANGE_VIEW:
+        case ActionTypes.REQUEST_SET_CURRENT_PARAMS:
         {
             return Object.assign({}, state, {
-                variantsView: action.view
+                variantsView: action.view,
+                variantsSampleFieldsList: action.sampleFields
             });
         }
 

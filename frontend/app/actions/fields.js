@@ -30,10 +30,10 @@ function requestFields() {
     }
 }
 
-function receiveFields(json) {
+export function receiveFields(fields) {
     return {
         type: RECEIVE_FIELDS,
-        fields: json,
+        fields: fields || [],
         receivedAt: Date.now()
     }
 }
@@ -62,7 +62,7 @@ function requestTotalFields() {
     }
 }
 
-function receiveTotalFields(json) {
+export function receiveTotalFields(json) {
     return {
         type: RECEIVE_TOTAL_FIELDS,
         fields: json,

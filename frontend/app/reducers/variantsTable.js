@@ -81,7 +81,7 @@ export default function variantsTable(state = initialState, action) {
                 needUpdate: true
             });
         }
-        case ActionTypes.CHANGE_VARIANTS_FILTER:
+        case ActionTypes.SET_FIELD_FILTER:
         {
             // copy search array
             var searchArray = [...state.searchInResultsParams.search];
@@ -173,7 +173,7 @@ export default function variantsTable(state = initialState, action) {
                 isFetching: true
             });
         }
-        case ActionTypes.RECEIVE_VARIANTS:
+        case ActionTypes.RECEIVE_ANALYSIS_OPERATION_ID:
         {
             return Object.assign({}, state, {
                 isFetching: false,
