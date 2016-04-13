@@ -993,12 +993,12 @@ export default class FilterBuilder extends Component {
 There was two arrays:
 
 at componentDidMount:
-  ...fields.notEditableFields.map( (f) => { return {id: f.id, label: `${f.name} -- ${f.source_name}`, type: f.value_type === 'float' ? 'double' : f.value_type} } ),
-  ...fields.sourceFieldsList.filter((f) => (f.source_name !== 'sample')).map( (f) => { return {id: f.id, label: `${f.name} -- source`, type: f.value_type === 'float' ? 'double' : f.value_type }} )
+  ...fields.notEditableFields.map( (f) => { return {id: f.id, label: `${f.name} -- ${f.sourceName}`, type: f.valueType === 'float' ? 'double' : f.valueType} } ),
+  ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map( (f) => { return {id: f.id, label: `${f.name} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType }} )
 
 at componentWillUpdate:
- ...fields.sampleFieldsList.map( (f) => { return {id: f.id, label: `${f.label} -- ${f.source_name}`, type: f.value_type === 'float' ? 'double' : f.value_type} } ),
- ...fields.sourceFieldsList.filter((f) => (f.source_name !== 'sample')).map( (f) => { return {id: f.id, label: `${f.label} -- source`, type: f.value_type === 'float' ? 'double' : f.value_type }} )
+ ...fields.sampleFieldsList.map( (f) => { return {id: f.id, label: `${f.label} -- ${f.sourceName}`, type: f.valueType === 'float' ? 'double' : f.valueType} } ),
+ ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map( (f) => { return {id: f.id, label: `${f.label} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType }} )
 
 1st part is from 'notEditableFields' at 'componentDidMount' vs 'sampleFieldsList' at 'componentWillUpdate'
 and all '.name' at componentDidMount vs '.label' at 'componentWillUpdate'
@@ -1009,14 +1009,14 @@ There must be not editable fields to prevent select gender for the person
     function getFieldValue(f, sourceName) {
       return {
         id: f.id,
-        label: `${f.label} -- ${(sourceName == null ? f.source_name : sourceName)} (${f.value_type})`,
-        type: f.value_type === 'float' ? 'double' : f.value_type
+        label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)} (${f.valueType})`,
+        type: f.valueType === 'float' ? 'double' : f.valueType
       };
     }
 
     return [
       ...fields.notEditableFields.map( (f) => getFieldValue(f) ),
-      ...fields.sourceFieldsList.filter( (f) => (f.source_name !== 'sample') ).map( (f) => getFieldValue(f, 'source') )
+      ...fields.sourceFieldsList.filter( (f) => (f.sourceName !== 'sample') ).map( (f) => getFieldValue(f, 'source') )
     ];
   }
 
