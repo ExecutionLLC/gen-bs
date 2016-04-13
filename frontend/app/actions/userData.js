@@ -1,6 +1,6 @@
 import apiFacade from '../api/ApiFacade'
 import {handleError} from './errorHandler'
-import {fetchFields, fetchTotalFields} from './fields'
+import {receiveFields, receiveTotalFields} from './fields'
 import {receiveSavedFilesList} from './savedFiles';
 import {receiveQueryHistory} from './queryHistory';
 import {analyze, changeView, changeFilter} from './ui';
@@ -66,21 +66,30 @@ export function fetchUserdata() {
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
-                const result = response.body;
-                const view = _.find(result.views, view => view.type == 'standard');
-                const sample = result.samples[0] || null;
+                const userData = response.body;
+                const view = _.find(userData.views, view => view.type == 'standard');
+                const {
+                    samples,
+                    totalFields,
+                    savedFiles,
+                    queryHistory,
+                    lastSampleId,
+                    lastSampleFields
+                } = userData;
+
+                const filter = _.find(userData.filters, filter => filter.type == 'standard');
+                const sample = _.find(samples, sample => sample.id == lastSampleId);
                 const sampleId = sample ? sample.id : null;
-                const filter = _.find(result.filters, filter => filter.type == 'standard');
-                dispatch(receiveUserdata(result));
+                dispatch(receiveUserdata(userData));
                 dispatch(changeView(view.id));
                 dispatch(changeFilter(filter.id));
-                dispatch(receiveSavedFilesList(result.savedFiles));
-                dispatch(analyze(sampleId, view.id, filter.id));
-                dispatch(fetchFields(sampleId));
-                dispatch(fetchTotalFields());
-                dispatch(receiveSamplesList(result.samples));
+                dispatch(receiveSavedFilesList(savedFiles));
+                dispatch(receiveTotalFields(totalFields));
+                dispatch(receiveFields(lastSampleFields));
+                dispatch(receiveSamplesList(samples));
                 dispatch(changeSample(sampleId));
-                dispatch(receiveQueryHistory(result.queryHistory));
+                dispatch(receiveQueryHistory(queryHistory));
+                dispatch(analyze(sampleId, view.id, filter.id));
             }
         });
     }

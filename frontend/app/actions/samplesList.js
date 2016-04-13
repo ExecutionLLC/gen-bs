@@ -78,7 +78,7 @@ export function fetchSamples() {
 export function receiveSamplesList(samples) {
     return {
         type: RECEIVE_SAMPLES_LIST,
-        samples: samples
+        samples: samples || []
     }
 }
 
