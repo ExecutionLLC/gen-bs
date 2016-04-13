@@ -188,6 +188,52 @@ class FilterQueryBuilder extends Component {
             console.log(types, jsTypes);
         })();
 */
+        function getFieldById(id) {
+            var i;
+            for (i = 0; i < fields.length; i++) {
+                if (id == fields[i].id) {
+                    return fields[i];
+                }
+            }
+        }
+
+        function jsTypeCastValue(val, type) {
+            var cast = {
+                'string': (val) => '' + val,
+                'number': (val) => +val,
+                'boolean': (val) => val === 'false' ? false : !!val
+            }[type];
+            return cast ? cast(val) : null;
+        }
+
+        function jsTypeCastArray(val, type, len) {
+            if (!val || typeof val !== 'object' || !val.length) {
+                return new Array(len || 1).fill(jsTypeCastValue(val, type));
+            } else {
+                return val
+                    .slice(0, len ? len : val.length)
+                    .map((v) => jsTypeCastValue(v, type))
+                    .concat(
+                        new Array(len > val.length ? len - val.length : 0)
+                            .fill(jsTypeCastValue(val[val.length - 1], type))
+                    );
+            }
+        }
+
+        function isAllowedOperatorType(operator, type) {
+            //return operator.allow[type]; // TODO: optimize
+            return operator.apply_to.indexOf(type) >= 0;
+        }
+
+        function getValidOperationsTypesForJSType(fieldJSType) {
+            var ops = [];
+            filterUtils.operators.map( (op) => { if (op.apply_to.indexOf(fieldJSType) >= 0) ops.push(op.type); } );
+            return ops;
+        }
+
+        function getValidOperationsTypesForField(field) {
+            return getValidOperationsTypesForJSType(fieldUtils.getFieldJSType(field));
+        }
 
         const fieldDefault = fields[Object.keys(fields)[0]].id;
 
