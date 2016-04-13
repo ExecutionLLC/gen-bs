@@ -411,10 +411,11 @@ class FilterQueryBuilder extends Component {
                 <FieldFilterItem
                     index={index}
                     item={item}
-                    fields={fields}
+                    fields={allowedFields}
+                    allowedOpsTypes={allowedOpsTypes}
+                    valueType={fieldJSType}
                     disabled={disabled}
                     onChange={ (item) => {
-
                         const {subrules, indexIn} = findSubrulesWIndex(index);
                         subrules[indexIn] = item;
                         dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
@@ -718,6 +719,10 @@ class FieldFilterItem extends Component {
         const item = this.props.item;
         /** @type {Array.<{id: string, label: string, type: string}>} */
         const fields = this.props.fields;
+        /** @type {string[]} */
+        const allowedOpsTypes = this.props.allowedOpsTypes;
+        /** @type {string} */
+        const valueType = this.props.valueType;
         /** @type {boolean} */
         const disabled = this.props.disabled;
         /** @type {function({fieldId: string, fieldCondition: Object.<string, string|number|boolean|null|Array.<string|number>>})} */
@@ -726,7 +731,7 @@ class FieldFilterItem extends Component {
         const selectOptionsList = fields.map( (field) => { return {value: field.id, label: field.label} } );
         const selectOptionValue = item.field;
 
-        const opsListForSelect = filterParser.ops.genomicsRulesOperatorsList.map( (opname) => { return {value: opname, label: filterParser.ops.genomicsRuleOperatorsLabels[opname]}; });
+        const opsListForSelect = allowedOpsTypes.map( (opname) => { return {value: opname, label: filterParser.ops.genomicsRuleOperatorsLabels[opname]}; });
 
         function makeInputForSingleValue(value, disabled, onChange) {
             var inputInfo = {
@@ -801,31 +806,73 @@ class FieldFilterItem extends Component {
                     />
                 </div>
                 <div className="rule-value-container">
-                    {
-                        typeof item.value === 'object' ?
-                            item.value && item.value.length ?
-                                makeInputList(item.value, disabled, (i, val) => {
-                                    var values = prop.item.value.slice();
-                                    values[i] = val;
-                                    onChange({
-                                        id: item.id,
-                                        field: item.field,
-                                        operator: item.operator,
-                                        value: values
-                                    });
-                                })
-                                :
-                                makeInputList([])
-                            :
-                            makeInputForSingleValue(item.value, disabled, (val) => {
-                                onChange({
+                    {(function(value){
+
+                        const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
+
+                        if (typeof value === 'object') {
+                            if (!value) {
+                                return null;
+                            }
+
+                            const operatorInfo = filterUtils.getOperatorByType(item.operator);
+                            const opWant = filterParser.ops.getOperatorWantedParams(operatorInfo);
+                            if (opWant.arraySize) {
+                                return <div className="rule-value-array">
+                                    <InputArray
+                                        value={value}
+                                        type={valueType === 'number' ? 'number' : 'text'}
+                                        disabled={disabled}
+                                        onChange={ (vals) => onChange({
+                                            id: item.id,
+                                            field: item.field,
+                                            operator: item.operator,
+                                            value: vals
+                                        })}
+                                    />
+                                </div>
+                            } else {
+                                return <div className="rule-value-array">
+                                    <InputResizingArray
+                                        value={value}
+                                        type={valueType === 'number' ? 'number' : 'text'}
+                                        disabled={disabled}
+                                        onChange={ (vals) => onChange({
+                                            id: item.id,
+                                            field: item.field,
+                                            operator: item.operator,
+                                            value: vals
+                                        })}
+                                    />
+                                </div>
+                            }
+                        }
+                        if (typeof value === 'boolean') {
+                            return <input
+                                className="form-control"
+                                type="checkbox"
+                                checked={item.value}
+                                disabled={disabled}
+                                onChange={ (evt) => onChange({
                                     id: item.id,
                                     field: item.field,
                                     operator: item.operator,
-                                    value: val
-                                });
+                                    value: evt.target.checked
+                                })}
+                            />
+                        }
+                        return makeInputForSingleValue(
+                            value,
+                            disabled,
+                            (val) => onChange({
+                                id: item.id,
+                                field: item.field,
+                                operator: item.operator,
+                                value: getInputValue(val)
                             })
-                    }
+                        );
+
+                    })(item.value)}
                 </div>
             </div>
         )
