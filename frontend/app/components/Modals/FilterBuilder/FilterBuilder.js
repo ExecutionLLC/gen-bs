@@ -236,6 +236,17 @@ class FilterQueryBuilder extends Component {
         }
 
         const fieldDefault = fields[Object.keys(fields)[0]].id;
+        function getValidFieldsIdsForOperation(fields, operation) {
+            var validFieldsIds = {};
+            fields.map( (field) => {
+                const fieldJSType = fieldUtils.getFieldJSType(field);
+                if (isAllowedOperatorType(operation, fieldJSType)) {
+                    validFieldsIds[field.id] = true;
+                }
+            });
+            return validFieldsIds;
+        }
+
 
 
         function findSubrules(index) {
