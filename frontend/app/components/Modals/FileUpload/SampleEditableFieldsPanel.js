@@ -35,33 +35,31 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     render() {
+        const {sample, editedSamples} = this.props;
+        const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
+        const sampleId = sample.id;
+        const fieldIdToValuesHash = {};
+        if (currentSampleIndex >= 0) {
+            _.reduce(editedSamples[currentSampleIndex].values, (result, value) => {
+                result[value.fieldId] = value.values;
+                return result;
+            }, fieldIdToValuesHash);
+        }
         return (
             <Panel collapsible
                    expanded={this.props.isExpanded}
                    className="samples-values form-horizontal-rows"
             >
                 <div className="flex">
-                    {this.props.fields.map(field => this.renderEditableField(field))}
+                    {this.props.fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
                     {this.renderRowButtons()}
                 </div>
             </Panel>
         );
     }
 
-    renderEditableField(field) {
-        let fieldValue;
-        const {sample, editedSamples} = this.props;
-        const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
-        const sampleId = sample.id;
-
-        if (currentSampleIndex >= 0) {
-            const storedValue = _.find(editedSamples[currentSampleIndex].values || [],
-                item => item.fieldId === field.id);
-            fieldValue = storedValue ? storedValue.values : '';
-        } else {
-            fieldValue = '';
-        }
-
+    renderEditableField(sampleId, field, fieldIdToValuesHash) {
+        const fieldValue = fieldIdToValuesHash[field.id] || '';
         if (field.availableValues) {
             return this.renderSelectField(sampleId, field, fieldValue);
         } else {
