@@ -50,6 +50,10 @@ class SavedFilesUrls extends CollectionUrls {
         const itemUrl = this._createUrlForId(itemId);
         return itemUrl + '/download';
     }
+
+    upload() {
+        return _constructApiUrl('/upload');
+    }
 }
 
 class SamplesUrls extends CollectionUrls {

@@ -40,6 +40,18 @@ describe('Query History', () => {
         });
     });
 
+    after((done) => {
+        sessionsClient.closeSession(demoSessionId, (error, response) => {
+            SessionsClient.getSessionFromResponse(response, false, false);
+
+            sessionsClient.closeSession(sessionId, (error, response) => {
+                SessionsClient.getSessionFromResponse(response, false, false);
+
+                done();
+            });
+        });
+    });
+
     it('should get last user queryHistory', (done) => {
         dataClient.getUserData(sessionId, languageId, (error, response) => {
             const body = ClientBase.readBodyWithCheck(error, response);
@@ -55,11 +67,13 @@ describe('Query History', () => {
                     assert.ok(body.operationId);
                     historyClient.getClientQueryHistory(sessionId, 1, 0, (error, response) => {
                         const body = ClientBase.readBodyWithCheck(error, response);
-                        assert.equal(body.result.length, 1, 'Unexpected history length');
+                        // The last entry should not be returned.
+                        assert.equal(body.result.length, 0, 'Unexpected history length');
                         const resultQuery = body.result[0];
                         assert.equal(resultQuery.sample.id, testSample.id, 'Sample id is not equal');
                         assert.equal(resultQuery.view.id, testView.id, 'View id is not equal');
                         assert.equal(resultQuery.filters[0].id, testFilter.id, 'Filters id is not equal');
+
                         done();
                     });
                 });
