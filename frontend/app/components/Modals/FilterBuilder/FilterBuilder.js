@@ -178,7 +178,6 @@ class FilterQueryBuilder extends Component {
         const disabled = this.props.disabled;
         const dispatch = this.props.dispatch;
 
-        const parsedRules = filterUtils.getRulesFromGenomics(rules);
 /* check all fields types
         (function() {
             console.log('field types:');
@@ -235,7 +234,6 @@ class FilterQueryBuilder extends Component {
             return getValidOperationsTypesForJSType(fieldUtils.getFieldJSType(field));
         }
 
-        const fieldDefault = fields[Object.keys(fields)[0]].id;
         function getValidFieldsIdsForOperation(fields, operation) {
             var validFieldsIds = {};
             fields.map( (field) => {
@@ -338,6 +336,12 @@ class FilterQueryBuilder extends Component {
 
             return {validRules: validRules, report: report};
         }
+
+
+        const parsedRawRules = filterUtils.getRulesFromGenomics(rules);
+        const {validRules: parsedRules, report} = validateRules(parsedRawRules);
+
+        const fieldDefault = fieldUtils.getDefault(fields);
 
         function findSubrules(index) {
             var searchIndex = index.slice();
