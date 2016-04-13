@@ -67,7 +67,7 @@ export function fetchUserdata() {
                 dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
                 const userData = response.body;
-                const view = _.find(userData.views, view => view.type == 'standard');
+                const view = _.find(userData.views, view => view.type === 'standard');
                 const {
                     samples,
                     totalFields,
@@ -77,7 +77,7 @@ export function fetchUserdata() {
                     lastSampleFields
                 } = userData;
 
-                const filter = _.find(userData.filters, filter => filter.type == 'standard');
+                const filter = _.find(userData.filters, filter => filter.type === 'standard');
                 const sample = _.find(samples, sample => sample.id === lastSampleId);
                 const sampleId = sample ? sample.id : null;
                 dispatch(receiveUserdata(userData));
