@@ -47,6 +47,11 @@ class App extends Component {
             'subnav-closed': ui.queryNavbarClosed
         });
 
+        var navbarQueryClass = classNames({
+            'collapse-subnav': true,
+            'subnav-closed': ui.queryNavbarClosed
+        });
+
         return (
             <div className={mainDivClass} id="main">
                 <nav className="navbar navbar-inverse navbar-static-top"></nav>
@@ -60,7 +65,7 @@ class App extends Component {
                 {samples.length > 0 &&
                  <div className="container-fluid">
                     <NavbarMain />
-                     <div className="collapse collapse-subnav" id="subnav">
+                     <div className={navbarQueryClass} id="subnav">
                          <NavbarCreateQuery
                           {...this.props}
                           openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
