@@ -80,7 +80,7 @@ export default class FieldHeaderControls extends Component {
             'input-group',
             {
                 'open': isFilterOpened,
-                'invisible': !isFieldSearchable || !isExists
+                'invisible': !isFieldSearchable || !areControlsEnabled
             }
         );
 
