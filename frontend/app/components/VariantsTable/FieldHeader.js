@@ -54,7 +54,8 @@ export default class FieldHeaderControls extends Component {
             'btn-group',
             'btn-group-sort',
             {
-                'open': isFilterOpened
+                'open': isFilterOpened,
+                'hidden': !isExists
             }
         );
 
@@ -72,7 +73,7 @@ export default class FieldHeaderControls extends Component {
                         <a type="button" className="btn-link-default">
                             {name}
                         </a>
-                        <div className={buttonGroupClasses} role="group" data-toggle="buttons">
+                        <div className={buttonGroupClasses}>
                             {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, isExists)}
                             {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order, isExists)}
                         </div>
@@ -94,7 +95,7 @@ export default class FieldHeaderControls extends Component {
             'input-group',
             {
                 'open': isFilterOpened,
-                'invisible': !isFieldSearchable
+                'invisible': !isFieldSearchable || !isExists
             }
         );
 
