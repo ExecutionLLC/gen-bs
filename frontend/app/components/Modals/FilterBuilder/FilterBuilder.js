@@ -660,7 +660,7 @@ class InputResizingArray extends Component {
     }
 
     static removeEmpty(vals) {
-        return vals.filter( (v) => v.val != '' );
+        return vals.filter( (v) => v.val !== '' );
     }
 
     constructor(props) {
