@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import {connect} from 'react-redux';
 
 import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder'
+import {viewBuilderChangeSortColumn} from "../../../actions/viewBuilder";
 
 
 export default class ViewBuilder extends React.Component {
@@ -36,7 +37,7 @@ export default class ViewBuilder extends React.Component {
             ];
             const sortOrder = viewItem.sortOrder;
             const currentDirection = viewItem.sortDirection;
-            const ascSortBtnClasses = this.getSortButtonClasses(sortOrder,currentDirection);
+            const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, currentDirection);
             const fieldId = viewItem.fieldId;
 
             return (
@@ -62,7 +63,7 @@ export default class ViewBuilder extends React.Component {
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
                              data-placement="bottom" data-container="body" title="Desc/Asc Descending">
-                            {this.renderSortButton(currentDirection, ascSortBtnClasses, sortOrder,fieldId)}
+                            {this.renderSortButton(currentDirection, ascSortBtnClasses, sortOrder, fieldId)}
                         </div>
 
                     </div>
@@ -130,18 +131,19 @@ export default class ViewBuilder extends React.Component {
         }
     }
 
-    renderSortButton(currentDirection, sortButtonClass, sortOrder) {
+    renderSortButton(currentDirection, sortButtonClass, sortOrder, fieldId) {
         return (
             <button className={sortButtonClass}
                     type="button"
-                    onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey) }>
+                    onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
                 <span className="text-info">{sortOrder}</span>
             </button>
         );
     }
 
-    onSortClick(direction, isControlKeyPressed) {
-        console.log(direction,isControlKeyPressed);
+    onSortClick(direction, isControlKeyPressed, fieldId) {
+        const {dispatch} = this.props;
+        dispatch(viewBuilderChangeSortColumn(fieldId, direction, isControlKeyPressed));
     }
 }
 
