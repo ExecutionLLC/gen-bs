@@ -34,6 +34,11 @@ export default class ViewBuilder extends React.Component {
                     return {value: f.id, label: `${f.name} -- ${f.sourceName}`}
                 })
             ];
+            const sortOrder = viewItem.sortOrder;
+            const currentDirection = viewItem.sortDirection;
+            const ascSortBtnClasses = this.getSortButtonClasses(sortOrder,currentDirection);
+            const fieldId = viewItem.fieldId;
+
             return (
 
                 <div className="row grid-toolbar" key={Math.round(Math.random()*100000000).toString()}>
@@ -57,7 +62,7 @@ export default class ViewBuilder extends React.Component {
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
                              data-placement="bottom" data-container="body" title="Desc/Asc Descending">
-                            <button type="button" className="btn btn-default btn-sort active desc" disabled/>
+                            {this.renderSortButton(currentDirection, ascSortBtnClasses, sortOrder,fieldId)}
                         </div>
 
                     </div>
@@ -105,6 +110,38 @@ export default class ViewBuilder extends React.Component {
             </div>
 
         )
+    }
+
+    getSortButtonClasses(order, sortDirection) {
+        if (order == null && sortDirection == null) {
+            return classNames(
+                'btn',
+                'btn-sort',
+                'btn-default'
+            );
+        }
+        else {
+            return classNames(
+                'btn',
+                'btn-sort', sortDirection, {
+                    'active': true
+                }
+            );
+        }
+    }
+
+    renderSortButton(currentDirection, sortButtonClass, sortOrder) {
+        return (
+            <button className={sortButtonClass}
+                    type="button"
+                    onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey) }>
+                <span className="text-info">{sortOrder}</span>
+            </button>
+        );
+    }
+
+    onSortClick(direction, isControlKeyPressed) {
+        console.log(direction,isControlKeyPressed);
     }
 }
 
