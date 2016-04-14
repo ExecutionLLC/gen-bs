@@ -137,15 +137,6 @@ class FilterQueryBuilder extends Component {
         const disabled = this.props.disabled;
         const dispatch = this.props.dispatch;
 
-/* check all fields types
-        (function() {
-            console.log('field types:');
-            var types = {};
-            var jsTypes = {};
-            fields.map( (f) => { types[f.type] = true; jsTypes[fieldUtils.getFieldJSType(f)] = true; } );
-            console.log(types, jsTypes);
-        })();
-*/
         function getFieldById(id) {
             var i;
             for (i = 0; i < fields.length; i++) {
@@ -769,20 +760,6 @@ class FieldFilterItem extends Component {
             );
         }
 
-        function makeInputList(values, disabled, onChange) {
-            return (
-                <div className="rule-value-array">
-                    {values.map( (value, index) => {
-                        return (
-                            <div key={index} className="rule-value-array-item">
-                                {makeInputForSingleTextValue(value, disabled, (val) => onChange(index, val) )}
-                            </div>
-                        );
-                    })}
-                </div>
-            );
-        }
-
         return (
             <div>
                 <div className="rule-filter-container">
@@ -916,7 +893,7 @@ There must be not editable fields to prevent select gender for the person
     function getFieldValue(f, sourceName) {
       return {
         id: f.id,
-        label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)} (${f.valueType})`,
+        label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)}`,
         type: f.valueType === 'float' ? 'double' : f.valueType
       };
     }
