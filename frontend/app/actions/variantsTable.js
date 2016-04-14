@@ -13,6 +13,7 @@ export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
 export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
+export const SET_VARIANTS_SORT = 'SET_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
 export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
 
@@ -122,6 +123,23 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
             dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
         }
+    }
+}
+
+export function setViewVariantsSort(view) {
+    const sortFields = _.filter(
+        view.viewListItems, viewListItem =>viewListItem.sortDirection != null && viewListItem.sortOrder != null);
+    const sortOrder = _.map(sortFields, sortField => {
+        return {
+            direction: sortField.sortDirection,
+            fieldId: sortField.fieldId,
+            order: sortField.sortOrder
+        }
+
+    });
+    return {
+        type: SET_VARIANTS_SORT,
+        sortOrder
     }
 }
 
