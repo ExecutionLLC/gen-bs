@@ -19,8 +19,6 @@ const filterUtils = {
             not_contains:     function(v) { return { '$ncontains': v[0] }; },
             ends_with:        function(v) { return { '$end_with': v[0] }; },
             not_ends_with:    function(v) { return { '$nend_with': v[0] }; },
-            is_empty:         function(v) { return { '$eq': '' }; },
-            is_not_empty:     function(v) { return { '$neq': '' }; },
             is_null:          function(v) { return { '$eq': null }; },
             is_not_null:      function(v) { return { '$neq': null }; }
         },
@@ -30,14 +28,14 @@ const filterUtils = {
                 v = v.$eq;
                 return {
                     'val': v,
-                    'op': v === null ? 'is_null' : (v === '' ? 'is_empty' : 'equal')
+                    'op': v === null ? 'is_null' : 'equal'
                 };
             },
             $neq: function(v) {
                 v = v.$neq;
                 return {
                     'val': v,
-                    'op': v === null ? 'is_not_null' : (v === '' ? 'is_not_empty' : 'not_equal')
+                    'op': v === null ? 'is_not_null' : 'not_equal'
                 };
             },
             $in: function(v) { return { 'val': v.$in, 'op': 'in' }; },
@@ -117,8 +115,6 @@ const filterUtils = {
         { type: 'not_contains',     nb_inputs: 1, multiple: false, apply_to: ['string'] },
         { type: 'ends_with',        nb_inputs: 1, multiple: false, apply_to: ['string'] },
         { type: 'not_ends_with',    nb_inputs: 1, multiple: false, apply_to: ['string'] },
-        { type: 'is_empty',         nb_inputs: 0, multiple: false, apply_to: ['string'] },
-        { type: 'is_not_empty',     nb_inputs: 0, multiple: false, apply_to: ['string'] },
         { type: 'is_null',          nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean'] },
         { type: 'is_not_null',      nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean'] }
     ],

@@ -24,8 +24,6 @@ const opsUtils = {
         "not_contains": "doesn't contain",
         "ends_with": "ends with",
         "not_ends_with": "doesn't end with",
-        "is_empty": "is empty",
-        "is_not_empty": "is not empty",
         "is_null": "is null",
         "is_not_null": "is not null"
     },
@@ -46,8 +44,6 @@ const opsUtils = {
         'not_contains',
         'ends_with',
         'not_ends_with',
-        'is_empty',
-        'is_not_empty',
         'is_null',
         'is_not_null',
     ],
