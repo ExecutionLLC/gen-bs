@@ -54,7 +54,8 @@ export default class FieldHeaderControls extends Component {
             'btn-group',
             'btn-group-sort',
             {
-                'open': isFilterOpened
+                'open': isFilterOpened,
+                'hidden': !isExists
             }
         );
 
