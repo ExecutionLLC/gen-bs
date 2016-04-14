@@ -836,35 +836,20 @@ class FieldFilterItem extends Component {
 
                             const operatorInfo = filterUtils.getOperatorByType(item.operator);
                             const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
-                            if (opWant.arraySize) {
-                                return <div className="rule-value-array">
-                                    <InputArray
-                                        value={value}
-                                        type={valueType === 'number' ? 'number' : 'text'}
-                                        disabled={disabled}
-                                        onChange={ (vals) => onChange({
-                                            id: item.id,
-                                            field: item.field,
-                                            operator: item.operator,
-                                            value: getInputValueArray(vals)
-                                        })}
-                                    />
-                                </div>
-                            } else {
-                                return <div className="rule-value-array">
-                                    <InputResizingArray
-                                        value={value}
-                                        type={valueType === 'number' ? 'number' : 'text'}
-                                        disabled={disabled}
-                                        onChange={ (vals) => onChange({
-                                            id: item.id,
-                                            field: item.field,
-                                            operator: item.operator,
-                                            value: getInputValueArray(vals)
-                                        })}
-                                    />
-                                </div>
-                            }
+                            const InputArrayComponent = opWant.arraySize ? InputArray : InputResizingArray;
+                            return <div className="rule-value-array">
+                                <InputArrayComponent
+                                    value={value}
+                                    type={valueType === 'number' ? 'number' : 'text'}
+                                    disabled={disabled}
+                                    onChange={ (vals) => onChange({
+                                        id: item.id,
+                                        field: item.field,
+                                        operator: item.operator,
+                                        value: getInputValueArray(vals)
+                                    })}
+                                />
+                            </div>
                         }
                         if (typeof value === 'boolean') {
                             return <input
