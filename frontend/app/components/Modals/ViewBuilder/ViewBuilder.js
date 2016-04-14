@@ -63,7 +63,7 @@ export default class ViewBuilder extends React.Component {
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
                              data-placement="bottom" data-container="body" title="Desc/Asc Descending">
-                            {this.renderSortButton(currentDirection, ascSortBtnClasses, sortOrder, fieldId)}
+                            {this.renderSortButton(currentDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
 
                     </div>
@@ -131,10 +131,11 @@ export default class ViewBuilder extends React.Component {
         }
     }
 
-    renderSortButton(currentDirection, sortButtonClass, sortOrder, fieldId) {
+    renderSortButton(currentDirection, sortButtonClass, sortOrder, fieldId, isDisable) {
         return (
             <button className={sortButtonClass}
                     type="button"
+                    disabled={isDisable}
                     onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
                 <span className="text-info">{sortOrder}</span>
             </button>

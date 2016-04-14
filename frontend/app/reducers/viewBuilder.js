@@ -182,7 +182,7 @@ export default function viewBuilder(state = {
                 }
                 viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
                     sortDirection: selectedDirection,
-                    sortOrder: firstSortItemIndex == -1 ? 1 : 2
+                    sortOrder: firstSortItemIndex == -1 ? 1 : selectedOrder
                 });
             }
             return Object.assign({}, state, {
