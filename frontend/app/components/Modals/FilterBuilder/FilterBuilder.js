@@ -45,7 +45,7 @@ const opsUtils = {
         'ends_with',
         'not_ends_with',
         'is_null',
-        'is_not_null',
+        'is_not_null'
     ],
     getOperatorWantedParams: function(operatorInfo) {
         if (!operatorInfo.nb_inputs) {
