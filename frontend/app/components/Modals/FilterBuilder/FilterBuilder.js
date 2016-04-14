@@ -825,6 +825,9 @@ class FieldFilterItem extends Component {
                     {(function(value){
 
                         const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
+                        function getInputValueArray(arr) {
+                            return arr.map( (val) => getInputValue(val) );
+                        }
 
                         if (typeof value === 'object') {
                             if (!value) {
@@ -843,7 +846,7 @@ class FieldFilterItem extends Component {
                                             id: item.id,
                                             field: item.field,
                                             operator: item.operator,
-                                            value: vals
+                                            value: getInputValueArray(vals)
                                         })}
                                     />
                                 </div>
@@ -857,7 +860,7 @@ class FieldFilterItem extends Component {
                                             id: item.id,
                                             field: item.field,
                                             operator: item.operator,
-                                            value: vals
+                                            value: getInputValueArray(vals)
                                         })}
                                     />
                                 </div>
