@@ -140,25 +140,17 @@ export function filterBuilderSaveAndSelectRules() {
     return (dispatch, getState) => {
         const rules = getState().filterBuilder.editOrNew ? getState().filterBuilder.editedFilter.rules : getState().filterBuilder.newFilter.rules;
         dispatch(filterBuilderRules(rules));
-        getState().filterBuilder.editOrNew ?
-            dispatch(filterBuilderUpdateFilter()) : dispatch(filterBuilderCreateFilter())
+        if (getState().filterBuilder.editOrNew) {
+            dispatch(filterBuilderUpdateFilter());
+        } else {
+            dispatch(filterBuilderCreateFilter());
+        }
     };
 }
 
 export function filterBuilderRequestRules() {
     return {
         type: FBUILDER_REQUEST_RULES
-    }
-}
-
-export function filterBuilderReceiveRules(rules) {
-    return (dispatch, getState) => {
-        dispatch(filterBuilderRules(rules));
-        if (getState().filterBuilder.editOrNew) {
-            dispatch(filterBuilderUpdateFilter());
-        } else {
-            dispatch(filterBuilderCreateFilter());
-        }
     }
 }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 
-import { filterBuilderReceiveRules, filterBuilderChangeAll } from '../../../actions/filterBuilder';
+import { filterBuilderChangeAll } from '../../../actions/filterBuilder';
 
 import filterUtils from '../../../utils/filterUtils';
 
