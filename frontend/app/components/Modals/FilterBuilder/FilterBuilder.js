@@ -749,25 +749,15 @@ class FieldFilterItem extends Component {
 
         const opsListForSelect = allowedOpsTypes.map( (opname) => { return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]}; });
 
-        function makeInputForSingleValue(value, disabled, onChange) {
-            var inputInfo = {
-                    'number': {attributes: {type: 'number', value: value}, getValue(el) { return +el.value; }, isText: true},
-                    'boolean': {attributes: {type: 'checkbox', checked: !!value}, getValue(el) { return el.checked; }, isText: false}
-                }[typeof value] || {attributes: {type: 'text', value: value}, getValue(el) { return el.value; }, isText: true };
+        function makeInputForSingleTextValue(value, disabled, onChange) {
             return (
-                inputInfo.isText ?
-                    <Input
-                        className="form-control"
-                        {...inputInfo.attributes}
-                        disabled={disabled}
-                        onChange={ (val) => onChange(val) }
-                    /> :
-                    <input
-                        className="form-control"
-                        {...inputInfo.attributes}
-                        disabled={disabled}
-                        onChange={ (evt) => onChange(inputInfo.getValue(evt.target)) }
-                    />
+                <Input
+                    className="form-control"
+                    type={typeof value === 'number' ? 'number' : 'text'}
+                    value={value}
+                    disabled={disabled}
+                    onChange={ (val) => onChange(val) }
+                />
             );
         }
 
@@ -777,7 +767,7 @@ class FieldFilterItem extends Component {
                     {values.map( (value, index) => {
                         return (
                             <div key={index} className="rule-value-array-item">
-                                {makeInputForSingleValue(value, disabled, (val) => onChange(index, val) )}
+                                {makeInputForSingleTextValue(value, disabled, (val) => onChange(index, val) )}
                             </div>
                         );
                     })}
@@ -865,7 +855,7 @@ class FieldFilterItem extends Component {
                                 })}
                             />
                         }
-                        return makeInputForSingleValue(
+                        return makeInputForSingleTextValue(
                             value,
                             disabled,
                             (val) => onChange({
