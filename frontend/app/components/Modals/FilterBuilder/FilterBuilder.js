@@ -371,7 +371,7 @@ class FilterQueryBuilder extends Component {
                         const castedValue = opWant.noParams ?
                             null :
                             opWant.single ?
-                                typeof value === 'object' && value.length ? jsTypeCastValue(value.join(), fieldJSType) : jsTypeCastValue(value, fieldJSType) :
+                                (typeof value === 'object' && value && value.length) ? jsTypeCastValue(value.join(), fieldJSType) : jsTypeCastValue(value, fieldJSType) :
                                 jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
                         item.value = castedValue;
                         const {subrules, indexIn} = findSubrulesWIndex(index);
