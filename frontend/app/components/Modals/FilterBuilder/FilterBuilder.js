@@ -7,6 +7,9 @@ import filterUtils from '../../../utils/filterUtils';
 
 
 const opsUtils = {
+    /**
+     * Map operator type to operator label
+     */
     genomicsRuleOperatorsLabels: {
         "equal": "equal",
         "not_equal": "not equal",
@@ -27,26 +30,16 @@ const opsUtils = {
         "is_null": "is null",
         "is_not_null": "is not null"
     },
-    genomicsRulesOperatorsList: [
-        'equal',
-        'not_equal',
-        'in',
-        'not_in',
-        'less',
-        'less_or_equal',
-        'greater',
-        'greater_or_equal',
-        'between',
-        'not_between',
-        'begins_with',
-        'not_begins_with',
-        'contains',
-        'not_contains',
-        'ends_with',
-        'not_ends_with',
-        'is_null',
-        'is_not_null'
-    ],
+    /**
+     * Return operator wanted params count
+     * Object contains one of properties:
+     *   noParams - operator does not want any params
+     *   single - operator want single parameter
+     *   arrayDynamic - operator wants dynamic-size array
+     *   arraySize - operator wants fixed-size array of arraySize length
+     * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operatorInfo as in filterUtils.operators
+     * @returns {{noParams: boolean=, single: boolean=, arrayDynamic: boolean=, arraySize: number=}}
+     */
     getOperatorWantedParams: function(operatorInfo) {
         if (!operatorInfo.nbInputs) {
             return {noParams: true};
@@ -63,9 +56,19 @@ const opsUtils = {
 };
 
 const fieldUtils = {
-    getDefault(fields) {
-        return fields[Object.keys(fields)[0]].id;
+    /**
+     * Return default field id for adding new rule item or smth
+     * @param {{id: string, label: string, type: string}[]} fields
+     * @returns {string}
+     */
+    getDefaultId(fields) {
+        return fields[0].id;
     },
+    /**
+     * Get JS type for the field value or undefined
+     * @param {{id: string, label: string, type: string}} field
+     * @returns {string|undefined}
+     */
     getFieldJSType(field) {
         const fieldType = field.type;
         const jsType = {
@@ -85,54 +88,89 @@ const fieldUtils = {
 /**
 
 FilterQueryBuilder(
-     fields: {}
+     fields: {{id: string, label: string, type: string}[]}
      rules: {{ <'$and'|'$or'>: ({id, label, type}|rules)[] }}
-     rules1: {{condition: <'AND'|'OR'>, rules: ({field, id, operator, value}|{condition})[]}}
      disabled: boolean
+     dispatch: function(Object)
 )
     QueryBuilder(
-        rules: {{ <'$and'|'$or'>: ({id, label, type}|rules)[] }}
-        rules1: {{condition: <'AND'|'OR'>, rules: ({field, id, operator, value}|{condition})[]}}
+        rules: {{condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}}
         disabled: boolean
-        makeItemComponent: function
-        handlers: {}
+        makeItemComponent: function(number[], {field: string, operator: string, value: *}, boolean): Component
+        handlers: {
+            onSwitch: function(number[], boolean),
+            onAdd: function(number[], boolean),
+            onDeleteGroup: function(number[]),
+            onDeleteItem: function(number[], boolean)
+        }
     )
         RulesGroupContainer(
             index: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
-            makeItemComponent: function
+            makeItemComponent: = makeItemComponent
+            ruleItems: {condition?: *, field?: string, operator?: string, value?: *}[]
             ruleIsAnd: boolean
-            ruleItems: []
-            disabled: boolean
-            handlers: {}
+            disabled: = disabled
+            handlers: = handlers
         )
             RulesGroupHeader(
-                index: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
-                disabled: boolean
-                isAnd: boolean
+                index: = index
+                disabled: = disabled
+                isAnd: = ruleIsAnd
                 onSwitch: function(boolean)
                 onAdd: function(boolean)
-                onDelete: ?function()
+                onDelete: function()
             )
             RulesGroupBody(
-                index: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
-                items: Object[]
-                disabled: boolean
-                makeItemComponent: Component
-                handlers: {}
+                index: = index
+                items: = ruleItems
+                disabled: = disabled
+                makeItemComponent: = makeItemComponent
+                handlers: = handlers
             )
                 RulesGroupContainer(...)
-                itemComponent(...)
+                RuleContainer(
+                    index: number[]
+                    item: {condition?: *, field?: string, operator?: string, value?: *}
+                    disabled: = disabled
+                    makeItemComponent: = makeItemComponent
+                    onDelete: function()
+                )
+                    itemComponent(
+                        number[],
+                        {field: string, operator: string, value: *},
+                        boolean
+                    )
+
+
+FieldFilterItem(
+    index: number[]
+    item: {field: string, operator: string, value: *}
+    fields: {id: string, label: string, type: string}[]
+    allowedOpsTypes: string[]
+    valueType: string
+    disabled: boolean
+    onChange: function({field: string, operator: string, value: *})
+)
 
  */
 
 
 class FilterQueryBuilder extends Component {
     render() {
+        /** @type {{id: string, label: string, type: string}[]} */
         const fields = this.props.fields;
+        /** @type {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} */
         const rules = this.props.rules;
+        /** @type {boolean} */
         const disabled = this.props.disabled;
+        /** @type function(Object) */
         const dispatch = this.props.dispatch;
 
+        /**
+         * Return field for id
+         * @param {string} id
+         * @returns {{id: string, label: string, type: string}}
+         */
         function getFieldById(id) {
             var i;
             for (i = 0; i < fields.length; i++) {
@@ -142,6 +180,12 @@ class FilterQueryBuilder extends Component {
             }
         }
 
+        /**
+         * Type cast value (single value, not an object or array) to desired type
+         * @param {*} val
+         * @param {string} type
+         * @returns {*|null}
+         */
         function jsTypeCastValue(val, type) {
             var cast = {
                 'string': (val) => typeof val === 'object' ? '' : '' + val,
@@ -151,6 +195,15 @@ class FilterQueryBuilder extends Component {
             return cast ? cast(val) : null;
         }
 
+        /**
+         * Type cast single value or array to desired typed array
+         * 'len' is optional parameter. If it set then make result array exactly that length
+         * either by cutting or enlarging it
+         * @param {*|array} val
+         * @param {string} type
+         * @param {number=} len
+         * @returns {*}
+         */
         function jsTypeCastArray(val, type, len) {
             if (!val || typeof val !== 'object' || !val.length) {
                 return new Array(len || 1).fill(jsTypeCastValue(val, type));
@@ -165,29 +218,59 @@ class FilterQueryBuilder extends Component {
             }
         }
 
+        /**
+         * Return true if operator allows given argument type
+         * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operator as in filterUtils.operators
+         * @param {string} type
+         * @returns {boolean}
+         */
         function isAllowedOperatorType(operator, type) {
             return operator.applyTo.indexOf(type) >= 0;
         }
 
-        function getValidOperationsTypesForJSType(fieldJSType) {
+        /**
+         * Get operators types (operator.type) for given value type
+         * @param {string} type
+         * @returns {string[]}
+         */
+        function getValidOperatorsTypesForJSType(type) {
             var ops = [];
-            filterUtils.operators.map( (op) => { if (op.applyTo.indexOf(fieldJSType) >= 0) ops.push(op.type); } );
+            filterUtils.operators.map( (op) => { if (isAllowedOperatorType(op, type)) ops.push(op.type); } );
             return ops;
         }
 
-        function getValidFieldsIdsForOperation(fields, operation) {
+        /**
+         * Get fields ids for given operation
+         * @param {{id: string, label: string, type: string}[]} fields
+         * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operator
+         * @returns {Object.<string, boolean>}
+         */
+        function getValidFieldsIdsForOperator(fields, operator) {
             var validFieldsIds = {};
             fields.map( (field) => {
                 const fieldJSType = fieldUtils.getFieldJSType(field);
-                if (isAllowedOperatorType(operation, fieldJSType)) {
+                if (isAllowedOperatorType(operator, fieldJSType)) {
                     validFieldsIds[field.id] = true;
                 }
             });
             return validFieldsIds;
         }
 
+        /**
+         * Validate parsed rules, return rules with valid items only (can be null) and validation report
+         * Report is an array of object with message and index (nested group indexes, [] is root) in source rules
+         * @param {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} rules
+         * @returns {{validRules: {condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}, report: {index: number[], message: string}[]}}
+         */
         function validateRules(rules) {
 
+            /**
+             * Validate rule item (field, operator, value), return valid rule,
+             * rules group flag (groups are not validating here) or error message
+             * Result value is type casted for field type
+             * @param {?{condition: *=, field: string=, operator: string=, value: *=}} rule
+             * @returns {{errorMessage: string=, isGroup: boolean=, validRule: {field: string, operator: string, value:*}=}}
+             */
             function validateRule(rule) {
                 if (!rule) {
                     return {errorMessage: 'no rule'};
@@ -230,17 +313,26 @@ class FilterQueryBuilder extends Component {
                 }};
             }
 
+            /**
+             * Validate rules array
+             * Return valid rules
+             * Append validation report
+             * @param {{condition: *=, field: string=, operator: string=, value: *=}[]}rules
+             * @param {number[]} index current rules group position, [] for root rules group, [1, 2] for 2nd group in 1st group in root
+             * @param {{index: number[], message: string}[]} report messages for rules in original rules tree
+             * @returns {{field: string, operator: string, value:*}[]}
+             */
             function validateRules(rules, index, report) {
                 var validRules = [];
-                rules.map( (val, i) => {
-                    var validateRuleResult = validateRule(val);
+                rules.map( (rule, i) => {
+                    var validateRuleResult = validateRule(rule);
                     if (validateRuleResult.validRule) {
                         validRules.push(validateRuleResult.validRule);
                         return;
                     }
                     const ruleIndex = index.concat([i]);
                     if (validateRuleResult.isGroup) {
-                        const validSubGroup = validateGroup(val, ruleIndex, report);
+                        const validSubGroup = validateGroup(rule, ruleIndex, report);
                         if (!validSubGroup) {
                             report.push({index: ruleIndex.slice(), message: 'invalid subgroup'});
                             return;
@@ -253,6 +345,15 @@ class FilterQueryBuilder extends Component {
                 return validRules;
             }
 
+            /**
+             * Validate rules group
+             * Return valid group or null
+             * Append validation report
+             * @param {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} group
+             * @param {number[]} index
+             * @param {{index: number[], message: string}[]} report
+             * @returns {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}}
+             */
             function validateGroup(group, index, report) {
                 if (group.condition !== 'AND' && group.condition !== 'OR') {
                     report.push({index: index.slice(), message: 'bad group condition "' + group.condition + '" (must be AND|OR)'});
@@ -276,13 +377,17 @@ class FilterQueryBuilder extends Component {
             return {validRules: validRules, report: report};
         }
 
-        const fieldDefault = fieldUtils.getDefault(fields);
+        /** @type {string} */
+        const fieldDefaultId = fieldUtils.getDefaultId(fields);
 
         const parsedRawRules = filterUtils.getRulesFromGenomics(rules);
         const validateRulesResult = validateRules(parsedRawRules);
 
-        var parsedRules = validateRulesResult.validRules ? validateRulesResult.validRules : {condition : 'AND', rules: [{field: fieldDefault, operator: 'is_null'}]};
+        // Make default rules if not parsed
+        var parsedRules = validateRulesResult.validRules ||
+            {condition : 'AND', rules: [{field: fieldDefaultId, operator: 'is_null'}]};
 
+        // Report validation results if any
         if (validateRulesResult.report.length) {
             console.error('Filter rules are invalid:');
             console.error(JSON.stringify(parsedRawRules, null, 4));
@@ -291,9 +396,15 @@ class FilterQueryBuilder extends Component {
         }
 
 
-        function findSubrules(index) {
+        /**
+         * Return subrules for given index, [] - root and so on
+         * @param {{condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}} rules
+         * @param {number[]} index
+         * @returns {{condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}}
+         */
+        function findSubrules(rules, index) {
             var searchIndex = index.slice();
-            var subrules = parsedRules;
+            var subrules = rules;
             var indexNow;
             while (searchIndex.length) {
                 subrules = subrules.rules;
@@ -303,9 +414,15 @@ class FilterQueryBuilder extends Component {
             return subrules;
         }
 
-        function findSubrulesWIndex(index) {
+        /**
+         * Return subrules and index in it for given index, [] - return root and null, [1, 2] - return 1st group and 2 as index
+         * @param {{condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}} rules
+         * @param {number[]} index
+         * @returns {{subrules: {condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}, indexIn: number|null}}
+         */
+        function findSubrulesWIndex(rules, index) {
             var searchIndex = index.slice();
-            var subrules = parsedRules;
+            var subrules = rules;
             var indexIn = null;
             while (searchIndex.length) {
                 subrules = subrules.rules;
@@ -318,30 +435,30 @@ class FilterQueryBuilder extends Component {
         }
 
         const handlers = {
-            onSwitch(index, isAnd) {
-                const subrules = findSubrules(index);
+            onSwitch(/** number[] */index, /** boolean */isAnd) {
+                const subrules = findSubrules(parsedRules, index);
                 subrules.condition = isAnd ? 'AND' : 'OR';
 
                 dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
             },
-            onAdd(index, isGroup) {
-                const subrules = findSubrules(index);
+            onAdd(/** number[] */index, /** boolean */isGroup) {
+                const subrules = findSubrules(parsedRules, index);
                 if (isGroup) {
-                    subrules.rules.push({condition: 'AND', rules: [{id: fieldDefault, field: fieldDefault, operator: 'is_null', value: null}]});
+                    subrules.rules.push({condition: 'AND', rules: [{id: fieldDefaultId, field: fieldDefaultId, operator: 'is_null', value: null}]});
                 } else {
-                    subrules.rules.push({id: fieldDefault, field: fieldDefault, operator: 'is_null', value: null});
+                    subrules.rules.push({id: fieldDefaultId, field: fieldDefaultId, operator: 'is_null', value: null});
                 }
                 dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
             },
-            onDeleteGroup(index) {
-                const {subrules, indexIn} = findSubrulesWIndex(index);
+            onDeleteGroup(/** number[] */index) {
+                const {subrules, indexIn} = findSubrulesWIndex(parsedRules, index);
                 if (indexIn != null && subrules.length > 1) {
                     subrules.splice(indexIn, 1);
                     dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
                 }
             },
-            onDeleteItem(index, itemIndex) {
-                const subrules = findSubrules(index);
+            onDeleteItem(/** number[] */index, /** number */itemIndex) {
+                const subrules = findSubrules(parsedRules, index);
                 if (subrules.rules.length > 1) {
                     subrules.rules.splice(itemIndex, 1);
                     dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
@@ -349,12 +466,19 @@ class FilterQueryBuilder extends Component {
             }
         };
 
+        /**
+         * Make filter rule item component
+         * @param {number[]} index
+         * @param {{field: string, operator: string, value: *}} item
+         * @param {boolean} disabled
+         * @returns {Component}
+         */
         function makeFilterItem(index, item, disabled) {
 
             const fieldJSType = fieldUtils.getFieldJSType(getFieldById(item.field));
-            const allowedOpsTypes = getValidOperationsTypesForJSType(fieldJSType);
-            const allowedFieldsIds = getValidFieldsIdsForOperation(fields, filterUtils.getOperatorByType(item.operator));
-            const allowedFields = (function() { var ret = []; fields.map( (f) => { if (allowedFieldsIds[f.id]) ret.push(f); } ); return ret; })();
+            const allowedOpsTypes = getValidOperatorsTypesForJSType(fieldJSType);
+            const allowedFieldsIds = getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
+            const allowedFields =  fields.filter( (f) => allowedFieldsIds[f.id] );
             return (
                 <FieldFilterItem
                     index={index}
@@ -374,7 +498,7 @@ class FilterQueryBuilder extends Component {
                                 (typeof value === 'object' && value && value.length) ? jsTypeCastValue(value.join(), fieldJSType) : jsTypeCastValue(value, fieldJSType) :
                                 jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
                         item.value = castedValue;
-                        const {subrules, indexIn} = findSubrulesWIndex(index);
+                        const {subrules, indexIn} = findSubrulesWIndex(parsedRules, index);
                         subrules[indexIn] = item;
                         dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
                     }}
@@ -396,12 +520,13 @@ class FilterQueryBuilder extends Component {
 class QueryBuilder extends Component {
 
   render() {
-      /** @type {{condition: string, rules: Object[]}} */
+      /** @type {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
       const rules = this.props.rules;
       /** @type {boolean} */
       const disabled = this.props.disabled;
-      /** @type function(Object):Component */
+      /** @type {function(number[], {}, boolean): Component} */
       const makeItemComponent = this.props.makeItemComponent;
+      /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
       const handlers = this.props.handlers;
 
       return (
@@ -426,15 +551,15 @@ class RulesGroupContainer extends Component {
     render() {
         /** @type {number[]} */
         const index = this.props.index;
-        /** @type {function(Object):Component} */
+        /** @type {function(number[], {}, boolean): Component} */
         const makeItemComponent = this.props.makeItemComponent;
-        /** @type {Object[]} */
+        /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
         const ruleItems = this.props.ruleItems;
         /** @type {boolean} */
         const ruleIsAnd = this.props.ruleIsAnd;
         /** @type {boolean} */
         const disabled = this.props.disabled;
-        /** @type {{onSwitch: function(boolean), onAdd: function(boolean), onDeleteGroup: function(), onDeleteItem: function(number)}} */
+        /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
         const handlers = this.props.handlers;
 
         return (
@@ -541,6 +666,7 @@ class RulesGroupBody extends Component {
         const makeItemComponent = this.props.makeItemComponent;
         /** @type {boolean} */
         const disabled = this.props.disabled;
+        /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
         const handlers = this.props.handlers;
 
 
@@ -562,7 +688,7 @@ class RulesGroupBody extends Component {
                         </div>
                     </div>
                     <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
-                    {props.makeItemComponent(props.indexNext, props.item, props.disabled)}
+                    {props.makeItemComponent(props.index, props.item, props.disabled)}
                 </li>
             );
         }
@@ -586,7 +712,7 @@ class RulesGroupBody extends Component {
                             } else {
                                 return <RuleContainer
                                     key={itemIndex}
-                                    indexNext={indexNext}
+                                    index={indexNext}
                                     item={item}
                                     disabled={disabled}
                                     makeItemComponent={makeItemComponent}
@@ -877,48 +1003,61 @@ export default class FilterBuilder extends Component {
       || this.props.filterBuilder !== nextProps.filterBuilder;
   }
 
-  makeFieldsList(fields) {
+  render() {
+    const { editOrNew, editedFilter, newFilter } = this.props.filterBuilder;
+    const filter = editOrNew ? (editedFilter):(newFilter);
 
-/*
-There was two arrays:
 
-at componentDidMount:
-  ...fields.notEditableFields.map( (f) => { return {id: f.id, label: `${f.name} -- ${f.sourceName}`, type: f.valueType === 'float' ? 'double' : f.valueType} } ),
-  ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map( (f) => { return {id: f.id, label: `${f.name} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType }} )
+    /**
+     * Make fields array for filters
+     * @param {{notEditableFields: Object[], sourceFieldsList: Object[]}} fields
+     * @returns {{id: string, label: string, type: string}[]}
+     */
+    function makeFieldsList(fields) {
 
-at componentWillUpdate:
- ...fields.sampleFieldsList.map( (f) => { return {id: f.id, label: `${f.label} -- ${f.sourceName}`, type: f.valueType === 'float' ? 'double' : f.valueType} } ),
- ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map( (f) => { return {id: f.id, label: `${f.label} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType }} )
+      /*
+       There was two arrays:
 
-1st part is from 'notEditableFields' at 'componentDidMount' vs 'sampleFieldsList' at 'componentWillUpdate'
-and all '.name' at componentDidMount vs '.label' at 'componentWillUpdate'
+       at componentDidMount:
+       ...fields.notEditableFields.map( (f) => { return {id: f.id, label: `${f.name} -- ${f.sourceName}`, type: f.valueType === 'float' ? 'double' : f.valueType} } ),
+       ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map( (f) => { return {id: f.id, label: `${f.name} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType }} )
 
-There must be not editable fields to prevent select gender for the person
-*/
+       at componentWillUpdate:
+       ...fields.sampleFieldsList.map( (f) => { return {id: f.id, label: `${f.label} -- ${f.sourceName}`, type: f.valueType === 'float' ? 'double' : f.valueType} } ),
+       ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map( (f) => { return {id: f.id, label: `${f.label} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType }} )
 
-    function getFieldValue(f, sourceName) {
-      return {
-        id: f.id,
-        label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)}`,
-        type: f.valueType === 'float' ? 'double' : f.valueType
-      };
+       1st part is from 'notEditableFields' at 'componentDidMount' vs 'sampleFieldsList' at 'componentWillUpdate'
+       and all '.name' at componentDidMount vs '.label' at 'componentWillUpdate'
+
+       There must be not editable fields to prevent select gender for the person
+       */
+
+      /**
+       * Make field structure usable for filters dialog purpposes
+       * @param {{id: string, label: string, sourceName: string, valueType: string}} f
+       * @param {string=} sourceName
+       * @returns {{id: string, label: string, type: string}}
+       */
+      function getFieldValue(f, sourceName) {
+        return {
+          id: f.id,
+          label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)}`,
+          type: f.valueType === 'float' ? 'double' : f.valueType
+        };
+      }
+
+      return [
+        ...fields.notEditableFields.map( (f) => getFieldValue(f) ),
+        ...fields.sourceFieldsList.filter( (f) => (f.sourceName !== 'sample') ).map( (f) => getFieldValue(f, 'source') )
+      ];
     }
 
-    return [
-      ...fields.notEditableFields.map( (f) => getFieldValue(f) ),
-      ...fields.sourceFieldsList.filter( (f) => (f.sourceName !== 'sample') ).map( (f) => getFieldValue(f, 'source') )
-    ];
-  }
-
-  render() {
-    const { editOrNew, rulesRequested, editedFilter, newFilter } = this.props.filterBuilder;
-    const filter = editOrNew ? (editedFilter):(newFilter);
     return (
       <div className="builder-wrapper">
         <FilterQueryBuilder
-            fields={this.makeFieldsList(this.props.fields)}
+            fields={makeFieldsList(this.props.fields)}
             rules={filter.rules}
-            disabled={filter.type === 'standard' || filter.type == 'advanced'}
+            disabled={filter.type === 'standard' || filter.type === 'advanced'}
             dispatch={this.props.dispatch}
         />
       </div>

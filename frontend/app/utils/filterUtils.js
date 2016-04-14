@@ -202,8 +202,8 @@ const filterUtils = {
     /**
      * Convert Genomics object to rules
      * @throws GenomicsParseError, UndefinedGenomicsConditionError, UndefinedGenomicsOperatorError
-     * @param data {object} query object
-     * @return {object}
+     * @param {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} data query object
+     * @return {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}}
      */
     getRulesFromGenomics: function(data) {
         if (data === undefined || data === null) {
