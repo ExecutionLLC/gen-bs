@@ -48,16 +48,16 @@ const opsUtils = {
         'is_not_null'
     ],
     getOperatorWantedParams: function(operatorInfo) {
-        if (!operatorInfo.nb_inputs) {
+        if (!operatorInfo.nbInputs) {
             return {noParams: true};
         }
-        if (operatorInfo.nb_inputs <= 1 && !operatorInfo.multiple) {
+        if (operatorInfo.nbInputs <= 1 && !operatorInfo.multiple) {
             return {single: true};
         }
         if (operatorInfo.multiple) {
             return {arrayDynamic: true};
         } else {
-            return {arraySize: operatorInfo.nb_inputs};
+            return {arraySize: operatorInfo.nbInputs};
         }
     }
 };
@@ -166,12 +166,12 @@ class FilterQueryBuilder extends Component {
         }
 
         function isAllowedOperatorType(operator, type) {
-            return operator.apply_to.indexOf(type) >= 0;
+            return operator.applyTo.indexOf(type) >= 0;
         }
 
         function getValidOperationsTypesForJSType(fieldJSType) {
             var ops = [];
-            filterUtils.operators.map( (op) => { if (op.apply_to.indexOf(fieldJSType) >= 0) ops.push(op.type); } );
+            filterUtils.operators.map( (op) => { if (op.applyTo.indexOf(fieldJSType) >= 0) ops.push(op.type); } );
             return ops;
         }
 

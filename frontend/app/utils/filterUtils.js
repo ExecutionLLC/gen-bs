@@ -99,24 +99,24 @@ const filterUtils = {
         }
     },
     operators: [
-        { type: 'equal',            nb_inputs: 1, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean'] },
-        { type: 'not_equal',        nb_inputs: 1, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean'] },
-        { type: 'in',               nb_inputs: 1, multiple: true,  apply_to: ['string', 'number', 'datetime'] },
-        { type: 'not_in',           nb_inputs: 1, multiple: true,  apply_to: ['string', 'number', 'datetime'] },
-        { type: 'less',             nb_inputs: 1, multiple: false, apply_to: ['number', 'datetime'] },
-        { type: 'less_or_equal',    nb_inputs: 1, multiple: false, apply_to: ['number', 'datetime'] },
-        { type: 'greater',          nb_inputs: 1, multiple: false, apply_to: ['number', 'datetime'] },
-        { type: 'greater_or_equal', nb_inputs: 1, multiple: false, apply_to: ['number', 'datetime'] },
-        { type: 'between',          nb_inputs: 2, multiple: false, apply_to: ['number', 'datetime'] },
-        { type: 'not_between',      nb_inputs: 2, multiple: false, apply_to: ['number', 'datetime'] },
-        { type: 'begins_with',      nb_inputs: 1, multiple: false, apply_to: ['string'] },
-        { type: 'not_begins_with',  nb_inputs: 1, multiple: false, apply_to: ['string'] },
-        { type: 'contains',         nb_inputs: 1, multiple: false, apply_to: ['string'] },
-        { type: 'not_contains',     nb_inputs: 1, multiple: false, apply_to: ['string'] },
-        { type: 'ends_with',        nb_inputs: 1, multiple: false, apply_to: ['string'] },
-        { type: 'not_ends_with',    nb_inputs: 1, multiple: false, apply_to: ['string'] },
-        { type: 'is_null',          nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean'] },
-        { type: 'is_not_null',      nb_inputs: 0, multiple: false, apply_to: ['string', 'number', 'datetime', 'boolean'] }
+        { type: 'equal',            nbInputs: 1, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean'] },
+        { type: 'not_equal',        nbInputs: 1, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean'] },
+        { type: 'in',               nbInputs: 1, multiple: true,  applyTo: ['string', 'number', 'datetime'] },
+        { type: 'not_in',           nbInputs: 1, multiple: true,  applyTo: ['string', 'number', 'datetime'] },
+        { type: 'less',             nbInputs: 1, multiple: false, applyTo: ['number', 'datetime'] },
+        { type: 'less_or_equal',    nbInputs: 1, multiple: false, applyTo: ['number', 'datetime'] },
+        { type: 'greater',          nbInputs: 1, multiple: false, applyTo: ['number', 'datetime'] },
+        { type: 'greater_or_equal', nbInputs: 1, multiple: false, applyTo: ['number', 'datetime'] },
+        { type: 'between',          nbInputs: 2, multiple: false, applyTo: ['number', 'datetime'] },
+        { type: 'not_between',      nbInputs: 2, multiple: false, applyTo: ['number', 'datetime'] },
+        { type: 'begins_with',      nbInputs: 1, multiple: false, applyTo: ['string'] },
+        { type: 'not_begins_with',  nbInputs: 1, multiple: false, applyTo: ['string'] },
+        { type: 'contains',         nbInputs: 1, multiple: false, applyTo: ['string'] },
+        { type: 'not_contains',     nbInputs: 1, multiple: false, applyTo: ['string'] },
+        { type: 'ends_with',        nbInputs: 1, multiple: false, applyTo: ['string'] },
+        { type: 'not_ends_with',    nbInputs: 1, multiple: false, applyTo: ['string'] },
+        { type: 'is_null',          nbInputs: 0, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean'] },
+        { type: 'is_not_null',      nbInputs: 0, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean'] }
     ],
 
     /**
@@ -175,7 +175,7 @@ const filterUtils = {
                         self.Utils.error('UndefinedGenomicsOperator', 'Unknown Genomics operation for operator "{0}"', rule.operator);
                     }
 
-                    if (builderOp.nb_inputs !== 0) {
+                    if (builderOp.nbInputs !== 0) {
                         if (!(rule.value instanceof Array)) {
                             rule.value = [rule.value];
                         }
