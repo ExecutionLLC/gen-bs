@@ -663,6 +663,10 @@ class InputResizingArray extends Component {
         return vals.filter( (v) => v.val !== '' );
     }
 
+    static DefaultInput(props) {
+        return <Input {...props} />
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -671,6 +675,8 @@ class InputResizingArray extends Component {
     }
 
     render() {
+        const InputComponent = this.props.InputComponent || InputResizingArray.DefaultInput;
+
         const self = this;
 
         function onEditIndex(val, index) {
@@ -693,7 +699,7 @@ class InputResizingArray extends Component {
 
         return <div>
             {this.state.value.map( (val, i) => {
-                return <Input key={val.key} {...this.props} value={val.val} onChange={ (val) => onEditIndex(val, i) } />
+                return <InputComponent key={val.key} {...this.props} value={val.val} onChange={ (val) => onEditIndex(val, i) } />
             })}
         </div>
     }
@@ -709,6 +715,8 @@ class InputArray extends Component {
     }
 
     render() {
+        const InputComponent = this.props.InputComponent || InputResizingArray.DefaultInput;
+
         const self = this;
 
         function onEditIndex(val, index) {
@@ -720,7 +728,7 @@ class InputArray extends Component {
 
         return <div>
             {this.state.value.map( (val, i) => {
-                return <Input key={val.key} {...this.props} value={val.val} onChange={ (val) => onEditIndex(val, i) } />
+                return <InputComponent key={val.key} {...this.props} value={val.val} onChange={(val) => onEditIndex(val, i)} />
             })}
         </div>
     }
@@ -832,6 +840,11 @@ class FieldFilterItem extends Component {
                                     value={value}
                                     type={valueType === 'number' ? 'number' : 'text'}
                                     disabled={disabled}
+                                    InputComponent={ (props) => {
+                                        return <div key={index} className="rule-value-array-item">
+                                            <Input {...props} className="form-control" />
+                                        </div>
+                                    }}
                                     onChange={ (vals) => onChange({
                                         id: item.id,
                                         field: item.field,
