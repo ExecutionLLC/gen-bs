@@ -157,8 +157,8 @@ class FilterQueryBuilder extends Component {
 
         function jsTypeCastValue(val, type) {
             var cast = {
-                'string': (val) => '' + val,
-                'number': (val) => +val,
+                'string': (val) => typeof val === 'object' ? '' : '' + val,
+                'number': (val) => +val || 0,
                 'boolean': (val) => val === 'false' ? false : !!val
             }[type];
             return cast ? cast(val) : null;
