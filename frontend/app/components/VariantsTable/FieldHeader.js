@@ -14,7 +14,7 @@ export default class FieldHeaderControls extends Component {
     }
 
     render() {
-        const {fieldMetadata, sortState} = this.props;
+        const {fieldMetadata, sortState, areControlsEnabled} = this.props;
         const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldMetadata.id)
             : null;
         if (columnSortParams) {
@@ -42,7 +42,8 @@ export default class FieldHeaderControls extends Component {
             'btn-group',
             'btn-group-sort',
             {
-                'open': isFilterOpened
+                'open': isFilterOpened,
+                'hidden': !areControlsEnabled
             }
         );
 
@@ -58,7 +59,7 @@ export default class FieldHeaderControls extends Component {
                         <a type="button" className="btn-link-default">
                             {name}
                         </a>
-                        <div className={buttonGroupClasses} role="group" data-toggle="buttons">
+                        <div className={buttonGroupClasses}>
                             {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order)}
                             {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order)}
                         </div>
@@ -79,7 +80,7 @@ export default class FieldHeaderControls extends Component {
             'input-group',
             {
                 'open': isFilterOpened,
-                'invisible': !isFieldSearchable
+                'invisible': !isFieldSearchable || !isExists
             }
         );
 
