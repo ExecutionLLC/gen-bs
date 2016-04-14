@@ -364,6 +364,16 @@ class FilterQueryBuilder extends Component {
                     valueType={fieldJSType}
                     disabled={disabled}
                     onChange={ (item) => {
+                        const itemOpType = item.operator;
+                        const itemOp = filterUtils.getOperatorByType(itemOpType);
+                        const opWant = opsUtils.getOperatorWantedParams(itemOp);
+                        const value = item.value;
+                        const castedValue = opWant.noParams ?
+                            null :
+                            opWant.single ?
+                                typeof value === 'object' && value.length ? jsTypeCastValue(value.join(), fieldJSType) : jsTypeCastValue(value, fieldJSType) :
+                                jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
+                        item.value = castedValue;
                         const {subrules, indexIn} = findSubrulesWIndex(index);
                         subrules[indexIn] = item;
                         dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
