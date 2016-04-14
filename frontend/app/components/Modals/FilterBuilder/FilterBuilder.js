@@ -675,11 +675,15 @@ class InputResizingArray extends Component {
 
         function onEditIndex(val, index) {
             var arr = self.state.value.slice();
-            if (val == '') {
-                arr.splice(index, 1);
+            const isValEmpty = val === '';
+            const isIndexTail = index >= self.state.value.length - 1;
+            arr[index].val = val;
+            if (isValEmpty) {
+            		if (!isIndexTail) {
+                		arr.splice(index, 1);
+                }
             } else {
-                arr[index].val = val;
-                if (index >= self.state.value.length - 1) {
+                if (isIndexTail) {
                     arr = InputResizingArray.addEmpty(arr);
                 }
             }
