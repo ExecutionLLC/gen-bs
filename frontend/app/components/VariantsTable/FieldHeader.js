@@ -73,7 +73,7 @@ export default class FieldHeaderControls extends Component {
                         <a type="button" className="btn-link-default">
                             {name}
                         </a>
-                        <div className={buttonGroupClasses} role="group" data-toggle="buttons">
+                        <div className={buttonGroupClasses}>
                             {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, isExists)}
                             {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order, isExists)}
                         </div>
