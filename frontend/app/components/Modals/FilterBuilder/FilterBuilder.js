@@ -898,7 +898,7 @@ class InputArray extends Component {
 
 class FieldFilterItem extends Component {
 
-    static makeInputForSingleTextValue(value, disabled, onChange) {
+    static renderInputForSingleTextValue(value, disabled, onChange) {
         return (
             <Input
                 className="form-control"
@@ -1022,7 +1022,7 @@ class FieldFilterItem extends Component {
                                 />
                             );
                         }
-                        return FieldFilterItem.makeInputForSingleTextValue(
+                        return FieldFilterItem.renderInputForSingleTextValue(
                             value,
                             disabled,
                             (val) => onChange({
