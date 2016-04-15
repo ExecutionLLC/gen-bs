@@ -14,13 +14,13 @@ export default function filterBuilder(state = {
 
     switch (action.type) {
         case ActionTypes.FBUILDER_SELECT_FILTER:
-            selectedFilter = _.find(action.filters, {id: action.filterId}) || null
+            selectedFilter = _.find(action.filters, {id: action.filterId}) || null;
             return Object.assign({}, state, {
                 selectedFilter,
                 isReceivedFilters: selectedFilter !== null,
-                editedFilter: action.editOrNew ? selectedFilter : null,
-                newFilter: !action.editOrNew ? selectedFilter : null,
-                editOrNew: action.editOrNew
+                editedFilter: selectedFilter,
+                newFilter: null,
+                editOrNew: true
             });
 
         case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:

@@ -43,12 +43,11 @@ export function filterBuilderToggleNewEdit(editOrNew) {
     }
 }
 
-export function filterBuilderSelectFilter(filters, filterId, editOrNew) {
+export function filterBuilderSelectFilter(filters, filterId) {
     return {
         type: FBUILDER_SELECT_FILTER,
         filters,
-        filterId,
-        editOrNew
+        filterId
     }
 }
 

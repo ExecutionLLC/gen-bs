@@ -41,7 +41,7 @@ export default class ExistentFilterSelect extends Component {
                             options={filters.map( filter => { return {value: filter.id, label: filter.name} } )}
                             value={selectedFilter.id}
                             clearable={false}
-                            onChange={ (val) => dispatch(filterBuilderSelectFilter(filters, val.value, true))}
+                            onChange={ (val) => dispatch(filterBuilderSelectFilter(filters, val.value))}
                         />
                     </div>
                     <div className="col-sm-6">
@@ -64,7 +64,7 @@ export default class ExistentFilterSelect extends Component {
                         { isFilterEditable &&
                         <div className="btn-group ">
                             <button type="button" className="btn btn-default"
-                                    onClick={() => dispatch(filterBuilderSelectFilter(filters, selectedFilter.id, true))}
+                                    onClick={() => dispatch(filterBuilderSelectFilter(filters, selectedFilter.id))}
                             >
                                 <span data-localize="views.setup.reset.title">Reset Filter</span>
                             </button>
