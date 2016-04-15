@@ -69,11 +69,13 @@ export default class ViewBuilder extends React.Component {
 
                     <div className="col-xs-1">
                         <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
-                            className="fa fa-lg fa-minus-circle"/></button>
+                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
+                                type="button">
+                            <i className="fa fa-lg fa-minus-circle"/></button>
                         <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
-                            className="fa fa-lg fa-plus-circle"/></button>
+                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }
+                                type="button">
+                            <i className="fa fa-lg fa-plus-circle"/></button>
                     </div>
                 </div>
             )
