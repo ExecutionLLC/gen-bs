@@ -1040,7 +1040,12 @@ class FieldFilterItem extends Component {
                 <div className="rule-value-container">
                     {(function(value){
 
+                        /** @type function(string|number):(string|number) */
                         const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
+                        /**
+                         * @param {(string|number)[]} arr
+                         * @returns {(string|number)[]}
+                         */
                         function getInputValueArray(arr) {
                             return arr.map( (val) => getInputValue(val) );
                         }
