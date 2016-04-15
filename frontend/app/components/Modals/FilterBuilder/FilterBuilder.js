@@ -877,6 +877,19 @@ class InputArray extends Component {
 
 
 class FieldFilterItem extends Component {
+
+    static makeInputForSingleTextValue(value, disabled, onChange) {
+        return (
+            <Input
+                className="form-control"
+                type={typeof value === 'number' ? 'number' : 'text'}
+                value={value}
+                disabled={disabled}
+                onChange={ (val) => onChange(val) }
+            />
+        );
+    }
+
     render() {
         /** {number[]} */
         const index = this.props.index;
@@ -897,18 +910,6 @@ class FieldFilterItem extends Component {
         const selectOptionValue = item.field;
 
         const opsListForSelect = allowedOpsTypes.map( (opname) => { return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]}; });
-
-        function makeInputForSingleTextValue(value, disabled, onChange) {
-            return (
-                <Input
-                    className="form-control"
-                    type={typeof value === 'number' ? 'number' : 'text'}
-                    value={value}
-                    disabled={disabled}
-                    onChange={ (val) => onChange(val) }
-                />
-            );
-        }
 
         return (
             <div>
@@ -1001,7 +1002,7 @@ class FieldFilterItem extends Component {
                                 />
                             );
                         }
-                        return makeInputForSingleTextValue(
+                        return FieldFilterItem.makeInputForSingleTextValue(
                             value,
                             disabled,
                             (val) => onChange({
