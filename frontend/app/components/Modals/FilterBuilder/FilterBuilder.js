@@ -508,12 +508,14 @@ class FilterQueryBuilder extends Component {
             );
         }
 
-        return <QueryBuilder
-            rules={parsedRules}
-            disabled={disabled}
-            makeItemComponent={makeFilterItem}
-            handlers={handlers}
-        />
+        return (
+            <QueryBuilder
+                rules={parsedRules}
+                disabled={disabled}
+                makeItemComponent={makeFilterItem}
+                handlers={handlers}
+            />
+        );
     }
 }
 
@@ -702,24 +704,28 @@ class RulesGroupBody extends Component {
                         items.map( (item, itemIndex) => {
                             const indexNext = index.concat(itemIndex);
                             if (item.condition) {
-                                return <RulesGroupContainer
-                                    index={indexNext}
-                                    key={itemIndex}
-                                    ruleItems={item.rules}
-                                    ruleIsAnd={item.condition == 'AND'}
-                                    disabled={disabled}
-                                    makeItemComponent={makeItemComponent}
-                                    handlers={handlers}
-                                />
+                                return (
+                                    <RulesGroupContainer
+                                        index={indexNext}
+                                        key={itemIndex}
+                                        ruleItems={item.rules}
+                                        ruleIsAnd={item.condition == 'AND'}
+                                        disabled={disabled}
+                                        makeItemComponent={makeItemComponent}
+                                        handlers={handlers}
+                                    />
+                                );
                             } else {
-                                return <RuleContainer
-                                    key={itemIndex}
-                                    index={indexNext}
-                                    item={item}
-                                    disabled={disabled}
-                                    makeItemComponent={makeItemComponent}
-                                    onDelete={ () => handlers.onDeleteItem(index, itemIndex) }
-                                />
+                                return (
+                                    <RuleContainer
+                                        key={itemIndex}
+                                        index={indexNext}
+                                        item={item}
+                                        disabled={disabled}
+                                        makeItemComponent={makeItemComponent}
+                                        onDelete={ () => handlers.onDeleteItem(index, itemIndex) }
+                                    />
+                                );
                             }
                         })
                     }
@@ -789,7 +795,9 @@ class InputResizingArray extends Component {
     }
 
     static DefaultInput(props) {
-        return <Input {...props} />
+        return (
+            <Input {...props} />
+        );
     }
 
     constructor(props) {
@@ -822,11 +830,15 @@ class InputResizingArray extends Component {
             self.props.onChange(InputResizingArray.fromKeyed(InputResizingArray.removeEmpty(arr)));
         }
 
-        return <div>
-            {this.state.value.map( (val, i) => {
-                return <InputComponent key={val.key} {...this.props} value={val.val} onChange={ (val) => onEditIndex(val, i) } />
-            })}
-        </div>
+        return (
+            <div>
+                {this.state.value.map( (val, i) => {
+                    return (
+                        <InputComponent key={val.key} {...this.props} value={val.val} onChange={ (val) => onEditIndex(val, i) } />
+                    );
+                })}
+            </div>
+        );
     }
 }
 
@@ -851,11 +863,15 @@ class InputArray extends Component {
             self.props.onChange(InputResizingArray.fromKeyed(arr));
         }
 
-        return <div>
-            {this.state.value.map( (val, i) => {
-                return <InputComponent key={val.key} {...this.props} value={val.val} onChange={(val) => onEditIndex(val, i)} />
-            })}
-        </div>
+        return (
+            <div>
+                {this.state.value.map( (val, i) => {
+                    return (
+                        <InputComponent key={val.key} {...this.props} value={val.val} onChange={(val) => onEditIndex(val, i)} />
+                    );
+                })}
+            </div>
+        );
     }
 }
 
@@ -946,38 +962,44 @@ class FieldFilterItem extends Component {
                             const operatorInfo = filterUtils.getOperatorByType(item.operator);
                             const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
                             const InputArrayComponent = opWant.arraySize ? InputArray : InputResizingArray;
-                            return <div className="rule-value-array">
-                                <InputArrayComponent
-                                    value={value}
-                                    type={valueType === 'number' ? 'number' : 'text'}
+                            return (
+                                <div className="rule-value-array">
+                                    <InputArrayComponent
+                                        value={value}
+                                        type={valueType === 'number' ? 'number' : 'text'}
+                                        disabled={disabled}
+                                        InputComponent={ (props) => {
+                                            return (
+                                                <div key={index} className="rule-value-array-item">
+                                                    <Input {...props} className="form-control" />
+                                                </div>
+                                            );
+                                        }}
+                                        onChange={ (vals) => onChange({
+                                            id: item.id,
+                                            field: item.field,
+                                            operator: item.operator,
+                                            value: getInputValueArray(vals)
+                                        })}
+                                    />
+                                </div>
+                            );
+                        }
+                        if (typeof value === 'boolean') {
+                            return (
+                                <input
+                                    className="form-control"
+                                    type="checkbox"
+                                    checked={item.value}
                                     disabled={disabled}
-                                    InputComponent={ (props) => {
-                                        return <div key={index} className="rule-value-array-item">
-                                            <Input {...props} className="form-control" />
-                                        </div>
-                                    }}
-                                    onChange={ (vals) => onChange({
+                                    onChange={ (evt) => onChange({
                                         id: item.id,
                                         field: item.field,
                                         operator: item.operator,
-                                        value: getInputValueArray(vals)
+                                        value: evt.target.checked
                                     })}
                                 />
-                            </div>
-                        }
-                        if (typeof value === 'boolean') {
-                            return <input
-                                className="form-control"
-                                type="checkbox"
-                                checked={item.value}
-                                disabled={disabled}
-                                onChange={ (evt) => onChange({
-                                    id: item.id,
-                                    field: item.field,
-                                    operator: item.operator,
-                                    value: evt.target.checked
-                                })}
-                            />
+                            );
                         }
                         return makeInputForSingleTextValue(
                             value,
