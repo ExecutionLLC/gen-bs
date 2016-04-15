@@ -58,90 +58,32 @@ export default function userData(state = {
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.ATTACH_HISTORY_DATA: {
-            const { attachedHistoryData: { sampleId, filterId, viewId} } = state;
-
-            const {collection: samples, historyItemId: newSampleId} = changeHistoryItem(state.samples, sampleId, action.sample);
-            const {collection: filters, historyItemId: newFilterId} = changeHistoryItem(state.filters, filterId, action.filters[0]);
-            const {collection: views, historyItemId: newViewId} = changeHistoryItem(state.views, viewId, action.view);
-
+        case ActionTypes.CHANGE_HISTORY_DATA:
+        {
+            const {sampleId, filterId, viewId} = action;
             return Object.assign({}, state, {
-                samples,
-                filters,
-                views,
                 attachedHistoryData: {
-                    sampleId: newSampleId,
-                    filterId: newFilterId,
-                    viewId: newViewId
+                    sampleId: sampleId,
+                    filterId: filterId,
+                    viewId: viewId
                 }
             });
         }
-        case ActionTypes.DETACH_HISTORY_DATA: {
-            if (!action.detachSample && !action.detachFilter && !action.detachView) {
-                return state;
-            }
-
-            const { attachedHistoryData } = state;
-
-            const {
-                collection: samples,
-                historyItemId: sampleId
-            } = detachHistoryItemIfNeedIt(action.detachSample, state.samples, attachedHistoryData.sampleId, null);
-            const {
-                collection: filters,
-                historyItemId: filterId
-            } = detachHistoryItemIfNeedIt(action.detachFilter, state.filters, attachedHistoryData.filterId, null);
-            const {
-                collection: views,
-                historyItemId: viewId
-            } = detachHistoryItemIfNeedIt(action.detachView, state.views, attachedHistoryData.viewId, null);
-
+        case ActionTypes.CHANGE_FILTERS:
+        {
+            const {filters} = action;
             return Object.assign({}, state, {
-                samples,
-                filters,
-                views,
-                attachedHistoryData: {
-                    sampleId,
-                    filterId,
-                    viewId
-                }
+                filters: filters
+            });
+        }
+        case ActionTypes.CHANGE_VIEWS:
+        {
+            const {views} = action;
+            return Object.assign({}, state, {
+                views: views
             });
         }
         default:
             return state
     }
-}
-
-function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
-    var newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
-    if (oldHistoryItemId === newHistoryItemId) {
-        // nothing to be changed
-        return { collection, historyItemId: oldHistoryItemId };
-    }
-
-    if (oldHistoryItemId) {
-        // remove old item from collection
-        collection = _.filter(collection, (item) => { return item.id !== oldHistoryItemId; } );
-    }
-
-    if (newHistoryItemId) {
-        const hasNewHistoryItem = _.some(collection, (item) => { return item.id === newHistoryItemId; });
-        if (!hasNewHistoryItem) {
-            // if collection do not contain such item, we should insert it
-            collection = [...collection, newHistoryItem];
-        } else {
-            // reset history id, because we already have this item in collection (so it is not from history, it is
-            // common item)
-            newHistoryItemId = null;
-        }
-    }
-
-    return { collection, historyItemId: newHistoryItemId};
-}
-
-function detachHistoryItemIfNeedIt(needDetach, collection, historyItemId) {
-    if (needDetach) {
-        return changeHistoryItem(collection, historyItemId, null);
-    }
-    return { collection, historyItemId };
 }
