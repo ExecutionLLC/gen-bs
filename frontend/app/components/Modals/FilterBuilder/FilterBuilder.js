@@ -1022,10 +1022,10 @@ class FieldFilterItem extends Component {
 
 export default class FilterBuilder extends Component {
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.fields !== nextProps.fields
-      || this.props.filterBuilder !== nextProps.filterBuilder;
-  }
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.fields !== nextProps.fields
+            || this.props.filterBuilder !== nextProps.filterBuilder;
+    }
 
     /**
      * Make field structure usable for filters dialog purpposes
@@ -1071,19 +1071,19 @@ export default class FilterBuilder extends Component {
         ];
     }
 
-  render() {
-    const { editOrNew, editedFilter, newFilter } = this.props.filterBuilder;
-    const filter = editOrNew ? (editedFilter):(newFilter);
+    render() {
+        const {editOrNew, editedFilter, newFilter} = this.props.filterBuilder;
+        const filter = editOrNew ? editedFilter : newFilter;
 
-    return (
-      <div className="builder-wrapper">
-        <FilterQueryBuilder
-            fields={FilterBuilder.makeFieldsList(this.props.fields)}
-            rules={filter.rules}
-            disabled={filter.type === 'standard' || filter.type === 'advanced'}
-            dispatch={this.props.dispatch}
-        />
-      </div>
-    );
-  }
+        return (
+            <div className="builder-wrapper">
+                <FilterQueryBuilder
+                    fields={FilterBuilder.makeFieldsList(this.props.fields)}
+                    rules={filter.rules}
+                    disabled={filter.type === 'standard' || filter.type === 'advanced'}
+                    dispatch={this.props.dispatch}
+                />
+            </div>
+        );
+    }
 }
