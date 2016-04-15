@@ -898,6 +898,12 @@ class InputArray extends Component {
 
 class FieldFilterItem extends Component {
 
+    /**
+     * @param {string|number} value
+     * @param {boolean} disabled
+     * @param {function(string)} onChange
+     * @returns {Component}
+     */
     static renderInputForSingleTextValue(value, disabled, onChange) {
         return (
             <Input
