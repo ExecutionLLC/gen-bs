@@ -1,5 +1,5 @@
 import HttpStatus from 'http-status';
-import { handleError } from './errorHandler'
+import {handleError} from './errorHandler'
 import apiFacade from '../api/ApiFacade';
 
 
@@ -9,6 +9,7 @@ export const CHANGE_SAMPLE = 'CHANGE_SAMPLE';
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
 export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
+export const CHANGE_SAMPLES = 'CHANGE_SAMPLES';
 
 const samplesClient = apiFacade.samplesClient;
 const NETWORK_ERROR = 'Network error. You can reload page and try again.';
@@ -118,5 +119,12 @@ export function requestUpdateSampleFields(sampleId) {
                 }
             }
         });
+    }
+}
+
+export function changeSamples(samples) {
+    return {
+        type: CHANGE_SAMPLES,
+        samples
     }
 }

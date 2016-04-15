@@ -26,16 +26,16 @@ export default class ViewBuilder extends React.Component {
         const selects = view.viewListItems.map(function (viewItem, index) {
 
             var currentValue =
-                _.find(allAvailableFields, {id: viewItem.fieldId}) ||
+                _.find(fields.totalFieldsList, {id: viewItem.fieldId}) ||
                 {id: null};
-
+            const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;
             const selectOptions = [
 
                 ...fieldsForSelection.map((f) => {
                     return {value: f.id, label: `${f.name} -- ${f.sourceName}`}
                 })
             ];
-            const {sortOrder, sortDirection, fieldId} = viewItem.sortOrder;
+            const {sortOrder, sortDirection, fieldId} = viewItem;
             const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, sortDirection);
 
             return (
@@ -56,7 +56,7 @@ export default class ViewBuilder extends React.Component {
                                 value={currentValue}
                                 clearable={false}
                                 onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
-                                disabled={isDisableEditing}
+                                disabled={isDisableEditing || !isFieldAvailable}
                             />
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
@@ -73,11 +73,13 @@ export default class ViewBuilder extends React.Component {
 
                     <div className="col-xs-1">
                         <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
-                            className="fa fa-lg fa-minus-circle"/></button>
+                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
+                                type="button">
+                            <i className="fa fa-lg fa-minus-circle"/></button>
                         <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
-                            className="fa fa-lg fa-plus-circle"/></button>
+                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }
+                                type="button">
+                            <i className="fa fa-lg fa-plus-circle"/></button>
                     </div>
                 </div>
             )

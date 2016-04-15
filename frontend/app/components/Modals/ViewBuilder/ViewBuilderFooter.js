@@ -32,7 +32,7 @@ export default class ViewBuilderFooter extends React.Component {
 
                 <button
                     onClick={ () => {this.selectOnClick()}}
-                    type="button"
+                    type="submit"
                     className="btn btn-primary"
                     disabled={disabledClass}
                     title={title}
