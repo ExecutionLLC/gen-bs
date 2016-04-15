@@ -664,16 +664,27 @@ class RulesGroupHeader extends Component {
 class RulesGroupBody extends Component {
 
     static RuleContainer(props) {
+        /** @type {{condition: *=, field: string=, operator: string=, value: *=}} */
+        const item = props.item;
+        /** @type {number} */
+        const index = props.index;
+        /** @type {boolean} */
+        const disabled = props.disabled;
+        /** @type {?function()} */
+        const onDelete = props.onDelete;
+        /** @type {function(number[], {}, boolean): Component} */
+        const makeItemComponent = props.makeItemComponent;
+
         return (
             <li className="rule-container">
                 <div className="rule-header">
                     <div className="btn-group pull-right rule-actions">
-                        {props.onDelete &&
+                        {onDelete &&
                         <button
                             type="button"
                             className="btn btn-xs btn-danger"
-                            onClick={() => { props.onDelete() }}
-                            disabled={props.disabled}
+                            onClick={onDelete}
+                            disabled={disabled}
                         >
                             <i className="glyphicon glyphicon-remove"/> Delete
                         </button>
@@ -681,11 +692,19 @@ class RulesGroupBody extends Component {
                     </div>
                 </div>
                 <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
-                {props.makeItemComponent(props.index, props.item, props.disabled)}
+                {makeItemComponent(index, item, disabled)}
             </li>
         );
     }
 
+    /**
+     * @param {{condition: *=, field: string=, operator: string=, value: *=}[]} items
+     * @param {number[]} index
+     * @param {boolean} disabled
+     * @param {function(number[], {}, boolean): Component} makeItemComponent
+     * @param {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} handlers
+     * @returns {Component}
+     */
     static renderItems(items, index, disabled, makeItemComponent, handlers) {
         return (
             items.map( (item, itemIndex) => {
@@ -723,9 +742,9 @@ class RulesGroupBody extends Component {
 
         /** @type {number[]} */
         const index = this.props.index;
-        /** @type {Object[]} */
+        /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
         const items = this.props.items;
-        /** @type {Component} */
+        /** @type {function(number[], {}, boolean): Component} */
         const makeItemComponent = this.props.makeItemComponent;
         /** @type {boolean} */
         const disabled = this.props.disabled;
