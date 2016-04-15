@@ -33,6 +33,9 @@ class KeywordsModel extends ModelBase {
         }, callback);
     }
 
+    /**
+     * Calls back with array of keywords related to the selected array of fields.
+     * */
     findForFieldIds(fieldIds, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([

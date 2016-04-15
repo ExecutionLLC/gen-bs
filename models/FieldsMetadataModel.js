@@ -30,14 +30,16 @@ class FieldsMetadataModel extends ModelBase {
     find(metadataId, callback) {
         async.waterfall([
             (callback) => this._fetch(metadataId, callback),
-            (fieldMetadata, callback) => this._mapFieldMetadata(fieldMetadata, callback)
+            (fieldMetadata, callback) => this._mapFieldMetadata(fieldMetadata, callback),
+            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
         ], callback);
     }
 
     findMany(metadataIds, callback) {
         async.waterfall([
             (callback) => this._fetchByIds(metadataIds, callback),
-            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
         ], callback);
     }
 
@@ -92,14 +94,31 @@ class FieldsMetadataModel extends ModelBase {
     findSourcesMetadata(callback) {
         async.waterfall([
             (callback) => this._fetchSourcesMetadata(callback),
-            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
         ], callback);
     }
 
     findTotalMetadata(callback) {
         async.waterfall([
             (callback) => this._fetchTotalMetadata(callback),
-            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
+            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
+        ], callback);
+    }
+
+    _attachKeywords(fieldsMetadata, callback) {
+        const fieldIds = _.map(fieldsMetadata, field => field.id);
+        async.waterfall([
+            (callback) => this.models.keywords.findForFieldIds(fieldIds, callback),
+            (keywords, callback) => {
+                const fieldIdsToKeywords = _.groupBy(keywords, keyword => keyword.fieldId);
+                const fieldsWithKeywords = _.map(fieldsMetadata,
+                    field => Object.assign({}, field, {
+                        keywords: fieldIdsToKeywords[field.id] || []
+                    }));
+                callback(null, fieldsWithKeywords);
+            }
         ], callback);
     }
 
@@ -121,23 +140,6 @@ class FieldsMetadataModel extends ModelBase {
                     }
                 });
         }, callback);
-    }
-
-    findMetadataBySourceName(sourceName, callback) {
-        async.waterfall([
-            (callback) => this._fetchMetadataBySourceName(sourceName, callback),
-            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
-        ], callback);
-    }
-
-    findMetadataKeywords(metadataId, callback) {
-        async.waterfall([
-            (callback) => this._fetchMetadataKeywords(metadataId, callback),
-            (keywords, callback) => {
-                const keywordIds = _.pluck(viewsData, 'id');
-                this.models.keywords.findMany(keywordIds, callback);
-            }
-        ], callback);
     }
 
     addMany(languId, fieldsMetadata, callback) {
