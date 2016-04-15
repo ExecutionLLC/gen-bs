@@ -663,6 +663,62 @@ class RulesGroupHeader extends Component {
 
 class RulesGroupBody extends Component {
 
+    static RuleContainer(props) {
+        return (
+            <li className="rule-container">
+                <div className="rule-header">
+                    <div className="btn-group pull-right rule-actions">
+                        {props.onDelete &&
+                        <button
+                            type="button"
+                            className="btn btn-xs btn-danger"
+                            onClick={() => { props.onDelete() }}
+                            disabled={props.disabled}
+                        >
+                            <i className="glyphicon glyphicon-remove"/> Delete
+                        </button>
+                        }
+                    </div>
+                </div>
+                <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
+                {props.makeItemComponent(props.index, props.item, props.disabled)}
+            </li>
+        );
+    }
+
+    static renderItems(items, index, disabled, makeItemComponent, handlers) {
+        return (
+            items.map( (item, itemIndex) => {
+                const indexNext = index.concat(itemIndex);
+                if (item.condition) {
+                    return (
+                        <RulesGroupContainer
+                            index={indexNext}
+                            key={itemIndex}
+                            ruleItems={item.rules}
+                            ruleIsAnd={item.condition == 'AND'}
+                            disabled={disabled}
+                            makeItemComponent={makeItemComponent}
+                            handlers={handlers}
+                        />
+                    );
+                } else {
+                    return (
+                        <RulesGroupBody.RuleContainer
+                            key={itemIndex}
+                            index={indexNext}
+                            item={item}
+                            disabled={disabled}
+                            makeItemComponent={makeItemComponent}
+                            onDelete={ () => handlers.onDeleteItem(index, itemIndex) }
+                        />
+                    );
+                }
+            })
+        );
+    }
+
+
     render() {
 
         /** @type {number[]} */
@@ -676,74 +732,15 @@ class RulesGroupBody extends Component {
         /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
         const handlers = this.props.handlers;
 
-
-        function RuleContainer(props) {
-            return (
-                <li className="rule-container">
-                    <div className="rule-header">
-                        <div className="btn-group pull-right rule-actions">
-                            {props.onDelete &&
-                                <button
-                                    type="button"
-                                    className="btn btn-xs btn-danger"
-                                    onClick={() => { props.onDelete() }}
-                                    disabled={props.disabled}
-                                >
-                                    <i className="glyphicon glyphicon-remove"/> Delete
-                                </button>
-                            }
-                        </div>
-                    </div>
-                    <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
-                    {props.makeItemComponent(props.index, props.item, props.disabled)}
-                </li>
-            );
-        }
-
         return (
             <dd className="rules-group-body">
                 <ul className="rules-list">
-                    {
-                        items.map( (item, itemIndex) => {
-                            const indexNext = index.concat(itemIndex);
-                            if (item.condition) {
-                                return (
-                                    <RulesGroupContainer
-                                        index={indexNext}
-                                        key={itemIndex}
-                                        ruleItems={item.rules}
-                                        ruleIsAnd={item.condition == 'AND'}
-                                        disabled={disabled}
-                                        makeItemComponent={makeItemComponent}
-                                        handlers={handlers}
-                                    />
-                                );
-                            } else {
-                                return (
-                                    <RuleContainer
-                                        key={itemIndex}
-                                        index={indexNext}
-                                        item={item}
-                                        disabled={disabled}
-                                        makeItemComponent={makeItemComponent}
-                                        onDelete={ () => handlers.onDeleteItem(index, itemIndex) }
-                                    />
-                                );
-                            }
-                        })
-                    }
+                    {RulesGroupBody.renderItems(items, index, disabled, makeItemComponent, handlers)}
                 </ul>
             </dd>
         );
     }
 }
-
-
-/**
- * Input fields arrays, resizeable and fixed sized
- */
-
-
 
 
 class FieldFilterItem extends Component {
