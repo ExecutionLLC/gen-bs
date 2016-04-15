@@ -763,6 +763,26 @@ class Input extends Component {
     }
 }
 
+/**
+ * Example:
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Input
+          className="i1"
+          type="number"
+          value={1234}
+          onChange={ (val) => { console.log(val); } }
+        />
+      </div>
+    );
+  }
+}
+
+ */
+
 
 /**
  * Input fields arrays, resizeable and fixed sized
