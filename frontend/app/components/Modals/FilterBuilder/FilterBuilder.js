@@ -87,6 +87,8 @@ const fieldUtils = {
 
 /**
 
+ Inner structure:
+
 FilterQueryBuilder(
      fields: {{id: string, label: string, type: string}[]}
      rules: {{ <'$and'|'$or'>: ({id, label, type}|rules)[] }}
