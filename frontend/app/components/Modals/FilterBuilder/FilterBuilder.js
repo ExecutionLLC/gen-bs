@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import Input from '../../shared/Input';
 import InputResizingArray from '../../shared/InputResizingArray';
+import InputArray from '../../shared/InputArray';
 
 import { filterBuilderChangeAll } from '../../../actions/filterBuilder';
 
@@ -743,38 +744,6 @@ class RulesGroupBody extends Component {
  */
 
 
-class InputArray extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: InputResizingArray.toKeyed(props.value)
-        };
-    }
-
-    render() {
-        const InputComponent = this.props.InputComponent || InputResizingArray.DefaultInput;
-
-        const self = this;
-
-        function onEditIndex(val, index) {
-            var arr = self.state.value.slice();
-            arr[index].val = val;
-            self.setState({value: arr});
-            self.props.onChange(InputResizingArray.fromKeyed(arr));
-        }
-
-        return (
-            <div>
-                {this.state.value.map( (val, i) => {
-                    return (
-                        <InputComponent key={val.key} {...this.props} value={val.val} onChange={(val) => onEditIndex(val, i)} />
-                    );
-                })}
-            </div>
-        );
-    }
-}
 
 
 class FieldFilterItem extends Component {
