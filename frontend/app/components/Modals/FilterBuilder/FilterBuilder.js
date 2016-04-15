@@ -955,10 +955,13 @@ class FieldFilterItem extends Component {
 
         const opsListForSelect = allowedOpsTypes.map( (opname) => { return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]}; });
 
-        function onFieldSelectChange(val) {
+        /**
+         * @param {string} fieldId
+         */
+        function onFieldSelectChange(fieldId) {
             onChange({
-                id: val,
-                field: val,
+                id: fieldId,
+                field: fieldId,
                 operator: item.operator,
                 value: item.value
             });
