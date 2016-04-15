@@ -910,6 +910,28 @@ class FieldFilterItem extends Component {
         );
     }
 
+    /**
+     * @param {{value: string, label: string}[]} fieldsList
+     * @param {string} fieldId
+     * @param {boolean} disabled
+     * @param {function(string)} onChange
+     * @returns {Component}
+     */
+    static renderFieldSelect(fieldsList, fieldId, disabled, onChange) {
+        return (
+            <div className="rule-filter-container">
+                <Select
+                    className="selectTree"
+                    options={fieldsList}
+                    value={fieldId}
+                    clearable={false}
+                    disabled={disabled}
+                    onChange={ (val) => onChange(val.value) }
+                />
+            </div>
+        );
+    }
+
     render() {
         /** {number[]} */
         const index = this.props.index;
@@ -926,30 +948,25 @@ class FieldFilterItem extends Component {
         /** @type {function({field: string, operator: string, value: *})} */
         const onChange = this.props.onChange;
 
-        const selectOptionsList = fields.map( (field) => { return {value: field.id, label: field.label} } );
-        const selectOptionValue = item.field;
+        /** @type {{value: string, label: string}[]} */
+        const selectFieldList = fields.map( (field) => { return {value: field.id, label: field.label} } );
+        /** @type {string} */
+        const selectFieldValue = item.field;
 
         const opsListForSelect = allowedOpsTypes.map( (opname) => { return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]}; });
 
+        function onFieldSelectChange(val) {
+            onChange({
+                id: val,
+                field: val,
+                operator: item.operator,
+                value: item.value
+            });
+        }
+
         return (
             <div>
-                <div className="rule-filter-container">
-                    <Select
-                        className="selectTree"
-                        options={selectOptionsList}
-                        value={selectOptionValue}
-                        clearable={false}
-                        disabled={disabled}
-                        onChange={(val) => {
-                            onChange({
-                                id: val.value,
-                                field: val.value,
-                                operator: item.operator,
-                                value: item.value
-                            });
-                        }}
-                    />
-                </div>
+                {FieldFilterItem.renderFieldSelect(selectFieldList, selectFieldValue, disabled, onFieldSelectChange)}
                 <div className="rule-operator-container rule-operator-container-operation">
                     <Select
                         className="select2"
