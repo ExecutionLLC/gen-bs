@@ -917,6 +917,24 @@ class FieldFilterItem extends Component {
     }
 
     /**
+     * @param {boolean} checked
+     * @param {boolean} disabled
+     * @param {function(boolean)} onChange
+     * @returns {Component}
+     */
+    static renderCheckbox(checked, disabled, onChange) {
+        return (
+            <input
+                className="form-control"
+                type="checkbox"
+                checked={checked}
+                disabled={disabled}
+                onChange={ (evt) => onChange(evt.target.checked) }
+            />
+        );
+    }
+
+    /**
      * @param {{value: string, label: string}[]} fieldsList
      * @param {string} fieldId
      * @param {boolean} disabled
@@ -1003,6 +1021,18 @@ class FieldFilterItem extends Component {
             });
         }
 
+        /**
+         * @param {*} value
+         */
+        function onItemValueChange(value) {
+            onChange({
+                id: item.id,
+                field: item.field,
+                operator: item.operator,
+                value: value
+            });
+        }
+
         return (
             <div>
                 {FieldFilterItem.renderFieldSelect(selectFieldList, selectFieldValue, disabled, onFieldSelectChange)}
@@ -1047,20 +1077,7 @@ class FieldFilterItem extends Component {
                             );
                         }
                         if (typeof value === 'boolean') {
-                            return (
-                                <input
-                                    className="form-control"
-                                    type="checkbox"
-                                    checked={item.value}
-                                    disabled={disabled}
-                                    onChange={ (evt) => onChange({
-                                        id: item.id,
-                                        field: item.field,
-                                        operator: item.operator,
-                                        value: evt.target.checked
-                                    })}
-                                />
-                            );
+                            return FieldFilterItem.renderCheckbox(item.value, disabled, onItemValueChange);
                         }
                         return FieldFilterItem.renderInputForSingleTextValue(
                             value,
