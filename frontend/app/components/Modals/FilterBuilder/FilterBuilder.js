@@ -592,6 +592,46 @@ class RulesGroupContainer extends Component {
 }
 
 class RulesGroupHeader extends Component {
+
+    /**
+     * @param {string} caption
+     * @param {boolean} disabled
+     * @param {function()} onAdd
+     * @returns {XML}
+     */
+    static renderAddButton(caption, disabled, onAdd) {
+        return (
+            <button type="button" className="btn btn-xs btn-success" disabled={disabled} onClick={onAdd}>
+                <i className="glyphicon glyphicon-plus"/> {caption}
+            </button>
+        );
+    }
+
+    /**
+     * @param {string} caption
+     * @param {string} value
+     * @param {string} groupName
+     * @param {boolean} isOn
+     * @param {boolean} disabled
+     * @param {function(boolean)} onSwitch
+     * @returns {Component}
+     */
+    static renderRadioButton(caption, value, groupName, isOn, disabled, onSwitch) {
+        return (
+            <label className={"btn btn-xs btn-default " + (isOn ? 'active': '')}>
+                <input
+                    type="radio"
+                    name={groupName}
+                    value={value}
+                    disabled={disabled}
+                    checked={isOn}
+                    onChange={ () => onSwitch(value) } />
+                {caption}
+            </label>
+        );
+    }
+
+
     render() {
         /** @type {number[]} */
         const index = this.props.index;
@@ -606,44 +646,13 @@ class RulesGroupHeader extends Component {
         /** @type {?function()} */
         const onDelete = this.props.onDelete;
 
-        const BUTTON_VALUES = { AND: 'AND', OR: 'OR' };
-
-        function makeAddButton(caption, disabled, onAdd) {
-            return (
-                <button type="button" className="btn btn-xs btn-success" disabled={disabled} onClick={onAdd}>
-                    <i className="glyphicon glyphicon-plus"/> {caption}
-                </button>
-            );
-        }
-
-        function makeRadioButton(caption, value, groupName, isOn, disabled, onSwitch) {
-
-            function onChange(evt) {
-                const isAnd = evt.target.value == BUTTON_VALUES.AND;
-                onSwitch(isAnd);
-            }
-
-            return (
-                <label className={"btn btn-xs btn-default " + (isOn ? 'active': '')}>
-                    <input
-                        type="radio"
-                        name={groupName}
-                        value={value}
-                        disabled={disabled}
-                        checked={isOn}
-                        onChange={onChange} />
-                    {caption}
-                </label>
-            );
-        }
-
         var groupName = 'builder-basic-react_group_' + index.join('-') + '_cond';
 
         return (
             <dt className="rules-group-header">
                 <div className="btn-group pull-right group-actions">
-                    {makeAddButton('Add rule', disabled, () => { onAdd(false); })}
-                    {makeAddButton('Add group', disabled, () => { onAdd(true); })}
+                    {RulesGroupHeader.renderAddButton('Add rule', disabled, () => { onAdd(false); })}
+                    {RulesGroupHeader.renderAddButton('Add group', disabled, () => { onAdd(true); })}
                     {onDelete &&
                         <button type="button" className="btn btn-xs btn-danger" onClick={onDelete} disabled={disabled} >
                             <i className="glyphicon glyphicon-remove" /> Delete
@@ -651,8 +660,8 @@ class RulesGroupHeader extends Component {
                     }
                 </div>
                 <div className="btn-group group-conditions">
-                    {makeRadioButton('AND', BUTTON_VALUES.AND, groupName, isAnd, disabled, onSwitch)}
-                    {makeRadioButton('OR', BUTTON_VALUES.OR, groupName, !isAnd, disabled, onSwitch)}
+                    {RulesGroupHeader.renderRadioButton('AND', true, groupName, isAnd, disabled, onSwitch)}
+                    {RulesGroupHeader.renderRadioButton('OR', false, groupName, !isAnd, disabled, onSwitch)}
                 </div>
                 <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
             </dt>
