@@ -913,9 +913,9 @@ class FieldFilterItem extends Component {
     render() {
         /** {number[]} */
         const index = this.props.index;
-        /** @type {{fieldId: string, fieldCondition: Object.<string, string|number|boolean|null|Array.<string|number>>}} */
+        /** @type {{field: string, operator: string, value: *}} */
         const item = this.props.item;
-        /** @type {Array.<{id: string, label: string, type: string}>} */
+        /** @type {{id: string, label: string, type: string}[]} */
         const fields = this.props.fields;
         /** @type {string[]} */
         const allowedOpsTypes = this.props.allowedOpsTypes;
@@ -923,7 +923,7 @@ class FieldFilterItem extends Component {
         const valueType = this.props.valueType;
         /** @type {boolean} */
         const disabled = this.props.disabled;
-        /** @type {function({fieldId: string, fieldCondition: Object.<string, string|number|boolean|null|Array.<string|number>>})} */
+        /** @type {function({field: string, operator: string, value: *})} */
         const onChange = this.props.onChange;
 
         const selectOptionsList = fields.map( (field) => { return {value: field.id, label: field.label} } );
