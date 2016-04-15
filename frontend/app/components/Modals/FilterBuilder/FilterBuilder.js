@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import Input from '../../shared/Input';
 
 import { filterBuilderChangeAll } from '../../../actions/filterBuilder';
 
@@ -734,54 +735,6 @@ class RulesGroupBody extends Component {
         );
     }
 }
-
-
-/**
- * Input field component with on blur and on enter firing onChange
- */
-class Input extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: props.value
-        };
-    }
-
-    render() {
-        const value = this.state.value;
-        const onChange = this.props.onChange;
-
-        return (
-            <input
-                {...this.props}
-                value={value}
-                onChange={ (evt) => this.setState({value: evt.target.value}) }
-                onBlur={ (evt) => onChange(evt.target.value) }
-                onKeyDown={ (evt) => { if (evt.keyCode == 13) onChange(value) } }
-            />
-        );
-    }
-}
-
-/**
- * Example:
-
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <Input
-          className="i1"
-          type="number"
-          value={1234}
-          onChange={ (val) => { console.log(val); } }
-        />
-      </div>
-    );
-  }
-}
-
- */
 
 
 /**
