@@ -3,6 +3,7 @@ import {requestAnalyze, requestSetCurrentParams} from './websocket';
 import { viewBuilderSelectView } from './viewBuilder';
 import { filterBuilderSelectFilter} from './filterBuilder';
 import {detachHistory} from "./queryHistory";
+import {setViewVariantsSort} from "./variantsTable";
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
@@ -84,6 +85,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(requestAnalyze(searchParams));
         const searchView = _.find(views, {id: viewId});
         dispatch(requestSetCurrentParams(searchView, sampleFieldsList));
+        dispatch(setViewVariantsSort(searchView));
         dispatch(fetchVariants(searchParams))
     }
 }
