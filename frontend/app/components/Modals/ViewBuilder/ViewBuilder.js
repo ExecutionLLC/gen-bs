@@ -25,9 +25,9 @@ export default class ViewBuilder extends React.Component {
         const selects = view.viewListItems.map(function (viewItem, index) {
 
             var currentValue =
-                _.find(allAvailableFields, {id: viewItem.fieldId}) ||
+                _.find(fields.totalFieldsList, {id: viewItem.fieldId}) ||
                 {id: null};
-
+            const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;
             const selectOptions = [
 
                 ...fieldsForSelection.map((f) => {
@@ -52,7 +52,7 @@ export default class ViewBuilder extends React.Component {
                                 value={currentValue}
                                 clearable={false}
                                 onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
-                                disabled={isDisableEditing}
+                                disabled={isDisableEditing || !isFieldAvailable}
                             />
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
