@@ -1061,7 +1061,7 @@ class FieldFilterItem extends Component {
                                         disabled={disabled}
                                         InputComponent={ (props) => {
                                             return (
-                                                <div key={index} className="rule-value-array-item">
+                                                <div className="rule-value-array-item">
                                                     <Input {...props} className="form-control" />
                                                 </div>
                                             );
