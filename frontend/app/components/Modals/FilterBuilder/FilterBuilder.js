@@ -971,6 +971,40 @@ class FieldFilterItem extends Component {
         );
     }
 
+    /**
+     * @param {Object} props
+     * @returns {Component}
+     */
+    static renderInputsArrayItem(props) {
+        return (
+            <div className="rule-value-array-item">
+                <Input {...props} className="form-control" />
+            </div>
+        );
+    }
+
+    /**
+     * @param {Component} ArrayComponent
+     * @param {(number|string)[]} value
+     * @param {string} valueType
+     * @param {boolean} disabled
+     * @param {function(string[])} onChange
+     * @returns {Component}
+     */
+    static renderInputsArray(ArrayComponent, value, valueType, disabled, onChange) {
+        return (
+            <div className="rule-value-array">
+                <ArrayComponent
+                    value={value}
+                    type={valueType === 'number' ? 'number' : 'text'}
+                    disabled={disabled}
+                    InputComponent={FieldFilterItem.renderInputsArrayItem}
+                    onChange={onChange}
+                />
+            </div>
+        );
+    }
+
     render() {
         /** {number[]} */
         const index = this.props.index;
@@ -1058,28 +1092,7 @@ class FieldFilterItem extends Component {
                             const operatorInfo = filterUtils.getOperatorByType(item.operator);
                             const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
                             const InputArrayComponent = opWant.arraySize ? InputArray : InputResizingArray;
-                            return (
-                                <div className="rule-value-array">
-                                    <InputArrayComponent
-                                        value={value}
-                                        type={valueType === 'number' ? 'number' : 'text'}
-                                        disabled={disabled}
-                                        InputComponent={ (props) => {
-                                            return (
-                                                <div className="rule-value-array-item">
-                                                    <Input {...props} className="form-control" />
-                                                </div>
-                                            );
-                                        }}
-                                        onChange={ (vals) => onChange({
-                                            id: item.id,
-                                            field: item.field,
-                                            operator: item.operator,
-                                            value: getInputValueArray(vals)
-                                        })}
-                                    />
-                                </div>
-                            );
+                            return FieldFilterItem.renderInputsArray(InputArrayComponent, value, valueType, disabled, (vals) => onItemValueChange(getInputValueArray(vals)) );
                         }
                         if (typeof value === 'boolean') {
                             return FieldFilterItem.renderCheckbox(item.value, disabled, onItemValueChange);
