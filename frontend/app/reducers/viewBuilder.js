@@ -7,20 +7,15 @@ function filterEmptyListItems(viewListItems) {
 }
 
 function getNextDirection(direction) {
-    switch (direction) {
-        case 'asc':
-        {
-            return 'desc';
-        }
-        case 'desc':
-        {
-            return null;
-        }
-        case null:
-        {
-            return 'asc'
-        }
+    if (!direction) {
+        return 'asc';
     }
+    const switcher = {
+        'asc': 'desc',
+        'desc': null
+    };
+
+    return switcher[direction];
 }
 
 export default function viewBuilder(state = {
@@ -152,7 +147,7 @@ export default function viewBuilder(state = {
         }
         case ActionTypes.VBUILDER_CHANGE_SORT_COLUMN:
         {
-            var viewItems = [...state.editedView.viewListItems];
+            const viewItems = [...state.editedView.viewListItems];
             const firstSortItemIndex = _.findIndex(viewItems, {sortOrder: 1});
             const secondSortItemIndex = _.findIndex(viewItems, {sortOrder: 2});
             const selectedSortItemIndex = _.findIndex(viewItems, {fieldId: action.fieldId});

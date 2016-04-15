@@ -35,10 +35,8 @@ export default class ViewBuilder extends React.Component {
                     return {value: f.id, label: `${f.name} -- ${f.sourceName}`}
                 })
             ];
-            const sortOrder = viewItem.sortOrder;
-            const currentDirection = viewItem.sortDirection;
-            const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, currentDirection);
-            const fieldId = viewItem.fieldId;
+            const {sortOrder, sortDirection, fieldId} = viewItem.sortOrder;
+            const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, sortDirection);
 
             return (
 
@@ -63,7 +61,7 @@ export default class ViewBuilder extends React.Component {
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
                              data-placement="bottom" data-container="body" title="Desc/Asc Descending">
-                            {this.renderSortButton(currentDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
+                            {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
 
                     </div>
@@ -114,7 +112,7 @@ export default class ViewBuilder extends React.Component {
     }
 
     getSortButtonClasses(order, sortDirection) {
-        if (order == null && sortDirection == null) {
+        if (!order && !sortDirection) {
             return classNames(
                 'btn',
                 'btn-sort',
