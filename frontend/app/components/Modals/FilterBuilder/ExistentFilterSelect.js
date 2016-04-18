@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 
-import { filterBuilderSelectFilter, filterBuilderToggleNewEdit} from '../../../actions/filterBuilder'
+import {
+    filterBuilderSelectFilter,
+    filterBuilderToggleNewEdit,
+    filterBuilderDeleteFilter
+} from '../../../actions/filterBuilder'
 
 
 export default class ExistentFilterSelect extends Component {
@@ -72,7 +75,9 @@ export default class ExistentFilterSelect extends Component {
                         }
                         { isFilterEditable &&
                         <div className="btn-group ">
-                            <button type="button" className="btn btn-link">
+                            <button type="button"
+                                    className="btn btn-default"
+                                    onClick={ () => dispatch(filterBuilderDeleteFilter(selectedFilter.id))}>
                                 <span data-localize="views.setup.delete.title">Delete Filter</span>
                             </button>
                         </div>
