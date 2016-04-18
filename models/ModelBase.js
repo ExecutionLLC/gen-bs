@@ -127,7 +127,9 @@ class ModelBase {
             .where('id', itemId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
             .asCallback((error) => {
-                callback(error, itemId);
+                callback(error, {
+                    id: itemId
+                });
             });
     }
 }
