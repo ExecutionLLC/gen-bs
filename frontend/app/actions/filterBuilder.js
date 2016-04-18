@@ -19,7 +19,6 @@ export const FBUILDER_RECEIVE_UPDATE_FILTER = 'FBUILDER_RECEIVE_UPDATE_FILTER';
 export const FBUILDER_REQUEST_CREATE_FILTER = 'FBUILDER_REQUEST_CREATE_FILTER';
 export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
 
-export const FBUILDER_REQUEST_RULES = 'FBUILDER_REQUEST_RULES';
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
 export const FBUILDER_CHANGE_ALL = 'FBUILDER_CHANGE_ALL';
@@ -147,17 +146,10 @@ export function filterBuilderSaveAndSelectRules() {
     };
 }
 
-export function filterBuilderRequestRules() {
-    return {
-        type: FBUILDER_REQUEST_RULES
-    }
-}
-
 export function filterBuilderRules(rules) {
     return {
         type: FBUILDER_RECEIVE_RULES,
         rules,
-        rulesPrepared: true,
         rPromise: function (resolve, reject) {
             resolve(777)
         }

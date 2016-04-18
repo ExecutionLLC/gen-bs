@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
 import classNames from 'classnames';
 
-import {filterBuilderRequestRules, filterBuilderSaveAndSelectRules} from '../../../actions/filterBuilder';
+import {filterBuilderSaveAndSelectRules} from '../../../actions/filterBuilder';
 
 
 export default class FilterBuilderFooter extends Component {
