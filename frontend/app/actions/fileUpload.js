@@ -2,6 +2,7 @@ import config from '../../config'
 import { closeModal } from './modalWindows'
 import {fetchSamples} from './samplesList';
 import gzip from '../utils/gzip'
+import {fetchTotalFields} from "./fields";
 
 /*
  * action types
@@ -127,6 +128,7 @@ export function changeFileUploadProgress(progressValueFromAS, progressStatusFrom
     return (dispatch, getState) => {
         dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS))
         if (progressStatusFromAS === 'ready') {
+            dispatch(fetchTotalFields());
             dispatch(closeModal('upload'));
             dispatch(fetchSamples());
         }
