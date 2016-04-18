@@ -2,9 +2,18 @@
 
 const _ = require('lodash');
 const async = require('async');
+const knex = require('knex');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const CollectionUtils = require('../utils/CollectionUtils');
 const SecureModelBase = require('./SecureModelBase');
+
+const TableNames = {
+    Views: 'view',
+    ViewItems: 'view_items',
+    ViewTexts: 'view_text',
+    ViewItemKeywords: 'view_item_keyword'
+};
 
 const mappedColumns = [
     'id',
@@ -24,43 +33,28 @@ class ViewsModel extends SecureModelBase {
     }
 
     find(userId, viewId, callback) {
-        async.waterfall([
-            (callback) => this._fetch(userId, viewId, callback),
-            (view, callback) => this._ensureItemNotDeleted(view, callback),
-            (view, callback) => {
-                this._fetchViewItems(view.id, (error, viewItems) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        this._mapView(view, viewItems, callback);
-                    }
-                });
-            }
-        ], callback);
+        const viewIds = [viewId];
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._findViews(trx, viewIds, userId, false, false, callback),
+                (views, callback) => this._ensureAllItemsFound(views, viewIds, callback)
+            ], (error, views) => {
+                callback(error, views);
+            });
+        }, callback);
     }
 
     // It collects the latest version of each view for the current user
     findAll(userId, callback) {
-        async.waterfall([
-            (callback) => this._fetchUserViews(userId, callback),
-            (views, callback) => this._mapViewsByIds(views, callback)
-        ], callback);
+        this.db.transactionally((trx, callback) => {
+            this._findViews(trx, null, userId, true, true, callback);
+        }, callback);
     }
 
     findMany(userId, viewIds, callback) {
-        async.waterfall([
-            (callback) => { this._fetchViews(viewIds, callback); },
-            (views, callback) => {
-                this._ensureAllItemsFound(views, viewIds, callback);
-            },
-            (views, callback) => async.map(views, (view, callback) => {
-                this._ensureItemNotDeleted(view, callback);
-            }, callback),
-            (views, callback) => async.map(views, (view, callback) => {
-                this._checkUserIsCorrect(userId, view, callback);
-            }, callback),
-            (views, callback) => this._mapViewsByIds(views, callback)
-        ], callback);
+        this.db.transactionally((trx, callback) => {
+            this._findViews(trx, viewIds, userId, false, false, callback);
+        }, callback);
     }
 
     _add(userId, languId, view, shouldGenerateId, callback) {
@@ -115,7 +109,7 @@ class ViewsModel extends SecureModelBase {
                         sortDirection: viewItem.sortDirection,
                         filterControlEnable: viewItem.filterControlEnable || false
                     };
-                    this._unsafeInsert('view_item', dataToInsert, trx, callback);
+                    this._unsafeInsert(TableNames.ViewItems, dataToInsert, trx, callback);
                 }
             },
             (viewItemId, callback) => {
@@ -137,7 +131,7 @@ class ViewsModel extends SecureModelBase {
             viewItemId: viewItemId,
             keywordId: keywordId
         };
-        this._unsafeInsert('view_item_keyword', dataToInsert, trx, callback);
+        this._unsafeInsert(TableNames.ViewItemKeywords, dataToInsert, trx, callback);
     }
 
     // Creates a new version of an existing view
@@ -160,7 +154,7 @@ class ViewsModel extends SecureModelBase {
                         languId: view.languId,
                         description: viewToUpdate.description
                     };
-                    this._unsafeInsert('view_text', dataToInsert, trx, (error) => {
+                    this._unsafeInsert(TableNames.ViewTexts, dataToInsert, trx, (error) => {
                         callback(error, viewId);
                     });
                 },
@@ -200,145 +194,151 @@ class ViewsModel extends SecureModelBase {
         }, callback);
     }
 
-    _fetchViews(viewIds, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('view_text', 'view_text.view_id', this.baseTableName + '.id')
-                .whereIn('id', viewIds)
-                .asCallback((error, viewsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData));
-                    }
-                });
-        }, callback);
-    }
-
-    _fetchUserViews(userId, callback) {
-        const query = 'SELECT * FROM ' +
-            '(SELECT ROW_NUMBER() OVER (' +
-            'PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC) AS RN, * ' +
-            'FROM ' + this.baseTableName + ' ' +
-            'INNER JOIN view_text ON view_text.view_id = ' + this.baseTableName + '.id ' +
-            'WHERE (creator = \'' + userId + '\' OR creator IS NULL) AND is_deleted = false) T WHERE T.RN = 1';
-        this.db.asCallback((knex, callback) => {
-            knex.raw(query)
-                .asCallback((error, viewsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewsData.rows));
-                    }
-            });
-        }, callback);
-    }
-
-    _mapViewsByIds(views, callback) {
-        const viewIds = _.pluck(views, 'id');
-        this._fetchViewItemsByIds(viewIds, (error, viewItems) => {
-            if (error) {
-                callback(error);
-            } else {
-                this._mapViews(views, viewItems, callback);
-            }
-        });
-    }
-
-    _mapViews(views, viewItems, callback) {
-        let viewItemsData = _.groupBy(viewItems, (viewItem) => {
-            return viewItem.viewId;
-        });
-        async.map(views, (view, callback) => {
-            this._mapView(view, viewItemsData[view.id], callback);
-        }, callback);
-    }
-
-    _mapView(view, viewItems, callback) {
+    _findViews(trx, viewIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
         async.waterfall([
-            (callback) => this._mapViewItems(viewItems, callback),
-            (viewItemsData, callback) => {
-                view.viewListItems = viewItemsData;
-                callback(null, this._mapColumns(view));
+            (callback) => this._findViewsMetadata(trx, viewIdsOrNull, userIdOrNull, includeLastVersionsOnly,
+                excludeDeleted, callback),
+            (viewsMetadata, callback) => {
+                const viewIds = _.map(viewsMetadata, view => view.id);
+                callback(null, viewsMetadata, viewIds);
+            },
+            (viewsMetadata, viewIds, callback) => {
+                this._attachListItems(trx, viewsMetadata, viewIds, (error, views) => {
+                    callback(error, views, viewIds);
+                });
+            },
+            (views, viewIds, callback) => {
+                this._attachViewsDescriptions(trx, views, viewIds, callback);
+            }
+        ], (error, views) => {
+            callback(error, views);
+        });
+    }
+
+    _findViewsMetadata(trx, viewIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
+        let query = trx.select()
+            .from(TableNames.Views)
+            .where('1 = 1');
+        if (includeLastVersionsOnly) {
+            const selectLastViewIds = "SELECT" +
+                "  T.id" +
+                "FROM (" +
+                "  SELECT ROW_NUMBER() OVER (" +
+                "    PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC" +
+                "  ) AS RN," +
+                "  id" +
+                "  FROM view" +
+                ") AS T" +
+                "WHERE T.RN = 1";
+            query = query.andWhereRaw('view.id IN (' + selectLastViewIds + ')');
+        }
+
+        if (userIdOrNull) {
+            query = query.andWhere(function () {
+                this.whereNull('creator')
+                    .orWhere('creator', userIdOrNull);
+            });
+        } else {
+            query = query.andWhere('creator', null);
+        }
+
+        if (excludeDeleted) {
+            query = query.andWhere('is_deleted', false);
+        }
+
+        if (viewIdsOrNull) {
+            query = query.andWhere('id', 'in', viewIdsOrNull);
+        }
+
+        async.waterfall([
+            callback => query.asCallback(callback),
+            (views, callback) => this._toCamelCase(views, callback)
+        ], callback);
+    }
+
+    _attachListItems(trx, views, viewIds, callback) {
+        async.waterfall([
+            (callback) => {
+                trx.select()
+                    .from(TableNames.ViewItems)
+                    .whereIn('view_id', viewIds)
+                    .asCallback(callback);
+            },
+            (viewsItems, callback) => this._toCamelCase(viewsItems, callback),
+            // Load keywords for the items.
+            (viewsItems, callback) => this._attachKeywords(trx, viewsItems, callback),
+            (viewsItems, callback) => {
+                // Group items by view.
+                const itemsByViewId = _.groupBy(viewsItems, viewItem => viewItem.viewId);
+                // Create a new views collection with view items attached.
+                const viewsWithItems = _.map(views, view => {
+                    return Object.assign({}, view, {
+                        viewListItems: itemsByViewId[view.id]
+                    });
+                });
+                callback(null, viewsWithItems);
             }
         ], callback);
     }
 
-    _mapViewItems(viewItems, callback) {
-        async.map(viewItems, (viewItem, callback) => {
-            async.waterfall([
-                (callback) => {
-                    this._fetchViewItemKeywords(viewItem.id, callback);
-                },
-                (keywords, callback) => {
-                    this._mapKeywords(keywords, callback);
-                },
-                (result, callback) => {
-                    viewItem.keywords = result;
-                    callback(null, viewItem);
-                }
-            ], callback);
-        }, callback);
-    }
-
-    _mapKeywords(keywords, callback) {
-        async.map(keywords, (keyword, callback) => {
-            async.waterfall([
-                (callback) => this.models.keywords.fetchKeywordSynonyms(keyword.id, callback),
-                (synonyms, callback) => {
-                    keyword.synonyms = synonyms;
-                    callback(null, keyword);
-                }
-            ], callback);
-        }, callback);
-    }
-
-    _fetchViewItemKeywords(viewItemId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from('view_item')
-                .innerJoin('view_item_keyword', 'view_item_keyword.view_item_id', 'view_item.id')
-                .innerJoin('keyword', 'view_item_keyword.keyword_id', 'keyword.id')
-                .where('view_item_id', viewItemId)
-                .asCallback((error, keywords) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(keywords));
-                    }
+    _attachViewsDescriptions(trx, views, viewIds, callback) {
+        async.waterfall([
+            (callback) => {
+                trx.select()
+                    .from(TableNames.ViewTexts)
+                    .whereIn('view_id', viewIds)
+                    .asCallback(callback);
+            },
+            (viewsTexts, callback) => this._toCamelCase(viewsTexts, callback),
+            (viewsTexts, callback) => {
+                const textsHash = CollectionUtils.createHashByKey(viewsTexts, 'viewId');
+                const viewsWithDescription = _.map(views, view => {
+                    return Object.assign({}, view, {
+                        description: textsHash[view.id]
+                    });
                 });
-        }, callback);
+                callback(null, viewsWithDescription);
+            }
+        ], callback);
     }
 
-    _fetchViewItemsByIds(viewIds, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from('view_item')
-                .whereIn('view_id', viewIds)
-                .asCallback((error, viewItemsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewItemsData));
-                    }
+    _attachKeywords(trx, viewItems, callback) {
+        const viewItemIds = _.map(viewItems, item => item.id);
+        async.waterfall([
+            // Get list of (itemId, keywordId) pairs from database
+            (callback) => {
+                trx.select()
+                    .from(TableNames.ViewItemKeywords)
+                    .whereIn('view_item_id', viewItemIds)
+                    .asCallback(callback)
+            },
+            (itemsKeywordIds, callback) => this._toCamelCase(itemsKeywordIds, callback),
+            // Find all keywords related to any of the items.
+            (itemsKeywordIds, callback) => {
+                // Get keywords ids we need to extract.
+                const keywordIdToItemIds = _.groupBy(itemsKeywordIds, itemKeywordId => itemKeywordId.keywordId);
+                const keywordIds = _.keys(keywordIdToItemIds);
+                // Extract keywords.
+                this.models.keywords.findMany(keywordIds, (error, keywords) => {
+                    callback(error, itemsKeywordIds, keywords);
                 });
-        }, callback);
-    }
+            },
+            // Attach keywords to the corresponding items.
+            (itemsKeywordIds, keywords, callback) => {
+                // Group (itemId, keywordId) pairs by item id.
+                const itemIdToKeywordIds = _.groupBy(itemsKeywordIds, itemKeywordId => itemKeywordId.viewItemId);
+                const keywordsHash = CollectionUtils.createHashByKey(keywords, 'id');
+                // Create a new collection of view list items with keywords.
+                const viewItemsWithKeywords = _.map(viewItems, viewItem => {
+                    const itemKeywordIds = itemIdToKeywordIds[viewItem.id];
+                    return Object.assign({}, viewItem, {
+                        keywords: _.map(itemKeywordIds, keywordId => keywordsHash[keywordId])
+                    });
+                });
 
-    _fetchViewItems(viewId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from('view_item')
-                .where('view_id', viewId)
-                .asCallback((error, viewItemsData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(viewItemsData));
-                    }
-                });
-        }, callback);
+                callback(null, viewItemsWithKeywords);
+            }
+        ]);
     }
 }
 
