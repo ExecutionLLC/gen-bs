@@ -34,6 +34,9 @@ const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please 
 const UPDATE_VIEW_NETWORK_ERROR = 'Cannot update view (network error). Please try again.';
 const UPDATE_VIEW_SERVER_ERROR = 'Cannot update view (server error). Please try again.';
 
+const DELETE_VIEW_NETWORK_ERROR = 'Cannot delete view (network error). Please try again.';
+const DELETE_VIEW_SERVER_ERROR = 'Cannot delete view (server error). Please try again.';
+
 const viewsClient = apiFacade.viewsClient;
 
 /*
@@ -187,9 +190,9 @@ export function viewBuilderDeleteView(viewId) {
         const {auth: {sessionId}} = getState();
         viewsClient.remove(sessionId, viewId, (error, response) => {
             if (error) {
-                dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
+                dispatch(handleError(null, DELETE_VIEW_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, CREATE_VIEW_SERVER_ERROR));
+                dispatch(handleError(null, DELETE_VIEW_SERVER_ERROR));
             } else {
                 const result = response.body;
                 dispatch(viewBuilderReceiveDeleteView(result));
