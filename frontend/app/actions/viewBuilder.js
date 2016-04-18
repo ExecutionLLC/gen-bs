@@ -4,6 +4,8 @@ import {fetchViews} from './userData';
 
 import HttpStatus from 'http-status';
 import {changeView} from "./ui";
+import {handleError} from './errorHandler';
+import {deleteView} from "./userData";
 
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW';
 
@@ -179,10 +181,30 @@ function viewBuilderReceiveCreateView(json) {
     };
 }
 
+export function viewBuilderDeleteView(viewId) {
+    return (dispatch, getState) => {
+        dispatch(viewBuilderRequestDeleteView(viewId));
+        const {auth: {sessionId}} = getState();
+        viewsClient.remove(sessionId, viewId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, CREATE_VIEW_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                dispatch(viewBuilderReceiveDeleteView(result));
+                dispatch(deleteView(result.id));
+                const selectedViewId = (result.id == getState().viewBuilder.selectedView.id)?getState().userData.views[0].id:getState().viewBuilder.selectedView.id;
+                dispatch(changeView(selectedViewId));
+            }
+        });
+    }
+}
 
-function viewBuilderRequestDeleteView() {
+function viewBuilderRequestDeleteView(viewId) {
     return {
-        type: VBUILDER_REQUEST_DELETE_VIEW
+        type: VBUILDER_REQUEST_DELETE_VIEW,
+        viewId
     };
 }
 
