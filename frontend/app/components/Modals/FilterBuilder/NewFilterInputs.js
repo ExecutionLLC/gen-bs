@@ -50,7 +50,6 @@ export default class NewFilterInputs extends Component {
 
                     <div className="col-sm-1">
                         <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                data-toggle="collapse" data-target=".copyview "
                                 onClick={ () => dispatch(filterBuilderToggleNewEdit(true)) }><span
                             data-localize="actions.cancel">Cancel</span></button>
                     </div>
