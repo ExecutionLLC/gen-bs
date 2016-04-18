@@ -44,9 +44,8 @@ export default function filterBuilder(state = {
         case ActionTypes.FBUILDER_CHANGE_ATTR:
             return Object.assign({}, state, {
                 editingFilter: state.editingFilter ?
-                    Object.assign({}, {
-                        filter: Object.assign({},
-                            state.editingFilter.filter,
+                    Object.assign({}, state.editingFilter, {
+                        filter: Object.assign({}, state.editingFilter.filter,
                             {
                                 name: action.name,
                                 description: action.description
@@ -61,9 +60,8 @@ export default function filterBuilder(state = {
                 rulesRequested: false,
                 rulesPrepared: true,
                 editingFilter: state.editingFilter ?
-                    Object.assign({}, {
-                        filter: Object.assign({},
-                            state.editingFilter.filter,
+                    Object.assign({}, state.editingFilter, {
+                        filter: Object.assign({}, state.editingFilter.filter,
                             {
                                 rules: action.rules
                             })
@@ -95,7 +93,7 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_CHANGE_ALL: return (function() {
             return Object.assign({}, state, {
-                editingFilter: Object.assign({}, {
+                editingFilter: Object.assign({}, state.editingFilter, {
                     filter: Object.assign({}, state.editingFilter.filter, {
                         rules: action.rules
                     })
