@@ -124,7 +124,7 @@ export default function filterBuilder(state = {
                 return Object.assign({}, state, {
                     editedFilter: Object.assign({}, state.editedFilter, {rules: action.rules}),
                     editingFilter: Object.assign({}, {
-                        filter: Object.assign({}, state.editedFilter.filter, {
+                        filter: Object.assign({}, state.editingFilter.filter, {
                             rules: action.rules
                         })
                     })
@@ -133,7 +133,7 @@ export default function filterBuilder(state = {
                 return Object.assign({}, state, {
                     newFilter: Object.assign({}, state.newFilter, {rules: action.rules}),
                     editingFilter: Object.assign({}, {
-                        filter: Object.assign({}, state.editedFilter.filter, {
+                        filter: Object.assign({}, state.editingFilter.filter, {
                             rules: action.rules
                         })
                     })
