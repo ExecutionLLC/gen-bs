@@ -66,9 +66,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         };
         const {
             userData: {
-                attachedHistoryData: historyData
-            },
-            ui: {
+                attachedHistoryData: historyData,
                 views
             },
             fields: {

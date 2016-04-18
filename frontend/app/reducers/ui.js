@@ -19,13 +19,11 @@ export default function ui(state = {
 
         case ActionTypes.CHANGE_HEADER_VIEW:
             return Object.assign({}, state, {
-                views: action.views,
                 selectedView: _.find(action.views, {id: action.viewId})
             });
 
         case ActionTypes.CHANGE_HEADER_FILTER:
             return Object.assign({}, state, {
-                filters: action.filters,
                 selectedFilter: _.find(action.filters, {id: action.filterId})
             });
 
