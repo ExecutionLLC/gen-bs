@@ -7,86 +7,7 @@ import QueryBuilder from '../../shared/QueryBuilder';
 
 import { filterBuilderChangeAll } from '../../../actions/filterBuilder';
 
-import filterUtils from '../../../utils/filterUtils';
-
-
-const opsUtils = {
-    /**
-     * Map operator type to operator label
-     */
-    genomicsRuleOperatorsLabels: {
-        "equal": "equal",
-        "not_equal": "not equal",
-        "in": "in",
-        "not_in": "not in",
-        "less": "less",
-        "less_or_equal": "less or equal",
-        "greater": "greater",
-        "greater_or_equal": "greater or equal",
-        "between": "between",
-        "not_between": "not between",
-        "begins_with": "begins with",
-        "not_begins_with": "doesn't begin with",
-        "contains": "contains",
-        "not_contains": "doesn't contain",
-        "ends_with": "ends with",
-        "not_ends_with": "doesn't end with",
-        "is_null": "is null",
-        "is_not_null": "is not null"
-    },
-    /**
-     * Return operator wanted params count
-     * Object contains one of properties:
-     *   noParams - operator does not want any params
-     *   single - operator want single parameter
-     *   arrayDynamic - operator wants dynamic-size array
-     *   arraySize - operator wants fixed-size array of arraySize length
-     * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operatorInfo as in filterUtils.operators
-     * @returns {{noParams: boolean=, single: boolean=, arrayDynamic: boolean=, arraySize: number=}}
-     */
-    getOperatorWantedParams: function(operatorInfo) {
-        if (!operatorInfo.nbInputs) {
-            return {noParams: true};
-        }
-        if (operatorInfo.nbInputs <= 1 && !operatorInfo.multiple) {
-            return {single: true};
-        }
-        if (operatorInfo.multiple) {
-            return {arrayDynamic: true};
-        } else {
-            return {arraySize: operatorInfo.nbInputs};
-        }
-    }
-};
-
-const fieldUtils = {
-    /**
-     * Return default field id for adding new rule item or smth
-     * @param {{id: string, label: string, type: string}[]} fields
-     * @returns {string}
-     */
-    getDefaultId(fields) {
-        return fields[0].id;
-    },
-    /**
-     * Get JS type for the field value or undefined
-     * @param {{id: string, label: string, type: string}} field
-     * @returns {string|undefined}
-     */
-    getFieldJSType(field) {
-        const fieldType = field.type;
-        const jsType = {
-            'char': 'string',
-            'string': 'string',
-            'integer': 'number',
-            'float': 'number',
-            'double': 'number',
-            'boolean': 'boolean'
-        }[fieldType];
-        return jsType;
-    }
-};
-
+import {filterUtils, fieldUtils, opsUtils, genomicsParsedRulesValidate} from '../../../utils/filterUtils';
 
 
 /**
@@ -116,75 +37,13 @@ class FilterQueryBuilder extends Component {
         const dispatch = this.props.dispatch;
 
         /**
-         * Return field for id
-         * @param {string} id
-         * @returns {{id: string, label: string, type: string}}
-         */
-        function getFieldById(id) {
-            var i;
-            for (i = 0; i < fields.length; i++) {
-                if (id == fields[i].id) {
-                    return fields[i];
-                }
-            }
-        }
-
-        /**
-         * Type cast value (single value, not an object or array) to desired type
-         * @param {*} val
-         * @param {string} type
-         * @returns {*|null}
-         */
-        function jsTypeCastValue(val, type) {
-            var cast = {
-                'string': (val) => typeof val === 'object' ? '' : '' + val,
-                'number': (val) => +val || 0,
-                'boolean': (val) => val === 'false' ? false : !!val
-            }[type];
-            return cast ? cast(val) : null;
-        }
-
-        /**
-         * Type cast single value or array to desired typed array
-         * 'len' is optional parameter. If it set then make result array exactly that length
-         * either by cutting or enlarging it
-         * @param {*|array} val
-         * @param {string} type
-         * @param {number=} len
-         * @returns {*}
-         */
-        function jsTypeCastArray(val, type, len) {
-            if (!val || typeof val !== 'object' || !val.length) {
-                return new Array(len || 1).fill(jsTypeCastValue(val, type));
-            } else {
-                return val
-                    .slice(0, len ? len : val.length)
-                    .map((v) => jsTypeCastValue(v, type))
-                    .concat(
-                        new Array(len > val.length ? len - val.length : 0)
-                            .fill(jsTypeCastValue(val[val.length - 1], type))
-                    );
-            }
-        }
-
-        /**
-         * Return true if operator allows given argument type
-         * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operator as in filterUtils.operators
-         * @param {string} type
-         * @returns {boolean}
-         */
-        function isAllowedOperatorType(operator, type) {
-            return operator.applyTo.indexOf(type) >= 0;
-        }
-
-        /**
          * Get operators types (operator.type) for given value type
          * @param {string} type
          * @returns {string[]}
          */
         function getValidOperatorsTypesForJSType(type) {
             var ops = [];
-            filterUtils.operators.map( (op) => { if (isAllowedOperatorType(op, type)) ops.push(op.type); } );
+            filterUtils.operators.map( (op) => { if (genomicsParsedRulesValidate.isAllowedOperatorType(op, type)) ops.push(op.type); } );
             return ops;
         }
 
@@ -198,139 +57,18 @@ class FilterQueryBuilder extends Component {
             var validFieldsIds = {};
             fields.map( (field) => {
                 const fieldJSType = fieldUtils.getFieldJSType(field);
-                if (isAllowedOperatorType(operator, fieldJSType)) {
+                if (genomicsParsedRulesValidate.isAllowedOperatorType(operator, fieldJSType)) {
                     validFieldsIds[field.id] = true;
                 }
             });
             return validFieldsIds;
         }
 
-        /**
-         * Validate parsed rules, return rules with valid items only (can be null) and validation report
-         * Report is an array of object with message and index (nested group indexes, [] is root) in source rules
-         * @param {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} rules
-         * @returns {{validRules: {condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}, report: {index: number[], message: string}[]}}
-         */
-        function validateRules(rules) {
-
-            /**
-             * Validate rule item (field, operator, value), return valid rule,
-             * rules group flag (groups are not validating here) or error message
-             * Result value is type casted for field type
-             * @param {?{condition: *=, field: string=, operator: string=, value: *=}} rule
-             * @returns {{errorMessage: string=, isGroup: boolean=, validRule: {field: string, operator: string, value:*}=}}
-             */
-            function validateRule(rule) {
-                if (!rule) {
-                    return {errorMessage: 'no rule'};
-                }
-                if (rule.condition) {
-                    return {isGroup: true};
-                }
-                if (!rule.field) {
-                    return({errorMessage: 'no field'});
-                }
-                if (!rule.operator) {
-                    return ({errorMessage: 'no operator'});
-                }
-
-                const field = getFieldById(rule.field);
-                if (!field) {
-                    return {errorMessage: 'field id "' + rule.field + '" is invalid'};
-                }
-                const fieldJSType = fieldUtils.getFieldJSType(field);
-                const operatorType = rule.operator;
-                const operatorInfo = filterUtils.getOperatorByType(operatorType);
-
-                if (!isAllowedOperatorType(operatorInfo, fieldJSType)) {
-                    return {errorMessage: 'field "' + JSON.stringify(field) + '" of type "' + fieldJSType + '" not allowed for operator "' + operatorType + '"'};
-                }
-
-                const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
-
-                const value = rule.value;
-                const castedValue = opWant.noParams ?
-                    null :
-                    opWant.single ?
-                        jsTypeCastValue(value, fieldJSType) :
-                        jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
-
-                return {validRule: {
-                    field: rule.field,
-                    operator: rule.operator,
-                    value: castedValue
-                }};
-            }
-
-            /**
-             * Validate rules array
-             * Return valid rules
-             * Append validation report
-             * @param {{condition: *=, field: string=, operator: string=, value: *=}[]}rules
-             * @param {number[]} index current rules group position, [] for root rules group, [1, 2] for 2nd group in 1st group in root
-             * @param {{index: number[], message: string}[]} report messages for rules in original rules tree
-             * @returns {{field: string, operator: string, value:*}[]}
-             */
-            function validateRules(rules, index, report) {
-                var validRules = [];
-                rules.map( (rule, i) => {
-                    var validateRuleResult = validateRule(rule);
-                    if (validateRuleResult.validRule) {
-                        validRules.push(validateRuleResult.validRule);
-                        return;
-                    }
-                    const ruleIndex = index.concat([i]);
-                    if (validateRuleResult.isGroup) {
-                        const validSubGroup = validateGroup(rule, ruleIndex, report);
-                        if (!validSubGroup) {
-                            report.push({index: ruleIndex.slice(), message: 'invalid subgroup'});
-                            return;
-                        }
-                        validRules.push(validSubGroup);
-                        return;
-                    }
-                    report.push({index: ruleIndex, message: validateRuleResult.errorMessage});
-                });
-                return validRules;
-            }
-
-            /**
-             * Validate rules group
-             * Return valid group or null
-             * Append validation report
-             * @param {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} group
-             * @param {number[]} index
-             * @param {{index: number[], message: string}[]} report
-             * @returns {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}}
-             */
-            function validateGroup(group, index, report) {
-                if (group.condition !== 'AND' && group.condition !== 'OR') {
-                    report.push({index: index.slice(), message: 'bad group condition "' + group.condition + '" (must be AND|OR)'});
-                    return null;
-                }
-                if (!group.rules || typeof group.rules !== 'object' || !group.rules.length) {
-                    report.push({index: index.slice(), message: 'group content (type ' + typeof group.rules + ', !!rule=' + !!group.rules + (group.rules ? ', len = ' + group.rules.length : '') + ')'});
-                    return null;
-                }
-                const validRules = validateRules(group.rules, index, report);
-                if (!validRules.length) {
-                    report.push({index: index.slice(), message: 'empty group'});
-                    return null;
-                }
-                return {condition: group.condition, rules: validRules};
-            }
-
-            var report = [];
-            var validRules = validateGroup(rules, [], report);
-
-            return {validRules: validRules, report: report};
-        }
-
         /** @type {string} */
         const fieldDefaultId = fieldUtils.getDefaultId(fields);
 
         const parsedRawRules = filterUtils.getRulesFromGenomics(rules);
-        const validateRulesResult = validateRules(parsedRawRules);
+        const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
 
         // Make default rules if not parsed
         var parsedRules = validateRulesResult.validRules ||
@@ -424,7 +162,7 @@ class FilterQueryBuilder extends Component {
          */
         function makeFilterItem(index, item, disabled) {
 
-            const fieldJSType = fieldUtils.getFieldJSType(getFieldById(item.field));
+            const fieldJSType = fieldUtils.getFieldJSType(fieldUtils.getFieldById(item.field));
             const allowedOpsTypes = getValidOperatorsTypesForJSType(fieldJSType);
             const allowedFieldsIds = getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
             const allowedFields =  fields.filter( (f) => allowedFieldsIds[f.id] );
@@ -444,8 +182,8 @@ class FilterQueryBuilder extends Component {
                         const castedValue = opWant.noParams ?
                             null :
                             opWant.single ?
-                                (typeof value === 'object' && value && value.length) ? jsTypeCastValue(value.join(), fieldJSType) : jsTypeCastValue(value, fieldJSType) :
-                                jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
+                                (typeof value === 'object' && value && value.length) ? genomicsParsedRulesValidate.jsTypeCastValue(value.join(), fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
+                                genomicsParsedRulesValidate.jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
                         item.value = castedValue;
                         const {subrules, indexIn} = findSubrulesWIndex(parsedRules, index);
                         subrules[indexIn] = item;
