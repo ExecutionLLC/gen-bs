@@ -93,6 +93,16 @@ export default function userData(state = {
                 ]
             });
         }
+        case ActionTypes.DELETE_FILTER:
+        {
+            const deletedFilterIndex = _.findIndex(state.filters, filter => filter.id == action.filterId);
+            return Object.assign({}, state,{
+                filters: [
+                    ...state.filters.slice(0, deletedFilterIndex),
+                    ...state.filters.slice(deletedFilterIndex + 1)
+                ]
+            });
+        }
         default:
             return state
     }
