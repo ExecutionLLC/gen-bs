@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
@@ -14,9 +14,9 @@ export default class ExistentFilterSelect extends Component {
 
     render() {
 
-        const { dispatch, auth } = this.props;
+        const {dispatch, auth} = this.props;
         const {selectedFilter} = this.props.filterBuilder;
-        const { filters } = this.props.userData;
+        const {filters} = this.props.userData;
         const disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
         });
@@ -32,11 +32,11 @@ export default class ExistentFilterSelect extends Component {
                     </div>
                 </div>
                 { !isFilterEditable &&
-                    <div className="alert alert-help">
+                <div className="alert alert-help">
                         <span data-localize="views.setup.selector.description">
                             This filter is not editable, duplicate it to make changes. (Only for registered users)
                         </span>
-                    </div>
+                </div>
                 }
                 <div className="row grid-toolbar">
                     <div className="col-sm-6">

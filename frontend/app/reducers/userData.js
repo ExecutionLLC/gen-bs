@@ -86,7 +86,7 @@ export default function userData(state = {
         case ActionTypes.DELETE_VIEW:
         {
             const deletedViewIndex = _.findIndex(state.views, view => view.id == action.viewId);
-            return Object.assign({}, state,{
+            return Object.assign({}, state, {
                 views: [
                     ...state.views.slice(0, deletedViewIndex),
                     ...state.views.slice(deletedViewIndex + 1)
@@ -96,7 +96,7 @@ export default function userData(state = {
         case ActionTypes.DELETE_FILTER:
         {
             const deletedFilterIndex = _.findIndex(state.filters, filter => filter.id == action.filterId);
-            return Object.assign({}, state,{
+            return Object.assign({}, state, {
                 filters: [
                     ...state.filters.slice(0, deletedFilterIndex),
                     ...state.filters.slice(deletedFilterIndex + 1)

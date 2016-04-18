@@ -197,8 +197,10 @@ export function viewBuilderDeleteView(viewId) {
                 const result = response.body;
                 dispatch(viewBuilderReceiveDeleteView(result));
                 dispatch(deleteView(result.id));
-                const selectedViewId = (result.id == getState().viewBuilder.selectedView.id)?getState().userData.views[0].id:getState().viewBuilder.selectedView.id;
-                dispatch(changeView(selectedViewId));
+                const state = getState();
+                const selectedViewId = state.viewBuilder.selectedView.id;
+                const newViewId = (result.id == selectedViewId) ? state.userData.views[0].id : selectedViewId;
+                dispatch(changeView(newViewId));
             }
         });
     }

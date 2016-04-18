@@ -1,9 +1,9 @@
 import config from '../../config'
 
 import apiFacade from '../api/ApiFacade';
-import { closeModal } from './modalWindows';
-import { handleError } from './errorHandler';
-import { fetchFilters } from './userData';
+import {closeModal} from './modalWindows';
+import {handleError} from './errorHandler';
+import {fetchFilters} from './userData';
 
 import HttpStatus from 'http-status';
 import {deleteFilter} from "./userData";
@@ -84,18 +84,18 @@ export function filterBuilderCreateFilter() {
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestUpdateFilter());
 
-        const {auth: {sessionId}, filterBuilder: {newFilter}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, filterBuilder: {newFilter}, ui: {languageId}} = getState();
         filtersClient.add(sessionId, languageId, newFilter, (error, response) => {
-           if (error) {
-               dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
-           } else if (response.status !== HttpStatus.OK) {
-               dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
-           } else {
-               const result = response.body;
-               dispatch(filterBuilderReceiveUpdateFilter(result));
-               dispatch(closeModal('filters'));
-               dispatch(fetchFilters(result.id));
-           }
+            if (error) {
+                dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                dispatch(filterBuilderReceiveUpdateFilter(result));
+                dispatch(closeModal('filters'));
+                dispatch(fetchFilters(result.id));
+            }
         });
     }
 }
@@ -184,8 +184,10 @@ export function filterBuilderDeleteFilter(filterId) {
                 const result = response.body;
                 dispatch(filterBuilderReceiveDeleteFilter(result));
                 dispatch(deleteFilter(result.id));
-                const selectedFilterId = (result.id == getState().ui.selectedFilter.id)?getState().userData.filters[0].id:getState().ui.selectedFilter.id;
-                dispatch(changeFilter(selectedFilterId));
+                const state = getState();
+                const selectedFilterId = state.ui.selectedFilter.id;
+                const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
+                dispatch(changeFilter(newFilterId));
             }
         });
     }
