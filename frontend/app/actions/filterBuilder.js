@@ -6,6 +6,8 @@ import { handleError } from './errorHandler';
 import { fetchFilters } from './userData';
 
 import HttpStatus from 'http-status';
+import {deleteFilter} from "./userData";
+import {changeFilter} from "./ui";
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
 
@@ -22,11 +24,17 @@ export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
 export const FBUILDER_REQUEST_RULES = 'FBUILDER_REQUEST_RULES';
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
+export const FBUILDER_REQUEST_DELETE_VIEW = 'FBUILDER_REQUEST_DELETE_VIEW';
+export const FBUILDER_RECEIVE_DELETE_VIEW = 'FBUILDER_RECEIVE_DELETE_VIEW';
+
 const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
 const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Please try again.';
 
 const UPDATE_FILTER_NETWORK_ERROR = 'Cannot update filter (network error). Please try again.';
 const UPDATE_FILTER_SERVER_ERROR = 'Cannot update filter (server error). Please try again.';
+
+const DELETE_FILTER_NETWORK_ERROR = 'Cannot delete filter (network error). Please try again.';
+const DELETE_FILTER_SERVER_ERROR = 'Cannot delete filter (server error). Please try again.';
 
 const filtersClient = apiFacade.filtersClient;
 
@@ -159,6 +167,41 @@ export function filterBuilderRules(rules) {
         rPromise: function (resolve, reject) {
             resolve(777)
         }
+    }
+}
+
+
+export function filterBuilderDeleteFilter(filterId) {
+    return (dispatch, getState) => {
+        dispatch(filterBuilderRequestDeleteFilter(filterId));
+        const {auth: {sessionId}} = getState();
+        filtersClient.remove(sessionId, filterId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, DELETE_FILTER_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                dispatch(filterBuilderReceiveDeleteFilter(result));
+                dispatch(deleteFilter(result.id));
+                const selectedFilterId = (result.id == getState().ui.selectedFilter.id)?getState().userData.filters[0].id:getState().ui.selectedFilter.id;
+                dispatch(changeFilter(selectedFilterId));
+            }
+        });
+    }
+}
+
+function filterBuilderRequestDeleteFilter(filterId) {
+    return {
+        type: FBUILDER_REQUEST_DELETE_VIEW,
+        filterId
+    };
+}
+
+function filterBuilderReceiveDeleteFilter(json) {
+    return {
+        type: FBUILDER_RECEIVE_DELETE_VIEW,
+        view: json
     }
 }
 
