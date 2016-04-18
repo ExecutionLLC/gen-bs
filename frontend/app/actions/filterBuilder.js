@@ -75,8 +75,9 @@ export function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestUpdateFilter());
+        const newFilter = getState().filterBuilder.editingFilter.filter;
 
-        const {auth: {sessionId}, filterBuilder: {newFilter}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, ui: {languageId} } = getState();
         filtersClient.add(sessionId, languageId, newFilter, (error, response) => {
            if (error) {
                dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
@@ -116,7 +117,7 @@ export function filterBuilderUpdateFilter() {
             dispatch(closeModal('filters'));
         } else {
             const sessionId = state.auth.sessionId;
-            const editedFilter = state.filterBuilder.editedFilter;
+            const editedFilter = state.filterBuilder.editingFilter.filter;// state.filterBuilder.editedFilter;
             dispatch(filterBuilderRequestUpdateFilter());
             filtersClient.update(sessionId, editedFilter, (error, response) => {
                 if (error) {
@@ -136,9 +137,9 @@ export function filterBuilderUpdateFilter() {
 
 export function filterBuilderSaveAndSelectRules() {
     return (dispatch, getState) => {
-        const rules = getState().filterBuilder.editOrNew ? getState().filterBuilder.editedFilter.rules : getState().filterBuilder.newFilter.rules;
+        const rules = getState().filterBuilder.editingFilter.filter.rules;//editOrNew ? getState().filterBuilder.editedFilter.rules : getState().filterBuilder.newFilter.rules;
         dispatch(filterBuilderRules(rules));
-        if (getState().filterBuilder.editOrNew) {
+        if (!getState().filterBuilder.editingFilter.isNew) {
             dispatch(filterBuilderUpdateFilter());
         } else {
             dispatch(filterBuilderCreateFilter());

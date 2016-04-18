@@ -3,9 +3,9 @@ import * as ActionTypes from '../actions/filterBuilder'
 export default function filterBuilder(state = {
     isReceivedFilters: false,
     selectedFilter: null,
-    editedFilter: null,
-    newFilter: null,
-    editOrNew: true,
+    editedFilter: null, // unised
+    newFilter: null, // unused
+    editOrNew: true, // unused
     isFetching: false,
     rulesRequested: false,
     editingFilter: {

@@ -739,9 +739,8 @@ export default class FilterBuilder extends Component {
     }
 
     render() {
-        const {editOrNew, editedFilter, newFilter} = this.props.filterBuilder;
-        const filter = editOrNew ? editedFilter : newFilter;
-
+        //const {editOrNew, editedFilter, newFilter} = this.props.filterBuilder;
+        const filter = this.props.filterBuilder.editingFilter.filter;//editOrNew ? editedFilter : newFilter;
         return (
             <div className="builder-wrapper">
                 <FilterQueryBuilder

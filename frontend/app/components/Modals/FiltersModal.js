@@ -12,7 +12,8 @@ class FiltersModal extends Component {
     render() {
 
         const {isValid} = this.props.userData;
-        const {editOrNew} = this.props.filterBuilder;
+        //const {editOrNew} = this.props.filterBuilder;
+        const editingFilterIsNew = this.props.filterBuilder.editingFilter.isNew;
 
         return (
 
@@ -30,7 +31,7 @@ class FiltersModal extends Component {
                     <FilterBuilderHeader />
                     <form>
                         <Modal.Body>
-                            { !editOrNew &&
+                            { editingFilterIsNew &&
                             <div>
                                 <NewFilterInputs  {...this.props} />
                                 <FilterBuilder
@@ -38,7 +39,7 @@ class FiltersModal extends Component {
                                 />
                             </div>
                             }
-                            { editOrNew &&
+                            { !editingFilterIsNew &&
                             <div>
                                 <ExistentFilterSelect {...this.props} />
                                 <FilterBuilder

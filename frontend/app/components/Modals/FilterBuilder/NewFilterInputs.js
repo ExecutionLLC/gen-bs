@@ -10,7 +10,7 @@ export default class NewFilterInputs extends Component {
 
         const { dispatch, showModal, closeModal } = this.props
         const { filters } = this.props.userData
-        const { newFilter } = this.props.filterBuilder
+        const newFilter = this.props.filterBuilder.editingFilter.filter;//const { newFilter } = this.props.filterBuilder
 
         return (
 
