@@ -24,8 +24,8 @@ export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
 export const FBUILDER_REQUEST_RULES = 'FBUILDER_REQUEST_RULES';
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
-export const FBUILDER_REQUEST_DELETE_VIEW = 'FBUILDER_REQUEST_DELETE_VIEW';
-export const FBUILDER_RECEIVE_DELETE_VIEW = 'FBUILDER_RECEIVE_DELETE_VIEW';
+export const FBUILDER_REQUEST_DELETE_FILTER = 'FBUILDER_REQUEST_DELETE_FILTER';
+export const FBUILDER_RECEIVE_DELETE_FILTER = 'FBUILDER_RECEIVE_DELETE_FILTER';
 
 const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
 const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Please try again.';
@@ -195,14 +195,14 @@ export function filterBuilderDeleteFilter(filterId) {
 
 function filterBuilderRequestDeleteFilter(filterId) {
     return {
-        type: FBUILDER_REQUEST_DELETE_VIEW,
+        type: FBUILDER_REQUEST_DELETE_FILTER,
         filterId
     };
 }
 
 function filterBuilderReceiveDeleteFilter(json) {
     return {
-        type: FBUILDER_RECEIVE_DELETE_VIEW,
+        type: FBUILDER_RECEIVE_DELETE_FILTER,
         view: json
     }
 }
