@@ -4,6 +4,8 @@ import {fetchViews} from './userData';
 
 import HttpStatus from 'http-status';
 import {changeView} from "./ui";
+import {handleError} from './errorHandler';
+import {deleteView} from "./userData";
 
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW';
 
@@ -31,6 +33,9 @@ const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please 
 
 const UPDATE_VIEW_NETWORK_ERROR = 'Cannot update view (network error). Please try again.';
 const UPDATE_VIEW_SERVER_ERROR = 'Cannot update view (server error). Please try again.';
+
+const DELETE_VIEW_NETWORK_ERROR = 'Cannot delete view (network error). Please try again.';
+const DELETE_VIEW_SERVER_ERROR = 'Cannot delete view (server error). Please try again.';
 
 const viewsClient = apiFacade.viewsClient;
 
@@ -179,10 +184,32 @@ function viewBuilderReceiveCreateView(json) {
     };
 }
 
+export function viewBuilderDeleteView(viewId) {
+    return (dispatch, getState) => {
+        dispatch(viewBuilderRequestDeleteView(viewId));
+        const {auth: {sessionId}} = getState();
+        viewsClient.remove(sessionId, viewId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, DELETE_VIEW_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, DELETE_VIEW_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                dispatch(viewBuilderReceiveDeleteView(result));
+                dispatch(deleteView(result.id));
+                const state = getState();
+                const selectedViewId = state.viewBuilder.selectedView.id;
+                const newViewId = (result.id == selectedViewId) ? state.userData.views[0].id : selectedViewId;
+                dispatch(changeView(newViewId));
+            }
+        });
+    }
+}
 
-function viewBuilderRequestDeleteView() {
+function viewBuilderRequestDeleteView(viewId) {
     return {
-        type: VBUILDER_REQUEST_DELETE_VIEW
+        type: VBUILDER_REQUEST_DELETE_VIEW,
+        viewId
     };
 }
 
