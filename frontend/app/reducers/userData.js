@@ -83,6 +83,16 @@ export default function userData(state = {
                 views: views
             });
         }
+        case ActionTypes.DELETE_VIEW:
+        {
+            const deletedViewIndex = _.findIndex(state.views, view => view.id == action.viewId);
+            return Object.assign({}, state,{
+                views: [
+                    ...state.views.slice(0, deletedViewIndex),
+                    ...state.views.slice(deletedViewIndex + 1)
+                ]
+            });
+        }
         default:
             return state
     }

@@ -25,6 +25,8 @@ export const CHANGE_HISTORY_DATA = 'CHANGE_HISTORY_DATA';
 export const CHANGE_FILTERS = 'CHANGE_FILTERS';
 export const CHANGE_VIEWS = 'CHANGE_VIEWS';
 
+export const DELETE_VIEW = 'DELETE_VIEW';
+
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
 
@@ -190,5 +192,12 @@ export function changeViews(views) {
     return {
         type: CHANGE_VIEWS,
         views
+    }
+}
+
+export function deleteView(viewId) {
+    return {
+        type: DELETE_VIEW,
+        viewId
     }
 }
