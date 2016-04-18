@@ -3,9 +3,6 @@ import * as ActionTypes from '../actions/filterBuilder'
 export default function filterBuilder(state = {
     isReceivedFilters: false,
     selectedFilter: null,
-    editedFilter: null, // unised
-    newFilter: null, // unused
-    editOrNew: true, // unused
     isFetching: false,
     rulesRequested: false,
     editingFilter: {
@@ -24,9 +21,6 @@ export default function filterBuilder(state = {
             return Object.assign({}, state, {
                 selectedFilter,
                 isReceivedFilters: selectedFilter !== null,
-                editedFilter: selectedFilter,
-                newFilter: null,
-                editOrNew: true,
                 editingFilter: {
                     filter: selectedFilter,
                     isNew: false
@@ -34,32 +28,21 @@ export default function filterBuilder(state = {
             });
 
         case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
-            filterToEdit = action.editOrNew ?
-                state.selectedFilter :
+            filterToEdit = action.makeNew ?
                 Object.assign({}, state.selectedFilter, {
                     type: 'user',
                     name: `Copy of ${state.selectedFilter.name}`
-                });
+                }) :
+                state.selectedFilter;
             return Object.assign({}, state, {
-                editOrNew: action.editOrNew,
-                editedFilter: action.editOrNew ? filterToEdit : null,
-                newFilter: !action.editOrNew ? filterToEdit : null,
                 editingFilter: {
                     filter: filterToEdit,
-                    isNew: !action.editOrNew
+                    isNew: action.makeNew
                 }
             });
 
         case ActionTypes.FBUILDER_CHANGE_ATTR:
             return Object.assign({}, state, {
-                editedFilter: state.editedFilter ? Object.assign({}, state.editedFilter, {
-                    name: action.name,
-                    description: action.description
-                }) : null,
-                newFilter: state.newFilter ? Object.assign({}, state.newFilter, {
-                    name: action.name,
-                    description: action.description
-                }) : null,
                 editingFilter: state.editingFilter ?
                     Object.assign({}, {
                         filter: Object.assign({},
@@ -77,12 +60,6 @@ export default function filterBuilder(state = {
             return Object.assign({}, state, {
                 rulesRequested: false,
                 rulesPrepared: true,
-                editedFilter: state.editedFilter ? Object.assign({}, state.editedFilter, {
-                    rules: action.rules
-                }) : null,
-                newFilter: state.newFilter ? Object.assign({}, state.newFilter, {
-                    rules: action.rules
-                }) : null,
                 editingFilter: state.editingFilter ?
                     Object.assign({}, {
                         filter: Object.assign({},
@@ -117,28 +94,13 @@ export default function filterBuilder(state = {
             });
 
         case ActionTypes.FBUILDER_CHANGE_ALL: return (function() {
-            const { editOrNew, editedFilter, newFilter } = state;
-            const filter = editOrNew ? (editedFilter):(newFilter);
-
-            if (editOrNew) {
-                return Object.assign({}, state, {
-                    editedFilter: Object.assign({}, state.editedFilter, {rules: action.rules}),
-                    editingFilter: Object.assign({}, {
-                        filter: Object.assign({}, state.editingFilter.filter, {
-                            rules: action.rules
-                        })
+            return Object.assign({}, state, {
+                editingFilter: Object.assign({}, {
+                    filter: Object.assign({}, state.editingFilter.filter, {
+                        rules: action.rules
                     })
-                });
-            } else {
-                return Object.assign({}, state, {
-                    newFilter: Object.assign({}, state.newFilter, {rules: action.rules}),
-                    editingFilter: Object.assign({}, {
-                        filter: Object.assign({}, state.editingFilter.filter, {
-                            rules: action.rules
-                        })
-                    })
-                });
-            }
+                })
+            });
         })();
 
         default:

@@ -12,7 +12,6 @@ class FiltersModal extends Component {
     render() {
 
         const {isValid} = this.props.userData;
-        //const {editOrNew} = this.props.filterBuilder;
         const editingFilterIsNew = this.props.filterBuilder.editingFilter.isNew;
 
         return (

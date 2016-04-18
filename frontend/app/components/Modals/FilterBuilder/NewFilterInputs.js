@@ -10,7 +10,7 @@ export default class NewFilterInputs extends Component {
 
         const { dispatch, showModal, closeModal } = this.props
         const { filters } = this.props.userData
-        const newFilter = this.props.filterBuilder.editingFilter.filter;//const { newFilter } = this.props.filterBuilder
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
         return (
 
@@ -24,11 +24,11 @@ export default class NewFilterInputs extends Component {
                             className="form-control text-primary"
                             data-localize="views.setup.new.name.help"
                             placeholder="Set view name a copy"
-                            value={newFilter.name}
-                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: e.target.value, desctription: newFilter.desctription, })) }
+                            value={editingFilter.name}
+                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: e.target.value, desctription: editingFilter.desctription, })) }
                         />
 
-                        { !newFilter.name &&
+                        { !editingFilter.name &&
                         <div className="help-text text-danger" data-localize="views.setup.new.name.error">
                             Filter name cannot be empty
                         </div>
@@ -43,8 +43,8 @@ export default class NewFilterInputs extends Component {
                             className="form-control"
                             data-localize="views.setup.new.description"
                             placeholder="Set view description (optional)"
-                            value={newFilter.description}
-                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: newFilter.name, description: e.target.value})) }
+                            value={editingFilter.description}
+                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: editingFilter.name, description: e.target.value})) }
                         />
                     </div>
 

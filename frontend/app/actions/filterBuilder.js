@@ -35,10 +35,10 @@ const filtersClient = apiFacade.filtersClient;
  * Action Creators
  */
 
-export function filterBuilderToggleNewEdit(editOrNew) {
+export function filterBuilderToggleNewEdit(makeNew) {
     return {
         type: FBUILDER_TOGGLE_NEW_EDIT,
-        editOrNew
+        makeNew
     }
 }
 
@@ -75,10 +75,10 @@ export function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestUpdateFilter());
-        const newFilter = getState().filterBuilder.editingFilter.filter;
+        const editingFilter = getState().filterBuilder.editingFilter.filter;
 
         const {auth: {sessionId}, ui: {languageId} } = getState();
-        filtersClient.add(sessionId, languageId, newFilter, (error, response) => {
+        filtersClient.add(sessionId, languageId, editingFilter, (error, response) => {
            if (error) {
                dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
            } else if (response.status !== HttpStatus.OK) {
@@ -117,9 +117,9 @@ export function filterBuilderUpdateFilter() {
             dispatch(closeModal('filters'));
         } else {
             const sessionId = state.auth.sessionId;
-            const editedFilter = state.filterBuilder.editingFilter.filter;// state.filterBuilder.editedFilter;
+            const editingFilter = state.filterBuilder.editingFilter.filter;
             dispatch(filterBuilderRequestUpdateFilter());
-            filtersClient.update(sessionId, editedFilter, (error, response) => {
+            filtersClient.update(sessionId, editingFilter, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
                 } else if (response.statusCode) {
@@ -137,7 +137,7 @@ export function filterBuilderUpdateFilter() {
 
 export function filterBuilderSaveAndSelectRules() {
     return (dispatch, getState) => {
-        const rules = getState().filterBuilder.editingFilter.filter.rules;//editOrNew ? getState().filterBuilder.editedFilter.rules : getState().filterBuilder.newFilter.rules;
+        const rules = getState().filterBuilder.editingFilter.filter.rules;
         dispatch(filterBuilderRules(rules));
         if (!getState().filterBuilder.editingFilter.isNew) {
             dispatch(filterBuilderUpdateFilter());

@@ -9,8 +9,7 @@ export default class FilterBuilderFooter extends Component {
 
     render() {
         const {dispatch, auth, closeModal} = this.props;
-//        const {editOrNew, editedFilter, newFilter} = this.props.filterBuilder;
-        const filter = this.props.filterBuilder.editingFilter.filter;// editOrNew ? (editedFilter) : (newFilter);
+        const filter = this.props.filterBuilder.editingFilter.filter;
 
         const disabledClass = classNames({
             'disabled': (filter.type === 'advanced' && auth.isDemo) ? 'disabled' : ''
