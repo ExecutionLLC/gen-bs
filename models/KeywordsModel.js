@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Uuid = require('node-uuid');
 const async = require('async');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
@@ -25,12 +26,24 @@ class KeywordsModel extends ModelBase {
 
     add(keyword, callback) {
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                (callback) => this._insertKeywordMetadata(trx, keyword),
-                (keywordId, callback) => this._insertSynonyms(trx, keywordId, keyword.synonyms,
-                    (error) => callback(error, keywordId))
-            ], callback);
+            this._add(trx, keyword, true, callback);
         }, callback);
+    }
+
+    addWithId(keyword, languId, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._add(trx, keyword, false, callback);
+        }, callback);
+    }
+
+    _add(trx, keyword, shouldGenerateId, callback) {
+        async.waterfall([
+            (callback) => this._insertKeywordMetadata(trx, keyword, shouldGenerateId, callback),
+            (keywordId, callback) => this._insertSynonyms(trx, keywordId, keyword.synonyms, true,
+                (error) => callback(error, keywordId))
+        ], (error, keyword) => {
+            callback(error, keyword);
+        });
     }
 
     /**
@@ -143,23 +156,27 @@ class KeywordsModel extends ModelBase {
             });
     }
 
-    _insertKeywordMetadata(trx, keywordMetadata, callback) {
+    _insertKeywordMetadata(trx, keywordMetadata, shouldGenerateId, callback) {
         const dataToInsert = {
+            id: shouldGenerateId ? Uuid.v4() : keywordMetadata.id,
             fieldId: keywordMetadata.fieldId,
             value: keywordMetadata.value
         };
         this._unsafeInsert(TableNames.Keywords, dataToInsert, trx, (error, keywordId) => callback(error, keywordId));
     }
 
-    _insertSynonyms(trx, keywordId, synonyms, callback) {
-        async.map(synonyms, (synonym, callback) => {
+    _insertSynonyms(trx, keywordId, synonyms, shouldGenerateId, callback) {
+        async.mapSeries(synonyms, (synonym, callback) => {
             const dataToInsert = {
+                id: shouldGenerateId ? Uuid.v4() : synonym.id,
                 languId: synonym.languId,
                 keywordId,
                 value: synonym.value
             };
             this._unsafeInsert(TableNames.Synonyms, dataToInsert, trx, callback);
-        }, callback);
+        }, (error, synonyms) => {
+            callback(error, synonyms);
+        });
     }
 }
 

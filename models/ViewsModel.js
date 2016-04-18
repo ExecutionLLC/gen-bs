@@ -10,7 +10,7 @@ const SecureModelBase = require('./SecureModelBase');
 
 const TableNames = {
     Views: 'view',
-    ViewItems: 'view_items',
+    ViewItems: 'view_item',
     ViewTexts: 'view_text',
     ViewItemKeywords: 'view_item_keyword'
 };
@@ -37,7 +37,8 @@ class ViewsModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._findViews(trx, viewIds, userId, false, false, callback),
-                (views, callback) => this._ensureAllItemsFound(views, viewIds, callback)
+                (views, callback) => this._ensureAllItemsFound(views, viewIds, callback),
+                (views, callback) => callback(null, _.first(views))
             ], (error, views) => {
                 callback(error, views);
             });
@@ -218,18 +219,18 @@ class ViewsModel extends SecureModelBase {
     _findViewsMetadata(trx, viewIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
         let query = trx.select()
             .from(TableNames.Views)
-            .where('1 = 1');
+            .whereRaw('1 = 1');
         if (includeLastVersionsOnly) {
-            const selectLastViewIds = "SELECT" +
-                "  T.id" +
-                "FROM (" +
-                "  SELECT ROW_NUMBER() OVER (" +
-                "    PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC" +
-                "  ) AS RN," +
-                "  id" +
-                "  FROM view" +
-                ") AS T" +
-                "WHERE T.RN = 1";
+            const selectLastViewIds = 'SELECT' +
+                '  T.id' +
+                ' FROM (' +
+                '  SELECT ROW_NUMBER() OVER (' +
+                '    PARTITION BY CASE WHEN original_view_id isnull THEN id ELSE original_view_id END ORDER BY timestamp DESC' +
+                '  ) AS RN,' +
+                '  id' +
+                '  FROM view' +
+                ' ) AS T' +
+                ' WHERE T.RN = 1';
             query = query.andWhereRaw('view.id IN (' + selectLastViewIds + ')');
         }
 
@@ -338,7 +339,7 @@ class ViewsModel extends SecureModelBase {
 
                 callback(null, viewItemsWithKeywords);
             }
-        ]);
+        ], callback);
     }
 }
 

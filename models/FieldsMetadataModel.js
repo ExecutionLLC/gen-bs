@@ -27,12 +27,15 @@ class FieldsMetadataModel extends ModelBase {
         super(models, 'field_metadata', mappedColumns);
     }
 
-    find(metadataId, callback) {
+    find(fieldId, callback) {
+        const fieldIds = [fieldId];
         async.waterfall([
-            (callback) => this._fetch(metadataId, callback),
-            (fieldMetadata, callback) => this._mapFieldMetadata(fieldMetadata, callback),
-            (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
-        ], callback);
+            (callback) => this.findMany(fieldIds, callback),
+            (fields, callback) => this._ensureAllItemsFound(fields, fieldIds, callback),
+            (fields, callback) => callback(null, _.first(fields))
+        ], (error, fields) => {
+            callback(error, fields);
+        });
     }
 
     findMany(metadataIds, callback) {
@@ -40,7 +43,9 @@ class FieldsMetadataModel extends ModelBase {
             (callback) => this._fetchByIds(metadataIds, callback),
             (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback),
             (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
-        ], callback);
+        ], (error, fields) => {
+            callback(error, fields);
+        });
     }
 
     /**

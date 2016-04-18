@@ -17,7 +17,7 @@ class ChangeCaseUtil {
           return obj;
       }
 
-      if (_.isObject(obj)) {
+      if (_.isObject(obj) && !_.isFunction(obj)) {
           const clone = _.cloneDeep(obj);
           _.keys(clone)
             .forEach(key => {
