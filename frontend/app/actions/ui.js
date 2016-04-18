@@ -1,7 +1,7 @@
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
-import { viewBuilderSelectView } from './viewBuilder';
-import { filterBuilderSelectFilter} from './filterBuilder';
+import {viewBuilderSelectView} from './viewBuilder';
+import {filterBuilderSelectFilter} from './filterBuilder';
 import {detachHistory} from "./queryHistory";
 import {setViewVariantsSort} from "./variantsTable";
 
@@ -66,9 +66,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         };
         const {
             userData: {
-                attachedHistoryData: historyData
-            },
-            ui: {
+                attachedHistoryData: historyData,
                 views
             },
             fields: {

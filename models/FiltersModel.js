@@ -36,9 +36,6 @@ class FiltersModel extends SecureModelBase {
             (callback) => { this._fetchFilters(filterIds, callback); },
             (filters, callback) => this._ensureAllItemsFound(filters, filterIds, callback),
             (filters, callback) => async.map(filters, (filter, callback) => {
-                this._ensureItemNotDeleted(filter, callback);
-            }, callback),
-            (filters, callback) => async.map(filters, (filter, callback) => {
                 this._checkUserIsCorrect(userId, filter, callback);
             }, callback),
             (filters, callback) => this._mapItems(filters, callback)
