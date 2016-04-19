@@ -33,7 +33,6 @@ export default function filterBuilder(state = {
                     name: `Copy of ${state.selectedFilter.name}`
                 }) :
                 state.selectedFilter;
-            console.log('FBUILDER_TOGGLE_NEW_EDIT', action.fields, filterToEdit);
             const fields = FieldUtils.makeFieldsList(action.fields);
             const fieldDefaultId = FieldUtils.getDefaultId(fields);
             const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
@@ -104,21 +103,6 @@ export default function filterBuilder(state = {
                     })
                 });
             }
-            //const parsedRules = null;//
-            // return Object.assign({}, state, {
-            //     editingFilter: {
-            //         filter: filterToEdit,
-            //         isNew: action.makeNew,
-            //         parsedFilter: parsedRules
-            //     }
-            // });
-            // return Object.assign({}, state, {
-            //     editingFilter: Object.assign({}, state.editingFilter, {
-            //         filter: Object.assign({}, state.editingFilter.filter, {
-            //             rules: action.rules
-            //         })
-            //     })
-            // });
 
         case ActionTypes.FBUILDER_CHANGE_ATTR:
             return Object.assign({}, state, {
