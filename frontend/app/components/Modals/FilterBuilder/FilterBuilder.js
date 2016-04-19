@@ -163,7 +163,7 @@ class FilterQueryBuilder extends Component {
          */
         function makeFilterItem(index, item, disabled) {
 
-            const fieldJSType = fieldUtils.getFieldJSType(fieldUtils.getFieldById(item.field));
+            const fieldJSType = fieldUtils.getFieldJSType(fieldUtils.getFieldById(fields, item.field));
             const allowedOpsTypes = getValidOperatorsTypesForJSType(fieldJSType);
             const allowedFieldsIds = getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
             const allowedFields =  fields.filter( (f) => allowedFieldsIds[f.id] );
