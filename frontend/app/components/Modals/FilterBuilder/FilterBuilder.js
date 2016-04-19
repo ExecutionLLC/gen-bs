@@ -27,6 +27,69 @@ FieldFilterItem(
 
 
 class FilterQueryBuilder extends Component {
+
+    /**
+     * Get operators types (operator.type) for given value type
+     * @param {string} type
+     * @returns {string[]}
+     */
+    static getValidOperatorsTypesForJSType(type) {
+        var ops = [];
+        filterUtils.operators.map( (op) => { if (genomicsParsedRulesValidate.isAllowedOperatorType(op, type)) ops.push(op.type); } );
+        return ops;
+    }
+
+    /**
+     * Get fields ids for given operation
+     * @param {{id: string, label: string, type: string}[]} fields
+     * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operator
+     * @returns {Object.<string, boolean>}
+     */
+    static getValidFieldsIdsForOperator(fields, operator) {
+        var validFieldsIds = {};
+        fields.map( (field) => {
+            const fieldJSType = FieldUtils.getFieldJSType(field);
+            if (genomicsParsedRulesValidate.isAllowedOperatorType(operator, fieldJSType)) {
+                validFieldsIds[field.id] = true;
+            }
+        });
+        return validFieldsIds;
+    }
+
+    /**
+     * Make filter rule item component
+     * @param {{id: string, label: string, type: string}[]} fields
+     * @param {function(Object)} dispatch
+     * @param {number[]} index
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {boolean} disabled
+     * @returns {Component}
+     */
+    static makeFilterItem(fields, dispatch, index, item, disabled) {
+        const fieldJSType = FieldUtils.getFieldJSType(FieldUtils.getFieldById(fields, item.field));
+        const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
+        const allowedFieldsIds = this.getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
+        const allowedFields =  fields.filter( (f) => allowedFieldsIds[f.id] );
+        return (
+            <FieldFilterItem
+                index={index}
+                item={item}
+                fields={allowedFields}
+                allowedOpsTypes={allowedOpsTypes}
+                valueType={fieldJSType}
+                disabled={disabled}
+                onChange={ (item) => {
+                            if (index.length < 1) {
+                                return;
+                            }
+                            const ruleIndex = index[index.length - 1];
+                            dispatch(filterBuilderChangeFilter(index.slice(0, index.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
+                        }}
+            />
+        );
+    }
+
+
     render() {
 
         const {
@@ -39,34 +102,6 @@ class FilterQueryBuilder extends Component {
             /** @type function(Object) */
             dispatch
         } = this.props;
-
-        /**
-         * Get operators types (operator.type) for given value type
-         * @param {string} type
-         * @returns {string[]}
-         */
-        function getValidOperatorsTypesForJSType(type) {
-            var ops = [];
-            filterUtils.operators.map( (op) => { if (genomicsParsedRulesValidate.isAllowedOperatorType(op, type)) ops.push(op.type); } );
-            return ops;
-        }
-
-        /**
-         * Get fields ids for given operation
-         * @param {{id: string, label: string, type: string}[]} fields
-         * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operator
-         * @returns {Object.<string, boolean>}
-         */
-        function getValidFieldsIdsForOperator(fields, operator) {
-            var validFieldsIds = {};
-            fields.map( (field) => {
-                const fieldJSType = FieldUtils.getFieldJSType(field);
-                if (genomicsParsedRulesValidate.isAllowedOperatorType(operator, fieldJSType)) {
-                    validFieldsIds[field.id] = true;
-                }
-            });
-            return validFieldsIds;
-        }
 
         const handlers = {
             onSwitch(/** number[] */index, /** boolean */isAnd) {
@@ -87,43 +122,11 @@ class FilterQueryBuilder extends Component {
             }
         };
 
-        /**
-         * Make filter rule item component
-         * @param {number[]} index
-         * @param {{field: string, operator: string, value: *}} item
-         * @param {boolean} disabled
-         * @returns {Component}
-         */
-        function makeFilterItem(index, item, disabled) {
-
-            const fieldJSType = FieldUtils.getFieldJSType(FieldUtils.getFieldById(fields, item.field));
-            const allowedOpsTypes = getValidOperatorsTypesForJSType(fieldJSType);
-            const allowedFieldsIds = getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
-            const allowedFields =  fields.filter( (f) => allowedFieldsIds[f.id] );
-            return (
-                <FieldFilterItem
-                    index={index}
-                    item={item}
-                    fields={allowedFields}
-                    allowedOpsTypes={allowedOpsTypes}
-                    valueType={fieldJSType}
-                    disabled={disabled}
-                    onChange={ (item) => {
-                        if (index.length < 1) {
-                            return;
-                        }
-                        const ruleIndex = index[index.length - 1];
-                        dispatch(filterBuilderChangeFilter(index.slice(0, index.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
-                    }}
-                />
-            );
-        }
-
         return (
             <QueryBuilder
                 rules={rules}
                 disabled={disabled}
-                makeItemComponent={makeFilterItem}
+                makeItemComponent={FilterQueryBuilder.makeFilterItem.bind(FilterQueryBuilder, fields, dispatch)}
                 handlers={handlers}
             />
         );
