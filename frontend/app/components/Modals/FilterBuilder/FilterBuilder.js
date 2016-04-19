@@ -11,10 +11,12 @@ export default class FilterBuilder extends Component {
     const { editOrNew, editedFilter, newFilter } = this.props.filterBuilder;
     const filter = editOrNew ? (editedFilter):(newFilter);
     var el = this.refs.builder;
+      const notEditableSampleFields = _.filter(fields.totalFieldsList, (field) => field.sourceName == 'sample' && !field.isEditable);
+
 
     const builderFilters = [
 
-        ...fields.notEditableFields.map( (f) => { return {id: f.id, label: `${f.name} -- ${f.sourceName}`, type: f.valueType === 'float' ? 'double' : f.valueType} } ),
+        ...notEditableSampleFields.map( (f) => { return {id: f.id, label: `${f.name} -- ${f.sourceName}`, type: f.valueType === 'float' ? 'double' : f.valueType} } ),
         ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map( (f) => { return {id: f.id, label: `${f.name} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType }} )
 
       ];
