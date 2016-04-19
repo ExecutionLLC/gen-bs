@@ -28,14 +28,17 @@ FieldFilterItem(
 
 class FilterQueryBuilder extends Component {
     render() {
-        /** @type {{id: string, label: string, type: string}[]} */
-        const fields = this.props.fields;
-        /** @type {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} */
-        const rules = this.props.rules;
-        /** @type {boolean} */
-        const disabled = this.props.disabled;
-        /** @type function(Object) */
-        const dispatch = this.props.dispatch;
+
+        const {
+            /** @type {{id: string, label: string, type: string}[]} */
+            fields,
+            /** @type {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} */
+            rules,
+            /** @type {boolean} */
+            disabled,
+            /** @type function(Object) */
+            dispatch
+        } = this.props;
 
         /**
          * Get operators types (operator.type) for given value type
@@ -238,20 +241,22 @@ class FieldFilterItem extends Component {
     }
 
     render() {
-        /** {number[]} */
-        const index = this.props.index;
-        /** @type {{field: string, operator: string, value: *}} */
-        const item = this.props.item;
-        /** @type {{id: string, label: string, type: string}[]} */
-        const fields = this.props.fields;
-        /** @type {string[]} */
-        const allowedOpsTypes = this.props.allowedOpsTypes;
-        /** @type {string} */
-        const valueType = this.props.valueType;
-        /** @type {boolean} */
-        const disabled = this.props.disabled;
-        /** @type {function({field: string, operator: string, value: *})} */
-        const onChange = this.props.onChange;
+        const {
+            /** {number[]} */
+            index,
+            /** @type {{field: string, operator: string, value: *}} */
+            item,
+            /** @type {{id: string, label: string, type: string}[]} */
+            fields,
+            /** @type {string[]} */
+            allowedOpsTypes,
+            /** @type {string} */
+            valueType,
+            /** @type {boolean} */
+            disabled,
+            /** @type {function({field: string, operator: string, value: *})} */
+            onChange
+        } = this.props;
 
         /** @type {{value: string, label: string}[]} */
         const selectFieldList = fields.map( (field) => { return {value: field.id, label: field.label} } );
@@ -356,14 +361,20 @@ export default class FilterBuilder extends Component {
     }
 
     render() {
-        const filter = this.props.filterBuilder.editingFilter.filter;
+        const {
+            filterBuilder,
+            fields,
+            dispatch
+        } = this.props;
+        const filter = filterBuilder.editingFilter.filter;
+        const parsedFilter = filterBuilder.editingFilter.parsedFilter;
         return (
             <div className="builder-wrapper">
                 <FilterQueryBuilder
-                    fields={FieldUtils.makeFieldsList(this.props.fields)}
-                    rules={this.props.filterBuilder.editingFilter.parsedFilter}
+                    fields={FieldUtils.makeFieldsList(fields)}
+                    rules={parsedFilter}
                     disabled={filter.type === 'standard' || filter.type === 'advanced'}
-                    dispatch={this.props.dispatch}
+                    dispatch={dispatch}
                 />
             </div>
         );
