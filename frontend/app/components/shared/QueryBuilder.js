@@ -150,7 +150,7 @@ class RulesGroupHeader extends Component {
 
     /**
      * @param {string} caption
-     * @param {string} value
+     * @param {boolean} value
      * @param {string} groupName
      * @param {boolean} isOn
      * @param {boolean} disabled
@@ -219,7 +219,7 @@ class RulesGroupBody extends Component {
         const {
             /** @type {{condition: *=, field: string=, operator: string=, value: *=}} */
             item,
-            /** @type {number} */
+            /** @type {number[]} */
             index,
             /** @type {boolean} */
             disabled,
