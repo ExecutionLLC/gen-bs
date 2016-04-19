@@ -189,7 +189,7 @@ class RulesGroupHeader extends Component {
             onDelete
         } = this.props;
 
-        var groupName = 'builder-basic-react_group_' + index.join('-') + '_cond';
+        const groupName = 'builder-basic-react_group_' + index.join('-') + '_cond';
 
         return (
             <dt className="rules-group-header">
