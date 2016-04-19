@@ -14,7 +14,7 @@ function makeFilterEditing(isNew, filterToEdit, fields) {
     const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
     const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
     // Report validation results if any
-    if (validateRulesResult.report.length) {
+    if (!_.isEmpty(validateRulesResult.report)) {
         console.error('Filter rules are invalid:');
         console.error(JSON.stringify(parsedRawRules, null, 4));
         console.error('Filter validation report:');
