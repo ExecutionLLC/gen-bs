@@ -16,11 +16,8 @@ class AppServerFilterUtils {
                 .map((operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata))
                 .filter(operand => operand)
                 .value();
-            if (!mappedOperands) {
+            if (_.isEmpty(mappedOperands)) {
                 return null;
-            }
-            if (!mappedOperands.length){
-                return null
             }
             const result = {};
             result[operator] = mappedOperands;
