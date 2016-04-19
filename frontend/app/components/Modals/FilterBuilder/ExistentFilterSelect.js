@@ -11,7 +11,7 @@ export default class ExistentFilterSelect extends Component {
 
     render() {
 
-        const { dispatch, auth } = this.props;
+        const { dispatch, auth, fields } = this.props;
         const {selectedFilter} = this.props.filterBuilder;
         const { filters } = this.props.userData;
         const disabledClass = classNames({
@@ -41,7 +41,10 @@ export default class ExistentFilterSelect extends Component {
                             options={filters.map( filter => { return {value: filter.id, label: filter.name} } )}
                             value={selectedFilter.id}
                             clearable={false}
-                            onChange={ (val) => dispatch(filterBuilderSelectFilter(filters, val.value))}
+                            onChange={ (val) => {
+                                dispatch(filterBuilderSelectFilter(filters, val.value));
+                                dispatch(filterBuilderToggleNewEdit(false, fields));
+                            }}
                         />
                     </div>
                     <div className="col-sm-6">
@@ -50,7 +53,7 @@ export default class ExistentFilterSelect extends Component {
                             <button type="button"
                                     className="btn btn-default in copyview"
                                     id="dblBtn"
-                                    onClick={ () => dispatch(filterBuilderToggleNewEdit(true))}
+                                    onClick={ () => dispatch(filterBuilderToggleNewEdit(true, fields)) }
                                     disabled={disabledClass}
                                     title={title}
                             >
@@ -63,7 +66,10 @@ export default class ExistentFilterSelect extends Component {
                         { isFilterEditable &&
                         <div className="btn-group ">
                             <button type="button" className="btn btn-default"
-                                    onClick={() => dispatch(filterBuilderSelectFilter(filters, selectedFilter.id))}
+                                    onClick={() => {
+                                        dispatch(filterBuilderSelectFilter(filters, selectedFilter.id));
+                                        dispatch(filterBuilderToggleNewEdit(false, fields));
+                                    }}
                             >
                                 <span data-localize="views.setup.reset.title">Reset Filter</span>
                             </button>

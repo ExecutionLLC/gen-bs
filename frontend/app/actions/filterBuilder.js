@@ -35,10 +35,11 @@ const filtersClient = apiFacade.filtersClient;
  * Action Creators
  */
 
-export function filterBuilderToggleNewEdit(makeNew) {
+export function filterBuilderToggleNewEdit(makeNew, fields) {
     return {
         type: FBUILDER_TOGGLE_NEW_EDIT,
-        makeNew
+        makeNew,
+        fields
     }
 }
 

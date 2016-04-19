@@ -7,8 +7,7 @@ import { filterBuilderChangeAttr, filterBuilderToggleNewEdit } from '../../../ac
 export default class NewFilterInputs extends Component {
 
     render() {
-
-        const { dispatch, showModal, closeModal } = this.props
+        const { dispatch, showModal, closeModal, fields } = this.props
         const { filters } = this.props.userData
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
@@ -50,7 +49,7 @@ export default class NewFilterInputs extends Component {
 
                     <div className="col-sm-1">
                         <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                onClick={ () => dispatch(filterBuilderToggleNewEdit(false)) }><span
+                                onClick={ () => dispatch(filterBuilderToggleNewEdit(false, fields)) }><span
                             data-localize="actions.cancel">Cancel</span></button>
                     </div>
 

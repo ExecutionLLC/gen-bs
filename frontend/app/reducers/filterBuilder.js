@@ -1,4 +1,6 @@
 import * as ActionTypes from '../actions/filterBuilder'
+import {filterUtils, genomicsParsedRulesValidate, fieldUtils} from '../utils/filterUtils';
+import FieldUtils from "../utils/fieldUtils";
 
 export default function filterBuilder(state = {
     isReceivedFilters: false,
@@ -20,11 +22,7 @@ export default function filterBuilder(state = {
             selectedFilter = _.find(action.filters, {id: action.filterId}) || null;
             return Object.assign({}, state, {
                 selectedFilter,
-                isReceivedFilters: selectedFilter !== null,
-                editingFilter: {
-                    filter: selectedFilter,
-                    isNew: false
-                }
+                isReceivedFilters: selectedFilter !== null
             });
 
         case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
