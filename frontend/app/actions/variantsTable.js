@@ -130,14 +130,14 @@ export function setViewVariantsSort(view) {
     const sortFields = _.filter(
         view.viewListItems, viewListItem =>viewListItem.sortDirection != null && viewListItem.sortOrder != null
     );
-    const sortOrder = _.map(sortFields, sortField => {
+    const sortOrder = _.sortByOrder(_.map(sortFields, sortField => {
         return {
             direction: sortField.sortDirection,
             fieldId: sortField.fieldId,
             order: sortField.sortOrder
         }
 
-    });
+    }), ['order'], true);
     return {
         type: SET_VIEW_VARIANTS_SORT,
         sortOrder
