@@ -88,6 +88,9 @@ export default class FilterBuilder extends React.Component {
 
         if (rulesRequested) {
             rules = window.$(el).queryBuilder('getGenomics');
+            // rules have no keys in case there are validation errors. Do nothing in this case.
+            if (!Object.keys(rules).length)
+                return;
             console.log('rules', JSON.stringify(rules));
             dispatch(filterBuilderReceiveRules(rules))
         } else {
