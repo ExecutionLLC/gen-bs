@@ -6,7 +6,7 @@ import InputArray from '../../shared/InputArray';
 import QueryBuilder from '../../shared/QueryBuilder';
 import FieldUtils from '../../../utils/fieldUtils'
 
-import { filterBuilderChangeAll } from '../../../actions/filterBuilder';
+import { filterBuilderChangeAll, filterBuilderChangeFilter } from '../../../actions/filterBuilder';
 
 import {filterUtils, fieldUtils, opsUtils, genomicsParsedRulesValidate} from '../../../utils/filterUtils';
 
@@ -65,101 +65,22 @@ class FilterQueryBuilder extends Component {
             return validFieldsIds;
         }
 
-        /** @type {string} */
-        const fieldDefaultId = fieldUtils.getDefaultId(fields);
-/*
-        const parsedRawRules = filterUtils.getRulesFromGenomics(rules);
-        const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
-
-        // Make default rules if not parsed
-        var parsedRules = validateRulesResult.validRules ||
-            {condition : 'AND', rules: [{field: fieldDefaultId, operator: 'is_null'}]};
-
-        // Report validation results if any
-        if (validateRulesResult.report.length) {
-            console.error('Filter rules are invalid:');
-            console.error(JSON.stringify(parsedRawRules, null, 4));
-            console.error('Filter validation report:');
-            console.error(JSON.stringify(validateRulesResult.report, null, 4));
-        }
-*/
-        const parsedRules = rules;
-
-        /**
-         * Return subrules for given index, [] - root and so on
-         * @param {{condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}} rules
-         * @param {number[]} index
-         * @returns {{condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}}
-         */
-        function findSubrules(rules, index) {
-            var searchIndex = index.slice();
-            var subrules = rules;
-            var indexNow;
-            while (searchIndex.length) {
-                subrules = subrules.rules;
-                indexNow = searchIndex.shift();
-                subrules = subrules[indexNow];
-            }
-            return subrules;
-        }
-
-        /**
-         * Return subrules and index in it for given index, [] - return root and null, [1, 2] - return 1st group and 2 as index
-         * @param {{condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}} rules
-         * @param {number[]} index
-         * @returns {{subrules: {condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}, indexIn: number|null}}
-         */
-        function findSubrulesWIndex(rules, index) {
-            var searchIndex = index.slice();
-            var subrules = rules;
-            var indexIn = null;
-            while (searchIndex.length) {
-                subrules = subrules.rules;
-                indexIn = searchIndex.shift();
-                if (searchIndex.length) {
-                    subrules = subrules[indexIn];
-                }
-            }
-            return {subrules: subrules, indexIn: indexIn};
-        }
-
         const handlers = {
             onSwitch(/** number[] */index, /** boolean */isAnd) {
-                // console.log(JSON.stringify(filterUtils.genomicsParsedRulesModification.switchCondition(parsedRules, index, isAnd), null, 4));
-                const subrules = findSubrules(parsedRules, index);
-                subrules.condition = isAnd ? 'AND' : 'OR';
-
-                dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
+                dispatch(filterBuilderChangeFilter(index, {onSwitch: isAnd}));
             },
             onAdd(/** number[] */index, /** boolean */isGroup) {
-                // console.log(JSON.stringify(filterUtils.genomicsParsedRulesModification.appendRuleOrGroup(parsedRules, index, isGroup ? filterUtils.genomicsParsedRulesModification.makeDefaultGroup(fieldDefaultId) : filterUtils.genomicsParsedRulesModification.makeDefaultRule(fieldDefaultId)), null, 4));
-                const subrules = findSubrules(parsedRules, index);
-                if (isGroup) {
-                    subrules.rules.push({condition: 'AND', rules: [{id: fieldDefaultId, field: fieldDefaultId, operator: 'is_null', value: null}]});
-                } else {
-                    subrules.rules.push({id: fieldDefaultId, field: fieldDefaultId, operator: 'is_null', value: null});
-                }
-                dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
+                dispatch(filterBuilderChangeFilter(index, {onAdd: isGroup}));
             },
             onDeleteGroup(/** number[] */index) {
-                if (index.length <= 1) {
+                if (index.length < 1) {
                     return;
                 }
                 const groupIndex = index[index.length - 1];
-                // console.log(JSON.stringify(filterUtils.genomicsParsedRulesModification.removeRuleOrGroup(parsedRules, index.slice(0, index.length - 1), groupIndex), null, 4));
-                const {subrules, indexIn} = findSubrulesWIndex(parsedRules, index);
-                if (indexIn != null && subrules.length > 1) {
-                    subrules.splice(indexIn, 1);
-                    dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
-                }
+                dispatch(filterBuilderChangeFilter(index.slice(0, index.length - 1), {onDelete: groupIndex}));
             },
             onDeleteItem(/** number[] */index, /** number */itemIndex) {
-                // console.log(JSON.stringify(filterUtils.genomicsParsedRulesModification.removeRuleOrGroup(parsedRules, index, itemIndex), null, 4));
-                const subrules = findSubrules(parsedRules, index);
-                if (subrules.rules.length > 1) {
-                    subrules.rules.splice(itemIndex, 1);
-                    dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
-                }
+                dispatch(filterBuilderChangeFilter(index, {onDelete: itemIndex}));
             }
         };
 
@@ -185,19 +106,11 @@ class FilterQueryBuilder extends Component {
                     valueType={fieldJSType}
                     disabled={disabled}
                     onChange={ (item) => {
-                        const itemOpType = item.operator;
-                        const itemOp = filterUtils.getOperatorByType(itemOpType);
-                        const opWant = opsUtils.getOperatorWantedParams(itemOp);
-                        const value = item.value;
-                        const castedValue = opWant.noParams ?
-                            null :
-                            opWant.single ?
-                                (typeof value === 'object' && value && value.length) ? genomicsParsedRulesValidate.jsTypeCastValue(value.join(), fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
-                                genomicsParsedRulesValidate.jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
-                        item.value = castedValue;
-                        const {subrules, indexIn} = findSubrulesWIndex(parsedRules, index);
-                        subrules[indexIn] = item;
-                        dispatch(filterBuilderChangeAll(filterUtils.getGenomics(parsedRules)));
+                        if (index.length < 1) {
+                            return;
+                        }
+                        const ruleIndex = index[index.length - 1];
+                        dispatch(filterBuilderChangeFilter(index.slice(0, index.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
                     }}
                 />
             );
@@ -205,7 +118,7 @@ class FilterQueryBuilder extends Component {
 
         return (
             <QueryBuilder
-                rules={parsedRules}
+                rules={rules}
                 disabled={disabled}
                 makeItemComponent={makeFilterItem}
                 handlers={handlers}

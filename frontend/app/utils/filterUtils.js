@@ -40,7 +40,7 @@ const immutableArray = {
 };
 
 
-const filterUtils = {
+export const filterUtils = {
     settings: {
         default_condition: 'AND',
 
@@ -324,7 +324,7 @@ const filterUtils = {
         },
         /**
          * @param {genomicsParsedData|genomicsParsedDataGroup} data
-         * @param {number} index
+         * @param {number[]} index
          * @param {boolean} isGroup
          * @param {string} defaultFieldId
          */
@@ -333,6 +333,26 @@ const filterUtils = {
                 this.makeDefaultGroup(defaultFieldId) :
                 this.makeDefaultRule(defaultFieldId);
             return this.appendRuleOrGroup(data, index, itemToAppend);
+        },
+        /**
+         * @param {genomicsParsedData|genomicsParsedDataGroup} data
+         * @param {number[]} index
+         * @param {number} itemIndex
+         * @param {genomicsParsedDataRule} rule
+         */
+        setRule(data, index, itemIndex, rule) {
+            if (!index.length) {
+                return this.group.replaceRule(data, itemIndex, rule);
+            }
+            /** @type {number} */
+            const indexInGroup = index[0];
+            /** @type {Array.<number>} */
+            const indexNext = index.slice(1, index.length);
+            /** @type {genomicsParsedDataGroup} */
+            const changingGroup = data.rules[indexInGroup];
+            /** @type {genomicsParsedDataGroup} */
+            const newGroup = this.setRule(changingGroup, indexNext, itemIndex, rule);
+            return this.group.replaceRule(data, indexInGroup, newGroup);
         }
     },
 

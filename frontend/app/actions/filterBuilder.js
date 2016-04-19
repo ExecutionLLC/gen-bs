@@ -10,6 +10,7 @@ import HttpStatus from 'http-status';
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
 
 export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR';
+export const FBUILDER_CHANGE_FILTER = 'FBUILDER_CHANGE_FILTER';
 
 export const FBUILDER_TOGGLE_NEW_EDIT = 'FBUILDER_TOGGLE_NEW_EDIT';
 
@@ -166,3 +167,10 @@ export function filterBuilderChangeAll(data) {
     };
 }
 
+export function filterBuilderChangeFilter(index, change) {
+    return {
+        type: FBUILDER_CHANGE_FILTER,
+        index,
+        change
+    };
+}

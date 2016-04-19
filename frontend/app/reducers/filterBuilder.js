@@ -1,5 +1,5 @@
 import * as ActionTypes from '../actions/filterBuilder'
-import {filterUtils, genomicsParsedRulesValidate, fieldUtils} from '../utils/filterUtils';
+import {filterUtils, genomicsParsedRulesValidate, fieldUtils, opsUtils} from '../utils/filterUtils';
 import FieldUtils from "../utils/fieldUtils";
 
 export default function filterBuilder(state = {
@@ -9,8 +9,9 @@ export default function filterBuilder(state = {
     rulesRequested: false,
     editingFilter: {
         filter: null,
-        rulesParsed: null,
-        isNew: false
+        parsedFilter: null,
+        isNew: false,
+        fieldDefaultId: ''
     }
 }, action) {
 
@@ -50,9 +51,75 @@ export default function filterBuilder(state = {
                 editingFilter: {
                     filter: filterToEdit,
                     isNew: action.makeNew,
-                    parsedFilter: parsedRules
+                    parsedFilter: parsedRules,
+                    fieldDefaultId: fieldDefaultId
                 }
             });
+        
+        case ActionTypes.FBUILDER_CHANGE_FILTER:
+            console.log(action);
+            debugger;
+            const doFs = {
+                onSwitch(isAnd) {
+                    return filterUtils.genomicsParsedRulesModification.switchCondition(state.editingFilter.parsedFilter, action.index, isAnd)
+                },
+                onEdit(itemTyped) {
+                    const ruleIndex = itemTyped.ruleIndex;
+                    const item = itemTyped.item;
+                    const fieldJSType = itemTyped.fieldJSType;
+                    const itemOpType = item.operator;
+                    const itemOp = filterUtils.getOperatorByType(itemOpType);
+                    const opWant = opsUtils.getOperatorWantedParams(itemOp);
+                    const value = item.value;
+                    const castedValue = opWant.noParams ?
+                        null :
+                        opWant.single ?
+                            (typeof value === 'object' && value && value.length) ? genomicsParsedRulesValidate.jsTypeCastValue(value.join(), fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
+                            genomicsParsedRulesValidate.jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
+                    return filterUtils.genomicsParsedRulesModification.setRule(state.editingFilter.parsedFilter, action.index, ruleIndex, {field: item.field, operator: item.operator, value: castedValue});
+                },
+                onDelete(itemIndex) {
+                    return filterUtils.genomicsParsedRulesModification.removeRuleOrGroup(state.editingFilter.parsedFilter, action.index, itemIndex);
+                },
+                onAdd(isGroup) {
+                    return filterUtils.genomicsParsedRulesModification.appendDefault(state.editingFilter.parsedFilter, action.index, isGroup, state.editingFilter.fieldDefaultId)
+                }
+            };
+            var newParsedRules;
+            for (var fname in action.change) {
+                if (!action.change.hasOwnProperty(fname)) {
+                    continue;
+                }
+                var doF = doFs[fname];
+                if (doF) {
+                    newParsedRules = doF(action.change[fname]);
+                    break;
+                }
+            }
+            if (!newParsedRules) {
+                return Object.assign({}, state, {});
+            } else {
+                return Object.assign({}, state, {
+                    editingFilter: Object.assign({}, state.editingFilter, {
+                        parsedFilter: newParsedRules
+                    })
+                });
+            }
+            //const parsedRules = null;//
+            // return Object.assign({}, state, {
+            //     editingFilter: {
+            //         filter: filterToEdit,
+            //         isNew: action.makeNew,
+            //         parsedFilter: parsedRules
+            //     }
+            // });
+            // return Object.assign({}, state, {
+            //     editingFilter: Object.assign({}, state.editingFilter, {
+            //         filter: Object.assign({}, state.editingFilter.filter, {
+            //             rules: action.rules
+            //         })
+            //     })
+            // });
 
         case ActionTypes.FBUILDER_CHANGE_ATTR:
             return Object.assign({}, state, {
