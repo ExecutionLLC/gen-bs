@@ -375,7 +375,7 @@ export default class FilterBuilder extends Component {
         return (
             <div className="builder-wrapper">
                 <FilterQueryBuilder
-                    fields={FieldUtils.makeFieldsList(fields)}
+                    fields={FieldUtils.makeFieldsListForFiltersSelect(fields)}
                     rules={parsedFilter}
                     disabled={filter.type === 'standard' || filter.type === 'advanced'}
                     dispatch={dispatch}

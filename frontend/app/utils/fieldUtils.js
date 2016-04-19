@@ -8,7 +8,7 @@ export default class FieldUtils {
      * @param {string=} sourceName
      * @returns {{id: string, label: string, type: string}}
      */
-    static getFieldValue(f, sourceName) {
+    static makeFieldSelectItemValue(f, sourceName) {
         return {
             id: f.id,
             label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)}`,
@@ -20,7 +20,7 @@ export default class FieldUtils {
      * @param {{notEditableFields: Object[], sourceFieldsList: Object[]}} fields
      * @returns {{id: string, label: string, type: string}[]}
      */
-    static makeFieldsList(fields) {
+    static makeFieldsListForFiltersSelect(fields) {
 
         /*
          There was two arrays:
@@ -40,8 +40,8 @@ export default class FieldUtils {
          */
 
         return [
-            ...fields.notEditableFields.map( (f) => this.getFieldValue(f) ),
-            ...fields.sourceFieldsList.filter( (f) => (f.sourceName !== 'sample') ).map( (f) => this.getFieldValue(f, 'source') )
+            ...fields.notEditableFields.map( (f) => this.makeFieldSelectItemValue(f) ),
+            ...fields.sourceFieldsList.filter( (f) => (f.sourceName !== 'sample') ).map( (f) => this.makeFieldSelectItemValue(f, 'source') )
         ];
     }
     /**
