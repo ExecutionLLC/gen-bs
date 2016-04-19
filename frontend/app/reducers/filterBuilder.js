@@ -51,6 +51,12 @@ export default function filterBuilder(state = {
                 rulesPrepared: false
             });
 
+        case ActionTypes.FBUILDER_REQUEST_RULES_CANCEL:
+            return Object.assign({}, state, {
+                rulesRequested: false,
+                rulesPrepared: true
+            });
+
         case ActionTypes.FBUILDER_RECEIVE_RULES:
             return Object.assign({}, state, {
                 rulesRequested: false,

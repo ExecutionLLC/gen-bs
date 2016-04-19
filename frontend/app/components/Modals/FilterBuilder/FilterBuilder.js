@@ -2,7 +2,8 @@ import React from 'react';
 
 import filterOperators from './filterOperators'
 import {
-    filterBuilderReceiveRules
+    filterBuilderReceiveRules,
+    filterBuilderRequestRulesCancel
 } from '../../../actions/filterBuilder';
 
 
@@ -89,7 +90,12 @@ export default class FilterBuilder extends React.Component {
         if (rulesRequested) {
             rules = window.$(el).queryBuilder('getGenomics');
             console.log('rules', JSON.stringify(rules));
-            dispatch(filterBuilderReceiveRules(rules))
+            console.log('rules', JSON.stringify(filter));
+            if (!filter.name.trim()) {
+                dispatch(filterBuilderRequestRulesCancel());
+            } else {
+                dispatch(filterBuilderReceiveRules(rules))
+            }
         } else {
             window.$(el).queryBuilder({
                 filters: builderFilters,
