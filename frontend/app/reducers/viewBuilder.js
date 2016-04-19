@@ -44,14 +44,14 @@ export default function viewBuilder(state = {
         {
             var name = state.editedView.name;
             const historyFlag = ' (from history)';
-            if (name.endsWith(historyFlag)) {
+            if (state.editedView.type=='history') {
                 name = name.substring(0, name.length - historyFlag.length);
             }
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     id: null,
                     type: 'user',
-                    name: `Copy of ${state.editedView.name}`,
+                    name: `Copy of ${name}`,
                     originalViewId: state.editedView.id
                 })
             });

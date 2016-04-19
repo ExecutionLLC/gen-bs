@@ -25,6 +25,7 @@ export default class ExistentViewSelect extends React.Component {
         });
         var title = (auth.isDemo) ? 'Login or register to work with view' : 'Make a copy for editing';
         const isViewEditable = (view.type === 'user');
+        const isHistory = (view.type === 'history');
 
         return (
 
@@ -34,10 +35,17 @@ export default class ExistentViewSelect extends React.Component {
                         <label data-localize="views.setup.selector.label">Available Views</label>
                     </div>
                 </div>
-                { !isViewEditable &&
+                { !isViewEditable &&!isHistory&&
                 <div className="alert alert-help">
                     <span data-localize="views.setup.selector.description">
                         This view is not editable, duplicate it to make changes. (Only for registered users)
+                    </span>
+                </div>
+                }
+                { !isViewEditable &&isHistory&&
+                <div className="alert alert-help">
+                    <span data-localize="views.setup.selector.description">
+                        This view from history, duplicate it to make changes.
                     </span>
                 </div>
                 }
