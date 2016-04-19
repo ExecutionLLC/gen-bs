@@ -34,7 +34,7 @@ class FilterQueryBuilder extends Component {
      * @returns {string[]}
      */
     static getValidOperatorsTypesForJSType(type) {
-        var ops = [];
+        const ops = [];
         filterUtils.operators.map( (op) => { if (genomicsParsedRulesValidate.isAllowedOperatorType(op, type)) ops.push(op.type); } );
         return ops;
     }
@@ -46,7 +46,7 @@ class FilterQueryBuilder extends Component {
      * @returns {Object.<string, boolean>}
      */
     static getValidFieldsIdsForOperator(fields, operator) {
-        var validFieldsIds = {};
+        const validFieldsIds = {};
         fields.map( (field) => {
             const fieldJSType = FieldUtils.getFieldJSType(field);
             if (genomicsParsedRulesValidate.isAllowedOperatorType(operator, fieldJSType)) {
