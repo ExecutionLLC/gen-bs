@@ -156,7 +156,8 @@ class SamplesModel extends SecureModelBase {
                     const dataToUpdate = {
                         fileName: sampleToUpdate.fileName
                     };
-                    this._unsafeUpdate(sampleId, dataToUpdate, trx, callback);
+                    this._unsafeUpdate(sampleId, dataToUpdate, trx,
+                        (error, result) => callback(error, (result || {}).id));
                 },
                 (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
                 (versionId, callback) => this._addFileSampleValues(trx, versionId, sampleToUpdate.values,
