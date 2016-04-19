@@ -1,3 +1,5 @@
+import FieldUtils from "./fieldUtils";
+
 const immutableArray = {
     /**
      * @template {T}
@@ -501,48 +503,6 @@ export const filterUtils = {
     }
 };
 
-export const fieldUtils = {
-    /**
-     * Return default field id for adding new rule item or smth
-     * @param {{id: string, label: string, type: string}[]} fields
-     * @returns {string}
-     */
-    getDefaultId(fields) {
-        return fields[0].id;
-    },
-    /**
-     * Get JS type for the field value or undefined
-     * @param {{id: string, label: string, type: string}} field
-     * @returns {string|undefined}
-     */
-    getFieldJSType(field) {
-        const fieldType = field.type;
-        const jsType = {
-            'char': 'string',
-            'string': 'string',
-            'integer': 'number',
-            'float': 'number',
-            'double': 'number',
-            'boolean': 'boolean'
-        }[fieldType];
-        return jsType;
-    },
-    /**
-     * Return field for id
-     * @param {{id: string, label: string, type: string}[]} fields
-     * @param {string} id
-     * @returns {{id: string, label: string, type: string}}
-     */
-    getFieldById(fields, id) {
-        var i;
-        for (i = 0; i < fields.length; i++) {
-            if (id == fields[i].id) {
-                return fields[i];
-            }
-        }
-    }
-};
-
 export const opsUtils = {
     /**
      * Map operator type to operator label
@@ -660,11 +620,11 @@ export const genomicsParsedRulesValidate = {
             return ({errorMessage: 'no operator'});
         }
     
-        const field = fieldUtils.getFieldById(fields, rule.field);
+        const field = FieldUtils.getFieldById(fields, rule.field);
         if (!field) {
             return {errorMessage: 'field id "' + rule.field + '" is invalid'};
         }
-        const fieldJSType = fieldUtils.getFieldJSType(field);
+        const fieldJSType = FieldUtils.getFieldJSType(field);
         const operatorType = rule.operator;
         const operatorInfo = filterUtils.getOperatorByType(operatorType);
     

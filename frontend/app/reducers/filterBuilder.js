@@ -1,5 +1,5 @@
 import * as ActionTypes from '../actions/filterBuilder'
-import {filterUtils, genomicsParsedRulesValidate, fieldUtils, opsUtils} from '../utils/filterUtils';
+import {filterUtils, genomicsParsedRulesValidate, opsUtils} from '../utils/filterUtils';
 import FieldUtils from "../utils/fieldUtils";
 
 export default function filterBuilder(state = {
@@ -35,7 +35,7 @@ export default function filterBuilder(state = {
                 state.selectedFilter;
             console.log('FBUILDER_TOGGLE_NEW_EDIT', action.fields, filterToEdit);
             const fields = FieldUtils.makeFieldsList(action.fields);
-            const fieldDefaultId = fieldUtils.getDefaultId(fields);
+            const fieldDefaultId = FieldUtils.getDefaultId(fields);
             const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
             const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
             // Report validation results if any
@@ -58,7 +58,6 @@ export default function filterBuilder(state = {
         
         case ActionTypes.FBUILDER_CHANGE_FILTER:
             console.log(action);
-            debugger;
             const doFs = {
                 onSwitch(isAnd) {
                     return filterUtils.genomicsParsedRulesModification.switchCondition(state.editingFilter.parsedFilter, action.index, isAnd)

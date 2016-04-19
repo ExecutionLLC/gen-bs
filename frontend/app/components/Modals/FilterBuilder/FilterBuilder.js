@@ -8,7 +8,7 @@ import FieldUtils from '../../../utils/fieldUtils'
 
 import { filterBuilderChangeAll, filterBuilderChangeFilter } from '../../../actions/filterBuilder';
 
-import {filterUtils, fieldUtils, opsUtils, genomicsParsedRulesValidate} from '../../../utils/filterUtils';
+import {filterUtils, opsUtils, genomicsParsedRulesValidate} from '../../../utils/filterUtils';
 
 
 /**
@@ -57,7 +57,7 @@ class FilterQueryBuilder extends Component {
         function getValidFieldsIdsForOperator(fields, operator) {
             var validFieldsIds = {};
             fields.map( (field) => {
-                const fieldJSType = fieldUtils.getFieldJSType(field);
+                const fieldJSType = FieldUtils.getFieldJSType(field);
                 if (genomicsParsedRulesValidate.isAllowedOperatorType(operator, fieldJSType)) {
                     validFieldsIds[field.id] = true;
                 }
@@ -93,7 +93,7 @@ class FilterQueryBuilder extends Component {
          */
         function makeFilterItem(index, item, disabled) {
 
-            const fieldJSType = fieldUtils.getFieldJSType(fieldUtils.getFieldById(fields, item.field));
+            const fieldJSType = FieldUtils.getFieldJSType(FieldUtils.getFieldById(fields, item.field));
             const allowedOpsTypes = getValidOperatorsTypesForJSType(fieldJSType);
             const allowedFieldsIds = getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
             const allowedFields =  fields.filter( (f) => allowedFieldsIds[f.id] );
