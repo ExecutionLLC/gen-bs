@@ -4,7 +4,7 @@ export default function websocket(state = {
     wsConn: null,
     lastMessageSended: null,
     messages: [],
-    errors: [],
+    error: null,
     closed: true,
     variants: null,
     variantsView:null,
@@ -115,20 +115,14 @@ export default function websocket(state = {
             });
         case ActionTypes.WS_RECEIVE_AS_ERROR:
             return Object.assign({}, state, {
-                errors: [
-                    ...state.errors,
-                    action.err
-                ],
+                error: action.err,
                 isVariantsLoading: false,
                 isVariantsValid: false
             });
 
         case ActionTypes.WS_RECEIVE_ERROR:
             return Object.assign({}, state, {
-                errors: [
-                    ...state.errors,
-                    action.err
-                ],
+                error: action.err,
                 isVariantsLoading: false
             });
         case ActionTypes.WS_RECEIVE_CLOSE:
