@@ -130,14 +130,16 @@ export function setViewVariantsSort(view) {
     const sortFields = _.filter(
         view.viewListItems, viewListItem =>viewListItem.sortDirection != null && viewListItem.sortOrder != null
     );
-    const sortOrder = _.sortByOrder(_.map(sortFields, sortField => {
-        return {
-            direction: sortField.sortDirection,
-            fieldId: sortField.fieldId,
-            order: sortField.sortOrder
-        }
-
-    }), ['order'], true);
+    const sortOrder = _(sortFields)
+        .map(sortField => {
+            return {
+                direction: sortField.sortDirection,
+                fieldId: sortField.fieldId,
+                order: sortField.sortOrder
+            }
+        })
+        .sortByOrder(['order'], true)
+        .value();
     return {
         type: SET_VIEW_VARIANTS_SORT,
         sortOrder
