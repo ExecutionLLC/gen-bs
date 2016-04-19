@@ -89,8 +89,6 @@ export default class FilterBuilder extends React.Component {
 
         if (rulesRequested) {
             rules = window.$(el).queryBuilder('getGenomics');
-            console.log('rules', JSON.stringify(rules));
-            console.log('rules', JSON.stringify(filter));
             if (!filter.name.trim()) {
                 dispatch(filterBuilderRequestRulesCancel());
             } else {
