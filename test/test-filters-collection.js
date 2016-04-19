@@ -118,7 +118,7 @@ describe('Filters', () => {
             });
         });
 
-        it('should fail to get and update deleted user filter', (done) => {
+        it('should not fail to get and fail to update deleted user filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
                 assert.equal(response.status, HttpStatus.OK);
@@ -140,7 +140,7 @@ describe('Filters', () => {
 
                         filtersClient.get(sessionId, addedFilter.id, (error, response) => {
                             assert.ifError(error);
-                            assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+                            assert.equal(response.status, HttpStatus.OK);
 
                             // Trying to update created filter.
                             const filterToUpdate = _.cloneDeep(addedFilter);

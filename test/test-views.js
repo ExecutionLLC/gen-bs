@@ -118,7 +118,7 @@ describe('Views', () => {
             });
         });
 
-        it('should fail to get and update deleted user view', (done) => {
+        it('should not fail to get and fail to update deleted user view', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
                 assert.equal(response.status, HttpStatus.OK);
@@ -140,7 +140,7 @@ describe('Views', () => {
 
                         viewsClient.get(sessionId, addedView.id, (error, response) => {
                             assert.ifError(error);
-                            assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+                            assert.equal(response.status, HttpStatus.OK);
 
                             // Trying to update created view.
                             const viewToUpdate = _.cloneDeep(addedView);
