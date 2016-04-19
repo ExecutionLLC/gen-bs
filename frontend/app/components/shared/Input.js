@@ -11,6 +11,12 @@ export default class Input extends Component {
         };
     }
 
+    componentWillReceiveProps(newProps) {
+        this.state = {
+            value: newProps.value
+        };
+    }
+
     render() {
         const value = this.state.value;
         const onChange = this.props.onChange;
