@@ -264,8 +264,9 @@ class ApplicationServerService extends ServiceBase {
         //noinspection UnnecessaryLocalVariableJS leaved for debug.
         const appServerSortOrder = _.map(sortedSortItems, listItem => {
             const field = fieldIdToMetadata[listItem.fieldId];
+            const columnName = this._getPrefixedFieldName(field);
             return {
-                columnName: field.name,
+                columnName,
                 isAscendingOrder: (listItem.sortDirection && listItem.sortDirection === 'asc') ? true : false
             };
         });
