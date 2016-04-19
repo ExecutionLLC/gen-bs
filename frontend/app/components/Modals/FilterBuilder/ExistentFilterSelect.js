@@ -1,19 +1,22 @@
-import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 
-import { filterBuilderSelectFilter, filterBuilderToggleNewEdit} from '../../../actions/filterBuilder'
+import {
+    filterBuilderSelectFilter,
+    filterBuilderToggleNewEdit,
+    filterBuilderDeleteFilter
+} from '../../../actions/filterBuilder'
 
 
 export default class ExistentFilterSelect extends Component {
 
     render() {
 
-        const { dispatch, auth } = this.props;
+        const {dispatch, auth} = this.props;
         const {selectedFilter} = this.props.filterBuilder;
-        const { filters } = this.props.userData;
+        const {filters} = this.props.userData;
         const disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
         });
@@ -29,11 +32,11 @@ export default class ExistentFilterSelect extends Component {
                     </div>
                 </div>
                 { !isFilterEditable &&
-                    <div className="alert alert-help">
+                <div className="alert alert-help">
                         <span data-localize="views.setup.selector.description">
                             This filter is not editable, duplicate it to make changes. (Only for registered users)
                         </span>
-                    </div>
+                </div>
                 }
                 <div className="row grid-toolbar">
                     <div className="col-sm-6">
@@ -72,7 +75,9 @@ export default class ExistentFilterSelect extends Component {
                         }
                         { isFilterEditable &&
                         <div className="btn-group ">
-                            <button type="button" className="btn btn-link">
+                            <button type="button"
+                                    className="btn btn-default"
+                                    onClick={ () => dispatch(filterBuilderDeleteFilter(selectedFilter.id))}>
                                 <span data-localize="views.setup.delete.title">Delete Filter</span>
                             </button>
                         </div>
