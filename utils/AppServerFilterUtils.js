@@ -19,6 +19,9 @@ class AppServerFilterUtils {
             if (!mappedOperands) {
                 return null;
             }
+            if (!mappedOperands.length){
+                return null
+            }
             const result = {};
             result[operator] = mappedOperands;
             return result;
