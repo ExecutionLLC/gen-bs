@@ -229,7 +229,11 @@ export const filterUtils = {
              * @returns {genomicsParsedDataGroup}
              */
             removeRule(group, index) {
-                return this._setGroupRules(group, immutableArray.remove(group.rules, index));
+                if (group.rules.length > 1) {
+                    return this._setGroupRules(group, immutableArray.remove(group.rules, index));
+                } else {
+                    return group;
+                }
             },
             /**
              * @param {genomicsParsedDataGroup} group
