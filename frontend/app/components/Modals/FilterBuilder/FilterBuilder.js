@@ -89,21 +89,8 @@ class FilterQueryBuilder extends Component {
         );
     }
 
-
-    render() {
-
-        const {
-            /** @type {{id: string, label: string, type: string}[]} */
-            fields,
-            /** @type {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} */
-            rules,
-            /** @type {boolean} */
-            disabled,
-            /** @type function(Object) */
-            dispatch
-        } = this.props;
-
-        const handlers = {
+    static makeFilterQueryBuilderHandlers(dispatch) {
+        return {
             onSwitch(/** number[] */index, /** boolean */isAnd) {
                 dispatch(filterBuilderChangeFilter(index, {onSwitch: isAnd}));
             },
@@ -121,13 +108,27 @@ class FilterQueryBuilder extends Component {
                 dispatch(filterBuilderChangeFilter(index, {onDelete: itemIndex}));
             }
         };
+    }
+
+    render() {
+
+        const {
+            /** @type {{id: string, label: string, type: string}[]} */
+            fields,
+            /** @type {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} */
+            rules,
+            /** @type {boolean} */
+            disabled,
+            /** @type function(Object) */
+            dispatch
+        } = this.props;
 
         return (
             <QueryBuilder
                 rules={rules}
                 disabled={disabled}
                 makeItemComponent={FilterQueryBuilder.makeFilterItem.bind(FilterQueryBuilder, fields, dispatch)}
-                handlers={handlers}
+                handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
             />
         );
     }
