@@ -21,8 +21,12 @@ export const REQUEST_VIEWS = 'REQUEST_VIEWS';
 export const RECEIVE_FILTERS = 'RECEIVE_FILTERS';
 export const REQUEST_FILTERS = 'REQUEST_FILTERS';
 
-export const ATTACH_HISTORY_DATA = 'ATTACH_HISTORY_DATA';
-export const DETACH_HISTORY_DATA = 'DETACH_HISTORY_DATA';
+export const CHANGE_HISTORY_DATA = 'CHANGE_HISTORY_DATA';
+export const CHANGE_FILTERS = 'CHANGE_FILTERS';
+export const CHANGE_VIEWS = 'CHANGE_VIEWS';
+
+export const DELETE_VIEW = 'DELETE_VIEW';
+export const DELETE_FILTER = 'DELETE_FILTER';
 
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
@@ -67,7 +71,7 @@ export function fetchUserdata() {
                 dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
                 const userData = response.body;
-                const view = _.find(userData.views, view => view.type == 'standard');
+                const view = _.find(userData.views, view => view.type === 'standard');
                 const {
                     samples,
                     totalFields,
@@ -77,7 +81,7 @@ export function fetchUserdata() {
                     lastSampleFields
                 } = userData;
 
-                const filter = _.find(userData.filters, filter => filter.type == 'standard');
+                const filter = _.find(userData.filters, filter => filter.type === 'standard');
                 const sample = _.find(samples, sample => sample.id === lastSampleId);
                 const sampleId = sample ? sample.id : null;
                 dispatch(receiveUserdata(userData));
@@ -169,20 +173,39 @@ export function fetchFilters() {
     }
 }
 
-export function attachHistoryData(historyItem) {
+export function changeHistoryData(sampleId, filterId, viewId) {
     return {
-        type: ATTACH_HISTORY_DATA,
-        sample: historyItem.sample,
-        view: historyItem.view,
-        filters: historyItem.filters
+        type: CHANGE_HISTORY_DATA,
+        sampleId,
+        filterId,
+        viewId
     }
 }
 
-export function detachHistoryData(detachSample, detachFilter, detachView) {
+export function changeFilters(filters) {
     return {
-        type: DETACH_HISTORY_DATA,
-        detachSample,
-        detachFilter,
-        detachView
+        type: CHANGE_FILTERS,
+        filters
+    }
+}
+
+export function changeViews(views) {
+    return {
+        type: CHANGE_VIEWS,
+        views
+    }
+}
+
+export function deleteView(viewId) {
+    return {
+        type: DELETE_VIEW,
+        viewId
+    }
+}
+
+export function deleteFilter(filterId) {
+    return {
+        type: DELETE_FILTER,
+        filterId
     }
 }

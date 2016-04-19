@@ -8,6 +8,7 @@ export default function websocket(state = {
     closed: true,
     variants: null,
     variantsView:null,
+    variantsSampleFieldsList: [],
     currentVariants: null,
     isVariantsEmpty: false,
     isVariantsValid: true,

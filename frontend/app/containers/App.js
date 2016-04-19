@@ -42,8 +42,13 @@ class App extends Component {
         const {samplesList: {samples}} = this.props;
         const { ui } = this.props;
 
-        var mainDivClass = classNames({
+        const mainDivClass = classNames({
             'main': true,
+            'subnav-closed': ui.queryNavbarClosed
+        });
+
+        const navbarQueryClass = classNames({
+            'collapse-subnav': true,
             'subnav-closed': ui.queryNavbarClosed
         });
 
@@ -60,7 +65,7 @@ class App extends Component {
                 {samples.length > 0 &&
                  <div className="container-fluid">
                     <NavbarMain />
-                     <div className="collapse collapse-subnav" id="subnav">
+                     <div className={navbarQueryClass} id="subnav">
                          <NavbarCreateQuery
                           {...this.props}
                           openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }

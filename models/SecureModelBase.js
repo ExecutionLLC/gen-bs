@@ -47,7 +47,6 @@ class SecureModelBase extends RemovableModelBase {
     find(userId, itemId, callback) {
         async.waterfall([
             (callback) => this._fetch(userId, itemId, callback),
-            (itemData, callback) => this._ensureItemNotDeleted(itemData, callback),
             (itemData, callback) => {
                 callback(null, this._mapColumns(itemData));
             }

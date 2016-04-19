@@ -114,6 +114,13 @@ export default function variantsTable(state = initialState, action) {
                 needUpdate: true
             });
         }
+        case ActionTypes.SET_VIEW_VARIANTS_SORT:{
+            return Object.assign({}, state, {
+                searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
+                    sort: action.sortOrder
+                })
+            });
+        }
         case ActionTypes.CHANGE_VARIANTS_SORT:
         {
             // copy sort array
