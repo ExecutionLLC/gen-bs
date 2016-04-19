@@ -2,7 +2,8 @@ import React from 'react';
 
 import filterOperators from './filterOperators'
 import {
-    filterBuilderReceiveRules
+    filterBuilderReceiveRules,
+    filterBuilderRequestRulesCancel
 } from '../../../actions/filterBuilder';
 
 
@@ -88,11 +89,16 @@ export default class FilterBuilder extends React.Component {
 
         if (rulesRequested) {
             rules = window.$(el).queryBuilder('getGenomics');
-            // rules have no keys in case there are validation errors. Do nothing in this case.
-            if (!Object.keys(rules).length)
+            // rules have no keys in case there are validation errors.
+            if (!Object.keys(rules).length) {
                 return;
-            console.log('rules', JSON.stringify(rules));
-            dispatch(filterBuilderReceiveRules(rules))
+            }
+            // Empty name is not allowed, cancel the rules request
+            if (!filter.name.trim()) {
+                dispatch(filterBuilderRequestRulesCancel());
+            } else {
+                dispatch(filterBuilderReceiveRules(rules))
+            }
         } else {
             window.$(el).queryBuilder({
                 filters: builderFilters,
