@@ -32,10 +32,25 @@ export default function filterBuilder(state = {
                     name: `Copy of ${state.selectedFilter.name}`
                 }) :
                 state.selectedFilter;
+            console.log('FBUILDER_TOGGLE_NEW_EDIT', action.fields, filterToEdit);
+            const fields = FieldUtils.makeFieldsList(action.fields);
+            const fieldDefaultId = fieldUtils.getDefaultId(fields);
+            const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
+            const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
+            // Report validation results if any
+            if (validateRulesResult.report.length) {
+                console.error('Filter rules are invalid:');
+                console.error(JSON.stringify(parsedRawRules, null, 4));
+                console.error('Filter validation report:');
+                console.error(JSON.stringify(validateRulesResult.report, null, 4));
+            }
+            const parsedRules = validateRulesResult.validRules ||
+                {condition : 'AND', rules: [{field: fieldDefaultId, operator: 'is_null'}]};
             return Object.assign({}, state, {
                 editingFilter: {
                     filter: filterToEdit,
-                    isNew: action.makeNew
+                    isNew: action.makeNew,
+                    parsedFilter: parsedRules
                 }
             });
 

@@ -67,7 +67,7 @@ class FilterQueryBuilder extends Component {
 
         /** @type {string} */
         const fieldDefaultId = fieldUtils.getDefaultId(fields);
-
+/*
         const parsedRawRules = filterUtils.getRulesFromGenomics(rules);
         const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
 
@@ -82,7 +82,8 @@ class FilterQueryBuilder extends Component {
             console.error('Filter validation report:');
             console.error(JSON.stringify(validateRulesResult.report, null, 4));
         }
-
+*/
+        const parsedRules = rules;
 
         /**
          * Return subrules for given index, [] - root and so on
@@ -439,7 +440,7 @@ export default class FilterBuilder extends Component {
             <div className="builder-wrapper">
                 <FilterQueryBuilder
                     fields={FieldUtils.makeFieldsList(this.props.fields)}
-                    rules={filter.rules}
+                    rules={this.props.filterBuilder.editingFilter.parsedFilter}
                     disabled={filter.type === 'standard' || filter.type === 'advanced'}
                     dispatch={this.props.dispatch}
                 />
