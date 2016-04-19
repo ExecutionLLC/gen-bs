@@ -324,7 +324,7 @@ export const filterUtils = {
          */
         makeDefaultGroup(defaultFieldId) {
             return {
-                condition: 'AND',
+                condition: filterUtils.settings.default_condition,
                 rules: [
                     this.makeDefaultRule(defaultFieldId)
                 ]

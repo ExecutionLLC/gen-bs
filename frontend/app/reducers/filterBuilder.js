@@ -20,8 +20,7 @@ function makeFilterEditing(isNew, filterToEdit, fields) {
         console.error('Filter validation report:');
         console.error(JSON.stringify(validateRulesResult.report, null, 4));
     }
-    const parsedFilter = validateRulesResult.validRules ||
-        {condition : 'AND', rules: [{field: fieldDefaultId, operator: 'is_null'}]};
+    const parsedFilter = validateRulesResult.validRules || filterUtils.genomicsParsedRulesModification.makeDefaultGroup(fieldDefaultId);
     return {
         filter: filterToEdit,
         isNew,
