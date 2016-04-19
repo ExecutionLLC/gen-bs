@@ -1,6 +1,6 @@
 import FieldUtils from "./fieldUtils";
 
-const immutableArray = {
+class immutableArray {
     /**
      * @template {T}
      * @param {T[]} arr
@@ -8,38 +8,40 @@ const immutableArray = {
      * @param {T} item
      * @returns {*}
      */
-    replace(arr, index, item) {
+    static replace(arr, index, item) {
         return [
             ...arr.slice(0, index),
             item,
             ...arr.slice(index + 1, arr.length)
         ];
-    },
+    }
+
     /**
      * @template {T}
      * @param {T[]} arr
      * @param {number} index
      * @returns {T[]}
      */
-    remove(arr, index) {
+    static remove(arr, index) {
         return [
             ...arr.slice(0, index),
             ...arr.slice(index + 1, arr.length)
         ];
-    },
+    }
+
     /**
      * @template {T}
      * @param {T[]} arr
      * @param {T} data
      * @returns {T[]}
      */
-    append(arr, data) {
+    static append(arr, data) {
         return [
             ...arr,
             data
         ];
     }
-};
+}
 
 
 export const filterUtils = {
