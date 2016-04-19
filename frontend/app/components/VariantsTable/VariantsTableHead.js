@@ -26,7 +26,12 @@ export default class VariantsTableHead extends Component {
         }
 
         const fieldIds = _.map(currentView.viewListItems, item => item.fieldId);
-
+        const expectedFields = [...fields.sourceFieldsList, ...currentSampleFields];
+        const expectedFieldsHash = _.reduce(expectedFields, (result, field) => {
+            result[field.id] = field;
+            return result;
+        }, {});
+        
         return (
             <tbody className="table-variants-head" id="variants_table_head">
             <tr>
@@ -59,13 +64,16 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, currentSampleFields, sort, dispatch))}
+                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, expectedFieldsHash, sort, dispatch))}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, fields, currentSampleFields, sortState, dispatch) {
+    renderFieldHeader(fieldId, fields, expectedFieldsHash, sortState, dispatch) {
+        const {totalFieldsHash} = fields;
+        const fieldMetadata = totalFieldsHash[fieldId];
+        const areControlsEnabled = !!expectedFieldsHash[fieldId];
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
             dispatch(sortVariants(fieldId, direction, isControlKeyPressed));
         const sendSearchRequest = (fieldId, searchValue) => {
@@ -75,9 +83,8 @@ export default class VariantsTableHead extends Component {
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, searchValue));
         return (
             <FieldHeader key={fieldId}
-                         fieldId={fieldId}
-                         fields={fields}
-                         currentSampleFields={currentSampleFields}
+                         fieldMetadata={fieldMetadata}
+                         areControlsEnabled={areControlsEnabled}
                          sortState={sortState}
                          onSortRequested={sendSortRequestedAction}
                          onSearchRequested={sendSearchRequest}

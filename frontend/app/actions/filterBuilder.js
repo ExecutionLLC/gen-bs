@@ -1,11 +1,13 @@
 import config from '../../config'
 
 import apiFacade from '../api/ApiFacade';
-import { closeModal } from './modalWindows';
-import { handleError } from './errorHandler';
-import { fetchFilters } from './userData';
+import {closeModal} from './modalWindows';
+import {handleError} from './errorHandler';
+import {fetchFilters} from './userData';
 
 import HttpStatus from 'http-status';
+import {deleteFilter} from "./userData";
+import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
@@ -23,6 +25,9 @@ export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
 
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
+export const FBUILDER_REQUEST_DELETE_FILTER = 'FBUILDER_REQUEST_DELETE_FILTER';
+export const FBUILDER_RECEIVE_DELETE_FILTER = 'FBUILDER_RECEIVE_DELETE_FILTER';
+
 export const FBUILDER_CHANGE_ALL = 'FBUILDER_CHANGE_ALL';
 
 const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
@@ -30,6 +35,9 @@ const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Ple
 
 const UPDATE_FILTER_NETWORK_ERROR = 'Cannot update filter (network error). Please try again.';
 const UPDATE_FILTER_SERVER_ERROR = 'Cannot update filter (server error). Please try again.';
+
+const DELETE_FILTER_NETWORK_ERROR = 'Cannot delete filter (network error). Please try again.';
+const DELETE_FILTER_SERVER_ERROR = 'Cannot delete filter (server error). Please try again.';
 
 const filtersClient = apiFacade.filtersClient;
 
@@ -176,3 +184,42 @@ export function filterBuilderChangeFilter(index, change) {
         change
     };
 }
+
+export function filterBuilderDeleteFilter(filterId) {
+    return (dispatch, getState) => {
+        dispatch(filterBuilderRequestDeleteFilter(filterId));
+        const {auth: {sessionId}} = getState();
+        filtersClient.remove(sessionId, filterId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, DELETE_FILTER_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                dispatch(filterBuilderReceiveDeleteFilter(result));
+                dispatch(deleteFilter(result.id));
+                const state = getState();
+                const selectedFilterId = state.ui.selectedFilter.id;
+                const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
+                dispatch(changeFilter(newFilterId));
+            }
+        });
+    }
+}
+
+function filterBuilderRequestDeleteFilter(filterId) {
+    return {
+        type: FBUILDER_REQUEST_DELETE_FILTER,
+        filterId
+    };
+}
+
+function filterBuilderReceiveDeleteFilter(json) {
+    return {
+        type: FBUILDER_RECEIVE_DELETE_FILTER,
+        view: json
+    }
+}
+
+
+
