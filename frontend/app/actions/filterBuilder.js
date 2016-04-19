@@ -6,6 +6,7 @@ import { handleError } from './errorHandler';
 import { fetchFilters } from './userData';
 
 import HttpStatus from 'http-status';
+import {filterUtils} from "../utils/filterUtils";
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
 
@@ -139,7 +140,8 @@ export function filterBuilderUpdateFilter() {
 
 export function filterBuilderSaveAndSelectRules() {
     return (dispatch, getState) => {
-        const rules = getState().filterBuilder.editingFilter.filter.rules;
+        const parsedRules = getState().filterBuilder.editingFilter.parsedFilter;
+        const rules = filterUtils.getGenomics(parsedRules);
         dispatch(filterBuilderRules(rules));
         if (!getState().filterBuilder.editingFilter.isNew) {
             dispatch(filterBuilderUpdateFilter());
