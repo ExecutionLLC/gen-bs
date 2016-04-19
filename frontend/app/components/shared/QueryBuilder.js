@@ -64,14 +64,16 @@ FilterQueryBuilder(
 export default class QueryBuilder extends Component {
 
     render() {
-        /** @type {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
-        const rules = this.props.rules;
-        /** @type {boolean} */
-        const disabled = this.props.disabled;
-        /** @type {function(number[], {}, boolean): Component} */
-        const makeItemComponent = this.props.makeItemComponent;
-        /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-        const handlers = this.props.handlers;
+        const {
+            /** @type {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
+            rules,
+            /** @type {boolean} */
+            disabled,
+            /** @type {function(number[], {}, boolean): Component} */
+            makeItemComponent,
+            /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
+            handlers
+        } = this.props;
 
         return (
             <div>
@@ -93,18 +95,20 @@ export default class QueryBuilder extends Component {
 class RulesGroupContainer extends Component {
 
     render() {
-        /** @type {number[]} */
-        const index = this.props.index;
-        /** @type {function(number[], {}, boolean): Component} */
-        const makeItemComponent = this.props.makeItemComponent;
-        /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
-        const ruleItems = this.props.ruleItems;
-        /** @type {boolean} */
-        const ruleIsAnd = this.props.ruleIsAnd;
-        /** @type {boolean} */
-        const disabled = this.props.disabled;
-        /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-        const handlers = this.props.handlers;
+        const {
+            /** @type {number[]} */
+            index,
+            /** @type {function(number[], {}, boolean): Component} */
+            makeItemComponent,
+            /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
+            ruleItems,
+            /** @type {boolean} */
+            ruleIsAnd,
+            /** @type {boolean} */
+            disabled,
+            /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
+            handlers
+        } = this.props;
 
         return (
             <dl className="rules-group-container">
@@ -170,18 +174,20 @@ class RulesGroupHeader extends Component {
 
 
     render() {
-        /** @type {number[]} */
-        const index = this.props.index;
-        /** @type {boolean} */
-        const isAnd = this.props.isAnd;
-        /** @type {boolean} */
-        const disabled = this.props.disabled;
-        /** @type {function(boolean)} */
-        const onSwitch = this.props.onSwitch;
-        /** @type {function(boolean)} */
-        const onAdd = this.props.onAdd;
-        /** @type {?function()} */
-        const onDelete = this.props.onDelete;
+        const {
+            /** @type {number[]} */
+            index,
+            /** @type {boolean} */
+            isAnd,
+            /** @type {boolean} */
+            disabled,
+            /** @type {function(boolean)} */
+            onSwitch,
+            /** @type {function(boolean)} */
+            onAdd,
+            /** @type {?function()} */
+            onDelete
+        } = this.props;
 
         var groupName = 'builder-basic-react_group_' + index.join('-') + '_cond';
 
@@ -210,16 +216,18 @@ class RulesGroupHeader extends Component {
 class RulesGroupBody extends Component {
 
     static RuleContainer(props) {
-        /** @type {{condition: *=, field: string=, operator: string=, value: *=}} */
-        const item = props.item;
-        /** @type {number} */
-        const index = props.index;
-        /** @type {boolean} */
-        const disabled = props.disabled;
-        /** @type {?function()} */
-        const onDelete = props.onDelete;
-        /** @type {function(number[], {}, boolean): Component} */
-        const makeItemComponent = props.makeItemComponent;
+        const {
+            /** @type {{condition: *=, field: string=, operator: string=, value: *=}} */
+            item,
+            /** @type {number} */
+            index,
+            /** @type {boolean} */
+            disabled,
+            /** @type {?function()} */
+            onDelete,
+            /** @type {function(number[], {}, boolean): Component} */
+            makeItemComponent
+        } = props;
 
         return (
             <li className="rule-container">
@@ -286,16 +294,18 @@ class RulesGroupBody extends Component {
 
     render() {
 
-        /** @type {number[]} */
-        const index = this.props.index;
-        /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
-        const items = this.props.items;
-        /** @type {function(number[], {}, boolean): Component} */
-        const makeItemComponent = this.props.makeItemComponent;
-        /** @type {boolean} */
-        const disabled = this.props.disabled;
-        /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-        const handlers = this.props.handlers;
+        const {
+            /** @type {number[]} */
+            index,
+            /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
+            items,
+            /** @type {function(number[], {}, boolean): Component} */
+            makeItemComponent,
+            /** @type {boolean} */
+            disabled,
+            /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
+            handlers
+        } = this.props;
 
         return (
             <dd className="rules-group-body">
