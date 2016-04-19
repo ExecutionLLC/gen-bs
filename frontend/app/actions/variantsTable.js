@@ -130,22 +130,27 @@ export function setViewVariantsSort(view) {
     return (dispatch, getState) => {
 
         const {fields:{sampleFieldsList}}=getState();
-        const sortFields = _.filter(
-            view.viewListItems, viewListItem =>viewListItem.sortDirection != null && viewListItem.sortOrder != null
-        );
-        const sortOrder = _(sortFields)
-            .filter(field =>{
-                return _.some(sampleFieldsList, {id: field.fieldId});
+        const sampleFieldsHash = _.reduce(sampleFieldsList, (result, field) => {
+            result[field.id] = field;
+            return result;
+        }, {});
+        const sortOrder = _(view.viewListItems)
+            .filter(viewListItem =>{
+                return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
             })
-            .map(sortField => {
+            .filter(viewListItem =>{
+                return sampleFieldsHash[viewListItem.fieldId];
+            })
+            .map(viewListItem => {
                 return {
-                    direction: sortField.sortDirection,
-                    fieldId: sortField.fieldId,
-                    order: sortField.sortOrder
+                    direction: viewListItem.sortDirection,
+                    fieldId: viewListItem.fieldId,
+                    order: viewListItem.sortOrder
                 }
             })
             .sortByOrder(['order'], true)
             .value();
+        //Fix for the case when another sort column is missing in the sample fields.
         if (sortOrder.length ==1){
             sortOrder[0].order = 1;
         }
