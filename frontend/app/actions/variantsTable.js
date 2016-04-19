@@ -13,7 +13,7 @@ export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
 export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
-export const SET_VIEW_VARIANTS_SORT = 'SET_VARIANTS_SORT';
+export const SET_VARIANTS_SORT = 'SET_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
 export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
 
@@ -127,19 +127,36 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
 }
 
 export function setViewVariantsSort(view) {
-    const sortFields = _.filter(
-        view.viewListItems, viewListItem =>viewListItem.sortDirection != null && viewListItem.sortOrder != null
-    );
-    const sortOrder = _.map(sortFields, sortField => {
-        return {
-            direction: sortField.sortDirection,
-            fieldId: sortField.fieldId,
-            order: sortField.sortOrder
-        }
+    return (dispatch, getState) => {
 
-    });
+        const {fields:{idToFieldHash}}=getState();
+        const sortOrder = _(view.viewListItems)
+            .filter(viewListItem =>{
+                return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
+            })
+            .filter(viewListItem =>{
+                return idToFieldHash[viewListItem.fieldId];
+            })
+            .map(viewListItem => {
+                return {
+                    direction: viewListItem.sortDirection,
+                    fieldId: viewListItem.fieldId,
+                    order: viewListItem.sortOrder
+                }
+            })
+            .sortByOrder(['order'], true)
+            .value();
+        //Fix for the case when another sort column is missing in the sample fields.
+        if (sortOrder.length ==1){
+            sortOrder[0].order = 1;
+        }
+        dispatch(setVariantsSort(sortOrder));
+    }
+}
+
+export function setVariantsSort( sortOrder) {
     return {
-        type: SET_VIEW_VARIANTS_SORT,
+        type: SET_VARIANTS_SORT,
         sortOrder
     }
 }
