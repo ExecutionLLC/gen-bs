@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Select from 'react-select';
 import Input from '../../shared/Input';
 import InputResizingArray from '../../shared/InputResizingArray';
@@ -6,9 +6,14 @@ import InputArray from '../../shared/InputArray';
 import QueryBuilder from '../../shared/QueryBuilder';
 import FieldUtils from '../../../utils/fieldUtils'
 
-import { filterBuilderChangeAll, filterBuilderChangeFilter } from '../../../actions/filterBuilder';
-
-import {filterUtils, opsUtils, genomicsParsedRulesValidate} from '../../../utils/filterUtils';
+import {
+    filterBuilderChangeFilter
+} from '../../../actions/filterBuilder';
+import {
+    filterUtils,
+    opsUtils,
+    genomicsParsedRulesValidate
+} from '../../../utils/filterUtils';
 
 
 /**
@@ -26,7 +31,7 @@ FieldFilterItem(
  */
 
 
-class FilterQueryBuilder extends Component {
+class FilterQueryBuilder extends React.Component {
 
     /**
      * Get operators types (operator.type) for given value type
@@ -35,7 +40,10 @@ class FilterQueryBuilder extends Component {
      */
     static getValidOperatorsTypesForJSType(type) {
         const ops = [];
-        filterUtils.operators.map( (op) => { if (genomicsParsedRulesValidate.isAllowedOperatorType(op, type)) ops.push(op.type); } );
+        filterUtils.operators.map((op) => {
+            if (genomicsParsedRulesValidate.isAllowedOperatorType(op, type))
+                ops.push(op.type);
+        });
         return ops;
     }
 
@@ -63,13 +71,13 @@ class FilterQueryBuilder extends Component {
      * @param {number[]} index
      * @param {{field: string, operator: string, value: *}} item
      * @param {boolean} disabled
-     * @returns {Component}
+     * @returns {React.Component}
      */
     static makeFilterItem(fields, dispatch, index, item, disabled) {
         const fieldJSType = FieldUtils.getFieldJSType(FieldUtils.getFieldById(fields, item.field));
         const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
         const allowedFieldsIds = this.getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
-        const allowedFields =  fields.filter( (f) => allowedFieldsIds[f.id] );
+        const allowedFields = fields.filter((f) => allowedFieldsIds[f.id]);
         return (
             <FieldFilterItem
                 index={index}
@@ -135,13 +143,13 @@ class FilterQueryBuilder extends Component {
 }
 
 
-class FieldFilterItem extends Component {
+class FieldFilterItem extends React.Component {
 
     /**
      * @param {string|number} value
      * @param {boolean} disabled
      * @param {function(string)} onChange
-     * @returns {Component}
+     * @returns {React.Component}
      */
     static renderInputForSingleTextValue(value, disabled, onChange) {
         return (
@@ -159,7 +167,7 @@ class FieldFilterItem extends Component {
      * @param {boolean} checked
      * @param {boolean} disabled
      * @param {function(boolean)} onChange
-     * @returns {Component}
+     * @returns {React.Component}
      */
     static renderCheckbox(checked, disabled, onChange) {
         return (
@@ -178,7 +186,7 @@ class FieldFilterItem extends Component {
      * @param {string} fieldId
      * @param {boolean} disabled
      * @param {function(string)} onChange
-     * @returns {Component}
+     * @returns {React.Component}
      */
     static renderFieldSelect(fieldsList, fieldId, disabled, onChange) {
         return (
@@ -212,7 +220,7 @@ class FieldFilterItem extends Component {
 
     /**
      * @param {Object} props
-     * @returns {Component}
+     * @returns {React.Component}
      */
     static renderInputsArrayItem(props) {
         return (
@@ -223,12 +231,12 @@ class FieldFilterItem extends Component {
     }
 
     /**
-     * @param {Component} ArrayComponent
+     * @param {React.Component} ArrayComponent
      * @param {(number|string)[]} value
      * @param {string} valueType
      * @param {boolean} disabled
      * @param {function(string[])} onChange
-     * @returns {Component}
+     * @returns {React.Component}
      */
     static renderInputsArray(ArrayComponent, value, valueType, disabled, onChange) {
         return (
@@ -263,12 +271,16 @@ class FieldFilterItem extends Component {
         } = this.props;
 
         /** @type {{value: string, label: string}[]} */
-        const selectFieldList = fields.map( (field) => { return {value: field.id, label: field.label} } );
+        const selectFieldList = fields.map((field) => {
+            return {value: field.id, label: field.label}
+        });
         /** @type {string} */
         const selectFieldValue = item.field;
 
         /** @type {{value: string, label: string}[]} */
-        const selectOperatorList = allowedOpsTypes.map( (opname) => { return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]}; });
+        const selectOperatorList = allowedOpsTypes.map((opname) => {
+            return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]};
+        });
         /** @type {string} */
         const selectOperatorValue = item.operator;
 
@@ -357,7 +369,7 @@ class FieldFilterItem extends Component {
 }
 
 
-export default class FilterBuilder extends Component {
+export default class FilterBuilder extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.fields !== nextProps.fields
