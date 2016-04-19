@@ -402,12 +402,12 @@ export const filterUtils = {
 
                     if (builderOp.nbInputs !== 0) {
                         if (!(rule.value instanceof Array)) {
-                            rule.value = [rule.value];
+                            values.push(self.Utils.changeType(rule.value, rule.type, false));
+                        } else {
+                            rule.value.forEach(function (v) {
+                                values.push(self.Utils.changeType(v, rule.type, false));
+                            });
                         }
-
-                        rule.value.forEach(function(v) {
-                            values.push(self.Utils.changeType(v, rule.type, false));
-                        });
                     }
 
                     var part = {};
