@@ -78,6 +78,7 @@ export function renewHistoryItem(historyItemId) {
             clonedHistoryItem.sample.name = clonedHistoryItem.sample.name + ' (from history)';
             clonedHistoryItem.filters[0].name = clonedHistoryItem.filters[0].name + ' (from history)';
             clonedHistoryItem.view.name = clonedHistoryItem.view.name + ' (from history)';
+            clonedHistoryItem.view.type = 'history';
             dispatch(attachHistory(clonedHistoryItem));
             dispatch(changeSample(clonedHistoryItem.sample.id));
             dispatch(fetchFields(clonedHistoryItem.sample.id));
