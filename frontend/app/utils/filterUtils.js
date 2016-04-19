@@ -666,9 +666,9 @@ export const genomicsParsedRulesValidate = {
      */
     validateRules(fields, rules, index) {
         var report = [];
-        var validRules = [];
+        const validRules = [];
         rules.map((rule, i) => {
-            var validateRuleResult = this.validateRule(fields, rule);
+            const validateRuleResult = this.validateRule(fields, rule);
             if (validateRuleResult.validRule) {
                 validRules.push(validateRuleResult.validRule);
                 return;
@@ -698,7 +698,7 @@ export const genomicsParsedRulesValidate = {
      * @returns {{validGroup: ?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, report: {index: number[], message: string}[]}}
      */
     validateGroup(fields, group, index) {
-        var  reportGroup = [];
+        var reportGroup = [];
         if (group.condition !== 'AND' && group.condition !== 'OR') {
             reportGroup.push({
                 index: index.slice(),
