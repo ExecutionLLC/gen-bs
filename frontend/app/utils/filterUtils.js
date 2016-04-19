@@ -1,4 +1,46 @@
-export const filterUtils = {
+const immutableArray = {
+    /**
+     * @template {T}
+     * @param {T[]} arr
+     * @param {number} index
+     * @param {T} item
+     * @returns {*}
+     */
+    replace(arr, index, item) {
+        return [
+            ...arr.slice(0, index),
+            item,
+            ...arr.slice(index + 1, arr.length)
+        ];
+    },
+    /**
+     * @template {T}
+     * @param {T[]} arr
+     * @param {number} index
+     * @returns {T[]}
+     */
+    remove(arr, index) {
+        return [
+            ...arr.slice(0, index),
+            ...arr.slice(index + 1, arr.length)
+        ];
+    },
+    /**
+     * @template {T}
+     * @param {T[]} arr
+     * @param {T} data
+     * @returns {T[]}
+     */
+    append(arr, data) {
+        return [
+            ...arr,
+            data
+        ];
+    }
+};
+
+
+const filterUtils = {
     settings: {
         default_condition: 'AND',
 
@@ -139,10 +181,165 @@ export const filterUtils = {
         this.Utils.error('UndefinedOperator', 'Undefined operator "{0}"', type);
     },
 
-/**
+    /**
+     * @typedef {{field: string, operator: string, value: *}} genomicsParsedDataRule
+     * @typedef {{condition: string, rules: Array.<genomicsParsedDataGroup|genomicsParsedDataRule>}} genomicsParsedDataGroup
+     * @typedef {genomicsParsedDataGroup} genomicsParsedData
+     */
+
+    genomicsParsedRulesModification: {
+        group: {
+            /**
+             * @param {genomicsParsedDataGroup} group
+             * @param {boolean} isAnd
+             * @returns {genomicsParsedDataGroup}
+             */
+            setGroupCondition(group, isAnd) {
+                return {
+                    condition: isAnd ? 'AND' : 'OR',
+                    rules: group.rules
+                };
+            },
+            /**
+             * @private
+             * @param {genomicsParsedDataGroup} group
+             * @param {Array.<genomicsParsedDataGroup|genomicsParsedDataRule>} newRules
+             * @returns {genomicsParsedDataGroup}
+             */
+            _setGroupRules(group, newRules) {
+                return {
+                    condition: group.condition,
+                    rules: newRules
+                };
+            },
+            /**
+             * @param {genomicsParsedDataGroup} group
+             * @param {number} index
+             * @param {genomicsParsedDataGroup|genomicsParsedDataRule} ruleOrGroup
+             * @returns {genomicsParsedDataGroup}
+             */
+            replaceRule(group, index, ruleOrGroup) {
+                return this._setGroupRules(group, immutableArray.replace(group.rules, index, ruleOrGroup));
+            },
+            /**
+             * @param {genomicsParsedDataGroup} group
+             * @param {number} index
+             * @returns {genomicsParsedDataGroup}
+             */
+            removeRule(group, index) {
+                return this._setGroupRules(group, immutableArray.remove(group.rules, index));
+            },
+            /**
+             * @param {genomicsParsedDataGroup} group
+             * @param {genomicsParsedDataGroup|genomicsParsedDataRule} ruleOrGroup
+             * @returns {genomicsParsedDataGroup}
+             */
+            addRule(group, ruleOrGroup) {
+                return this._setGroupRules(group, immutableArray.append(group.rules, ruleOrGroup));
+            }
+        },
+        /**
+         * @param {genomicsParsedData|genomicsParsedDataGroup} data
+         * @param {number[]} index
+         * @param {boolean} isAnd
+         * @returns {genomicsParsedData|genomicsParsedDataGroup}
+         */
+        switchCondition(data, index, isAnd) {
+            if (!index.length) {
+                return this.group.setGroupCondition(data, isAnd);
+            }
+            /** @type {number} */
+            const indexInGroup = index[0];
+            /** @type {Array.<number>} */
+            const indexNext = index.slice(1, index.length);
+            /** @type {genomicsParsedDataGroup} */
+            const changingGroup = data.rules[indexInGroup];
+            /** @type {genomicsParsedDataGroup} */
+            const newGroup = this.switchCondition(changingGroup, indexNext, isAnd);
+            return this.group.replaceRule(data, indexInGroup, newGroup);
+        },
+        /**
+         * @param {genomicsParsedData|genomicsParsedDataGroup} data
+         * @param {number[]} index
+         * @param {genomicsParsedData|genomicsParsedDataGroup} ruleOrGroup
+         * @returns {genomicsParsedData|genomicsParsedDataGroup}
+         */
+        appendRuleOrGroup(data, index, ruleOrGroup) {
+            if (!index.length) {
+                return this.group.addRule(data, ruleOrGroup);
+            }
+            /** @type {number} */
+            const indexInGroup = index[0];
+            /** @type {Array.<number>} */
+            const indexNext = index.slice(1, index.length);
+            /** @type {genomicsParsedDataGroup} */
+            const changingGroup = data.rules[indexInGroup];
+            /** @type {genomicsParsedDataGroup} */
+            const newGroup = this.appendRuleOrGroup(changingGroup, indexNext, ruleOrGroup);
+            return this.group.replaceRule(data, indexInGroup, newGroup);
+        },
+        /**
+         * @param {genomicsParsedData|genomicsParsedDataGroup} data
+         * @param {number[]} index
+         * @param {number} itemIndex
+         * @returns {genomicsParsedData|genomicsParsedDataGroup}
+         */
+        removeRuleOrGroup(data, index, itemIndex) {
+            if (!index.length) {
+                return this.group.removeRule(data, itemIndex);
+            }
+            /** @type {number} */
+            const indexInGroup = index[0];
+            /** @type {Array.<number>} */
+            const indexNext = index.slice(1, index.length);
+            /** @type {genomicsParsedDataGroup} */
+            const changingGroup = data.rules[indexInGroup];
+            /** @type {genomicsParsedDataGroup} */
+            const newGroup = this.removeRuleOrGroup(changingGroup, indexNext, itemIndex);
+            return this.group.replaceRule(data, indexInGroup, newGroup);
+        },
+        /**
+         * @param {string} defaultFieldId
+         * @returns {{id: string, field: string, operator: string, value: *}}
+         */
+        makeDefaultRule(defaultFieldId) {
+            return {
+                id: defaultFieldId,
+                field: defaultFieldId,
+                operator: 'is_null',
+                value: null
+            };
+        },
+        /**
+         * @param {string} defaultFieldId
+         * @returns {genomicsParsedDataGroup}
+         */
+        makeDefaultGroup(defaultFieldId) {
+            return {
+                condition: 'AND',
+                rules: [
+                    this.makeDefaultRule(defaultFieldId)
+                ]
+            };
+        },
+        /**
+         * @param {genomicsParsedData|genomicsParsedDataGroup} data
+         * @param {number} index
+         * @param {boolean} isGroup
+         * @param {string} defaultFieldId
+         */
+        appendDefault(data, index, isGroup, defaultFieldId) {
+            const itemToAppend = isGroup ?
+                this.makeDefaultGroup(defaultFieldId) :
+                this.makeDefaultRule(defaultFieldId);
+            return this.appendRuleOrGroup(data, index, itemToAppend);
+        }
+    },
+
+    /**
      * Get rules as Genomics query
      * @throws UndefinedGenomicsConditionError, UndefinedGenomicsOperatorError
-     * @param data {object} (optional) rules
+     * @param {genomicsParsedData} data rules
      * @return {object}
      */
     getGenomics: function(data) {
