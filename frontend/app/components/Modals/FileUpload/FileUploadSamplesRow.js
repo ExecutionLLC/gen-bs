@@ -15,7 +15,7 @@ export default class FileUploadSamplesRow extends Component {
         this.state = {showValues: false};
     }
 
-    onSelectForAnalyzisClick(e, sample) {
+    onSelectForAnalysisClick(e, sample) {
         e.preventDefault();
         const {dispatch, closeModal, samplesList: {samples}} = this.props;
         dispatch(receiveSamplesList(samples));
@@ -60,21 +60,21 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderFooter() {
-        const {sample} = this.props;
+        const {isDemoSession, sample} = this.props;
         return (
             <div className="panel-footer">
-
-                <a onClick={(e) => this.onSelectForAnalyzisClick(e, sample)}
-                   className="btn btn-link btn-uppercase"
-                   type="button">
-                    <span data-localize="samples.settings.select.title">Select for analysis</span>
-                </a>
-                {sample.type === 'user'
-                && <a onClick={e => this.onShowValuesClick(e)}
-                      className="btn btn-link btn-uppercase" role="button"
-                      data-toggle="collapse" data-parent="#accordion"
-                      href="#collapseOne" aria-expanded="false"
-                      aria-controls="collapseOne">Edit
+                {!(isDemoSession && sample.type === 'advanced') &&
+                <a onClick={(e) => this.onSelectForAnalysisClick(e, sample)}
+                    className="btn btn-link btn-uppercase"
+                    type="button">
+                        <span data-localize="samples.settings.select.title">Select for analysis</span>
+                </a>}
+                {sample.type === 'user' &&
+                <a onClick={e => this.onShowValuesClick(e)}
+                   className="btn btn-link btn-uppercase" role="button"
+                   data-toggle="collapse" data-parent="#accordion"
+                   href="#collapseOne" aria-expanded="false"
+                   aria-controls="collapseOne">Edit
                 </a>}
             </div>
         );
