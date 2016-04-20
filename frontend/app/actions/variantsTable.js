@@ -192,14 +192,14 @@ function receiveAnalysisOperationId(operationId) {
 }
 
 
-export function createComment(alt, pos, ref, chrom, searchKey, comment) {
+export function createComment(alt, pos, reference, chrom, searchKey, comment) {
 
     return (dispatch, getState) => {
 
         const commentObject = {
             alt,
             pos,
-            'reference': ref,
+            reference,
             chrom,
             searchKey,
             comment
