@@ -42,12 +42,11 @@ export default function viewBuilder(state = {
         }
         case ActionTypes.VBUILDER_TOGGLE_NEW:
         {
-            var name = state.editedView.name;
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     id: null,
                     type: 'user',
-                    name: `Copy of ${name}`,
+                    name: `Copy of ${state.editedView.name}`,
                     originalViewId: state.editedView.id
                 })
             });
