@@ -111,7 +111,7 @@ export function attachHistory(historyItem) {
 
 export function detachHistory(detachSample, detachFilter, detachView) {
     return (dispatch, getState) => {
-        if (detachSample && !detachFilter && !detachView) {
+        if (!detachSample && !detachFilter && !detachView) {
             return;
         }
         const {userData, samplesList} = getState();
