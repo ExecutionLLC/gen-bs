@@ -37,7 +37,6 @@ class ViewsModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._findViews(trx, viewIds, userId, false, false, callback),
-                (views, callback) => this._ensureAllItemsFound(views, viewIds, callback),
                 (views, callback) => callback(null, _.first(views))
             ], (error, views) => {
                 callback(error, views);
@@ -253,7 +252,14 @@ class ViewsModel extends SecureModelBase {
 
         async.waterfall([
             callback => query.asCallback(callback),
-            (views, callback) => this._toCamelCase(views, callback)
+            (views, callback) => this._toCamelCase(views, callback),
+            (views, callback) => {
+                if (viewIdsOrNull) {
+                    this._ensureAllItemsFound(views, viewIdsOrNull, callback);
+                } else {
+                    callback(null, views);
+                }
+            }
         ], callback);
     }
 
