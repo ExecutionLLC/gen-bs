@@ -47,8 +47,10 @@ export default class ExistentViewSelect extends React.Component {
         switch (selectedViewType) {
             case 'history':
                 descriptionText = 'This view is history view, duplicate it to make changes.';
+                break;
             case 'user':
                 descriptionText = '';
+                break;
         }
 
         if (descriptionText) {
