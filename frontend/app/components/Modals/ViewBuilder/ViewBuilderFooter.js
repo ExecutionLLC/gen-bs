@@ -55,6 +55,9 @@ export default class ViewBuilderFooter extends React.Component {
         e.preventDefault();
         const {dispatch, viewBuilder} =this.props;
         const editedView = viewBuilder.editedView;
+        if (!editedView.name.trim()) {
+            return;
+        }
         editedView.id !== null ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView());
     }
 }
