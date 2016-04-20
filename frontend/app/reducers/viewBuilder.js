@@ -43,10 +43,6 @@ export default function viewBuilder(state = {
         case ActionTypes.VBUILDER_TOGGLE_NEW:
         {
             var name = state.editedView.name;
-            const historyFlag = ' (from history)';
-            if (state.editedView.type=='history') {
-                name = name.substring(0, name.length - historyFlag.length);
-            }
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     id: null,
