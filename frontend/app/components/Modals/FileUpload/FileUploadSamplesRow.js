@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Panel} from 'react-bootstrap';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
-
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     changeSample, receiveSamplesList
 } from '../../../actions/samplesList'
@@ -51,7 +50,10 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div>
                 <div className="panel-heading">
-                    <h3 className="panel-title">{sample.fileName}<span>{sample.description}</span></h3>
+                    <h3 className="panel-title">
+                        {getItemLabelByNameAndType(sample.fileName, sample.type)}
+                        <span>{sample.description}</span>
+                    </h3>
                 </div>
             </div>
         );

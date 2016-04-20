@@ -75,9 +75,8 @@ export function renewHistoryItem(historyItemId) {
             // copy history item and update names of sample, view and filter. All items from history
             // should be marked as '(from history)'.
             var clonedHistoryItem = _.cloneDeep(historyItem);
-            clonedHistoryItem.sample.name = clonedHistoryItem.sample.name + ' (from history)';
-            clonedHistoryItem.filters[0].name = clonedHistoryItem.filters[0].name + ' (from history)';
-            clonedHistoryItem.view.name = clonedHistoryItem.view.name + ' (from history)';
+            clonedHistoryItem.sample.type = 'history';
+            clonedHistoryItem.filters[0].type = 'history';
             clonedHistoryItem.view.type = 'history';
             dispatch(attachHistory(clonedHistoryItem));
             dispatch(changeSample(clonedHistoryItem.sample.id));

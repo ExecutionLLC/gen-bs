@@ -3,6 +3,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     filterBuilderSelectFilter,
     filterBuilderToggleNewEdit,
@@ -41,7 +42,7 @@ export default class ExistentFilterSelect extends Component {
                 <div className="row grid-toolbar">
                     <div className="col-sm-6">
                         <Select
-                            options={filters.map( filter => { return {value: filter.id, label: filter.name} } )}
+                            options={filters.map( filter => { return {value: filter.id, label: getItemLabelByNameAndType(filter.name, filter.type)} } )}
                             value={selectedFilter.id}
                             clearable={false}
                             onChange={ (val) => dispatch(filterBuilderSelectFilter(filters, val.value, true))}
