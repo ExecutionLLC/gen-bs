@@ -34,6 +34,7 @@ export default class FileUploadSamples extends Component {
                         sample => (
                             <FileUploadSamplesRow
                                 sample={sample}
+                                isDemoSession={this.props.auth.isDemo}
                                 fields={this.props.editableFieldsList}
                                 key={sample.id}
                                 samples={samples}
