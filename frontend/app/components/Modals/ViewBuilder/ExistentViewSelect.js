@@ -24,10 +24,10 @@ export default class ExistentViewSelect extends React.Component {
                 <div className="row grid-toolbar">
                     {this.renderTitle()}
                 </div>
-                {this.renderDescription(selectedView.type)}
+                {this.renderDescription(isDemoSession, selectedView.type)}
                 <div className="row grid-toolbar">
                     {this.renderViewSelector(views)}
-                    {this.renderButtonGroup(isEditableView, isDemoSession)}
+                    {this.renderButtonGroup(isDemoSession, isEditableView)}
                 </div>
             </div>
         )
@@ -84,7 +84,7 @@ export default class ExistentViewSelect extends React.Component {
         )
     }
 
-    renderButtonGroup(isEditableView, isDemoSession) {
+    renderButtonGroup(isDemoSession, isEditableView) {
         return (
             <div className="col-sm-6">
                 {this.renderDuplicateViewButton(isDemoSession)}
