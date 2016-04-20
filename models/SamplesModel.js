@@ -165,7 +165,8 @@ class SamplesModel extends SecureModelBase {
                 (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
                 (versionId, callback) => this._addFileSampleValues(trx, versionId, sampleToUpdate.values,
                     (error) => callback(error, versionId)),
-                (versionId, callback) => this._findInTransaction(trx, userId, versionId, callback)
+                (versionId, callback) => this._findManyInTransaction(trx, userId, [versionId], callback),
+                (samples, callback) => callback(null, samples[0])
             ], callback);
         }, callback);
     }
