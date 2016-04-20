@@ -20,7 +20,9 @@ export default function filterBuilder(state = {
                 isReceivedFilters: selectedFilter !== null,
                 editedFilter: action.editOrNew ? selectedFilter : null,
                 newFilter: !action.editOrNew ? selectedFilter : null,
-                editOrNew: action.editOrNew
+                editOrNew: action.editOrNew,
+                rulesRequested: false,
+                rulesPrepared: true
             });
 
         case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
