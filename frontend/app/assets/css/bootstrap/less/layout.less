@@ -1,10 +1,5 @@
 
 .collapse-subnav { 
-  &.collapse,
-  &.in,
-  &.collapsing { 
-    .transition-duration(35s);
-  }
   .navbar-fixed-top {
     margin: 0;
     top:@navbar-height;
@@ -164,9 +159,6 @@
 }
 .table-variants-head {
   top: 250px;
-  .transition-property(~"top");
-  .transition-duration(.05s);
-  .transition-timing-function(ease);
      @media (min-width: @screen-md) { 
       top: 150px;
     }
@@ -177,9 +169,6 @@
 .table-variants-body {
     top: 322px;
     bottom: 0;
-  .transition-property(~"top");
-  .transition-duration(.05s);
-  .transition-timing-function(ease);
      @media (min-width: @screen-md){ 
       top: 222px;
      }

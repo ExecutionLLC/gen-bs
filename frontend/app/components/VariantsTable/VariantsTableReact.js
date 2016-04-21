@@ -21,8 +21,7 @@ class VariantsTableReact extends Component {
         const { variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error } = this.props.ws
 
         var tableWrapperClass = classNames({
-            'table-variants-wrapper': true,
-            'subnav-closed': ui.queryNavbarClosed
+            'table-variants-wrapper': true
         });
 
         return (

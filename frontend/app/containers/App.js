@@ -49,7 +49,7 @@ class App extends Component {
 
         const navbarQueryClass = classNames({
             'collapse-subnav': true,
-            'subnav-closed': ui.queryNavbarClosed
+            'hidden': ui.queryNavbarClosed
         });
 
         return (
