@@ -120,9 +120,9 @@ class ViewsModel extends SecureModelBase {
         ], callback);
     }
 
-    _addKeywords(viewItemId, keywords, trx, callback) {
-        async.map(keywords, (keyword, callback) => {
-            this._addKeyword(viewItemId, keyword.id, trx, callback);
+    _addKeywords(viewItemId, keywordIds, trx, callback) {
+        async.map(keywordIds, (keywordId, callback) => {
+            this._addKeyword(viewItemId, keywordId, trx, callback);
         }, callback);
     }
 
