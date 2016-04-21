@@ -99,7 +99,7 @@ export function fetchUserdata() {
                 dispatch(changeSample(sample.id));
                 dispatch(changeFilter(filter.id));
                 dispatch(changeView(view.id));
-                if (!sample.id || filter.id || view.id) {
+                if (!sample || !filter || !view) {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 } else {
                     dispatch(analyze(sample.id, view.id, filter.id));
