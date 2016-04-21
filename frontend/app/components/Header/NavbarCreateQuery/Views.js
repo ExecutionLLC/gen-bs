@@ -9,7 +9,7 @@ export default class Views extends Component {
 
     render() {
         const dispatch = this.props.dispatch;
-        const currentView = this.props.ui.currentView;
+        const selectedView = this.props.ui.selectedView;
         return (
 
             <div className="table-cell max-width">
@@ -19,7 +19,7 @@ export default class Views extends Component {
 
                     <Select
                         options={this.getViewOptions()}
-                        value={currentView ? currentView.id: null}
+                        value={selectedView ? selectedView.id: null}
                         clearable={false}
                         onChange={ (val) => dispatch(changeView(val.value) )}
                     />

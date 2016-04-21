@@ -1,5 +1,5 @@
 import HttpStatus from 'http-status';
-import { handleError } from './errorHandler'
+import {handleError} from './errorHandler'
 import apiFacade from '../api/ApiFacade';
 
 
@@ -9,6 +9,7 @@ export const CHANGE_SAMPLE = 'CHANGE_SAMPLE';
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
 export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
+export const CHANGE_SAMPLES = 'CHANGE_SAMPLES';
 
 const samplesClient = apiFacade.samplesClient;
 const NETWORK_ERROR = 'Network error. You can reload page and try again.';
@@ -58,15 +59,15 @@ export function fetchSamples() {
             } else {
                 const {
                     samplesList: {
-                        currentSample
+                        selectedSample
                     }
                 } = getState();
                 const samples = response.body;
 
                 dispatch(receiveSamplesList(samples));
 
-                if (currentSample) {
-                    dispatch(changeSample(currentSample.id));
+                if (selectedSample) {
+                    dispatch(changeSample(selectedSample.id));
                 } else if (samples && samples.length) {
                     dispatch(changeSample(samples[0].id));
                 }
@@ -78,7 +79,7 @@ export function fetchSamples() {
 export function receiveSamplesList(samples) {
     return {
         type: RECEIVE_SAMPLES_LIST,
-        samples: samples
+        samples: samples || []
     }
 }
 
@@ -99,8 +100,8 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
 
 export function requestUpdateSampleFields(sampleId) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, samplesList: {samples, currentSample}} = getState();
-        const sampleToUpdate = _.find(samples, {id: sampleId});
+        const {auth: {sessionId}, samplesList: {editedSamples, selectedSample}} = getState();
+        const sampleToUpdate = _.find(editedSamples, {id: sampleId});
         samplesClient.update(sessionId, sampleToUpdate, (error, response) => {
             if (error) {
                 dispatch(handleError(null, NETWORK_ERROR));
@@ -112,11 +113,18 @@ export function requestUpdateSampleFields(sampleId) {
                     dispatch(receiveUpdatedSample(sampleId, updatedSample));
                     // If updating current sample, remember the sample id is changed during update
                     // so select new version of the sample.
-                    if (currentSample && currentSample.id === sampleId) {
+                    if (selectedSample && selectedSample.id === sampleId) {
                         dispatch(changeSample(updatedSample.id))
                     }
                 }
             }
         });
+    }
+}
+
+export function changeSamples(samples) {
+    return {
+        type: CHANGE_SAMPLES,
+        samples
     }
 }

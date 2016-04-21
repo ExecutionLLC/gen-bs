@@ -4,7 +4,12 @@ import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 
-import {viewBuilderToggleEdit, viewBuilderSelectView, viewBuilderToggleNew} from '../../../actions/viewBuilder'
+import {
+    viewBuilderToggleEdit,
+    viewBuilderSelectView,
+    viewBuilderToggleNew,
+    viewBuilderDeleteView
+} from '../../../actions/viewBuilder'
 
 
 export default class ExistentViewSelect extends React.Component {

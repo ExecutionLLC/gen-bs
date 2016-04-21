@@ -11,8 +11,9 @@ import HttpStatus from 'http-status';
 
 export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
-export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER';
+export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
+export const SET_VARIANTS_SORT = 'SET_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
 export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
 
@@ -24,7 +25,7 @@ export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
 export const CLEAR_VARIANTS_ROWS_SELECTION = 'CLEAR_VARIANTS_ROWS_SELECTION';
 
 export const REQUEST_VARIANTS = 'REQUEST_VARIANTS';
-export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS';
+export const RECEIVE_ANALYSIS_OPERATION_ID = 'RECEIVE_ANALYSIS_OPERATION_ID';
 
 export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS';
 export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
@@ -64,7 +65,7 @@ function changeVariantsLimit() {
     }
 }
 
-export function getNextPartOfData(currentSample, currentView, currentFilter) {
+export function getNextPartOfData() {
     return (dispatch) => {
         dispatch(changeVariantsLimit());
 
@@ -107,11 +108,11 @@ export function setExcludedFields(excludedFields) {
     }
 }
 
-export function changeVariantsFilter(fieldId, filterValue) {
+export function setFieldFilter(fieldId, filterValue) {
     return {
-        type: CHANGE_VARIANTS_FILTER,
-        fieldId: fieldId,
-        filterValue: filterValue
+        type: SET_FIELD_FILTER,
+        fieldId,
+        filterValue
     }
 }
 
@@ -122,6 +123,41 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
             dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
         }
+    }
+}
+
+export function setViewVariantsSort(view) {
+    return (dispatch, getState) => {
+
+        const {fields:{idToFieldHash}}=getState();
+        const sortOrder = _(view.viewListItems)
+            .filter(viewListItem =>{
+                return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
+            })
+            .filter(viewListItem =>{
+                return idToFieldHash[viewListItem.fieldId];
+            })
+            .map(viewListItem => {
+                return {
+                    direction: viewListItem.sortDirection,
+                    fieldId: viewListItem.fieldId,
+                    order: viewListItem.sortOrder
+                }
+            })
+            .sortByOrder(['order'], true)
+            .value();
+        //Fix for the case when another sort column is missing in the sample fields.
+        if (sortOrder.length ==1){
+            sortOrder[0].order = 1;
+        }
+        dispatch(setVariantsSort(sortOrder));
+    }
+}
+
+export function setVariantsSort( sortOrder) {
+    return {
+        type: SET_VARIANTS_SORT,
+        sortOrder
     }
 }
 
@@ -147,23 +183,23 @@ function requestVariants() {
     }
 }
 
-function receiveVariants(json) {
+function receiveAnalysisOperationId(operationId) {
     return {
-        type: RECEIVE_VARIANTS,
-        operationId: json.operationId,
+        type: RECEIVE_ANALYSIS_OPERATION_ID,
+        operationId,
         receivedAt: Date.now()
     }
 }
 
 
-export function createComment(alt, pos, ref, chrom, searchKey, comment) {
+export function createComment(alt, pos, reference, chrom, searchKey, comment) {
 
     return (dispatch, getState) => {
 
         const commentObject = {
             alt,
             pos,
-            'reference': ref,
+            reference,
             chrom,
             searchKey,
             comment
@@ -253,7 +289,8 @@ export function fetchVariants(searchParams) {
                 } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
                 } else {
-                    dispatch(receiveVariants(response.body));
+                    const {operationId} = response.body;
+                    dispatch(receiveAnalysisOperationId(operationId));
                     const state = getState();
                     dispatch(changeExcludedFields(state.websocket.variantsView.id));
                     const isDemo = state.auth.isDemo;

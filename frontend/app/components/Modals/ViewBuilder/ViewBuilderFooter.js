@@ -31,8 +31,8 @@ export default class ViewBuilderFooter extends React.Component {
                 </button>
 
                 <button
-                    onClick={ () => {this.selectOnClick()}}
-                    type="button"
+                    onClick={ (e) => {this.selectOnClick(e)}}
+                    type="submit"
                     className="btn btn-primary"
                     disabled={disabledClass}
                     title={title}
@@ -46,14 +46,18 @@ export default class ViewBuilderFooter extends React.Component {
 
     cancelOnClick() {
         const {dispatch, closeModal, views, viewBuilder} =this.props;
-        const currentView = viewBuilder.currentView;
+        const selectedView = viewBuilder.selectedView;
         closeModal('views');
-        dispatch(viewBuilderSelectView(views, currentView.id, true));
+        dispatch(viewBuilderSelectView(views, selectedView.id, true));
     }
 
-    selectOnClick() {
+    selectOnClick(e) {
+        e.preventDefault();
         const {dispatch, viewBuilder} =this.props;
         const editedView = viewBuilder.editedView;
+        if (!editedView.name.trim()) {
+            return;
+        }
         editedView.id !== null ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView());
     }
 }

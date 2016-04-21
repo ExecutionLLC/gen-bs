@@ -26,7 +26,6 @@ class ViewsModel extends SecureModelBase {
     find(userId, viewId, callback) {
         async.waterfall([
             (callback) => this._fetch(userId, viewId, callback),
-            (view, callback) => this._ensureItemNotDeleted(view, callback),
             (view, callback) => {
                 this._fetchViewItems(view.id, (error, viewItems) => {
                     if (error) {
@@ -53,9 +52,6 @@ class ViewsModel extends SecureModelBase {
             (views, callback) => {
                 this._ensureAllItemsFound(views, viewIds, callback);
             },
-            (views, callback) => async.map(views, (view, callback) => {
-                this._ensureItemNotDeleted(view, callback);
-            }, callback),
             (views, callback) => async.map(views, (view, callback) => {
                 this._checkUserIsCorrect(userId, view, callback);
             }, callback),
