@@ -38,7 +38,7 @@ class App extends Component {
     }
 
     render() {
-        const { isAuthenticated, isFetching } = this.props.userData;
+        const { isFetching } = this.props.userData;
         const {samplesList: {samples}} = this.props;
         const { ui } = this.props;
 
@@ -55,13 +55,7 @@ class App extends Component {
         return (
             <div className={mainDivClass} id="main">
                 <nav className="navbar navbar-inverse navbar-static-top"></nav>
-                {!isAuthenticated && <div >&nbsp;</div>}
-                {isAuthenticated && isFetching && samples.length === 0 &&
-                    <div className="loader"><h1>Analyze...</h1></div>
-                }
-                {isAuthenticated && !isFetching && samples.length === 0 &&
-                    <h2>Empty.</h2>
-                }
+                {<div >&nbsp;</div>}
                 {samples.length > 0 &&
                  <div className="container-fluid">
                     <NavbarMain />
