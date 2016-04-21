@@ -80,10 +80,14 @@ export function renewHistoryItem(historyItemId) {
             clonedHistoryItem.view.name = clonedHistoryItem.view.name + ' (from history)';
             dispatch(attachHistory(clonedHistoryItem));
             dispatch(changeSample(clonedHistoryItem.sample.id));
-            dispatch(fetchFields(clonedHistoryItem.sample.id));
-            dispatch(changeFilter(clonedHistoryItem.filters[0].id));
-            dispatch(changeView(clonedHistoryItem.view.id));
-            dispatch(analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id));
+            dispatch(fetchFields(clonedHistoryItem.sample.id)).then(
+                () => {
+                    dispatch(changeFilter(clonedHistoryItem.filters[0].id));
+                    dispatch(changeView(clonedHistoryItem.view.id));
+                    dispatch(analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id));
+                }
+            );
+            
         }
     }
 }
