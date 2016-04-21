@@ -11,8 +11,10 @@ export default class SamplesClient extends UserEntityClientBase {
     }
 
     getFields(sessionId, sampleId, callback) {
-        RequestWrapper.get(this.urls.getSampleFields(sampleId),
-            this._makeHeaders({sessionId}), null, null, callback);
+        var self = this;
+        setTimeout(function(){
+        RequestWrapper.get(self.urls.getSampleFields(sampleId),
+            self._makeHeaders({sessionId}), null, null, callback);}, 3000);
     }
 
     getSourcesFields(sessionId, callback) {
