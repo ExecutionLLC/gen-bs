@@ -37,6 +37,9 @@ const FETCH_FILTERS_SERVER_ERROR = 'Cannot update filters data (server error). Y
 const FETCH_VIEWS_NETWORK_ERROR = 'Cannot update views data (network error). You can reload page and try again.';
 const FETCH_VIEWS_SERVER_ERROR = 'Cannot update views data (server error). You can reload page and try again.';
 
+const CANNOT_FIND_DEFAULT_ITEMS_ERROR = 'Cannot determine set of default settings (sample, view, filter). ' +
+                                        'You can try to set sample, filter, view by hand or try to reload page.';
+
 const dataClient = apiFacade.dataClient;
 const filtersClient = apiFacade.filtersClient;
 const viewsClient = apiFacade.viewsClient;
@@ -71,7 +74,6 @@ export function fetchUserdata() {
                 dispatch(handleError(null, FETCH_USER_DATA_SERVER_ERROR));
             } else {
                 const userData = response.body;
-                const view = _.find(userData.views, view => view.type === 'standard');
                 const {
                     samples,
                     totalFields,
@@ -81,19 +83,27 @@ export function fetchUserdata() {
                     lastSampleFields
                 } = userData;
 
+                const sample = _.find(samples, sample => sample.id === lastSampleId) ||
+                               _.find(samples, sample => sample.type === 'standard');
                 const filter = _.find(userData.filters, filter => filter.type === 'standard');
-                const sample = _.find(samples, sample => sample.id === lastSampleId);
-                const sampleId = sample ? sample.id : null;
+                const view = _.find(userData.views, view => view.type === 'standard');
+
                 dispatch(receiveUserdata(userData));
-                dispatch(changeView(view.id));
-                dispatch(changeFilter(filter.id));
+
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
                 dispatch(receiveFields(lastSampleFields));
                 dispatch(receiveSamplesList(samples));
-                dispatch(changeSample(sampleId));
                 dispatch(receiveQueryHistory(queryHistory));
-                dispatch(analyze(sampleId, view.id, filter.id));
+
+                dispatch(changeSample(sample.id));
+                dispatch(changeFilter(filter.id));
+                dispatch(changeView(view.id));
+                if (!sample.id || filter.id || view.id) {
+                    dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                } else {
+                    dispatch(analyze(sample.id, view.id, filter.id));
+                }
             }
         });
     }
