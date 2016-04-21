@@ -9,6 +9,7 @@ import {changeViews} from "./userData";
 import {changeSamples} from "./samplesList";
 import {changeSample} from "./samplesList";
 import {fetchFields} from "./fields";
+import {prepareAnalyze} from './websocket';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -80,6 +81,7 @@ export function renewHistoryItem(historyItemId) {
             clonedHistoryItem.view.name = clonedHistoryItem.view.name + ' (from history)';
             dispatch(attachHistory(clonedHistoryItem));
             dispatch(changeSample(clonedHistoryItem.sample.id));
+            dispatch(prepareAnalyze());
             dispatch(fetchFields(clonedHistoryItem.sample.id)).then(
                 () => {
                     dispatch(changeFilter(clonedHistoryItem.filters[0].id));
