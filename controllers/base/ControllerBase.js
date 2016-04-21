@@ -3,6 +3,8 @@
 const _ = require('lodash');
 const HttpStatus = require('http-status');
 
+const RequestLimiterStorage = require('./RequestLimiterStorage');
+
 /**
  * Base class for all controllers.
  * */
@@ -12,6 +14,7 @@ class ControllerBase {
 
         this.config = services.config;
         this.logger = services.logger;
+        this.requestLimiterStorage = new RequestLimiterStorage(this.logger);
 
         this.getSessionId = this.getSessionId.bind(this);
         this.getLanguageId = this.getLanguageId.bind(this);
