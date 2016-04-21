@@ -58,6 +58,9 @@ class SearchService extends ServiceBase {
                     this._createAppServerSearchParams(sessionId, user, languageId, sampleId, viewId, filterId, limit, offset, callback);
                 },
                 (appServerRequestParams, callback) => {
+                    this._validateAppServerSearchParams(appServerRequestParams, callback);
+                },
+                (appServerRequestParams, callback) => {
                     this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
                         appServerRequestParams, callback);
                 }
@@ -329,15 +332,6 @@ class SearchService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-
-                _.forEach([result.sample, result.filter, result.view], (item) => {
-                    this.services.users.ensureUserHasAccessToItem(user.id, item.type, (error) => {
-                        if (error) {
-                            callback(error);
-                        }
-                    });
-                });
-
                 const appServerSearchParams = {
                     sessionId,
                     langu: result.langu,
@@ -350,6 +344,22 @@ class SearchService extends ServiceBase {
                     offset
                 };
                 callback(null, appServerSearchParams);
+            }
+        });
+    }
+
+    _validateAppServerSearchParams(appServerRequestParams, callback) {
+        const userId = appServerRequestParams.userId;
+        const sample = appServerRequestParams.sample;
+        const filter = appServerRequestParams.filter;
+        const view = appServerRequestParams.view;
+        async.each([sample, filter, view], (item, callback) => {
+            this.services.users.ensureUserHasAccessToItem(userId, item.type, callback)
+        }, (error) => {
+            if (error) {
+                callback(error);
+            } else {
+                callback(null, appServerRequestParams);
             }
         });
     }
