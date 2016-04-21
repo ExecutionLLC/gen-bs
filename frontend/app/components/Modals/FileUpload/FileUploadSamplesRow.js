@@ -63,14 +63,14 @@ export default class FileUploadSamplesRow extends Component {
         const {isDemoSession, sample} = this.props;
         return (
             <div className="panel-footer">
-                {this.renderSelectButton(isDemoSession, sample.type)}
+                {this.renderSelectButton(isDemoSession, sample)}
                 {this.renderEditButton(sample.type)}
             </div>
         );
     }
 
-    renderSelectButton(isDemoSession, sampleType) {
-        if(isDemoSession && sampleType === 'advanced') {
+    renderSelectButton(isDemoSession, sample) {
+        if(isDemoSession && sample.type === 'advanced') {
             return (
                 <span data-localize="samples.settings.select.title">
                     Please register to analyze this sample.
