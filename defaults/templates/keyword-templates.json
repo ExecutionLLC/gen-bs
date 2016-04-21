@@ -5,15 +5,12 @@
       "name": "CHROM",
       "value_type": "integer"
     },
+    "name": "CHROM 1",
     "value": "1",
     "synonyms": [
       {
         "langu_id": "en",
         "value": "Synonym of CHROM 1"
-      },
-      {
-        "langu_id": "en",
-        "value": "Another synonym of CHROM 1"
       }
     ]
   },
@@ -23,15 +20,12 @@
       "name": "CHROM",
       "value_type": "integer"
     },
+    "name": "CHROM 2",
     "value": "2",
     "synonyms": [
       {
         "langu_id": "en",
         "value": "Synonym of CHROM 2"
-      },
-      {
-        "langu_id": "en",
-        "value": "Another synonym of CHROM 2"
       }
     ]
   },
@@ -47,14 +41,6 @@
       {
         "langu_id": "en",
         "value": "Pos 889158"
-      },
-      {
-        "langu_id": "en",
-        "value": "Synonym of Pos 889158"
-      },
-      {
-        "langu_id": "en",
-        "value": "Another synonym of Pos 889158"
       }
     ]
   }

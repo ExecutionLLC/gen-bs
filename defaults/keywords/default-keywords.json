@@ -1,36 +1,30 @@
 [
   {
-    "id": "33373501-e086-4104-9daf-229bc21d3302",
+    "id": "9be7e5dc-7497-412d-b100-6b326d74b32d",
     "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM 1",
     "value": "1",
     "synonyms": [
       {
         "langu_id": "en",
         "value": "Synonym of CHROM 1"
-      },
-      {
-        "langu_id": "en",
-        "value": "Another synonym of CHROM 1"
       }
     ]
   },
   {
-    "id": "9a009f21-b0ad-465a-8d59-757a88deaec6",
+    "id": "76233eca-1dda-4c0e-9c7c-a87870854649",
     "field_id": "00000000-0000-0000-0000-000000000001",
+    "name": "CHROM 2",
     "value": "2",
     "synonyms": [
       {
         "langu_id": "en",
         "value": "Synonym of CHROM 2"
-      },
-      {
-        "langu_id": "en",
-        "value": "Another synonym of CHROM 2"
       }
     ]
   },
   {
-    "id": "a964bd0f-46b5-487b-ac08-7dccd236c584",
+    "id": "dc74e638-67ad-4a4e-86c3-0071d78246f7",
     "field_id": "00000000-0000-0000-0000-000000000002",
     "name": "Position",
     "value": "889158",
@@ -38,14 +32,6 @@
       {
         "langu_id": "en",
         "value": "Pos 889158"
-      },
-      {
-        "langu_id": "en",
-        "value": "Synonym of Pos 889158"
-      },
-      {
-        "langu_id": "en",
-        "value": "Another synonym of Pos 889158"
       }
     ]
   }
