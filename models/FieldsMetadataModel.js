@@ -119,7 +119,7 @@ class FieldsMetadataModel extends ModelBase {
             (keywords, callback) => {
                 const fieldIdsToKeywords = _.groupBy(keywords, keyword => keyword.fieldId);
                 const fieldsWithKeywords = _.map(fieldsMetadata,
-                    field => Object.assign({}, field, {
+                    (field) => Object.assign({}, field, {
                         keywords: fieldIdsToKeywords[field.id] || []
                     }));
                 callback(null, fieldsWithKeywords);
