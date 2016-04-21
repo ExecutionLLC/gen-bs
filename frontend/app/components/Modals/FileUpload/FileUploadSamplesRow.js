@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Panel} from 'react-bootstrap';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
-
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     changeSample, receiveSamplesList
 } from '../../../actions/samplesList'
@@ -16,7 +15,7 @@ export default class FileUploadSamplesRow extends Component {
         this.state = {showValues: false};
     }
 
-    onSelectForAnalyzisClick(e, sample) {
+    onSelectForAnalysisClick(e, sample) {
         e.preventDefault();
         const {dispatch, closeModal, samplesList: {samples}} = this.props;
         dispatch(receiveSamplesList(samples));
@@ -51,33 +50,58 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <div>
                 <div className="panel-heading">
-                    <h3 className="panel-title">{sample.fileName}<span>{sample.description}</span></h3>
+                    <h3 className="panel-title">
+                        {getItemLabelByNameAndType(sample.fileName, sample.type)}
+                        <span>{sample.description}</span>
+                    </h3>
                 </div>
             </div>
         );
     }
 
     renderFooter() {
-        const {sample} = this.props;
+        const {isDemoSession, sample} = this.props;
         return (
             <div className="panel-footer">
-
-                <a onClick={(e) => this.onSelectForAnalyzisClick(e, sample)}
-                   className="btn btn-link btn-uppercase"
-                   type="button">
-                    <span data-localize="samples.settings.select.title">Select for analysis</span>
-                </a>
-                {sample.type === 'user'
-                && <a onClick={e => this.onShowValuesClick(e)}
-                      className="btn btn-link btn-uppercase" role="button"
-                      data-toggle="collapse" data-parent="#accordion"
-                      href="#collapseOne" aria-expanded="false"
-                      aria-controls="collapseOne">Edit
-                </a>}
+                {this.renderSelectButton(isDemoSession, sample.type)}
+                {this.renderEditButton(sample.type)}
             </div>
         );
     }
 
+    renderSelectButton(isDemoSession, sampleType) {
+        if(isDemoSession && sampleType === 'advanced') {
+            return (
+                <span data-localize="samples.settings.select.title">
+                    Please register to analyze this sample.
+                </span>
+            )
+        }
+
+        return (
+            <a onClick={(e) => this.onSelectForAnalysisClick(e, sample)}
+               className="btn btn-link btn-uppercase"
+               type="button"
+            >
+                <span data-localize="samples.settings.select.title">Select for analysis</span>
+            </a>
+        )
+    }
+
+    renderEditButton(sampleType) {
+        if (sampleType === 'user') {
+            return (
+                <a onClick={e => this.onShowValuesClick(e)}
+                   className="btn btn-link btn-uppercase" role="button"
+                   data-toggle="collapse" data-parent="#accordion"
+                   href="#collapseOne" aria-expanded="false"
+                   aria-controls="collapseOne">Edit
+                </a>
+            )
+        }
+
+        return null;
+    }
 
     renderEditableValues() {
         const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props;

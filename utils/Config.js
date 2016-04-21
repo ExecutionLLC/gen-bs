@@ -12,7 +12,7 @@ const SETTINGS = {
     // will always be used. This is convenient when port forwarding to Redis server is used.
     forceOverrideRedisToLocalhost: ENV.GEN_WS_FORCE_OVERRIDE_REDIS_TO_LOCALHOST || false,
     // If true, samples will not be marked as analyzed, and there will be no fee from the user.
-    disableMakeAnalyzed: ENV.GEN_WS_DISABLE_MAKE_ANALYZED || false,
+    disableMakeAnalyzed: ENV.GEN_WS_DISABLE_MAKE_ANALYZED || true,
     // If enabled, demo users will have rights to create and delete filters and samples.
     // These filters and samples will be shared between them, as there is only one demo-user in the system.
     enableFullRightsForDemoUsers: ENV.GEN_WS_ENABLE_FULL_RIGHTS_FOR_DEMO_USERS || false,

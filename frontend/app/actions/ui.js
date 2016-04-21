@@ -4,6 +4,7 @@ import {viewBuilderSelectView} from './viewBuilder';
 import {filterBuilderSelectFilter} from './filterBuilder';
 import {detachHistory} from "./queryHistory";
 import {setViewVariantsSort} from "./variantsTable";
+import {handleError} from './errorHandler'
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
@@ -12,6 +13,8 @@ export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
 export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
+
+const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameters.';
 
 /*
  * Action Creators
@@ -56,6 +59,10 @@ export function changeFilter(filterId) {
 
 export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
     return (dispatch, getState) => {
+        if (!sampleId || !viewId || !filterId) {
+            dispatch(handleError(null, ANALIZE_PARAMS_ERROR));
+            return;
+        }
 
         const searchParams = {
             sampleId: sampleId,

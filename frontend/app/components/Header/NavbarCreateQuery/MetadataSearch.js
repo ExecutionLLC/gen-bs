@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Select2 from 'react-select2-wrapper';
 import Select from 'react-select';
 
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 
 export default class MetadataSearch extends Component {
 
@@ -10,7 +10,7 @@ export default class MetadataSearch extends Component {
     }
 
     render() {
-        const {samples, selectedSampleId, onSampleChangeRequested} = this.props;
+        const {selectedSampleId, onSampleChangeRequested} = this.props;
         return (
 
             <div className="table-cell max-width">
@@ -21,7 +21,7 @@ export default class MetadataSearch extends Component {
                      data-container="body"
                      title="Select one from available samples"
                 >
-                    <Select options={samples.map( s => { return {value: s.id, label: s.fileName} } )}
+                    <Select options={this.getSampleOptions()}
                             clearable={false}
                             value={selectedSampleId}
                             onChange={ (item) => onSampleChangeRequested(item.value)}
@@ -29,6 +29,20 @@ export default class MetadataSearch extends Component {
                 </div>
             </div>
         );
+    }
+
+    isSampleDisabled(sample){
+        const {isDemoSession} = this.props;
+        return  isDemoSession && sample.type == 'advanced';
+    }
+
+    getSampleOptions() {
+        const {samples} = this.props;
+        return samples.map( (sampleItem) => {
+            const isDisabled = this.isSampleDisabled(sampleItem);
+            const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
+            return {value: sampleItem.id, label, disabled: isDisabled};
+        });
     }
 }
 

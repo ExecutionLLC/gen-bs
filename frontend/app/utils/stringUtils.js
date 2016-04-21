@@ -23,3 +23,7 @@ export function getUrlParameterByName(name, url) {
     }
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+
+export function getItemLabelByNameAndType(itemName, itemType) {
+    return itemType === 'history' ? itemName + ' (from history)' : itemName;
+}
