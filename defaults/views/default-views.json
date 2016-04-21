@@ -11,10 +11,7 @@
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc",
-        "keywords": [
-          "9be7e5dc-7497-412d-b100-6b326d74b32d",
-          "76233eca-1dda-4c0e-9c7c-a87870854649"
-        ]
+        "keywords": []
       },
       {
         "id": "d36e9d7d-311a-4696-a87a-c1414811c51c",
@@ -22,9 +19,7 @@
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc",
-        "keywords": [
-          "dc74e638-67ad-4a4e-86c3-0071d78246f7"
-        ]
+        "keywords": []
       },
       {
         "id": "eeb28a1f-fa97-40dc-8309-3ead2468b4c9",
@@ -48,7 +43,10 @@
         "id": "96f57add-94d1-4381-8d36-c2d020bcccb8",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 5,
-        "keywords": []
+        "keywords": [
+          "9be7e5dc-7497-412d-b100-6b326d74b32d",
+          "76233eca-1dda-4c0e-9c7c-a87870854649"
+        ]
       }
     ]
   },
@@ -64,9 +62,7 @@
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc",
-        "keywords": [
-          "9be7e5dc-7497-412d-b100-6b326d74b32d"
-        ]
+        "keywords": []
       },
       {
         "id": "428daa1a-1014-4ceb-bdd8-0ccf79cd7d24",
@@ -86,7 +82,9 @@
         "id": "c1ebdda9-3ac4-4d9b-a701-f4ca61279a16",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 4,
-        "keywords": []
+        "keywords": [
+          "9be7e5dc-7497-412d-b100-6b326d74b32d"
+        ]
       }
     ]
   }
