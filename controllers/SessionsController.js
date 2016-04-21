@@ -6,7 +6,7 @@ const Express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-const ControllerBase = require('./ControllerBase');
+const ControllerBase = require('./base/ControllerBase');
 
 class SessionsController extends ControllerBase {
     constructor(services) {

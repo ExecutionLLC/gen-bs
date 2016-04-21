@@ -3,7 +3,7 @@
 const Express = require('express');
 const async = require('async');
 
-const ControllerBase = require('./ControllerBase');
+const ControllerBase = require('./base/ControllerBase');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 class SearchController extends ControllerBase {

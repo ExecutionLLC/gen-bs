@@ -5,7 +5,7 @@ const multer = require('multer');
 const fs = require('fs');
 const _ = require('lodash');
 
-const UserEntityControllerBase = require('./UserEntityControllerBase');
+const UserEntityControllerBase = require('./base/UserEntityControllerBase');
 
 class SavedFilesController extends UserEntityControllerBase {
     constructor(services) {
