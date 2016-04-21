@@ -29,12 +29,17 @@ class AppServerViewUtils {
             .filter(listItem => fieldIdToMetadata[listItem.fieldId])
             .map(listItem => {
                 const field = fieldIdToMetadata[listItem.fieldId];
+                const keyWordHash = _.reduce(field.keywords, (result, keyword) => {
+                    result[keyword.id] = keyword;
+                    return result;
+                }, {});
                 return {
                     fieldName: field.name,
                     sourceName: field.sourceName,
                     order: listItem.order,
                     sortOrder: listItem.sortOrder,
-                    sortDirection: listItem.sortDirection
+                    sortDirection: listItem.sortDirection,
+                    filter: _.map(listItem.keywords, keywordId =>keyWordHash[keywordId].value)
                 };
             })
             .value();
@@ -68,7 +73,7 @@ class AppServerViewUtils {
     static _createAppServerViewColumn(listItem) {
         return {
             name: listItem.fieldName,
-            filter: [] // TODO: List of resolved keywords
+            filter: listItem.filter
         };
     }
 }
