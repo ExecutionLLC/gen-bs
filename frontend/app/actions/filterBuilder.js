@@ -22,6 +22,7 @@ export const FBUILDER_REQUEST_CREATE_FILTER = 'FBUILDER_REQUEST_CREATE_FILTER';
 export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
 
 export const FBUILDER_REQUEST_RULES = 'FBUILDER_REQUEST_RULES';
+export const FBUILDER_REQUEST_RULES_CANCEL = 'FBUILDER_REQUEST_RULES_CANCEL';
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
 export const FBUILDER_REQUEST_DELETE_FILTER = 'FBUILDER_REQUEST_DELETE_FILTER';
@@ -145,6 +146,12 @@ export function filterBuilderUpdateFilter() {
 export function filterBuilderRequestRules() {
     return {
         type: FBUILDER_REQUEST_RULES
+    }
+}
+
+export function filterBuilderRequestRulesCancel() {
+    return {
+        type: FBUILDER_REQUEST_RULES_CANCEL
     }
 }
 
