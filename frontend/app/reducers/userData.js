@@ -83,6 +83,26 @@ export default function userData(state = {
                 views: views
             });
         }
+        case ActionTypes.DELETE_VIEW:
+        {
+            const deletedViewIndex = _.findIndex(state.views, view => view.id == action.viewId);
+            return Object.assign({}, state, {
+                views: [
+                    ...state.views.slice(0, deletedViewIndex),
+                    ...state.views.slice(deletedViewIndex + 1)
+                ]
+            });
+        }
+        case ActionTypes.DELETE_FILTER:
+        {
+            const deletedFilterIndex = _.findIndex(state.filters, filter => filter.id == action.filterId);
+            return Object.assign({}, state, {
+                filters: [
+                    ...state.filters.slice(0, deletedFilterIndex),
+                    ...state.filters.slice(deletedFilterIndex + 1)
+                ]
+            });
+        }
         default:
             return state
     }

@@ -4,7 +4,12 @@ import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 
-import {viewBuilderToggleEdit, viewBuilderSelectView, viewBuilderToggleNew} from '../../../actions/viewBuilder'
+import {
+    viewBuilderToggleEdit,
+    viewBuilderSelectView,
+    viewBuilderToggleNew,
+    viewBuilderDeleteView
+} from '../../../actions/viewBuilder'
 
 
 export default class ExistentViewSelect extends React.Component {
@@ -75,7 +80,9 @@ export default class ExistentViewSelect extends React.Component {
                         }
                         { view.type == 'user' &&
                         <div className="btn-group ">
-                            <button type="button" className="btn btn-link">
+                            <button type="button"
+                                    className="btn btn-default"
+                                    onClick={ () => dispatch(viewBuilderDeleteView(view.id))}>
                                 <span data-localize="views.setup.delete.title">Delete View</span>
                             </button>
                         </div>
