@@ -14,7 +14,7 @@ import {filterUtils, opsUtils, genomicsParsedRulesValidate} from '../../../utils
 /**
 
 FieldFilterItem(
-    index: number[]
+    indexPath: number[]
     item: {field: string, operator: string, value: *}
     fields: {id: string, label: string, type: string}[]
     allowedOpsTypes: string[]
@@ -42,7 +42,7 @@ class FilterQueryBuilder extends Component {
     /**
      * Get fields ids for given operation
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operator
+     * @param {{type: string, nbInputs: number, multiple: boolean, applyTo: string[]}} operator
      * @returns {Object.<string, boolean>}
      */
     static getValidFieldsIdsForOperator(fields, operator) {
@@ -60,30 +60,30 @@ class FilterQueryBuilder extends Component {
      * Make filter rule item component
      * @param {{id: string, label: string, type: string}[]} fields
      * @param {function(Object)} dispatch
-     * @param {number[]} index
+     * @param {number[]} indexPath
      * @param {{field: string, operator: string, value: *}} item
      * @param {boolean} disabled
      * @returns {Component}
      */
-    static makeFilterItem(fields, dispatch, index, item, disabled) {
+    static makeFilterItem(fields, dispatch, indexPath, item, disabled) {
         const fieldJSType = FieldUtils.getFieldJSType(FieldUtils.getFieldById(fields, item.field));
         const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
         const allowedFieldsIds = this.getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
         const allowedFields =  fields.filter( (f) => allowedFieldsIds[f.id] );
         return (
             <FieldFilterItem
-                index={index}
+                indexPath={indexPath}
                 item={item}
                 fields={allowedFields}
                 allowedOpsTypes={allowedOpsTypes}
                 valueType={fieldJSType}
                 disabled={disabled}
                 onChange={ (item) => {
-                            if (index.length < 1) {
+                            if (indexPath.length < 1) {
                                 return;
                             }
-                            const ruleIndex = index[index.length - 1];
-                            dispatch(filterBuilderChangeFilter(index.slice(0, index.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
+                            const ruleIndex = indexPath[indexPath.length - 1];
+                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
                         }}
             />
         );
@@ -91,21 +91,21 @@ class FilterQueryBuilder extends Component {
 
     static makeFilterQueryBuilderHandlers(dispatch) {
         return {
-            onSwitch(/** number[] */index, /** boolean */isAnd) {
-                dispatch(filterBuilderChangeFilter(index, {onSwitch: isAnd}));
+            onSwitch(/** number[] */indexPath, /** boolean */isAnd) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onSwitch: isAnd}));
             },
-            onAdd(/** number[] */index, /** boolean */isGroup) {
-                dispatch(filterBuilderChangeFilter(index, {onAdd: isGroup}));
+            onAdd(/** number[] */indexPath, /** boolean */isGroup) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onAdd: isGroup}));
             },
-            onDeleteGroup(/** number[] */index) {
-                if (index.length < 1) {
+            onDeleteGroup(/** number[] */indexPath) {
+                if (indexPath.length < 1) {
                     return;
                 }
-                const groupIndex = index[index.length - 1];
-                dispatch(filterBuilderChangeFilter(index.slice(0, index.length - 1), {onDelete: groupIndex}));
+                const groupIndex = indexPath[indexPath.length - 1];
+                dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onDelete: groupIndex}));
             },
-            onDeleteItem(/** number[] */index, /** number */itemIndex) {
-                dispatch(filterBuilderChangeFilter(index, {onDelete: itemIndex}));
+            onDeleteItem(/** number[] */indexPath, /** number */itemIndex) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onDelete: itemIndex}));
             }
         };
     }
@@ -247,7 +247,7 @@ class FieldFilterItem extends Component {
     render() {
         const {
             /** {number[]} */
-            index,
+            indexPath,
             /** @type {{field: string, operator: string, value: *}} */
             item,
             /** @type {{id: string, label: string, type: string}[]} */

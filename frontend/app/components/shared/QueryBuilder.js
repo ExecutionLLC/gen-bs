@@ -23,7 +23,7 @@ FilterQueryBuilder(
         }
     )
         RulesGroupContainer(
-            index: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
+            indexPath: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
             makeItemComponent: = makeItemComponent
             ruleItems: {condition?: *, field?: string, operator?: string, value?: *}[]
             ruleIsAnd: boolean
@@ -31,7 +31,7 @@ FilterQueryBuilder(
             handlers: = handlers
         )
             RulesGroupHeader(
-                index: = index
+                indexPath: = indexPath
                 disabled: = disabled
                 isAnd: = ruleIsAnd
                 onSwitch: function(boolean)
@@ -39,7 +39,7 @@ FilterQueryBuilder(
                 onDelete: function()
             )
             RulesGroupBody(
-                index: = index
+                indexPath: = indexPath
                 items: = ruleItems
                 disabled: = disabled
                 makeItemComponent: = makeItemComponent
@@ -47,7 +47,7 @@ FilterQueryBuilder(
             )
                 RulesGroupContainer(...)
                 RuleContainer(
-                    index: number[]
+                    indexPath: number[]
                     item: {condition?: *, field?: string, operator?: string, value?: *}
                     disabled: = disabled
                     makeItemComponent: = makeItemComponent
@@ -79,7 +79,7 @@ export default class QueryBuilder extends Component {
             <div>
                 <div className="query-builder">
                     <RulesGroupContainer
-                        index={[]}
+                        indexPath={[]}
                         makeItemComponent={makeItemComponent}
                         ruleItems={rules.rules}
                         ruleIsAnd={rules.condition == 'AND'}
@@ -97,7 +97,7 @@ class RulesGroupContainer extends Component {
     render() {
         const {
             /** @type {number[]} */
-            index,
+            indexPath,
             /** @type {function(number[], {}, boolean): Component} */
             makeItemComponent,
             /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
@@ -113,15 +113,15 @@ class RulesGroupContainer extends Component {
         return (
             <dl className="rules-group-container">
                 <RulesGroupHeader
-                    index={index}
+                    indexPath={indexPath}
                     disabled={disabled}
                     isAnd={ruleIsAnd}
-                    onSwitch={ (isAnd) => { handlers.onSwitch(index, isAnd); }  }
-                    onAdd={ (isGroup) => { handlers.onAdd(index, isGroup); } }
-                    onDelete={ () => { handlers.onDeleteGroup(index); } }
+                    onSwitch={ (isAnd) => { handlers.onSwitch(indexPath, isAnd); }  }
+                    onAdd={ (isGroup) => { handlers.onAdd(indexPath, isGroup); } }
+                    onDelete={ () => { handlers.onDeleteGroup(indexPath); } }
                 />
                 <RulesGroupBody
-                    index={index}
+                    indexPath={indexPath}
                     items={ruleItems}
                     disabled={disabled}
                     makeItemComponent={makeItemComponent}
@@ -176,7 +176,7 @@ class RulesGroupHeader extends Component {
     render() {
         const {
             /** @type {number[]} */
-            index,
+            indexPath,
             /** @type {boolean} */
             isAnd,
             /** @type {boolean} */
@@ -189,7 +189,7 @@ class RulesGroupHeader extends Component {
             onDelete
         } = this.props;
 
-        const groupName = 'builder-basic-react_group_' + index.join('-') + '_cond';
+        const groupName = 'builder-basic-react_group_' + indexPath.join('-') + '_cond';
 
         return (
             <dt className="rules-group-header">
@@ -220,7 +220,7 @@ class RulesGroupBody extends Component {
             /** @type {{condition: *=, field: string=, operator: string=, value: *=}} */
             item,
             /** @type {number[]} */
-            index,
+            indexPath,
             /** @type {boolean} */
             disabled,
             /** @type {?function()} */
@@ -246,27 +246,27 @@ class RulesGroupBody extends Component {
                     </div>
                 </div>
                 <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
-                {makeItemComponent(index, item, disabled)}
+                {makeItemComponent(indexPath, item, disabled)}
             </li>
         );
     }
 
     /**
      * @param {{condition: *=, field: string=, operator: string=, value: *=}[]} items
-     * @param {number[]} index
+     * @param {number[]} indexPath
      * @param {boolean} disabled
      * @param {function(number[], {}, boolean): Component} makeItemComponent
      * @param {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} handlers
      * @returns {Component}
      */
-    static renderItems(items, index, disabled, makeItemComponent, handlers) {
+    static renderItems(items, indexPath, disabled, makeItemComponent, handlers) {
         return (
             items.map( (item, itemIndex) => {
-                const indexNext = index.concat(itemIndex);
+                const indexNext = indexPath.concat(itemIndex);
                 if (item.condition) {
                     return (
                         <RulesGroupContainer
-                            index={indexNext}
+                            indexPath={indexNext}
                             key={itemIndex}
                             ruleItems={item.rules}
                             ruleIsAnd={item.condition == 'AND'}
@@ -279,11 +279,11 @@ class RulesGroupBody extends Component {
                     return (
                         <RulesGroupBody.RuleContainer
                             key={itemIndex}
-                            index={indexNext}
+                            indexPath={indexNext}
                             item={item}
                             disabled={disabled}
                             makeItemComponent={makeItemComponent}
-                            onDelete={ () => handlers.onDeleteItem(index, itemIndex) }
+                            onDelete={ () => handlers.onDeleteItem(indexPath, itemIndex) }
                         />
                     );
                 }
@@ -296,7 +296,7 @@ class RulesGroupBody extends Component {
 
         const {
             /** @type {number[]} */
-            index,
+            indexPath,
             /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
             items,
             /** @type {function(number[], {}, boolean): Component} */
@@ -310,7 +310,7 @@ class RulesGroupBody extends Component {
         return (
             <dd className="rules-group-body">
                 <ul className="rules-list">
-                    {RulesGroupBody.renderItems(items, index, disabled, makeItemComponent, handlers)}
+                    {RulesGroupBody.renderItems(items, indexPath, disabled, makeItemComponent, handlers)}
                 </ul>
             </dd>
         );
