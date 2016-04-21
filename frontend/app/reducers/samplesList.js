@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import * as ActionTypes from '../actions/samplesList'
 
 
@@ -53,9 +55,10 @@ export default function samplesList(state = {
 
         case ActionTypes.RECEIVE_SAMPLES_LIST:
             const {samples} = action;
+            const sortedSamples = _.sortBy(samples, sample => sample.fileName.toLowerCase());
             return Object.assign({}, state, {
-                samples: [...samples],
-                editedSamples: _.cloneDeep(samples)
+                samples: [...sortedSamples],
+                editedSamples: _.cloneDeep(sortedSamples)
             });
 
         case ActionTypes.RESET_SAMPLE_IN_LIST:
