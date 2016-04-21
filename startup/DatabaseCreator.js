@@ -363,9 +363,9 @@ class DatabaseCreator {
             .createTable('vcf_file_sample', table => {
                 table.uuid('id')
                     .primary();
-                table.string('file_name', 50)
+                table.string('file_name', 256)
                     .notNullable();
-                table.string('hash', 50);
+                table.string('hash', 128);
                 table.enu('type', entityTypeEnumValues)
                     .notNullable();
                 table.boolean('is_analyzed')
@@ -421,7 +421,7 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('view')
                     .notNullable();
-                table.string('name', 50);
+                table.string('name', 256);
                 table.string('url', 2048);
                 table.integer('total_results');
                 table.timestamp('timestamp')

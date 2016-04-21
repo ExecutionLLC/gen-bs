@@ -16,29 +16,10 @@ class DataController extends ControllerBase {
     getData(request, response) {
         const user = request.user;
         const sessionId = request.sessionId;
-        async.parallel({
-            profileMetadata: (callback) => callback(null, user),
-            views: (callback) => {
-                this.services.views.findAll(user, callback);
-            },
-            filters: (callback) => {
-                this.services.filters.findAll(user, callback);
-            },
-            samples: (callback) => {
-                this.services.samples.findAll(user, callback);
-            },
-            activeOperations: (callback) => {
-                this.services.operations.findAll(sessionId, (error, operations) => {
-                    const clientOperations = _.map(operations, operation => {
-                        return {
-                            id: operation.id,
-                            type: operation.type
-                        };
-                    });
-                    callback(error, clientOperations);
-                });
-            }
-        }, (error, results) => {
+        async.waterfall([
+            (callback) => this.checkUserIsDefined(request, callback),
+            (callback) => this.services.userData.getUserData(user, sessionId, callback)
+        ], (error, results) => {
             this.sendErrorOrJson(response, error, results);
         });
     }

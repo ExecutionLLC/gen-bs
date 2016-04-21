@@ -1,100 +1,145 @@
-import React, { Component } from 'react';
-import { Panel } from 'react-bootstrap';
-import { changeSample} from '../../../actions/ui'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Panel} from 'react-bootstrap';
+
+import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
+
+import {
+    changeSample, receiveSamplesList
+} from '../../../actions/samplesList'
+
 
 export default class FileUploadSamplesRow extends Component {
-  constructor(...args) {
-    super(...args);
-    this.state = { showValues: false };
-  }
 
-  clickShowValues(e) {
-    e.preventDefault();
-    this.setState({showValues: !this.state.showValues});
-  }
+    constructor(...args) {
+        super(...args);
+        this.state = {showValues: false};
+    }
+
+    onSelectForAnalyzisClick(e, sample) {
+        e.preventDefault();
+        const {dispatch, closeModal, samplesList: {samples}} = this.props;
+        dispatch(receiveSamplesList(samples));
+        dispatch(changeSample(sample.id));
+        closeModal('upload');
+    }
+
+    setShowValuesState(showValues) {
+        this.setState({
+            showValues
+        });
+    }
+
+    onShowValuesClick(e) {
+        e.preventDefault();
+        this.setShowValuesState(!this.state.showValues);
+    }
+
+    render() {
+        return (
+            <div className="panel">
+                {this.renderHeader()}
+                {this.renderCurrentValues()}
+                {this.renderEditableValues()}
+                {this.renderFooter()}
+            </div>
+        );
+    }
+
+    renderHeader() {
+        const {sample} = this.props;
+        return (
+            <div>
+                <div className="panel-heading">
+                    <h3 className="panel-title">{sample.fileName}<span>{sample.description}</span></h3>
+                </div>
+            </div>
+        );
+    }
+
+    renderFooter() {
+        const {sample} = this.props;
+        return (
+            <div className="panel-footer">
+
+                <a onClick={(e) => this.onSelectForAnalyzisClick(e, sample)}
+                   className="btn btn-link btn-uppercase"
+                   type="button">
+                    <span data-localize="samples.settings.select.title">Select for analysis</span>
+                </a>
+                {sample.type === 'user'
+                && <a onClick={e => this.onShowValuesClick(e)}
+                      className="btn btn-link btn-uppercase" role="button"
+                      data-toggle="collapse" data-parent="#accordion"
+                      href="#collapseOne" aria-expanded="false"
+                      aria-controls="collapseOne">Edit
+                </a>}
+            </div>
+        );
+    }
 
 
-  render() {
-    return (
-      <div>
-        {this.renderMain()}
-        {this.renderValues()}
-      </div>
-    );
-  }
+    renderEditableValues() {
+        const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props;
+        return (
+            <SampleEditableFieldsPanel dispatch={dispatch}
+                                       isExpanded={this.state.showValues}
+                                       fields={fields}
+                                       sample={sample}
+                                       editedSamples={editedSamples}
+            />
+        )
+    }
 
-  renderMain() {
-    const { sample,samples,dispatch,closeModal } = this.props;
-    return (
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <div className="btn-group pull-right">
+    renderCurrentValues() {
+        const {sample, fields} = this.props;
+        const fieldIdToValuesHash = _.reduce(sample.values, (result, value) => {
+            result[value.fieldId] = value.values;
+            return result;
+        }, {});
 
-            <button
-                onClick={() => {
-                  dispatch(changeSample(samples, sample.id));
-                  closeModal('upload');
-                }}
-                className="btn btn-default btn-choose"
-                type="button" >
-              <span data-localize="samples.settings.select.title">Select for analysis</span>
-            </button>
-            {sample.type === 'user'
-            && <a onClick={e => this.clickShowValues(e)}
-                  className="btn btn-default collapsed" role="button"
-                  data-toggle="collapse" data-parent="#accordion"
-                  href="#collapseOne" aria-expanded="false"
-                  aria-controls="collapseOne">
-              <i className="fa fa-pencil"></i>
-            </a>}
-          </div>
-          <div className="flex">
-            <dl>
-              <dt>Name</dt>
-              <dd>{sample.file_name}</dd>
-            </dl>
-            <dl>
-              <dt>Version</dt>
-              <dd><i>unknown</i></dd>
-            </dl>
-            <dl>
-              <dt>Type</dt>
-              <dd>{sample.type}</dd>
-            </dl>
-            <dl>
-              <dt>Description</dt>
-              <dd><i>empty</i></dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-    );
-
-  }
-
-  renderValues() {
-    const { sample } = this.props;
-    const values = _.indexBy(sample.values, 'field_id');
-    return (
-      <Panel collapsible expanded={this.state.showValues} className="samples-values form-horizontal-rows">
-        <div className="flex">
-          {this.props.fields.map(field => {
+        if (_.some(sample.values, option => option.values)) {
             return (
-              <dl key={field.id}>
-                <dt>{field.label}</dt>
-                <dd>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={values[field.id] && values[field.id].values}
-                    onChange={(e) => this.props.onUpdateSampleValue(field.id, e.target.value)}
-                  />
-                </dd>
-              </dl>
+                <div>
+                    <div className="flex">
+                        {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
+                    </div>
+                </div>
             );
-          })}
-        </div>
-      </Panel>
-    )
-  }
+        } else {
+            return null;
+        }
+    }
+
+    renderReadOnlyField(field, fieldIdToValuesHash) {
+        if (fieldIdToValuesHash[field.id]) {
+            let fieldValue = fieldIdToValuesHash[field.id];
+            // If field has available values, then the value is id of the actual option.
+            // We then need to retrieve the actual value corresponding to the option.
+            if (!_.isEmpty(field.availableValues)) {
+                const option = _.find(field.availableValues,
+                    availableValue => availableValue.id === fieldValue);
+                fieldValue = option.value;
+            }
+            return (
+                <dl key={field.id}
+                    className="dl-horizontal">
+                    <dt>{field.label}</dt>
+                    <dd>{fieldValue}</dd>
+                </dl>
+            );
+        } else {
+            return null;
+        }
+    }
 }
+
+function mapStateToProps(state) {
+    const {ui, samplesList} = state;
+    return {
+        ui,
+        samplesList
+    }
+}
+
+export default connect(mapStateToProps)(FileUploadSamplesRow)

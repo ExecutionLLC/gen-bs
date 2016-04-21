@@ -11,13 +11,10 @@ import NewFilterInputs from './FilterBuilder/NewFilterInputs'
 class FiltersModal extends Component {
     render() {
 
-        const { dispatch, showModal, closeModal } = this.props;
-        const { currentSample, currentFilter } = this.props.ui;
-        const { samples, views, isValid } = this.props.userData;
-        const { editOrNew, editedFilter, newFilter} = this.props.filterBuilder;
+        const {isValid} = this.props.userData;
+        const {editOrNew} = this.props.filterBuilder;
 
         return (
-
 
             <Modal
                 dialogClassName="modal-dialog-primary"
@@ -62,14 +59,15 @@ class FiltersModal extends Component {
 
 
 function mapStateToProps(state) {
-    const { filterBuilder, ui, auth, userData, fields } = state
+    const { filterBuilder, ui, auth, userData, fields, samplesList } = state
 
     return {
         userData,
         fields,
         ui,
         filterBuilder,
-        auth
+        auth,
+        samplesList
     }
 }
 

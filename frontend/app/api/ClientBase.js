@@ -1,7 +1,5 @@
 'use strict';
 
-import HttpStatus from 'http-status';
-
 import config from '../../config'
 
 export default class ClientBase {

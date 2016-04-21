@@ -1,18 +1,17 @@
-import { fetchVariants, clearSearchParams } from './variantsTable'
-import { requestAnalyze , requestChangeView} from './websocket'
-import { viewBuilderSelectView } from './viewBuilder'
-import { filterBuilderSelectFilter} from './filterBuilder'
+import {fetchVariants, clearSearchParams} from './variantsTable';
+import {requestAnalyze, requestSetCurrentParams} from './websocket';
+import {viewBuilderSelectView} from './viewBuilder';
+import {filterBuilderSelectFilter} from './filterBuilder';
+import {detachHistory} from "./queryHistory";
+import {setViewVariantsSort} from "./variantsTable";
+
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
 
-export const CHANGE_SAMPLE = 'CHANGE_SAMPLE';
 export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
 export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
-export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
-
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
-
 
 /*
  * Action Creators
@@ -20,23 +19,6 @@ export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 export function toggleQueryNavbar() {
     return {
         type: TOGGLE_QUERY_NAVBAR
-    }
-}
-
-export function changeSample(samples, sampleId) {
-    return {
-        type: CHANGE_SAMPLE,
-        samples,
-        sampleId
-    }
-}
-
-export function updateSampleValue(sampleId, valueFieldId, value) {
-    return {
-        type: UPDATE_SAMPLE_VALUE,
-        sampleId,
-        valueFieldId,
-        value
     }
 }
 
@@ -82,16 +64,26 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
             limit: limit,
             offset: offset
         };
+        const {
+            userData: {
+                attachedHistoryData: historyData,
+                views
+            },
+            fields: {
+                sampleFieldsList
+            }
+        } = getState();
+
+        const detachHistorySample = historyData.sampleId ? historyData.sampleId !== sampleId : false;
+        const detachHistoryFilter = historyData.filterId ? historyData.filterId !== filterId : false;
+        const detachHistoryView = historyData.viewId ? historyData.viewId !== viewId : false;
+        dispatch(detachHistory(detachHistorySample, detachHistoryFilter, detachHistoryView));
 
         dispatch(clearSearchParams());
-
         dispatch(requestAnalyze(searchParams));
-
-        const searchView = _.find(getState().ui.views , {id: viewId});
-
-        dispatch(requestChangeView(searchView));
-
+        const searchView = _.find(views, {id: viewId});
+        dispatch(requestSetCurrentParams(searchView, sampleFieldsList));
+        dispatch(setViewVariantsSort(searchView));
         dispatch(fetchVariants(searchParams))
-
     }
 }

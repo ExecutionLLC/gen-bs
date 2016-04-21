@@ -22,16 +22,15 @@ class SearchController extends ControllerBase {
             (body, callback) => {
                 const user = request.user;
                 const sessionId = request.sessionId;
-                const languId = request.languId;
+                const languageId = request.languId;
 
                 const sampleId = body.sampleId;
                 const viewId = body.viewId;
                 const filterId = body.filterId;
                 const limit = body.limit;
                 const offset = body.offset;
-
                 this.services.search
-                    .sendSearchRequest(user, sessionId, languId,
+                    .sendSearchRequest(user, sessionId, languageId,
                         sampleId, viewId, filterId, limit, offset, callback);
             }
         ], (error, operationId) => {
@@ -52,8 +51,12 @@ class SearchController extends ControllerBase {
                 const sortValues = body.sort;
                 const limit = body.limit;
                 const offset = body.offset;
-                this.services.search.searchInResults(user, sessionId, operationId,
-                    globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback);
+                if (isNaN(limit) || isNaN(offset)) {
+                    callback(new Error('Offset or limit are not specified.'));
+                } else {
+                    this.services.search.searchInResults(user, sessionId, operationId,
+                        globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback);
+                }
             }
         ], (error, operationId) => {
             this.sendErrorOrJson(response, error, {operationId});

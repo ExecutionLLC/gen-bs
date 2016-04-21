@@ -1,38 +1,42 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
+import {connect} from 'react-redux';
 
-import { viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn } from '../../../actions/viewBuilder'
+import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder'
+import {viewBuilderChangeSortColumn} from "../../../actions/viewBuilder";
 
 
-export default class ViewBuilder extends Component {
+export default class ViewBuilder extends React.Component {
 
     render() {
-        const { dispatch, fields } = this.props
-        const view = this.props.viewBuilder.editOrNew ? (this.props.viewBuilder.editedView) : (this.props.viewBuilder.newView)
+        const {dispatch, fields, viewBuilder} = this.props;
+        const view = viewBuilder.editedView;
         var disabledClass = classNames({
             'disabled': (view.type !== 'user') ? 'disabled' : ''
         });
 
-        const previouslySelectedFieldIds = view.view_list_items.map(viewItem => viewItem.field_id);
+        const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         const isDisableEditing = view.type !== 'user';
         const allAvailableFields = fields.sampleFieldsList.concat(fields.sourceFieldsList);
         // Exclude editable fields and fields that are already selected.
-        const fieldsForSelection = _.filter(allAvailableFields, field => !field.is_editable
-            && !_.includes(previouslySelectedFieldIds, field.id));
-        const selects = view.view_list_items.map(function (viewItem, index) {
+        const fieldsForSelection = _.filter(allAvailableFields, field => !field.isEditable
+        && !_.includes(previouslySelectedFieldIds, field.id));
+        const selects = view.viewListItems.map(function (viewItem, index) {
 
             var currentValue =
-                _.find(allAvailableFields, {id: viewItem.field_id}) ||
+                _.find(fields.totalFieldsList, {id: viewItem.fieldId}) ||
                 {id: null};
-
+            const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;
             const selectOptions = [
 
                 ...fieldsForSelection.map((f) => {
-                    return {value: f.id, label: `${f.name} -- ${f.source_name}`}
+                    return {value: f.id, label: `${f.name} -- ${f.sourceName}`}
                 })
             ];
+            const {sortOrder, sortDirection, fieldId} = viewItem;
+            const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, sortDirection);
 
             return (
 
@@ -40,10 +44,10 @@ export default class ViewBuilder extends Component {
 
                     <div className="col-xs-6 btn-group-select2">
                         <div className="btn-group">
-                            <button className="btn btn-link btnDrag" disabled="">
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
+                            <button className="btn btn-link btnDrag" disabled="" type="button">
+                                <span className="icon-bar"/>
+                                <span className="icon-bar"/>
+                                <span className="icon-bar"/>
                             </button>
                         </div>
                         <div className="btn-group">
@@ -52,20 +56,16 @@ export default class ViewBuilder extends Component {
                                 value={currentValue}
                                 clearable={false}
                                 onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
-                                disabled={isDisableEditing}
+                                disabled={isDisableEditing || !isFieldAvailable}
                             />
                         </div>
                         <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
                              data-placement="bottom" data-container="body" title="Desc/Asc Descending">
-                            <button type="button" className="btn btn-default btn-sort active desc" disabled></button>
+                            {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
 
                     </div>
                     <div className="col-xs-5 input-group">
-                  <span className="input-group-addon" data-localize="views.setup.settings.filter" data-toggle="tooltip"
-                        data-placement="bottom" data-container="body" title="Column Filter">
-                    <input type="checkbox" id="cCh1" checked="" disabled=""/>
-                  </span>
 
                         <input type="text" className="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""
                                readOnly="" data-localize="views.setup.settings.keywords"/>
@@ -73,15 +73,17 @@ export default class ViewBuilder extends Component {
 
                     <div className="col-xs-1">
                         <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
-                            className="fa fa-lg fa-minus-circle"></i></button>
+                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
+                                type="button">
+                            <i className="fa fa-lg fa-minus-circle"/></button>
                         <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
-                            className="fa fa-lg fa-plus-circle"></i></button>
+                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }
+                                type="button">
+                            <i className="fa fa-lg fa-plus-circle"/></button>
                     </div>
                 </div>
             )
-        }.bind(this))
+        }.bind(this));
 
         return (
 
@@ -110,4 +112,49 @@ export default class ViewBuilder extends Component {
 
         )
     }
+
+    getSortButtonClasses(order, sortDirection) {
+        if (!order && !sortDirection) {
+            return classNames(
+                'btn',
+                'btn-sort',
+                'btn-default'
+            );
+        }
+        else {
+            return classNames(
+                'btn',
+                'btn-sort', sortDirection, {
+                    'active': true
+                }
+            );
+        }
+    }
+
+    renderSortButton(currentDirection, sortButtonClass, sortOrder, fieldId, isDisable) {
+        return (
+            <button className={sortButtonClass}
+                    type="button"
+                    disabled={isDisable}
+                    onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
+                <span className="text-info">{sortOrder}</span>
+            </button>
+        );
+    }
+
+    onSortClick(direction, isControlKeyPressed, fieldId) {
+        const {dispatch} = this.props;
+        dispatch(viewBuilderChangeSortColumn(fieldId, direction, isControlKeyPressed));
+    }
 }
+
+function mapStateToProps(state) {
+    const {viewBuilder, userData: {views}, fields} = state;
+    return {
+        viewBuilder,
+        views,
+        fields
+    }
+}
+
+export default connect(mapStateToProps)(ViewBuilder);

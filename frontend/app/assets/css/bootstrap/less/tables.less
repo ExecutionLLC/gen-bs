@@ -22,7 +22,6 @@ th {
 .table {
   width: 100%;
   max-width: 100%;
-  margin-bottom: @line-height-computed;
   // Cells
   > thead,
   > tbody,
@@ -43,7 +42,7 @@ th {
     vertical-align: bottom;
     border-bottom: 1px solid @table-border-color;
     background: @table-th-bg;
-    font-size: ceil((@font-size-base * 0.9));
+    font-size: ceil((@font-size-base * 0.92));
     font-weight: normal;
   }
   // Remove top border from thead by default
@@ -310,189 +309,6 @@ table {
   }
 }
 
-.table { 
-  &.table-grid {
-   margin-top: 0!important;
-   background:#fff;
-
-    thead {
-       > tr { 
-         > th { 
-           background: #fff;
-           border: solid 1px @default-max-light;
-           padding-bottom: 0;
-           color: @gray-darker;
-           > div { 
-              width: 108px;
-         
-           }
-           > div + div { 
-               position: relative;
-                margin: 0 -8px;
-                height: 33px;
-               
-              &:before {
-               .fa();
-               position: absolute;
-               left: 7px;
-               top: 6px;
-               content: "\f002";
-               color: @gray-lighter;
-              }
-              .form-control { 
-                  .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @input-border-radius-small);
-                   padding-left: 24px;
-                   font-size: 12px;
-                   border-radius: 0;
-                   border-width: 0;
-                   background: transparent;
-                    &[disabled],
-                    &[readonly],
-                    fieldset[disabled] & {
-                      background: #fff;
-                      color: #bbb;
-                   }
-                }
-              
-             }
-           > div + div.active { 
-              &:before { 
-                color: @brand-primary;
-              }
-              .form-control { 
-                color: @brand-primary;
-              }
-            } 
-           .variants-table-header-label { 
-              position: relative;
-              >.btn-link { 
-              display: block;
-              font-size: 12px;
-              line-height: 22px;
-              margin-right: 54px;
-              overflow: hidden;
-              padding: 5px 0;
-              text-align: left;
-              text-overflow: ellipsis;
-              vertical-align: text-top;
-              white-space: nowrap;
-              color: @gray-dark;
-              
-              }
-               
-             .btn-group.btn-group-sort { 
-               position: absolute;
-               right: 0;
-               top:6px;
-             }
-             .btn-sort { 
-              background: transparent;
-              height: 24px;
-              width: 24px;
-              padding: 0;
-              color: @gray-lighter;
-              &:hover,
-              &:focus { 
-                color: @gray-light;
-                box-shadow: none;
-              }
-              &.active { 
-                color: @gray-dark;
-              }
-              > span { 
-                font-size: 12px;
-                line-height: 1;
-                position: absolute;
-                right: -1px;
-                top: 0;
-    
-              }
-              }
-             }
-           
-           &:first-child,
-           &:first-child + th {
-              width: 24px;
-             > div { width: 24px; }
-             > div + div { width: 24px;}
-             > div + div:before { 
-               display: none;
-             }
-            }
-           &.active {
-              
-             > div {
-               background: transparent;
-             }
-           }
-          }
-       }
-     }
- 
-    thead,
-    tbody,
-    tfoot { 
-      tr { 
-       td, th, tf { 
-          font-size: @font-size-small;
-          width: 120px;
-          max-width: 120px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          &:first-child,
-           &:first-child + th {
-             width: 24px;
-           }
-         
-       }
-     }
-    }
-
-    tbody { 
-      background: #fff;
-      tr {
-        &:hover { 
-         cursor: pointer; 
-        } 
-         td.comment {
-          width:120px;
-        }
-                
-    
-      }
-    }
-     &.table-resposive {
-        thead,
-        tbody,
-        tfoot { 
-         > tr {  
-          &:before { 
-            .fa();
-            padding: 12px;
-            color: @brand-primary;
-            content: "\f055";
-            font-size: 16px;               
-           }
-          }
-        }      
-        thead,
-        tfoot {
-        > tr { 
-         &:before {
-            visibility: hidden;
-          }
-         }
-        }
-        thead {
-        border-bottom: solid 1px #ddd;
-        th {
-          border-bottom: solid 1px #ddd;
-        }
-      }
-   }
-    }
- }
 
 .table-wrapper { 
   overflow: hidden;
@@ -514,7 +330,6 @@ table {
 
 .table { 
   &.table-variants {
-    
    margin-top: 0!important;
    background:#fff;
    table-layout: fixed;
@@ -530,8 +345,8 @@ table {
            color: @gray-darker;
            font-weight: normal;
            height: 64px;
-           
-            .variants-table-search-field { 
+                 
+             .variants-table-search-field { 
                 display: block;
                 float: left;
                 height: 32px;
@@ -541,24 +356,46 @@ table {
                 top: -32px;
                 width: 32px!important;
                 background: #fff;
-                &.open { 
-                display: table;
-                left: 0;
-                margin-right: 16px;
-                width: 104px!important;
-                .input-group-btn { 
-                  display: none;
-                 }
-                }
+  
                 button { 
                  padding: 4px;
                  border-radius: 0;
+                 i:before { 
+                   &:extend(.md-i);
+                   content: "search";
+                 }
                  
                }
                 .form-control { 
-                  .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @input-border-radius-small);                  
+                  .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @input-border-radius-small);  
+                   display: none;                
                 }
-              
+                &.open { 
+                  display: table;
+                  left: 0;
+                  margin-right: 16px;
+                  width: 104px!important;
+                .input-group-btn { 
+                  display: none;
+                 }
+                 .form-control { 
+                   display: table-cell;
+                 }
+                }
+                &.filtered { 
+                  button { 
+                    i:before {
+                      content: 'zoom_in';
+                    }
+                  } 
+                }
+                &.disabled { 
+                  button { 
+                    i{
+                      color:darken(@default-max-light, 5%);
+                    }
+                  } 
+                }               
              }
              .variants-table-search-field.invisible {
                visibility: hidden;
@@ -577,7 +414,7 @@ table {
                 padding: 16px 4px 8px;
               > .btn-link-default { 
                 display: block;
-                font-size: 12px;
+                font-size: @font-size-small;
                 line-height: 22px;
                 overflow: hidden;
                 text-align: left;
@@ -618,23 +455,22 @@ table {
               }
               }
              }
-             &.comment {
+            &.comment {
               .variants-table-search-field { 
-                &.open {
-                  width: 144!important;
-                  }
-                } 
+              &.open {
+                  width: 142px!important;
+                 }
+               } 
              }
-          
  
           }
        }
      }
     .table-variants-head,
-    .table-variants-body {         
+    .table-variants-body { 
       tr { 
          td { 
-          font-size: @font-size-small;
+          font-size: ceil((@font-size-base * 0.92));
           padding: 0;
           border:none;
           height: 35px;
@@ -657,7 +493,6 @@ table {
              }
             
              .checkbox { 
-               display: none;
                margin: 0;
              }
              .btn-link { 
@@ -672,6 +507,9 @@ table {
             > div{ 
               width: 158px; 
               max-width:  158px;
+            }
+            .comment-link { 
+              &:extend(.btn-link-default);
             }
           
         }
@@ -723,6 +561,7 @@ table {
         background-size: 100% 70px;
         background-attachment: local; 
 
+
       tr { 
          td {
            > div {
@@ -770,8 +609,6 @@ table {
 .table-variants-head { 
 left: 0;
     top: 44px;
-    
-    
 }
 .table-variants-body {
  bottom: 0;
@@ -796,26 +633,35 @@ left: 0;
   }
 .table-loader {
     height: 35px;
-      line-height: 35px;
     text-align: center; 
     color: @gray;
+    line-height: 35px;
     i { 
       vertical-align: middle;
       margin-left: .25em;
     }
  }                 
 .empty {
-  background: rgb(247, 247, 247) none repeat scroll 0% 0%; margin: -5px -5px -5px -32px; text-align: center; padding: 150px 0px; color: rgb(170, 170, 170);
-  border-top: 1px solid #eee;
+  background: @default-max-light;
+  margin: -@table-condensed-cell-padding;
+  text-align: center;
+  color: @gray-light;
+  padding: 150px 0;
   h3 { 
     margin: 0 auto;
     max-width: 50%;
     text-align: left;
+     text-align: center;
     .subtext{ 
       font-size: @font-size-base;
       display: block;
      line-height: 1.4;
      margin: 0 @navbar-height;
+    }
+    .md-i { 
+      font-size: 2em;
+      vertical-align: middle;
+      margin-left: @padding-small-horizontal;
     }
   }
   .panel { 
@@ -830,20 +676,15 @@ left: 0;
       }
 
     h4 { 
-      font-size: 20px;
-     
-      
-          }
-    .dl { 
-     
+      font-size: 20px;  
+     }
+    .dl {      
       dt { 
         font-weight: normal;
+       }
       }
-      }
-    
     }
-     
-}
+  }
 .table-history { 
   dl {
     .dl-horizontal();

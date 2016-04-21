@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
 
 import Upload from './NavbarCreateQuery/Upload'
 import MetadataSearch from './NavbarCreateQuery/MetadataSearch'
@@ -11,49 +11,58 @@ import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 import {fetchFields} from '../../actions/fields'
 
-import { changeSample, changeView, changeFilter, analyze } from '../../actions/ui'
+import { changeView, changeFilter, analyze } from '../../actions/ui'
+import { changeSample } from '../../actions/samplesList'
 
 
 class NavbarCreateQuery extends Component {
 
     onSampleSelected(sampleId) {
         const { dispatch, samples } = this.props;
-        dispatch(changeSample(samples, sampleId));
+        dispatch(changeSample(sampleId));
         dispatch(fetchFields(sampleId));
     }
 
     render() {
 
         const { dispatch, samples, views } = this.props;
-        const { currentSample, currentView, currentFilter } = this.props.ui;
-        const currentSampleId = currentSample ? currentSample.id : null;
+        const {selectedView, selectedFilter} = this.props.ui;
+        const {selectedSample} = this.props.samplesList;
+        const selectedSampleId = selectedSample ? selectedSample.id : null;
 
         return (
 
             <nav className="navbar navbar-fixed-top navbar-default">
                 <div className="container-fluid">
                     <div className="table-row">
-                        <Upload  {...this.props} />
-
-                        <MetadataSearch samples={samples}
-                                        currentSampleId={currentSampleId}
-                                        onSampleChangeRequested={(sampleId) => this.onSampleSelected(sampleId) }
-                        />
-                        <FiltersSetup {...this.props} />
-                        <Filters
+                        <Upload
                             {...this.props}
                         />
 
-                        <ViewsSetup {...this.props} />
+                        <MetadataSearch samples={samples}
+                                        selectedSampleId={selectedSampleId}
+                                        onSampleChangeRequested={(sampleId) => this.onSampleSelected(sampleId) }
+                        />
+                        <FiltersSetup
+                            {...this.props}
+                        />
+                        <Filters
+                            {...this.props}
+                        />
+                        <ViewsSetup
+                            {...this.props}
+                        />
                         <Views
                             {...this.props}
                         />
 
                         <Analyze
                             {...this.props}
-                            clicked={ (e) => dispatch(analyze(currentSample.id, currentView.id, currentFilter.id))}
+                            clicked={ (e) => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilter.id))}
                         />
-                        <LoadHistory />
+                        <LoadHistory
+                            dispatch={this.props.dispatch}
+                        />
                     </div>
                 </div>
             </nav>
@@ -63,14 +72,28 @@ class NavbarCreateQuery extends Component {
 }
 
 function mapStateToProps(state) {
-    const { modalWindows, userData, ui} = state
+    const {
+        modalWindows,
+        userData: {
+            views,
+            filters
+        },
+        ui,
+        auth,
+        samplesList,
+        samplesList: {
+            samples
+        }
+    } = state;
 
     return {
         modalWindows,
-        samples: userData.samples,
-        views: userData.views,
-        filters: userData.filters,
-        ui
+        samples,
+        views,
+        filters,
+        ui,
+        auth,
+        samplesList
     }
 }
 

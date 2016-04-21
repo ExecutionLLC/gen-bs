@@ -4,10 +4,11 @@ export default function websocket(state = {
     wsConn: null,
     lastMessageSended: null,
     messages: [],
-    errors: [],
+    error: null,
     closed: true,
     variants: null,
     variantsView:null,
+    variantsSampleFieldsList: [],
     currentVariants: null,
     isVariantsEmpty: false,
     isVariantsValid: true,
@@ -19,7 +20,7 @@ export default function websocket(state = {
         {
             const commentVariants = state.variants.slice();
             const deletedVariantIndex = _.findIndex(
-                commentVariants, variant => variant.search_key === action.search_key
+                commentVariants, variant => variant.searchKey === action.searchKey
             );
             const deletedVariant = commentVariants[deletedVariantIndex];
             const newComments = deletedVariant.comments.slice(1);
@@ -35,7 +36,7 @@ export default function websocket(state = {
         {
             const commentVariants = state.variants.slice();
             const updatedVariantIndex = _.findIndex(
-                commentVariants, variant => variant.search_key === action.commentData.search_key
+                commentVariants, variant => variant.searchKey === action.commentData.searchKey
             );
             const updatedVariant = commentVariants[updatedVariantIndex];
             const newComments = updatedVariant.comments.slice();
@@ -52,7 +53,7 @@ export default function websocket(state = {
         {
             const commentVariants = state.variants.slice();
             const addCommentVariantIndex = _.findIndex(
-                commentVariants, variant => variant.search_key === action.commentData.search_key
+                commentVariants, variant => variant.searchKey === action.commentData.searchKey
             );
             const addVariant = commentVariants[addCommentVariantIndex];
             const newComments = addVariant.comments.slice();
@@ -81,7 +82,7 @@ export default function websocket(state = {
             const resultData = _.map(action.wsData.result.data, row => {
                 return Object.assign({}, row, {
                     fieldsHash: _.reduce(row.fields, (result, fieldValue) => {
-                        result[fieldValue.field_id] = fieldValue.value;
+                        result[fieldValue.fieldId] = fieldValue.value;
                         return result;
                     }, {})
                 });
@@ -114,20 +115,14 @@ export default function websocket(state = {
             });
         case ActionTypes.WS_RECEIVE_AS_ERROR:
             return Object.assign({}, state, {
-                errors: [
-                    ...state.errors,
-                    action.err
-                ],
+                error: action.err,
                 isVariantsLoading: false,
                 isVariantsValid: false
             });
 
         case ActionTypes.WS_RECEIVE_ERROR:
             return Object.assign({}, state, {
-                errors: [
-                    ...state.errors,
-                    action.err
-                ],
+                error: action.err,
                 isVariantsLoading: false
             });
         case ActionTypes.WS_RECEIVE_CLOSE:
@@ -144,10 +139,11 @@ export default function websocket(state = {
                 isVariantsLoading: true,
                 searchParams:action.searchParams
             });
-        case ActionTypes.REQUEST_CHANGE_VIEW:
+        case ActionTypes.REQUEST_SET_CURRENT_PARAMS:
         {
             return Object.assign({}, state, {
-                variantsView: action.view
+                variantsView: action.view,
+                variantsSampleFieldsList: action.sampleFields
             });
         }
 

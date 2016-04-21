@@ -39,15 +39,15 @@ class ModelBase {
     exists(itemId, callback) {
         this.db.asCallback((knex, callback) => {
             knex.select('id')
-            .from(this.baseTableName)
-            .where('id', itemId)
-            .asCallback((error, itemData) => {
-                if (error) {
-                    callback(error);
-                } else {
-                    callback(null, (itemData.length > 0));
-                }
-            });
+                .from(this.baseTableName)
+                .where('id', itemId)
+                .asCallback((error, itemData) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, (itemData.length > 0));
+                    }
+                });
         }, callback);
     }
 
@@ -127,7 +127,9 @@ class ModelBase {
             .where('id', itemId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(dataToUpdate))
             .asCallback((error) => {
-                callback(error, itemId);
+                callback(error, {
+                    id: itemId
+                });
             });
     }
 }

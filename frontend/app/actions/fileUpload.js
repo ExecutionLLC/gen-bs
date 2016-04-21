@@ -1,7 +1,8 @@
 import config from '../../config'
 import { closeModal } from './modalWindows'
-import { fetchSamples } from './userData'
+import {fetchSamples} from './samplesList';
 import gzip from '../utils/gzip'
+import {fetchTotalFields} from "./fields";
 
 /*
  * action types
@@ -78,7 +79,7 @@ function requestFileUpload() {
 function receiveFileUpload(json) {
     return {
         type: RECEIVE_FILE_UPLOAD,
-        operationId: json.operation_id,
+        operationId: json.operationId,
     }
 }
 
@@ -127,6 +128,7 @@ export function changeFileUploadProgress(progressValueFromAS, progressStatusFrom
     return (dispatch, getState) => {
         dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS))
         if (progressStatusFromAS === 'ready') {
+            dispatch(fetchTotalFields());
             dispatch(closeModal('upload'));
             dispatch(fetchSamples());
         }

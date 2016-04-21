@@ -4,6 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const CollectionUtils = require('../utils/CollectionUtils');
 const SecureModelBase = require('./SecureModelBase');
 
 const mappedColumns = [
@@ -28,19 +29,43 @@ class SamplesModel extends SecureModelBase {
     }
 
     find(userId, sampleVersionId, callback) {
-       this.db.transactionally((trx, callback) => {
-           this._findInTransaction(trx, userId, sampleVersionId, callback);
-       }, callback);
+        this.db.transactionally((trx, callback) => {
+            const sampleVersionIds = [sampleVersionId];
+            async.waterfall([
+                (callback) => this._findManyInTransaction(trx, userId, sampleVersionIds, callback),
+                (samples, callback) => callback(null, samples[0])
+            ], callback);
+        }, callback);
     }
 
     findAll(userId, callback) {
-        // We need only metadata here, but the actual sample id should be replaced with the latest version id.
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                // Find samples metadata.
+                // Find all sample ids belonging to the user.
                 (callback) => this._findSamplesMetadata(trx, userId, null, true, callback),
-                (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback)
+                (samplesMetadata, callback) => {
+                    const sampleIds = _(samplesMetadata)
+                        .map(sample => sample.id)
+                        .uniq()
+                        .value();
+                    callback(null, sampleIds);
+                },
+                // Find last version for each sample
+                (sampleIds, callback) => {
+                    this._findLastVersionsBySampleIds(trx, sampleIds, callback);
+                },
+                // Use the find-many method to build the samples.
+                (versions, callback) => {
+                    const versionIds = versions.map(version => version.versionId);
+                    this._findManyInTransaction(trx, userId, versionIds, callback)
+                }
             ], callback);
+        }, callback);
+    }
+
+    findMany(userId, sampleVersionIds, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._findManyInTransaction(trx, userId, sampleVersionIds, callback);
         }, callback);
     }
 
@@ -102,11 +127,7 @@ class SamplesModel extends SecureModelBase {
     makeSampleIsAnalyzedIfNeeded(userId, sampleVersionId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
-                (sampleId, callback) => this._findSamplesMetadata(trx, userId, [sampleId], true,
-                    (error, samplesMetadata) => callback(error, sampleId, samplesMetadata)),
-                (sampleId, samplesMetadata, callback) => this._ensureAllItemsFound(samplesMetadata, [sampleId], callback),
-                (samplesMetadata, callback) => callback(null, samplesMetadata[0]),
+                (callback) => this.find(userId, sampleVersionId, callback),
                 (sample, callback) => {
                     const isAnalyzed = sample.isAnalyzed || false;
                     if (!isAnalyzed) {
@@ -138,43 +159,16 @@ class SamplesModel extends SecureModelBase {
                     const dataToUpdate = {
                         fileName: sampleToUpdate.fileName
                     };
-                    this._unsafeUpdate(sampleId, dataToUpdate, trx, callback);
+                    this._unsafeUpdate(sampleId, dataToUpdate, trx,
+                        (error, result) => callback(error, (result || {}).id));
                 },
                 (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
                 (versionId, callback) => this._addFileSampleValues(trx, versionId, sampleToUpdate.values,
                     (error) => callback(error, versionId)),
-                (versionId, callback) => this._findInTransaction(trx, userId, versionId, callback)
+                (versionId, callback) => this._findManyInTransaction(trx, userId, [versionId], callback),
+                (samples, callback) => callback(null, samples[0])
             ], callback);
         }, callback);
-    }
-
-    _replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback) {
-        async.waterfall([
-            // Find last versions for each sample.
-            (callback) => {
-                const sampleIds = _.map(samplesMetadata, sampleMetadata => sampleMetadata.id);
-                this._findLastVersionIdsBySampleIds(trx, sampleIds,
-                    (error, versions) => callback(error, samplesMetadata, versions));
-            },
-            // Create sampleId -> versionId hash.
-            (samplesMetadata, versions, callback) => {
-                const sampleIdToVersionIdHash = _.reduce(versions, (result, version) => {
-                    result[version.sampleId] = version.versionId;
-                    return result;
-                }, {});
-                callback(null, samplesMetadata, sampleIdToVersionIdHash);
-            },
-            // Replace sample id with id of the last version.
-            (samplesMetadata, sampleIdToVersionIdHash, callback) => {
-                const samplesWithVersion = _.map(samplesMetadata, sampleMetadata => {
-                    const sampleWithVersion = _.cloneDeep(sampleMetadata);
-                    sampleWithVersion.originalId = sampleWithVersion.id;
-                    sampleWithVersion.id = sampleIdToVersionIdHash[sampleMetadata.id];
-                    return sampleWithVersion;
-                });
-                callback(null, samplesWithVersion);
-            }
-        ], callback);
     }
 
     _setAnalyzed(sampleId, value, trx, callback) {
@@ -196,11 +190,11 @@ class SamplesModel extends SecureModelBase {
     }
 
     /**
-     * @param userId The owner
-     * @param sample Sample metadata to add.
-     * @param shouldGenerateId If true, id will be generated.
-     * @param trx Knex transaction
-     * @param callback (error, sampleVersionId)
+     * @param {Uuid} userId The owner
+     * @param {Object} sample Sample metadata to add.
+     * @param {boolean} shouldGenerateId If true, id will be generated.
+     * @param {KnexTransaction} trx Knex transaction
+     * @param {function(Error, Uuid)} callback (error, sampleVersionId)
      * */
     _addInTransaction(userId, sample, shouldGenerateId, trx, callback) {
         async.waterfall([
@@ -210,14 +204,14 @@ class SamplesModel extends SecureModelBase {
             },
             (sampleId, callback) => this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback),
             (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
-                    callback(error, {
-                        sampleId,
-                        versionId
-                    });
-                }),
+                callback(error, {
+                    sampleId,
+                    versionId
+                });
+            }),
             (sampleObj, callback) => this._addFileSampleValues(trx, sampleObj.versionId, sample.values, (error) => {
-                    callback(error, sampleObj.versionId);
-                })
+                callback(error, sampleObj.versionId);
+            })
         ], callback);
     }
 
@@ -232,10 +226,10 @@ class SamplesModel extends SecureModelBase {
     /**
      * Adds sample values into vcf_file_sample_value table.
      *
-     * @param versionId Id of the sample version.
-     * @param values array of the sample values, each of form {fieldId, values (string value for the table column)}.
-     * @param trx Knex transaction object.
-     * @param callback (error, resulting values list)
+     * @param {Object} trx Knex transaction object.
+     * @param {string} versionId Id of the sample version.
+     * @param {Array} values array of the sample values, each of form {fieldId, values (string value for the table column)}.
+     * @param {function(Error, Array)} callback (error, resulting values list)
      * */
     _addFileSampleValues(trx, versionId, values, callback) {
         async.map(values, (value, callback) => {
@@ -259,7 +253,7 @@ class SamplesModel extends SecureModelBase {
         // Find last version and compare with the specified.
         async.waterfall([
             (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
-            (sampleId, callback) => this._findLastVersionIdsBySampleIds(trx, [sampleId],
+            (sampleId, callback) => this._findLastVersionsBySampleIds(trx, [sampleId],
                 (error, lastVersions) => callback(error, _.first(lastVersions))),
             (version, callback) => {
                 if (version.versionId === sampleVersionId) {
@@ -271,23 +265,76 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
-    _findInTransaction(trx, userId, sampleVersionId, callback) {
+    _findManyInTransaction(trx, userId, sampleVersionIds, callback) {
         async.waterfall([
-            (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
-            (sampleId, callback) => this._findSamplesMetadata(trx, userId, [sampleId],
-                true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleId)),
-            (samplesMetadata, sampleId, callback) => this._ensureAllItemsFound(samplesMetadata, [sampleId], callback),
-            (samplesMetadata, callback) => this._replaceSampleIdWithLastVersionId(trx, samplesMetadata, callback),
-            (samplesMetadata, callback) => callback(null, samplesMetadata[0]),
-            (sampleMetadata, callback) => this._findValuesForVersion(trx, sampleVersionId,
-                (error, values) => callback(error, sampleMetadata, values)),
-            (sampleMetadata, values, callback) => {
-                const resultSample = _.cloneDeep(sampleMetadata);
-                resultSample.values = values;
-                callback(null, resultSample);
-            }
+            (callback) => this._findSampleVersionsByVersionIds(trx, sampleVersionIds, callback),
+            (sampleVersions, callback) => this._ensureAllItemsFound(sampleVersions, sampleVersionIds, callback),
+            (sampleVersions, callback) => {
+                // Here we can have request for different versions of the same sample. Load metadata only once.
+                const sampleIds = _(sampleVersions)
+                    .map(sampleVersion => sampleVersion.sampleId)
+                    .uniq()
+                    .value();
+                this._findSamplesMetadata(trx,
+                    userId,
+                    sampleIds,
+                    true, (error, samplesMetadata) => callback(error, samplesMetadata, sampleVersions))
+            },
+            (samplesMetadata, sampleVersions, callback) =>
+                this._createSamplesWithValues(trx, samplesMetadata, sampleVersions,
+                    (error, resultSamples) => callback(error, resultSamples, sampleVersions))
         ], (error, resultSample) => {
             callback(error, resultSample);
+        });
+    }
+
+    _createSamplesWithValues(trx, samplesMetadata, sampleVersions, callback) {
+        const versionIds = _.map(sampleVersions, version => version.versionId);
+        async.waterfall([
+            (callback) => this._findValuesForVersions(trx, versionIds, callback),
+            (values, callback) => {
+                const samplesValues = _.groupBy(values, 'vcfFileSampleVersionId');
+                const sampleIdToMetadataHash = CollectionUtils.createHashByKey(samplesMetadata, 'id');
+                const resultSamples = sampleVersions
+                    .map(sampleVersion => {
+                        const sampleId = sampleVersion.sampleId;
+                        const versionId = sampleVersion.versionId;
+                        const sampleMetadata = sampleIdToMetadataHash[sampleId];
+                        return Object.assign({}, sampleMetadata, {
+                            id: versionId,
+                            originalId: sampleId,
+                            values: samplesValues[versionId]
+                        })
+                    });
+                callback(null, resultSamples);
+            }
+        ], callback);
+    }
+
+    _findValuesForVersions(trx, sampleVersionIds, callback) {
+        async.waterfall([
+            (callback) => trx.select()
+                .from(SampleTableNames.Values)
+                .whereIn('vcf_file_sample_version_id', sampleVersionIds)
+                .asCallback((error, rows) => callback(error, rows)),
+            (rows, callback) => this._toCamelCase(rows, callback)
+        ], (error, rows) => {
+            callback(error, rows);
+        });
+    }
+
+    _findSampleVersionsByVersionIds(trx, sampleVersionIds, callback) {
+        async.waterfall([
+            (callback) => trx.select()
+                .from(SampleTableNames.Versions)
+                .whereIn('id', sampleVersionIds)
+                .orderBy('timestamp', 'desc')
+                .asCallback((error, results) => callback(error, results)),
+            (results, callback) => this._toCamelCase(results, callback)
+        ], (error, versions) => {
+            const mappedVersions = _.map(versions, (version) =>
+                this._mapDatabaseSampleVersionToObject(version));
+            callback(error, mappedVersions);
         });
     }
 
@@ -302,7 +349,7 @@ class SamplesModel extends SecureModelBase {
             (results, callback) => this._toCamelCase(results, callback)
         ], (error, results) => {
             if (error || !results || !results.length) {
-                callback(error || new Error('Sample is not found.'));
+                callback(error || new Error('Sample is not found:' + sampleVersionId));
             } else {
                 callback(null, results[0].vcfFileSampleId);
             }
@@ -312,7 +359,7 @@ class SamplesModel extends SecureModelBase {
     _findSamplesMetadata(trx, userId, sampleIdsOrNull, shouldExcludeDeletedEntries, callback) {
         let baseQuery = trx.select()
             .from(SampleTableNames.Metadata)
-            .where(function() {
+            .where(function () {
                 this.where('creator', userId)
                     .orWhere('creator', null)
             });
@@ -333,18 +380,6 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    _findValuesForVersion(trx, sampleVersionId, callback) {
-        async.waterfall([
-            (callback) => trx.select('field_id', 'values')
-                .from(SampleTableNames.Values)
-                .where('vcf_file_sample_version_id', sampleVersionId)
-                .asCallback((error, rows) => callback(error, rows)),
-            (rows, callback) => this._toCamelCase(rows, callback)
-        ], (error, rows) => {
-            callback(error, rows);
-        });
-    }
-
     /**
      * Finds last version id for each sample id in array.
      *
@@ -353,35 +388,37 @@ class SamplesModel extends SecureModelBase {
      * @param callback (error, versions). Each version is an object
      * which has 'sampleId' and 'versionId' fields.
      * */
-    _findLastVersionIdsBySampleIds(trx, sampleIds, callback) {
+    _findLastVersionsBySampleIds(trx, sampleIds, callback) {
         const sampleIdsInQuotes = _.map(sampleIds, id => '\'' + id + '\'');
         async.waterfall([
             (callback) => trx.raw(
-                'SELECT DISTINCT ON (vcf_file_sample_id)'
-                + ' vcf_file_sample_id'
-                + ', LAST_VALUE(id) OVER wnd AS last_version_id'
-                + ', LAST_VALUE(timestamp) OVER wnd AS last_version_timestamp'
-                + ' FROM vcf_file_sample_version'
-                + ' WHERE vcf_file_sample_id IN'
-                + ' (' + sampleIdsInQuotes.join(', ') + ')'
-                + ' WINDOW wnd AS'
-                + ' (PARTITION BY vcf_file_sample_id ORDER BY timestamp DESC)'
-            )
+                    'SELECT DISTINCT ON (vcf_file_sample_id)'
+                    + ' vcf_file_sample_id'
+                    + ', LAST_VALUE(id) OVER wnd AS id'
+                    + ', LAST_VALUE(timestamp) OVER wnd AS last_version_timestamp'
+                    + ' FROM vcf_file_sample_version'
+                    + ' WHERE vcf_file_sample_id IN'
+                    + ' (' + sampleIdsInQuotes.join(', ') + ')'
+                    + ' WINDOW wnd AS'
+                    + ' (PARTITION BY vcf_file_sample_id ORDER BY timestamp DESC)'
+                )
                 .asCallback((error, results) => callback(error, results && results.rows)),
             (versions, callback) => this._ensureAllItemsFound(versions, sampleIds, callback),
             (versions, callback) => this._toCamelCase(versions, callback),
             (versions, callback) => {
-                const mappedVersions = _.map(versions, (version) => {
-                    return {
-                        sampleId: version.vcfFileSampleId,
-                        versionId: version.lastVersionId
-                    };
-                });
+                const mappedVersions = _.map(versions, (version) => this._mapDatabaseSampleVersionToObject(version));
                 callback(null, mappedVersions);
             }
         ], (error, versions) => {
             callback(error, versions);
         });
+    }
+    
+    _mapDatabaseSampleVersionToObject(databaseVersion) {
+        return {
+            sampleId: databaseVersion.vcfFileSampleId,
+            versionId: databaseVersion.id
+        }
     }
 
     _createDataToInsert(userId, sample, shouldGenerateId) {
