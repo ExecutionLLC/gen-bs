@@ -136,7 +136,7 @@ export default class ViewBuilder extends React.Component {
                     type="button"
                     disabled={isDisable}
                     onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
-                <span className="text-info">{sortOrder}</span>
+                <span className="badge badge-info">{sortOrder}</span>
             </button>
         );
     }
