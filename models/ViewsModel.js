@@ -301,7 +301,7 @@ class ViewsModel extends SecureModelBase {
                 const textsHash = CollectionUtils.createHashByKey(viewsTexts, 'viewId');
                 const viewsWithDescription = _.map(views, view => {
                     return Object.assign({}, view, {
-                        description: textsHash[view.id]
+                        description: textsHash[view.id].description
                     });
                 });
                 callback(null, viewsWithDescription);
