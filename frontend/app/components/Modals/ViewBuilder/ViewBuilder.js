@@ -38,7 +38,7 @@ export default class ViewBuilder extends React.Component {
 
                 <div className="row grid-toolbar" key={Math.round(Math.random()*100000000).toString()}>
 
-                    <div className="col-xs-6 btn-group-select2">
+                    <div className="col-xs-12 col-sm-6 btn-group-select2">
                         <div className="btn-group">
                             <button className="btn btn-link btnDrag" disabled="" type="button">
                                 <span className="icon-bar"/>
@@ -61,19 +61,19 @@ export default class ViewBuilder extends React.Component {
                         </div>
 
                     </div>
-                    <div className="col-xs-5 input-group">
-
+                    <div className="col-xs-12 col-sm-6 input-group">
                         <input type="text" className="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""
                                readOnly="" data-localize="views.setup.settings.keywords"/>
-                    </div>
-
-                    <div className="col-xs-1">
-                        <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
-                            className="fa fa-lg fa-minus-circle"/></button>
-                        <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
-                            className="fa fa-lg fa-plus-circle"/></button>
+                        <div className="input-group-btn">
+                            <button className="btn-link-default" disabled={disabledClass}
+                                    onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
+                                className="md-i">close</i></button>
+                        </div>
+                        <div className="input-group-btn">
+                            <button className="btn-link-default" disabled={disabledClass}
+                                    onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
+                                className="md-i">add</i></button>
+                        </div>
                     </div>
                 </div>
             )
@@ -81,11 +81,11 @@ export default class ViewBuilder extends React.Component {
 
         return (
 
-            <div className="sort-setting copyview collapse in">
+            <div className="copyview collapse in">
                 <h5 data-localize="views.setup.settings.title">Table Columns</h5>
-                <div className="row grid-toolbar nobg">
+                <div className="row grid-toolbar hidden-xs">
 
-                    <div className="col-xs-6">
+                    <div className="col-sm-6">
                         <small className="text-muted text-order" data-localize="views.setup.settings.columns_order">
                             Order
                         </small>
@@ -94,7 +94,7 @@ export default class ViewBuilder extends React.Component {
                         </small>
                     </div>
 
-                    <div className="col-xs-6">
+                    <div className="col-sm-6">
                         <small className="text-muted" data-localize="views.setup.settings.columns_filter">Column Filter
                             and Keywords
                         </small>

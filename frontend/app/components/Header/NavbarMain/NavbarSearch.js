@@ -14,7 +14,8 @@ export default class NavbarSearch extends Component {
         const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
         return (
             <div className="navbar-search">
-                <div className="navbar-search-field width">
+                <a data-target="#mobileSearch" data-toggle="modal" className="btn navbar-btn btn-block visible-xs" type="button"><i className="md-i">search</i></a>
+                <div className="navbar-search-field hidden-xs">
                     <input
                      type="text"
                      data-localize="results.search"

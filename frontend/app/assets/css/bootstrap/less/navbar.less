@@ -733,10 +733,9 @@
     dl:last-child { 
       margin: 0;
     }
-    }
   }
-  
-  .navbar-default { 
+ }
+.navbar-default { 
    .navbar-search-field { 
      background: #f8f8f9 none repeat scroll 0 0;
     border-left: 1px solid rgba(255, 255, 255, 0.6);
@@ -905,12 +904,9 @@
     display: table;
    > div { 
      display: table-cell;
-     //padding-left: 1px;
      vertical-align: top;
      width: 1%;
-     &:last-child { 
-       padding-right: 15px;
-     }
+   
      &.width100 { 
         width: 100%;
      }
@@ -966,7 +962,7 @@
 
 @media (max-width: @screen-xss-max) {
 
- .navbar-inner { 
+  .navbar-inner { 
    > div { 
       &.navbar-search { 
         width: 1%;
@@ -974,47 +970,25 @@
       &.visible-xxs { 
        display: table-cell !important;
      }
-     span.user {
-       max-width: 80px;
-       display: block; 
-       width: 100%;
-       overflow: hidden;
-       text-overflow: ellipsis;
-       white-space: nowrap;
-     }
-     > a, > div > a, .btn {
-        padding-left: 0;
+     > a, > div > a, .btn, .dropdown-toggle {
+       padding-left: 0;
        padding-right: 0;
        min-width:0;
+       text-align: center;
+       width: 100%;
+       display: block;
         &.brand { 
           width: auto;
           padding: 0 8px;
           font-size: 18px;
-      }
-       .caret { 
-         position: absolute;
-         right: 1px;
-         top: 25px;
         }
-       }
-     
-     
-   }
- } 
- 
-}
-
-
-
-
-
-
-
+       }     
+      }
+    } 
+  }
 }
 
 
 .navbar-search-full { 
-  margin-bottom: @padding-base-vertical;
-  border-radius: 0;
-  margin-bottom: @padding-large-vertical * 1.5;
+  margin-bottom: 0;
 }

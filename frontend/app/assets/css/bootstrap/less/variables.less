@@ -57,7 +57,6 @@
 @font-size-h5:            @font-size-base;
 @font-size-h6:            ceil((@font-size-base * 0.85)); 
 
-
 //** Unit-less `line-height` for use in components like buttons.
 @line-height-base:        1.428571429; // 20/14
 //** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
@@ -639,9 +638,12 @@
 @modal-header-bg:              transparent;
 
 @modal-title-color:            @text-color;
-@modal-title-padding:         @padding-base-horizontal;
+@modal-title-padding:          11px 15px;
+
 //** Modal title line-height
 @modal-title-line-height:     @line-height-base;
+@modal-footer-padding:   8px;
+@modal-footer-height: 54px;
 
 //** Background color of modal content area
 
@@ -789,22 +791,22 @@
 @panel-primary-state-icon:    "\f061"; 
 
 @panel-success-text:          @state-success-text;
-@panel-success-border:        @state-success-bg;
+@panel-success-border:        @state-success-border;
 @panel-success-heading-bg:    @state-success-bg;
 @panel-success-state-icon:    "\f058";; 
 
 @panel-info-text:             @state-info-text;
-@panel-info-border:           @state-info-bg;
+@panel-info-border:           @state-info-border;
 @panel-info-heading-bg:       @state-info-bg;
 @panel-info-state-icon:       "\f059"; 
 
 @panel-warning-text:          @state-warning-text;
-@panel-warning-border:        @state-warning-bg;
+@panel-warning-border:        @state-warning-border;
 @panel-warning-heading-bg:    @state-warning-bg;
 @panel-warning-state-icon:    "\f071"; 
 
 @panel-danger-text:           @state-danger-text;
-@panel-danger-border:         @state-danger-bg;
+@panel-danger-border:         @state-danger-border;
 @panel-danger-heading-bg:     @state-danger-bg;
 @panel-danger-state-icon:     "\f05e";
 

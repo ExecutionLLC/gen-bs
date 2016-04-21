@@ -58,22 +58,20 @@ class SavedFilesModal extends DialogBase {
             .take(10)
             .value();
         return (
-            <div className="table-wrapper table-files-wrapper">
-                <div className="table-container table-variants-container">
-                    <table className="table table-condensed">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Sample</th>
-                            <th>Filter</th>
-                            <th>View</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {_.map(sortedFiles, file => this.renderSavedFileRow(file))}
-                        </tbody>
-                    </table>
-                </div>
+            <div className="modal-body-scroll">
+                  <table className="table table-condensed table-vertical-top table-responsive-transform">
+                      <thead>
+                      <tr>
+                          <th>Date</th>
+                          <th>Sample</th>
+                          <th>Filter</th>
+                          <th>View</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {_.map(sortedFiles, file => this.renderSavedFileRow(file))}
+                      </tbody>
+                  </table>
             </div>
         );
     }

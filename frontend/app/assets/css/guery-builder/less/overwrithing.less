@@ -24,11 +24,12 @@
  .rule-container .rule-value-container {
   
      vertical-align: top;
-     margin: 5px 0;
+     margin: 0 5px 0 15px;
        .form-control { 
         width: 160px; 
       }
-      span.select2 { 
+       span.select2,
+       select.form-control { 
         width: 160px!important;
       }
 }
@@ -93,6 +94,21 @@
 }
 }
 
+.group-conditions {
+  label.active {
+    &:extend(.btn-primary);
+  }
+}
+.query-builder .rules-group-container .rules-group-header .group-actions .btn-success { 
+      &:extend(.btn-primary);
+}
+
+.query-builder .rules-group-container .rules-list .btn-danger { 
+  
+     &:extend(.btn-default);
+}
+
+//combine filters
 .combine-options { 
   .query-builder .rule-container .rule-value-container {
     span.select2 { 

@@ -35,8 +35,8 @@ export default class ExistentFilterSelect extends Component {
                         </span>
                     </div>
                 }
-                <div className="row grid-toolbar">
-                    <div className="col-sm-6">
+                <div className="row grid-toolbar row-head-selector">
+                    <div className="col-xs-8 col-sm-6">
                         <Select
                             options={filters.map( filter => { return {value: filter.id, label: filter.name} } )}
                             value={currentFilter.id}
@@ -44,7 +44,7 @@ export default class ExistentFilterSelect extends Component {
                             onChange={ (val) => dispatch(filterBuilderSelectFilter(filters, val.value, true))}
                         />
                     </div>
-                    <div className="col-sm-6">
+                    <div className="col-xs-4 col-sm-6">
                         <div className="btn-group" data-localize="actions.duplicate.help" data-toggle="tooltip"
                              data-placement="bottom" data-container="body">
                             <button type="button"
@@ -55,7 +55,8 @@ export default class ExistentFilterSelect extends Component {
                                     disabled={disabledClass}
                                     title={title}
                             >
-                                <span data-localize="actions.duplicate.title">Duplicate</span>
+                                <span data-localize="actions.duplicate.title" className="hidden-xs">Duplicate</span>
+                                <span className="visible-xs"><i className="md-i">content_copy</i></span>
                             </button>
                         </div>
                         {
@@ -66,7 +67,8 @@ export default class ExistentFilterSelect extends Component {
                             <button type="button" className="btn btn-default"
                                     onClick={() => dispatch(filterBuilderSelectFilter(filters, currentFilter.id, true))}
                             >
-                                <span data-localize="views.setup.reset.title">Reset Filter</span>
+                                <span data-localize="views.setup.reset.title" className="hidden-xs">Reset Filter</span>
+                                <span className="visible-xs"><i className="md-i">setting_backup_restore</i></span>
                             </button>
                         </div>
                         }
@@ -74,6 +76,7 @@ export default class ExistentFilterSelect extends Component {
                         <div className="btn-group ">
                             <button type="button" className="btn btn-link">
                                 <span data-localize="views.setup.delete.title">Delete Filter</span>
+                                <span className="visible-xs"><i className="md-i">close</i></span>
                             </button>
                         </div>
                         }

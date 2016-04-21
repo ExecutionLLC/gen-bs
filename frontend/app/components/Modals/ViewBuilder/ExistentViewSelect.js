@@ -36,8 +36,8 @@ export default class ExistentViewSelect extends React.Component {
                     </span>
                 </div>
                 }
-                <div className="row grid-toolbar">
-                    <div className="col-sm-6">
+                <div className="row grid-toolbar row-head-selector">
+                    <div className="col-xs-8 col-sm-6">
                         <Select
                             options={views.map( v => { return {value: v.id, label: v.name} } )}
                             value={view.id}
@@ -45,7 +45,7 @@ export default class ExistentViewSelect extends React.Component {
                             onChange={ (val) => dispatch(viewBuilderToggleEdit(views, val.value, true))}
                         />
                     </div>
-                    <div className="col-sm-6">
+                    <div className="col-xs-4 col-sm-6">
                         <div className="btn-group" data-localize="actions.duplicate.help" data-toggle="tooltip"
                              data-placement="bottom" data-container="body" title="Сopy this to a new">
                             <button type="button"
@@ -57,7 +57,8 @@ export default class ExistentViewSelect extends React.Component {
                                     disabled={disabledClass}
                                     title={title}
                             >
-                                <span data-localize="actions.duplicate.title">Duplicate</span>
+                                <span data-localize="actions.duplicate.title" className="hidden-xs">Duplicate</span>
+                                <span className="visible-xs"><i className="md-i">content_copy</i></span>
                             </button>
                         </div>
                         {
@@ -69,14 +70,16 @@ export default class ExistentViewSelect extends React.Component {
                                     className="btn btn-default"
                                     onClick={ () => dispatch(viewBuilderSelectView(views, view.id, true))}>
 
-                                <span data-localize="views.setup.reset.title">Reset View</span>
+                                <span data-localize="views.setup.reset.title" className="hidden-xs">Reset View</span>
+                                <span className="visible-xs"><i className="md-i">setting_backup_restore</i></span>
                             </button>
                         </div>
                         }
                         { view.type == 'user' &&
                         <div className="btn-group ">
                             <button type="button" className="btn btn-link">
-                                <span data-localize="views.setup.delete.title">Delete View</span>
+                                <span data-localize="views.setup.delete.title" className="hidden-xs">Delete View</span>
+                                <span className="visible-xs"><i className="md-i">close</i></span>
                             </button>
                         </div>
                         }

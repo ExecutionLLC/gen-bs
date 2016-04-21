@@ -3,47 +3,134 @@
   &.collapse,
   &.in,
   &.collapsing { 
-
     .transition-duration(35s);
-
   }
-  
-  
- .navbar-fixed-top {
+  .navbar-fixed-top {
     margin: 0;
     top:@navbar-height;
-     left: 0;
-     right:0;
-      .transition(all .25s linear);
-      z-index: 2;
+    left: 0;
+    right:0;
+    .transition(all .25s linear);
+    z-index: 2;
 
   }
+  
   .table-row { 
+      align-items: stretch;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding-top: 10px;
+      > div {
+        width: 30%;
+        display: block;
+        padding-bottom: 10px;
+        padding-right: 5px;
+         &.max-width {
+            width: 70%;
+            padding-left: 5px;
+            padding-right:0;
+         }
+         &:last-child {
+            width: 50%;
+            padding-left: @padding-xs-horizontal;
+         }
+         &.table-cell-xs-6 { 
+           width: 50%;
+         }
+        .btn-group .btn {
+          display: block;
+          float: none;
+          width: 100%;
+          border-radius: @border-radius-small!important;
+          }
+        .view-select {
+            min-width: 150px;
+          }
+        .filter-select {
+            min-width: 150px;
+        }
+        .Select-menu-outer { 
+         z-index: 3;
+        }
+       }
+    }
+  @media (min-width: @screen-md)  {
+      .table-row { 
+       > div { 
+         width: 15%;
+         padding-left: 5px;
+       &.max-width {
+         width: 35%; 
+         padding-right: 5px;
+       }  
+       &.table-cell-xs-6 { 
+         width: 25%;
+         padding-left: 5px;
+       }
+       &:last-child {
+         width: 25%; 
+         
+       }
+        }
+       }
+  }
+  @media (min-width: @screen-lg) {
+    .table-row { 
+      display: table;
     > div { 
-      padding:10px 5px;
+      padding:@padding-xs-horizontal*2 @padding-xs-horizontal;
+      display: table-cell;
+      width: 1%;
+      padding-left: 5px;
+      padding-right:5px;
       &:first-child {
         padding-left: 0;
+        width: 1%;
       }
       &:last-child{
         padding-right: 0;
+        width: 1%;
       }
       &.max-width { 
         min-width: 200px;
+        width: 100%;
+        padding-right:5px;
+      }
+      &.table-cell-xs-6 { 
+        width: 1%;
+      }
+       .btn-group .btn {
+      display: table-cell;
+      width: auto;
       }
     } 
    }
-  @media (max-width: @screen-xs) {
-   display: none!important;
- } 
+  } 
 }
+
+.table-container {
+    height: 100%;
+    position: relative;
+}  
+ 
+.table-variants-container {
+   min-height: 100%;
+   overflow: hidden;
+   width: 100%;
+   position: relative;
+}
+
+
+  
 .table-variants-wrapper { 
-    bottom: 0;
-    top: 100px;  
-    left: 0;
-    right: 0;
-    position: absolute; 
+  bottom: 0;
+  top: @navbar-height;  
+  left: 0;
+  right: 0;
+  position: absolute; 
   .empty { 
-        align-items: center;
+    align-items: center;
     bottom: 0;
     display: flex;
     left: 0;
@@ -52,32 +139,68 @@
     position: absolute;
     right: 0;
     top: 0;
-   
+    }
+}
+.table { 
+    &.table-variants { 
+      &:after { 
+         top:278px;
       }
+    }
+    @media (min-width: @screen-md) { 
+      &.table-variants { 
+        &:after { 
+        top: 178px;
+       }
+      } 
+     }
+    @media (min-width: @screen-lg) { 
+      &.table-variants { 
+        &:after { 
+        top: 128px;
+       }
+      } 
+     }
 }
 .table-variants-head {
-    top: 100px;
+  top: 250px;
   .transition-property(~"top");
   .transition-duration(.05s);
   .transition-timing-function(ease);
+     @media (min-width: @screen-md) { 
+      top: 150px;
+    }
+    @media (min-width: @screen-lg) { 
+      top: 100px;
+    }
 }
 .table-variants-body {
-    top: 172px;
-    .transition-property(~"top");
+    top: 322px;
+    bottom: 0;
+  .transition-property(~"top");
   .transition-duration(.05s);
   .transition-timing-function(ease);
+     @media (min-width: @screen-md){ 
+      top: 222px;
+     }
+      @media (min-width: @screen-lg){ 
+      top: 172px;
+    }
 }
 
 .subnav-closed { 
-
+  .table { 
+    &.table-variants { 
+      &:after { 
+        top: 72px;
+      }
+    }
+  }
   .table-variants-head {
     top: 44px;
- }
+  }
   .table-variants-body {
     top: 116px;
-}
+  }
 
 }
-
-
-

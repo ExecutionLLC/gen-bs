@@ -15,10 +15,13 @@ export default class NewFilterInputs extends Component {
         return (
 
             <div className="collapse in copyview">
-                <div className="row grid-toolbar">
+                <div className="row">
+                        <label className="col-sm-6" data-localize="views.setup.new.name.title">New View</label>
+                        <label className="col-sm-6" data-localize="general.description">Description</label>
+                </div>
+                <div className="row grid-toolbar row-noborder">
 
                     <div className="col-sm-6">
-                        <label data-localize="views.setup.new.name.title">New View</label>
                         <input
                             type="text"
                             className="form-control text-primary"
@@ -36,8 +39,7 @@ export default class NewFilterInputs extends Component {
 
                     </div>
 
-                    <div className="col-sm-5">
-                        <label data-localize="general.description">Description</label>
+                    <div className="col-sm-6 input-group">
                         <input
                             type="text"
                             className="form-control"
@@ -46,15 +48,14 @@ export default class NewFilterInputs extends Component {
                             value={newFilter.description}
                             onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: newFilter.name, description: e.target.value})) }
                         />
-                    </div>
+                   
 
-                    <div className="col-sm-1">
-                        <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                data-toggle="collapse" data-target=".copyview "
-                                onClick={ () => dispatch(filterBuilderToggleNewEdit(true)) }><span
-                            data-localize="actions.cancel">Cancel</span></button>
+                        <div className="input-group-btn btn-group-close">
+                              <button type="button" className="btn-link-default" type="button"
+                                      data-toggle="collapse" data-target=".copyview "
+                                      onClick={ () => dispatch(filterBuilderToggleNewEdit(true)) }><i className="md-i">close</i></button>
+                        </div>
                     </div>
-
                 </div>
             </div>
 
