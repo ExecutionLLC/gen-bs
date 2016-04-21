@@ -63,23 +63,45 @@ export default class FileUploadSamplesRow extends Component {
         const {isDemoSession, sample} = this.props;
         return (
             <div className="panel-footer">
-                {!(isDemoSession && sample.type === 'advanced') &&
-                <a onClick={(e) => this.onSelectForAnalysisClick(e, sample)}
-                    className="btn btn-link btn-uppercase"
-                    type="button">
-                        <span data-localize="samples.settings.select.title">Select for analysis</span>
-                </a>}
-                {sample.type === 'user' &&
+                {this.renderSelectButton(isDemoSession, sample.type)}
+                {this.renderEditButton(sample.type)}
+            </div>
+        );
+    }
+
+    renderSelectButton(isDemoSession, sampleType) {
+        if(isDemoSession && sampleType === 'advanced') {
+            return (
+                <span data-localize="samples.settings.select.title">
+                    Please register to analyze this sample.
+                </span>
+            )
+        }
+
+        return (
+            <a onClick={(e) => this.onSelectForAnalysisClick(e, sample)}
+               className="btn btn-link btn-uppercase"
+               type="button"
+            >
+                <span data-localize="samples.settings.select.title">Select for analysis</span>
+            </a>
+        )
+    }
+
+    renderEditButton(sampleType) {
+        if (sampleType === 'user') {
+            return (
                 <a onClick={e => this.onShowValuesClick(e)}
                    className="btn btn-link btn-uppercase" role="button"
                    data-toggle="collapse" data-parent="#accordion"
                    href="#collapseOne" aria-expanded="false"
                    aria-controls="collapseOne">Edit
-                </a>}
-            </div>
-        );
-    }
+                </a>
+            )
+        }
 
+        return null;
+    }
 
     renderEditableValues() {
         const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props;
