@@ -34,7 +34,11 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) {
-        if (!_.some([languageId, viewId, filterId, sampleId, limit, offset])) {
+        const hasUndefOrNullParam = _.some([languageId, viewId, filterId, sampleId, limit, offset], (param) => {
+            return _.isUndefined(param) || _.isNull(param);
+        });
+
+        if (hasUndefOrNullParam) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
                     languId: languageId || 'undefined',
                     viewId: viewId || 'undefined',
@@ -325,6 +329,15 @@ class SearchService extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
+
+                _.forEach([result.sample, result.filter, result.view], (item) => {
+                    this.services.users.ensureUserHasAccessToItem(user.id, item.type, (error) => {
+                        if (error) {
+                            callback(error);
+                        }
+                    });
+                });
+
                 const appServerSearchParams = {
                     sessionId,
                     langu: result.langu,
