@@ -356,11 +356,7 @@ class SearchService extends ServiceBase {
         async.each([sample, filter, view], (item, callback) => {
             this.services.users.ensureUserHasAccessToItem(userId, item.type, callback)
         }, (error) => {
-            if (error) {
-                callback(error);
-            } else {
-                callback(null, appServerRequestParams);
-            }
+            callback(null, appServerRequestParams);
         });
     }
 }
