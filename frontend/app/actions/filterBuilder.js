@@ -169,14 +169,6 @@ export function filterBuilderRules(rules) {
     }
 }
 
-export function filterBuilderChangeAll(data) {
-    console.log('filterBuilderChangeAll', data);
-    return {
-        type: FBUILDER_CHANGE_ALL,
-        rules: data
-    };
-}
-
 export function filterBuilderChangeFilter(index, change) {
     return {
         type: FBUILDER_CHANGE_FILTER,

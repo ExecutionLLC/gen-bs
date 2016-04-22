@@ -19,7 +19,7 @@ import {
 /**
 
 FieldFilterItem(
-    index: number[]
+    indexPath: number[]
     item: {field: string, operator: string, value: *}
     fields: {id: string, label: string, type: string}[]
     allowedOpsTypes: string[]
@@ -50,7 +50,7 @@ class FilterQueryBuilder extends React.Component {
     /**
      * Get fields ids for given operation
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{type: string, nbInput: number, multiple: boolean, applyTo: string[]}} operator
+     * @param {{type: string, nbInputs: number, multiple: boolean, applyTo: string[]}} operator
      * @returns {Object.<string, boolean>}
      */
     static getValidFieldsIdsForOperator(fields, operator) {
@@ -68,30 +68,30 @@ class FilterQueryBuilder extends React.Component {
      * Make filter rule item component
      * @param {{id: string, label: string, type: string}[]} fields
      * @param {function(Object)} dispatch
-     * @param {number[]} index
+     * @param {number[]} indexPath
      * @param {{field: string, operator: string, value: *}} item
      * @param {boolean} disabled
      * @returns {React.Component}
      */
-    static makeFilterItem(fields, dispatch, index, item, disabled) {
+    static makeFilterItem(fields, dispatch, indexPath, item, disabled) {
         const fieldJSType = FieldUtils.getFieldJSType(FieldUtils.getFieldById(fields, item.field));
         const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
         const allowedFieldsIds = this.getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
         const allowedFields = fields.filter((f) => allowedFieldsIds[f.id]);
         return (
             <FieldFilterItem
-                index={index}
+                indexPath={indexPath}
                 item={item}
                 fields={allowedFields}
                 allowedOpsTypes={allowedOpsTypes}
                 valueType={fieldJSType}
                 disabled={disabled}
                 onChange={ (item) => {
-                            if (index.length < 1) {
+                            if (indexPath.length < 1) {
                                 return;
                             }
-                            const ruleIndex = index[index.length - 1];
-                            dispatch(filterBuilderChangeFilter(index.slice(0, index.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
+                            const ruleIndex = indexPath[indexPath.length - 1];
+                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
                         }}
             />
         );
@@ -99,21 +99,21 @@ class FilterQueryBuilder extends React.Component {
 
     static makeFilterQueryBuilderHandlers(dispatch) {
         return {
-            onSwitch(/** number[] */index, /** boolean */isAnd) {
-                dispatch(filterBuilderChangeFilter(index, {onSwitch: isAnd}));
+            onSwitch(/** number[] */indexPath, /** boolean */isAnd) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onSwitch: isAnd}));
             },
-            onAdd(/** number[] */index, /** boolean */isGroup) {
-                dispatch(filterBuilderChangeFilter(index, {onAdd: isGroup}));
+            onAdd(/** number[] */indexPath, /** boolean */isGroup) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onAdd: isGroup}));
             },
-            onDeleteGroup(/** number[] */index) {
-                if (index.length < 1) {
+            onDeleteGroup(/** number[] */indexPath) {
+                if (indexPath.length < 1) {
                     return;
                 }
-                const groupIndex = index[index.length - 1];
-                dispatch(filterBuilderChangeFilter(index.slice(0, index.length - 1), {onDelete: groupIndex}));
+                const groupIndex = indexPath[indexPath.length - 1];
+                dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onDelete: groupIndex}));
             },
-            onDeleteItem(/** number[] */index, /** number */itemIndex) {
-                dispatch(filterBuilderChangeFilter(index, {onDelete: itemIndex}));
+            onDeleteItem(/** number[] */indexPath, /** number */itemIndex) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onDelete: itemIndex}));
             }
         };
     }
@@ -135,7 +135,7 @@ class FilterQueryBuilder extends React.Component {
             <QueryBuilder
                 rules={rules}
                 disabled={disabled}
-                makeItemComponent={FilterQueryBuilder.makeFilterItem.bind(FilterQueryBuilder, fields, dispatch)}
+                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(fields, dispatch, indexPath, item, disabled) }
                 handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
             />
         );
@@ -252,10 +252,91 @@ class FieldFilterItem extends React.Component {
         );
     }
 
+    static renderItem(item, valueType, disabled, onChange) {
+        const value = item.value;
+        /** @type function(string|number):(string|number) */
+        const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
+        /**
+         * @param {(string|number)[]} arr
+         * @returns {(string|number)[]}
+         */
+        function getInputValueArray(arr) {
+            return arr.map( (val) => getInputValue(val) );
+        }
+
+        if (typeof value === 'object') {
+            if (!value) {
+                return null;
+            }
+
+            const operatorInfo = filterUtils.getOperatorByType(item.operator);
+            const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
+            const InputArrayComponent = opWant.arraySize ? InputArray : InputResizingArray;
+            return FieldFilterItem.renderInputsArray(
+                InputArrayComponent,
+                value,
+                valueType,
+                disabled,
+                (vals) => onChange(FieldFilterItem.itemChangeValue(item, getInputValueArray(vals)))
+            );
+        }
+        if (typeof value === 'boolean') {
+            return FieldFilterItem.renderCheckbox(
+                value,
+                disabled,
+                (val) => onChange(FieldFilterItem.itemChangeValue(item, val))
+            );
+        }
+        return FieldFilterItem.renderInputForSingleTextValue(
+            value,
+            disabled,
+            (val) => onChange(FieldFilterItem.itemChangeValue(item, val))
+        );
+    }
+
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {string} fieldId
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeField(item, fieldId) {
+        return {
+            field: fieldId,
+            operator: item.operator,
+            value: item.value
+        };
+    }
+
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {string} operatorType
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeOperatorType(item, operatorType) {
+        return {
+            field: item.field,
+            operator: operatorType,
+            value: item.value
+        };
+    }
+
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {*} value
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeValue(item, value) {
+        return {
+            field: item.field,
+            operator: item.operator,
+            value: value
+        };
+    }
+
     render() {
         const {
             /** {number[]} */
-            index,
+            indexPath,
             /** @type {{field: string, operator: string, value: *}} */
             item,
             /** @type {{id: string, label: string, type: string}[]} */
@@ -322,46 +403,20 @@ class FieldFilterItem extends React.Component {
 
         return (
             <div>
-                {FieldFilterItem.renderFieldSelect(selectFieldList, selectFieldValue, disabled, onFieldSelectChange)}
-                {FieldFilterItem.renderOperatorSelect(selectOperatorList, selectOperatorValue, disabled, onOperatorSelectChange)}
+                {FieldFilterItem.renderFieldSelect(
+                    selectFieldList,
+                    selectFieldValue,
+                    disabled,
+                    (fieldId) => onChange(FieldFilterItem.itemChangeField(item, fieldId))
+                )}
+                {FieldFilterItem.renderOperatorSelect(
+                    selectOperatorList,
+                    selectOperatorValue,
+                    disabled,
+                    (operatorType) => onChange(FieldFilterItem.itemChangeOperatorType(item, operatorType))
+                )}
                 <div className="rule-value-container">
-                    {(function(value){
-
-                        /** @type function(string|number):(string|number) */
-                        const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
-                        /**
-                         * @param {(string|number)[]} arr
-                         * @returns {(string|number)[]}
-                         */
-                        function getInputValueArray(arr) {
-                            return arr.map( (val) => getInputValue(val) );
-                        }
-
-                        if (typeof value === 'object') {
-                            if (!value) {
-                                return null;
-                            }
-
-                            const operatorInfo = filterUtils.getOperatorByType(item.operator);
-                            const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
-                            const InputArrayComponent = opWant.arraySize ? InputArray : InputResizingArray;
-                            return FieldFilterItem.renderInputsArray(InputArrayComponent, value, valueType, disabled, (vals) => onItemValueChange(getInputValueArray(vals)) );
-                        }
-                        if (typeof value === 'boolean') {
-                            return FieldFilterItem.renderCheckbox(item.value, disabled, onItemValueChange);
-                        }
-                        return FieldFilterItem.renderInputForSingleTextValue(
-                            value,
-                            disabled,
-                            (val) => onChange({
-                                id: item.id,
-                                field: item.field,
-                                operator: item.operator,
-                                value: getInputValue(val)
-                            })
-                        );
-
-                    })(item.value)}
+                    {FieldFilterItem.renderItem(item, valueType, disabled, onChange)}
                 </div>
             </div>
         )
