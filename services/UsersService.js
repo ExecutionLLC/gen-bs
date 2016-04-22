@@ -74,6 +74,14 @@ class UserService extends ServiceBase {
         }
     }
 
+    ensureUserHasAccessToItem(userId, itemType, callback) {
+        if (this.isDemoUserId(userId) && itemType === 'advanced') {
+            callback(new Error('Advanced item is not accessible for demo user.'));
+        } else {
+            callback(null);
+        }
+    }
+
     findDemoUser(callback) {
         callback(null, this.demoUser);
     }

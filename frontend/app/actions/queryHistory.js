@@ -9,6 +9,7 @@ import {changeViews} from "./userData";
 import {changeSamples} from "./samplesList";
 import {changeSample} from "./samplesList";
 import {fetchFields} from "./fields";
+import {prepareAnalyze} from './websocket';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -75,15 +76,22 @@ export function renewHistoryItem(historyItemId) {
             // copy history item and update names of sample, view and filter. All items from history
             // should be marked as '(from history)'.
             var clonedHistoryItem = _.cloneDeep(historyItem);
-            clonedHistoryItem.sample.name = clonedHistoryItem.sample.name + ' (from history)';
-            clonedHistoryItem.filters[0].name = clonedHistoryItem.filters[0].name + ' (from history)';
-            clonedHistoryItem.view.name = clonedHistoryItem.view.name + ' (from history)';
-            dispatch(attachHistory(clonedHistoryItem));
-            dispatch(changeSample(clonedHistoryItem.sample.id));
-            dispatch(fetchFields(clonedHistoryItem.sample.id));
-            dispatch(changeFilter(clonedHistoryItem.filters[0].id));
-            dispatch(changeView(clonedHistoryItem.view.id));
-            dispatch(analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id));
+            clonedHistoryItem.sample.type = 'history';
+            clonedHistoryItem.filters[0].type = 'history';
+            clonedHistoryItem.view.type = 'history';
+            dispatch([
+                attachHistory(clonedHistoryItem),
+                changeSample(clonedHistoryItem.sample.id),
+                prepareAnalyze()
+            ]);
+            dispatch(fetchFields(clonedHistoryItem.sample.id))
+                .then(() => {
+                    dispatch([
+                        changeFilter(clonedHistoryItem.filters[0].id),
+                        changeView(clonedHistoryItem.view.id),
+                        analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
+                    ]);
+                });
         }
     }
 }
@@ -100,10 +108,12 @@ export function attachHistory(historyItem) {
         const {collection: views, historyItemId: newViewId} = changeHistoryItem(
             getState().userData.views, viewId, historyItem.view
         );
-        dispatch(changeHistoryData(newSampleId, newFilterId, newViewId));
-        dispatch(changeFilters(filters));
-        dispatch(changeViews(views));
-        dispatch(changeSamples(samples));
+        dispatch([
+            changeHistoryData(newSampleId, newFilterId, newViewId),
+            changeFilters(filters),
+            changeViews(views),
+            changeSamples(samples)
+        ]);
     }
 
 }
@@ -111,7 +121,7 @@ export function attachHistory(historyItem) {
 
 export function detachHistory(detachSample, detachFilter, detachView) {
     return (dispatch, getState) => {
-        if (detachSample && !detachFilter && !detachView) {
+        if (!detachSample && !detachFilter && !detachView) {
             return;
         }
         const {userData, samplesList} = getState();
@@ -129,11 +139,12 @@ export function detachHistory(detachSample, detachFilter, detachView) {
             historyItemId: viewId
         } = detachHistoryItemIfNeedIt(detachView, userData.views, attachedHistoryData.viewId, null);
 
-        dispatch(changeHistoryData(sampleId, filterId, viewId));
-        dispatch(changeFilters(filters));
-        dispatch(changeViews(views));
-        dispatch(changeSamples(samples));
-
+        dispatch([
+            changeHistoryData(sampleId, filterId, viewId),
+            changeFilters(filters),
+            changeViews(views),
+            changeSamples(samples)
+        ]);
     }
 }
 

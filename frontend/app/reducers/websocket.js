@@ -133,6 +133,10 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 lastMessageSended: action.msg
             });
+        case ActionTypes.PREPARE_ANALYZE:
+            return Object.assign({}, state, {
+                isVariantsLoading: true
+            });
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
                 variants: null,
