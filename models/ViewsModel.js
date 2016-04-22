@@ -301,7 +301,7 @@ class ViewsModel extends SecureModelBase {
                 const textsHash = CollectionUtils.createHashByKey(viewsTexts, 'viewId');
                 const viewsWithDescription = _.map(views, view => {
                     return Object.assign({}, view, {
-                        description: textsHash[view.id]
+                        description: textsHash[view.id].description
                     });
                 });
                 callback(null, viewsWithDescription);
@@ -320,26 +320,15 @@ class ViewsModel extends SecureModelBase {
                     .asCallback(callback)
             },
             (itemsKeywordIds, callback) => this._toCamelCase(itemsKeywordIds, callback),
-            // Find all keywords related to any of the items.
-            (itemsKeywordIds, callback) => {
-                // Get keywords ids we need to extract.
-                const keywordIdToItemIds = _.groupBy(itemsKeywordIds, itemKeywordId => itemKeywordId.keywordId);
-                const keywordIds = _.keys(keywordIdToItemIds);
-                // Extract keywords.
-                this.models.keywords.findMany(keywordIds, (error, keywords) => {
-                    callback(error, itemsKeywordIds, keywords);
-                });
-            },
             // Attach keywords to the corresponding items.
-            (itemsKeywordIds, keywords, callback) => {
+            (itemsKeywordIds, callback) => {
                 // Group (itemId, keywordId) pairs by item id.
                 const itemIdToKeywordIds = _.groupBy(itemsKeywordIds, itemKeywordId => itemKeywordId.viewItemId);
-                const keywordsHash = CollectionUtils.createHashByKey(keywords, 'id');
                 // Create a new collection of view list items with keywords.
                 const viewItemsWithKeywords = _.map(viewItems, viewItem => {
                     const itemKeywordIds = itemIdToKeywordIds[viewItem.id];
                     return Object.assign({}, viewItem, {
-                        keywords: _.map(itemKeywordIds, keywordId => keywordsHash[keywordId])
+                        keywords: _.map(itemKeywordIds,itemKeywordId =>itemKeywordId.keywordId)
                     });
                 });
 

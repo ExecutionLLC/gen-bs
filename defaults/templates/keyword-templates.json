@@ -2,45 +2,30 @@
   {
     "field": {
       "source_name": "sample",
-      "name": "CHROM",
-      "value_type": "integer"
+      "name": "ALT",
+      "value_type": "string"
     },
-    "name": "CHROM 1",
-    "value": "1",
+    "name": "ALT A",
+    "value": "A",
     "synonyms": [
       {
         "langu_id": "en",
-        "value": "Synonym of CHROM 1"
+        "value": "Synonym of ALT A"
       }
     ]
   },
   {
     "field": {
       "source_name": "sample",
-      "name": "CHROM",
-      "value_type": "integer"
+      "name": "ALT",
+      "value_type": "string"
     },
-    "name": "CHROM 2",
-    "value": "2",
+    "name": "ALT C",
+    "value": "C",
     "synonyms": [
       {
         "langu_id": "en",
-        "value": "Synonym of CHROM 2"
-      }
-    ]
-  },
-  {
-    "field": {
-      "source_name": "sample",
-      "name": "POS",
-      "value_type": "integer"
-    },
-    "name": "Position",
-    "value": "889158",
-    "synonyms": [
-      {
-        "langu_id": "en",
-        "value": "Pos 889158"
+        "value": "Synonym of ALT C"
       }
     ]
   }
