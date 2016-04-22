@@ -479,7 +479,17 @@ table {
                 text-overflow: ellipsis;
                 white-space: nowrap; 
                 &.table-loader {
+                   position: absolute;
+                   left: 0;
+                   right: 0;
+                   text-align: center;
                    width: auto;
+                   line-height: 1;
+                   padding: 0;
+                   margin-top: -6px;
+                   .md-i { 
+                     margin: -12px 0;
+                   }
                 }
            }
           &.btntd {
