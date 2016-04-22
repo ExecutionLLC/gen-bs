@@ -17,7 +17,7 @@ export default class NewViewInputs extends React.Component {
                         <label className="col-sm-6" data-localize="views.setup.new.name.title">New View</label>
                         <label className="col-sm-6" data-localize="general.description">Description</label>
                 </div>
-                <div className="row grid-toolbar row-noborder">
+                <div className="row grid-toolbar row-noborder row-new-item">
 
                     <div className="col-sm-6">
                         <input

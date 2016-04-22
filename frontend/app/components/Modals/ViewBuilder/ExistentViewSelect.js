@@ -25,7 +25,7 @@ export default class ExistentViewSelect extends React.Component {
                     {this.renderTitle()}
                 </div>
                 {this.renderDescription(isDemoSession, selectedView.type)}
-                <div className="row grid-toolbar">
+                <div className="row grid-toolbar row-head-selector">
                     {this.renderViewSelector(views)}
                     {this.renderButtonGroup(isDemoSession, isEditableView)}
                 </div>
@@ -76,7 +76,7 @@ export default class ExistentViewSelect extends React.Component {
         );
 
         return (
-            <div className="col-sm-6">
+            <div className="col-xs-8 col-sm-6">
                 <Select options={selectorItems}
                         value={this.getSelectedViewId()}
                         clearable={false}
@@ -88,7 +88,7 @@ export default class ExistentViewSelect extends React.Component {
 
     renderButtonGroup(isDemoSession, isEditableView) {
         return (
-            <div className="col-sm-6">
+            <div className="col-xs-4 col-sm-6">
                 {this.renderDuplicateViewButton(isDemoSession)}
                 {isEditableView && this.renderResetViewButton()}
                 {isEditableView && this.renderDeleteViewButton()}
