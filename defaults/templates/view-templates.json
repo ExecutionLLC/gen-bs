@@ -10,10 +10,7 @@
           "name": "CHROM",
           "value_type": "integer"
         },
-        "keywords": [
-          "CHROM 1",
-          "CHROM 2"
-        ],
+        "keywords": [],
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
@@ -24,9 +21,7 @@
           "name": "POS",
           "value_type": "integer"
         },
-        "keywords": [
-          "Position"
-        ],
+        "keywords": [],
         "order": 2,
         "sort_order": 2,
         "sort_direction": "desc"
@@ -62,7 +57,10 @@
           "name": "ALT",
           "value_type": "string"
         },
-        "keywords": [],
+        "keywords": [
+          "ALT A",
+          "ALT C"
+        ],
         "order": 5
       }
     ]
@@ -78,9 +76,7 @@
           "name": "CHROM",
           "value_type": "integer"
         },
-        "keywords": [
-          "CHROM 1"
-        ],
+        "keywords": [],
         "order": 1,
         "sort_order": 1,
         "sort_direction": "asc"
@@ -111,7 +107,9 @@
           "name": "ALT",
           "value_type": "string"
         },
-        "keywords": [],
+        "keywords": [
+          "ALT C"
+        ],
         "order": 4
       }
     ]
