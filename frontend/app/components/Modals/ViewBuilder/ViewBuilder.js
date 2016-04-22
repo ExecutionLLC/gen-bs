@@ -123,6 +123,7 @@ export default class ViewBuilder extends React.Component {
         else {
             return classNames(
                 'btn',
+                'btn-default',
                 'btn-sort', sortDirection, {
                     'active': true
                 }
