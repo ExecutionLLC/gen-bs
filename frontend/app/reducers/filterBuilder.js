@@ -170,16 +170,6 @@ export default function filterBuilder(state = {
                 selectedFilter: action.filter
             });
 
-        case ActionTypes.FBUILDER_CHANGE_ALL: return (function() {
-            return Object.assign({}, state, {
-                editingFilter: Object.assign({}, state.editingFilter, {
-                    filter: Object.assign({}, state.editingFilter.filter, {
-                        rules: action.rules
-                    })
-                })
-            });
-        })();
-
         default:
             return state
     }

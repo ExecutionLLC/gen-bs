@@ -23,8 +23,6 @@ export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
 
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
-export const FBUILDER_CHANGE_ALL = 'FBUILDER_CHANGE_ALL';
-
 const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
 const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Please try again.';
 
@@ -159,14 +157,6 @@ export function filterBuilderRules(rules) {
             resolve(777)
         }
     }
-}
-
-export function filterBuilderChangeAll(data) {
-    console.log('filterBuilderChangeAll', data);
-    return {
-        type: FBUILDER_CHANGE_ALL,
-        rules: data
-    };
 }
 
 export function filterBuilderChangeFilter(index, change) {

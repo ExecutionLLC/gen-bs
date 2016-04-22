@@ -6,7 +6,7 @@ import InputArray from '../../shared/InputArray';
 import QueryBuilder from '../../shared/QueryBuilder';
 import FieldUtils from '../../../utils/fieldUtils'
 
-import { filterBuilderChangeAll, filterBuilderChangeFilter } from '../../../actions/filterBuilder';
+import { filterBuilderChangeFilter } from '../../../actions/filterBuilder';
 
 import {filterUtils, opsUtils, genomicsParsedRulesValidate} from '../../../utils/filterUtils';
 
