@@ -127,7 +127,7 @@ class FilterQueryBuilder extends Component {
             <QueryBuilder
                 rules={rules}
                 disabled={disabled}
-                makeItemComponent={FilterQueryBuilder.makeFilterItem.bind(FilterQueryBuilder, fields, dispatch)}
+                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(fields, dispatch, indexPath, item, disabled) }
                 handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
             />
         );
