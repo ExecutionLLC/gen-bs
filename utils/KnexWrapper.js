@@ -64,6 +64,9 @@ class KnexWrapper {
     }
 
     transactionally(query, callback) {
+        if (typeof callback !== 'function') {
+            throw new Error('callback is not a function');
+        }
         async.waterfall([
             (callback) => {
                 // 1. Create transaction

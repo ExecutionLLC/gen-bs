@@ -3,17 +3,21 @@
 const ServiceBase = require('./ServiceBase');
 
 class KeywordService extends ServiceBase {
-  constructor(services, models) {
-    super(services, models);
-  }
+    constructor(services, models) {
+        super(services, models);
+    }
 
-  find(keywordId, callback) {
-    this.models.keywords.find(keywordId, callback);
-  }
+    add(keyword, callback) {
+        this.models.keywords.add(keyword, callback);
+    }
 
-  findMany(keywordIds, callback) {
-    this.models.findMany(keywordIds, callback);
-  }
+    findForFieldIds(fieldIds, callback) {
+        this.models.keywords.findForFieldIds(fieldIds, callback);
+    }
+
+    findMany(keywordIds, callback) {
+        this.models.findMany(keywordIds, callback);
+    }
 }
 
 module.exports = KeywordService;
