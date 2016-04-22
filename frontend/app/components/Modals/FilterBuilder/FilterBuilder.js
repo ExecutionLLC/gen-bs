@@ -244,6 +244,48 @@ class FieldFilterItem extends Component {
         );
     }
 
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {string} fieldId
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeField(item, fieldId) {
+        return {
+            id: fieldId,
+            field: fieldId,
+            operator: item.operator,
+            value: item.value
+        };
+    }
+
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {string} operatorType
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeOperatorType(item, operatorType) {
+        return {
+            id: item.id,
+            field: item.field,
+            operator: operatorType,
+            value: item.value
+        };
+    }
+
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {*} value
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeValue(item, value) {
+        return {
+            id: item.id,
+            field: item.field,
+            operator: item.operator,
+            value: value
+        };
+    }
+
     render() {
         const {
             /** {number[]} */
@@ -272,46 +314,20 @@ class FieldFilterItem extends Component {
         /** @type {string} */
         const selectOperatorValue = item.operator;
 
-        /**
-         * @param {string} fieldId
-         */
-        function onFieldSelectChange(fieldId) {
-            onChange({
-                id: fieldId,
-                field: fieldId,
-                operator: item.operator,
-                value: item.value
-            });
-        }
-
-        /**
-         * @param {string} operatorType
-         */
-        function onOperatorSelectChange(operatorType) {
-            onChange({
-                id: item.id,
-                field: item.field,
-                operator: operatorType,
-                value: item.value
-            });
-        }
-
-        /**
-         * @param {*} value
-         */
-        function onItemValueChange(value) {
-            onChange({
-                id: item.id,
-                field: item.field,
-                operator: item.operator,
-                value: value
-            });
-        }
-
         return (
             <div>
-                {FieldFilterItem.renderFieldSelect(selectFieldList, selectFieldValue, disabled, onFieldSelectChange)}
-                {FieldFilterItem.renderOperatorSelect(selectOperatorList, selectOperatorValue, disabled, onOperatorSelectChange)}
+                {FieldFilterItem.renderFieldSelect(
+                    selectFieldList,
+                    selectFieldValue,
+                    disabled,
+                    (fieldId) => onChange(FieldFilterItem.itemChangeField(item, fieldId))
+                )}
+                {FieldFilterItem.renderOperatorSelect(
+                    selectOperatorList,
+                    selectOperatorValue,
+                    disabled,
+                    (operatorType) => onChange(FieldFilterItem.itemChangeOperatorType(item, operatorType))
+                )}
                 <div className="rule-value-container">
                     {(function(value){
 
@@ -333,20 +349,25 @@ class FieldFilterItem extends Component {
                             const operatorInfo = filterUtils.getOperatorByType(item.operator);
                             const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
                             const InputArrayComponent = opWant.arraySize ? InputArray : InputResizingArray;
-                            return FieldFilterItem.renderInputsArray(InputArrayComponent, value, valueType, disabled, (vals) => onItemValueChange(getInputValueArray(vals)) );
+                            return FieldFilterItem.renderInputsArray(
+                                InputArrayComponent,
+                                value,
+                                valueType,
+                                disabled,
+                                (vals) => onChange(FieldFilterItem.itemChangeValue(item, getInputValueArray(vals)))
+                            );
                         }
                         if (typeof value === 'boolean') {
-                            return FieldFilterItem.renderCheckbox(item.value, disabled, onItemValueChange);
+                            return FieldFilterItem.renderCheckbox(
+                                item.value,
+                                disabled,
+                                (val) => onChange(FieldFilterItem.itemChangeValue(item, val))
+                            );
                         }
                         return FieldFilterItem.renderInputForSingleTextValue(
                             value,
                             disabled,
-                            (val) => onChange({
-                                id: item.id,
-                                field: item.field,
-                                operator: item.operator,
-                                value: getInputValue(val)
-                            })
+                            (val) => onChange(FieldFilterItem.itemChangeValue(item, val))
                         );
 
                     })(item.value)}
