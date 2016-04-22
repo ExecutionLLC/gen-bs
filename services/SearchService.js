@@ -34,7 +34,11 @@ class SearchService extends ServiceBase {
     }
 
     sendSearchRequest(user, sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) {
-        if (!_.some([languageId, viewId, filterId, sampleId, limit, offset])) {
+        const hasUndefOrNullParam = _.some([languageId, viewId, filterId, sampleId, limit, offset], (param) => {
+            return _.isUndefined(param) || _.isNull(param);
+        });
+
+        if (hasUndefOrNullParam) {
             callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
                     languId: languageId || 'undefined',
                     viewId: viewId || 'undefined',
@@ -52,6 +56,9 @@ class SearchService extends ServiceBase {
                 },
                 (sessionId, callback) => {
                     this._createAppServerSearchParams(sessionId, user, languageId, sampleId, viewId, filterId, limit, offset, callback);
+                },
+                (appServerRequestParams, callback) => {
+                    this._validateAppServerSearchParams(appServerRequestParams, callback);
                 },
                 (appServerRequestParams, callback) => {
                     this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
@@ -338,6 +345,18 @@ class SearchService extends ServiceBase {
                 };
                 callback(null, appServerSearchParams);
             }
+        });
+    }
+
+    _validateAppServerSearchParams(appServerRequestParams, callback) {
+        const userId = appServerRequestParams.userId;
+        const sample = appServerRequestParams.sample;
+        const filter = appServerRequestParams.filter;
+        const view = appServerRequestParams.view;
+        async.each([sample, filter, view], (item, callback) => {
+            this.services.users.ensureUserHasAccessToItem(userId, item.type, callback)
+        }, (error) => {
+            callback(error, appServerRequestParams);
         });
     }
 }

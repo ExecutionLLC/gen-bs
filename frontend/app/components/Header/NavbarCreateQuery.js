@@ -25,7 +25,7 @@ class NavbarCreateQuery extends Component {
 
     render() {
 
-        const { dispatch, samples, views } = this.props;
+        const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
         const {selectedView, selectedFilter} = this.props.ui;
         const {selectedSample} = this.props.samplesList;
         const selectedSampleId = selectedSample ? selectedSample.id : null;
@@ -41,6 +41,7 @@ class NavbarCreateQuery extends Component {
 
                         <MetadataSearch samples={samples}
                                         selectedSampleId={selectedSampleId}
+                                        isDemoSession={isDemoSession}
                                         onSampleChangeRequested={(sampleId) => this.onSampleSelected(sampleId) }
                         />
                         <FiltersSetup

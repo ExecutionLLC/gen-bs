@@ -33,7 +33,9 @@ export default class FilterBuilderFooter extends Component {
                     disabled={disabledClass}
                     title={title}
                     onClick={ () => {
-                        dispatch(filterBuilderSaveAndSelectRules())
+                        if (filter.name.trim()) {
+                            dispatch(filterBuilderSaveAndSelectRules())
+                        }
                     }}
                     type="button"
                     className="btn btn-primary"

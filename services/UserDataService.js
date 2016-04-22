@@ -47,9 +47,12 @@ class UserDataService extends ServiceBase {
      * */
     _findLastSampleInfo(user, allSamples, callback) {
         async.waterfall([
-            (callback) => this.services.queryHistory.findLastEntryOrNull(user, callback),
-            (lastEntry, callback) => {
-                let sampleId = lastEntry ? lastEntry.sampleId : allSamples[0].id;
+            (callback) => {
+                // If session is demo session, then we should pick first not 'advanced' sample.
+                const firstNotAdvancedSample = _.find(allSamples, (sample) => {
+                    return sample.type !== 'advanced';
+                });
+                let sampleId = firstNotAdvancedSample ? firstNotAdvancedSample.id : null;
                 this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId,
                     (error, sampleFields) => callback(error, sampleId, sampleFields));
             }
