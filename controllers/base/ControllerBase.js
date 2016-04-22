@@ -36,7 +36,7 @@ class ControllerBase {
      * @property {number|undefined}delayMs Time period to delay requests.
      * @property {number|undefined}maxCallCountBeforeBlock Maximum count for API calls before blocking.
      * @property {string|undefined}message Message to send to the client.
-     * @property {function(request, response)|undefined}keyGenerator Function to generate custom keys for the limiter.
+     * @property {function(request, response):string|undefined}keyGenerator Function to generate custom keys for the limiter.
      * */
 
     /**
