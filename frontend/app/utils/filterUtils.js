@@ -249,12 +249,12 @@ export const filterUtils = {
         /**
          * @param {genomicsParsedData|genomicsParsedDataGroup} data
          * @param {number[]} indexPath
-         * @param {boolean} isAnd
+         * @param {function(genomicsParsedDataGroup, *):(genomicsParsedDataGroup)} doModifyFunction
          * @returns {genomicsParsedData|genomicsParsedDataGroup}
          */
-        switchCondition(data, indexPath, isAnd) {
+        modifyGroup(data, indexPath, doModifyFunction) {
             if (!indexPath.length) {
-                return this.group.setGroupCondition(data, isAnd);
+                return doModifyFunction(data);
             }
             /** @type {number} */
             const indexInGroup = indexPath[0];
@@ -263,8 +263,21 @@ export const filterUtils = {
             /** @type {genomicsParsedDataGroup} */
             const changingGroup = data.rules[indexInGroup];
             /** @type {genomicsParsedDataGroup} */
-            const newGroup = this.switchCondition(changingGroup, indexPathNext, isAnd);
+            const newGroup = this.modifyGroup(changingGroup, indexPathNext, doModifyFunction);
             return this.group.replaceRule(data, indexInGroup, newGroup);
+        },
+        /**
+         * @param {genomicsParsedData|genomicsParsedDataGroup} data
+         * @param {number[]} indexPath
+         * @param {boolean} isAnd
+         * @returns {genomicsParsedData|genomicsParsedDataGroup}
+         */
+        switchCondition(data, indexPath, isAnd) {
+            return this.modifyGroup(
+                data,
+                indexPath,
+                (group) => this.group.setGroupCondition(group, isAnd)
+            );
         },
         /**
          * @param {genomicsParsedData|genomicsParsedDataGroup} data
@@ -273,18 +286,11 @@ export const filterUtils = {
          * @returns {genomicsParsedData|genomicsParsedDataGroup}
          */
         appendRuleOrGroup(data, indexPath, ruleOrGroup) {
-            if (!indexPath.length) {
-                return this.group.addRule(data, ruleOrGroup);
-            }
-            /** @type {number} */
-            const indexInGroup = indexPath[0];
-            /** @type {Array.<number>} */
-            const indexPathNext = indexPath.slice(1, indexPath.length);
-            /** @type {genomicsParsedDataGroup} */
-            const changingGroup = data.rules[indexInGroup];
-            /** @type {genomicsParsedDataGroup} */
-            const newGroup = this.appendRuleOrGroup(changingGroup, indexPathNext, ruleOrGroup);
-            return this.group.replaceRule(data, indexInGroup, newGroup);
+            return this.modifyGroup(
+                data,
+                indexPath,
+                (group) => this.group.addRule(group, ruleOrGroup)
+            );
         },
         /**
          * @param {genomicsParsedData|genomicsParsedDataGroup} data
@@ -293,18 +299,11 @@ export const filterUtils = {
          * @returns {genomicsParsedData|genomicsParsedDataGroup}
          */
         removeRuleOrGroup(data, indexPath, itemIndex) {
-            if (!indexPath.length) {
-                return this.group.removeRule(data, itemIndex);
-            }
-            /** @type {number} */
-            const indexInGroup = indexPath[0];
-            /** @type {Array.<number>} */
-            const indexPathNext = indexPath.slice(1, indexPath.length);
-            /** @type {genomicsParsedDataGroup} */
-            const changingGroup = data.rules[indexInGroup];
-            /** @type {genomicsParsedDataGroup} */
-            const newGroup = this.removeRuleOrGroup(changingGroup, indexPathNext, itemIndex);
-            return this.group.replaceRule(data, indexInGroup, newGroup);
+            return this.modifyGroup(
+                data,
+                indexPath,
+                (group) => this.group.removeRule(group, itemIndex)
+            );
         },
         /**
          * @param {string} defaultFieldId
