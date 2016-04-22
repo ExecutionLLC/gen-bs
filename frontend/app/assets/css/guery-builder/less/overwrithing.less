@@ -19,12 +19,15 @@
  .rule-container .rule-operator-container { 
    width: 140px;
       vertical-align: top;
-      margin: 5px 0;
+      margin: 5px;
+       @media (max-width: @screen-xss-max) {
+         margin: 5px 0;
+       }
 }
  .rule-container .rule-value-container {
   
      vertical-align: top;
-     margin: 0 5px 0 15px;
+     margin: 5px 5px 0 5px;
        .form-control { 
         width: 160px; 
       }
@@ -112,4 +115,8 @@
     }
   }
 
+}
+
+.query-builder .rule-container select {
+    width: 100%;
 }

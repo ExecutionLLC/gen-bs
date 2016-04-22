@@ -669,41 +669,8 @@ table {
 
 .table {   
   &.table-responsive-transform { 
-    @media (max-width:@grid-float-breakpoint-max) {
-      thead { 
-        display: none;
-      }
-      tbody {
-     
-        > tr { 
-          display: block;
-          position: relative;
-          padding: @padding-small-vertical @padding-base-horizontal;
-          border-top: solid 1px @table-border-color;
-          td { 
-            display: block; 
-            width:100%;
-            border-top:none;
-          }
-          td:last-child:not(:first-child) { 
-            width: auto;
-            position: absolute;
-            top:@padding-small-vertical;
-            right: @padding-base-horizontal;
-          }
-        }
-      } 
-    }   
-  }
-}
-
-.modal {
- .table-content { 
-    background: #fff; 
-
-  .table { 
-    margin-bottom: 0;
-    > thead,
+     margin-bottom: 0;
+         > thead,
     > tbody,
     > tfoot { 
       > tr { 
@@ -725,25 +692,47 @@ table {
        }
      }
    }
- } 
-  @media(max-width: @grid-float-breakpoint-max){ 
-      .table-content { 
-        .table-condensed {
-          > thead,
-          > tbody,
-          > tfoot { 
-            > tr { 
-              > td, th, tf { 
-                &:first-child { 
-                  padding-left: @table-condensed-cell-padding;
-                }
-                &:last-child { 
-                  padding-left: @table-condensed-cell-padding;
-                }
-              }
-            }
-          }          
-        }
+  @media (max-width:@grid-float-breakpoint-max) {
+      &.table-responsive-transform { 
+      thead { 
+        display: none;
       }
-   }
+      
+      tbody {
+     
+        > tr { 
+          display: block;
+          position: relative;
+          padding: @padding-small-vertical @padding-base-horizontal;
+          border-top: solid 1px @table-border-color;
+          td { 
+            display: block; 
+            width:100%;
+            border-top:none;
+          }
+          td:last-child:not(:first-child) { 
+            width: auto;
+            position: absolute;
+            top:@padding-small-vertical;
+            right: @padding-base-horizontal;
+          }
+        }
+      } 
+  
+      > thead,
+      > tbody,
+      > tfoot { 
+        > tr { 
+          > td, th, tf { 
+            &:first-child { 
+              padding-left: @table-condensed-cell-padding;
+            }
+            &:last-child { 
+              padding-left: @table-condensed-cell-padding;
+            }
+          }
+        }
+      }          
+    }
+  }
 }

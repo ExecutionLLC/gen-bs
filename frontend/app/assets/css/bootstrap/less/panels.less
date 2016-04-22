@@ -21,6 +21,8 @@
 // Optional heading
 .panel-heading {
   padding: @panel-heading-padding;
+  border: solid 1px transparent;
+  margin: -1px;
   .border-top-radius((@panel-border-radius - 1));
 
   > .dropdown .dropdown-toggle {
@@ -238,7 +240,6 @@
   }
   .panel-heading { 
    border-bottom: 1px solid @panel-inner-border;
-   margin-bottom: -1px;
   }
   .panel-title { 
     font-size: @font-size-h4;
