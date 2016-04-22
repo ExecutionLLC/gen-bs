@@ -9,7 +9,7 @@ const HttpStatus = require('http-status');
 const WebSocketServer = require('ws').Server;
 
 const ErrorUtils = require('./utils/ErrorUtils');
-const ControllerBase = require('./controllers/ControllerBase');
+const ControllerBase = require('./controllers/base/ControllerBase');
 
 class WebServerHost {
     constructor(controllers, services, models) {

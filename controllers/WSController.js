@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 
-const ControllerBase = require('./ControllerBase');
+const ControllerBase = require('./base/ControllerBase');
 
 /**
  * This controller handles client web socket connections,
