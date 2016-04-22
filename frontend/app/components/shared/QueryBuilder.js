@@ -212,10 +212,8 @@ class RulesGroupHeader extends Component {
     }
 }
 
-
-class RulesGroupBody extends Component {
-
-    static RuleContainer(props) {
+class RuleContainer extends Component {
+    render() {
         const {
             /** @type {{condition: *=, field: string=, operator: string=, value: *=}} */
             item,
@@ -227,7 +225,7 @@ class RulesGroupBody extends Component {
             onDelete,
             /** @type {function(number[], {}, boolean): Component} */
             makeItemComponent
-        } = props;
+        } = this.props;
 
         return (
             <li className="rule-container">
@@ -250,6 +248,10 @@ class RulesGroupBody extends Component {
             </li>
         );
     }
+}
+
+
+class RulesGroupBody extends Component {
 
     /**
      * @param {{condition: *=, field: string=, operator: string=, value: *=}[]} items
@@ -277,7 +279,7 @@ class RulesGroupBody extends Component {
                     );
                 } else {
                     return (
-                        <RulesGroupBody.RuleContainer
+                        <RuleContainer
                             key={itemIndex}
                             indexPath={indexNext}
                             item={item}
