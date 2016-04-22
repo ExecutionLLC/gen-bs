@@ -251,7 +251,6 @@ class FieldFilterItem extends Component {
      */
     static itemChangeField(item, fieldId) {
         return {
-            id: fieldId,
             field: fieldId,
             operator: item.operator,
             value: item.value
@@ -265,7 +264,6 @@ class FieldFilterItem extends Component {
      */
     static itemChangeOperatorType(item, operatorType) {
         return {
-            id: item.id,
             field: item.field,
             operator: operatorType,
             value: item.value
@@ -279,7 +277,6 @@ class FieldFilterItem extends Component {
      */
     static itemChangeValue(item, value) {
         return {
-            id: item.id,
             field: item.field,
             operator: item.operator,
             value: value
