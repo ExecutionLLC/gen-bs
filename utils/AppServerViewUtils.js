@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const CollectionUtils = require('./CollectionUtils');
 
 /**
  * Here is the WS to AS view conversion logic.
@@ -29,10 +30,7 @@ class AppServerViewUtils {
             .filter(listItem => fieldIdToMetadata[listItem.fieldId])
             .map(listItem => {
                 const field = fieldIdToMetadata[listItem.fieldId];
-                const keyWordHash = _.reduce(field.keywords, (result, keyword) => {
-                    result[keyword.id] = keyword;
-                    return result;
-                }, {});
+                const keyWordHash = CollectionUtils.createHashByKey(field.keywords,'id');
                 return {
                     fieldName: field.name,
                     sourceName: field.sourceName,

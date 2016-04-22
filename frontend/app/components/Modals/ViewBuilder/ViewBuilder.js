@@ -40,9 +40,9 @@ export default class ViewBuilder extends React.Component {
             const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, sortDirection);
 
             //keywords
-            const currantValueKeywordsHash = this.createFieldKeywordsHash(currentValue);
-            const keywordsCurrentValue = this.createCurrentKeywordValues(viewItem, currantValueKeywordsHash);
-            const keywordsSelectOptions = this.createFieldKeywordsSelects(currentValue);
+            const currentValueKeywordsHash = this.createFieldKeywordsHash(currentValue);
+            const keywordsCurrentValue = this.createCurrentKeywordValues(viewItem, currentValueKeywordsHash);
+            const keywordsSelectOptions = this.createFieldKeywordsSelectOptions(currentValue);
 
             return (
 
@@ -75,9 +75,9 @@ export default class ViewBuilder extends React.Component {
                         <Select
                             options={keywordsSelectOptions}
                             multi={true}
-                            placeholder={(keywordsSelectOptions.length) ?'Choose keywords':''}
+                            placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
                             value={keywordsCurrentValue}
-                            onChange={ (val) => this.onChangeKeyWord(index, val)}
+                            onChange={ (val) => this.onChangeKeyword(index, val)}
                             clearable={false}
                             disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
                         />
@@ -135,7 +135,7 @@ export default class ViewBuilder extends React.Component {
     };
 
     createFieldKeywordsHash(field) {
-        if (field.id == null) {
+        if (!field.id) {
             return {};
         } else {
             return _.reduce(field.keywords, (result, keyword) => {
@@ -145,8 +145,8 @@ export default class ViewBuilder extends React.Component {
         }
     }
 
-    createFieldKeywordsSelects(field) {
-        if (field.id == null) {
+    createFieldKeywordsSelectOptions(field) {
+        if (!field.id) {
             return [];
         } else {
             return [
@@ -192,7 +192,7 @@ export default class ViewBuilder extends React.Component {
         dispatch(viewBuilderChangeSortColumn(fieldId, direction, isControlKeyPressed));
     }
 
-    onChangeKeyWord(index, keywordValues) {
+    onChangeKeyword(index, keywordValues) {
         const {dispatch} = this.props;
         dispatch(
             viewBuilderChangeKeywords(

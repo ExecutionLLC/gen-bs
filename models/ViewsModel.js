@@ -328,7 +328,7 @@ class ViewsModel extends SecureModelBase {
                 const viewItemsWithKeywords = _.map(viewItems, viewItem => {
                     const itemKeywordIds = itemIdToKeywordIds[viewItem.id];
                     return Object.assign({}, viewItem, {
-                        keywords: (itemKeywordIds == null) ? []: _.map(itemKeywordIds,itemKeywordId =>itemKeywordId.keywordId)
+                        keywords: _.map(itemKeywordIds,itemKeywordId =>itemKeywordId.keywordId)
                     });
                 });
 
