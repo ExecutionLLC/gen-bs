@@ -85,3 +85,28 @@ select.select2.form-control + span.select2 {
 .row.grid-toolbar > div .select-icons + .select2 {
     width: 46px!important;
 }
+
+//material design
+.material-select { 
+  + .select2-container--default { 
+     .select2-selection--single { 
+      border-width: 0 0 1px;
+      box-shadow: none;
+      background:transparent;
+      border-radius: 0;
+      height: 40px;
+      padding-left: 0;
+      border-color: @input-border;
+       
+     .select2-selection__rendered { 
+       padding-left: 0;
+       padding-right: 0;
+       line-height: 40px;
+     }
+     .select2-selection__arrow b {
+     border-color: @gray transparent transparent;
+     }
+   }
+  }
+} 
+

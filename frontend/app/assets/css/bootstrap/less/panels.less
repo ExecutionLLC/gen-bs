@@ -237,9 +237,6 @@
     }
   }
 
-  .panel-heading {
-      border-bottom: 1px solid @panel-inner-border;
-  }
   .panel-title { 
     font-size: @font-size-h4;
   }
@@ -262,7 +259,7 @@
            }
            .btn-group { 
                display: inline-block;
-             }
+           }
          }
          .panel-heading {
           background: #fff; 
@@ -314,7 +311,6 @@
 
 
 //bootstrap react fix
-
 .panel { 
   .panel,
   .panel-default {
@@ -330,11 +326,14 @@
 }
 
 .panel-group-scroll { 
+    @media (min-width: @screen-sm){
     height: 400px;
     margin-right: -16px;
     overflow-x: hidden;
     overflow-y: auto;
     padding-right: 16px;
+
+    }
 }
 .panel {
   &.edit-mode {
@@ -348,6 +347,7 @@
    }
   }
   &.panel-file-upload { 
-    margin: 0;
+    margin-bottom: 16px;
   }
 }  
+

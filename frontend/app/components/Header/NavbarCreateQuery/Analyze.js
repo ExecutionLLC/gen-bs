@@ -19,7 +19,7 @@ export default class Analyze extends Component {
     };
     return (
 
-        <div className="table-cell table-cell-xs-6">
+        <div className="table-cell table-cell-xs-4">
             <div className="btn-group"
               data-localize="query.analyze.help"
               ref="analyze_tooltip_target"

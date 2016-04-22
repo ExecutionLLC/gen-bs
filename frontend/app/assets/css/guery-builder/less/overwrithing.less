@@ -32,6 +32,9 @@
        select.form-control { 
         width: 160px!important;
       }
+       @media (max-width: @screen-xss-max) { 
+         margin: 0 5px 0 0;
+       } 
 }
 
  
@@ -79,19 +82,7 @@
      }
 
 }
-@media (min-width: @screen-md) { 
-    .rule-container .rule-filter-container  {
-  margin: 0 5px 0 0; 
-    }
-   .rule-container .rule-operator-container { 
-     margin: 0 5px 0 0;
-    }
-    .rule-container .rule-value-container {
-      margin: 0 5px 0 0;
-     }
 
-    
-}
 }
 
 .group-conditions {

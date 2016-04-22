@@ -51,7 +51,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         return (
             <Panel collapsible
                    expanded={this.props.isExpanded}
-                   className="samples-values form-horizontal-rows"
+                   className="samples-values"
             >
                 <div className="flex">
                     {this.props.fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
