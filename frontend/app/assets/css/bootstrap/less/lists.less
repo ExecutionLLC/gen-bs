@@ -5,10 +5,12 @@
   dl {
     width: 50%;
     margin-bottom: 12px;
-     dd {
+    dd {
     &:extend(.clearfix all); // Clear the floated `dt` if an empty `dd` is present
-  }
-
+   }
+    &.dl-btns { 
+      margin-right: 50%;
+    }
   @media (min-width: @dl-flex-horizontal-breakpoint) {
     dt {
       float: left;
