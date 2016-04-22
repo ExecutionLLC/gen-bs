@@ -582,7 +582,20 @@ table {
     }
   }
 }
-
+.table-variants-message { 
+      display: block;
+      max-width: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      position: fixed;
+      width: 100%;
+      height: auto!important; 
+      z-index: 2;
+      .empty { 
+        position: relative;
+        height: 100%;
+      }
+}
 .table-loader {
     height: 35px;
     text-align: center; 
@@ -649,7 +662,7 @@ table {
     margin-bottom: 8px;
   }
 }
-  .btn { 
+.btn { 
     &.reset-padding { 
     margin: -@table-cell-padding;
   }

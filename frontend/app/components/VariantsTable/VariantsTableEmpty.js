@@ -4,15 +4,12 @@ export default class VariantsTableEmpty extends Component {
 
     render() {
         return (
-            <div className="table-variants-body">
+            <div className="table-variants-message">
                 <div className="empty">
-                    <div className="panel panel-success">
-                        <div className="panel-body">
-                            <h3 className="text-center">
-                                Results are empty!
-                            </h3>
-                        </div>
-                    </div>
+                      <h3 className="text-center">
+                      <i className="md-i">hourglass_empty</i>
+                          Results are empty!
+                      </h3>
                 </div>
             </div>
 
