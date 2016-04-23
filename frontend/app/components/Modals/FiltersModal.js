@@ -30,24 +30,24 @@ class FiltersModal extends Component {
                     <FilterBuilderHeader />
                     <form>
                         <Modal.Body>
-                          <div className="modal-body-scroll">
-                            { editingFilterIsNew &&
+                            <div className="modal-body-scroll">
+                                { editingFilterIsNew &&
                                 <div className="modal-padding">
-                                  <NewFilterInputs  {...this.props} />
+                                    <NewFilterInputs  {...this.props} />
                                     <FilterBuilder
                                         {...this.props}
                                     />
                                 </div>
-                            }
-                            { !editingFilterIsNew &&
+                                }
+                                { !editingFilterIsNew &&
                                 <div className="modal-padding">
-                                  <ExistentFilterSelect {...this.props} />
-                                  <FilterBuilder
-                                      {...this.props}
-                                  />
+                                    <ExistentFilterSelect {...this.props} />
+                                    <FilterBuilder
+                                        {...this.props}
+                                    />
+                                </div>
+                                }
                             </div>
-                            }
-                          </div>
                         </Modal.Body>
                         <FilterBuilderFooter {...this.props} />
                     </form>

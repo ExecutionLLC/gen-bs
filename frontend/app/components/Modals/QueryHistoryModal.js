@@ -44,7 +44,7 @@ export default class QueryHistoryModal extends Component {
         return (
             <tr>
                 <td colSpan="5">
-                    <div className="empty"><h3><i className="md-i">hourglass_empty</i>{message}</h3></div>
+                    <div className="empty"><h3><i className="md-i">perm_identity</i>{message}</h3></div>
                 </td>
             </tr>
         )

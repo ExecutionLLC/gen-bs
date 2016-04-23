@@ -618,7 +618,7 @@ table {
  }                 
 .empty {
   background: @default-max-light;
-  margin: -@table-condensed-cell-padding;
+  margin: -@table-condensed-cell-padding -@table-condensed-cell-padding -@table-condensed-cell-padding -(@table-condensed-cell-padding *4);
   text-align: center;
   color: @gray-light;
   padding: 150px 0;
@@ -649,7 +649,7 @@ table {
   @media (max-width:@grid-float-breakpoint-max) {
    margin: -8px -20px;
    h3 {
-      max-width: 50%;
+      max-width: 90%;
    }
  }
 }
@@ -676,10 +676,10 @@ table {
       > tr { 
         > td, th, tf { 
           &:first-child { 
-            padding-left: @table-cell-padding *3;
+            padding-left: @table-condensed-cell-padding *3;
           }
           &:last-child { 
-            padding-left: @table-cell-padding *4;
+            padding-left: @table-condensed-cell-padding *4;
           }
         }
       }

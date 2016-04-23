@@ -37,11 +37,11 @@ class SavedFilesModal extends DialogBase {
         const {isDemo} = this.props;
         if (isDemo) {
             return (
-                <div>Please register to access your saved files here.</div>
+                <div className="empty"><h3><i className="md-i">perm_identity</i>Please register to access your saved files here.</h3></div>
             );
         } else {
             return (
-                <div>Here will be the files you have exported, but there are no such files for now.</div>
+                <div className="empty"><h3><i className="md-i">hourglass_empty</i>Here will be the files you have exported, but there are no such files for now.</h3></div>
             );
         }
     }

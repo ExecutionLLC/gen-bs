@@ -35,22 +35,20 @@ class ViewsModal extends React.Component {
                     <ViewBuilderHeader />
                     <form>
                         <Modal.Body>
-                            { isNew &&
                             <div className="modal-body-scroll">
-                                <div className="modal-padding">
-                                    <NewViewInputs  />
-                                    <ViewBuilder />
-                                </div>   
+                                { isNew &&
+                                    <div className="modal-padding">
+                                        <NewViewInputs  />
+                                        <ViewBuilder />
+                                    </div>   
+                                }
+                                { !isNew &&
+                                    <div className="modal-padding">
+                                        <ExistentViewSelect />
+                                        <ViewBuilder />
+                                    </div>
+                                }
                             </div>
-                            }
-                            { !isNew &&
-                            <div className="modal-body-scroll">
-                                <div className="modal-padding">
-                                    <ExistentViewSelect />
-                                    <ViewBuilder />
-                                </div>
-                            </div>
-                            }
                         </Modal.Body>
                         <ViewBuilderFooter closeModal={closeModal}/>
                     </form>

@@ -49,18 +49,11 @@ export default class NewFilterInputs extends Component {
                         />
                    
 
-<<<<<<< HEAD
                         <div className="input-group-btn btn-group-close">
-                              <button type="button" className="btn-link-default" type="button"
-                                      data-toggle="collapse" data-target=".copyview "
-                                      onClick={ () => dispatch(filterBuilderToggleNewEdit(true)) }><i className="md-i">close</i></button>
+                            <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
+                                    onClick={ () => dispatch(filterBuilderToggleNewEdit(false, fields)) }><span
+                                className="hidden-xs" data-localize="actions.cancel">Cancel</span><span className="visible-xs"></span></button>
                         </div>
-=======
-                    <div className="col-sm-1">
-                        <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                onClick={ () => dispatch(filterBuilderToggleNewEdit(false, fields)) }><span
-                            data-localize="actions.cancel">Cancel</span></button>
->>>>>>> master
                     </div>
                 </div>
             </div>

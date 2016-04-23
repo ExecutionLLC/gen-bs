@@ -69,9 +69,8 @@ export default class ViewBuilder extends React.Component {
                              data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                             {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
-
                     </div>
-                    <div className="col-xs-10 input-group">
+                    <div className="col-xs-12 col-sm-6">
                         <Select
                             options={keywordsSelectOptions}
                             multi={true}
@@ -81,8 +80,6 @@ export default class ViewBuilder extends React.Component {
                             clearable={false}
                             disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
                         />
-                    </div>
-
                     </div>
                 </div>
             )
