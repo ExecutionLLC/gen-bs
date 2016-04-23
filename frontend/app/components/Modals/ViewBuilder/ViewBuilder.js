@@ -70,16 +70,28 @@ export default class ViewBuilder extends React.Component {
                             {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
                     </div>
-                    <div className="col-xs-12 col-sm-6">
-                        <Select
-                            options={keywordsSelectOptions}
-                            multi={true}
-                            placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
-                            value={keywordsCurrentValue}
-                            onChange={ (val) => this.onChangeKeyword(index, val)}
-                            clearable={false}
-                            disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
-                        />
+                    <div className="col-xs-12 col-sm-6 btn-group-select2">
+                        <div className="btn-group btn-group-select100">
+                            <Select
+                                options={keywordsSelectOptions}
+                                multi={true}
+                                placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
+                                value={keywordsCurrentValue}
+                                onChange={ (val) => this.onChangeKeyword(index, val)}
+                                clearable={false}
+                                disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
+                            />
+                        </div>
+                        <div className="btn-group">
+                            <button className="btn-link-default" disabled={disabledClass}
+                                    onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
+                                    type="button">
+                                    <i className="md-i">close</i></button>
+                            <button className="btn-link-default" disabled={disabledClass}
+                                    onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }
+                                    type="button">
+                                    <i className="md-i">add</i></button>                          
+                        </div>
                     </div>
                 </div>
             )
