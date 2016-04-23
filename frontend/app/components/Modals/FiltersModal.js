@@ -12,7 +12,7 @@ class FiltersModal extends Component {
     render() {
 
         const {isValid} = this.props.userData;
-        const {editOrNew} = this.props.filterBuilder;
+        const editingFilterIsNew = this.props.filterBuilder.editingFilter.isNew;
 
         return (
 
@@ -30,26 +30,24 @@ class FiltersModal extends Component {
                     <FilterBuilderHeader />
                     <form>
                         <Modal.Body>
-                            { !editOrNew &&
-                            <div className="modal-body-scroll">
+                          <div className="modal-body-scroll">
+                            { editingFilterIsNew &&
                                 <div className="modal-padding">
-                                    <NewFilterInputs  {...this.props} />
+                                  <NewFilterInputs  {...this.props} />
                                     <FilterBuilder
                                         {...this.props}
                                     />
                                 </div>
-                            </div>
                             }
-                            { editOrNew &&
-                            <div className="modal-body-scroll">
+                            { !editingFilterIsNew &&
                                 <div className="modal-padding">
-                                    <ExistentFilterSelect {...this.props} />
-                                    <FilterBuilder
-                                        {...this.props}
-                                    />
-                                </div>
+                                  <ExistentFilterSelect {...this.props} />
+                                  <FilterBuilder
+                                      {...this.props}
+                                  />
                             </div>
                             }
+                          </div>
                         </Modal.Body>
                         <FilterBuilderFooter {...this.props} />
                     </form>

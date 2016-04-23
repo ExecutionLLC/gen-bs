@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import {connect} from 'react-redux';
 
 import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder'
-import {viewBuilderChangeSortColumn} from "../../../actions/viewBuilder";
+import {viewBuilderChangeSortColumn, viewBuilderChangeKeywords} from "../../../actions/viewBuilder";
 
 
 export default class ViewBuilder extends React.Component {
@@ -28,6 +28,7 @@ export default class ViewBuilder extends React.Component {
             var currentValue =
                 _.find(fields.totalFieldsList, {id: viewItem.fieldId}) ||
                 {id: null};
+
             const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;
             const selectOptions = [
 
@@ -37,6 +38,11 @@ export default class ViewBuilder extends React.Component {
             ];
             const {sortOrder, sortDirection, fieldId} = viewItem;
             const ascSortBtnClasses = this.getSortButtonClasses(sortOrder, sortDirection);
+
+            //keywords
+            const currentValueKeywordsHash = this.createFieldKeywordsHash(currentValue);
+            const keywordsCurrentValue = this.createCurrentKeywordValues(viewItem, currentValueKeywordsHash);
+            const keywordsSelectOptions = this.createFieldKeywordsSelectOptions(currentValue);
 
             return (
 
@@ -65,19 +71,17 @@ export default class ViewBuilder extends React.Component {
                         </div>
 
                     </div>
-                    <div className="col-xs-12 col-sm-6 input-group">
-                        <input type="text" className="form-control" placeholder="Keywords (Optional)" id="cFl1" value=""
-                               readOnly="" data-localize="views.setup.settings.keywords"/>
-                        <div className="input-group-btn">
-                            <button className="btn-link-default" disabled={disabledClass}
-                                    onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }><i
-                                className="md-i">close</i></button>
-                        </div>
-                        <div className="input-group-btn">
-                            <button className="btn-link-default" disabled={disabledClass}
-                                    onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }><i
-                                className="md-i">add</i></button>
-                        </div>
+                    <div className="col-xs-10 input-group">
+                        <Select
+                            options={keywordsSelectOptions}
+                            multi={true}
+                            placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
+                            value={keywordsCurrentValue}
+                            onChange={ (val) => this.onChangeKeyword(index, val)}
+                            clearable={false}
+                            disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
+                        />
+                    </div>
 
                     </div>
                 </div>
@@ -110,6 +114,39 @@ export default class ViewBuilder extends React.Component {
             </div>
 
         )
+    }
+
+    createCurrentKeywordValues(viewItem, keywords) {
+        return [
+            ...viewItem.keywords.map((keywordId) => {
+                const currentKeyword = keywords[keywordId];
+                return {value: currentKeyword.synonyms[0].keywordId, label: `${currentKeyword.synonyms[0].value}`}
+            })
+        ];
+    };
+
+    createFieldKeywordsHash(field) {
+        if (!field.id) {
+            return {};
+        } else {
+            return _.reduce(field.keywords, (result, keyword) => {
+                result[keyword.id] = keyword;
+                return result;
+            }, {});
+        }
+    }
+
+    createFieldKeywordsSelectOptions(field) {
+        if (!field.id) {
+            return [];
+        } else {
+            return [
+
+                ...field.keywords.map((keyword) => {
+                    return {value: keyword.synonyms[0].keywordId, label: `${keyword.synonyms[0].value}`}
+                })
+            ];
+        }
     }
 
     getSortButtonClasses(order, sortDirection) {
@@ -145,6 +182,17 @@ export default class ViewBuilder extends React.Component {
     onSortClick(direction, isControlKeyPressed, fieldId) {
         const {dispatch} = this.props;
         dispatch(viewBuilderChangeSortColumn(fieldId, direction, isControlKeyPressed));
+    }
+
+    onChangeKeyword(index, keywordValues) {
+        const {dispatch} = this.props;
+        dispatch(
+            viewBuilderChangeKeywords(
+                index, _.map(
+                    keywordValues, keywordValue => keywordValue.value
+                )
+            )
+        );
     }
 }
 

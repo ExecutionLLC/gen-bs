@@ -1,118 +1,452 @@
 import React from 'react';
+import Select from 'react-select';
+import Input from '../../shared/Input';
+import InputResizingArray from '../../shared/InputResizingArray';
+import InputArray from '../../shared/InputArray';
+import QueryBuilder from '../../shared/QueryBuilder';
+import FieldUtils from '../../../utils/fieldUtils'
 
-import filterOperators from './filterOperators'
 import {
-    filterBuilderReceiveRules,
-    filterBuilderRequestRulesCancel
+    filterBuilderChangeFilter
 } from '../../../actions/filterBuilder';
+import {
+    filterUtils,
+    opsUtils,
+    genomicsParsedRulesValidate
+} from '../../../utils/filterUtils';
+
+
+/**
+
+FieldFilterItem(
+    indexPath: number[]
+    item: {field: string, operator: string, value: *}
+    fields: {id: string, label: string, type: string}[]
+    allowedOpsTypes: string[]
+    valueType: string
+    disabled: boolean
+    onChange: function({field: string, operator: string, value: *})
+)
+
+ */
+
+
+class FilterQueryBuilder extends React.Component {
+
+    /**
+     * Get operators types (operator.type) for given value type
+     * @param {string} type
+     * @returns {string[]}
+     */
+    static getValidOperatorsTypesForJSType(type) {
+        const ops = [];
+        filterUtils.operators.map((op) => {
+            if (genomicsParsedRulesValidate.isAllowedOperatorType(op, type))
+                ops.push(op.type);
+        });
+        return ops;
+    }
+
+    /**
+     * Get fields ids for given operation
+     * @param {{id: string, label: string, type: string}[]} fields
+     * @param {{type: string, nbInputs: number, multiple: boolean, applyTo: string[]}} operator
+     * @returns {Object.<string, boolean>}
+     */
+    static getValidFieldsIdsForOperator(fields, operator) {
+        const validFieldsIds = {};
+        fields.map( (field) => {
+            const fieldJSType = FieldUtils.getFieldJSType(field);
+            if (genomicsParsedRulesValidate.isAllowedOperatorType(operator, fieldJSType)) {
+                validFieldsIds[field.id] = true;
+            }
+        });
+        return validFieldsIds;
+    }
+
+    /**
+     * Make filter rule item component
+     * @param {{id: string, label: string, type: string}[]} fields
+     * @param {function(Object)} dispatch
+     * @param {number[]} indexPath
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {boolean} disabled
+     * @returns {React.Component}
+     */
+    static makeFilterItem(fields, dispatch, indexPath, item, disabled) {
+        const fieldJSType = FieldUtils.getFieldJSType(FieldUtils.getFieldById(fields, item.field));
+        const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
+        const allowedFieldsIds = this.getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
+        const allowedFields = fields.filter((f) => allowedFieldsIds[f.id]);
+        return (
+            <FieldFilterItem
+                indexPath={indexPath}
+                item={item}
+                fields={allowedFields}
+                allowedOpsTypes={allowedOpsTypes}
+                valueType={fieldJSType}
+                disabled={disabled}
+                onChange={ (item) => {
+                            if (indexPath.length < 1) {
+                                return;
+                            }
+                            const ruleIndex = indexPath[indexPath.length - 1];
+                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
+                        }}
+            />
+        );
+    }
+
+    static makeFilterQueryBuilderHandlers(dispatch) {
+        return {
+            onSwitch(/** number[] */indexPath, /** boolean */isAnd) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onSwitch: isAnd}));
+            },
+            onAdd(/** number[] */indexPath, /** boolean */isGroup) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onAdd: isGroup}));
+            },
+            onDeleteGroup(/** number[] */indexPath) {
+                if (indexPath.length < 1) {
+                    return;
+                }
+                const groupIndex = indexPath[indexPath.length - 1];
+                dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onDelete: groupIndex}));
+            },
+            onDeleteItem(/** number[] */indexPath, /** number */itemIndex) {
+                dispatch(filterBuilderChangeFilter(indexPath, {onDelete: itemIndex}));
+            }
+        };
+    }
+
+    render() {
+
+        const {
+            /** @type {{id: string, label: string, type: string}[]} */
+            fields,
+            /** @type {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} */
+            rules,
+            /** @type {boolean} */
+            disabled,
+            /** @type function(Object) */
+            dispatch
+        } = this.props;
+
+        return (
+            <QueryBuilder
+                rules={rules}
+                disabled={disabled}
+                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(fields, dispatch, indexPath, item, disabled) }
+                handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
+            />
+        );
+    }
+}
+
+
+class FieldFilterItem extends React.Component {
+
+    /**
+     * @param {string|number} value
+     * @param {boolean} disabled
+     * @param {function(string)} onChange
+     * @returns {React.Component}
+     */
+    static renderInputForSingleTextValue(value, disabled, onChange) {
+        return (
+            <Input
+                className="form-control"
+                type={typeof value === 'number' ? 'number' : 'text'}
+                value={value}
+                disabled={disabled}
+                onChange={ (val) => onChange(val) }
+            />
+        );
+    }
+
+    /**
+     * @param {boolean} checked
+     * @param {boolean} disabled
+     * @param {function(boolean)} onChange
+     * @returns {React.Component}
+     */
+    static renderCheckbox(checked, disabled, onChange) {
+        return (
+            <input
+                className="form-control"
+                type="checkbox"
+                checked={checked}
+                disabled={disabled}
+                onChange={ (evt) => onChange(evt.target.checked) }
+            />
+        );
+    }
+
+    /**
+     * @param {{value: string, label: string}[]} fieldsList
+     * @param {string} fieldId
+     * @param {boolean} disabled
+     * @param {function(string)} onChange
+     * @returns {React.Component}
+     */
+    static renderFieldSelect(fieldsList, fieldId, disabled, onChange) {
+        return (
+            <div className="rule-filter-container">
+                <Select
+                    className="selectTree"
+                    options={fieldsList}
+                    value={fieldId}
+                    clearable={false}
+                    disabled={disabled}
+                    onChange={ (val) => onChange(val.value) }
+                />
+            </div>
+        );
+    }
+
+    static renderOperatorSelect(operatorsList, operatorType, disabled, onChange) {
+        return (
+            <div className="rule-operator-container rule-operator-container-operation">
+                <Select
+                    className="select2"
+                    options={operatorsList}
+                    value={operatorType}
+                    clearable={false}
+                    disabled={disabled}
+                    onChange={ (val) => onChange(val.value) }
+                />
+            </div>
+        );
+    }
+
+    /**
+     * @param {Object} props
+     * @returns {React.Component}
+     */
+    static renderInputsArrayItem(props) {
+        return (
+            <div className="rule-value-array-item">
+                <Input {...props} className="form-control" />
+            </div>
+        );
+    }
+
+    /**
+     * @param {React.Component} ArrayComponent
+     * @param {(number|string)[]} value
+     * @param {string} valueType
+     * @param {boolean} disabled
+     * @param {function(string[])} onChange
+     * @returns {React.Component}
+     */
+    static renderInputsArray(ArrayComponent, value, valueType, disabled, onChange) {
+        return (
+            <div className="rule-value-array">
+                <ArrayComponent
+                    value={value}
+                    type={valueType === 'number' ? 'number' : 'text'}
+                    disabled={disabled}
+                    InputComponent={FieldFilterItem.renderInputsArrayItem}
+                    onChange={onChange}
+                />
+            </div>
+        );
+    }
+
+    static renderItem(item, valueType, disabled, onChange) {
+        const value = item.value;
+        /** @type function(string|number):(string|number) */
+        const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
+        /**
+         * @param {(string|number)[]} arr
+         * @returns {(string|number)[]}
+         */
+        function getInputValueArray(arr) {
+            return arr.map( (val) => getInputValue(val) );
+        }
+
+        if (typeof value === 'object') {
+            if (!value) {
+                return null;
+            }
+
+            const operatorInfo = filterUtils.getOperatorByType(item.operator);
+            const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
+            const InputArrayComponent = opWant.arraySize ? InputArray : InputResizingArray;
+            return FieldFilterItem.renderInputsArray(
+                InputArrayComponent,
+                value,
+                valueType,
+                disabled,
+                (vals) => onChange(FieldFilterItem.itemChangeValue(item, getInputValueArray(vals)))
+            );
+        }
+        if (typeof value === 'boolean') {
+            return FieldFilterItem.renderCheckbox(
+                value,
+                disabled,
+                (val) => onChange(FieldFilterItem.itemChangeValue(item, val))
+            );
+        }
+        return FieldFilterItem.renderInputForSingleTextValue(
+            value,
+            disabled,
+            (val) => onChange(FieldFilterItem.itemChangeValue(item, val))
+        );
+    }
+
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {string} fieldId
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeField(item, fieldId) {
+        return {
+            field: fieldId,
+            operator: item.operator,
+            value: item.value
+        };
+    }
+
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {string} operatorType
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeOperatorType(item, operatorType) {
+        return {
+            field: item.field,
+            operator: operatorType,
+            value: item.value
+        };
+    }
+
+    /**
+     * @param {{field: string, operator: string, value: *}} item
+     * @param {*} value
+     * @returns {{field: string, operator: string, value: *}}
+     */
+    static itemChangeValue(item, value) {
+        return {
+            field: item.field,
+            operator: item.operator,
+            value: value
+        };
+    }
+
+    render() {
+        const {
+            /** {number[]} */
+            indexPath,
+            /** @type {{field: string, operator: string, value: *}} */
+            item,
+            /** @type {{id: string, label: string, type: string}[]} */
+            fields,
+            /** @type {string[]} */
+            allowedOpsTypes,
+            /** @type {string} */
+            valueType,
+            /** @type {boolean} */
+            disabled,
+            /** @type {function({field: string, operator: string, value: *})} */
+            onChange
+        } = this.props;
+
+        /** @type {{value: string, label: string}[]} */
+        const selectFieldList = fields.map((field) => {
+            return {value: field.id, label: field.label}
+        });
+        /** @type {string} */
+        const selectFieldValue = item.field;
+
+        /** @type {{value: string, label: string}[]} */
+        const selectOperatorList = allowedOpsTypes.map((opname) => {
+            return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]};
+        });
+        /** @type {string} */
+        const selectOperatorValue = item.operator;
+
+        /**
+         * @param {string} fieldId
+         */
+        function onFieldSelectChange(fieldId) {
+            onChange({
+                id: fieldId,
+                field: fieldId,
+                operator: item.operator,
+                value: item.value
+            });
+        }
+
+        /**
+         * @param {string} operatorType
+         */
+        function onOperatorSelectChange(operatorType) {
+            onChange({
+                id: item.id,
+                field: item.field,
+                operator: operatorType,
+                value: item.value
+            });
+        }
+
+        /**
+         * @param {*} value
+         */
+        function onItemValueChange(value) {
+            onChange({
+                id: item.id,
+                field: item.field,
+                operator: item.operator,
+                value: value
+            });
+        }
+
+        return (
+            <div>
+                {FieldFilterItem.renderFieldSelect(
+                    selectFieldList,
+                    selectFieldValue,
+                    disabled,
+                    (fieldId) => onChange(FieldFilterItem.itemChangeField(item, fieldId))
+                )}
+                {FieldFilterItem.renderOperatorSelect(
+                    selectOperatorList,
+                    selectOperatorValue,
+                    disabled,
+                    (operatorType) => onChange(FieldFilterItem.itemChangeOperatorType(item, operatorType))
+                )}
+                <div className="rule-value-container">
+                    {FieldFilterItem.renderItem(item, valueType, disabled, onChange)}
+                </div>
+            </div>
+        )
+    }
+}
 
 
 export default class FilterBuilder extends React.Component {
-
-    componentDidMount() {
-        const {fields, filterBuilder:{editOrNew, editedFilter, newFilter}} = this.props;
-        const filter = editOrNew ? (editedFilter) : (newFilter);
-        var el = this.refs.builder;
-        const notEditableSampleFields = _.filter(
-            fields.totalFieldsList, (field) => field.sourceName == 'sample' && !field.isEditable
-        );
-
-
-        const builderFilters = [
-
-            ...notEditableSampleFields.map((f) => {
-                return {
-                    id: f.id,
-                    label: `${f.name} -- ${f.sourceName}`,
-                    type: f.valueType === 'float' ? 'double' : f.valueType
-                }
-            }),
-            ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map((f) => {
-                return {id: f.id, label: `${f.name} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType}
-            })
-
-        ];
-
-        window.$(el).queryBuilder({
-            filters: builderFilters,
-            operators: filterOperators
-        });
-        this.disableFilter(filter, el);
-    }
 
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.fields !== nextProps.fields
             || this.props.filterBuilder !== nextProps.filterBuilder;
     }
 
-    disableFilter(filter, el) {
-        window.$(el).queryBuilder('setRulesFromGenomics', filter.rules);
-        if (filter.type === 'standard' || filter.type == 'advanced') {
-            //inputs and selects
-            window.$('input[name*="builder-basic_rule"],select[name*="builder-basic_rule"]')
-                .prop('disabled', true);
-            //and, or operators
-            window.$('div[class*="group-conditions"]')
-                .children()
-                .children()
-                .prop('disabled', true);
-            //add rule ,add group
-            window.$('div[class*="group-actions"]')
-                .children()
-                .prop('disabled', true);
-            window.$('div[class*="rule-actions"]')
-                .children()
-                .prop('disabled', true);
-        }
-    }
-
-    componentWillUpdate(nextProps) {
-        const {dispatch, fields} = nextProps;
-        const {editOrNew, rulesRequested, editedFilter, newFilter} = nextProps.filterBuilder;
-        const filter = editOrNew ? (editedFilter) : (newFilter);
-        var el = this.refs.builder;
-        var rules = [];
-        const builderFilters = [
-
-            ...fields.sampleFieldsList.map((f) => {
-                return {
-                    id: f.id,
-                    label: `${f.label} -- ${f.sourceName}`,
-                    type: f.valueType === 'float' ? 'double' : f.valueType
-                }
-            }),
-            ...fields.sourceFieldsList.filter((f) => (f.sourceName !== 'sample')).map((f) => {
-                return {id: f.id, label: `${f.label} -- source`, type: f.valueType === 'float' ? 'double' : f.valueType}
-            })
-
-        ];
-
-        if (rulesRequested) {
-            rules = window.$(el).queryBuilder('getGenomics');
-            // rules have no keys in case there are validation errors.
-            if (!Object.keys(rules).length) {
-                return;
-            }
-            // Empty name is not allowed, cancel the rules request
-            if (!filter.name.trim()) {
-                dispatch(filterBuilderRequestRulesCancel());
-            } else {
-                dispatch(filterBuilderReceiveRules(rules))
-            }
-        } else {
-            window.$(el).queryBuilder({
-                filters: builderFilters,
-                operators: filterOperators
-            });
-            this.disableFilter(filter, el);
-        }
-    }
-
     render() {
-
+        const {
+            filterBuilder,
+            fields,
+            dispatch
+        } = this.props;
+        const filter = filterBuilder.editingFilter.filter;
+        const parsedFilter = filterBuilder.editingFilter.parsedFilter;
         return (
             <div className="builder-wrapper">
-                <div id="builder-basic" className="query-builder form-inline" ref="builder"></div>
+                <FilterQueryBuilder
+                    fields={FieldUtils.makeFieldsListForFiltersSelect(fields)}
+                    rules={parsedFilter}
+                    disabled={filter.type === 'standard' || filter.type === 'advanced'}
+                    dispatch={dispatch}
+                />
             </div>
         );
     }

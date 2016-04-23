@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const CollectionUtils = require('./CollectionUtils');
 
 /**
  * Here is the WS to AS view conversion logic.
@@ -29,12 +30,14 @@ class AppServerViewUtils {
             .filter(listItem => fieldIdToMetadata[listItem.fieldId])
             .map(listItem => {
                 const field = fieldIdToMetadata[listItem.fieldId];
+                const keyWordHash = CollectionUtils.createHashByKey(field.keywords,'id');
                 return {
                     fieldName: field.name,
                     sourceName: field.sourceName,
                     order: listItem.order,
                     sortOrder: listItem.sortOrder,
-                    sortDirection: listItem.sortDirection
+                    sortDirection: listItem.sortDirection,
+                    filter: _.map(listItem.keywords, keywordId =>keyWordHash[keywordId].value)
                 };
             })
             .value();
@@ -68,7 +71,7 @@ class AppServerViewUtils {
     static _createAppServerViewColumn(listItem) {
         return {
             name: listItem.fieldName,
-            filter: [] // TODO: List of resolved keywords
+            filter: listItem.filter
         };
     }
 }
