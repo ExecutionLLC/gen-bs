@@ -86,7 +86,7 @@ export default class ExistentFilterSelect extends Component {
                             <button type="button"
                                     className="btn btn-default"
                                     onClick={ () => dispatch(filterBuilderDeleteFilter(selectedFilter.id))}>
-                                <span data-localize="views.setup.delete.title">Delete Filter</span>
+                                <span data-localize="views.setup.delete.title" className="hidden-xs">Delete Filter</span>
                                 <span className="visible-xs"><i className="md-i">close</i></span>
                             </button>
                         </div>
