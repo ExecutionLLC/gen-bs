@@ -130,12 +130,12 @@ class SessionService extends ServiceBase {
 
     findSystemSessionId(callback) {
         async.waterfall([
-            (callback) => this._findSessionsByType(SESSION_TYPES.SYSTEM),
+            (callback) => this._findSessionsByType(SESSION_TYPES.SYSTEM, callback),
             (sessions, callback) => {
                 if (_.isEmpty(sessions)) {
                     callback(new Error('System session is not found'));
                 } else {
-                    callback(sessions, callback);
+                    callback(null, sessions);
                 }
             },
             (sessions, callback) => callback(null, _.first(sessions).id)
