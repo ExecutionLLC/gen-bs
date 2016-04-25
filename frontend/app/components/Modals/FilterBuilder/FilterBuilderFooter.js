@@ -12,7 +12,7 @@ export default class FilterBuilderFooter extends Component {
         const filter = this.props.filterBuilder.editingFilter.filter;
 
         const disabledClass = classNames({
-            'disabled': (filter.type === 'advanced' && auth.isDemo) ? 'disabled' : ''
+            'disabled': (filter.type === 'advanced' && auth.isDemo || !filter.name.trim()) ? 'disabled' : ''
         });
         const title = (filter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
         const isFilterEditable = (filter.type === 'user');
