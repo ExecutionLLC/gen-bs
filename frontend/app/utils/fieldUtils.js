@@ -17,25 +17,12 @@ export default class FieldUtils {
     }
     /**
      * Make fields array for filters
-     * @param {{notEditableFields: Object[], sourceFieldsList: Object[], totalFieldsList: Object[]}} fields
+     * @param {{notEditableFields: Object[], sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
      * @returns {{id: string, label: string, type: string}[]}
      */
     static makeFieldsListForFiltersSelect(fields) {
-
-        /**
-         * @type {Array}
-         */
-        const notEditableSampleTotalFields = _.filter(
-            fields.totalFieldsList, (field) => field.sourceName === 'sample' && !field.isEditable
-        );
-        const notSampleSourceFields = _.filter(
-            fields.sourceFieldsList, (field) => field.sourceName !== 'sample'
-        );
-
-        return [
-            ...notEditableSampleTotalFields.map( (f) => this.makeFieldSelectItemValue(f) ),
-            ...notSampleSourceFields.map( (f) => this.makeFieldSelectItemValue(f, 'source') )
-        ];
+        const allAvailableFields = _.filter(fields.sampleFieldsList.concat(fields.sourceFieldsList), field => !field.isEditable);
+        return allAvailableFields.map( (f) => this.makeFieldSelectItemValue(f) );
     }
     /**
      * Return default field id for adding new rule item or smth
