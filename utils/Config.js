@@ -55,7 +55,7 @@ const SETTINGS = {
             // Task timeouts in seconds.
             checkSessions: {
                 isEnabled: true,
-                taskTimeout: 5 * 60
+                taskTimeout: 1 * 60
             },
             importSourceMetadata: {
                 isEnabled: true,

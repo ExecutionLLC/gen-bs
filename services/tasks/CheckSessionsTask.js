@@ -58,7 +58,7 @@ class CheckSessionsTask extends SchedulerTaskBase {
             // Now ask session state for each operation.
             (operations, callback) => {
                 async.each(operations, (operation, callback) => {
-                    this.services.applicationServer.requestOperationState(operation.id, (error) => {
+                    this.services.applicationServer.requestKeepOperationAlive(operation.id, (error) => {
                         // Continue even if one of the requests is failed, as we need to update all the operations.
                         if (error) {
                             this.logger.error('Error updating operation state.')

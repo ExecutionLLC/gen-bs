@@ -14,6 +14,7 @@ const METHODS = {
     getSourcesList: 'v1.get_sources',
     getSourceMetadata: 'v1.get_source_metadata',
     checkSession: 'v1.get_session_state',
+    keepAlive: 'v1.keep_alive',
     openSearchSession: 'v1.open_session',
     closeSession: 'v1.close_session',
     searchInResults: 'v1.search_in_results',
@@ -54,21 +55,32 @@ class ApplicationServerService extends ServiceBase {
         return this.rpcProxy.isConnected();
     }
 
-    requestSourcesList(sessionId, callback) {
+    requestSourcesList(callback) {
         const method = METHODS.getSourcesList;
         async.waterfall([
-            (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
             (operation, callback) => this._rpcSend(operation.getId(), method, null, callback)
         ], callback);
     }
 
-    requestSourceMetadata(sessionId, sourceNames, callback) {
+    requestSourceMetadata(sourceNames, callback) {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
-            (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
             (operation, callback) => this._rpcSend(operation.getId(), method, _.map(sourceNames, (sourceName) => {
                 return sourceName + '.h5'
             }), callback)
+        ], callback);
+    }
+
+    requestKeepOperationAlive(operationId, callback) {
+        const method = METHODS.keepAlive;
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (operation, callback) => this._rpcSend(operation.getId(), method, {sessionId: operationId}, callback)
         ], callback);
     }
 
