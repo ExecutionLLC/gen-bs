@@ -55,7 +55,7 @@
  .rules-group-container .rules-group-header .group-actions { 
    .btn { 
      margin-left: 2px;
-   
+     border-radius: 3px;
    }
  }
 @media (max-width: @screen-xss-max) {
@@ -94,16 +94,16 @@
 
 .group-conditions {
   label.active {
-    &:extend(.btn-primary);
+    .btn-primary();
   }
 }
 .query-builder .rules-group-container .rules-group-header .group-actions .btn-success { 
-      &:extend(.btn-primary);
+     .btn-primary();
 }
 
-.query-builder .rules-group-container .rules-list .btn-danger { 
-  
-     &:extend(.btn-default);
+.query-builder .rules-group-container .rules-list .btn-danger,
+.query-builder .rules-group-container .rules-group-header .group-actions .btn-danger { 
+     .btn-default();
 }
 
 //combine filters

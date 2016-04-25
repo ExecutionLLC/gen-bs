@@ -49,7 +49,7 @@ export default class ViewBuilder extends React.Component {
                 <div className="row grid-toolbar" key={Math.round(Math.random()*100000000).toString()}>
 
                     <div className="col-xs-12 col-sm-6 btn-group-select2">
-                        <div className="btn-group">
+                        <div className="btn-group btn-group-left">
                             <button className="btn btn-link btnDrag" disabled="" type="button">
                                 <span className="icon-bar"/>
                                 <span className="icon-bar"/>

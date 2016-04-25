@@ -76,7 +76,7 @@ export default class ExistentViewSelect extends React.Component {
         );
 
         return (
-            <div className="col-xs-8 col-sm-6">
+            <div className="col-sm-6">
                 <Select options={selectorItems}
                         value={this.getSelectedViewId()}
                         clearable={false}
@@ -88,10 +88,12 @@ export default class ExistentViewSelect extends React.Component {
 
     renderButtonGroup(isDemoSession, isEditableView) {
         return (
-            <div className="col-xs-4 col-sm-6">
-                {this.renderDuplicateViewButton(isDemoSession)}
-                {isEditableView && this.renderResetViewButton()}
-                {isEditableView && this.renderDeleteViewButton()}
+            <div className="col-sm-6">
+                <div className="btn-group">
+                    {this.renderDuplicateViewButton(isDemoSession)}
+                    {isEditableView && this.renderResetViewButton()}
+                    {isEditableView && this.renderDeleteViewButton()}
+                </div>
             </div>
         )
     }
@@ -103,46 +105,40 @@ export default class ExistentViewSelect extends React.Component {
         });
 
         return (
-            <div className="btn-group">
-                <button type="button"
-                        className="btn btn-default collapse in copyview"
-                        id="dblBtn"
-                        onClick={ () => {this.onDuplicateViewClick()} }
-                        disabled={disabledClass}
-                        title={duplicateButtonTooltip}
-                >
-                    <span data-localize="actions.duplicate.title" className="hidden-xs">Duplicate</span>
-                    <span className="visible-xs"><i className="md-i">content_copy</i></span>
-                </button>
-            </div>
+            <button type="button"
+                    className="btn btn-default collapse in copyview"
+                    id="dblBtn"
+                    onClick={ () => {this.onDuplicateViewClick()} }
+                    disabled={disabledClass}
+                    title={duplicateButtonTooltip}
+            >
+                <span data-localize="actions.duplicate.title" className="hidden-xs">Duplicate</span>
+                <span className="visible-xs"><i className="md-i">content_copy</i></span>
+            </button>
         )
     }
 
     renderResetViewButton() {
         return (
-            <div className="btn-group">
-                <button type="button"
-                        className="btn btn-default"
-                        onClick={ () => {this.onResetViewClick()} }
-                >
-                    <span data-localize="views.setup.reset.title" className="hidden-xs">Reset View</span>
-                    <span className="visible-xs"><i className="md-i">setting_backup_restore</i></span>
-                </button>
-            </div>
+            <button type="button"
+                    className="btn btn-default"
+                    onClick={ () => {this.onResetViewClick()} }
+            >
+                <span data-localize="views.setup.reset.title" className="hidden-xs">Reset View</span>
+                <span className="visible-xs"><i className="md-i">settings_backup_restore</i></span>
+            </button>
         )
     }
 
     renderDeleteViewButton() {
         return (
-            <div className="btn-group">
-                <button type="button"
-                        className="btn btn-default"
-                        onClick={ () => {this.onDeleteViewClick()} }
-                >
-                    <span data-localize="views.setup.delete.title" className="hidden-xs">Delete View</span>
-                    <span className="visible-xs"><i className="md-i">close</i></span>
-                </button>
-            </div>
+            <button type="button"
+                    className="btn btn-default"
+                    onClick={ () => {this.onDeleteViewClick()} }
+            >
+                <span data-localize="views.setup.delete.title" className="hidden-xs">Delete View</span>
+                <span className="visible-xs"><i className="md-i">close</i></span>
+            </button>
         )
     }
 

@@ -14,13 +14,9 @@ export default class NewFilterInputs extends Component {
         return (
 
             <div className="collapse in copyview">
-                <div className="row">
-                        <label className="col-sm-6" data-localize="views.setup.new.name.title">New View</label>
-                        <label className="col-sm-6" data-localize="general.description">Description</label>
-                </div>
                 <div className="row grid-toolbar row-noborder row-new-item">
-
                     <div className="col-sm-6">
+                        <label data-localize="views.setup.new.name.title">New View</label>
                         <input
                             type="text"
                             className="form-control text-primary"
@@ -37,22 +33,21 @@ export default class NewFilterInputs extends Component {
                         }
 
                     </div>
-
-                    <div className="col-sm-6 input-group">
-                        <input
-                            type="text"
-                            className="form-control"
-                            data-localize="views.setup.new.description"
-                            placeholder="Set view description (optional)"
-                            value={editingFilter.description}
-                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: editingFilter.name, description: e.target.value})) }
-                        />
-                   
-
-                        <div className="input-group-btn btn-group-close">
-                            <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                    onClick={ () => dispatch(filterBuilderToggleNewEdit(false, fields)) }><span
-                                className="hidden-xs" data-localize="actions.cancel">Cancel</span><span className="visible-xs"></span></button>
+                    <div className="col-sm-6">
+                        <label data-localize="general.description">Description</label>
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                className="form-control"
+                                data-localize="views.setup.new.description"
+                                placeholder="Set view description (optional)"
+                                value={editingFilter.description}
+                                onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: editingFilter.name, description: e.target.value})) }
+                            />
+                            <div className="input-group-btn  btn-group-close">
+                                <button type="button" className="btn-link-default" type="button"
+                                        onClick={ () => dispatch(filterBuilderToggleNewEdit(false, fields)) }><i className="md-i">close</i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
