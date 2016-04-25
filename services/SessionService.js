@@ -113,7 +113,7 @@ class SessionService extends ServiceBase {
         ], callback);
     }
 
-    updateLastActivity(sessionId, callback) {
+    findAndUpdateLastActivity(sessionId, callback) {
         async.waterfall([
             (callback) => this._findSession(sessionId, true, callback),
             (session, callback) => this._updateLastActivity(session, callback),

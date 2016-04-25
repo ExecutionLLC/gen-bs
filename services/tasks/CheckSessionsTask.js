@@ -45,7 +45,7 @@ class CheckSessionsTask extends SchedulerTaskBase {
         const operationTypes = this.services.operations.operationTypes();
         async.waterfall([
             // Find user sessions.
-            (callback) => this.services.sessions.findAllUsersSessionsIds(callback),
+            (callback) => this.services.sessions.findAll(callback),
             // Find search operations for each session.
             (sessionIds, callback) => async.map(sessionIds, (sessionId, callback) => {
                 this.services.operations.findAllByType(sessionId, operationTypes.SEARCH, callback);

@@ -203,7 +203,7 @@ class ApplicationServerService extends ServiceBase {
     }
 
     requestOperationState(operationId, callback) {
-        this._rpcSend(operationId, METHODS.checkSession, {session_id: operationId}, callback);
+        this._rpcSend(operationId, METHODS.checkSession, null, callback);
     }
 
     _requestOperations() {

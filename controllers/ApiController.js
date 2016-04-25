@@ -27,8 +27,8 @@ class ApiController extends ControllerBase {
             callback(null);
         } else {
             async.waterfall([
-                (callback) => this.services.sessions.updateLastActivity(sessionId, callback),
-                (callback) => this.services.sessions.findSessionUserId(sessionId, callback),
+                (callback) => this.services.sessions.findAndUpdateLastActivity(sessionId, callback),
+                (sessionId, callback) => this.services.sessions.findSessionUserId(sessionId, callback),
                 (userId, callback) => this.services.users.find(userId, callback),
                 (user, callback) => {
                     request.sessionId = sessionId;
