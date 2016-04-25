@@ -38,17 +38,16 @@ class SessionsController extends ControllerBase {
     }
 
     check(request, response) {
+        // The session lifetime update happens automatically in the ApiController for each API call.
+        // Here we need to only return the session type.
         const sessionId = this.getSessionId(request);
 
         async.waterfall([
-            (callback) =>this.sessions.findById(sessionId, callback),
-            (sessionId, callback) => this.sessions.findSessionType(
+            (callback) => this.sessions.findSessionType(sessionId, callback),
+            (sessionType, callback) => callback(null, {
                 sessionId,
-                (error, sessionType) => callback(error, {
-                    sessionId,
-                    sessionType
-                })
-            )
+                sessionType
+            })
         ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 
