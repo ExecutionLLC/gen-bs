@@ -27,7 +27,7 @@ export default class NewFilterInputs extends Component {
                             data-localize="views.setup.new.name.help"
                             placeholder="Set view name a copy"
                             value={editingFilter.name}
-                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: e.target.value, desctription: editingFilter.desctription, })) }
+                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: e.target.value, description: editingFilter.description })) }
                         />
 
                         { !editingFilter.name &&
