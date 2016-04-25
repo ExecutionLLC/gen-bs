@@ -32,10 +32,13 @@ class SessionService extends ServiceBase {
 
     findSessionType(sessionId, callback) {
         async.waterfall([
-            (callback) => this.findById(sessionId, callback),
-            (sessionId, callback) => this._findSession(sessionId, true, callback),
+            (callback) => this._findSession(sessionId, true, callback),
             (session, callback) => callback(null, session.type)
         ], callback);
+    }
+
+    findAllUsersSessionsIds(callback) {
+        this._findSessionsByType(SESSION_TYPES.USER, callback);
     }
 
     /**
@@ -125,13 +128,18 @@ class SessionService extends ServiceBase {
         ], callback);
     }
 
-    findSystemSession(callback) {
-        const systemSession = _.find(this.sessions, (session) => session.type === SESSION_TYPES.SYSTEM);
-        if (!systemSession) {
-            callback(new Error('System session is not found'));
-        } else {
-            callback(null, systemSession);
-        }
+    findSystemSessionId(callback) {
+        async.waterfall([
+            (callback) => this._findSessionsByType(SESSION_TYPES.SYSTEM),
+            (sessions, callback) => {
+                if (_.isEmpty(sessions)) {
+                    callback(new Error('System session is not found'));
+                } else {
+                    callback(sessions, callback);
+                }
+            },
+            (sessions, callback) => callback(null, _.first(sessions).id)
+        ], callback);
     }
 
     findSessionUserId(sessionId, callback) {
@@ -211,6 +219,11 @@ class SessionService extends ServiceBase {
         } else {
             callback(null, sessionDescriptor);
         }
+    }
+
+    _findSessionsByType(sessionType, callback) {
+        const sessions = _.filter(this.sessions, session => session.type === sessionType);
+        callback(null, sessions);
     }
 
     /**

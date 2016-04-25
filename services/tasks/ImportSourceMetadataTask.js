@@ -35,11 +35,11 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 if (this.waitForConnection) {
                     callback(new Error('RPC is not connected.'));
                 } else {
-                    this.services.sessions.findSystemSession(callback);
+                    this.services.sessions.findSystemSessionId(callback);
                 }
             },
-            (systemSession, callback) => {
-                this.services.applicationServer.requestSourcesList(systemSession.id, callback);
+            (systemSessionId, callback) => {
+                this.services.applicationServer.requestSourcesList(systemSessionId, callback);
             },
             (result, callback) => {
                 this.onCompleteCallback = callback;
@@ -88,13 +88,13 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 if (missingSourceNames.length > 0) {
                     async.waterfall([
                         (callback) => {
-                            this.services.sessions.findSystemSession(callback);
+                            this.services.sessions.findSystemSessionId(callback);
                         },
-                        (systemSession, callback) => {
+                        (systemSessionId, callback) => {
                             // Metadata will be received without source names in the same order,
                             // so save the list here to find the source name later.
                             this.requestedSources = missingSourceNames;
-                            this.services.applicationServer.requestSourceMetadata(systemSession.id, missingSourceNames, callback);
+                            this.services.applicationServer.requestSourceMetadata(systemSessionId, missingSourceNames, callback);
                         }
                     ], callback);
                 } else {

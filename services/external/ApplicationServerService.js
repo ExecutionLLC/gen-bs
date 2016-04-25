@@ -13,6 +13,7 @@ const AppServerUploadUtils = require('../../utils/AppServerUploadUtils');
 const METHODS = {
     getSourcesList: 'v1.get_sources',
     getSourceMetadata: 'v1.get_source_metadata',
+    checkSession: 'v1.get_session_state',
     openSearchSession: 'v1.open_session',
     closeSession: 'v1.close_session',
     searchInResults: 'v1.search_in_results',
@@ -35,7 +36,7 @@ class ApplicationServerService extends ServiceBase {
         this.requestOpenSearchSession = this.requestOpenSearchSession.bind(this);
         this.requestSearchInResults = this.requestSearchInResults.bind(this);
         this._requestOperations = this._requestOperations.bind(this);
-        this._requestOperationState = this._requestOperationState.bind(this);
+        this.requestOperationState = this.requestOperationState.bind(this);
 
         this._rpcReply = this._rpcReply.bind(this);
 
@@ -201,8 +202,8 @@ class ApplicationServerService extends ServiceBase {
         ], callback);
     }
 
-    _requestOperationState(operationId, callback) {
-        this._rpcSend(operationId, 'v1.get_session_state', {session_id: operationId}, callback);
+    requestOperationState(operationId, callback) {
+        this._rpcSend(operationId, METHODS.checkSession, {session_id: operationId}, callback);
     }
 
     _requestOperations() {
@@ -211,7 +212,7 @@ class ApplicationServerService extends ServiceBase {
             _.each(sessionIds, sessionId => {
                 this.services.operations.findAll(sessionId, (error, operationIds) => {
                     _.each(operationIds, operationId => {
-                        this._requestOperationState(operationId, (error) => {
+                        this.requestOperationState(operationId, (error) => {
                             if (error) {
                                 this.logger.error('Error requesting operation state: ' + error);
                             }
