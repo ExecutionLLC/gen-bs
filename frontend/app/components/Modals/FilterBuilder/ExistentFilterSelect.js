@@ -3,7 +3,10 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 
-import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import {
+    getItemLabelByNameAndType,
+    getReadonlyReasonForSessionAndType
+} from '../../../utils/stringUtils';
 import {
     filterBuilderSelectFilter,
     filterBuilderToggleNewEdit,
@@ -24,6 +27,8 @@ export default class ExistentFilterSelect extends Component {
         const title = (auth.isDemo) ? 'Login or register to work with filter' : 'Make a copy for editing';
         const isFilterEditable = (selectedFilter.type === 'user');
 
+        const descriptionText = getReadonlyReasonForSessionAndType(auth.isDemo, selectedFilter.type);
+        
         return (
 
             <div className="in copyview">
@@ -32,10 +37,10 @@ export default class ExistentFilterSelect extends Component {
                         <label data-localize="views.setup.selector.label">Available Filters</label>
                     </div>
                 </div>
-                { !isFilterEditable &&
+                { descriptionText &&
                 <div className="alert alert-help">
                         <span data-localize="views.setup.selector.description">
-                            This filter is not editable, duplicate it to make changes. (Only for registered users)
+                            {descriptionText}
                         </span>
                 </div>
                 }
