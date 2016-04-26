@@ -29,6 +29,7 @@ FilterQueryBuilder(
             ruleIsAnd: boolean
             disabled: = disabled
             handlers: = handlers
+            allowDelete: boolean
         )
             RulesGroupHeader(
                 indexPath: = indexPath
@@ -36,7 +37,7 @@ FilterQueryBuilder(
                 isAnd: = ruleIsAnd
                 onSwitch: function(boolean)
                 onAdd: function(boolean)
-                onDelete: function()
+                onDelete: ?function()
             )
             RulesGroupBody(
                 indexPath: = indexPath
@@ -85,6 +86,7 @@ export default class QueryBuilder extends Component {
                         ruleIsAnd={rules.condition == 'AND'}
                         disabled={disabled}
                         handlers={handlers}
+                        allowDelete={false}
                     />
                 </div>
             </div>
@@ -106,8 +108,10 @@ class RulesGroupContainer extends Component {
             ruleIsAnd,
             /** @type {boolean} */
             disabled,
+            /** @type {boolean} */
+            allowDelete,
             /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-            handlers
+            handlers,
         } = this.props;
 
         return (
@@ -118,7 +122,7 @@ class RulesGroupContainer extends Component {
                     isAnd={ruleIsAnd}
                     onSwitch={ (isAnd) => { handlers.onSwitch(indexPath, isAnd); }  }
                     onAdd={ (isGroup) => { handlers.onAdd(indexPath, isGroup); } }
-                    onDelete={ () => { handlers.onDeleteGroup(indexPath); } }
+                    onDelete={ allowDelete && ( () => { handlers.onDeleteGroup(indexPath); } ) }
                 />
                 <RulesGroupBody
                     indexPath={indexPath}
@@ -196,7 +200,7 @@ class RulesGroupHeader extends Component {
                 <div className="btn-group pull-right group-actions">
                     {RulesGroupHeader.renderAddButton('Add rule', disabled, () => { onAdd(false); })}
                     {RulesGroupHeader.renderAddButton('Add group', disabled, () => { onAdd(true); })}
-                    <button type="button" className="btn btn-xs btn-danger" onClick={onDelete} disabled={disabled} >
+                    <button type="button" className="btn btn-xs btn-danger" onClick={onDelete} disabled={disabled || !onDelete} >
                         <i className="glyphicon glyphicon-remove" /> Delete
                     </button>
                 </div>
@@ -274,6 +278,7 @@ class RulesGroupBody extends Component {
                             disabled={disabled}
                             makeItemComponent={makeItemComponent}
                             handlers={handlers}
+                            allowDelete={allowDelete}
                         />
                     );
                 } else {
