@@ -12,6 +12,9 @@ class CheckSessionsTask extends SchedulerTaskBase {
         const isEnabled = services.config.scheduler.tasks[TASK_NAME].isEnabled;
         const taskTimeout = services.config.scheduler.tasks[TASK_NAME].taskTimeout;
         super(TASK_NAME, isEnabled, taskTimeout, services, models);
+
+        const appServerReplyEvents = this.services.applicationServerReply.registeredEvents();
+        this.services.applicationServerReply.on(appServerReplyEvents.onKeepAliveResultReceived, this._onKeepAliveResultReceived.bind(this));
     }
 
     execute(callback) {
@@ -19,6 +22,14 @@ class CheckSessionsTask extends SchedulerTaskBase {
             (callback) => this._destroyExpiredSessions(callback),
             (callback) => this._renewSearchSessionsOnAppServer(callback)
         ], callback);
+    }
+
+    calculateTimeout() {
+        const defaultTimeoutMsecs = this.defaultTimeoutSecs * 1000;
+        const lastActivityDate = this.services.sessions.getMinimumActivityTimestamp();
+        const msecsBeforeNextRun = _.isNull(lastActivityDate) ?
+            defaultTimeoutMsecs : (Date.now() - lastActivityDate);
+        return Math.min(msecsBeforeNextRun, defaultTimeoutMsecs);
     }
 
     _destroyExpiredSessions(callback) {
@@ -58,7 +69,9 @@ class CheckSessionsTask extends SchedulerTaskBase {
             // Now ask session state for each operation.
             (operations, callback) => {
                 async.each(operations, (operation, callback) => {
-                    this.services.applicationServer.requestKeepOperationAlive(operation.id, (error) => {
+                    const operationId = operation.getId();
+                    const sessionId = operation.getSessionId();
+                    this.services.applicationServer.requestKeepOperationAlive(sessionId, operationId, (error) => {
                         // Continue even if one of the requests is failed, as we need to update all the operations.
                         if (error) {
                             this.logger.error('Error updating operation state.')
@@ -71,12 +84,8 @@ class CheckSessionsTask extends SchedulerTaskBase {
         callback(null);
     }
 
-    calculateTimeout() {
-        const defaultTimeoutMsecs = this.defaultTimeoutSecs * 1000;
-        const lastActivityDate = this.services.sessions.getMinimumActivityTimestamp();
-        const msecsBeforeNextRun = _.isNull(lastActivityDate) ?
-            defaultTimeoutMsecs : (Date.now() - lastActivityDate);
-        return Math.min(msecsBeforeNextRun, defaultTimeoutMsecs);
+    _onKeepAliveResultReceived() {
+        // Just to avoid error message in logs.
     }
 }
 

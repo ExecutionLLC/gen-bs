@@ -13,6 +13,7 @@ const SESSION_STATUS = {
 };
 
 const EVENTS = {
+    onKeepAliveResultReceived: 'onKeepAliveResultReceived',
     onOperationResultReceived: 'onOperationResultReceived',
     onSourcesListReceived: 'onSourcesListReceived',
     onSourceMetadataReceived: 'onSourceMetadataReceived'
@@ -52,21 +53,20 @@ class ApplicationServerReplyService extends ServiceBase {
                 },
                 (operation, callback) => {
                     this._processOperationResult(operation, rpcError, rpcMessage, (error, operationResult) => {
-                        callback(error, {
-                            operation,
-                            operationResult
-                        });
+                        callback(error, operation, operationResult);
                     });
                 },
-                (resultWithOperation, callback) => {
+                (operation, operationResult, callback) => {
                     // Determine if we should complete the operation, and complete it.
-                    const shouldCompleteOperation = resultWithOperation.operationResult
-                        && resultWithOperation.operationResult.shouldCompleteOperation;
+                    const shouldCompleteOperation = operationResult && operationResult.shouldCompleteOperation;
                     this._completeOperationIfNeeded(
-                        resultWithOperation.operation,
+                        operation,
                         shouldCompleteOperation,
                         (error) => {
-                            callback(error, resultWithOperation);
+                            callback(error, {
+                                operation,
+                                operationResult
+                            });
                         });
                 }
             ], (error, resultWithOperation) => {
@@ -96,8 +96,8 @@ class ApplicationServerReplyService extends ServiceBase {
      * Selects and runs proper message parser. Handles RPC-level errors.
      * */
     _processOperationResult(operation, rpcError, rpcMessage, callback) {
-        const event = operation.getMethod();
-        const events = this.services.applicationServer.registeredEvents();
+        const method = operation.getMethod();
+        const methods = this.services.applicationServer.registeredEvents();
 
         let result = null;
 
@@ -114,20 +114,24 @@ class ApplicationServerReplyService extends ServiceBase {
             return;
         }
 
-        switch (event) {
-            case events.openSearchSession:
+        switch (method) {
+            case methods.openSearchSession:
                 this._processOpenSearchResult(operation, rpcMessage, callback);
                 break;
 
-            case events.uploadSample:
+            case methods.uploadSample:
                 this._processUploadSampleResult(operation, rpcMessage, callback);
                 break;
 
-            case events.getSourcesList:
+            case methods.getSourcesList:
                 this._processGetSourcesListResult(operation, rpcMessage, callback);
                 break;
 
-            case events.getSourceMetadata:
+            case methods.keepAlive:
+                this._processKeepAliveResult(operation, rpcMessage, callback);
+                break;
+
+            case methods.getSourceMetadata:
                 this._processGetSourceMetadataResult(operation, rpcMessage, callback);
                 break;
 
@@ -136,6 +140,25 @@ class ApplicationServerReplyService extends ServiceBase {
                 callback(null, rpcMessage.result);
                 break;
         }
+    }
+
+    _processKeepAliveResult(operation, rpcMessage, callback) {
+        const sessionId = operation.getSessionId();
+        const operationIdToCheck = operation.getOperationIdToCheck();
+        const isAlive = rpcMessage.result;
+
+        if (!isAlive) {
+            this.services.operations.remove(sessionId, operationIdToCheck, (error) => {
+                if (error) {
+                    this.logger.error('Error while closing dead search operation: ' + error);
+                }
+            });
+        }
+
+        callback(null, {
+            eventName: EVENTS.onKeepAliveResultReceived,
+            shouldCompleteOperation: true
+        });
     }
 
     _processGetSourcesListResult(operation, message, callback) {

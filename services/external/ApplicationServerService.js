@@ -65,12 +65,14 @@ class ApplicationServerService extends ServiceBase {
         ], callback);
     }
 
-    requestKeepOperationAlive(operationId, callback) {
+    requestKeepOperationAlive(sessionId, searchOperationId, callback) {
         const method = METHODS.keepAlive;
+        const operationTypes = this.services.operations.operationTypes();
         async.waterfall([
+            (callback) => this.services.operations.ensureOperationOfType(sessionId, searchOperationId, operationTypes.SEARCH, callback),
             (callback) => this.services.sessions.findSystemSessionId(callback),
-            (sessionId, callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
-            (operation, callback) => this._rpcSend(operation.getId(), method, {sessionId: operationId}, callback)
+            (sessionId, callback) => this.services.operations.addKeepAliveOperation(sessionId, searchOperationId, callback),
+            (operation, callback) => this._rpcSend(operation.getId(), method, {sessionId: searchOperationId}, callback)
         ], callback);
     }
 
