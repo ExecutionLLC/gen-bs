@@ -231,7 +231,6 @@ class RuleContainer extends Component {
             <li className="rule-container">
                 <div className="rule-header">
                     <div className="btn-group pull-right rule-actions">
-                        {onDelete &&
                         <button
                             type="button"
                             className="btn btn-xs btn-danger"
@@ -240,7 +239,6 @@ class RuleContainer extends Component {
                         >
                             <i className="glyphicon glyphicon-remove"/> Delete
                         </button>
-                        }
                     </div>
                 </div>
                 <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
