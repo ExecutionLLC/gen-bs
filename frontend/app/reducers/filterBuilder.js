@@ -105,7 +105,8 @@ export default function filterBuilder(state = {
                             name: `Copy of ${state.selectedFilter.name}`
                         }) :
                         state.selectedFilter,
-                    FieldUtils.makeFieldsListForFiltersSelect(action.fields))
+                    action.fields.totalFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )
+                )
             });
         
         case ActionTypes.FBUILDER_CHANGE_FILTER:

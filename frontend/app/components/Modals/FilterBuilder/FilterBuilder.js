@@ -64,34 +64,58 @@ class FilterQueryBuilder extends React.Component {
         return validFieldsIds;
     }
 
+    static getFieldFilterItemRestrictions(field, fields, operator) {
+        const fieldJSType = FieldUtils.getFieldJSType(field);
+        const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
+        const allowedFieldsIds = this.getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(operator));
+        const allowedFields = fields.filter( (f) => allowedFieldsIds[f.id] );
+        return {
+            fieldJSType,
+            allowedOpsTypes,
+            allowedFields
+        };
+    }
+
+    static getDisabledFieldFilterItemRestrictions(field, operator) {
+        const fieldJSType = FieldUtils.getFieldJSType(field);
+        const allowedOpsTypes = [operator];
+        const allowedFields = [field];
+        return {
+            fieldJSType,
+            allowedOpsTypes,
+            allowedFields
+        };
+    }
+
     /**
      * Make filter rule item component
-     * @param {{id: string, label: string, type: string}[]} fields
+     * @param {{id: string, label: string, type: string}[]} sampleFields
+     * @param {{id: string, label: string, type: string}[]} totalFields
      * @param {function(Object)} dispatch
      * @param {number[]} indexPath
      * @param {{field: string, operator: string, value: *}} item
      * @param {boolean} disabled
      * @returns {React.Component}
      */
-    static makeFilterItem(fields, dispatch, indexPath, item, disabled) {
-        const fieldJSType = FieldUtils.getFieldJSType(FieldUtils.getFieldById(fields, item.field));
-        const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
-        const allowedFieldsIds = this.getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(item.operator));
-        const allowedFields = fields.filter((f) => allowedFieldsIds[f.id]);
+    static makeFilterItem(sampleFields, totalFields, dispatch, indexPath, item, disabled) {
+        const fieldFromSample = FieldUtils.getFieldById(sampleFields, item.field);
+        const itemRestrictions = fieldFromSample ?
+            this.getFieldFilterItemRestrictions(fieldFromSample, sampleFields, item.operator) :
+            this.getDisabledFieldFilterItemRestrictions(FieldUtils.getFieldById(totalFields, item.field), item.operator);
         return (
             <FieldFilterItem
                 indexPath={indexPath}
                 item={item}
-                fields={allowedFields}
-                allowedOpsTypes={allowedOpsTypes}
-                valueType={fieldJSType}
-                disabled={disabled}
+                fields={itemRestrictions.allowedFields}
+                allowedOpsTypes={itemRestrictions.allowedOpsTypes}
+                valueType={itemRestrictions.fieldJSType}
+                disabled={disabled || !fieldFromSample}
                 onChange={ (item) => {
                             if (indexPath.length < 1) {
                                 return;
                             }
                             const ruleIndex = indexPath[indexPath.length - 1];
-                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
+                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType: itemRestrictions.fieldJSType, ruleIndex}}));
                         }}
             />
         );
@@ -122,7 +146,9 @@ class FilterQueryBuilder extends React.Component {
 
         const {
             /** @type {{id: string, label: string, type: string}[]} */
-            fields,
+            sampleFields,
+            /** @type {{id: string, label: string, type: string}[]} */
+            totalFields,
             /** @type {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} */
             rules,
             /** @type {boolean} */
@@ -135,7 +161,7 @@ class FilterQueryBuilder extends React.Component {
             <QueryBuilder
                 rules={rules}
                 disabled={disabled}
-                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(fields, dispatch, indexPath, item, disabled) }
+                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(sampleFields, totalFields, dispatch, indexPath, item, disabled) }
                 handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
             />
         );
@@ -442,7 +468,8 @@ export default class FilterBuilder extends React.Component {
         return (
             <div className="builder-wrapper">
                 <FilterQueryBuilder
-                    fields={FieldUtils.makeFieldsListForFiltersSelect(fields)}
+                    sampleFields={fields.sampleFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
+                    totalFields={fields.totalFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     rules={parsedFilter}
                     disabled={filter.type === 'standard' || filter.type === 'advanced'}
                     dispatch={dispatch}
