@@ -12,7 +12,7 @@ FilterQueryBuilder(
      dispatch: function(Object)
 )
     QueryBuilder(
-        rules: {{condition: string, rules: {condition?: *, field?: string, operator?: string, value?: *}[]}}
+        rules: {{condition: string, rules: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]}}
         disabled: boolean
         makeItemComponent: function(number[], {field: string, operator: string, value: *}, boolean): Component
         handlers: {
@@ -25,7 +25,7 @@ FilterQueryBuilder(
         RulesGroupContainer(
             indexPath: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
             makeItemComponent: = makeItemComponent
-            ruleItems: {condition?: *, field?: string, operator?: string, value?: *}[]
+            ruleItems: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]
             ruleIsAnd: boolean
             disabled: = disabled
             handlers: = handlers
@@ -49,7 +49,7 @@ FilterQueryBuilder(
                 RulesGroupContainer(...)
                 RuleContainer(
                     indexPath: number[]
-                    item: {condition?: *, field?: string, operator?: string, value?: *}
+                    item: {field: string, operator: string, value: *}
                     disabled: = disabled
                     makeItemComponent: = makeItemComponent
                     onDelete: ?function()
@@ -66,7 +66,7 @@ export default class QueryBuilder extends Component {
 
     render() {
         const {
-            /** @type {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
+            /** @type {{condition: string, rules: Array.<{condition: string, rules: Array}|{field: string, operator: string, value: *}>}} */
             rules,
             /** @type {boolean} */
             disabled,
@@ -102,7 +102,7 @@ class RulesGroupContainer extends Component {
             indexPath,
             /** @type {function(number[], {}, boolean): Component} */
             makeItemComponent,
-            /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
+            /** @type {({condition: string, rules: Array}|{field: string, operator: string, value: *})[]} */
             ruleItems,
             /** @type {boolean} */
             ruleIsAnd,
@@ -217,7 +217,7 @@ class RulesGroupHeader extends Component {
 class RuleContainer extends Component {
     render() {
         const {
-            /** @type {{condition: *=, field: string=, operator: string=, value: *=}} */
+            /** @type {{field: string, operator: string, value: *}} */
             item,
             /** @type {number[]} */
             indexPath,
@@ -225,7 +225,7 @@ class RuleContainer extends Component {
             disabled,
             /** @type {?function()} */
             onDelete,
-            /** @type {function(number[], {}, boolean): Component} */
+            /** @type {function(number[], {field: string, operator: string, value: *}, boolean): Component} */
             makeItemComponent
         } = this.props;
 
@@ -303,7 +303,7 @@ class RulesGroupBody extends Component {
         const {
             /** @type {number[]} */
             indexPath,
-            /** @type {{condition: *=, field: string=, operator: string=, value: *=}[]} */
+            /** @type {({condition: string, rules: Array}|{field: string, operator: string, value: *})[]} */
             items,
             /** @type {function(number[], {}, boolean): Component} */
             makeItemComponent,
