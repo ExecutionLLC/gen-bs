@@ -143,12 +143,25 @@ class ApplicationServerReplyService extends ServiceBase {
     }
 
     _processKeepAliveResult(operation, rpcMessage, callback) {
-        const sessionId = operation.getSessionId();
         const operationIdToCheck = operation.getOperationIdToCheck();
-        const isAlive = rpcMessage.result;
+        const result = rpcMessage.result;
+        if (result && result.error) {
+            this.logger.error('Unexpected error received from AS as keep-alive result: ' + JSON.stringify(result.error));
+            callback(null, {
+                eventName: EVENTS.onKeepAliveResultReceived,
+                shouldCompleteOperation: true
+            });
+            return;
+        }
 
+        const isAlive = result;
         if (!isAlive) {
-            this.services.operations.remove(sessionId, operationIdToCheck, (error) => {
+            async.waterfall([
+                // The keep-alive operation belongs to system session.
+                // So we need to find the operation id in all sessions.
+                (callback) => this.services.operations.findInAllSessions(operationIdToCheck, callback),
+                (operation, callback) => this.services.operations.remove(operation.getSessionId(), operation.getId(), callback)
+            ], (error) => {
                 if (error) {
                     this.logger.error('Error while closing dead search operation: ' + error);
                 }

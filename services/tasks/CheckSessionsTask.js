@@ -81,7 +81,6 @@ class CheckSessionsTask extends SchedulerTaskBase {
                 }, callback);
             }
         ], callback);
-        callback(null);
     }
 
     _onKeepAliveResultReceived() {
