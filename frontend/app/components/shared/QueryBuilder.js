@@ -235,7 +235,7 @@ class RuleContainer extends Component {
                             type="button"
                             className="btn btn-xs btn-danger"
                             onClick={onDelete}
-                            disabled={disabled}
+                            disabled={disabled || !onDelete}
                         >
                             <i className="glyphicon glyphicon-remove"/> Delete
                         </button>
@@ -260,6 +260,9 @@ class RulesGroupBody extends Component {
      * @returns {Component[]}
      */
     static renderItems(items, indexPath, disabled, makeItemComponent, handlers) {
+
+        const allowDelete = items.length > 1;
+
         return (
             items.map( (item, itemIndex) => {
                 const indexNext = indexPath.concat(itemIndex);
@@ -283,7 +286,7 @@ class RulesGroupBody extends Component {
                             item={item}
                             disabled={disabled}
                             makeItemComponent={makeItemComponent}
-                            onDelete={ () => handlers.onDeleteItem(indexPath, itemIndex) }
+                            onDelete={ allowDelete && ( () => handlers.onDeleteItem(indexPath, itemIndex) ) }
                         />
                     );
                 }
