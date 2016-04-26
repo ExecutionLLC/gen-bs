@@ -196,11 +196,9 @@ class RulesGroupHeader extends Component {
                 <div className="btn-group pull-right group-actions">
                     {RulesGroupHeader.renderAddButton('Add rule', disabled, () => { onAdd(false); })}
                     {RulesGroupHeader.renderAddButton('Add group', disabled, () => { onAdd(true); })}
-                    {onDelete &&
                     <button type="button" className="btn btn-xs btn-danger" onClick={onDelete} disabled={disabled} >
                         <i className="glyphicon glyphicon-remove" /> Delete
                     </button>
-                    }
                 </div>
                 <div className="btn-group group-conditions">
                     {RulesGroupHeader.renderRadioButton('AND', true, groupName, isAnd, disabled, onSwitch)}
