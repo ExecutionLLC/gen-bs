@@ -79,7 +79,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
             },
             samplesList: {
                 samples
-                },
+            },
             fields: {
                 sampleFieldsList
             }
