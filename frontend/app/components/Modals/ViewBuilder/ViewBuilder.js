@@ -25,10 +25,12 @@ export default class ViewBuilder extends React.Component {
 
         const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         const isDisableEditing = view.type !== 'user';
-        const allAvailableFields = fields.sampleFieldsList.concat(fields.sourceFieldsList);
-        // Exclude editable fields and fields that are already selected.
-        const fieldsForSelection = _.filter(allAvailableFields, field => !field.isEditable
-        && !_.includes(previouslySelectedFieldIds, field.id));
+        const allAvailableFields = fields.allowedFieldsList;
+        // Exclude fields that are already selected.
+        const fieldsForSelection = _.filter(
+            allAvailableFields,
+            field => !_.includes(previouslySelectedFieldIds, field.id)
+        );
         const selects = view.viewListItems.map(function (viewItem, index) {
 
             var currentValue =
