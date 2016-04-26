@@ -1,5 +1,20 @@
 import * as ActionTypes from '../actions/fields'
 
+const initialState = {
+    isFetching: {
+        samples: false,
+        sources: false
+    },
+    sampleFieldsList: [],
+    sampleIdToFieldHash: {},
+    editableFields: [],
+    sourceFieldsList: [],
+    totalFieldsList: [],
+    // Fields allowed for selection in a typical fields list.
+    allowedFieldsList: [],
+    allowedIdToFieldHash: {}
+};
+
 // Patch field label because it may not exist
 function updateFieldLabelIfNeeded(field) {
     return Object.assign({}, field, {
@@ -16,10 +31,18 @@ function reduceRequestFields(action, state) {
 }
 
 function reduceReceiveFields(action, state) {
+    const {sourceFieldsList} = state;
     const fields = action.fields.map(updateFieldLabelIfNeeded);
     const editableFields = _.filter(fields, 'isEditable', true);
-    const notEditableSampleFields = _.filter(fields, 'isEditable', false);
-    const idToFieldHash = _.reduce(fields, (result, field) => {
+    const allowedFieldsList = [
+        ..._.filter(fields, 'isEditable', false),
+        ...sourceFieldsList
+    ];
+    const sampleIdToFieldHash = _.reduce(fields, (result, field) => {
+        result[field.id] = field;
+        return result;
+    }, {});
+    const allowedIdToFieldHash = _.reduce(allowedFieldsList, (result, field) => {
         result[field.id] = field;
         return result;
     }, {});
@@ -30,8 +53,9 @@ function reduceReceiveFields(action, state) {
         }),
         sampleFieldsList: fields,
         editableFields,
-        notEditableFields: notEditableSampleFields,
-        idToFieldHash,
+        allowedFieldsList,
+        allowedIdToFieldHash,
+        sampleIdToFieldHash,
         lastUpdated: action.receivedAt
     });
 }
@@ -61,13 +85,7 @@ function reduceRequestTotalFields(action, state) {
     });
 }
 
-export default function fields(state = {
-    isFetching: {samples: false, sources: false},
-    sampleFieldsList: [],
-    sourceFieldsList: [],
-    totalFieldsList:[],
-    notEditableFields:[]
-}, action) {
+export default function fields(state = initialState, action) {
 
     switch (action.type) {
 

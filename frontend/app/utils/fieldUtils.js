@@ -17,7 +17,7 @@ export default class FieldUtils {
     }
     /**
      * Make fields array for filters
-     * @param {{notEditableFields: Object[], sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
+     * @param {{sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
      * @returns {{id: string, label: string, type: string}[]}
      */
     static makeFieldsListForFiltersSelect(fields) {
