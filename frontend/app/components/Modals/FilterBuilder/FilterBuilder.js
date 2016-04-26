@@ -429,7 +429,7 @@ export default class FilterBuilder extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.fields !== nextProps.fields
             || this.props.filterBuilder.editingFilter.filter.type !== nextProps.filterBuilder.editingFilter.filter.type
-            || this.props.filterBuilder.editingFilter.filter.parsedFilter !== nextProps.filterBuilder.editingFilter.filter.parsedFilter;
+            || this.props.filterBuilder.editingFilter.parsedFilter !== nextProps.filterBuilder.editingFilter.parsedFilter;
     }
 
     render() {
