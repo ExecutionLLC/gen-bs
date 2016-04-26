@@ -1,10 +1,11 @@
 'use strict';
 
 const async = require('async');
+const _ = require('lodash');
 
 const ServiceBase = require('../ServiceBase');
 const EventProxy = require('../../utils/EventProxy');
-var _ = require('lodash');
+const METHODS = require('./ApplicationServerMethods');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -97,9 +98,6 @@ class ApplicationServerReplyService extends ServiceBase {
      * */
     _processOperationResult(operation, rpcError, rpcMessage, callback) {
         const method = operation.getMethod();
-        const methods = this.services.applicationServer.registeredEvents();
-
-        let result = null;
 
         if (rpcError) {
             // Errors in any types of the operations except the search operations should make them completed.
@@ -115,23 +113,23 @@ class ApplicationServerReplyService extends ServiceBase {
         }
 
         switch (method) {
-            case methods.openSearchSession:
+            case METHODS.openSearchSession:
                 this._processOpenSearchResult(operation, rpcMessage, callback);
                 break;
 
-            case methods.uploadSample:
+            case METHODS.uploadSample:
                 this._processUploadSampleResult(operation, rpcMessage, callback);
                 break;
 
-            case methods.getSourcesList:
+            case METHODS.getSourcesList:
                 this._processGetSourcesListResult(operation, rpcMessage, callback);
                 break;
 
-            case methods.keepAlive:
+            case METHODS.keepAlive:
                 this._processKeepAliveResult(operation, rpcMessage, callback);
                 break;
 
-            case methods.getSourceMetadata:
+            case METHODS.getSourceMetadata:
                 this._processGetSourceMetadataResult(operation, rpcMessage, callback);
                 break;
 
