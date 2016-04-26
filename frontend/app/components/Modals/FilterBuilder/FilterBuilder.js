@@ -99,7 +99,6 @@ class FilterQueryBuilder extends React.Component {
      */
     static makeFilterItem(sampleFields, totalFields, dispatch, indexPath, item, disabled) {
         const fieldFromSample = FieldUtils.getFieldById(sampleFields, item.field);
-        console.log('fieldFromSample', item.field, fieldFromSample);
         const itemRestrictions = fieldFromSample ?
             this.getFieldFilterItemRestrictions(fieldFromSample, sampleFields, item.operator) :
             this.getDisabledFieldFilterItemRestrictions(FieldUtils.getFieldById(totalFields, item.field), item.operator);
