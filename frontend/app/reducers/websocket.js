@@ -7,7 +7,9 @@ export default function websocket(state = {
     error: null,
     closed: true,
     variants: null,
-    variantsView:null,
+    variantsSample: null,
+    variantsView: null,
+    variantsFilter: null,
     variantsSampleFieldsList: [],
     currentVariants: null,
     isVariantsEmpty: false,
@@ -147,6 +149,8 @@ export default function websocket(state = {
         {
             return Object.assign({}, state, {
                 variantsView: action.view,
+                variantsSample: action.sample,
+                variantsFilter: action.filter,
                 variantsSampleFieldsList: action.sampleFields
             });
         }

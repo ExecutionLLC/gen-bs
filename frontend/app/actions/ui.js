@@ -65,17 +65,21 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         }
 
         const searchParams = {
-            sampleId: sampleId,
-            viewId: viewId,
-            filterId: filterId,
-            limit: limit,
-            offset: offset
+            sampleId,
+            viewId,
+            filterId,
+            limit,
+            offset
         };
         const {
             userData: {
                 attachedHistoryData: historyData,
-                views
+                views,
+                filters
             },
+            samplesList: {
+                samples
+                },
             fields: {
                 sampleFieldsList
             }
@@ -89,7 +93,9 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(clearSearchParams());
         dispatch(requestAnalyze(searchParams));
         const searchView = _.find(views, {id: viewId});
-        dispatch(requestSetCurrentParams(searchView, sampleFieldsList));
+        const searchSample = _.find(samples, {id: sampleId});
+        const searchFilter = _.find(filters, {id: filterId});
+        dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
         dispatch(fetchVariants(searchParams))
     }
