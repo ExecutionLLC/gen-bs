@@ -10,15 +10,7 @@ const AppServerViewUtils = require('../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../utils/AppServerFilterUtils');
 const AppServerUploadUtils = require('../../utils/AppServerUploadUtils');
 
-const METHODS = {
-    getSourcesList: 'v1.get_sources',
-    getSourceMetadata: 'v1.get_source_metadata',
-    openSearchSession: 'v1.open_session',
-    closeSession: 'v1.close_session',
-    searchInResults: 'v1.search_in_results',
-    uploadSample: 'v1.upload_file',
-    processSample: 'v1.convert_file'
-};
+const METHODS = require('./ApplicationServerMethods');
 
 /**
  * This service sends requests to AS.
@@ -35,7 +27,7 @@ class ApplicationServerService extends ServiceBase {
         this.requestOpenSearchSession = this.requestOpenSearchSession.bind(this);
         this.requestSearchInResults = this.requestSearchInResults.bind(this);
         this._requestOperations = this._requestOperations.bind(this);
-        this._requestOperationState = this._requestOperationState.bind(this);
+        this.requestOperationState = this.requestOperationState.bind(this);
 
         this._rpcReply = this._rpcReply.bind(this);
 
@@ -53,21 +45,34 @@ class ApplicationServerService extends ServiceBase {
         return this.rpcProxy.isConnected();
     }
 
-    requestSourcesList(sessionId, callback) {
+    requestSourcesList(callback) {
         const method = METHODS.getSourcesList;
         async.waterfall([
-            (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
             (operation, callback) => this._rpcSend(operation.getId(), method, null, callback)
         ], callback);
     }
 
-    requestSourceMetadata(sessionId, sourceNames, callback) {
+    requestSourceMetadata(sourceNames, callback) {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
-            (callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
             (operation, callback) => this._rpcSend(operation.getId(), method, _.map(sourceNames, (sourceName) => {
                 return sourceName + '.h5'
             }), callback)
+        ], callback);
+    }
+
+    requestKeepOperationAlive(sessionId, searchOperationId, callback) {
+        const method = METHODS.keepAlive;
+        const operationTypes = this.services.operations.operationTypes();
+        async.waterfall([
+            (callback) => this.services.operations.ensureOperationOfType(sessionId, searchOperationId, operationTypes.SEARCH, callback),
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => this.services.operations.addKeepAliveOperation(sessionId, searchOperationId, callback),
+            (operation, callback) => this._rpcSend(operation.getId(), method, {sessionId: searchOperationId}, callback)
         ], callback);
     }
 
@@ -201,8 +206,8 @@ class ApplicationServerService extends ServiceBase {
         ], callback);
     }
 
-    _requestOperationState(operationId, callback) {
-        this._rpcSend(operationId, 'v1.get_session_state', {session_id: operationId}, callback);
+    requestOperationState(operationId, callback) {
+        this._rpcSend(operationId, METHODS.checkSession, null, callback);
     }
 
     _requestOperations() {
@@ -211,7 +216,7 @@ class ApplicationServerService extends ServiceBase {
             _.each(sessionIds, sessionId => {
                 this.services.operations.findAll(sessionId, (error, operationIds) => {
                     _.each(operationIds, operationId => {
-                        this._requestOperationState(operationId, (error) => {
+                        this.requestOperationState(operationId, (error) => {
                             if (error) {
                                 this.logger.error('Error requesting operation state: ' + error);
                             }
