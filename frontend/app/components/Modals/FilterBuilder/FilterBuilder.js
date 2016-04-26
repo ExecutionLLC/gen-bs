@@ -89,7 +89,7 @@ class FilterQueryBuilder extends React.Component {
 
     /**
      * Make filter rule item component
-     * @param {{id: string, label: string, type: string}[]} sampleFields
+     * @param {{id: string, label: string, type: string}[]} allowedFields
      * @param {{id: string, label: string, type: string}[]} totalFields
      * @param {function(Object)} dispatch
      * @param {number[]} indexPath
@@ -97,10 +97,10 @@ class FilterQueryBuilder extends React.Component {
      * @param {boolean} disabled
      * @returns {React.Component}
      */
-    static makeFilterItem(sampleFields, totalFields, dispatch, indexPath, item, disabled) {
-        const fieldFromSample = FieldUtils.getFieldById(sampleFields, item.field);
+    static makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) {
+        const fieldFromSample = FieldUtils.getFieldById(allowedFields, item.field);
         const itemRestrictions = fieldFromSample ?
-            this.getFieldFilterItemRestrictions(fieldFromSample, sampleFields, item.operator) :
+            this.getFieldFilterItemRestrictions(fieldFromSample, allowedFields, item.operator) :
             this.getDisabledFieldFilterItemRestrictions(FieldUtils.getFieldById(totalFields, item.field), item.operator);
         return (
             <FieldFilterItem
@@ -146,7 +146,7 @@ class FilterQueryBuilder extends React.Component {
 
         const {
             /** @type {{id: string, label: string, type: string}[]} */
-            sampleFields,
+            allowedFields,
             /** @type {{id: string, label: string, type: string}[]} */
             totalFields,
             /** @type {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} */
@@ -161,7 +161,7 @@ class FilterQueryBuilder extends React.Component {
             <QueryBuilder
                 rules={rules}
                 disabled={disabled}
-                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(sampleFields, totalFields, dispatch, indexPath, item, disabled) }
+                makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) }
                 handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
             />
         );
@@ -391,42 +391,6 @@ class FieldFilterItem extends React.Component {
         /** @type {string} */
         const selectOperatorValue = item.operator;
 
-        /**
-         * @param {string} fieldId
-         */
-        function onFieldSelectChange(fieldId) {
-            onChange({
-                id: fieldId,
-                field: fieldId,
-                operator: item.operator,
-                value: item.value
-            });
-        }
-
-        /**
-         * @param {string} operatorType
-         */
-        function onOperatorSelectChange(operatorType) {
-            onChange({
-                id: item.id,
-                field: item.field,
-                operator: operatorType,
-                value: item.value
-            });
-        }
-
-        /**
-         * @param {*} value
-         */
-        function onItemValueChange(value) {
-            onChange({
-                id: item.id,
-                field: item.field,
-                operator: item.operator,
-                value: value
-            });
-        }
-
         return (
             <div>
                 {FieldFilterItem.renderFieldSelect(
@@ -469,7 +433,7 @@ export default class FilterBuilder extends React.Component {
         return (
             <div className="builder-wrapper">
                 <FilterQueryBuilder
-                    sampleFields={fields.sampleFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
+                    allowedFields={fields.allowedFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     totalFields={fields.totalFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     rules={parsedFilter}
                     disabled={filter.type === 'standard' || filter.type === 'advanced'}
