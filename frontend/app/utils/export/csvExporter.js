@@ -21,7 +21,7 @@ export default class CsvExporter extends ExporterBase {
     }
 
     _preprocessRowValue(value) {
-        value = (value || '').replace('"', '""');
+        value = (value || '').replace(/"/g, '""');
         return `"${value}"`;
     }
 }
