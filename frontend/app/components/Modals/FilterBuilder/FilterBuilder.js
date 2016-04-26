@@ -33,6 +33,12 @@ FieldFilterItem(
 
 class FilterQueryBuilder extends React.Component {
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.fields !== nextProps.fields ||
+            this.props.rules !== nextProps.rules ||
+            this.props.disabled !== nextProps.disabled;
+    }
+
     /**
      * Get operators types (operator.type) for given value type
      * @param {string} type
