@@ -56,7 +56,7 @@ export default class InputResizingArray extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: InputResizingArray.addEmpty(InputResizingArray.toKeyed(props.value))
+            value: InputResizingArray.addEmpty(InputResizingArray.removeEmpty(InputResizingArray.toKeyed(props.value)))
         };
     }
 
