@@ -33,12 +33,6 @@ FieldFilterItem(
 
 class FilterQueryBuilder extends React.Component {
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.props.fields !== nextProps.fields ||
-            this.props.rules !== nextProps.rules ||
-            this.props.disabled !== nextProps.disabled;
-    }
-
     /**
      * Get operators types (operator.type) for given value type
      * @param {string} type
@@ -434,7 +428,8 @@ export default class FilterBuilder extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.fields !== nextProps.fields
-            || this.props.filterBuilder !== nextProps.filterBuilder;
+            || this.props.filterBuilder.editingFilter.filter.type !== nextProps.filterBuilder.editingFilter.filter.type
+            || this.props.filterBuilder.editingFilter.filter.parsedFilter !== nextProps.filterBuilder.editingFilter.filter.parsedFilter;
     }
 
     render() {
