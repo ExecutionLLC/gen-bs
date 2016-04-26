@@ -391,42 +391,6 @@ class FieldFilterItem extends React.Component {
         /** @type {string} */
         const selectOperatorValue = item.operator;
 
-        /**
-         * @param {string} fieldId
-         */
-        function onFieldSelectChange(fieldId) {
-            onChange({
-                id: fieldId,
-                field: fieldId,
-                operator: item.operator,
-                value: item.value
-            });
-        }
-
-        /**
-         * @param {string} operatorType
-         */
-        function onOperatorSelectChange(operatorType) {
-            onChange({
-                id: item.id,
-                field: item.field,
-                operator: operatorType,
-                value: item.value
-            });
-        }
-
-        /**
-         * @param {*} value
-         */
-        function onItemValueChange(value) {
-            onChange({
-                id: item.id,
-                field: item.field,
-                operator: item.operator,
-                value: value
-            });
-        }
-
         return (
             <div>
                 {FieldFilterItem.renderFieldSelect(
