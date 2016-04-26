@@ -165,13 +165,18 @@ class ApplicationServerReplyService extends ServiceBase {
                 if (error) {
                     this.logger.error('Error while closing dead search operation: ' + error);
                 }
+
+                callback(null, {
+                    eventName: EVENTS.onKeepAliveResultReceived,
+                    shouldCompleteOperation: true
+                });
+            });
+        } else {
+            callback(null, {
+                eventName: EVENTS.onKeepAliveResultReceived,
+                shouldCompleteOperation: true
             });
         }
-
-        callback(null, {
-            eventName: EVENTS.onKeepAliveResultReceived,
-            shouldCompleteOperation: true
-        });
     }
 
     _processGetSourcesListResult(operation, message, callback) {
