@@ -10,6 +10,12 @@ import {viewBuilderChangeSortColumn, viewBuilderChangeKeywords} from "../../../a
 
 export default class ViewBuilder extends React.Component {
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.fields !== nextProps.fields
+            || this.props.viewBuilder.editedView.type !== nextProps.viewBuilder.editedView.type
+            || this.props.viewBuilder.editedView.viewListItems !== nextProps.viewBuilder.editedView.viewListItems;
+    }
+
     render() {
         const {dispatch, fields, viewBuilder} = this.props;
         const view = viewBuilder.editedView;
