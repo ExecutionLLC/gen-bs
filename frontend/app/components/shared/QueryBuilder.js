@@ -254,12 +254,12 @@ class RuleContainer extends Component {
 class RulesGroupBody extends Component {
 
     /**
-     * @param {{condition: *=, field: string=, operator: string=, value: *=}[]} items
+     * @param {({condition: string, rules: Array}|{field: string, operator: string, value: *})[]} items
      * @param {number[]} indexPath
      * @param {boolean} disabled
      * @param {function(number[], {}, boolean): Component} makeItemComponent
      * @param {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} handlers
-     * @returns {Component}
+     * @returns {Component[]}
      */
     static renderItems(items, indexPath, disabled, makeItemComponent, handlers) {
         return (
