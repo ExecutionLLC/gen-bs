@@ -30,6 +30,6 @@ export default class ExporterBase {
 
         const documentBody = this.buildDocument(headerRow, rows);
         const blobType = `"${this.mimeType}"`;
-        return new Blob([documentBody], {type: blobType});
+        return new Blob(['\uFEFF' + documentBody], {type: blobType});
     }
 }
