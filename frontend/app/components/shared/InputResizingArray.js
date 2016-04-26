@@ -33,41 +33,47 @@ export default class InputResizingArray extends Component {
         );
     }
 
+    onEditIndex(val, index, isComplete) {
+        var arr = this.state.value.slice();
+        const isValEmpty = val === '';
+        const isIndexTail = index >= this.state.value.length - 1;
+        arr[index].val = val;
+        if (isValEmpty) {
+            if (!isIndexTail && isComplete) {
+                arr.splice(index, 1);
+            }
+        } else {
+            if (isIndexTail) {
+                arr = InputResizingArray.addEmpty(arr);
+            }
+        }
+        this.setState({value: arr});
+        if (isComplete) {
+            this.props.onChange(InputResizingArray.fromKeyed(InputResizingArray.removeEmpty(arr)));
+        }
+    }
+
     constructor(props) {
         super(props);
         this.state = {
-            value: InputResizingArray.addEmpty(InputResizingArray.toKeyed(props.value))
+            value: InputResizingArray.addEmpty(InputResizingArray.removeEmpty(InputResizingArray.toKeyed(props.value)))
         };
     }
 
     render() {
         const InputComponent = this.props.InputComponent || InputResizingArray.DefaultInput;
 
-        const self = this;
-
-        function onEditIndex(val, index) {
-            var arr = self.state.value.slice();
-            const isValEmpty = val === '';
-            const isIndexTail = index >= self.state.value.length - 1;
-            arr[index].val = val;
-            if (isValEmpty) {
-                if (!isIndexTail) {
-                    arr.splice(index, 1);
-                }
-            } else {
-                if (isIndexTail) {
-                    arr = InputResizingArray.addEmpty(arr);
-                }
-            }
-            self.setState({value: arr});
-            self.props.onChange(InputResizingArray.fromKeyed(InputResizingArray.removeEmpty(arr)));
-        }
-
         return (
             <div>
                 {this.state.value.map( (val, i) => {
                     return (
-                        <InputComponent key={val.key} {...this.props} value={val.val} onChange={ (val) => onEditIndex(val, i) } />
+                        <InputComponent
+                            key={val.key}
+                            {...this.props}
+                            value={val.val}
+                            onChange={ (val) => this.onEditIndex(val, i, true) }
+                            onChanging={ (val) => this.onEditIndex(val, i, false) }
+                        />
                     );
                 })}
             </div>
