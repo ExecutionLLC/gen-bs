@@ -19,13 +19,13 @@ export default class Input extends Component {
 
     render() {
         const value = this.state.value;
-        const onChange = this.props.onChange;
+        const {onChange, onChanging} = this.props;
 
         return (
             <input
                 {...this.props}
                 value={value}
-                onChange={ (evt) => this.setState({value: evt.target.value}) }
+                onChange={ (evt) => { const value = evt.target.value; this.setState({value: value}); if (onChanging) onChanging(value); } }
                 onBlur={ (evt) => onChange(evt.target.value) }
                 onKeyDown={ (evt) => { if (evt.keyCode == 13) onChange(value) } }
             />
