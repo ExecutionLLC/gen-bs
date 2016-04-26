@@ -33,13 +33,13 @@ export default class InputResizingArray extends Component {
         );
     }
 
-    onEditIndex(val, index) {
+    onEditIndex(val, index, isComplete) {
         var arr = this.state.value.slice();
         const isValEmpty = val === '';
         const isIndexTail = index >= this.state.value.length - 1;
         arr[index].val = val;
         if (isValEmpty) {
-            if (!isIndexTail) {
+            if (!isIndexTail && isComplete) {
                 arr.splice(index, 1);
             }
         } else {
@@ -48,7 +48,9 @@ export default class InputResizingArray extends Component {
             }
         }
         this.setState({value: arr});
-        this.props.onChange(InputResizingArray.fromKeyed(InputResizingArray.removeEmpty(arr)));
+        if (isComplete) {
+            this.props.onChange(InputResizingArray.fromKeyed(InputResizingArray.removeEmpty(arr)));
+        }
     }
 
     constructor(props) {
@@ -65,7 +67,13 @@ export default class InputResizingArray extends Component {
             <div>
                 {this.state.value.map( (val, i) => {
                     return (
-                        <InputComponent key={val.key} {...this.props} value={val.val} onChange={ (val) => this.onEditIndex(val, i) } />
+                        <InputComponent
+                            key={val.key}
+                            {...this.props}
+                            value={val.val}
+                            onChange={ (val) => this.onEditIndex(val, i, true) }
+                            onChanging={ (val) => this.onEditIndex(val, i, false) }
+                        />
                     );
                 })}
             </div>
