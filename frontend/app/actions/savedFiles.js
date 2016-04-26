@@ -119,14 +119,10 @@ export function exportToFile(exportType) {
             auth: {
                 isDemo
             },
-            ui: {
-                selectedView,
-            },
-            samplesList: {
-                selectedSample
-            },
             websocket: {
-                variants
+                variants,
+                variantsView,
+                variantsSample
             },
             variantsTable: {
                 selectedRowIndices
@@ -138,7 +134,7 @@ export function exportToFile(exportType) {
 
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
-        const columns = _.map(selectedView.viewListItems, listItem => {
+        const columns = _.map(variantsView.viewListItems, listItem => {
                 const field = totalFieldsHash[listItem.fieldId];
                 return {
                     id: listItem.fieldId,
@@ -168,7 +164,7 @@ export function exportToFile(exportType) {
         const exporter = ExportUtils.createExporter(exportType);
         const fileBlob = exporter.buildBlob(columns, dataToExport);
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
-        const fileName = `${selectedSample.fileName}_chunk_${createdDate}.${exportType}`;
+        const fileName = `${variantsSample.fileName}_chunk_${createdDate}.${exportType}`;
         const count = selectedRowIndices.length;
 
         dispatch(createUserDownload(fileBlob, fileName));
