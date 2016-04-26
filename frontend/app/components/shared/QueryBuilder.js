@@ -51,7 +51,7 @@ FilterQueryBuilder(
                     item: {condition?: *, field?: string, operator?: string, value?: *}
                     disabled: = disabled
                     makeItemComponent: = makeItemComponent
-                    onDelete: function()
+                    onDelete: ?function()
                 )
                     itemComponent(
                         number[],
