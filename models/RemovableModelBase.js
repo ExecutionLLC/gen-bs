@@ -18,8 +18,7 @@ class RemovableModelBase extends ModelBase {
 
     find(itemId, callback) {
         async.waterfall([
-            (callback) => super.find(itemId, callback),
-            (itemData, callback) => this._ensureItemNotDeleted(itemData, callback)
+            (callback) => super.find(itemId, callback)
         ], callback);
     }
 

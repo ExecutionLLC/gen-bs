@@ -470,16 +470,19 @@ class DatabaseCreator {
                     .primary();
                 table.uuid('vcf_file_sample_version_id')
                     .references('id')
-                    .inTable('vcf_file_sample_version');
+                    .inTable('vcf_file_sample_version')
+                    .notNullable();
                 table.uuid('view_id')
                     .references('id')
-                    .inTable('view');
+                    .inTable('view')
+                    .notNullable();
                 table.integer('total_results');
                 table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
                 table.uuid('creator')
                     .references('id')
-                    .inTable('user');
+                    .inTable('user')
+                    .notNullable();
             })
             .createTable('query_history_filter', table => {
                 table.uuid('query_history_id')

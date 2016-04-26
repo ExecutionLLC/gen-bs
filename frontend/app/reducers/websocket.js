@@ -4,10 +4,11 @@ export default function websocket(state = {
     wsConn: null,
     lastMessageSended: null,
     messages: [],
-    errors: [],
+    error: null,
     closed: true,
     variants: null,
     variantsView:null,
+    variantsSampleFieldsList: [],
     currentVariants: null,
     isVariantsEmpty: false,
     isVariantsValid: true,
@@ -114,20 +115,14 @@ export default function websocket(state = {
             });
         case ActionTypes.WS_RECEIVE_AS_ERROR:
             return Object.assign({}, state, {
-                errors: [
-                    ...state.errors,
-                    action.err
-                ],
+                error: action.err,
                 isVariantsLoading: false,
                 isVariantsValid: false
             });
 
         case ActionTypes.WS_RECEIVE_ERROR:
             return Object.assign({}, state, {
-                errors: [
-                    ...state.errors,
-                    action.err
-                ],
+                error: action.err,
                 isVariantsLoading: false
             });
         case ActionTypes.WS_RECEIVE_CLOSE:
@@ -137,6 +132,10 @@ export default function websocket(state = {
         case ActionTypes.WS_SEND_MESSAGE:
             return Object.assign({}, state, {
                 lastMessageSended: action.msg
+            });
+        case ActionTypes.PREPARE_ANALYZE:
+            return Object.assign({}, state, {
+                isVariantsLoading: true
             });
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {

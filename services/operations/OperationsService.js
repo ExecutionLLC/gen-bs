@@ -8,6 +8,7 @@ const OperationBase = require('./OperationBase');
 const SearchOperation = require('./SearchOperation');
 const UploadOperation = require('./UploadOperation');
 const SystemOperation = require('./SystemOperation');
+const KeepAliveOperation = require('./KeepAliveOperation');
 
 const SYSTEM_SESSION = '9c952e80-c2db-4a09-a0b0-6ea667d254a1';
 
@@ -45,6 +46,34 @@ class OperationsService extends ServiceBase {
     addSystemOperation(sessionId, method, callback) {
         const operation = new SystemOperation(sessionId, method);
         this._addOperation(sessionId, operation, callback);
+    }
+
+    addKeepAliveOperation(sessionId, sessionIdToCheck, callback) {
+        const operation = new KeepAliveOperation(sessionId, sessionIdToCheck);
+        this._addOperation(sessionId, operation, callback);
+    }
+
+    /**
+     * Checks that the operation by id has requested type.
+     *
+     * @param {string}sessionId Id of the session holding the operation.
+     * @param {string}operationId Id of the operation to check.
+     * @param {string}operationType
+     * @param {function(Error)}callback
+     */
+    ensureOperationOfType(sessionId, operationId, operationType, callback) {
+        async.waterfall([
+            (callback) => this.find(sessionId, operationId, callback),
+            (operation, callback) => {
+                if (operation.getType() === operationType) {
+                    callback(null);
+                } else {
+                    callback(
+                        new Error('Expected operation type: ' + operationType + ', found: ' + operation.getType())
+                    );
+                }
+            }
+        ], callback);
     }
 
     findInAllSessions(operationId, callback) {

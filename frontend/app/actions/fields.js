@@ -44,14 +44,17 @@ export function fetchFields(sampleId) {
         dispatch(requestFields());
 
         const sessionId = getState().auth.sessionId;
-        samplesClient.getFields(sessionId, sampleId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, SAMPLE_FIELDS_SERVER_ERROR));
-            } else {
-                dispatch(receiveFields(response.body));
-            }
+        return new Promise( (resolve) => {
+            samplesClient.getFields(sessionId, sampleId, (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, SAMPLE_FIELDS_SERVER_ERROR));
+                } else {
+                    dispatch(receiveFields(response.body));
+                }
+                resolve();
+            });
         });
     }
 }

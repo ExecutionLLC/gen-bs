@@ -13,6 +13,7 @@ export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
 export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
+export const SET_VARIANTS_SORT = 'SET_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
 export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
 
@@ -125,6 +126,41 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     }
 }
 
+export function setViewVariantsSort(view) {
+    return (dispatch, getState) => {
+
+        const {fields:{sampleIdToFieldHash}} = getState();
+        const sortOrder = _(view.viewListItems)
+            .filter(viewListItem => {
+                return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
+            })
+            .filter(viewListItem => {
+                return sampleIdToFieldHash[viewListItem.fieldId];
+            })
+            .map(viewListItem => {
+                return {
+                    direction: viewListItem.sortDirection,
+                    fieldId: viewListItem.fieldId,
+                    order: viewListItem.sortOrder
+                }
+            })
+            .sortByOrder(['order'], true)
+            .value();
+        //Fix for the case when another sort column is missing in the sample fields.
+        if (sortOrder.length == 1) {
+            sortOrder[0].order = 1;
+        }
+        dispatch(setVariantsSort(sortOrder));
+    }
+}
+
+export function setVariantsSort( sortOrder) {
+    return {
+        type: SET_VARIANTS_SORT,
+        sortOrder
+    }
+}
+
 export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
     return {
         type: CHANGE_VARIANTS_SORT,
@@ -156,14 +192,14 @@ function receiveAnalysisOperationId(operationId) {
 }
 
 
-export function createComment(alt, pos, ref, chrom, searchKey, comment) {
+export function createComment(alt, pos, reference, chrom, searchKey, comment) {
 
     return (dispatch, getState) => {
 
         const commentObject = {
             alt,
             pos,
-            'reference': ref,
+            reference,
             chrom,
             searchKey,
             comment

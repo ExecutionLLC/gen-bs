@@ -6,7 +6,7 @@ const Express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-const ControllerBase = require('./ControllerBase');
+const ControllerBase = require('./base/ControllerBase');
 
 class SessionsController extends ControllerBase {
     constructor(services) {
@@ -38,17 +38,16 @@ class SessionsController extends ControllerBase {
     }
 
     check(request, response) {
+        // The session lifetime update happens automatically in the ApiController for each API call.
+        // Here we need to only return the session type.
         const sessionId = this.getSessionId(request);
 
         async.waterfall([
-            (callback) =>this.sessions.findById(sessionId, callback),
-            (sessionId, callback) => this.sessions.findSessionType(
+            (callback) => this.sessions.findSessionType(sessionId, callback),
+            (sessionType, callback) => callback(null, {
                 sessionId,
-                (error, sessionType) => callback(error, {
-                    sessionId,
-                    sessionType
-                })
-            )
+                sessionType
+            })
         ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 
@@ -158,9 +157,25 @@ class SessionsController extends ControllerBase {
 
         this._configurePassport(router, controllerRelativePath);
 
-        router.post('/', this.open);
-        router.put('/', this.check);
-        router.delete('/', this.close);
+        const openSessionLimiter = this.createLimiter({
+            noDelayCount: 2, // allow only two sessions before starting to delay
+            delayMs: 3 * 1000, // delay to 3 seconds
+            maxCallCountBeforeBlock: 10 // allow create sessions only ten times before delay
+        });
+
+        const checkSessionLimiter = this.createLimiter({
+            noDelayCount: 1,
+            delayMs: 500
+        });
+
+        const closeSessionLimiter = this.createLimiter({
+            noDelayCount: 2,
+            delayMs: 500
+        });
+
+        router.post('/', openSessionLimiter, this.open);
+        router.put('/', checkSessionLimiter, this.check);
+        router.delete('/', closeSessionLimiter, this.close);
 
         return router;
     }

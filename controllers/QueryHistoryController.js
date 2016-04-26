@@ -4,7 +4,7 @@ const _ = require('lodash');
 const Express = require('express');
 const async = require('async');
 
-const ControllerBase = require('./ControllerBase');
+const ControllerBase = require('./base/ControllerBase');
 
 class QueryHistoryController extends ControllerBase {
     constructor(services) {

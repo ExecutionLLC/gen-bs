@@ -1,9 +1,24 @@
 import * as ActionTypes from '../actions/viewBuilder'
 
-const EMPTY_VIEW_ITEM = {fieldId: null};
+const EMPTY_VIEW_ITEM = {
+    fieldId: null,
+    keywords: []
+};
 
 function filterEmptyListItems(viewListItems) {
     return _.filter(viewListItems, item => item !== EMPTY_VIEW_ITEM);
+}
+
+function getNextDirection(direction) {
+    if (!direction) {
+        return 'asc';
+    }
+    const switcher = {
+        'asc': 'desc',
+        'desc': null
+    };
+
+    return switcher[direction];
 }
 
 export default function viewBuilder(state = {
@@ -125,7 +140,64 @@ export default function viewBuilder(state = {
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
 
                         Object.assign({}, state.editedView.viewListItems[action.viewItemIndex], {
-                            fieldId: action.fieldId
+                            fieldId: action.fieldId,
+                            keywords: [],
+                        }),
+
+                        ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)
+                    ]
+                })
+            });
+        }
+        case ActionTypes.VBUILDER_CHANGE_SORT_COLUMN:
+        {
+            const viewItems = [...state.editedView.viewListItems];
+            const firstSortItemIndex = _.findIndex(viewItems, {sortOrder: 1});
+            const secondSortItemIndex = _.findIndex(viewItems, {sortOrder: 2});
+            const selectedSortItemIndex = _.findIndex(viewItems, {fieldId: action.fieldId});
+            const selectedOrder = action.sortOrder;
+            const selectedDirection = getNextDirection(action.sortDirection);
+            if (selectedSortItemIndex == secondSortItemIndex || selectedSortItemIndex == firstSortItemIndex) {
+                viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+                    sortDirection: selectedDirection
+                });
+                if (selectedDirection == null) {
+                    viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+                        sortOrder: null
+                    });
+                    if (selectedSortItemIndex == firstSortItemIndex && secondSortItemIndex != -1) {
+                        viewItems[secondSortItemIndex] = Object.assign({}, viewItems[secondSortItemIndex], {
+                            sortOrder: 1
+                        });
+                    }
+                }
+            } else {
+                const oldSortItemIndex = _.findIndex(viewItems, {sortOrder: selectedOrder});
+                if (oldSortItemIndex != -1) {
+                    viewItems[oldSortItemIndex] = Object.assign({}, viewItems[oldSortItemIndex], {
+                        sortOrder: null,
+                        sortDirection: null
+                    });
+                }
+                viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+                    sortDirection: selectedDirection,
+                    sortOrder: firstSortItemIndex == -1 ? 1 : selectedOrder
+                });
+            }
+            return Object.assign({}, state, {
+                editedView: Object.assign({}, state.editedView, {
+                    viewListItems: viewItems
+                })
+            });
+        }
+        case ActionTypes.VBUILDER_SET_ITEM_KEYWORDS:{
+            return Object.assign({}, state, {
+                editedView: Object.assign({}, state.editedView, {
+                    viewListItems: [
+                        ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
+
+                        Object.assign({}, state.editedView.viewListItems[action.viewItemIndex], {
+                            keywords: action.keywordsIds
                         }),
 
                         ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)

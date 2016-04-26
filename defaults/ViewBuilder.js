@@ -20,7 +20,7 @@ class ViewBuilder extends DefaultsBuilderBase {
         this._createView = this._createView.bind(this);
         this._createListItem = this._createListItem.bind(this);
         this._createKeywords = this._createKeywords.bind(this);
-        this._createKeyword = this._createKeyword.bind(this);
+        this._findKeywordId = this._findKeywordId.bind(this);
     }
 
     /**
@@ -78,15 +78,15 @@ class ViewBuilder extends DefaultsBuilderBase {
     }
 
     _createKeywords(keywordsNames, keywords) {
-        return _.map(keywordsNames, (keywordName) => this._createKeyword(keywordName, keywords));
+        return _.map(keywordsNames, (keywordName) => this._findKeywordId(keywordName, keywords));
     }
 
-    _createKeyword(keywordName, keywords) {
-        const findedKeywords = _.filter(keywords, keyword => keyword.name === keywordName);
-        if (findedKeywords.length > 1) {
-            throw new Error('Too many keywords match, name: ' + keywordName);
+    _findKeywordId(keywordName, keywords) {
+        const keywordsFound = _.filter(keywords, keyword => keyword.name === keywordName);
+        if (keywordsFound.length !== 1) {
+            throw new Error('Incorrect number of keywords found for name: ' + keywordName);
         } else {
-            return findedKeywords[0];
+            return keywordsFound[0].id;
         }
     }
 
