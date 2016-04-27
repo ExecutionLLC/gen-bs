@@ -45,7 +45,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderDescription(isDemoSession, selectedViewType) {
-        const descriptionText = getReadonlyReasonForSessionAndType(isDemoSession, selectedViewType);
+        const descriptionText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType);
 
         if (descriptionText) {
             return (

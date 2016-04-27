@@ -27,7 +27,7 @@ export default class ExistentFilterSelect extends Component {
         const title = (auth.isDemo) ? 'Login or register to work with filter' : 'Make a copy for editing';
         const isFilterEditable = (selectedFilter.type === 'user');
 
-        const descriptionText = getReadonlyReasonForSessionAndType(auth.isDemo, selectedFilter.type);
+        const descriptionText = getReadonlyReasonForSessionAndType('filter', auth.isDemo, selectedFilter.type);
         
         return (
 
