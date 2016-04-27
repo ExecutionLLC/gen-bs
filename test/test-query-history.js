@@ -23,7 +23,7 @@ const dataClient = new DataClient(urls);
 const languageId = Config.defaultLanguId;
 
 
-describe('Query History', () => {
+describe.skip('Query History', () => {
     let sessionId = null;
     let demoSessionId = null;
     before((done) => {

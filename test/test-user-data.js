@@ -18,15 +18,15 @@ const sessionsClient = new SessionsClient(urls);
 const dataClient = new DataClient(urls);
 
 const languId = Config.defaultLanguId;
-const DefaultFilters = require('../defaults/filters/default-filters.json');
-const DefaultViews = require('../defaults/views/default-views.json');
 
 const checkUserData = (userData, isDemoUser, callback) => {
-    const profile = userData.profileMetadata;
-    assert.ok(profile);
-    assert.equal(profile.email, TestUser.email);
-    assert.equal(profile.name, TestUser.name);
-    assert.equal(profile.id, TestUser.id);
+    if (!isDemoUser) {
+        const profile = userData.profileMetadata;
+        assert.ok(profile);
+        assert.equal(profile.email, TestUser.email);
+        assert.equal(profile.name, TestUser.name);
+        assert.equal(profile.id, TestUser.id);
+    }
 
     // No session operations.
     const operations = userData.activeOperations;
@@ -34,18 +34,18 @@ const checkUserData = (userData, isDemoUser, callback) => {
 
     // Only default filters.
     const filters = userData.filters;
-    CollectionUtils.checkCollectionIsValid(filters, null, false);
+    CollectionUtils.checkCollectionIsValid(filters, null, false, true);
 
     // Only default views.
     const views = userData.views;
-    CollectionUtils.checkCollectionIsValid(views, DefaultFilters, false);
+    CollectionUtils.checkCollectionIsValid(views, null, false, true);
 
     // Only default samples.
     const samples = userData.samples;
-    CollectionUtils.checkCollectionIsValid(samples, DefaultViews, false);
+    CollectionUtils.checkCollectionIsValid(samples, null, false, true);
 
     const totalFields = userData.totalFields;
-    CollectionUtils.checkCollectionIsValid(totalFields, null, false);
+    CollectionUtils.checkCollectionIsValid(totalFields, null, false, false);
 
     const lastSampleId = userData.lastSampleId;
     assert.ok(lastSampleId);
@@ -73,10 +73,22 @@ describe('User Data', () => {
             sessionsClient.openSession(null, (error, response) => {
                 ClientBase.readBodyWithCheck(error, response);
                 demoSessionId = SessionsClient.getSessionFromResponse(response);
-            });
 
-            done();
+                done();
+            });
         });
+    });
+
+    after((done) => {
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+
+            sessionsClient.closeSession(demoSessionId, (error, response) => {
+                ClientBase.readBodyWithCheck(error, response);
+
+                done();
+            });
+        })
     });
 
     it('should get user data in appropriate format', (done) => {
