@@ -116,6 +116,7 @@ function asError(err) {
 }
 
 function otherMessage(wsData) {
+    console.error('Unexpected message in web socket: ' + JSON.stringify(wsData));
     return {
         type: WS_OTHER_MESSAGE,
         wsData
