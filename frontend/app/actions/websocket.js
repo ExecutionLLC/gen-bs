@@ -116,6 +116,7 @@ function asError(err) {
 }
 
 function otherMessage(wsData) {
+    console.error('Unexpected message in web socket: ' + JSON.stringify(wsData));
     return {
         type: WS_OTHER_MESSAGE,
         wsData
@@ -125,8 +126,6 @@ function otherMessage(wsData) {
 function receiveMessage(msg) {
     return (dispatch, getState) => {
         const wsData = JSON.parse(JSON.parse(msg));
-        console.log('wsData.result', wsData.result);
-        console.log('wsData.operationId', wsData.operationId);
         if (wsData.result) {
             if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
                 dispatch(tableMessage(wsData));

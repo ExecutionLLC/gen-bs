@@ -2,8 +2,6 @@ import * as ActionTypes from '../actions/websocket'
 
 export default function websocket(state = {
     wsConn: null,
-    lastMessageSended: null,
-    messages: [],
     error: null,
     closed: true,
     variants: null,
@@ -90,10 +88,6 @@ export default function websocket(state = {
                 });
             });
             return Object.assign({}, state, {
-                messages: [
-                    ...state.messages,
-                    action.wsData
-                ],
                 variants: state.variants === null ? resultData : [...state.variants, ...(resultData || [])],
                 currentVariants: resultData,
                 isVariantsEmpty: (resultData && resultData.length === 0),
@@ -102,18 +96,7 @@ export default function websocket(state = {
             });
         case ActionTypes.WS_PROGRESS_MESSAGE:
             return Object.assign({}, state, {
-                messages: [
-                    ...state.messages,
-                    action.wsData
-                ],
                 progress: action.wsData.result.progress
-            });
-        case ActionTypes.WS_OTHER_MESSAGE:
-            return Object.assign({}, state, {
-                messages: [
-                    ...state.messages,
-                    action.wsData
-                ]
             });
         case ActionTypes.WS_RECEIVE_AS_ERROR:
             return Object.assign({}, state, {
@@ -130,10 +113,6 @@ export default function websocket(state = {
         case ActionTypes.WS_RECEIVE_CLOSE:
             return Object.assign({}, state, {
                 closed: true
-            });
-        case ActionTypes.WS_SEND_MESSAGE:
-            return Object.assign({}, state, {
-                lastMessageSended: action.msg
             });
         case ActionTypes.PREPARE_ANALYZE:
             return Object.assign({}, state, {
