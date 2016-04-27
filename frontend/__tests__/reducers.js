@@ -1,4 +1,5 @@
 import {handleError, lastErrorResolved} from '../app/actions/errorHandler';
+import {openModal, closeModal} from '../app/actions/modalWindows';
 import configureStore from '../app/store/configureStore';
 
 /**
@@ -59,6 +60,57 @@ describe('dispatching errorHandler actions', () => {
         const store = configureStore();
         var unsubscribe;
         var t = makeStateTests(tests, () => store.getState().errorHandler, () => { unsubscribe(); done(); } );
+        unsubscribe = store.subscribe( () => {
+            t.check();
+            t();
+        });
+        t();
+        t.check();
+        t();
+    });
+});
+
+describe('dispatching modalWindows actions', () => {
+    it('succeed when', (done) => {
+
+        const tests = [
+            {
+                exec: () => {},
+                state: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: false}}
+            },
+            {
+                exec: () => { store.dispatch(closeModal('filters')); },
+                state: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: false}}
+            },
+            {
+                exec: () => { store.dispatch(openModal('upload')); },
+                state: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: true}}
+            },
+            {
+                exec: () => { store.dispatch(openModal('views')); },
+                state: {views: {showModal: true}, filters: {showModal: false}, upload: {showModal: true}}
+            },
+            {
+                exec: () => { store.dispatch(openModal('filters')); },
+                state: {views: {showModal: true}, filters: {showModal: true}, upload: {showModal: true}}
+            },
+            {
+                exec: () => { store.dispatch(closeModal('views')); },
+                state: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: true}}
+            },
+            {
+                exec: () => { store.dispatch(closeModal('upload')); },
+                state: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: false}}
+            },
+            {
+                exec: () => { store.dispatch(openModal('filters')); },
+                state: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: false}}
+            }
+        ];
+
+        const store = configureStore();
+        var unsubscribe;
+        const t = makeStateTests(tests, () => store.getState().modalWindows, () => { unsubscribe(); done() } );
         unsubscribe = store.subscribe( () => {
             t.check();
             t();
