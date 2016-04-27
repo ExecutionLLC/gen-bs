@@ -3,7 +3,7 @@
 const Express = require('express');
 const async = require('async');
 
-const ControllerBase = require('./ControllerBase');
+const ControllerBase = require('./base/ControllerBase');
 const ErrorUtils = require('../utils/ErrorUtils');
 
 /**
@@ -27,7 +27,8 @@ class ApiController extends ControllerBase {
             callback(null);
         } else {
             async.waterfall([
-                (callback) => this.services.sessions.findSessionUserId(sessionId, callback),
+                (callback) => this.services.sessions.findAndUpdateLastActivity(sessionId, callback),
+                (sessionId, callback) => this.services.sessions.findSessionUserId(sessionId, callback),
                 (userId, callback) => this.services.users.find(userId, callback),
                 (user, callback) => {
                     request.sessionId = sessionId;

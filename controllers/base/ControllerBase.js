@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 const HttpStatus = require('http-status');
+const RateLimit = require('express-rate-limit');
 
 /**
  * Base class for all controllers.
@@ -25,6 +26,33 @@ class ControllerBase {
         response
             .status(HttpStatus.OK)
             .end();
+    }
+
+    /**
+     * Options for limiting.
+     * @typedef {Object} LimitOptions
+     * @property {number|undefined}delayWindowMs Time window in which requests should persist.
+     * @property {number|undefined}noDelayCount Count of calls before starting to delay.
+     * @property {number|undefined}delayMs Time period to delay requests.
+     * @property {number|undefined}maxCallCountBeforeBlock Maximum count for API calls before blocking.
+     * @property {string|undefined}message Message to send to the client.
+     * @property {function(request, response):string|undefined}keyGenerator Function to generate custom keys for the limiter.
+     * */
+
+    /**
+     *
+     * @param {LimitOptions}options
+     * @returns {*}
+     */
+    createLimiter(options) {
+        return RateLimit({
+            windowMs: options.delayWindowMs || 60 * 1000,
+            delayAfter: options.noDelayCount || 100000,
+            delayMs: options.delayMs || 500,
+            max: options.maxCallCountBeforeBlock || 1000,
+            message: options.message || 'Too many requests, please try later',
+            keyGenerator: options.keyGenerator
+        });
     }
 
     sendErrorOrJson(response, error, jsonResult) {

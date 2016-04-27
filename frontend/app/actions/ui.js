@@ -4,6 +4,7 @@ import {viewBuilderSelectView} from './viewBuilder';
 import {filterBuilderSelectFilter} from './filterBuilder';
 import {detachHistory} from "./queryHistory";
 import {setViewVariantsSort} from "./variantsTable";
+import {handleError} from './errorHandler'
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
@@ -12,6 +13,8 @@ export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
 export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
+
+const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameters.';
 
 /*
  * Action Creators
@@ -50,24 +53,32 @@ export function changeFilter(filterId) {
     return (dispatch, getState) => {
         const {userData: {filters}} = getState();
         dispatch(changeHeaderFilter(filters, filterId));
-        dispatch(filterBuilderSelectFilter(filters, filterId, true));
+        dispatch(filterBuilderSelectFilter(filters, filterId));
     }
 }
 
 export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
     return (dispatch, getState) => {
+        if (!sampleId || !viewId || !filterId) {
+            dispatch(handleError(null, ANALIZE_PARAMS_ERROR));
+            return;
+        }
 
         const searchParams = {
-            sampleId: sampleId,
-            viewId: viewId,
-            filterId: filterId,
-            limit: limit,
-            offset: offset
+            sampleId,
+            viewId,
+            filterId,
+            limit,
+            offset
         };
         const {
             userData: {
                 attachedHistoryData: historyData,
-                views
+                views,
+                filters
+            },
+            samplesList: {
+                samples
             },
             fields: {
                 sampleFieldsList
@@ -82,7 +93,9 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(clearSearchParams());
         dispatch(requestAnalyze(searchParams));
         const searchView = _.find(views, {id: viewId});
-        dispatch(requestSetCurrentParams(searchView, sampleFieldsList));
+        const searchSample = _.find(samples, {id: sampleId});
+        const searchFilter = _.find(filters, {id: filterId});
+        dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
         dispatch(fetchVariants(searchParams))
     }

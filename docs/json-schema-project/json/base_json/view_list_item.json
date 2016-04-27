@@ -1,48 +1,49 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
-	"type": "object",
-	"properties": {
-		"id": {
-			"type": "string",
-			"description": "UUID, the unique identifier for the view list item"
-		},
-		"field_name": {
-			"type": "string",
-			"description": "name of the field in sample."
-		},
-		"source_name": {
-			"type": "string",
-			"description": "Null for sample fields, otherwise contains name of the source field is contained in."
-		},
-		"order": {
-			"description": "The order of column in list",
-			"type": "integer"
-		},
-		"sort_order": {
-			"description": "The order of column in multi_sort_settings",
-			"type": "integer"
-		},
-		"sort_direction": {
-			"description": "Sort direction",
-			"type": "string",
-			"enum": [
-				"asc",
-				"desc"
-			]
-		},
-		"filter_control_enable": {
-			"type": "boolean"
-		},
-		"keywords": {
-			"type": "array",
-			"uniqueItems": true,
-			"items": {
-				"$ref": "./keyword.json#"
-			}
-		}
-	},
-	"required": [
-		"id",
-		"order"
-	]
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UUID, the unique identifier for the view list item"
+    },
+    "field_name": {
+      "type": "string",
+      "description": "name of the field in sample."
+    },
+    "source_name": {
+      "type": "string",
+      "description": "Null for sample fields, otherwise contains name of the source field is contained in."
+    },
+    "order": {
+      "description": "The order of column in list",
+      "type": "integer"
+    },
+    "sort_order": {
+      "description": "The order of column in multi_sort_settings",
+      "type": "integer"
+    },
+    "sort_direction": {
+      "description": "Sort direction",
+      "type": "string",
+      "enum": [
+        "asc",
+        "desc"
+      ]
+    },
+    "filter_control_enable": {
+      "type": "boolean"
+    },
+    "keywords": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "description": "UUID, id of the keyword. The keyword itself should be obtained from the metadata of the corresponding field."
+      }
+    }
+  },
+  "required": [
+    "id",
+    "order"
+  ]
 }

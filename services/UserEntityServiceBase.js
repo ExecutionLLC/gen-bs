@@ -53,7 +53,8 @@ class UserEntityServiceBase extends ServiceBase {
         async.waterfall([
             (callback) => this._checkUserIsSet(user, callback),
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.theModel.remove(user.id, itemId, callback)
+            (callback) => this.find(user, itemId, callback),
+            (item, callback) => this.theModel.remove(user.id, itemId, (error) => callback(error, item))
         ], callback);
     }
 }

@@ -4,7 +4,7 @@ const multer = require('multer');
 const fs = require('fs');
 const async = require('async');
 
-const UserEntityControllerBase = require('./UserEntityControllerBase');
+const UserEntityControllerBase = require('./base/UserEntityControllerBase');
 
 class SampleController extends UserEntityControllerBase {
     constructor(services) {

@@ -18,7 +18,7 @@ class VariantsTableReact extends Component {
 
     render() {
         const { dispatch, auth, views, fields, ui } = this.props
-        const { variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, errors } = this.props.ws
+        const { variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error } = this.props.ws
 
         var tableWrapperClass = classNames({
             'table-variants-wrapper': true,
@@ -34,7 +34,7 @@ class VariantsTableReact extends Component {
 
                 { !isVariantsLoading && !isVariantsValid &&
                 <div className="col-xs-6 col-xs-offset-3">
-                    <VariantsTableLoadError errors={errors}/>
+                    <VariantsTableLoadError error={error}/>
                 </div>
                 }
                 { !isVariantsLoading && isVariantsValid &&
