@@ -77,6 +77,7 @@ class WebServerHost {
         showErrorFunc(this.config.forceOverrideRedisToLocalhost, 'Forced override Redis host to localhost.');
         showErrorFunc(this.config.disableMakeAnalyzed, 'User fees are disabled!');
         showErrorFunc(this.config.enableFullRightsForDemoUsers, 'Demo users have full rights!');
+        showErrorFunc(this.config.disableRequestLimits, 'Requests limits are disabled!');
     }
 
     _printServerConfig() {
