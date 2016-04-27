@@ -1,7 +1,34 @@
 import {handleError, lastErrorResolved} from '../app/actions/errorHandler';
 import configureStore from '../app/store/configureStore';
 
-const store = configureStore();
+/**
+ * @template {T}
+ * @param {{exec: function(), state: T}[]} tests
+ * @param {function():T} getState
+ * @param {function()} done
+ * @returns {function()}
+ */
+function makeStateTests(tests, getState, done) {
+
+    var currentTest = null;
+
+    function doTest() {
+        currentTest = tests.shift();
+        if (!currentTest) {
+            done();
+            return;
+        }
+        currentTest.exec();
+    }
+
+    function testCheck() {
+        expect(getState()).toEqual(currentTest.state);
+    }
+
+    doTest.check = testCheck;
+    return doTest;
+}
+
 
 describe('dispatching errorHandler actions', () => {
     it('succeed when', (done) => {
@@ -29,27 +56,15 @@ describe('dispatching errorHandler actions', () => {
             }
         ];
 
-        var currentTest = null;
-
-        function doTest() {
-            currentTest = tests.shift();
-            if (!currentTest) {
-                done();
-                return;
-            }
-            currentTest.exec();
-        }
-
-        function testCheck() {
-            expect(store.getState().errorHandler).toEqual(currentTest.state);
-        }
-
-        store.subscribe( () => {
-            testCheck();
-            doTest();
+        const store = configureStore();
+        var unsubscribe;
+        var t = makeStateTests(tests, () => store.getState().errorHandler, () => { unsubscribe(); done(); } );
+        unsubscribe = store.subscribe( () => {
+            t.check();
+            t();
         });
-        doTest();
-        testCheck();
-        doTest();
+        t();
+        t.check();
+        t();
     });
 });
