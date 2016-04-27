@@ -115,7 +115,7 @@ function requestViews() {
     }
 }
 
-function receiveViews(json) {
+export function receiveViews(json) {
     return {
         type: RECEIVE_VIEWS,
         views: json,

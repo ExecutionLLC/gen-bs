@@ -1,5 +1,7 @@
 import {handleError, lastErrorResolved} from '../app/actions/errorHandler';
 import {openModal, closeModal} from '../app/actions/modalWindows';
+import {toggleQueryNavbar, changeView, changeHeaderFilter, changeFilter} from '../app/actions/ui';
+import {receiveViews} from '../app/actions/userData';
 import configureStore from '../app/store/configureStore';
 
 /**
@@ -111,6 +113,55 @@ describe('dispatching modalWindows actions', () => {
         const store = configureStore();
         var unsubscribe;
         const t = makeStateTests(tests, () => store.getState().modalWindows, () => { unsubscribe(); done() } );
+        unsubscribe = store.subscribe( () => {
+            t.check();
+            t();
+        });
+        t();
+        t.check();
+        t();
+    });
+});
+
+describe('dispatching ui actions', () => {
+    it('succeed when', (done) => {
+
+        const INIT_STATE = {queryNavbarClosed: true, selectedView: null, selectedFilter: null, currentLimit: 100, currentOffset: 0, isAnalyzeTooltipVisible: false, language: 'en'};
+
+        function chstate(ch) {
+            return Object.assign({}, INIT_STATE, ch);
+        }
+
+        const tests = [
+            {
+                exec: () => {},
+                state: INIT_STATE
+            },
+            {
+                exec: () => store.dispatch(toggleQueryNavbar()),
+                state: chstate({queryNavbarClosed: false})
+            },
+            {
+                exec: () => store.dispatch(toggleQueryNavbar()),
+                state: chstate()
+            },
+            {
+                exec: () => store.dispatch(receiveViews([{id:1, q:2}, {id:2, w:3}])),
+                state: chstate()
+            },
+            {
+                exec: () => store.dispatch(changeView(4)),
+                state: chstate({selectedView: void 0})
+            },
+            {
+                exec: () => store.dispatch(changeView(2)),
+                state: chstate({selectedView: {id:2, w:3}})
+            }
+        ];
+
+        const store = configureStore();
+        var unsubscribe;
+        const t = makeStateTests(tests, () => store.getState().ui, () => { unsubscribe(); done() } );
         unsubscribe = store.subscribe( () => {
             t.check();
             t();
