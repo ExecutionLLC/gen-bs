@@ -81,6 +81,19 @@ class ModelBase {
         callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemOrItems));
     }
 
+    /**
+     * @param {string}name
+     * @param {function(Error)}callback
+     */
+    _ensureNameIsValid(name, callback) {
+        const trimmedName = (name || '').trim();
+        if (_.isEmpty(trimmedName)) {
+            callback(new Error('Name cannot be empty.'));
+        } else {
+            callback(null);
+        }
+    }
+
     _ensureAllItemsFound(itemsFound, itemIdsToFind, callback) {
         if (itemsFound && itemsFound.length === itemIdsToFind.length) {
             callback(null, itemsFound);

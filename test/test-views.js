@@ -171,7 +171,7 @@ describe('Views', () => {
             });
         });
 
-        it('should fail to add view with list item containing field_id=null',(done) =>{
+        it('should fail to add view with list item containing field_id=null', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
@@ -179,10 +179,25 @@ describe('Views', () => {
                 view.name = 'Test View ' + Uuid.v4();
                 const viewItem = view.viewListItems[0];
                 viewItem.fieldId = null;
-                view.viewListItems.push(viewItem)
+                view.viewListItems.push(viewItem);
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
+                    done();
+                });
+            });
+        });
+
+        it('should fail to add view with empty name', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = '';
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
                     done();
                 });
             });

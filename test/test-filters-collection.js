@@ -157,6 +157,21 @@ describe('Filters', () => {
             });
         });
 
+        it('should fail to create filter with empty name', (done) => {
+            filtersClient.getAll(sessionId, (error, response) => {
+                const filters = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(filters);
+                const filter = filters[0];
+                filter.name = '';
+
+                filtersClient.add(sessionId, languId, filter, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                })
+            })
+        });
+
         it('should fail to get list in incorrect session', (done) => {
             filtersClient.getAll(UnknownSessionId, (error, response) => {
                 ClientBase.expectErrorResponse(error, response);
