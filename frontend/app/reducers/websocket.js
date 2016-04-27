@@ -98,8 +98,6 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 progress: action.wsData.result.progress
             });
-        case ActionTypes.WS_OTHER_MESSAGE:
-            return state;
         case ActionTypes.WS_RECEIVE_AS_ERROR:
             return Object.assign({}, state, {
                 error: action.err,
@@ -116,8 +114,6 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 closed: true
             });
-        case ActionTypes.WS_SEND_MESSAGE:
-            return state;
         case ActionTypes.PREPARE_ANALYZE:
             return Object.assign({}, state, {
                 isVariantsLoading: true
