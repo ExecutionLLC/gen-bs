@@ -21,14 +21,14 @@ const TestUser = {
     userEmail: 'valarievaughn@electonic.com'
 };
 
-const assertCommentContentsEqual = (comment1, comment2) => {
-    assert.ok((!comment1 && !comment2) || (comment1 && comment2));
-    assert.equal(comment1.reference, comment2.reference);
-    assert.equal(comment1.chrom, comment2.chrom);
-    assert.equal(comment1.pos, comment2.pos);
-    assert.equal(comment1.alt, comment2.alt);
-    assert.equal(comment1.searchKey, comment2.searchKey);
-    assert.equal(comment1.comment, comment2.comment);
+const assertCommentContentsEqual = (addedComment, originalComment) => {
+    assert.ok((!addedComment && !originalComment) || (addedComment && originalComment));
+    assert.equal(addedComment.reference, originalComment.reference);
+    assert.equal(addedComment.chrom, originalComment.chrom);
+    assert.equal(addedComment.pos, originalComment.pos);
+    assert.equal(addedComment.alt, originalComment.alt);
+    assert.equal(addedComment.searchKey, originalComment.searchKey);
+    assert.equal(addedComment.comment, originalComment.comment);
 };
 
 describe('Comments', () => {

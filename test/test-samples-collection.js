@@ -53,7 +53,7 @@ describe('Samples Collection', function() {
         samplesClient.getAll(sessionId, (error, response) => {
             const samples = ClientBase.readBodyWithCheck(error, response);
             assert.ok(samples && samples.length);
-            CollectionUtils.checkCollectionIsValid(samples, null, false);
+            CollectionUtils.checkCollectionIsValid(samples, null, false, true);
 
             _.each(samples, sample => SamplesClient.verifySampleFormat(sample, false));
 

@@ -118,7 +118,7 @@ describe('Filters', () => {
             });
         });
 
-        it('should fail to get and update deleted user filter', (done) => {
+        it('should not fail to get and fail to update deleted user filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
                 assert.equal(response.status, HttpStatus.OK);
@@ -140,7 +140,7 @@ describe('Filters', () => {
 
                         filtersClient.get(sessionId, addedFilter.id, (error, response) => {
                             assert.ifError(error);
-                            assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+                            assert.equal(response.status, HttpStatus.OK);
 
                             // Trying to update created filter.
                             const filterToUpdate = _.cloneDeep(addedFilter);
@@ -155,6 +155,21 @@ describe('Filters', () => {
                     });
                 });
             });
+        });
+
+        it('should fail to create filter with empty name', (done) => {
+            filtersClient.getAll(sessionId, (error, response) => {
+                const filters = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(filters);
+                const filter = filters[0];
+                filter.name = '';
+
+                filtersClient.add(sessionId, languId, filter, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                })
+            })
         });
 
         it('should fail to get list in incorrect session', (done) => {
