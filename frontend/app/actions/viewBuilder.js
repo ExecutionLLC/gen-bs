@@ -145,7 +145,7 @@ export function viewBuilderUpdateView(viewItemIndex) {
             viewsClient.update(sessionId, editedView, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, UPDATE_VIEW_NETWORK_ERROR));
-                } else if (response.statusCode) {
+                } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, UPDATE_VIEW_SERVER_ERROR));
                 } else {
                     const result = response.body;
