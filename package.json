@@ -54,6 +54,7 @@
     "ws": "1.0.1"
   },
   "devDependencies": {
+    "mocha": "2.4.5",
     "request": "2.67.0"
   }
 }
