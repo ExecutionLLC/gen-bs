@@ -14,7 +14,22 @@ export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
+export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
+export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSITION_RESET';
+
 const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameters.';
+
+export function requestTableScrollPositionReset() {
+    return {
+        type: REQUEST_TABLE_SCROLL_POSITION_RESET
+    }
+}
+
+export function completeTableScrollPositionReset() {
+    return {
+        type: COMPLETE_TABLE_SCROLL_POSITION_RESET
+    }
+}
 
 /*
  * Action Creators

@@ -1,7 +1,8 @@
 import apiFacade from '../api/ApiFacade';
-import {handleError} from './errorHandler'
-import {clearVariants, addComment, changeComment, deleteComment} from './websocket'
-import {updateQueryHistory} from './queryHistory'
+import {handleError} from './errorHandler';
+import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
+import {updateQueryHistory} from './queryHistory';
+import {requestTableScrollPositionReset} from './ui';
 
 import HttpStatus from 'http-status';
 
@@ -118,6 +119,7 @@ export function setFieldFilter(fieldId, filterValue) {
 
 export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     return (dispatch, getState) => {
+        dispatch(requestTableScrollPositionReset());
         dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2 : 1, sortDirection));
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
@@ -271,6 +273,7 @@ export function fetchVariants(searchParams) {
     return (dispatch, getState) => {
         console.log('fetchVariants: ', searchParams);
 
+        dispatch(requestTableScrollPositionReset());
         dispatch(requestVariants());
         dispatch(clearTableRowsSelection());
 
