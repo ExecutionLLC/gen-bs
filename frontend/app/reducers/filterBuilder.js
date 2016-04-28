@@ -150,9 +150,6 @@ export default function filterBuilder(state = {
     }
 }, action) {
 
-    var selectedFilter;
-    var newParsedRules;
-
     switch (action.type) {
         case ActionTypes.FBUILDER_SELECT_FILTER:
             return reduceFBuilderSelectFilter(state, action);
