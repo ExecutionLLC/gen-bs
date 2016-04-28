@@ -203,6 +203,21 @@ describe('Views', () => {
             });
         });
 
+        it('should fail to add view with empty list item', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = 'Test View ' + Uuid.v4();
+                view.viewListItems = [];
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+                    done();
+                });
+            });
+        });
+
         it('should fail to update view with list item containing field_id=null', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
@@ -232,5 +247,34 @@ describe('Views', () => {
                 });
             });
         });
+
+        it('should fail to update view with empty list item', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = 'Test View ' + Uuid.v4();
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    const addedView = ClientBase.readBodyWithCheck(error, response);
+                    assert.ok(addedView);
+                    assert.notEqual(addedView.id, view.id, 'View id is not changed.');
+                    assert.equal(addedView.name, view.name);
+                    assert.equal(addedView.type, 'user');
+
+                    // Update created view.
+                    const viewToUpdate = _.cloneDeep(addedView);
+                    viewToUpdate.name = 'Test View ' + Uuid.v4();
+                    viewToUpdate.type = 'advanced';
+                    viewToUpdate.viewListItems = [];
+
+                    viewsClient.update(sessionId, viewToUpdate, (error, response) => {
+                        ClientBase.expectErrorResponse(error, response);
+                        done();
+                    });
+                });
+            });
+        });
+
     });
 });
