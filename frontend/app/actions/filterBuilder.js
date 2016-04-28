@@ -180,7 +180,7 @@ export function filterBuilderChangeFilter(index, change) {
 export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestDeleteFilter(filterId));
-        const {auth: {sessionId}} = getState();
+        const {auth: {sessionId}, fields} = getState();
         filtersClient.remove(sessionId, filterId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
@@ -194,6 +194,7 @@ export function filterBuilderDeleteFilter(filterId) {
                 const selectedFilterId = state.ui.selectedFilter.id;
                 const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
                 dispatch(changeFilter(newFilterId));
+                dispatch(filterBuilderToggleNewEdit(false, fields));
             }
         });
     }
