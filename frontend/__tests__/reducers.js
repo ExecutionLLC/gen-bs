@@ -20,12 +20,12 @@ function makeStateTests(tests, store, getState) {
         it(test.name, (done) => {
             if (test.exec) {
                 stateChangeF = () => {
-                    expect(getState()).toEqual(test.state);
+                    expect(getState()).toEqual(test.expectedState);
                     done();
                 };
                 test.exec();
             } else {
-                expect(getState()).toEqual(test.state);
+                expect(getState()).toEqual(test.expectedState);
                 done();
             }
         });
@@ -44,28 +44,28 @@ describe('dispatching errorHandler actions', () => {
         {
             name: 'init',
             exec: null,
-            state: {showErrorWindow: false, lastError: null}
+            expectedState: {showErrorWindow: false, lastError: null}
         },
         {
             name: 'error set 1',
             exec: () => {
                 store.dispatch(handleError(1, 'q'));
             },
-            state: {showErrorWindow: true, lastError: {errorCode: 1, errorMessage: 'q'}}
+            expectedState: {showErrorWindow: true, lastError: {errorCode: 1, errorMessage: 'q'}}
         },
         {
             name: 'error set 2',
             exec: () => {
                 store.dispatch(handleError(2, 'w'));
             },
-            state: {showErrorWindow: true, lastError: {errorCode: 2, errorMessage: 'w'}}
+            expectedState: {showErrorWindow: true, lastError: {errorCode: 2, errorMessage: 'w'}}
         },
         {
             name: 'error reset',
             exec: () => {
                 store.dispatch(lastErrorResolved());
             },
-            state: {showErrorWindow: false, lastError: null}
+            expectedState: {showErrorWindow: false, lastError: null}
         }
     ];
 
@@ -78,42 +78,42 @@ describe('dispatching modalWindows actions', () => {
     const tests = [
         {
             name: 'init',
-            state: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: false}}
+            expectedState: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: false}}
         },
         {
             name: 'close already closed filters',
             exec: () => { store.dispatch(closeModal('filters')); },
-            state: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: false}}
+            expectedState: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: false}}
         },
         {
             name: 'open upload',
             exec: () => { store.dispatch(openModal('upload')); },
-            state: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: true}}
+            expectedState: {views: {showModal: false}, filters: {showModal: false}, upload: {showModal: true}}
         },
         {
             name: 'open views',
             exec: () => { store.dispatch(openModal('views')); },
-            state: {views: {showModal: true}, filters: {showModal: false}, upload: {showModal: true}}
+            expectedState: {views: {showModal: true}, filters: {showModal: false}, upload: {showModal: true}}
         },
         {
             name: 'open filters',
             exec: () => { store.dispatch(openModal('filters')); },
-            state: {views: {showModal: true}, filters: {showModal: true}, upload: {showModal: true}}
+            expectedState: {views: {showModal: true}, filters: {showModal: true}, upload: {showModal: true}}
         },
         {
             name: 'close views',
             exec: () => { store.dispatch(closeModal('views')); },
-            state: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: true}}
+            expectedState: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: true}}
         },
         {
             name: 'close upload',
             exec: () => { store.dispatch(closeModal('upload')); },
-            state: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: false}}
+            expectedState: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: false}}
         },
         {
             name: 'open already opened filters',
             exec: () => { store.dispatch(openModal('filters')); },
-            state: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: false}}
+            expectedState: {views: {showModal: false}, filters: {showModal: true}, upload: {showModal: false}}
         }
     ];
 
@@ -132,32 +132,32 @@ describe('dispatching ui actions', () => {
     const tests = [
         {
             name: 'init',
-            state: INIT_STATE
+            expectedState: INIT_STATE
         },
         {
             name: 'toggle query navbar',
             exec: () => store.dispatch(toggleQueryNavbar()),
-            state: chstate({queryNavbarClosed: ''+false})
+            expectedState: chstate({queryNavbarClosed: false})
         },
         {
             name: 'toggle query navbar again',
             exec: () => store.dispatch(toggleQueryNavbar()),
-            state: chstate()
+            expectedState: chstate()
         },
         {
             name: 'set views',
             exec: () => store.dispatch(receiveViews([{id:1, q:2}, {id:2, w:3}])),
-            state: chstate()
+            expectedState: chstate()
         },
         {
             name: 'change absent view',
             exec: () => store.dispatch(changeView(4)),
-            state: chstate({selectedView: void 0})
+            expectedState: chstate({selectedView: void 0})
         },
         {
             name: 'change existent view',
             exec: () => store.dispatch(changeView(2)),
-            state: chstate({selectedView: {id:2, w:3}})
+            expectedState: chstate({selectedView: {id:2, w:3}})
         }
     ];
 
