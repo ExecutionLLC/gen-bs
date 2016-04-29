@@ -277,4 +277,17 @@ describe('Views', () => {
         });
 
     });
+
+    describe('positive tests after all tests', () => {
+        it('should get all views after all tests', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                assert.ok(Array.isArray(views));
+                _.each(views, view => checkView(view));
+                done();
+            });
+        });
+
+    });
 });
