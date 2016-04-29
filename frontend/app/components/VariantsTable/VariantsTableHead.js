@@ -91,7 +91,7 @@ export default class VariantsTableHead extends Component {
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
                          currentVariants = {this.props.ws.currentVariants}
-                         disabled={isFetching}
+                         disabled={false}
             />
         );
     }
