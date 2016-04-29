@@ -49,12 +49,11 @@ export function viewBuilderToggleNew() {
     };
 }
 
-export function viewBuilderSelectView(views, viewId, editOrNew) {
+export function viewBuilderSelectView(views, viewId) {
     return {
         type: VBUILDER_SELECT_VIEW,
         views,
-        viewId,
-        editOrNew
+        viewId
     };
 }
 

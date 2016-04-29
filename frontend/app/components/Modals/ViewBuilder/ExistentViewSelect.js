@@ -142,7 +142,7 @@ export default class ExistentViewSelect extends React.Component {
 
     onSelectedViewChanged(viewId) {
         const {dispatch, views} = this.props;
-        dispatch(viewBuilderSelectView(views, viewId, true));
+        dispatch(viewBuilderSelectView(views, viewId));
     }
 
     onDuplicateViewClick() {
@@ -153,7 +153,7 @@ export default class ExistentViewSelect extends React.Component {
     onResetViewClick() {
         const {dispatch, views} = this.props;
         const selectedViewId = this.getSelectedViewId();
-        dispatch(viewBuilderSelectView(views, selectedViewId, true));
+        dispatch(viewBuilderSelectView(views, selectedViewId));
     }
 
     onDeleteViewClick() {
