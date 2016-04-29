@@ -27,7 +27,6 @@ export const VBUILDER_REQUEST_DELETE_VIEW = 'VBUILDER_REQUEST_DELETE_VIEW';
 export const VBUILDER_RECEIVE_DELETE_VIEW = 'VBUILDER_RECEIVE_DELETE_VIEW';
 
 export const VBUILDER_TOGGLE_NEW = 'VBUILDER_TOGGLE_NEW';
-export const VBUILDER_TOGGLE_EDIT = ' VBUILDER_TOGGLE_EDIT';
 
 const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
 const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
