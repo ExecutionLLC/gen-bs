@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import VariantsTableRow from './VariantsTableRow';
 
 import { getNextPartOfData, selectTableRow } from '../../actions/variantsTable';
+import {completeTableScrollPositionReset} from '../../actions/ui';
 
 export default class VariantsTableRows extends Component {
 
@@ -66,7 +67,14 @@ export default class VariantsTableRows extends Component {
     }
 
     handleScroll(e) {
-        const { currentVariants } = this.props.ws;
+        const { dispatch, ws: {currentVariants}, ui: {shouldResetTableScrollPosition} } = this.props;
+        // Workaround for bug #299
+        if (shouldResetTableScrollPosition) {
+            setTimeout(() => {
+                this.refs.variantsTableBody.scrollTop = 0;
+                dispatch(completeTableScrollPositionReset());
+            }, 10);
+        }
         if (!currentVariants) {
             return;
         }
