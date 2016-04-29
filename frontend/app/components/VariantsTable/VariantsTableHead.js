@@ -19,7 +19,7 @@ export default class VariantsTableHead extends Component {
 
         if (!searchParams || !currentView) {
             return (
-                <tbody className="table-variants-head" id="variants_table_head">
+                <tbody className="table-variants-head" id="variants_table_head" ref="variantsTableHead">
                 <tr />
                 </tbody>
             );
@@ -33,7 +33,7 @@ export default class VariantsTableHead extends Component {
         }, {});
         
         return (
-            <tbody className="table-variants-head" id="variants_table_head">
+            <tbody className="table-variants-head" id="variants_table_head" ref="variantsTableHead">
             <tr>
                 <td className="btntd">
                     <div></div>
@@ -93,4 +93,22 @@ export default class VariantsTableHead extends Component {
             />
         );
     }
+
+    componentDidMount() {
+        const scrollElement = this.refs.variantsTableHead;
+        scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
+    }
+
+    componentWillUnmount() {
+        const scrollElement = this.refs.variantsTableHead;
+        scrollElement.removeEventListener('scroll', this.handleScroll);
+    }
+
+    handleScroll(e) {
+        const el = e.target;
+        if(this.props.xScrollListener) {
+            this.props.xScrollListener(el.scrollLeft);
+        }
+    }
+
 }
