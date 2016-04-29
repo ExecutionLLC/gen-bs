@@ -12,6 +12,7 @@ export default class VariantsTableHead extends Component {
     render() {
         const { dispatch, fields, ws, searchParams } = this.props;
         const { sort } = this.props.variantsTable.searchInResultsParams;
+        const { isFetching } = this.props.variantsTable;
         const {
             variantsView: currentView,
             variantsSampleFieldsList: currentSampleFields
@@ -64,13 +65,13 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, expectedFieldsHash, sort, dispatch))}
+                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sort, dispatch))}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, fields, expectedFieldsHash, sortState, dispatch) {
+    renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sortState, dispatch) {
         const {totalFieldsHash} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
         const areControlsEnabled = !!expectedFieldsHash[fieldId];
@@ -90,6 +91,7 @@ export default class VariantsTableHead extends Component {
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
                          currentVariants = {this.props.ws.currentVariants}
+                         disabled={isFetching}
             />
         );
     }
