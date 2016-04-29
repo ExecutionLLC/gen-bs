@@ -9,7 +9,6 @@ import {
     getReadonlyReasonForSessionAndType
 } from '../../../utils/stringUtils';
 import {
-    viewBuilderToggleEdit,
     viewBuilderSelectView,
     viewBuilderToggleNew,
     viewBuilderDeleteView
@@ -143,7 +142,7 @@ export default class ExistentViewSelect extends React.Component {
 
     onSelectedViewChanged(viewId) {
         const {dispatch, views} = this.props;
-        dispatch(viewBuilderToggleEdit(views, viewId, true));
+        dispatch(viewBuilderSelectView(views, viewId, true));
     }
 
     onDuplicateViewClick() {

@@ -58,14 +58,6 @@ export function viewBuilderSelectView(views, viewId, editOrNew) {
     };
 }
 
-export function viewBuilderToggleEdit(views, viewId) {
-    return {
-        type: VBUILDER_TOGGLE_EDIT,
-        views,
-        viewId
-    };
-}
-
 export function viewBuilderChangeAttr(attr) {
     return {
         type: VBUILDER_CHANGE_ATTR,
@@ -132,10 +124,11 @@ export function viewBuilderUpdateView(viewItemIndex) {
     return (dispatch, getState) => {
         const state = getState();
         const editedView = state.viewBuilder.editedView;
-        const isNotEditableView = _.includes(['advanced', 'standard'], editedView.type);
+        const isNotEdited = _.includes(['advanced', 'standard'], editedView.type)
+            || state.viewBuilder.selectedView === state.viewBuilder.editedView;
 
         dispatch(viewBuilderRequestUpdateView());
-        if (state.auth.isDemo || isNotEditableView) {
+        if (state.auth.isDemo || isNotEdited) {
             dispatch(closeModal('views'));
             dispatch(changeView(editedView.id));
         } else {
