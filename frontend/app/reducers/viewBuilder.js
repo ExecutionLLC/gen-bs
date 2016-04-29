@@ -36,13 +36,6 @@ export default function viewBuilder(state = {
                 editedView: selectedView
             });
         }
-        case ActionTypes.VBUILDER_TOGGLE_EDIT:
-        {
-            const editedView = _.find(action.views, {id: action.viewId}) || null;
-            return Object.assign({}, state, {
-                editedView: editedView
-            });
-        }
         case ActionTypes.VBUILDER_TOGGLE_NEW:
         {
             return Object.assign({}, state, {

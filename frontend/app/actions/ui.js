@@ -37,7 +37,7 @@ export function changeView(viewId) {
     return (dispatch, getState) => {
         const {userData: {views}} = getState();
         dispatch(changeHeaderView(views, viewId));
-        dispatch(viewBuilderSelectView(views, viewId, true));
+        dispatch(viewBuilderSelectView(views, viewId));
     }
 }
 

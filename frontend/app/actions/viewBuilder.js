@@ -27,7 +27,6 @@ export const VBUILDER_REQUEST_DELETE_VIEW = 'VBUILDER_REQUEST_DELETE_VIEW';
 export const VBUILDER_RECEIVE_DELETE_VIEW = 'VBUILDER_RECEIVE_DELETE_VIEW';
 
 export const VBUILDER_TOGGLE_NEW = 'VBUILDER_TOGGLE_NEW';
-export const VBUILDER_TOGGLE_EDIT = ' VBUILDER_TOGGLE_EDIT';
 
 const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
 const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
@@ -49,18 +48,9 @@ export function viewBuilderToggleNew() {
     };
 }
 
-export function viewBuilderSelectView(views, viewId, editOrNew) {
+export function viewBuilderSelectView(views, viewId) {
     return {
         type: VBUILDER_SELECT_VIEW,
-        views,
-        viewId,
-        editOrNew
-    };
-}
-
-export function viewBuilderToggleEdit(views, viewId) {
-    return {
-        type: VBUILDER_TOGGLE_EDIT,
         views,
         viewId
     };
@@ -132,10 +122,11 @@ export function viewBuilderUpdateView(viewItemIndex) {
     return (dispatch, getState) => {
         const state = getState();
         const editedView = state.viewBuilder.editedView;
-        const isNotEditableView = _.includes(['advanced', 'standard'], editedView.type);
+        const isNotEdited = _.includes(['advanced', 'standard'], editedView.type)
+            || state.viewBuilder.selectedView === state.viewBuilder.editedView;
 
         dispatch(viewBuilderRequestUpdateView());
-        if (state.auth.isDemo || isNotEditableView) {
+        if (state.auth.isDemo || isNotEdited) {
             dispatch(closeModal('views'));
             dispatch(changeView(editedView.id));
         } else {
