@@ -50,11 +50,11 @@ class VariantsTableReact extends Component {
                     <table className="table table-striped table-variants header-fixed" id="variants_table"
                            ref="variantsTable">
                         <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHead"
-                                           xScrollListener={ (scrollLeft) => { this.headerXScrollListener(scrollLeft) } } 
+                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)) } }
                         />
                         { !isVariantsEmpty &&
                         <VariantsTableRows variants={variants} fields={fields} {...this.props} ref="variantsTableRows"
-                                           xScrollListener={ (scrollLeft) => { this.tableXScrollListener(scrollLeft) } }
+                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)) } }
                         />
                         }
                     </table>
@@ -69,38 +69,19 @@ class VariantsTableReact extends Component {
         )
     }
 
-    tableXScrollListener(scrollLeft) {
+    elementXScrollListener(scrollLeft, DOMNode) {
         // ignore if we want to scroll to already desired place
         if (this.scrollTarget !== null && scrollLeft == this.scrollTarget) {
             return;
         }
-        const variantsTableHead = ReactDOM.findDOMNode(this.refs.variantsTableHead);
-        if (variantsTableHead) {
+        if (DOMNode) {
             this.scrollTarget = scrollLeft;
-            // we should move header manually, because "position" attribute of header equal "fixed"
-            if (variantsTableHead.scrollLeft == scrollLeft) {
+            // we should move header manually, because "position" attribute of element is "fixed"
+            if (DOMNode.scrollLeft == scrollLeft) {
                 // destination point reached - get ready to scroll again
                 this.scrollTarget = null;
             } else {
-                variantsTableHead.scrollLeft = scrollLeft;
-            }
-        }
-    }
-
-    headerXScrollListener(scrollLeft) {
-        // ignore if we want to scroll to already desired place
-        if (this.scrollTarget !== null && scrollLeft == this.scrollTarget) {
-            return;
-        }
-        const variantsTableRows = ReactDOM.findDOMNode(this.refs.variantsTableRows);
-        if (variantsTableRows) {
-            this.scrollTarget = scrollLeft;
-            // we should move header manually, because "position" attribute of rows equal "fixed"
-            if (variantsTableRows.scrollLeft == scrollLeft) {
-                // destination point reached - get ready to scroll again
-                this.scrollTarget = null;
-            } else {
-                variantsTableRows.scrollLeft = scrollLeft;
+                DOMNode.scrollLeft = scrollLeft;
             }
         }
     }
