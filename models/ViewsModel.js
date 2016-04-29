@@ -81,10 +81,6 @@ class ViewsModel extends SecureModelBase {
                     });
                 },
                 (viewId, callback) => {
-                    if (!view.viewListItems || !view.viewListItems.length) {
-                        callback(new Error("Can't add view without fields"));
-                        return;
-                    }
                     this._addViewItems(viewId, view.viewListItems, trx, (error) => {
                         callback(error, viewId);
                     });
@@ -164,10 +160,6 @@ class ViewsModel extends SecureModelBase {
                     });
                 },
                 (viewId, callback) => {
-                    if (!viewToUpdate.viewListItems || !viewToUpdate.viewListItems.length) {
-                        callback(new Error("Can't update view without fields"));
-                        return;
-                    }
                     this._addViewItems(viewId, viewToUpdate.viewListItems, trx, (error) => {
                         callback(error, viewId);
                     });
