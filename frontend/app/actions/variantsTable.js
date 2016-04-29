@@ -1,7 +1,8 @@
 import apiFacade from '../api/ApiFacade';
-import {handleError} from './errorHandler'
-import {clearVariants, addComment, changeComment, deleteComment} from './websocket'
-import {updateQueryHistory} from './queryHistory'
+import {handleError} from './errorHandler';
+import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
+import {updateQueryHistory} from './queryHistory';
+import {requestTableScrollPositionReset} from './ui';
 
 import HttpStatus from 'http-status';
 
@@ -356,6 +357,7 @@ export function searchInResultsNextData() {
 
 export function searchInResults(flags) {
     return (dispatch, getState) => {
+        dispatch(requestTableScrollPositionReset());
         dispatch(requestSearchedResults(flags));
         dispatch(clearTableRowsSelection());
 

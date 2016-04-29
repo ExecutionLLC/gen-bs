@@ -14,7 +14,7 @@ export default class FieldHeaderControls extends Component {
     }
 
     render() {
-        const {fieldMetadata, sortState, areControlsEnabled} = this.props;
+        const {fieldMetadata, sortState, areControlsEnabled, disabled} = this.props;
         const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldMetadata.id)
             : null;
 
@@ -57,8 +57,8 @@ export default class FieldHeaderControls extends Component {
                             {name}
                         </a>
                         <div className={buttonGroupClasses}>
-                            {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order)}
-                            {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order)}
+                            {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, disabled)}
+                            {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order, disabled)}
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@ export default class FieldHeaderControls extends Component {
     }
 
     renderFilterInput() {
-        const {fieldMetadata, areControlsEnabled} = this.props;
+        const {fieldMetadata, areControlsEnabled, disabled} = this.props;
         const {searchString, isFilterOpened} = this.state;
         const fieldValueType = fieldMetadata.valueType;
         const isFieldSearchable = fieldValueType === 'string';
@@ -86,7 +86,8 @@ export default class FieldHeaderControls extends Component {
                 <div className={inputGroupClasses}>
                     <span className="input-group-btn">
                         <button className="btn btn-link-light-default"
-                                onClick={() => this.setFilterOpened(true)}>
+                                onClick={() => this.setFilterOpened(true)}
+                                disabled={disabled}>
                             <i></i>
                         </button>
                     </span>
@@ -97,6 +98,7 @@ export default class FieldHeaderControls extends Component {
                            onChange={(e) => this.onSearchInputChanged(e)}
                            onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
                            onBlur={(e) => this.onSearchInputBlur()}
+                           disabled={disabled}
                     />
                 </div>
             );
@@ -118,11 +120,12 @@ export default class FieldHeaderControls extends Component {
         }
     }
 
-    renderSortButton(direction, currentDirection, sortButtonClass, order) {
+    renderSortButton(direction, currentDirection, sortButtonClass, order, disabled) {
         return (
             <button className={sortButtonClass}
                     key={direction}
-                    onClick={ e => this.onSortClick(direction, e.ctrlKey || e.metaKey) }>
+                    onClick={ e => this.onSortClick(direction, e.ctrlKey || e.metaKey) }
+                    disabled={disabled}>
                 {direction === currentDirection &&
                 <span className="text-info">{order}</span>
                 }

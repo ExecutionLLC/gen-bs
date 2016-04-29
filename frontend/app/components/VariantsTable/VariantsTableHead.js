@@ -12,6 +12,7 @@ export default class VariantsTableHead extends Component {
     render() {
         const { dispatch, fields, ws, searchParams } = this.props;
         const { sort } = this.props.variantsTable.searchInResultsParams;
+        const { isFetching } = this.props.variantsTable;
         const {
             variantsView: currentView,
             variantsSampleFieldsList: currentSampleFields
@@ -19,7 +20,7 @@ export default class VariantsTableHead extends Component {
 
         if (!searchParams || !currentView) {
             return (
-                <tbody className="table-variants-head" id="variants_table_head">
+                <tbody className="table-variants-head" id="variants_table_head" ref="variantsTableHead">
                 <tr />
                 </tbody>
             );
@@ -33,7 +34,7 @@ export default class VariantsTableHead extends Component {
         }, {});
         
         return (
-            <tbody className="table-variants-head" id="variants_table_head">
+            <tbody className="table-variants-head" id="variants_table_head" ref="variantsTableHead">
             <tr>
                 <td className="btntd">
                     <div></div>
@@ -64,13 +65,13 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, expectedFieldsHash, sort, dispatch))}
+                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sort, dispatch))}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, fields, expectedFieldsHash, sortState, dispatch) {
+    renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sortState, dispatch) {
         const {totalFieldsHash} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
         const areControlsEnabled = !!expectedFieldsHash[fieldId];
@@ -90,7 +91,26 @@ export default class VariantsTableHead extends Component {
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
                          currentVariants = {this.props.ws.currentVariants}
+                         disabled={isFetching}
             />
         );
     }
+
+    componentDidMount() {
+        const scrollElement = this.refs.variantsTableHead;
+        scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
+    }
+
+    componentWillUnmount() {
+        const scrollElement = this.refs.variantsTableHead;
+        scrollElement.removeEventListener('scroll', this.handleScroll);
+    }
+
+    handleScroll(e) {
+        const el = e.target;
+        if(this.props.xScrollListener) {
+            this.props.xScrollListener(el.scrollLeft);
+        }
+    }
+
 }
