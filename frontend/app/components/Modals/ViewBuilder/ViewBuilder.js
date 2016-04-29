@@ -22,6 +22,7 @@ export default class ViewBuilder extends React.Component {
         var disabledClass = classNames({
             'disabled': (view.type !== 'user') ? 'disabled' : ''
         });
+        var disabledClassMinus = view.viewListItems.length > 1 ? disabledClass : classNames({'disabled': 'disabled'});
 
         const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         const isDisableEditing = view.type !== 'user';
@@ -92,7 +93,7 @@ export default class ViewBuilder extends React.Component {
                     </div>
 
                     <div className="col-xs-1">
-                        <button className="btn-link" disabled={disabledClass}
+                        <button className="btn-link" disabled={disabledClassMinus}
                                 onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
                                 type="button">
                             <i className="fa fa-lg fa-minus-circle"/></button>
