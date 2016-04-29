@@ -133,7 +133,7 @@ export function filterBuilderUpdateFilter() {
             filtersClient.update(sessionId, editingFilter, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
-                } else if (response.statusCode) {
+                } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
                 } else {
                     const result = response.body;
