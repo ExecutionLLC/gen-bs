@@ -79,17 +79,19 @@ function reduceFBuilderSelectFilter(state, action) {
 }
 
 function reduceFBuilderToggleNewEdit(state, action) {
+    const editingFilter = parseFilterForEditing(
+        action.makeNew,
+        action.makeNew ?
+            Object.assign({}, state.selectedFilter, {
+                type: 'user',
+                name: `Copy of ${state.selectedFilter.name}`
+            }) :
+            state.selectedFilter,
+        action.fields.totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f))
+    );
     return Object.assign({}, state, {
-        editingFilter: parseFilterForEditing(
-            action.makeNew,
-            action.makeNew ?
-                Object.assign({}, state.selectedFilter, {
-                    type: 'user',
-                    name: `Copy of ${state.selectedFilter.name}`
-                }) :
-                state.selectedFilter,
-            action.fields.totalFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )
-        )
+        editingFilter,
+        originalFilter: editingFilter
     });
 }
 

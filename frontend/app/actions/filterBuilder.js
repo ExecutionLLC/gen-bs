@@ -122,15 +122,18 @@ export function filterBuilderUpdateFilter() {
     return (dispatch, getState) => {
         const state = getState();
         const selectedFilter = state.filterBuilder.selectedFilter;
-        const isNotEditableFilter = _.some(['advanced', 'standard'], selectedFilter.type);
+        const editingFilter = state.filterBuilder.editingFilter;
+        const originalFilter = state.filterBuilder.originalFilter;
+        const isNotEdited = _.includes(['advanced', 'standard'], selectedFilter.type)
+            || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
-        if (state.auth.isDemo || isNotEditableFilter) {
+        if (state.auth.isDemo || isNotEdited) {
             dispatch(closeModal('filters'));
         } else {
             const sessionId = state.auth.sessionId;
-            const editingFilter = state.filterBuilder.editingFilter.filter;
+            const resultEditingFilter = editingFilter.filter;
             dispatch(filterBuilderRequestUpdateFilter());
-            filtersClient.update(sessionId, editingFilter, (error, response) => {
+            filtersClient.update(sessionId, resultEditingFilter, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
