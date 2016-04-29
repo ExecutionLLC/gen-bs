@@ -119,7 +119,6 @@ export function setFieldFilter(fieldId, filterValue) {
 
 export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     return (dispatch, getState) => {
-        dispatch(requestTableScrollPositionReset());
         dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2 : 1, sortDirection));
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
@@ -273,7 +272,6 @@ export function fetchVariants(searchParams) {
     return (dispatch, getState) => {
         console.log('fetchVariants: ', searchParams);
 
-        dispatch(requestTableScrollPositionReset());
         dispatch(requestVariants());
         dispatch(clearTableRowsSelection());
 
@@ -359,6 +357,7 @@ export function searchInResultsNextData() {
 
 export function searchInResults(flags) {
     return (dispatch, getState) => {
+        dispatch(requestTableScrollPositionReset());
         dispatch(requestSearchedResults(flags));
         dispatch(clearTableRowsSelection());
 

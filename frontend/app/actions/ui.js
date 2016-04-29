@@ -105,6 +105,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         const detachHistoryView = historyData.viewId ? historyData.viewId !== viewId : false;
         dispatch(detachHistory(detachHistorySample, detachHistoryFilter, detachHistoryView));
 
+        dispatch(requestTableScrollPositionReset());
         dispatch(clearSearchParams());
         dispatch(requestAnalyze(searchParams));
         const searchView = _.find(views, {id: viewId});
