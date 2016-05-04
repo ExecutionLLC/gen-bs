@@ -47,32 +47,14 @@ class FilterQueryBuilder extends React.Component {
         return ops;
     }
 
-    /**
-     * Get fields ids for given operation
-     * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{type: string, nbInputs: number, multiple: boolean, applyTo: string[]}} operator
-     * @returns {Object.<string, boolean>}
-     */
-    static getValidFieldsIdsForOperator(fields, operator) {
-        const validFieldsIds = {};
-        fields.map( (field) => {
-            const fieldJSType = FieldUtils.getFieldJSType(field);
-            if (genomicsParsedRulesValidate.isAllowedOperatorType(operator, fieldJSType)) {
-                validFieldsIds[field.id] = true;
-            }
-        });
-        return validFieldsIds;
-    }
 
-    static getFieldFilterItemRestrictions(field, fields, operator) {
+    static getFieldFilterItemRestrictions(field, fields) {
         const fieldJSType = FieldUtils.getFieldJSType(field);
-        const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
-        const allowedFieldsIds = this.getValidFieldsIdsForOperator(fields, filterUtils.getOperatorByType(operator));
-        const allowedFields = fields.filter( (f) => allowedFieldsIds[f.id] );
+        const allowedOpsTypes = FilterQueryBuilder.getValidOperatorsTypesForJSType(fieldJSType);
         return {
             fieldJSType,
             allowedOpsTypes,
-            allowedFields
+            allowedFields: fields
         };
     }
 
@@ -85,6 +67,25 @@ class FilterQueryBuilder extends React.Component {
             allowedOpsTypes,
             allowedFields
         };
+    }
+
+    static onChangeItem(item, indexPath, allowedFields, dispatch) {
+        if (indexPath.length < 1) {
+            return;
+        }
+        const ruleIndex = indexPath[indexPath.length - 1];
+        const parentIndexPath = indexPath.slice(0, indexPath.length - 1);
+        const selectedFieldId = item.field;
+        const selectedField = FieldUtils.getFieldById(allowedFields, selectedFieldId);
+        const selectedFieldJSType = FieldUtils.getFieldJSType(selectedField);
+        const selectedOperatorType = item.operator;
+        const selectedOperator = filterUtils.getOperatorByType(selectedOperatorType);
+        const isOperatorAllowed = genomicsParsedRulesValidate.isAllowedOperatorType(selectedOperator, selectedFieldJSType);
+        if (isOperatorAllowed) {
+            dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item, fieldJSType: selectedFieldJSType, ruleIndex}}));
+        } else {
+            dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item: { field: item.field, operator: 'equal', value: item.value}, fieldJSType: selectedFieldJSType, ruleIndex}}));
+        }
     }
 
     /**
@@ -100,8 +101,8 @@ class FilterQueryBuilder extends React.Component {
     static makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) {
         const fieldFromSample = FieldUtils.getFieldById(allowedFields, item.field);
         const itemRestrictions = fieldFromSample ?
-            this.getFieldFilterItemRestrictions(fieldFromSample, allowedFields, item.operator) :
-            this.getDisabledFieldFilterItemRestrictions(FieldUtils.getFieldById(totalFields, item.field), item.operator);
+            FilterQueryBuilder.getFieldFilterItemRestrictions(fieldFromSample, allowedFields) :
+            FilterQueryBuilder.getDisabledFieldFilterItemRestrictions(FieldUtils.getFieldById(totalFields, item.field), item.operator);
         return (
             <FieldFilterItem
                 indexPath={indexPath}
@@ -110,13 +111,7 @@ class FilterQueryBuilder extends React.Component {
                 allowedOpsTypes={itemRestrictions.allowedOpsTypes}
                 valueType={itemRestrictions.fieldJSType}
                 disabled={disabled || !fieldFromSample}
-                onChange={ (item) => {
-                            if (indexPath.length < 1) {
-                                return;
-                            }
-                            const ruleIndex = indexPath[indexPath.length - 1];
-                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType: itemRestrictions.fieldJSType, ruleIndex}}));
-                        }}
+                onChange={ (item) => FilterQueryBuilder.onChangeItem(item, indexPath, allowedFields, dispatch) }
             />
         );
     }
