@@ -16,7 +16,7 @@ export default class Views extends Component {
             <div className="table-cell max-width">
                 <div className="btn-group btn-group-select100 view-select" data-localize="views.help"
                      data-toggle="tooltip" data-placement="bottom" data-container="body"
-                     title="Select one or more from available views">
+                     title="Select one of available views">
 
                     <Select
                         options={this.getViewOptions()}
