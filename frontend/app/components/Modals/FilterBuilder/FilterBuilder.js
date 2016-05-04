@@ -87,6 +87,14 @@ class FilterQueryBuilder extends React.Component {
         };
     }
 
+    static onChangeItem(item, fieldJSType, indexPath, dispatch) {
+        if (indexPath.length < 1) {
+            return;
+        }
+        const ruleIndex = indexPath[indexPath.length - 1];
+        dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType, ruleIndex}}));
+    }
+
     /**
      * Make filter rule item component
      * @param {{id: string, label: string, type: string}[]} allowedFields
@@ -110,13 +118,7 @@ class FilterQueryBuilder extends React.Component {
                 allowedOpsTypes={itemRestrictions.allowedOpsTypes}
                 valueType={itemRestrictions.fieldJSType}
                 disabled={disabled || !fieldFromSample}
-                onChange={ (item) => {
-                            if (indexPath.length < 1) {
-                                return;
-                            }
-                            const ruleIndex = indexPath[indexPath.length - 1];
-                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType: itemRestrictions.fieldJSType, ruleIndex}}));
-                        }}
+                onChange={ (item) => this.onChangeItem(item, itemRestrictions.fieldJSType, indexPath, dispatch) }
             />
         );
     }
