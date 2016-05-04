@@ -129,7 +129,7 @@ function receiveMessage(msg) {
         if (wsData.result) {
             if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
                 dispatch(tableMessage(wsData));
-                if (getState().variantsTable.isFilteringOrSorting) {
+                if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
                     dispatch(receiveSearchedResults())
                 }
             } else if (wsData.result.progress !== undefined) {
