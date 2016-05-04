@@ -128,6 +128,7 @@ export function filterBuilderUpdateFilter() {
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
         if (state.auth.isDemo || isNotEdited) {
+            dispatch(changeFilter(editingFilter.filter.id));
             dispatch(closeModal('filters'));
         } else {
             const sessionId = state.auth.sessionId;
