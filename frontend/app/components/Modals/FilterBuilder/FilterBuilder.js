@@ -82,7 +82,7 @@ class FilterQueryBuilder extends React.Component {
         const selectedOperator = filterUtils.getOperatorByType(selectedOperatorType);
         const isOperatorAllowed = genomicsParsedRulesValidate.isAllowedOperatorType(selectedOperator, selectedFieldJSType);
         if (isOperatorAllowed) {
-            dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item, fieldJSType, ruleIndex}}));
+            dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item, fieldJSType: selectedFieldJSType, ruleIndex}}));
         } else {
             dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item: { field: item.field, operator: 'equal', value: item.value}, fieldJSType: selectedFieldJSType, ruleIndex}}));
         }
