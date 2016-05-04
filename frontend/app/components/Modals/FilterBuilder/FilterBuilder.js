@@ -50,7 +50,7 @@ class FilterQueryBuilder extends React.Component {
 
     static getFieldFilterItemRestrictions(field, fields) {
         const fieldJSType = FieldUtils.getFieldJSType(field);
-        const allowedOpsTypes = this.getValidOperatorsTypesForJSType(fieldJSType);
+        const allowedOpsTypes = FilterQueryBuilder.getValidOperatorsTypesForJSType(fieldJSType);
         return {
             fieldJSType,
             allowedOpsTypes,
@@ -101,8 +101,8 @@ class FilterQueryBuilder extends React.Component {
     static makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) {
         const fieldFromSample = FieldUtils.getFieldById(allowedFields, item.field);
         const itemRestrictions = fieldFromSample ?
-            this.getFieldFilterItemRestrictions(fieldFromSample, allowedFields) :
-            this.getDisabledFieldFilterItemRestrictions(FieldUtils.getFieldById(totalFields, item.field), item.operator);
+            FilterQueryBuilder.getFieldFilterItemRestrictions(fieldFromSample, allowedFields) :
+            FilterQueryBuilder.getDisabledFieldFilterItemRestrictions(FieldUtils.getFieldById(totalFields, item.field), item.operator);
         return (
             <FieldFilterItem
                 indexPath={indexPath}
@@ -111,7 +111,7 @@ class FilterQueryBuilder extends React.Component {
                 allowedOpsTypes={itemRestrictions.allowedOpsTypes}
                 valueType={itemRestrictions.fieldJSType}
                 disabled={disabled || !fieldFromSample}
-                onChange={ (item) => this.onChangeItem(item, itemRestrictions.fieldJSType, indexPath, allowedFields, dispatch) }
+                onChange={ (item) => FilterQueryBuilder.onChangeItem(item, itemRestrictions.fieldJSType, indexPath, allowedFields, dispatch) }
             />
         );
     }
