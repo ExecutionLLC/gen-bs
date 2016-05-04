@@ -69,7 +69,7 @@ class FilterQueryBuilder extends React.Component {
         };
     }
 
-    static onChangeItem(item, fieldJSType, indexPath, allowedFields, dispatch) {
+    static onChangeItem(item, indexPath, allowedFields, dispatch) {
         if (indexPath.length < 1) {
             return;
         }
@@ -111,7 +111,7 @@ class FilterQueryBuilder extends React.Component {
                 allowedOpsTypes={itemRestrictions.allowedOpsTypes}
                 valueType={itemRestrictions.fieldJSType}
                 disabled={disabled || !fieldFromSample}
-                onChange={ (item) => FilterQueryBuilder.onChangeItem(item, itemRestrictions.fieldJSType, indexPath, allowedFields, dispatch) }
+                onChange={ (item) => FilterQueryBuilder.onChangeItem(item, indexPath, allowedFields, dispatch) }
             />
         );
     }
