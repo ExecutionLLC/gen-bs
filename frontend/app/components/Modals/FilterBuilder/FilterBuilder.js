@@ -115,7 +115,10 @@ class FilterQueryBuilder extends React.Component {
                                 return;
                             }
                             const ruleIndex = indexPath[indexPath.length - 1];
-                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType: itemRestrictions.fieldJSType, ruleIndex}}));
+                            const newFieldId = item.field;
+                            const newFieldFromSample = FieldUtils.getFieldById(allowedFields, newFieldId);
+                            const newFieldJSType = FieldUtils.getFieldJSType(newFieldFromSample);
+                            dispatch(filterBuilderChangeFilter(indexPath.slice(0, indexPath.length - 1), {onEdit: {item, fieldJSType: newFieldJSType, ruleIndex}}));
                         }}
             />
         );
