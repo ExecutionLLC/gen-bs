@@ -3,10 +3,6 @@ import OriginalSelect from 'react-select';
 
 // Wrapper around react-select to define adequate defaults.
 export default class Select extends Component {
-    constructor(...args) {
-        super(...args);
-    }
-
     render() {
         const selectProperties = Object.assign({}, {
             clearable: false,
