@@ -18,20 +18,25 @@ export default class ViewBuilder extends React.Component {
 
     render() {
         const {dispatch, fields, viewBuilder} = this.props;
-        const view = viewBuilder.editedView;
-        var disabledClass = classNames({
-            'disabled': (view.type !== 'user') ? 'disabled' : ''
-        });
-        var disabledClassMinus = view.viewListItems.length > 1 ? disabledClass : classNames({'disabled': 'disabled'});
-
-        const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
-        const isDisableEditing = view.type !== 'user';
         const allAvailableFields = fields.allowedFieldsList;
         // Exclude fields that are already selected.
         const fieldsForSelection = _.filter(
             allAvailableFields,
             field => !_.includes(previouslySelectedFieldIds, field.id)
         );
+        // This field will be chosen when a new item is created.
+        const nextDefaultField = _.first(fieldsForSelection);
+        const view = viewBuilder.editedView;
+        const viewItemsLength = view.viewListItems.length;
+        var plusDisabledClass = classNames({
+            'disabled': (view.type !== 'user' || viewItemsLength >= 30 || !nextDefaultField) ? 'disabled' : ''
+        });
+        var minusDisabledClass = classNames({
+            'disabled': (view.type !== 'user' || viewItemsLength <= 1) ? 'disabled' : ''
+        });
+
+        const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
+        const isDisableEditing = view.type !== 'user';
         const selects = view.viewListItems.map(function (viewItem, index) {
 
             var currentValue =
@@ -93,12 +98,12 @@ export default class ViewBuilder extends React.Component {
                     </div>
 
                     <div className="col-xs-1">
-                        <button className="btn-link" disabled={disabledClassMinus}
+                        <button className="btn-link" disabled={minusDisabledClass}
                                 onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
                                 type="button">
                             <i className="fa fa-lg fa-minus-circle"/></button>
-                        <button className="btn-link" disabled={disabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }
+                        <button className="btn-link" disabled={plusDisabledClass}
+                                onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
                                 type="button">
                             <i className="fa fa-lg fa-plus-circle"/></button>
                     </div>

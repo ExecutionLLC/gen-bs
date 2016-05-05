@@ -79,10 +79,11 @@ export function viewBuilderDeleteColumn(viewItemIndex) {
     };
 }
 
-export function viewBuilderAddColumn(viewItemIndex) {
+export function viewBuilderAddColumn(viewItemIndex, columnFieldId) {
     return {
         type: VBUILDER_ADD_COLUMN,
-        viewItemIndex
+        viewItemIndex,
+        columnFieldId
     };
 }
 
