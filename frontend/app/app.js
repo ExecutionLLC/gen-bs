@@ -13,7 +13,6 @@ import './assets/vendor/matchMedia/matchMedia.js';
 import './assets/vendor/matchMedia/matchMedia.addListener.js';
 
 import './assets/vendor/jquery-localize/dist/jquery.localize.js';
-import './components/localize/jquerylocalize.js';
 
 require('file?name=[path][name].[ext]&context=./app'
     + '!./assets/vendor/jQuery-QueryBuilder/dist/js/genomics-query-builder.standalone.js');
