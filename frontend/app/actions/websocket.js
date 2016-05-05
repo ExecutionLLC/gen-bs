@@ -13,6 +13,7 @@ export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 export const WS_TABLE_MESSAGE = 'WS_TABLE_MESSAGE';
 export const WS_PROGRESS_MESSAGE = 'WS_PROGRESS_MESSAGE';
 export const WS_OTHER_MESSAGE = 'WS_OTHER_MESSAGE';
+export const PREPARE_ANALYZE = 'PREPARE_ANALYZE';
 export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
@@ -115,6 +116,7 @@ function asError(err) {
 }
 
 function otherMessage(wsData) {
+    console.error('Unexpected message in web socket: ' + JSON.stringify(wsData));
     return {
         type: WS_OTHER_MESSAGE,
         wsData
@@ -124,12 +126,10 @@ function otherMessage(wsData) {
 function receiveMessage(msg) {
     return (dispatch, getState) => {
         const wsData = JSON.parse(JSON.parse(msg));
-        console.log('wsData.result', wsData.result);
-        console.log('wsData.operationId', wsData.operationId);
         if (wsData.result) {
             if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
                 dispatch(tableMessage(wsData));
-                if (getState().variantsTable.isFilteringOrSorting) {
+                if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
                     dispatch(receiveSearchedResults())
                 }
             } else if (wsData.result.progress !== undefined) {
@@ -180,6 +180,12 @@ export function send(msg) {
     };
 }
 
+export function prepareAnalyze() {
+    return {
+        type: PREPARE_ANALYZE
+    };
+}
+
 export function requestAnalyze(searchParams) {
     return {
         type: REQUEST_ANALYZE,
@@ -187,10 +193,12 @@ export function requestAnalyze(searchParams) {
     };
 }
 
-export function requestSetCurrentParams(view, sampleFields) {
+export function requestSetCurrentParams(view, filter, sample, sampleFields) {
     return {
         type: REQUEST_SET_CURRENT_PARAMS,
         view,
+        filter,
+        sample,
         sampleFields
     };
 }

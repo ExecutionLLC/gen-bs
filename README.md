@@ -71,6 +71,21 @@ After all of that done without errors, use the following command to launch the f
 
     npm start
 
+# Running WebServer Tests
+
+To run tests for WebServer from the terminal, use the following command:
+
+    npm test
+
+To test WebServer from WebStorm:
+
+* Create a new configuration for Mocha
+* Set the following environment variables:
+    * `GEN_WS_DISABLE_REQUEST_LIMITS=true` - important, as part of the tests will be failing with HTTP error 429 otherwise.
+    * `GEN_WS_DATABASE_NAME=yourdatabasenamehere` - optional, if you want to use a different database for testing. Don't forget to create it using `GEN_WS_DATABASE_NAME=yourdatabasehere npm run db:reset`
+
+Currently, there is no way to run only one test, as in this case the before-all-tests hook is not running, so there will be no mocked web server.
+
 # Additional Info
 
 Default database data lays in `defaults/` folder.

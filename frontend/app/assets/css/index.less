@@ -16,6 +16,19 @@
   width: 250px;
 }
 
+.query-builder .rule-container .rule-value-container .rule-value-array .rule-value-array-item {
+  display: inline-block;
+}
+
+.query-builder .rule-container .rule-value-container .rule-value-array .rule-value-array-item:not(:first-child):before {
+  content: ", ";
+}
+
+.query-builder .rule-container .rule-value-container .rule-value-array .rule-value-array-item .form-control {
+  width: 100px;
+  display: inline-block;
+}
+
 .rule-operator-container select.form-control {
   width: 160px;
 }

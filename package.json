@@ -4,8 +4,7 @@
   "description": "Genomix Application WebServer Node",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
-    "deploy": "bash ./scripts/heroku-deploy.sh",
+    "test": "GEN_WS_DISABLE_REQUEST_LIMITS=true mocha",
     "db:create": "node ./scripts/create-database.js",
     "db:reset": "npm run db:create; npm run defaults:import",
     "defaults:import": "node ./scripts/import-defaults.js",
@@ -14,7 +13,8 @@
     "defaults:generate": "node ./defaults/build-initial-data.js",
     "client": "node test-client/index.js",
     "user:add": "node ./scripts/add-user.js",
-    "frontend": "cd frontend; npm start"
+    "frontend": "cd frontend; npm start",
+    "update": "cd scripts; bash amazon-update.sh"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
     "colors": "1.1.2",
     "cors": "2.7.1",
     "express": "4.13.3",
+    "express-rate-limit": "https://github.com/karatheodory/express-rate-limit.git#custom-condition",
     "http-status": "0.2.0",
     "knex": "0.9.0",
     "lodash": "^3.10.1",
@@ -53,6 +54,7 @@
     "ws": "1.0.1"
   },
   "devDependencies": {
+    "mocha": "2.4.5",
     "request": "2.67.0"
   }
 }

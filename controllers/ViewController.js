@@ -1,6 +1,6 @@
 'use strict';
 
-const UserEntityControllerBase = require('./UserEntityControllerBase');
+const UserEntityControllerBase = require('./base/UserEntityControllerBase');
 
 class ViewController extends UserEntityControllerBase {
   constructor(services) {

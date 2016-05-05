@@ -18,8 +18,49 @@ const sessionsClient = new SessionsClient(urls);
 const dataClient = new DataClient(urls);
 
 const languId = Config.defaultLanguId;
-const DefaultFilters = require('../defaults/filters/default-filters.json');
-const DefaultViews = require('../defaults/views/default-views.json');
+
+const checkUserData = (userData, isDemoUser, callback) => {
+    if (!isDemoUser) {
+        const profile = userData.profileMetadata;
+        assert.ok(profile);
+        assert.equal(profile.email, TestUser.email);
+        assert.equal(profile.name, TestUser.name);
+        assert.equal(profile.id, TestUser.id);
+    }
+
+    // No session operations.
+    const operations = userData.activeOperations;
+    assert.ok(_.isEmpty(operations), 'There should be no operations for the newly created demo session');
+
+    // Only default filters.
+    const filters = userData.filters;
+    CollectionUtils.checkCollectionIsValid(filters, null, false, true);
+
+    // Only default views.
+    const views = userData.views;
+    CollectionUtils.checkCollectionIsValid(views, null, false, true);
+
+    // Only default samples.
+    const samples = userData.samples;
+    CollectionUtils.checkCollectionIsValid(samples, null, false, true);
+
+    const totalFields = userData.totalFields;
+    CollectionUtils.checkCollectionIsValid(totalFields, null, false, false);
+
+    const lastSampleId = userData.lastSampleId;
+    assert.ok(lastSampleId);
+    assert.ok(_.find(samples, sample => sample.id === lastSampleId));
+
+    const lastSampleFields = userData.lastSampleFields;
+    assert.ok(lastSampleFields);
+    assert.ok(!_.isEmpty(lastSampleFields));
+
+    _.each(samples, sample => SamplesClient.verifySampleFormat(sample, false));
+
+    assert.ok(userData.savedFiles);
+
+    callback();
+};
 
 describe('User Data', () => {
     let sessionId = null;
@@ -32,69 +73,42 @@ describe('User Data', () => {
             sessionsClient.openSession(null, (error, response) => {
                 ClientBase.readBodyWithCheck(error, response);
                 demoSessionId = SessionsClient.getSessionFromResponse(response);
-            });
 
-            done();
+                done();
+            });
         });
+    });
+
+    after((done) => {
+        sessionsClient.closeSession(sessionId, (error, response) => {
+            ClientBase.readBodyWithCheck(error, response);
+
+            sessionsClient.closeSession(demoSessionId, (error, response) => {
+                ClientBase.readBodyWithCheck(error, response);
+
+                done();
+            });
+        })
     });
 
     it('should get user data in appropriate format', (done) => {
         dataClient.getUserData(sessionId, languId, (error, response) => {
-            const body = ClientBase.readBodyWithCheck(error, response);
+            const userData = ClientBase.readBodyWithCheck(error, response);
 
-            const profile = body.profileMetadata;
-            assert.ok(profile);
-            assert.equal(profile.email, TestUser.email);
-            assert.equal(profile.name, TestUser.name);
-            assert.equal(profile.id, TestUser.id);
-
-            // No session operations.
-            const operations = body.activeOperations;
-            assert.ok(_.isEmpty(operations), 'There should be no operations for the newly created demo session');
-
-            // Only default filters.
-            const filters = body.filters;
-            CollectionUtils.checkCollectionIsValid(filters, null, false);
-
-            // Only default views.
-            const views = body.views;
-            CollectionUtils.checkCollectionIsValid(views, null, false);
-
-            // Only default samples.
-            const samples = body.samples;
-            CollectionUtils.checkCollectionIsValid(samples, null, false);
-
-            _.each(samples, sample => SamplesClient.verifySampleFormat(sample, false));
-
-            assert.ok(body.savedFiles);
-
-            done();
+            checkUserData(userData, false, () => {
+                done();
+            });
         });
     });
 
     it('should get demo user data', (done) => {
         dataClient.getUserData(demoSessionId, languId, (error, response) => {
-            const body = ClientBase.readBodyWithCheck(error, response);
+            const userData = ClientBase.readBodyWithCheck(error, response);
 
-            // No session operations.
-            const operations = body.activeOperations;
-            assert.ok(_.isEmpty(operations), 'There should be no operations for the newly created demo session');
+            checkUserData(userData, true, () => {
 
-            // Only default filters.
-            const filters = body.filters;
-            CollectionUtils.checkCollectionIsValid(filters, DefaultFilters, true);
-
-            // Only default views.
-            const views = body.views;
-            CollectionUtils.checkCollectionIsValid(views, DefaultViews, true);
-
-            // Only default samples.
-            const samples = body.samples;
-            CollectionUtils.checkCollectionIsValid(samples, null, true);
-
-            _.each(samples, sample => SamplesClient.verifySampleFormat(sample, false));
-
-            done();
+                done();
+            });
         });
     });
 });

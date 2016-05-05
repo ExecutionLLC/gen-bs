@@ -3,7 +3,7 @@
 const Express = require('express');
 const async = require('async');
 
-const ControllerBase = require('./ControllerBase');
+const ControllerBase = require('./base/ControllerBase');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 class SearchController extends ControllerBase {
@@ -88,7 +88,17 @@ class SearchController extends ControllerBase {
     createRouter() {
         const router = new Express();
 
-        router.post('/', this.analyze);
+        const analyzeLimiter = this.createLimiter({
+            delayWindowMs: 10 * 1000,
+            noDelayCount: 1,
+            maxCallCountBeforeBlock: 3,
+            delayMs: 2 * 1000,
+            keyGenerator: (request) => {
+                return this.getSessionId(request);
+            }
+        });
+
+        router.post('/', analyzeLimiter, this.analyze);
         router.post('/:operationId', this.searchInResults);
         router.get('/:operationId', this.getResultsPage);
 

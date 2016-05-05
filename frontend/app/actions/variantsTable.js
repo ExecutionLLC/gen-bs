@@ -1,7 +1,8 @@
 import apiFacade from '../api/ApiFacade';
-import {handleError} from './errorHandler'
-import {clearVariants, addComment, changeComment, deleteComment} from './websocket'
-import {updateQueryHistory} from './queryHistory'
+import {handleError} from './errorHandler';
+import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
+import {updateQueryHistory} from './queryHistory';
+import {requestTableScrollPositionReset} from './ui';
 
 import HttpStatus from 'http-status';
 
@@ -129,13 +130,13 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
 export function setViewVariantsSort(view) {
     return (dispatch, getState) => {
 
-        const {fields:{idToFieldHash}}=getState();
+        const {fields:{sampleIdToFieldHash}} = getState();
         const sortOrder = _(view.viewListItems)
-            .filter(viewListItem =>{
+            .filter(viewListItem => {
                 return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
             })
-            .filter(viewListItem =>{
-                return idToFieldHash[viewListItem.fieldId];
+            .filter(viewListItem => {
+                return sampleIdToFieldHash[viewListItem.fieldId];
             })
             .map(viewListItem => {
                 return {
@@ -147,7 +148,7 @@ export function setViewVariantsSort(view) {
             .sortByOrder(['order'], true)
             .value();
         //Fix for the case when another sort column is missing in the sample fields.
-        if (sortOrder.length ==1){
+        if (sortOrder.length == 1) {
             sortOrder[0].order = 1;
         }
         dispatch(setVariantsSort(sortOrder));
@@ -356,6 +357,7 @@ export function searchInResultsNextData() {
 
 export function searchInResults(flags) {
     return (dispatch, getState) => {
+        dispatch(requestTableScrollPositionReset());
         dispatch(requestSearchedResults(flags));
         dispatch(clearTableRowsSelection());
 

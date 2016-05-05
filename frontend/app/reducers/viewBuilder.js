@@ -1,6 +1,9 @@
 import * as ActionTypes from '../actions/viewBuilder'
 
-const EMPTY_VIEW_ITEM = {fieldId: null};
+const EMPTY_VIEW_ITEM = {
+    fieldId: null,
+    keywords: []
+};
 
 function filterEmptyListItems(viewListItems) {
     return _.filter(viewListItems, item => item !== EMPTY_VIEW_ITEM);
@@ -31,13 +34,6 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 selectedView: selectedView,
                 editedView: selectedView
-            });
-        }
-        case ActionTypes.VBUILDER_TOGGLE_EDIT:
-        {
-            const editedView = _.find(action.views, {id: action.viewId}) || null;
-            return Object.assign({}, state, {
-                editedView: editedView
             });
         }
         case ActionTypes.VBUILDER_TOGGLE_NEW:
@@ -137,7 +133,8 @@ export default function viewBuilder(state = {
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
 
                         Object.assign({}, state.editedView.viewListItems[action.viewItemIndex], {
-                            fieldId: action.fieldId
+                            fieldId: action.fieldId,
+                            keywords: [],
                         }),
 
                         ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)
@@ -183,6 +180,21 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     viewListItems: viewItems
+                })
+            });
+        }
+        case ActionTypes.VBUILDER_SET_ITEM_KEYWORDS:{
+            return Object.assign({}, state, {
+                editedView: Object.assign({}, state.editedView, {
+                    viewListItems: [
+                        ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
+
+                        Object.assign({}, state.editedView.viewListItems[action.viewItemIndex], {
+                            keywords: action.keywordsIds
+                        }),
+
+                        ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)
+                    ]
                 })
             });
         }

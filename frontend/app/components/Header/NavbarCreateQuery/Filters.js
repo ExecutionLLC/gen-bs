@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Select from 'react-select';
 
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {changeFilter} from '../../../actions/ui'
 
 export default class Filters extends Component {
@@ -20,7 +21,7 @@ export default class Filters extends Component {
                      data-toggle="tooltip"
                      data-placement="bottom"
                      data-container="body"
-                     title="Select one or more from available filters"
+                     title="Select one of available filters"
                 >
                     <Select options={this.getFilterOptions()}
                             value={selectedFilter ? selectedFilter.id : null}
@@ -39,10 +40,11 @@ export default class Filters extends Component {
 
     getFilterOptions() {
         const filters = this.props.userData.filters;
-        return filters.map(f => {
-                const isDisabled = this.isFilterDisabled(f);
+        return filters.map((filterItem) => {
+                const isDisabled = this.isFilterDisabled(filterItem);
+                const label = getItemLabelByNameAndType(filterItem.name, filterItem.type);
                 return {
-                    value: f.id, label: f.name, disabled: isDisabled
+                    value: filterItem.id, label, disabled: isDisabled
                 }
             }
         )
