@@ -28,6 +28,8 @@ export const CHANGE_VIEWS = 'CHANGE_VIEWS';
 export const DELETE_VIEW = 'DELETE_VIEW';
 export const DELETE_FILTER = 'DELETE_FILTER';
 
+export const ADD_FILTER = 'ADD_FILTER';
+
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
 
@@ -217,5 +219,12 @@ export function deleteFilter(filterId) {
     return {
         type: DELETE_FILTER,
         filterId
+    }
+}
+
+export function addFilter(filter) {
+    return {
+        type: ADD_FILTER,
+        filter
     }
 }

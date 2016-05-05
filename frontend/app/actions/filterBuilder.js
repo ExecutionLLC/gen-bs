@@ -6,7 +6,7 @@ import {handleError} from './errorHandler';
 import {fetchFilters} from './userData';
 
 import HttpStatus from 'http-status';
-import {deleteFilter} from "./userData";
+import {addFilter, deleteFilter} from "./userData";
 import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
 
@@ -97,8 +97,10 @@ export function filterBuilderCreateFilter() {
            } else {
                const result = response.body;
                dispatch(filterBuilderReceiveUpdateFilter(result));
+               const filterId = result.id;
+               dispatch(addFilter(result));
+               dispatch(changeFilter(filterId));
                dispatch(closeModal('filters'));
-               dispatch(fetchFilters());
            }
         });
     }
@@ -142,8 +144,8 @@ export function filterBuilderUpdateFilter() {
                 } else {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
+                    dispatch(changeFilter(editingFilter.filter.id));
                     dispatch(closeModal('filters'));
-                    dispatch(fetchFilters())
                 }
             });
         }

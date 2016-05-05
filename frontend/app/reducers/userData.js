@@ -103,6 +103,15 @@ export default function userData(state = {
                 ]
             });
         }
+        case ActionTypes.ADD_FILTER:
+        {
+            return Object.assign({}, state, {
+                filters: [
+                    ...state.filters.slice(),
+                    action.filter
+                ]
+            });
+        }
         default:
             return state
     }
