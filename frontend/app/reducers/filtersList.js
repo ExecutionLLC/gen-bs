@@ -2,7 +2,7 @@ import * as ActionTypes from '../actions/filtersList'
 
 export default function filtersList(state = {
     filters: [],
-    selectedFilter: null,
+    selectedFilterId: null,
     isServerOperation: false
 }, action) {
     
@@ -18,6 +18,10 @@ export default function filtersList(state = {
         case ActionTypes.FILTERS_LIST_RECEIVE:
             return Object.assign({}, state, {
                 filters: action.filters
+            });
+        case ActionTypes.FILTERS_LIST_SELECT_FILTER:
+            return Object.assign({}, state, {
+                selectedFilterId: action.filterId
             });
         default:
             return state;

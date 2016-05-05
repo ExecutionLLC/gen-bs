@@ -11,7 +11,7 @@ import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 import {fetchFields} from '../../actions/fields'
 
-import { changeView, changeFilter, analyze } from '../../actions/ui'
+import { changeView, analyze } from '../../actions/ui'
 import { changeSample } from '../../actions/samplesList'
 
 

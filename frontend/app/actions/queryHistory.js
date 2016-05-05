@@ -10,6 +10,7 @@ import {changeSamples} from "./samplesList";
 import {changeSample} from "./samplesList";
 import {fetchFields} from "./fields";
 import {prepareAnalyze} from './websocket';
+import {filtersListSelectFilter} from "./filtersList";
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -88,6 +89,7 @@ export function renewHistoryItem(historyItemId) {
                 .then(() => {
                     dispatch([
                         changeFilter(clonedHistoryItem.filters[0].id),
+                        filtersListSelectFilter(clonedHistoryItem.filters[0].id),
                         changeView(clonedHistoryItem.view.id),
                         analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
                     ]);

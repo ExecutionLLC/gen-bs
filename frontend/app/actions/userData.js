@@ -9,6 +9,7 @@ import {changeSample, receiveSamplesList} from './samplesList';
 import HttpStatus from 'http-status';
 import * as _ from "lodash";
 import {filtersListReceive} from "./filtersList";
+import {filtersListSelectFilter} from "./filtersList";
 
 /*
  * action types
@@ -102,6 +103,8 @@ export function fetchUserdata() {
 
                 dispatch(changeSample(sample.id));
                 dispatch(changeFilter(filter.id));
+                dispatch(filtersListSelectFilter(filter.id));
+                
                 dispatch(changeView(view.id));
                 if (!sample || !filter || !view) {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
@@ -182,6 +185,7 @@ export function fetchFilters() {
 
                 dispatch(receiveFilters(result));
                 dispatch(changeFilter(filterId));
+                dispatch(filtersListSelectFilter(filterId));
             }
         });
     }

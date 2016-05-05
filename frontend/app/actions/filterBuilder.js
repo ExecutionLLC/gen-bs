@@ -8,6 +8,7 @@ import HttpStatus from 'http-status';
 import {addFilter, deleteFilter} from "./userData";
 import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
+import {filtersListSelectFilter} from "./filtersList";
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
 
@@ -99,6 +100,7 @@ export function filterBuilderCreateFilter() {
                const filterId = result.id;
                dispatch(addFilter(result));
                dispatch(changeFilter(filterId));
+               dispatch(filtersListSelectFilter(filterId));
                dispatch(closeModal('filters'));
            }
         });
@@ -130,6 +132,7 @@ export function filterBuilderUpdateFilter() {
 
         if (state.auth.isDemo || isNotEdited) {
             dispatch(changeFilter(editingFilter.filter.id));
+            dispatch(filtersListSelectFilter(editingFilter.filter.id));
             dispatch(closeModal('filters'));
         } else {
             const sessionId = state.auth.sessionId;
@@ -144,6 +147,7 @@ export function filterBuilderUpdateFilter() {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
                     dispatch(changeFilter(editingFilter.filter.id));
+                    dispatch(filtersListSelectFilter(editingFilter.filter.id));
                     dispatch(closeModal('filters'));
                 }
             });
@@ -199,6 +203,7 @@ export function filterBuilderDeleteFilter(filterId) {
                 const selectedFilterId = state.ui.selectedFilter.id;
                 const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
                 dispatch(changeFilter(newFilterId));
+                dispatch(filtersListSelectFilter(newFilterId));
                 dispatch(filterBuilderToggleNewEdit(false, fields));
             }
         });

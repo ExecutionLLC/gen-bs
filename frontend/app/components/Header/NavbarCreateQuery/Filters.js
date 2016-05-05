@@ -3,6 +3,7 @@ import Select from 'react-select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {changeFilter} from '../../../actions/ui'
+import {filtersListSelectFilter} from "../../../actions/filtersList";
 
 export default class Filters extends Component {
 
@@ -26,7 +27,10 @@ export default class Filters extends Component {
                     <Select options={this.getFilterOptions()}
                             value={selectedFilter ? selectedFilter.id : null}
                             clearable={false}
-                            onChange={(item) => dispatch(changeFilter(item.value))}
+                            onChange={(item) => {
+                                dispatch(changeFilter(item.value));
+                                dispatch(filtersListSelectFilter(item.value));
+                            }}
                     />
                 </div>
             </div>
