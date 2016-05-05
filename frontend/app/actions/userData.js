@@ -101,14 +101,13 @@ export function fetchUserdata() {
                 dispatch(receiveSamplesList(samples));
                 dispatch(receiveQueryHistory(queryHistory));
 
-                dispatch(changeSample(sample.id));
-                dispatch(changeFilter(filter.id));
-                dispatch(filtersListSelectFilter(filter.id));
-                
-                dispatch(changeView(view.id));
                 if (!sample || !filter || !view) {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 } else {
+                    dispatch(changeSample(sample.id));
+                    dispatch(changeFilter(filter.id));
+                    dispatch(filtersListSelectFilter(filter.id));
+                    dispatch(changeView(view.id));
                     dispatch(analyze(sample.id, view.id, filter.id));
                 }
             }
