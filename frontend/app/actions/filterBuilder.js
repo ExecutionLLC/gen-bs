@@ -8,7 +8,7 @@ import HttpStatus from 'http-status';
 import {addFilter, deleteFilter} from "./userData";
 import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
-import {filtersListSelectFilter} from "./filtersList";
+import {filtersListSelectFilter, filtersListAddFilter, filtersListDeleteFilter} from "./filtersList";
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
 
@@ -99,6 +99,7 @@ export function filterBuilderCreateFilter() {
                dispatch(filterBuilderReceiveUpdateFilter(result));
                const filterId = result.id;
                dispatch(addFilter(result));
+               dispatch(filtersListAddFilter(result));
                dispatch(changeFilter(filterId));
                dispatch(filtersListSelectFilter(filterId));
                dispatch(closeModal('filters'));
@@ -199,11 +200,11 @@ export function filterBuilderDeleteFilter(filterId) {
                 const result = response.body;
                 dispatch(filterBuilderReceiveDeleteFilter(result));
                 dispatch(deleteFilter(result.id));
+                dispatch(filtersListDeleteFilter(result.id));
                 const state = getState();
                 const selectedFilterId = state.ui.selectedFilter.id;
                 const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
                 dispatch(changeFilter(newFilterId));
-                dispatch(filtersListSelectFilter(newFilterId));
                 dispatch(filterBuilderToggleNewEdit(false, fields));
             }
         });
