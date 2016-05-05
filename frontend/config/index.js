@@ -1,4 +1,14 @@
 //const HOST = window.location.hostname;
+/* global
+ API_HOST: false,
+ API_PORT: false,
+ HEADER_SESSION: false,
+ HEADER_LANGUAGE: false,
+ SESSION_KEEP_ALIVE_TIMEOUT: false,
+ SESSION_LOGOUT_TIMEOUT: false,
+ SESSION_LOGOUT_WARNING_TIMEOUT: false,
+ LOGIN_CALLBACK_PORT: false
+ */
 const HOST = API_HOST;
 const PORT = API_PORT;
 
