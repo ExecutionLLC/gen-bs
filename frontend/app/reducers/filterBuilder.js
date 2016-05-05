@@ -84,7 +84,8 @@ function reduceFBuilderToggleNewEdit(state, action) {
         action.makeNew ?
             Object.assign({}, state.selectedFilter, {
                 type: 'user',
-                name: `Copy of ${state.selectedFilter.name}`
+                name: `Copy of ${state.selectedFilter.name}`,
+                id: null
             }) :
             state.selectedFilter,
         action.fields.totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f))
