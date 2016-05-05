@@ -10,7 +10,7 @@ export default class ExportDropdown extends ComponentBase {
         super(props)
     }
 
-    get haveSelectedVariants() {
+    haveSelectedVariants() {
         const {selectedRowIndices} = this.props;
         return !_.isEmpty(selectedRowIndices);
     }
@@ -23,7 +23,7 @@ export default class ExportDropdown extends ComponentBase {
                     <NavDropdown title={exportDropdownTitle}
                                  id="export-dropdown"
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
-                                 disabled={!this.haveSelectedVariants}
+                                 disabled={!this.haveSelectedVariants()}
                     >
                         <MenuItem eventKey="csv">CSV</MenuItem>
                         <MenuItem eventKey="sql">SQL</MenuItem>
