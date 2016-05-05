@@ -110,6 +110,7 @@ function mapStateToProps(state) {
             savedFiles,
             ui,
             samplesList,
+            filtersList,
             errorHandler: { showErrorWindow },
             queryHistory: { showQueryHistoryModal } } = state;
 
@@ -122,6 +123,7 @@ function mapStateToProps(state) {
         savedFiles,
         ui,
         samplesList,
+        filtersList,
         showErrorWindow,
         showQueryHistoryModal
     }
