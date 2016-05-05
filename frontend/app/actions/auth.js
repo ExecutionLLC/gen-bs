@@ -1,14 +1,14 @@
 import HttpStatus from 'http-status';
-import { addTimeout, removeTimeout } from 'redux-timeout';
+import {addTimeout, removeTimeout} from 'redux-timeout';
 
 import config from '../../config';
-import { getCookie } from '../utils/cookie';
-import { getUrlParameterByName } from '../utils/stringUtils'
+import {getCookie} from '../utils/cookie';
+import {getUrlParameterByName} from '../utils/stringUtils'
 
-import { fetchUserdata } from './userData';
-import { createWsConnection, subscribeToWs, send } from './websocket';
-import { handleError } from './errorHandler'
-import { clearQueryHistory, updateQueryHistory } from './queryHistory'
+import {fetchUserdata} from './userData';
+import {createWsConnection, subscribeToWs, send} from './websocket';
+import {handleError} from './errorHandler'
+import {clearQueryHistory, updateQueryHistory} from './queryHistory'
 
 import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient'
@@ -46,7 +46,7 @@ export class KeepAliveTask {
         this.keepAliveTaskId = null;
     }
 
-    isRunning () {
+    isRunning() {
         return this.keepAliveTaskId !== null;
     }
 
@@ -240,7 +240,9 @@ export function startAutoLogoutTimer() {
         const secondsToAutoLogout = getState().auth.secondsToAutoLogout;
         if (secondsToAutoLogout === null) {
             // if secondsToAutoLogout !== null, then auto logout is already started
-            dispatch(addTimeout(1000, UPDATE_AUTOLOGOUT_TIMER, () => { dispatch(updateAutoLogoutTimer()) } ));
+            dispatch(addTimeout(1000, UPDATE_AUTOLOGOUT_TIMER, () => {
+                dispatch(updateAutoLogoutTimer())
+            }));
             dispatch(updateAutoLogoutTimer());
         }
     }
@@ -256,7 +258,7 @@ function _updateAutoLogoutTimer(secondsToAutoLogout) {
 function updateAutoLogoutTimer() {
     return (dispatch, getState) => {
         const secondsToAutoLogout = getState().auth.secondsToAutoLogout;
-        let nextSecondsToAutoLogout =  secondsToAutoLogout === null ? config.SESSION.LOGOUT_WARNING_TIMEOUT : secondsToAutoLogout - 1;
+        let nextSecondsToAutoLogout = secondsToAutoLogout === null ? config.SESSION.LOGOUT_WARNING_TIMEOUT : secondsToAutoLogout - 1;
         if (nextSecondsToAutoLogout < 0) {
             // if auto logout timer is expired, then we should start logout procedure
             dispatch(stopAutoLogoutTimer());

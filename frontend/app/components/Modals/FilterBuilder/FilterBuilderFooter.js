@@ -16,7 +16,7 @@ export default class FilterBuilderFooter extends Component {
         });
         const title = (filter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
         const isFilterEditable = (filter.type === 'user');
-        const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
+        const selectButtonLabel = isFilterEditable ? 'Save and Select' : 'Select';
 
         return (
             <Modal.Footer>

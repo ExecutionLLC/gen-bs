@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Modal} from 'react-bootstrap';
 
-import { filterBuilderChangeAttr, filterBuilderToggleNewEdit } from '../../../actions/filterBuilder'
+import {filterBuilderChangeAttr, filterBuilderToggleNewEdit} from '../../../actions/filterBuilder'
 
 
 export default class NewFilterInputs extends Component {
 
     render() {
-        const { dispatch, showModal, closeModal, fields } = this.props
-        const { filters } = this.props.userData
+        const {dispatch, showModal, closeModal, fields} = this.props
+        const {filters} = this.props.userData
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
         return (

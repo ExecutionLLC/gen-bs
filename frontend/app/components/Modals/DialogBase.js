@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Modal} from 'react-bootstrap';
 import classnames from 'classnames';
 
 import ComponentBase from '../shared/ComponentBase';
@@ -8,7 +8,7 @@ export default class DialogBase extends ComponentBase {
     constructor(props, dialogName) {
         super(props);
     }
-    
+
     getBodyClassNames() {
         return [];
     }

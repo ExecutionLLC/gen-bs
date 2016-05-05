@@ -183,7 +183,8 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_SET_ITEM_KEYWORDS:{
+        case ActionTypes.VBUILDER_SET_ITEM_KEYWORDS:
+        {
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     viewListItems: [

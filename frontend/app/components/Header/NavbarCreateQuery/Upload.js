@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 export default class Upload extends Component {
 
@@ -19,13 +19,13 @@ export default class Upload extends Component {
 
                     <a href='#' className='btn btn-default' type='button'
                        onClick={this.props.openModal.bind(this, 'upload')}
-                  >
+                    >
                         <span data-localize='samples.upload.title'>Upload</span>
-                  </a>
-    
+                    </a>
+
                 </div>
             </div>
-    
+
         )
     }
 }

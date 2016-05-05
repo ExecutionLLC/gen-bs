@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
 
 
 export default class NavbarSearch extends Component {
@@ -40,22 +40,22 @@ export default class NavbarSearch extends Component {
     onGlobalSearchInputKeyPressed(e) {
         // user pressed 'enter'
         if (e.charCode === 13) {
-            const { globalSearchString } = this.state;
-            const { onGlobalSearchRequested } = this.props;
+            const {globalSearchString} = this.state;
+            const {onGlobalSearchRequested} = this.props;
             onGlobalSearchRequested(globalSearchString);
         }
     }
 
     onGlobalSearchInputBlur() {
-        const { globalSearchString } = this.state;
-        const { onGlobalSearchStringChanged } = this.props;
+        const {globalSearchString} = this.state;
+        const {onGlobalSearchStringChanged} = this.props;
         onGlobalSearchStringChanged(globalSearchString);
     }
 }
 
 function mapStateToProps(state) {
-    const { websocket: {isVariantsLoading, isVariantsValid} } = state;
-    return { isVariantsLoading, isVariantsValid };
+    const {websocket: {isVariantsLoading, isVariantsValid}} = state;
+    return {isVariantsLoading, isVariantsValid};
 }
 
 export default connect(mapStateToProps)(NavbarSearch);

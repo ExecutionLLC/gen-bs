@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Moment from 'moment';
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 
 import DialogBase from './DialogBase';
 import {closeSavedFilesDialog, downloadSavedFile} from '../../actions/savedFiles';
@@ -98,7 +98,7 @@ class SavedFilesModal extends DialogBase {
             </tr>
         );
     }
-    
+
     onDownloadClick(savedFile) {
         const {dispatch} = this.props;
         dispatch(downloadSavedFile(savedFile));
@@ -115,7 +115,7 @@ SavedFilesModal.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { savedFiles: {list}, auth: {isDemo} } = state;
+    const {savedFiles: {list}, auth: {isDemo}} = state;
 
     return {
         savedFiles: list,

@@ -31,8 +31,8 @@ export default class Views extends Component {
 
         )
     }
-    
-    isViewDisabled(view){
+
+    isViewDisabled(view) {
         const {auth} = this.props;
         return auth.isDemo && view.type == 'advanced';
     }

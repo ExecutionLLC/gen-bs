@@ -135,16 +135,16 @@ export function exportToFile(exportType) {
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
         const columns = _.map(variantsView.viewListItems, listItem => {
-                const field = totalFieldsHash[listItem.fieldId];
-                return {
-                    id: listItem.fieldId,
-                    name: field.label
-                }
-            })
-            .concat([{
-                id: 'comment',
-                name: 'Comment'
-            }]);
+            const field = totalFieldsHash[listItem.fieldId];
+            return {
+                id: listItem.fieldId,
+                name: field.label
+            }
+        })
+        .concat([{
+            id: 'comment',
+            name: 'Comment'
+        }]);
 
         // The export data should be array of objects in {field_id -> field_value} format.
         const dataToExport = _(selectedRowIndices.sort())

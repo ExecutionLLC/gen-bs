@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Select from 'react-select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
@@ -31,14 +31,14 @@ export default class MetadataSearch extends Component {
         );
     }
 
-    isSampleDisabled(sample){
+    isSampleDisabled(sample) {
         const {isDemoSession} = this.props;
-        return  isDemoSession && sample.type == 'advanced';
+        return isDemoSession && sample.type == 'advanced';
     }
 
     getSampleOptions() {
         const {samples} = this.props;
-        return samples.map( (sampleItem) => {
+        return samples.map((sampleItem) => {
             const isDisabled = this.isSampleDisabled(sampleItem);
             const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
             return {value: sampleItem.id, label, disabled: isDisabled};

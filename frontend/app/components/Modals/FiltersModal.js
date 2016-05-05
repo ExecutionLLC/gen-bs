@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
+import {Modal} from 'react-bootstrap';
 
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader'
 import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter'
@@ -59,7 +59,7 @@ class FiltersModal extends Component {
 
 
 function mapStateToProps(state) {
-    const { filterBuilder, ui, auth, userData, fields, samplesList } = state
+    const {filterBuilder, ui, auth, userData, fields, samplesList} = state
 
     return {
         userData,

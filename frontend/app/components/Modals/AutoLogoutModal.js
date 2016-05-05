@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Modal} from 'react-bootstrap';
 
 export default class AutoLogoutModal extends Component {
     renderHeader() {
@@ -45,16 +45,16 @@ export default class AutoLogoutModal extends Component {
                 show={this.props.showModal}
                 onHide={ () => {this.props.closeModal()} }
             >
-            { this.renderHeader() }
-            { this.renderBody() }
-            { this.renderFooter() }
+                { this.renderHeader() }
+                { this.renderBody() }
+                { this.renderFooter() }
             </Modal>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const { auth: { secondsToAutoLogout } } = state;
+    const {auth: {secondsToAutoLogout}} = state;
     return {
         secondsToAutoLogout
     }

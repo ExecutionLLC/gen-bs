@@ -20,7 +20,7 @@ export default function samplesList(state = {
             return Object.assign({}, state, {
                 isFetching: true
             });
-        
+
         case ActionTypes.UPDATE_SAMPLE_VALUE:
             const {valueFieldId, value} = action;
             sampleId = action.sampleId;

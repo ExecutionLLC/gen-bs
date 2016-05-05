@@ -70,7 +70,7 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderSelectButton(isDemoSession, sample) {
-        if(isDemoSession && sample.type === 'advanced') {
+        if (isDemoSession && sample.type === 'advanced') {
             return (
                 <span data-localize='samples.settings.select.title'>
                     Please register to analyze this sample.

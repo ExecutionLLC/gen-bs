@@ -28,7 +28,7 @@ export default class ExistentFilterSelect extends Component {
         const isFilterEditable = (selectedFilter.type === 'user');
 
         const descriptionText = getReadonlyReasonForSessionAndType('filter', auth.isDemo, selectedFilter.type);
-        
+
         return (
 
             <div className='in copyview'>

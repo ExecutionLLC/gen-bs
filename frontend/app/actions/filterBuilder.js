@@ -88,18 +88,18 @@ export function filterBuilderCreateFilter() {
         dispatch(filterBuilderRequestUpdateFilter());
         const editingFilter = getState().filterBuilder.editingFilter.filter;
 
-        const {auth: {sessionId}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, ui: {languageId}} = getState();
         filtersClient.add(sessionId, languageId, editingFilter, (error, response) => {
-           if (error) {
-               dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
-           } else if (response.status !== HttpStatus.OK) {
-               dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
-           } else {
-               const result = response.body;
-               dispatch(filterBuilderReceiveUpdateFilter(result));
-               dispatch(closeModal('filters'));
-               dispatch(fetchFilters(result.id));
-           }
+            if (error) {
+                dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
+            } else {
+                const result = response.body;
+                dispatch(filterBuilderReceiveUpdateFilter(result));
+                dispatch(closeModal('filters'));
+                dispatch(fetchFilters(result.id));
+            }
         });
     }
 }

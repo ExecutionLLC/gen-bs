@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Modal} from 'react-bootstrap';
 
-import { lastErrorResolved } from '../../actions/errorHandler'
+import {lastErrorResolved} from '../../actions/errorHandler'
 
 export default class ErrorModal extends Component {
     renderHeader() {
@@ -51,16 +51,16 @@ export default class ErrorModal extends Component {
                 show={this.props.showModal}
                 onHide={ () => {this.props.closeModal()} }
             >
-            { this.renderHeader() }
-            { this.renderBody() }
-            { this.renderFooter() }
+                { this.renderHeader() }
+                { this.renderBody() }
+                { this.renderFooter() }
             </Modal>
         )
     }
 }
 
 function mapStateToProps(state) {
-    const { errorHandler: { lastError } } = state;
+    const {errorHandler: {lastError}} = state;
     return {
         lastError
     }

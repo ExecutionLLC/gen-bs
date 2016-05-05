@@ -1,5 +1,5 @@
 import apiFacade from '../api/ApiFacade'
-import { handleError } from './errorHandler';
+import {handleError} from './errorHandler';
 
 import HttpStatus from 'http-status';
 
@@ -44,7 +44,7 @@ export function fetchFields(sampleId) {
         dispatch(requestFields());
 
         const sessionId = getState().auth.sessionId;
-        return new Promise( (resolve) => {
+        return new Promise((resolve) => {
             samplesClient.getFields(sessionId, sampleId, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));

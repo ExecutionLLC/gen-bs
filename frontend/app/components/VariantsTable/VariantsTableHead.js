@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import classNames from 'classnames';
 
 import FieldHeader from './FieldHeader';
-import  { firstCharToUpperCase } from '../../utils/stringUtils';
+import  {firstCharToUpperCase} from '../../utils/stringUtils';
 import FieldUtils from '../../utils/fieldUtils';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
@@ -10,9 +10,9 @@ import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../act
 export default class VariantsTableHead extends Component {
 
     render() {
-        const { dispatch, fields, ws, searchParams } = this.props;
-        const { sort } = this.props.variantsTable.searchInResultsParams;
-        const { isFetching } = this.props.variantsTable;
+        const {dispatch, fields, ws, searchParams} = this.props;
+        const {sort} = this.props.variantsTable.searchInResultsParams;
+        const {isFetching} = this.props.variantsTable;
         const {
             variantsView: currentView,
             variantsSampleFieldsList: currentSampleFields
@@ -32,7 +32,7 @@ export default class VariantsTableHead extends Component {
             result[field.id] = field;
             return result;
         }, {});
-        
+
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
             <tr>
@@ -90,7 +90,7 @@ export default class VariantsTableHead extends Component {
                          onSortRequested={sendSortRequestedAction}
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
-                         currentVariants = {this.props.ws.currentVariants}
+                         currentVariants={this.props.ws.currentVariants}
                          disabled={isFetching}
             />
         );
@@ -108,7 +108,7 @@ export default class VariantsTableHead extends Component {
 
     handleScroll(e) {
         const el = e.target;
-        if(this.props.xScrollListener) {
+        if (this.props.xScrollListener) {
             this.props.xScrollListener(el.scrollLeft);
         }
     }

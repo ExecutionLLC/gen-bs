@@ -1,5 +1,5 @@
 import config from '../../config'
-import { closeModal } from './modalWindows'
+import {closeModal} from './modalWindows'
 import {fetchSamples} from './samplesList';
 import gzip from '../utils/gzip'
 import {fetchTotalFields} from './fields';
@@ -100,32 +100,32 @@ export function uploadFile(files) {
         formData.append('sample', getState().fileUpload.files[0]);
 
         return $.ajax(config.URLS.FILE_UPLOAD, {
-                'type': 'POST',
+            'type': 'POST',
             'headers': {'X-Session-Id': getState().auth.sessionId},
-                'data': formData,
-                'contentType': false,
-                'processData': false,
-                'xhrFields': {
-                    // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
-                    'onprogress': function (progress) {
-                        console.log(progress);
-                        // calculate upload progress
-                        var percentage = Math.floor((progress.total / progress.total) * 100);
-                        // log upload progress to console
-                        console.log('progress', percentage);
-                        dispatch(changeFileUploadProgress(percentage, 'ajax'));
-                        if (percentage === 100) {
-                            console.log('DONE!');
-                        }
+            'data': formData,
+            'contentType': false,
+            'processData': false,
+            'xhrFields': {
+                // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
+                'onprogress': function (progress) {
+                    console.log(progress);
+                    // calculate upload progress
+                    var percentage = Math.floor((progress.total / progress.total) * 100);
+                    // log upload progress to console
+                    console.log('progress', percentage);
+                    dispatch(changeFileUploadProgress(percentage, 'ajax'));
+                    if (percentage === 100) {
+                        console.log('DONE!');
                     }
                 }
-            })
-            .done(json => {
-                dispatch(receiveFileOperation(json));
-            })
-            .fail(err => {
-                console.error('Upload FAILED: ', err.responseText);
-            });
+            }
+        })
+        .done(json => {
+            dispatch(receiveFileOperation(json));
+        })
+        .fail(err => {
+            console.error('Upload FAILED: ', err.responseText);
+        });
     }
 
 }

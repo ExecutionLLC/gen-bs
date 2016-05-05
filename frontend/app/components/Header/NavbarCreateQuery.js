@@ -11,21 +11,21 @@ import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 import {fetchFields} from '../../actions/fields'
 
-import { changeView, changeFilter, analyze } from '../../actions/ui'
-import { changeSample } from '../../actions/samplesList'
+import {changeView, changeFilter, analyze} from '../../actions/ui'
+import {changeSample} from '../../actions/samplesList'
 
 
 class NavbarCreateQuery extends Component {
 
     onSampleSelected(sampleId) {
-        const { dispatch, samples } = this.props;
+        const {dispatch, samples} = this.props;
         dispatch(changeSample(sampleId));
         dispatch(fetchFields(sampleId));
     }
 
     render() {
 
-        const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
+        const {dispatch, auth: {isDemo: isDemoSession}, samples} = this.props;
         const {selectedView, selectedFilter} = this.props.ui;
         const {selectedSample} = this.props.samplesList;
         const selectedSampleId = selectedSample ? selectedSample.id : null;

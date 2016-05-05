@@ -1,5 +1,5 @@
-import { receiveSearchedResults } from './variantsTable'
-import { changeFileUploadProgress, fileUploadError } from './fileUpload'
+import {receiveSearchedResults} from './variantsTable'
+import {changeFileUploadProgress, fileUploadError} from './fileUpload'
 /*
  * action types
  */
@@ -19,7 +19,7 @@ export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 export const WS_ADD_COMMENT = 'WS_ADD_COMMENT';
 export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT';
-export const WS_DELETE_COMMENT='WS_DELETE_COMMENT';
+export const WS_DELETE_COMMENT = 'WS_DELETE_COMMENT';
 export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 
 
@@ -32,21 +32,21 @@ export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
  * action creators
  */
 
-export  function addComment(commentData){
+export function addComment(commentData) {
     return {
         type: WS_ADD_COMMENT,
         commentData
     }
 }
 
-export  function changeComment(commentData){
+export function changeComment(commentData) {
     return {
         type: WS_UPDATE_COMMENT,
         commentData
     }
 }
 
-export  function deleteComment(commentData, searchKey){
+export function deleteComment(commentData, searchKey) {
     return {
         type: WS_DELETE_COMMENT,
         commentData,

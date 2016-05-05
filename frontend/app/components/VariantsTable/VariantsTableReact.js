@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
 import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 
-import { fetchVariants, searchInResults } from '../../actions/variantsTable'
+import {fetchVariants, searchInResults} from '../../actions/variantsTable'
 
 import VariantsTableHead from './VariantsTableHead'
 import VariantsTableRows from './VariantsTableRows'
@@ -22,8 +22,8 @@ class VariantsTableReact extends Component {
     }
 
     render() {
-        const { dispatch, auth, views, fields, ui } = this.props
-        const { variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error } = this.props.ws
+        const {dispatch, auth, views, fields, ui} = this.props
+        const {variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error} = this.props.ws
 
         var tableWrapperClass = classNames({
             'table-variants-wrapper': true,
@@ -88,8 +88,8 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, websocket, ui, variantsTable } = state;
-    const { searchParams } = state.websocket;
+    const {auth, websocket, ui, variantsTable} = state;
+    const {searchParams} = state.websocket;
 
     return {
         auth,

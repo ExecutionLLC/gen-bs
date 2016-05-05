@@ -1,9 +1,9 @@
 import Moment from 'moment';
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { Modal } from 'react-bootstrap';
+import {connect} from 'react-redux';
+import {Modal} from 'react-bootstrap';
 
-import { renewHistoryItem } from '../../actions/queryHistory'
+import {renewHistoryItem} from '../../actions/queryHistory'
 
 export default class QueryHistoryModal extends Component {
     renderHeader() {
@@ -19,21 +19,21 @@ export default class QueryHistoryModal extends Component {
     renderHistoryTableHeader() {
         return (
             <thead>
-                <tr>
-                    <th data-localize='general.datetime'>
-                        Datetime
-                    </th>
-                    <th>
-                        Sample
-                    </th>
-                    <th>
-                        Filters
-                    </th>
-                    <th>
-                        View
-                    </th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th data-localize='general.datetime'>
+                    Datetime
+                </th>
+                <th>
+                    Sample
+                </th>
+                <th>
+                    Filters
+                </th>
+                <th>
+                    View
+                </th>
+                <th></th>
+            </tr>
             </thead>
         )
     }
@@ -55,13 +55,13 @@ export default class QueryHistoryModal extends Component {
         if (history.length === 0) {
             return (
                 <tbody>
-                    { this.renderEmptyHistoryTableBody() }
+                { this.renderEmptyHistoryTableBody() }
                 </tbody>
             )
         }
         return (
             <tbody>
-                { _.map(history, (historyItem) => this.renderHistoryTableRow(historyItem)) }
+            { _.map(history, (historyItem) => this.renderHistoryTableRow(historyItem)) }
             </tbody>
         )
     }
@@ -80,7 +80,9 @@ export default class QueryHistoryModal extends Component {
         const itemId = historyItem.id;
         const datetime = historyItem.timestamp ? Moment(historyItem.timestamp).format('YYYY-MM-DD-HH-mm-ss') : 'Unknown';
         const sample = historyItem.sample ? historyItem.sample.fileName : 'Unknown';
-        const filters = historyItem.filters.length > 0 ? _.map(historyItem.filters, (item) => { return item.name }).join('</br>') : 'Unknown';
+        const filters = historyItem.filters.length > 0 ? _.map(historyItem.filters, (item) => {
+            return item.name
+        }).join('</br>') : 'Unknown';
         const view = historyItem.view ? historyItem.view.name : 'Unknown';
         return (
             <tr key={ itemId }>
@@ -128,7 +130,7 @@ export default class QueryHistoryModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth: { isDemo }, queryHistory: { history } } = state;
+    const {auth: {isDemo}, queryHistory: {history}} = state;
     return {
         isDemo,
         history

@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import VariantsTableRow from './VariantsTableRow';
 
-import { getNextPartOfData, selectTableRow } from '../../actions/variantsTable';
+import {getNextPartOfData, selectTableRow} from '../../actions/variantsTable';
 import {completeTableScrollPositionReset} from '../../actions/ui';
 
 export default class VariantsTableRows extends Component {
 
     render() {
         const sampleRows = this.props.variants;
-        const { currentVariants } = this.props.ws;
-        const { sort } = this.props.variantsTable.searchInResultsParams;
-        const { isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
-        const { searchParams,ui,fields } = this.props;
+        const {currentVariants} = this.props.ws;
+        const {sort} = this.props.variantsTable.searchInResultsParams;
+        const {isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
+        const {searchParams, ui, fields} = this.props;
         const currentView = this.props.ws.variantsView;
 
         return (
@@ -40,7 +40,7 @@ export default class VariantsTableRows extends Component {
         return this.props.variants !== nextProps.variants
             || this.props.variantsTable.isFilteringOrSorting !== nextProps.variantsTable.isFilteringOrSorting
             || this.props.variantsTable.selectedRowIndices !==
-                    nextProps.variantsTable.selectedRowIndices;
+            nextProps.variantsTable.selectedRowIndices;
     }
 
     componentWillUnmount() {
@@ -67,7 +67,7 @@ export default class VariantsTableRows extends Component {
     }
 
     handleScroll(e) {
-        const { dispatch, ws: {currentVariants}, ui: {shouldResetTableScrollPosition} } = this.props;
+        const {dispatch, ws: {currentVariants}, ui: {shouldResetTableScrollPosition}} = this.props;
         // Workaround for bug #299
         if (shouldResetTableScrollPosition) {
             setTimeout(() => {
@@ -86,7 +86,7 @@ export default class VariantsTableRows extends Component {
             this.props.dispatch(getNextPartOfData());
         }
 
-        if(this.props.xScrollListener) {
+        if (this.props.xScrollListener) {
             this.props.xScrollListener(el.scrollLeft);
         }
     }

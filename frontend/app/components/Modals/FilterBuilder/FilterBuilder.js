@@ -18,15 +18,15 @@ import {
 
 /**
 
-FieldFilterItem(
-    indexPath: number[]
-    item: {field: string, operator: string, value: *}
-    fields: {id: string, label: string, type: string}[]
-    allowedOpsTypes: string[]
-    valueType: string
-    disabled: boolean
-    onChange: function({field: string, operator: string, value: *})
-)
+ FieldFilterItem(
+ indexPath: number[]
+ item: {field: string, operator: string, value: *}
+ fields: {id: string, label: string, type: string}[]
+ allowedOpsTypes: string[]
+ valueType: string
+ disabled: boolean
+ onChange: function({field: string, operator: string, value: *})
+ )
 
  */
 
@@ -82,9 +82,23 @@ class FilterQueryBuilder extends React.Component {
         const selectedOperator = filterUtils.getOperatorByType(selectedOperatorType);
         const isOperatorAllowed = genomicsParsedRulesValidate.isAllowedOperatorType(selectedOperator, selectedFieldJSType);
         if (isOperatorAllowed) {
-            dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item, fieldJSType: selectedFieldJSType, ruleIndex}}));
+            dispatch(filterBuilderChangeFilter(parentIndexPath, {
+                onEdit: {
+                    item,
+                    fieldJSType: selectedFieldJSType,
+                    ruleIndex
+                }
+            }));
         } else {
-            dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item: { field: item.field, operator: 'equal', value: item.value}, fieldJSType: selectedFieldJSType, ruleIndex}}));
+            dispatch(filterBuilderChangeFilter(parentIndexPath, {
+                onEdit: {
+                    item: {
+                        field: item.field,
+                        operator: 'equal',
+                        value: item.value
+                    }, fieldJSType: selectedFieldJSType, ruleIndex
+                }
+            }));
         }
     }
 
@@ -277,12 +291,13 @@ class FieldFilterItem extends React.Component {
         const value = item.value;
         /** @type function(string|number):(string|number) */
         const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
+
         /**
          * @param {(string|number)[]} arr
          * @returns {(string|number)[]}
          */
         function getInputValueArray(arr) {
-            return arr.map( (val) => getInputValue(val) );
+            return arr.map((val) => getInputValue(val));
         }
 
         if (typeof value === 'object') {

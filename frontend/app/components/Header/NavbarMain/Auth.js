@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { logout } from '../../../actions/auth';
+import {logout} from '../../../actions/auth';
 import config from '../../../../config';
 
 const AUTHORIZED_USER_TITLE = '';

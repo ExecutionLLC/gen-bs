@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { showQueryHistoryModal } from '../../../actions/queryHistory'
+import React, {Component} from 'react';
+import {showQueryHistoryModal} from '../../../actions/queryHistory'
 
 export default class LoadHistory extends Component {
 

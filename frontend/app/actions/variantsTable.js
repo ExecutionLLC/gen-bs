@@ -155,7 +155,7 @@ export function setViewVariantsSort(view) {
     }
 }
 
-export function setVariantsSort( sortOrder) {
+export function setVariantsSort(sortOrder) {
     return {
         type: SET_VARIANTS_SORT,
         sortOrder

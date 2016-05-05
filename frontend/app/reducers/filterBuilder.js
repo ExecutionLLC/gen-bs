@@ -48,7 +48,11 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
                 opWant.single ?
                     (typeof value === 'object' && value && value.length) ? genomicsParsedRulesValidate.jsTypeCastValue(value.join(), fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
                     genomicsParsedRulesValidate.jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
-            return modification.setRule(parsedFilter, index, ruleIndex, {field: item.field, operator: item.operator, value: castedValue});
+            return modification.setRule(parsedFilter, index, ruleIndex, {
+                field: item.field,
+                operator: item.operator,
+                value: castedValue
+            });
         },
         onDelete(itemIndex) {
             return modification.removeRuleOrGroup(parsedFilter, index, itemIndex);
@@ -158,7 +162,7 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
             return reduceFBuilderToggleNewEdit(state, action);
-        
+
         case ActionTypes.FBUILDER_CHANGE_FILTER:
             return reduceFBuilderChangeFilter(state, action);
 

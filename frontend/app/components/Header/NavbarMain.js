@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
 
 import CreateQueryNavbarButton from './NavbarMain/CreateQueryNavbarButton'
 import NavbarSearch from './NavbarMain/NavbarSearch'
@@ -9,8 +9,8 @@ import Language from './NavbarMain/Language'
 import Buy from './NavbarMain/Buy'
 import Auth from './NavbarMain/Auth'
 
-import { toggleQueryNavbar } from '../../actions/ui'
-import { changeVariantsGlobalFilter, searchInResultsSortFilter } from '../../actions/variantsTable'
+import {toggleQueryNavbar} from '../../actions/ui'
+import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable'
 
 class NavbarMain extends Component {
 
@@ -19,7 +19,7 @@ class NavbarMain extends Component {
     }
 
     render() {
-        const { dispatch, ui, variantsTable: {selectedRowIndices} } = this.props;
+        const {dispatch, ui, variantsTable: {selectedRowIndices}} = this.props;
         const changeGlobalSearchValue = (globalSearchString) => {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
         };
@@ -38,13 +38,14 @@ class NavbarMain extends Component {
                         data-localize='brand.title'>AGx</span><sup>i</sup></a></div>
 
                     <CreateQueryNavbarButton toggleQueryNavbar={ () => { dispatch(toggleQueryNavbar()) } }/>
-                    <NavbarSearch onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString) } }
-                                  onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString) } }
+                    <NavbarSearch
+                        onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString) } }
+                        onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString) } }
                     />
                     <ExportDropdown dispatch={this.props.dispatch}
                                     selectedRowIndices={selectedRowIndices}
                     />
-                    <SavedFiles dispatch={this.props.dispatch} />
+                    <SavedFiles dispatch={this.props.dispatch}/>
                     <Language />
                     <Buy />
                     <Auth {...this.props} />
@@ -57,7 +58,7 @@ class NavbarMain extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, userData, ui, ws, variantsTable } = state;
+    const {auth, userData, ui, ws, variantsTable} = state;
 
     return {
         auth,

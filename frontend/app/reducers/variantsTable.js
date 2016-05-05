@@ -114,7 +114,8 @@ export default function variantsTable(state = initialState, action) {
                 needUpdate: true
             });
         }
-        case ActionTypes.SET_VARIANTS_SORT:{
+        case ActionTypes.SET_VARIANTS_SORT:
+        {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     sort: action.sortOrder

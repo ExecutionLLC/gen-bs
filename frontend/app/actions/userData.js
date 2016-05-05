@@ -37,8 +37,8 @@ const FETCH_FILTERS_SERVER_ERROR = 'Cannot update filters data (server error). Y
 const FETCH_VIEWS_NETWORK_ERROR = 'Cannot update views data (network error). You can reload page and try again.';
 const FETCH_VIEWS_SERVER_ERROR = 'Cannot update views data (server error). You can reload page and try again.';
 
-const CANNOT_FIND_DEFAULT_ITEMS_ERROR = 'Cannot determine set of default settings (sample, view, filter). ' +
-                                        'You can try to set sample, filter, view by hand or try to reload page.';
+const CANNOT_FIND_DEFAULT_ITEMS_ERROR = 'Cannot determine set of default settings (sample, view, filter). ' 
+    + 'You can try to set sample, filter, view by hand or try to reload page.';
 
 const dataClient = apiFacade.dataClient;
 const filtersClient = apiFacade.filtersClient;
@@ -84,7 +84,7 @@ export function fetchUserdata() {
                 } = userData;
 
                 const sample = _.find(samples, sample => sample.id === lastSampleId) ||
-                               _.find(samples, sample => sample.type === 'standard');
+                    _.find(samples, sample => sample.type === 'standard');
                 const filter = _.find(userData.filters, filter => filter.type === 'standard');
                 const view = _.find(userData.views, view => view.type === 'standard');
 
