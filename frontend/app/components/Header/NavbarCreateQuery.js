@@ -32,9 +32,9 @@ class NavbarCreateQuery extends Component {
 
         return (
 
-            <nav className="navbar navbar-fixed-top navbar-default">
-                <div className="container-fluid">
-                    <div className="table-row">
+            <nav className='navbar navbar-fixed-top navbar-default'>
+                <div className='container-fluid'>
+                    <div className='table-row'>
                         <Upload
                             {...this.props}
                         />

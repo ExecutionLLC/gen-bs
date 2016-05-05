@@ -53,20 +53,20 @@ class App extends Component {
         });
 
         return (
-            <div className={mainDivClass} id="main">
-                <nav className="navbar navbar-inverse navbar-static-top"></nav>
+            <div className={mainDivClass} id='main'>
+                <nav className='navbar navbar-inverse navbar-static-top'></nav>
                 {<div >&nbsp;</div>}
                 {samples.length > 0 &&
-                 <div className="container-fluid">
+                <div className='container-fluid'>
                     <NavbarMain />
-                     <div className={navbarQueryClass} id="subnav">
+                    <div className={navbarQueryClass} id='subnav'>
                          <NavbarCreateQuery
                           {...this.props}
                           openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
                          />
                      </div>
                      <VariantsTableReact {...this.props} />
-                     <div id="fav-message" className="hidden">
+                    <div id='fav-message' className='hidden'>
                         You can export these items to file
                      </div>
                  </div>

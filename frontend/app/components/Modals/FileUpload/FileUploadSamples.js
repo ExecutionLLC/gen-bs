@@ -21,15 +21,16 @@ export default class FileUploadSamples extends Component {
         }
         return (
             <div>
-                <div className="navbar navbar-search-full">
-                    <div className="navbar-search">
-                        <div className="navbar-search-field">
-                          <input type="text" placeholder="Search available samples" onChange={e => this.setState({ searchWord: e.target.value })}
-                               className="form-control material-input"/>
+                <div className='navbar navbar-search-full'>
+                    <div className='navbar-search'>
+                        <div className='navbar-search-field'>
+                            <input type='text' placeholder='Search available samples'
+                                   onChange={e => this.setState({ searchWord: e.target.value })}
+                                   className='form-control material-input'/>
                         </div>
                     </div>
                 </div>
-                <div className="panel-group panel-group-scroll">
+                <div className='panel-group panel-group-scroll'>
                     {samples.map(
                         sample => (
                             <FileUploadSamplesRow

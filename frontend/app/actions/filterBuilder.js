@@ -6,9 +6,9 @@ import {handleError} from './errorHandler';
 import {fetchFilters} from './userData';
 
 import HttpStatus from 'http-status';
-import {deleteFilter} from "./userData";
-import {changeFilter} from "./ui";
-import {filterUtils} from "../utils/filterUtils";
+import {deleteFilter} from './userData';
+import {changeFilter} from './ui';
+import {filterUtils} from '../utils/filterUtils';
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
 

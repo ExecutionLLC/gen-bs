@@ -34,26 +34,26 @@ class VariantsTableReact extends Component {
 
             <div className={tableWrapperClass}>
                 { isVariantsLoading &&
-                <div className="loader"></div>
+                <div className='loader'></div>
                 }
 
                 { !isVariantsLoading && !isVariantsValid &&
-                <div className="col-xs-6 col-xs-offset-3">
+                <div className='col-xs-6 col-xs-offset-3'>
                     <VariantsTableLoadError error={error}/>
                 </div>
                 }
                 { !isVariantsLoading && isVariantsValid &&
-                <div className="table-variants-container">
+                <div className='table-variants-container'>
                     { auth.isDemo &&
                     <DemoModeMessage errorMessage={auth.errorMessage} {...this.props} />
                     }
-                    <table className="table table-striped table-variants header-fixed" id="variants_table"
-                           ref="variantsTable">
-                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHead"
+                    <table className='table table-striped table-variants header-fixed' id='variants_table'
+                           ref='variantsTable'>
+                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref='variantsTableHead'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)) } }
                         />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} {...this.props} ref="variantsTableRows"
+                        <VariantsTableRows variants={variants} fields={fields} {...this.props} ref='variantsTableRows'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)) } }
                         />
                         }

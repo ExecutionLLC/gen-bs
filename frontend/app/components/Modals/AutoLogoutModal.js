@@ -6,7 +6,7 @@ export default class AutoLogoutModal extends Component {
     renderHeader() {
         return (
             <Modal.Header>
-                <Modal.Title data-localize="autoLogout.heading">
+                <Modal.Title data-localize='autoLogout.heading'>
                     Auto Logout
                 </Modal.Title>
             </Modal.Header>
@@ -25,11 +25,11 @@ export default class AutoLogoutModal extends Component {
         return (
             <Modal.Footer>
                 <button
-                 onClick={ () => {this.props.closeModal()} }
-                 type="button"
-                 className="btn btn-default"
-                 data-dismiss="modal"
-                 localize-data="action.extendSession"
+                    onClick={ () => {this.props.closeModal()} }
+                    type='button'
+                    className='btn btn-default'
+                    data-dismiss='modal'
+                    localize-data='action.extendSession'
                 >
                     <span>Extend session</span>
                 </button>
@@ -40,8 +40,8 @@ export default class AutoLogoutModal extends Component {
     render() {
         return (
             <Modal
-                dialogClassName="modal-dialog-primary"
-                bsSize="lg"
+                dialogClassName='modal-dialog-primary'
+                bsSize='lg'
                 show={this.props.showModal}
                 onHide={ () => {this.props.closeModal()} }
             >

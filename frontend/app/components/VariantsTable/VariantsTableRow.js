@@ -30,12 +30,14 @@ export default class VariantsTableRow extends ComponentBase {
 
         return (
             <tr>
-                <td className="btntd row_checkbox"><div>{rowIndex + 1}</div></td>
-                <td className="btntd row_checkbox"
-                    key="row_checkbox">
+                <td className='btntd row_checkbox'>
+                    <div>{rowIndex + 1}</div>
+                </td>
+                <td className='btntd row_checkbox'
+                    key='row_checkbox'>
                     <div>
-                        <label className="checkbox">
-                            <input type="checkbox"
+                        <label className='checkbox'>
+                            <input type='checkbox'
                                    checked={isSelected}
                                    onChange={() => this.onRowSelectionChanged()}
                             />
@@ -44,7 +46,7 @@ export default class VariantsTableRow extends ComponentBase {
                         <span />
                     </div>
                 </td>
-                <td className="btntd">
+                <td className='btntd'>
                     <div>
                     </div>
                 </td>

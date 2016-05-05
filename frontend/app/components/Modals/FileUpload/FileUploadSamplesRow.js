@@ -36,7 +36,7 @@ export default class FileUploadSamplesRow extends Component {
 
     render() {
         return (
-            <div className="panel">
+            <div className='panel'>
                 {this.renderHeader()}
                 {this.renderCurrentValues()}
                 {this.renderEditableValues()}
@@ -49,8 +49,8 @@ export default class FileUploadSamplesRow extends Component {
         const {sample} = this.props;
         return (
             <div>
-                <div className="panel-heading">
-                    <h3 className="panel-title">
+                <div className='panel-heading'>
+                    <h3 className='panel-title'>
                         {getItemLabelByNameAndType(sample.fileName, sample.type)}
                         <span>{sample.description}</span>
                     </h3>
@@ -62,7 +62,7 @@ export default class FileUploadSamplesRow extends Component {
     renderFooter() {
         const {isDemoSession, sample} = this.props;
         return (
-            <div className="panel-footer">
+            <div className='panel-footer'>
                 {this.renderSelectButton(isDemoSession, sample)}
                 {this.renderEditButton(sample.type)}
             </div>
@@ -72,7 +72,7 @@ export default class FileUploadSamplesRow extends Component {
     renderSelectButton(isDemoSession, sample) {
         if(isDemoSession && sample.type === 'advanced') {
             return (
-                <span data-localize="samples.settings.select.title">
+                <span data-localize='samples.settings.select.title'>
                     Please register to analyze this sample.
                 </span>
             )
@@ -80,10 +80,10 @@ export default class FileUploadSamplesRow extends Component {
 
         return (
             <a onClick={(e) => this.onSelectForAnalysisClick(e, sample)}
-               className="btn btn-link btn-uppercase"
-               type="button"
+               className='btn btn-link btn-uppercase'
+               type='button'
             >
-                <span data-localize="samples.settings.select.title">Select for analysis</span>
+                <span data-localize='samples.settings.select.title'>Select for analysis</span>
             </a>
         )
     }
@@ -92,10 +92,10 @@ export default class FileUploadSamplesRow extends Component {
         if (sampleType === 'user') {
             return (
                 <a onClick={e => this.onShowValuesClick(e)}
-                   className="btn btn-link btn-uppercase" role="button"
-                   data-toggle="collapse" data-parent="#accordion"
-                   href="#collapseOne" aria-expanded="false"
-                   aria-controls="collapseOne">Edit
+                   className='btn btn-link btn-uppercase' role='button'
+                   data-toggle='collapse' data-parent='#accordion'
+                   href='#collapseOne' aria-expanded='false'
+                   aria-controls='collapseOne'>Edit
                 </a>
             )
         }
@@ -125,7 +125,7 @@ export default class FileUploadSamplesRow extends Component {
         if (_.some(sample.values, option => option.values)) {
             return (
                 <div>
-                    <div className="flex">
+                    <div className='flex'>
                         {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
                     </div>
                 </div>
@@ -147,7 +147,7 @@ export default class FileUploadSamplesRow extends Component {
             }
             return (
                 <dl key={field.id}
-                    className="dl-horizontal">
+                    className='dl-horizontal'>
                     <dt>{field.label}</dt>
                     <dd>{fieldValue}</dd>
                 </dl>

@@ -52,8 +52,8 @@ export default class FieldHeaderControls extends Component {
             <td data-label={fieldMetadata.id}
                 key={fieldMetadata.id}>
                 <div>
-                    <div className="variants-table-header-label">
-                        <a type="button" className="btn-link-default">
+                    <div className='variants-table-header-label'>
+                        <a type='button' className='btn-link-default'>
                             {name}
                         </a>
                         <div className={buttonGroupClasses}>
@@ -84,15 +84,15 @@ export default class FieldHeaderControls extends Component {
         if (isFieldSearchable && areControlsEnabled) {
             return (
                 <div className={inputGroupClasses}>
-                    <span className="input-group-btn">
-                        <button className="btn btn-link-light-default"
+                    <span className='input-group-btn'>
+                        <button className='btn btn-link-light-default'
                                 onClick={() => this.setFilterOpened(true)}
                                 disabled={disabled}>
                             <i></i>
                         </button>
                     </span>
-                    <input type="text"
-                           className="form-control material-input"
+                    <input type='text'
+                           className='form-control material-input'
                            value={searchString}
                            ref={(input) => this.focusInput(input)}
                            onChange={(e) => this.onSearchInputChanged(e)}
@@ -105,14 +105,14 @@ export default class FieldHeaderControls extends Component {
         } else {
             return (
                 <div className={inputGroupClasses}>
-                    <span className="input-group-btn">
-                        <button className="btn btn-link-light-default">
+                    <span className='input-group-btn'>
+                        <button className='btn btn-link-light-default'>
                             <i></i>
                         </button>
                     </span>
-                    <input type="text"
-                           className="form-control material-input"
-                           value="Non-filtered type"
+                    <input type='text'
+                           className='form-control material-input'
+                           value='Non-filtered type'
                            disabled
                     />
                 </div>
@@ -127,7 +127,7 @@ export default class FieldHeaderControls extends Component {
                     onClick={ e => this.onSortClick(direction, e.ctrlKey || e.metaKey) }
                     disabled={disabled}>
                 {direction === currentDirection &&
-                <span className="text-info">{order}</span>
+                <span className='text-info'>{order}</span>
                 }
             </button>
         );

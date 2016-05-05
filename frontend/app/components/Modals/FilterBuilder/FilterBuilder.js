@@ -175,7 +175,7 @@ class FieldFilterItem extends React.Component {
     static renderInputForSingleTextValue(value, disabled, onChange) {
         return (
             <Input
-                className="form-control"
+                className='form-control'
                 type={typeof value === 'number' ? 'number' : 'text'}
                 value={value}
                 disabled={disabled}
@@ -193,8 +193,8 @@ class FieldFilterItem extends React.Component {
     static renderCheckbox(checked, disabled, onChange) {
         return (
             <input
-                className="form-control"
-                type="checkbox"
+                className='form-control'
+                type='checkbox'
                 checked={checked}
                 disabled={disabled}
                 onChange={ (evt) => onChange(evt.target.checked) }
@@ -211,9 +211,9 @@ class FieldFilterItem extends React.Component {
      */
     static renderFieldSelect(fieldsList, fieldId, disabled, onChange) {
         return (
-            <div className="rule-filter-container">
+            <div className='rule-filter-container'>
                 <Select
-                    className="selectTree"
+                    className='selectTree'
                     options={fieldsList}
                     value={fieldId}
                     clearable={false}
@@ -226,9 +226,9 @@ class FieldFilterItem extends React.Component {
 
     static renderOperatorSelect(operatorsList, operatorType, disabled, onChange) {
         return (
-            <div className="rule-operator-container rule-operator-container-operation">
+            <div className='rule-operator-container rule-operator-container-operation'>
                 <Select
-                    className="select2"
+                    className='select2'
                     options={operatorsList}
                     value={operatorType}
                     clearable={false}
@@ -245,8 +245,8 @@ class FieldFilterItem extends React.Component {
      */
     static renderInputsArrayItem(props) {
         return (
-            <div className="rule-value-array-item">
-                <Input {...props} className="form-control" />
+            <div className='rule-value-array-item'>
+                <Input {...props} className='form-control'/>
             </div>
         );
     }
@@ -261,7 +261,7 @@ class FieldFilterItem extends React.Component {
      */
     static renderInputsArray(ArrayComponent, value, valueType, disabled, onChange) {
         return (
-            <div className="rule-value-array">
+            <div className='rule-value-array'>
                 <ArrayComponent
                     value={value}
                     type={valueType === 'number' ? 'number' : 'text'}
@@ -400,7 +400,7 @@ class FieldFilterItem extends React.Component {
                     disabled,
                     (operatorType) => onChange(FieldFilterItem.itemChangeOperatorType(item, operatorType))
                 )}
-                <div className="rule-value-container">
+                <div className='rule-value-container'>
                     {FieldFilterItem.renderItem(item, valueType, disabled, onChange)}
                 </div>
             </div>
@@ -426,7 +426,7 @@ export default class FilterBuilder extends React.Component {
         const filter = filterBuilder.editingFilter.filter;
         const parsedFilter = filterBuilder.editingFilter.parsedFilter;
         return (
-            <div className="builder-wrapper">
+            <div className='builder-wrapper'>
                 <FilterQueryBuilder
                     allowedFields={fields.allowedFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     totalFields={fields.totalFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}

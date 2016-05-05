@@ -13,10 +13,10 @@ export default class Views extends Component {
         const selectedView = this.props.ui.selectedView;
         return (
 
-            <div className="table-cell max-width">
-                <div className="btn-group btn-group-select100 view-select" data-localize="views.help"
-                     data-toggle="tooltip" data-placement="bottom" data-container="body"
-                     title="Select one of available views">
+            <div className='table-cell max-width'>
+                <div className='btn-group btn-group-select100 view-select' data-localize='views.help'
+                     data-toggle='tooltip' data-placement='bottom' data-container='body'
+                     title='Select one of available views'>
 
                     <Select
                         options={this.getViewOptions()}

@@ -8,7 +8,7 @@ export default class ErrorModal extends Component {
     renderHeader() {
         return (
             <Modal.Header>
-                <Modal.Title data-localize="error.heading">
+                <Modal.Title data-localize='error.heading'>
                     Error
                 </Modal.Title>
             </Modal.Header>
@@ -31,11 +31,11 @@ export default class ErrorModal extends Component {
         return (
             <Modal.Footer>
                 <button
-                 onClick={ () => {this.props.closeModal()} }
-                 type="button"
-                 className="btn btn-default"
-                 data-dismiss="modal"
-                 localize-data="action.close"
+                    onClick={ () => {this.props.closeModal()} }
+                    type='button'
+                    className='btn btn-default'
+                    data-dismiss='modal'
+                    localize-data='action.close'
                 >
                     <span>Close</span>
                 </button>
@@ -46,8 +46,8 @@ export default class ErrorModal extends Component {
     render() {
         return (
             <Modal
-                dialogClassName="modal-dialog-primary"
-                bsSize="lg"
+                dialogClassName='modal-dialog-primary'
+                bsSize='lg'
                 show={this.props.showModal}
                 onHide={ () => {this.props.closeModal()} }
             >

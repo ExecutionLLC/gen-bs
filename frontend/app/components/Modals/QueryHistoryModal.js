@@ -9,7 +9,7 @@ export default class QueryHistoryModal extends Component {
     renderHeader() {
         return (
             <Modal.Header closeButton>
-                <Modal.Title data-localize="history.heading">
+                <Modal.Title data-localize='history.heading'>
                     History
                 </Modal.Title>
             </Modal.Header>
@@ -20,7 +20,7 @@ export default class QueryHistoryModal extends Component {
         return (
             <thead>
                 <tr>
-                    <th data-localize="general.datetime">
+                    <th data-localize='general.datetime'>
                         Datetime
                     </th>
                     <th>
@@ -43,8 +43,8 @@ export default class QueryHistoryModal extends Component {
         const message = isDemo ? "Please register to access your query history." : "History is empty.";
         return (
             <tr>
-                <td colSpan="5">
-                    <div className="empty"><h3><i className="md-i">hourglass_empty</i>{message}</h3></div>
+                <td colSpan='5'>
+                    <div className='empty'><h3><i className='md-i'>hourglass_empty</i>{message}</h3></div>
                 </td>
             </tr>
         )
@@ -68,7 +68,7 @@ export default class QueryHistoryModal extends Component {
 
     renderRenewButton(historyItemId) {
         return (
-            <button className="btn btn-uppercase btn-link"
+            <button className='btn btn-uppercase btn-link'
                     onClick={ () => { this.onRenewButtonClicked(historyItemId) } }
             >
                 Renew
@@ -95,7 +95,7 @@ export default class QueryHistoryModal extends Component {
 
     renderHistoryTable() {
         return (
-            <table className="table table-condensed">
+            <table className='table table-condensed'>
                 { this.renderHistoryTableHeader() }
                 { this.renderHistoryTableBody() }
             </table>
@@ -109,8 +109,8 @@ export default class QueryHistoryModal extends Component {
     render() {
         return (
             <Modal
-                dialogClassName="modal-dialog-primary"
-                bsSize="lg"
+                dialogClassName='modal-dialog-primary'
+                bsSize='lg'
                 show={ this.props.showModal }
                 onHide={ () => {this.props.closeModal()} }
             >

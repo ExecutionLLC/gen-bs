@@ -10,7 +10,7 @@ export default class ViewBuilderHeader extends React.Component {
     render() {
         return (
             <Modal.Header closeButton>
-                <Modal.Title data-localize="views.heading">
+                <Modal.Title data-localize='views.heading'>
                     Setup Views
                 </Modal.Title>
             </Modal.Header>

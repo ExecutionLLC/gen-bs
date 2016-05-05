@@ -17,8 +17,8 @@ class FiltersModal extends Component {
         return (
 
             <Modal
-                dialogClassName="modal-dialog-primary"
-                bsSize="lg"
+                dialogClassName='modal-dialog-primary'
+                bsSize='lg'
                 show={this.props.showModal}
                 onHide={ () => {this.props.closeModal('filters')} }
             >

@@ -23,21 +23,21 @@ export default class ViewBuilderFooter extends React.Component {
             <Modal.Footer>
                 <button
                     onClick={ () => {  this.cancelOnClick()}}
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
+                    type='button'
+                    className='btn btn-default'
+                    data-dismiss='modal'
                 >
-                    <span data-localize="actions.cancel"/>Cancel
+                    <span data-localize='actions.cancel'/>Cancel
                 </button>
 
                 <button
                     onClick={ (e) => {this.selectOnClick(e)}}
-                    type="submit"
-                    className="btn btn-primary"
+                    type='submit'
+                    className='btn btn-primary'
                     disabled={disabledClass}
                     title={title}
                 >
-                    <span data-localize="actions.save_select.title">{selectButtonLabel}</span>
+                    <span data-localize='actions.save_select.title'>{selectButtonLabel}</span>
                 </button>
             </Modal.Footer>
 

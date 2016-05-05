@@ -21,13 +21,13 @@ export default class ExportDropdown extends ComponentBase {
             <div>
                 <Nav>
                     <NavDropdown title={exportDropdownTitle}
-                                 id="export-dropdown"
+                                 id='export-dropdown'
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
                                  disabled={!this.haveSelectedVariants()}
                     >
-                        <MenuItem eventKey="csv">CSV</MenuItem>
-                        <MenuItem eventKey="sql">SQL</MenuItem>
-                        <MenuItem eventKey="txt">Text</MenuItem>
+                        <MenuItem eventKey='csv'>CSV</MenuItem>
+                        <MenuItem eventKey='sql'>SQL</MenuItem>
+                        <MenuItem eventKey='txt'>Text</MenuItem>
                     </NavDropdown>
                 </Nav>
             </div>
@@ -40,7 +40,7 @@ export default class ExportDropdown extends ComponentBase {
         } else {
             const {selectedRowIndices} = this.props;
             const selectedVariantsCount = selectedRowIndices.length;
-            return (<span>Export  <span className="badge badge-warning">{selectedVariantsCount}</span></span>);
+            return (<span>Export  <span className='badge badge-warning'>{selectedVariantsCount}</span></span>);
         }
     }
 

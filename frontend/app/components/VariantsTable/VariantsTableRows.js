@@ -16,9 +16,9 @@ export default class VariantsTableRows extends Component {
         const currentView = this.props.ws.variantsView;
 
         return (
-            <tbody className="table-variants-body"
-                   id="variants_table_body"
-                   ref="variantsTableBody">
+            <tbody className='table-variants-body'
+                   id='variants_table_body'
+                   ref='variantsTableBody'>
             {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
                 currentView, fields, selectedRowIndices)}
             {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
@@ -52,8 +52,8 @@ export default class VariantsTableRows extends Component {
         if (isFilteringOrSorting || !currentView) {
             return (
                 <tr>
-                    <td colSpan="100">
-                        <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+                    <td colSpan='100'>
+                        <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
                         </div>
                     </td>
                 </tr>
@@ -115,8 +115,8 @@ export default class VariantsTableRows extends Component {
         if (!isFilteringOrSorting && variantsLength > 99) {
             return (
                 <tr>
-                    <td colSpan="100">
-                        <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+                    <td colSpan='100'>
+                        <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
                         </div>
                     </td>
                 </tr>

@@ -20,8 +20,8 @@ export default class FileUpload extends Component {
             return this.renderDemoContent();
         } else {
             return (
-                <div className="panel file-upload-panel panel-default">
-                    <div className="panel-body">
+                <div className='panel file-upload-panel panel-default'>
+                    <div className='panel-body'>
 
                         {error && this.renderUploadError(error)}
 
@@ -30,9 +30,9 @@ export default class FileUpload extends Component {
 
 
                         { isArchiving &&
-                        <div className="text-center">
+                        <div className='text-center'>
                             <strong style={{color: '#2363a1'}}>Archiving...</strong>
-                            <i className="fa fa-spinner fa-spin"></i>
+                            <i className='fa fa-spinner fa-spin'></i>
                         </div>
                         }
                         { !error &&
@@ -48,7 +48,7 @@ export default class FileUpload extends Component {
         const {files} = this.props.fileUpload;
         return (
             files[0] &&
-            <div className="text-center">
+            <div className='text-center'>
                 <strong style={{color: '#2363a1'}}>{files[0].name}</strong>
             </div>
         );
@@ -57,17 +57,17 @@ export default class FileUpload extends Component {
     renderUploadButton() {
         return (
             <button onClick={this.onUploadClick.bind(this)}
-                    className="btn-link-light-default btn-select-file">
+                    className='btn-link-light-default btn-select-file'>
                 <input
                     onChange={ (e) => this.onUploadChanged(e)}
                     style={{display: 'none'}}
-                    ref="fileInput"
-                    id="file-select"
-                    type="file"
+                    ref='fileInput'
+                    id='file-select'
+                    type='file'
                     accept=".vcf,.gz"
                     name="files[]"
                 />
-                <i className="md-i">cloud_upload</i>
+                <i className='md-i'>cloud_upload</i>
                 <span>Click here to upload new samples</span>
                 <span>.vcf, .vcf.gz</span>
             </button>
@@ -76,7 +76,7 @@ export default class FileUpload extends Component {
 
     renderUploadError(error) {
         return (
-            <div className="alert alert-danger">
+            <div className='alert alert-danger'>
                 <p>{error}</p>
             </div>
         );
@@ -84,8 +84,8 @@ export default class FileUpload extends Component {
 
     renderDemoContent() {
         return (
-            <div className="panel panel-primary">
-                <div className="panel-heading">
+            <div className='panel panel-primary'>
+                <div className='panel-heading'>
                     Please login or register to upload new samples
                 </div>
             </div>

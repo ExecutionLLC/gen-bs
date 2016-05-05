@@ -13,13 +13,13 @@ export default class MetadataSearch extends Component {
         const {selectedSampleId, onSampleChangeRequested} = this.props;
         return (
 
-            <div className="table-cell max-width">
-                <div className="btn-group sample-search"
-                     data-localize="samples.help"
-                     data-toggle="tooltip"
-                     data-placement="bottom"
-                     data-container="body"
-                     title="Select one from available samples"
+            <div className='table-cell max-width'>
+                <div className='btn-group sample-search'
+                     data-localize='samples.help'
+                     data-toggle='tooltip'
+                     data-placement='bottom'
+                     data-container='body'
+                     title='Select one from available samples'
                 >
                     <Select options={this.getSampleOptions()}
                             clearable={false}

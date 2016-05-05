@@ -78,7 +78,7 @@ export default class QueryBuilder extends Component {
 
         return (
             <div>
-                <div className="query-builder">
+                <div className='query-builder'>
                     <RulesGroupContainer
                         indexPath={[]}
                         makeItemComponent={makeItemComponent}
@@ -115,7 +115,7 @@ class RulesGroupContainer extends Component {
         } = this.props;
 
         return (
-            <dl className="rules-group-container">
+            <dl className='rules-group-container'>
                 <RulesGroupHeader
                     indexPath={indexPath}
                     disabled={disabled}
@@ -146,8 +146,8 @@ class RulesGroupHeader extends Component {
      */
     static renderAddButton(caption, disabled, onAdd) {
         return (
-            <button type="button" className="btn btn-xs btn-success" disabled={disabled} onClick={onAdd}>
-                <i className="glyphicon glyphicon-plus"/> {caption}
+            <button type='button' className='btn btn-xs btn-success' disabled={disabled} onClick={onAdd}>
+                <i className='glyphicon glyphicon-plus'/> {caption}
             </button>
         );
     }
@@ -165,7 +165,7 @@ class RulesGroupHeader extends Component {
         return (
             <label className={"btn btn-xs btn-default " + (isOn ? 'active': '')}>
                 <input
-                    type="radio"
+                    type='radio'
                     name={groupName}
                     value={value}
                     disabled={disabled}
@@ -196,19 +196,20 @@ class RulesGroupHeader extends Component {
         const groupName = 'builder-basic-react_group_' + indexPath.join('-') + '_cond';
 
         return (
-            <dt className="rules-group-header">
-                <div className="btn-group pull-right group-actions">
+            <dt className='rules-group-header'>
+                <div className='btn-group pull-right group-actions'>
                     {RulesGroupHeader.renderAddButton('Add rule', disabled, () => { onAdd(false); })}
                     {RulesGroupHeader.renderAddButton('Add group', disabled, () => { onAdd(true); })}
-                    <button type="button" className="btn btn-xs btn-danger" onClick={onDelete} disabled={disabled || !onDelete} >
-                        <i className="glyphicon glyphicon-remove" /> Delete
+                    <button type='button' className='btn btn-xs btn-danger' onClick={onDelete}
+                            disabled={disabled || !onDelete}>
+                        <i className='glyphicon glyphicon-remove'/> Delete
                     </button>
                 </div>
-                <div className="btn-group group-conditions">
+                <div className='btn-group group-conditions'>
                     {RulesGroupHeader.renderRadioButton('AND', true, groupName, isAnd, disabled, onSwitch)}
                     {RulesGroupHeader.renderRadioButton('OR', false, groupName, !isAnd, disabled, onSwitch)}
                 </div>
-                <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
+                <div className='error-container'><i className='glyphicon glyphicon-warning-sign'/></div>
             </dt>
         );
     }
@@ -230,20 +231,20 @@ class RuleContainer extends Component {
         } = this.props;
 
         return (
-            <li className="rule-container">
-                <div className="rule-header">
-                    <div className="btn-group pull-right rule-actions">
+            <li className='rule-container'>
+                <div className='rule-header'>
+                    <div className='btn-group pull-right rule-actions'>
                         <button
-                            type="button"
-                            className="btn btn-xs btn-danger"
+                            type='button'
+                            className='btn btn-xs btn-danger'
                             onClick={onDelete}
                             disabled={disabled || !onDelete}
                         >
-                            <i className="glyphicon glyphicon-remove"/> Delete
+                            <i className='glyphicon glyphicon-remove'/> Delete
                         </button>
                     </div>
                 </div>
-                <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
+                <div className='error-container'><i className='glyphicon glyphicon-warning-sign'/></div>
                 {makeItemComponent(indexPath, item, disabled)}
             </li>
         );
@@ -314,8 +315,8 @@ class RulesGroupBody extends Component {
         } = this.props;
 
         return (
-            <dd className="rules-group-body">
-                <ul className="rules-list">
+            <dd className='rules-group-body'>
+                <ul className='rules-list'>
                     {RulesGroupBody.renderItems(items, indexPath, disabled, makeItemComponent, handlers)}
                 </ul>
             </dd>

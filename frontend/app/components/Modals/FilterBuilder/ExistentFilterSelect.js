@@ -31,21 +31,21 @@ export default class ExistentFilterSelect extends Component {
         
         return (
 
-            <div className="in copyview">
-                <div className="row grid-toolbar">
-                    <div className="col-sm-6">
-                        <label data-localize="views.setup.selector.label">Available Filters</label>
+            <div className='in copyview'>
+                <div className='row grid-toolbar'>
+                    <div className='col-sm-6'>
+                        <label data-localize='views.setup.selector.label'>Available Filters</label>
                     </div>
                 </div>
                 { descriptionText &&
-                <div className="alert alert-help">
-                        <span data-localize="views.setup.selector.description">
+                <div className='alert alert-help'>
+                        <span data-localize='views.setup.selector.description'>
                             {descriptionText}
                         </span>
                 </div>
                 }
-                <div className="row grid-toolbar">
-                    <div className="col-sm-6">
+                <div className='row grid-toolbar'>
+                    <div className='col-sm-6'>
                         <Select
                             options={filters.map( filter => { return {value: filter.id, label: getItemLabelByNameAndType(filter.name, filter.type)} } )}
                             value={selectedFilter.id}
@@ -56,40 +56,40 @@ export default class ExistentFilterSelect extends Component {
                             }}
                         />
                     </div>
-                    <div className="col-sm-6">
-                        <div className="btn-group" data-localize="actions.duplicate.help" data-toggle="tooltip"
-                             data-placement="bottom" data-container="body">
-                            <button type="button"
-                                    className="btn btn-default in copyview"
-                                    id="dblBtn"
+                    <div className='col-sm-6'>
+                        <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
+                             data-placement='bottom' data-container='body'>
+                            <button type='button'
+                                    className='btn btn-default in copyview'
+                                    id='dblBtn'
                                     onClick={ () => dispatch(filterBuilderToggleNewEdit(true, fields)) }
                                     disabled={disabledClass}
                                     title={title}
                             >
-                                <span data-localize="actions.duplicate.title">Duplicate</span>
+                                <span data-localize='actions.duplicate.title'>Duplicate</span>
                             </button>
                         </div>
                         {
                             //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                         }
                         { isFilterEditable &&
-                        <div className="btn-group ">
-                            <button type="button" className="btn btn-default"
+                        <div className='btn-group '>
+                            <button type='button' className='btn btn-default'
                                     onClick={() => {
                                         dispatch(filterBuilderSelectFilter(filters, selectedFilter.id));
                                         dispatch(filterBuilderToggleNewEdit(false, fields));
                                     }}
                             >
-                                <span data-localize="views.setup.reset.title">Reset Filter</span>
+                                <span data-localize='views.setup.reset.title'>Reset Filter</span>
                             </button>
                         </div>
                         }
                         { isFilterEditable &&
-                        <div className="btn-group ">
-                            <button type="button"
-                                    className="btn btn-default"
+                        <div className='btn-group '>
+                            <button type='button'
+                                    className='btn btn-default'
                                     onClick={ () => dispatch(filterBuilderDeleteFilter(selectedFilter.id))}>
-                                <span data-localize="views.setup.delete.title">Delete Filter</span>
+                                <span data-localize='views.setup.delete.title'>Delete Filter</span>
                             </button>
                         </div>
                         }

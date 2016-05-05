@@ -2,8 +2,8 @@ import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
 import {viewBuilderSelectView} from './viewBuilder';
 import {filterBuilderSelectFilter} from './filterBuilder';
-import {detachHistory} from "./queryHistory";
-import {setViewVariantsSort} from "./variantsTable";
+import {detachHistory} from './queryHistory';
+import {setViewVariantsSort} from './variantsTable';
 import {handleError} from './errorHandler'
 
 

@@ -4,11 +4,11 @@ import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
 import {analyze, changeFilter, changeView} from './ui';
-import {changeFilters} from "./userData";
-import {changeViews} from "./userData";
-import {changeSamples} from "./samplesList";
-import {changeSample} from "./samplesList";
-import {fetchFields} from "./fields";
+import {changeFilters} from './userData';
+import {changeViews} from './userData';
+import {changeSamples} from './samplesList';
+import {changeSample} from './samplesList';
+import {fetchFields} from './fields';
 import {prepareAnalyze} from './websocket';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';

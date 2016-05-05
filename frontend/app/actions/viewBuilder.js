@@ -3,9 +3,9 @@ import {closeModal} from './modalWindows';
 import {fetchViews} from './userData';
 
 import HttpStatus from 'http-status';
-import {changeView} from "./ui";
+import {changeView} from './ui';
 import {handleError} from './errorHandler';
-import {deleteView} from "./userData";
+import {deleteView} from './userData';
 
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW';
 

@@ -58,9 +58,9 @@ class SavedFilesModal extends DialogBase {
             .take(10)
             .value();
         return (
-            <div className="table-wrapper table-files-wrapper">
-                <div className="table-container table-variants-container">
-                    <table className="table table-condensed">
+            <div className='table-wrapper table-files-wrapper'>
+                <div className='table-container table-variants-container'>
+                    <table className='table table-condensed'>
                         <thead>
                         <tr>
                             <th>Date</th>
@@ -89,8 +89,8 @@ class SavedFilesModal extends DialogBase {
                 <td>
                     <button
                         onClick={() => this.onDownloadClick(savedFile)}
-                        type="button"
-                        className="btn btn-uppercase btn-link"
+                        type='button'
+                        className='btn btn-uppercase btn-link'
                     >
                         <span>Download</span>
                     </button>

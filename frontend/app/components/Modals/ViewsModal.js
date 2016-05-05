@@ -22,8 +22,8 @@ class ViewsModal extends React.Component {
 
 
             <Modal
-                dialogClassName="modal-dialog-primary"
-                bsSize="lg"
+                dialogClassName='modal-dialog-primary'
+                bsSize='lg'
                 show={showModal}
                 onHide={ () => {closeModal('views')} }
             >

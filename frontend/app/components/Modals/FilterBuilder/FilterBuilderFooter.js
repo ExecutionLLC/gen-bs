@@ -22,11 +22,11 @@ export default class FilterBuilderFooter extends Component {
             <Modal.Footer>
                 <button
                     onClick={ () => { closeModal('filters')} }
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
+                    type='button'
+                    className='btn btn-default'
+                    data-dismiss='modal'
                 >
-                    <span data-localize="actions.cancel">Cancel</span>
+                    <span data-localize='actions.cancel'>Cancel</span>
                 </button>
 
                 <button
@@ -37,10 +37,10 @@ export default class FilterBuilderFooter extends Component {
                             dispatch(filterBuilderSaveAndSelectRules())
                         }
                     }}
-                    type="button"
-                    className="btn btn-primary"
+                    type='button'
+                    className='btn btn-primary'
                 >
-                    <span data-localize="actions.save_select.title">{selectButtonLabel}</span>
+                    <span data-localize='actions.save_select.title'>{selectButtonLabel}</span>
                 </button>
             </Modal.Footer>
 

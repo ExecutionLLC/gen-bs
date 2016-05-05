@@ -20,7 +20,7 @@ export default class VariantsTableHead extends Component {
 
         if (!searchParams || !currentView) {
             return (
-                <tbody className="table-variants-head" id="variants_table_head" ref="variantsTableHead">
+                <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
                 <tr />
                 </tbody>
             );
@@ -34,34 +34,34 @@ export default class VariantsTableHead extends Component {
         }, {});
         
         return (
-            <tbody className="table-variants-head" id="variants_table_head" ref="variantsTableHead">
+            <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
             <tr>
-                <td className="btntd">
+                <td className='btntd'>
                     <div></div>
                 </td>
-                <td className="btntd row_checkbox" key="row_checkbox">
+                <td className='btntd row_checkbox' key='row_checkbox'>
                     <div></div>
                 </td>
-                <td className="btntd">
+                <td className='btntd'>
                     <div></div>
                 </td>
-                <td data-label="comment" key="comment" className="comment">
+                <td data-label='comment' key='comment' className='comment'>
                     <div>
-                        <div className="variants-table-header-label">
-                            <a type="button" className="btn-link-default">
+                        <div className='variants-table-header-label'>
+                            <a type='button' className='btn-link-default'>
                                 Comment
                             </a>
 
                         </div>
                     </div>
-                    <div className="variants-table-search-field input-group invisible">
-                       <span className="input-group-btn">
-                           <button className="btn btn-link-light-default">
-                               <i className="md-i">search</i>
+                    <div className='variants-table-search-field input-group invisible'>
+                       <span className='input-group-btn'>
+                           <button className='btn btn-link-light-default'>
+                               <i className='md-i'>search</i>
                            </button>
                        </span>
-                        <input type="text" className="form-control material-input"
-                               value=""
+                        <input type='text' className='form-control material-input'
+                               value=''
                         />
                     </div>
                 </td>

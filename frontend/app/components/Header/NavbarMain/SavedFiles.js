@@ -11,12 +11,12 @@ export default class SavedFiles extends Component {
     render() {
         return (
 
-            <div className="hidden-xxs">
-                <a href="#"
-                   className="btn navbar-btn"
+            <div className='hidden-xxs'>
+                <a href='#'
+                   className='btn navbar-btn'
                    onClick={() => this.onButtonClick()}
                 >
-                    <span data-localize="files.title">Saved files</span>
+                    <span data-localize='files.title'>Saved files</span>
                 </a>
             </div>
 

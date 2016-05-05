@@ -7,7 +7,7 @@ import {analyze, changeView, changeFilter} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 /*
  * action types

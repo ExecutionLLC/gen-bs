@@ -4,7 +4,7 @@ export default class DemoModeMessage extends Component {
 
     render() {
         return (
-            <div className="alert alert-inverse alert-fixed" role="alert">
+            <div className='alert alert-inverse alert-fixed' role='alert'>
                 { this.props.errorMessage &&
                 <p>{this.props.errorMessage}</p>
                 }

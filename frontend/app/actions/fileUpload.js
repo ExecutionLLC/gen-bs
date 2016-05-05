@@ -2,7 +2,7 @@ import config from '../../config'
 import { closeModal } from './modalWindows'
 import {fetchSamples} from './samplesList';
 import gzip from '../utils/gzip'
-import {fetchTotalFields} from "./fields";
+import {fetchTotalFields} from './fields';
 
 /*
  * action types
@@ -101,7 +101,7 @@ export function uploadFile(files) {
 
         return $.ajax(config.URLS.FILE_UPLOAD, {
                 'type': 'POST',
-                'headers': {"X-Session-Id": getState().auth.sessionId},
+            'headers': {'X-Session-Id': getState().auth.sessionId},
                 'data': formData,
                 'contentType': false,
                 'processData': false,

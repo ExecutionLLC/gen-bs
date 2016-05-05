@@ -29,10 +29,10 @@ export default class DialogBase extends ComponentBase {
         return (
             <button
                 onClick={ () => {this.onCloseModal()} }
-                type="button"
-                className="btn btn-default"
-                data-dismiss="modal"
-                localize-data="action.extendSession"
+                type='button'
+                className='btn btn-default'
+                data-dismiss='modal'
+                localize-data='action.extendSession'
             >
                 <span>Ok</span>
             </button>
@@ -72,8 +72,8 @@ export default class DialogBase extends ComponentBase {
 
     render() {
         return (
-            <Modal dialogClassName="modal-dialog-primary"
-                   bsSize="lg"
+            <Modal dialogClassName='modal-dialog-primary'
+                   bsSize='lg'
                    show={this.props.showModal}
                    onHide={ () => {this.onCloseModal()} }
             >

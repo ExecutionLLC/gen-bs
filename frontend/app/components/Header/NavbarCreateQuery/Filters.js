@@ -15,13 +15,13 @@ export default class Filters extends Component {
         const selectedFilter = this.props.ui.selectedFilter;
 
         return (
-            <div className="table-cell max-width">
-                <div className="btn-group filter-select"
-                     data-localize="filters.help"
-                     data-toggle="tooltip"
-                     data-placement="bottom"
-                     data-container="body"
-                     title="Select one of available filters"
+            <div className='table-cell max-width'>
+                <div className='btn-group filter-select'
+                     data-localize='filters.help'
+                     data-toggle='tooltip'
+                     data-placement='bottom'
+                     data-container='body'
+                     title='Select one of available filters'
                 >
                     <Select options={this.getFilterOptions()}
                             value={selectedFilter ? selectedFilter.id : null}

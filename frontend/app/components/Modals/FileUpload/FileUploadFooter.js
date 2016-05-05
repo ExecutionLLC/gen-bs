@@ -22,23 +22,23 @@ export default class FileUploadFooter extends Component {
 
         <Modal.Footer>
           <button
-            onClick={ () => { this.props.closeModal('upload')} }
-            type="button"
-            className="btn btn-default"
-            data-dismiss="modal"
+              onClick={ () => { this.props.closeModal('upload')} }
+              type='button'
+              className='btn btn-default'
+              data-dismiss='modal'
           >
-            <span  data-localize="actions.cancel" />Cancel
+              <span data-localize='actions.cancel'/>Cancel
           </button>
 
           <button
-            disabled={disabledClass} 
-            onClick={ () => {
+              disabled={disabledClass}
+              onClick={ () => {
               dispatch(uploadFile())
             }}
-            type="button"
-            className="btn btn-primary"
+              type='button'
+              className='btn btn-primary'
           >
-            <span data-localize="actions.save_select.title">Upload</span>
+              <span data-localize='actions.save_select.title'>Upload</span>
           </button>
          </Modal.Footer>
 

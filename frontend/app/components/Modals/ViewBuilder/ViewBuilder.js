@@ -55,17 +55,17 @@ export default class ViewBuilder extends React.Component {
 
             return (
 
-                <div className="row grid-toolbar" key={Math.round(Math.random()*100000000).toString()}>
+                <div className='row grid-toolbar' key={Math.round(Math.random()*100000000).toString()}>
 
-                    <div className="col-xs-6 btn-group-select2">
-                        <div className="btn-group">
-                            <button className="btn btn-link btnDrag" disabled="" type="button">
-                                <span className="icon-bar"/>
-                                <span className="icon-bar"/>
-                                <span className="icon-bar"/>
+                    <div className='col-xs-6 btn-group-select2'>
+                        <div className='btn-group'>
+                            <button className='btn btn-link btnDrag' disabled='' type='button'>
+                                <span className='icon-bar'/>
+                                <span className='icon-bar'/>
+                                <span className='icon-bar'/>
                             </button>
                         </div>
-                        <div className="btn-group">
+                        <div className='btn-group'>
                             <Select
                                 options={selectOptions}
                                 value={currentValue}
@@ -74,13 +74,13 @@ export default class ViewBuilder extends React.Component {
                                 disabled={isDisableEditing || !isFieldAvailable}
                             />
                         </div>
-                        <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
-                             data-placement="bottom" data-container="body" title="Desc/Asc Descending">
+                        <div className='btn-group' data-localize='views.setup.settings.sort' data-toggle='tooltip'
+                             data-placement='bottom' data-container='body' title='Desc/Asc Descending'>
                             {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
 
                     </div>
-                    <div className="col-xs-5 input-group">
+                    <div className='col-xs-5 input-group'>
                         <Select
                             options={keywordsSelectOptions}
                             multi={true}
@@ -92,15 +92,15 @@ export default class ViewBuilder extends React.Component {
                         />
                     </div>
 
-                    <div className="col-xs-1">
-                        <button className="btn-link" disabled={disabledClassMinus}
+                    <div className='col-xs-1'>
+                        <button className='btn-link' disabled={disabledClassMinus}
                                 onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
-                                type="button">
-                            <i className="fa fa-lg fa-minus-circle"/></button>
-                        <button className="btn-link" disabled={disabledClass}
+                                type='button'>
+                            <i className='fa fa-lg fa-minus-circle'/></button>
+                        <button className='btn-link' disabled={disabledClass}
                                 onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }
-                                type="button">
-                            <i className="fa fa-lg fa-plus-circle"/></button>
+                                type='button'>
+                            <i className='fa fa-lg fa-plus-circle'/></button>
                     </div>
                 </div>
             )
@@ -108,21 +108,21 @@ export default class ViewBuilder extends React.Component {
 
         return (
 
-            <div className="sort-setting copyview collapse in">
-                <h5 data-localize="views.setup.settings.title">Table Columns</h5>
-                <div className="row grid-toolbar nobg">
+            <div className='sort-setting copyview collapse in'>
+                <h5 data-localize='views.setup.settings.title'>Table Columns</h5>
+                <div className='row grid-toolbar nobg'>
 
-                    <div className="col-xs-6">
-                        <small className="text-muted text-order" data-localize="views.setup.settings.columns_order">
+                    <div className='col-xs-6'>
+                        <small className='text-muted text-order' data-localize='views.setup.settings.columns_order'>
                             Order
                         </small>
-                        <small className="text-muted" data-localize="views.setup.settings.columns_sorting">Column Name
+                        <small className='text-muted' data-localize='views.setup.settings.columns_sorting'>Column Name
                             and Multi Sort Order
                         </small>
                     </div>
 
-                    <div className="col-xs-6">
-                        <small className="text-muted" data-localize="views.setup.settings.columns_filter">Column Filter
+                    <div className='col-xs-6'>
+                        <small className='text-muted' data-localize='views.setup.settings.columns_filter'>Column Filter
                             and Keywords
                         </small>
                     </div>
@@ -188,10 +188,10 @@ export default class ViewBuilder extends React.Component {
     renderSortButton(currentDirection, sortButtonClass, sortOrder, fieldId, isDisable) {
         return (
             <button className={sortButtonClass}
-                    type="button"
+                    type='button'
                     disabled={isDisable}
                     onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
-                <span className="text-info">{sortOrder}</span>
+                <span className='text-info'>{sortOrder}</span>
             </button>
         );
     }
