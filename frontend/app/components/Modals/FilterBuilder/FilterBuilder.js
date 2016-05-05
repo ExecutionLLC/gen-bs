@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import InputResizingArray from '../../shared/InputResizingArray';
 import InputArray from '../../shared/InputArray';
@@ -216,7 +216,6 @@ class FieldFilterItem extends React.Component {
                     className="selectTree"
                     options={fieldsList}
                     value={fieldId}
-                    clearable={false}
                     disabled={disabled}
                     onChange={ (val) => onChange(val.value) }
                 />
@@ -231,7 +230,6 @@ class FieldFilterItem extends React.Component {
                     className="select2"
                     options={operatorsList}
                     value={operatorType}
-                    clearable={false}
                     disabled={disabled}
                     onChange={ (val) => onChange(val.value) }
                 />
