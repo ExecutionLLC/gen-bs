@@ -98,7 +98,7 @@ export function filterBuilderCreateFilter() {
                const result = response.body;
                dispatch(filterBuilderReceiveUpdateFilter(result));
                dispatch(closeModal('filters'));
-               dispatch(fetchFilters(result.id));
+               dispatch(fetchFilters());
            }
         });
     }
@@ -143,7 +143,7 @@ export function filterBuilderUpdateFilter() {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
                     dispatch(closeModal('filters'));
-                    dispatch(fetchFilters(result.id))
+                    dispatch(fetchFilters())
                 }
             });
         }
