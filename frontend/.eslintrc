@@ -4,7 +4,7 @@
   "env": {
     "browser": true,
     "node": true,
-    "jquery": true
+    "es6": true
   },
   "globals": {
     "_": false
@@ -13,6 +13,10 @@
     "react"
   ],
   "rules": {
+    "indent": [
+      "error",
+      4
+    ],
     "no-debugger": 0,
     "no-console": 0,
     "new-cap": 0,
