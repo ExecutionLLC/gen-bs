@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 
 import ComponentBase from '../../shared/ComponentBase';
@@ -106,7 +106,6 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                 <dd>
                     <Select
                         options={selectOptions}
-                        clearable={false}
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.value)}
                     />

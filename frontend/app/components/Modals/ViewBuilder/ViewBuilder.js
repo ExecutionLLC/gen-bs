@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
@@ -69,7 +69,6 @@ export default class ViewBuilder extends React.Component {
                             <Select
                                 options={selectOptions}
                                 value={currentValue}
-                                clearable={false}
                                 onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
                                 disabled={isDisableEditing || !isFieldAvailable}
                             />
@@ -87,7 +86,8 @@ export default class ViewBuilder extends React.Component {
                             placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
                             value={keywordsCurrentValue}
                             onChange={ (val) => this.onChangeKeyword(index, val)}
-                            clearable={false}
+                            clearable={true}
+                            backspaceRemoves={true}
                             disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
                         />
                     </div>

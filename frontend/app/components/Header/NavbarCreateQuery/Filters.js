@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {changeFilter} from '../../../actions/ui'
@@ -25,7 +25,6 @@ export default class Filters extends Component {
                 >
                     <Select options={this.getFilterOptions()}
                             value={selectedFilter ? selectedFilter.id : null}
-                            clearable={false}
                             onChange={(item) => dispatch(changeFilter(item.value))}
                     />
                 </div>
