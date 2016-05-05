@@ -8,6 +8,7 @@ import {changeSample, receiveSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
 import * as _ from "lodash";
+import {filtersListReceive} from "./filtersList";
 
 /*
  * action types
@@ -91,6 +92,7 @@ export function fetchUserdata() {
                 const view = _.find(userData.views, view => view.type === 'standard');
 
                 dispatch(receiveUserdata(userData));
+                dispatch(filtersListReceive(userData.filters));
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
