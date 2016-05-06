@@ -77,17 +77,18 @@ export function filtersListServerCreateFilter(filter, sessionId, languageId) {
         return new Promise( (resolve) => {
             filtersClient.add(sessionId, languageId, filter, (error, response) => {
                 dispatch(filtersListEndServerOperation());
+                let newFilter = null;
                 if (error) {
                     dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
                 } else {
-                    const newFilter = response.body;
+                    newFilter = response.body;
                     const filterId = newFilter.id;
                     dispatch(filtersListAddFilter(newFilter));
                     dispatch(filtersListSelectFilter(filterId));
                 }
-                resolve();
+                resolve(newFilter);
             });
         });
     };
@@ -99,16 +100,17 @@ export function filtersListServerUpdateFilter(filter, sessionId) {
         return new Promise( (resolve) => {
             filtersClient.update(sessionId, filter, (error, response) => {
                 dispatch(filtersListEndServerOperation());
+                let updatedFilter = null;
                 if (error) {
                     dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
                 } else {
-                    const updatedFilter = response.body;
+                    updatedFilter = response.body;
                     dispatch(filtersListEditFilter(filter.id, updatedFilter));
                     dispatch(filtersListSelectFilter(updatedFilter.id));
                 }
-                resolve();
+                resolve(updatedFilter);
             });
         });
     };
@@ -127,7 +129,7 @@ export function filtersListServerDeleteFilter(filterId, sessionId) {
                 } else {
                     dispatch(filtersListDeleteFilter(filterId));
                 }
-                resolve();
+                resolve(!error);
             });
         });
     };
