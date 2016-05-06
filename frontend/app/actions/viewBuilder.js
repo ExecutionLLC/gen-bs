@@ -92,7 +92,7 @@ export function viewBuilderChangeSortColumn(fieldId, sortDirection, ctrlKeyPress
         fieldId,
         sortDirection,
         sortOrder: ctrlKeyPressed ? 2 : 1
-    }
+    };
 }
 
 export function viewBuilderChangeKeywords(viewItemIndex, keywordsIds) {
@@ -116,8 +116,7 @@ function viewBuilderReceiveUpdateView(json) {
     };
 }
 
-// FIXME: viewItemIndex is unused
-export function viewBuilderUpdateView(viewItemIndex) {
+export function viewBuilderUpdateView() {
 
     return (dispatch, getState) => {
         const state = getState();
@@ -142,15 +141,14 @@ export function viewBuilderUpdateView(viewItemIndex) {
                     const result = response.body;
                     dispatch(viewBuilderReceiveUpdateView(result));
                     dispatch(closeModal('views'));
-                    dispatch(fetchViews(result.id))
+                    dispatch(fetchViews(result.id));
                 }
             });
         }
-    }
+    };
 }
 
-// FIXME: viewItemIndex is unused
-export function viewBuilderCreateView(viewItemIndex) {
+export function viewBuilderCreateView() {
 
     return (dispatch, getState) => {
         dispatch(viewBuilderRequestCreateView());
@@ -168,7 +166,7 @@ export function viewBuilderCreateView(viewItemIndex) {
                 dispatch(fetchViews(result.id));
             }
         });
-    }
+    };
 }
 
 function viewBuilderRequestCreateView() {
@@ -203,7 +201,7 @@ export function viewBuilderDeleteView(viewId) {
                 dispatch(changeView(newViewId));
             }
         });
-    }
+    };
 }
 
 function viewBuilderRequestDeleteView(viewId) {
@@ -217,5 +215,5 @@ function viewBuilderReceiveDeleteView(json) {
     return {
         type: VBUILDER_RECEIVE_DELETE_VIEW,
         view: json
-    }
+    };
 }

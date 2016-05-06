@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
-import {renewHistoryItem} from '../../actions/queryHistory'
+import {renewHistoryItem} from '../../actions/queryHistory';
 
 export default class QueryHistoryModal extends Component {
     renderHeader() {
@@ -13,7 +13,7 @@ export default class QueryHistoryModal extends Component {
                     History
                 </Modal.Title>
             </Modal.Header>
-        )
+        );
     }
 
     renderHistoryTableHeader() {
@@ -35,19 +35,19 @@ export default class QueryHistoryModal extends Component {
                 <th></th>
             </tr>
             </thead>
-        )
+        );
     }
 
     renderEmptyHistoryTableBody() {
         const {isDemo} = this.props;
-        const message = isDemo ? "Please register to access your query history." : "History is empty.";
+        const message = isDemo ? 'Please register to access your query history.' : 'History is empty.';
         return (
             <tr>
                 <td colSpan='5'>
                     <div className='empty'><h3><i className='md-i'>hourglass_empty</i>{message}</h3></div>
                 </td>
             </tr>
-        )
+        );
     }
 
     renderHistoryTableBody() {
@@ -57,32 +57,31 @@ export default class QueryHistoryModal extends Component {
                 <tbody>
                 { this.renderEmptyHistoryTableBody() }
                 </tbody>
-            )
+            );
         }
         return (
             <tbody>
             { _.map(history, (historyItem) => this.renderHistoryTableRow(historyItem)) }
             </tbody>
-        )
+        );
     }
 
     renderRenewButton(historyItemId) {
         return (
             <button className='btn btn-uppercase btn-link'
-                    onClick={ () => { this.onRenewButtonClicked(historyItemId) } }
+                    onClick={ () => this.onRenewButtonClicked(historyItemId) }
             >
                 Renew
             </button>
-        )
+        );
     }
 
     renderHistoryTableRow(historyItem) {
         const itemId = historyItem.id;
         const datetime = historyItem.timestamp ? Moment(historyItem.timestamp).format('YYYY-MM-DD-HH-mm-ss') : 'Unknown';
         const sample = historyItem.sample ? historyItem.sample.fileName : 'Unknown';
-        const filters = historyItem.filters.length > 0 ? _.map(historyItem.filters, (item) => {
-            return item.name
-        }).join('</br>') : 'Unknown';
+        const filters = historyItem.filters.length > 0 ?
+            _.map(historyItem.filters, (item) => item.name).join('</br>') : 'Unknown';
         const view = historyItem.view ? historyItem.view.name : 'Unknown';
         return (
             <tr key={ itemId }>
@@ -92,7 +91,7 @@ export default class QueryHistoryModal extends Component {
                 <td>{ view }</td>
                 <td>{ this.renderRenewButton(historyItem.id) }</td>
             </tr>
-        )
+        );
     }
 
     renderHistoryTable() {
@@ -101,7 +100,7 @@ export default class QueryHistoryModal extends Component {
                 { this.renderHistoryTableHeader() }
                 { this.renderHistoryTableBody() }
             </table>
-        )
+        );
     }
 
     renderFooter() {
@@ -114,13 +113,13 @@ export default class QueryHistoryModal extends Component {
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
                 show={ this.props.showModal }
-                onHide={ () => {this.props.closeModal()} }
+                onHide={ () => this.props.closeModal() }
             >
                 { this.renderHeader() }
                 { this.renderHistoryTable() }
                 { this.renderFooter() }
             </Modal>
-        )
+        );
     }
 
     onRenewButtonClicked(historyItemId) {
@@ -134,7 +133,7 @@ function mapStateToProps(state) {
     return {
         isDemo,
         history
-    }
+    };
 }
 
 export default connect(mapStateToProps)(QueryHistoryModal);

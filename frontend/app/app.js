@@ -1,5 +1,5 @@
-import 'babel-polyfill'
-import 'jszip'
+import 'babel-polyfill';
+import 'jszip';
 
 
 require('file?name=index.html!./index.html');
@@ -19,11 +19,11 @@ require('file?name=[path][name].[ext]&context=./app'
 require('file?name=[path][name].[ext]&context=./app'
     + '!./assets/vendor/font-awesome/css/font-awesome.min.css');
 
-import React from 'react'
-import { render } from 'react-dom'
-import Root from './containers/Root'
+import React from 'react';
+import { render } from 'react-dom';
+import Root from './containers/Root';
 
-import gzip from './utils/gzip'
+import gzip from './utils/gzip';
 window.gzip = gzip;
 import './assets/css/index.less';
 

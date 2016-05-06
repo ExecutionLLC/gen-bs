@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Moment from 'moment';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
 import DialogBase from './DialogBase';
 import {closeSavedFilesDialog, downloadSavedFile} from '../../actions/savedFiles';
 
 class SavedFilesModal extends DialogBase {
     constructor(props) {
-        super(props, 'savedFiles');
+        super(props);
     }
 
     get haveSavedFiles() {

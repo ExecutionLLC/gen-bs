@@ -111,7 +111,7 @@ class RulesGroupContainer extends Component {
             /** @type {boolean} */
             allowDelete,
             /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-            handlers,
+            handlers
         } = this.props;
 
         return (
@@ -163,7 +163,7 @@ class RulesGroupHeader extends Component {
      */
     static renderRadioButton(caption, value, groupName, isOn, disabled, onSwitch) {
         return (
-            <label className={"btn btn-xs btn-default " + (isOn ? 'active': '')}>
+            <label className={'btn btn-xs btn-default ' + (isOn ? 'active': '')}>
                 <input
                     type='radio'
                     name={groupName}

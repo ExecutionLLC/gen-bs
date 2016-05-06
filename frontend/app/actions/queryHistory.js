@@ -69,7 +69,7 @@ export function renewHistoryItem(historyItemId) {
         const {history} = getState().queryHistory;
         const historyItem = _.find(history, (historyItem) => {
                 return historyItem.id === historyItemId;
-            }) || null;
+        }) || null;
         if (historyItem === null) {
             dispatch(handleError(null, UNKNOWN_HISTORY_ID_ERROR));
         } else {

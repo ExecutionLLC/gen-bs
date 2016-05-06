@@ -5,16 +5,13 @@ import SqlExporter from './export/sqlExporter';
 export default class ExportUtils {
     static createExporter(ofType) {
         switch (ofType) {
-            case 'csv':
-            {
+            case 'csv': {
                 return new CsvExporter();
             }
-            case 'txt':
-            {
+            case 'txt': {
                 return new TxtExporter();
             }
-            case 'sql':
-            {
+            case 'sql': {
                 return new SqlExporter();
             }
             default:
