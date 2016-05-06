@@ -200,7 +200,7 @@ export function filterBuilderDeleteFilter(filterId) {
                     //dispatch(filterBuilderReceiveDeleteFilter(null));//did not implemented // argument did not used
                     dispatch(deleteFilter(filterId));
                     const state = getState();
-                    const selectedFilterId = state.ui.selectedFilter.id;
+                    const selectedFilterId = state.filtersList.selectedFilterId;
                     const newFilterId = (filterId == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
                     dispatch(changeFilter(newFilterId));
                     dispatch(filterBuilderToggleNewEdit(false, fields));
