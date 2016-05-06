@@ -4,7 +4,7 @@ import Input from '../../shared/Input';
 import InputResizingArray from '../../shared/InputResizingArray';
 import InputArray from '../../shared/InputArray';
 import QueryBuilder from '../../shared/QueryBuilder';
-import FieldUtils from '../../../utils/fieldUtils'
+import FieldUtils from '../../../utils/fieldUtils';
 
 import {
     filterBuilderChangeFilter

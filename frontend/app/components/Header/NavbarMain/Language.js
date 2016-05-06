@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 export default class Language extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {

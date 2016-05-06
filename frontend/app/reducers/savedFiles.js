@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/savedFiles'
+import * as ActionTypes from '../actions/savedFiles';
 
 import ExportUtils from '../utils/exportUtils';
 
@@ -7,8 +7,7 @@ export default function savedFiles(state = {
     list: []
 }, action) {
     switch (action.type) {
-        case ActionTypes.CREATE_EXPORT_DOWNLOAD:
-        {
+        case ActionTypes.CREATE_EXPORT_DOWNLOAD: {
             const {
                 fileBlob,
                 fileName
@@ -18,15 +17,13 @@ export default function savedFiles(state = {
             return state;
         }
 
-        case ActionTypes.RECEIVE_SAVED_FILES_LIST:
-        {
+        case ActionTypes.RECEIVE_SAVED_FILES_LIST: {
             return Object.assign({}, state, {
                 list: action.savedFilesList
             });
         }
 
-        case ActionTypes.SAVED_FILE_UPLOAD_RESULT_RECEIVED:
-        {
+        case ActionTypes.SAVED_FILE_UPLOAD_RESULT_RECEIVED: {
             // Put newly added file to the beginning of the array.
             const savedFiles = state.list;
             const {savedFile} = action;
@@ -36,28 +33,25 @@ export default function savedFiles(state = {
             });
         }
 
-        case ActionTypes.SAVED_FILE_DOWNLOAD_RESULT_RECEIVED:
-        {
+        case ActionTypes.SAVED_FILE_DOWNLOAD_RESULT_RECEIVED: {
             const {savedFileBlob, fileName} = action;
             ExportUtils.downloadBlob(savedFileBlob, fileName);
             return state;
         }
 
-        case ActionTypes.SHOW_SAVED_FILES_DIALOG:
-        {
+        case ActionTypes.SHOW_SAVED_FILES_DIALOG: {
             return Object.assign({}, state, {
                 showSavedFilesModal: true
             });
         }
 
-        case ActionTypes.CLOSE_SAVED_FILES_DIALOG:
-        {
+        case ActionTypes.CLOSE_SAVED_FILES_DIALOG: {
             return Object.assign({}, state, {
                 showSavedFilesModal: false
             });
         }
 
         default:
-            return state
+            return state;
     }
 }

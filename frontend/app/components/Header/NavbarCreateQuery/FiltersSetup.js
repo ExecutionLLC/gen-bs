@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import Select2 from 'react-select2-wrapper';
-import {filterBuilderToggleNewEdit} from '../../../actions/filterBuilder'
+import {filterBuilderToggleNewEdit} from '../../../actions/filterBuilder';
 
 
 export default class FiltersSetup extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {
@@ -30,8 +29,6 @@ export default class FiltersSetup extends Component {
                     </button>
                 </div>
             </div>
-
-
-        )
+        );
     }
 }

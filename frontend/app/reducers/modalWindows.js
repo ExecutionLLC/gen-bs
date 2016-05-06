@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/modalWindows'
+import * as ActionTypes from '../actions/modalWindows';
 
 export default function modalWindows(state = {
     views: {showModal: false},
@@ -17,6 +17,6 @@ export default function modalWindows(state = {
             });
 
         default:
-            return state
+            return state;
     }
 }

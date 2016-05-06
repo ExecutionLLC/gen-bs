@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/errorHandler'
+import * as ActionTypes from '../actions/errorHandler';
 
 export default function errorHandler(state = {
     showErrorWindow: false,
@@ -6,15 +6,13 @@ export default function errorHandler(state = {
 },
                                      action) {
     switch (action.type) {
-        case ActionTypes.HANDLE_ERROR:
-        {
+        case ActionTypes.HANDLE_ERROR: {
             return Object.assign({}, state, {
                 showErrorWindow: action.error ? true : false,
                 lastError: action.error
             });
         }
-        case ActionTypes.LAST_ERROR_RESOLVED:
-        {
+        case ActionTypes.LAST_ERROR_RESOLVED: {
             return Object.assign({}, state, {
                 showErrorWindow: false,
                 lastError: null

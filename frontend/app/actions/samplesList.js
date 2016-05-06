@@ -1,5 +1,5 @@
 import HttpStatus from 'http-status';
-import {handleError} from './errorHandler'
+import {handleError} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
 
 

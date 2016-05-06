@@ -13,6 +13,6 @@ export default class FileUploadHeader extends Component {
                 </Modal.Title>
             </Modal.Header>
 
-        )
+        );
     }
 }

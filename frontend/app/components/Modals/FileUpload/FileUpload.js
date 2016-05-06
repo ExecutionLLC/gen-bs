@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {Modal} from 'react-bootstrap';
-import classNames from 'classnames';
 
 import FileUploadProgressBar from './FileUploadProgressBar';
 
@@ -10,7 +8,7 @@ import {clearUploadState, changeFileForUpload} from '../../../actions/fileUpload
 export default class FileUpload extends Component {
 
     componentWillMount() {
-        this.props.dispatch(clearUploadState())
+        this.props.dispatch(clearUploadState());
     }
 
     render() {

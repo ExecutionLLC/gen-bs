@@ -20,7 +20,7 @@ export default class Auth extends Component {
                     </a>
                     <ul className='dropdown-menu'>
                         <li>
-                            <a onClick={ e => { this.props.dispatch(logout()) } } href='#' type='button' id='logout'>
+                            <a onClick={() => this.props.dispatch(logout()) } href='#' type='button' id='logout'>
                                 <span data-localize='account.logout'>Logout</span>
                             </a>
                         </li>

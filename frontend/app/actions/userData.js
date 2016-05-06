@@ -1,6 +1,6 @@
-import apiFacade from '../api/ApiFacade'
-import {handleError} from './errorHandler'
-import {receiveFields, receiveTotalFields} from './fields'
+import apiFacade from '../api/ApiFacade';
+import {handleError} from './errorHandler';
+import {receiveFields, receiveTotalFields} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {receiveQueryHistory} from './queryHistory';
 import {analyze, changeView, changeFilter} from './ui';

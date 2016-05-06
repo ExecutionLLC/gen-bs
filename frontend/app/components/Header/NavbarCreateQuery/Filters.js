@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import Select from 'react-select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeFilter} from '../../../actions/ui'
+import {changeFilter} from '../../../actions/ui';
 
 export default class Filters extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {

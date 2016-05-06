@@ -12,7 +12,7 @@ export default class VariantsTableRows extends Component {
         const {currentVariants} = this.props.ws;
         const {sort} = this.props.variantsTable.searchInResultsParams;
         const {isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
-        const {searchParams, ui, fields} = this.props;
+        const {fields} = this.props;
         const currentView = this.props.ws.variantsView;
 
         return (

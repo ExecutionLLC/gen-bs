@@ -1,7 +1,7 @@
-import config from '../../config'
-import {closeModal} from './modalWindows'
+import config from '../../config';
+import {closeModal} from './modalWindows';
 import {fetchSamples} from './samplesList';
-import gzip from '../utils/gzip'
+import gzip from '../utils/gzip';
 import {fetchTotalFields} from './fields';
 
 /*

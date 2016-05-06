@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import * as ActionTypes from '../actions/samplesList'
+import * as ActionTypes from '../actions/samplesList';
 
 
 export default function samplesList(state = {

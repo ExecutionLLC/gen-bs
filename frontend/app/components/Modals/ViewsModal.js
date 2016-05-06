@@ -1,12 +1,12 @@
 import React  from 'react';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
-import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader'
-import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter'
-import NewViewInputs from './ViewBuilder/NewViewInputs'
-import ExistentViewSelect from './ViewBuilder/ExistentViewSelect'
-import ViewBuilder from './ViewBuilder/ViewBuilder'
+import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader';
+import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter';
+import NewViewInputs from './ViewBuilder/NewViewInputs';
+import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
+import ViewBuilder from './ViewBuilder/ViewBuilder';
 
 class ViewsModal extends React.Component {
 

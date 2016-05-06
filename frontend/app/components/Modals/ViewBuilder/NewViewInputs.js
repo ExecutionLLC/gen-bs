@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
+import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder';
 
 
 export default class NewViewInputs extends React.Component {

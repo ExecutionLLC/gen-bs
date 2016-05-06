@@ -14,7 +14,7 @@ class FileUploadModal extends Component {
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
                 show={this.props.showModal}
-                onHide={ () => {this.props.closeModal('upload')} }
+                onHide={ () => this.props.closeModal('upload') }
             >
                 <FileUploadHeader />
                 <Modal.Body>

@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/websocket'
+import * as ActionTypes from '../actions/websocket';
 
 export default function websocket(state = {
     wsConn: null,
@@ -16,8 +16,7 @@ export default function websocket(state = {
     progress: null
 }, action) {
     switch (action.type) {
-        case  ActionTypes.WS_DELETE_COMMENT:
-        {
+        case  ActionTypes.WS_DELETE_COMMENT: {
             const commentVariants = state.variants.slice();
             const deletedVariantIndex = _.findIndex(
                 commentVariants, variant => variant.searchKey === action.searchKey
@@ -32,8 +31,7 @@ export default function websocket(state = {
                 variants: commentVariants
             });
         }
-        case ActionTypes.WS_UPDATE_COMMENT:
-        {
+        case ActionTypes.WS_UPDATE_COMMENT: {
             const commentVariants = state.variants.slice();
             const updatedVariantIndex = _.findIndex(
                 commentVariants, variant => variant.searchKey === action.commentData.searchKey
@@ -49,8 +47,7 @@ export default function websocket(state = {
                 variants: commentVariants
             });
         }
-        case ActionTypes.WS_ADD_COMMENT:
-        {
+        case ActionTypes.WS_ADD_COMMENT: {
             const commentVariants = state.variants.slice();
             const addCommentVariantIndex = _.findIndex(
                 commentVariants, variant => variant.searchKey === action.commentData.searchKey
@@ -124,8 +121,7 @@ export default function websocket(state = {
                 isVariantsLoading: true,
                 searchParams: action.searchParams
             });
-        case ActionTypes.REQUEST_SET_CURRENT_PARAMS:
-        {
+        case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {
                 variantsView: action.view,
                 variantsSample: action.sample,
@@ -135,6 +131,6 @@ export default function websocket(state = {
         }
 
         default:
-            return state
+            return state;
     }
 }

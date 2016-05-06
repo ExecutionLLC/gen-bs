@@ -20,7 +20,7 @@ export default class SavedFiles extends Component {
                 </a>
             </div>
 
-        )
+        );
     }
 
     onButtonClick() {

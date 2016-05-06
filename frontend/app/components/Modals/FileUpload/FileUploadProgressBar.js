@@ -5,7 +5,7 @@ export default class FileUploadProgressBar extends Component {
 
     render() {
 
-        const {progressStatusFromAS, progressValueFromAS} = this.props.fileUpload
+        const {progressStatusFromAS, progressValueFromAS} = this.props.fileUpload;
 
         return (
 

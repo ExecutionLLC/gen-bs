@@ -1,22 +1,20 @@
 const WebSocketClient = require('../../test-client/WebSocketClient');
-const Request = require('request')
+const Request = require('request');
 
-const HOST = 'localhost'
-const PORT = 8888
+const HOST = 'localhost';
+const PORT = 8888;
 const SESSION_HEADER = 'X-Session-Id';
 
 const wsClient = new WebSocketClient(HOST, PORT);
-console.log('test ws')
-
-var operationId = null;
+console.log('test ws');
 
 const searchParams = {
-    sampleId: "ce81aa10-13e3-47c8-bd10-205e97a92d69",
+    sampleId: 'ce81aa10-13e3-47c8-bd10-205e97a92d69',
     viewId: 'b7ead923-9973-443a-9f44-5563d31b5073',
     filterIds: null,
     limit: 100,
     offset: 0
-}
+};
 
 function login(userName, password, cb) {
     var sessionId = null;

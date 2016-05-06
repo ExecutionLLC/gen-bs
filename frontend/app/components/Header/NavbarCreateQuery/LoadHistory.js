@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {showQueryHistoryModal} from '../../../actions/queryHistory'
+import {showQueryHistoryModal} from '../../../actions/queryHistory';
 
 export default class LoadHistory extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {
@@ -15,11 +15,11 @@ export default class LoadHistory extends Component {
                      data-toggle='tooltip'
                      data-placement='bottom'
                      data-container='body'
-                     title="History of queries, saved query settings"
+                     title='History of queries, saved query settings'
                 >
                     <button className='btn btn-default'
                             type='button'
-                            onClick={ () => { this.props.dispatch(showQueryHistoryModal()) } }
+                            onClick={ () => this.props.dispatch(showQueryHistoryModal()) }
                     >
                         <span data-localize='history.title'>
                             Load history
@@ -27,6 +27,6 @@ export default class LoadHistory extends Component {
                     </button>
                 </div>
             </div>
-        )
+        );
     }
 }

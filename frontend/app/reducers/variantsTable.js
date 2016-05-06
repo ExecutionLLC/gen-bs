@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/variantsTable'
+import * as ActionTypes from '../actions/variantsTable';
 
 const initialState = {
     operationId: null,

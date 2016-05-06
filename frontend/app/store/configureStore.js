@@ -27,5 +27,5 @@ const createStoreWithMiddleware = compose(
 )(createStore);
 
 export default function configureStore(initialState) {
-    return createStoreWithMiddleware(rootReducer, initialState)
+    return createStoreWithMiddleware(rootReducer, initialState);
 }

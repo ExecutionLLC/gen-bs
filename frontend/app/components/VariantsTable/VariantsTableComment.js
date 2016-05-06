@@ -1,5 +1,5 @@
 import React, {Component}  from 'react';
-import {Popover, OverlayTrigger} from 'react-bootstrap'
+import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 
 import {createComment, updateComment, removeComment} from '../../actions/variantsTable';

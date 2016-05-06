@@ -8,7 +8,7 @@ import ComponentBase from '../../shared/ComponentBase';
 import {
     updateSampleValue, resetSampleInList,
     requestUpdateSampleFields
-} from '../../../actions/samplesList'
+} from '../../../actions/samplesList';
 
 export default class SampleEditableFieldsPanel extends ComponentBase {
     constructor(...args) {

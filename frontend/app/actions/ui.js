@@ -4,7 +4,7 @@ import {viewBuilderSelectView} from './viewBuilder';
 import {filterBuilderSelectFilter} from './filterBuilder';
 import {detachHistory} from './queryHistory';
 import {setViewVariantsSort} from './variantsTable';
-import {handleError} from './errorHandler'
+import {handleError} from './errorHandler';
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
@@ -22,13 +22,13 @@ const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameter
 export function requestTableScrollPositionReset() {
     return {
         type: REQUEST_TABLE_SCROLL_POSITION_RESET
-    }
+    };
 }
 
 export function completeTableScrollPositionReset() {
     return {
         type: COMPLETE_TABLE_SCROLL_POSITION_RESET
-    }
+    };
 }
 
 /*
@@ -37,7 +37,7 @@ export function completeTableScrollPositionReset() {
 export function toggleQueryNavbar() {
     return {
         type: TOGGLE_QUERY_NAVBAR
-    }
+    };
 }
 
 function changeHeaderView(views, viewId) {
@@ -45,7 +45,7 @@ function changeHeaderView(views, viewId) {
         type: CHANGE_HEADER_VIEW,
         views,
         viewId
-    }
+    };
 }
 
 export function changeView(viewId) {
@@ -53,7 +53,7 @@ export function changeView(viewId) {
         const {userData: {views}} = getState();
         dispatch(changeHeaderView(views, viewId));
         dispatch(viewBuilderSelectView(views, viewId));
-    }
+    };
 }
 
 export function changeHeaderFilter(filters, filterId) {
@@ -61,7 +61,7 @@ export function changeHeaderFilter(filters, filterId) {
         type: CHANGE_HEADER_FILTER,
         filters,
         filterId
-    }
+    };
 }
 
 export function changeFilter(filterId) {
@@ -69,7 +69,7 @@ export function changeFilter(filterId) {
         const {userData: {filters}} = getState();
         dispatch(changeHeaderFilter(filters, filterId));
         dispatch(filterBuilderSelectFilter(filters, filterId));
-    }
+    };
 }
 
 export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
@@ -113,6 +113,6 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         const searchFilter = _.find(filters, {id: filterId});
         dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
-        dispatch(fetchVariants(searchParams))
-    }
+        dispatch(fetchVariants(searchParams));
+    };
 }

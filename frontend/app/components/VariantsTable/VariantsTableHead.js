@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
-import classNames from 'classnames';
 
 import FieldHeader from './FieldHeader';
-import  {firstCharToUpperCase} from '../../utils/stringUtils';
-import FieldUtils from '../../utils/fieldUtils';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
 

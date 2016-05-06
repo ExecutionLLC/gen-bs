@@ -1,5 +1,5 @@
-import {receiveSearchedResults} from './variantsTable'
-import {changeFileUploadProgress, fileUploadError} from './fileUpload'
+import {receiveSearchedResults} from './variantsTable';
+import {changeFileUploadProgress, fileUploadError} from './fileUpload';
 /*
  * action types
  */

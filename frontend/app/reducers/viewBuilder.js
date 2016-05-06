@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/viewBuilder'
+import * as ActionTypes from '../actions/viewBuilder';
 
 const EMPTY_VIEW_ITEM = {
     fieldId: null,

@@ -13,7 +13,7 @@ import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
 import FiltersModal from '../components/Modals/FiltersModal';
 import FileUploadModal from '../components/Modals/FileUploadModal';
-import QueryHistoryModal from '../components/Modals/QueryHistoryModal'
+import QueryHistoryModal from '../components/Modals/QueryHistoryModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
 

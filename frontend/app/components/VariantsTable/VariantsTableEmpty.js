@@ -13,6 +13,6 @@ export default class VariantsTableEmpty extends Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }

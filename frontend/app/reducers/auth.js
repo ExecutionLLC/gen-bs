@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/auth'
+import * as ActionTypes from '../actions/auth';
 
 export default function auth(state = {
     isFetching: false,

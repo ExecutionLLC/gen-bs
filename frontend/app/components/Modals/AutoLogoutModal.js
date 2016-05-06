@@ -10,7 +10,7 @@ export default class AutoLogoutModal extends Component {
                     Auto Logout
                 </Modal.Title>
             </Modal.Header>
-        )
+        );
     }
 
     renderBody() {
@@ -18,7 +18,7 @@ export default class AutoLogoutModal extends Component {
             <Modal.Body>
                 Your session will be automatically closed after {this.props.secondsToAutoLogout} seconds.
             </Modal.Body>
-        )
+        );
     }
 
     renderFooter() {

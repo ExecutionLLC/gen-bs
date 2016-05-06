@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/ui'
+import * as ActionTypes from '../actions/ui';
 
 export default function ui(state = {
     queryNavbarClosed: true,

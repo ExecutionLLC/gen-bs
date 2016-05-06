@@ -10,6 +10,6 @@ export default class FilterBuilderHeader extends Component {
                     Setup Filters
                 </Modal.Title>
             </Modal.Header>
-        )
+        );
     }
 }

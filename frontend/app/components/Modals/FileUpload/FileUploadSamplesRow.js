@@ -5,7 +5,7 @@ import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     changeSample, receiveSamplesList
-} from '../../../actions/samplesList'
+} from '../../../actions/samplesList';
 
 
 export default class FileUploadSamplesRow extends Component {

@@ -3,7 +3,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeView} from '../../../actions/ui'
+import {changeView} from '../../../actions/ui';
 
 export default class Views extends Component {
 

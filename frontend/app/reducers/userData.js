@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/userData'
+import * as ActionTypes from '../actions/userData';
 
 export default function userData(state = {
     isFetching: false,

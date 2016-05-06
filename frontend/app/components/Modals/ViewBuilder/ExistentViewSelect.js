@@ -12,7 +12,7 @@ import {
     viewBuilderSelectView,
     viewBuilderToggleNew,
     viewBuilderDeleteView
-} from '../../../actions/viewBuilder'
+} from '../../../actions/viewBuilder';
 
 
 export default class ExistentViewSelect extends React.Component {

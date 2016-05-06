@@ -11,7 +11,7 @@ import {
     filterBuilderSelectFilter,
     filterBuilderToggleNewEdit,
     filterBuilderDeleteFilter
-} from '../../../actions/filterBuilder'
+} from '../../../actions/filterBuilder';
 
 
 export default class ExistentFilterSelect extends Component {

@@ -11,6 +11,6 @@ export default class DemoModeMessage extends Component {
                 <p>Demo Mode</p>
                 <p>Please, login</p>
             </div>
-        )
+        );
     }
 }

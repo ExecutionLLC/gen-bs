@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 export default class Buy extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {
@@ -16,6 +16,6 @@ export default class Buy extends Component {
                     data-localize='buy.title'>Buy</span></a>
             </div>
 
-        )
+        );
     }
 }

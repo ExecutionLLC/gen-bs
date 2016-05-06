@@ -15,6 +15,6 @@ export default class VariantsTableLoadError extends Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }

@@ -14,6 +14,6 @@ export default class ViewBuilderHeader extends React.Component {
                     Setup Views
                 </Modal.Title>
             </Modal.Header>
-        )
+        );
     }
 }

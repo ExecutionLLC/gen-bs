@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import classNames from 'classnames';
 
-import  {firstCharToUpperCase} from '../../utils/stringUtils'
+import  {firstCharToUpperCase} from '../../utils/stringUtils';
 
 export default class FieldHeaderControls extends Component {
     constructor(props) {

@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import {Overlay, Tooltip} from 'react-bootstrap'
+import {Overlay, Tooltip} from 'react-bootstrap';
 
 
 export default class Analyze extends Component {
 
     render() {
 
-        const {isAnalyzeTooltipVisible} = this.props.ui
+        const {isAnalyzeTooltipVisible} = this.props.ui;
         const isFetchingSamples = this.props.fields.isFetching.samples; // is fetching fields actually, see REQUEST_FIELDS 
 
         const tooltip = <Tooltip id='analyze_button_tooltip'>Analyze current sample with current filters and

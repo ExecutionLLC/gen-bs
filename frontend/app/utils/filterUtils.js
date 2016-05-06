@@ -97,10 +97,10 @@ export const filterUtils = {
             not_ends_with: function (v) {
                 return {'$nend_with': v[0]};
             },
-            is_null: function (v) {
+            is_null: function () {
                 return {'$eq': null};
             },
-            is_not_null: function (v) {
+            is_not_null: function () {
                 return {'$neq': null};
             }
         },
@@ -184,7 +184,7 @@ export const filterUtils = {
          * @param message {string}
          * @param args,... {mixed}
          */
-        error: function (type, message/*, args*/) {
+        error: function (type/*, message, args*/) {
             var err = new Error(this.fmt.apply(null, Array.prototype.slice.call(arguments, 1)));
             err.name = type + 'Error';
             err.args = Array.prototype.slice.call(arguments, 2);
@@ -530,7 +530,7 @@ export const filterUtils = {
                     var field = keys[0];
                     var value = rule[field];
 
-                    var operator = self.determineGenomicsOperator(value, field);
+                    var operator = self.determineGenomicsOperator(value);
                     if (operator === undefined) {
                         self.Utils.error('GenomicsParse', 'Invalid Genomics query format');
                     }
@@ -564,7 +564,7 @@ export const filterUtils = {
      * @param {string} field
      * @return {string|undefined}
      */
-    determineGenomicsOperator: function (value, field) {
+    determineGenomicsOperator: function (value) {
         if (value !== null && typeof value == 'object') {
             var subkeys = Object.keys(value);
 

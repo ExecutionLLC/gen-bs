@@ -9,7 +9,7 @@ export default class FileUploadFooter extends Component {
 
     render() {
 
-        const {dispatch, closeModal} = this.props;
+        const {dispatch} = this.props;
         const {files, isFetching} = this.props.fileUpload;
 
         var disabledClass = classNames({

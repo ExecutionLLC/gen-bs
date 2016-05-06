@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 export default class ViewsSetup extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
     render() {
