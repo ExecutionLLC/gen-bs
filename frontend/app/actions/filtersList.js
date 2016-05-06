@@ -1,3 +1,9 @@
+import apiFacade from '../api/ApiFacade';
+import {handleError} from './errorHandler';
+import HttpStatus from 'http-status';
+
+const filtersClient = apiFacade.filtersClient;
+
 export const FILTERS_LIST_START_SERVER_OPERATION = 'FILTERS_LIST_START_SERVER_OPERATION';
 export const FILTERS_LIST_END_SERVER_OPERATION = 'FILTERS_LIST_END_SERVER_OPERATION';
 export const FILTERS_LIST_RECEIVE = 'FILTERS_LIST_RECEIVE';
@@ -5,6 +11,17 @@ export const FILTERS_LIST_SELECT_FILTER = 'FILTERS_LIST_SELECT_FILTER';
 export const FILTERS_LIST_ADD_FILTER = 'FILTERS_LIST_ADD_FILTER';
 export const FILTERS_LIST_DELETE_FILTER = 'FILTERS_LIST_DELETE_FILTER';
 export const FILTERS_LIST_EDIT_FILTER = 'FILTERS_LIST_EDIT_FILTER';
+
+
+const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
+const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Please try again.';
+
+const UPDATE_FILTER_NETWORK_ERROR = 'Cannot update filter (network error). Please try again.';
+const UPDATE_FILTER_SERVER_ERROR = 'Cannot update filter (server error). Please try again.';
+
+const DELETE_FILTER_NETWORK_ERROR = 'Cannot delete filter (network error). Please try again.';
+const DELETE_FILTER_SERVER_ERROR = 'Cannot delete filter (server error). Please try again.';
+
 
 export function filtersListStartServerOperation() {
     return {
@@ -54,3 +71,64 @@ export function filtersListEditFilter(filterId, filter) {
     };
 }
 
+export function filtersListServerCreateFilter(filter, sessionId, languageId) {
+    return (dispatch) => {
+        dispatch(filtersListStartServerOperation());
+        return new Promise( (resolve) => {
+            filtersClient.add(sessionId, languageId, filter, (error, response) => {
+                dispatch(filtersListEndServerOperation());
+                if (error) {
+                    dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
+                } else {
+                    const newFilter = response.body;
+                    const filterId = newFilter.id;
+                    dispatch(filtersListAddFilter(newFilter));
+                    dispatch(filtersListSelectFilter(filterId));
+                }
+                resolve();
+            });
+        });
+    };
+}
+
+export function filtersListServerUpdateFilter(filter, sessionId) {
+    return (dispatch) => {
+        dispatch(filtersListStartServerOperation());
+        return new Promise( (resolve) => {
+            filtersClient.update(sessionId, filter, (error, response) => {
+                dispatch(filtersListEndServerOperation());
+                if (error) {
+                    dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
+                } else {
+                    const updatedFilter = response.body;
+                    dispatch(filtersListEditFilter(filter.id, updatedFilter));
+                    dispatch(filtersListSelectFilter(updatedFilter.id));
+                }
+                resolve();
+            });
+        });
+    };
+}
+
+export function filtersListServerDeleteFilter(filterId, sessionId) {
+    return (dispatch) => {
+        dispatch(filtersListStartServerOperation());
+        return new Promise( (resolve) => {
+            filtersClient.remove(sessionId, filterId, (error, response) => {
+                dispatch(filtersListEndServerOperation());
+                if (error) {
+                    dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, DELETE_FILTER_SERVER_ERROR));
+                } else {
+                    dispatch(filtersListDeleteFilter(filterId));
+                }
+                resolve();
+            });
+        });
+    };
+}
