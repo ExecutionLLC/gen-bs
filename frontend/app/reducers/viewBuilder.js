@@ -25,7 +25,7 @@ function createViewItem(fieldId) {
     return {
         fieldId,
         keywords: []
-    }
+    };
 }
 
 export default function viewBuilder(state = {
