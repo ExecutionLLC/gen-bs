@@ -8,7 +8,13 @@ import HttpStatus from 'http-status';
 import {addFilter, deleteFilter, editFilter} from "./userData";
 import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
-import {filtersListSelectFilter, filtersListAddFilter, filtersListDeleteFilter} from "./filtersList";
+import {
+    filtersListSelectFilter,
+    filtersListAddFilter,
+    filtersListDeleteFilter,
+    filtersListStartServerOperation,
+    filtersListEndServerOperation
+} from "./filtersList";
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
 
@@ -89,7 +95,9 @@ export function filterBuilderCreateFilter() {
         const editingFilter = getState().filterBuilder.editingFilter.filter;
 
         const {auth: {sessionId}, ui: {languageId} } = getState();
+        dispatch(filtersListStartServerOperation());
         filtersClient.add(sessionId, languageId, editingFilter, (error, response) => {
+           dispatch(filtersListEndServerOperation());
            if (error) {
                dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
            } else if (response.status !== HttpStatus.OK) {
@@ -139,7 +147,9 @@ export function filterBuilderUpdateFilter() {
             const sessionId = state.auth.sessionId;
             const resultEditingFilter = editingFilter.filter;
             dispatch(filterBuilderRequestUpdateFilter());
+            dispatch(filtersListStartServerOperation());
             filtersClient.update(sessionId, resultEditingFilter, (error, response) => {
+                dispatch(filtersListEndServerOperation());
                 if (error) {
                     dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
@@ -192,7 +202,9 @@ export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestDeleteFilter(filterId));
         const {auth: {sessionId}, fields} = getState();
+        dispatch(filtersListStartServerOperation());
         filtersClient.remove(sessionId, filterId, (error, response) => {
+            dispatch(filtersListEndServerOperation());
             if (error) {
                 dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
