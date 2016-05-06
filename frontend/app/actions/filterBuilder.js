@@ -2,19 +2,12 @@ import config from '../../config'
 
 import apiFacade from '../api/ApiFacade';
 import {closeModal} from './modalWindows';
-import {handleError} from './errorHandler';
 
-import HttpStatus from 'http-status';
 import {addFilter, deleteFilter, editFilter} from "./userData";
 import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
 import {
     filtersListSelectFilter,
-    filtersListAddFilter,
-    filtersListDeleteFilter,
-    filtersListStartServerOperation,
-    filtersListEndServerOperation,
-    filtersListEditFilter,
     filtersListServerCreateFilter,
     filtersListServerUpdateFilter,
     filtersListServerDeleteFilter
@@ -30,26 +23,8 @@ export const FBUILDER_TOGGLE_NEW_EDIT = 'FBUILDER_TOGGLE_NEW_EDIT';
 export const FBUILDER_REQUEST_UPDATE_FILTER = 'FBUILDER_REQUEST_UPDATE_FILTER';
 export const FBUILDER_RECEIVE_UPDATE_FILTER = 'FBUILDER_RECEIVE_UPDATE_FILTER';
 
-export const FBUILDER_REQUEST_CREATE_FILTER = 'FBUILDER_REQUEST_CREATE_FILTER';
-export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
-
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
-export const FBUILDER_REQUEST_DELETE_FILTER = 'FBUILDER_REQUEST_DELETE_FILTER';
-export const FBUILDER_RECEIVE_DELETE_FILTER = 'FBUILDER_RECEIVE_DELETE_FILTER';
-
-export const FBUILDER_CHANGE_ALL = 'FBUILDER_CHANGE_ALL';
-
-const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
-const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Please try again.';
-
-const UPDATE_FILTER_NETWORK_ERROR = 'Cannot update filter (network error). Please try again.';
-const UPDATE_FILTER_SERVER_ERROR = 'Cannot update filter (server error). Please try again.';
-
-const DELETE_FILTER_NETWORK_ERROR = 'Cannot delete filter (network error). Please try again.';
-const DELETE_FILTER_SERVER_ERROR = 'Cannot delete filter (server error). Please try again.';
-
-const filtersClient = apiFacade.filtersClient;
 
 /*
  * Action Creators
@@ -79,23 +54,10 @@ export function filterBuilderChangeAttr(attr) {
     }
 }
 
-function filterBuilderRequestCreateFilter() {
-    return {
-        type: FBUILDER_REQUEST_CREATE_FILTER
-    }
-}
-
-function filterBuilderReceiveCreateFilter(json) {
-    return {
-        type: FBUILDER_RECEIVE_CREATE_FILTER,
-        filter: json
-    }
-}
-
 export function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
-        dispatch(filterBuilderRequestUpdateFilter());
+        dispatch(filterBuilderRequestUpdateFilter());//remove later
         const editingFilter = getState().filterBuilder.editingFilter.filter;
 
         const {auth: {sessionId}, ui: {languageId} } = getState();
@@ -217,10 +179,7 @@ export function filterBuilderSaveAndSelectRules() {
 export function filterBuilderRules(rules) {
     return {
         type: FBUILDER_RECEIVE_RULES,
-        rules,
-        rPromise: function (resolve, reject) {
-            resolve(777)
-        }
+        rules
     }
 }
 
@@ -234,14 +193,14 @@ export function filterBuilderChangeFilter(index, change) {
 
 export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
-        dispatch(filterBuilderRequestDeleteFilter(filterId));
+        //dispatch(filterBuilderRequestDeleteFilter(filterId));//did not implemented
         const {auth: {sessionId}, fields} = getState();
         dispatch(filtersListServerDeleteFilter(filterId, sessionId))
             .then( (success)=> {
 
                 //remove later
                 if (success) {
-                    dispatch(filterBuilderReceiveDeleteFilter(null));// argument did not used
+                    //dispatch(filterBuilderReceiveDeleteFilter(null));//did not implemented // argument did not used
                     dispatch(deleteFilter(filterId));
                     const state = getState();
                     const selectedFilterId = state.ui.selectedFilter.id;
@@ -273,20 +232,3 @@ export function filterBuilderDeleteFilter(filterId) {
 */
     }
 }
-
-function filterBuilderRequestDeleteFilter(filterId) {
-    return {
-        type: FBUILDER_REQUEST_DELETE_FILTER,
-        filterId
-    };
-}
-
-function filterBuilderReceiveDeleteFilter(json) {
-    return {
-        type: FBUILDER_RECEIVE_DELETE_FILTER,
-        view: json
-    }
-}
-
-
-

@@ -180,17 +180,6 @@ export default function filterBuilder(state = {
                 selectedFilter: action.filter
             });
 
-        case ActionTypes.FBUILDER_REQUEST_CREATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-
-        case ActionTypes.FBUILDER_RECEIVE_CREATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: false,
-                selectedFilter: action.filter
-            });
-
         default:
             return state
     }
