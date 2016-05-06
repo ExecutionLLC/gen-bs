@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {changeFilter} from '../../../actions/ui'
@@ -21,11 +21,10 @@ export default class Filters extends Component {
                      data-toggle="tooltip"
                      data-placement="bottom"
                      data-container="body"
-                     title="Select one or more from available filters"
+                     title="Select one of available filters"
                 >
                     <Select options={this.getFilterOptions()}
                             value={selectedFilter ? selectedFilter.id : null}
-                            clearable={false}
                             onChange={(item) => dispatch(changeFilter(item.value))}
                     />
                 </div>

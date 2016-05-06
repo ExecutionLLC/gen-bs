@@ -5,6 +5,8 @@ export default function ui(state = {
     queryNavbarClosed: true,
     selectedView: null,
     selectedFilter: null,
+    // Workaround for bug #299
+    shouldResetTableScrollPosition: false,
     currentLimit: 100,
     currentOffset: 0,
     isAnalyzeTooltipVisible: false,
@@ -16,6 +18,16 @@ export default function ui(state = {
         case ActionTypes.TOGGLE_QUERY_NAVBAR:
             return Object.assign({}, state, {
                 queryNavbarClosed: !state.queryNavbarClosed
+            });
+
+        case ActionTypes.REQUEST_TABLE_SCROLL_POSITION_RESET:
+            return Object.assign({}, state, {
+                shouldResetTableScrollPosition: true
+            });
+
+        case ActionTypes.COMPLETE_TABLE_SCROLL_POSITION_RESET:
+            return Object.assign({}, state, {
+                shouldResetTableScrollPosition: false
             });
 
         case ActionTypes.CHANGE_HEADER_VIEW:

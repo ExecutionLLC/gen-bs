@@ -23,10 +23,10 @@ class ViewsService extends UserEntityServiceBase {
 
   update(user, view, callback) {
       async.waterfall([
-          (callback) => super.find(user, view.id, callback),
-          (existingView, callback) => {
-              this._viewItemsCheck(existingView, callback);
+          (callback) => {
+              this._viewItemsCheck(view, callback);
           },
+          (view, callback) => super.find(user, view.id, callback),
           (existingView, callback) => {
               if (existingView.type !== 'user') {
                   callback(new Error('Default view cannot be updated'));

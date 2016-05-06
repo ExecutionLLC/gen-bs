@@ -4,7 +4,7 @@
   "description": "Genomix Application WebServer Node",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "GEN_WS_DISABLE_REQUEST_LIMITS=true mocha",
     "db:create": "node ./scripts/create-database.js",
     "db:reset": "npm run db:create; npm run defaults:import",
     "defaults:import": "node ./scripts/import-defaults.js",
@@ -54,6 +54,7 @@
     "ws": "1.0.1"
   },
   "devDependencies": {
+    "mocha": "2.4.5",
     "request": "2.67.0"
   }
 }

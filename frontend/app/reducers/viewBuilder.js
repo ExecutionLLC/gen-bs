@@ -21,6 +21,13 @@ function getNextDirection(direction) {
     return switcher[direction];
 }
 
+function createViewItem(fieldId) {
+    return {
+        fieldId,
+        keywords: []
+    }
+}
+
 export default function viewBuilder(state = {
     selectedView: null,
     editedView: null,
@@ -34,13 +41,6 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 selectedView: selectedView,
                 editedView: selectedView
-            });
-        }
-        case ActionTypes.VBUILDER_TOGGLE_EDIT:
-        {
-            const editedView = _.find(action.views, {id: action.viewId}) || null;
-            return Object.assign({}, state, {
-                editedView: editedView
             });
         }
         case ActionTypes.VBUILDER_TOGGLE_NEW:
@@ -113,11 +113,12 @@ export default function viewBuilder(state = {
         }
         case ActionTypes.VBUILDER_ADD_COLUMN:
         {
+            const newViewItem = createViewItem(action.columnFieldId);
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
-                        EMPTY_VIEW_ITEM,
+                        newViewItem,
                         ...state.editedView.viewListItems.slice(action.viewItemIndex)
                     ]
                 })
@@ -134,15 +135,13 @@ export default function viewBuilder(state = {
         }
         case ActionTypes.VBUILDER_CHANGE_COLUMN:
         {
+            const changedViewItem = createViewItem(action.fieldId);
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
 
-                        Object.assign({}, state.editedView.viewListItems[action.viewItemIndex], {
-                            fieldId: action.fieldId,
-                            keywords: [],
-                        }),
+                        Object.assign({}, state.editedView.viewListItems[action.viewItemIndex], changedViewItem),
 
                         ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)
                     ]

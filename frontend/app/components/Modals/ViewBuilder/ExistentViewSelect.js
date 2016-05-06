@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
@@ -9,7 +9,6 @@ import {
     getReadonlyReasonForSessionAndType
 } from '../../../utils/stringUtils';
 import {
-    viewBuilderToggleEdit,
     viewBuilderSelectView,
     viewBuilderToggleNew,
     viewBuilderDeleteView
@@ -45,7 +44,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderDescription(isDemoSession, selectedViewType) {
-        const descriptionText = getReadonlyReasonForSessionAndType(isDemoSession, selectedViewType);
+        const descriptionText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType);
 
         if (descriptionText) {
             return (
@@ -73,7 +72,6 @@ export default class ExistentViewSelect extends React.Component {
             <div className="col-sm-6">
                 <Select options={selectorItems}
                         value={this.getSelectedViewId()}
-                        clearable={false}
                         onChange={(item) => this.onSelectedViewChanged(item.value)}
                 />
             </div>
@@ -143,7 +141,7 @@ export default class ExistentViewSelect extends React.Component {
 
     onSelectedViewChanged(viewId) {
         const {dispatch, views} = this.props;
-        dispatch(viewBuilderToggleEdit(views, viewId, true));
+        dispatch(viewBuilderSelectView(views, viewId));
     }
 
     onDuplicateViewClick() {
@@ -154,7 +152,7 @@ export default class ExistentViewSelect extends React.Component {
     onResetViewClick() {
         const {dispatch, views} = this.props;
         const selectedViewId = this.getSelectedViewId();
-        dispatch(viewBuilderSelectView(views, selectedViewId, true));
+        dispatch(viewBuilderSelectView(views, selectedViewId));
     }
 
     onDeleteViewClick() {

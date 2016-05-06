@@ -14,7 +14,22 @@ export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
+export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
+export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSITION_RESET';
+
 const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameters.';
+
+export function requestTableScrollPositionReset() {
+    return {
+        type: REQUEST_TABLE_SCROLL_POSITION_RESET
+    }
+}
+
+export function completeTableScrollPositionReset() {
+    return {
+        type: COMPLETE_TABLE_SCROLL_POSITION_RESET
+    }
+}
 
 /*
  * Action Creators
@@ -37,7 +52,7 @@ export function changeView(viewId) {
     return (dispatch, getState) => {
         const {userData: {views}} = getState();
         dispatch(changeHeaderView(views, viewId));
-        dispatch(viewBuilderSelectView(views, viewId, true));
+        dispatch(viewBuilderSelectView(views, viewId));
     }
 }
 
@@ -65,16 +80,20 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         }
 
         const searchParams = {
-            sampleId: sampleId,
-            viewId: viewId,
-            filterId: filterId,
-            limit: limit,
-            offset: offset
+            sampleId,
+            viewId,
+            filterId,
+            limit,
+            offset
         };
         const {
             userData: {
                 attachedHistoryData: historyData,
-                views
+                views,
+                filters
+            },
+            samplesList: {
+                samples
             },
             fields: {
                 sampleFieldsList
@@ -86,10 +105,13 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         const detachHistoryView = historyData.viewId ? historyData.viewId !== viewId : false;
         dispatch(detachHistory(detachHistorySample, detachHistoryFilter, detachHistoryView));
 
+        dispatch(requestTableScrollPositionReset());
         dispatch(clearSearchParams());
         dispatch(requestAnalyze(searchParams));
         const searchView = _.find(views, {id: viewId});
-        dispatch(requestSetCurrentParams(searchView, sampleFieldsList));
+        const searchSample = _.find(samples, {id: sampleId});
+        const searchFilter = _.find(filters, {id: filterId});
+        dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
         dispatch(fetchVariants(searchParams))
     }

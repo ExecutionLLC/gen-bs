@@ -46,7 +46,6 @@ export default class Auth extends Component {
     }
 
     render() {
-        console.log('auth header', this.props.auth.isDemo);
         if (this.props.auth.isDemo) {
             return this._renderForDemoUser();
         }
