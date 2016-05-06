@@ -14,7 +14,10 @@ import {
     filtersListDeleteFilter,
     filtersListStartServerOperation,
     filtersListEndServerOperation,
-    filtersListEditFilter
+    filtersListEditFilter,
+    filtersListServerCreateFilter,
+    filtersListServerUpdateFilter,
+    filtersListServerDeleteFilter
 } from "./filtersList";
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
@@ -96,6 +99,19 @@ export function filterBuilderCreateFilter() {
         const editingFilter = getState().filterBuilder.editingFilter.filter;
 
         const {auth: {sessionId}, ui: {languageId} } = getState();
+        dispatch(filtersListServerCreateFilter(editingFilter, sessionId, languageId))
+            .then( (newFilter) => {
+
+                // remove later
+                if (newFilter) {
+                    dispatch(filterBuilderReceiveUpdateFilter(newFilter));
+                    dispatch(addFilter(newFilter));
+                    dispatch(changeFilter(newFilter.id));
+                }
+
+                dispatch(closeModal('filters'));
+            });
+/*
         dispatch(filtersListStartServerOperation());
         filtersClient.add(sessionId, languageId, editingFilter, (error, response) => {
            dispatch(filtersListEndServerOperation());
@@ -114,6 +130,7 @@ export function filterBuilderCreateFilter() {
                dispatch(closeModal('filters'));
            }
         });
+*/
     }
 }
 
@@ -141,12 +158,26 @@ export function filterBuilderUpdateFilter() {
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
         if (state.auth.isDemo || isNotEdited) {
-            dispatch(changeFilter(editingFilter.filter.id));
+            dispatch(changeFilter(editingFilter.filter.id));//remove later
             dispatch(filtersListSelectFilter(editingFilter.filter.id));
             dispatch(closeModal('filters'));
         } else {
             const sessionId = state.auth.sessionId;
             const resultEditingFilter = editingFilter.filter;
+            dispatch(filterBuilderRequestUpdateFilter());//remove later
+            dispatch(filtersListServerUpdateFilter(resultEditingFilter, sessionId))
+                .then( (updatedFilter) => {
+
+                    // remove later
+                    if (updatedFilter) {
+                        dispatch(filterBuilderReceiveUpdateFilter(updatedFilter));
+                        dispatch(editFilter(editingFilter.filter.id, updatedFilter));
+                        dispatch(changeFilter(updatedFilter.id));
+                    }
+
+                    dispatch(closeModal('filters'));
+                });
+/*
             dispatch(filterBuilderRequestUpdateFilter());
             dispatch(filtersListStartServerOperation());
             filtersClient.update(sessionId, resultEditingFilter, (error, response) => {
@@ -165,6 +196,7 @@ export function filterBuilderUpdateFilter() {
                     dispatch(closeModal('filters'));
                 }
             });
+*/
         }
     }
 }
@@ -204,6 +236,21 @@ export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestDeleteFilter(filterId));
         const {auth: {sessionId}, fields} = getState();
+        dispatch(filtersListServerDeleteFilter(filterId, sessionId))
+            .then( (success)=> {
+
+                //remove later
+                if (success) {
+                    dispatch(filterBuilderReceiveDeleteFilter(null));// argument did not used
+                    dispatch(deleteFilter(filterId));
+                    const state = getState();
+                    const selectedFilterId = state.ui.selectedFilter.id;
+                    const newFilterId = (filterId == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
+                    dispatch(changeFilter(newFilterId));
+                    dispatch(filterBuilderToggleNewEdit(false, fields));
+                }
+            });
+/*
         dispatch(filtersListStartServerOperation());
         filtersClient.remove(sessionId, filterId, (error, response) => {
             dispatch(filtersListEndServerOperation());
@@ -223,6 +270,7 @@ export function filterBuilderDeleteFilter(filterId) {
                 dispatch(filterBuilderToggleNewEdit(false, fields));
             }
         });
+*/
     }
 }
 
