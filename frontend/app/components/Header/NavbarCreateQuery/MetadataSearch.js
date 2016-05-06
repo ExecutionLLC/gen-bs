@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import Select from 'react-select';
+import React, { Component } from 'react';
+import Select from '../../shared/Select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 
@@ -22,7 +22,6 @@ export default class MetadataSearch extends Component {
                      title='Select one from available samples'
                 >
                     <Select options={this.getSampleOptions()}
-                            clearable={false}
                             value={selectedSampleId}
                             onChange={ (item) => onSampleChangeRequested(item.value)}
                     />

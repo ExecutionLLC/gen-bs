@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
@@ -72,7 +72,6 @@ export default class ExistentViewSelect extends React.Component {
             <div className='col-sm-6'>
                 <Select options={selectorItems}
                         value={this.getSelectedViewId()}
-                        clearable={false}
                         onChange={(item) => this.onSelectedViewChanged(item.value)}
                 />
             </div>
