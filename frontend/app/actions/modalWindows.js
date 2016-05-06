@@ -20,5 +20,5 @@ export function closeModal(modalName) {
     return {
         type: CLOSE_MODAL,
         modalName
-    }
+    };
 }

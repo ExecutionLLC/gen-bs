@@ -25,7 +25,7 @@ export default class AutoLogoutModal extends Component {
         return (
             <Modal.Footer>
                 <button
-                    onClick={ () => {this.props.closeModal()} }
+                    onClick={ () => this.props.closeModal() }
                     type='button'
                     className='btn btn-default'
                     data-dismiss='modal'
@@ -34,7 +34,7 @@ export default class AutoLogoutModal extends Component {
                     <span>Extend session</span>
                 </button>
             </Modal.Footer>
-        )
+        );
     }
 
     render() {
@@ -43,13 +43,13 @@ export default class AutoLogoutModal extends Component {
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
                 show={this.props.showModal}
-                onHide={ () => {this.props.closeModal()} }
+                onHide={ () => this.props.closeModal() }
             >
                 { this.renderHeader() }
                 { this.renderBody() }
                 { this.renderFooter() }
             </Modal>
-        )
+        );
     }
 }
 
@@ -57,7 +57,7 @@ function mapStateToProps(state) {
     const {auth: {secondsToAutoLogout}} = state;
     return {
         secondsToAutoLogout
-    }
+    };
 }
 
 export default connect(mapStateToProps)(AutoLogoutModal);

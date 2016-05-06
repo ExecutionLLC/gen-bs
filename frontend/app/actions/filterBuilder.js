@@ -1,5 +1,3 @@
-import config from '../../config';
-
 import apiFacade from '../api/ApiFacade';
 import {closeModal} from './modalWindows';
 import {handleError} from './errorHandler';
@@ -50,7 +48,7 @@ export function filterBuilderToggleNewEdit(makeNew, fields) {
         type: FBUILDER_TOGGLE_NEW_EDIT,
         makeNew,
         fields
-    }
+    };
 }
 
 export function filterBuilderSelectFilter(filters, filterId) {
@@ -58,7 +56,7 @@ export function filterBuilderSelectFilter(filters, filterId) {
         type: FBUILDER_SELECT_FILTER,
         filters,
         filterId
-    }
+    };
 }
 
 export function filterBuilderChangeAttr(attr) {
@@ -66,20 +64,20 @@ export function filterBuilderChangeAttr(attr) {
         type: FBUILDER_CHANGE_ATTR,
         name: attr.name,
         description: attr.description
-    }
+    };
 }
 
 function filterBuilderRequestCreateFilter() {
     return {
         type: FBUILDER_REQUEST_CREATE_FILTER
-    }
+    };
 }
 
 function filterBuilderReceiveCreateFilter(json) {
     return {
         type: FBUILDER_RECEIVE_CREATE_FILTER,
         filter: json
-    }
+    };
 }
 
 export function filterBuilderCreateFilter() {
@@ -101,20 +99,20 @@ export function filterBuilderCreateFilter() {
                 dispatch(fetchFilters(result.id));
             }
         });
-    }
+    };
 }
 
 function filterBuilderRequestUpdateFilter() {
     return {
         type: FBUILDER_REQUEST_UPDATE_FILTER
-    }
+    };
 }
 
 function filterBuilderReceiveUpdateFilter(json) {
     return {
         type: FBUILDER_RECEIVE_UPDATE_FILTER,
         filter: json
-    }
+    };
 }
 
 export function filterBuilderUpdateFilter() {
@@ -143,11 +141,11 @@ export function filterBuilderUpdateFilter() {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
                     dispatch(closeModal('filters'));
-                    dispatch(fetchFilters(result.id))
+                    dispatch(fetchFilters(result.id));
                 }
             });
         }
-    }
+    };
 }
 
 export function filterBuilderSaveAndSelectRules() {
@@ -167,10 +165,10 @@ export function filterBuilderRules(rules) {
     return {
         type: FBUILDER_RECEIVE_RULES,
         rules,
-        rPromise: function (resolve, reject) {
-            resolve(777)
+        rPromise: function (resolve) {
+            resolve(777);
         }
-    }
+    };
 }
 
 export function filterBuilderChangeFilter(index, change) {
@@ -201,7 +199,7 @@ export function filterBuilderDeleteFilter(filterId) {
                 dispatch(filterBuilderToggleNewEdit(false, fields));
             }
         });
-    }
+    };
 }
 
 function filterBuilderRequestDeleteFilter(filterId) {
@@ -215,7 +213,7 @@ function filterBuilderReceiveDeleteFilter(json) {
     return {
         type: FBUILDER_RECEIVE_DELETE_FILTER,
         view: json
-    }
+    };
 }
 
 

@@ -75,7 +75,7 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 wsConn: action.wsConn
             });
-        case ActionTypes.WS_TABLE_MESSAGE:
+        case ActionTypes.WS_TABLE_MESSAGE: {
             const resultData = _.map(action.wsData.result.data, row => {
                 return Object.assign({}, row, {
                     fieldsHash: _.reduce(row.fields, (result, fieldValue) => {
@@ -91,6 +91,7 @@ export default function websocket(state = {
                 isVariantsLoading: false,
                 isVariantsValid: true
             });
+        }
         case ActionTypes.WS_PROGRESS_MESSAGE:
             return Object.assign({}, state, {
                 progress: action.wsData.result.progress

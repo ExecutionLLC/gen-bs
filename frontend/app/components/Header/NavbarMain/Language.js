@@ -31,6 +31,6 @@ export default class Language extends Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }

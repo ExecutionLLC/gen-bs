@@ -58,8 +58,7 @@ export default function userData(state = {
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.CHANGE_HISTORY_DATA:
-        {
+        case ActionTypes.CHANGE_HISTORY_DATA: {
             const {sampleId, filterId, viewId} = action;
             return Object.assign({}, state, {
                 attachedHistoryData: {
@@ -69,22 +68,19 @@ export default function userData(state = {
                 }
             });
         }
-        case ActionTypes.CHANGE_FILTERS:
-        {
+        case ActionTypes.CHANGE_FILTERS: {
             const {filters} = action;
             return Object.assign({}, state, {
                 filters: filters
             });
         }
-        case ActionTypes.CHANGE_VIEWS:
-        {
+        case ActionTypes.CHANGE_VIEWS: {
             const {views} = action;
             return Object.assign({}, state, {
                 views: views
             });
         }
-        case ActionTypes.DELETE_VIEW:
-        {
+        case ActionTypes.DELETE_VIEW: {
             const deletedViewIndex = _.findIndex(state.views, view => view.id == action.viewId);
             return Object.assign({}, state, {
                 views: [
@@ -93,8 +89,7 @@ export default function userData(state = {
                 ]
             });
         }
-        case ActionTypes.DELETE_FILTER:
-        {
+        case ActionTypes.DELETE_FILTER: {
             const deletedFilterIndex = _.findIndex(state.filters, filter => filter.id == action.filterId);
             return Object.assign({}, state, {
                 filters: [
@@ -104,6 +99,6 @@ export default function userData(state = {
             });
         }
         default:
-            return state
+            return state;
     }
 }

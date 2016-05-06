@@ -38,7 +38,7 @@ export default class NewViewInputs extends React.Component {
                             type='text'
                             className='form-control'
                             data-localize='views.setup.new.description'
-                            placeholder="Set view description (optional)"
+                            placeholder='Set view description (optional)'
                             value={newView.description}
                             onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: newView.name, description: e.target.value})) }
                         />
@@ -54,7 +54,7 @@ export default class NewViewInputs extends React.Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }
 
@@ -63,7 +63,7 @@ function mapStateToProps(state) {
     return {
         views,
         viewBuilder
-    }
+    };
 }
 
 export default connect(mapStateToProps)(NewViewInputs);

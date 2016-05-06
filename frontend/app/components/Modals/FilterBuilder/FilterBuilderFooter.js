@@ -21,7 +21,7 @@ export default class FilterBuilderFooter extends Component {
         return (
             <Modal.Footer>
                 <button
-                    onClick={ () => { closeModal('filters')} }
+                    onClick={ () => closeModal('filters') }
                     type='button'
                     className='btn btn-default'
                     data-dismiss='modal'
@@ -34,7 +34,7 @@ export default class FilterBuilderFooter extends Component {
                     title={title}
                     onClick={ () => {
                         if (filter.name.trim()) {
-                            dispatch(filterBuilderSaveAndSelectRules())
+                            dispatch(filterBuilderSaveAndSelectRules());
                         }
                     }}
                     type='button'
@@ -44,6 +44,6 @@ export default class FilterBuilderFooter extends Component {
                 </button>
             </Modal.Footer>
 
-        )
+        );
     }
 }

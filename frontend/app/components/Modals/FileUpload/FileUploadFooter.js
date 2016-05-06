@@ -21,7 +21,7 @@ export default class FileUploadFooter extends Component {
 
             <Modal.Footer>
                 <button
-                    onClick={ () => { this.props.closeModal('upload')} }
+                    onClick={ () => this.props.closeModal('upload') }
                     type='button'
                     className='btn btn-default'
                     data-dismiss='modal'
@@ -32,8 +32,8 @@ export default class FileUploadFooter extends Component {
                 <button
                     disabled={disabledClass}
                     onClick={ () => {
-              dispatch(uploadFile())
-            }}
+                        dispatch(uploadFile());
+                    }}
                     type='button'
                     className='btn btn-primary'
                 >
@@ -41,6 +41,6 @@ export default class FileUploadFooter extends Component {
                 </button>
             </Modal.Footer>
 
-        )
+        );
     }
 }

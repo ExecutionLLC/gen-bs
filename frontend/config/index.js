@@ -33,4 +33,4 @@ const config = {
     LOGIN_URL: `http://${HOST}:${PORT}/api/session/auth/google?callbackPort=${LOGIN_CALLBACK_PORT}`
 };
 
-export default config
+export default config;

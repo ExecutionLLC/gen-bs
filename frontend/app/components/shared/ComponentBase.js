@@ -1,5 +1,4 @@
-//noinspection Eslint
-import React, {Component} from 'react';
+import {Component} from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 
 export default class ComponentBase extends Component {

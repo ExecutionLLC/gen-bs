@@ -40,6 +40,6 @@ export default class CreateQeuryNavbarButton extends Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }

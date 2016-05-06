@@ -97,7 +97,7 @@ export default class FieldHeaderControls extends Component {
                            ref={(input) => this.focusInput(input)}
                            onChange={(e) => this.onSearchInputChanged(e)}
                            onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
-                           onBlur={(e) => this.onSearchInputBlur()}
+                           onBlur={() => this.onSearchInputBlur()}
                            disabled={disabled}
                     />
                 </div>
@@ -136,7 +136,7 @@ export default class FieldHeaderControls extends Component {
     onSortClick(direction, isControlKeyPressed) {
         const {areControlsEnabled} = this.props;
         if (areControlsEnabled) {
-            this.onSearchClick(direction, isControlKeyPressed)
+            this.onSearchClick(direction, isControlKeyPressed);
         }
     }
 

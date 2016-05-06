@@ -62,8 +62,8 @@ export default class FileUpload extends Component {
                     ref='fileInput'
                     id='file-select'
                     type='file'
-                    accept=".vcf,.gz"
-                    name="files[]"
+                    accept='.vcf,.gz'
+                    name='files[]'
                 />
                 <i className='md-i'>cloud_upload</i>
                 <span>Click here to upload new samples</span>

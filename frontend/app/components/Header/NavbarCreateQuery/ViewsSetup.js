@@ -24,6 +24,6 @@ export default class ViewsSetup extends Component {
                     </button>
                 </div>
             </div>
-        )
+        );
     }
 }

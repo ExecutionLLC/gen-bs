@@ -27,7 +27,7 @@ export default class Auth extends Component {
                     </ul>
                 </div>
             </div>
-        )
+        );
     }
 
     _renderForDemoUser() {
@@ -46,7 +46,7 @@ export default class Auth extends Component {
                     </span>
                 </a>
             </div>
-        )
+        );
     }
 
     render() {

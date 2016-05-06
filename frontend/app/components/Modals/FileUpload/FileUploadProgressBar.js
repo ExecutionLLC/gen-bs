@@ -52,6 +52,6 @@ export default class FileUploadProgressBar extends Component {
                 }
             </div>
 
-        )
+        );
     }
 }

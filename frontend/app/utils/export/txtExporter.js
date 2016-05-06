@@ -6,7 +6,7 @@ export default class TxtExporter extends ExporterBase {
         this.valuesSeparator = ' | ';
     }
 
-    buildHeaderRow(columnsArray, data) {
+    buildHeaderRow(columnsArray) {
         return _.map(columnsArray, column => {
             const valueLength = this.longestValueLengthByColumn[column.id];
 
@@ -14,7 +14,7 @@ export default class TxtExporter extends ExporterBase {
         }).join(this.valuesSeparator);
     }
 
-    buildRow(columnsArray, rowValues, data) {
+    buildRow(columnsArray, rowValues) {
         return _.map(columnsArray, (column, columnIndex) => {
             const rowValue = rowValues[columnIndex];
             const valueLength = this.longestValueLengthByColumn[column.id];

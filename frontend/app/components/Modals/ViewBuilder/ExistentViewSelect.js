@@ -32,7 +32,7 @@ export default class ExistentViewSelect extends React.Component {
                     {this.renderButtonGroup(isDemoSession, isEditableView)}
                 </div>
             </div>
-        )
+        );
     }
 
     renderTitle() {
@@ -40,7 +40,7 @@ export default class ExistentViewSelect extends React.Component {
             <div className='col-sm-6'>
                 <label data-localize='views.setup.selector.label'>Available Views</label>
             </div>
-        )
+        );
     }
 
     renderDescription(isDemoSession, selectedViewType) {
@@ -53,7 +53,7 @@ export default class ExistentViewSelect extends React.Component {
                         {descriptionText}
                     </span>
                 </div>
-            )
+            );
         }
 
         return null;
@@ -76,7 +76,7 @@ export default class ExistentViewSelect extends React.Component {
                         onChange={(item) => this.onSelectedViewChanged(item.value)}
                 />
             </div>
-        )
+        );
     }
 
     renderButtonGroup(isDemoSession, isEditableView) {
@@ -86,7 +86,7 @@ export default class ExistentViewSelect extends React.Component {
                 {isEditableView && this.renderResetViewButton()}
                 {isEditableView && this.renderDeleteViewButton()}
             </div>
-        )
+        );
     }
 
     renderDuplicateViewButton(isDemoSession) {
@@ -100,14 +100,14 @@ export default class ExistentViewSelect extends React.Component {
                 <button type='button'
                         className='btn btn-default collapse in copyview'
                         id='dblBtn'
-                        onClick={ () => {this.onDuplicateViewClick()} }
+                        onClick={ () => {this.onDuplicateViewClick();} }
                         disabled={disabledClass}
                         title={duplicateButtonTooltip}
                 >
                     <span data-localize='actions.duplicate.title'>Duplicate</span>
                 </button>
             </div>
-        )
+        );
     }
 
     renderResetViewButton() {
@@ -115,12 +115,12 @@ export default class ExistentViewSelect extends React.Component {
             <div className='btn-group'>
                 <button type='button'
                         className='btn btn-default'
-                        onClick={ () => {this.onResetViewClick()} }
+                        onClick={ () => {this.onResetViewClick();} }
                 >
                     <span data-localize='views.setup.reset.title'>Reset View</span>
                 </button>
             </div>
-        )
+        );
     }
 
     renderDeleteViewButton() {
@@ -128,12 +128,12 @@ export default class ExistentViewSelect extends React.Component {
             <div className='btn-group'>
                 <button type='button'
                         className='btn btn-default'
-                        onClick={ () => {this.onDeleteViewClick()} }
+                        onClick={ () => {this.onDeleteViewClick();} }
                 >
                     <span data-localize='views.setup.delete.title'>Delete View</span>
                 </button>
             </div>
-        )
+        );
     }
 
     getSelectedViewId() {
@@ -170,7 +170,7 @@ function mapStateToProps(state) {
         auth,
         viewBuilder,
         views
-    }
+    };
 }
 
 export default connect(mapStateToProps)(ExistentViewSelect);

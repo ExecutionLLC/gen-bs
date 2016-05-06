@@ -30,7 +30,7 @@ export default class Filters extends Component {
                     />
                 </div>
             </div>
-        )
+        );
     }
 
     isFilterDisabled(filter) {
@@ -45,7 +45,7 @@ export default class Filters extends Component {
             const label = getItemLabelByNameAndType(filterItem.name, filterItem.type);
             return {
                 value: filterItem.id, label, disabled: isDisabled
-            }
+            };
         });
     }
 }

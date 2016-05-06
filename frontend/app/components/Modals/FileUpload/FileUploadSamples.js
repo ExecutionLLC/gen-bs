@@ -52,7 +52,7 @@ export default class FileUploadSamples extends Component {
 
 function mapStateToProps(state) {
     const {samplesList} = state;
-    return {samplesList}
+    return {samplesList};
 }
 
-export default connect(mapStateToProps)(FileUploadSamples)
+export default connect(mapStateToProps)(FileUploadSamples);

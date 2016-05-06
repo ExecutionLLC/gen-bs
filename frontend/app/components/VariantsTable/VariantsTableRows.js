@@ -36,7 +36,7 @@ export default class VariantsTableRows extends Component {
         scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps) {
         return this.props.variants !== nextProps.variants
             || this.props.variantsTable.isFilteringOrSorting !== nextProps.variantsTable.isFilteringOrSorting
             || this.props.variantsTable.selectedRowIndices !==

@@ -53,13 +53,13 @@ class FiltersModal extends Component {
                 }
             </Modal>
 
-        )
+        );
     }
 }
 
 
 function mapStateToProps(state) {
-    const {filterBuilder, ui, auth, userData, fields, samplesList} = state
+    const {filterBuilder, ui, auth, userData, fields, samplesList} = state;
 
     return {
         userData,
@@ -68,8 +68,8 @@ function mapStateToProps(state) {
         filterBuilder,
         auth,
         samplesList
-    }
+    };
 }
 
-export default connect(mapStateToProps)(FiltersModal)
+export default connect(mapStateToProps)(FiltersModal);
 

@@ -75,7 +75,7 @@ export default class FileUploadSamplesRow extends Component {
                 <span data-localize='samples.settings.select.title'>
                     Please register to analyze this sample.
                 </span>
-            )
+            );
         }
 
         return (
@@ -85,7 +85,7 @@ export default class FileUploadSamplesRow extends Component {
             >
                 <span data-localize='samples.settings.select.title'>Select for analysis</span>
             </a>
-        )
+        );
     }
 
     renderEditButton(sampleType) {
@@ -97,7 +97,7 @@ export default class FileUploadSamplesRow extends Component {
                    href='#collapseOne' aria-expanded='false'
                    aria-controls='collapseOne'>Edit
                 </a>
-            )
+            );
         }
 
         return null;
@@ -112,7 +112,7 @@ export default class FileUploadSamplesRow extends Component {
                                        sample={sample}
                                        editedSamples={editedSamples}
             />
-        )
+        );
     }
 
     renderCurrentValues() {
@@ -163,7 +163,7 @@ function mapStateToProps(state) {
     return {
         ui,
         samplesList
-    }
+    };
 }
 
-export default connect(mapStateToProps)(FileUploadSamplesRow)
+export default connect(mapStateToProps)(FileUploadSamplesRow);

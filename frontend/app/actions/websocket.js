@@ -36,14 +36,14 @@ export function addComment(commentData) {
     return {
         type: WS_ADD_COMMENT,
         commentData
-    }
+    };
 }
 
 export function changeComment(commentData) {
     return {
         type: WS_UPDATE_COMMENT,
         commentData
-    }
+    };
 }
 
 export function deleteComment(commentData, searchKey) {
@@ -51,26 +51,26 @@ export function deleteComment(commentData, searchKey) {
         type: WS_DELETE_COMMENT,
         commentData,
         searchKey
-    }
+    };
 }
 export function clearVariants() {
     return {
         type: WS_CLEAR_VARIANTS
-    }
+    };
 }
 
 export function createWsConnection(wsConn) {
     return {
         type: WS_CREATE_CONNECTION,
         wsConn
-    }
+    };
 }
 
 function tableMessage(wsData) {
     return {
         type: WS_TABLE_MESSAGE,
         wsData
-    }
+    };
 }
 
 function progressMessageRouter(wsData) {
@@ -80,14 +80,14 @@ function progressMessageRouter(wsData) {
         if (getState().fileUpload.operationId === wsData.operationId) {
             dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
         }
-    }
+    };
 }
 
 function progressMessage(wsData) {
     return {
         type: WS_PROGRESS_MESSAGE,
         wsData
-    }
+    };
 }
 
 function receiveError(err) {
@@ -101,11 +101,11 @@ function asErrorRouter(wsData) {
     return (dispatch, getState) => {
 
         if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(fileUploadError(wsData.result.error.message))
+            dispatch(fileUploadError(wsData.result.error.message));
         } else {
-            dispatch(asError(wsData.result.error))
+            dispatch(asError(wsData.result.error));
         }
-    }
+    };
 }
 
 function asError(err) {
@@ -130,7 +130,7 @@ function receiveMessage(msg) {
             if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
                 dispatch(tableMessage(wsData));
                 if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
-                    dispatch(receiveSearchedResults())
+                    dispatch(receiveSearchedResults());
                 }
             } else if (wsData.result.progress !== undefined) {
                 dispatch(progressMessageRouter(wsData));
@@ -142,21 +142,21 @@ function receiveMessage(msg) {
         } else {
             dispatch(otherMessage(wsData));
         }
-    }
+    };
 }
 
 function receiveClose(msg) {
     return {
         type: WS_RECEIVE_CLOSE,
         msg
-    }
+    };
 }
 
 function sended(msg) {
     return {
         type: WS_SEND_MESSAGE,
         msg
-    }
+    };
 }
 
 export function subscribeToWs(sessionId) {
@@ -168,7 +168,7 @@ export function subscribeToWs(sessionId) {
         conn.onmessage = event => dispatch(receiveMessage(JSON.stringify(event.data)));
         conn.onerror = event => dispatch(receiveError(event.data));
         conn.onclose = event => dispatch(receiveClose(event.data));
-    }
+    };
 }
 
 export function send(msg) {

@@ -23,7 +23,7 @@ class FileUploadModal extends Component {
                 </Modal.Body>
                 <FileUploadFooter {...this.props} />
             </Modal>
-        )
+        );
     }
 }
 
@@ -36,7 +36,7 @@ function mapStateToProps(state) {
         fileUpload,
         samples,
         editableFieldsList: editableFields
-    }
+    };
 }
 
-export default connect(mapStateToProps)(FileUploadModal)
+export default connect(mapStateToProps)(FileUploadModal);

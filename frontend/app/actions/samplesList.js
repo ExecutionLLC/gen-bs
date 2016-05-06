@@ -26,14 +26,14 @@ const FETCH_SAMPLES_SERVER_ERROR = 'Cannot update samples data (server error). Y
 function requestSamples() {
     return {
         type: REQUEST_SAMPLES
-    }
+    };
 }
 
 export function changeSample(sampleId) {
     return {
         type: CHANGE_SAMPLE,
         sampleId
-    }
+    };
 }
 
 export function updateSampleValue(sampleId, valueFieldId, value) {
@@ -42,7 +42,7 @@ export function updateSampleValue(sampleId, valueFieldId, value) {
         sampleId,
         valueFieldId,
         value
-    }
+    };
 }
 
 export function fetchSamples() {
@@ -73,21 +73,21 @@ export function fetchSamples() {
                 }
             }
         });
-    }
+    };
 }
 
 export function receiveSamplesList(samples) {
     return {
         type: RECEIVE_SAMPLES_LIST,
         samples: samples || []
-    }
+    };
 }
 
 export function resetSampleInList(sampleId) {
     return {
         type: RESET_SAMPLE_IN_LIST,
         sampleId
-    }
+    };
 }
 
 export function receiveUpdatedSample(sampleId, updatedSample) {
@@ -95,7 +95,7 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
         type: RECEIVE_UPDATED_SAMPLE,
         updatedSampleId: sampleId,
         updatedSample
-    }
+    };
 }
 
 export function requestUpdateSampleFields(sampleId) {
@@ -114,17 +114,17 @@ export function requestUpdateSampleFields(sampleId) {
                     // If updating current sample, remember the sample id is changed during update
                     // so select new version of the sample.
                     if (selectedSample && selectedSample.id === sampleId) {
-                        dispatch(changeSample(updatedSample.id))
+                        dispatch(changeSample(updatedSample.id));
                     }
                 }
             }
         });
-    }
+    };
 }
 
 export function changeSamples(samples) {
     return {
         type: CHANGE_SAMPLES,
         samples
-    }
+    };
 }

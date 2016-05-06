@@ -7,11 +7,11 @@ export default class SqlExporter extends ExporterBase {
         this.tableName = 'MySamplesTable';
     }
 
-    buildHeaderRow(columnsArray, data) {
+    buildHeaderRow(/*columnsArray*/) {
         return '';
     }
 
-    buildRow(columnsArray, rowValues, data) {
+    buildRow(columnsArray, rowValues) {
         const sqlValues = _.map(rowValues, value => this._prepareValue(value));
         return this.baseSqlQuery + `(${sqlValues.join(', ')});`;
     }

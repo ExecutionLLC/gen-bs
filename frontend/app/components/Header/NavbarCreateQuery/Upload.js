@@ -26,6 +26,6 @@ export default class Upload extends Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }

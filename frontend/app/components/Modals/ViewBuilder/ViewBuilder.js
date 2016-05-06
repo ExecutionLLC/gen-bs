@@ -42,7 +42,7 @@ export default class ViewBuilder extends React.Component {
             const selectOptions = [
 
                 ...fieldsForSelection.map((f) => {
-                    return {value: f.id, label: `${f.name} -- ${f.sourceName}`}
+                    return {value: f.id, label: `${f.name} -- ${f.sourceName}`};
                 })
             ];
             const {sortOrder, sortDirection, fieldId} = viewItem;
@@ -103,7 +103,7 @@ export default class ViewBuilder extends React.Component {
                             <i className='fa fa-lg fa-plus-circle'/></button>
                     </div>
                 </div>
-            )
+            );
         }.bind(this));
 
         return (
@@ -131,17 +131,17 @@ export default class ViewBuilder extends React.Component {
                 {selects}
             </div>
 
-        )
+        );
     }
 
     createCurrentKeywordValues(viewItem, keywords) {
         return [
             ...viewItem.keywords.map((keywordId) => {
                 const currentKeyword = keywords[keywordId];
-                return {value: currentKeyword.synonyms[0].keywordId, label: `${currentKeyword.synonyms[0].value}`}
+                return {value: currentKeyword.synonyms[0].keywordId, label: `${currentKeyword.synonyms[0].value}`};
             })
         ];
-    };
+    }
 
     createFieldKeywordsHash(field) {
         if (!field.id) {
@@ -161,7 +161,7 @@ export default class ViewBuilder extends React.Component {
             return [
 
                 ...field.keywords.map((keyword) => {
-                    return {value: keyword.synonyms[0].keywordId, label: `${keyword.synonyms[0].value}`}
+                    return {value: keyword.synonyms[0].keywordId, label: `${keyword.synonyms[0].value}`};
                 })
             ];
         }
@@ -219,7 +219,7 @@ function mapStateToProps(state) {
         viewBuilder,
         views,
         fields
-    }
+    };
 }
 
 export default connect(mapStateToProps)(ViewBuilder);

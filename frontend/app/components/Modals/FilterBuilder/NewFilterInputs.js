@@ -39,7 +39,7 @@ export default class NewFilterInputs extends Component {
                             type='text'
                             className='form-control'
                             data-localize='views.setup.new.description'
-                            placeholder="Set view description (optional)"
+                            placeholder='Set view description (optional)'
                             value={editingFilter.description}
                             onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: editingFilter.name, description: e.target.value})) }
                         />
@@ -54,6 +54,6 @@ export default class NewFilterInputs extends Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }

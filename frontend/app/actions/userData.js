@@ -51,7 +51,7 @@ const viewsClient = apiFacade.viewsClient;
 function requestUserdata() {
     return {
         type: REQUEST_USERDATA
-    }
+    };
 }
 
 function receiveUserdata(json) {
@@ -59,7 +59,7 @@ function receiveUserdata(json) {
         type: RECEIVE_USERDATA,
         userData: json,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchUserdata() {
@@ -106,13 +106,13 @@ export function fetchUserdata() {
                 }
             }
         });
-    }
+    };
 }
 
 function requestViews() {
     return {
         type: REQUEST_VIEWS
-    }
+    };
 }
 
 function receiveViews(json) {
@@ -120,7 +120,7 @@ function receiveViews(json) {
         type: RECEIVE_VIEWS,
         views: json,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchViews() {
@@ -143,13 +143,13 @@ export function fetchViews() {
                 dispatch(changeView(viewId));
             }
         });
-    }
+    };
 }
 
 function requestFilters() {
     return {
         type: REQUEST_FILTERS
-    }
+    };
 }
 
 function receiveFilters(json) {
@@ -157,7 +157,7 @@ function receiveFilters(json) {
         type: RECEIVE_FILTERS,
         filters: json,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchFilters() {
@@ -180,7 +180,7 @@ export function fetchFilters() {
                 dispatch(changeFilter(filterId));
             }
         });
-    }
+    };
 }
 
 export function changeHistoryData(sampleId, filterId, viewId) {
@@ -189,33 +189,33 @@ export function changeHistoryData(sampleId, filterId, viewId) {
         sampleId,
         filterId,
         viewId
-    }
+    };
 }
 
 export function changeFilters(filters) {
     return {
         type: CHANGE_FILTERS,
         filters
-    }
+    };
 }
 
 export function changeViews(views) {
     return {
         type: CHANGE_VIEWS,
         views
-    }
+    };
 }
 
 export function deleteView(viewId) {
     return {
         type: DELETE_VIEW,
         viewId
-    }
+    };
 }
 
 export function deleteFilter(filterId) {
     return {
         type: DELETE_FILTER,
         filterId
-    }
+    };
 }

@@ -28,25 +28,25 @@ export function receiveQueryHistory(history) {
     return {
         type: RECEIVE_QUERY_HISTORY,
         history
-    }
+    };
 }
 
 export function showQueryHistoryModal() {
     return {
         type: SHOW_QUERY_HISTORY_MODAL
-    }
+    };
 }
 
 export function closeQueryHistoryModal() {
     return {
         type: CLOSE_QUERY_HISTORY_MODAL
-    }
+    };
 }
 
 export function clearQueryHistory() {
     return (dispatch) => {
         dispatch(receiveQueryHistory([]));
-    }
+    };
 }
 
 export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
@@ -61,15 +61,13 @@ export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSE
                 dispatch(receiveQueryHistory(response.body.result));
             }
         });
-    }
+    };
 }
 
 export function renewHistoryItem(historyItemId) {
     return (dispatch, getState) => {
         const {history} = getState().queryHistory;
-        const historyItem = _.find(history, (historyItem) => {
-                return historyItem.id === historyItemId;
-        }) || null;
+        const historyItem = _.find(history, (historyItem) => historyItem.id === historyItemId) || null;
         if (historyItem === null) {
             dispatch(handleError(null, UNKNOWN_HISTORY_ID_ERROR));
         } else {
@@ -93,7 +91,7 @@ export function renewHistoryItem(historyItemId) {
                     ]);
                 });
         }
-    }
+    };
 }
 
 export function attachHistory(historyItem) {
@@ -114,7 +112,7 @@ export function attachHistory(historyItem) {
             changeViews(views),
             changeSamples(samples)
         ]);
-    }
+    };
 
 }
 
@@ -145,7 +143,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
             changeViews(views),
             changeSamples(samples)
         ]);
-    }
+    };
 }
 
 function detachHistoryItemIfNeedIt(needDetach, collection, historyItemId) {

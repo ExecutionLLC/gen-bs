@@ -23,74 +23,79 @@ export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 export function clearUploadState() {
     return {
         type: CLEAR_UPLOAD_STATE
-    }
+    };
 }
 
 export function fileUploadError(msg) {
     return {
         type: FILE_UPLOAD_ERROR,
         msg
-    }
+    };
 }
 
 function requestGzip() {
     return {
         type: REQUEST_GZIP
-    }
+    };
 }
 
 function receiveGzip() {
     return {
         type: RECEIVE_GZIP
-    }
+    };
 }
 export function changeFileForUpload(files) {
     const theFile = files[0];
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(clearUploadState());
-        if (theFile.type === 'application/gzip' || theFile.type === 'application/x-gzip' || theFile.name.split('.').pop() === 'gz') {
-            dispatch(changeFileForUploadAfterGzip(files))
-        } else if (theFile.type === 'text/vcard' || theFile.type === 'text/directory' || theFile.name.split('.').pop() === 'vcf') {
+        if (theFile.type === 'application/gzip' 
+            || theFile.type === 'application/x-gzip' 
+            || theFile.name.split('.').pop() === 'gz') {
+            dispatch(changeFileForUploadAfterGzip(files));
+        } else if (theFile.type === 'text/vcard' 
+            || theFile.type === 'text/directory' 
+            || theFile.name.split('.').pop() === 'vcf') {
             console.log('Not gzipped vcf');
             dispatch(requestGzip());
             gzip(theFile).then(file => {
                 dispatch(changeFileForUploadAfterGzip([file]));
-                dispatch(receiveGzip())
-            })
+                dispatch(receiveGzip());
+            });
         } else {
             console.error('Wrong file type. Type must be vcard or gzip');
-            dispatch(fileUploadError('Unsupported file type: must be Variant Calling Format (VCF) 4.1 or higher or VCF compressed with gzip'))
+            dispatch(fileUploadError('Unsupported file type: must be Variant Calling Format'
+                + ' (VCF) 4.1 or higher or VCF compressed with gzip'));
         }
-    }
+    };
 }
 
 function changeFileForUploadAfterGzip(files) {
     return {
         type: CHANGE_FILE_FOR_UPLOAD,
         files
-    }
+    };
 }
 
 function requestFileUpload() {
     return {
         type: REQUEST_FILE_UPLOAD
-    }
+    };
 }
 
 function receiveFileUpload() {
     return {
         type: RECEIVE_FILE_UPLOAD
-    }
+    };
 }
 
 function receiveFileOperation(json) {
     return {
         type: RECEIVE_FILE_OPERATION,
         operationId: json.operationId
-    }
+    };
 }
 
-export function uploadFile(files) {
+export function uploadFile() {
     return (dispatch, getState) => {
 
         dispatch(requestFileUpload());
@@ -126,13 +131,13 @@ export function uploadFile(files) {
         .fail(err => {
             console.error('Upload FAILED: ', err.responseText);
         });
-    }
+    };
 
 }
 
 
 export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS));
         if (progressStatusFromAS === 'ready') {
             dispatch(receiveFileUpload());
@@ -140,7 +145,7 @@ export function changeFileUploadProgress(progressValueFromAS, progressStatusFrom
             dispatch(closeModal('upload'));
             dispatch(fetchSamples());
         }
-    }
+    };
 }
 
 function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS) {
@@ -148,7 +153,7 @@ function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS
         type: FILE_UPLOAD_CHANGE_PROGRESS,
         progressValueFromAS,
         progressStatusFromAS
-    }
+    };
 }
 
 

@@ -371,8 +371,6 @@ class FieldFilterItem extends React.Component {
 
     render() {
         const {
-            /** {number[]} */
-            indexPath,
             /** @type {{field: string, operator: string, value: *}} */
             item,
             /** @type {{id: string, label: string, type: string}[]} */
@@ -389,7 +387,7 @@ class FieldFilterItem extends React.Component {
 
         /** @type {{value: string, label: string}[]} */
         const selectFieldList = fields.map((field) => {
-            return {value: field.id, label: field.label}
+            return {value: field.id, label: field.label};
         });
         /** @type {string} */
         const selectFieldValue = item.field;
@@ -419,14 +417,14 @@ class FieldFilterItem extends React.Component {
                     {FieldFilterItem.renderItem(item, valueType, disabled, onChange)}
                 </div>
             </div>
-        )
+        );
     }
 }
 
 
 export default class FilterBuilder extends React.Component {
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps) {
         return this.props.fields !== nextProps.fields
             || this.props.filterBuilder.editingFilter.filter.type !== nextProps.filterBuilder.editingFilter.filter.type
             || this.props.filterBuilder.editingFilter.parsedFilter !== nextProps.filterBuilder.editingFilter.parsedFilter;

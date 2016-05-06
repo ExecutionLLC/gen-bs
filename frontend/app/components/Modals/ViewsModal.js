@@ -25,7 +25,7 @@ class ViewsModal extends React.Component {
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
                 show={showModal}
-                onHide={ () => {closeModal('views')} }
+                onHide={ () => closeModal('views') }
             >
                 { !isValid &&
                 <div >&nbsp;</div>
@@ -54,7 +54,7 @@ class ViewsModal extends React.Component {
                 }
             </Modal>
 
-        )
+        );
     }
 }
 
@@ -65,8 +65,8 @@ function mapStateToProps(state) {
     return {
         isValid,
         viewBuilder
-    }
+    };
 }
 
-export default connect(mapStateToProps)(ViewsModal)
+export default connect(mapStateToProps)(ViewsModal);
 

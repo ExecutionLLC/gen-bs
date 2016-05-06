@@ -24,7 +24,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(requestUpdateSampleFields(sample.id))
+        dispatch(requestUpdateSampleFields(sample.id));
     }
 
     onResetSampleClick(e, sample) {
@@ -90,13 +90,13 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                     <span data-localize='actions.save_select.title'>Save</span>
                 </button>
             </div>
-        )
+        );
     }
 
     renderSelectField(sampleId, field, fieldValue) {
         const selectOptions = field.availableValues.map(
             option => {
-                return {value: option.id, label: option.value}
+                return {value: option.id, label: option.value};
             }
         );
 

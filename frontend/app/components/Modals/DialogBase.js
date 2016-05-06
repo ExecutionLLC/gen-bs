@@ -28,7 +28,7 @@ export default class DialogBase extends ComponentBase {
     renderFooterContents() {
         return (
             <button
-                onClick={ () => {this.onCloseModal()} }
+                onClick={ () => this.onCloseModal() }
                 type='button'
                 className='btn btn-default'
                 data-dismiss='modal'
@@ -75,7 +75,7 @@ export default class DialogBase extends ComponentBase {
             <Modal dialogClassName='modal-dialog-primary'
                    bsSize='lg'
                    show={this.props.showModal}
-                   onHide={ () => {this.onCloseModal()} }
+                   onHide={ () => {this.onCloseModal();} }
             >
                 {this.renderHeader()}
                 {this.renderBody()}

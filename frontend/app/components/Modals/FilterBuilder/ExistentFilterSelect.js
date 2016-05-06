@@ -47,7 +47,7 @@ export default class ExistentFilterSelect extends Component {
                 <div className='row grid-toolbar'>
                     <div className='col-sm-6'>
                         <Select
-                            options={filters.map( filter => { return {value: filter.id, label: getItemLabelByNameAndType(filter.name, filter.type)} } )}
+                            options={filters.map( filter => { return {value: filter.id, label: getItemLabelByNameAndType(filter.name, filter.type)}; } )}
                             value={selectedFilter.id}
                             clearable={false}
                             onChange={ (val) => {
@@ -97,6 +97,6 @@ export default class ExistentFilterSelect extends Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }

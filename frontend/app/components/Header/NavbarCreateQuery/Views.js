@@ -29,7 +29,7 @@ export default class Views extends Component {
             </div>
 
 
-        )
+        );
     }
 
     isViewDisabled(view) {
@@ -45,8 +45,8 @@ export default class Views extends Component {
                 const label = getItemLabelByNameAndType(viewItem.name, viewItem.type);
                 return {
                     value: viewItem.id, label, disabled: isDisabled
-                }
+                };
             }
-        )
+        );
     }
 }

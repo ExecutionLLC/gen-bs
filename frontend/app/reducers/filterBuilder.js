@@ -33,7 +33,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
     const modification = filterUtils.genomicsParsedRulesModification;
     const changeFunctions = {
         onSwitch(isAnd) {
-            return modification.switchCondition(parsedFilter, index, isAnd)
+            return modification.switchCondition(parsedFilter, index, isAnd);
         },
         onEdit(itemTyped) {
             const ruleIndex = itemTyped.ruleIndex;
@@ -58,7 +58,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
             return modification.removeRuleOrGroup(parsedFilter, index, itemIndex);
         },
         onAdd(isGroup) {
-            return modification.appendDefault(parsedFilter, index, isGroup, fieldDefaultId)
+            return modification.appendDefault(parsedFilter, index, isGroup, fieldDefaultId);
         }
     };
     var changeName;
@@ -195,6 +195,6 @@ export default function filterBuilder(state = {
             });
 
         default:
-            return state
+            return state;
     }
 }

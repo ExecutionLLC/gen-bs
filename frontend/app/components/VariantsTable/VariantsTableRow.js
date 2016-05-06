@@ -71,7 +71,7 @@ export default class VariantsTableRow extends ComponentBase {
 
     getMainFieldValue(colName, rowFields, fields) {
         const mainField = _.find(fields.totalFieldsList, field => field.name === colName);
-        return _.find(rowFields, field => field.fieldId === mainField.id).value
+        return _.find(rowFields, field => field.fieldId === mainField.id).value;
     }
 
 
@@ -94,7 +94,7 @@ export default class VariantsTableRow extends ComponentBase {
         );
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps) {
         return this.props.row !== nextProps.row
             || this.props.isSelected !== nextProps.isSelected;
     }

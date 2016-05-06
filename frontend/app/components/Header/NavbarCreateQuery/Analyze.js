@@ -37,6 +37,6 @@ export default class Analyze extends Component {
 
             </div>
 
-        )
+        );
     }
 }
