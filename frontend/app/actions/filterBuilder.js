@@ -13,7 +13,8 @@ import {
     filtersListAddFilter,
     filtersListDeleteFilter,
     filtersListStartServerOperation,
-    filtersListEndServerOperation
+    filtersListEndServerOperation,
+    filtersListEditFilter
 } from "./filtersList";
 
 export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
@@ -158,6 +159,7 @@ export function filterBuilderUpdateFilter() {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
                     dispatch(editFilter(editingFilter.filter.id, result));
+                    dispatch(filtersListEditFilter(editingFilter.filter.id, result));
                     dispatch(changeFilter(result.id));
                     dispatch(filtersListSelectFilter(result.id));
                     dispatch(closeModal('filters'));

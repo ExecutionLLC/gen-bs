@@ -4,6 +4,7 @@ export const FILTERS_LIST_RECEIVE = 'FILTERS_LIST_RECEIVE';
 export const FILTERS_LIST_SELECT_FILTER = 'FILTERS_LIST_SELECT_FILTER';
 export const FILTERS_LIST_ADD_FILTER = 'FILTERS_LIST_ADD_FILTER';
 export const FILTERS_LIST_DELETE_FILTER = 'FILTERS_LIST_DELETE_FILTER';
+export const FILTERS_LIST_EDIT_FILTER = 'FILTERS_LIST_EDIT_FILTER';
 
 export function filtersListStartServerOperation() {
     return {
@@ -44,3 +45,12 @@ export function filtersListDeleteFilter(filterId) {
         filterId: filterId
     };
 }
+
+export function filtersListEditFilter(filterId, filter) {
+    return {
+        type: FILTERS_LIST_EDIT_FILTER,
+        filterId: filterId,
+        filter: filter
+    };
+}
+

@@ -41,6 +41,18 @@ export default function filtersList(state = {
                 filters: newFiltersArray,
                 selectedFilterId: newSelectedFilterId
             });
+        case ActionTypes.FILTERS_LIST_EDIT_FILTER:
+            const editFilterIndex = state.filters.findIndex( (filter) => filter.id === action.filterId );
+            const filtersUpdated = [
+                ...state.filters.slice(0, editFilterIndex),
+                action.filter,
+                ...state.filters.slice(editFilterIndex + 1)
+            ];
+            const updatedSelectedFilterId = (state.selectedFilterId === action.filterId) ? action.filter.id : state.selectedFilterId;
+            return Object.assign({}, state, {
+                filters: filtersUpdated,
+                selectedFilterId: updatedSelectedFilterId
+            });
         default:
             return state;
     }
