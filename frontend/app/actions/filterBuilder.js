@@ -6,7 +6,7 @@ import {handleError} from './errorHandler';
 import {fetchFilters} from './userData';
 
 import HttpStatus from 'http-status';
-import {addFilter, deleteFilter} from "./userData";
+import {addFilter, deleteFilter, editFilter} from "./userData";
 import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
 
@@ -144,7 +144,8 @@ export function filterBuilderUpdateFilter() {
                 } else {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
-                    dispatch(changeFilter(editingFilter.filter.id));
+                    dispatch(editFilter(editingFilter.filter.id, result));
+                    dispatch(changeFilter(result.id));
                     dispatch(closeModal('filters'));
                 }
             });
