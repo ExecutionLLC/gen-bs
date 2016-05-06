@@ -1,6 +1,3 @@
-import config from '../../config'
-
-import apiFacade from '../api/ApiFacade';
 import {closeModal} from './modalWindows';
 
 import {addFilter, deleteFilter, editFilter} from "./userData";
