@@ -17,6 +17,10 @@ export const FBUILDER_CHANGE_FILTER = 'FBUILDER_CHANGE_FILTER';
 
 export const FBUILDER_TOGGLE_NEW_EDIT = 'FBUILDER_TOGGLE_NEW_EDIT';
 
+export const FBUILDER_START_EDIT = 'FBUILDER_START_EDIT';
+export const FBUILDER_SAVE_EDIT = 'FBUILDER_SAVE_EDIT';
+export const FBUILDER_END_EDIT = 'FBUILDER_END_EDIT';
+
 export const FBUILDER_REQUEST_UPDATE_FILTER = 'FBUILDER_REQUEST_UPDATE_FILTER';
 export const FBUILDER_RECEIVE_UPDATE_FILTER = 'FBUILDER_RECEIVE_UPDATE_FILTER';
 
@@ -44,6 +48,27 @@ const filtersClient = apiFacade.filtersClient;
 /*
  * Action Creators
  */
+
+export function filterBuilderStartEdit(makeNew, filter, fields) {
+    return {
+        type: FBUILDER_START_EDIT,
+        makeNew,
+        filter,
+        fields
+    };
+}
+
+export function filterBuilderSaveEdit() {
+    return {
+        type: FBUILDER_SAVE_EDIT
+    };
+}
+
+export function filterBuilderEndEdit() {
+    return {
+        type: FBUILDER_END_EDIT
+    };
+}
 
 export function filterBuilderToggleNewEdit(makeNew, fields) {
     return {
