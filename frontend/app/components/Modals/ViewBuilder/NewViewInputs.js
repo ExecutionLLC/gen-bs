@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {viewBuilderToggleEdit, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
+import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
 
 
 export default class NewViewInputs extends React.Component {
@@ -43,10 +43,12 @@ export default class NewViewInputs extends React.Component {
                                 value={newView.description}
                                 onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: newView.name, description: e.target.value})) }
                             />
-                            <div className="input-group-btn btn-group-close">                               
-                                    <button type="button" className="btn-link-default" type="button"
-                                            data-toggle="collapse" data-target=".copyview "
-                                            onClick={ () => dispatch(viewBuilderToggleEdit(views,newView.originalViewId)) }><i className="md-i">close</i></button>
+
+                            <div className="input-group-btn btn-group-close">
+                                <button type="button" className="btn-link-default" type="button"
+                                        data-toggle="collapse" data-target=".copyview "
+                                        onClick={ () => dispatch(viewBuilderSelectView(views, newView.originalViewId)) }><span
+                                        data-localize="actions.cancel">Cancel</span></button>
                             </div>
                         </div>
                     </div>

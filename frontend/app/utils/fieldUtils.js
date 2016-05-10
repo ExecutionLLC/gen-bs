@@ -17,7 +17,7 @@ export default class FieldUtils {
     }
     /**
      * Make fields array for filters
-     * @param {{notEditableFields: Object[], sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
+     * @param {{sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
      * @returns {{id: string, label: string, type: string}[]}
      */
     static makeFieldsListForFiltersSelect(fields) {
@@ -53,7 +53,7 @@ export default class FieldUtils {
      * Return field for id
      * @param {{id: string, label: string, type: string}[]} fields
      * @param {string} id
-     * @returns {{id: string, label: string, type: string}}
+     * @returns {{id: string, label: string, type: string}|null}
      */
     static getFieldById(fields, id) {
         var i;
@@ -62,6 +62,7 @@ export default class FieldUtils {
                 return fields[i];
             }
         }
+        return null;
     }
 
 }

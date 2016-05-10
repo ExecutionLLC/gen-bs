@@ -28,12 +28,12 @@ export function getItemLabelByNameAndType(itemName, itemType) {
     return itemType === 'history' ? itemName + ' (from history)' : itemName;
 }
 
-export function getReadonlyReasonForSessionAndType(isDemoSession, selectedViewFilterType) {
-    var descriptionText = 'This view is not editable, duplicate it to make changes.';
+export function getReadonlyReasonForSessionAndType(what, isDemoSession, selectedViewFilterType) {
+    var descriptionText = 'This ' + what + ' is not editable, duplicate it to make changes.';
     descriptionText = isDemoSession ? descriptionText + ' (Only for registered users)' : descriptionText;
     switch (selectedViewFilterType) {
         case 'history':
-            descriptionText = 'This view is history view, duplicate it to make changes.';
+            descriptionText = 'This ' + what + ' is history ' + what + ', duplicate it to make changes.';
             break;
         case 'user':
             descriptionText = '';

@@ -118,7 +118,7 @@ describe('Views', () => {
             });
         });
 
-        it('should fail to get and update deleted user view', (done) => {
+        it('should not fail to get and fail to update deleted user view', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
                 assert.ifError(error);
                 assert.equal(response.status, HttpStatus.OK);
@@ -140,7 +140,7 @@ describe('Views', () => {
 
                         viewsClient.get(sessionId, addedView.id, (error, response) => {
                             assert.ifError(error);
-                            assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
+                            assert.equal(response.status, HttpStatus.OK);
 
                             // Trying to update created view.
                             const viewToUpdate = _.cloneDeep(addedView);
@@ -171,7 +171,7 @@ describe('Views', () => {
             });
         });
 
-        it('should fail to add view with list item containing field_id=null',(done) =>{
+        it('should fail to add view with list item containing field_id=null', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
@@ -179,7 +179,37 @@ describe('Views', () => {
                 view.name = 'Test View ' + Uuid.v4();
                 const viewItem = view.viewListItems[0];
                 viewItem.fieldId = null;
-                view.viewListItems.push(viewItem)
+                view.viewListItems.push(viewItem);
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+                    done();
+                });
+            });
+        });
+
+        it('should fail to add view with empty name', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = '';
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                });
+            });
+        });
+
+        it('should fail to add view with empty list item', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = 'Test View ' + Uuid.v4();
+                view.viewListItems = [];
 
                 viewsClient.add(sessionId, languId, view, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
@@ -217,5 +247,47 @@ describe('Views', () => {
                 });
             });
         });
+
+        it('should fail to update view with empty list item', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = 'Test View ' + Uuid.v4();
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    const addedView = ClientBase.readBodyWithCheck(error, response);
+                    assert.ok(addedView);
+                    assert.notEqual(addedView.id, view.id, 'View id is not changed.');
+                    assert.equal(addedView.name, view.name);
+                    assert.equal(addedView.type, 'user');
+
+                    // Update created view.
+                    const viewToUpdate = _.cloneDeep(addedView);
+                    viewToUpdate.name = 'Test View ' + Uuid.v4();
+                    viewToUpdate.type = 'advanced';
+                    viewToUpdate.viewListItems = [];
+
+                    viewsClient.update(sessionId, viewToUpdate, (error, response) => {
+                        ClientBase.expectErrorResponse(error, response);
+                        done();
+                    });
+                });
+            });
+        });
+
+    });
+
+    describe('positive tests after all tests', () => {
+        it('should get all views after all tests', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                assert.ok(Array.isArray(views));
+                _.each(views, view => checkView(view));
+                done();
+            });
+        });
+
     });
 });

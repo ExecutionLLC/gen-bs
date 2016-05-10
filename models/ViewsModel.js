@@ -60,6 +60,7 @@ class ViewsModel extends SecureModelBase {
     _add(userId, languId, view, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
+                (callback) => this._ensureNameIsValid(view.name, callback),
                 (callback) => {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : view.id,

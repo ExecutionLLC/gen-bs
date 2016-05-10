@@ -4,6 +4,7 @@ const ENV = process.env;
 
 const SETTINGS = {
     port: ENV.GEN_WS_PORT || 5000,
+    disableRequestLimits: ENV.GEN_WS_DISABLE_REQUEST_LIMITS || false,
     enableCORS: ENV.GEN_WS_CORS_ENABLE || true,
     // If true, the 'callbackPort' variable will be supported in the SessionsController.
     // This setting is very security-critical and should be set to false in production.
@@ -55,7 +56,7 @@ const SETTINGS = {
             // Task timeouts in seconds.
             checkSessions: {
                 isEnabled: true,
-                taskTimeout: 5 * 60
+                taskTimeout: 10 * 60
             },
             importSourceMetadata: {
                 isEnabled: true,

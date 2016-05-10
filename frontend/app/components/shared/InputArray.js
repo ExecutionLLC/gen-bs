@@ -10,6 +10,12 @@ export default class InputArray extends Component {
         };
     }
 
+    componentWillReceiveProps(newProps) {
+        this.state = {
+            value: InputResizingArray.toKeyed(newProps.value)
+        };
+    }
+
     render() {
         const InputComponent = this.props.InputComponent || InputResizingArray.DefaultInput;
 

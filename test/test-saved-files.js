@@ -70,7 +70,7 @@ describe('Saved Files', () => {
         });
     });
 
-    it('should correctly upload exported file', (done) => {
+    it.skip('should correctly upload exported file', (done) => {
         const fileStream = fs.createReadStream(testFilePath);
         const fileMetadata = generateFileMetadata(sampleId);
         savedFilesClient.add(languId, sessionId, fileMetadata, fileStream, (error, response) => {

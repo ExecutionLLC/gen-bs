@@ -1,10 +1,11 @@
 'use strict';
 
 const async = require('async');
+const _ = require('lodash');
 
 const ServiceBase = require('../ServiceBase');
 const EventProxy = require('../../utils/EventProxy');
-var _ = require('lodash');
+const METHODS = require('./ApplicationServerMethods');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -13,6 +14,7 @@ const SESSION_STATUS = {
 };
 
 const EVENTS = {
+    onKeepAliveResultReceived: 'onKeepAliveResultReceived',
     onOperationResultReceived: 'onOperationResultReceived',
     onSourcesListReceived: 'onSourcesListReceived',
     onSourceMetadataReceived: 'onSourceMetadataReceived'
@@ -52,21 +54,20 @@ class ApplicationServerReplyService extends ServiceBase {
                 },
                 (operation, callback) => {
                     this._processOperationResult(operation, rpcError, rpcMessage, (error, operationResult) => {
-                        callback(error, {
-                            operation,
-                            operationResult
-                        });
+                        callback(error, operation, operationResult);
                     });
                 },
-                (resultWithOperation, callback) => {
+                (operation, operationResult, callback) => {
                     // Determine if we should complete the operation, and complete it.
-                    const shouldCompleteOperation = resultWithOperation.operationResult
-                        && resultWithOperation.operationResult.shouldCompleteOperation;
+                    const shouldCompleteOperation = operationResult && operationResult.shouldCompleteOperation;
                     this._completeOperationIfNeeded(
-                        resultWithOperation.operation,
+                        operation,
                         shouldCompleteOperation,
                         (error) => {
-                            callback(error, resultWithOperation);
+                            callback(error, {
+                                operation,
+                                operationResult
+                            });
                         });
                 }
             ], (error, resultWithOperation) => {
@@ -96,10 +97,7 @@ class ApplicationServerReplyService extends ServiceBase {
      * Selects and runs proper message parser. Handles RPC-level errors.
      * */
     _processOperationResult(operation, rpcError, rpcMessage, callback) {
-        const event = operation.getMethod();
-        const events = this.services.applicationServer.registeredEvents();
-
-        let result = null;
+        const method = operation.getMethod();
 
         if (rpcError) {
             // Errors in any types of the operations except the search operations should make them completed.
@@ -114,20 +112,24 @@ class ApplicationServerReplyService extends ServiceBase {
             return;
         }
 
-        switch (event) {
-            case events.openSearchSession:
+        switch (method) {
+            case METHODS.openSearchSession:
                 this._processOpenSearchResult(operation, rpcMessage, callback);
                 break;
 
-            case events.uploadSample:
+            case METHODS.uploadSample:
                 this._processUploadSampleResult(operation, rpcMessage, callback);
                 break;
 
-            case events.getSourcesList:
+            case METHODS.getSourcesList:
                 this._processGetSourcesListResult(operation, rpcMessage, callback);
                 break;
 
-            case events.getSourceMetadata:
+            case METHODS.keepAlive:
+                this._processKeepAliveResult(operation, rpcMessage, callback);
+                break;
+
+            case METHODS.getSourceMetadata:
                 this._processGetSourceMetadataResult(operation, rpcMessage, callback);
                 break;
 
@@ -135,6 +137,43 @@ class ApplicationServerReplyService extends ServiceBase {
                 this.logger.error('Unexpected result came from the application server, send as is.');
                 callback(null, rpcMessage.result);
                 break;
+        }
+    }
+
+    _processKeepAliveResult(operation, rpcMessage, callback) {
+        const operationIdToCheck = operation.getOperationIdToCheck();
+        const result = rpcMessage.result;
+        if (result && result.error) {
+            this.logger.error('Unexpected error received from AS as keep-alive result: ' + JSON.stringify(result.error));
+            callback(null, {
+                eventName: EVENTS.onKeepAliveResultReceived,
+                shouldCompleteOperation: true
+            });
+            return;
+        }
+
+        const isAlive = result;
+        if (!isAlive) {
+            async.waterfall([
+                // The keep-alive operation belongs to system session.
+                // So we need to find the operation id in all sessions.
+                (callback) => this.services.operations.findInAllSessions(operationIdToCheck, callback),
+                (operation, callback) => this.services.operations.remove(operation.getSessionId(), operation.getId(), callback)
+            ], (error) => {
+                if (error) {
+                    this.logger.error('Error while closing dead search operation: ' + error);
+                }
+
+                callback(null, {
+                    eventName: EVENTS.onKeepAliveResultReceived,
+                    shouldCompleteOperation: true
+                });
+            });
+        } else {
+            callback(null, {
+                eventName: EVENTS.onKeepAliveResultReceived,
+                shouldCompleteOperation: true
+            });
         }
     }
 

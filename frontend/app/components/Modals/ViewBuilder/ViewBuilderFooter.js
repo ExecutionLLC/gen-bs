@@ -11,7 +11,7 @@ export default class ViewBuilderFooter extends React.Component {
         const {auth, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
         var disabledClass = classNames({
-            'disabled': (editedView.type === 'advanced' && auth.isDemo) ? 'disabled' : ''
+            'disabled': (editedView.type === 'advanced' && auth.isDemo || !editedView.name.trim()) ? 'disabled' : ''
         });
         var title = (editedView.type === 'advanced' && auth.isDemo) ?
             'Login or register to select advanced view' : '';
@@ -48,7 +48,7 @@ export default class ViewBuilderFooter extends React.Component {
         const {dispatch, closeModal, views, viewBuilder} =this.props;
         const selectedView = viewBuilder.selectedView;
         closeModal('views');
-        dispatch(viewBuilderSelectView(views, selectedView.id, true));
+        dispatch(viewBuilderSelectView(views, selectedView.id));
     }
 
     selectOnClick(e) {

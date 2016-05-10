@@ -45,6 +45,11 @@ class ControllerBase {
      * @returns {*}
      */
     createLimiter(options) {
+        // If disabled, return no-op middleware.
+        if (this.config.disableRequestLimits) {
+            return (request, response, next) => next();
+        }
+
         return RateLimit({
             windowMs: options.delayWindowMs || 60 * 1000,
             delayAfter: options.noDelayCount || 100000,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
@@ -16,12 +16,11 @@ export default class Views extends Component {
             <div className="table-cell max-width">
                 <div className="btn-group btn-group-select100 view-select" data-localize="views.help"
                      data-toggle="tooltip" data-placement="bottom" data-container="body"
-                     title="Select one or more from available views">
+                     title="Select one of available views">
 
                     <Select
                         options={this.getViewOptions()}
                         value={selectedView ? selectedView.id: null}
-                        clearable={false}
                         onChange={ (val) => dispatch(changeView(val.value) )}
                     />
 

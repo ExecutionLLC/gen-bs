@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
@@ -10,19 +10,33 @@ import {viewBuilderChangeSortColumn, viewBuilderChangeKeywords} from "../../../a
 
 export default class ViewBuilder extends React.Component {
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.fields !== nextProps.fields
+            || this.props.viewBuilder.editedView.type !== nextProps.viewBuilder.editedView.type
+            || this.props.viewBuilder.editedView.viewListItems !== nextProps.viewBuilder.editedView.viewListItems;
+    }
+
     render() {
         const {dispatch, fields, viewBuilder} = this.props;
+        const allAvailableFields = fields.allowedFieldsList;
+        // Exclude fields that are already selected.
+        const fieldsForSelection = _.filter(
+            allAvailableFields,
+            field => !_.includes(previouslySelectedFieldIds, field.id)
+        );
+        // This field will be chosen when a new item is created.
+        const nextDefaultField = _.first(fieldsForSelection);
         const view = viewBuilder.editedView;
-        var disabledClass = classNames({
-            'disabled': (view.type !== 'user') ? 'disabled' : ''
+        const viewItemsLength = view.viewListItems.length;
+        var plusDisabledClass = classNames({
+            'disabled': (view.type !== 'user' || viewItemsLength >= 30 || !nextDefaultField) ? 'disabled' : ''
+        });
+        var minusDisabledClass = classNames({
+            'disabled': (view.type !== 'user' || viewItemsLength <= 1) ? 'disabled' : ''
         });
 
         const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         const isDisableEditing = view.type !== 'user';
-        const allAvailableFields = fields.sampleFieldsList.concat(fields.sourceFieldsList);
-        // Exclude editable fields and fields that are already selected.
-        const fieldsForSelection = _.filter(allAvailableFields, field => !field.isEditable
-        && !_.includes(previouslySelectedFieldIds, field.id));
         const selects = view.viewListItems.map(function (viewItem, index) {
 
             var currentValue =
@@ -60,7 +74,6 @@ export default class ViewBuilder extends React.Component {
                             <Select
                                 options={selectOptions}
                                 value={currentValue}
-                                clearable={false}
                                 onChange={ (val) => dispatch(viewBuilderChangeColumn(index, val.value)) }
                                 disabled={isDisableEditing || !isFieldAvailable}
                             />
@@ -78,20 +91,21 @@ export default class ViewBuilder extends React.Component {
                                 placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
                                 value={keywordsCurrentValue}
                                 onChange={ (val) => this.onChangeKeyword(index, val)}
-                                clearable={false}
+                                clearable={true}
+                                backspaceRemoves={true}
                                 disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
                             />
                         </div>
-                        <div className="btn-group">
-                            <button className="btn-link-default" disabled={disabledClass}
-                                    onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
-                                    type="button">
-                                    <i className="md-i">close</i></button>
-                            <button className="btn-link-default" disabled={disabledClass}
-                                    onClick={ () => dispatch(viewBuilderAddColumn(index+1)) }
-                                    type="button">
-                                    <i className="md-i">add</i></button>                          
-                        </div>
+                    </div>
+                    <div className="btn-group">
+                        <button className="btn-link-default" disabled={minusDisabledClass}
+                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
+                                type="button">
+                            <i className="md-i">close</i></button>
+                        <button className="btn-link-default" disabled={plusDisabledClass}
+                                onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
+                                type="button">
+                            <i className="md-i">add</i></button>
                     </div>
                 </div>
             )

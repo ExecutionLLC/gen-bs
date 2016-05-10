@@ -122,18 +122,22 @@ export function filterBuilderUpdateFilter() {
     return (dispatch, getState) => {
         const state = getState();
         const selectedFilter = state.filterBuilder.selectedFilter;
-        const isNotEditableFilter = _.some(['advanced', 'standard'], selectedFilter.type);
+        const editingFilter = state.filterBuilder.editingFilter;
+        const originalFilter = state.filterBuilder.originalFilter;
+        const isNotEdited = _.includes(['advanced', 'standard'], selectedFilter.type)
+            || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
-        if (state.auth.isDemo || isNotEditableFilter) {
+        if (state.auth.isDemo || isNotEdited) {
+            dispatch(changeFilter(editingFilter.filter.id));
             dispatch(closeModal('filters'));
         } else {
             const sessionId = state.auth.sessionId;
-            const editingFilter = state.filterBuilder.editingFilter.filter;
+            const resultEditingFilter = editingFilter.filter;
             dispatch(filterBuilderRequestUpdateFilter());
-            filtersClient.update(sessionId, editingFilter, (error, response) => {
+            filtersClient.update(sessionId, resultEditingFilter, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
-                } else if (response.statusCode) {
+                } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
                 } else {
                     const result = response.body;
@@ -180,7 +184,7 @@ export function filterBuilderChangeFilter(index, change) {
 export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
         dispatch(filterBuilderRequestDeleteFilter(filterId));
-        const {auth: {sessionId}} = getState();
+        const {auth: {sessionId}, fields} = getState();
         filtersClient.remove(sessionId, filterId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
@@ -194,6 +198,7 @@ export function filterBuilderDeleteFilter(filterId) {
                 const selectedFilterId = state.ui.selectedFilter.id;
                 const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
                 dispatch(changeFilter(newFilterId));
+                dispatch(filterBuilderToggleNewEdit(false, fields));
             }
         });
     }

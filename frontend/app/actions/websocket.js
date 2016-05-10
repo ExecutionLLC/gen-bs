@@ -116,6 +116,7 @@ function asError(err) {
 }
 
 function otherMessage(wsData) {
+    console.error('Unexpected message in web socket: ' + JSON.stringify(wsData));
     return {
         type: WS_OTHER_MESSAGE,
         wsData
@@ -125,12 +126,10 @@ function otherMessage(wsData) {
 function receiveMessage(msg) {
     return (dispatch, getState) => {
         const wsData = JSON.parse(JSON.parse(msg));
-        console.log('wsData.result', wsData.result);
-        console.log('wsData.operationId', wsData.operationId);
         if (wsData.result) {
             if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
                 dispatch(tableMessage(wsData));
-                if (getState().variantsTable.isFilteringOrSorting) {
+                if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
                     dispatch(receiveSearchedResults())
                 }
             } else if (wsData.result.progress !== undefined) {
@@ -194,10 +193,12 @@ export function requestAnalyze(searchParams) {
     };
 }
 
-export function requestSetCurrentParams(view, sampleFields) {
+export function requestSetCurrentParams(view, filter, sample, sampleFields) {
     return {
         type: REQUEST_SET_CURRENT_PARAMS,
         view,
+        filter,
+        sample,
         sampleFields
     };
 }
