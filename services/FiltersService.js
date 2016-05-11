@@ -13,6 +13,10 @@ class FiltersService extends UserEntityServiceBase {
     add(user, languId, filter, callback) {
         async.waterfall([
             (callback) => this._checkFilterRules(filter, callback),
+            (callback) => super.findAll(user, callback),
+            (filters, callback) => {
+                this._checkFilterNameExists(filter, filters, callback)
+            },
             (callback) => super.add(user, languId, filter, callback)
         ], callback);
     }
@@ -72,6 +76,18 @@ class FiltersService extends UserEntityServiceBase {
             } else {
                 callback(null, mappedColumns[0]);
             }
+        }
+    }
+
+    _checkFilterNameExists(filter, filters, callback) {
+        const filterName = filter.name;
+        const filterExists = _.some(
+            filters, f => f.name == filterName
+        );
+        if (filterExists) {
+            callback(new Error('Filter with this name already exists.'));
+        } else {
+            callback(null);
         }
     }
 }
