@@ -10,12 +10,8 @@ import {deleteFilter} from "./userData";
 import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
 
-export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
-
 export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR';
 export const FBUILDER_CHANGE_FILTER = 'FBUILDER_CHANGE_FILTER';
-
-export const FBUILDER_TOGGLE_NEW_EDIT = 'FBUILDER_TOGGLE_NEW_EDIT';
 
 export const FBUILDER_START_EDIT = 'FBUILDER_START_EDIT';
 export const FBUILDER_SAVE_EDIT = 'FBUILDER_SAVE_EDIT';
@@ -68,22 +64,6 @@ export function filterBuilderEndEdit() {
     return {
         type: FBUILDER_END_EDIT
     };
-}
-
-export function filterBuilderToggleNewEdit(makeNew, fields) {
-    return {
-        type: FBUILDER_TOGGLE_NEW_EDIT,
-        makeNew,
-        fields
-    }
-}
-
-export function filterBuilderSelectFilter(filters, filterId) {
-    return {
-        type: FBUILDER_SELECT_FILTER,
-        filters,
-        filterId
-    }
 }
 
 export function filterBuilderChangeAttr(attr) {

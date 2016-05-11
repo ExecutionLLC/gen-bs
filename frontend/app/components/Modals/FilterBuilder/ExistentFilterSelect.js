@@ -8,7 +8,6 @@ import {
     getReadonlyReasonForSessionAndType
 } from '../../../utils/stringUtils';
 import {
-    filterBuilderSelectFilter,
     filterBuilderStartEdit,
     filterBuilderDeleteFilter
 } from '../../../actions/filterBuilder'

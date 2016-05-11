@@ -70,14 +70,6 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
     return null;
 }
 
-function reduceFBuilderSelectFilter(state, action) {
-    const selectedFilter = _.find(action.filters, {id: action.filterId}) || null;
-    return Object.assign({}, state, {
-        selectedFilter,
-        isReceivedFilters: selectedFilter !== null
-    });
-}
-
 function reduceFBuilderToggleNewEdit(state, action) {
     const editingFilter = parseFilterForEditing(
         action.makeNew,
@@ -185,12 +177,6 @@ export default function filterBuilder(state = {
 }, action) {
 
     switch (action.type) {
-        case ActionTypes.FBUILDER_SELECT_FILTER:
-            return reduceFBuilderSelectFilter(state, action);
-
-        case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
-            return reduceFBuilderToggleNewEdit(state, action);
-        
         case ActionTypes.FBUILDER_CHANGE_FILTER:
             return reduceFBuilderChangeFilter(state, action);
 
