@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {changeView} from '../../../actions/ui'
 
 export default class Views extends Component {
@@ -9,18 +10,17 @@ export default class Views extends Component {
 
     render() {
         const dispatch = this.props.dispatch;
-        const currentView = this.props.ui.currentView;
+        const selectedView = this.props.ui.selectedView;
         return (
 
             <div className="table-cell max-width">
                 <div className="btn-group btn-group-select100 view-select" data-localize="views.help"
                      data-toggle="tooltip" data-placement="bottom" data-container="body"
-                     title="Select one or more from available views">
+                     title="Select one of available views">
 
                     <Select
                         options={this.getViewOptions()}
-                        value={currentView ? currentView.id: null}
-                        clearable={false}
+                        value={selectedView ? selectedView.id: null}
                         onChange={ (val) => dispatch(changeView(val.value) )}
                     />
 
@@ -30,18 +30,20 @@ export default class Views extends Component {
 
         )
     }
+    
     isViewDisabled(view){
-        const {auth} = this.props
+        const {auth} = this.props;
         return auth.isDemo && view.type == 'advanced';
     }
 
     getViewOptions() {
         const views = this.props.views;
         return views.map(
-            v => {
-                const isDisabled = this.isViewDisabled(v);
+            (viewItem) => {
+                const isDisabled = this.isViewDisabled(viewItem);
+                const label = getItemLabelByNameAndType(viewItem.name, viewItem.type);
                 return {
-                    value: v.id, label: v.name, disabled: isDisabled
+                    value: viewItem.id, label, disabled: isDisabled
                 }
             }
         )

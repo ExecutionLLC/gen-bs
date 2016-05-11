@@ -35,11 +35,11 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 if (this.waitForConnection) {
                     callback(new Error('RPC is not connected.'));
                 } else {
-                    this.services.sessions.findSystemSession(callback);
+                    callback(null);
                 }
             },
-            (systemSession, callback) => {
-                this.services.applicationServer.requestSourcesList(systemSession.id, callback);
+            (callback) => {
+                this.services.applicationServer.requestSourcesList(callback);
             },
             (result, callback) => {
                 this.onCompleteCallback = callback;
@@ -86,17 +86,10 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
             },
             (missingSourceNames, callback) => {
                 if (missingSourceNames.length > 0) {
-                    async.waterfall([
-                        (callback) => {
-                            this.services.sessions.findSystemSession(callback);
-                        },
-                        (systemSession, callback) => {
-                            // Metadata will be received without source names in the same order,
-                            // so save the list here to find the source name later.
-                            this.requestedSources = missingSourceNames;
-                            this.services.applicationServer.requestSourceMetadata(systemSession.id, missingSourceNames, callback);
-                        }
-                    ], callback);
+                    // Metadata will be received without source names in the same order,
+                    // so save the list here to find the source name later.
+                    this.requestedSources = missingSourceNames;
+                    this.services.applicationServer.requestSourceMetadata(missingSourceNames, callback);
                 } else {
                     this.logger.info('There are no sources to import.');
                     this.completed = true;

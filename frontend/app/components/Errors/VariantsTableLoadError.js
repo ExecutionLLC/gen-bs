@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 export default class VariantsTableLoadError extends Component {
 
     render() {
+        const error = this.props.error;
         return (
 
             <div className="panel panel-danger">
@@ -10,13 +11,7 @@ export default class VariantsTableLoadError extends Component {
                     <h3 className="panel-title">Error loading Analyze Results Data</h3>
                 </div>
                 <div className="panel-body">
-                    <ol>
-                        {
-                            this.props.errors.map((err) => (
-                                <li>Code: <strong>{err.code}</strong>; Message: <strong>{err.message}</strong></li>
-                            ))
-                        }
-                    </ol>
+                    Code: <strong>{error.code}</strong>; Message: <strong>{error.message}</strong>
                 </div>
             </div>
 

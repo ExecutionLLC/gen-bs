@@ -8,6 +8,7 @@ export default class Analyze extends Component {
   render() {
 
     const { isAnalyzeTooltipVisible } = this.props.ui
+    const isFetchingSamples = this.props.fields.isFetching.samples; // is fetching fields actually, see REQUEST_FIELDS 
 
     const tooltip = <Tooltip id="analyze_button_tooltip">Analyze current sample with current filters and view</Tooltip>;
 
@@ -19,12 +20,12 @@ export default class Analyze extends Component {
     };
     return (
 
-        <div className="table-cell">
-            <div className="btn-group-submit"
+        <div className="table-cell table-cell-xs-4">
+            <div className="btn-group"
               data-localize="query.analyze.help"
               ref="analyze_tooltip_target"
               >  
-              <button className="btn btn-primary" type="button" onClick={this.props.clicked}>
+              <button className="btn btn-primary" type="button" disabled={isFetchingSamples} onClick={this.props.clicked}>
                  <span data-localize="query.analyze.title">Analyze</span>
               </button>
             <Overlay {...overlayProps} placement="bottom">

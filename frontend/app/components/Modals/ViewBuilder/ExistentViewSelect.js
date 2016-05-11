@@ -1,89 +1,163 @@
 import React from 'react';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 
-import {viewBuilderToggleEdit, viewBuilderSelectView, viewBuilderToggleNew} from '../../../actions/viewBuilder'
+import {
+    getItemLabelByNameAndType,
+    getReadonlyReasonForSessionAndType
+} from '../../../utils/stringUtils';
+import {
+    viewBuilderSelectView,
+    viewBuilderToggleNew,
+    viewBuilderDeleteView
+} from '../../../actions/viewBuilder'
 
 
 export default class ExistentViewSelect extends React.Component {
 
-
     render() {
-
-        const {dispatch, auth, viewBuilder, views} = this.props;
-        const view = viewBuilder.editedView;
-
-        var disabledClass = classNames({
-            'disabled': (auth.isDemo) ? 'disabled' : ''
-        });
-        var title = (auth.isDemo) ? 'Login or register to work with view' : 'Make a copy for editing';
-        const isViewEditable = (view.type === 'user');
+        const {auth: {isDemo: isDemoSession}, viewBuilder: {editedView: selectedView}, views} = this.props;
+        const isEditableView = selectedView.type === 'user';
 
         return (
-
             <div className="collapse in copyview">
                 <div className="row grid-toolbar">
-                    <div className="col-sm-6">
-                        <label data-localize="views.setup.selector.label">Available Views</label>
-                    </div>
+                    {this.renderTitle()}
                 </div>
-                { !isViewEditable &&
-                <div className="alert alert-help">
-                    <span data-localize="views.setup.selector.description">
-                        This view is not editable, duplicate it to make changes. (Only for registered users)
-                    </span>
-                </div>
-                }
-                <div className="row grid-toolbar">
-                    <div className="col-sm-6">
-                        <Select
-                            options={views.map( v => { return {value: v.id, label: v.name} } )}
-                            value={view.id}
-                            clearable={false}
-                            onChange={ (val) => dispatch(viewBuilderToggleEdit(views, val.value, true))}
-                        />
-                    </div>
-                    <div className="col-sm-6">
-                        <div className="btn-group" data-localize="actions.duplicate.help" data-toggle="tooltip"
-                             data-placement="bottom" data-container="body" title="Сopy this to a new">
-                            <button type="button"
-                                    className="btn btn-default collapse in copyview"
-                                    data-toggle="collapse"
-                                    data-target=".copyview"
-                                    id="dblBtn"
-                                    onClick={ () => dispatch(viewBuilderToggleNew()) }
-                                    disabled={disabledClass}
-                                    title={title}
-                            >
-                                <span data-localize="actions.duplicate.title">Duplicate</span>
-                            </button>
-                        </div>
-                        {
-                            //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
-                        }
-                        { view.type == 'user' &&
-                        <div className="btn-group ">
-                            <button type="button"
-                                    className="btn btn-default"
-                                    onClick={ () => dispatch(viewBuilderSelectView(views, view.id, true))}>
-
-                                <span data-localize="views.setup.reset.title">Reset View</span>
-                            </button>
-                        </div>
-                        }
-                        { view.type == 'user' &&
-                        <div className="btn-group ">
-                            <button type="button" className="btn btn-link">
-                                <span data-localize="views.setup.delete.title">Delete View</span>
-                            </button>
-                        </div>
-                        }
-                    </div>
+                {this.renderDescription(isDemoSession, selectedView.type)}
+                <div className="row grid-toolbar row-head-selector">
+                    {this.renderViewSelector(views)}
+                    {this.renderButtonGroup(isDemoSession, isEditableView)}
                 </div>
             </div>
         )
+    }
+
+    renderTitle() {
+        return (
+            <div className="col-sm-6">
+                <label data-localize="views.setup.selector.label">Available Views</label>
+            </div>
+        )
+    }
+
+    renderDescription(isDemoSession, selectedViewType) {
+        const descriptionText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType);
+
+        if (descriptionText) {
+            return (
+                <div className="alert alert-help">
+                    <span data-localize="views.setup.selector.description">
+                        {descriptionText}
+                    </span>
+                </div>
+            )
+        }
+
+        return null;
+    }
+
+    renderViewSelector(views) {
+        const selectorItems = views.map(
+            (viewItem) => {
+                const value = viewItem.id;
+                const label = getItemLabelByNameAndType(viewItem.name, viewItem.type);
+                return {value, label};
+            }
+        );
+
+        return (
+            <div className="col-sm-6">
+                <Select options={selectorItems}
+                        value={this.getSelectedViewId()}
+                        onChange={(item) => this.onSelectedViewChanged(item.value)}
+                />
+            </div>
+        )
+    }
+
+    renderButtonGroup(isDemoSession, isEditableView) {
+        return (
+            <div className="col-sm-6">
+                <div className="btn-group">
+                    {this.renderDuplicateViewButton(isDemoSession)}
+                    {isEditableView && this.renderResetViewButton()}
+                    {isEditableView && this.renderDeleteViewButton()}
+                </div>
+            </div>
+        )
+    }
+
+    renderDuplicateViewButton(isDemoSession) {
+        const duplicateButtonTooltip = isDemoSession ? 'Login or register to work with view' : 'Make a copy for editing';
+        const disabledClass = classNames({
+            'disabled': (isDemoSession) ? 'disabled' : ''
+        });
+
+        return (
+            <button type="button"
+                    className="btn btn-default collapse in copyview"
+                    id="dblBtn"
+                    onClick={ () => {this.onDuplicateViewClick()} }
+                    disabled={disabledClass}
+                    title={duplicateButtonTooltip}
+            >
+                <span data-localize="actions.duplicate.title" className="hidden-xs">Duplicate</span>
+                <span className="visible-xs"><i className="md-i">content_copy</i></span>
+            </button>
+        )
+    }
+
+    renderResetViewButton() {
+        return (
+            <button type="button"
+                    className="btn btn-default"
+                    onClick={ () => {this.onResetViewClick()} }
+            >
+                <span data-localize="views.setup.reset.title" className="hidden-xs">Reset View</span>
+                <span className="visible-xs"><i className="md-i">settings_backup_restore</i></span>
+            </button>
+        )
+    }
+
+    renderDeleteViewButton() {
+        return (
+            <button type="button"
+                    className="btn btn-default"
+                    onClick={ () => {this.onDeleteViewClick()} }
+            >
+                <span data-localize="views.setup.delete.title" className="hidden-xs">Delete View</span>
+                <span className="visible-xs"><i className="md-i">close</i></span>
+            </button>
+        )
+    }
+
+    getSelectedViewId() {
+        return this.props.viewBuilder.editedView.id;
+    }
+
+    onSelectedViewChanged(viewId) {
+        const {dispatch, views} = this.props;
+        dispatch(viewBuilderSelectView(views, viewId));
+    }
+
+    onDuplicateViewClick() {
+        const {dispatch} = this.props;
+        dispatch(viewBuilderToggleNew());
+    }
+
+    onResetViewClick() {
+        const {dispatch, views} = this.props;
+        const selectedViewId = this.getSelectedViewId();
+        dispatch(viewBuilderSelectView(views, selectedViewId));
+    }
+
+    onDeleteViewClick() {
+        const {dispatch} = this.props;
+        const selectedViewId = this.getSelectedViewId();
+        dispatch(viewBuilderDeleteView(selectedViewId));
     }
 }
 

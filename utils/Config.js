@@ -4,6 +4,7 @@ const ENV = process.env;
 
 const SETTINGS = {
     port: ENV.GEN_WS_PORT || 5000,
+    disableRequestLimits: ENV.GEN_WS_DISABLE_REQUEST_LIMITS || false,
     enableCORS: ENV.GEN_WS_CORS_ENABLE || true,
     // If true, the 'callbackPort' variable will be supported in the SessionsController.
     // This setting is very security-critical and should be set to false in production.
@@ -12,7 +13,7 @@ const SETTINGS = {
     // will always be used. This is convenient when port forwarding to Redis server is used.
     forceOverrideRedisToLocalhost: ENV.GEN_WS_FORCE_OVERRIDE_REDIS_TO_LOCALHOST || false,
     // If true, samples will not be marked as analyzed, and there will be no fee from the user.
-    disableMakeAnalyzed: ENV.GEN_WS_DISABLE_MAKE_ANALYZED || false,
+    disableMakeAnalyzed: ENV.GEN_WS_DISABLE_MAKE_ANALYZED || true,
     // If enabled, demo users will have rights to create and delete filters and samples.
     // These filters and samples will be shared between them, as there is only one demo-user in the system.
     enableFullRightsForDemoUsers: ENV.GEN_WS_ENABLE_FULL_RIGHTS_FOR_DEMO_USERS || false,
@@ -55,7 +56,7 @@ const SETTINGS = {
             // Task timeouts in seconds.
             checkSessions: {
                 isEnabled: true,
-                taskTimeout: 5 * 60
+                taskTimeout: 10 * 60
             },
             importSourceMetadata: {
                 isEnabled: true,

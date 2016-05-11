@@ -10,7 +10,7 @@ class RequestWrapper {
         Request.post({
             url,
             headers,
-            json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
+            json: bodyObject
         }, RequestWrapper._createResponseConverter(callback));
     }
 
@@ -18,8 +18,8 @@ class RequestWrapper {
         Request.get({
             url,
             headers,
-            qs: ChangeCaseUtil.convertKeysToSnakeCase(queryParams),
-            json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
+            qs: queryParams,
+            json: bodyObject
         }, RequestWrapper._createResponseConverter(callback))
     }
 
@@ -27,7 +27,7 @@ class RequestWrapper {
         Request.put({
             url,
             headers,
-            json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
+            json: bodyObject
         }, RequestWrapper._createResponseConverter(callback));
     }
 
@@ -35,7 +35,7 @@ class RequestWrapper {
         Request.del({
             url,
             headers,
-            json: ChangeCaseUtil.convertKeysToSnakeCase(bodyObject)
+            json: bodyObject
         }, RequestWrapper._createResponseConverter(callback));
     }
 
@@ -68,7 +68,7 @@ class RequestWrapper {
                 }
                 callback(null, {
                     status,
-                    body: ChangeCaseUtil.convertKeysToCamelCase(body)
+                    body
                 });
             }
         };

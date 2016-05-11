@@ -2,18 +2,17 @@ import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
 import classNames from 'classnames';
 
-import {filterBuilderRequestRules} from '../../../actions/filterBuilder';
+import {filterBuilderSaveAndSelectRules} from '../../../actions/filterBuilder';
 
 
 export default class FilterBuilderFooter extends Component {
 
     render() {
         const {dispatch, auth, closeModal} = this.props;
-        const {editOrNew, editedFilter, newFilter} = this.props.filterBuilder;
-        const filter = editOrNew ? (editedFilter) : (newFilter);
+        const filter = this.props.filterBuilder.editingFilter.filter;
 
         const disabledClass = classNames({
-            'disabled': (filter.type === 'advanced' && auth.isDemo) ? 'disabled' : ''
+            'disabled': (filter.type === 'advanced' && auth.isDemo || !filter.name.trim()) ? 'disabled' : ''
         });
         const title = (filter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
         const isFilterEditable = (filter.type === 'user');
@@ -34,8 +33,10 @@ export default class FilterBuilderFooter extends Component {
                     disabled={disabledClass}
                     title={title}
                     onClick={ () => {
-              dispatch(filterBuilderRequestRules())
-            }}
+                        if (filter.name.trim()) {
+                            dispatch(filterBuilderSaveAndSelectRules())
+                        }
+                    }}
                     type="button"
                     className="btn btn-primary"
                 >

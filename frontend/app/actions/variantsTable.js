@@ -1,7 +1,8 @@
 import apiFacade from '../api/ApiFacade';
-import { handleError } from './errorHandler'
-import { clearVariants, addComment, changeComment, deleteComment } from './websocket'
-import { updateQueryHistory } from './queryHistory'
+import {handleError} from './errorHandler';
+import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
+import {updateQueryHistory} from './queryHistory';
+import {requestTableScrollPositionReset} from './ui';
 
 import HttpStatus from 'http-status';
 
@@ -11,9 +12,11 @@ import HttpStatus from 'http-status';
 
 export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
-export const CHANGE_VARIANTS_FILTER = 'CHANGE_VARIANTS_FILTER';
+export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
+export const SET_VARIANTS_SORT = 'SET_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
+export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
 
 export const FILTER_VARIANTS = 'FILTER_VARIANTS';
 
@@ -23,7 +26,7 @@ export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
 export const CLEAR_VARIANTS_ROWS_SELECTION = 'CLEAR_VARIANTS_ROWS_SELECTION';
 
 export const REQUEST_VARIANTS = 'REQUEST_VARIANTS';
-export const RECEIVE_VARIANTS = 'RECEIVE_VARIANTS';
+export const RECEIVE_ANALYSIS_OPERATION_ID = 'RECEIVE_ANALYSIS_OPERATION_ID';
 
 export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS';
 export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
@@ -63,7 +66,7 @@ function changeVariantsLimit() {
     }
 }
 
-export function getNextPartOfData(currentSample, currentView, currentFilter) {
+export function getNextPartOfData() {
     return (dispatch) => {
         dispatch(changeVariantsLimit());
 
@@ -86,11 +89,31 @@ export function clearSearchParams() {
     }
 }
 
-export function changeVariantsFilter(fieldId, filterValue) {
+export function changeExcludedFields(viewId) {
+    return (dispatch, getState) => {
+        const {fields:{sampleFieldsList}, userData:{views}}=getState();
+        const view = _.find(views, {id: viewId});
+        const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
+        const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);
+        const viewFieldIds = _.map(view.viewListItems, viewItem =>viewItem.fieldId);
+
+        const excludedMandatoryFields = _.difference(mandatoryFieldIds, viewFieldIds);
+        dispatch(setExcludedFields(excludedMandatoryFields))
+    };
+}
+
+export function setExcludedFields(excludedFields) {
     return {
-        type: CHANGE_VARIANTS_FILTER,
-        fieldId: fieldId,
-        filterValue: filterValue
+        type: SET_EXCLUDED_FIELDS,
+        excludedFields
+    }
+}
+
+export function setFieldFilter(fieldId, filterValue) {
+    return {
+        type: SET_FIELD_FILTER,
+        fieldId,
+        filterValue
     }
 }
 
@@ -101,6 +124,41 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
             dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
         }
+    }
+}
+
+export function setViewVariantsSort(view) {
+    return (dispatch, getState) => {
+
+        const {fields:{sampleIdToFieldHash}} = getState();
+        const sortOrder = _(view.viewListItems)
+            .filter(viewListItem => {
+                return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
+            })
+            .filter(viewListItem => {
+                return sampleIdToFieldHash[viewListItem.fieldId];
+            })
+            .map(viewListItem => {
+                return {
+                    direction: viewListItem.sortDirection,
+                    fieldId: viewListItem.fieldId,
+                    order: viewListItem.sortOrder
+                }
+            })
+            .sortByOrder(['order'], true)
+            .value();
+        //Fix for the case when another sort column is missing in the sample fields.
+        if (sortOrder.length == 1) {
+            sortOrder[0].order = 1;
+        }
+        dispatch(setVariantsSort(sortOrder));
+    }
+}
+
+export function setVariantsSort( sortOrder) {
+    return {
+        type: SET_VARIANTS_SORT,
+        sortOrder
     }
 }
 
@@ -126,29 +184,29 @@ function requestVariants() {
     }
 }
 
-function receiveVariants(json) {
+function receiveAnalysisOperationId(operationId) {
     return {
-        type: RECEIVE_VARIANTS,
-        operationId: json.operationId,
+        type: RECEIVE_ANALYSIS_OPERATION_ID,
+        operationId,
         receivedAt: Date.now()
     }
 }
 
 
-export function createComment(alt, pos, ref, chrom, searchKey, comment) {
+export function createComment(alt, pos, reference, chrom, searchKey, comment) {
 
     return (dispatch, getState) => {
 
         const commentObject = {
             alt,
             pos,
-            'reference': ref,
+            reference,
             chrom,
             searchKey,
             comment
         };
 
-        const { auth: {sessionId}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, ui: {languageId}} = getState();
         commentsClient.add(sessionId, languageId, commentObject,
             (error, response) => {
                 if (error) {
@@ -217,7 +275,7 @@ export function fetchVariants(searchParams) {
         dispatch(requestVariants());
         dispatch(clearTableRowsSelection());
 
-        const { auth: {sessionId}, ui: {languageId} } = getState();
+        const {auth: {sessionId}, ui: {languageId}} = getState();
         searchClient.sendSearchRequest(
             sessionId,
             languageId,
@@ -232,8 +290,11 @@ export function fetchVariants(searchParams) {
                 } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
                 } else {
-                    dispatch(receiveVariants(response.body));
-                    const isDemo = getState().auth.isDemo;
+                    const {operationId} = response.body;
+                    dispatch(receiveAnalysisOperationId(operationId));
+                    const state = getState();
+                    dispatch(changeExcludedFields(state.websocket.variantsView.id));
+                    const isDemo = state.auth.isDemo;
                     if (!isDemo) {
                         dispatch(updateQueryHistory());
                     }
@@ -296,13 +357,14 @@ export function searchInResultsNextData() {
 
 export function searchInResults(flags) {
     return (dispatch, getState) => {
+        dispatch(requestTableScrollPositionReset());
         dispatch(requestSearchedResults(flags));
         dispatch(clearTableRowsSelection());
 
         const state = getState();
         const sessionId = state.auth.sessionId;
         const operationId = state.variantsTable.operationId;
-        const { search, sort, topSearch, limit, offset } = state.variantsTable.searchInResultsParams;
+        const {search, sort, topSearch, limit, offset} = state.variantsTable.searchInResultsParams;
 
         searchClient.sendSearchInResultsRequest(
             sessionId,

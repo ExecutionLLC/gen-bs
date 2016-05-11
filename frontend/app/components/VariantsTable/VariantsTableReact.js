@@ -16,13 +16,17 @@ import VariantsTableLoadError from '../Errors/VariantsTableLoadError'
 
 class VariantsTableReact extends Component {
 
+    constructor(props) {
+        super(props);
+        this.scrollTarget = null;
+    }
+
     render() {
         const { dispatch, auth, views, fields, ui } = this.props
-        const { variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, errors } = this.props.ws
+        const { variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error } = this.props.ws
 
         var tableWrapperClass = classNames({
-            'table-variants-wrapper': true,
-            'subnav-closed': ui.queryNavbarClosed
+            'table-variants-wrapper': true
         });
 
         return (
@@ -34,7 +38,7 @@ class VariantsTableReact extends Component {
 
                 { !isVariantsLoading && !isVariantsValid &&
                 <div className="col-xs-6 col-xs-offset-3">
-                    <VariantsTableLoadError errors={errors}/>
+                    <VariantsTableLoadError error={error}/>
                 </div>
                 }
                 { !isVariantsLoading && isVariantsValid &&
@@ -44,10 +48,12 @@ class VariantsTableReact extends Component {
                     }
                     <table className="table table-striped table-variants header-fixed" id="variants_table"
                            ref="variantsTable">
-                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHead"/>
+                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHead"
+                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)) } }
+                        />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} {...this.props}
-                                           xScrollListener={ (scrollLeft) => { this.tableXScrollListener(scrollLeft) } }
+                        <VariantsTableRows variants={variants} fields={fields} {...this.props} ref="variantsTableRows"
+                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)) } }
                         />
                         }
                     </table>
@@ -62,11 +68,20 @@ class VariantsTableReact extends Component {
         )
     }
 
-    tableXScrollListener(scrollLeft) {
-        const variantsTableHead = ReactDOM.findDOMNode(this.refs.variantsTableHead);
-        if (variantsTableHead) {
-            // we should move header manually, because "position" attribute of header equal "fixed"
-            variantsTableHead.scrollLeft = scrollLeft;
+    elementXScrollListener(scrollLeft, DOMNode) {
+        // ignore if we want to scroll to already desired place
+        if (this.scrollTarget !== null && scrollLeft == this.scrollTarget) {
+            return;
+        }
+        if (DOMNode) {
+            this.scrollTarget = scrollLeft;
+            // we should move header manually, because "position" attribute of element is "fixed"
+            if (DOMNode.scrollLeft == scrollLeft) {
+                // destination point reached - get ready to scroll again
+                this.scrollTarget = null;
+            } else {
+                DOMNode.scrollLeft = scrollLeft;
+            }
         }
     }
 }

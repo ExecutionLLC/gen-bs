@@ -1,13 +1,35 @@
 import * as ActionTypes from '../actions/viewBuilder'
 
-const EMPTY_VIEW_ITEM = {fieldId: null};
+const EMPTY_VIEW_ITEM = {
+    fieldId: null,
+    keywords: []
+};
 
 function filterEmptyListItems(viewListItems) {
     return _.filter(viewListItems, item => item !== EMPTY_VIEW_ITEM);
 }
 
+function getNextDirection(direction) {
+    if (!direction) {
+        return 'asc';
+    }
+    const switcher = {
+        'asc': 'desc',
+        'desc': null
+    };
+
+    return switcher[direction];
+}
+
+function createViewItem(fieldId) {
+    return {
+        fieldId,
+        keywords: []
+    }
+}
+
 export default function viewBuilder(state = {
-    currentView: null,
+    selectedView: null,
     editedView: null,
     isFetching: false
 }, action) {
@@ -15,17 +37,10 @@ export default function viewBuilder(state = {
     switch (action.type) {
         case ActionTypes.VBUILDER_SELECT_VIEW:
         {
-            const currentView = _.find(action.views, {id: action.viewId}) || null;
+            const selectedView = _.find(action.views, {id: action.viewId}) || null;
             return Object.assign({}, state, {
-                currentView: currentView,
-                editedView: currentView
-            });
-        }
-        case ActionTypes.VBUILDER_TOGGLE_EDIT:
-        {
-            const editedView = _.find(action.views, {id: action.viewId}) || null;
-            return Object.assign({}, state, {
-                editedView: editedView
+                selectedView: selectedView,
+                editedView: selectedView
             });
         }
         case ActionTypes.VBUILDER_TOGGLE_NEW:
@@ -52,7 +67,7 @@ export default function viewBuilder(state = {
         {
             return Object.assign({}, state, {
                 isFetching: false,
-                currentView: action.view,
+                selectedView: action.view,
                 editedView: action.view
             });
         }
@@ -70,7 +85,7 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 editedView: action.view,
-                currentView: action.view
+                selectedView: action.view
             });
         }
         case ActionTypes.VBUILDER_REQUEST_DELETE_VIEW:
@@ -98,11 +113,12 @@ export default function viewBuilder(state = {
         }
         case ActionTypes.VBUILDER_ADD_COLUMN:
         {
+            const newViewItem = createViewItem(action.columnFieldId);
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
-                        EMPTY_VIEW_ITEM,
+                        newViewItem,
                         ...state.editedView.viewListItems.slice(action.viewItemIndex)
                     ]
                 })
@@ -119,13 +135,68 @@ export default function viewBuilder(state = {
         }
         case ActionTypes.VBUILDER_CHANGE_COLUMN:
         {
+            const changedViewItem = createViewItem(action.fieldId);
+            return Object.assign({}, state, {
+                editedView: Object.assign({}, state.editedView, {
+                    viewListItems: [
+                        ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
+
+                        Object.assign({}, state.editedView.viewListItems[action.viewItemIndex], changedViewItem),
+
+                        ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)
+                    ]
+                })
+            });
+        }
+        case ActionTypes.VBUILDER_CHANGE_SORT_COLUMN:
+        {
+            const viewItems = [...state.editedView.viewListItems];
+            const firstSortItemIndex = _.findIndex(viewItems, {sortOrder: 1});
+            const secondSortItemIndex = _.findIndex(viewItems, {sortOrder: 2});
+            const selectedSortItemIndex = _.findIndex(viewItems, {fieldId: action.fieldId});
+            const selectedOrder = action.sortOrder;
+            const selectedDirection = getNextDirection(action.sortDirection);
+            if (selectedSortItemIndex == secondSortItemIndex || selectedSortItemIndex == firstSortItemIndex) {
+                viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+                    sortDirection: selectedDirection
+                });
+                if (selectedDirection == null) {
+                    viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+                        sortOrder: null
+                    });
+                    if (selectedSortItemIndex == firstSortItemIndex && secondSortItemIndex != -1) {
+                        viewItems[secondSortItemIndex] = Object.assign({}, viewItems[secondSortItemIndex], {
+                            sortOrder: 1
+                        });
+                    }
+                }
+            } else {
+                const oldSortItemIndex = _.findIndex(viewItems, {sortOrder: selectedOrder});
+                if (oldSortItemIndex != -1) {
+                    viewItems[oldSortItemIndex] = Object.assign({}, viewItems[oldSortItemIndex], {
+                        sortOrder: null,
+                        sortDirection: null
+                    });
+                }
+                viewItems[selectedSortItemIndex] = Object.assign({}, viewItems[selectedSortItemIndex], {
+                    sortDirection: selectedDirection,
+                    sortOrder: firstSortItemIndex == -1 ? 1 : selectedOrder
+                });
+            }
+            return Object.assign({}, state, {
+                editedView: Object.assign({}, state.editedView, {
+                    viewListItems: viewItems
+                })
+            });
+        }
+        case ActionTypes.VBUILDER_SET_ITEM_KEYWORDS:{
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
                         ...state.editedView.viewListItems.slice(0, action.viewItemIndex),
 
                         Object.assign({}, state.editedView.viewListItems[action.viewItemIndex], {
-                            fieldId: action.fieldId
+                            keywords: action.keywordsIds
                         }),
 
                         ...state.editedView.viewListItems.slice(action.viewItemIndex + 1)

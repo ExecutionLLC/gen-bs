@@ -7,16 +7,14 @@ import { filterBuilderChangeAttr, filterBuilderToggleNewEdit } from '../../../ac
 export default class NewFilterInputs extends Component {
 
     render() {
-
-        const { dispatch, showModal, closeModal } = this.props
+        const { dispatch, showModal, closeModal, fields } = this.props
         const { filters } = this.props.userData
-        const { newFilter } = this.props.filterBuilder
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
         return (
 
             <div className="collapse in copyview">
-                <div className="row grid-toolbar">
-
+                <div className="row grid-toolbar row-noborder row-new-item">
                     <div className="col-sm-6">
                         <label data-localize="views.setup.new.name.title">New View</label>
                         <input
@@ -24,37 +22,34 @@ export default class NewFilterInputs extends Component {
                             className="form-control text-primary"
                             data-localize="views.setup.new.name.help"
                             placeholder="Set view name a copy"
-                            value={newFilter.name}
-                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: e.target.value, desctription: newFilter.desctription, })) }
+                            value={editingFilter.name}
+                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: e.target.value, description: editingFilter.description })) }
                         />
 
-                        { !newFilter.name &&
+                        { !editingFilter.name &&
                         <div className="help-text text-danger" data-localize="views.setup.new.name.error">
                             Filter name cannot be empty
                         </div>
                         }
 
                     </div>
-
-                    <div className="col-sm-5">
+                    <div className="col-sm-6">
                         <label data-localize="general.description">Description</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            data-localize="views.setup.new.description"
-                            placeholder="Set view description (optional)"
-                            value={newFilter.description}
-                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: newFilter.name, description: e.target.value})) }
-                        />
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                className="form-control"
+                                data-localize="views.setup.new.description"
+                                placeholder="Set view description (optional)"
+                                value={editingFilter.description}
+                                onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: editingFilter.name, description: e.target.value})) }
+                            />
+                            <div className="input-group-btn  btn-group-close">
+                                <button type="button" className="btn-link-default" type="button"
+                                        onClick={ () => dispatch(filterBuilderToggleNewEdit(false, fields)) }><i className="md-i">close</i></button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div className="col-sm-1">
-                        <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                data-toggle="collapse" data-target=".copyview "
-                                onClick={ () => dispatch(filterBuilderToggleNewEdit(true)) }><span
-                            data-localize="actions.cancel">Cancel</span></button>
-                    </div>
-
                 </div>
             </div>
 

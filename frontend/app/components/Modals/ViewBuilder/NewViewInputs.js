@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {viewBuilderToggleEdit, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
+import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
 
 
 export default class NewViewInputs extends React.Component {
@@ -13,8 +13,7 @@ export default class NewViewInputs extends React.Component {
         return (
 
             <div className="collapse in copyview">
-                <div className="row grid-toolbar">
-
+                <div className="row grid-toolbar row-noborder row-new-item">
                     <div className="col-sm-6">
                         <label data-localize="views.setup.new.name.title">New View</label>
                         <input
@@ -32,25 +31,27 @@ export default class NewViewInputs extends React.Component {
                         }
                     </div>
 
-                    <div className="col-sm-5">
+                    <div className="col-sm-6">
                         <label data-localize="general.description">Description</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            data-localize="views.setup.new.description"
-                            placeholder="Set view description (optional)"
-                            value={newView.description}
-                            onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: newView.name, description: e.target.value})) }
-                        />
-                    </div>
 
-                    <div className="col-sm-1">
-                        <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                data-toggle="collapse" data-target=".copyview "
-                                onClick={ () => dispatch(viewBuilderToggleEdit(views,newView.originalViewId)) }><span
-                            data-localize="actions.cancel">Cancel</span></button>
-                    </div>
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                className="form-control"
+                                data-localize="views.setup.new.description"
+                                placeholder="Set view description (optional)"
+                                value={newView.description}
+                                onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: newView.name, description: e.target.value})) }
+                            />
 
+                            <div className="input-group-btn btn-group-close">
+                                <button type="button" className="btn-link-default" type="button"
+                                        data-toggle="collapse" data-target=".copyview "
+                                        onClick={ () => dispatch(viewBuilderSelectView(views, newView.originalViewId)) }><span
+                                        data-localize="actions.cancel">Cancel</span></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const UserEntityControllerBase = require('./UserEntityControllerBase');
+const UserEntityControllerBase = require('./base/UserEntityControllerBase');
 
 class FilterController extends UserEntityControllerBase {
     constructor(services) {

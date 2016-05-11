@@ -19,7 +19,7 @@ const samplesClient = new SamplesClient(urls);
 const EditableFieldsTemplates = require('../defaults/templates/metadata/editable-metadata.json');
 const TestUser = require('./mocks/mock-users.json')[1];
 
-describe('One Sample', function() {
+describe.skip('One Sample', function () {
     this.timeout(30000);
     let sessionId = null;
     let webSocketClient = null;

@@ -179,18 +179,16 @@
 .btn-link-warning {
    .btn-link-variant(@brand-warning); 
 }
-  .btn-link-success {
-   .btn-link-variant(@brand-success); 
+.btn-link-success {
+ .btn-link-variant(@brand-success); 
 }
-  .btn-link-info {
-   .btn-link-variant(@brand-info); 
+.btn-link-info {
+ .btn-link-variant(@brand-info); 
 }
-  .btn-link-muted {
-   .btn-link-variant(@text-muted); 
+.btn-link-muted {
+ .btn-link-variant(@text-muted); 
 }
-
-
-.btn-link  small { 
+.btn-link small { 
     color: @text-muted;
     text-decoration: underline;
  }
@@ -202,12 +200,13 @@ label.btn-link {
   }
 }
 .link-toggle { 
-  display: inline-block;
+    display: inline-block;
     max-width: 160px;
     padding-left: 5px;
     vertical-align: top;
   font-weight: bold; color: @text-muted; font-size: @font-size-small;
-   }
+}
+
 // Button Sizes
 // --------------------------------------------------
 
@@ -222,7 +221,6 @@ label.btn-link {
 .btn-xs {
   .button-size(@padding-xs-vertical; @padding-xs-horizontal; @font-size-small; @line-height-small; @btn-border-radius-small);
 }
-
 
 // Block button
 // --------------------------------------------------
@@ -250,18 +248,7 @@ input[type="button"] {
     text-align: left;
   }
 }
-
-//
-.btn-openid { 
-    background: rgba(0, 0, 0, 0) url("http://localhost:3000/assets/images/openid_connect.png") no-repeat scroll center center / cover ;
-    border: 1px solid @navbar-inverse-border;
-    height: 34px;
-    width: 180px
- }
- //
- 
 .btn-group-select2 { 
- 
   .btn-group { 
     display: table-cell;
     vertical-align: top;
@@ -287,12 +274,6 @@ input[type="button"] {
     }
   }
 }
-.btn.active { 
-  .fa-star-o:before {
-    content: "\f005";
-    color: @brand-warning;
-  }
-}
 .btn-sm-h-paddings { 
   padding-left: @padding-small-horizontal;
   padding-right: @padding-small-horizontal;
@@ -315,7 +296,7 @@ input[type="button"] {
   }
 }
 .icon-bar {
-    background-color: #ddd;
+    background-color:@gray-lighter;
     border-radius: 1px;
     display: block;
     height: 2px;
@@ -324,7 +305,6 @@ input[type="button"] {
 }
 
 .btn-sort { 
-
     background-position: center center;
     background-repeat: no-repeat;
     height: 32px;
@@ -338,12 +318,10 @@ input[type="button"] {
       top: 4px;
       content: "sort";
       opacity: .2;
-    }
-    
+    }    
   }
 .btn-sort:active{ 
    &:before { 
-     
      opacity: 1;
    }
 }
@@ -359,21 +337,18 @@ input[type="button"] {
       opacity: 1;
    }
   }
-
 .btn.btn-sort {
   .badge { 
       background: transparent;
        color: @brand-info;
       position: absolute;
-      right: -4px;
-    top: -1px;
+      right: -6px;
+    top: -2px;
     }
 }
-
 .btn-multi-label { 
   > span { 
     position: relative;
-  
   }
     > span { 
       margin-bottom: 5px;
@@ -383,7 +358,6 @@ input[type="button"] {
         left: -10px;
         position: absolute;
         top: 0;
-        
       }
     }
   > span:first-child { 
@@ -408,7 +382,6 @@ input[type="button"] {
     }
   }
 }
-
 .btn.collapse.in { 
   display: inline-block;
 }
@@ -437,128 +410,52 @@ input[type="button"] {
      color: @gray-lighter;
   }
   i { 
-    font-size: 48px;
+    font-size: 32px;
   }
   span:last-child { 
-    margin-top: 40px;
-    margin-bottom: 16px;
+
     color: @gray-lighter;
+    
+  }
+  @media(min-width:@screen-sm){
+   i { 
+    font-size: 48px;
+  }
+    span:last-child { 
+ 
+   }
   }
 }
-
 .btn-uppercase { 
   text-transform: uppercase;
   font-family: "Roboto-Medium";
 }
-
-.btn { 
+.btn,
+.dropdown-toggle { 
   .md-i { 
      margin: -4px;
     vertical-align: middle;
   }
 }
-
 .btnDrag { 
-       position: relative;
-        &:after { 
-          
-            background: lighten(@brand-primary, 20%);
-    border-radius: 8px;
-    color: #fff;
-    display: none;
-    font-size: 11px;
-    height: 13px;
-    line-height: 13px;
-    position: absolute;
-    right: 5px;
-    top: -2px;
-    width: 13px;   
-          }
-     }
-     
-     
-     .btn-info-sign { 
- border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 3px;
-    color: #608fba;
-    display: block;
-    font-size: 11px;
-    font-weight: normal;
-    line-height: 16px;
-    margin: 13px 12px 0;
-    min-width: 0 !important;
-    padding: 0 5px;
-    text-align: center;
-    background: none;
-    
- + .dropdown-menu {
-   left: -130px;
-    margin-top: 36px;
-    max-width: 300px;
-    width: 300px;
-    padding: 15px;
-    color: @text-color;
-   
-    dl { 
-      margin-bottom: 8px; 
-    }
-    dt { 
-      font-weight: normal;
-    }
-    dd { 
-      color: @text-muted;
-    }
- }
-  &:hover{ 
-    + .dropdown-menu { 
-      
-      display: block;
-    }
-  }
+    position: relative;
+      &:after { 
+        background: lighten(@brand-primary, 20%);
+        border-radius: 8px;
+        color: #fff;
+        display: none;
+        font-size: 11px;
+        height: 13px;
+        line-height: 13px;
+        position: absolute;
+        right: 5px;
+        top: -2px;
+        width: 13px;   
+        }
 }
-
-.btn-with-pic { 
-  
-  img { 
-   border: 1px solid #ddd;
-    display: block;
-    margin: 0 0 8px;
-    max-width: 100%;
-    + span { border-bottom: medium none !important;
-    color: #2363a1 !important;
-    display: block;
-    text-align: left;}
-  }
-}
-
-.btn-share-block { 
- bottom: 7px;
-    position: absolute;
-    right: 10px;
-    top: auto;
-}
-
-.btn-check { 
-  position: relative;
-  padding-left: 16px;
-  &:before { 
-    position: absolute;
-    left:0;
-    top:8px;
-   .fa();
-    content: "\f096"; 
-  }
-  &.active {
-   &:before {
-   content: "\f14a";
-  }
-  }
-}
-
 .table { 
   >tbody {
        .btn-link { 
-     
          padding: 5px 11px;
        }
        .btn-link { 
@@ -567,7 +464,6 @@ input[type="button"] {
            color: @gray-light;
            font-size: 18px;
            content: 'star_border';
-           
          
         }
          &.active { 

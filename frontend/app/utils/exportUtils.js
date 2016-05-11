@@ -27,7 +27,9 @@ export default class ExportUtils {
         a.href = url;
         a.download = fileName;
         a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
+        setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }, 100);
     }
 }

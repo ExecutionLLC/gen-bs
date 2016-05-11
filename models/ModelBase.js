@@ -39,15 +39,15 @@ class ModelBase {
     exists(itemId, callback) {
         this.db.asCallback((knex, callback) => {
             knex.select('id')
-            .from(this.baseTableName)
-            .where('id', itemId)
-            .asCallback((error, itemData) => {
-                if (error) {
-                    callback(error);
-                } else {
-                    callback(null, (itemData.length > 0));
-                }
-            });
+                .from(this.baseTableName)
+                .where('id', itemId)
+                .asCallback((error, itemData) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, (itemData.length > 0));
+                    }
+                });
         }, callback);
     }
 
@@ -79,6 +79,19 @@ class ModelBase {
 
     _toCamelCase(itemOrItems, callback) {
         callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemOrItems));
+    }
+
+    /**
+     * @param {string}name
+     * @param {function(Error)}callback
+     */
+    _ensureNameIsValid(name, callback) {
+        const trimmedName = (name || '').trim();
+        if (_.isEmpty(trimmedName)) {
+            callback(new Error('Name cannot be empty.'));
+        } else {
+            callback(null);
+        }
     }
 
     _ensureAllItemsFound(itemsFound, itemIdsToFind, callback) {

@@ -2,12 +2,13 @@ import * as ActionTypes from '../actions/websocket'
 
 export default function websocket(state = {
     wsConn: null,
-    lastMessageSended: null,
-    messages: [],
-    errors: [],
+    error: null,
     closed: true,
     variants: null,
-    variantsView:null,
+    variantsSample: null,
+    variantsView: null,
+    variantsFilter: null,
+    variantsSampleFieldsList: [],
     currentVariants: null,
     isVariantsEmpty: false,
     isVariantsValid: true,
@@ -87,10 +88,6 @@ export default function websocket(state = {
                 });
             });
             return Object.assign({}, state, {
-                messages: [
-                    ...state.messages,
-                    action.wsData
-                ],
                 variants: state.variants === null ? resultData : [...state.variants, ...(resultData || [])],
                 currentVariants: resultData,
                 isVariantsEmpty: (resultData && resultData.length === 0),
@@ -99,44 +96,27 @@ export default function websocket(state = {
             });
         case ActionTypes.WS_PROGRESS_MESSAGE:
             return Object.assign({}, state, {
-                messages: [
-                    ...state.messages,
-                    action.wsData
-                ],
                 progress: action.wsData.result.progress
-            });
-        case ActionTypes.WS_OTHER_MESSAGE:
-            return Object.assign({}, state, {
-                messages: [
-                    ...state.messages,
-                    action.wsData
-                ]
             });
         case ActionTypes.WS_RECEIVE_AS_ERROR:
             return Object.assign({}, state, {
-                errors: [
-                    ...state.errors,
-                    action.err
-                ],
+                error: action.err,
                 isVariantsLoading: false,
                 isVariantsValid: false
             });
 
         case ActionTypes.WS_RECEIVE_ERROR:
             return Object.assign({}, state, {
-                errors: [
-                    ...state.errors,
-                    action.err
-                ],
+                error: action.err,
                 isVariantsLoading: false
             });
         case ActionTypes.WS_RECEIVE_CLOSE:
             return Object.assign({}, state, {
                 closed: true
             });
-        case ActionTypes.WS_SEND_MESSAGE:
+        case ActionTypes.PREPARE_ANALYZE:
             return Object.assign({}, state, {
-                lastMessageSended: action.msg
+                isVariantsLoading: true
             });
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
@@ -144,10 +124,13 @@ export default function websocket(state = {
                 isVariantsLoading: true,
                 searchParams:action.searchParams
             });
-        case ActionTypes.REQUEST_CHANGE_VIEW:
+        case ActionTypes.REQUEST_SET_CURRENT_PARAMS:
         {
             return Object.assign({}, state, {
-                variantsView: action.view
+                variantsView: action.view,
+                variantsSample: action.sample,
+                variantsFilter: action.filter,
+                variantsSampleFieldsList: action.sampleFields
             });
         }
 

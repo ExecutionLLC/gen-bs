@@ -1,8 +1,7 @@
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 import classNames from 'classnames';
 
 import  {firstCharToUpperCase} from '../../utils/stringUtils'
-import FieldUtils from '../../utils/fieldUtils'
 
 export default class FieldHeaderControls extends Component {
     constructor(props) {
@@ -14,28 +13,14 @@ export default class FieldHeaderControls extends Component {
         };
     }
 
-    isFieldExists(fieldId) {
-        const {currentVariants} = this.props;
-        if (_.isEmpty(currentVariants)) {
-            return false;
-        } else {
-            const variantField = _.find(currentVariants[0].fields, field=>field.fieldId == fieldId);
-            return (variantField) ? true : false;
-        }
-    }
-
     render() {
-        const {fieldId, fields, sortState} = this.props;
-        const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldId)
+        const {fieldMetadata, sortState, areControlsEnabled, disabled} = this.props;
+        const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldMetadata.id)
             : null;
-        if (columnSortParams) {
-            console.log('columnSortParams', columnSortParams)
-        }
 
         const isFilterOpened = this.state.isFilterOpened;
         const currentDirection = columnSortParams ? columnSortParams.direction : null;
         const order = columnSortParams ? columnSortParams.order : null;
-        const isExists = this.isFieldExists(fieldId);
         const ascSortBtnClasses = classNames(
             'btn',
             'btn-sort', 'asc', {
@@ -54,56 +39,55 @@ export default class FieldHeaderControls extends Component {
             'btn-group',
             'btn-group-sort',
             {
-                'open': isFilterOpened
+                'open': isFilterOpened,
+                'hidden': !areControlsEnabled
             }
         );
-
-        const fieldMetadata = FieldUtils.find(fieldId, fields);
 
         const name = firstCharToUpperCase(
             !fieldMetadata ? 'Unknown' : fieldMetadata.name
         );
 
         return (
-            <td data-label={fieldId}
-                key={fieldId}>
+            <td data-label={fieldMetadata.id}
+                key={fieldMetadata.id}>
                 <div>
                     <div className="variants-table-header-label">
                         <a type="button" className="btn-link-default">
                             {name}
                         </a>
-                        <div className={buttonGroupClasses} role="group" data-toggle="buttons">
-                            {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, isExists)}
-                            {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order, isExists)}
+                        <div className={buttonGroupClasses}>
+                            {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, disabled)}
+                            {this.renderSortButton('desc', currentDirection, descSortBtnClasses, order, disabled)}
                         </div>
                     </div>
                 </div>
-                {this.renderFilterInput(isExists)}
+                {this.renderFilterInput()}
             </td>
         );
     }
 
-    renderFilterInput(isExists) {
-        const {fieldId, fields} = this.props;
+    renderFilterInput() {
+        const {fieldMetadata, areControlsEnabled, disabled} = this.props;
         const {searchString, isFilterOpened} = this.state;
-        const fieldMetadata = FieldUtils.find(fieldId, fields);
-        const fieldValueType = fieldMetadata ? fieldMetadata.valueType : null;
+        const fieldValueType = fieldMetadata.valueType;
         const isFieldSearchable = fieldValueType === 'string';
         const inputGroupClasses = classNames(
             'variants-table-search-field',
             'input-group',
             {
                 'open': isFilterOpened,
-                'invisible': !isFieldSearchable
+                'invisible': !isFieldSearchable || !areControlsEnabled
             }
         );
 
-        if (isFieldSearchable && isExists) {
+        if (isFieldSearchable && areControlsEnabled) {
             return (
                 <div className={inputGroupClasses}>
                     <span className="input-group-btn">
                         <button className="btn btn-link-light-default"
-                                onClick={() => this.setFilterOpened(true)}>
+                                onClick={() => this.setFilterOpened(true)}
+                                disabled={disabled}>
                             <i></i>
                         </button>
                     </span>
@@ -114,6 +98,7 @@ export default class FieldHeaderControls extends Component {
                            onChange={(e) => this.onSearchInputChanged(e)}
                            onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
                            onBlur={(e) => this.onSearchInputBlur()}
+                           disabled={disabled}
                     />
                 </div>
             );
@@ -135,11 +120,12 @@ export default class FieldHeaderControls extends Component {
         }
     }
 
-    renderSortButton(direction, currentDirection, sortButtonClass, order, isExists) {
+    renderSortButton(direction, currentDirection, sortButtonClass, order, disabled) {
         return (
             <button className={sortButtonClass}
                     key={direction}
-                    onClick={ e => this.onSortClick(isExists, direction, e.ctrlKey || e.metaKey) }>
+                    onClick={ e => this.onSortClick(direction, e.ctrlKey || e.metaKey) }
+                    disabled={disabled}>
                 {direction === currentDirection &&
                 <span className="text-info">{order}</span>
                 }
@@ -147,8 +133,9 @@ export default class FieldHeaderControls extends Component {
         );
     }
 
-    onSortClick(isExists, direction, isControlKeyPressed) {
-        if (isExists) {
+    onSortClick(direction, isControlKeyPressed) {
+        const {areControlsEnabled} = this.props;
+        if (areControlsEnabled) {
             this.onSearchClick(direction, isControlKeyPressed)
         }
     }
@@ -160,8 +147,8 @@ export default class FieldHeaderControls extends Component {
     }
 
     onSearchInputBlur() {
-        const {fieldId, onSearchValueChanged} = this.props;
-        onSearchValueChanged(fieldId, this.state.searchString);
+        const {fieldMetadata, onSearchValueChanged} = this.props;
+        onSearchValueChanged(fieldMetadata.id, this.state.searchString);
         this.setFilterOpened(false);
     }
 
@@ -178,26 +165,28 @@ export default class FieldHeaderControls extends Component {
     }
 
     onSearchInputKeyPressed(e) {
-        const {fieldId, onSearchRequested} = this.props;
+        const {fieldMetadata, onSearchRequested} = this.props;
         if (e.charCode === 13) {
-            onSearchRequested(fieldId, this.state.searchString);
+            onSearchRequested(fieldMetadata.id, this.state.searchString);
         }
     }
 
     onSearchClick(direction, isControlKeyPressed) {
-        const {fieldId, onSortRequested} = this.props;
-        onSortRequested(fieldId, direction, isControlKeyPressed);
+        const {fieldMetadata, onSortRequested} = this.props;
+        onSortRequested(fieldMetadata.id, direction, isControlKeyPressed);
     }
 }
 
 FieldHeaderControls.propTypes = {
-    fieldId: React.PropTypes.string.isRequired,
-    fields: React.PropTypes.object.isRequired,
-    sortState: React.PropTypes.array.isRequired,
+    fieldMetadata: PropTypes.object.isRequired,
+    areControlsEnabled: PropTypes.bool.isRequired,
+    sortState: PropTypes.array.isRequired,
     // callback(fieldId, searchString)
-    onSearchValueChanged: React.PropTypes.func.isRequired,
+    onSearchValueChanged: PropTypes.func.isRequired,
     // callback(fieldId, searchString)
-    onSearchRequested: React.PropTypes.func.isRequired,
-    // callback(fieldId, direction, isControlKeyPressed), where direction in ['asc', 'desc']
-    onSortRequested: React.PropTypes.func.isRequired
+    onSearchRequested: PropTypes.func.isRequired,
+    /**
+     * @type {function(fieldId, direction, isControlKeyPressed)}, where direction in ['asc', 'desc']
+     * */
+    onSortRequested: PropTypes.func.isRequired
 };

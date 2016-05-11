@@ -25,10 +25,10 @@ class NavbarCreateQuery extends Component {
 
     render() {
 
-        const { dispatch, samples, views } = this.props;
-        const { currentView, currentFilter } = this.props.ui;
-        const { currentSample } = this.props.samplesList;
-        const currentSampleId = currentSample ? currentSample.id : null;
+        const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
+        const {selectedView, selectedFilter} = this.props.ui;
+        const {selectedSample} = this.props.samplesList;
+        const selectedSampleId = selectedSample ? selectedSample.id : null;
 
         return (
 
@@ -40,7 +40,8 @@ class NavbarCreateQuery extends Component {
                         />
 
                         <MetadataSearch samples={samples}
-                                        currentSampleId={currentSampleId}
+                                        selectedSampleId={selectedSampleId}
+                                        isDemoSession={isDemoSession}
                                         onSampleChangeRequested={(sampleId) => this.onSampleSelected(sampleId) }
                         />
                         <FiltersSetup
@@ -58,7 +59,7 @@ class NavbarCreateQuery extends Component {
 
                         <Analyze
                             {...this.props}
-                            clicked={ (e) => dispatch(analyze(currentSample.id, currentView.id, currentFilter.id))}
+                            clicked={ (e) => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilter.id))}
                         />
                         <LoadHistory
                             dispatch={this.props.dispatch}

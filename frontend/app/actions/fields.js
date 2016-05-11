@@ -30,10 +30,10 @@ function requestFields() {
     }
 }
 
-function receiveFields(json) {
+export function receiveFields(fields) {
     return {
         type: RECEIVE_FIELDS,
-        fields: json,
+        fields: fields || [],
         receivedAt: Date.now()
     }
 }
@@ -44,14 +44,17 @@ export function fetchFields(sampleId) {
         dispatch(requestFields());
 
         const sessionId = getState().auth.sessionId;
-        samplesClient.getFields(sessionId, sampleId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, SAMPLE_FIELDS_SERVER_ERROR));
-            } else {
-                dispatch(receiveFields(response.body));
-            }
+        return new Promise( (resolve) => {
+            samplesClient.getFields(sessionId, sampleId, (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));
+                } else if (response.status !== HttpStatus.OK) {
+                    dispatch(handleError(null, SAMPLE_FIELDS_SERVER_ERROR));
+                } else {
+                    dispatch(receiveFields(response.body));
+                }
+                resolve();
+            });
         });
     }
 }
@@ -62,7 +65,7 @@ function requestTotalFields() {
     }
 }
 
-function receiveTotalFields(json) {
+export function receiveTotalFields(json) {
     return {
         type: RECEIVE_TOTAL_FIELDS,
         fields: json,
