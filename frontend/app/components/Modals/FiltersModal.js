@@ -10,6 +10,12 @@ import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect'
 import NewFilterInputs from './FilterBuilder/NewFilterInputs'
 
 class FiltersModal extends Component {
+
+    onClose() {
+        this.props.closeModal('filters');
+        this.props.dispatch(filterBuilderEndEdit());
+    }
+
     render() {
 
         const {isValid} = this.props.userData;
@@ -21,7 +27,7 @@ class FiltersModal extends Component {
                 dialogClassName="modal-dialog-primary"
                 bsSize="lg"
                 show={this.props.showModal}
-                onHide={ () => {this.props.closeModal('filters'); this.props.dispatch(filterBuilderEndEdit()); } }
+                onHide={() => this.onClose()}
             >
                 { (!isValid || !editingFilter) &&
                 <div >&nbsp;</div>
@@ -52,7 +58,7 @@ class FiltersModal extends Component {
                         </Modal.Body>
                         <FilterBuilderFooter
                             {...this.props}
-                            closeModal={() => { this.props.closeModal('filters'); this.props.dispatch(filterBuilderEndEdit()); } }
+                            closeModal={() => this.onClose()}
                         />
                     </form>
                 </div>
