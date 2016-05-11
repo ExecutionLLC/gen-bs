@@ -12,8 +12,8 @@ class FiltersModal extends Component {
     render() {
 
         const {isValid} = this.props.userData;
-        const editingFilterIsNew = this.props.filterBuilder.editingFilter.isNew;
-
+        const {editingFilter} = this.props.filterBuilder;
+        const editingFilterIsNew = editingFilter ? editingFilter.isNew : false;
         return (
 
             <Modal
@@ -22,10 +22,10 @@ class FiltersModal extends Component {
                 show={this.props.showModal}
                 onHide={ () => {this.props.closeModal('filters')} }
             >
-                { !isValid &&
+                { (!isValid || !editingFilter) &&
                 <div >&nbsp;</div>
                 }
-                { isValid &&
+                { (isValid && editingFilter) &&
                 <div>
                     <FilterBuilderHeader />
                     <form>

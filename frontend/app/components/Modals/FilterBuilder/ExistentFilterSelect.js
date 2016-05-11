@@ -19,7 +19,7 @@ export default class ExistentFilterSelect extends Component {
     render() {
 
         const {dispatch, auth, fields} = this.props;
-        const {selectedFilter} = this.props.filterBuilder;
+        const selectedFilter = this.props.filterBuilder.editingFilter.filter;
         const {filters} = this.props.userData;
         const disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
@@ -51,7 +51,6 @@ export default class ExistentFilterSelect extends Component {
                             value={selectedFilter.id}
                             clearable={false}
                             onChange={ (val) => {
-                                dispatch(filterBuilderSelectFilter(filters, val.value));
                                 dispatch(filterBuilderStartEdit(false, filters.find((filter) => filter.id === val.value) || null, fields));
                             }}
                         />

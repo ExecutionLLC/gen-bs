@@ -68,7 +68,6 @@ export function changeFilter(filterId) {
     return (dispatch, getState) => {
         const {userData: {filters}} = getState();
         dispatch(changeHeaderFilter(filters, filterId));
-        dispatch(filterBuilderSelectFilter(filters, filterId));
     }
 }
 

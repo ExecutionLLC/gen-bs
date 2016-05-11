@@ -177,15 +177,11 @@ function reduceFBuilderReceiveRules(state, action) {
 
 export default function filterBuilder(state = {
     isReceivedFilters: false,
-    selectedFilter: null,
     isFetching: false,
     rulesRequested: false,
-    editingFilter: {
-        filter: null,
-        parsedFilter: null,
-        isNew: false,
-        fieldDefaultId: ''
-    }
+    /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
+    editingFilter: null,
+    originalFilter: null
 }, action) {
 
     switch (action.type) {
@@ -211,8 +207,7 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_RECEIVE_UPDATE_FILTER:
             return Object.assign({}, state, {
-                isFetching: false,
-                selectedFilter: action.filter
+                isFetching: false
             });
 
         case ActionTypes.FBUILDER_REQUEST_CREATE_FILTER:
@@ -222,8 +217,7 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_RECEIVE_CREATE_FILTER:
             return Object.assign({}, state, {
-                isFetching: false,
-                selectedFilter: action.filter
+                isFetching: false
             });
 
         case ActionTypes.FBUILDER_START_EDIT:

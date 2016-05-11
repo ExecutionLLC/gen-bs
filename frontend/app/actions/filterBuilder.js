@@ -146,10 +146,9 @@ export function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
         const state = getState();
-        const selectedFilter = state.filterBuilder.selectedFilter;
         const editingFilter = state.filterBuilder.editingFilter;
         const originalFilter = state.filterBuilder.originalFilter;
-        const isNotEdited = _.includes(['advanced', 'standard'], selectedFilter.type)
+        const isNotEdited = _.includes(['advanced', 'standard'], editingFilter.filter.type)
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
         if (state.auth.isDemo || isNotEdited) {
