@@ -71,26 +71,8 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
     return null;
 }
 
-function reduceFBuilderToggleNewEdit(state, action) {
-    const {fields: {totalFieldsList, allowedFieldsList}, makeNew} = action;
-    const editingFilter = parseFilterForEditing(
-        makeNew,
-        makeNew ?
-            Object.assign({}, state.selectedFilter, {
-                type: 'user',
-                name: `Copy of ${state.selectedFilter.name}`
-            }) :
-            state.selectedFilter,
-        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
-        allowedFieldsList
-    );
-    return Object.assign({}, state, {
-        editingFilter,
-        originalFilter: editingFilter
-    });
-}
-
-function reduceFBuilderStartEdit(state, makeNew, filter, fields) {
+function reduceFBuilderStartEdit(state, action) {
+    const {fields: {totalFieldsList, allowedFieldsList}, filter, makeNew} = action;
     const editingFilter = parseFilterForEditing(
         makeNew,
         makeNew ?
@@ -99,7 +81,8 @@ function reduceFBuilderStartEdit(state, makeNew, filter, fields) {
                 name: `Copy of ${filter.name}`
             }) :
             filter,
-        fields.totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f))
+        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
+        allowedFieldsList
     );
     return Object.assign({}, state, {
         editingFilter: editingFilter,
@@ -210,7 +193,7 @@ export default function filterBuilder(state = {
             });
 
         case ActionTypes.FBUILDER_START_EDIT:
-            return reduceFBuilderStartEdit(state, action.makeNew, action.filter, action.fields);
+            return reduceFBuilderStartEdit(state, action);
 
         case ActionTypes.FBUILDER_SAVE_EDIT:
             return reduceFBuilderSaveEdit(state);
