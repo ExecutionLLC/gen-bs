@@ -6,6 +6,11 @@ const async = require('async');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const SecureModelBase = require('./SecureModelBase');
 
+const TableNames = {
+    Filters: 'filter',
+    FilterTexts: 'filter_text'
+};
+
 const mappedColumns = [
     'id',
     'originalFilterId',
@@ -136,6 +141,54 @@ class FiltersModel extends SecureModelBase {
                     }
                 });
         }, callback);
+    }
+
+    _findFiltersMetadata(trx, filterIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
+        let query = trx.select()
+            .from(TableNames.Filters)
+            .whereRaw('1 = 1');
+        if (includeLastVersionsOnly) {
+            const selectLastFilterIds = 'SELECT' +
+                '  T.id' +
+                ' FROM (' +
+                '  SELECT ROW_NUMBER() OVER (' +
+                '    PARTITION BY CASE WHEN original_filter_id isnull THEN id ELSE original_filter_id END ORDER BY timestamp DESC' +
+                '  ) AS RN,' +
+                '  id' +
+                '  FROM filter' +
+                ' ) AS T' +
+                ' WHERE T.RN = 1';
+            query = query.andWhereRaw('filter.id IN (' + selectLastFilterIds + ')');
+        }
+
+        if (userIdOrNull) {
+            query = query.andWhere(function () {
+                this.whereNull('creator')
+                    .orWhere('creator', userIdOrNull);
+            });
+        } else {
+            query = query.andWhere('creator', null);
+        }
+
+        if (excludeDeleted) {
+            query = query.andWhere('is_deleted', false);
+        }
+
+        if (filterIdsOrNull) {
+            query = query.andWhere('id', 'in', filterIdsOrNull);
+        }
+
+        async.waterfall([
+            callback => query.asCallback(callback),
+            (filters, callback) => this._toCamelCase(filters, callback),
+            (filters, callback) => {
+                if (filterIdsOrNull) {
+                    this._ensureAllItemsFound(filters, filterIdsOrNull, callback);
+                } else {
+                    callback(null, filters);
+                }
+            }
+        ], callback);
     }
 
     _fetchUserFilters(userId, callback) {
