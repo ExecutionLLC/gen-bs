@@ -36,11 +36,11 @@ export default class ExportDropdown extends ComponentBase {
 
     renderExportButtonTitle() {
         if (!this.haveSelectedVariants) {
-            return (<span>Export</span>);
+            return (<span><span className="hidden-xxs">Export</span><span className="visible-xxs"><i className="md-i">file_download</i></span></span>);
         } else {
             const {selectedRowIndices} = this.props;
             const selectedVariantsCount = selectedRowIndices.length;
-            return (<span>Export  <span className="badge badge-warning">{selectedVariantsCount}</span></span>);
+            return (<span><span className="hidden-xxs">Export</span><span className="visible-xxs"><i className="md-i">file_download</i></span><span className="badge badge-warning">{selectedVariantsCount}</span></span>);
         }
     }
 

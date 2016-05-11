@@ -7,10 +7,11 @@ import FieldUtils from "../utils/fieldUtils";
  * @param {boolean} isNew
  * @param {{rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}} filterToEdit
  * @param {{id: string, label: string, type: string}[]} fields
+ * @param {{id: string, label: string, type: string}[]} allowedFields
  * @returns {{filter: {rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}, isNew: boolean, parsedFilter: {condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, fieldDefaultId: string}}
  */
-function parseFilterForEditing(isNew, filterToEdit, fields) {
-    const fieldDefaultId = FieldUtils.getDefaultId(fields);
+function parseFilterForEditing(isNew, filterToEdit, fields, allowedFields) {
+    const fieldDefaultId = FieldUtils.getDefaultId(allowedFields);
     const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
     const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
     // Report validation results if any
@@ -71,15 +72,17 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
 }
 
 function reduceFBuilderToggleNewEdit(state, action) {
+    const {fields: {totalFieldsList, allowedFieldsList}, makeNew} = action;
     const editingFilter = parseFilterForEditing(
-        action.makeNew,
-        action.makeNew ?
+        makeNew,
+        makeNew ?
             Object.assign({}, state.selectedFilter, {
                 type: 'user',
                 name: `Copy of ${state.selectedFilter.name}`
             }) :
             state.selectedFilter,
-        action.fields.totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f))
+        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
+        allowedFieldsList
     );
     return Object.assign({}, state, {
         editingFilter,

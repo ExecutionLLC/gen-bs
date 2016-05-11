@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
-import Select from 'react-select';
+import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 
 import ComponentBase from '../../shared/ComponentBase';
@@ -51,7 +51,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         return (
             <Panel collapsible
                    expanded={this.props.isExpanded}
-                   className="samples-values form-horizontal-rows"
+                   className="samples-values"
             >
                 <div className="flex">
                     {this.props.fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
@@ -73,23 +73,27 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     renderRowButtons() {
         const {sample} = this.props;
         return (
-            <div className="btn-group ">
-                <button
-                    onClick={ (e) => this.onResetSampleClick(e, sample) }
-                    type="button"
-                    className="btn btn-default"
-                >
-                    <span>Reset</span>
-                </button>
-
-                <button
-                    onClick={ (e) => this.onSaveEditedSampleClick(e, sample) }
-                    type="button"
-                    className="btn btn-primary"
-                >
-                    <span data-localize="actions.save_select.title">Save</span>
-                </button>
-            </div>
+          <dl className="dl-horizontal dl-btns">
+              <dd>
+                  <div className="btn-group ">
+                      <button
+                          onClick={ (e) => this.onResetSampleClick(e, sample) }
+                          type="button"
+                          className="btn btn-default"
+                      >
+                          <span>Reset</span>
+                      </button>
+      
+                      <button
+                          onClick={ (e) => this.onSaveEditedSampleClick(e, sample) }
+                          type="button"
+                          className="btn btn-primary"
+                      >
+                          <span data-localize="actions.save_select.title">Save</span>
+                      </button>
+                  </div>
+              </dd>
+          </dl>
         )
     }
 
@@ -106,7 +110,6 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                 <dd>
                     <Select
                         options={selectOptions}
-                        clearable={false}
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.value)}
                     />
