@@ -10,9 +10,6 @@
   border: 1px solid @panel-default-border;
   border-radius: @panel-border-radius;
   .box-shadow(@shadow-paper-1);
-   &:hover { 
-     .box-shadow(@panel-hover-shadow);
-  }
 }
 
 // Panel contents
@@ -24,6 +21,8 @@
 // Optional heading
 .panel-heading {
   padding: @panel-heading-padding;
+  border: solid 1px transparent;
+  margin: -1px;
   .border-top-radius((@panel-border-radius - 1));
 
   > .dropdown .dropdown-toggle {
@@ -239,9 +238,8 @@
       margin-top:-1px;
     }
   }
-
-  .panel-heading {
-      border-bottom: 1px solid @panel-inner-border;
+  .panel-heading { 
+   border-bottom: 1px solid @panel-inner-border;
   }
   .panel-title { 
     font-size: @font-size-h4;
@@ -265,7 +263,7 @@
            }
            .btn-group { 
                display: inline-block;
-             }
+           }
          }
          .panel-heading {
           background: #fff; 
@@ -291,72 +289,32 @@
 
 // Contextual variations
 .panel-default {
-  .panel-variant(@panel-default-border; @panel-default-text; @panel-default-heading-bg; @panel-default-border; @panel-default-state-icon);
+  .panel-variant(@panel-default-border; @panel-default-text; @panel-default-heading-bg; @panel-default-border);
 }
 .panel-primary {
-  .panel-variant(@panel-primary-border; @panel-primary-text; @panel-primary-heading-bg; @panel-primary-border; @panel-primary-state-icon);
+  .panel-variant(@panel-primary-border; @panel-primary-text; @panel-primary-heading-bg; @panel-primary-border);
 }
 .panel-success {
-  .panel-variant(@panel-success-border; @panel-success-text; @panel-success-heading-bg; @panel-success-border; @panel-success-state-icon);
+  .panel-variant(@panel-success-border; @panel-success-text; @panel-success-heading-bg; @panel-success-border);
 }
 .panel-info {
-  .panel-variant(@panel-info-border; @panel-info-text; @panel-info-heading-bg; @panel-info-border; @panel-info-state-icon);
+  .panel-variant(@panel-info-border; @panel-info-text; @panel-info-heading-bg; @panel-info-border);
 }
 .panel-warning {
-  .panel-variant(@panel-warning-border; @panel-warning-text; @panel-warning-heading-bg; @panel-warning-border; @panel-warning-state-icon);
+  .panel-variant(@panel-warning-border; @panel-warning-text; @panel-warning-heading-bg; @panel-warning-border);
 }
 .panel-danger {
-  .panel-variant(@panel-danger-border; @panel-danger-text; @panel-danger-heading-bg; @panel-danger-border; @panel-danger-state-icon);
+  .panel-variant(@panel-danger-border; @panel-danger-text; @panel-danger-heading-bg; @panel-danger-border);
 }
 
-
-.panel-primary { 
-  .panel-heading { 
-    .nav-pills { 
-      > li { 
-        a { 
-   
-          color: #fff;
-          &:hover,
-          &:focus,
-          &:active { 
-            background: fade(#000, 10%);
-          }
-        }
-        &.active { 
-         a { 
-          background: @brand-info;
-          color: #fff;
-          &:hover,
-          &:focus,
-          &:active { 
-            background: @brand-info;
-          }
-        }
-
-        }
-      }
-    }
+.panel { 
+  &.panel-material:hover {       
+     .box-shadow(@panel-hover-shadow);
   }
 }
 
-//custom
-
-.drop-area { 
-  background: #fff;
-  border-bottom: solid 2px #e5e5e5;
-  margin: 0 0 @line-height-computed;
-  padding: @padding-base-vertical @padding-base-horizontal;
-  text-align: center;
-  > div { 
-    + div { 
-      margin:@line-height-computed/2;
-    }
-  }
-}
 
 //bootstrap react fix
-
 .panel { 
   .panel,
   .panel-default {
@@ -364,16 +322,46 @@
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
-    margin: 0;
+    margin: 0 0 -1px;
     padding: 0;
     border-radius:0;
+    border: none;
   }
 }
 
 .panel-group-scroll { 
-    height: 400px;
+    @media (min-width: @screen-sm){
+    height: 250px;
     margin-right: -16px;
     overflow-x: hidden;
     overflow-y: auto;
-    padding-right: 3px;
+    padding-right: 16px;
+
+    }
+}
+.panel {
+  &.edit-mode {
+    dl.editable { 
+     dd {
+       display: none;
+       + dd { 
+         display: block;
+       }
+     }
+   }
+  }
+  &.panel-file-upload { 
+    margin-bottom: 16px;
+  }
+}  
+.panel-empty-state { 
+  position: relative;
+  min-height: 140px;
+  .empty { 
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+}
+.samples-values.panel {
+  background-color: inherit;
 }

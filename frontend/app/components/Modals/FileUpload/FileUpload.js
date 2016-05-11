@@ -84,9 +84,9 @@ export default class FileUpload extends Component {
 
     renderDemoContent() {
         return (
-            <div className="panel panel-primary">
-                <div className="panel-heading">
-                    Please login or register to upload new samples
+            <div className="panel panel-empty-state">
+                <div className="empty">
+                    <h3><i className="md-i">perm_identity</i>Please login or register to upload new samples</h3>
                 </div>
             </div>
         );

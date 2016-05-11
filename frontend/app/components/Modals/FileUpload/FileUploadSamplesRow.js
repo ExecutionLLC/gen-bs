@@ -124,7 +124,7 @@ export default class FileUploadSamplesRow extends Component {
 
         if (_.some(sample.values, option => option.values)) {
             return (
-                <div>
+                <div className="panel-body">
                     <div className="flex">
                         {fields.map(field => this.renderReadOnlyField(field, fieldIdToValuesHash))}
                     </div>

@@ -44,7 +44,7 @@ export default class ExistentFilterSelect extends Component {
                         </span>
                 </div>
                 }
-                <div className="row grid-toolbar">
+                <div className="row grid-toolbar row-head-selector">
                     <div className="col-sm-6">
                         <Select
                             options={filters.map( filter => { return {value: filter.id, label: getItemLabelByNameAndType(filter.name, filter.type)} } )}
@@ -65,33 +65,32 @@ export default class ExistentFilterSelect extends Component {
                                     disabled={disabledClass}
                                     title={title}
                             >
-                                <span data-localize="actions.duplicate.title">Duplicate</span>
+                                <span data-localize="actions.duplicate.title" className="hidden-xs">Duplicate</span>
+                                <span className="visible-xs"><i className="md-i">content_copy</i></span>
                             </button>
-                        </div>
-                        {
-                            //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
-                        }
-                        { isFilterEditable &&
-                        <div className="btn-group ">
-                            <button type="button" className="btn btn-default"
-                                    onClick={() => {
-                                        dispatch(filterBuilderSelectFilter(filters, selectedFilter.id));
-                                        dispatch(filterBuilderToggleNewEdit(false, fields));
-                                    }}
-                            >
-                                <span data-localize="views.setup.reset.title">Reset Filter</span>
-                            </button>
-                        </div>
-                        }
-                        { isFilterEditable &&
-                        <div className="btn-group ">
-                            <button type="button"
-                                    className="btn btn-default"
-                                    onClick={ () => dispatch(filterBuilderDeleteFilter(selectedFilter.id))}>
-                                <span data-localize="views.setup.delete.title">Delete Filter</span>
-                            </button>
-                        </div>
-                        }
+                            {
+                                //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
+                            }
+                            { isFilterEditable &&
+                                <button type="button" className="btn btn-default"
+                                        onClick={() => {
+                                            dispatch(filterBuilderSelectFilter(filters, selectedFilter.id));
+                                            dispatch(filterBuilderToggleNewEdit(false, fields));
+                                        }}
+                                >
+                                    <span data-localize="views.setup.reset.title" className="hidden-xs">Reset Filter</span>
+                                    <span className="visible-xs"><i className="md-i">settings_backup_restore</i></span>
+                                </button>
+                            }
+                            { isFilterEditable &&
+                                <button type="button"
+                                        className="btn btn-default"
+                                        onClick={ () => dispatch(filterBuilderDeleteFilter(selectedFilter.id))}>
+                                    <span data-localize="views.setup.delete.title" className="hidden-xs">Delete Filter</span>
+                                    <span className="visible-xs"><i className="md-i">close</i></span>
+                                </button>
+                            }
+                        </div>                            
                     </div>
                 </div>
             </div>
