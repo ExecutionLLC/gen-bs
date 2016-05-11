@@ -6,9 +6,29 @@ import { filterBuilderChangeAttr, filterBuilderStartEdit } from '../../../action
 
 export default class NewFilterInputs extends Component {
 
+    onNameChange(name) {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderChangeAttr({
+            name: name,
+            description: editingFilter.description
+        }));
+    }
+
+    onDescriptionChange(description) {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderChangeAttr({
+            name: editingFilter.name,
+            description: description
+        }));
+    }
+
+    onCancelClick() {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderStartEdit(false, editingFilter, this.props.fields));
+    }
+
     render() {
-        const { dispatch, showModal, closeModal, fields } = this.props
-        const { filters } = this.props.userData
+        const { dispatch, fields } = this.props;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
         return (
@@ -23,7 +43,7 @@ export default class NewFilterInputs extends Component {
                             data-localize="views.setup.new.name.help"
                             placeholder="Set view name a copy"
                             value={editingFilter.name}
-                            onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: e.target.value, description: editingFilter.description })) }
+                            onChange={(e) => this.onNameChange(e.target.value)}
                         />
 
                         { !editingFilter.name &&
@@ -42,11 +62,13 @@ export default class NewFilterInputs extends Component {
                                 data-localize="views.setup.new.description"
                                 placeholder="Set view description (optional)"
                                 value={editingFilter.description}
-                                onChange={ (e) =>dispatch(filterBuilderChangeAttr({name: editingFilter.name, description: e.target.value})) }
+                                onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
                             <div className="input-group-btn  btn-group-close">
                                 <button type="button" className="btn-link-default" type="button"
-                                        onClick={ () => dispatch(filterBuilderStartEdit(false, editingFilter, fields)) }><i className="md-i">close</i></button>
+                                        onClick={() => this.onCancelClick()}>
+                                    <i className="md-i">close</i>
+                                </button>
                             </div>
                         </div>
                     </div>
