@@ -1,20 +1,31 @@
-import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Modal} from 'react-bootstrap';
 
-import { filterBuilderChangeAttr, filterBuilderToggleNewEdit } from '../../../actions/filterBuilder'
+import {filterBuilderChangeAttr, filterBuilderToggleNewEdit} from '../../../actions/filterBuilder'
 
 
 export default class NewFilterInputs extends Component {
 
     render() {
-        const { dispatch, showModal, closeModal, fields } = this.props
-        const { filters } = this.props.userData
+        const {dispatch, showModal, closeModal, fields} = this.props;
+        const {filters} = this.props.userData;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
+
+        const filterNameExists = _.some(filters, filter => filter.name == editingFilter.name);
+        const descriptionText = (filterNameExists) ? 'Filter with this name is already exists.' : '';
 
         return (
 
             <div className="collapse in copyview">
+                { descriptionText &&
+                <div className="alert alert-help">
+                        <span data-localize="views.setup.selector.description">
+                            {descriptionText}
+                        </span>
+                </div>
+                }
                 <div className="row grid-toolbar row-noborder row-new-item">
+
                     <div className="col-sm-6">
                         <label data-localize="views.setup.new.name.title">New View</label>
                         <input
