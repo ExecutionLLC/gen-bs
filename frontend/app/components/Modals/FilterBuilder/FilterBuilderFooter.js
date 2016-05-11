@@ -9,13 +9,15 @@ export default class FilterBuilderFooter extends Component {
 
     render() {
         const {dispatch, auth, closeModal} = this.props;
-        const filter = this.props.filterBuilder.editingFilter.filter;
+        const {filters} = this.props.userData;
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
+        const filterNameExists = _.some(filters, filter => filter.name == editingFilter.name);
         const disabledClass = classNames({
-            'disabled': (filter.type === 'advanced' && auth.isDemo || !filter.name.trim()) ? 'disabled' : ''
+            'disabled': (editingFilter.type === 'advanced' && auth.isDemo || !editingFilter.name.trim()||filterNameExists) ? 'disabled' : ''
         });
-        const title = (filter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
-        const isFilterEditable = (filter.type === 'user');
+        const title = (editingFilter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
+        const isFilterEditable = (editingFilter.type === 'user');
         const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
 
         return (
@@ -33,7 +35,7 @@ export default class FilterBuilderFooter extends Component {
                     disabled={disabledClass}
                     title={title}
                     onClick={ () => {
-                        if (filter.name.trim()) {
+                        if (editingFilter.name.trim()) {
                             dispatch(filterBuilderSaveAndSelectRules())
                         }
                     }}
