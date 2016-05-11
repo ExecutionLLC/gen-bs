@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader'
 import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter'
 import FilterBuilder from './FilterBuilder/FilterBuilder'
+import {filterBuilderEndEdit} from '../../actions/filterBuilder';
 import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect'
 import NewFilterInputs from './FilterBuilder/NewFilterInputs'
 
@@ -20,7 +21,7 @@ class FiltersModal extends Component {
                 dialogClassName="modal-dialog-primary"
                 bsSize="lg"
                 show={this.props.showModal}
-                onHide={ () => {this.props.closeModal('filters')} }
+                onHide={ () => {this.props.closeModal('filters'); this.props.dispatch(filterBuilderEndEdit()); } }
             >
                 { (!isValid || !editingFilter) &&
                 <div >&nbsp;</div>
@@ -47,7 +48,10 @@ class FiltersModal extends Component {
                             </div>
                             }
                         </Modal.Body>
-                        <FilterBuilderFooter {...this.props} />
+                        <FilterBuilderFooter
+                            {...this.props}
+                            closeModal={() => { this.props.closeModal('filters'); this.props.dispatch(filterBuilderEndEdit()); } }
+                        />
                     </form>
                 </div>
                 }

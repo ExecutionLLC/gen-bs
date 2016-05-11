@@ -103,6 +103,7 @@ export function filterBuilderCreateFilter() {
                const result = response.body;
                dispatch(filterBuilderReceiveUpdateFilter(result));
                dispatch(closeModal('filters'));
+               dispatch(filterBuilderEndEdit());
                dispatch(fetchFilters(result.id)); // calls changeFilter
            }
         });
@@ -134,6 +135,7 @@ export function filterBuilderUpdateFilter() {
         if (state.auth.isDemo || isNotEdited) {
             dispatch(changeFilter(editingFilter.filter.id));
             dispatch(closeModal('filters'));
+            dispatch(filterBuilderEndEdit());
         } else {
             const sessionId = state.auth.sessionId;
             const resultEditingFilter = editingFilter.filter;
@@ -147,6 +149,7 @@ export function filterBuilderUpdateFilter() {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
                     dispatch(closeModal('filters'));
+                    dispatch(filterBuilderEndEdit());
                     dispatch(fetchFilters(result.id)); // calls changeFilter
                 }
             });

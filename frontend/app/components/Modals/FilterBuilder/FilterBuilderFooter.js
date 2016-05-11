@@ -21,7 +21,7 @@ export default class FilterBuilderFooter extends Component {
         return (
             <Modal.Footer>
                 <button
-                    onClick={ () => { closeModal('filters')} }
+                    onClick={closeModal}
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
