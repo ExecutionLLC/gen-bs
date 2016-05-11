@@ -177,8 +177,8 @@ export function filterBuilderUpdateFilter() {
 
 export function filterBuilderSaveAndSelectRules() {
     return (dispatch, getState) => {
-        const parsedRules = getState().filterBuilder.editingFilter.parsedFilter;
-        const rules = filterUtils.getGenomics(parsedRules);
+        dispatch(filterBuilderSaveEdit());
+        const rules = getState().filterBuilder.editingFilter.filter.rules;
         dispatch(filterBuilderRules(rules));
         if (!getState().filterBuilder.editingFilter.isNew) {
             dispatch(filterBuilderUpdateFilter());
