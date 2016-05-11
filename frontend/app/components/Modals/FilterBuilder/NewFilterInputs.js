@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 
-import { filterBuilderChangeAttr, filterBuilderToggleNewEdit } from '../../../actions/filterBuilder'
+import { filterBuilderChangeAttr, filterBuilderStartEdit } from '../../../actions/filterBuilder'
 
 
 export default class NewFilterInputs extends Component {
@@ -49,8 +49,8 @@ export default class NewFilterInputs extends Component {
 
                     <div className="col-sm-1">
                         <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                onClick={ () => dispatch(filterBuilderToggleNewEdit(false, fields)) }><span
-                            data-localize="actions.cancel">Cancel</span></button>
+                                onClick={ () => dispatch(filterBuilderStartEdit(false, editingFilter, fields)) }><span
+                                data-localize="actions.cancel">Cancel</span></button>
                     </div>
 
                 </div>

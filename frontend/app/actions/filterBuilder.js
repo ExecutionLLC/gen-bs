@@ -222,8 +222,9 @@ export function filterBuilderDeleteFilter(filterId) {
                 const state = getState();
                 const selectedFilterId = state.ui.selectedFilter.id;
                 const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
+                const newFilter = state.userData.filters.find( (filter) => filter.id === newFilterId); // replace by filtersList
                 dispatch(changeFilter(newFilterId));
-                dispatch(filterBuilderToggleNewEdit(false, fields));
+                dispatch(filterBuilderStartEdit(false, newFilter, fields));
             }
         });
     }

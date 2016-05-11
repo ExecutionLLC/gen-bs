@@ -9,7 +9,7 @@ import {
 } from '../../../utils/stringUtils';
 import {
     filterBuilderSelectFilter,
-    filterBuilderToggleNewEdit,
+    filterBuilderStartEdit,
     filterBuilderDeleteFilter
 } from '../../../actions/filterBuilder'
 
@@ -52,7 +52,7 @@ export default class ExistentFilterSelect extends Component {
                             clearable={false}
                             onChange={ (val) => {
                                 dispatch(filterBuilderSelectFilter(filters, val.value));
-                                dispatch(filterBuilderToggleNewEdit(false, fields));
+                                dispatch(filterBuilderStartEdit(false, filters.find((filter) => filter.id === val.value) || null, fields));
                             }}
                         />
                     </div>
@@ -62,7 +62,7 @@ export default class ExistentFilterSelect extends Component {
                             <button type="button"
                                     className="btn btn-default in copyview"
                                     id="dblBtn"
-                                    onClick={ () => dispatch(filterBuilderToggleNewEdit(true, fields)) }
+                                    onClick={ () => dispatch(filterBuilderStartEdit(true, selectedFilter, fields)) }
                                     disabled={disabledClass}
                                     title={title}
                             >
@@ -76,8 +76,7 @@ export default class ExistentFilterSelect extends Component {
                         <div className="btn-group ">
                             <button type="button" className="btn btn-default"
                                     onClick={() => {
-                                        dispatch(filterBuilderSelectFilter(filters, selectedFilter.id));
-                                        dispatch(filterBuilderToggleNewEdit(false, fields));
+                                        dispatch(filterBuilderStartEdit(false, selectedFilter, fields));
                                     }}
                             >
                                 <span data-localize="views.setup.reset.title">Reset Filter</span>
