@@ -95,10 +95,14 @@ export default class QueryHistoryModal extends Component {
 
     renderHistoryTable() {
         return (
-            <table className="table table-condensed">
-                { this.renderHistoryTableHeader() }
-                { this.renderHistoryTableBody() }
-            </table>
+          <div className="modal-body">
+              <div className="modal-body-scroll">      
+                  <table className="table table-condensed table-vertical-top table-responsive-transform">
+                      { this.renderHistoryTableHeader() }
+                      { this.renderHistoryTableBody() }
+                  </table>
+              </div>
+          </div>
         )
     }
 
