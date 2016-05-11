@@ -88,7 +88,6 @@ export default class ExistentFilterSelect extends Component {
                                 </button>
                             }
                         </div>                            
-                        </div>
                     </div>
                 </div>
             </div>
