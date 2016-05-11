@@ -10,7 +10,7 @@ const initialState = {
     editableFields: [],
     sourceFieldsList: [],
     totalFieldsList: [],
-    totalFieldsHash: [],
+    totalFieldsHash: {},
     // Fields allowed for selection in a typical fields list (include current sample fields and sources fields)
     allowedFieldsList: [],
     allowedIdToFieldHash: {}
