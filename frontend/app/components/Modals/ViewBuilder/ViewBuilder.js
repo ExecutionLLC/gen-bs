@@ -96,16 +96,16 @@ export default class ViewBuilder extends React.Component {
                                 disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
                             />
                         </div>
-                    </div>
-                    <div className="btn-group">
-                        <button className="btn-link-default" disabled={minusDisabledClass}
-                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
-                                type="button">
-                            <i className="md-i">close</i></button>
-                        <button className="btn-link-default" disabled={plusDisabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
-                                type="button">
-                            <i className="md-i">add</i></button>
+                        <div className="btn-group">
+                            <button className="btn-link-default" disabled={minusDisabledClass}
+                                    onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
+                                    type="button">
+                                <i className="md-i">close</i></button>
+                            <button className="btn-link-default" disabled={plusDisabledClass}
+                                    onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
+                                    type="button">
+                                <i className="md-i">add</i></button>
+                        </div>
                     </div>
                 </div>
             )

@@ -47,8 +47,9 @@ export default class NewViewInputs extends React.Component {
                             <div className="input-group-btn btn-group-close">
                                 <button type="button" className="btn-link-default" type="button"
                                         data-toggle="collapse" data-target=".copyview "
-                                        onClick={ () => dispatch(viewBuilderSelectView(views, newView.originalViewId)) }><span
-                                        data-localize="actions.cancel">Cancel</span></button>
+                                        onClick={ () => dispatch(viewBuilderSelectView(views, newView.originalViewId)) }>
+                                    <i class="md-i" data-reactid=".3e.1.0.0.1.1.0.0.0.0.0.1.1.1.0.0">close</i>
+                                </button>
                             </div>
                         </div>
                     </div>
