@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Select from '../../shared/Select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeFilter} from '../../../actions/ui'
 import {filtersListSelectFilter} from "../../../actions/filtersList";
 
 export default class Filters extends Component {
@@ -27,7 +26,6 @@ export default class Filters extends Component {
                     <Select options={this.getFilterOptions()}
                             value={selectedFilterId}
                             onChange={(item) => {
-                                dispatch(changeFilter(item.value));
                                 dispatch(filtersListSelectFilter(item.value));
                             }}
                     />

@@ -55,12 +55,6 @@ export function changeView(viewId) {
     }
 }
 
-export function changeFilter(filterId) {
-    return (dispatch) => {
-        dispatch(filtersListSelectFilter(filterId));
-    }
-}
-
 export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
     return (dispatch, getState) => {
         if (!sampleId || !viewId || !filterId) {

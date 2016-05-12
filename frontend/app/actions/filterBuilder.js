@@ -1,8 +1,6 @@
 import {closeModal} from './modalWindows';
 
 import {addFilter, deleteFilter, editFilter} from "./userData";
-import {changeFilter} from "./ui";
-import {filterUtils} from "../utils/filterUtils";
 import {
     filtersListSelectFilter,
     filtersListServerCreateFilter,
@@ -59,45 +57,13 @@ export function filterBuilderChangeAttr(attr) {
 export function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
-        dispatch(filterBuilderRequestUpdateFilter());//remove later
         const editingFilter = getState().filterBuilder.editingFilter.filter;
-
         const {auth: {sessionId}, ui: {languageId} } = getState();
         dispatch(filtersListServerCreateFilter(editingFilter, sessionId, languageId))
-            .then( (newFilter) => {
-
-                // remove later
-                if (newFilter) {
-                    dispatch(filterBuilderReceiveUpdateFilter(newFilter));
-                    dispatch(addFilter(newFilter));
-                    dispatch(changeFilter(newFilter.id));
-                }
-
+            .then( () => {
                 dispatch(closeModal('filters'));
                 dispatch(filterBuilderEndEdit());
             });
-/*
-        dispatch(filtersListStartServerOperation());
-        filtersClient.add(sessionId, languageId, editingFilter, (error, response) => {
-           dispatch(filtersListEndServerOperation());
-           if (error) {
-               dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
-           } else if (response.status !== HttpStatus.OK) {
-               dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
-           } else {
-               const result = response.body;
-               dispatch(filterBuilderReceiveUpdateFilter(result));
-               const filterId = result.id;
-               dispatch(addFilter(result));
-               dispatch(filtersListAddFilter(result));
-               dispatch(changeFilter(filterId));
-               dispatch(filtersListSelectFilter(filterId));
-               dispatch(closeModal('filters'));
-               dispatch(filterBuilderEndEdit());
-               dispatch(fetchFilters(result.id)); // calls changeFilter
-           }
-        });
-*/
     }
 }
 
@@ -124,7 +90,6 @@ export function filterBuilderUpdateFilter() {
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
         if (state.auth.isDemo || isNotEdited) {
-            dispatch(changeFilter(editingFilter.filter.id));//remove later
             dispatch(filtersListSelectFilter(editingFilter.filter.id));
             dispatch(closeModal('filters'));
             dispatch(filterBuilderEndEdit());
@@ -133,40 +98,10 @@ export function filterBuilderUpdateFilter() {
             const resultEditingFilter = editingFilter.filter;
             dispatch(filterBuilderRequestUpdateFilter());//remove later
             dispatch(filtersListServerUpdateFilter(resultEditingFilter, sessionId))
-                .then( (updatedFilter) => {
-
-                    // remove later
-                    if (updatedFilter) {
-                        dispatch(filterBuilderReceiveUpdateFilter(updatedFilter));
-                        dispatch(editFilter(editingFilter.filter.id, updatedFilter));
-                        dispatch(changeFilter(updatedFilter.id));
-                    }
-
+                .then( () => {
                     dispatch(closeModal('filters'));
                     dispatch(filterBuilderEndEdit());
                 });
-/*
-            dispatch(filterBuilderRequestUpdateFilter());
-            dispatch(filtersListStartServerOperation());
-            filtersClient.update(sessionId, resultEditingFilter, (error, response) => {
-                dispatch(filtersListEndServerOperation());
-                if (error) {
-                    dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
-                } else {
-                    const result = response.body;
-                    dispatch(filterBuilderReceiveUpdateFilter(result));
-                    dispatch(editFilter(editingFilter.filter.id, result));
-                    dispatch(filtersListEditFilter(editingFilter.filter.id, result));
-                    dispatch(changeFilter(result.id));
-                    dispatch(filtersListSelectFilter(result.id));
-                    dispatch(closeModal('filters'));
-                    dispatch(filterBuilderEndEdit());
-                    dispatch(fetchFilters(result.id)); // calls changeFilter
-                }
-            });
-*/
         }
     }
 }
@@ -205,40 +140,13 @@ export function filterBuilderDeleteFilter(filterId) {
         const {auth: {sessionId}, fields} = getState();
         dispatch(filtersListServerDeleteFilter(filterId, sessionId))
             .then( (success)=> {
-
-                //remove later
                 if (success) {
-                    //dispatch(filterBuilderReceiveDeleteFilter(null));//did not implemented // argument did not used
-                    dispatch(deleteFilter(filterId));
                     const state = getState();
                     const selectedFilterId = state.filtersList.selectedFilterId;
                     const newFilterId = (filterId == selectedFilterId) ? state.filtersList.filters[0].id : selectedFilterId;
                     const newFilter = state.filtersList.filters.find( (filter) => filter.id === newFilterId);
-                    dispatch(changeFilter(newFilterId));
                     dispatch(filterBuilderStartEdit(false, newFilter, fields));
                 }
             });
-/*
-        dispatch(filtersListStartServerOperation());
-        filtersClient.remove(sessionId, filterId, (error, response) => {
-            dispatch(filtersListEndServerOperation());
-            if (error) {
-                dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, DELETE_FILTER_SERVER_ERROR));
-            } else {
-                const result = response.body;
-                dispatch(filterBuilderReceiveDeleteFilter(result));
-                dispatch(deleteFilter(result.id));
-                dispatch(filtersListDeleteFilter(result.id));
-                const state = getState();
-                const selectedFilterId = state.ui.selectedFilter.id;
-                const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
-                const newFilter = state.userData.filters.find( (filter) => filter.id === newFilterId); // replace by filtersList
-                dispatch(changeFilter(newFilterId));
-                dispatch(filterBuilderStartEdit(false, newFilter, fields));
-            }
-        });
-*/
     }
 }

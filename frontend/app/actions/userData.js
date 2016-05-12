@@ -3,7 +3,7 @@ import {handleError} from './errorHandler'
 import {receiveFields, receiveTotalFields} from './fields'
 import {receiveSavedFilesList} from './savedFiles';
 import {receiveQueryHistory} from './queryHistory';
-import {analyze, changeView, changeFilter} from './ui';
+import {analyze, changeView} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
@@ -106,7 +106,6 @@ export function fetchUserdata() {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 } else {
                     dispatch(changeSample(sample.id));
-                    dispatch(changeFilter(filter.id));
                     dispatch(filtersListSelectFilter(filter.id));
                     dispatch(changeView(view.id));
                     dispatch(analyze(sample.id, view.id, filter.id));
@@ -164,30 +163,6 @@ function receiveFilters(json) {
         type: RECEIVE_FILTERS,
         filters: json,
         receivedAt: Date.now()
-    }
-}
-
-export function fetchFilters(filterIdToSelect) {
-
-    return (dispatch, getState) => {
-        dispatch(requestFilters());
-
-        const sessionId = getState().auth.sessionId;
-        filtersClient.getAll(sessionId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, FETCH_FILTERS_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, FETCH_FILTERS_SERVER_ERROR));
-            } else {
-                const result = response.body;
-                const filter = result[0] || null;
-                const filterId = filterIdToSelect || filter.id; // rid of whole fetchFilters
-
-                dispatch(receiveFilters(result));
-                dispatch(changeFilter(filterId));
-                dispatch(filtersListSelectFilter(filterId));
-            }
-        });
     }
 }
 
