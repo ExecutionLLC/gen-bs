@@ -19,8 +19,7 @@ const SETTINGS = {
     enableFullRightsForDemoUsers: ENV.GEN_WS_ENABLE_FULL_RIGHTS_FOR_DEMO_USERS || false,
     samplesUpload: {
         path: ENV.GEN_WS_UPLOAD_PATH || __dirname + '/../uploads/', // Temporary path for uploaded samples.
-        maxSizeInBytes: ENV.GEN_WS_UPLOAD_MAX_SIZE || 25 * 1024 * 1024, // Max size of the uploaded sample.
-        maxCount: ENV.GEN_WS_UPLOAD_MAX_COUNT || 5 // Max parallel uploads count.
+        maxSizeInBytes: ENV.GEN_WS_UPLOAD_MAX_SIZE || 25 * 1024 * 1024 // Max size of the uploaded sample.
     },
     savedFilesUpload: {
         maxSizeInBytes: ENV.GEN_WS_SAVED_FILES_MAX_SIZE || 1024 * 1024,
