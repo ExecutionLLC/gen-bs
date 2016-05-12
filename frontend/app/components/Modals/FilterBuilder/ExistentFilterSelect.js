@@ -35,7 +35,7 @@ export default class ExistentFilterSelect extends Component {
 
         const {dispatch, auth, fields} = this.props;
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
-        const {filters} = this.props.userData;
+        const {filters} = this.props.filtersList;
         const disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
         });

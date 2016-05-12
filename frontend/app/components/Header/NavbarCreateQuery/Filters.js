@@ -40,7 +40,7 @@ export default class Filters extends Component {
     }
 
     getFilterOptions() {
-        const filters = this.props.userData.filters;
+        const {filters} = this.props.filtersList;
         return filters.map((filterItem) => {
                 const isDisabled = this.isFilterDisabled(filterItem);
                 const label = getItemLabelByNameAndType(filterItem.name, filterItem.type);

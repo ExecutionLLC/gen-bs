@@ -4,7 +4,6 @@ export default function userData(state = {
     isFetching: false,
     isValid: false,
     profileMetadata: {},
-    filters: [],
     views: [],
     attachedHistoryData: {
         sampleId: null,
@@ -26,7 +25,6 @@ export default function userData(state = {
                 isValid: true,
 
                 profileMetadata: action.userData.profileMetadata,
-                filters: action.userData.filters,
                 views: action.userData.views,
 
                 lastUpdated: action.receivedAt
@@ -46,18 +44,6 @@ export default function userData(state = {
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.REQUEST_FILTERS:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-
-        case ActionTypes.RECEIVE_FILTERS:
-            return Object.assign({}, state, {
-                isFetching: false,
-                filters: action.filters,
-                lastUpdated: action.receivedAt
-            });
-
         case ActionTypes.CHANGE_HISTORY_DATA:
         {
             const {sampleId, filterId, viewId} = action;
@@ -67,13 +53,6 @@ export default function userData(state = {
                     filterId: filterId,
                     viewId: viewId
                 }
-            });
-        }
-        case ActionTypes.CHANGE_FILTERS:
-        {
-            const {filters} = action;
-            return Object.assign({}, state, {
-                filters: filters
             });
         }
         case ActionTypes.CHANGE_VIEWS:
@@ -90,36 +69,6 @@ export default function userData(state = {
                 views: [
                     ...state.views.slice(0, deletedViewIndex),
                     ...state.views.slice(deletedViewIndex + 1)
-                ]
-            });
-        }
-        case ActionTypes.DELETE_FILTER:
-        {
-            const deletedFilterIndex = _.findIndex(state.filters, filter => filter.id == action.filterId);
-            return Object.assign({}, state, {
-                filters: [
-                    ...state.filters.slice(0, deletedFilterIndex),
-                    ...state.filters.slice(deletedFilterIndex + 1)
-                ]
-            });
-        }
-        case ActionTypes.ADD_FILTER:
-        {
-            return Object.assign({}, state, {
-                filters: [
-                    ...state.filters.slice(),
-                    action.filter
-                ]
-            });
-        }
-        case ActionTypes.EDIT_FILTER:
-        {
-            const editedFilterIndex = _.findIndex(state.filters, filter => filter.id == action.filterId);
-            return Object.assign({}, state, {
-                filters: [
-                    ...state.filters.slice(0, editedFilterIndex),
-                    action.filter,
-                    ...state.filters.slice(editedFilterIndex + 1)
                 ]
             });
         }
