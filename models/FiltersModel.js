@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const async = require('async');
 
+const CollectionUtils = require('../utils/CollectionUtils');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const SecureModelBase = require('./SecureModelBase');
 
@@ -30,21 +31,27 @@ class FiltersModel extends SecureModelBase {
 
     // It collects the latest version of each filter for the current user
     findAll(userId, callback) {
-        async.waterfall([
-            (callback) => this._fetchUserFilters(userId, callback),
-            (filters, callback) => this._mapItems(filters, callback)
-        ], callback);
+        this.db.transactionally((trx, callback) => {
+            this._findFilters(trx, null, userId, true, true, callback);
+        }, callback);
     }
 
     findMany(userId, filterIds, callback) {
-        async.waterfall([
-            (callback) => { this._fetchFilters(filterIds, callback); },
-            (filters, callback) => this._ensureAllItemsFound(filters, filterIds, callback),
-            (filters, callback) => async.map(filters, (filter, callback) => {
-                this._checkUserIsCorrect(userId, filter, callback);
-            }, callback),
-            (filters, callback) => this._mapItems(filters, callback)
-        ], callback);
+        this.db.transactionally((trx, callback) => {
+            this._findFilters(trx, filterIds, userId, true, true, callback);
+        }, callback);
+    }
+
+    find(userId, filterId, callback) {
+        const filterIds = [filterId];
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
+                (callback) => this._findFilters(trx, filterIds, userId, false, false, callback),
+                (filters, callback) => callback(null, _.first(filters))
+            ], (error, filters) => {
+                callback(error, filters);
+            });
+        }, callback);
     }
 
     _add(userId, languId, filter, shouldGenerateId, callback) {
@@ -127,20 +134,41 @@ class FiltersModel extends SecureModelBase {
         }, callback);
     }
 
-    _fetchFilters(filterIds, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .innerJoin('filter_text', 'filter_text.filter_id', this.baseTableName + '.id')
-                .whereIn('id', filterIds)
-                .asCallback((error, filtersData) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData));
-                    }
+    _findFilters(trx, filterIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
+        async.waterfall([
+            (callback) => this._findFiltersMetadata(trx, filterIdsOrNull, userIdOrNull, includeLastVersionsOnly,
+                excludeDeleted, callback),
+            (filtersMetadata, callback) => {
+                const filterIds = _.map(filtersMetadata, filter => filter.id);
+                callback(null, filtersMetadata, filterIds);
+            },
+            (filters, filterIds, callback) => {
+                this._attachFiltersDescriptions(trx, filters, filterIds, callback);
+            }
+        ], (error, views) => {
+            callback(error, views);
+        });
+    }
+
+    _attachFiltersDescriptions(trx, filters, filterIds, callback) {
+        async.waterfall([
+            (callback) => {
+                trx.select()
+                    .from(TableNames.FilterTexts)
+                    .whereIn('filter_id', filterIds)
+                    .asCallback(callback);
+            },
+            (filterTexts, callback) => this._toCamelCase(filterTexts, callback),
+            (filterTexts, callback) => {
+                const textsHash = CollectionUtils.createHashByKey(filterTexts, 'filterId');
+                const filtersWithDescription = _.map(filters, filter => {
+                    return Object.assign({}, filter, {
+                        description: textsHash[filter.id].description
+                    });
                 });
-        }, callback);
+                callback(null, filtersWithDescription);
+            }
+        ], callback);
     }
 
     _findFiltersMetadata(trx, filterIdsOrNull, userIdOrNull, includeLastVersionsOnly, excludeDeleted, callback) {
@@ -189,25 +217,6 @@ class FiltersModel extends SecureModelBase {
                 }
             }
         ], callback);
-    }
-
-    _fetchUserFilters(userId, callback) {
-        const query = 'SELECT * FROM ' +
-            '(SELECT ROW_NUMBER() OVER (' +
-            'PARTITION BY CASE WHEN original_filter_id isnull THEN id ELSE original_filter_id END ORDER BY timestamp DESC) AS RN, * ' +
-            'FROM ' + this.baseTableName + ' ' +
-            'INNER JOIN filter_text ON filter_text.filter_id = ' + this.baseTableName + '.id ' +
-            'WHERE (creator = \'' + userId + '\' OR creator IS NULL) AND is_deleted = false) T WHERE T.RN = 1';
-        this.db.asCallback((knex, callback) => {
-            knex.raw(query)
-                .asCallback((error, filtersData) => {
-                if (error) {
-                    callback(error);
-                } else {
-                    callback(null, ChangeCaseUtil.convertKeysToCamelCase(filtersData.rows));
-                }
-            });
-        }, callback);
     }
 }
 

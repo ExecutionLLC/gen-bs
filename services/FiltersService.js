@@ -21,21 +21,26 @@ class FiltersService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this._checkFilterRules(filter, callback),
             (callback) => super.find(user, filter.id, callback),
-            (existingFilter, callback) => {
-                if (existingFilter.type !== 'user') {
-                    callback(new Error('Default filter cannot be updated'));
-                } else {
-                    super.update(user, filter, callback);
-                }
-            }
+            (existingFilter, callback) => this._ensureItemOfUserType(existingFilter, callback),
+            (existingFilter, callback) => super.update(user, filter, callback)
         ], callback);
+    }
+
+    remove(user, filterId, callback) {
+        async.waterfall([
+            (callback) => super.find(user, filterId, callback),
+            (existingFilter, callback) => this._ensureItemOfUserType(existingFilter, callback),
+            (existingFilter, callback) => super.remove(user, existingFilter.id, callback)
+        ], (error, filter) => {
+            callback(error, filter);
+        });
     }
 
     _checkFilterRules(filter, callback) {
         async.waterfall([
             (callback) => {
                 if (!_.isObject(filter.rules)) {
-                    callback(new Error('Filter rules is not defined'))
+                    callback(new Error('Filter rules are not in correct format'))
                 } else {
                     callback(null);
                 }

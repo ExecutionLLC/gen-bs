@@ -149,7 +149,7 @@ describe('Filters', () => {
                         // It should not return with all user filters.
                         filtersClient.getAll(sessionId, (error, response) => {
                             const filters = ClientBase.readBodyWithCheck(error, response);
-                            assert.ok(!_.includes(filters, f => f.id == addedFilter.id));
+                            assert.ok(!_.some(filters, f => f.id == addedFilter.id));
 
                             // It should be possible to retrieve it by id (history support).
                             filtersClient.get(sessionId, addedFilter.id, (error, response) => {
@@ -223,8 +223,8 @@ describe('Filters', () => {
                     // Now it should return.
                     filtersClient.getAll(sessionId, (error, response) => {
                         const filters = ClientBase.readBodyWithCheck(error, response);
-                        assert.ok(_.includes(filters, f => f.id === addedFilter.id));
-                        assert.ok(_.includes(filters, f => f.description === filter.description));
+                        assert.ok(_.some(filters, f => f.id === addedFilter.id));
+                        assert.ok(_.some(filters, f => f.description === filter.description));
 
                         const filterToUpdate = Object.assign({}, addedFilter, {
                             name: Uuid.v4()
@@ -241,7 +241,7 @@ describe('Filters', () => {
                                 filtersClient.getAll(sessionId, (error, response) => {
                                     // Now filters list should not return the filter.
                                     const filters = ClientBase.readBodyWithCheck(error, response);
-                                    assert.ok(!_.includes(filters, f => f.description === filter.description));
+                                    assert.ok(!_.some(filters, f => f.description === filter.description));
 
                                     done();
                                 });
