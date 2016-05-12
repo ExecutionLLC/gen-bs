@@ -1,10 +1,11 @@
 import * as ActionTypes from '../actions/errorHandler';
 
-export default function errorHandler(state = {
+const initialState = {
     showErrorWindow: false,
     lastError: null
-},
-                                     action) {
+};
+
+export default function errorHandler(state = initialState, action) {
     switch (action.type) {
         case ActionTypes.HANDLE_ERROR: {
             return Object.assign({}, state, {
