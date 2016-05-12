@@ -78,7 +78,8 @@ function reduceFBuilderStartEdit(state, action) {
         makeNew ?
             Object.assign({}, filter, {
                 type: 'user',
-                name: `Copy of ${filter.name}`
+                name: `Copy of ${filter.name}`,
+                id: null
             }) :
             filter,
         totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
@@ -178,16 +179,6 @@ export default function filterBuilder(state = {
             });
 
         case ActionTypes.FBUILDER_RECEIVE_UPDATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: false
-            });
-
-        case ActionTypes.FBUILDER_REQUEST_CREATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-
-        case ActionTypes.FBUILDER_RECEIVE_CREATE_FILTER:
             return Object.assign({}, state, {
                 isFetching: false
             });

@@ -4,12 +4,12 @@ import {viewBuilderSelectView} from './viewBuilder';
 import {detachHistory} from "./queryHistory";
 import {setViewVariantsSort} from "./variantsTable";
 import {handleError} from './errorHandler'
+import {filtersListSelectFilter} from "./filtersList";
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
 
 export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
-export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
@@ -55,18 +55,9 @@ export function changeView(viewId) {
     }
 }
 
-export function changeHeaderFilter(filters, filterId) {
-    return {
-        type: CHANGE_HEADER_FILTER,
-        filters,
-        filterId
-    }
-}
-
 export function changeFilter(filterId) {
-    return (dispatch, getState) => {
-        const {userData: {filters}} = getState();
-        dispatch(changeHeaderFilter(filters, filterId));
+    return (dispatch) => {
+        dispatch(filtersListSelectFilter(filterId));
     }
 }
 

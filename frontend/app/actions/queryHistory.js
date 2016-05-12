@@ -10,6 +10,8 @@ import {changeSamples} from "./samplesList";
 import {changeSample} from "./samplesList";
 import {fetchFields} from "./fields";
 import {prepareAnalyze} from './websocket';
+import {filtersListSelectFilter} from "./filtersList";
+import {filtersListReceive} from "./filtersList";
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -88,6 +90,7 @@ export function renewHistoryItem(historyItemId) {
                 .then(() => {
                     dispatch([
                         changeFilter(clonedHistoryItem.filters[0].id),
+                        filtersListSelectFilter(clonedHistoryItem.filters[0].id),
                         changeView(clonedHistoryItem.view.id),
                         analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
                     ]);
@@ -111,6 +114,7 @@ export function attachHistory(historyItem) {
         dispatch([
             changeHistoryData(newSampleId, newFilterId, newViewId),
             changeFilters(filters),
+            filtersListReceive(filters),
             changeViews(views),
             changeSamples(samples)
         ]);
@@ -142,6 +146,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),
             changeFilters(filters),
+            filtersListReceive(filters),
             changeViews(views),
             changeSamples(samples)
         ]);

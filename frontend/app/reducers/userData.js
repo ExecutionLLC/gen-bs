@@ -103,6 +103,26 @@ export default function userData(state = {
                 ]
             });
         }
+        case ActionTypes.ADD_FILTER:
+        {
+            return Object.assign({}, state, {
+                filters: [
+                    ...state.filters.slice(),
+                    action.filter
+                ]
+            });
+        }
+        case ActionTypes.EDIT_FILTER:
+        {
+            const editedFilterIndex = _.findIndex(state.filters, filter => filter.id == action.filterId);
+            return Object.assign({}, state, {
+                filters: [
+                    ...state.filters.slice(0, editedFilterIndex),
+                    action.filter,
+                    ...state.filters.slice(editedFilterIndex + 1)
+                ]
+            });
+        }
         default:
             return state
     }

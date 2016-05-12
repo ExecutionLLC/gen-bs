@@ -8,6 +8,8 @@ import {changeSample, receiveSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
 import * as _ from "lodash";
+import {filtersListReceive} from "./filtersList";
+import {filtersListSelectFilter} from "./filtersList";
 
 /*
  * action types
@@ -27,6 +29,9 @@ export const CHANGE_VIEWS = 'CHANGE_VIEWS';
 
 export const DELETE_VIEW = 'DELETE_VIEW';
 export const DELETE_FILTER = 'DELETE_FILTER';
+
+export const ADD_FILTER = 'ADD_FILTER';
+export const EDIT_FILTER = 'EDIT_FILTER';
 
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
@@ -89,6 +94,7 @@ export function fetchUserdata() {
                 const view = _.find(userData.views, view => view.type === 'standard');
 
                 dispatch(receiveUserdata(userData));
+                dispatch(filtersListReceive(userData.filters));
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
@@ -96,12 +102,13 @@ export function fetchUserdata() {
                 dispatch(receiveSamplesList(samples));
                 dispatch(receiveQueryHistory(queryHistory));
 
-                dispatch(changeSample(sample.id));
-                dispatch(changeFilter(filter.id));
-                dispatch(changeView(view.id));
                 if (!sample || !filter || !view) {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 } else {
+                    dispatch(changeSample(sample.id));
+                    dispatch(changeFilter(filter.id));
+                    dispatch(filtersListSelectFilter(filter.id));
+                    dispatch(changeView(view.id));
                     dispatch(analyze(sample.id, view.id, filter.id));
                 }
             }
@@ -178,6 +185,7 @@ export function fetchFilters(filterIdToSelect) {
 
                 dispatch(receiveFilters(result));
                 dispatch(changeFilter(filterId));
+                dispatch(filtersListSelectFilter(filterId));
             }
         });
     }
@@ -218,4 +226,19 @@ export function deleteFilter(filterId) {
         type: DELETE_FILTER,
         filterId
     }
+}
+
+export function addFilter(filter) {
+    return {
+        type: ADD_FILTER,
+        filter
+    }
+}
+
+export function editFilter(filterId, filter) {
+    return {
+        type: EDIT_FILTER,
+        filterId,
+        filter
+    };
 }
