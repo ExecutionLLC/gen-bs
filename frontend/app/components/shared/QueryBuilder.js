@@ -1,65 +1,62 @@
 import React, {Component} from 'react';
 
 
-/**
-
- Inner structure:
-
- FilterQueryBuilder(
- fields: {{id: string, label: string, type: string}[]}
- rules: {{ <'$and'|'$or'>: ({id, label, type}|rules)[] }}
- disabled: boolean
- dispatch: function(Object)
- )
- QueryBuilder(
- rules: {{condition: string, rules: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]}}
- disabled: boolean
- makeItemComponent: function(number[], {field: string, operator: string, value: *}, boolean): Component
- handlers: {
-            onSwitch: function(number[], boolean),
-            onAdd: function(number[], boolean),
-            onDeleteGroup: function(number[]),
-            onDeleteItem: function(number[], boolean)
-        }
- )
- RulesGroupContainer(
- indexPath: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
- makeItemComponent: = makeItemComponent
- ruleItems: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]
- ruleIsAnd: boolean
- disabled: = disabled
- handlers: = handlers
- allowDelete: boolean
- )
- RulesGroupHeader(
- indexPath: = indexPath
- disabled: = disabled
- isAnd: = ruleIsAnd
- onSwitch: function(boolean)
- onAdd: function(boolean)
- onDelete: ?function()
- )
- RulesGroupBody(
- indexPath: = indexPath
- items: = ruleItems
- disabled: = disabled
- makeItemComponent: = makeItemComponent
- handlers: = handlers
- )
- RulesGroupContainer(...)
- RuleContainer(
- indexPath: number[]
- item: {field: string, operator: string, value: *}
- disabled: = disabled
- makeItemComponent: = makeItemComponent
- onDelete: ?function()
- )
- itemComponent(
- number[],
- {field: string, operator: string, value: *},
- boolean
- )
- */
+// Inner structure:
+//
+// FilterQueryBuilder(
+//      fields: {{id: string, label: string, type: string}[]}
+//      rules: {{ <'$and'|'$or'>: ({id, label, type}|rules)[] }}
+//      disabled: boolean
+//      dispatch: function(Object)
+// )
+//     QueryBuilder(
+//         rules: {{condition: string, rules: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]}}
+//         disabled: boolean
+//         makeItemComponent: function(number[], {field: string, operator: string, value: *}, boolean): Component
+//         handlers: {
+//             onSwitch: function(number[], boolean),
+//             onAdd: function(number[], boolean),
+//             onDeleteGroup: function(number[]),
+//             onDeleteItem: function(number[], boolean)
+//         }
+//     )
+//         RulesGroupContainer(
+//             indexPath: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
+//             makeItemComponent: = makeItemComponent
+//             ruleItems: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]
+//             ruleIsAnd: boolean
+//             disabled: = disabled
+//             handlers: = handlers
+//             allowDelete: boolean
+//         )
+//             RulesGroupHeader(
+//                 indexPath: = indexPath
+//                 disabled: = disabled
+//                 isAnd: = ruleIsAnd
+//                 onSwitch: function(boolean)
+//                 onAdd: function(boolean)
+//                 onDelete: ?function()
+//             )
+//             RulesGroupBody(
+//                 indexPath: = indexPath
+//                 items: = ruleItems
+//                 disabled: = disabled
+//                 makeItemComponent: = makeItemComponent
+//                 handlers: = handlers
+//             )
+//                 RulesGroupContainer(...)
+//                 RuleContainer(
+//                     indexPath: number[]
+//                     item: {field: string, operator: string, value: *}
+//                     disabled: = disabled
+//                     makeItemComponent: = makeItemComponent
+//                     onDelete: ?function()
+//                 )
+//                     itemComponent(
+//                         number[],
+//                         {field: string, operator: string, value: *},
+//                         boolean
+//                     )
 
 
 export default class QueryBuilder extends Component {
