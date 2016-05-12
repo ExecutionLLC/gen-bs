@@ -38,9 +38,10 @@ class OperationsService extends ServiceBase {
         this._addOperation(sessionId, operation, callback);
     }
 
-    addUploadOperation(sessionId, method, callback) {
-        const operation = new UploadOperation(sessionId, method);
-        this._addOperation(sessionId, operation, callback);
+    addUploadOperation(method, userId, callback) {
+        const systemSessionId = this.systemSessionId();
+        const operation = new UploadOperation(systemSessionId, method, userId);
+        this._addOperation(systemSessionId, operation, callback);
     }
 
     addSystemOperation(sessionId, method, callback) {

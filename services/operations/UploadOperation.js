@@ -3,21 +3,13 @@
 const SystemOperation = require('./SystemOperation');
 
 class UploadOperation extends SystemOperation {
-    constructor(sessionId, method) {
+    constructor(sessionId, method, userId) {
         super(sessionId, method);
+        this.userId = userId;
     }
 
     getType() {
         return SystemOperation.operationTypes().UPLOAD;
-    }
-    
-    /**
-     * Sets file owner.
-     * 
-     * @param {string}userId
-     * */
-    setUserId(userId) {
-        this.userId = userId;
     }
 
     /**

@@ -129,7 +129,7 @@ class ApplicationServerService extends ServiceBase {
      * */
     uploadSample(sessionId, sampleId, user, sampleLocalPath, sampleFileName, callback) {
         async.waterfall([
-            (callback) => this.services.operations.addUploadOperation(sessionId, METHODS.uploadSample, callback),
+            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, user.id, callback),
             (operation, callback) => {
                 operation.setSampleId(sampleId);
                 operation.setSampleFileName(sampleFileName);
