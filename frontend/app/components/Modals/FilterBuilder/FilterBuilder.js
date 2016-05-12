@@ -16,19 +16,15 @@ import {
 } from '../../../utils/filterUtils';
 
 
-/**
-
- FieldFilterItem(
- indexPath: number[]
- item: {field: string, operator: string, value: *}
- fields: {id: string, label: string, type: string}[]
- allowedOpsTypes: string[]
- valueType: string
- disabled: boolean
- onChange: function({field: string, operator: string, value: *})
- )
-
- */
+// FieldFilterItem(
+//     indexPath: number[]
+//     item: {field: string, operator: string, value: *}
+//     fields: {id: string, label: string, type: string}[]
+//     allowedOpsTypes: string[]
+//     valueType: string
+//     disabled: boolean
+//     onChange: function({field: string, operator: string, value: *})
+// )
 
 
 class FilterQueryBuilder extends React.Component {
