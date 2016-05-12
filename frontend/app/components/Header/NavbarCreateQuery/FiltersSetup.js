@@ -10,7 +10,7 @@ export default class FiltersSetup extends Component {
     }
 
     onFiltersClick() {
-        this.props.dispatch(filterBuilderStartEdit(false, this.props.ui.selectedFilter, this.props.fields)); // replace by filedsList
+        this.props.dispatch(filterBuilderStartEdit(false, this.props.filtersList.filters.find( (filter) => filter.id === this.props.filtersList.selectedFilterId), this.props.fields));
         this.props.openModal('filters');
     }
     
