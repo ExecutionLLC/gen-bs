@@ -47,7 +47,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
             const castedValue = opWant.noParams ?
                 null :
                 opWant.single ?
-                    (typeof value === 'object' && value && value.length) ? genomicsParsedRulesValidate.jsTypeCastValue(value.join(), fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
+                    (_.isArray(value)) ? genomicsParsedRulesValidate.jsTypeCastValue(value[0], fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
                     genomicsParsedRulesValidate.jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
             return modification.setRule(parsedFilter, index, ruleIndex, {field: item.field, operator: item.operator, value: castedValue});
         },

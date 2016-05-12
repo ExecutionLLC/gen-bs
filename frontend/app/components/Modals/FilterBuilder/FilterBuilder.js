@@ -51,10 +51,12 @@ class FilterQueryBuilder extends React.Component {
     static getFieldFilterItemRestrictions(field, fields) {
         const fieldJSType = FieldUtils.getFieldJSType(field);
         const allowedOpsTypes = FilterQueryBuilder.getValidOperatorsTypesForJSType(fieldJSType);
+        const fieldValidationRegexp = FieldUtils.getFieldInputValidationRegex(field);
         return {
             fieldJSType,
             allowedOpsTypes,
-            allowedFields: fields
+            allowedFields: fields,
+            fieldValidationRegexp
         };
     }
 
@@ -62,10 +64,12 @@ class FilterQueryBuilder extends React.Component {
         const fieldJSType = FieldUtils.getFieldJSType(field);
         const allowedOpsTypes = [operator];
         const allowedFields = [field];
+        const fieldValidationRegexp = FieldUtils.getFieldInputValidationRegex(field);
         return {
             fieldJSType,
             allowedOpsTypes,
-            allowedFields
+            allowedFields,
+            fieldValidationRegexp
         };
     }
 
@@ -110,6 +114,7 @@ class FilterQueryBuilder extends React.Component {
                 fields={itemRestrictions.allowedFields}
                 allowedOpsTypes={itemRestrictions.allowedOpsTypes}
                 valueType={itemRestrictions.fieldJSType}
+                validationRegex = {itemRestrictions.fieldValidationRegexp}
                 disabled={disabled || !fieldFromSample}
                 onChange={ (item) => FilterQueryBuilder.onChangeItem(item, indexPath, allowedFields, dispatch) }
             />
@@ -172,7 +177,7 @@ class FieldFilterItem extends React.Component {
      * @param {function(string)} onChange
      * @returns {React.Component}
      */
-    static renderInputForSingleTextValue(value, disabled, onChange) {
+    static renderInputForSingleTextValue(value, disabled, onChange, validationRegex) {
         return (
             <Input
                 className="form-control"
@@ -180,6 +185,7 @@ class FieldFilterItem extends React.Component {
                 value={value}
                 disabled={disabled}
                 onChange={ (val) => onChange(val) }
+                validationRegex={validationRegex}
             />
         );
     }
@@ -257,7 +263,7 @@ class FieldFilterItem extends React.Component {
      * @param {function(string[])} onChange
      * @returns {React.Component}
      */
-    static renderInputsArray(ArrayComponent, value, valueType, disabled, onChange) {
+    static renderInputsArray(ArrayComponent, value, valueType, disabled, onChange,  validationRegex) {
         return (
             <div className="rule-value-array">
                 <ArrayComponent
@@ -266,12 +272,13 @@ class FieldFilterItem extends React.Component {
                     disabled={disabled}
                     InputComponent={FieldFilterItem.renderInputsArrayItem}
                     onChange={onChange}
+                    validationRegex={validationRegex}
                 />
             </div>
         );
     }
 
-    static renderItem(item, valueType, disabled, onChange) {
+    static renderItem(item, valueType, disabled, onChange, validationRegex) {
         const value = item.value;
         /** @type function(string|number):(string|number) */
         const getInputValue = valueType === 'number' ? (v) => +v : (v) => v;
@@ -296,7 +303,8 @@ class FieldFilterItem extends React.Component {
                 value,
                 valueType,
                 disabled,
-                (vals) => onChange(FieldFilterItem.itemChangeValue(item, getInputValueArray(vals)))
+                (vals) => onChange(FieldFilterItem.itemChangeValue(item, getInputValueArray(vals))),
+                validationRegex
             );
         }
         if (typeof value === 'boolean') {
@@ -309,7 +317,8 @@ class FieldFilterItem extends React.Component {
         return FieldFilterItem.renderInputForSingleTextValue(
             value,
             disabled,
-            (val) => onChange(FieldFilterItem.itemChangeValue(item, val))
+            (val) => onChange(FieldFilterItem.itemChangeValue(item, val)),
+            validationRegex
         );
     }
 
@@ -367,7 +376,9 @@ class FieldFilterItem extends React.Component {
             /** @type {boolean} */
             disabled,
             /** @type {function({field: string, operator: string, value: *})} */
-            onChange
+            onChange,
+            /** @type {string} */
+            validationRegex
         } = this.props;
 
         /** @type {{value: string, label: string}[]} */
@@ -399,7 +410,7 @@ class FieldFilterItem extends React.Component {
                     (operatorType) => onChange(FieldFilterItem.itemChangeOperatorType(item, operatorType))
                 )}
                 <div className="rule-value-container">
-                    {FieldFilterItem.renderItem(item, valueType, disabled, onChange)}
+                    {FieldFilterItem.renderItem(item, valueType, disabled, onChange, validationRegex)}
                 </div>
             </div>
         )

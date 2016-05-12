@@ -50,6 +50,23 @@ export default class FieldUtils {
         return jsType;
     }
     /**
+     * Get validation regex for the field value or undefined
+     * @param {{id: string, label: string, type: string}} field
+     * @returns {string|undefined}
+     */
+    static getFieldInputValidationRegex(field){
+        const fieldType = field.type;
+        const jsType = {
+            'char': "^((?!,).)*$",
+            'string': "^((?!,).)*$",
+            'integer': null,
+            'float': null,
+            'double': null,
+            'boolean': null
+        }[fieldType];
+        return jsType;
+    }
+    /**
      * Return field for id
      * @param {{id: string, label: string, type: string}[]} fields
      * @param {string} id

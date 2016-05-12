@@ -46,9 +46,11 @@ export default class Input extends Component {
     }
 
     onInputChanged(evt) {
-        const {onChanging} = this.props;
+        const {onChanging, validationRegex} = this.props;
         const value = evt.target.value;
-
+        if (validationRegex && !new RegExp(validationRegex).test(value)){
+            return;
+        }
         this.setState({value});
 
         if (onChanging) {

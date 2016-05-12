@@ -20,13 +20,15 @@ export default class FilterBuilderFooter extends Component {
 
     render() {
         const {auth} = this.props;
-        const filter = this.props.filterBuilder.editingFilter.filter;
+        const {filters} = this.props.userData;
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
+        const filterNameExists = _.some(filters, filter => filter.name.trim() == editingFilter.name.trim() && filter.id != editingFilter.id);
         const disabledClass = classNames({
-            'disabled': (filter.type === 'advanced' && auth.isDemo || !filter.name.trim()) ? 'disabled' : ''
+            'disabled': (editingFilter.type === 'advanced' && auth.isDemo || !editingFilter.name.trim() || filterNameExists) ? 'disabled' : ''
         });
-        const title = (filter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
-        const isFilterEditable = (filter.type === 'user');
+        const title = (editingFilter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
+        const isFilterEditable = (editingFilter.type === 'user');
         const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
 
         return (
