@@ -48,8 +48,8 @@ class FiltersModel extends SecureModelBase {
             async.waterfall([
                 (callback) => this._findFilters(trx, filterIds, userId, false, false, callback),
                 (filters, callback) => callback(null, _.first(filters))
-            ], (error, filters) => {
-                callback(error, filters);
+            ], (error, filter) => {
+                callback(error, filter);
             });
         }, callback);
     }
