@@ -3,55 +3,36 @@ import { ProgressBar } from 'react-bootstrap';
 
 export default class FileUploadProgressBar extends Component {
 
-  render() {
+    renderBar(title, now) {
+        return (
+            <div>
+                <div className="text-center"><strong>{title}</strong></div>
+                <ProgressBar now={now} label="%(percent)s%" bsStyle='success' />
+            </div>
+        );
+    }
 
-    const { progressStatusFromAS, progressValueFromAS } = this.props.fileUpload
+    renderProgress(stage, stagesCount, progress) {
+        return this.renderBar('Files processing', 100 * ((stage + progress / 100) / stagesCount));
+    }
 
-    return (
+    render() {
 
-      <div>
-        { progressStatusFromAS === 'ajax' &&
-          <div>
-            <div className="text-center"><strong>Ajax Uploading</strong></div>
-            <ProgressBar now={progressValueFromAS} label="%(percent)s%" bsStyle="success" />
-            <div className="text-center"><strong>AS Converting</strong></div>
-            <ProgressBar now={0} label="%(percent)s%" bsStyle="warning" />
-            <div className="text-center"><strong>AS S3 Uploading</strong></div>
-            <ProgressBar now={0} label="%(percent)s%" bsStyle="info" />
-          </div>
-        }
-        { progressStatusFromAS === 'converting' &&
-          <div>
-            <div className="text-center"><strong>Ajax Uploading</strong></div>
-            <ProgressBar now={100} label="%(percent)s%" bsStyle="success" />
-            <div className="text-center"><strong>AS Converting</strong></div>
-            <ProgressBar now={progressValueFromAS} label="%(percent)s%" bsStyle="warning" />
-            <div className="text-center"><strong>>AS S3 Uploading</strong></div>
-            <ProgressBar now={0} label="%(percent)s%" bsStyle="info" />
-          </div>
-        }
-        { progressStatusFromAS === 's3_uploading' &&
-          <div>
-            <div className="text-center"><strong>Ajax Uploading</strong></div>
-            <ProgressBar now={100} label="%(percent)s%" bsStyle="success" />
-            <div className="text-center"><strong>AS Converting</strong></div>
-            <ProgressBar now={100} label="%(percent)s%" striped bsStyle="warning" />
-            <div className="text-center"><strong>AS S3 Uploading</strong></div>
-            <ProgressBar now={progressValueFromAS} label="%(percent)s%" bsStyle="info" />
-          </div>
-        }
-        { progressStatusFromAS === 'ready' &&
-          <div>
-            <div className="text-center"><strong>Ajax Uploading</strong></div>
-            <ProgressBar now={100} label="%(percent)s%" bsStyle="success" />
-            <div className="text-center"><strong>AS Converting</strong></div>
-            <ProgressBar now={100} label="%(percent)s%" bsStyle="warning" />
-            <div className="text-center"><strong>AS S3 Uploading</strong></div>
-            <ProgressBar now={100} label="%(percent)s%" bsStyle="info" />
-          </div>
-        }
-      </div>
+        const { progressStatusFromAS, progressValueFromAS } = this.props.fileUpload;
 
-    )
-  }
+        const STAGES = {
+            TOTAL: 3,
+            'ajax': 0,
+            'converting': 1,
+            's3_uploading': 2,
+            'ready': 3
+        };
+
+        const currentStage = STAGES[progressStatusFromAS] || null;
+        if (currentStage === null) {
+            return null;
+        }
+        const currentProgress = currentStage < STAGES.TOTAL ? progressValueFromAS : 0;
+        return this.renderProgress(currentStage, STAGES.TOTAL, currentProgress);
+    }
 }
