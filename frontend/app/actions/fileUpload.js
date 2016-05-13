@@ -90,7 +90,7 @@ function receiveFileOperation(json) {
     }
 }
 
-export function uploadFile(files) {
+export function uploadFile() {
     return (dispatch, getState) => {
 
         dispatch(requestFileUpload());
