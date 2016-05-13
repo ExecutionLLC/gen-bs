@@ -71,30 +71,41 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
     return null;
 }
 
-function reduceFBuilderSelectFilter(state, action) {
-    const selectedFilter = _.find(action.filters, {id: action.filterId}) || null;
-    return Object.assign({}, state, {
-        selectedFilter,
-        isReceivedFilters: selectedFilter !== null
-    });
-}
-
-function reduceFBuilderToggleNewEdit(state, action) {
-    const {fields: {totalFieldsList, allowedFieldsList}, makeNew} = action;
+function reduceFBuilderStartEdit(state, action) {
+    const {fields: {totalFieldsList, allowedFieldsList}, filter, makeNew} = action;
     const editingFilter = parseFilterForEditing(
         makeNew,
         makeNew ?
-            Object.assign({}, state.selectedFilter, {
+            Object.assign({}, filter, {
                 type: 'user',
-                name: `Copy of ${state.selectedFilter.name}`
+                name: `Copy of ${filter.name}`
             }) :
-            state.selectedFilter,
+            filter,
         totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
         allowedFieldsList
     );
     return Object.assign({}, state, {
-        editingFilter,
+        editingFilter: editingFilter,
         originalFilter: editingFilter
+    });
+}
+
+function reduceFBuilderSaveEdit(state) {
+    const parsedRules = state.editingFilter.parsedFilter;
+    const rules = filterUtils.getGenomics(parsedRules);
+    return Object.assign({}, state, {
+        editingFilter: Object.assign({}, state.editingFilter, {
+            filter: Object.assign({}, state.editingFilter.filter, {
+                rules
+            })
+        })
+    });
+}
+    
+function reduceFBuilderEndEdit(state) {
+    return Object.assign({} ,state, {
+        editingFilter: null,
+        originalFilter: null
     });
 }
 
@@ -144,24 +155,14 @@ function reduceFBuilderReceiveRules(state, action) {
 
 export default function filterBuilder(state = {
     isReceivedFilters: false,
-    selectedFilter: null,
     isFetching: false,
     rulesRequested: false,
-    editingFilter: {
-        filter: null,
-        parsedFilter: null,
-        isNew: false,
-        fieldDefaultId: ''
-    }
+    /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
+    editingFilter: null,
+    originalFilter: null
 }, action) {
 
     switch (action.type) {
-        case ActionTypes.FBUILDER_SELECT_FILTER:
-            return reduceFBuilderSelectFilter(state, action);
-
-        case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
-            return reduceFBuilderToggleNewEdit(state, action);
-        
         case ActionTypes.FBUILDER_CHANGE_FILTER:
             return reduceFBuilderChangeFilter(state, action);
 
@@ -178,8 +179,7 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_RECEIVE_UPDATE_FILTER:
             return Object.assign({}, state, {
-                isFetching: false,
-                selectedFilter: action.filter
+                isFetching: false
             });
 
         case ActionTypes.FBUILDER_REQUEST_CREATE_FILTER:
@@ -189,9 +189,17 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_RECEIVE_CREATE_FILTER:
             return Object.assign({}, state, {
-                isFetching: false,
-                selectedFilter: action.filter
+                isFetching: false
             });
+
+        case ActionTypes.FBUILDER_START_EDIT:
+            return reduceFBuilderStartEdit(state, action);
+
+        case ActionTypes.FBUILDER_SAVE_EDIT:
+            return reduceFBuilderSaveEdit(state);
+
+        case ActionTypes.FBUILDER_END_EDIT:
+            return reduceFBuilderEndEdit(state);
 
         default:
             return state

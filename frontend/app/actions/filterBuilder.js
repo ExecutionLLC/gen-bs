@@ -10,12 +10,12 @@ import {deleteFilter} from "./userData";
 import {changeFilter} from "./ui";
 import {filterUtils} from "../utils/filterUtils";
 
-export const FBUILDER_SELECT_FILTER = 'FBUILDER_SELECT_FILTER';
-
 export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR';
 export const FBUILDER_CHANGE_FILTER = 'FBUILDER_CHANGE_FILTER';
 
-export const FBUILDER_TOGGLE_NEW_EDIT = 'FBUILDER_TOGGLE_NEW_EDIT';
+export const FBUILDER_START_EDIT = 'FBUILDER_START_EDIT';
+export const FBUILDER_SAVE_EDIT = 'FBUILDER_SAVE_EDIT';
+export const FBUILDER_END_EDIT = 'FBUILDER_END_EDIT';
 
 export const FBUILDER_REQUEST_UPDATE_FILTER = 'FBUILDER_REQUEST_UPDATE_FILTER';
 export const FBUILDER_RECEIVE_UPDATE_FILTER = 'FBUILDER_RECEIVE_UPDATE_FILTER';
@@ -45,20 +45,25 @@ const filtersClient = apiFacade.filtersClient;
  * Action Creators
  */
 
-export function filterBuilderToggleNewEdit(makeNew, fields) {
+export function filterBuilderStartEdit(makeNew, filter, fields) {
     return {
-        type: FBUILDER_TOGGLE_NEW_EDIT,
+        type: FBUILDER_START_EDIT,
         makeNew,
+        filter,
         fields
-    }
+    };
 }
 
-export function filterBuilderSelectFilter(filters, filterId) {
+export function filterBuilderSaveEdit() {
     return {
-        type: FBUILDER_SELECT_FILTER,
-        filters,
-        filterId
-    }
+        type: FBUILDER_SAVE_EDIT
+    };
+}
+
+export function filterBuilderEndEdit() {
+    return {
+        type: FBUILDER_END_EDIT
+    };
 }
 
 export function filterBuilderChangeAttr(attr) {
@@ -98,7 +103,8 @@ export function filterBuilderCreateFilter() {
                const result = response.body;
                dispatch(filterBuilderReceiveUpdateFilter(result));
                dispatch(closeModal('filters'));
-               dispatch(fetchFilters(result.id));
+               dispatch(filterBuilderEndEdit());
+               dispatch(fetchFilters(result.id)); // calls changeFilter
            }
         });
     }
@@ -121,15 +127,15 @@ export function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
         const state = getState();
-        const selectedFilter = state.filterBuilder.selectedFilter;
         const editingFilter = state.filterBuilder.editingFilter;
         const originalFilter = state.filterBuilder.originalFilter;
-        const isNotEdited = _.includes(['advanced', 'standard'], selectedFilter.type)
+        const isNotEdited = _.includes(['advanced', 'standard'], editingFilter.filter.type)
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
         if (state.auth.isDemo || isNotEdited) {
             dispatch(changeFilter(editingFilter.filter.id));
             dispatch(closeModal('filters'));
+            dispatch(filterBuilderEndEdit());
         } else {
             const sessionId = state.auth.sessionId;
             const resultEditingFilter = editingFilter.filter;
@@ -143,7 +149,8 @@ export function filterBuilderUpdateFilter() {
                     const result = response.body;
                     dispatch(filterBuilderReceiveUpdateFilter(result));
                     dispatch(closeModal('filters'));
-                    dispatch(fetchFilters(result.id))
+                    dispatch(filterBuilderEndEdit());
+                    dispatch(fetchFilters(result.id)); // calls changeFilter
                 }
             });
         }
@@ -152,8 +159,8 @@ export function filterBuilderUpdateFilter() {
 
 export function filterBuilderSaveAndSelectRules() {
     return (dispatch, getState) => {
-        const parsedRules = getState().filterBuilder.editingFilter.parsedFilter;
-        const rules = filterUtils.getGenomics(parsedRules);
+        dispatch(filterBuilderSaveEdit());
+        const rules = getState().filterBuilder.editingFilter.filter.rules;
         dispatch(filterBuilderRules(rules));
         if (!getState().filterBuilder.editingFilter.isNew) {
             dispatch(filterBuilderUpdateFilter());
@@ -197,8 +204,9 @@ export function filterBuilderDeleteFilter(filterId) {
                 const state = getState();
                 const selectedFilterId = state.ui.selectedFilter.id;
                 const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
+                const newFilter = state.userData.filters.find( (filter) => filter.id === newFilterId); // replace by filtersList
                 dispatch(changeFilter(newFilterId));
-                dispatch(filterBuilderToggleNewEdit(false, fields));
+                dispatch(filterBuilderStartEdit(false, newFilter, fields));
             }
         });
     }

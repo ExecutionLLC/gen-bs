@@ -7,8 +7,19 @@ import {filterBuilderSaveAndSelectRules} from '../../../actions/filterBuilder';
 
 export default class FilterBuilderFooter extends Component {
 
+    onCancelClick() {
+        this.props.closeModal();
+    }
+
+    onConfirmClick() {
+        const filter = this.props.filterBuilder.editingFilter.filter;
+        if (filter.name.trim()) {
+            this.props.dispatch(filterBuilderSaveAndSelectRules())
+        }
+    }
+
     render() {
-        const {dispatch, auth, closeModal} = this.props;
+        const {auth} = this.props;
         const {filters} = this.props.userData;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
@@ -23,7 +34,7 @@ export default class FilterBuilderFooter extends Component {
         return (
             <Modal.Footer>
                 <button
-                    onClick={ () => { closeModal('filters')} }
+                    onClick={() => this.onCancelClick()}
                     type="button"
                     className="btn btn-default"
                     data-dismiss="modal"
@@ -34,11 +45,7 @@ export default class FilterBuilderFooter extends Component {
                 <button
                     disabled={disabledClass}
                     title={title}
-                    onClick={ () => {
-                        if (editingFilter.name.trim()) {
-                            dispatch(filterBuilderSaveAndSelectRules())
-                        }
-                    }}
+                    onClick={() => this.onConfirmClick()}
                     type="button"
                     className="btn btn-primary"
                 >

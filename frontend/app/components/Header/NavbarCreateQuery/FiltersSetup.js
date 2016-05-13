@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Select2 from 'react-select2-wrapper';
-import {filterBuilderToggleNewEdit} from '../../../actions/filterBuilder'
+import {filterBuilderStartEdit} from '../../../actions/filterBuilder'
 
 
 export default class FiltersSetup extends Component {
@@ -9,6 +9,11 @@ export default class FiltersSetup extends Component {
         super(props)
     }
 
+    onFiltersClick() {
+        this.props.dispatch(filterBuilderStartEdit(false, this.props.ui.selectedFilter, this.props.fields)); // replace by filedsList
+        this.props.openModal('filters');
+    }
+    
     render() {
         return (
 
@@ -21,10 +26,7 @@ export default class FiltersSetup extends Component {
                         type="button"
                         data-toggle="modal"
                         data-target="#filter"
-                        onClick={() => {
-                            this.props.dispatch(filterBuilderToggleNewEdit(false, this.props.fields));
-                            this.props.openModal('filters');
-                        }}
+                        onClick={() => this.onFiltersClick()}
                     >
                         <span data-localize="filters.setup.title">Filters</span>
                     </button>

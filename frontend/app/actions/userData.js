@@ -160,7 +160,7 @@ function receiveFilters(json) {
     }
 }
 
-export function fetchFilters() {
+export function fetchFilters(filterIdToSelect) {
 
     return (dispatch, getState) => {
         dispatch(requestFilters());
@@ -174,7 +174,7 @@ export function fetchFilters() {
             } else {
                 const result = response.body;
                 const filter = result[0] || null;
-                const filterId = getState().filterBuilder.selectedFilter.id || filter.id;
+                const filterId = filterIdToSelect || filter.id; // rid of whole fetchFilters
 
                 dispatch(receiveFilters(result));
                 dispatch(changeFilter(filterId));

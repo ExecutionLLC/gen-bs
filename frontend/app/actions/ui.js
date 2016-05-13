@@ -1,7 +1,6 @@
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
 import {viewBuilderSelectView} from './viewBuilder';
-import {filterBuilderSelectFilter} from './filterBuilder';
 import {detachHistory} from "./queryHistory";
 import {setViewVariantsSort} from "./variantsTable";
 import {handleError} from './errorHandler'
@@ -68,7 +67,6 @@ export function changeFilter(filterId) {
     return (dispatch, getState) => {
         const {userData: {filters}} = getState();
         dispatch(changeHeaderFilter(filters, filterId));
-        dispatch(filterBuilderSelectFilter(filters, filterId));
     }
 }
 

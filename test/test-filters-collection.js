@@ -103,7 +103,7 @@ describe('Filters', () => {
     });
 
     describe('failure tests', () => {
-        it('should fail to update non-user filter', (done) => {
+        it('should fail to update or delete non-user filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(filters);
@@ -113,7 +113,12 @@ describe('Filters', () => {
 
                 filtersClient.update(sessionId, nonUserFilter, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
-                    done();
+
+                    filtersClient.remove(sessionId, nonUserFilter.id, (error, response) => {
+                        ClientBase.expectErrorResponse(error, response);
+
+                        done();
+                    });
                 });
             });
         });
@@ -126,30 +131,40 @@ describe('Filters', () => {
                 assert.ok(filters);
                 const filter = filters[0];
                 filter.name = 'Test Filter ' + Uuid.v4();
+                filter.description = Uuid.v4();
 
                 filtersClient.add(sessionId, languId, filter, (error, response) => {
                     assert.ifError(error);
                     assert.equal(response.status, HttpStatus.OK);
                     const addedFilter = response.body;
                     assert.ok(addedFilter);
+                    assert.equal(addedFilter.name, filter.name);
+                    assert.equal(addedFilter.description, filter.description);
 
                     // Delete created filter
                     filtersClient.remove(sessionId, addedFilter.id, (error, response) => {
                         assert.ifError(error);
                         assert.equal(response.status, HttpStatus.OK);
 
-                        filtersClient.get(sessionId, addedFilter.id, (error, response) => {
-                            assert.ifError(error);
-                            assert.equal(response.status, HttpStatus.OK);
+                        // It should not return with all user filters.
+                        filtersClient.getAll(sessionId, (error, response) => {
+                            const filters = ClientBase.readBodyWithCheck(error, response);
+                            assert.ok(!_.some(filters, f => f.id == addedFilter.id));
 
-                            // Trying to update created filter.
-                            const filterToUpdate = _.cloneDeep(addedFilter);
-                            filterToUpdate.name = 'Test Filter ' + Uuid.v4();
-
-                            filtersClient.update(sessionId, filterToUpdate, (error, response) => {
+                            // It should be possible to retrieve it by id (history support).
+                            filtersClient.get(sessionId, addedFilter.id, (error, response) => {
                                 assert.ifError(error);
-                                assert.equal(response.status, HttpStatus.INTERNAL_SERVER_ERROR);
-                                done();
+                                assert.equal(response.status, HttpStatus.OK);
+
+                                // It should fail to update removed filter.
+                                const filterToUpdate = _.cloneDeep(addedFilter);
+                                filterToUpdate.name = 'Test Filter ' + Uuid.v4();
+
+                                filtersClient.update(sessionId, filterToUpdate, (error, response) => {
+                                    ClientBase.expectErrorResponse(error, response);
+
+                                    done();
+                                });
                             });
                         });
                     });
@@ -183,6 +198,57 @@ describe('Filters', () => {
             filtersClient.get(sessionId, UnknownFilterId, (error, response) => {
                 ClientBase.expectErrorResponse(error, response);
                 done();
+            });
+        });
+
+        it('should not return previous version of the filter when current version is deleted (issue #337)', (done) => {
+            filtersClient.getAll(sessionId, (error, response) => {
+                assert.ifError(error);
+                assert.equal(response.status, HttpStatus.OK);
+                const filters = response.body;
+                assert.ok(filters);
+                const filter = filters[0];
+                filter.name = 'Test Filter ' + Uuid.v4();
+                // Will search the filter by description below.
+                filter.description = Uuid.v4();
+
+                filtersClient.add(sessionId, languId, filter, (error, response) => {
+                    assert.ifError(error);
+                    assert.equal(response.status, HttpStatus.OK);
+                    const addedFilter = response.body;
+                    assert.ok(addedFilter);
+                    assert.equal(addedFilter.name, filter.name);
+                    assert.equal(addedFilter.description, filter.description);
+
+                    // Now it should return.
+                    filtersClient.getAll(sessionId, (error, response) => {
+                        const filters = ClientBase.readBodyWithCheck(error, response);
+                        assert.ok(_.some(filters, f => f.id === addedFilter.id));
+                        assert.ok(_.some(filters, f => f.description === filter.description));
+
+                        const filterToUpdate = Object.assign({}, addedFilter, {
+                            name: Uuid.v4()
+                        });
+
+                        // Make new version.
+                        filtersClient.update(sessionId, filterToUpdate, (error, response) => {
+                            const updatedFilter = ClientBase.readBodyWithCheck(error, response);
+
+                            // Delete the last version.
+                            filtersClient.remove(sessionId, updatedFilter.id, (error, response) => {
+                                ClientBase.readBodyWithCheck(error, response);
+
+                                filtersClient.getAll(sessionId, (error, response) => {
+                                    // Now filters list should not return the filter.
+                                    const filters = ClientBase.readBodyWithCheck(error, response);
+                                    assert.ok(!_.some(filters, f => f.description === filter.description));
+
+                                    done();
+                                });
+                            })
+                        })
+                    });
+                });
             });
         });
     });
