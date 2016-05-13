@@ -10,8 +10,6 @@ const UploadOperation = require('./UploadOperation');
 const SystemOperation = require('./SystemOperation');
 const KeepAliveOperation = require('./KeepAliveOperation');
 
-const SYSTEM_SESSION = '9c952e80-c2db-4a09-a0b0-6ea667d254a1';
-
 const OPERATION_TYPES = {
     SYSTEM: 'system',
     SEARCH: 'search',
@@ -25,33 +23,38 @@ class OperationsService extends ServiceBase {
         this.operations = {};
     }
 
-    systemSessionId() {
-        return SYSTEM_SESSION;
-    }
-
     operationTypes() {
         return OperationBase.operationTypes();
     }
 
     addSearchOperation(sessionId, method, callback) {
         const operation = new SearchOperation(sessionId, method);
-        this._addOperation(sessionId, operation, callback);
+        this._addOperation(operation, callback);
     }
 
     addUploadOperation(method, userId, callback) {
-        const systemSessionId = this.systemSessionId();
-        const operation = new UploadOperation(systemSessionId, method, userId);
-        this._addOperation(systemSessionId, operation, callback);
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => {
+                const operation = new UploadOperation(sessionId, method, userId);
+                this._addOperation(operation, callback);
+            }
+        ], callback);
     }
 
-    addSystemOperation(sessionId, method, callback) {
-        const operation = new SystemOperation(sessionId, method);
-        this._addOperation(sessionId, operation, callback);
+    addSystemOperation(method, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => {
+                const operation = new SystemOperation(sessionId, method);
+                this._addOperation(operation, callback);
+            }
+        ], callback);
     }
 
     addKeepAliveOperation(sessionId, sessionIdToCheck, callback) {
         const operation = new KeepAliveOperation(sessionId, sessionIdToCheck);
-        this._addOperation(sessionId, operation, callback);
+        this._addOperation(operation, callback);
     }
 
     /**
@@ -154,7 +157,8 @@ class OperationsService extends ServiceBase {
         }
     }
 
-    _addOperation(sessionId, operation, callback) {
+    _addOperation(operation, callback) {
+        const sessionId = operation.getSessionId();
         this.services.logger.info('Starting operation ' + operation.getId() + ' of type ' + operation.getType());
         const sessionOperations = this.operations[sessionId] || (this.operations[sessionId] = {});
         const operationId = operation.getId();

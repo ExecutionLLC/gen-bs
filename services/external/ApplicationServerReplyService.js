@@ -71,7 +71,7 @@ class ApplicationServerReplyService extends ServiceBase {
                     );
                 }
             ], (error, operation, operationResult, sessionIds) => {
-                if (!error && !operationResult) {
+                if (!operation) {
                     this.logger.error('No operation is found. Error: ' + error);
                 } else if (operationResult) {
                     // Fire only progress events here, for which operationResult != null.
@@ -80,7 +80,7 @@ class ApplicationServerReplyService extends ServiceBase {
                     const eventData = {
                         operationId: operation.getId(),
                         sessionIds,
-                        operationResult
+                        result: operationResult
                     };
                     this.eventEmitter.emit(operationResult.eventName, eventData);
                     callback(error, operationResult);
@@ -141,7 +141,7 @@ class ApplicationServerReplyService extends ServiceBase {
     _findSessionIdsForOperation(operation, callback) {
         const operationTypes = this.services.operations.operationTypes();
         if (operation.getType() !== operationTypes.UPLOAD) {
-            callback(null, operation.getSessionId());
+            callback(null, [operation.getSessionId()]);
         } else {
             // Upload operations belong to the system session and contain user id.
             // Here we need to find all active sessions for the specified user.

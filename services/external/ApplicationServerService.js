@@ -48,8 +48,7 @@ class ApplicationServerService extends ServiceBase {
     requestSourcesList(callback) {
         const method = METHODS.getSourcesList;
         async.waterfall([
-            (callback) => this.services.sessions.findSystemSessionId(callback),
-            (sessionId, callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (callback) => this.services.operations.addSystemOperation(method, callback),
             (operation, callback) => this._rpcSend(operation.getId(), method, null, callback)
         ], callback);
     }
@@ -57,8 +56,7 @@ class ApplicationServerService extends ServiceBase {
     requestSourceMetadata(sourceNames, callback) {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
-            (callback) => this.services.sessions.findSystemSessionId(callback),
-            (sessionId, callback) => this.services.operations.addSystemOperation(sessionId, method, callback),
+            (callback) => this.services.operations.addSystemOperation(method, callback),
             (operation, callback) => this._rpcSend(operation.getId(), method, _.map(sourceNames, (sourceName) => {
                 return sourceName + '.h5'
             }), callback)
@@ -157,7 +155,9 @@ class ApplicationServerService extends ServiceBase {
      * */
     requestSampleProcessing(sessionId, operationId, callback) {
         async.waterfall([
-            (callback) => this.services.operations.find(sessionId, operationId, callback),
+            // Upload operations lay in the system session.
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (systemSessionId, callback) => this.services.operations.find(systemSessionId, operationId, callback),
             (operation, callback) => {
                 const method = METHODS.processSample;
                 this._rpcSend(operationId, method, null, callback);
