@@ -29,6 +29,20 @@ class UploadOperation extends SystemOperation {
         this.sampleId = sampleId;
     }
 
+    /**
+     * @param {object}message
+     * */
+    setLastAppServerMessage(message) {
+        this.lastAppServerMessage = message;
+    }
+    
+    /**
+     * @returns {object}message
+     * */
+    getLastAppServerMessage() {
+        return this.lastAppServerMessage;
+    }
+
     getSampleFileName() {
         return this.sampleFileName;
     }

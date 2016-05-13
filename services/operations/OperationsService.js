@@ -103,6 +103,24 @@ class OperationsService extends ServiceBase {
         }
     }
 
+    /**
+     * Finds active system operations started by the specified user.
+     * Currently there can only be upload operations.
+     *
+     * @param {string}userId
+     * @param {function(Error, Array<UploadOperation>)}callback
+     * */
+    findActiveOperations(userId, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            // Find upload operations of all users.
+            (sessionId, callback) => this.findAllByType(sessionId, OPERATION_TYPES.UPLOAD, callback),
+            (operations, callback) => callback(null,
+                _.filter(operations, operation => operation.getUserId() === userId)
+            )
+        ], callback);
+    }
+
     findAll(sessionId, callback) {
         const sessionOperations = this.operations[sessionId];
         if (sessionOperations) {

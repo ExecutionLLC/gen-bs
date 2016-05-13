@@ -116,7 +116,9 @@ class ApplicationServerReplyService extends ServiceBase {
                 break;
 
             case METHODS.uploadSample:
-                this._processUploadSampleResult(operation, rpcMessage, callback);
+                setTimeout(() => {
+                    this._processUploadSampleResult(operation, rpcMessage, callback);
+                }, 3);
                 break;
 
             case METHODS.getSourcesList:
@@ -253,12 +255,14 @@ class ApplicationServerReplyService extends ServiceBase {
 
             // If not ready, just send the progress up
             if (status !== SESSION_STATUS.READY) {
-                callback(null, {
+                const message = {
                     status,
                     progress,
-                    eventName: EVENTS.onOperationResultReceived,
-                    shouldCompleteOperation: false
-                });
+                    shouldCompleteOperation: false,
+                    eventName: EVENTS.onOperationResultReceived
+                };
+                operation.setLastAppServerMessage(message);
+                callback(null, message);
             } else {
                 // Sample is fully processed and the fields metadata is available.
                 // Now we need to:
