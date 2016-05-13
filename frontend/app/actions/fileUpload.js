@@ -154,7 +154,7 @@ export function changeFileUploadProgress(progressValueFromAS, progressStatusFrom
         if (progressStatusFromAS === 'ready') {
             dispatch(receiveFileUpload());
             dispatch(fetchTotalFields());
-            dispatch(closeModal('upload'));
+            //dispatch(closeModal('upload'));
             dispatch(fetchSamples());
         }
     }
