@@ -3,12 +3,12 @@
 const _ = require('lodash');
 const async = require('async');
 
-const ServiceBase = require('../ServiceBase');
-const RPCProxy = require('../../utils/RPCProxy');
+const ServiceBase = require('../../ServiceBase');
+const RPCProxy = require('../../../utils/RPCProxy');
 
-const AppServerViewUtils = require('../../utils/AppServerViewUtils');
-const AppServerFilterUtils = require('../../utils/AppServerFilterUtils');
-const AppServerUploadUtils = require('../../utils/AppServerUploadUtils');
+const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
+const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
+const AppServerUploadUtils = require('../../../utils/AppServerUploadUtils');
 
 const METHODS = require('./ApplicationServerMethods');
 

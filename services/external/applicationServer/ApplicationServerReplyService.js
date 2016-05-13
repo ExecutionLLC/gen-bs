@@ -3,8 +3,8 @@
 const async = require('async');
 const _ = require('lodash');
 
-const ServiceBase = require('../ServiceBase');
-const EventProxy = require('../../utils/EventProxy');
+const ServiceBase = require('../../ServiceBase');
+const EventProxy = require('../../../utils/EventProxy');
 const METHODS = require('./ApplicationServerMethods');
 
 const SESSION_STATUS = {

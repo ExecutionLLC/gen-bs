@@ -1,7 +1,7 @@
 'use strict';
 
 const SystemOperation = require('./SystemOperation');
-const ApplicationServerMethods = require('../external/ApplicationServerMethods');
+const ApplicationServerMethods = require('../external/applicationServer/ApplicationServerMethods');
 const OperationBase = require('./OperationBase');
 
 class KeepAliveOperation extends SystemOperation {
