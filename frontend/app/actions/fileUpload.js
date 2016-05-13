@@ -7,7 +7,7 @@ import {fetchTotalFields} from "./fields";
 /*
  * action types
  */
-export const CHANGE_FILE_FOR_UPLOAD = 'CHANGE_FILE_FOR_UPLOAD';
+export const ADD_GZIPPED_FILES_FOR_UPLOAD = 'ADD_GZIPPED_FILES_FOR_UPLOAD';
 export const REQUEST_FILE_UPLOAD = 'REQUEST_FILE_UPLOAD';
 export const RECEIVE_FILE_UPLOAD = 'RECEIVE_FILE_UPLOAD';
 export const RECEIVE_FILE_OPERATION = 'RECEIVE_FILE_OPERATION';
@@ -49,12 +49,12 @@ export function addFilesForUpload(files) {
     return (dispatch, getState) => {
         dispatch(clearUploadState());
         if (theFile.type === 'application/gzip' || theFile.type === 'application/x-gzip' || theFile.name.split('.').pop() === 'gz') {
-            dispatch(changeFileForUploadAfterGzip(files))
+            dispatch(addGZippedFilesForUpload(files))
         } else if (theFile.type === 'text/vcard' || theFile.type === 'text/directory' || theFile.name.split('.').pop() === 'vcf') {
             console.log('Not gzipped vcf');
             dispatch(requestGzip());
             gzip(theFile).then(file => {
-                dispatch(changeFileForUploadAfterGzip([file]));
+                dispatch(addGZippedFilesForUpload([file]));
                 dispatch(receiveGzip())
             })
         } else {
@@ -64,9 +64,9 @@ export function addFilesForUpload(files) {
     }
 }
 
-function changeFileForUploadAfterGzip(files) {
+function addGZippedFilesForUpload(files) {
     return {
-        type: CHANGE_FILE_FOR_UPLOAD,
+        type: ADD_GZIPPED_FILES_FOR_UPLOAD,
         files
     }
 }

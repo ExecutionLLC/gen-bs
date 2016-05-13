@@ -37,7 +37,7 @@ export default function fileUpload(state = initialState, action) {
                 error: action.msg
             });
         }
-        case ActionTypes.CHANGE_FILE_FOR_UPLOAD:
+        case ActionTypes.ADD_GZIPPED_FILES_FOR_UPLOAD:
         {
             return Object.assign({}, state, {
                 files: action.files,
