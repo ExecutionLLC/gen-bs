@@ -49,7 +49,8 @@ function createFileProcess(file) {
         isFetching: false,
         file: file,
         error: null,
-        isArchiving: false
+        isArchiving: false,
+        isUploaded: false
     };
 }
 
