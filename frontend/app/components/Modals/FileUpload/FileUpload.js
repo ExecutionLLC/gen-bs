@@ -66,6 +66,7 @@ export default class FileUpload extends Component {
                     type="file"
                     accept=".vcf,.gz"
                     name="files[]"
+                    multiple="multiple"
                 />
                 <i className="md-i">cloud_upload</i>
                 <span>Click here to upload new samples</span>
