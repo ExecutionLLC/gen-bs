@@ -44,7 +44,7 @@ function receiveGzip() {
         type: RECEIVE_GZIP
     }
 }
-export function changeFileForUpload(files) {
+export function addFilesForUpload(files) {
     const theFile = files[0];
     return (dispatch, getState) => {
         dispatch(clearUploadState());

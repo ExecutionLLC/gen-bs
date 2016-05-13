@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import FileUploadProgressBar from './FileUploadProgressBar';
 
-import {clearUploadState, changeFileForUpload} from '../../../actions/fileUpload';
+import {clearUploadState, addFilesForUpload} from '../../../actions/fileUpload';
 
 
 export default class FileUpload extends Component {
@@ -95,7 +95,7 @@ export default class FileUpload extends Component {
 
     onUploadChanged(e) {
         const {dispatch} = this.props;
-        dispatch(changeFileForUpload(e.target.files));
+        dispatch(addFilesForUpload(e.target.files));
     }
 
     onUploadClick() {
