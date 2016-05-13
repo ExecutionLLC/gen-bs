@@ -114,7 +114,7 @@ export default function fileUpload(state = initialState, action) {
         }
         case ActionTypes.FILE_UPLOAD_ERROR:
         {
-            if (action.index != null) {
+            if (action.index == null) {
                 return Object.assign({}, state, {
                     files: [],
                     error: action.msg
