@@ -41,6 +41,9 @@ export default class FileUpload extends Component {
                             progressValueFromAS={this.props.fileUpload.progressValueFromAS}
                         />
                         }
+
+                        {this.props.fileUpload.filesProcesses.map((fp, index) => this.renderMultiFile(fp, index))}
+
                     </div>
                 </div>
             );
@@ -53,6 +56,35 @@ export default class FileUpload extends Component {
             files[0] &&
             <div className="text-center">
                 <strong style={{color: '#2363a1'}}>{files[0].name}</strong>
+            </div>
+        );
+    }
+
+    renderMultiFile(fileProcess, index) {
+        return (
+            <div key={index}>
+                {fileProcess.error && this.renderUploadError(fileProcess.error)}
+                {this.renderFileInfo(fileProcess.file)}
+                {fileProcess.isArchiving &&
+                <div className="text-center">
+                    <strong style={{color: '#2363a1'}}>Archiving...</strong>
+                    <i className="fa fa-spinner fa-spin"/>
+                </div>
+                }
+                {!fileProcess.error &&
+                <FileUploadProgressBar
+                    progressStatusFromAS={fileProcess.progressStatusFromAS}
+                    progressValueFromAS={fileProcess.progressValueFromAS}
+                />
+                }
+            </div>
+        );
+    }
+
+    renderFileInfo(file) {
+        return (
+            <div className="text-center">
+                <strong style={{color: '#2363a1'}}>{file.name}</strong>
             </div>
         );
     }
