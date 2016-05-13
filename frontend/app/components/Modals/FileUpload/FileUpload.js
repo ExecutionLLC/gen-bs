@@ -36,7 +36,10 @@ export default class FileUpload extends Component {
                         </div>
                         }
                         { !error &&
-                        <FileUploadProgressBar {...this.props} />
+                        <FileUploadProgressBar
+                            progressStatusFromAS={this.props.fileUpload.progressStatusFromAS}
+                            progressValueFromAS={this.props.fileUpload.progressValueFromAS}
+                        />
                         }
                     </div>
                 </div>
