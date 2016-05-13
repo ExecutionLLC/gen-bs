@@ -7,7 +7,8 @@ import {fetchTotalFields} from "./fields";
 /*
  * action types
  */
-export const ADD_GZIPPED_FILES_FOR_UPLOAD = 'ADD_GZIPPED_FILES_FOR_UPLOAD';
+export const ADD_NOGZIPPED_FOR_UPLOAD = 'ADD_NOGZIPPED_FOR_UPLOAD';
+export const ADD_GZIPPED_FILE_FOR_UPLOAD = 'ADD_GZIPPED_FILE_FOR_UPLOAD';
 export const REQUEST_FILE_UPLOAD = 'REQUEST_FILE_UPLOAD';
 export const RECEIVE_FILE_UPLOAD = 'RECEIVE_FILE_UPLOAD';
 export const RECEIVE_FILE_OPERATION = 'RECEIVE_FILE_OPERATION';
@@ -26,67 +27,83 @@ export function clearUploadState() {
     }
 }
 
-export function fileUploadError(msg) {
+export function fileUploadError(msg, index) {
     return {
         type: FILE_UPLOAD_ERROR,
-        msg
+        msg,
+        index
     }
 }
 
-function requestGzip() {
+function requestGzip(index) {
     return {
-        type: REQUEST_GZIP
+        type: REQUEST_GZIP,
+        index
     }
 }
 
-function receiveGzip() {
+function receiveGzip(index) {
     return {
-        type: RECEIVE_GZIP
+        type: RECEIVE_GZIP,
+        index
     }
 }
+
+function addNoGZippedForUpload(files) {
+    return {
+        type: ADD_NOGZIPPED_FOR_UPLOAD,
+        files
+    };
+}
+
 export function addFilesForUpload(files) {
     const theFile = files[0];
     return (dispatch, getState) => {
         dispatch(clearUploadState());
+        dispatch(addNoGZippedForUpload(files));
         if (theFile.type === 'application/gzip' || theFile.type === 'application/x-gzip' || theFile.name.split('.').pop() === 'gz') {
-            dispatch(addGZippedFilesForUpload(files))
+            dispatch(addGZippedFileForUpload(files, null))
         } else if (theFile.type === 'text/vcard' || theFile.type === 'text/directory' || theFile.name.split('.').pop() === 'vcf') {
             console.log('Not gzipped vcf');
-            dispatch(requestGzip());
+            dispatch(requestGzip(null));
             gzip(theFile).then(file => {
-                dispatch(addGZippedFilesForUpload([file]));
-                dispatch(receiveGzip())
+                dispatch(addGZippedFileForUpload([file], null));
+                dispatch(receiveGzip(null))
             })
         } else {
             console.error('Wrong file type. Type must be vcard or gzip');
-            dispatch(fileUploadError('Unsupported file type: must be Variant Calling Format (VCF) 4.1 or higher or VCF compressed with gzip'))
+            dispatch(fileUploadError('Unsupported file type: must be Variant Calling Format (VCF) 4.1 or higher or VCF compressed with gzip', null))
         }
     }
 }
 
-function addGZippedFilesForUpload(files) {
+function addGZippedFileForUpload(files, index) {
     return {
-        type: ADD_GZIPPED_FILES_FOR_UPLOAD,
-        files
+        type: ADD_GZIPPED_FILE_FOR_UPLOAD,
+        files,
+        index
     }
 }
 
-function requestFileUpload() {
+function requestFileUpload(index) {
     return {
-        type: REQUEST_FILE_UPLOAD
+        type: REQUEST_FILE_UPLOAD,
+        index
     }
 }
 
-function receiveFileUpload() {
+function receiveFileUpload(index) {
     return {
-        type: RECEIVE_FILE_UPLOAD
+        type: RECEIVE_FILE_UPLOAD,
+        index
     }
 }
 
-function receiveFileOperation(json) {
+function receiveFileOperation(json, index) {
     return {
         type: RECEIVE_FILE_OPERATION,
-        operationId: json.operationId
+        operationId: json.operationId,
+        index
     }
 }
 
@@ -94,7 +111,7 @@ export function uploadFile() {
     return (dispatch, getState) => {
 
         dispatch(requestFileUpload());
-        dispatch(changeFileUploadProgress(0, 'ajax'));
+        dispatch(changeFileUploadProgress(0, 'ajax', null));
 
         const formData = new FormData();
         formData.append('sample', getState().fileUpload.files[0]);
@@ -113,7 +130,7 @@ export function uploadFile() {
                         var percentage = Math.floor((progress.total / progress.total) * 100);
                         // log upload progress to console
                         console.log('progress', percentage);
-                        dispatch(changeFileUploadProgress(percentage, 'ajax'));
+                        dispatch(changeFileUploadProgress(percentage, 'ajax', null));
                         if (percentage === 100) {
                             console.log('DONE!');
                         }
@@ -121,7 +138,7 @@ export function uploadFile() {
                 }
             })
             .done(json => {
-                dispatch(receiveFileOperation(json));
+                dispatch(receiveFileOperation(json, null));
             })
             .fail(err => {
                 console.error('Upload FAILED: ', err.responseText);
@@ -131,9 +148,9 @@ export function uploadFile() {
 }
 
 
-export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS) {
+export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS, index) {
     return (dispatch, getState) => {
-        dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS));
+        dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, index));
         if (progressStatusFromAS === 'ready') {
             dispatch(receiveFileUpload());
             dispatch(fetchTotalFields());
@@ -143,7 +160,7 @@ export function changeFileUploadProgress(progressValueFromAS, progressStatusFrom
     }
 }
 
-function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS) {
+function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, index) {
     return {
         type: FILE_UPLOAD_CHANGE_PROGRESS,
         progressValueFromAS,

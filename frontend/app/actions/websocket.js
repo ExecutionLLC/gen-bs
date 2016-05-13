@@ -1,5 +1,6 @@
 import { receiveSearchedResults } from './variantsTable'
 import { changeFileUploadProgress, fileUploadError } from './fileUpload'
+import * as _ from 'lodash';
 /*
  * action types
  */
@@ -77,8 +78,13 @@ function progressMessageRouter(wsData) {
     return (dispatch, getState) => {
         dispatch(progressMessage(wsData));
 
+        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
+        if (fileIndex >= 0) {
+            dispatch(changeFileUploadProgress(wsData.result.error.message, fileIndex))
+        }
+
         if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
+            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, null));
         }
     }
 }
@@ -100,8 +106,13 @@ function receiveError(err) {
 function asErrorRouter(wsData) {
     return (dispatch, getState) => {
 
+        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
+        if (fileIndex >= 0) {
+            dispatch(fileUploadError(wsData.result.error.message, fileIndex))
+        }
+
         if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(fileUploadError(wsData.result.error.message))
+            dispatch(fileUploadError(wsData.result.error.message, null))
         } else {
             dispatch(asError(wsData.result.error))
         }
