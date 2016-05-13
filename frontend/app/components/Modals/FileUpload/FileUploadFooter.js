@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap';
 import classNames from 'classnames';
 
 import { uploadFile } from '../../../actions/fileUpload';
+import * as _ from 'lodash';
 
 
 export default class FileUploadFooter extends Component {
@@ -10,13 +11,14 @@ export default class FileUploadFooter extends Component {
   render() {
 
     const { dispatch, closeModal } = this.props;
-    const { files, isFetching } = this.props.fileUpload;
+    const {files, isFetching, filesProcesses} = this.props.fileUpload;
 
     var disabledClass = classNames({
       'disabled': (files.length === 0)||(isFetching) ? 'disabled':''
     });
 
-
+    const isDisabledForSingleFile = !files.length || isFetching;
+    const isDisabledForMultiFile = _.some(filesProcesses, {isUploaded: false, isFetching: false});
 
     return (
 
@@ -31,7 +33,7 @@ export default class FileUploadFooter extends Component {
           </button>
 
           <button
-            disabled={disabledClass} 
+            disabled={isDisabledForSingleFile && isDisabledForMultiFile}
             onClick={ () => {
               dispatch(uploadFile())
             }}
