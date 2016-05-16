@@ -78,7 +78,8 @@ function reduceFBuilderStartEdit(state, action) {
         makeNew ?
             Object.assign({}, filter, {
                 type: 'user',
-                name: `Copy of ${filter.name}`
+                name: `Copy of ${filter.name}`,
+                id: null
             }) :
             filter,
         totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
@@ -155,7 +156,6 @@ function reduceFBuilderReceiveRules(state, action) {
 
 export default function filterBuilder(state = {
     isReceivedFilters: false,
-    isFetching: false,
     rulesRequested: false,
     /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
     editingFilter: null,
@@ -171,26 +171,6 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_RECEIVE_RULES:
             return reduceFBuilderReceiveRules(state, action);
-
-        case ActionTypes.FBUILDER_REQUEST_UPDATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-
-        case ActionTypes.FBUILDER_RECEIVE_UPDATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: false
-            });
-
-        case ActionTypes.FBUILDER_REQUEST_CREATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-
-        case ActionTypes.FBUILDER_RECEIVE_CREATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: false
-            });
 
         case ActionTypes.FBUILDER_START_EDIT:
             return reduceFBuilderStartEdit(state, action);

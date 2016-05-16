@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 import {
     getItemLabelByNameAndType,
@@ -16,7 +17,7 @@ import {
 export default class ExistentFilterSelect extends Component {
 
     onSelectChange(filters, filterId, fields) {
-        this.props.dispatch(filterBuilderStartEdit(false, filters.find((filter) => filter.id === filterId) || null, fields));
+        this.props.dispatch(filterBuilderStartEdit(false, _.find(filters, {id: filterId}) || null, fields));
     }
 
     onDuplicateClick(filter, fields) {
@@ -35,7 +36,7 @@ export default class ExistentFilterSelect extends Component {
 
         const {dispatch, auth, fields} = this.props;
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
-        const {filters} = this.props.userData;
+        const {filters} = this.props.filtersList;
         const disabledClass = classNames({
             'disabled': (auth.isDemo) ? 'disabled' : ''
         });

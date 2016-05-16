@@ -20,7 +20,7 @@ export default class FilterBuilderFooter extends Component {
 
     render() {
         const {auth} = this.props;
-        const {filters} = this.props.userData;
+        const {filters} = this.props.filtersList;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
         const isFilterEditable = editingFilter.type === 'user';

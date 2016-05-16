@@ -4,12 +4,12 @@ import {viewBuilderSelectView} from './viewBuilder';
 import {detachHistory} from "./queryHistory";
 import {setViewVariantsSort} from "./variantsTable";
 import {handleError} from './errorHandler'
+import {filtersListSelectFilter} from "./filtersList";
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
 
 export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
-export const CHANGE_HEADER_FILTER = 'CHANGE_HEADER_FILTER';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
@@ -55,21 +55,6 @@ export function changeView(viewId) {
     }
 }
 
-export function changeHeaderFilter(filters, filterId) {
-    return {
-        type: CHANGE_HEADER_FILTER,
-        filters,
-        filterId
-    }
-}
-
-export function changeFilter(filterId) {
-    return (dispatch, getState) => {
-        const {userData: {filters}} = getState();
-        dispatch(changeHeaderFilter(filters, filterId));
-    }
-}
-
 export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
     return (dispatch, getState) => {
         if (!sampleId || !viewId || !filterId) {
@@ -87,11 +72,13 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         const {
             userData: {
                 attachedHistoryData: historyData,
-                views,
-                filters
+                views
             },
             samplesList: {
                 samples
+            },
+            filtersList: {
+                filters
             },
             fields: {
                 sampleFieldsList
