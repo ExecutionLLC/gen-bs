@@ -23,12 +23,16 @@ export default class FilterBuilderFooter extends Component {
         const {filters} = this.props.userData;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
-        const filterNameExists = _.some(filters, filter => filter.name.trim() == editingFilter.name.trim() && filter.id != editingFilter.id);
+        const isFilterEditable = editingFilter.type === 'user';
+        const filterNameExists = isFilterEditable && _(filters)
+            .filter(filter => filter.type === 'user')
+            .some(filter => filter.name.trim() == editingFilter.name.trim()
+                && filter.id != editingFilter.id
+            );
         const disabledClass = classNames({
             'disabled': (editingFilter.type === 'advanced' && auth.isDemo || !editingFilter.name.trim() || filterNameExists) ? 'disabled' : ''
         });
         const title = (editingFilter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
-        const isFilterEditable = (editingFilter.type === 'user');
         const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
 
         return (
