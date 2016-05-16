@@ -184,7 +184,7 @@ function sendFile(file, sessionId, onOperationId, onProgress, onError) {
 export function uploadFile() {
     return (dispatch, getState) => {
 
-        dispatch(requestFileUpload());
+        dispatch(requestFileUpload(null));
         dispatch(changeFileUploadProgress(0, 'ajax', null));
 
         sendFile(
