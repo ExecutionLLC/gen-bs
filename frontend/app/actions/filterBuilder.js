@@ -1,5 +1,5 @@
 import {closeModal} from './modalWindows';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 import {addFilter, deleteFilter, editFilter} from "./userData";
 import {

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Select2 from 'react-select2-wrapper';
 import {filterBuilderStartEdit} from '../../../actions/filterBuilder'
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 
 export default class FiltersSetup extends Component {
