@@ -11,8 +11,10 @@ export default class FiltersSetup extends Component {
     }
 
     onFiltersClick() {
-        this.props.dispatch(filterBuilderStartEdit(false, _.find(this.props.filtersList.filters, {id: this.props.filtersList.selectedFilterId}), this.props.fields));
-        this.props.openModal('filters');
+        const {filtersList, fields, dispatch, openModal} = this.props;
+        const selectedFilter = _.find(filtersList.filters, {id: filtersList.selectedFilterId});
+        dispatch(filterBuilderStartEdit(false, selectedFilter, fields));
+        openModal('filters');
     }
     
     render() {
