@@ -56,24 +56,46 @@ function addNoGZippedForUpload(files) {
     };
 }
 
+/**
+ * Make gzipped file or return the input file if already gzipped
+ * @param {File} file
+ * @param {function()} onGzipStart
+ * @param {function(File)} onGzipped
+ * @param {function(string)} onError
+ */
+function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
+    if (file.type === 'application/gzip' || file.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz') {
+        onGzipped(file);
+    } else if (file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') {
+        onGzipStart();
+        gzip(file).then(gzippedFile => {
+            onGzipped(gzippedFile);
+        })
+    } else {
+        onError('Unsupported file type: must be Variant Calling Format (VCF) 4.1 or higher or VCF compressed with gzip');
+    }
+}
+
 export function addFilesForUpload(files) {
-    const theFile = files[0];
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(clearUploadState());
         dispatch(addNoGZippedForUpload(files));
-        if (theFile.type === 'application/gzip' || theFile.type === 'application/x-gzip' || theFile.name.split('.').pop() === 'gz') {
-            dispatch(addGZippedFileForUpload(files, null))
-        } else if (theFile.type === 'text/vcard' || theFile.type === 'text/directory' || theFile.name.split('.').pop() === 'vcf') {
-            console.log('Not gzipped vcf');
-            dispatch(requestGzip(null));
-            gzip(theFile).then(file => {
-                dispatch(addGZippedFileForUpload([file], null));
-                dispatch(receiveGzip(null))
-            })
-        } else {
-            console.error('Wrong file type. Type must be vcard or gzip');
-            dispatch(fileUploadError('Unsupported file type: must be Variant Calling Format (VCF) 4.1 or higher or VCF compressed with gzip', null))
-        }
+        ensureGzippedFile(
+            files[0],
+            () => {
+                dispatch(requestGzip(null));
+            },
+            (gzippedFile) => {
+                dispatch(addGZippedFileForUpload([gzippedFile], null));
+                if (gzippedFile !== files[0]) {
+                    dispatch(receiveGzip(null));
+                }
+            },
+            (message) => {
+                console.error('Wrong file type. Type must be vcard or gzip');
+                dispatch(fileUploadError(message, null))
+            }
+        );
     }
 }
 
