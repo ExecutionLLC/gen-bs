@@ -16,9 +16,6 @@ export const FBUILDER_START_EDIT = 'FBUILDER_START_EDIT';
 export const FBUILDER_SAVE_EDIT = 'FBUILDER_SAVE_EDIT';
 export const FBUILDER_END_EDIT = 'FBUILDER_END_EDIT';
 
-export const FBUILDER_REQUEST_UPDATE_FILTER = 'FBUILDER_REQUEST_UPDATE_FILTER';
-export const FBUILDER_RECEIVE_UPDATE_FILTER = 'FBUILDER_RECEIVE_UPDATE_FILTER';
-
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
 
@@ -68,19 +65,6 @@ export function filterBuilderCreateFilter() {
     }
 }
 
-function filterBuilderRequestUpdateFilter() {
-    return {
-        type: FBUILDER_REQUEST_UPDATE_FILTER
-    }
-}
-
-function filterBuilderReceiveUpdateFilter(json) {
-    return {
-        type: FBUILDER_RECEIVE_UPDATE_FILTER,
-        filter: json
-    }
-}
-
 export function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
@@ -97,7 +81,6 @@ export function filterBuilderUpdateFilter() {
         } else {
             const sessionId = state.auth.sessionId;
             const resultEditingFilter = editingFilter.filter;
-            dispatch(filterBuilderRequestUpdateFilter());//remove later
             dispatch(filtersListServerUpdateFilter(resultEditingFilter, sessionId))
                 .then( () => {
                     dispatch(closeModal('filters'));
@@ -137,7 +120,6 @@ export function filterBuilderChangeFilter(index, change) {
 
 export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
-        //dispatch(filterBuilderRequestDeleteFilter(filterId));//did not implemented
         const {auth: {sessionId}, fields} = getState();
         dispatch(filtersListServerDeleteFilter(filterId, sessionId))
             .then( (success)=> {
