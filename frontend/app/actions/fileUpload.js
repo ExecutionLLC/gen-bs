@@ -77,8 +77,9 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
 }
 
 export function addFilesForUpload(files) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(clearUploadState());
+        const addedFilesIndex = getState().fileUpload.filesProcesses.length;
         dispatch(addNoGZippedForUpload(files));
         ensureGzippedFile(
             files[0],
@@ -96,6 +97,25 @@ export function addFilesForUpload(files) {
                 dispatch(fileUploadError(message, null))
             }
         );
+        files.forEach((file, fileLocalIndex) => {
+            const fileIndex = addedFilesIndex + fileLocalIndex;
+            ensureGzippedFile(
+                file,
+                () => {
+                    dispatch(requestGzip(fileIndex));
+                },
+                (gzippedFile) => {
+                    dispatch(addGZippedFileForUpload([gzippedFile], fileIndex));
+                    if (gzippedFile !== file) {
+                        dispatch(receiveGzip(fileIndex));
+                    }
+                },
+                (message) => {
+                    console.error('Wrong file type. Type must be vcard or gzip');
+                    dispatch(fileUploadError(message, fileIndex));
+                }
+            );
+        });
     }
 }
 
