@@ -5,7 +5,7 @@ const _ = require('lodash');
 
 const ServiceBase = require('../../ServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
-const METHODS = require('./ApplicationServerMethods');
+const METHODS = require('./AppServerMethods');
 
 const SESSION_STATUS = {
     LOADING: 'loading',

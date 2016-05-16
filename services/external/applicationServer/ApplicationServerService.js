@@ -3,7 +3,7 @@
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
 
-const METHODS = require('./ApplicationServerMethods');
+const METHODS = require('./AppServerMethods');
 
 /**
  * This service sends requests to AS.

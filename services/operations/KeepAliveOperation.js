@@ -1,12 +1,12 @@
 'use strict';
 
 const SystemOperation = require('./SystemOperation');
-const ApplicationServerMethods = require('../external/applicationServer/ApplicationServerMethods');
+const METHODS = require('../external/applicationServer/AppServerMethods');
 const OperationBase = require('./OperationBase');
 
 class KeepAliveOperation extends SystemOperation {
     constructor(sessionId, operationIdToCheck) {
-        super(sessionId, ApplicationServerMethods.keepAlive);
+        super(sessionId, METHODS.keepAlive);
 
         this.operationIdToCheck = operationIdToCheck;
     }

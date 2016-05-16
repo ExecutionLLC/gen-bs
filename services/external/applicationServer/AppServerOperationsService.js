@@ -4,7 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
-const METHODS = require('./ApplicationServerMethods');
+const METHODS = require('./AppServerMethods');
 
 class AppServerOperationsService extends ApplicationServerServiceBase {
     constructor(services) {
