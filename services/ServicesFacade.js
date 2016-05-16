@@ -20,7 +20,7 @@ const UserDataService = require('./UserDataService');
 
 const ApplicationServerService = require('./external/applicationServer/ApplicationServerService');
 const ApplicationServerReplyService = require('./external/applicationServer/ApplicationServerReplyService');
-const ApplicationServerUploadService = require('./external/applicationServer/ApplicationServerUploadService');
+const AppServerUploadService = require('./external/applicationServer/AppServerUploadService');
 const AppServerSourcesService = require('./external/applicationServer/AppServerSourcesService');
 const AppServerOperationsService = require('./external/applicationServer/AppServerOperationsService');
 const AppServerSearchService = require('./external/applicationServer/AppServerSearchService');
@@ -46,7 +46,7 @@ class ServiceFacade {
         this.operations = new OperationService(this, models);
 
         this.applicationServer = new ApplicationServerService(this);
-        this.applicationServerUpload = new ApplicationServerUploadService(this);
+        this.applicationServerUpload = new AppServerUploadService(this);
         this.applicationServerSources = new AppServerSourcesService(this);
         this.applicationServerOperations = new AppServerOperationsService(this);
         this.applicationServerReply = new ApplicationServerReplyService(this);

@@ -7,7 +7,7 @@ const AppServerUploadUtils = require('../../../utils/AppServerUploadUtils');
 
 const METHODS = require('./AppServerMethods');
 
-class ApplicationServerUploadService extends ApplicationServerServiceBase {
+class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
         super(services, models);
     }
@@ -46,4 +46,4 @@ class ApplicationServerUploadService extends ApplicationServerServiceBase {
     }
 }
 
-module.exports = ApplicationServerUploadService;
+module.exports = AppServerUploadService;
