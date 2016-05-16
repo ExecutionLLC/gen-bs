@@ -80,7 +80,7 @@ function progressMessageRouter(wsData) {
 
         const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
         if (fileIndex >= 0) {
-            dispatch(changeFileUploadProgress(wsData.result.error.message, fileIndex))
+            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, fileIndex))
         }
 
         if (getState().fileUpload.operationId === wsData.operationId) {
@@ -137,8 +137,10 @@ function otherMessage(wsData) {
 function receiveMessage(msg) {
     return (dispatch, getState) => {
         const wsData = JSON.parse(JSON.parse(msg));
+        const fileUploadIsSingleFile = getState().fileUpload.operationId !== wsData.operationId;
+        const fileUploadIsMultipleFile = !!_.find(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
         if (wsData.result) {
-            if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
+            if (wsData.result.sampleId && fileUploadIsSingleFile && !fileUploadIsMultipleFile) {
                 dispatch(tableMessage(wsData));
                 if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
                     dispatch(receiveSearchedResults())
