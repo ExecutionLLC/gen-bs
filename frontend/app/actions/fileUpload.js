@@ -69,7 +69,7 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
     } else if (file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') {
         onGzipStart();
         gzip(file).then(gzippedFile => {
-            onGzipped(gzippedFile);
+            setTimeout(() => {onGzipped(gzippedFile)}, 1000); // TODO: remove before merge
         })
     } else {
         onError('Unsupported file type: must be Variant Calling Format (VCF) 4.1 or higher or VCF compressed with gzip');
