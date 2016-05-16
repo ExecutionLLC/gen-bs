@@ -1,4 +1,5 @@
 import {closeModal} from './modalWindows';
+import * as _ from 'lodash';
 
 import {addFilter, deleteFilter, editFilter} from "./userData";
 import {
@@ -144,7 +145,7 @@ export function filterBuilderDeleteFilter(filterId) {
                     const state = getState();
                     const selectedFilterId = state.filtersList.selectedFilterId;
                     const newFilterId = (filterId == selectedFilterId) ? state.filtersList.filters[0].id : selectedFilterId;
-                    const newFilter = state.filtersList.filters.find( (filter) => filter.id === newFilterId);
+                    const newFilter = _.find(state.filtersList.filters, {id: newFilterId});
                     dispatch(filterBuilderStartEdit(false, newFilter, fields));
                 }
             });

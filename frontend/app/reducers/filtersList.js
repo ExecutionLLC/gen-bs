@@ -31,7 +31,10 @@ export default function filtersList(state = {
                 ]
             });
         case ActionTypes.FILTERS_LIST_DELETE_FILTER:
-            const deletedFilterIndex = state.filters.findIndex( (filter) => filter.id === action.filterId );
+            const deletedFilterIndex = _.findIndex(state.filters, {id: action.filterId});
+            if (deletedFilterIndex < 0) {
+                return state;
+            }
             const newFiltersArray = [
                 ...state.filters.slice(0, deletedFilterIndex),
                 ...state.filters.slice(deletedFilterIndex + 1)
@@ -42,7 +45,10 @@ export default function filtersList(state = {
                 selectedFilterId: newSelectedFilterId
             });
         case ActionTypes.FILTERS_LIST_EDIT_FILTER:
-            const editFilterIndex = state.filters.findIndex( (filter) => filter.id === action.filterId );
+            const editFilterIndex = _.findIndex(state.filters, {id: action.filterId});
+            if (editFilterIndex < 0) {
+                return state;
+            }
             const filtersUpdated = [
                 ...state.filters.slice(0, editFilterIndex),
                 action.filter,

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Select2 from 'react-select2-wrapper';
 import {filterBuilderStartEdit} from '../../../actions/filterBuilder'
+import * as _ from 'lodash';
 
 
 export default class FiltersSetup extends Component {
@@ -10,7 +11,7 @@ export default class FiltersSetup extends Component {
     }
 
     onFiltersClick() {
-        this.props.dispatch(filterBuilderStartEdit(false, this.props.filtersList.filters.find( (filter) => filter.id === this.props.filtersList.selectedFilterId), this.props.fields));
+        this.props.dispatch(filterBuilderStartEdit(false, _.find(this.props.filtersList.filters, {id: this.props.filtersList.selectedFilterId}), this.props.fields));
         this.props.openModal('filters');
     }
     
