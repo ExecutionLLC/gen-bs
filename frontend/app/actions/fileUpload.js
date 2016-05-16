@@ -225,7 +225,8 @@ function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS
     return {
         type: FILE_UPLOAD_CHANGE_PROGRESS,
         progressValueFromAS,
-        progressStatusFromAS
+        progressStatusFromAS,
+        index
     }
 }
 

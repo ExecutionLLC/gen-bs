@@ -227,10 +227,23 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS:
         {
-            return Object.assign({}, state, {
-                progressValueFromAS: action.progressValueFromAS,
-                progressStatusFromAS: action.progressStatusFromAS
-            });
+            if (action.index == null) {
+                return Object.assign({}, state, {
+                    progressValueFromAS: action.progressValueFromAS,
+                    progressStatusFromAS: action.progressStatusFromAS
+                });
+            } else {
+                return Object.assign({}, state, {
+                    filesProcesses: editFilesProcesses(
+                        state.filesProcesses,
+                        action.index,
+                        Object.assign({}, state.filesProcesses[action.index], {
+                            progressValueFromAS: action.progressValueFromAS,
+                            progressStatusFromAS: action.progressStatusFromAS
+                        })
+                    )
+                });
+            }
         }
         default:
             return state
