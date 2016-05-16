@@ -23,7 +23,7 @@ export default class FilterBuilderFooter extends Component {
         const {filters} = this.props.userData;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
-        const isFilterEditable = (editingFilter.type === 'user');
+        const isFilterEditable = editingFilter.type === 'user';
         const filterNameExists = isFilterEditable && _(filters)
             .filter(filter => filter.type === 'user')
             .some(filter => filter.name.trim() == editingFilter.name.trim()
