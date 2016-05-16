@@ -204,6 +204,30 @@ export function uploadFile() {
                 console.error('Upload FAILED: ', err.responseText);
             }
         );
+
+        getState().fileUpload.filesProcesses.forEach((fp, index) => {
+            if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving) {
+                return;
+            }
+            dispatch(requestFileUpload(index));
+            dispatch(changeFileUploadProgress(0, 'ajax', index));
+            sendFile(
+                fp.file,
+                getState().auth.sessionId,
+                (operationId) => {
+                    dispatch(receiveFileOperation({operationId: operationId}, index));
+                },
+                (percentage) => {
+                    console.log('progress', percentage);
+                    dispatch(changeFileUploadProgress(percentage, 'ajax', index));
+                },
+                (err) => {
+                    console.error('Upload FAILED: ', err.responseText);
+                    //dispatch(fileUploadError(err.responseText, index))
+                }
+            );
+        });
+        
     }
 
 }
