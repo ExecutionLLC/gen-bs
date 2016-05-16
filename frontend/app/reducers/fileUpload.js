@@ -41,14 +41,26 @@ function editFilesProcessesIfIndex(filesProcesses, index, newFileProcess) {
     }
 }
 
+/**
+ * Full processing progress:
+ * - file added: isArchieved: false, isUploaded: false
+ * - file starts to compress: isArchieved: false, isArchieving: true, isUploaded: false
+ * - file compressed: isArchieved: true, isArchieving: false, isUploaded: false
+ * - file starts to upload: isUploading: true, operationId: !null
+ * - file upload operation id got: isUploading: true, operationId: !null
+ * - file uploadede: isUploaded: true
+ * @param {File} file
+ * @returns {{progressValueFromAS: number, progressStatusFromAS: null, operationId: null, isUploading: boolean, file: *, error: null, isArchieved: boolean, isArchiving: boolean, isUploaded: boolean}}
+ */
 function createFileProcess(file) {
     return {
         progressValueFromAS: 0,
         progressStatusFromAS: null,
         operationId: null,
-        isFetching: false,
+        isUploading: false,
         file: file,
         error: null,
+        isArchieved: false,
         isArchiving: false,
         isUploaded: false
     };
@@ -169,7 +181,7 @@ export default function fileUpload(state = initialState, action) {
                         state.filesProcesses,
                         action.index,
                         Object.assign({}, state.filesProcesses[action.index], {
-                            isFetching: true
+                            isUploading: true
                         })
                     )
                 });
@@ -187,7 +199,7 @@ export default function fileUpload(state = initialState, action) {
                         state.filesProcesses,
                         action.index,
                         Object.assign({}, state.filesProcesses[action.index], {
-                            isFetching: false
+                            isUploading: false
                         })
                     )
                 });
