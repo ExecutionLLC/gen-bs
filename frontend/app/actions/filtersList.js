@@ -38,36 +38,36 @@ export function filtersListEndServerOperation() {
 export function filtersListReceive(filters) {
     return {
         type: FILTERS_LIST_RECEIVE,
-        filters: filters
+        filters
     };
 }
 
 export function filtersListSelectFilter(filterId) {
     return {
         type: FILTERS_LIST_SELECT_FILTER,
-        filterId: filterId
+        filterId
     };
 }
 
 export function filtersListAddFilter(filter) {
     return {
         type: FILTERS_LIST_ADD_FILTER,
-        filter: filter
+        filter
     };
 }
 
 export function filtersListDeleteFilter(filterId) {
     return {
         type: FILTERS_LIST_DELETE_FILTER,
-        filterId: filterId
+        filterId
     };
 }
 
 export function filtersListEditFilter(filterId, filter) {
     return {
         type: FILTERS_LIST_EDIT_FILTER,
-        filterId: filterId,
-        filter: filter
+        filterId,
+        filter
     };
 }
 
