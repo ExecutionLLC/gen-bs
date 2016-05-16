@@ -61,6 +61,8 @@ export function filterBuilderCreateFilter() {
             .then( () => {
                 dispatch(closeModal('filters'));
                 dispatch(filterBuilderEndEdit());
+            })
+            .catch( () => {
             });
     }
 }
@@ -85,6 +87,8 @@ export function filterBuilderUpdateFilter() {
                 .then( () => {
                     dispatch(closeModal('filters'));
                     dispatch(filterBuilderEndEdit());
+                })
+                .catch( () => {
                 });
         }
     }
@@ -122,14 +126,14 @@ export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
         const {auth: {sessionId}, fields} = getState();
         dispatch(filtersListServerDeleteFilter(filterId, sessionId))
-            .then( (success)=> {
-                if (success) {
-                    const state = getState();
-                    const selectedFilterId = state.filtersList.selectedFilterId;
-                    const newFilterId = (filterId == selectedFilterId) ? state.filtersList.filters[0].id : selectedFilterId;
-                    const newFilter = _.find(state.filtersList.filters, {id: newFilterId});
-                    dispatch(filterBuilderStartEdit(false, newFilter, fields));
-                }
+            .then( ()=> {
+                const state = getState();
+                const selectedFilterId = state.filtersList.selectedFilterId;
+                const newFilterId = (filterId == selectedFilterId) ? state.filtersList.filters[0].id : selectedFilterId;
+                const newFilter = _.find(state.filtersList.filters, {id: newFilterId});
+                dispatch(filterBuilderStartEdit(false, newFilter, fields));
+            })
+            .catch( () => {
             });
     }
 }

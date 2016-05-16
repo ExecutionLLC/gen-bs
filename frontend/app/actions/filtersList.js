@@ -74,21 +74,22 @@ export function filtersListEditFilter(filterId, filter) {
 export function filtersListServerCreateFilter(filter, sessionId, languageId) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
-        return new Promise( (resolve) => {
+        return new Promise( (resolve, reject) => {
             filtersClient.add(sessionId, languageId, filter, (error, response) => {
                 dispatch(filtersListEndServerOperation());
-                let newFilter = null;
                 if (error) {
                     dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
+                    reject();
                 } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
+                    reject();
                 } else {
-                    newFilter = response.body;
+                    const newFilter = response.body;
                     const filterId = newFilter.id;
                     dispatch(filtersListAddFilter(newFilter));
                     dispatch(filtersListSelectFilter(filterId));
+                    resolve(newFilter);
                 }
-                resolve(newFilter);
             });
         });
     };
@@ -97,20 +98,21 @@ export function filtersListServerCreateFilter(filter, sessionId, languageId) {
 export function filtersListServerUpdateFilter(filter, sessionId) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
-        return new Promise( (resolve) => {
+        return new Promise( (resolve, reject) => {
             filtersClient.update(sessionId, filter, (error, response) => {
                 dispatch(filtersListEndServerOperation());
-                let updatedFilter = null;
                 if (error) {
                     dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
+                    reject();
                 } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
+                    reject();
                 } else {
-                    updatedFilter = response.body;
+                    const updatedFilter = response.body;
                     dispatch(filtersListEditFilter(filter.id, updatedFilter));
                     dispatch(filtersListSelectFilter(updatedFilter.id));
+                    resolve();
                 }
-                resolve(updatedFilter);
             });
         });
     };
@@ -119,17 +121,19 @@ export function filtersListServerUpdateFilter(filter, sessionId) {
 export function filtersListServerDeleteFilter(filterId, sessionId) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
-        return new Promise( (resolve) => {
+        return new Promise( (resolve, reject) => {
             filtersClient.remove(sessionId, filterId, (error, response) => {
                 dispatch(filtersListEndServerOperation());
                 if (error) {
                     dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
+                    reject();
                 } else if (response.status !== HttpStatus.OK) {
                     dispatch(handleError(null, DELETE_FILTER_SERVER_ERROR));
+                    reject();
                 } else {
                     dispatch(filtersListDeleteFilter(filterId));
+                    resolve();
                 }
-                resolve(!error);
             });
         });
     };
