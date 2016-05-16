@@ -43,14 +43,14 @@ function editFilesProcessesIfIndex(filesProcesses, index, newFileProcess) {
 
 /**
  * Full processing progress:
- * - file added: isArchieved: false, isUploaded: false
- * - file starts to compress: isArchieved: false, isArchieving: true, isUploaded: false
- * - file compressed: isArchieved: true, isArchieving: false, isUploaded: false
+ * - file added: isArchived: false, isUploaded: false
+ * - file starts to compress: isArchived: false, isArchiving: true, isUploaded: false
+ * - file compressed: isArchived: true, isArchiving: false, isUploaded: false
  * - file starts to upload: isUploading: true, operationId: !null
  * - file upload operation id got: isUploading: true, operationId: !null
- * - file uploadede: isUploaded: true
+ * - file uploaded: isUploaded: true
  * @param {File} file
- * @returns {{progressValueFromAS: number, progressStatusFromAS: null, operationId: null, isUploading: boolean, file: *, error: null, isArchieved: boolean, isArchiving: boolean, isUploaded: boolean}}
+ * @returns {{progressValueFromAS: number, progressStatusFromAS: null, operationId: null, isUploading: boolean, file: *, error: null, isArchived: boolean, isArchiving: boolean, isUploaded: boolean}}
  */
 function createFileProcess(file) {
     return {
@@ -60,7 +60,7 @@ function createFileProcess(file) {
         isUploading: false,
         file: file,
         error: null,
-        isArchieved: false,
+        isArchived: false,
         isArchiving: false,
         isUploaded: false
     };
@@ -119,7 +119,8 @@ export default function fileUpload(state = initialState, action) {
                         state.filesProcesses,
                         action.index,
                         Object.assign({}, state.filesProcesses[action.index], {
-                            isArchiving: false
+                            isArchiving: false,
+                            isArchived: true
                         })
                     )
                 });

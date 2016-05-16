@@ -149,42 +149,61 @@ function receiveFileOperation(json, index) {
     }
 }
 
+function sendFile(file, sessionId, onOperationId, onProgress, onError) {
+    const formData = new FormData();
+    formData.append('sample', file);
+    $.ajax(config.URLS.FILE_UPLOAD, {
+        'type': 'POST',
+        'headers': {"X-Session-Id": sessionId},
+        'data': formData,
+        'contentType': false,
+        'processData': false,
+        'xhrFields': {
+            // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
+            'onprogress': function (progress) {
+                // calculate upload progress
+                var percentage = Math.floor((progress.total / progress.total) * 100);
+                // log upload progress to console
+                console.log('sendFile progress', progress, percentage);
+                onProgress(percentage);
+                if (percentage === 100) {
+                    console.log('sendFile DONE!');
+                }
+            }
+        }
+    })
+        .done(json => {
+            onOperationId(json.operationId);
+        })
+        .fail(err => {
+            onError(err);
+        });
+
+}
+
 export function uploadFile() {
     return (dispatch, getState) => {
 
         dispatch(requestFileUpload());
         dispatch(changeFileUploadProgress(0, 'ajax', null));
 
-        const formData = new FormData();
-        formData.append('sample', getState().fileUpload.files[0]);
-
-        return $.ajax(config.URLS.FILE_UPLOAD, {
-                'type': 'POST',
-                'headers': {"X-Session-Id": getState().auth.sessionId},
-                'data': formData,
-                'contentType': false,
-                'processData': false,
-                'xhrFields': {
-                    // add listener to XMLHTTPRequest object directly for progress (jquery doesn't have this yet)
-                    'onprogress': function (progress) {
-                        console.log(progress);
-                        // calculate upload progress
-                        var percentage = Math.floor((progress.total / progress.total) * 100);
-                        // log upload progress to console
-                        console.log('progress', percentage);
-                        dispatch(changeFileUploadProgress(percentage, 'ajax', null));
-                        if (percentage === 100) {
-                            console.log('DONE!');
-                        }
-                    }
+        sendFile(
+            getState().fileUpload.files[0],
+            getState().auth.sessionId,
+            (operationId) => {
+                dispatch(receiveFileOperation({operationId: operationId}, null));
+            },
+            (percentage) => {
+                console.log('progress', percentage);
+                dispatch(changeFileUploadProgress(percentage, 'ajax', null));
+                if (percentage === 100) {
+                    console.log('DONE!');
                 }
-            })
-            .done(json => {
-                dispatch(receiveFileOperation(json, null));
-            })
-            .fail(err => {
+            },
+            (err) => {
                 console.error('Upload FAILED: ', err.responseText);
-            });
+            }
+        );
     }
 
 }
