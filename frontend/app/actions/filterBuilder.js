@@ -61,8 +61,6 @@ export function filterBuilderCreateFilter() {
             .then( () => {
                 dispatch(closeModal('filters'));
                 dispatch(filterBuilderEndEdit());
-            })
-            .catch( () => {
             });
     }
 }
@@ -87,8 +85,6 @@ export function filterBuilderUpdateFilter() {
                 .then( () => {
                     dispatch(closeModal('filters'));
                     dispatch(filterBuilderEndEdit());
-                })
-                .catch( () => {
                 });
         }
     }
@@ -132,8 +128,6 @@ export function filterBuilderDeleteFilter(filterId) {
                 const newFilterId = (filterId == selectedFilterId) ? state.filtersList.filters[0].id : selectedFilterId;
                 const newFilter = _.find(state.filtersList.filters, {id: newFilterId});
                 dispatch(filterBuilderStartEdit(false, newFilter, fields));
-            })
-            .catch( () => {
             });
     }
 }
