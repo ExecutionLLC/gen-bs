@@ -13,14 +13,14 @@ import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
 import FiltersModal from '../components/Modals/FiltersModal';
 import FileUploadModal from '../components/Modals/FileUploadModal';
-import QueryHistoryModal from '../components/Modals/QueryHistoryModal'
+import QueryHistoryModal from '../components/Modals/QueryHistoryModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-import { closeQueryHistoryModal } from '../actions/queryHistory'
+import { closeQueryHistoryModal } from '../actions/queryHistory';
 
 
 class App extends Component {
@@ -53,52 +53,52 @@ class App extends Component {
         });
 
         return (
-            <div className={mainDivClass} id="main">
-                <nav className="navbar navbar-inverse navbar-static-top"></nav>
+            <div className={mainDivClass} id='main'>
+                <nav className='navbar navbar-inverse navbar-static-top'></nav>
                 {<div >&nbsp;</div>}
                 {samples.length > 0 &&
-                 <div className="container-fluid">
+                 <div className='container-fluid'>
                     <NavbarMain />
-                     <div className={navbarQueryClass} id="subnav">
+                     <div className={navbarQueryClass} id='subnav'>
                          <NavbarCreateQuery
                           {...this.props}
-                          openModal={ (modalName) => { this.props.dispatch(openModal(modalName)) } }
+                          openModal={ (modalName) => { this.props.dispatch(openModal(modalName)); } }
                          />
                      </div>
                      <VariantsTableReact {...this.props} />
-                     <div id="fav-message" className="hidden">
+                     <div id='fav-message' className='hidden'>
                         You can export these items to file
                      </div>
                  </div>
                 }
                 <ErrorModal
                     showModal={this.props.showErrorWindow}
-                    closeModal={ () => { this.props.dispatch(lastErrorResolved()) } }
+                    closeModal={ () => { this.props.dispatch(lastErrorResolved()); } }
                 />
                 <AutoLogoutModal
                     showModal={this.props.auth.showAutoLogoutDialog}
-                    closeModal={ () => { this.props.dispatch(stopAutoLogoutTimer()) } }
+                    closeModal={ () => { this.props.dispatch(stopAutoLogoutTimer()); } }
                 />
                 <ViewsModal
                     showModal={this.props.modalWindows.views.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
                 />
                 <FiltersModal
                     showModal={this.props.modalWindows.filters.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
                     dispatch={this.props.dispatch}
                 />
                 <FileUploadModal
                     showModal={this.props.modalWindows.upload.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)) } }
+                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
                 />
                 <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
                 <QueryHistoryModal
                     showModal={this.props.showQueryHistoryModal}
-                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()) } }
+                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()); } }
                 />
             </div>
-        )
+        );
     }
 }
 
@@ -127,7 +127,7 @@ function mapStateToProps(state) {
         filtersList,
         showErrorWindow,
         showQueryHistoryModal
-    }
+    };
 }
 
 export default connect(mapStateToProps)(App);

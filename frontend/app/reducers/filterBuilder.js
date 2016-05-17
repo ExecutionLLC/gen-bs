@@ -1,6 +1,6 @@
-import * as ActionTypes from '../actions/filterBuilder'
+import * as ActionTypes from '../actions/filterBuilder';
 import {filterUtils, genomicsParsedRulesValidate, opsUtils} from '../utils/filterUtils';
-import FieldUtils from "../utils/fieldUtils";
+import FieldUtils from '../utils/fieldUtils';
 
 
 /**
@@ -34,7 +34,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
     const modification = filterUtils.genomicsParsedRulesModification;
     const changeFunctions = {
         onSwitch(isAnd) {
-            return modification.switchCondition(parsedFilter, index, isAnd)
+            return modification.switchCondition(parsedFilter, index, isAnd);
         },
         onEdit(itemTyped) {
             const ruleIndex = itemTyped.ruleIndex;
@@ -55,7 +55,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
             return modification.removeRuleOrGroup(parsedFilter, index, itemIndex);
         },
         onAdd(isGroup) {
-            return modification.appendDefault(parsedFilter, index, isGroup, fieldDefaultId)
+            return modification.appendDefault(parsedFilter, index, isGroup, fieldDefaultId);
         }
     };
     var changeName;
@@ -182,6 +182,6 @@ export default function filterBuilder(state = {
             return reduceFBuilderEndEdit(state);
 
         default:
-            return state
+            return state;
     }
 }

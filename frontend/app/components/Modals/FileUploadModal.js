@@ -18,8 +18,8 @@ class FileUploadModal extends Component {
             >
                 <FileUploadHeader />
                 <Modal.Body>
-                    <div className="modal-body-scroll">
-                        <div className="modal-padding">
+                    <div className='modal-body-scroll'>
+                        <div className='modal-padding'>
                             <FileUpload {...this.props} />
                             <FileUploadSamples {...this.props} />
                         </div>

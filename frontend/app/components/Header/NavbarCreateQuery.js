@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
-import Upload from './NavbarCreateQuery/Upload'
-import MetadataSearch from './NavbarCreateQuery/MetadataSearch'
-import FiltersSetup from './NavbarCreateQuery/FiltersSetup'
-import Filters from './NavbarCreateQuery/Filters'
-import ViewsSetup from './NavbarCreateQuery/ViewsSetup'
-import Views from './NavbarCreateQuery/Views'
-import Analyze from './NavbarCreateQuery/Analyze'
-import LoadHistory from './NavbarCreateQuery/LoadHistory'
-import {fetchFields} from '../../actions/fields'
+import Upload from './NavbarCreateQuery/Upload';
+import MetadataSearch from './NavbarCreateQuery/MetadataSearch';
+import FiltersSetup from './NavbarCreateQuery/FiltersSetup';
+import Filters from './NavbarCreateQuery/Filters';
+import ViewsSetup from './NavbarCreateQuery/ViewsSetup';
+import Views from './NavbarCreateQuery/Views';
+import Analyze from './NavbarCreateQuery/Analyze';
+import LoadHistory from './NavbarCreateQuery/LoadHistory';
+import {fetchFields} from '../../actions/fields';
 
-import { changeView, analyze } from '../../actions/ui'
-import { changeSample } from '../../actions/samplesList'
+import { changeView, analyze } from '../../actions/ui';
+import { changeSample } from '../../actions/samplesList';
 
 
 class NavbarCreateQuery extends Component {
@@ -33,9 +33,9 @@ class NavbarCreateQuery extends Component {
 
         return (
 
-            <nav className="navbar navbar-fixed-top navbar-default">
-                <div className="container-fluid">
-                    <div className="table-row">
+            <nav className='navbar navbar-fixed-top navbar-default'>
+                <div className='container-fluid'>
+                    <div className='table-row'>
                         <Upload
                             {...this.props}
                         />
@@ -69,7 +69,7 @@ class NavbarCreateQuery extends Component {
                 </div>
             </nav>
 
-        )
+        );
     }
 }
 
@@ -98,7 +98,7 @@ function mapStateToProps(state) {
         auth,
         samplesList,
         filtersList
-    }
+    };
 }
 
-export default connect(mapStateToProps)(NavbarCreateQuery)
+export default connect(mapStateToProps)(NavbarCreateQuery);

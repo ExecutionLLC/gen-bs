@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/filtersList'
+import * as ActionTypes from '../actions/filtersList';
 
 export default function filtersList(state = {
     filters: [],

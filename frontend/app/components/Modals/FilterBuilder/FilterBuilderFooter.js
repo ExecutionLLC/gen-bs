@@ -14,7 +14,7 @@ export default class FilterBuilderFooter extends Component {
     onConfirmClick() {
         const filter = this.props.filterBuilder.editingFilter.filter;
         if (filter.name.trim()) {
-            this.props.dispatch(filterBuilderSaveAndSelectRules())
+            this.props.dispatch(filterBuilderSaveAndSelectRules());
         }
     }
 
@@ -39,24 +39,24 @@ export default class FilterBuilderFooter extends Component {
             <Modal.Footer>
                 <button
                     onClick={() => this.onCancelClick()}
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
+                    type='button'
+                    className='btn btn-default'
+                    data-dismiss='modal'
                 >
-                    <span data-localize="actions.cancel">Cancel</span>
+                    <span data-localize='actions.cancel'>Cancel</span>
                 </button>
 
                 <button
                     disabled={disabledClass}
                     title={title}
                     onClick={() => this.onConfirmClick()}
-                    type="button"
-                    className="btn btn-primary"
+                    type='button'
+                    className='btn btn-primary'
                 >
-                    <span data-localize="actions.save_select.title">{selectButtonLabel}</span>
+                    <span data-localize='actions.save_select.title'>{selectButtonLabel}</span>
                 </button>
             </Modal.Footer>
 
-        )
+        );
     }
 }

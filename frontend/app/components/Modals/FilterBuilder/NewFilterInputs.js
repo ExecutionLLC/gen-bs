@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
 
-import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/filterBuilder'
+import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/filterBuilder';
 
 
 export default class NewFilterInputs extends Component {
@@ -37,49 +37,49 @@ export default class NewFilterInputs extends Component {
 
         return (
 
-            <div className="collapse in copyview">
+            <div className='collapse in copyview'>
                 { descriptionText &&
-                <div className="alert alert-help">
-                        <span data-localize="views.setup.selector.description">
+                <div className='alert alert-help'>
+                        <span data-localize='views.setup.selector.description'>
                             {descriptionText}
                         </span>
                 </div>
                 }
-                <div className="row grid-toolbar row-noborder row-new-item">
+                <div className='row grid-toolbar row-noborder row-new-item'>
 
-                    <div className="col-sm-6">
-                        <label data-localize="views.setup.new.name.title">New View</label>
+                    <div className='col-sm-6'>
+                        <label data-localize='views.setup.new.name.title'>New View</label>
                         <input
-                            type="text"
-                            className="form-control text-primary"
-                            data-localize="views.setup.new.name.help"
-                            placeholder="Set view name a copy"
+                            type='text'
+                            className='form-control text-primary'
+                            data-localize='views.setup.new.name.help'
+                            placeholder='Set view name a copy'
                             value={editingFilter.name}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
 
                         { !editingFilter.name &&
-                        <div className="help-text text-danger" data-localize="views.setup.new.name.error">
+                        <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
                             Filter name cannot be empty
                         </div>
                         }
 
                     </div>
-                    <div className="col-sm-6">
-                        <label data-localize="general.description">Description</label>
-                        <div className="input-group">
+                    <div className='col-sm-6'>
+                        <label data-localize='general.description'>Description</label>
+                        <div className='input-group'>
                             <input
-                                type="text"
-                                className="form-control"
-                                data-localize="views.setup.new.description"
-                                placeholder="Set view description (optional)"
+                                type='text'
+                                className='form-control'
+                                data-localize='views.setup.new.description'
+                                placeholder='Set view description (optional)'
                                 value={editingFilter.description}
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
-                            <div className="input-group-btn  btn-group-close">
-                                <button type="button" className="btn-link-default" type="button"
+                            <div className='input-group-btn  btn-group-close'>
+                                <button type='button' className='btn-link-default' type='button'
                                         onClick={() => this.onCancelClick()}>
-                                    <i className="md-i">close</i>
+                                    <i className='md-i'>close</i>
                                 </button>
                             </div>
                         </div>
@@ -87,6 +87,6 @@ export default class NewFilterInputs extends Component {
                 </div>
             </div>
 
-        )
+        );
     }
 }

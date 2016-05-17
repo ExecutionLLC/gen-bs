@@ -1,6 +1,6 @@
-import apiFacade from '../api/ApiFacade'
-import {handleError} from './errorHandler'
-import {receiveFields, receiveTotalFields} from './fields'
+import apiFacade from '../api/ApiFacade';
+import {handleError} from './errorHandler';
+import {receiveFields, receiveTotalFields} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {receiveQueryHistory} from './queryHistory';
 import {analyze, changeView} from './ui';
@@ -44,7 +44,7 @@ const viewsClient = apiFacade.viewsClient;
 function requestUserdata() {
     return {
         type: REQUEST_USERDATA
-    }
+    };
 }
 
 function receiveUserdata(json) {
@@ -52,7 +52,7 @@ function receiveUserdata(json) {
         type: RECEIVE_USERDATA,
         userData: json,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchUserdata() {
@@ -100,13 +100,13 @@ export function fetchUserdata() {
                 }
             }
         });
-    }
+    };
 }
 
 function requestViews() {
     return {
         type: REQUEST_VIEWS
-    }
+    };
 }
 
 function receiveViews(json) {
@@ -114,7 +114,7 @@ function receiveViews(json) {
         type: RECEIVE_VIEWS,
         views: json,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchViews() {
@@ -137,7 +137,7 @@ export function fetchViews() {
                 dispatch(changeView(viewId));
             }
         });
-    }
+    };
 }
 
 export function changeHistoryData(sampleId, filterId, viewId) {
@@ -146,19 +146,19 @@ export function changeHistoryData(sampleId, filterId, viewId) {
         sampleId,
         filterId,
         viewId
-    }
+    };
 }
 
 export function changeViews(views) {
     return {
         type: CHANGE_VIEWS,
         views
-    }
+    };
 }
 
 export function deleteView(viewId) {
     return {
         type: DELETE_VIEW,
         viewId
-    }
+    };
 }
