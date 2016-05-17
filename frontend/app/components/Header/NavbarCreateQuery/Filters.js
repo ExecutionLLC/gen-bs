@@ -47,7 +47,6 @@ export default class Filters extends Component {
             return {
                 value: filterItem.id, label, disabled: isDisabled
             };
-        }
-        );
+        });
     }
 }
