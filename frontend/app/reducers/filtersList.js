@@ -1,5 +1,38 @@
 import * as ActionTypes from '../actions/filtersList';
 
+function reduceFilterListDeleteFilter(state, action) {
+    const deletedFilterIndex = _.findIndex(state.filters, {id: action.filterId});
+    if (deletedFilterIndex < 0) {
+        return state;
+    }
+    const newFiltersArray = [
+        ...state.filters.slice(0, deletedFilterIndex),
+        ...state.filters.slice(deletedFilterIndex + 1)
+    ];
+    const newSelectedFilterId = (state.selectedFilterId === action.filterId) ? state.filters[0].id : state.selectedFilterId;
+    return Object.assign({}, state, {
+        filters: newFiltersArray,
+        selectedFilterId: newSelectedFilterId
+    });
+}
+
+function reduceFilterListEditFilter(state, action) {
+    const editFilterIndex = _.findIndex(state.filters, {id: action.filterId});
+    if (editFilterIndex < 0) {
+        return state;
+    }
+    const filtersUpdated = [
+        ...state.filters.slice(0, editFilterIndex),
+        action.filter,
+        ...state.filters.slice(editFilterIndex + 1)
+    ];
+    const updatedSelectedFilterId = (state.selectedFilterId === action.filterId) ? action.filter.id : state.selectedFilterId;
+    return Object.assign({}, state, {
+        filters: filtersUpdated,
+        selectedFilterId: updatedSelectedFilterId
+    });
+}
+
 export default function filtersList(state = {
     filters: [],
     selectedFilterId: null,
@@ -31,34 +64,9 @@ export default function filtersList(state = {
                 ]
             });
         case ActionTypes.FILTERS_LIST_DELETE_FILTER:
-            const deletedFilterIndex = _.findIndex(state.filters, {id: action.filterId});
-            if (deletedFilterIndex < 0) {
-                return state;
-            }
-            const newFiltersArray = [
-                ...state.filters.slice(0, deletedFilterIndex),
-                ...state.filters.slice(deletedFilterIndex + 1)
-            ];
-            const newSelectedFilterId = (state.selectedFilterId === action.filterId) ? state.filters[0].id : state.selectedFilterId;
-            return Object.assign({}, state, {
-                filters: newFiltersArray,
-                selectedFilterId: newSelectedFilterId
-            });
+            return reduceFilterListDeleteFilter(state, action);
         case ActionTypes.FILTERS_LIST_EDIT_FILTER:
-            const editFilterIndex = _.findIndex(state.filters, {id: action.filterId});
-            if (editFilterIndex < 0) {
-                return state;
-            }
-            const filtersUpdated = [
-                ...state.filters.slice(0, editFilterIndex),
-                action.filter,
-                ...state.filters.slice(editFilterIndex + 1)
-            ];
-            const updatedSelectedFilterId = (state.selectedFilterId === action.filterId) ? action.filter.id : state.selectedFilterId;
-            return Object.assign({}, state, {
-                filters: filtersUpdated,
-                selectedFilterId: updatedSelectedFilterId
-            });
+            return reduceFilterListEditFilter(state, action);
         default:
             return state;
     }
