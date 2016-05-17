@@ -42,7 +42,7 @@ class ApiFacade {
 
     get queryHistoryClient() {
         return this._queryHistoryClient;
-	}
+    }
 
     get samplesClient() {
         return this._samplesClient;

@@ -63,7 +63,7 @@ const searchClient = apiFacade.searchClient;
 function changeVariantsLimit() {
     return {
         type: CHANGE_VARIANTS_LIMIT
-    }
+    };
 }
 
 export function getNextPartOfData() {
@@ -73,20 +73,20 @@ export function getNextPartOfData() {
         setTimeout(() => {
             dispatch(searchInResultsNextData());
         }, 100);
-    }
+    };
 }
 
 export function initSearchInResultsParams(searchInResultsParams) {
     return {
         type: INIT_SEARCH_IN_RESULTS_PARAMS,
         searchInResultsParams
-    }
+    };
 }
 
 export function clearSearchParams() {
     return {
         type: CLEAR_SEARCH_PARAMS
-    }
+    };
 }
 
 export function changeExcludedFields(viewId) {
@@ -98,7 +98,7 @@ export function changeExcludedFields(viewId) {
         const viewFieldIds = _.map(view.viewListItems, viewItem =>viewItem.fieldId);
 
         const excludedMandatoryFields = _.difference(mandatoryFieldIds, viewFieldIds);
-        dispatch(setExcludedFields(excludedMandatoryFields))
+        dispatch(setExcludedFields(excludedMandatoryFields));
     };
 }
 
@@ -106,7 +106,7 @@ export function setExcludedFields(excludedFields) {
     return {
         type: SET_EXCLUDED_FIELDS,
         excludedFields
-    }
+    };
 }
 
 export function setFieldFilter(fieldId, filterValue) {
@@ -114,7 +114,7 @@ export function setFieldFilter(fieldId, filterValue) {
         type: SET_FIELD_FILTER,
         fieldId,
         filterValue
-    }
+    };
 }
 
 export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
@@ -122,9 +122,9 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
         dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2 : 1, sortDirection));
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
-            dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}))
+            dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}));
         }
-    }
+    };
 }
 
 export function setViewVariantsSort(view) {
@@ -143,7 +143,7 @@ export function setViewVariantsSort(view) {
                     direction: viewListItem.sortDirection,
                     fieldId: viewListItem.fieldId,
                     order: viewListItem.sortOrder
-                }
+                };
             })
             .sortByOrder(['order'], true)
             .value();
@@ -152,14 +152,14 @@ export function setViewVariantsSort(view) {
             sortOrder[0].order = 1;
         }
         dispatch(setVariantsSort(sortOrder));
-    }
+    };
 }
 
-export function setVariantsSort( sortOrder) {
+export function setVariantsSort(sortOrder) {
     return {
         type: SET_VARIANTS_SORT,
         sortOrder
-    }
+    };
 }
 
 export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
@@ -168,20 +168,20 @@ export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
         fieldId,
         sortOrder,
         sortDirection
-    }
+    };
 }
 
 export function changeVariantsGlobalFilter(globalSearchString) {
     return {
         type: CHANGE_VARIANTS_GLOBAL_FILTER,
         globalSearchString
-    }
+    };
 }
 
 function requestVariants() {
     return {
         type: REQUEST_VARIANTS
-    }
+    };
 }
 
 function receiveAnalysisOperationId(operationId) {
@@ -189,7 +189,7 @@ function receiveAnalysisOperationId(operationId) {
         type: RECEIVE_ANALYSIS_OPERATION_ID,
         operationId,
         receivedAt: Date.now()
-    }
+    };
 }
 
 
@@ -218,7 +218,7 @@ export function createComment(alt, pos, reference, chrom, searchKey, comment) {
                 }
             }
         );
-    }
+    };
 }
 
 export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
@@ -247,7 +247,7 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
                 }
             }
         );
-    }
+    };
 }
 
 export function removeComment(id, searchKey) {
@@ -265,7 +265,7 @@ export function removeComment(id, searchKey) {
                 }
             }
         );
-    }
+    };
 }
 
 export function fetchVariants(searchParams) {
@@ -301,7 +301,7 @@ export function fetchVariants(searchParams) {
                 }
             }
         );
-    }
+    };
 }
 
 function requestSearchedResults(flags) {
@@ -309,14 +309,14 @@ function requestSearchedResults(flags) {
         type: REQUEST_SEARCHED_RESULTS,
         isNextDataLoading: flags.isNextDataLoading,
         isFilteringOrSorting: flags.isFilteringOrSorting
-    }
+    };
 }
 
 export function receiveSearchedResults() {
     return {
         type: RECEIVE_SEARCHED_RESULTS,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function searchInResultsSortFilter() {
@@ -325,7 +325,7 @@ export function searchInResultsSortFilter() {
             dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}));
         }
-    }
+    };
 }
 
 export function searchInResultsNextData() {
@@ -352,7 +352,7 @@ export function searchInResultsNextData() {
                 }
             }
         );
-    }
+    };
 }
 
 export function searchInResults(flags) {
@@ -384,7 +384,7 @@ export function searchInResults(flags) {
                 }
             }
         );
-    }
+    };
 }
 
 export function selectTableRow(rowIndex, isSelected) {
@@ -392,7 +392,7 @@ export function selectTableRow(rowIndex, isSelected) {
         type: SELECT_VARIANTS_ROW,
         rowIndex,
         isSelected
-    }
+    };
 }
 
 export function clearTableRowsSelection() {

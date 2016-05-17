@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import ReactDOM from 'react-dom'
-import classNames from 'classnames'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
-import { fetchVariants, searchInResults } from '../../actions/variantsTable'
-
-import VariantsTableHead from './VariantsTableHead'
-import VariantsTableRows from './VariantsTableRows'
-import VariantsTableEmpty from './VariantsTableEmpty'
-import DemoModeMessage from '../Errors/DemoModeMessage'
+import VariantsTableHead from './VariantsTableHead';
+import VariantsTableRows from './VariantsTableRows';
+import VariantsTableEmpty from './VariantsTableEmpty';
+import DemoModeMessage from '../Errors/DemoModeMessage';
 
 
-import VariantsTableLoadError from '../Errors/VariantsTableLoadError'
+import VariantsTableLoadError from '../Errors/VariantsTableLoadError';
 
 
 class VariantsTableReact extends Component {
@@ -22,8 +20,8 @@ class VariantsTableReact extends Component {
     }
 
     render() {
-        const { dispatch, auth, views, fields, ui } = this.props
-        const { variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error } = this.props.ws
+        const {auth, fields} = this.props;
+        const {variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error} = this.props.ws;
 
         var tableWrapperClass = classNames({
             'table-variants-wrapper': true
@@ -33,27 +31,27 @@ class VariantsTableReact extends Component {
 
             <div className={tableWrapperClass}>
                 { isVariantsLoading &&
-                <div className="loader"></div>
+                <div className='loader'></div>
                 }
 
                 { !isVariantsLoading && !isVariantsValid &&
-                <div className="col-xs-6 col-xs-offset-3">
+                <div className='col-xs-6 col-xs-offset-3'>
                     <VariantsTableLoadError error={error}/>
                 </div>
                 }
                 { !isVariantsLoading && isVariantsValid &&
-                <div className="table-variants-container">
+                <div className='table-variants-container'>
                     { auth.isDemo &&
                     <DemoModeMessage errorMessage={auth.errorMessage} {...this.props} />
                     }
-                    <table className="table table-striped table-variants header-fixed" id="variants_table"
-                           ref="variantsTable">
-                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref="variantsTableHead"
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)) } }
+                    <table className='table table-striped table-variants header-fixed' id='variants_table'
+                           ref='variantsTable'>
+                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref='variantsTableHead'
+                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)); } }
                         />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} {...this.props} ref="variantsTableRows"
-                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)) } }
+                        <VariantsTableRows variants={variants} fields={fields} {...this.props} ref='variantsTableRows'
+                                           xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)); } }
                         />
                         }
                     </table>
@@ -65,7 +63,7 @@ class VariantsTableReact extends Component {
 
             </div>
 
-        )
+        );
     }
 
     elementXScrollListener(scrollLeft, DOMNode) {
@@ -87,8 +85,8 @@ class VariantsTableReact extends Component {
 }
 
 function mapStateToProps(state) {
-    const { auth, websocket, ui, variantsTable } = state;
-    const { searchParams } = state.websocket;
+    const {auth, websocket, ui, variantsTable} = state;
+    const {searchParams} = state.websocket;
 
     return {
         auth,
@@ -96,7 +94,7 @@ function mapStateToProps(state) {
         ui,
         variantsTable,
         searchParams
-    }
+    };
 }
 
-export default connect(mapStateToProps)(VariantsTableReact)
+export default connect(mapStateToProps)(VariantsTableReact);

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
 import FileUploadSamplesRow from './FileUploadSamplesRow';
 
@@ -10,7 +10,7 @@ export default class FileUploadSamples extends Component {
     }
 
     render() {
-        let { dispatch, closeModal, samplesList: {samples}} = this.props;
+        let {dispatch, closeModal, samplesList: {samples}} = this.props;
         if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
             console.error('No editable fields found');
             return null;
@@ -21,15 +21,16 @@ export default class FileUploadSamples extends Component {
         }
         return (
             <div>
-                <div className="navbar navbar-search-full">
-                    <div className="navbar-search">
-                        <div className="navbar-search-field">
-                          <input type="text" placeholder="Search available samples" onChange={e => this.setState({ searchWord: e.target.value })}
-                               className="form-control material-input"/>
+                <div className='navbar navbar-search-full'>
+                    <div className='navbar-search'>
+                        <div className='navbar-search-field'>
+                            <input type='text' placeholder='Search available samples'
+                                   onChange={e => this.setState({ searchWord: e.target.value })}
+                                   className='form-control material-input'/>
                         </div>
                     </div>
                 </div>
-                <div className="panel-group panel-group-scroll">
+                <div className='panel-group panel-group-scroll'>
                     {samples.map(
                         sample => (
                             <FileUploadSamplesRow
@@ -50,8 +51,8 @@ export default class FileUploadSamples extends Component {
 }
 
 function mapStateToProps(state) {
-    const { samplesList } = state;
-    return { samplesList }
+    const {samplesList} = state;
+    return {samplesList};
 }
 
-export default connect(mapStateToProps)(FileUploadSamples)
+export default connect(mapStateToProps)(FileUploadSamples);

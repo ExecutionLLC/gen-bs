@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/savedFiles'
+import * as ActionTypes from '../actions/savedFiles';
 
 import ExportUtils from '../utils/exportUtils';
 
@@ -52,6 +52,6 @@ export default function savedFiles(state = {
         }
 
         default:
-            return state
+            return state;
     }
 }

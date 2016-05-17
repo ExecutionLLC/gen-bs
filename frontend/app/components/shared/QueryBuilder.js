@@ -1,67 +1,64 @@
 import React, {Component} from 'react';
 
 
-/**
+// Inner structure:
+//
+// FilterQueryBuilder(
+//      fields: {{id: string, label: string, type: string}[]}
+//      rules: {{ <'$and'|'$or'>: ({id, label, type}|rules)[] }}
+//      disabled: boolean
+//      dispatch: function(Object)
+// )
+//     QueryBuilder(
+//         rules: {{condition: string, rules: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]}}
+//         disabled: boolean
+//         makeItemComponent: function(number[], {field: string, operator: string, value: *}, boolean): Component
+//         handlers: {
+//             onSwitch: function(number[], boolean),
+//             onAdd: function(number[], boolean),
+//             onDeleteGroup: function(number[]),
+//             onDeleteItem: function(number[], boolean)
+//         }
+//     )
+//         RulesGroupContainer(
+//             indexPath: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
+//             makeItemComponent: = makeItemComponent
+//             ruleItems: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]
+//             ruleIsAnd: boolean
+//             disabled: = disabled
+//             handlers: = handlers
+//             allowDelete: boolean
+//         )
+//             RulesGroupHeader(
+//                 indexPath: = indexPath
+//                 disabled: = disabled
+//                 isAnd: = ruleIsAnd
+//                 onSwitch: function(boolean)
+//                 onAdd: function(boolean)
+//                 onDelete: ?function()
+//             )
+//             RulesGroupBody(
+//                 indexPath: = indexPath
+//                 items: = ruleItems
+//                 disabled: = disabled
+//                 makeItemComponent: = makeItemComponent
+//                 handlers: = handlers
+//             )
+//                 RulesGroupContainer(...)
+//                 RuleContainer(
+//                     indexPath: number[]
+//                     item: {field: string, operator: string, value: *}
+//                     disabled: = disabled
+//                     makeItemComponent: = makeItemComponent
+//                     onDelete: ?function()
+//                 )
+//                     itemComponent(
+//                         number[],
+//                         {field: string, operator: string, value: *},
+//                         boolean
+//                     )
 
- Inner structure:
 
-FilterQueryBuilder(
-     fields: {{id: string, label: string, type: string}[]}
-     rules: {{ <'$and'|'$or'>: ({id, label, type}|rules)[] }}
-     disabled: boolean
-     dispatch: function(Object)
-)
-    QueryBuilder(
-        rules: {{condition: string, rules: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]}}
-        disabled: boolean
-        makeItemComponent: function(number[], {field: string, operator: string, value: *}, boolean): Component
-        handlers: {
-            onSwitch: function(number[], boolean),
-            onAdd: function(number[], boolean),
-            onDeleteGroup: function(number[]),
-            onDeleteItem: function(number[], boolean)
-        }
-    )
-        RulesGroupContainer(
-            indexPath: number[] // [] - root, [1, 2] - 2nd child at 1st child of root
-            makeItemComponent: = makeItemComponent
-            ruleItems: ({condition: string, rules: Array}|{field: string, operator: string, value: *})[]
-            ruleIsAnd: boolean
-            disabled: = disabled
-            handlers: = handlers
-            allowDelete: boolean
-        )
-            RulesGroupHeader(
-                indexPath: = indexPath
-                disabled: = disabled
-                isAnd: = ruleIsAnd
-                onSwitch: function(boolean)
-                onAdd: function(boolean)
-                onDelete: ?function()
-            )
-            RulesGroupBody(
-                indexPath: = indexPath
-                items: = ruleItems
-                disabled: = disabled
-                makeItemComponent: = makeItemComponent
-                handlers: = handlers
-            )
-                RulesGroupContainer(...)
-                RuleContainer(
-                    indexPath: number[]
-                    item: {field: string, operator: string, value: *}
-                    disabled: = disabled
-                    makeItemComponent: = makeItemComponent
-                    onDelete: ?function()
-                )
-                    itemComponent(
-                        number[],
-                        {field: string, operator: string, value: *},
-                        boolean
-                    )
- */
-
-    
 export default class QueryBuilder extends Component {
 
     render() {
@@ -78,7 +75,7 @@ export default class QueryBuilder extends Component {
 
         return (
             <div>
-                <div className="query-builder">
+                <div className='query-builder'>
                     <RulesGroupContainer
                         indexPath={[]}
                         makeItemComponent={makeItemComponent}
@@ -111,11 +108,11 @@ class RulesGroupContainer extends Component {
             /** @type {boolean} */
             allowDelete,
             /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-            handlers,
+            handlers
         } = this.props;
 
         return (
-            <dl className="rules-group-container">
+            <dl className='rules-group-container'>
                 <RulesGroupHeader
                     indexPath={indexPath}
                     disabled={disabled}
@@ -146,8 +143,8 @@ class RulesGroupHeader extends Component {
      */
     static renderAddButton(caption, disabled, onAdd) {
         return (
-            <button type="button" className="btn btn-xs btn-success" disabled={disabled} onClick={onAdd}>
-                <i className="glyphicon glyphicon-plus"/> {caption}
+            <button type='button' className='btn btn-xs btn-success' disabled={disabled} onClick={onAdd}>
+                <i className='glyphicon glyphicon-plus'/> {caption}
             </button>
         );
     }
@@ -163,14 +160,14 @@ class RulesGroupHeader extends Component {
      */
     static renderRadioButton(caption, value, groupName, isOn, disabled, onSwitch) {
         return (
-            <label className={"btn btn-xs btn-default " + (isOn ? 'active': '')}>
+            <label className={'btn btn-xs btn-default ' + (isOn ? 'active': '')}>
                 <input
-                    type="radio"
+                    type='radio'
                     name={groupName}
                     value={value}
                     disabled={disabled}
                     checked={isOn}
-                    onChange={ () => onSwitch(value) } />
+                    onChange={ () => onSwitch(value) }/>
                 {caption}
             </label>
         );
@@ -196,19 +193,24 @@ class RulesGroupHeader extends Component {
         const groupName = 'builder-basic-react_group_' + indexPath.join('-') + '_cond';
 
         return (
-            <dt className="rules-group-header">
-                <div className="btn-group pull-right group-actions">
-                    {RulesGroupHeader.renderAddButton('Add rule', disabled, () => { onAdd(false); })}
-                    {RulesGroupHeader.renderAddButton('Add group', disabled, () => { onAdd(true); })}
-                    <button type="button" className="btn btn-xs btn-danger" onClick={onDelete} disabled={disabled || !onDelete} >
-                        <i className="glyphicon glyphicon-remove" /> Delete
+            <dt className='rules-group-header'>
+                <div className='btn-group pull-right group-actions'>
+                    {RulesGroupHeader.renderAddButton('Add rule', disabled, () => {
+                        onAdd(false);
+                    })}
+                    {RulesGroupHeader.renderAddButton('Add group', disabled, () => {
+                        onAdd(true);
+                    })}
+                    <button type='button' className='btn btn-xs btn-danger' onClick={onDelete}
+                            disabled={disabled || !onDelete}>
+                        <i className='glyphicon glyphicon-remove'/> Delete
                     </button>
                 </div>
-                <div className="btn-group group-conditions">
+                <div className='btn-group group-conditions'>
                     {RulesGroupHeader.renderRadioButton('AND', true, groupName, isAnd, disabled, onSwitch)}
                     {RulesGroupHeader.renderRadioButton('OR', false, groupName, !isAnd, disabled, onSwitch)}
                 </div>
-                <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
+                <div className='error-container'><i className='glyphicon glyphicon-warning-sign'/></div>
             </dt>
         );
     }
@@ -230,20 +232,20 @@ class RuleContainer extends Component {
         } = this.props;
 
         return (
-            <li className="rule-container">
-                <div className="rule-header">
-                    <div className="btn-group pull-right rule-actions">
+            <li className='rule-container'>
+                <div className='rule-header'>
+                    <div className='btn-group pull-right rule-actions'>
                         <button
-                            type="button"
-                            className="btn btn-xs btn-danger"
+                            type='button'
+                            className='btn btn-xs btn-danger'
                             onClick={onDelete}
                             disabled={disabled || !onDelete}
                         >
-                            <i className="glyphicon glyphicon-remove"/> Delete
+                            <i className='glyphicon glyphicon-remove'/> Delete
                         </button>
                     </div>
                 </div>
-                <div className="error-container"><i className="glyphicon glyphicon-warning-sign" /></div>
+                <div className='error-container'><i className='glyphicon glyphicon-warning-sign'/></div>
                 {makeItemComponent(indexPath, item, disabled)}
             </li>
         );
@@ -266,7 +268,7 @@ class RulesGroupBody extends Component {
         const allowDelete = items.length > 1;
 
         return (
-            items.map( (item, itemIndex) => {
+            items.map((item, itemIndex) => {
                 const indexNext = indexPath.concat(itemIndex);
                 if (item.condition) {
                     return (
@@ -314,8 +316,8 @@ class RulesGroupBody extends Component {
         } = this.props;
 
         return (
-            <dd className="rules-group-body">
-                <ul className="rules-list">
+            <dd className='rules-group-body'>
+                <ul className='rules-list'>
                     {RulesGroupBody.renderItems(items, indexPath, disabled, makeItemComponent, handlers)}
                 </ul>
             </dd>

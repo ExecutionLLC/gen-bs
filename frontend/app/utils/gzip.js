@@ -1,4 +1,4 @@
-import pako from 'pako'
+import pako from 'pako';
 /**
  * gzip file
  * @param {File} file - File for gzip.
@@ -8,16 +8,12 @@ export default function gzip(file) {
 
     const reader = new FileReader();
 
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve) => {
         reader.onload = (e => {
-            var content = null;
-            var theFile = null;
             const ch = new Uint8Array(e.target.result);
-
-            content = pako.gzip(ch)
-
-            theFile = new File([content], file.name + '.gz', {type: 'application/gzip', lastModified: new Date()})
-            resolve(theFile)
+            const content = pako.gzip(ch);
+            const theFile = new File([content], file.name + '.gz', {type: 'application/gzip', lastModified: new Date()});
+            resolve(theFile);
         });
     });
 

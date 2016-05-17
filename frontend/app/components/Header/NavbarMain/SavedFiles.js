@@ -12,15 +12,15 @@ export default class SavedFiles extends Component {
         return (
 
             <div>
-                <a href="#"
-                   className="btn navbar-btn"
+                <a href='#'
+                   className='btn navbar-btn'
                    onClick={() => this.onButtonClick()}
                 >
-                    <span><span className="hidden-xxs" data-localize="files.title">Saved files</span><span className="visible-xxs"><i className="md-i">archive</i></span></span>
+                    <span><span className='hidden-xxs' data-localize='files.title'>Saved files</span><span className='visible-xxs'><i className='md-i'>archive</i></span></span>
                 </a>
             </div>
 
-        )
+        );
     }
 
     onButtonClick() {

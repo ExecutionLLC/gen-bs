@@ -1,12 +1,12 @@
 import React  from 'react';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
-import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader'
-import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter'
-import NewViewInputs from './ViewBuilder/NewViewInputs'
-import ExistentViewSelect from './ViewBuilder/ExistentViewSelect'
-import ViewBuilder from './ViewBuilder/ViewBuilder'
+import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader';
+import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter';
+import NewViewInputs from './ViewBuilder/NewViewInputs';
+import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
+import ViewBuilder from './ViewBuilder/ViewBuilder';
 
 class ViewsModal extends React.Component {
 
@@ -22,10 +22,10 @@ class ViewsModal extends React.Component {
 
 
             <Modal
-                dialogClassName="modal-dialog-primary"
-                bsSize="lg"
+                dialogClassName='modal-dialog-primary'
+                bsSize='lg'
                 show={showModal}
-                onHide={ () => {closeModal('views')} }
+                onHide={ () => closeModal('views') }
             >
                 { !isValid &&
                 <div >&nbsp;</div>
@@ -35,15 +35,15 @@ class ViewsModal extends React.Component {
                     <ViewBuilderHeader />
                     <form>
                         <Modal.Body>
-                            <div className="modal-body-scroll">
+                            <div className='modal-body-scroll'>
                                 { isNew &&
-                                    <div className="modal-padding">
+                                    <div className='modal-padding'>
                                         <NewViewInputs  />
                                         <ViewBuilder />
                                     </div>   
                                 }
                                 { !isNew &&
-                                    <div className="modal-padding">
+                                    <div className='modal-padding'>
                                         <ExistentViewSelect />
                                         <ViewBuilder />
                                     </div>
@@ -56,7 +56,7 @@ class ViewsModal extends React.Component {
                 }
             </Modal>
 
-        )
+        );
     }
 }
 
@@ -67,8 +67,8 @@ function mapStateToProps(state) {
     return {
         isValid,
         viewBuilder
-    }
+    };
 }
 
-export default connect(mapStateToProps)(ViewsModal)
+export default connect(mapStateToProps)(ViewsModal);
 
