@@ -1,16 +1,17 @@
-import * as ActionTypes from '../actions/filterBuilder';
+import * as ActionTypes from '../actions/filterBuilder'
 import {filterUtils, genomicsParsedRulesValidate, opsUtils} from '../utils/filterUtils';
-import FieldUtils from '../utils/fieldUtils';
+import FieldUtils from "../utils/fieldUtils";
 
 
 /**
  * @param {boolean} isNew
  * @param {{rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}} filterToEdit
  * @param {{id: string, label: string, type: string}[]} fields
+ * @param {{id: string, label: string, type: string}[]} allowedFields
  * @returns {{filter: {rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}, isNew: boolean, parsedFilter: {condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, fieldDefaultId: string}}
  */
-function parseFilterForEditing(isNew, filterToEdit, fields) {
-    const fieldDefaultId = FieldUtils.getDefaultId(fields);
+function parseFilterForEditing(isNew, filterToEdit, fields, allowedFields) {
+    const fieldDefaultId = FieldUtils.getDefaultId(allowedFields);
     const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
     const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
     // Report validation results if any
@@ -33,7 +34,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
     const modification = filterUtils.genomicsParsedRulesModification;
     const changeFunctions = {
         onSwitch(isAnd) {
-            return modification.switchCondition(parsedFilter, index, isAnd);
+            return modification.switchCondition(parsedFilter, index, isAnd)
         },
         onEdit(itemTyped) {
             const ruleIndex = itemTyped.ruleIndex;
@@ -46,19 +47,15 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
             const castedValue = opWant.noParams ?
                 null :
                 opWant.single ?
-                    (typeof value === 'object' && value && value.length) ? genomicsParsedRulesValidate.jsTypeCastValue(value.join(), fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
+                    (_.isArray(value)) ? genomicsParsedRulesValidate.jsTypeCastValue(value[0], fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
                     genomicsParsedRulesValidate.jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
-            return modification.setRule(parsedFilter, index, ruleIndex, {
-                field: item.field,
-                operator: item.operator,
-                value: castedValue
-            });
+            return modification.setRule(parsedFilter, index, ruleIndex, {field: item.field, operator: item.operator, value: castedValue});
         },
         onDelete(itemIndex) {
             return modification.removeRuleOrGroup(parsedFilter, index, itemIndex);
         },
         onAdd(isGroup) {
-            return modification.appendDefault(parsedFilter, index, isGroup, fieldDefaultId);
+            return modification.appendDefault(parsedFilter, index, isGroup, fieldDefaultId)
         }
     };
     var changeName;
@@ -74,28 +71,42 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
     return null;
 }
 
-function reduceFBuilderSelectFilter(state, action) {
-    const selectedFilter = _.find(action.filters, {id: action.filterId}) || null;
+function reduceFBuilderStartEdit(state, action) {
+    const {fields: {totalFieldsList, allowedFieldsList}, filter, makeNew} = action;
+    const editingFilter = parseFilterForEditing(
+        makeNew,
+        makeNew ?
+            Object.assign({}, filter, {
+                type: 'user',
+                name: `Copy of ${filter.name}`,
+                id: null
+            }) :
+            filter,
+        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
+        allowedFieldsList
+    );
     return Object.assign({}, state, {
-        selectedFilter,
-        isReceivedFilters: selectedFilter !== null
+        editingFilter: editingFilter,
+        originalFilter: editingFilter
     });
 }
 
-function reduceFBuilderToggleNewEdit(state, action) {
-    const editingFilter = parseFilterForEditing(
-        action.makeNew,
-        action.makeNew ?
-            Object.assign({}, state.selectedFilter, {
-                type: 'user',
-                name: `Copy of ${state.selectedFilter.name}`
-            }) :
-            state.selectedFilter,
-        action.fields.totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f))
-    );
+function reduceFBuilderSaveEdit(state) {
+    const parsedRules = state.editingFilter.parsedFilter;
+    const rules = filterUtils.getGenomics(parsedRules);
     return Object.assign({}, state, {
-        editingFilter,
-        originalFilter: editingFilter
+        editingFilter: Object.assign({}, state.editingFilter, {
+            filter: Object.assign({}, state.editingFilter.filter, {
+                rules
+            })
+        })
+    });
+}
+    
+function reduceFBuilderEndEdit(state) {
+    return Object.assign({} ,state, {
+        editingFilter: null,
+        originalFilter: null
     });
 }
 
@@ -145,24 +156,13 @@ function reduceFBuilderReceiveRules(state, action) {
 
 export default function filterBuilder(state = {
     isReceivedFilters: false,
-    selectedFilter: null,
-    isFetching: false,
     rulesRequested: false,
-    editingFilter: {
-        filter: null,
-        parsedFilter: null,
-        isNew: false,
-        fieldDefaultId: ''
-    }
+    /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
+    editingFilter: null,
+    originalFilter: null
 }, action) {
 
     switch (action.type) {
-        case ActionTypes.FBUILDER_SELECT_FILTER:
-            return reduceFBuilderSelectFilter(state, action);
-
-        case ActionTypes.FBUILDER_TOGGLE_NEW_EDIT:
-            return reduceFBuilderToggleNewEdit(state, action);
-
         case ActionTypes.FBUILDER_CHANGE_FILTER:
             return reduceFBuilderChangeFilter(state, action);
 
@@ -172,29 +172,16 @@ export default function filterBuilder(state = {
         case ActionTypes.FBUILDER_RECEIVE_RULES:
             return reduceFBuilderReceiveRules(state, action);
 
-        case ActionTypes.FBUILDER_REQUEST_UPDATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
+        case ActionTypes.FBUILDER_START_EDIT:
+            return reduceFBuilderStartEdit(state, action);
 
-        case ActionTypes.FBUILDER_RECEIVE_UPDATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: false,
-                selectedFilter: action.filter
-            });
+        case ActionTypes.FBUILDER_SAVE_EDIT:
+            return reduceFBuilderSaveEdit(state);
 
-        case ActionTypes.FBUILDER_REQUEST_CREATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-
-        case ActionTypes.FBUILDER_RECEIVE_CREATE_FILTER:
-            return Object.assign({}, state, {
-                isFetching: false,
-                selectedFilter: action.filter
-            });
+        case ActionTypes.FBUILDER_END_EDIT:
+            return reduceFBuilderEndEdit(state);
 
         default:
-            return state;
+            return state
     }
 }

@@ -1,10 +1,9 @@
-import * as ActionTypes from '../actions/userData';
+import * as ActionTypes from '../actions/userData'
 
 export default function userData(state = {
     isFetching: false,
     isValid: false,
     profileMetadata: {},
-    filters: [],
     views: [],
     attachedHistoryData: {
         sampleId: null,
@@ -26,7 +25,6 @@ export default function userData(state = {
                 isValid: true,
 
                 profileMetadata: action.userData.profileMetadata,
-                filters: action.userData.filters,
                 views: action.userData.views,
 
                 lastUpdated: action.receivedAt
@@ -46,19 +44,8 @@ export default function userData(state = {
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.REQUEST_FILTERS:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-
-        case ActionTypes.RECEIVE_FILTERS:
-            return Object.assign({}, state, {
-                isFetching: false,
-                filters: action.filters,
-                lastUpdated: action.receivedAt
-            });
-
-        case ActionTypes.CHANGE_HISTORY_DATA: {
+        case ActionTypes.CHANGE_HISTORY_DATA:
+        {
             const {sampleId, filterId, viewId} = action;
             return Object.assign({}, state, {
                 attachedHistoryData: {
@@ -68,19 +55,15 @@ export default function userData(state = {
                 }
             });
         }
-        case ActionTypes.CHANGE_FILTERS: {
-            const {filters} = action;
-            return Object.assign({}, state, {
-                filters: filters
-            });
-        }
-        case ActionTypes.CHANGE_VIEWS: {
+        case ActionTypes.CHANGE_VIEWS:
+        {
             const {views} = action;
             return Object.assign({}, state, {
                 views: views
             });
         }
-        case ActionTypes.DELETE_VIEW: {
+        case ActionTypes.DELETE_VIEW:
+        {
             const deletedViewIndex = _.findIndex(state.views, view => view.id == action.viewId);
             return Object.assign({}, state, {
                 views: [
@@ -89,16 +72,7 @@ export default function userData(state = {
                 ]
             });
         }
-        case ActionTypes.DELETE_FILTER: {
-            const deletedFilterIndex = _.findIndex(state.filters, filter => filter.id == action.filterId);
-            return Object.assign({}, state, {
-                filters: [
-                    ...state.filters.slice(0, deletedFilterIndex),
-                    ...state.filters.slice(deletedFilterIndex + 1)
-                ]
-            });
-        }
         default:
-            return state;
+            return state
     }
 }

@@ -3,14 +3,15 @@ import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 
-import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder';
-import {viewBuilderChangeSortColumn, viewBuilderChangeKeywords} from '../../../actions/viewBuilder';
+import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder'
+import {viewBuilderChangeSortColumn, viewBuilderChangeKeywords} from "../../../actions/viewBuilder";
 
 
 export default class ViewBuilder extends React.Component {
 
-    shouldComponentUpdate(nextProps) {
+    shouldComponentUpdate(nextProps, nextState) {
         return this.props.fields !== nextProps.fields
             || this.props.viewBuilder.editedView.type !== nextProps.viewBuilder.editedView.type
             || this.props.viewBuilder.editedView.viewListItems !== nextProps.viewBuilder.editedView.viewListItems;
@@ -19,6 +20,9 @@ export default class ViewBuilder extends React.Component {
     render() {
         const {dispatch, fields, viewBuilder} = this.props;
         const allAvailableFields = fields.allowedFieldsList;
+        const view = viewBuilder.editedView;
+        const viewItemsLength = view.viewListItems.length;
+        const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         // Exclude fields that are already selected.
         const fieldsForSelection = _.filter(
             allAvailableFields,
@@ -26,8 +30,6 @@ export default class ViewBuilder extends React.Component {
         );
         // This field will be chosen when a new item is created.
         const nextDefaultField = _.first(fieldsForSelection);
-        const view = viewBuilder.editedView;
-        const viewItemsLength = view.viewListItems.length;
         var plusDisabledClass = classNames({
             'disabled': (view.type !== 'user' || viewItemsLength >= 30 || !nextDefaultField) ? 'disabled' : ''
         });
@@ -35,7 +37,6 @@ export default class ViewBuilder extends React.Component {
             'disabled': (view.type !== 'user' || viewItemsLength <= 1) ? 'disabled' : ''
         });
 
-        const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         const isDisableEditing = view.type !== 'user';
         const selects = view.viewListItems.map(function (viewItem, index) {
 
@@ -47,7 +48,7 @@ export default class ViewBuilder extends React.Component {
             const selectOptions = [
 
                 ...fieldsForSelection.map((f) => {
-                    return {value: f.id, label: `${f.name} -- ${f.sourceName}`};
+                    return {value: f.id, label: `${f.name} -- ${f.sourceName}`}
                 })
             ];
             const {sortOrder, sortDirection, fieldId} = viewItem;
@@ -60,17 +61,17 @@ export default class ViewBuilder extends React.Component {
 
             return (
 
-                <div className='row grid-toolbar' key={Math.round(Math.random()*100000000).toString()}>
+                <div className="row grid-toolbar" key={Math.round(Math.random()*100000000).toString()}>
 
-                    <div className='col-xs-6 btn-group-select2'>
-                        <div className='btn-group'>
-                            <button className='btn btn-link btnDrag' disabled='' type='button'>
-                                <span className='icon-bar'/>
-                                <span className='icon-bar'/>
-                                <span className='icon-bar'/>
+                    <div className="col-xs-12 col-sm-6 btn-group-select2">
+                        <div className="btn-group btn-group-left">
+                            <button className="btn btn-link btnDrag" disabled="" type="button">
+                                <span className="icon-bar"/>
+                                <span className="icon-bar"/>
+                                <span className="icon-bar"/>
                             </button>
                         </div>
-                        <div className='btn-group'>
+                        <div className="btn-group">
                             <Select
                                 options={selectOptions}
                                 value={currentValue}
@@ -78,56 +79,56 @@ export default class ViewBuilder extends React.Component {
                                 disabled={isDisableEditing || !isFieldAvailable}
                             />
                         </div>
-                        <div className='btn-group' data-localize='views.setup.settings.sort' data-toggle='tooltip'
-                             data-placement='bottom' data-container='body' title='Desc/Asc Descending'>
+                        <div className="btn-group" data-localize="views.setup.settings.sort" data-toggle="tooltip"
+                             data-placement="bottom" data-container="body" title="Desc/Asc Descending">
                             {this.renderSortButton(sortDirection, ascSortBtnClasses, sortOrder, fieldId, isDisableEditing)}
                         </div>
-
                     </div>
-                    <div className='col-xs-5 input-group'>
-                        <Select
-                            options={keywordsSelectOptions}
-                            multi={true}
-                            placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
-                            value={keywordsCurrentValue}
-                            onChange={ (val) => this.onChangeKeyword(index, val)}
-                            clearable={true}
-                            backspaceRemoves={true}
-                            disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
-                        />
-                    </div>
-
-                    <div className="col-xs-1">
-                        <button className="btn-link" disabled={minusDisabledClass}
-                                onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
-                                type="button">
-                            <i className="fa fa-lg fa-minus-circle"/></button>
-                        <button className="btn-link" disabled={plusDisabledClass}
-                                onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
-                                type="button">
-                            <i className="fa fa-lg fa-plus-circle"/></button>
+                    <div className="col-xs-12 col-sm-6 btn-group-select2">
+                        <div className="btn-group btn-group-select100">
+                            <Select
+                                options={keywordsSelectOptions}
+                                multi={true}
+                                placeholder={(keywordsSelectOptions.length) ?'Choose keywords':'No keywords defined for the field'}
+                                value={keywordsCurrentValue}
+                                onChange={ (val) => this.onChangeKeyword(index, val)}
+                                clearable={true}
+                                backspaceRemoves={true}
+                                disabled={isDisableEditing || !isFieldAvailable ||!keywordsSelectOptions.length}
+                            />
+                        </div>
+                        <div className="btn-group">
+                            <button className="btn-link-default" disabled={minusDisabledClass}
+                                    onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
+                                    type="button">
+                                <i className="md-i">close</i></button>
+                            <button className="btn-link-default" disabled={plusDisabledClass}
+                                    onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
+                                    type="button">
+                                <i className="md-i">add</i></button>
+                        </div>
                     </div>
                 </div>
-            );
+            )
         }.bind(this));
 
         return (
 
-            <div className='sort-setting copyview collapse in'>
-                <h5 data-localize='views.setup.settings.title'>Table Columns</h5>
-                <div className='row grid-toolbar nobg'>
+            <div className="copyview collapse in">
+                <h5 data-localize="views.setup.settings.title">Table Columns</h5>
+                <div className="row grid-toolbar hidden-xs">
 
-                    <div className='col-xs-6'>
-                        <small className='text-muted text-order' data-localize='views.setup.settings.columns_order'>
+                    <div className="col-sm-6">
+                        <small className="text-muted text-order" data-localize="views.setup.settings.columns_order">
                             Order
                         </small>
-                        <small className='text-muted' data-localize='views.setup.settings.columns_sorting'>Column Name
+                        <small className="text-muted" data-localize="views.setup.settings.columns_sorting">Column Name
                             and Multi Sort Order
                         </small>
                     </div>
 
-                    <div className='col-xs-6'>
-                        <small className='text-muted' data-localize='views.setup.settings.columns_filter'>Column Filter
+                    <div className="col-sm-6">
+                        <small className="text-muted" data-localize="views.setup.settings.columns_filter">Column Filter
                             and Keywords
                         </small>
                     </div>
@@ -136,17 +137,17 @@ export default class ViewBuilder extends React.Component {
                 {selects}
             </div>
 
-        );
+        )
     }
 
     createCurrentKeywordValues(viewItem, keywords) {
         return [
             ...viewItem.keywords.map((keywordId) => {
                 const currentKeyword = keywords[keywordId];
-                return {value: currentKeyword.synonyms[0].keywordId, label: `${currentKeyword.synonyms[0].value}`};
+                return {value: currentKeyword.synonyms[0].keywordId, label: `${currentKeyword.synonyms[0].value}`}
             })
         ];
-    }
+    };
 
     createFieldKeywordsHash(field) {
         if (!field.id) {
@@ -166,7 +167,7 @@ export default class ViewBuilder extends React.Component {
             return [
 
                 ...field.keywords.map((keyword) => {
-                    return {value: keyword.synonyms[0].keywordId, label: `${keyword.synonyms[0].value}`};
+                    return {value: keyword.synonyms[0].keywordId, label: `${keyword.synonyms[0].value}`}
                 })
             ];
         }
@@ -183,6 +184,7 @@ export default class ViewBuilder extends React.Component {
         else {
             return classNames(
                 'btn',
+                'btn-default',
                 'btn-sort', sortDirection, {
                     'active': true
                 }
@@ -193,10 +195,10 @@ export default class ViewBuilder extends React.Component {
     renderSortButton(currentDirection, sortButtonClass, sortOrder, fieldId, isDisable) {
         return (
             <button className={sortButtonClass}
-                    type='button'
+                    type="button"
                     disabled={isDisable}
                     onClick={ e => this.onSortClick(currentDirection, e.ctrlKey || e.metaKey, fieldId )}>
-                <span className='text-info'>{sortOrder}</span>
+                <span className="badge badge-info">{sortOrder}</span>
             </button>
         );
     }
@@ -224,7 +226,7 @@ function mapStateToProps(state) {
         viewBuilder,
         views,
         fields
-    };
+    }
 }
 
 export default connect(mapStateToProps)(ViewBuilder);

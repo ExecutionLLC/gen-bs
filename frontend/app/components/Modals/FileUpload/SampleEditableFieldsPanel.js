@@ -8,7 +8,7 @@ import ComponentBase from '../../shared/ComponentBase';
 import {
     updateSampleValue, resetSampleInList,
     requestUpdateSampleFields
-} from '../../../actions/samplesList';
+} from '../../../actions/samplesList'
 
 export default class SampleEditableFieldsPanel extends ComponentBase {
     constructor(...args) {
@@ -24,7 +24,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(requestUpdateSampleFields(sample.id));
+        dispatch(requestUpdateSampleFields(sample.id))
     }
 
     onResetSampleClick(e, sample) {
@@ -51,9 +51,9 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         return (
             <Panel collapsible
                    expanded={this.props.isExpanded}
-                   className='samples-values form-horizontal-rows'
+                   className="samples-values"
             >
-                <div className='flex'>
+                <div className="flex">
                     {this.props.fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
                     {this.renderRowButtons()}
                 </div>
@@ -73,35 +73,39 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     renderRowButtons() {
         const {sample} = this.props;
         return (
-            <div className='btn-group '>
-                <button
-                    onClick={ (e) => this.onResetSampleClick(e, sample) }
-                    type='button'
-                    className='btn btn-default'
-                >
-                    <span>Reset</span>
-                </button>
-
-                <button
-                    onClick={ (e) => this.onSaveEditedSampleClick(e, sample) }
-                    type='button'
-                    className='btn btn-primary'
-                >
-                    <span data-localize='actions.save_select.title'>Save</span>
-                </button>
-            </div>
-        );
+          <dl className="dl-horizontal dl-btns">
+              <dd>
+                  <div className="btn-group ">
+                      <button
+                          onClick={ (e) => this.onResetSampleClick(e, sample) }
+                          type="button"
+                          className="btn btn-default"
+                      >
+                          <span>Reset</span>
+                      </button>
+      
+                      <button
+                          onClick={ (e) => this.onSaveEditedSampleClick(e, sample) }
+                          type="button"
+                          className="btn btn-primary"
+                      >
+                          <span data-localize="actions.save_select.title">Save</span>
+                      </button>
+                  </div>
+              </dd>
+          </dl>
+        )
     }
 
     renderSelectField(sampleId, field, fieldValue) {
         const selectOptions = field.availableValues.map(
             option => {
-                return {value: option.id, label: option.value};
+                return {value: option.id, label: option.value}
             }
         );
 
         return (
-            <dl key={field.id} className='dl-horizontal'>
+            <dl key={field.id} className="dl-horizontal">
                 <dt>{field.label}</dt>
                 <dd>
                     <Select
@@ -116,12 +120,12 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 
     renderTextField(sampleId, field, fieldValue) {
         return (
-            <dl key={field.id} className='dl-horizontal'>
+            <dl key={field.id} className="dl-horizontal">
                 <dt>{field.label}</dt>
                 <dd>
                     <input
-                        type='text'
-                        className='form-control'
+                        type="text"
+                        className="form-control"
                         value={fieldValue}
                         onChange={(e) => this.onSampleValueUpdated(sampleId, field.id, e.target.value) }
                     />

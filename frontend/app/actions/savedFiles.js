@@ -30,7 +30,6 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
         const {
             ui: {
                 selectedView,
-                selectedFilter,
                 language
             },
             auth: {
@@ -38,12 +37,15 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             },
             samplesList: {
                 selectedSample
+            },
+            filtersList: {
+                selectedFilterId
             }
         } = getState();
         const fileMetadata = {
             sampleId: selectedSample.id,
             viewId: selectedView.id,
-            filterIds: [selectedFilter.id],
+            filterIds: [selectedFilterId],
             name: fileName,
             url: null,
             totalResults

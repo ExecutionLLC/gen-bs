@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
 import auth from './auth';
 import userData from './userData';
@@ -10,10 +10,11 @@ import filterBuilder from './filterBuilder';
 import fields from './fields';
 import ui from './ui';
 import samplesList from './samplesList';
-import websocket from './websocket';
+import websocket from './websocket'
 import fileUpload from './fileUpload';
 import errorHandler from './errorHandler';
-import queryHistory from './queryHistory';
+import queryHistory from './queryHistory'
+import filtersList from "./filtersList";
 
 const genApp = combineReducers({
     auth,
@@ -26,6 +27,7 @@ const genApp = combineReducers({
     fields,
     ui,
     samplesList,
+    filtersList,
     websocket,
     fileUpload,
     errorHandler,

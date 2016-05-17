@@ -1,65 +1,77 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Modal} from 'react-bootstrap';
+import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { Modal } from 'react-bootstrap';
 
-import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader';
-import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter';
-import FilterBuilder from './FilterBuilder/FilterBuilder';
-import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
-import NewFilterInputs from './FilterBuilder/NewFilterInputs';
+import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader'
+import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter'
+import FilterBuilder from './FilterBuilder/FilterBuilder'
+import {filterBuilderEndEdit} from '../../actions/filterBuilder';
+import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect'
+import NewFilterInputs from './FilterBuilder/NewFilterInputs'
 
 class FiltersModal extends Component {
+
+    onClose() {
+        this.props.closeModal('filters');
+        this.props.dispatch(filterBuilderEndEdit());
+    }
+
     render() {
 
         const {isValid} = this.props.userData;
-        const editingFilterIsNew = this.props.filterBuilder.editingFilter.isNew;
-
+        const {editingFilter} = this.props.filterBuilder;
+        const editingFilterIsNew = editingFilter ? editingFilter.isNew : false;
         return (
 
             <Modal
-                dialogClassName='modal-dialog-primary'
-                bsSize='lg'
+                dialogClassName="modal-dialog-primary"
+                bsSize="lg"
                 show={this.props.showModal}
-                onHide={ () => this.props.closeModal('filters') }
+                onHide={() => this.onClose()}
             >
-                { !isValid &&
+                { (!isValid || !editingFilter) &&
                 <div >&nbsp;</div>
                 }
-                { isValid &&
+                { (isValid && editingFilter) &&
                 <div>
                     <FilterBuilderHeader />
                     <form>
                         <Modal.Body>
-                            { editingFilterIsNew &&
-                            <div>
-                                <NewFilterInputs  {...this.props} />
-                                <FilterBuilder
-                                    {...this.props}
-                                />
+                            <div className="modal-body-scroll">
+                                { editingFilterIsNew &&
+                                <div className="modal-padding">
+                                    <NewFilterInputs  {...this.props} />
+                                    <FilterBuilder
+                                        {...this.props}
+                                    />
+                                </div>
+                                }
+                                { !editingFilterIsNew &&
+                                <div className="modal-padding">
+                                    <ExistentFilterSelect {...this.props} />
+                                    <FilterBuilder
+                                        {...this.props}
+                                    />
+                                </div>
+                                }
                             </div>
-                            }
-                            { !editingFilterIsNew &&
-                            <div>
-                                <ExistentFilterSelect {...this.props} />
-                                <FilterBuilder
-                                    {...this.props}
-                                />
-                            </div>
-                            }
                         </Modal.Body>
-                        <FilterBuilderFooter {...this.props} />
+                        <FilterBuilderFooter
+                            {...this.props}
+                            closeModal={() => this.onClose()}
+                        />
                     </form>
                 </div>
                 }
             </Modal>
 
-        );
+        )
     }
 }
 
 
 function mapStateToProps(state) {
-    const {filterBuilder, ui, auth, userData, fields, samplesList} = state;
+    const { filterBuilder, ui, auth, userData, fields, samplesList, filtersList } = state
 
     return {
         userData,
@@ -67,9 +79,10 @@ function mapStateToProps(state) {
         ui,
         filterBuilder,
         auth,
-        samplesList
-    };
+        samplesList,
+        filtersList
+    }
 }
 
-export default connect(mapStateToProps)(FiltersModal);
+export default connect(mapStateToProps)(FiltersModal)
 

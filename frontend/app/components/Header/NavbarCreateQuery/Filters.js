@@ -2,34 +2,36 @@ import React, {Component} from 'react';
 import Select from '../../shared/Select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeFilter} from '../../../actions/ui';
+import {filtersListSelectFilter} from "../../../actions/filtersList";
 
 export default class Filters extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
         const dispatch = this.props.dispatch;
-        const selectedFilter = this.props.ui.selectedFilter;
+        const selectedFilterId = this.props.filtersList.selectedFilterId;
 
         return (
-            <div className='table-cell max-width'>
-                <div className='btn-group filter-select'
-                     data-localize='filters.help'
-                     data-toggle='tooltip'
-                     data-placement='bottom'
-                     data-container='body'
-                     title='Select one of available filters'
+            <div className="table-cell max-width">
+                <div className="btn-group filter-select"
+                     data-localize="filters.help"
+                     data-toggle="tooltip"
+                     data-placement="bottom"
+                     data-container="body"
+                     title="Select one of available filters"
                 >
                     <Select options={this.getFilterOptions()}
-                            value={selectedFilter ? selectedFilter.id : null}
-                            onChange={(item) => dispatch(changeFilter(item.value))}
+                            value={selectedFilterId}
+                            onChange={(item) => {
+                                dispatch(filtersListSelectFilter(item.value));
+                            }}
                     />
                 </div>
             </div>
-        );
+        )
     }
 
     isFilterDisabled(filter) {
@@ -38,13 +40,14 @@ export default class Filters extends Component {
     }
 
     getFilterOptions() {
-        const filters = this.props.userData.filters;
+        const {filters} = this.props.filtersList;
         return filters.map((filterItem) => {
-            const isDisabled = this.isFilterDisabled(filterItem);
-            const label = getItemLabelByNameAndType(filterItem.name, filterItem.type);
-            return {
-                value: filterItem.id, label, disabled: isDisabled
-            };
-        });
+                const isDisabled = this.isFilterDisabled(filterItem);
+                const label = getItemLabelByNameAndType(filterItem.name, filterItem.type);
+                return {
+                    value: filterItem.id, label, disabled: isDisabled
+                }
+            }
+        )
     }
 }
