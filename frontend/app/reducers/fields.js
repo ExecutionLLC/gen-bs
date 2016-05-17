@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/fields'
+import * as ActionTypes from '../actions/fields';
 
 const initialState = {
     isFetching: {

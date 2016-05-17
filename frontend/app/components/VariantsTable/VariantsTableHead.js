@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
-import classNames from 'classnames';
+import React, {Component} from 'react';
 
 import FieldHeader from './FieldHeader';
-import  { firstCharToUpperCase } from '../../utils/stringUtils';
-import FieldUtils from '../../utils/fieldUtils';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
 
 export default class VariantsTableHead extends Component {
 
     render() {
-        const { dispatch, fields, ws, searchParams } = this.props;
-        const { sort } = this.props.variantsTable.searchInResultsParams;
-        const { isFetching } = this.props.variantsTable;
+        const {dispatch, fields, ws, searchParams} = this.props;
+        const {sort} = this.props.variantsTable.searchInResultsParams;
+        const {isFetching} = this.props.variantsTable;
         const {
             variantsView: currentView,
             variantsSampleFieldsList: currentSampleFields
@@ -20,7 +17,7 @@ export default class VariantsTableHead extends Component {
 
         if (!searchParams || !currentView) {
             return (
-                <tbody className="table-variants-head" id="variants_table_head" ref="variantsTableHead">
+                <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
                 <tr />
                 </tbody>
             );
@@ -32,36 +29,36 @@ export default class VariantsTableHead extends Component {
             result[field.id] = field;
             return result;
         }, {});
-        
+
         return (
-            <tbody className="table-variants-head" id="variants_table_head" ref="variantsTableHead">
+            <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
             <tr>
-                <td className="btntd">
+                <td className='btntd'>
                     <div></div>
                 </td>
-                <td className="btntd row_checkbox" key="row_checkbox">
+                <td className='btntd row_checkbox' key='row_checkbox'>
                     <div></div>
                 </td>
-                <td className="btntd">
+                <td className='btntd'>
                     <div></div>
                 </td>
-                <td data-label="comment" key="comment" className="comment">
+                <td data-label='comment' key='comment' className='comment'>
                     <div>
-                        <div className="variants-table-header-label">
-                            <a type="button" className="btn-link-default">
+                        <div className='variants-table-header-label'>
+                            <a type='button' className='btn-link-default'>
                                 Comment
                             </a>
 
                         </div>
                     </div>
-                    <div className="variants-table-search-field input-group invisible">
-                       <span className="input-group-btn">
-                           <button className="btn btn-link-light-default">
-                               <i className="md-i">search</i>
+                    <div className='variants-table-search-field input-group invisible'>
+                       <span className='input-group-btn'>
+                           <button className='btn btn-link-light-default'>
+                               <i className='md-i'>search</i>
                            </button>
                        </span>
-                        <input type="text" className="form-control material-input"
-                               value=""
+                        <input type='text' className='form-control material-input'
+                               value=''
                         />
                     </div>
                 </td>
@@ -90,7 +87,7 @@ export default class VariantsTableHead extends Component {
                          onSortRequested={sendSortRequestedAction}
                          onSearchRequested={sendSearchRequest}
                          onSearchValueChanged={onSearchValueChanged}
-                         currentVariants = {this.props.ws.currentVariants}
+                         currentVariants={this.props.ws.currentVariants}
                          disabled={isFetching}
             />
         );
@@ -108,7 +105,7 @@ export default class VariantsTableHead extends Component {
 
     handleScroll(e) {
         const el = e.target;
-        if(this.props.xScrollListener) {
+        if (this.props.xScrollListener) {
             this.props.xScrollListener(el.scrollLeft);
         }
     }

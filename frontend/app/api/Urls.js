@@ -79,7 +79,7 @@ export default class Urls {
     history() {
         return this._constructApiUrl('/history', this.host, this.port);
     }
-    
+
     startSearch() {
         return this._constructApiUrl('/search');
     }

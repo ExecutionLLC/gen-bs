@@ -1,4 +1,4 @@
-import  * as ActionTypes from '../actions/queryHistory'
+import  * as ActionTypes from '../actions/queryHistory';
 
 const initialState = {
     history: [],
@@ -6,7 +6,7 @@ const initialState = {
 };
 
 export default function queryHistory(state = initialState, action) {
-    switch(action.type) {
+    switch (action.type) {
         case ActionTypes.RECEIVE_QUERY_HISTORY: {
             return Object.assign({}, state, {
                 history: action.history || initialState.history

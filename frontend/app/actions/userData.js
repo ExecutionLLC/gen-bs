@@ -1,13 +1,15 @@
-import apiFacade from '../api/ApiFacade'
-import {handleError} from './errorHandler'
-import {receiveFields, receiveTotalFields} from './fields'
+import apiFacade from '../api/ApiFacade';
+import {handleError} from './errorHandler';
+import {receiveFields, receiveTotalFields} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {receiveQueryHistory} from './queryHistory';
-import {analyze, changeView, changeFilter} from './ui';
+import {analyze, changeView} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
-import * as _ from "lodash";
+import _ from 'lodash';
+import {filtersListReceive} from './filtersList';
+import {filtersListSelectFilter} from './filtersList';
 
 /*
  * action types
@@ -18,21 +20,13 @@ export const REQUEST_USERDATA = 'REQUEST_USERDATA';
 export const RECEIVE_VIEWS = 'RECEIVE_VIEWS';
 export const REQUEST_VIEWS = 'REQUEST_VIEWS';
 
-export const RECEIVE_FILTERS = 'RECEIVE_FILTERS';
-export const REQUEST_FILTERS = 'REQUEST_FILTERS';
-
 export const CHANGE_HISTORY_DATA = 'CHANGE_HISTORY_DATA';
-export const CHANGE_FILTERS = 'CHANGE_FILTERS';
 export const CHANGE_VIEWS = 'CHANGE_VIEWS';
 
 export const DELETE_VIEW = 'DELETE_VIEW';
-export const DELETE_FILTER = 'DELETE_FILTER';
 
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
-
-const FETCH_FILTERS_NETWORK_ERROR = 'Cannot update filters data (network error). You can reload page and try again.';
-const FETCH_FILTERS_SERVER_ERROR = 'Cannot update filters data (server error). You can reload page and try again.';
 
 const FETCH_VIEWS_NETWORK_ERROR = 'Cannot update views data (network error). You can reload page and try again.';
 const FETCH_VIEWS_SERVER_ERROR = 'Cannot update views data (server error). You can reload page and try again.';
@@ -41,7 +35,6 @@ const CANNOT_FIND_DEFAULT_ITEMS_ERROR = 'Cannot determine set of default setting
                                         'You can try to set sample, filter, view by hand or try to reload page.';
 
 const dataClient = apiFacade.dataClient;
-const filtersClient = apiFacade.filtersClient;
 const viewsClient = apiFacade.viewsClient;
 
 /*
@@ -51,7 +44,7 @@ const viewsClient = apiFacade.viewsClient;
 function requestUserdata() {
     return {
         type: REQUEST_USERDATA
-    }
+    };
 }
 
 function receiveUserdata(json) {
@@ -59,7 +52,7 @@ function receiveUserdata(json) {
         type: RECEIVE_USERDATA,
         userData: json,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchUserdata() {
@@ -89,6 +82,7 @@ export function fetchUserdata() {
                 const view = _.find(userData.views, view => view.type === 'standard');
 
                 dispatch(receiveUserdata(userData));
+                dispatch(filtersListReceive(userData.filters));
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
@@ -96,23 +90,23 @@ export function fetchUserdata() {
                 dispatch(receiveSamplesList(samples));
                 dispatch(receiveQueryHistory(queryHistory));
 
-                dispatch(changeSample(sample.id));
-                dispatch(changeFilter(filter.id));
-                dispatch(changeView(view.id));
                 if (!sample || !filter || !view) {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 } else {
+                    dispatch(changeSample(sample.id));
+                    dispatch(filtersListSelectFilter(filter.id));
+                    dispatch(changeView(view.id));
                     dispatch(analyze(sample.id, view.id, filter.id));
                 }
             }
         });
-    }
+    };
 }
 
 function requestViews() {
     return {
         type: REQUEST_VIEWS
-    }
+    };
 }
 
 function receiveViews(json) {
@@ -120,7 +114,7 @@ function receiveViews(json) {
         type: RECEIVE_VIEWS,
         views: json,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchViews() {
@@ -143,44 +137,7 @@ export function fetchViews() {
                 dispatch(changeView(viewId));
             }
         });
-    }
-}
-
-function requestFilters() {
-    return {
-        type: REQUEST_FILTERS
-    }
-}
-
-function receiveFilters(json) {
-    return {
-        type: RECEIVE_FILTERS,
-        filters: json,
-        receivedAt: Date.now()
-    }
-}
-
-export function fetchFilters(filterIdToSelect) {
-
-    return (dispatch, getState) => {
-        dispatch(requestFilters());
-
-        const sessionId = getState().auth.sessionId;
-        filtersClient.getAll(sessionId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, FETCH_FILTERS_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, FETCH_FILTERS_SERVER_ERROR));
-            } else {
-                const result = response.body;
-                const filter = result[0] || null;
-                const filterId = filterIdToSelect || filter.id; // rid of whole fetchFilters
-
-                dispatch(receiveFilters(result));
-                dispatch(changeFilter(filterId));
-            }
-        });
-    }
+    };
 }
 
 export function changeHistoryData(sampleId, filterId, viewId) {
@@ -189,33 +146,19 @@ export function changeHistoryData(sampleId, filterId, viewId) {
         sampleId,
         filterId,
         viewId
-    }
-}
-
-export function changeFilters(filters) {
-    return {
-        type: CHANGE_FILTERS,
-        filters
-    }
+    };
 }
 
 export function changeViews(views) {
     return {
         type: CHANGE_VIEWS,
         views
-    }
+    };
 }
 
 export function deleteView(viewId) {
     return {
         type: DELETE_VIEW,
         viewId
-    }
-}
-
-export function deleteFilter(filterId) {
-    return {
-        type: DELETE_FILTER,
-        filterId
-    }
+    };
 }
