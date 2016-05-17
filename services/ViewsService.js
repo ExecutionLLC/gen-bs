@@ -15,6 +15,10 @@ class ViewsService extends UserEntityServiceBase {
         (callback) => {
             this._viewItemsCheck(item, callback);
         },
+        (item, callback) => super.findAll(user, callback),
+        (views, callback) => {
+            this._checkViewNameExists(item, views, callback);
+        },
         (item, callback) => {
             super.add(user, languId, item, callback);
         }
@@ -49,6 +53,17 @@ class ViewsService extends UserEntityServiceBase {
       }
   }
 
+    _checkViewNameExists(view, views, callback) {
+        const viewName = view.name.trim();
+        const viewExists = _.some(
+            views, v => v.name.trim() == viewName
+        );
+        if (viewExists) {
+            callback(new Error('View with this name already exists.'));
+        } else {
+            callback(null, view);
+        }
+    }
 }
 
 module.exports = ViewsService;
