@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {Modal} from 'react-bootstrap';
-import classNames from 'classnames';
 
 import FileUploadProgressBar from './FileUploadProgressBar';
 

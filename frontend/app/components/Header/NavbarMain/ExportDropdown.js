@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Nav, NavDropdown, MenuItem} from 'react-bootstrap';
 
 import {exportToFile} from '../../../actions/savedFiles';

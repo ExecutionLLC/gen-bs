@@ -4,7 +4,6 @@ import {viewBuilderSelectView} from './viewBuilder';
 import {detachHistory} from './queryHistory';
 import {setViewVariantsSort} from './variantsTable';
 import {handleError} from './errorHandler';
-import {filtersListSelectFilter} from './filtersList';
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';

@@ -20,7 +20,7 @@ class VariantsTableReact extends Component {
     }
 
     render() {
-        const {auth, fields, ui} = this.props;
+        const {auth, fields} = this.props;
         const {variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error} = this.props.ws;
 
         var tableWrapperClass = classNames({

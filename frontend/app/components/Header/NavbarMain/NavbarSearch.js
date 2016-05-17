@@ -24,7 +24,7 @@ export default class NavbarSearch extends Component {
                      data-localize=''
                      onChange={(e) => this.onGlobalSearchInputChanged(e)}
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
-                     onBlur={(e) => this.onGlobalSearchInputBlur()}
+                     onBlur={() => this.onGlobalSearchInputBlur()}
                      disabled={!isEnabled}
                     />
                 </div>

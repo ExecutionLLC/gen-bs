@@ -11,14 +11,14 @@ import Analyze from './NavbarCreateQuery/Analyze';
 import LoadHistory from './NavbarCreateQuery/LoadHistory';
 import {fetchFields} from '../../actions/fields';
 
-import { changeView, analyze } from '../../actions/ui';
+import { analyze } from '../../actions/ui';
 import { changeSample } from '../../actions/samplesList';
 
 
 class NavbarCreateQuery extends Component {
 
     onSampleSelected(sampleId) {
-        const { dispatch, samples } = this.props;
+        const { dispatch } = this.props;
         dispatch(changeSample(sampleId));
         dispatch(fetchFields(sampleId));
     }
@@ -60,7 +60,7 @@ class NavbarCreateQuery extends Component {
 
                         <Analyze
                             {...this.props}
-                            clicked={ (e) => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilterId))}
+                            clicked={ () => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilterId))}
                         />
                         <LoadHistory
                             dispatch={this.props.dispatch}

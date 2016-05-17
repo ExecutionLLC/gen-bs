@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Modal} from 'react-bootstrap';
 
 import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/filterBuilder';
 
@@ -28,7 +27,6 @@ export default class NewFilterInputs extends Component {
     }
 
     render() {
-        const {dispatch, fields} = this.props;
         const {filters} = this.props.filtersList;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 

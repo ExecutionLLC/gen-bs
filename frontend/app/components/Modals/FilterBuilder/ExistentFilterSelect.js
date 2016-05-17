@@ -34,7 +34,7 @@ export default class ExistentFilterSelect extends Component {
 
     render() {
 
-        const {dispatch, auth, fields} = this.props;
+        const {auth, fields} = this.props;
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
         const {filters} = this.props.filtersList;
         const disabledClass = classNames({

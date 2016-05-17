@@ -38,7 +38,6 @@ class App extends Component {
     }
 
     render() {
-        const { isFetching } = this.props.userData;
         const {samplesList: {samples}} = this.props;
         const { ui } = this.props;
 
