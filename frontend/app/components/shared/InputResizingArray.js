@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import Input from './Input';
 
-const makeKey = (function() {
+const makeKey = (function () {
     var key;
-    return function() {
+    return function () {
         key = (key + 1) || 0;
         return key;
     };
@@ -24,11 +24,11 @@ export default class InputResizingArray extends Component {
     }
 
     static fromKeyed(vals) {
-        return vals.map( (v) => v.val );
+        return vals.map((v) => v.val);
     }
 
     static removeEmpty(vals) {
-        return vals.filter( (v) => v.val !== '' );
+        return vals.filter((v) => v.val !== '');
     }
 
     static DefaultInput(props) {
@@ -75,7 +75,7 @@ export default class InputResizingArray extends Component {
 
         return (
             <div>
-                {this.state.value.map( (val, i) => {
+                {this.state.value.map((val, i) => {
                     return (
                         <InputComponent
                             key={val.key}

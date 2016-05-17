@@ -3,7 +3,7 @@ import {Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import classNames from 'classnames';
 
-import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} from '../../../actions/viewBuilder'
+import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} from '../../../actions/viewBuilder';
 
 export default class ViewBuilderFooter extends React.Component {
 
@@ -22,26 +22,26 @@ export default class ViewBuilderFooter extends React.Component {
 
             <Modal.Footer>
                 <button
-                    onClick={ () => {  this.cancelOnClick()}}
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
+                    onClick={ () => {  this.cancelOnClick();}}
+                    type='button'
+                    className='btn btn-default'
+                    data-dismiss='modal'
                 >
-                    <span data-localize="actions.cancel"/>Cancel
+                    <span data-localize='actions.cancel'/>Cancel
                 </button>
 
                 <button
-                    onClick={ (e) => {this.selectOnClick(e)}}
-                    type="submit"
-                    className="btn btn-primary"
+                    onClick={ (e) => {this.selectOnClick(e);}}
+                    type='submit'
+                    className='btn btn-primary'
                     disabled={disabledClass}
                     title={title}
                 >
-                    <span data-localize="actions.save_select.title">{selectButtonLabel}</span>
+                    <span data-localize='actions.save_select.title'>{selectButtonLabel}</span>
                 </button>
             </Modal.Footer>
 
-        )
+        );
     }
 
     cancelOnClick() {
@@ -68,7 +68,7 @@ function mapStateToProps(state) {
         views,
         auth,
         viewBuilder
-    }
+    };
 }
 
 export default connect(mapStateToProps)(ViewBuilderFooter);

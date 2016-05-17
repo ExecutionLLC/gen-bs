@@ -4,11 +4,13 @@ export default class ExporterBase {
         this.newLine = '\n';
     }
 
-    buildHeaderRow(columnsArray, data) {
+    // eslint-disable-next-line
+    buildHeaderRow(columnsArray) {
         throw new Error('Not implemented.');
     }
 
-    buildRow(columnsArray, rowValues, data) {
+    // eslint-disable-next-line
+    buildRow(columnsArray, rowValues) {
         throw new Error('Not implemented.');
     }
 

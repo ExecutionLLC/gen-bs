@@ -1,5 +1,5 @@
 import React, {Component}  from 'react';
-import {Popover, OverlayTrigger} from 'react-bootstrap'
+import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 
 import {createComment, updateComment, removeComment} from '../../actions/variantsTable';
@@ -17,7 +17,7 @@ export default class VariantsTableComment extends Component {
     renderComment() {
         const {comments} = this.props;
         return (
-            <td className="comment">
+            <td className='comment'>
                 <div>
                     {(_.isEmpty(comments)) ? ' ' : comments[0].comment}
                 </div>
@@ -32,12 +32,12 @@ export default class VariantsTableComment extends Component {
             );
         } else {
             return (
-                <td className="comment">
+                <td className='comment'>
                     <OverlayTrigger
-                        trigger="click"
-                        ref="overlay"
+                        trigger='click'
+                        ref='overlay'
                         rootClose={true}
-                        placement="right"
+                        placement='right'
                         overlay={
                             <Popover id={searchKey}>
                                 {this.renderCommentPopover()}
@@ -45,7 +45,7 @@ export default class VariantsTableComment extends Component {
                         }
                     >
                         <div>
-                            <a className="btn-link-default editable editable-pre-wrapped editable-click editable-open">
+                            <a className='btn-link-default editable editable-pre-wrapped editable-click editable-open'>
                                 {(_.isEmpty(comments)) ? 'Add Comment' : comments[0].comment}</a>
 
                         </div>
@@ -89,32 +89,32 @@ export default class VariantsTableComment extends Component {
 
         return (
             <div>
-                <form className="form-inline editableform">
-                    <div className="control-group form-group">
+                <form className='form-inline editableform'>
+                    <div className='control-group form-group'>
                         <div>
-                            <div className="">
-                                    <textarea rows="7"
-                                              placeholder="Your comments here..."
-                                              className="form-control material-input input-large"
+                            <div className=''>
+                                    <textarea rows='7'
+                                              placeholder='Your comments here...'
+                                              className='form-control material-input input-large'
                                               onChange={(e) => this.onCommentChanged(e)}
                                               defaultValue={(_.isEmpty(comments)) ? '' : comments[0].comment}
                                     />
                             </div>
-                            <div className="editable-buttons editable-buttons-bottom">
-                                <button type="button"
-                                        className="btn btn-uppercase btn-link editable-submit"
+                            <div className='editable-buttons editable-buttons-bottom'>
+                                <button type='button'
+                                        className='btn btn-uppercase btn-link editable-submit'
                                         onClick={()=> this.onSaveClick(alt, pos,
                                             reference, chrom, searchKey, comment, comments)}
                                 >Save
                                 </button>
-                                <button type="button"
+                                <button type='button'
                                         onClick={()=>this.refs.overlay.toggle()}
-                                        className="btn btn-uppercase btn-link editable-cancel">
+                                        className='btn btn-uppercase btn-link editable-cancel'>
                                     Cancel
                                 </button>
                             </div>
                         </div>
-                        <div className="editable-error-block help-block"></div>
+                        <div className='editable-error-block help-block'></div>
                     </div>
                 </form>
             </div>

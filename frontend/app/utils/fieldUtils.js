@@ -2,6 +2,7 @@ export default class FieldUtils {
     static find(fieldId, fields) {
         return _.find(fields.totalFieldsList, (field) => field.id === fieldId);
     }
+
     /**
      * Make field structure usable for filters dialog purpposes
      * @param {{id: string, label: string, sourceName: string, valueType: string}} f
@@ -15,6 +16,7 @@ export default class FieldUtils {
             type: f.valueType === 'float' ? 'double' : f.valueType
         };
     }
+
     /**
      * Make fields array for filters
      * @param {{sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
@@ -22,8 +24,9 @@ export default class FieldUtils {
      */
     static makeFieldsListForFiltersSelect(fields) {
         const allAvailableFields = _.filter(fields.sampleFieldsList.concat(fields.sourceFieldsList), field => !field.isEditable);
-        return allAvailableFields.map( (f) => this.makeFieldSelectItemValue(f) );
+        return allAvailableFields.map((f) => this.makeFieldSelectItemValue(f));
     }
+
     /**
      * Return default field id for adding new rule item or smth
      * @param {{id: string, label: string, type: string}[]} fields
@@ -32,6 +35,7 @@ export default class FieldUtils {
     static getDefaultId(fields) {
         return fields[0].id;
     }
+
     /**
      * Get JS type for the field value or undefined
      * @param {{id: string, label: string, type: string}} field
@@ -49,6 +53,7 @@ export default class FieldUtils {
         }[fieldType];
         return jsType;
     }
+
     /**
      * Get validation regex for the field value or undefined
      * @param {{id: string, label: string, type: string}} field
@@ -57,8 +62,8 @@ export default class FieldUtils {
     static getFieldInputValidationRegex(field){
         const fieldType = field.type;
         const jsType = {
-            'char': "^((?!,).)*$",
-            'string': "^((?!,).)*$",
+            'char': '^((?!,).)*$',
+            'string': '^((?!,).)*$',
             'integer': null,
             'float': null,
             'double': null,

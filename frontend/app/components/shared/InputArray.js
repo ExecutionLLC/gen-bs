@@ -30,9 +30,10 @@ export default class InputArray extends Component {
 
         return (
             <div>
-                {this.state.value.map( (val, i) => {
+                {this.state.value.map((val, i) => {
                     return (
-                        <InputComponent key={val.key} {...this.props} value={val.val} onChange={(val) => onEditIndex(val, i)} />
+                        <InputComponent key={val.key} {...this.props} value={val.val}
+                                        onChange={(val) => onEditIndex(val, i)}/>
                     );
                 })}
             </div>

@@ -13,13 +13,13 @@ export default class MetadataSearch extends Component {
         const {selectedSampleId, onSampleChangeRequested} = this.props;
         return (
 
-            <div className="table-cell max-width">
-                <div className="btn-group sample-search"
-                     data-localize="samples.help"
-                     data-toggle="tooltip"
-                     data-placement="bottom"
-                     data-container="body"
-                     title="Select one from available samples"
+            <div className='table-cell max-width'>
+                <div className='btn-group sample-search'
+                     data-localize='samples.help'
+                     data-toggle='tooltip'
+                     data-placement='bottom'
+                     data-container='body'
+                     title='Select one from available samples'
                 >
                     <Select options={this.getSampleOptions()}
                             value={selectedSampleId}
@@ -30,14 +30,14 @@ export default class MetadataSearch extends Component {
         );
     }
 
-    isSampleDisabled(sample){
+    isSampleDisabled(sample) {
         const {isDemoSession} = this.props;
-        return  isDemoSession && sample.type == 'advanced';
+        return isDemoSession && sample.type == 'advanced';
     }
 
     getSampleOptions() {
         const {samples} = this.props;
-        return samples.map( (sampleItem) => {
+        return samples.map((sampleItem) => {
             const isDisabled = this.isSampleDisabled(sampleItem);
             const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
             return {value: sampleItem.id, label, disabled: isDisabled};
