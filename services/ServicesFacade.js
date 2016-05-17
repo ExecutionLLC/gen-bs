@@ -20,7 +20,7 @@ const UserDataService = require('./UserDataService');
 
 const ApplicationServerService = require('./external/applicationServer/ApplicationServerService');
 const ApplicationServerReplyService = require('./external/applicationServer/ApplicationServerReplyService');
-const AppServerUploadService = require('./external/applicationServer/AppServerUploadService');
+const AppServerUploadService = require('./external/applicationServer/upload/AppServerUploadService');
 const AppServerSourcesService = require('./external/applicationServer/AppServerSourcesService');
 const AppServerOperationsService = require('./external/applicationServer/AppServerOperationsService');
 const AppServerSearchService = require('./external/applicationServer/AppServerSearchService');
