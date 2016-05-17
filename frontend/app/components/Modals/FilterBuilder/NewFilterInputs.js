@@ -29,7 +29,7 @@ export default class NewFilterInputs extends Component {
 
     render() {
         const {dispatch, fields} = this.props;
-        const {filters} = this.props.userData;
+        const {filters} = this.props.filtersList;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
         const filterNameExists = _.some(filters, filter => filter.name == editingFilter.name);

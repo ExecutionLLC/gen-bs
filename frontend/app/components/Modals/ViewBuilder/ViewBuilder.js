@@ -3,6 +3,7 @@ import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 
 import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder'
 import {viewBuilderChangeSortColumn, viewBuilderChangeKeywords} from "../../../actions/viewBuilder";
@@ -19,6 +20,9 @@ export default class ViewBuilder extends React.Component {
     render() {
         const {dispatch, fields, viewBuilder} = this.props;
         const allAvailableFields = fields.allowedFieldsList;
+        const view = viewBuilder.editedView;
+        const viewItemsLength = view.viewListItems.length;
+        const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         // Exclude fields that are already selected.
         const fieldsForSelection = _.filter(
             allAvailableFields,
@@ -26,8 +30,6 @@ export default class ViewBuilder extends React.Component {
         );
         // This field will be chosen when a new item is created.
         const nextDefaultField = _.first(fieldsForSelection);
-        const view = viewBuilder.editedView;
-        const viewItemsLength = view.viewListItems.length;
         var plusDisabledClass = classNames({
             'disabled': (view.type !== 'user' || viewItemsLength >= 30 || !nextDefaultField) ? 'disabled' : ''
         });
@@ -35,7 +37,6 @@ export default class ViewBuilder extends React.Component {
             'disabled': (view.type !== 'user' || viewItemsLength <= 1) ? 'disabled' : ''
         });
 
-        const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         const isDisableEditing = view.type !== 'user';
         const selects = view.viewListItems.map(function (viewItem, index) {
 

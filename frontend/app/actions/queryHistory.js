@@ -3,13 +3,14 @@ import HttpStatus from 'http-status';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
-import {analyze, changeFilter, changeView} from './ui';
-import {changeFilters} from "./userData";
+import {analyze, changeView} from './ui';
 import {changeViews} from "./userData";
 import {changeSamples} from "./samplesList";
 import {changeSample} from "./samplesList";
 import {fetchFields} from "./fields";
 import {prepareAnalyze} from './websocket';
+import {filtersListSelectFilter} from "./filtersList";
+import {filtersListReceive} from "./filtersList";
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -87,7 +88,7 @@ export function renewHistoryItem(historyItemId) {
             dispatch(fetchFields(clonedHistoryItem.sample.id))
                 .then(() => {
                     dispatch([
-                        changeFilter(clonedHistoryItem.filters[0].id),
+                        filtersListSelectFilter(clonedHistoryItem.filters[0].id),
                         changeView(clonedHistoryItem.view.id),
                         analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
                     ]);
@@ -103,14 +104,14 @@ export function attachHistory(historyItem) {
             getState().samplesList.samples, sampleId, historyItem.sample
         );
         const {collection: filters, historyItemId: newFilterId} = changeHistoryItem(
-            getState().userData.filters, filterId, historyItem.filters[0]
+            getState().filtersList.filters, filterId, historyItem.filters[0]
         );
         const {collection: views, historyItemId: newViewId} = changeHistoryItem(
             getState().userData.views, viewId, historyItem.view
         );
         dispatch([
             changeHistoryData(newSampleId, newFilterId, newViewId),
-            changeFilters(filters),
+            filtersListReceive(filters),
             changeViews(views),
             changeSamples(samples)
         ]);
@@ -124,7 +125,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         if (!detachSample && !detachFilter && !detachView) {
             return;
         }
-        const {userData, samplesList} = getState();
+        const {userData, samplesList, filtersList} = getState();
         const attachedHistoryData = userData.attachedHistoryData;
         const {
             collection: samples,
@@ -133,7 +134,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         const {
             collection: filters,
             historyItemId: filterId
-        } = detachHistoryItemIfNeedIt(detachFilter, userData.filters, attachedHistoryData.filterId, null);
+        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.filters, attachedHistoryData.filterId, null);
         const {
             collection: views,
             historyItemId: viewId
@@ -141,7 +142,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
 
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),
-            changeFilters(filters),
+            filtersListReceive(filters),
             changeViews(views),
             changeSamples(samples)
         ]);

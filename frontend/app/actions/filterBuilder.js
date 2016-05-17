@@ -1,14 +1,13 @@
-import config from '../../config'
-
-import apiFacade from '../api/ApiFacade';
 import {closeModal} from './modalWindows';
-import {handleError} from './errorHandler';
-import {fetchFilters} from './userData';
+import _ from 'lodash';
 
-import HttpStatus from 'http-status';
-import {deleteFilter} from "./userData";
-import {changeFilter} from "./ui";
-import {filterUtils} from "../utils/filterUtils";
+import {addFilter, deleteFilter, editFilter} from "./userData";
+import {
+    filtersListSelectFilter,
+    filtersListServerCreateFilter,
+    filtersListServerUpdateFilter,
+    filtersListServerDeleteFilter
+} from "./filtersList";
 
 export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR';
 export const FBUILDER_CHANGE_FILTER = 'FBUILDER_CHANGE_FILTER';
@@ -17,29 +16,8 @@ export const FBUILDER_START_EDIT = 'FBUILDER_START_EDIT';
 export const FBUILDER_SAVE_EDIT = 'FBUILDER_SAVE_EDIT';
 export const FBUILDER_END_EDIT = 'FBUILDER_END_EDIT';
 
-export const FBUILDER_REQUEST_UPDATE_FILTER = 'FBUILDER_REQUEST_UPDATE_FILTER';
-export const FBUILDER_RECEIVE_UPDATE_FILTER = 'FBUILDER_RECEIVE_UPDATE_FILTER';
-
-export const FBUILDER_REQUEST_CREATE_FILTER = 'FBUILDER_REQUEST_CREATE_FILTER';
-export const FBUILDER_RECEIVE_CREATE_FILTER = 'FBUILDER_RECEIVE_CREATE_FILTER';
-
 export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
 
-export const FBUILDER_REQUEST_DELETE_FILTER = 'FBUILDER_REQUEST_DELETE_FILTER';
-export const FBUILDER_RECEIVE_DELETE_FILTER = 'FBUILDER_RECEIVE_DELETE_FILTER';
-
-export const FBUILDER_CHANGE_ALL = 'FBUILDER_CHANGE_ALL';
-
-const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
-const CREATE_FILTER_SERVER_ERROR = 'Cannot create new filter (server error). Please try again.';
-
-const UPDATE_FILTER_NETWORK_ERROR = 'Cannot update filter (network error). Please try again.';
-const UPDATE_FILTER_SERVER_ERROR = 'Cannot update filter (server error). Please try again.';
-
-const DELETE_FILTER_NETWORK_ERROR = 'Cannot delete filter (network error). Please try again.';
-const DELETE_FILTER_SERVER_ERROR = 'Cannot delete filter (server error). Please try again.';
-
-const filtersClient = apiFacade.filtersClient;
 
 /*
  * Action Creators
@@ -74,52 +52,16 @@ export function filterBuilderChangeAttr(attr) {
     }
 }
 
-function filterBuilderRequestCreateFilter() {
-    return {
-        type: FBUILDER_REQUEST_CREATE_FILTER
-    }
-}
-
-function filterBuilderReceiveCreateFilter(json) {
-    return {
-        type: FBUILDER_RECEIVE_CREATE_FILTER,
-        filter: json
-    }
-}
-
 export function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
-        dispatch(filterBuilderRequestUpdateFilter());
         const editingFilter = getState().filterBuilder.editingFilter.filter;
-
         const {auth: {sessionId}, ui: {languageId} } = getState();
-        filtersClient.add(sessionId, languageId, editingFilter, (error, response) => {
-           if (error) {
-               dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
-           } else if (response.status !== HttpStatus.OK) {
-               dispatch(handleError(null, CREATE_FILTER_SERVER_ERROR));
-           } else {
-               const result = response.body;
-               dispatch(filterBuilderReceiveUpdateFilter(result));
-               dispatch(closeModal('filters'));
-               dispatch(filterBuilderEndEdit());
-               dispatch(fetchFilters(result.id)); // calls changeFilter
-           }
-        });
-    }
-}
-
-function filterBuilderRequestUpdateFilter() {
-    return {
-        type: FBUILDER_REQUEST_UPDATE_FILTER
-    }
-}
-
-function filterBuilderReceiveUpdateFilter(json) {
-    return {
-        type: FBUILDER_RECEIVE_UPDATE_FILTER,
-        filter: json
+        dispatch(filtersListServerCreateFilter(editingFilter, sessionId, languageId))
+            .then( () => {
+                dispatch(closeModal('filters'));
+                dispatch(filterBuilderEndEdit());
+            });
     }
 }
 
@@ -133,26 +75,17 @@ export function filterBuilderUpdateFilter() {
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
         if (state.auth.isDemo || isNotEdited) {
-            dispatch(changeFilter(editingFilter.filter.id));
+            dispatch(filtersListSelectFilter(editingFilter.filter.id));
             dispatch(closeModal('filters'));
             dispatch(filterBuilderEndEdit());
         } else {
             const sessionId = state.auth.sessionId;
             const resultEditingFilter = editingFilter.filter;
-            dispatch(filterBuilderRequestUpdateFilter());
-            filtersClient.update(sessionId, resultEditingFilter, (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, UPDATE_FILTER_SERVER_ERROR));
-                } else {
-                    const result = response.body;
-                    dispatch(filterBuilderReceiveUpdateFilter(result));
+            dispatch(filtersListServerUpdateFilter(resultEditingFilter, sessionId))
+                .then( () => {
                     dispatch(closeModal('filters'));
                     dispatch(filterBuilderEndEdit());
-                    dispatch(fetchFilters(result.id)); // calls changeFilter
-                }
-            });
+                });
         }
     }
 }
@@ -173,10 +106,7 @@ export function filterBuilderSaveAndSelectRules() {
 export function filterBuilderRules(rules) {
     return {
         type: FBUILDER_RECEIVE_RULES,
-        rules,
-        rPromise: function (resolve, reject) {
-            resolve(777)
-        }
+        rules
     }
 }
 
@@ -190,41 +120,14 @@ export function filterBuilderChangeFilter(index, change) {
 
 export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
-        dispatch(filterBuilderRequestDeleteFilter(filterId));
         const {auth: {sessionId}, fields} = getState();
-        filtersClient.remove(sessionId, filterId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, DELETE_FILTER_SERVER_ERROR));
-            } else {
-                const result = response.body;
-                dispatch(filterBuilderReceiveDeleteFilter(result));
-                dispatch(deleteFilter(result.id));
+        dispatch(filtersListServerDeleteFilter(filterId, sessionId))
+            .then( ()=> {
                 const state = getState();
-                const selectedFilterId = state.ui.selectedFilter.id;
-                const newFilterId = (result.id == selectedFilterId) ? state.userData.filters[0].id : selectedFilterId;
-                const newFilter = state.userData.filters.find( (filter) => filter.id === newFilterId); // replace by filtersList
-                dispatch(changeFilter(newFilterId));
+                const selectedFilterId = state.filtersList.selectedFilterId;
+                const newFilterId = (filterId == selectedFilterId) ? state.filtersList.filters[0].id : selectedFilterId;
+                const newFilter = _.find(state.filtersList.filters, {id: newFilterId});
                 dispatch(filterBuilderStartEdit(false, newFilter, fields));
-            }
-        });
+            });
     }
 }
-
-function filterBuilderRequestDeleteFilter(filterId) {
-    return {
-        type: FBUILDER_REQUEST_DELETE_FILTER,
-        filterId
-    };
-}
-
-function filterBuilderReceiveDeleteFilter(json) {
-    return {
-        type: FBUILDER_RECEIVE_DELETE_FILTER,
-        view: json
-    }
-}
-
-
-

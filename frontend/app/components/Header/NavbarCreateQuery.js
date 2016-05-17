@@ -11,7 +11,7 @@ import Analyze from './NavbarCreateQuery/Analyze'
 import LoadHistory from './NavbarCreateQuery/LoadHistory'
 import {fetchFields} from '../../actions/fields'
 
-import { changeView, changeFilter, analyze } from '../../actions/ui'
+import { changeView, analyze } from '../../actions/ui'
 import { changeSample } from '../../actions/samplesList'
 
 
@@ -26,7 +26,8 @@ class NavbarCreateQuery extends Component {
     render() {
 
         const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
-        const {selectedView, selectedFilter} = this.props.ui;
+        const {selectedView} = this.props.ui;
+        const {selectedFilterId} = this.props.filtersList;
         const {selectedSample} = this.props.samplesList;
         const selectedSampleId = selectedSample ? selectedSample.id : null;
 
@@ -59,7 +60,7 @@ class NavbarCreateQuery extends Component {
 
                         <Analyze
                             {...this.props}
-                            clicked={ (e) => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilter.id))}
+                            clicked={ (e) => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilterId))}
                         />
                         <LoadHistory
                             dispatch={this.props.dispatch}
@@ -84,7 +85,8 @@ function mapStateToProps(state) {
         samplesList,
         samplesList: {
             samples
-        }
+        },
+        filtersList
     } = state;
 
     return {
@@ -94,7 +96,8 @@ function mapStateToProps(state) {
         filters,
         ui,
         auth,
-        samplesList
+        samplesList,
+        filtersList
     }
 }
 
