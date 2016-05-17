@@ -9,14 +9,18 @@ const makeKey = (function() {
     };
 })();
 
+function makeKeyForValueIndex(v, i) {
+    return 'key_' + v + '/' + i;
+}
+
 export default class InputResizingArray extends Component {
 
     static toKeyed(vals) {
-        return vals.map( (v) => ({val: v, key: makeKey()}) );
+        return vals.map( (v, i) => ({val: v, key: makeKeyForValueIndex(v, i)}) );
     }
 
     static addEmpty(vals) {
-        return vals.concat([{val: '', key: makeKey()}]);
+        return vals.concat([{val: '', key: makeKeyForValueIndex('', vals.length)}]);
     }
 
     static fromKeyed(vals) {
