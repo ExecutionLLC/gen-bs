@@ -22,7 +22,7 @@ export default class NewViewInputs extends React.Component {
                             data-localize='views.setup.new.name.help'
                             placeholder='Set view name a copy'
                             value={newView.name}
-                            onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: e.target.value, description: newView.description})) }
+                            onChange={ (e) => this.onNameChange(e.target.value) }
                         />
                         { !newView.name &&
                         <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
@@ -41,13 +41,13 @@ export default class NewViewInputs extends React.Component {
                                 data-localize='views.setup.new.description'
                                 placeholder='Set view description (optional)'
                                 value={newView.description}
-                                onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: newView.name, description: e.target.value})) }
+                                onChange={ (e) => this.onDescriptionChange(e.target.value) }
                             />
 
                             <div className='input-group-btn btn-group-close'>
                                 <button type='button' className='btn-link-default' type='button'
                                         data-toggle='collapse' data-target='.copyview '
-                                        onClick={ () => dispatch(viewBuilderSelectView(views, newView.originalViewId)) }>
+                                        onClick={ () => this.onCancelClick() }>
                                     <i className='md-i'>close</i>
                                 </button>
                             </div>
@@ -58,6 +58,28 @@ export default class NewViewInputs extends React.Component {
 
         );
     }
+
+    onNameChange(name) {
+        const editingView = this.props.viewBuilder.editedView;
+        this.props.dispatch(viewBuilderChangeAttr({
+            name: name,
+            description: editingView.description
+        }));
+    }
+
+    onDescriptionChange(description) {
+        const editingView = this.props.viewBuilder.editedView;
+        this.props.dispatch(viewBuilderChangeAttr({
+            name: editingView.name,
+            description: description
+        }));
+    }
+
+    onCancelClick() {
+        const editingView = this.props.viewBuilder.editedView;
+        this.props.dispatch(viewBuilderSelectView(this.props.views, editingView.originalViewId));
+    }
+
 }
 
 function mapStateToProps(state) {
