@@ -1,39 +1,12 @@
 import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
-import classNames from 'classnames';
 
 import {filterBuilderSaveAndSelectRules} from '../../../actions/filterBuilder';
 
-
 export default class FilterBuilderFooter extends Component {
 
-    onCancelClick() {
-        this.props.closeModal();
-    }
-
-    onConfirmClick() {
-        const filter = this.props.filterBuilder.editingFilter.filter;
-        if (filter.name.trim()) {
-            this.props.dispatch(filterBuilderSaveAndSelectRules());
-        }
-    }
-
     render() {
-        const {auth} = this.props;
-        const {filters} = this.props.filtersList;
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-
-        const isFilterEditable = editingFilter.type === 'user';
-        const filterNameExists = isFilterEditable && _(filters)
-            .filter(filter => filter.type === 'user')
-            .some(filter => filter.name.trim() == editingFilter.name.trim()
-                && filter.id != editingFilter.id
-            );
-        const disabledClass = classNames({
-            'disabled': (editingFilter.type === 'advanced' && auth.isDemo || !editingFilter.name.trim() || filterNameExists) ? 'disabled' : ''
-        });
-        const title = (editingFilter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
-        const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
+        const {confirmButtonParams} = this.props;
 
         return (
             <Modal.Footer>
@@ -47,16 +20,27 @@ export default class FilterBuilderFooter extends Component {
                 </button>
 
                 <button
-                    disabled={disabledClass}
-                    title={title}
                     onClick={() => this.onConfirmClick()}
                     type='button'
                     className='btn btn-primary'
+                    disabled={confirmButtonParams.disabled}
+                    title={confirmButtonParams.title}
                 >
-                    <span data-localize='actions.save_select.title'>{selectButtonLabel}</span>
+                    <span data-localize='actions.save_select.title'>{confirmButtonParams.caption}</span>
                 </button>
             </Modal.Footer>
-
         );
     }
+
+    onCancelClick() {
+        this.props.closeModal();
+    }
+
+    onConfirmClick() {
+        const filter = this.props.filterBuilder.editingFilter.filter;
+        if (filter.name.trim()) {
+            this.props.dispatch(filterBuilderSaveAndSelectRules());
+        }
+    }
+
 }
