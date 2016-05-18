@@ -19,7 +19,7 @@ export default class FilterBuilderFooter extends Component {
     }
 
     render() {
-        const {auth} = this.props;
+        const {auth, confirmButton} = this.props;
         const {filters} = this.props.filtersList;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
@@ -47,13 +47,13 @@ export default class FilterBuilderFooter extends Component {
                 </button>
 
                 <button
-                    disabled={disabledClass}
-                    title={title}
+                    disabled={confirmButton.disabled}
+                    title={confirmButton.title}
                     onClick={() => this.onConfirmClick()}
                     type='button'
                     className='btn btn-primary'
                 >
-                    <span data-localize='actions.save_select.title'>{selectButtonLabel}</span>
+                    <span data-localize='actions.save_select.title'>{confirmButton.caption}</span>
                 </button>
             </Modal.Footer>
 

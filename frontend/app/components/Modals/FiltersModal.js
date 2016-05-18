@@ -67,6 +67,7 @@ class FiltersModal extends Component {
                         </Modal.Body>
                         <FilterBuilderFooter
                             {...this.props}
+                            confirmButton={{caption: '<button caption>', title: '<button title>', disabled: true}}
                             closeModal={() => this.onClose()}
                         />
                     </form>
