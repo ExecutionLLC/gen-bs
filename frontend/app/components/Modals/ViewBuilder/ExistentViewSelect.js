@@ -12,7 +12,7 @@ import {
     viewBuilderSelectView,
     viewBuilderToggleNew,
     viewBuilderDeleteView
-} from '../../../actions/viewBuilder'
+} from '../../../actions/viewBuilder';
 
 
 export default class ExistentViewSelect extends React.Component {
@@ -22,25 +22,25 @@ export default class ExistentViewSelect extends React.Component {
         const isEditableView = selectedView.type === 'user';
 
         return (
-            <div className="collapse in copyview">
-                <div className="row grid-toolbar">
+            <div className='collapse in copyview'>
+                <div className='row grid-toolbar'>
                     {this.renderTitle()}
                 </div>
                 {this.renderDescription(isDemoSession, selectedView.type)}
-                <div className="row grid-toolbar row-head-selector">
+                <div className='row grid-toolbar row-head-selector'>
                     {this.renderViewSelector(views)}
                     {this.renderButtonGroup(isDemoSession, isEditableView)}
                 </div>
             </div>
-        )
+        );
     }
 
     renderTitle() {
         return (
-            <div className="col-sm-6">
-                <label data-localize="views.setup.selector.label">Available Views</label>
+            <div className='col-sm-6'>
+                <label data-localize='views.setup.selector.label'>Available Views</label>
             </div>
-        )
+        );
     }
 
     renderDescription(isDemoSession, selectedViewType) {
@@ -48,12 +48,12 @@ export default class ExistentViewSelect extends React.Component {
 
         if (descriptionText) {
             return (
-                <div className="alert alert-help">
-                    <span data-localize="views.setup.selector.description">
+                <div className='alert alert-help'>
+                    <span data-localize='views.setup.selector.description'>
                         {descriptionText}
                     </span>
                 </div>
-            )
+            );
         }
 
         return null;
@@ -69,25 +69,25 @@ export default class ExistentViewSelect extends React.Component {
         );
 
         return (
-            <div className="col-sm-6">
+            <div className='col-sm-6'>
                 <Select options={selectorItems}
                         value={this.getSelectedViewId()}
                         onChange={(item) => this.onSelectedViewChanged(item.value)}
                 />
             </div>
-        )
+        );
     }
 
     renderButtonGroup(isDemoSession, isEditableView) {
         return (
-            <div className="col-sm-6">
-                <div className="btn-group">
+            <div className='col-sm-6'>
+                <div className='btn-group'>
                     {this.renderDuplicateViewButton(isDemoSession)}
                     {isEditableView && this.renderResetViewButton()}
                     {isEditableView && this.renderDeleteViewButton()}
                 </div>
             </div>
-        )
+        );
     }
 
     renderDuplicateViewButton(isDemoSession) {
@@ -97,41 +97,41 @@ export default class ExistentViewSelect extends React.Component {
         });
 
         return (
-            <button type="button"
-                    className="btn btn-default collapse in copyview"
-                    id="dblBtn"
-                    onClick={ () => {this.onDuplicateViewClick()} }
+            <button type='button'
+                    className='btn btn-default collapse in copyview'
+                    id='dblBtn'
+                    onClick={ () => {this.onDuplicateViewClick();} }
                     disabled={disabledClass}
                     title={duplicateButtonTooltip}
             >
-                <span data-localize="actions.duplicate.title" className="hidden-xs">Duplicate</span>
-                <span className="visible-xs"><i className="md-i">content_copy</i></span>
+                <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
+                <span className='visible-xs'><i className='md-i'>content_copy</i></span>
             </button>
-        )
+        );
     }
 
     renderResetViewButton() {
         return (
-            <button type="button"
-                    className="btn btn-default"
-                    onClick={ () => {this.onResetViewClick()} }
+            <button type='button'
+                    className='btn btn-default'
+                    onClick={ () => {this.onResetViewClick();} }
             >
-                <span data-localize="views.setup.reset.title" className="hidden-xs">Reset View</span>
-                <span className="visible-xs"><i className="md-i">settings_backup_restore</i></span>
+                <span data-localize='views.setup.reset.title' className='hidden-xs'>Reset View</span>
+                <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
             </button>
-        )
+        );
     }
 
     renderDeleteViewButton() {
         return (
-            <button type="button"
-                    className="btn btn-default"
-                    onClick={ () => {this.onDeleteViewClick()} }
+            <button type='button'
+                    className='btn btn-default'
+                    onClick={ () => {this.onDeleteViewClick();} }
             >
-                <span data-localize="views.setup.delete.title" className="hidden-xs">Delete View</span>
-                <span className="visible-xs"><i className="md-i">close</i></span>
+                <span data-localize='views.setup.delete.title' className='hidden-xs'>Delete View</span>
+                <span className='visible-xs'><i className='md-i'>close</i></span>
             </button>
-        )
+        );
     }
 
     getSelectedViewId() {
@@ -162,13 +162,12 @@ export default class ExistentViewSelect extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {viewBuilder, auth, userData} = state;
-    const views = userData.views;
+    const {viewBuilder, auth, userData: {views}} = state;
     return {
         auth,
         viewBuilder,
         views
-    }
+    };
 }
 
 export default connect(mapStateToProps)(ExistentViewSelect);

@@ -1,8 +1,8 @@
-import config from '../../config'
-import { closeModal } from './modalWindows'
+import config from '../../config';
+import {closeModal} from './modalWindows';
 import {fetchSamples} from './samplesList';
-import gzip from '../utils/gzip'
-import {fetchTotalFields} from "./fields";
+import gzip from '../utils/gzip';
+import {fetchTotalFields} from './fields';
 
 /*
  * action types
@@ -24,7 +24,7 @@ export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 export function clearUploadState() {
     return {
         type: CLEAR_UPLOAD_STATE
-    }
+    };
 }
 
 export function fileUploadError(msg, index) {
@@ -32,21 +32,21 @@ export function fileUploadError(msg, index) {
         type: FILE_UPLOAD_ERROR,
         msg,
         index
-    }
+    };
 }
 
 function requestGzip(index) {
     return {
         type: REQUEST_GZIP,
         index
-    }
+    };
 }
 
 function receiveGzip(index) {
     return {
         type: RECEIVE_GZIP,
         index
-    }
+    };
 }
 
 function addNoGZippedForUpload(files) {
@@ -64,15 +64,20 @@ function addNoGZippedForUpload(files) {
  * @param {function(string)} onError
  */
 function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
-    if (file.type === 'application/gzip' || file.type === 'application/x-gzip' || file.name.split('.').pop() === 'gz') {
+    if (file.type === 'application/gzip'
+        || file.type === 'application/x-gzip'
+        || file.name.split('.').pop() === 'gz') {
         onGzipped(file);
-    } else if (file.type === 'text/vcard' || file.type === 'text/directory' || file.name.split('.').pop() === 'vcf') {
+    } else if (file.type === 'text/vcard'
+        || file.type === 'text/directory'
+        || file.name.split('.').pop() === 'vcf') {
         onGzipStart();
         gzip(file).then(gzippedFile => {
             setTimeout(() => {onGzipped(gzippedFile)}, 1000); // TODO: remove before merge
         })
     } else {
-        onError('Unsupported file type: must be Variant Calling Format (VCF) 4.1 or higher or VCF compressed with gzip');
+        onError('Unsupported file type: must be Variant Calling Format'
+            +' (VCF) 4.1 or higher or VCF compressed with gzip');
     }
 }
 
@@ -124,21 +129,21 @@ function addGZippedFileForUpload(files, index) {
         type: ADD_GZIPPED_FILE_FOR_UPLOAD,
         files,
         index
-    }
+    };
 }
 
 function requestFileUpload(index) {
     return {
         type: REQUEST_FILE_UPLOAD,
         index
-    }
+    };
 }
 
 function receiveFileUpload(index) {
     return {
         type: RECEIVE_FILE_UPLOAD,
         index
-    }
+    };
 }
 
 function receiveFileOperation(json, index) {
@@ -146,7 +151,7 @@ function receiveFileOperation(json, index) {
         type: RECEIVE_FILE_OPERATION,
         operationId: json.operationId,
         index
-    }
+    };
 }
 
 function sendFile(file, sessionId, onOperationId, onProgress, onError) {
@@ -154,7 +159,7 @@ function sendFile(file, sessionId, onOperationId, onProgress, onError) {
     formData.append('sample', file);
     $.ajax(config.URLS.FILE_UPLOAD, {
         'type': 'POST',
-        'headers': {"X-Session-Id": sessionId},
+        'headers': {'X-Session-Id': sessionId},
         'data': formData,
         'contentType': false,
         'processData': false,
@@ -234,7 +239,7 @@ export function uploadFile() {
 
 
 export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS, index) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, index));
         if (progressStatusFromAS === 'ready') {
             dispatch(receiveFileUpload());
@@ -242,7 +247,7 @@ export function changeFileUploadProgress(progressValueFromAS, progressStatusFrom
             //dispatch(closeModal('upload'));
             dispatch(fetchSamples());
         }
-    }
+    };
 }
 
 function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, index) {
@@ -251,7 +256,7 @@ function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS
         progressValueFromAS,
         progressStatusFromAS,
         index
-    }
+    };
 }
 
 

@@ -57,6 +57,14 @@ class UserEntityServiceBase extends ServiceBase {
             (item, callback) => this.theModel.remove(user.id, itemId, (error) => callback(error, item))
         ], callback);
     }
+
+    _ensureItemOfUserType(item, callback) {
+        if (item.type === 'user') {
+            callback(null, item);
+        } else {
+            callback(new Error('Default items cannot be changed.'));
+        }
+    }
 }
 
 module.exports = UserEntityServiceBase;

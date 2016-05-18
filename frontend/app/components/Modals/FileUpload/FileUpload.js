@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {Modal} from 'react-bootstrap';
-import classNames from 'classnames';
 
 import FileUploadProgressBar from './FileUploadProgressBar';
 
@@ -10,7 +8,7 @@ import {clearUploadState, addFilesForUpload} from '../../../actions/fileUpload';
 export default class FileUpload extends Component {
 
     componentWillMount() {
-        this.props.dispatch(clearUploadState())
+        this.props.dispatch(clearUploadState());
     }
 
     render() {
@@ -20,8 +18,8 @@ export default class FileUpload extends Component {
             return this.renderDemoContent();
         } else {
             return (
-                <div className="panel file-upload-panel panel-default">
-                    <div className="panel-body">
+                <div className='panel file-upload-panel panel-default'>
+                    <div className='panel-body'>
 
                         {error && this.renderUploadError(error)}
 
@@ -30,9 +28,9 @@ export default class FileUpload extends Component {
 
 
                         { isArchiving &&
-                        <div className="text-center">
+                        <div className='text-center'>
                             <strong style={{color: '#2363a1'}}>Archiving...</strong>
-                            <i className="fa fa-spinner fa-spin"></i>
+                            <i className='fa fa-spinner fa-spin'></i>
                         </div>
                         }
                         { !error &&
@@ -54,7 +52,7 @@ export default class FileUpload extends Component {
         const {files} = this.props.fileUpload;
         return (
             files[0] &&
-            <div className="text-center">
+            <div className='text-center'>
                 <strong style={{color: '#2363a1'}}>{files[0].name}</strong>
             </div>
         );
@@ -67,9 +65,9 @@ export default class FileUpload extends Component {
                 {this.renderFileInfo(fileProcess.file)}
                 {JSON.stringify(fileProcess)}
                 {fileProcess.isArchiving &&
-                <div className="text-center">
+                <div className='text-center'>
                     <strong style={{color: '#2363a1'}}>Archiving...</strong>
-                    <i className="fa fa-spinner fa-spin"/>
+                    <i className='fa fa-spinner fa-spin'/>
                 </div>
                 }
                 {!fileProcess.error &&
@@ -96,18 +94,18 @@ export default class FileUpload extends Component {
                     onDragEnter={(e) => {e.stopPropagation();e.preventDefault();}}
                     onDragOver={(e) => {ce.stopPropagation();e.preventDefault();}}
                     onDrop={(e) => {e.stopPropagation();e.preventDefault();this.onFilesDrop(e.dataTransfer.files);}}
-                    className="btn-link-light-default btn-select-file">
+                    className='btn-link-light-default btn-select-file'>
                 <input
                     onChange={ (e) => this.onUploadChanged(e.target.files)}
                     style={{display: 'none'}}
-                    ref="fileInput"
-                    id="file-select"
-                    type="file"
-                    accept=".vcf,.gz"
-                    name="files[]"
-                    multiple="multiple"
+                    ref='fileInput'
+                    id='file-select'
+                    type='file'
+                    accept='.vcf,.gz'
+                    name='files[]'
+                    multiple='multiple'
                 />
-                <i className="md-i">cloud_upload</i>
+                <i className='md-i'>cloud_upload</i>
                 <span>Click here to upload new samples</span>
                 <span>.vcf, .vcf.gz</span>
             </button>
@@ -116,7 +114,7 @@ export default class FileUpload extends Component {
 
     renderUploadError(error) {
         return (
-            <div className="alert">
+            <div className='alert'>
                 <p>{error}</p>
             </div>
         );
@@ -124,9 +122,9 @@ export default class FileUpload extends Component {
 
     renderDemoContent() {
         return (
-            <div className="panel panel-empty-state">
-                <div className="empty">
-                    <h3><i className="md-i">perm_identity</i>Please login or register to upload new samples</h3>
+            <div className='panel panel-empty-state'>
+                <div className='empty'>
+                    <h3><i className='md-i'>perm_identity</i>Please login or register to upload new samples</h3>
                 </div>
             </div>
         );

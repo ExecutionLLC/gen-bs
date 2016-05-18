@@ -1,6 +1,6 @@
-import { receiveSearchedResults } from './variantsTable'
-import { changeFileUploadProgress, fileUploadError } from './fileUpload'
-import * as _ from 'lodash';
+import {receiveSearchedResults} from './variantsTable';
+import {changeFileUploadProgress, fileUploadError} from './fileUpload';
+import _ from 'lodash';
 /*
  * action types
  */
@@ -20,7 +20,7 @@ export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
 export const WS_ADD_COMMENT = 'WS_ADD_COMMENT';
 export const WS_UPDATE_COMMENT = 'WS_UPDATE_COMMENT';
-export const WS_DELETE_COMMENT='WS_DELETE_COMMENT';
+export const WS_DELETE_COMMENT = 'WS_DELETE_COMMENT';
 export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
 
 
@@ -33,45 +33,45 @@ export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
  * action creators
  */
 
-export  function addComment(commentData){
+export function addComment(commentData) {
     return {
         type: WS_ADD_COMMENT,
         commentData
-    }
+    };
 }
 
-export  function changeComment(commentData){
+export function changeComment(commentData) {
     return {
         type: WS_UPDATE_COMMENT,
         commentData
-    }
+    };
 }
 
-export  function deleteComment(commentData, searchKey){
+export function deleteComment(commentData, searchKey) {
     return {
         type: WS_DELETE_COMMENT,
         commentData,
         searchKey
-    }
+    };
 }
 export function clearVariants() {
     return {
         type: WS_CLEAR_VARIANTS
-    }
+    };
 }
 
 export function createWsConnection(wsConn) {
     return {
         type: WS_CREATE_CONNECTION,
         wsConn
-    }
+    };
 }
 
 function tableMessage(wsData) {
     return {
         type: WS_TABLE_MESSAGE,
         wsData
-    }
+    };
 }
 
 function progressMessageRouter(wsData) {
@@ -86,14 +86,14 @@ function progressMessageRouter(wsData) {
         if (getState().fileUpload.operationId === wsData.operationId) {
             dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, null));
         }
-    }
+    };
 }
 
 function progressMessage(wsData) {
     return {
         type: WS_PROGRESS_MESSAGE,
         wsData
-    }
+    };
 }
 
 function receiveError(err) {
@@ -112,11 +112,11 @@ function asErrorRouter(wsData) {
         }
 
         if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(fileUploadError(wsData.result.error.message, null))
+            dispatch(fileUploadError(wsData.result.error.message, null));
         } else {
-            dispatch(asError(wsData.result.error))
+            dispatch(asError(wsData.result.error));
         }
-    }
+    };
 }
 
 function asError(err) {
@@ -143,7 +143,7 @@ function receiveMessage(msg) {
             if (wsData.result.sampleId && fileUploadIsSingleFile && !fileUploadIsMultipleFile) {
                 dispatch(tableMessage(wsData));
                 if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
-                    dispatch(receiveSearchedResults())
+                    dispatch(receiveSearchedResults());
                 }
             } else if (wsData.result.progress !== undefined) {
                 dispatch(progressMessageRouter(wsData));
@@ -155,21 +155,21 @@ function receiveMessage(msg) {
         } else {
             dispatch(otherMessage(wsData));
         }
-    }
+    };
 }
 
 function receiveClose(msg) {
     return {
         type: WS_RECEIVE_CLOSE,
         msg
-    }
+    };
 }
 
 function sended(msg) {
     return {
         type: WS_SEND_MESSAGE,
         msg
-    }
+    };
 }
 
 export function subscribeToWs(sessionId) {
@@ -181,7 +181,7 @@ export function subscribeToWs(sessionId) {
         conn.onmessage = event => dispatch(receiveMessage(JSON.stringify(event.data)));
         conn.onerror = event => dispatch(receiveError(event.data));
         conn.onclose = event => dispatch(receiveClose(event.data));
-    }
+    };
 }
 
 export function send(msg) {

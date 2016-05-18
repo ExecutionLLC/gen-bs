@@ -1,0 +1,293 @@
+{
+  "type": "standard",
+  "reference": "hg19",
+  "fields": [
+    {
+      "name": "CHROM",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    {
+      "name": "POS",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    },
+    {
+      "name": "ID",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Semi-colon separated list of unique identifiers where available."
+    },
+    {
+      "name": "REF",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    {
+      "name": "ALT",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    },
+    {
+      "name": "QUAL",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "float",
+      "desc": "Quality."
+    },
+    {
+      "name": "FILTER",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Filter status."
+    },
+    {
+      "name": "INFO_ADP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Average per-sample depth of bases with Phred score >= 0"
+    },
+    {
+      "name": "INFO_WT",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples called reference (wild-type)"
+    },
+    {
+      "name": "INFO_HET",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples called heterozygous-variant"
+    },
+    {
+      "name": "INFO_HOM",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples called homozygous-variant"
+    },
+    {
+      "name": "INFO_NC",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Number of samples not called"
+    },
+    {
+      "name": "Allele",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Consequence",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "IMPACT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "SYMBOL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Gene",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Feature_type",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Feature",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "BIOTYPE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "EXON",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "INTRON",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "HGVSc",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "HGVSp",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "cDNA_position",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "CDS_position",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Protein_position",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Amino_acids",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Codons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Existing_variation",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "ALLELE_NUM",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "DISTANCE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "STRAND",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "SYMBOL_SOURCE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "HGNC_ID",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "CCDS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "SIFT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "PolyPhen",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "HGVS_OFFSET",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Genotype",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    {
+      "name": "Zygosity",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    }
+  ]
+}

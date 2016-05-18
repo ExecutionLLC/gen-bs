@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Modal } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Modal} from 'react-bootstrap';
 
 import FileUploadHeader from './FileUpload/FileUploadHeader';
 import FileUploadFooter from './FileUpload/FileUploadFooter';
@@ -11,15 +11,15 @@ class FileUploadModal extends Component {
     render() {
         return (
             <Modal
-                dialogClassName="modal-dialog-primary"
-                bsSize="lg"
+                dialogClassName='modal-dialog-primary'
+                bsSize='lg'
                 show={this.props.showModal}
-                onHide={ () => {this.props.closeModal('upload')} }
+                onHide={ () => this.props.closeModal('upload') }
             >
                 <FileUploadHeader />
                 <Modal.Body>
-                    <div className="modal-body-scroll">
-                        <div className="modal-padding">
+                    <div className='modal-body-scroll'>
+                        <div className='modal-padding'>
                             <FileUpload {...this.props} />
                             <FileUploadSamples {...this.props} />
                         </div>
@@ -27,7 +27,7 @@ class FileUploadModal extends Component {
                 </Modal.Body>
                 <FileUploadFooter {...this.props} />
             </Modal>
-        )
+        );
     }
 }
 
@@ -40,7 +40,7 @@ function mapStateToProps(state) {
         fileUpload,
         samples,
         editableFieldsList: editableFields
-    }
+    };
 }
 
-export default connect(mapStateToProps)(FileUploadModal)
+export default connect(mapStateToProps)(FileUploadModal);

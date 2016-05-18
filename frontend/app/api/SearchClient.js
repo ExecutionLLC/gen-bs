@@ -39,7 +39,7 @@ export default class SearchClient extends ClientBase {
             callback
         );
     }
-    
+
     sendGetNextPartOfData(sessionId, operationId, offset, limit, callback) {
         RequestWrapper.get(
             this.urls.startSearchInResults(operationId),

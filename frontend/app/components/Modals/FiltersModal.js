@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
+import _ from 'lodash';
 
-import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader'
-import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter'
-import FilterBuilder from './FilterBuilder/FilterBuilder'
+import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader';
+import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter';
+import FilterBuilder from './FilterBuilder/FilterBuilder';
 import {filterBuilderEndEdit} from '../../actions/filterBuilder';
-import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect'
-import NewFilterInputs from './FilterBuilder/NewFilterInputs'
+import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
+import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 
 class FiltersModal extends Component {
 
@@ -17,37 +18,63 @@ class FiltersModal extends Component {
     }
 
     render() {
+        const {auth} = this.props;
+        const {filters} = this.props.filtersList;
+        const editingFilterObject = this.props.filterBuilder.editingFilter;
+        const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
+        const editingFilter = editingFilterObject && editingFilterObject.filter;
+        const isFilterEditable = editingFilter && editingFilter.type === 'user';
+        const isFilterAdvanced = editingFilter && editingFilter.type === 'advanced';
+        const isLoginRequired = isFilterAdvanced && auth.isDemo;
+        const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
-        const {isValid} = this.props.userData;
-        const {editingFilter} = this.props.filterBuilder;
-        const editingFilterIsNew = editingFilter ? editingFilter.isNew : false;
+        const filterNameExists = isFilterEditable && _(filters)
+                .filter(filter => filter.type !== 'history')
+                .some(filter => filter.name.trim() === editingFilterNameTrimmed
+                    && filter.id != editingFilter.id
+                );
+
+        const titleValidationMessage =
+            filterNameExists ? 'Filter with this name is already exists.' :
+                editingFilter && !editingFilterNameTrimmed ? 'Filter name cannot be empty' :
+                    '';
+
+        const confirmButtonParams = {
+            caption: isFilterEditable ? 'Save and Select': 'Select',
+            title: isLoginRequired ? 'Login or register to select advanced filters' : '',
+            disabled: isLoginRequired || !!titleValidationMessage
+        };
+
         return (
 
             <Modal
-                dialogClassName="modal-dialog-primary"
-                bsSize="lg"
+                dialogClassName='modal-dialog-primary'
+                bsSize='lg'
                 show={this.props.showModal}
                 onHide={() => this.onClose()}
             >
-                { (!isValid || !editingFilter) &&
+                { (!editingFilter) &&
                 <div >&nbsp;</div>
                 }
-                { (isValid && editingFilter) &&
+                { (editingFilter) &&
                 <div>
                     <FilterBuilderHeader />
                     <form>
                         <Modal.Body>
-                            <div className="modal-body-scroll">
+                            <div className='modal-body-scroll'>
                                 { editingFilterIsNew &&
-                                <div className="modal-padding">
-                                    <NewFilterInputs  {...this.props} />
+                                <div className='modal-padding'>
+                                    <NewFilterInputs
+                                        {...this.props}
+                                        validationMessage={titleValidationMessage}
+                                    />
                                     <FilterBuilder
                                         {...this.props}
                                     />
                                 </div>
                                 }
                                 { !editingFilterIsNew &&
-                                <div className="modal-padding">
+                                <div className='modal-padding'>
                                     <ExistentFilterSelect {...this.props} />
                                     <FilterBuilder
                                         {...this.props}
@@ -58,6 +85,7 @@ class FiltersModal extends Component {
                         </Modal.Body>
                         <FilterBuilderFooter
                             {...this.props}
+                            confirmButtonParams={confirmButtonParams}
                             closeModal={() => this.onClose()}
                         />
                     </form>
@@ -65,23 +93,23 @@ class FiltersModal extends Component {
                 }
             </Modal>
 
-        )
+        );
     }
 }
 
 
 function mapStateToProps(state) {
-    const { filterBuilder, ui, auth, userData, fields, samplesList } = state
+    const { filterBuilder, ui, auth, fields, samplesList, filtersList } = state;
 
     return {
-        userData,
         fields,
         ui,
         filterBuilder,
         auth,
-        samplesList
-    }
+        samplesList,
+        filtersList
+    };
 }
 
-export default connect(mapStateToProps)(FiltersModal)
+export default connect(mapStateToProps)(FiltersModal);
 

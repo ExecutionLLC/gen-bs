@@ -38,8 +38,8 @@ class ViewsModel extends SecureModelBase {
             async.waterfall([
                 (callback) => this._findViews(trx, viewIds, userId, false, false, callback),
                 (views, callback) => callback(null, _.first(views))
-            ], (error, views) => {
-                callback(error, views);
+            ], (error, view) => {
+                callback(error, view);
             });
         }, callback);
     }
@@ -100,7 +100,7 @@ class ViewsModel extends SecureModelBase {
             (callback) => {
                 if (!viewItem.fieldId){
                     callback(new Error('Can\'t add view item with no field id'));
-                }else {
+                } else {
                     const dataToInsert = {
                         id: this._generateId(),
                         viewId: viewId,

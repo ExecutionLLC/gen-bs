@@ -1,5 +1,5 @@
-import apiFacade from '../api/ApiFacade'
-import { handleError } from './errorHandler';
+import apiFacade from '../api/ApiFacade';
+import {handleError} from './errorHandler';
 
 import HttpStatus from 'http-status';
 
@@ -27,7 +27,7 @@ const samplesClient = apiFacade.samplesClient;
 function requestFields() {
     return {
         type: REQUEST_FIELDS
-    }
+    };
 }
 
 export function receiveFields(fields) {
@@ -35,7 +35,7 @@ export function receiveFields(fields) {
         type: RECEIVE_FIELDS,
         fields: fields || [],
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchFields(sampleId) {
@@ -44,7 +44,7 @@ export function fetchFields(sampleId) {
         dispatch(requestFields());
 
         const sessionId = getState().auth.sessionId;
-        return new Promise( (resolve) => {
+        return new Promise((resolve) => {
             samplesClient.getFields(sessionId, sampleId, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));
@@ -56,13 +56,13 @@ export function fetchFields(sampleId) {
                 resolve();
             });
         });
-    }
+    };
 }
 
 function requestTotalFields() {
     return {
         type: REQUEST_TOTAL_FIELDS
-    }
+    };
 }
 
 export function receiveTotalFields(json) {
@@ -70,7 +70,7 @@ export function receiveTotalFields(json) {
         type: RECEIVE_TOTAL_FIELDS,
         fields: json,
         receivedAt: Date.now()
-    }
+    };
 }
 
 export function fetchTotalFields() {
@@ -88,5 +88,5 @@ export function fetchTotalFields() {
                 dispatch(receiveTotalFields(response.body));
             }
         });
-    }
+    };
 }

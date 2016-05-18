@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { ProgressBar } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {ProgressBar} from 'react-bootstrap';
 
 export default class FileUploadProgressBar extends Component {
 
