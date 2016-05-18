@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
-import classNames from 'classnames';
 
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader';
 import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter';
