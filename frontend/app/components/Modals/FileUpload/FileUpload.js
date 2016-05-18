@@ -95,7 +95,7 @@ export default class FileUpload extends Component {
             <button onClick={this.onUploadClick.bind(this)}
                     className="btn-link-light-default btn-select-file">
                 <input
-                    onChange={ (e) => this.onUploadChanged(e)}
+                    onChange={ (e) => this.onUploadChanged(e.target.files)}
                     style={{display: 'none'}}
                     ref="fileInput"
                     id="file-select"
@@ -129,7 +129,7 @@ export default class FileUpload extends Component {
         );
     }
 
-    onUploadChanged(e) {
+    onUploadChanged(files) {
         const {dispatch} = this.props;
         dispatch(addFilesForUpload(Array.prototype.slice.call(e.target.files)));
     }
