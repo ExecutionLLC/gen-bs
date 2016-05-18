@@ -10,10 +10,9 @@ export default class ViewBuilderFooter extends React.Component {
         const {confirmButton} = this.props;
 
         return (
-
             <Modal.Footer>
                 <button
-                    onClick={ () => {  this.cancelOnClick();}}
+                    onClick={() => this.cancelOnClick()}
                     type='button'
                     className='btn btn-default'
                     data-dismiss='modal'
@@ -22,7 +21,7 @@ export default class ViewBuilderFooter extends React.Component {
                 </button>
 
                 <button
-                    onClick={ (e) => {this.selectOnClick(e);}}
+                    onClick={(e) => this.selectOnClick(e)}
                     type='submit'
                     className='btn btn-primary'
                     disabled={confirmButton.disabled}
@@ -31,7 +30,6 @@ export default class ViewBuilderFooter extends React.Component {
                     <span data-localize='actions.save_select.title'>{confirmButton.caption}</span>
                 </button>
             </Modal.Footer>
-
         );
     }
 
@@ -51,6 +49,7 @@ export default class ViewBuilderFooter extends React.Component {
         }
         editedView.id !== null ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView());
     }
+
 }
 
 function mapStateToProps(state) {
