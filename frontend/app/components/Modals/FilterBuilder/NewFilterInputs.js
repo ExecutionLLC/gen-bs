@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/filterBuilder';
 
-
 export default class NewFilterInputs extends Component {
 
     render() {
