@@ -1,13 +1,12 @@
 import {closeModal} from './modalWindows';
 import _ from 'lodash';
 
-import {addFilter, deleteFilter, editFilter} from "./userData";
 import {
     filtersListSelectFilter,
     filtersListServerCreateFilter,
     filtersListServerUpdateFilter,
     filtersListServerDeleteFilter
-} from "./filtersList";
+} from './filtersList';
 
 export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR';
 export const FBUILDER_CHANGE_FILTER = 'FBUILDER_CHANGE_FILTER';
@@ -49,7 +48,7 @@ export function filterBuilderChangeAttr(attr) {
         type: FBUILDER_CHANGE_ATTR,
         name: attr.name,
         description: attr.description
-    }
+    };
 }
 
 export function filterBuilderCreateFilter() {
@@ -62,7 +61,7 @@ export function filterBuilderCreateFilter() {
                 dispatch(closeModal('filters'));
                 dispatch(filterBuilderEndEdit());
             });
-    }
+    };
 }
 
 export function filterBuilderUpdateFilter() {
@@ -87,7 +86,7 @@ export function filterBuilderUpdateFilter() {
                     dispatch(filterBuilderEndEdit());
                 });
         }
-    }
+    };
 }
 
 export function filterBuilderSaveAndSelectRules() {
@@ -107,7 +106,7 @@ export function filterBuilderRules(rules) {
     return {
         type: FBUILDER_RECEIVE_RULES,
         rules
-    }
+    };
 }
 
 export function filterBuilderChangeFilter(index, change) {
@@ -129,5 +128,5 @@ export function filterBuilderDeleteFilter(filterId) {
                 const newFilter = _.find(state.filtersList.filters, {id: newFilterId});
                 dispatch(filterBuilderStartEdit(false, newFilter, fields));
             });
-    }
+    };
 }

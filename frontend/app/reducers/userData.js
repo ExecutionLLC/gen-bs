@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/userData'
+import * as ActionTypes from '../actions/userData';
 
 export default function userData(state = {
     isFetching: false,
@@ -45,34 +45,34 @@ export default function userData(state = {
             });
 
         case ActionTypes.CHANGE_HISTORY_DATA:
-        {
-            const {sampleId, filterId, viewId} = action;
-            return Object.assign({}, state, {
-                attachedHistoryData: {
-                    sampleId: sampleId,
-                    filterId: filterId,
-                    viewId: viewId
-                }
-            });
-        }
+            {
+                const {sampleId, filterId, viewId} = action;
+                return Object.assign({}, state, {
+                    attachedHistoryData: {
+                        sampleId: sampleId,
+                        filterId: filterId,
+                        viewId: viewId
+                    }
+                });
+            }
         case ActionTypes.CHANGE_VIEWS:
-        {
-            const {views} = action;
-            return Object.assign({}, state, {
-                views: views
-            });
-        }
+            {
+                const {views} = action;
+                return Object.assign({}, state, {
+                    views: views
+                });
+            }
         case ActionTypes.DELETE_VIEW:
-        {
-            const deletedViewIndex = _.findIndex(state.views, view => view.id == action.viewId);
-            return Object.assign({}, state, {
-                views: [
-                    ...state.views.slice(0, deletedViewIndex),
-                    ...state.views.slice(deletedViewIndex + 1)
-                ]
-            });
-        }
+            {
+                const deletedViewIndex = _.findIndex(state.views, view => view.id == action.viewId);
+                return Object.assign({}, state, {
+                    views: [
+                        ...state.views.slice(0, deletedViewIndex),
+                        ...state.views.slice(deletedViewIndex + 1)
+                    ]
+                });
+            }
         default:
-            return state
+            return state;
     }
 }

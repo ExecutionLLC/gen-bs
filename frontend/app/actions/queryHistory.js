@@ -4,13 +4,13 @@ import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
 import {analyze, changeView} from './ui';
-import {changeViews} from "./userData";
-import {changeSamples} from "./samplesList";
-import {changeSample} from "./samplesList";
-import {fetchFields} from "./fields";
+import {changeViews} from './userData';
+import {changeSamples} from './samplesList';
+import {changeSample} from './samplesList';
+import {fetchFields} from './fields';
 import {prepareAnalyze} from './websocket';
-import {filtersListSelectFilter} from "./filtersList";
-import {filtersListReceive} from "./filtersList";
+import {filtersListSelectFilter} from './filtersList';
+import {filtersListReceive} from './filtersList';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -29,25 +29,25 @@ export function receiveQueryHistory(history) {
     return {
         type: RECEIVE_QUERY_HISTORY,
         history
-    }
+    };
 }
 
 export function showQueryHistoryModal() {
     return {
         type: SHOW_QUERY_HISTORY_MODAL
-    }
+    };
 }
 
 export function closeQueryHistoryModal() {
     return {
         type: CLOSE_QUERY_HISTORY_MODAL
-    }
+    };
 }
 
 export function clearQueryHistory() {
     return (dispatch) => {
         dispatch(receiveQueryHistory([]));
-    }
+    };
 }
 
 export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
@@ -62,15 +62,15 @@ export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSE
                 dispatch(receiveQueryHistory(response.body.result));
             }
         });
-    }
+    };
 }
 
 export function renewHistoryItem(historyItemId) {
     return (dispatch, getState) => {
         const {history} = getState().queryHistory;
         const historyItem = _.find(history, (historyItem) => {
-                return historyItem.id === historyItemId;
-            }) || null;
+            return historyItem.id === historyItemId;
+        }) || null;
         if (historyItem === null) {
             dispatch(handleError(null, UNKNOWN_HISTORY_ID_ERROR));
         } else {
@@ -94,7 +94,7 @@ export function renewHistoryItem(historyItemId) {
                     ]);
                 });
         }
-    }
+    };
 }
 
 export function attachHistory(historyItem) {
@@ -115,7 +115,7 @@ export function attachHistory(historyItem) {
             changeViews(views),
             changeSamples(samples)
         ]);
-    }
+    };
 
 }
 
@@ -146,7 +146,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
             changeViews(views),
             changeSamples(samples)
         ]);
-    }
+    };
 }
 
 function detachHistoryItemIfNeedIt(needDetach, collection, historyItemId) {

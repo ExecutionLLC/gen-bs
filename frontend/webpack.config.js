@@ -31,7 +31,8 @@ module.exports = {
     devtool: '#eval',
 
     entry: [
-        'webpack/hot/dev-server',
+        'webpack-hot-middleware/client',
+        'babel-polyfill',
         './app/app.js'
     ],
 
@@ -40,15 +41,26 @@ module.exports = {
         filename: 'genomics.js'
     },
     module: {
+        preLoaders: [
+            {
+                test: /\.js$/,
+                loaders: ['eslint'],
+                include: [
+                    path.resolve(__dirname, 'app'),
+                    path.resolve(__dirname, 'config')
+                ],
+                exclude: [
+                    path.resolve(__dirname, 'app/assets')
+                ]
+            }
+        ],
         loaders: [
             {test: /\.json$/, loader: 'file?name=[name].[ext]'},
             {
                 test: /\.js?$/,
                 exclude: /(node_modules|bower_components|vendor)/,
-                loader: 'babel',
-                query: {
-                    presets: ['react', 'es2015', 'stage-0']
-                }
+                loaders: ['react-hot', 'babel-loader'],
+                plugins: ['transform-runtime']
             },
             {test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery'},
 

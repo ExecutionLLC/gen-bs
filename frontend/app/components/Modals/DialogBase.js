@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
+import React from 'react';
+import {Modal} from 'react-bootstrap';
 import classnames from 'classnames';
 
 import ComponentBase from '../shared/ComponentBase';
 
 export default class DialogBase extends ComponentBase {
-    constructor(props, dialogName) {
+    constructor(props) {
         super(props);
     }
-    
+
     getBodyClassNames() {
         return [];
     }
@@ -28,11 +28,11 @@ export default class DialogBase extends ComponentBase {
     renderFooterContents() {
         return (
             <button
-                onClick={ () => {this.onCloseModal()} }
-                type="button"
-                className="btn btn-default"
-                data-dismiss="modal"
-                localize-data="action.extendSession"
+                onClick={ () => this.onCloseModal() }
+                type='button'
+                className='btn btn-default'
+                data-dismiss='modal'
+                localize-data='action.extendSession'
             >
                 <span>Ok</span>
             </button>
@@ -72,10 +72,10 @@ export default class DialogBase extends ComponentBase {
 
     render() {
         return (
-            <Modal dialogClassName="modal-dialog-primary"
-                   bsSize="lg"
+            <Modal dialogClassName='modal-dialog-primary'
+                   bsSize='lg'
                    show={this.props.showModal}
-                   onHide={ () => {this.onCloseModal()} }
+                   onHide={ () => {this.onCloseModal();} }
             >
                 {this.renderHeader()}
                 {this.renderBody()}

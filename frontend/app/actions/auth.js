@@ -1,17 +1,17 @@
 import HttpStatus from 'http-status';
-import { addTimeout, removeTimeout } from 'redux-timeout';
+import {addTimeout, removeTimeout} from 'redux-timeout';
 
 import config from '../../config';
-import { getCookie } from '../utils/cookie';
-import { getUrlParameterByName } from '../utils/stringUtils'
+import {getCookie} from '../utils/cookie';
+import {getUrlParameterByName} from '../utils/stringUtils';
 
-import { fetchUserdata } from './userData';
-import { createWsConnection, subscribeToWs, send } from './websocket';
-import { handleError } from './errorHandler'
-import { clearQueryHistory, updateQueryHistory } from './queryHistory'
+import {fetchUserdata} from './userData';
+import {createWsConnection, subscribeToWs} from './websocket';
+import {handleError} from './errorHandler';
+import {clearQueryHistory} from './queryHistory';
 
 import apiFacade from '../api/ApiFacade';
-import SessionsClient from '../api/SessionsClient'
+import SessionsClient from '../api/SessionsClient';
 
 /*
  * action types
@@ -46,7 +46,7 @@ export class KeepAliveTask {
         this.keepAliveTaskId = null;
     }
 
-    isRunning () {
+    isRunning() {
         return this.keepAliveTaskId !== null;
     }
 
@@ -67,7 +67,7 @@ export class KeepAliveTask {
             const currentSessionId = window.reduxStore.getState().auth.sessionId;
             if (currentSessionId) {
                 // update session on the web server
-                checkSession(currentSessionId, (error, isValidSession, isDemoSession) => {
+                checkSession(currentSessionId, (error) => {
                     if (error) {
                         console.log('got unexpected error in keep alive task', error);
                     }
@@ -86,7 +86,7 @@ export class KeepAliveTask {
 function requestSession() {
     return {
         type: REQUEST_SESSION
-    }
+    };
 }
 
 function receiveSession(sessionId, isDemo) {
@@ -101,14 +101,14 @@ function receiveSession(sessionId, isDemo) {
         isAuthenticated: isAuthenticated,
         isDemo: isDemo,
         receivedAt: Date.now()
-    }
+    };
 }
 
 function loginError(errorMessage) {
     return {
         type: LOGIN_ERROR,
         errorMessage
-    }
+    };
 }
 
 function updateLoginData(dispatch, sessionId, isDemo) {
@@ -213,7 +213,7 @@ export function login() {
             // try to restore old session
             checkCookieSessionAndLogin(dispatch);
         }
-    }
+    };
 }
 
 export function logout() {
@@ -240,23 +240,25 @@ export function startAutoLogoutTimer() {
         const secondsToAutoLogout = getState().auth.secondsToAutoLogout;
         if (secondsToAutoLogout === null) {
             // if secondsToAutoLogout !== null, then auto logout is already started
-            dispatch(addTimeout(1000, UPDATE_AUTOLOGOUT_TIMER, () => { dispatch(updateAutoLogoutTimer()) } ));
+            dispatch(addTimeout(1000, UPDATE_AUTOLOGOUT_TIMER, () => {
+                dispatch(updateAutoLogoutTimer());
+            }));
             dispatch(updateAutoLogoutTimer());
         }
-    }
+    };
 }
 
 function _updateAutoLogoutTimer(secondsToAutoLogout) {
     return {
         type: UPDATE_AUTOLOGOUT_TIMER,
         secondsToAutoLogout
-    }
+    };
 }
 
 function updateAutoLogoutTimer() {
     return (dispatch, getState) => {
         const secondsToAutoLogout = getState().auth.secondsToAutoLogout;
-        let nextSecondsToAutoLogout =  secondsToAutoLogout === null ? config.SESSION.LOGOUT_WARNING_TIMEOUT : secondsToAutoLogout - 1;
+        let nextSecondsToAutoLogout = secondsToAutoLogout === null ? config.SESSION.LOGOUT_WARNING_TIMEOUT : secondsToAutoLogout - 1;
         if (nextSecondsToAutoLogout < 0) {
             // if auto logout timer is expired, then we should start logout procedure
             dispatch(stopAutoLogoutTimer());
@@ -265,7 +267,7 @@ function updateAutoLogoutTimer() {
         }
         // updates timer
         dispatch(_updateAutoLogoutTimer(nextSecondsToAutoLogout));
-    }
+    };
 }
 
 export function stopAutoLogoutTimer() {
@@ -273,5 +275,5 @@ export function stopAutoLogoutTimer() {
     return (dispatch) => {
         dispatch(removeTimeout(UPDATE_AUTOLOGOUT_TIMER));
         dispatch(_updateAutoLogoutTimer(null));
-    }
+    };
 }

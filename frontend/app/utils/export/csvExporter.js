@@ -6,12 +6,12 @@ export default class CsvExporter extends ExporterBase {
         this.separator = ';';
     }
 
-    buildHeaderRow(columnsArray, data) {
+    buildHeaderRow(columnsArray) {
         const columnNames = _.map(columnsArray, col => col.name);
         return this._createRow(columnNames);
     }
 
-    buildRow(columnsArray, rowValues, data) {
+    buildRow(columnsArray, rowValues) {
         return this._createRow(rowValues);
     }
 

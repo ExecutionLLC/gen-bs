@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/viewBuilder'
+import * as ActionTypes from '../actions/viewBuilder';
 
 const EMPTY_VIEW_ITEM = {
     fieldId: null,
@@ -25,7 +25,7 @@ function createViewItem(fieldId) {
     return {
         fieldId,
         keywords: []
-    }
+    };
 }
 
 export default function viewBuilder(state = {
@@ -35,16 +35,14 @@ export default function viewBuilder(state = {
 }, action) {
 
     switch (action.type) {
-        case ActionTypes.VBUILDER_SELECT_VIEW:
-        {
+        case ActionTypes.VBUILDER_SELECT_VIEW: {
             const selectedView = _.find(action.views, {id: action.viewId}) || null;
             return Object.assign({}, state, {
                 selectedView: selectedView,
                 editedView: selectedView
             });
         }
-        case ActionTypes.VBUILDER_TOGGLE_NEW:
-        {
+        case ActionTypes.VBUILDER_TOGGLE_NEW: {
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     id: null,
@@ -54,8 +52,7 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW:
-        {
+        case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: true,
                 editedView: Object.assign({}, state.editedView, {
@@ -63,16 +60,14 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_RECEIVE_UPDATE_VIEW:
-        {
+        case ActionTypes.VBUILDER_RECEIVE_UPDATE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: false,
                 selectedView: action.view,
                 editedView: action.view
             });
         }
-        case ActionTypes.VBUILDER_REQUEST_CREATE_VIEW:
-        {
+        case ActionTypes.VBUILDER_REQUEST_CREATE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: true,
                 editedView: Object.assign({}, state.editedView, {
@@ -80,28 +75,24 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_RECEIVE_CREATE_VIEW:
-        {
+        case ActionTypes.VBUILDER_RECEIVE_CREATE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: false,
                 editedView: action.view,
                 selectedView: action.view
             });
         }
-        case ActionTypes.VBUILDER_REQUEST_DELETE_VIEW:
-        {
+        case ActionTypes.VBUILDER_REQUEST_DELETE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: true
             });
         }
-        case ActionTypes.VBUILDER_RECEIVE_DELETE_VIEW:
-        {
+        case ActionTypes.VBUILDER_RECEIVE_DELETE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: false
             });
         }
-        case ActionTypes.VBUILDER_DELETE_COLUMN:
-        {
+        case ActionTypes.VBUILDER_DELETE_COLUMN: {
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
@@ -111,8 +102,7 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_ADD_COLUMN:
-        {
+        case ActionTypes.VBUILDER_ADD_COLUMN: {
             const newViewItem = createViewItem(action.columnFieldId);
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
@@ -124,8 +114,7 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_CHANGE_ATTR:
-        {
+        case ActionTypes.VBUILDER_CHANGE_ATTR: {
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     name: action.name,
@@ -133,8 +122,7 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_CHANGE_COLUMN:
-        {
+        case ActionTypes.VBUILDER_CHANGE_COLUMN: {
             const changedViewItem = createViewItem(action.fieldId);
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
@@ -148,8 +136,7 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_CHANGE_SORT_COLUMN:
-        {
+        case ActionTypes.VBUILDER_CHANGE_SORT_COLUMN: {
             const viewItems = [...state.editedView.viewListItems];
             const firstSortItemIndex = _.findIndex(viewItems, {sortOrder: 1});
             const secondSortItemIndex = _.findIndex(viewItems, {sortOrder: 2});
@@ -189,7 +176,7 @@ export default function viewBuilder(state = {
                 })
             });
         }
-        case ActionTypes.VBUILDER_SET_ITEM_KEYWORDS:{
+        case ActionTypes.VBUILDER_SET_ITEM_KEYWORDS: {
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
                     viewListItems: [
@@ -205,6 +192,6 @@ export default function viewBuilder(state = {
             });
         }
         default:
-            return state
+            return state;
     }
 }
