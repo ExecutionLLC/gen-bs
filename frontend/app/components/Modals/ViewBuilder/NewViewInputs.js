@@ -13,6 +13,13 @@ export default class NewViewInputs extends React.Component {
         return (
 
             <div className='collapse in copyview'>
+                { validationMessage &&
+                <div className='alert alert-help'>
+                        <span data-localize='views.setup.selector.description'>
+                            {validationMessage}
+                        </span>
+                </div>
+                }
                 <div className='row grid-toolbar row-noborder row-new-item'>
                     <div className='col-sm-6'>
                         <label data-localize='views.setup.new.name.title'>New View</label>
@@ -22,7 +29,7 @@ export default class NewViewInputs extends React.Component {
                             data-localize='views.setup.new.name.help'
                             placeholder='Set view name a copy'
                             value={newView.name}
-                            onChange={ (e) => this.onNameChange(e.target.value) }
+                            onChange={(e) => this.onNameChange(e.target.value)}
                         />
                         { validationMessage &&
                         <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
@@ -30,10 +37,8 @@ export default class NewViewInputs extends React.Component {
                         </div>
                         }
                     </div>
-
                     <div className='col-sm-6'>
                         <label data-localize='general.description'>Description</label>
-
                         <div className='input-group'>
                             <input
                                 type='text'
@@ -41,13 +46,11 @@ export default class NewViewInputs extends React.Component {
                                 data-localize='views.setup.new.description'
                                 placeholder='Set view description (optional)'
                                 value={newView.description}
-                                onChange={ (e) => this.onDescriptionChange(e.target.value) }
+                                onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
-
                             <div className='input-group-btn btn-group-close'>
                                 <button type='button' className='btn-link-default' type='button'
-                                        data-toggle='collapse' data-target='.copyview '
-                                        onClick={ () => this.onCancelClick() }>
+                                        onClick={() => this.onCancelClick()}>
                                     <i className='md-i'>close</i>
                                 </button>
                             </div>
