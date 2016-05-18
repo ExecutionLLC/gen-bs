@@ -33,7 +33,7 @@ class FiltersModal extends Component {
 
         const isFilterEditable = editingFilter && editingFilter.filter.type === 'user';
         const filterNameExists2 = isFilterEditable && _(filters)
-                .filter(filter => filter.type === 'user')
+                .filter(filter => filter.type !== 'history')
                 .some(filter => filter.name.trim() == editingFilter.filter.name.trim()
                     && filter.id != editingFilter.filter.id
                 );
