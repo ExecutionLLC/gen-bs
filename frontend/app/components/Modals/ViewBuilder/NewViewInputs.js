@@ -7,7 +7,7 @@ export default class NewViewInputs extends React.Component {
 
     render() {
 
-        const {dispatch, viewBuilder, views} = this.props;
+        const {viewBuilder} = this.props;
         const newView = viewBuilder.editedView;
 
         return (
