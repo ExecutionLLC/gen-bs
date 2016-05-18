@@ -21,7 +21,7 @@ class ViewsModal extends React.Component {
         const editedView = viewBuilder.editedView;
         const isNew = editedView ? editedView.id === null : false;
         const isViewEditable = editedView && editedView.type === 'user';
-        const isViewAdvanced = editedView && editedView.type === 'user';
+        const isViewAdvanced = editedView && editedView.type === 'advanced';
         const isLoginRequired = isViewAdvanced && auth.isDemo;
         const editedViewNameTrimmed = editedView && editedView.name.trim();
 
