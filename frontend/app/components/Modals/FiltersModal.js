@@ -21,26 +21,27 @@ class FiltersModal extends Component {
     render() {
         const editingFilterObject = this.props.filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
+        const editingFilter = editingFilterObject && editingFilterObject.filter;
 
         const {filters} = this.props.filtersList;
-        const filterNameExists = editingFilterObject && _.some(filters, filter => filter.name == editingFilterObject.filter.name);
+        const filterNameExists = editingFilter&& _.some(filters, filter => filter.name == editingFilter.name);
         const titleValidationMessage =
             filterNameExists ? 'Filter with this name is already exists.' :
-                editingFilterObject && !editingFilterObject.filter.name ? 'Filter name cannot be empty' :
+                editingFilter && !editingFilter.name ? 'Filter name cannot be empty' :
                     '';
 
         const {auth} = this.props;
 
-        const isFilterEditable = editingFilterObject && editingFilterObject.filter.type === 'user';
+        const isFilterEditable = editingFilter && editingFilter.type === 'user';
         const filterNameExists2 = isFilterEditable && _(filters)
                 .filter(filter => filter.type !== 'history')
-                .some(filter => filter.name.trim() == editingFilterObject.filter.name.trim()
-                    && filter.id != editingFilterObject.filter.id
+                .some(filter => filter.name.trim() == editingFilter.name.trim()
+                    && filter.id != editingFilter.id
                 );
         const disabledClass = classNames({
-            'disabled': (editingFilterObject && editingFilterObject.filter.type === 'advanced' && auth.isDemo || (editingFilterObject && !editingFilterObject.filter.name.trim()) || filterNameExists2) ? 'disabled' : ''
+            'disabled': (editingFilter && editingFilter.type === 'advanced' && auth.isDemo || (editingFilter && !editingFilter.name.trim()) || filterNameExists2) ? 'disabled' : ''
         });
-        const title = (editingFilterObject && editingFilterObject.filter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
+        const title = (editingFilter && editingFilter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
         const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
 
         return (
@@ -51,10 +52,10 @@ class FiltersModal extends Component {
                 show={this.props.showModal}
                 onHide={() => this.onClose()}
             >
-                { (!editingFilterObject) &&
+                { (!editingFilter) &&
                 <div >&nbsp;</div>
                 }
-                { (editingFilterObject) &&
+                { (editingFilter) &&
                 <div>
                     <FilterBuilderHeader />
                     <form>
