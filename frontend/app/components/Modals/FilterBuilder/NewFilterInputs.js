@@ -57,7 +57,7 @@ export default class NewFilterInputs extends Component {
     onNameChange(name) {
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
         this.props.dispatch(filterBuilderChangeAttr({
-            name: name,
+            name,
             description: editingFilter.description
         }));
     }
@@ -66,7 +66,7 @@ export default class NewFilterInputs extends Component {
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
         this.props.dispatch(filterBuilderChangeAttr({
             name: editingFilter.name,
-            description: description
+            description
         }));
     }
 

@@ -56,24 +56,24 @@ export default class NewViewInputs extends React.Component {
     }
 
     onNameChange(name) {
-        const editingView = this.props.viewBuilder.editedView;
+        const {editedView} = this.props.viewBuilder;
         this.props.dispatch(viewBuilderChangeAttr({
-            name: name,
-            description: editingView.description
+            name,
+            description: editedView.description
         }));
     }
 
     onDescriptionChange(description) {
-        const editingView = this.props.viewBuilder.editedView;
+        const {editedView} = this.props.viewBuilder;
         this.props.dispatch(viewBuilderChangeAttr({
-            name: editingView.name,
-            description: description
+            name: editedView.name,
+            description
         }));
     }
 
     onCancelClick() {
-        const editingView = this.props.viewBuilder.editedView;
-        this.props.dispatch(viewBuilderSelectView(this.props.views, editingView.originalViewId));
+        const {editedView} = this.props.viewBuilder;
+        this.props.dispatch(viewBuilderSelectView(this.props.views, editedView.originalViewId));
     }
 
 }
