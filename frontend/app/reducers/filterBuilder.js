@@ -7,10 +7,11 @@ import FieldUtils from '../utils/fieldUtils';
  * @param {boolean} isNew
  * @param {{rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}} filterToEdit
  * @param {{id: string, label: string, type: string}[]} fields
+ * @param {string} parentFilterId
  * @param {{id: string, label: string, type: string}[]} allowedFields
  * @returns {{filter: {rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}, isNew: boolean, parsedFilter: {condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, fieldDefaultId: string}}
  */
-function parseFilterForEditing(isNew, filterToEdit, fields, allowedFields) {
+function parseFilterForEditing(isNew, filterToEdit, parentFilterId, fields, allowedFields) {
     const fieldDefaultId = FieldUtils.getDefaultId(allowedFields);
     const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
     const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
@@ -25,6 +26,7 @@ function parseFilterForEditing(isNew, filterToEdit, fields, allowedFields) {
     return {
         filter: filterToEdit,
         isNew,
+        parentFilterId,
         parsedFilter,
         fieldDefaultId
     };
@@ -82,6 +84,7 @@ function reduceFBuilderStartEdit(state, action) {
                 id: null
             }) :
             filter,
+        filter.id,
         totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
         allowedFieldsList
     );
