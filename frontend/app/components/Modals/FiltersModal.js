@@ -22,24 +22,25 @@ class FiltersModal extends Component {
         const editingFilterObject = this.props.filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;
+        const isFilterEditable = editingFilter && editingFilter.type === 'user';
+        const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
         const {filters} = this.props.filtersList;
-        const filterNameExists = editingFilter&& _.some(filters, filter => filter.name == editingFilter.name);
+        const filterNameExists = editingFilter && _.some(filters, filter => filter.name == editingFilterNameTrimmed);
         const titleValidationMessage =
             filterNameExists ? 'Filter with this name is already exists.' :
-                editingFilter && !editingFilter.name ? 'Filter name cannot be empty' :
+                editingFilter && !editingFilterNameTrimmed ? 'Filter name cannot be empty' :
                     '';
 
         const {auth} = this.props;
 
-        const isFilterEditable = editingFilter && editingFilter.type === 'user';
         const filterNameExists2 = isFilterEditable && _(filters)
                 .filter(filter => filter.type !== 'history')
-                .some(filter => filter.name.trim() == editingFilter.name.trim()
+                .some(filter => filter.name.trim() == editingFilterNameTrimmed
                     && filter.id != editingFilter.id
                 );
         const disabledClass = classNames({
-            'disabled': (editingFilter && editingFilter.type === 'advanced' && auth.isDemo || (editingFilter && !editingFilter.name.trim()) || filterNameExists2) ? 'disabled' : ''
+            'disabled': (editingFilter && editingFilter.type === 'advanced' && auth.isDemo || (editingFilter && !editingFilterNameTrimmed) || filterNameExists2) ? 'disabled' : ''
         });
         const title = (editingFilter && editingFilter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
         const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
