@@ -26,7 +26,7 @@ class ViewsModal extends React.Component {
 
         const validationMessage = !editedViewNameTrimmed ? 'View name cannot be empty' : '';
 
-        const confirmButton = {
+        const confirmButtonParams = {
             caption: isViewEditable ? 'Save and Select' : 'Select',
             title: isLoginRequired ? 'Login or register to select advanced view' : '',
             disabled: isLoginRequired || !!validationMessage
@@ -68,7 +68,7 @@ class ViewsModal extends React.Component {
                         </Modal.Body>
                         <ViewBuilderFooter
                             closeModal={closeModal}
-                            confirmButton={confirmButton}
+                            confirmButtonParams={confirmButtonParams}
                         />
                     </form>
                 </div>

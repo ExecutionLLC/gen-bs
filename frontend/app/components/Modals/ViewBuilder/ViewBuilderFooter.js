@@ -7,7 +7,7 @@ import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} fro
 export default class ViewBuilderFooter extends React.Component {
 
     render() {
-        const {confirmButton} = this.props;
+        const {confirmButtonParams} = this.props;
 
         return (
             <Modal.Footer>
@@ -24,10 +24,10 @@ export default class ViewBuilderFooter extends React.Component {
                     onClick={(e) => this.selectOnClick(e)}
                     type='submit'
                     className='btn btn-primary'
-                    disabled={confirmButton.disabled}
-                    title={confirmButton.title}
+                    disabled={confirmButtonParams.disabled}
+                    title={confirmButtonParams.title}
                 >
-                    <span data-localize='actions.save_select.title'>{confirmButton.caption}</span>
+                    <span data-localize='actions.save_select.title'>{confirmButtonParams.caption}</span>
                 </button>
             </Modal.Footer>
         );

@@ -39,7 +39,7 @@ class FiltersModal extends Component {
                 editingFilter && !editingFilterNameTrimmed ? 'Filter name cannot be empty' :
                     '';
 
-        const confirmButton = {
+        const confirmButtonParams = {
             caption: isFilterEditable ? 'Save and Select': 'Select',
             title: isLoginRequired ? 'Login or register to select advanced filters' : '',
             disabled: isLoginRequired || !!titleValidationMessage
@@ -85,7 +85,7 @@ class FiltersModal extends Component {
                         </Modal.Body>
                         <FilterBuilderFooter
                             {...this.props}
-                            confirmButton={confirmButton}
+                            confirmButtonParams={confirmButtonParams}
                             closeModal={() => this.onClose()}
                         />
                     </form>
