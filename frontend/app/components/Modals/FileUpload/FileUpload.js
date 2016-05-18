@@ -93,6 +93,9 @@ export default class FileUpload extends Component {
     renderUploadButton() {
         return (
             <button onClick={this.onUploadClick.bind(this)}
+                    onDragEnter={(e) => {e.stopPropagation();e.preventDefault();}}
+                    onDragOver={(e) => {ce.stopPropagation();e.preventDefault();}}
+                    onDrop={(e) => {e.stopPropagation();e.preventDefault();this.onFilesDrop(e.dataTransfer.files);}}
                     className="btn-link-light-default btn-select-file">
                 <input
                     onChange={ (e) => this.onUploadChanged(e.target.files)}
@@ -131,7 +134,12 @@ export default class FileUpload extends Component {
 
     onUploadChanged(files) {
         const {dispatch} = this.props;
-        dispatch(addFilesForUpload(Array.prototype.slice.call(e.target.files)));
+        dispatch(addFilesForUpload(Array.prototype.slice.call(files)));
+    }
+
+    onFilesDrop(files) {
+        const {dispatch} = this.props;
+        dispatch(addFilesForUpload(Array.prototype.slice.call(files)))
     }
 
     onUploadClick() {
