@@ -24,7 +24,7 @@ export default class NewViewInputs extends React.Component {
                             value={newView.name}
                             onChange={ (e) => this.onNameChange(e.target.value) }
                         />
-                        { !newView.name &&
+                        { validationMessage &&
                         <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
                             {validationMessage}
                         </div>
