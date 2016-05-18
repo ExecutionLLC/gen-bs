@@ -29,17 +29,17 @@ export default class NewFilterInputs extends Component {
     render() {
         const {filters} = this.props.filtersList;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
-
+        const {validationMessage} = this.props;
         const filterNameExists = _.some(filters, filter => filter.name == editingFilter.name);
         const descriptionText = (filterNameExists) ? 'Filter with this name is already exists.' : '';
 
         return (
 
             <div className='collapse in copyview'>
-                { descriptionText &&
+                { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='views.setup.selector.description'>
-                            {descriptionText}
+                            {validationMessage}
                         </span>
                 </div>
                 }
@@ -56,9 +56,9 @@ export default class NewFilterInputs extends Component {
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
 
-                        { !editingFilter.name &&
+                        { validationMessage &&
                         <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
-                            Filter name cannot be empty
+                            {validationMessage}
                         </div>
                         }
 

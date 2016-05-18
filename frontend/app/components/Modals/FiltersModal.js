@@ -26,6 +26,7 @@ class FiltersModal extends Component {
         }
 
         const editingFilterIsNew = editingFilter ? editingFilter.isNew : false;
+        const titleValidationMessage = '<title validation message>';
         return (
 
             <Modal
@@ -45,7 +46,10 @@ class FiltersModal extends Component {
                             <div className='modal-body-scroll'>
                                 { editingFilterIsNew &&
                                 <div className='modal-padding'>
-                                    <NewFilterInputs  {...this.props} />
+                                    <NewFilterInputs
+                                        {...this.props}
+                                        validationMessage={titleValidationMessage}
+                                    />
                                     <FilterBuilder
                                         {...this.props}
                                     />
