@@ -6,11 +6,11 @@ import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/
 export default class NewFilterInputs extends Component {
 
     render() {
+
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
         const {validationMessage} = this.props;
 
         return (
-
             <div className='collapse in copyview'>
                 { validationMessage &&
                 <div className='alert alert-help'>
@@ -20,7 +20,6 @@ export default class NewFilterInputs extends Component {
                 </div>
                 }
                 <div className='row grid-toolbar row-noborder row-new-item'>
-
                     <div className='col-sm-6'>
                         <label data-localize='views.setup.new.name.title'>New View</label>
                         <input
@@ -31,13 +30,6 @@ export default class NewFilterInputs extends Component {
                             value={editingFilter.name}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
-
-                        { validationMessage &&
-                        <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
-                            {validationMessage}
-                        </div>
-                        }
-
                     </div>
                     <div className='col-sm-6'>
                         <label data-localize='general.description'>Description</label>
@@ -60,7 +52,6 @@ export default class NewFilterInputs extends Component {
                     </div>
                 </div>
             </div>
-
         );
     }
 

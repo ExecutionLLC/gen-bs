@@ -11,7 +11,6 @@ export default class NewViewInputs extends React.Component {
         const newView = viewBuilder.editedView;
 
         return (
-
             <div className='collapse in copyview'>
                 { validationMessage &&
                 <div className='alert alert-help'>
@@ -31,11 +30,6 @@ export default class NewViewInputs extends React.Component {
                             value={newView.name}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
-                        { validationMessage &&
-                        <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
-                            {validationMessage}
-                        </div>
-                        }
                     </div>
                     <div className='col-sm-6'>
                         <label data-localize='general.description'>Description</label>
@@ -58,7 +52,6 @@ export default class NewViewInputs extends React.Component {
                     </div>
                 </div>
             </div>
-
         );
     }
 
