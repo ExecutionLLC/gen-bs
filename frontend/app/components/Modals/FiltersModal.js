@@ -99,10 +99,9 @@ class FiltersModal extends Component {
 
 
 function mapStateToProps(state) {
-    const { filterBuilder, ui, auth, userData, fields, samplesList, filtersList } = state;
+    const { filterBuilder, ui, auth, fields, samplesList, filtersList } = state;
 
     return {
-        userData,
         fields,
         ui,
         filterBuilder,

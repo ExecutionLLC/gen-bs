@@ -162,8 +162,7 @@ export default class ExistentViewSelect extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {viewBuilder, auth, userData} = state;
-    const views = userData.views;
+    const {viewBuilder, auth, userData: {views}} = state;
     return {
         auth,
         viewBuilder,

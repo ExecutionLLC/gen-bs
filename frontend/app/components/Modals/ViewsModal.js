@@ -80,7 +80,7 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, userData, viewBuilder} = state;
+    const {auth, viewBuilder} = state;
 
     return {
         auth,
