@@ -16,7 +16,7 @@ class ViewsModal extends React.Component {
 
     render() {
         const {auth} = this.props;
-        const {isValid, showModal, closeModal, viewBuilder} = this.props;
+        const {showModal, closeModal, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
         const isNew = editedView ? editedView.id === null : false;
         const isViewEditable = editedView && editedView.type === 'user';
@@ -41,10 +41,10 @@ class ViewsModal extends React.Component {
                 show={showModal}
                 onHide={ () => closeModal('views') }
             >
-                { !isValid &&
+                { !editedView &&
                 <div >&nbsp;</div>
                 }
-                { isValid &&
+                { editedView &&
                 <div>
                     <ViewBuilderHeader />
                     <form>
@@ -81,10 +81,8 @@ class ViewsModal extends React.Component {
 
 function mapStateToProps(state) {
     const {auth, userData, viewBuilder} = state;
-    const isValid = userData.isValid;
 
     return {
-        isValid,
         auth,
         viewBuilder
     };
