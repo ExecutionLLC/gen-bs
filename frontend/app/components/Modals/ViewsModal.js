@@ -7,6 +7,7 @@ import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter';
 import NewViewInputs from './ViewBuilder/NewViewInputs';
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
+import classNames from 'classnames';
 
 class ViewsModal extends React.Component {
 
@@ -18,6 +19,26 @@ class ViewsModal extends React.Component {
         const {isValid, showModal, closeModal, viewBuilder} =this.props;
         const editedView = viewBuilder.editedView;
         const isNew = (editedView) ? editedView.id === null : false;
+
+        const confirmButton = (() => {
+            const {auth, viewBuilder} = this.props;
+            const editedView = viewBuilder.editedView;
+            if (!editedView) {
+                return {};
+            }
+            var disabledClass = classNames({
+                'disabled': (editedView.type === 'advanced' && auth.isDemo || !editedView.name.trim()) ? 'disabled' : ''
+            });
+            var title = (editedView.type === 'advanced' && auth.isDemo) ?
+                'Login or register to select advanced view' : '';
+            const isViewEditable = (editedView.type === 'user');
+            const selectButtonLabel = isViewEditable ? 'Save and Select' : 'Select';
+            return {
+                caption: selectButtonLabel,
+                title: title,
+                disabled: disabledClass
+            };
+        })();
         return (
 
 
@@ -50,7 +71,10 @@ class ViewsModal extends React.Component {
                                 }
                             </div>
                         </Modal.Body>
-                        <ViewBuilderFooter closeModal={closeModal}/>
+                        <ViewBuilderFooter
+                            closeModal={closeModal}
+                            confirmButton={confirmButton}
+                        />
                     </form>
                 </div>
                 }
@@ -61,11 +85,12 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {userData, viewBuilder} = state;
+    const {auth, userData, viewBuilder} = state;
     const isValid = userData.isValid;
 
     return {
         isValid,
+        auth,
         viewBuilder
     };
 }

@@ -1,22 +1,13 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import classNames from 'classnames';
 
 import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} from '../../../actions/viewBuilder';
 
 export default class ViewBuilderFooter extends React.Component {
 
     render() {
-        const {auth, viewBuilder} = this.props;
-        const editedView = viewBuilder.editedView;
-        var disabledClass = classNames({
-            'disabled': (editedView.type === 'advanced' && auth.isDemo || !editedView.name.trim()) ? 'disabled' : ''
-        });
-        var title = (editedView.type === 'advanced' && auth.isDemo) ?
-            'Login or register to select advanced view' : '';
-        const isViewEditable = (editedView.type === 'user');
-        const selectButtonLabel = isViewEditable ? 'Save and Select' : 'Select';
+        const {confirmButton} = this.props;
 
         return (
 
@@ -34,10 +25,10 @@ export default class ViewBuilderFooter extends React.Component {
                     onClick={ (e) => {this.selectOnClick(e);}}
                     type='submit'
                     className='btn btn-primary'
-                    disabled={disabledClass}
-                    title={title}
+                    disabled={confirmButton.disabled}
+                    title={confirmButton.title}
                 >
-                    <span data-localize='actions.save_select.title'>{selectButtonLabel}</span>
+                    <span data-localize='actions.save_select.title'>{confirmButton.caption}</span>
                 </button>
             </Modal.Footer>
 
