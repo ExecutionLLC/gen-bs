@@ -20,6 +20,8 @@ class ViewsModal extends React.Component {
         const editedView = viewBuilder.editedView;
         const isNew = (editedView) ? editedView.id === null : false;
 
+        const validationMessage = editedView && !editedView.name ? 'View name cannot be empty' : '';
+
         const confirmButton = (() => {
             const {auth, viewBuilder} = this.props;
             const editedView = viewBuilder.editedView;
@@ -59,7 +61,9 @@ class ViewsModal extends React.Component {
                             <div className='modal-body-scroll'>
                                 { isNew &&
                                     <div className='modal-padding'>
-                                        <NewViewInputs  />
+                                        <NewViewInputs
+                                            validationMessage={validationMessage}
+                                        />
                                         <ViewBuilder />
                                     </div>   
                                 }

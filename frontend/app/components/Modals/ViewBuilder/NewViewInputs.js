@@ -7,7 +7,7 @@ export default class NewViewInputs extends React.Component {
 
     render() {
 
-        const {viewBuilder} = this.props;
+        const {viewBuilder, validationMessage} = this.props;
         const newView = viewBuilder.editedView;
 
         return (
@@ -26,7 +26,7 @@ export default class NewViewInputs extends React.Component {
                         />
                         { !newView.name &&
                         <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
-                            View name cannot be empty
+                            {validationMessage}
                         </div>
                         }
                     </div>
