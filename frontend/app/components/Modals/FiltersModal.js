@@ -27,10 +27,9 @@ class FiltersModal extends Component {
         const isFilterEditable = editingFilter && editingFilter.type === 'user';
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
-        const filterNameExists = editingFilter && _.some(filters, filter => filter.name == editingFilterNameTrimmed);
-        const filterNameExists2 = isFilterEditable && _(filters)
+        const filterNameExists = isFilterEditable && _(filters)
                 .filter(filter => filter.type !== 'history')
-                .some(filter => filter.name.trim() == editingFilterNameTrimmed
+                .some(filter => filter.name.trim() === editingFilterNameTrimmed
                     && filter.id != editingFilter.id
                 );
 
@@ -39,9 +38,7 @@ class FiltersModal extends Component {
                 editingFilter && !editingFilterNameTrimmed ? 'Filter name cannot be empty' :
                     '';
 
-        const disabledClass = classNames({
-            'disabled': (editingFilter && editingFilter.type === 'advanced' && auth.isDemo || (editingFilter && !editingFilterNameTrimmed) || filterNameExists2) ? 'disabled' : ''
-        });
+        const confirmButtonDisabled = editingFilter && editingFilter.type === 'advanced' && auth.isDemo || !!titleValidationMessage;
         const title = (editingFilter && editingFilter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
         const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
 
@@ -85,7 +82,7 @@ class FiltersModal extends Component {
                         </Modal.Body>
                         <FilterBuilderFooter
                             {...this.props}
-                            confirmButton={{caption: selectButtonLabel, title: title, disabled: disabledClass}}
+                            confirmButton={{caption: selectButtonLabel, title: title, disabled: confirmButtonDisabled}}
                             closeModal={() => this.onClose()}
                         />
                     </form>
