@@ -116,9 +116,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 break;
 
             case METHODS.uploadSample:
-                setTimeout(() => {
-                    this._processUploadSampleResult(operation, rpcMessage, callback);
-                }, 3);
+                this._processUploadSampleResult(operation, rpcMessage, callback);
                 break;
 
             case METHODS.getSourcesList:
