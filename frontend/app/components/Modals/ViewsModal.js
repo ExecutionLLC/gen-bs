@@ -7,7 +7,6 @@ import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter';
 import NewViewInputs from './ViewBuilder/NewViewInputs';
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
-import classNames from 'classnames';
 
 class ViewsModal extends React.Component {
 
