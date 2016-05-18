@@ -20,6 +20,11 @@ class FiltersModal extends Component {
 
         const {isValid} = this.props.userData;
         const {editingFilter} = this.props.filterBuilder;
+
+        if (!editingFilter) {
+            return null;
+        }
+
         const editingFilterIsNew = editingFilter ? editingFilter.isNew : false;
         return (
 
