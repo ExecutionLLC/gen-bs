@@ -2,10 +2,10 @@
 
 const async = require('async');
 
-const ApplicationServerServiceBase = require('./../ApplicationServerServiceBase');
-const AppServerUploadUtils = require('../../../../utils/AppServerUploadUtils');
+const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
+const AppServerUploadUtils = require('../../../utils/AppServerUploadUtils');
 
-const METHODS = require('./../AppServerMethods');
+const METHODS = require('./AppServerMethods');
 
 class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
