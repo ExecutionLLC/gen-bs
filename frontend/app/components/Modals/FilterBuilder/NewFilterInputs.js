@@ -5,27 +5,6 @@ import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/
 
 export default class NewFilterInputs extends Component {
 
-    onNameChange(name) {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderChangeAttr({
-            name: name,
-            description: editingFilter.description
-        }));
-    }
-
-    onDescriptionChange(description) {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderChangeAttr({
-            name: editingFilter.name,
-            description: description
-        }));
-    }
-
-    onCancelClick() {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderStartEdit(false, editingFilter, this.props.fields));
-    }
-
     render() {
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
         const {validationMessage} = this.props;
@@ -84,4 +63,26 @@ export default class NewFilterInputs extends Component {
 
         );
     }
+
+    onNameChange(name) {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderChangeAttr({
+            name: name,
+            description: editingFilter.description
+        }));
+    }
+
+    onDescriptionChange(description) {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderChangeAttr({
+            name: editingFilter.name,
+            description: description
+        }));
+    }
+
+    onCancelClick() {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderStartEdit(false, editingFilter, this.props.fields));
+    }
+
 }
