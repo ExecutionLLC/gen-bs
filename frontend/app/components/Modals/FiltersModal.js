@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
+import _ from 'lodash';
+import classNames from 'classnames';
 
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader';
 import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter';
@@ -21,7 +23,28 @@ class FiltersModal extends Component {
         const {isValid} = this.props.userData;
         const {editingFilter} = this.props.filterBuilder;
         const editingFilterIsNew = editingFilter ? editingFilter.isNew : false;
-        const titleValidationMessage = '<title validation message>';
+
+        const {filters} = this.props.filtersList;
+        const filterNameExists = editingFilter && _.some(filters, filter => filter.name == editingFilter.filter.name);
+        const titleValidationMessage =
+            filterNameExists ? 'Filter with this name is already exists.' :
+                editingFilter && !editingFilter.filter.name ? 'Filter name cannot be empty' :
+                    '';
+
+        const {auth} = this.props;
+
+        const isFilterEditable = editingFilter && editingFilter.filter.type === 'user';
+        const filterNameExists2 = isFilterEditable && _(filters)
+                .filter(filter => filter.type === 'user')
+                .some(filter => filter.name.trim() == editingFilter.filter.name.trim()
+                    && filter.id != editingFilter.filter.id
+                );
+        const disabledClass = classNames({
+            'disabled': (editingFilter && editingFilter.filter.type === 'advanced' && auth.isDemo || (editingFilter && !editingFilter.filter.name.trim()) || filterNameExists2) ? 'disabled' : ''
+        });
+        const title = (editingFilter && editingFilter.filter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
+        const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
+
         return (
 
             <Modal
@@ -62,7 +85,7 @@ class FiltersModal extends Component {
                         </Modal.Body>
                         <FilterBuilderFooter
                             {...this.props}
-                            confirmButton={{caption: '<button caption>', title: '<button title>', disabled: true}}
+                            confirmButton={{caption: selectButtonLabel, title: title, disabled: disabledClass}}
                             closeModal={() => this.onClose()}
                         />
                     </form>

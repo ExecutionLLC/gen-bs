@@ -27,11 +27,8 @@ export default class NewFilterInputs extends Component {
     }
 
     render() {
-        const {filters} = this.props.filtersList;
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
         const {validationMessage} = this.props;
-        const filterNameExists = _.some(filters, filter => filter.name == editingFilter.name);
-        const descriptionText = (filterNameExists) ? 'Filter with this name is already exists.' : '';
 
         return (
 
