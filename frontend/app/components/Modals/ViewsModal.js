@@ -16,7 +16,7 @@ class ViewsModal extends React.Component {
     }
 
     render() {
-        const {isValid, showModal, closeModal, viewBuilder} =this.props;
+        const {isValid, showModal, closeModal, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
         const isNew = (editedView) ? editedView.id === null : false;
 
