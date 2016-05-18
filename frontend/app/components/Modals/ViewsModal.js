@@ -16,24 +16,26 @@ class ViewsModal extends React.Component {
     }
 
     render() {
+        const {auth} = this.props;
         const {isValid, showModal, closeModal, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
-        const isNew = (editedView) ? editedView.id === null : false;
+        const isNew = editedView ? editedView.id === null : false;
+        const isViewEditable = editedView && editedView.type === 'user';
+        const isViewAdvanced = editedView && editedView.type === 'user';
+        const isLoginRequired = isViewAdvanced && auth.isDemo;
+        const editedViewNameTrimmed = editedView && editedView.name.trim();
 
-        const validationMessage = editedView && !editedView.name ? 'View name cannot be empty' : '';
+        const validationMessage = !editedViewNameTrimmed ? 'View name cannot be empty' : '';
 
         const confirmButton = (() => {
-            const {auth, viewBuilder} = this.props;
-            const editedView = viewBuilder.editedView;
             if (!editedView) {
                 return {};
             }
             var disabledClass = classNames({
-                'disabled': (editedView.type === 'advanced' && auth.isDemo || !editedView.name.trim()) ? 'disabled' : ''
+                'disabled': (isLoginRequired || !editedViewNameTrimmed) ? 'disabled' : ''
             });
-            var title = (editedView.type === 'advanced' && auth.isDemo) ?
+            var title = (isLoginRequired) ?
                 'Login or register to select advanced view' : '';
-            const isViewEditable = (editedView.type === 'user');
             const selectButtonLabel = isViewEditable ? 'Save and Select' : 'Select';
             return {
                 caption: selectButtonLabel,
