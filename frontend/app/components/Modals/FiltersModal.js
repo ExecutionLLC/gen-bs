@@ -25,6 +25,8 @@ class FiltersModal extends Component {
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;
         const isFilterEditable = editingFilter && editingFilter.type === 'user';
+        const isFilterAdvanced = editingFilter && editingFilter.type === 'advanced';
+        const isLoginRequired = isFilterAdvanced && auth.isDemo;
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
         const filterNameExists = isFilterEditable && _(filters)
@@ -38,8 +40,8 @@ class FiltersModal extends Component {
                 editingFilter && !editingFilterNameTrimmed ? 'Filter name cannot be empty' :
                     '';
 
-        const confirmButtonDisabled = editingFilter && editingFilter.type === 'advanced' && auth.isDemo || !!titleValidationMessage;
-        const title = (editingFilter && editingFilter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
+        const confirmButtonDisabled = isLoginRequired || !!titleValidationMessage;
+        const title = isLoginRequired ? 'Login or register to select advanced filters' : '';
         const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
 
         return (
