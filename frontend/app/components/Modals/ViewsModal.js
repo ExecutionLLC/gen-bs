@@ -27,22 +27,12 @@ class ViewsModal extends React.Component {
 
         const validationMessage = !editedViewNameTrimmed ? 'View name cannot be empty' : '';
 
-        const confirmButton = (() => {
-            if (!editedView) {
-                return {};
-            }
-            var disabledClass = classNames({
-                'disabled': (isLoginRequired || !editedViewNameTrimmed) ? 'disabled' : ''
-            });
-            var title = (isLoginRequired) ?
-                'Login or register to select advanced view' : '';
-            const selectButtonLabel = isViewEditable ? 'Save and Select' : 'Select';
-            return {
-                caption: selectButtonLabel,
-                title: title,
-                disabled: disabledClass
-            };
-        })();
+        const confirmButton = {
+            caption: isViewEditable ? 'Save and Select' : 'Select',
+            title: isLoginRequired ? 'Login or register to select advanced view' : '',
+            disabled: isLoginRequired || !!validationMessage
+        };
+
         return (
 
 
