@@ -10,22 +10,22 @@ export default class NewFilterInputs extends Component {
         const {validationMessage} = this.props;
 
         return (
-            <div className='collapse in copyview'>
+            <div className='collapse in'>
                 { validationMessage &&
                 <div className='alert alert-help'>
-                        <span data-localize='views.setup.selector.description'>
+                        <span data-localize='filters.setup.selector.description'>
                             {validationMessage}
                         </span>
                 </div>
                 }
                 <div className='row grid-toolbar row-noborder row-new-item'>
                     <div className='col-sm-6'>
-                        <label data-localize='views.setup.new.name.title'>New View</label>
+                        <label data-localize='filters.setup.new.name.title'>New Filter</label>
                         <input
                             type='text'
                             className='form-control text-primary'
-                            data-localize='views.setup.new.name.help'
-                            placeholder='Set view name a copy'
+                            data-localize='filters.setup.new.name.help'
+                            placeholder='Set filter name'
                             value={editingFilter.name}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
@@ -36,8 +36,8 @@ export default class NewFilterInputs extends Component {
                             <input
                                 type='text'
                                 className='form-control'
-                                data-localize='views.setup.new.description'
-                                placeholder='Set view description (optional)'
+                                data-localize='filters.setup.new.description'
+                                placeholder='Set filter description (optional)'
                                 value={editingFilter.description}
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />

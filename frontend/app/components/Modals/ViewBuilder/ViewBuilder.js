@@ -114,7 +114,7 @@ export default class ViewBuilder extends React.Component {
 
         return (
 
-            <div className='copyview collapse in'>
+            <div className='collapse in'>
                 <h5 data-localize='views.setup.settings.title'>Table Columns</h5>
                 <div className='row grid-toolbar hidden-xs'>
 
