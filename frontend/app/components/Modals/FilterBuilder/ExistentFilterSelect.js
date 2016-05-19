@@ -54,7 +54,7 @@ export default class ExistentFilterSelect extends Component {
 
         return (
 
-            <div className='in copyview'>
+            <div className='in'>
                 <div className='row grid-toolbar'>
                     <div className='col-sm-6'>
                         <label data-localize='filters.setup.selector.label'>Available Filters</label>
@@ -79,7 +79,7 @@ export default class ExistentFilterSelect extends Component {
                         <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
                              data-placement='bottom' data-container='body'>
                             <button type='button'
-                                    className='btn btn-default in copyview'
+                                    className='btn btn-default in'
                                     id='dblBtn'
                                     onClick={() => this.onDuplicateClick(selectedFilter, fields)}
                                     disabled={disabledClass}

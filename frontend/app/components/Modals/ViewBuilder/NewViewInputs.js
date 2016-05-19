@@ -11,7 +11,7 @@ export default class NewViewInputs extends React.Component {
         const newView = viewBuilder.editedView;
 
         return (
-            <div className='collapse in copyview'>
+            <div className='collapse in'>
                 { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='views.setup.selector.description'>

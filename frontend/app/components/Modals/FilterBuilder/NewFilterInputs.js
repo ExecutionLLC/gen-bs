@@ -10,7 +10,7 @@ export default class NewFilterInputs extends Component {
         const {validationMessage} = this.props;
 
         return (
-            <div className='collapse in copyview'>
+            <div className='collapse in'>
                 { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='filters.setup.selector.description'>
