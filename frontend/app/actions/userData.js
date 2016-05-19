@@ -117,7 +117,7 @@ function receiveViews(json) {
     };
 }
 
-export function fetchViews() {
+export function fetchViews(viewIdToSelect) {
 
     return (dispatch, getState) => {
         dispatch(requestViews());
@@ -131,7 +131,7 @@ export function fetchViews() {
             } else {
                 const result = response.body;
                 const view = result[0] || null;
-                const viewId = getState().viewBuilder.selectedView.id || view.id;
+                const viewId = viewIdToSelect || view.id;
 
                 dispatch(receiveViews(result));
                 dispatch(changeView(viewId));
