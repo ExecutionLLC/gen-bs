@@ -26,7 +26,7 @@ export default class NewViewInputs extends React.Component {
                             type='text'
                             className='form-control text-primary'
                             data-localize='views.setup.new.name.help'
-                            placeholder='Set view name a copy'
+                            placeholder='Set view name'
                             value={newView.name}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />

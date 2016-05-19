@@ -310,7 +310,7 @@
       "new": {
         "name": {
           "title": "New view",
-          "value": "Set view name a copy",
+          "value": "Set view name",
           "error": "Name can not be empty",
           "value_prefix": "Copy of"
         },
@@ -392,7 +392,7 @@
       "new": {
         "name": {
           "title": "New filter",
-          "value": "Set filter name a copy",
+          "value": "Set filter name",
           "error": "Name can not be empty",
           "prefix": "Copy of"
         },

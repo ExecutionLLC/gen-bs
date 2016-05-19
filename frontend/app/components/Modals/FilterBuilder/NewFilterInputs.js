@@ -25,7 +25,7 @@ export default class NewFilterInputs extends Component {
                             type='text'
                             className='form-control text-primary'
                             data-localize='filters.setup.new.name.help'
-                            placeholder='Set view name a copy'
+                            placeholder='Set filter name'
                             value={editingFilter.name}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
