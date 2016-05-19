@@ -95,7 +95,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             sortOrder: _.map(sortedParams, sortedParam => {
                 return {
                     columnName: this._getPrefixedFieldName(sortedParam.fieldMetadata),
-                    isAscendingOrder: (sortedParam.sortDirection === 'asc')
+                    isAscendingOrder: sortedParam.sortDirection === 'asc'
                 };
             })
         };

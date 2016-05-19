@@ -44,8 +44,8 @@ class SearchService extends ServiceBase {
                     viewId: viewId || 'undefined',
                     filterId: filterId || 'undefined',
                     sampleId: sampleId || 'undefined',
-                    limit: limit || 'undefined',
-                    offset: offset || 'undefined'
+                    limit: _.isNumber(limit) ? limit : 'undefined',
+                    offset: _.isNumber(offset) ? offset : 'undefined'
                 }, null, 2)));
         } else {
             async.waterfall([

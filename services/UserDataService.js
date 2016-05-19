@@ -101,11 +101,11 @@ class UserDataService extends ServiceBase {
             (callback) => this.services.operations.findActiveOperations(user.id, callback),
             (operations, callback) => {
                 const groupedOperations = _.groupBy(operations, operation => operation instanceof UploadOperation);
-                const nonUploadResults = _.map(groupedOperations['false'], operation => _.assign({}, {
+                const nonUploadResults = _.map(groupedOperations['false'], operation => ({
                     id: operation.getId(),
                     type: operation.getType()
                 }));
-                const uploadResults = _.map(groupedOperations['true'], operation => _.assign({}, {
+                const uploadResults = _.map(groupedOperations['true'], operation => ({
                     id: operation.getId(),
                     type: operation.getType(),
                     lastMessage: operation.getLastAppServerMessage()
