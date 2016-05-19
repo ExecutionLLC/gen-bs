@@ -2,49 +2,23 @@ import React, {Component} from 'react';
 
 import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/filterBuilder';
 
-
 export default class NewFilterInputs extends Component {
 
-    onNameChange(name) {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderChangeAttr({
-            name: name,
-            description: editingFilter.description
-        }));
-    }
-
-    onDescriptionChange(description) {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderChangeAttr({
-            name: editingFilter.name,
-            description: description
-        }));
-    }
-
-    onCancelClick() {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderStartEdit(false, editingFilter, this.props.fields));
-    }
-
     render() {
-        const {filters} = this.props.filtersList;
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
 
-        const filterNameExists = _.some(filters, filter => filter.name == editingFilter.name);
-        const descriptionText = (filterNameExists) ? 'Filter with this name is already exists.' : '';
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        const {validationMessage} = this.props;
 
         return (
-
             <div className='collapse in copyview'>
-                { descriptionText &&
+                { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='views.setup.selector.description'>
-                            {descriptionText}
+                            {validationMessage}
                         </span>
                 </div>
                 }
                 <div className='row grid-toolbar row-noborder row-new-item'>
-
                     <div className='col-sm-6'>
                         <label data-localize='views.setup.new.name.title'>New View</label>
                         <input
@@ -55,13 +29,6 @@ export default class NewFilterInputs extends Component {
                             value={editingFilter.name}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
-
-                        { !editingFilter.name &&
-                        <div className='help-text text-danger' data-localize='views.setup.new.name.error'>
-                            Filter name cannot be empty
-                        </div>
-                        }
-
                     </div>
                     <div className='col-sm-6'>
                         <label data-localize='general.description'>Description</label>
@@ -84,7 +51,28 @@ export default class NewFilterInputs extends Component {
                     </div>
                 </div>
             </div>
-
         );
     }
+
+    onNameChange(name) {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderChangeAttr({
+            name,
+            description: editingFilter.description
+        }));
+    }
+
+    onDescriptionChange(description) {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderChangeAttr({
+            name: editingFilter.name,
+            description
+        }));
+    }
+
+    onCancelClick() {
+        const editingFilter = this.props.filterBuilder.editingFilter.filter;
+        this.props.dispatch(filterBuilderStartEdit(false, editingFilter, this.props.fields));
+    }
+
 }

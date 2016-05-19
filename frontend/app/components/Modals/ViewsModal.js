@@ -15,9 +15,23 @@ class ViewsModal extends React.Component {
     }
 
     render() {
-        const {isValid, showModal, closeModal, viewBuilder} =this.props;
+        const {auth} = this.props;
+        const {showModal, closeModal, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
-        const isNew = (editedView) ? editedView.id === null : false;
+        const isNew = editedView ? editedView.id === null : false;
+        const isViewEditable = editedView && editedView.type === 'user';
+        const isViewAdvanced = editedView && editedView.type === 'advanced';
+        const isLoginRequired = isViewAdvanced && auth.isDemo;
+        const editedViewNameTrimmed = editedView && editedView.name.trim();
+
+        const validationMessage = !editedViewNameTrimmed ? 'View name cannot be empty' : '';
+
+        const confirmButtonParams = {
+            caption: isViewEditable ? 'Save and Select' : 'Select',
+            title: isLoginRequired ? 'Login or register to select advanced view' : '',
+            disabled: isLoginRequired || !!validationMessage
+        };
+
         return (
 
 
@@ -27,10 +41,10 @@ class ViewsModal extends React.Component {
                 show={showModal}
                 onHide={ () => closeModal('views') }
             >
-                { !isValid &&
+                { !editedView &&
                 <div >&nbsp;</div>
                 }
-                { isValid &&
+                { editedView &&
                 <div>
                     <ViewBuilderHeader />
                     <form>
@@ -38,7 +52,9 @@ class ViewsModal extends React.Component {
                             <div className='modal-body-scroll'>
                                 { isNew &&
                                     <div className='modal-padding'>
-                                        <NewViewInputs  />
+                                        <NewViewInputs
+                                            validationMessage={validationMessage}
+                                        />
                                         <ViewBuilder />
                                     </div>   
                                 }
@@ -50,7 +66,10 @@ class ViewsModal extends React.Component {
                                 }
                             </div>
                         </Modal.Body>
-                        <ViewBuilderFooter closeModal={closeModal}/>
+                        <ViewBuilderFooter
+                            closeModal={closeModal}
+                            confirmButtonParams={confirmButtonParams}
+                        />
                     </form>
                 </div>
                 }
@@ -61,11 +80,10 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {userData, viewBuilder} = state;
-    const isValid = userData.isValid;
+    const {auth, viewBuilder} = state;
 
     return {
-        isValid,
+        auth,
         viewBuilder
     };
 }
