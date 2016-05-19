@@ -92,7 +92,7 @@ export default class FileUpload extends Component {
         return (
             <button onClick={this.onUploadClick.bind(this)}
                     onDragEnter={(e) => {e.stopPropagation();e.preventDefault();}}
-                    onDragOver={(e) => {ce.stopPropagation();e.preventDefault();}}
+                    onDragOver={(e) => {e.stopPropagation();e.preventDefault();}}
                     onDrop={(e) => {e.stopPropagation();e.preventDefault();this.onFilesDrop(e.dataTransfer.files);}}
                     className='btn-link-light-default btn-select-file'>
                 <input
