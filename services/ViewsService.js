@@ -54,6 +54,10 @@ class ViewsService extends UserEntityServiceBase {
   }
 
     _checkViewNameExists(view, views, callback) {
+        if (!_.isString(view.name)) {
+            callback(new Error('View name should be a string.'));
+            return;
+        }
         const viewName = view.name.trim();
         const viewExists = _.some(
             views, v => v.name.trim() == viewName
