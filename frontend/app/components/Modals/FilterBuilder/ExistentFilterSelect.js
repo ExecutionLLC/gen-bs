@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
-import classNames from 'classnames';
 import _ from 'lodash';
 
 import {
@@ -37,9 +36,7 @@ export default class ExistentFilterSelect extends Component {
         const {auth, fields} = this.props;
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
         const {filters} = this.props.filtersList;
-        const disabledClass = classNames({
-            'disabled': (auth.isDemo) ? 'disabled' : ''
-        });
+        const disabled = auth.isDemo;
         const title = (auth.isDemo) ? 'Login or register to work with filter' : 'Make a copy for editing';
         const isFilterEditable = (selectedFilter.type === 'user');
 
@@ -82,7 +79,7 @@ export default class ExistentFilterSelect extends Component {
                                     className='btn btn-default in copyview'
                                     id='dblBtn'
                                     onClick={() => this.onDuplicateClick(selectedFilter, fields)}
-                                    disabled={disabledClass}
+                                    disabled={disabled}
                                     title={title}
                             >
                                 <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>

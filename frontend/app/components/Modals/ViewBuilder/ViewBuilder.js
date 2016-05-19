@@ -30,12 +30,8 @@ export default class ViewBuilder extends React.Component {
         );
         // This field will be chosen when a new item is created.
         const nextDefaultField = _.first(fieldsForSelection);
-        var plusDisabledClass = classNames({
-            'disabled': (view.type !== 'user' || viewItemsLength >= 30 || !nextDefaultField) ? 'disabled' : ''
-        });
-        var minusDisabledClass = classNames({
-            'disabled': (view.type !== 'user' || viewItemsLength <= 1) ? 'disabled' : ''
-        });
+        var plusDisabled = view.type !== 'user' || viewItemsLength >= 30 || !nextDefaultField;
+        var minusDisabled = view.type !== 'user' || viewItemsLength <= 1;
 
         const isDisableEditing = view.type !== 'user';
         const selects = view.viewListItems.map(function (viewItem, index) {
@@ -98,11 +94,11 @@ export default class ViewBuilder extends React.Component {
                             />
                         </div>
                         <div className='btn-group'>
-                            <button className='btn-link-default' disabled={minusDisabledClass}
+                            <button className='btn-link-default' disabled={minusDisabled}
                                     onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
                                     type='button'>
                                 <i className='md-i'>close</i></button>
-                            <button className='btn-link-default' disabled={plusDisabledClass}
+                            <button className='btn-link-default' disabled={plusDisabled}
                                     onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
                                     type='button'>
                                 <i className='md-i'>add</i></button>
@@ -185,7 +181,9 @@ export default class ViewBuilder extends React.Component {
             return classNames(
                 'btn',
                 'btn-default',
-                'btn-sort', sortDirection, {
+                'btn-sort',
+                sortDirection,
+                {
                     'active': true
                 }
             );

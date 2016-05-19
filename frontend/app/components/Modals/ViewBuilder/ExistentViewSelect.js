@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
-import classNames from 'classnames';
 import {connect} from 'react-redux';
 
 import {
@@ -92,16 +91,14 @@ export default class ExistentViewSelect extends React.Component {
 
     renderDuplicateViewButton(isDemoSession) {
         const duplicateButtonTooltip = isDemoSession ? 'Login or register to work with view' : 'Make a copy for editing';
-        const disabledClass = classNames({
-            'disabled': (isDemoSession) ? 'disabled' : ''
-        });
+        const disabled = isDemoSession;
 
         return (
             <button type='button'
                     className='btn btn-default collapse in copyview'
                     id='dblBtn'
                     onClick={ () => {this.onDuplicateViewClick();} }
-                    disabled={disabledClass}
+                    disabled={disabled}
                     title={duplicateButtonTooltip}
             >
                 <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
