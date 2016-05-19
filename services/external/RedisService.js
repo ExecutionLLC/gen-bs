@@ -64,7 +64,7 @@ class RedisService extends ServiceBase {
 
     _emitDataReceivedEvent(sessionId, operationId, sampleId, offset, limit, fieldIdToValueArray, callback) {
         const reply = {
-            sessionId,
+            sessionIds: [sessionId],
             operationId,
             result: {
                 sampleId,
