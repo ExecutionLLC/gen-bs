@@ -103,7 +103,8 @@ class UserDataService extends ServiceBase {
                 const groupedOperations = _.groupBy(operations, operation => operation instanceof UploadOperation);
                 const nonUploadResults = _.map(groupedOperations['false'], operation => ({
                     id: operation.getId(),
-                    type: operation.getType()
+                    type: operation.getType(),
+                    lastMessage: null
                 }));
                 const uploadResults = _.map(groupedOperations['true'], operation => ({
                     id: operation.getId(),
