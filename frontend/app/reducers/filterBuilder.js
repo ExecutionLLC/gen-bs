@@ -143,8 +143,6 @@ function reduceFBuilderChangeAttr(state, action) {
 
 function reduceFBuilderReceiveRules(state, action) {
     return Object.assign({}, state, {
-        rulesRequested: false,
-        rulesPrepared: true,
         editingFilter: state.editingFilter ?
             Object.assign({}, state.editingFilter, {
                 filter: Object.assign({}, state.editingFilter.filter,
@@ -158,8 +156,6 @@ function reduceFBuilderReceiveRules(state, action) {
 
 
 export default function filterBuilder(state = {
-    isReceivedFilters: false,
-    rulesRequested: false,
     /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
     editingFilter: null,
     originalFilter: null
