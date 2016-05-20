@@ -5,6 +5,7 @@ import {Modal} from 'react-bootstrap';
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader';
 import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter';
 import NewViewInputs from './ViewBuilder/NewViewInputs';
+import {viewBuilderEndEdit} from '../../actions/viewBuilder';
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
 
@@ -80,6 +81,7 @@ class ViewsModal extends React.Component {
 
     onClose() {
         this.props.closeModal('views');
+        this.props.dispatch(viewBuilderEndEdit());
     }
 }
 

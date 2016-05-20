@@ -81,6 +81,7 @@ class App extends Component {
                 <ViewsModal
                     showModal={this.props.modalWindows.views.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
+                    dispatch={this.props.dispatch}
                 />
                 <FiltersModal
                     showModal={this.props.modalWindows.filters.showModal}
