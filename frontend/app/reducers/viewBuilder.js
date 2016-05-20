@@ -32,10 +32,10 @@ function reduceVBuilderStartEdit(state, action) {
     const {view, makeNew} = action;
     const editingView = makeNew ?
         Object.assign({}, view, {
-                type: 'user',
-                name: `Copy of ${view.name}`,
-                id: null
-            }) :
+            type: 'user',
+            name: `Copy of ${view.name}`,
+            id: null
+        }) :
         view;
     return Object.assign({}, state, {
         editingView: editingView,
