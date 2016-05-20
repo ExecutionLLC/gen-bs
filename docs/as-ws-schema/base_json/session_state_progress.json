@@ -1,11 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "file session status",
   "type": "object",
+  "description": "Message indicating current progress of the search request.",
   "properties": {
     "session_state": {
       "type": "object",
-      "description": "When state is ready, the data is available in Redis",
       "parameters": {
         "status": {
           "enum": [
@@ -13,31 +12,12 @@
             "view_building",
             "view_filtering",
             "view_loading",
-            "view_updating",
-            "ready"
+            "view_updating"
           ]
         },
         "progress": {
           "type": "integer",
           "description": "progress of operation in %"
-        },
-        "redis_db": {
-          "type": "object",
-          "description": "Available only when state is ready",
-          "properties": {
-            "url": {
-              "type": "string",
-              "description": "url of the redis"
-            },
-            "number": {
-              "type": "integer",
-              "description": "redis DB number"
-            },
-            "result_index": {
-              "type": "string",
-              "description": "key of the sorted and filtered index"
-            }
-          }
         },
         "view_structure": {
           "$ref": "base_json/view.json#",
@@ -53,7 +33,7 @@
         "view_sort_order": {
           "type": "array",
           "items": {
-            "$ref": "base_json/sort_order.json#"
+            "$ref": "./sort_order.json#"
           }
         },
         "column_filters": {
@@ -81,7 +61,7 @@
               "type": "array",
               "description": "List of excluded columns",
               "items": {
-                "$ref": "base_json/excluded_column.json#"
+                "$ref": "./excluded_column.json#"
               }
             }
           }

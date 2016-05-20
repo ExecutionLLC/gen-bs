@@ -5,7 +5,7 @@
   "properties": {
     "source_name": {
       "type": "string",
-      "description": "Column source name.( sample - if sample column)"
+      "description": "Column source name. ('sample' for sample columns)"
     },
     "column_name": {
       "type": "string",
