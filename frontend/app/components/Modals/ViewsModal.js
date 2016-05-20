@@ -16,7 +16,7 @@ class ViewsModal extends React.Component {
 
     render() {
         const {auth} = this.props;
-        const {showModal, closeModal, viewBuilder} = this.props;
+        const {showModal, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
         const isNew = editedView ? editedView.id === null : false;
         const isViewEditable = editedView && editedView.type === 'user';
@@ -39,7 +39,7 @@ class ViewsModal extends React.Component {
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
                 show={showModal}
-                onHide={ () => closeModal('views') }
+                onHide={() => this.onClose()}
             >
                 { !editedView &&
                 <div >&nbsp;</div>
@@ -67,7 +67,7 @@ class ViewsModal extends React.Component {
                             </div>
                         </Modal.Body>
                         <ViewBuilderFooter
-                            closeModal={closeModal}
+                            closeModal={() => this.onClose()}
                             confirmButtonParams={confirmButtonParams}
                         />
                     </form>
@@ -76,6 +76,10 @@ class ViewsModal extends React.Component {
             </Modal>
 
         );
+    }
+
+    onClose() {
+        this.props.closeModal('views');
     }
 }
 
