@@ -9,6 +9,10 @@ import {deleteView} from './userData';
 
 export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW';
 
+export const VBUILDER_START_EDIT = 'VBUILDER_START_EDIT';
+export const VBUILDER_SAVE_EDIT = 'VBUILDER_SAVE_EDIT';
+export const VBUILDER_END_EDIT = 'VBUILDER_END_EDIT';
+
 export const VBUILDER_CHANGE_ATTR = 'VBUILDER_CHANGE_ATTR';
 
 export const VBUILDER_CHANGE_COLUMN = 'VBUILDER_CHANGE_COLUMN';
@@ -45,6 +49,27 @@ const viewsClient = apiFacade.viewsClient;
 export function viewBuilderToggleNew() {
     return {
         type: VBUILDER_TOGGLE_NEW
+    };
+}
+
+export function viewBuilderStartEdit(makeNew, view, fields) {
+    return {
+        type: VBUILDER_START_EDIT,
+        makeNew,
+        view,
+        fields
+    };
+}
+
+export function viewBuilderSaveEdit() {
+    return {
+        type: VBUILDER_SAVE_EDIT
+    };
+}
+
+export function viewBuilderEndEdit() {
+    return {
+        type: VBUILDER_END_EDIT
     };
 }
 

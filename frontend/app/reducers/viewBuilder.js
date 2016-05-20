@@ -28,9 +28,40 @@ function createViewItem(fieldId) {
     };
 }
 
+function reduceVBuilderStartEdit(state, action) {
+    const {view, makeNew} = action;
+    const editingView = makeNew ?
+        Object.assign({}, view, {
+                type: 'user',
+                name: `Copy of ${view.name}`,
+                id: null
+            }) :
+        view;
+    return Object.assign({}, state, {
+        editingView: editingView,
+        originalView: editingView,
+        editingViewIsNew: makeNew
+    });
+}
+
+function reduceVBuilderSaveEdit(state) {
+    return state;
+}
+
+function reduceVBuilderEndEdit(state) {
+    return Object.assign({} ,state, {
+        editingView: null,
+        originalView: null,
+        editingViewIsNew: false
+    });
+}
+
 export default function viewBuilder(state = {
     selectedView: null,
     editedView: null,
+    editingView: null,
+    originalView: null,
+    editingViewIsNew: false,
     isFetching: false
 }, action) {
 
@@ -42,6 +73,12 @@ export default function viewBuilder(state = {
                 editedView: selectedView
             });
         }
+        case ActionTypes.VBUILDER_START_EDIT:
+            return reduceVBuilderStartEdit(state, action);
+        case ActionTypes.VBUILDER_SAVE_EDIT:
+            return reduceVBuilderSaveEdit(state);
+        case ActionTypes.VBUILDER_END_EDIT:
+            return reduceVBuilderEndEdit(state);
         case ActionTypes.VBUILDER_TOGGLE_NEW: {
             return Object.assign({}, state, {
                 editedView: Object.assign({}, state.editedView, {
