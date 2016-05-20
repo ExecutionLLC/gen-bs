@@ -42,12 +42,13 @@ export default class ViewBuilderFooter extends React.Component {
 
     selectOnClick(e) {
         e.preventDefault();
-        const {dispatch, viewBuilder} =this.props;
+        const {dispatch, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
-        if (!editedView.name.trim()) {
-            return;
+        if (editedView.id !== null) { // TODO replace by this.props.dispatch(viewBuilderSaveAndSelectRules());
+            dispatch(viewBuilderUpdateView())
+        } else {
+            dispatch(viewBuilderCreateView());
         }
-        editedView.id !== null ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView());
     }
 
 }
