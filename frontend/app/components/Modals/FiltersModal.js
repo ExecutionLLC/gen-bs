@@ -84,7 +84,7 @@ class FiltersModal extends Component {
                             </div>
                         </Modal.Body>
                         <FilterBuilderFooter
-                            {...this.props}
+                            dispatch={this.props.dispatch}
                             confirmButtonParams={confirmButtonParams}
                             closeModal={() => this.onClose()}
                         />
