@@ -1,6 +1,6 @@
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
-import {viewBuilderSelectView} from './viewBuilder';
+import {viewBuilderSelectView} from './viewBuilder'; // TODO remove
 import {detachHistory} from './queryHistory';
 import {setViewVariantsSort} from './variantsTable';
 import {handleError} from './errorHandler';
@@ -50,7 +50,7 @@ export function changeView(viewId) {
     return (dispatch, getState) => {
         const {userData: {views}} = getState();
         dispatch(changeHeaderView(views, viewId));
-        dispatch(viewBuilderSelectView(views, viewId));
+        dispatch(viewBuilderSelectView(views, viewId)); // TODO remove
     };
 }
 
