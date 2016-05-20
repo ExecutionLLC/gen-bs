@@ -24,7 +24,7 @@ export default class ExistentViewSelect extends React.Component {
         const isEditableView = selectedView.type === 'user';
 
         return (
-            <div className='collapse in copyview'>
+            <div className='collapse in'>
                 <div className='row grid-toolbar'>
                     {this.renderTitle()}
                 </div>
@@ -100,7 +100,7 @@ export default class ExistentViewSelect extends React.Component {
 
         return (
             <button type='button'
-                    className='btn btn-default collapse in copyview'
+                    className='btn btn-default collapse in'
                     id='dblBtn'
                     onClick={ () => {this.onDuplicateViewClick();} }
                     disabled={disabledClass}

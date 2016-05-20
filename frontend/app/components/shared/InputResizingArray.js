@@ -1,14 +1,6 @@
 import React, {Component} from 'react';
 import Input from './Input';
 
-const makeKey = (function () {
-    var key;
-    return function () {
-        key = (key + 1) || 0;
-        return key;
-    };
-})();
-
 function makeKeyForValueIndex(v, i) {
     return 'key_' + v + '/' + i;
 }

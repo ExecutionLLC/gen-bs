@@ -11,7 +11,7 @@ export default class NewViewInputs extends React.Component {
         const newView = viewBuilder.editedView;
 
         return (
-            <div className='collapse in copyview'>
+            <div className='collapse in'>
                 { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='views.setup.selector.description'>
@@ -26,7 +26,7 @@ export default class NewViewInputs extends React.Component {
                             type='text'
                             className='form-control text-primary'
                             data-localize='views.setup.new.name.help'
-                            placeholder='Set view name a copy'
+                            placeholder='Set view name'
                             value={newView.name}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />

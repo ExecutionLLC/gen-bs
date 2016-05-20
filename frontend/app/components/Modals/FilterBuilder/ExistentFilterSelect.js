@@ -54,15 +54,15 @@ export default class ExistentFilterSelect extends Component {
 
         return (
 
-            <div className='in copyview'>
+            <div className='in'>
                 <div className='row grid-toolbar'>
                     <div className='col-sm-6'>
-                        <label data-localize='views.setup.selector.label'>Available Filters</label>
+                        <label data-localize='filters.setup.selector.label'>Available Filters</label>
                     </div>
                 </div>
                 { descriptionText &&
                 <div className='alert alert-help'>
-                        <span data-localize='views.setup.selector.description'>
+                        <span data-localize='filters.setup.selector.description'>
                             {descriptionText}
                         </span>
                 </div>
@@ -79,7 +79,7 @@ export default class ExistentFilterSelect extends Component {
                         <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
                              data-placement='bottom' data-container='body'>
                             <button type='button'
-                                    className='btn btn-default in copyview'
+                                    className='btn btn-default in'
                                     id='dblBtn'
                                     onClick={() => this.onDuplicateClick(selectedFilter, fields)}
                                     disabled={disabledClass}
@@ -95,7 +95,7 @@ export default class ExistentFilterSelect extends Component {
                                 <button type='button' className='btn btn-default'
                                         onClick={() => this.onResetFilterClick(selectedFilter, fields)}
                                 >
-                                    <span data-localize='views.setup.reset.title' className='hidden-xs'>Reset Filter</span>
+                                    <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset Filter</span>
                                     <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
                                 </button>
                             }
@@ -103,7 +103,7 @@ export default class ExistentFilterSelect extends Component {
                                 <button type='button'
                                         className='btn btn-default'
                                         onClick={() => this.onDeleteFilterClick(selectedFilter.id)}>
-                                    <span data-localize='views.setup.delete.title' className='hidden-xs'>Delete Filter</span>
+                                    <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete Filter</span>
                                     <span className='visible-xs'><i className='md-i'>close</i></span>
                                 </button>
                             }

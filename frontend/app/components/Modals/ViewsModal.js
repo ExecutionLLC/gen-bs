@@ -17,6 +17,7 @@ class ViewsModal extends React.Component {
 
     render() {
         const {auth} = this.props;
+        const {views} = this.props.userData;
         const {showModal, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
         const isNew = editedView ? editedView.id === null : false;
@@ -25,7 +26,16 @@ class ViewsModal extends React.Component {
         const isLoginRequired = isViewAdvanced && auth.isDemo;
         const editedViewNameTrimmed = editedView && editedView.name.trim();
 
-        const validationMessage = !editedViewNameTrimmed ? 'View name cannot be empty' : '';
+        const viewNameExists = isViewEditable && _(views)
+                .filter(view => view.type !== 'history')
+                .some(view => view.name.trim() === editedViewNameTrimmed
+                    && view.id != editedView.id
+                );
+
+        const validationMessage =
+            viewNameExists ? 'View with this name is already exists.' :
+                editedView && !editedViewNameTrimmed ? 'View name cannot be empty' :
+                    '';
 
         const confirmButtonParams = {
             caption: isViewEditable ? 'Save and Select' : 'Select',
@@ -86,11 +96,12 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, viewBuilder} = state;
+    const {auth, viewBuilder, userData} = state;
 
     return {
         auth,
-        viewBuilder
+        viewBuilder,
+        userData
     };
 }
 

@@ -44,8 +44,8 @@ class SearchService extends ServiceBase {
                     viewId: viewId || 'undefined',
                     filterId: filterId || 'undefined',
                     sampleId: sampleId || 'undefined',
-                    limit: limit || 'undefined',
-                    offset: offset || 'undefined'
+                    limit: _.isNumber(limit) ? limit : 'undefined',
+                    offset: _.isNumber(offset) ? offset : 'undefined'
                 }, null, 2)));
         } else {
             async.waterfall([
@@ -128,7 +128,8 @@ class SearchService extends ServiceBase {
 
     _onRedisDataReceived(replyInfo) {
         const fieldIdToValueArray = replyInfo.result.fieldIdToValueArray;
-        const sessionId = replyInfo.sessionId;
+        // For search requests there is only one session.
+        const sessionId = _.first(replyInfo.sessionIds);
 
         async.waterfall([
             (callback) =>
@@ -172,12 +173,12 @@ class SearchService extends ServiceBase {
     }
 
     _emitDataReceivedEvent(error, redisReply, convertedRows) {
-        const sessionId = redisReply.sessionId;
+        const sessionIds = redisReply.sessionIds;
         const operationId = redisReply.operationId;
         const sampleId = redisReply.result.sampleId;
         if (error) {
             this.eventEmitter.emit(EVENTS.onDataReceived, {
-                sessionId,
+                sessionIds,
                 operationId,
                 result: {
                     sampleId,
@@ -186,7 +187,7 @@ class SearchService extends ServiceBase {
             });
         } else {
             this.eventEmitter.emit(EVENTS.onDataReceived, {
-                sessionId,
+                sessionIds,
                 operationId,
                 result: {
                     sampleId,

@@ -68,13 +68,14 @@ class WSController extends ControllerBase {
     }
 
     _onServerReply(reply) {
-        const sessionId = reply.sessionId;
-        const client = this._findClientBySessionId(sessionId);
-        if (client && client.ws) {
-            this._sendClientMessage(client.ws, reply);
-        } else {
-            this.logger.warn('No client WS is found for session ' + sessionId);
-        }
+        _.each(reply.sessionIds, sessionId => {
+            const client = this._findClientBySessionId(sessionId);
+            if (client && client.ws) {
+                this._sendClientMessage(client.ws, reply);
+            } else {
+                this.logger.warn('No client WS is found for session ' + sessionId);
+            }
+        });
     }
 
     _sendClientMessage(clientWs, messageObject) {

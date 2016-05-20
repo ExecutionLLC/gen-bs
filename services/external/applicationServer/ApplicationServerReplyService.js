@@ -3,9 +3,9 @@
 const async = require('async');
 const _ = require('lodash');
 
-const ServiceBase = require('../ServiceBase');
-const EventProxy = require('../../utils/EventProxy');
-const METHODS = require('./ApplicationServerMethods');
+const ServiceBase = require('../../ServiceBase');
+const EventProxy = require('../../../utils/EventProxy');
+const METHODS = require('./AppServerMethods');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -57,35 +57,33 @@ class ApplicationServerReplyService extends ServiceBase {
                         callback(error, operation, operationResult);
                     });
                 },
-                (operation, operationResult, callback) => {
+                (operation, operationResult, callback) => this._findSessionIdsForOperation(
+                    operation,
+                    (error, sessionIds) => callback(error, operation, operationResult, sessionIds)
+                ),
+                (operation, operationResult, sessionIds, callback) => {
                     // Determine if we should complete the operation, and complete it.
                     const shouldCompleteOperation = operationResult && operationResult.shouldCompleteOperation;
                     this._completeOperationIfNeeded(
                         operation,
                         shouldCompleteOperation,
-                        (error) => {
-                            callback(error, {
-                                operation,
-                                operationResult
-                            });
-                        });
+                        (error) => callback(error, operation, operationResult, sessionIds)
+                    );
                 }
-            ], (error, resultWithOperation) => {
-                if (!resultWithOperation || !resultWithOperation.operation) {
+            ], (error, operation, operationResult, sessionIds) => {
+                if (!operation) {
                     this.logger.error('No operation is found. Error: ' + error);
-                } else if (resultWithOperation && resultWithOperation.operationResult) {
+                } else if (operationResult) {
                     // Fire only progress events here, for which operationResult != null.
                     // Redis has it's own event to indicate the data retrieval finish,
                     // and operationResult == null in this case.
-                    const operation = resultWithOperation.operation;
-                    const result = resultWithOperation.operationResult;
                     const eventData = {
                         operationId: operation.getId(),
-                        sessionId: operation.getSessionId(),
-                        result
+                        sessionIds,
+                        result: operationResult
                     };
-                    this.eventEmitter.emit(result.eventName, eventData);
-                    callback(error, result);
+                    this.eventEmitter.emit(operationResult.eventName, eventData);
+                    callback(error, operationResult);
                 } else {
                     callback(error, null);
                 }
@@ -137,6 +135,18 @@ class ApplicationServerReplyService extends ServiceBase {
                 this.logger.error('Unexpected result came from the application server, send as is.');
                 callback(null, rpcMessage.result);
                 break;
+        }
+    }
+
+    _findSessionIdsForOperation(operation, callback) {
+        const operationTypes = this.services.operations.operationTypes();
+        if (operation.getType() !== operationTypes.UPLOAD) {
+            callback(null, [operation.getSessionId()]);
+        } else {
+            // Upload operations belong to the system session and contain user id.
+            // Here we need to find all active sessions for the specified user.
+            const userId = operation.getUserId();
+            this.services.sessions.findAllByUserId(userId, callback);
         }
     }
 
@@ -243,12 +253,14 @@ class ApplicationServerReplyService extends ServiceBase {
 
             // If not ready, just send the progress up
             if (status !== SESSION_STATUS.READY) {
-                callback(null, {
+                const message = {
                     status,
                     progress,
-                    eventName: EVENTS.onOperationResultReceived,
-                    shouldCompleteOperation: false
-                });
+                    shouldCompleteOperation: false,
+                    eventName: EVENTS.onOperationResultReceived
+                };
+                operation.setLastAppServerMessage(message);
+                callback(null, message);
             } else {
                 // Sample is fully processed and the fields metadata is available.
                 // Now we need to:
@@ -260,11 +272,10 @@ class ApplicationServerReplyService extends ServiceBase {
                 const fieldsMetadata = sampleMetadata.columns;
                 const sampleReference = sampleMetadata.reference;
                 const sampleFileName = operation.getSampleFileName();
-                const sessionId = operation.getSessionId();
+                const userId = operation.getUserId();
 
                 async.waterfall([
-                    (callback) => this.services.sessions.findSessionUserId(sessionId, callback),
-                    (userId, callback) => this.services.users.find(userId, callback),
+                    (callback) => this.services.users.find(userId, callback),
                     (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
                         sampleFileName, sampleReference, fieldsMetadata, callback)
                 ], (error, sampleVersionId) => {
