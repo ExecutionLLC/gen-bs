@@ -40,7 +40,8 @@ function reduceVBuilderStartEdit(state, action) {
     return Object.assign({}, state, {
         editingView: editingView,
         originalView: editingView,
-        editingViewIsNew: makeNew
+        editingViewIsNew: makeNew,
+        editingViedParentId: view.id
     });
 }
 
@@ -52,7 +53,8 @@ function reduceVBuilderEndEdit(state) {
     return Object.assign({} ,state, {
         editingView: null,
         originalView: null,
-        editingViewIsNew: false
+        editingViewIsNew: false,
+        editingViedParentId: ''
     });
 }
 
@@ -62,6 +64,7 @@ export default function viewBuilder(state = {
     editingView: null,
     originalView: null,
     editingViewIsNew: false,
+    editingViedParentId: '',
     isFetching: false
 }, action) {
 
