@@ -73,7 +73,7 @@ export default class NewViewInputs extends React.Component {
 
     onCancelClick() {
         const {editedView} = this.props.viewBuilder;
-        this.props.dispatch(viewBuilderSelectView(this.props.views, editedView.originalViewId));
+        this.props.dispatch(viewBuilderSelectView(this.props.views, editedView.originalViewId)); // TODO replace by start edit (parent view) 
     }
 
 }

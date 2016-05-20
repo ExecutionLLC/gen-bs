@@ -3,6 +3,7 @@ import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 
 import {
     getItemLabelByNameAndType,
@@ -11,6 +12,7 @@ import {
 import {
     viewBuilderSelectView,
     viewBuilderToggleNew,
+    viewBuilderStartEdit,
     viewBuilderDeleteView
 } from '../../../actions/viewBuilder';
 
@@ -138,20 +140,24 @@ export default class ExistentViewSelect extends React.Component {
         return this.props.viewBuilder.editedView.id;
     }
 
+    getViewForId(viewId) {
+        return _.find(this.props.views, {id: viewId});
+    }
+
     onSelectedViewChanged(viewId) {
         const {dispatch, views} = this.props;
-        dispatch(viewBuilderSelectView(views, viewId));
+        dispatch(viewBuilderSelectView(views, viewId));  // TODO replace by dispatch(viewBuilderStartEdit(false, this.getViewForId(viewId)));
     }
 
     onDuplicateViewClick() {
         const {dispatch} = this.props;
-        dispatch(viewBuilderToggleNew());
+        dispatch(viewBuilderToggleNew()); // TODO replace by const selectedViewId = this.getSelectedViewId();dispatch(viewBuilderStartEdit(true, this.getViewForId(selectedViewId)));
     }
 
     onResetViewClick() {
         const {dispatch, views} = this.props;
         const selectedViewId = this.getSelectedViewId();
-        dispatch(viewBuilderSelectView(views, selectedViewId));
+        dispatch(viewBuilderSelectView(views, selectedViewId)); // TODO replace by dispatch(viewBuilderStartEdit(false, this.getViewForId(selectedViewId)));
     }
 
     onDeleteViewClick() {
