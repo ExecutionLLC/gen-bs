@@ -52,12 +52,11 @@ export function viewBuilderToggleNew() {
     };
 }
 
-export function viewBuilderStartEdit(makeNew, view, fields) {
+export function viewBuilderStartEdit(makeNew, view) {
     return {
         type: VBUILDER_START_EDIT,
         makeNew,
-        view,
-        fields
+        view
     };
 }
 
