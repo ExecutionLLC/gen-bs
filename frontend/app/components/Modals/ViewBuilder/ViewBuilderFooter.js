@@ -34,9 +34,9 @@ export default class ViewBuilderFooter extends React.Component {
     }
 
     cancelOnClick() {
-        const {dispatch, closeModal, views, viewBuilder} =this.props;
+        const {dispatch, closeModal, views, viewBuilder} = this.props;
         const selectedView = viewBuilder.selectedView;
-        closeModal('views');
+        closeModal();
         dispatch(viewBuilderSelectView(views, selectedView.id));
     }
 
