@@ -15,8 +15,6 @@ export const FBUILDER_START_EDIT = 'FBUILDER_START_EDIT';
 export const FBUILDER_SAVE_EDIT = 'FBUILDER_SAVE_EDIT';
 export const FBUILDER_END_EDIT = 'FBUILDER_END_EDIT';
 
-export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
-
 
 /*
  * Action Creators
@@ -92,20 +90,11 @@ export function filterBuilderUpdateFilter() {
 export function filterBuilderSaveAndSelectRules() {
     return (dispatch, getState) => {
         dispatch(filterBuilderSaveEdit());
-        const rules = getState().filterBuilder.editingFilter.filter.rules;
-        dispatch(filterBuilderRules(rules));
         if (!getState().filterBuilder.editingFilter.isNew) {
             dispatch(filterBuilderUpdateFilter());
         } else {
             dispatch(filterBuilderCreateFilter());
         }
-    };
-}
-
-export function filterBuilderRules(rules) {
-    return {
-        type: FBUILDER_RECEIVE_RULES,
-        rules
     };
 }
 
