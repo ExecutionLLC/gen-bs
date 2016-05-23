@@ -49,7 +49,7 @@ export function filterBuilderChangeAttr(attr) {
     };
 }
 
-export function filterBuilderCreateFilter() {
+function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
         const editingFilter = getState().filterBuilder.editingFilter.filter;
@@ -62,7 +62,7 @@ export function filterBuilderCreateFilter() {
     };
 }
 
-export function filterBuilderUpdateFilter() {
+function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
         const state = getState();
