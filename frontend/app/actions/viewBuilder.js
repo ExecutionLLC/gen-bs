@@ -233,7 +233,7 @@ export function viewBuilderDeleteView(viewId) {
                 dispatch(viewBuilderReceiveDeleteView(result));
                 dispatch(deleteView(result.id));
                 const state = getState();
-                const selectedViewId = state.viewBuilder.editingView.id;
+                const selectedViewId = state.viewBuilder.editedView.id;
                 const newViewId = (result.id == selectedViewId) ? state.userData.views[0].id : selectedViewId;
                 dispatch(changeView(newViewId));
             }
