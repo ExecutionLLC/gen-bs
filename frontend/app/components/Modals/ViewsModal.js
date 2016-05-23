@@ -11,10 +11,6 @@ import ViewBuilder from './ViewBuilder/ViewBuilder';
 
 class ViewsModal extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {auth} = this.props;
         const {views} = this.props.userData;
