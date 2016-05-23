@@ -5,12 +5,76 @@ const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const METHODS = require('./AppServerMethods');
+const EVENTS = require('./AppServerEvents');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
+
+const SESSION_STATUS = {
+    LOADING: 'loading',
+    FILTERING: 'filtering',
+    READY: 'ready'
+};
 
 class AppServerSearchService extends ApplicationServerServiceBase {
     constructor(services) {
         super(services);
+    }
+
+    /**
+     * Parses RPC message for the 'open_session' method calls.
+     * */
+    processSearchResult(operation, message, callback) {
+        if (!message || !message.result || !message.result.sessionState) {
+            this.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
+            callback(null, {
+                result: message,
+                shouldCompleteOperation: false,
+                eventName: EVENTS.onOperationResultReceived
+            });
+        } else {
+            const sessionState = message.result.sessionState;
+
+            const sampleId = operation.getSampleId();
+            const userId = operation.getUserId();
+            const limit = operation.getLimit();
+            const offset = operation.getOffset();
+
+            // If not ready, just send the progress up
+            if (sessionState.status !== SESSION_STATUS.READY) {
+                callback(null, {
+                    status: sessionState.status,
+                    progress: sessionState.progress,
+                    shouldCompleteOperation: false,
+                    eventName: EVENTS.onOperationResultReceived
+                });
+            } else {
+                // Get data from Redis
+                const redisInfo = sessionState.redisDb;
+                const redisParams = {
+                    host: redisInfo.host,
+                    port: redisInfo.port,
+                    sampleId,
+                    userId,
+                    operationId: operation.getId(),
+                    sessionId: operation.getSessionId(),
+                    databaseNumber: redisInfo.number,
+                    dataIndex: redisInfo.resultIndex,
+                    offset,
+                    limit
+                };
+                async.waterfall([
+                    (callback) => {
+                        this._storeRedisParamsInOperation(redisParams, operation, callback);
+                    },
+                    (callback) => {
+                        this.services.redis.fetch(redisParams, callback);
+                    }
+                ], (error) => {
+                    // Redis will fire data event by itself, so send null as result to distinguish cases.
+                    callback(error, null);
+                });
+            }
+        }
     }
 
     requestOpenSearchSession(sessionId, params, callback) {
@@ -155,6 +219,21 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 }
             }
         });
+    }
+
+    _storeRedisParamsInOperation(redisParams, operation, callback) {
+        // Store Redis information in the operation.
+        // This is done to be able to fetch another page later.
+        const params = {
+            host: redisParams.host,
+            port: redisParams.port,
+            databaseNumber: redisParams.databaseNumber,
+            dataIndex: redisParams.dataIndex,
+            sampleId: redisParams.sampleId
+        };
+
+        operation.setRedisParams(params);
+        callback(null);
     }
 }
 

@@ -147,23 +147,23 @@ class ApplicationServerReplyService extends ServiceBase {
 
         switch (method) {
             case METHODS.openSearchSession:
-                this._processSearchResult(operation, rpcMessage, callback);
+                this.services.applicationServerSearch.processSearchResult(operation, rpcMessage, callback);
                 break;
 
             case METHODS.uploadSample:
-                this._processUploadResult(operation, rpcMessage, callback);
+                this.services.applicationServerUpload.processUploadResult(operation, rpcMessage, callback);
                 break;
 
             case METHODS.getSourcesList:
-                this._processGetSourcesListResult(operation, rpcMessage, callback);
-                break;
-
-            case METHODS.keepAlive:
-                this._processKeepAliveResult(operation, rpcMessage, callback);
+                this.services.applicationServerSources.processGetSourcesListResult(operation, rpcMessage, callback);
                 break;
 
             case METHODS.getSourceMetadata:
-                this._processGetSourceMetadataResult(operation, rpcMessage, callback);
+                this.services.applicationServerSources.processGetSourceMetadataResult(operation, rpcMessage, callback);
+                break;
+
+            case METHODS.keepAlive:
+                this.services.applicationServerOperations.processKeepAliveResult(operation, rpcMessage, callback);
                 break;
 
             default:
@@ -183,219 +183,6 @@ class ApplicationServerReplyService extends ServiceBase {
             const userId = operation.getUserId();
             this.services.sessions.findAllByUserId(userId, callback);
         }
-    }
-
-    _processKeepAliveResult(operation, rpcMessage, callback) {
-        const operationIdToCheck = operation.getOperationIdToCheck();
-        const result = rpcMessage.result;
-        if (result && result.error) {
-            this.logger.error('Unexpected error received from AS as keep-alive result: ' + JSON.stringify(result.error));
-            callback(null, {
-                eventName: EVENTS.onKeepAliveResultReceived,
-                shouldCompleteOperation: true
-            });
-            return;
-        }
-
-        const isAlive = result;
-        if (!isAlive) {
-            async.waterfall([
-                // The keep-alive operation belongs to system session.
-                // So we need to find the operation id in all sessions.
-                (callback) => this.services.operations.findInAllSessions(operationIdToCheck, callback),
-                (operation, callback) => this.services.operations.remove(operation.getSessionId(), operation.getId(), callback)
-            ], (error) => {
-                if (error) {
-                    this.logger.error('Error while closing dead search operation: ' + error);
-                }
-
-                callback(null, {
-                    eventName: EVENTS.onKeepAliveResultReceived,
-                    shouldCompleteOperation: true
-                });
-            });
-        } else {
-            callback(null, {
-                eventName: EVENTS.onKeepAliveResultReceived,
-                shouldCompleteOperation: true
-            });
-        }
-    }
-
-    _processGetSourcesListResult(operation, message, callback) {
-        this.logger.info('Processing get sources list result for operation ' + operation.getId());
-        if (!message || !message.result) {
-            this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
-            callback(null, {
-                eventName: EVENTS.onSourcesListReceived,
-                result: message
-            });
-        } else {
-            const sourcesList = _.map(message.result, (source) => {
-                source.sourceName = source.sourceName.replace('.h5', '');
-                return source;
-            });
-            callback(null, {
-                eventName: EVENTS.onSourcesListReceived,
-                sourcesList
-            });
-        }
-    }
-
-    _processGetSourceMetadataResult(operation, message, callback) {
-        this.logger.info('Processing get sources list result for operation ' + operation.getId());
-        if (!message || !message.result) {
-            this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
-            callback(null, {
-                result: message,
-                eventName: EVENTS.onSourceMetadataReceived
-            });
-        } else {
-            const messageResult = message.result;
-            if (messageResult.error) {
-                callback(null, {
-                    eventName: EVENTS.onSourceMetadataReceived,
-                    error: messageResult.error
-                });
-            } else {
-                const convertedSourcesMetadata = _.map(messageResult, sourceMetadata => {
-                    return {
-                        fieldsMetadata: sourceMetadata.columns,
-                        reference: sourceMetadata.reference
-                    };
-                });
-                callback(null, {
-                    eventName: EVENTS.onSourceMetadataReceived,
-                    sourcesMetadata: convertedSourcesMetadata
-                });
-            }
-        }
-    }
-
-    _processUploadResult(operation, message, callback) {
-        this.logger.info('Processing upload result for operation ' + operation.getId());
-        if (!message || !message.result || !message.result.status) {
-            this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
-            callback(null, {
-                result: message,
-                eventName: EVENTS.onOperationResultReceived,
-                shouldCompleteOperation: true
-            });
-        } else {
-            const result = message.result;
-            const status = result.status;
-            const progress = result.progress;
-
-            // If not ready, just send the progress up
-            if (status !== SESSION_STATUS.READY) {
-                const message = {
-                    status,
-                    progress,
-                    shouldCompleteOperation: false,
-                    eventName: EVENTS.onOperationResultReceived
-                };
-                operation.setLastAppServerMessage(message);
-                callback(null, message);
-            } else {
-                // Sample is fully processed and the fields metadata is available.
-                // Now we need to:
-                // 1. Insert all the data into database.
-                // 2. Send a message to the frontend to indicate the processing is fully completed.
-                // 3. Close the operation.
-                const sampleId = operation.getSampleId();
-                const sampleMetadata = result.metadata;
-                const fieldsMetadata = sampleMetadata.columns;
-                const sampleReference = sampleMetadata.reference;
-                const sampleFileName = operation.getSampleFileName();
-                const userId = operation.getUserId();
-
-                async.waterfall([
-                    (callback) => this.services.users.find(userId, callback),
-                    (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
-                        sampleFileName, sampleReference, fieldsMetadata, callback)
-                ], (error, sampleVersionId) => {
-                    callback(error, {
-                        status,
-                        progress,
-                        sampleId: sampleVersionId,
-                        eventName: EVENTS.onOperationResultReceived,
-                        shouldCompleteOperation: true
-                    });
-                });
-            }
-        }
-    }
-
-    /**
-     * Parses RPC message for the 'open_session' method calls.
-     * */
-    _processSearchResult(operation, message, callback) {
-        if (!message || !message.result || !message.result.sessionState) {
-            this.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
-            callback(null, {
-                result: message,
-                shouldCompleteOperation: false,
-                eventName: EVENTS.onOperationResultReceived
-            });
-        } else {
-            const sessionState = message.result.sessionState;
-
-            const sampleId = operation.getSampleId();
-            const userId = operation.getUserId();
-            const limit = operation.getLimit();
-            const offset = operation.getOffset();
-
-            // If not ready, just send the progress up
-            if (sessionState.status !== SESSION_STATUS.READY) {
-                callback(null, {
-                    status: sessionState.status,
-                    progress: sessionState.progress,
-                    shouldCompleteOperation: false,
-                    eventName: EVENTS.onOperationResultReceived
-                });
-            } else {
-                // Get data from Redis
-                const redisInfo = sessionState.redisDb;
-                const redisParams = {
-                    host: redisInfo.host,
-                    port: redisInfo.port,
-                    sampleId,
-                    userId,
-                    operationId: operation.getId(),
-                    sessionId: operation.getSessionId(),
-                    databaseNumber: redisInfo.number,
-                    dataIndex: redisInfo.resultIndex,
-                    offset,
-                    limit
-                };
-                async.waterfall([
-                    (callback) => {
-                        this._storeRedisParamsInOperation(redisParams, operation, callback);
-                    },
-                    (callback) => {
-                        this.services.redis.fetch(redisParams, callback);
-                    }
-                ], (error) => {
-                    // Redis will fire data event by itself, so send null as result to distinguish cases.
-                    callback(error, null);
-                });
-            }
-        }
-    }
-
-    _storeRedisParamsInOperation(redisParams, operation, callback) {
-        // Store Redis information in the operation.
-        // This is done to be able to fetch another page later.
-        const params = {
-            host: redisParams.host,
-            port: redisParams.port,
-            databaseNumber: redisParams.databaseNumber,
-            dataIndex: redisParams.dataIndex,
-            sampleId: redisParams.sampleId
-        };
-
-        operation.setRedisParams(params);
-        callback(null);
     }
 
     /**

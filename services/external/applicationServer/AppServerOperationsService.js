@@ -5,6 +5,7 @@ const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const METHODS = require('./AppServerMethods');
+const EVENTS = require('./AppServerEvents');
 
 class AppServerOperationsService extends ApplicationServerServiceBase {
     constructor(services) {
@@ -41,6 +42,43 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
 
     requestOperationState(operationId, callback) {
         this._rpcSend(operationId, METHODS.checkSession, null, callback);
+    }
+
+    processKeepAliveResult(operation, rpcMessage, callback) {
+        const operationIdToCheck = operation.getOperationIdToCheck();
+        const result = rpcMessage.result;
+        if (result && result.error) {
+            this.logger.error('Unexpected error received from AS as keep-alive result: ' + JSON.stringify(result.error));
+            callback(null, {
+                eventName: EVENTS.onKeepAliveResultReceived,
+                shouldCompleteOperation: true
+            });
+            return;
+        }
+
+        const isAlive = result;
+        if (!isAlive) {
+            async.waterfall([
+                // The keep-alive operation belongs to system session.
+                // So we need to find the operation id in all sessions.
+                (callback) => this.services.operations.findInAllSessions(operationIdToCheck, callback),
+                (operation, callback) => this.services.operations.remove(operation.getSessionId(), operation.getId(), callback)
+            ], (error) => {
+                if (error) {
+                    this.logger.error('Error while closing dead search operation: ' + error);
+                }
+
+                callback(null, {
+                    eventName: EVENTS.onKeepAliveResultReceived,
+                    shouldCompleteOperation: true
+                });
+            });
+        } else {
+            callback(null, {
+                eventName: EVENTS.onKeepAliveResultReceived,
+                shouldCompleteOperation: true
+            });
+        }
     }
 }
 
