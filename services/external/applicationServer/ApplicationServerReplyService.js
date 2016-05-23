@@ -20,6 +20,17 @@ const EVENTS = {
     onSourceMetadataReceived: 'onSourceMetadataReceived'
 };
 
+/**
+ * @typedef {Object} AppServerResult
+ * @property {string}operationId
+ * @property {boolean}isOperationCompleted
+ * @property {string}operationType
+ * @property {string}eventName
+ * @property {Object}result
+ * @property {string}resultType 'error' or 'success'
+ * @property {Object}error
+ * */
+
 class ApplicationServerReplyService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
@@ -43,59 +54,83 @@ class ApplicationServerReplyService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    onRpcReplyReceived(rpcError, rpcMessage, callback) {
-        if (rpcError && !rpcMessage) {
-            this.logger.error('RPC request error! %s', rpcError);
-            this.logger.info('The RPC event will be ignored, as there is no message received, only error.');
+    _ensureMessageIsSuccessful(message, callback) {
+        if (!message.id) {
+            callback(new Error('Operation id is not defined.'));
+        } else if (!message.error) {
+            callback(null);
         } else {
-            async.waterfall([
-                (callback) => {
-                    this._findMessageOperation(rpcMessage, callback);
-                },
-                (operation, callback) => {
-                    this._processOperationResult(operation, rpcError, rpcMessage, (error, operationResult) => {
-                        callback(error, operation, operationResult);
-                    });
-                },
-                (operation, operationResult, callback) => this._findSessionIdsForOperation(
+            callback(message.error);
+        }
+    }
+
+    /**
+     * Here RPC results are distributed by the actual handlers.
+     * Errors should also be handled on this level.
+     * @param rpcMessage Message to process.
+     * @param callback
+     */
+    onRpcReplyReceived(rpcMessage, callback) {
+        async.waterfall([
+            (callback) => this._ensureMessageIsSuccessful(rpcMessage, callback),
+            (callback) => {
+                this.services.operations.findInAllSessions(rpcMessage.id, callback);
+            },
+            (operation, callback) => {
+                this._processOperationResult(operation, rpcMessage, (error, operationResult) => {
+                    callback(error, operation, operationResult);
+                });
+            },
+            (operation, operationResult, callback) => this._findSessionIdsForOperation(
+                operation,
+                (error, sessionIds) => callback(error, operation, operationResult, sessionIds)
+            ),
+            (operation, operationResult, sessionIds, callback) => {
+                // Determine if we should complete the operation, and complete it.
+                const shouldCompleteOperation = operationResult && operationResult.shouldCompleteOperation;
+                this._completeOperationIfNeeded(
                     operation,
-                    (error, sessionIds) => callback(error, operation, operationResult, sessionIds)
-                ),
-                (operation, operationResult, sessionIds, callback) => {
-                    // Determine if we should complete the operation, and complete it.
-                    const shouldCompleteOperation = operationResult && operationResult.shouldCompleteOperation;
-                    this._completeOperationIfNeeded(
-                        operation,
-                        shouldCompleteOperation,
-                        (error) => callback(error, operation, operationResult, sessionIds)
-                    );
-                }
-            ], (error, operation, operationResult, sessionIds) => {
-                if (!operation) {
-                    this.logger.error('No operation is found. Error: ' + error);
-                } else if (operationResult) {
-                    // Fire only progress events here, for which operationResult != null.
-                    // Redis has it's own event to indicate the data retrieval finish,
-                    // and operationResult == null in this case.
-                    const eventData = {
-                        operationId: operation.getId(),
-                        sessionIds,
-                        result: operationResult
-                    };
-                    this.eventEmitter.emit(operationResult.eventName, eventData);
-                    callback(error, operationResult);
-                } else {
-                    callback(error, null);
-                }
-            });
+                    shouldCompleteOperation,
+                    (error) => callback(error, operation, operationResult, sessionIds)
+                );
+            }
+        ], (error, operation, operationResult, sessionIds) => {
+            this._createOperationResult(error, operation, operationResult, sessionIds, callback);
+        });
+    }
+
+    _createOperationResult(error, operation, operationResult, sessionIds, callback) {
+        if (!operation) {
+            this.logger.error('No operation is found. Error: ' + error);
+            return;
+        }
+
+        if (operationResult) {
+            // Fire only progress events here, for which operationResult != null.
+            // Redis has it's own event to indicate the data retrieval finish,
+            // and operationResult == null in this case.
+            const eventData = {
+                operationId: operation.getId(),
+                sessionIds,
+                result: operationResult
+            };
+            this.eventEmitter.emit(operationResult.eventName, eventData);
+            callback(error, operationResult);
+        } else {
+            callback(error, null);
         }
     }
 
     /**
      * Selects and runs proper message parser. Handles RPC-level errors.
-     * */
-    _processOperationResult(operation, rpcError, rpcMessage, callback) {
+     * @param {OperationBase}operation
+     * @param rpcMessage
+     * @param {function(Error, AppServerResult)}callback
+     * @private
+     */
+    _processOperationResult(operation, rpcMessage, callback) {
         const method = operation.getMethod();
+        const rpcError = rpcMessage.error;
 
         if (rpcError) {
             // Errors in any types of the operations except the search operations should make them completed.
@@ -112,11 +147,11 @@ class ApplicationServerReplyService extends ServiceBase {
 
         switch (method) {
             case METHODS.openSearchSession:
-                this._processOpenSearchResult(operation, rpcMessage, callback);
+                this._processSearchResult(operation, rpcMessage, callback);
                 break;
 
             case METHODS.uploadSample:
-                this._processUploadSampleResult(operation, rpcMessage, callback);
+                this._processUploadResult(operation, rpcMessage, callback);
                 break;
 
             case METHODS.getSourcesList:
@@ -237,7 +272,7 @@ class ApplicationServerReplyService extends ServiceBase {
         }
     }
 
-    _processUploadSampleResult(operation, message, callback) {
+    _processUploadResult(operation, message, callback) {
         this.logger.info('Processing upload result for operation ' + operation.getId());
         if (!message || !message.result || !message.result.status) {
             this.services.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
@@ -294,7 +329,7 @@ class ApplicationServerReplyService extends ServiceBase {
     /**
      * Parses RPC message for the 'open_session' method calls.
      * */
-    _processOpenSearchResult(operation, message, callback) {
+    _processSearchResult(operation, message, callback) {
         if (!message || !message.result || !message.result.sessionState) {
             this.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
             callback(null, {
@@ -361,11 +396,6 @@ class ApplicationServerReplyService extends ServiceBase {
 
         operation.setRedisParams(params);
         callback(null);
-    }
-
-    _findMessageOperation(rpcMessage, callback) {
-        const operationId = rpcMessage.id;
-        this.services.operations.findInAllSessions(operationId, callback);
     }
 
     /**

@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const async = require('async');
 
 const ServiceBase = require('../../ServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
@@ -39,9 +38,9 @@ class ApplicationServerServiceBase extends ServiceBase {
         });
     }
 
-    _rpcReply(rpcError, rpcMessage) {
-        this.logger.info('RPC REPLY, error: ' + JSON.stringify(rpcError, null, 2) + ', message: ' + JSON.stringify(rpcMessage, null, 2));
-        this.services.applicationServerReply.onRpcReplyReceived(rpcError, rpcMessage, (error) => {
+    _rpcReply(rpcMessage) {
+        this.logger.info('RPC REPLY: ' + JSON.stringify(rpcMessage, null, 2));
+        this.services.applicationServerReply.onRpcReplyReceived(rpcMessage, (error) => {
             if (error) {
                 this.logger.error('Error processing RPC reply: ' + error);
             }
