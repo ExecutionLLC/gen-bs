@@ -16,7 +16,7 @@ export default class ViewBuilderFooter extends React.Component {
                     className='btn btn-default'
                     data-dismiss='modal'
                 >
-                    <span data-localize='actions.cancel'/>Cancel
+                    <span data-localize='actions.cancel'>Cancel</span>
                 </button>
 
                 <button
