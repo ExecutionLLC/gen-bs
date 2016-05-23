@@ -96,7 +96,7 @@ class ApplicationServerReplyService extends ServiceBase {
                     || !clientOperationResult.isOperationCompleted) {
                     operation.setLastAppServerMessage(clientOperationResult);
                 }
-                callback(operationResult, clientOperationResult, callback);
+                callback(null, operationResult, clientOperationResult);
             },
             (operationResult, clientOperationResult, callback) => {
                 this._emitEvent(operationResult, clientOperationResult, callback);
