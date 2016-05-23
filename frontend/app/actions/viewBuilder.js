@@ -147,7 +147,7 @@ function viewBuilderUpdateView() {
         const state = getState();
         const editedView = state.viewBuilder.editedView;
         const isNotEdited = _.includes(['advanced', 'standard'], editedView.type)
-            || state.viewBuilder.selectedView === state.viewBuilder.editedView;
+            || state.viewBuilder.selectedView === state.viewBuilder.editedView; // TODO sv: check editingView===originalView
 
         dispatch(viewBuilderRequestUpdateView());
         if (state.auth.isDemo || isNotEdited) {
@@ -233,7 +233,7 @@ export function viewBuilderDeleteView(viewId) {
                 dispatch(viewBuilderReceiveDeleteView(result));
                 dispatch(deleteView(result.id));
                 const state = getState();
-                const selectedViewId = state.viewBuilder.selectedView.id;
+                const selectedViewId = state.viewBuilder.editingView.id;
                 const newViewId = (result.id == selectedViewId) ? state.userData.views[0].id : selectedViewId;
                 dispatch(changeView(newViewId));
             }

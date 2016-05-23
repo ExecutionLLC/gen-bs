@@ -59,7 +59,7 @@ function reduceVBuilderEndEdit(state) {
 }
 
 export default function viewBuilder(state = {
-    selectedView: null,
+    selectedView: null, // TODO sv: remove
     editedView: null,
     editingView: null,
     originalView: null,
@@ -73,7 +73,9 @@ export default function viewBuilder(state = {
             const selectedView = _.find(action.views, {id: action.viewId}) || null;
             return Object.assign({}, state, {
                 selectedView: selectedView,
-                editedView: selectedView
+                editedView: selectedView,
+                editingView: selectedView, // TODO: remove with SELECT_VIEW
+                originalView: selectedView // TODO: remove with SELECT_VIEW
             });
         }
         case ActionTypes.VBUILDER_START_EDIT:
@@ -104,7 +106,9 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 selectedView: action.view,
-                editedView: action.view
+                editedView: action.view,
+                editingView: action.view,
+                originalView: action.view
             });
         }
         case ActionTypes.VBUILDER_REQUEST_CREATE_VIEW: {
