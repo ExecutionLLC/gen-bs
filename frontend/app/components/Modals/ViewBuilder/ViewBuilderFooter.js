@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
 
-import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} from '../../../actions/viewBuilder';
+import {viewBuilderSelectView, viewBuilderSaveAndSelectView} from '../../../actions/viewBuilder';
 
 export default class ViewBuilderFooter extends React.Component {
 
@@ -42,13 +42,8 @@ export default class ViewBuilderFooter extends React.Component {
 
     selectOnClick(e) {
         e.preventDefault();
-        const {dispatch, viewBuilder} = this.props;
-        const editedView = viewBuilder.editedView;
-        if (editedView.id !== null) { // TODO replace by this.props.dispatch(viewBuilderSaveAndSelectRules());
-            dispatch(viewBuilderUpdateView());
-        } else {
-            dispatch(viewBuilderCreateView());
-        }
+        const {dispatch} = this.props;
+        dispatch(viewBuilderSaveAndSelectView());
     }
 
 }

@@ -141,7 +141,7 @@ function viewBuilderReceiveUpdateView(json) {
     };
 }
 
-export function viewBuilderUpdateView() {
+function viewBuilderUpdateView() {
 
     return (dispatch, getState) => {
         const state = getState();
@@ -173,7 +173,7 @@ export function viewBuilderUpdateView() {
     };
 }
 
-export function viewBuilderCreateView() {
+function viewBuilderCreateView() {
 
     return (dispatch, getState) => {
         dispatch(viewBuilderRequestCreateView());
@@ -191,6 +191,18 @@ export function viewBuilderCreateView() {
                 dispatch(fetchViews(result.id));
             }
         });
+    };
+}
+
+export function viewBuilderSaveAndSelectView() {
+    return (dispatch, getState) => {
+        const viewBuilder = getState().viewBuilder;
+        const editedView = viewBuilder.editedView;
+        if (editedView.id !== null) {
+            dispatch(viewBuilderUpdateView());
+        } else {
+            dispatch(viewBuilderCreateView());
+        }
     };
 }
 
