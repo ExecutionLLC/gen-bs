@@ -33,16 +33,12 @@ export default class ViewBuilderFooter extends React.Component {
     }
 
     cancelOnClick() {
-        const {dispatch, closeModal, userData: {views}, viewBuilder} = this.props;
-        const selectedView = viewBuilder.selectedView;
-        closeModal();
-        dispatch(viewBuilderSelectView(views, selectedView.id)); // TODO remove
+        this.props.closeModal();
     }
 
     selectOnClick(e) {
         e.preventDefault();
-        const {dispatch} = this.props;
-        dispatch(viewBuilderSaveAndSelectView());
+        this.props.dispatch(viewBuilderSaveAndSelectView());
     }
 
 }
