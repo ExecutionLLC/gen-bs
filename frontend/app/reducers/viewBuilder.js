@@ -38,6 +38,8 @@ function reduceVBuilderStartEdit(state, action) {
         }) :
         view;
     return Object.assign({}, state, {
+        selectedView: editingView, // TODO sv: remove
+        editedView: editingView, // TODO remove
         editingView: editingView,
         originalView: editingView,
         editingViewIsNew: makeNew,
@@ -85,13 +87,15 @@ export default function viewBuilder(state = {
         case ActionTypes.VBUILDER_END_EDIT:
             return reduceVBuilderEndEdit(state);
         case ActionTypes.VBUILDER_TOGGLE_NEW: {
+            const toggleNewView = Object.assign({}, state.editedView, {
+                id: null,
+                type: 'user',
+                name: `Copy of ${state.editedView.name}`
+            });
             return Object.assign({}, state, {
-                editedView: Object.assign({}, state.editedView, {
-                    id: null,
-                    type: 'user',
-                    name: `Copy of ${state.editedView.name}`,
-                    originalViewId: state.editedView.id
-                })
+                editedView: toggleNewView,
+                editingView: toggleNewView,
+                editingViewParentId: state.editedView.id
             });
         }
         case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW: {
