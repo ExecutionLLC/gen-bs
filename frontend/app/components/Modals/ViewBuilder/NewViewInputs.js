@@ -1,6 +1,6 @@
 import React from 'react';
-import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder';
 
+import {viewBuilderChangeAttr, viewBuilderStartEdit} from '../../../actions/viewBuilder';
 
 export default class NewViewInputs extends React.Component {
 
@@ -71,8 +71,8 @@ export default class NewViewInputs extends React.Component {
     }
 
     onCancelClick() {
-        const {editedView} = this.props.viewBuilder;
-        this.props.dispatch(viewBuilderSelectView(this.props.userData.views, editedView.originalViewId)); // TODO replace by start edit (parent view) 
+        const parentView = _.find(this.props.userData.views, {id: this.props.viewBuilder.editingViewParentId});
+        this.props.dispatch(viewBuilderStartEdit(false, parentView, this.props.userData.views));
     }
 
 }
