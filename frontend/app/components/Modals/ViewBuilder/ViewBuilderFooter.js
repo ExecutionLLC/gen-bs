@@ -1,6 +1,5 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-import {connect} from 'react-redux';
 
 import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} from '../../../actions/viewBuilder';
 
@@ -34,7 +33,7 @@ export default class ViewBuilderFooter extends React.Component {
     }
 
     cancelOnClick() {
-        const {dispatch, closeModal, views, viewBuilder} =this.props;
+        const {dispatch, closeModal, userData: {views}, viewBuilder} = this.props;
         const selectedView = viewBuilder.selectedView;
         closeModal('views');
         dispatch(viewBuilderSelectView(views, selectedView.id));
@@ -51,14 +50,3 @@ export default class ViewBuilderFooter extends React.Component {
     }
 
 }
-
-function mapStateToProps(state) {
-    const {auth, viewBuilder, userData :{views}} = state;
-    return {
-        views,
-        auth,
-        viewBuilder
-    };
-}
-
-export default connect(mapStateToProps)(ViewBuilderFooter);

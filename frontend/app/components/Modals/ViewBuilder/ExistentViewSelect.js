@@ -2,7 +2,6 @@ import React from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
-import {connect} from 'react-redux';
 
 import {
     getItemLabelByNameAndType,
@@ -18,7 +17,7 @@ import {
 export default class ExistentViewSelect extends React.Component {
 
     render() {
-        const {auth: {isDemo: isDemoSession}, viewBuilder: {editedView: selectedView}, views} = this.props;
+        const {auth: {isDemo: isDemoSession}, viewBuilder: {editedView: selectedView}, userData: {views}} = this.props;
         const isEditableView = selectedView.type === 'user';
 
         return (
@@ -139,7 +138,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onSelectedViewChanged(viewId) {
-        const {dispatch, views} = this.props;
+        const {dispatch, userData: {views}} = this.props;
         dispatch(viewBuilderSelectView(views, viewId));
     }
 
@@ -149,7 +148,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onResetViewClick() {
-        const {dispatch, views} = this.props;
+        const {dispatch, userData: {views}} = this.props;
         const selectedViewId = this.getSelectedViewId();
         dispatch(viewBuilderSelectView(views, selectedViewId));
     }
@@ -160,14 +159,3 @@ export default class ExistentViewSelect extends React.Component {
         dispatch(viewBuilderDeleteView(selectedViewId));
     }
 }
-
-function mapStateToProps(state) {
-    const {viewBuilder, auth, userData: {views}} = state;
-    return {
-        auth,
-        viewBuilder,
-        views
-    };
-}
-
-export default connect(mapStateToProps)(ExistentViewSelect);
