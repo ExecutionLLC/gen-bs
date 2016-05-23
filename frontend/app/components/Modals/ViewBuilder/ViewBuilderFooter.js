@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 
-import {viewBuilderSelectView, viewBuilderSaveAndSelectView} from '../../../actions/viewBuilder';
+import {viewBuilderSaveAndSelectView} from '../../../actions/viewBuilder';
 
 export default class ViewBuilderFooter extends React.Component {
 
