@@ -41,7 +41,7 @@ function reduceVBuilderStartEdit(state, action) {
         editingView: editingView,
         originalView: editingView,
         editingViewIsNew: makeNew,
-        editingViedParentId: view.id
+        editingViewParentId: view.id
     });
 }
 
@@ -54,7 +54,7 @@ function reduceVBuilderEndEdit(state) {
         editingView: null,
         originalView: null,
         editingViewIsNew: false,
-        editingViedParentId: ''
+        editingViewParentId: ''
     });
 }
 
@@ -64,7 +64,7 @@ export default function viewBuilder(state = {
     editingView: null,
     originalView: null,
     editingViewIsNew: false,
-    editingViedParentId: '',
+    editingViewParentId: '',
     isFetching: false
 }, action) {
 
