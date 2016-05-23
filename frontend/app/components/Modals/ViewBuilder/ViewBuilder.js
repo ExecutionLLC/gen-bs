@@ -2,7 +2,6 @@ import React from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
-import {connect} from 'react-redux';
 import _ from 'lodash';
 
 import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder';
@@ -219,14 +218,3 @@ export default class ViewBuilder extends React.Component {
         );
     }
 }
-
-function mapStateToProps(state) {
-    const {viewBuilder, userData: {views}, fields} = state;
-    return {
-        viewBuilder,
-        views,
-        fields
-    };
-}
-
-export default connect(mapStateToProps)(ViewBuilder);

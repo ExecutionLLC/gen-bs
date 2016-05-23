@@ -64,20 +64,28 @@ class ViewsModal extends React.Component {
                                 { isNew &&
                                     <div className='modal-padding'>
                                         <NewViewInputs
+                                            {...this.props}
                                             validationMessage={validationMessage}
                                         />
-                                        <ViewBuilder />
+                                        <ViewBuilder
+                                            {...this.props}
+                                        />
                                     </div>   
                                 }
                                 { !isNew &&
                                     <div className='modal-padding'>
-                                        <ExistentViewSelect />
-                                        <ViewBuilder />
+                                        <ExistentViewSelect
+                                            {...this.props}
+                                        />
+                                        <ViewBuilder
+                                            {...this.props}
+                                        />
                                     </div>
                                 }
                             </div>
                         </Modal.Body>
                         <ViewBuilderFooter
+                            {...this.props}
                             closeModal={() => this.onClose()}
                             confirmButtonParams={confirmButtonParams}
                         />
@@ -96,12 +104,13 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, viewBuilder, userData} = state;
+    const {auth, viewBuilder, userData, fields} = state;
 
     return {
         auth,
         viewBuilder,
-        userData
+        userData,
+        fields
     };
 }
 

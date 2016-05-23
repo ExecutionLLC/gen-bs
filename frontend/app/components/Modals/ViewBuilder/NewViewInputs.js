@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder';
 
 
@@ -73,17 +72,7 @@ export default class NewViewInputs extends React.Component {
 
     onCancelClick() {
         const {editedView} = this.props.viewBuilder;
-        this.props.dispatch(viewBuilderSelectView(this.props.views, editedView.originalViewId)); // TODO replace by start edit (parent view) 
+        this.props.dispatch(viewBuilderSelectView(this.props.userData.views, editedView.originalViewId)); // TODO replace by start edit (parent view) 
     }
 
 }
-
-function mapStateToProps(state) {
-    const {viewBuilder, userData: {views}} = state;
-    return {
-        views,
-        viewBuilder
-    };
-}
-
-export default connect(mapStateToProps)(NewViewInputs);
