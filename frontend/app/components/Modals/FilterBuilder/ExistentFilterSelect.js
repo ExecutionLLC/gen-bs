@@ -16,22 +16,6 @@ import {
 
 export default class ExistentFilterSelect extends Component {
 
-    onSelectChange(filters, filterId, fields) {
-        this.props.dispatch(filterBuilderStartEdit(false, _.find(filters, {id: filterId}) || null, fields));
-    }
-
-    onDuplicateClick(filter, fields) {
-        this.props.dispatch(filterBuilderStartEdit(true, filter, fields));
-    }
-
-    onResetFilterClick(filter, fields) {
-        this.props.dispatch(filterBuilderStartEdit(false, filter, fields));
-    }
-
-    onDeleteFilterClick(filterId) {
-        this.props.dispatch(filterBuilderDeleteFilter(filterId));
-    }
-
     render() {
 
         const {auth, fields} = this.props;
@@ -114,4 +98,21 @@ export default class ExistentFilterSelect extends Component {
 
         );
     }
+
+    onSelectChange(filters, filterId, fields) {
+        this.props.dispatch(filterBuilderStartEdit(false, _.find(filters, {id: filterId}) || null, fields));
+    }
+
+    onDuplicateClick(filter, fields) {
+        this.props.dispatch(filterBuilderStartEdit(true, filter, fields));
+    }
+
+    onResetFilterClick(filter, fields) {
+        this.props.dispatch(filterBuilderStartEdit(false, filter, fields));
+    }
+
+    onDeleteFilterClick(filterId) {
+        this.props.dispatch(filterBuilderDeleteFilter(filterId));
+    }
+
 }
