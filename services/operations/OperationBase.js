@@ -20,6 +20,7 @@ class OperationBase {
         return this.timestamp;
     }
 
+    /**@returns {string}*/
     getId() {
         return this.id;
     }
@@ -32,6 +33,7 @@ class OperationBase {
         return this.method;
     }
 
+    /**@returns {string}*/
     getType() {
         throw new Error('Method is not implemented');
     }

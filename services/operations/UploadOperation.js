@@ -30,7 +30,7 @@ class UploadOperation extends SystemOperation {
     }
 
     /**
-     * @param {object}message
+     * @param {AppServerResult}message
      * */
     setLastAppServerMessage(message) {
         this.lastAppServerMessage = message;

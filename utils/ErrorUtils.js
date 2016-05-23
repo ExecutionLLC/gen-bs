@@ -8,10 +8,13 @@ class ErrorUtils {
             return 'Operation successful';
         }
 
-        let message;
+        let message = '';
         if (_.isObject(error)) {
             if (error.message) {
                 message = error.message;
+                if (error.stack) {
+                    message += '\n' + error.stack;
+                }
             } else {
                 message = JSON.stringify(error);
             }

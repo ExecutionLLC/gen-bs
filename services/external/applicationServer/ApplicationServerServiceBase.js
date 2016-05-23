@@ -4,6 +4,7 @@ const _ = require('lodash');
 
 const ServiceBase = require('../../ServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
+const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const proxyProviderFunc = _.once(function () {
     // return new RPCProxy(...args);
@@ -42,10 +43,42 @@ class ApplicationServerServiceBase extends ServiceBase {
         this.logger.info('RPC REPLY: ' + JSON.stringify(rpcMessage, null, 2));
         this.services.applicationServerReply.onRpcReplyReceived(rpcMessage, (error) => {
             if (error) {
-                this.logger.error('Error processing RPC reply: ' + error);
+                this.logger.error('Error processing RPC reply: ' + ErrorUtils.createErrorMessage(error));
             }
         });
     }
+    
+    /**
+     * @typedef {Object}AppServerErrorResult
+     * @property {number}code
+     * @property {string}message
+     * */
+
+    /**
+     * @typedef {Object}AppServerProgressMessage
+     * @property {string}status
+     * @property {number}progress
+     * */
+    
+    /**
+     * @typedef {AppServerProgressMessage}AppServerUploadResult
+     * @property {string}sampleId
+     * */
+    
+    /**
+     * @typedef {AppServerProgressMessage}AppServerSearchResult
+     * @property {Array<Object>}data
+     * */
+    
+    /**
+     * @typedef {Object}AppServerOperationResult
+     * @property {OperationBase}operation
+     * @property {string}eventName Event to generate.
+     * @property {boolean}shouldCompleteOperation If true, corresponding operation descriptor should be destroyed.
+     * @property {string}resultType 'error' || 'normal'.
+     * @property {(AppServerProgressMessage|AppServerUploadResult|Array|undefined)}result Operation result data.
+     * @property {(AppServerErrorResult|undefined)}error Error object in case of error occurred.
+     * */
 }
 
 module.exports = ApplicationServerServiceBase;

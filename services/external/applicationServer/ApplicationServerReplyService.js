@@ -5,7 +5,9 @@ const _ = require('lodash');
 
 const ServiceBase = require('../../ServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
+const OperationBase = require('../../operations/OperationBase');
 const METHODS = require('./AppServerMethods');
+const EVENTS = require('./AppServerEvents');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -13,22 +15,15 @@ const SESSION_STATUS = {
     READY: 'ready'
 };
 
-const EVENTS = {
-    onKeepAliveResultReceived: 'onKeepAliveResultReceived',
-    onOperationResultReceived: 'onOperationResultReceived',
-    onSourcesListReceived: 'onSourcesListReceived',
-    onSourceMetadataReceived: 'onSourceMetadataReceived'
-};
-
 /**
  * @typedef {Object} AppServerResult
  * @property {string}operationId
- * @property {boolean}isOperationCompleted
  * @property {string}operationType
- * @property {string}eventName
- * @property {Object}result
+ * @property {string[]}sessionIds
+ * @property {boolean}isOperationCompleted
+ * @property {(Object|undefined)}result
  * @property {string}resultType 'error' or 'success'
- * @property {Object}error
+ * @property {(AppServerErrorResult|undefined)}error
  * */
 
 class ApplicationServerReplyService extends ServiceBase {
@@ -78,54 +73,97 @@ class ApplicationServerReplyService extends ServiceBase {
             },
             (operation, callback) => {
                 this._processOperationResult(operation, rpcMessage, (error, operationResult) => {
-                    callback(error, operation, operationResult);
+                    callback(error, operationResult);
                 });
             },
-            (operation, operationResult, callback) => this._findSessionIdsForOperation(
-                operation,
-                (error, sessionIds) => callback(error, operation, operationResult, sessionIds)
+            (operationResult, callback) => this._findSessionIdsForOperation(
+                operationResult.operation,
+                (error, sessionIds) => callback(error, operationResult, sessionIds)
             ),
-            (operation, operationResult, sessionIds, callback) => {
-                // Determine if we should complete the operation, and complete it.
-                const shouldCompleteOperation = operationResult && operationResult.shouldCompleteOperation;
+            (operationResult, sessionIds, callback) => {
                 this._completeOperationIfNeeded(
-                    operation,
-                    shouldCompleteOperation,
-                    (error) => callback(error, operation, operationResult, sessionIds)
+                    operationResult,
+                    (error) => callback(error, operationResult, sessionIds)
                 );
+            },
+            (operationResult, sessionIds, callback) => {
+               this._createClientOperationResult(operationResult, sessionIds, callback);
+            },
+            (operationResult, clientOperationResult, callback) => {
+                // Store client message in the operation for active uploads.
+                const operation = operationResult.operation;
+                if (operation.getType() == OperationBase.operationTypes().UPLOAD
+                    || !clientOperationResult.isOperationCompleted) {
+                    operation.setLastAppServerMessage(clientOperationResult);
+                }
+                callback(operationResult, clientOperationResult, callback);
+            },
+            (operationResult, clientOperationResult, callback) => {
+                this._emitEvent(operationResult, clientOperationResult, callback);
             }
-        ], (error, operation, operationResult, sessionIds) => {
-            this._createOperationResult(error, operation, operationResult, sessionIds, callback);
+        ], (error) => {
+            callback(error);
         });
     }
 
-    _createOperationResult(error, operation, operationResult, sessionIds, callback) {
-        if (!operation) {
-            this.logger.error('No operation is found. Error: ' + error);
-            return;
-        }
+    processLoadNextPageResult(operationResult, callback) {
+        async.waterfall([
+            (callback) => {
+                this._findSessionIdsForOperation(operationResult.operation, callback);
+            },
+            (sessionIds, callback) => {
+                this._completeOperationIfNeeded(operationResult, (error) => callback(error, sessionIds));
+            },
+            (sessionIds, callback) => {
+                this._createClientOperationResult(operationResult, sessionIds, callback);
+            },
+            (operationResult, clientOperationResult, callback) => {
+                this._emitEvent(operationResult, clientOperationResult, callback)
+            }
+        ], (error) => {
+            callback(error);
+        });
+    }
 
-        if (operationResult) {
-            // Fire only progress events here, for which operationResult != null.
-            // Redis has it's own event to indicate the data retrieval finish,
-            // and operationResult == null in this case.
-            const eventData = {
-                operationId: operation.getId(),
-                sessionIds,
-                result: operationResult
-            };
-            this.eventEmitter.emit(operationResult.eventName, eventData);
-            callback(error, operationResult);
-        } else {
-            callback(error, null);
-        }
+    /**
+     * @callback ClientOperationResultCallback
+     * @param {Error}error
+     * @param {AppServerOperationResult}operationResult
+     * @param {AppServerResult}appServerResult
+     * */
+
+    /**
+     * @param {AppServerOperationResult}operationResult
+     * @param {string[]}sessionIds
+     * @param {ClientOperationResultCallback}callback
+     * */
+    _createClientOperationResult(operationResult, sessionIds, callback) {
+        const operation = operationResult.operation;
+        /**
+         * @type AppServerResult
+         * */
+        const eventData = {
+            operationId: operation.getId(),
+            sessionIds,
+            operationType: operation.getType(),
+            isOperationCompleted: operationResult.shouldCompleteOperation,
+            resultType: operationResult.resultType,
+            result: operationResult.result,
+            error: operationResult.error
+        };
+        callback(null, operationResult, eventData);
+    }
+
+    _emitEvent(operationResult, clientOperationResult, callback) {
+        this.eventEmitter.emit(operationResult.eventName, clientOperationResult);
+        callback(null);
     }
 
     /**
      * Selects and runs proper message parser. Handles RPC-level errors.
      * @param {OperationBase}operation
      * @param rpcMessage
-     * @param {function(Error, AppServerResult)}callback
+     * @param {function(Error, AppServerOperationResult)}callback
      * @private
      */
     _processOperationResult(operation, rpcMessage, callback) {
@@ -187,13 +225,21 @@ class ApplicationServerReplyService extends ServiceBase {
 
     /**
      * Deletes associated information for completed operations.
+     *
+     * @param {AppServerOperationResult}operationResult
+     * @param {function(Error, AppServerOperationResult)}callback
      * */
-    _completeOperationIfNeeded(operation, shouldComplete, callback) {
+    _completeOperationIfNeeded(operationResult, callback) {
         const operations = this.services.operations;
-        if (shouldComplete) {
-            operations.remove(operation.sessionId, operation.getId(), callback);
+        const operation = operationResult.operation;
+        if (operationResult.shouldCompleteOperation) {
+            operations.remove(
+                operation.sessionId,
+                operation.getId(),
+                (error) => callback(error, operationResult)
+            );
         } else {
-            callback(null, operation);
+            callback(null, operationResult);
         }
     }
 }

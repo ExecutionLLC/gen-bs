@@ -6,6 +6,7 @@ const async = require('async');
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
+const RESULT_TYPES = require('./AppServerResultTypes');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 
@@ -18,63 +19,68 @@ const SESSION_STATUS = {
 class AppServerSearchService extends ApplicationServerServiceBase {
     constructor(services) {
         super(services);
+        
+        this.eventEmitter = new EventEmitter(EVENTS);
+    }
+
+    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
+        async.waterfall([
+            (callback) => {
+                this.services.operations.find(sessionId, operationId, callback);
+            },
+            (operation, callback) => {
+                const redisData = operation.getRedisParams();
+                const userId = user.id;
+                const redisParams = {
+                    sessionId,
+                    operationId,
+                    host: redisData.host,
+                    port: redisData.port,
+                    sampleId: redisData.sampleId,
+                    userId,
+                    databaseNumber: redisData.databaseNumber,
+                    dataIndex: redisData.dataIndex,
+                    limit,
+                    offset
+                };
+                this.services.redis.fetch(redisParams, callback);
+            },
+            (fieldIdToValueHash, callback) => {
+                this._createSearchDataResult(null, fieldIdToValueHash, callback);
+            },
+            (operationResult, callback) => {
+                this.services.applicationServerReply.processLoadNextPageResult(operationResult, callback);
+            }
+        ], callback);
     }
 
     /**
      * Parses RPC message for the 'open_session' method calls.
+     * @param {OperationBase}operation
+     * @param {Object}message
+     * @param {function(Error, AppServerOperationResult)} callback
      * */
     processSearchResult(operation, message, callback) {
-        if (!message || !message.result || !message.result.sessionState) {
-            this.logger.warn('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2));
-            callback(null, {
-                result: message,
-                shouldCompleteOperation: false,
-                eventName: EVENTS.onOperationResultReceived
-            });
-        } else {
-            const sessionState = message.result.sessionState;
+        async.waterfall([
+            (callback) => {
+                if (!message || !message.result || !message.result.sessionState) {
+                    callback(new Error('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2)));
+                } else {
+                    callback(null);
+                }
+            },
+            (callback) => {
+                const sessionState = message.result.sessionState;
 
-            const sampleId = operation.getSampleId();
-            const userId = operation.getUserId();
-            const limit = operation.getLimit();
-            const offset = operation.getOffset();
-
-            // If not ready, just send the progress up
-            if (sessionState.status !== SESSION_STATUS.READY) {
-                callback(null, {
-                    status: sessionState.status,
-                    progress: sessionState.progress,
-                    shouldCompleteOperation: false,
-                    eventName: EVENTS.onOperationResultReceived
-                });
-            } else {
-                // Get data from Redis
-                const redisInfo = sessionState.redisDb;
-                const redisParams = {
-                    host: redisInfo.host,
-                    port: redisInfo.port,
-                    sampleId,
-                    userId,
-                    operationId: operation.getId(),
-                    sessionId: operation.getSessionId(),
-                    databaseNumber: redisInfo.number,
-                    dataIndex: redisInfo.resultIndex,
-                    offset,
-                    limit
-                };
-                async.waterfall([
-                    (callback) => {
-                        this._storeRedisParamsInOperation(redisParams, operation, callback);
-                    },
-                    (callback) => {
-                        this.services.redis.fetch(redisParams, callback);
-                    }
-                ], (error) => {
-                    // Redis will fire data event by itself, so send null as result to distinguish cases.
-                    callback(error, null);
-                });
+                if (sessionState.status !== SESSION_STATUS.READY) {
+                    this._processProgressMessage(message, callback);
+                } else {
+                    this._processSearchResultMessage(operation, message, callback);
+                }
             }
-        }
+        ], (error, result) => {
+            callback(error, result);
+        });
     }
 
     requestOpenSearchSession(sessionId, params, callback) {
@@ -134,6 +140,70 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 this._rpcSend(operationId, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
+    }
+
+    _processSearchResultMessage(operation, message, callback) {
+        const sessionState = message.result.sessionState;
+
+        const sampleId = operation.getSampleId();
+        const userId = operation.getUserId();
+        const limit = operation.getLimit();
+        const offset = operation.getOffset();
+
+        // Get data from Redis
+        const redisInfo = sessionState.redisDb;
+        // TODO: Seems session, operation, user id and sample id shall be removed from below.
+        const redisParams = {
+            host: redisInfo.host,
+            port: redisInfo.port,
+            sampleId,
+            userId,
+            operationId: operation.getId(),
+            sessionId: operation.getSessionId(),
+            databaseNumber: redisInfo.number,
+            dataIndex: redisInfo.resultIndex,
+            offset,
+            limit
+        };
+        async.waterfall([
+            (callback) => {
+                // Store params to be able to retrieve next page by user requests.
+                this._storeRedisParamsInOperation(redisParams, operation, callback);
+            },
+            (callback) => {
+                this.services.redis.fetch(redisParams, callback);
+            }
+        ], (error, fieldIdToValueHash) => {
+            this._createSearchDataResult(error, fieldIdToValueHash, callback);
+        });
+    }
+
+    _createSearchDataResult(error, fieldIdToValueHash, callback) {
+        /**
+         * @type AppServerOperationResult
+         * */
+        const result = {
+            shouldCompleteOperation: false,
+            error,
+            resultType: (error)? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
+            eventName: EVENTS.onSearchDataReceived,
+            result: fieldIdToValueHash
+        };
+        callback(null, result);
+    }
+
+    _processProgressMessage(message, callback) {
+        const sessionState = message.result.sessionState;
+
+        /**
+         * @type AppServerOperationResult
+         * */
+        const result = {
+            status: sessionState.status,
+            progress: sessionState.progress,
+            eventName: EVENTS.onOperationResultReceived
+        };
+        callback(null, result);
     }
 
     _createSearchInResultsParams(globalSearchValue, excludedFields, fieldSearchValues, sortParams) {

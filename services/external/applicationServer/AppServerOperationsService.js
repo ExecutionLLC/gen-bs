@@ -47,15 +47,15 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
     processKeepAliveResult(operation, rpcMessage, callback) {
         const operationIdToCheck = operation.getOperationIdToCheck();
         const result = rpcMessage.result;
-        if (result && result.error) {
-            this.logger.error('Unexpected error received from AS as keep-alive result: ' + JSON.stringify(result.error));
-            callback(null, {
-                eventName: EVENTS.onKeepAliveResultReceived,
-                shouldCompleteOperation: true
-            });
-            return;
-        }
-
+        /**
+         * @type AppServerOperationResult
+         * */
+        const operationResult = {
+            eventName: EVENTS.onKeepAliveResultReceived,
+            shouldCompleteOperation: true,
+            operation,
+            result: null
+        };
         const isAlive = result;
         if (!isAlive) {
             async.waterfall([
@@ -68,15 +68,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
                     this.logger.error('Error while closing dead search operation: ' + error);
                 }
 
-                callback(null, {
-                    eventName: EVENTS.onKeepAliveResultReceived,
-                    shouldCompleteOperation: true
-                });
-            });
-        } else {
-            callback(null, {
-                eventName: EVENTS.onKeepAliveResultReceived,
-                shouldCompleteOperation: true
+                callback(null, operationResult);
             });
         }
     }
