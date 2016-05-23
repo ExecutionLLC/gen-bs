@@ -29,14 +29,6 @@ class RedisService extends ServiceBase {
         super(services, models);
     }
 
-    on(eventName, callback) {
-        this.eventEmitter.on(eventName, callback);
-    }
-
-    off(eventName, callback) {
-        this.eventEmitter.off(eventName, callback);
-    }
-
     getSearchKeyFieldName() {
         return 'search_key';
     }

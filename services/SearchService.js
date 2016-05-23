@@ -5,6 +5,7 @@ const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
 const EventProxy = require('../utils/EventProxy');
+const RESULT_TYPES = require('./external/applicationServer/AppServerResultTypes');
 
 const EVENTS = {
     onDataReceived: 'onDataReceived'
@@ -14,7 +15,7 @@ class SearchService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
 
-        this._onRedisDataReceived = this._onRedisDataReceived.bind(this);
+        this._onSearchDataReceived = this._onSearchDataReceived.bind(this);
 
         this.eventEmitter = new EventProxy(EVENTS);
         this.searchKeyFieldName = this.services.redis.getSearchKeyFieldName();
@@ -122,14 +123,14 @@ class SearchService extends ServiceBase {
 
 
     _subscribeToRedisEvents() {
-        const redisEvents = this.services.redis.registeredEvents();
-        this.services.redis.on(redisEvents.onRedisDataReceived, this._onRedisDataReceived.bind(this));
+        const events = this.services.applicationServerReply.registeredEvents();
+        this.services.applicationServerReply.on(events.onSearchDataReceived, this._onSearchDataReceived.bind(this));
     }
 
-    _onRedisDataReceived(replyInfo) {
-        const fieldIdToValueArray = replyInfo.result.fieldIdToValueArray;
+    _onSearchDataReceived(message) {
+        const fieldIdToValueArray = message.result;
         // For search requests there is only one session.
-        const sessionId = _.first(replyInfo.sessionIds);
+        const sessionId = _.first(message.sessionIds);
 
         async.waterfall([
             (callback) =>
@@ -169,34 +170,24 @@ class SearchService extends ServiceBase {
                 });
                 callback(null, rows);
             }
-        ], (error, convertedRows) => this._emitDataReceivedEvent(error, replyInfo, convertedRows));
+        ], (error, convertedRows) => this._emitDataReceivedEvent(error, message, convertedRows));
     }
 
-    _emitDataReceivedEvent(error, redisReply, convertedRows) {
-        const sessionIds = redisReply.sessionIds;
-        const operationId = redisReply.operationId;
-        const sampleId = redisReply.result.sampleId;
+    _emitDataReceivedEvent(error, message, convertedRows) {
+        /**@type AppServerResult*/
+        let clientMessage;
         if (error) {
-            this.eventEmitter.emit(EVENTS.onDataReceived, {
-                sessionIds,
-                operationId,
-                result: {
-                    sampleId,
-                    error
-                }
+            clientMessage = Object.assign({}, message, {
+                resultType: RESULT_TYPES.ERROR,
+                result: null,
+                error
             });
         } else {
-            this.eventEmitter.emit(EVENTS.onDataReceived, {
-                sessionIds,
-                operationId,
-                result: {
-                    sampleId,
-                    limit: redisReply.result.limit,
-                    offset: redisReply.result.offset,
-                    data: convertedRows
-                }
+            clientMessage = Object.assign({}, message, {
+                result: convertedRows
             });
         }
+        this.eventEmitter.emit(EVENTS.onDataReceived, clientMessage);
     }
 
     /**

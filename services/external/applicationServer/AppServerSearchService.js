@@ -7,6 +7,7 @@ const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const RESULT_TYPES = require('./AppServerResultTypes');
+const EventEmitter = require('../../../utils/EventProxy');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 
