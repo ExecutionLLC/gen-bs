@@ -45,7 +45,7 @@ export default class ViewBuilderFooter extends React.Component {
         const {dispatch, viewBuilder} = this.props;
         const editedView = viewBuilder.editedView;
         if (editedView.id !== null) { // TODO replace by this.props.dispatch(viewBuilderSaveAndSelectRules());
-            dispatch(viewBuilderUpdateView())
+            dispatch(viewBuilderUpdateView());
         } else {
             dispatch(viewBuilderCreateView());
         }
