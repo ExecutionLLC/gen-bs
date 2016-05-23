@@ -72,7 +72,7 @@ export default function viewBuilder(state = {
         case ActionTypes.VBUILDER_SELECT_VIEW: {
             const selectedView = _.find(action.views, {id: action.viewId}) || null;
             return Object.assign({}, state, {
-                selectedView: selectedView,
+                selectedView: selectedView, // TODO sv: remove
                 editedView: selectedView,
                 editingView: selectedView, // TODO: remove with SELECT_VIEW
                 originalView: selectedView // TODO: remove with SELECT_VIEW
@@ -105,7 +105,7 @@ export default function viewBuilder(state = {
         case ActionTypes.VBUILDER_RECEIVE_UPDATE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: false,
-                selectedView: action.view,
+                selectedView: action.view, // TODO sv: remove
                 editedView: action.view,
                 editingView: action.view,
                 originalView: action.view
@@ -123,7 +123,9 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 editedView: action.view,
-                selectedView: action.view
+                selectedView: action.view, // TODO sv: remove
+                editingView: action.view,
+                originalView: action.view
             });
         }
         case ActionTypes.VBUILDER_REQUEST_DELETE_VIEW: {
