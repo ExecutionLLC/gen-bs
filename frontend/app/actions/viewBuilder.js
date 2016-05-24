@@ -6,6 +6,9 @@ import HttpStatus from 'http-status';
 import {handleError} from './errorHandler';
 import {deleteView} from './userData';
 import {viewsListSelectView} from './viewsList';
+import {viewsListServerCreateView} from './viewsList';
+import {viewsListServerDeleteView} from './viewsList';
+import {viewsListServerUpdateView} from './viewsList';
 
 export const VBUILDER_START_EDIT = 'VBUILDER_START_EDIT';
 export const VBUILDER_SAVE_EDIT = 'VBUILDER_SAVE_EDIT';
@@ -123,55 +126,40 @@ function viewBuilderReceiveUpdateView(json) {
     };
 }
 
+function viewBuilderCreateView() {
+
+    return (dispatch, getState) => {
+        const editingView = getState().viewBuilder.editingView;
+        const {auth: {sessionId}, ui: {languageId} } = getState();
+        dispatch(viewsListServerCreateView(editingView, sessionId, languageId))
+            .then(() => {
+                dispatch(closeModal('views'));
+                dispatch(viewBuilderEndEdit());
+            });
+    };
+}
+
 function viewBuilderUpdateView() {
 
     return (dispatch, getState) => {
         const state = getState();
         const editingView = state.viewBuilder.editingView;
+        const originalView = state.viewBuilder.originalView;
         const isNotEdited = _.includes(['advanced', 'standard'], editingView.type)
-            || state.viewBuilder.originalView === editingView;
-        dispatch(viewBuilderRequestUpdateView());
+            || originalView === editingView;
+
         if (state.auth.isDemo || isNotEdited) {
-            dispatch(closeModal('views'));
             dispatch(viewsListSelectView(editingView.id));
+            dispatch(closeModal('views'));
+            dispatch(viewBuilderEndEdit());
         } else {
             const sessionId = state.auth.sessionId;
-
-            dispatch(viewBuilderRequestUpdateView());
-            viewsClient.update(sessionId, editingView, (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, UPDATE_VIEW_NETWORK_ERROR));
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, UPDATE_VIEW_SERVER_ERROR));
-                } else {
-                    const result = response.body;
-                    dispatch(viewBuilderReceiveUpdateView(result));
+            dispatch(viewsListServerUpdateView(editingView, sessionId))
+                .then(() => {
                     dispatch(closeModal('views'));
-                    dispatch(fetchViews(result.id));
-                }
-            });
+                    dispatch(viewBuilderEndEdit());
+                });
         }
-    };
-}
-
-function viewBuilderCreateView() {
-
-    return (dispatch, getState) => {
-        dispatch(viewBuilderRequestCreateView());
-
-        const {auth: {sessionId}, viewBuilder: {editingView}, ui: {languageId}} = getState();
-        viewsClient.add(sessionId, languageId, editingView, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, CREATE_VIEW_SERVER_ERROR));
-            } else {
-                const result = response.body;
-                dispatch(viewBuilderReceiveCreateView(result));
-                dispatch(closeModal('views'));
-                dispatch(fetchViews(result.id));
-            }
-        });
     };
 }
 
@@ -180,7 +168,7 @@ export function viewBuilderSaveAndSelectView() {
         dispatch(viewBuilderSaveEdit());
         const viewBuilder = getState().viewBuilder;
         const editingView = viewBuilder.editingView;
-        if (editingView.id !== null) {
+        if (!viewBuilder.editingViewIsNew) {
             dispatch(viewBuilderUpdateView());
         } else {
             dispatch(viewBuilderCreateView());
@@ -203,26 +191,16 @@ function viewBuilderReceiveCreateView(json) {
 
 export function viewBuilderDeleteView(viewId) {
     return (dispatch, getState) => {
-        dispatch(viewBuilderRequestDeleteView(viewId));
         const {auth: {sessionId}} = getState();
-        viewsClient.remove(sessionId, viewId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, DELETE_VIEW_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, DELETE_VIEW_SERVER_ERROR));
-            } else {
-                const result = response.body;
-                dispatch(viewBuilderReceiveDeleteView(result));
-                dispatch(deleteView(result.id));
+        dispatch(viewsListServerDeleteView(viewId, sessionId))
+            .then(() => {
                 const state = getState();
                 const views = state.viewsList.views;
                 const editingViewId = state.viewBuilder.editingView.id;
-                const newViewId = (result.id == editingViewId) ? views[0].id : editingViewId;
-                dispatch(viewsListSelectView(newViewId)); // TODO vl3 need?
+                const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
                 const newView = _.find(views, {id: newViewId});
                 dispatch(viewBuilderStartEdit(false, newView));
-            }
-        });
+            });
     };
 }
 
