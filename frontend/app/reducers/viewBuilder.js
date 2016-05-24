@@ -86,18 +86,6 @@ export default function viewBuilder(state = {
             return reduceVBuilderSaveEdit(state);
         case ActionTypes.VBUILDER_END_EDIT:
             return reduceVBuilderEndEdit(state);
-        case ActionTypes.VBUILDER_TOGGLE_NEW: {
-            const toggleNewView = Object.assign({}, state.editedView, {
-                id: null,
-                type: 'user',
-                name: `Copy of ${state.editedView.name}`
-            });
-            return Object.assign({}, state, {
-                editedView: toggleNewView,
-                editingView: toggleNewView,
-                editingViewParentId: state.editedView.id
-            });
-        }
         case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: true,

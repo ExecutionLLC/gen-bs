@@ -30,8 +30,6 @@ export const VBUILDER_RECEIVE_CREATE_VIEW = 'VBUILDER_RECEIVE_CREATE_VIEW';
 export const VBUILDER_REQUEST_DELETE_VIEW = 'VBUILDER_REQUEST_DELETE_VIEW';
 export const VBUILDER_RECEIVE_DELETE_VIEW = 'VBUILDER_RECEIVE_DELETE_VIEW';
 
-export const VBUILDER_TOGGLE_NEW = 'VBUILDER_TOGGLE_NEW';
-
 const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
 const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
 
@@ -46,12 +44,6 @@ const viewsClient = apiFacade.viewsClient;
 /*
  * Action Creators
  */
-export function viewBuilderToggleNew() {
-    return {
-        type: VBUILDER_TOGGLE_NEW
-    };
-}
-
 export function viewBuilderStartEdit(makeNew, view) {
     return {
         type: VBUILDER_START_EDIT,

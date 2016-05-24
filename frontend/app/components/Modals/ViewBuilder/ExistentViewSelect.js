@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
-import classNames from 'classnames';
 import _ from 'lodash';
 
 import {
@@ -10,7 +9,6 @@ import {
 } from '../../../utils/stringUtils';
 import {
     viewBuilderSelectView,
-    viewBuilderToggleNew,
     viewBuilderStartEdit,
     viewBuilderDeleteView
 } from '../../../actions/viewBuilder';
