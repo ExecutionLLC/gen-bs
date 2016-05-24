@@ -93,7 +93,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 // Store client message in the operation for active uploads.
                 const operation = operationResult.operation;
                 if (operation.getType() == OperationBase.operationTypes().UPLOAD
-                    || !clientOperationResult.isOperationCompleted) {
+                    && !clientOperationResult.isOperationCompleted) {
                     operation.setLastAppServerMessage(clientOperationResult);
                 }
                 callback(null, operationResult, clientOperationResult);

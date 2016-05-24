@@ -74,7 +74,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 const sessionState = message.result.sessionState;
 
                 if (sessionState.status !== SESSION_STATUS.READY) {
-                    this._processProgressMessage(message, callback);
+                    this._processProgressMessage(operation, message, callback);
                 } else {
                     this._processSearchResultMessage(operation, message, callback);
                 }
@@ -175,15 +175,16 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 this.services.redis.fetch(redisParams, callback);
             }
         ], (error, fieldIdToValueHash) => {
-            this._createSearchDataResult(error, fieldIdToValueHash, callback);
+            this._createSearchDataResult(error, operation, fieldIdToValueHash, callback);
         });
     }
 
-    _createSearchDataResult(error, fieldIdToValueHash, callback) {
+    _createSearchDataResult(error, operation, fieldIdToValueHash, callback) {
         /**
          * @type AppServerOperationResult
          * */
         const result = {
+            operation,
             shouldCompleteOperation: false,
             error,
             resultType: (error)? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
@@ -193,16 +194,29 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         callback(null, result);
     }
 
-    _processProgressMessage(message, callback) {
+    /**
+     * @param {OperationBase}operation
+     * @param {Object}message
+     * @param {function(Error, AppServerOperationResult)}callback
+     * */
+    _processProgressMessage(operation, message, callback) {
+        /**
+         * @type {{status:string, progress: number}}
+         * */
         const sessionState = message.result.sessionState;
 
         /**
          * @type AppServerOperationResult
          * */
         const result = {
-            status: sessionState.status,
-            progress: sessionState.progress,
-            eventName: EVENTS.onOperationResultReceived
+            operation,
+            eventName: EVENTS.onOperationResultReceived,
+            shouldCompleteOperation: false,
+            resultType: RESULT_TYPES.SUCCESS,
+            result: {
+                status: sessionState.status,
+                progress: sessionState.progress
+            }
         };
         callback(null, result);
     }
