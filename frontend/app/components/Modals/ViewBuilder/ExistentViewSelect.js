@@ -144,7 +144,8 @@ export default class ExistentViewSelect extends React.Component {
 
     onDuplicateViewClick() {
         const {dispatch} = this.props;
-        dispatch(viewBuilderToggleNew()); // TODO replace by const selectedViewId = this.getSelectedViewId();dispatch(viewBuilderStartEdit(true, this.getViewForId(selectedViewId)));
+        const selectedView = this.props.viewBuilder.editedView;
+        dispatch(viewBuilderStartEdit(true, selectedView));
     }
 
     onResetViewClick() {
