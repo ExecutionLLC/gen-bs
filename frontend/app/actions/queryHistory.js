@@ -3,7 +3,7 @@ import HttpStatus from 'http-status';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
-import {analyze, changeView} from './ui';
+import {analyze} from './ui';
 import {changeViews} from './userData';
 import {changeSamples} from './samplesList';
 import {changeSample} from './samplesList';
@@ -92,7 +92,6 @@ export function renewHistoryItem(historyItemId) {
                     dispatch([
                         filtersListSelectFilter(clonedHistoryItem.filters[0].id),
                         viewsListSelectView(clonedHistoryItem.view.id),
-                        changeView(clonedHistoryItem.view.id), // TODO vl remove
                         analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
                     ]);
                 });

@@ -3,7 +3,7 @@ import {handleError} from './errorHandler';
 import {receiveFields, receiveTotalFields} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {receiveQueryHistory} from './queryHistory';
-import {analyze, changeView} from './ui';
+import {analyze} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
@@ -99,7 +99,6 @@ export function fetchUserdata() {
                     dispatch(changeSample(sample.id));
                     dispatch(filtersListSelectFilter(filter.id));
                     dispatch(viewsListSelectView(view.id));
-                    dispatch(changeView(view.id)); // TODO vl2 replace by viewsListSelectView
                     dispatch(analyze(sample.id, view.id, filter.id));
                 }
             }
@@ -139,7 +138,6 @@ export function fetchViews(viewIdToSelect) { // TODO vl4 remove
 
                 dispatch(receiveViews(result));
                 dispatch(viewsListSelectView(viewId));
-                dispatch(changeView(viewId)); // TODO vl2 remove
             }
         });
     };

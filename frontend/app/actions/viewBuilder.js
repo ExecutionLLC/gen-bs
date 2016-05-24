@@ -3,7 +3,6 @@ import {closeModal} from './modalWindows';
 import {fetchViews} from './userData';
 
 import HttpStatus from 'http-status';
-import {changeView} from './ui';
 import {handleError} from './errorHandler';
 import {deleteView} from './userData';
 import {viewsListSelectView} from './viewsList';
@@ -134,7 +133,6 @@ function viewBuilderUpdateView() {
         dispatch(viewBuilderRequestUpdateView());
         if (state.auth.isDemo || isNotEdited) {
             dispatch(closeModal('views'));
-            dispatch(changeView(editingView.id)); // TODO vl remove
             dispatch(viewsListSelectView(editingView.id));
         } else {
             const sessionId = state.auth.sessionId;
@@ -220,7 +218,6 @@ export function viewBuilderDeleteView(viewId) {
                 const views = state.viewsList.views;
                 const editingViewId = state.viewBuilder.editingView.id;
                 const newViewId = (result.id == editingViewId) ? views[0].id : editingViewId;
-                dispatch(changeView(newViewId)); // TODO vl remove
                 dispatch(viewsListSelectView(newViewId)); // TODO vl3 need?
                 const newView = _.find(views, {id: newViewId});
                 dispatch(viewBuilderStartEdit(false, newView));

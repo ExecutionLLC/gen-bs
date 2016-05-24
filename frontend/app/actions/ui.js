@@ -7,8 +7,6 @@ import {handleError} from './errorHandler';
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
 
-export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
-
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
 export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
@@ -34,21 +32,6 @@ export function completeTableScrollPositionReset() {
 export function toggleQueryNavbar() {
     return {
         type: TOGGLE_QUERY_NAVBAR
-    };
-}
-
-function changeHeaderView(views, viewId) { // TODO vl3 need?
-    return {
-        type: CHANGE_HEADER_VIEW,
-        views,
-        viewId
-    };
-}
-
-export function changeView(viewId) { // TODO vl3 need?
-    return (dispatch, getState) => {
-        const {userData: {views}} = getState();
-        dispatch(changeHeaderView(views, viewId));
     };
 }
 

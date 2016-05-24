@@ -4,7 +4,6 @@ import {viewsListSelectView} from '../../../actions/viewsList';
 import 'react-select/dist/react-select.css';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeView} from '../../../actions/ui';
 
 export default class Views extends Component {
 
@@ -23,7 +22,6 @@ export default class Views extends Component {
                         options={this.getViewOptions()}
                         value={selectedViewId}
                         onChange={ (val) => {
-                            dispatch(changeView(val.value)); // TODO vl3 need?
                             dispatch(viewsListSelectView(val.value));
                         }}
                     />
