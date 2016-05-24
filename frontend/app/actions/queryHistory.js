@@ -115,7 +115,6 @@ export function attachHistory(historyItem) {
             changeHistoryData(newSampleId, newFilterId, newViewId),
             filtersListReceive(filters),
             viewsListReceive(views),
-            changeViews(views), // TODO vl2 use viewsListReceive
             changeSamples(samples)
         ]);
     };
@@ -146,7 +145,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),
             filtersListReceive(filters),
-            changeViews(views), // TODO vl2 use viewsListReceive
+            viewsListReceive(views),
             changeSamples(samples)
         ]);
     };
