@@ -52,15 +52,27 @@ export default class ExistentFilterSelect extends Component {
                 </div>
                 }
                 <div className='row grid-toolbar row-head-selector'>
-                    <div className='col-sm-6'>
-                        <Select
-                            options={selectItems}
-                            value={selectedFilter.id}
-                            onChange={(val) => this.onSelectChange(filters, val.value, fields)}
-                        />
-                    </div>
+                    {this.renderFiltersSelector(filters, fields)}
                     {this.renderButtonGroup(disabledClass, isFilterEditable)}
                 </div>
+            </div>
+        );
+    }
+
+    renderFiltersSelector(filters, fields) {
+        const selectItems = filters.map( filter => {
+            return {
+                value: filter.id,
+                label: getItemLabelByNameAndType(filter.name, filter.type)
+            };
+        });
+        return (
+            <div className='col-sm-6'>
+                <Select
+                    options={selectItems}
+                    value={this.getSelectedFilter().id}
+                    onChange={(val) => this.onSelectChange(filters, val.value, fields)}
+                />
             </div>
         );
     }
