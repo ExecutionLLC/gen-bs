@@ -90,13 +90,14 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderDuplicateFilterButton(isDisabled) {
+    renderDuplicateFilterButton(isDemoSession) {
+        const title = isDemoSession ? 'Login or register to work with filter' : 'Make a copy for editing';
         return (
             <button type='button'
                     className='btn btn-default in'
                     id='dblBtn'
                     onClick={() => this.onDuplicateClick(this.getSelectedFilter(), this.props.fields)}
-                    disabled={isDisabled}
+                    disabled={isDemoSession}
                     title={title}
             >
                 <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
