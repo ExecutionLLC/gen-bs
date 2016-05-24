@@ -26,7 +26,7 @@ class NavbarCreateQuery extends Component {
     render() {
 
         const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
-        const {selectedView} = this.props.ui;
+        const {selectedView} = this.props.ui; // TODO vl use viewsList
         const {selectedFilterId} = this.props.filtersList;
         const {selectedSample} = this.props.samplesList;
         const selectedSampleId = selectedSample ? selectedSample.id : null;
@@ -77,14 +77,14 @@ function mapStateToProps(state) {
     const {
         modalWindows,
         userData: {
-            views,
-            filters
+            views, // TODO vl replace by vievsList
+            filters // TODO remove
         },
         ui,
         auth,
         samplesList,
         samplesList: {
-            samples
+            samples // TODO why not use samplesList.samples?
         },
         filtersList
     } = state;
@@ -92,7 +92,7 @@ function mapStateToProps(state) {
     return {
         modalWindows,
         samples,
-        views,
+        views, // TODO vl rename by viewsList
         filters,
         ui,
         auth,

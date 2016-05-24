@@ -16,7 +16,7 @@ import {
 export default class ExistentViewSelect extends React.Component {
 
     render() {
-        const {auth: {isDemo: isDemoSession}, viewBuilder: {editingView: {type: selectedViewType}}, userData: {views}} = this.props;
+        const {auth: {isDemo: isDemoSession}, viewBuilder: {editingView: {type: selectedViewType}}, userData: {views}} = this.props; // TODO vl use viewsList
         const isEditableView = selectedViewType === 'user';
 
         return (
@@ -131,7 +131,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     getViewForId(viewId) {
-        return _.find(this.props.userData.views, {id: viewId});
+        return _.find(this.props.userData.views, {id: viewId}); // TODO use viewsList
     }
 
     onSelectedViewChanged(viewId) {

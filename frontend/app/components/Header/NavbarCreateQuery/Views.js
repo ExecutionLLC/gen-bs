@@ -10,7 +10,7 @@ export default class Views extends Component {
 
     render() {
         const dispatch = this.props.dispatch;
-        const selectedView = this.props.ui.selectedView;
+        const selectedView = this.props.ui.selectedView; // TODO vl use viewsList
         return (
 
             <div className='table-cell max-width'>

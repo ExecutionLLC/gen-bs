@@ -4,7 +4,7 @@ export default function userData(state = {
     isFetching: false,
     isValid: false,
     profileMetadata: {},
-    views: [],
+    views: [], // TODO vl remove
     attachedHistoryData: {
         sampleId: null,
         filterId: null,
@@ -25,21 +25,21 @@ export default function userData(state = {
                 isValid: true,
 
                 profileMetadata: action.userData.profileMetadata,
-                views: action.userData.views,
+                views: action.userData.views, // TODO vl remove
 
                 lastUpdated: action.receivedAt
             });
 
-        case ActionTypes.REQUEST_VIEWS:
+        case ActionTypes.REQUEST_VIEWS: // TODO vl3 need?
             return Object.assign({}, state, {
                 isFetching: true
             });
 
-        case ActionTypes.RECEIVE_VIEWS:
+        case ActionTypes.RECEIVE_VIEWS: // TODO vl3 need?
             return Object.assign({}, state, {
                 isFetching: false,
 
-                views: action.views,
+                views: action.views, // TODO vl remove
 
                 lastUpdated: action.receivedAt
             });
@@ -55,14 +55,14 @@ export default function userData(state = {
                     }
                 });
             }
-        case ActionTypes.CHANGE_VIEWS:
+        case ActionTypes.CHANGE_VIEWS: // TODO vl remove
             {
                 const {views} = action;
                 return Object.assign({}, state, {
                     views: views
                 });
             }
-        case ActionTypes.DELETE_VIEW:
+        case ActionTypes.DELETE_VIEW: // TODO vl remove
             {
                 const deletedViewIndex = _.findIndex(state.views, view => view.id == action.viewId);
                 return Object.assign({}, state, {

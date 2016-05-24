@@ -37,7 +37,7 @@ export function toggleQueryNavbar() {
     };
 }
 
-function changeHeaderView(views, viewId) {
+function changeHeaderView(views, viewId) { // TODO vl3 need?
     return {
         type: CHANGE_HEADER_VIEW,
         views,
@@ -45,7 +45,7 @@ function changeHeaderView(views, viewId) {
     };
 }
 
-export function changeView(viewId) {
+export function changeView(viewId) { // TODO vl3 need?
     return (dispatch, getState) => {
         const {userData: {views}} = getState();
         dispatch(changeHeaderView(views, viewId));
@@ -69,7 +69,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         const {
             userData: {
                 attachedHistoryData: historyData,
-                views
+                views // TODO vl replace by viewsList
             },
             samplesList: {
                 samples

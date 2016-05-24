@@ -29,7 +29,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
     return (dispatch, getState) => {
         const {
             ui: {
-                selectedView,
+                selectedView, // TODO vl use viewsList and view id
                 language
             },
             auth: {

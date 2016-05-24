@@ -216,9 +216,9 @@ export function viewBuilderDeleteView(viewId) {
                 dispatch(deleteView(result.id));
                 const state = getState();
                 const editingViewId = state.viewBuilder.editingView.id;
-                const newViewId = (result.id == editingViewId) ? state.userData.views[0].id : editingViewId;
+                const newViewId = (result.id == editingViewId) ? state.userData.views[0].id : editingViewId; // TODO vl use viewsList
                 dispatch(changeView(newViewId));
-                const newView = _.find(state.userData.views, {id: newViewId});
+                const newView = _.find(state.userData.views, {id: newViewId}); // TODO vl use viewsList
                 dispatch(viewBuilderStartEdit(false, newView));
             }
         });

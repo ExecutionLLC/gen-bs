@@ -89,7 +89,7 @@ export function renewHistoryItem(historyItemId) {
                 .then(() => {
                     dispatch([
                         filtersListSelectFilter(clonedHistoryItem.filters[0].id),
-                        changeView(clonedHistoryItem.view.id),
+                        changeView(clonedHistoryItem.view.id), // TODO vl replace by viewsListSelectView
                         analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
                     ]);
                 });
@@ -107,12 +107,12 @@ export function attachHistory(historyItem) {
             getState().filtersList.filters, filterId, historyItem.filters[0]
         );
         const {collection: views, historyItemId: newViewId} = changeHistoryItem(
-            getState().userData.views, viewId, historyItem.view
+            getState().userData.views, viewId, historyItem.view // TODO vl use viewsList
         );
         dispatch([
             changeHistoryData(newSampleId, newFilterId, newViewId),
             filtersListReceive(filters),
-            changeViews(views),
+            changeViews(views), // TODO vl2 use viewsListReceive
             changeSamples(samples)
         ]);
     };
@@ -138,12 +138,12 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         const {
             collection: views,
             historyItemId: viewId
-        } = detachHistoryItemIfNeedIt(detachView, userData.views, attachedHistoryData.viewId, null);
+        } = detachHistoryItemIfNeedIt(detachView, userData.views, attachedHistoryData.viewId, null); // TODO vl use viewsList
 
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),
             filtersListReceive(filters),
-            changeViews(views),
+            changeViews(views), // TODO vl2 use viewsListReceive
             changeSamples(samples)
         ]);
     };

@@ -9,8 +9,8 @@ export default class ViewsSetup extends Component {
     }
 
     onViewsClick() {
-        const {views} = this.props.userData;
-        const selectedViewId = this.props.ui.selectedView.id;
+        const {views} = this.props.userData; // TODO vl use viewsList
+        const selectedViewId = this.props.ui.selectedView.id; // TODO vl use viewsList
         const selectedView = _.find(views, {id: selectedViewId});
         this.props.dispatch(viewBuilderStartEdit(false, selectedView));
         this.props.openModal('views');

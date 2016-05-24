@@ -83,6 +83,7 @@ export function fetchUserdata() {
 
                 dispatch(receiveUserdata(userData));
                 dispatch(filtersListReceive(userData.filters));
+                // TODO vl! use viewsListReceive
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
@@ -95,7 +96,7 @@ export function fetchUserdata() {
                 } else {
                     dispatch(changeSample(sample.id));
                     dispatch(filtersListSelectFilter(filter.id));
-                    dispatch(changeView(view.id));
+                    dispatch(changeView(view.id)); // TODO vl2 replace by viewsListSelectView
                     dispatch(analyze(sample.id, view.id, filter.id));
                 }
             }
@@ -109,7 +110,7 @@ function requestViews() {
     };
 }
 
-function receiveViews(json) {
+function receiveViews(json) { // TODO vl4 need?
     return {
         type: RECEIVE_VIEWS,
         views: json,
@@ -117,7 +118,7 @@ function receiveViews(json) {
     };
 }
 
-export function fetchViews(viewIdToSelect) {
+export function fetchViews(viewIdToSelect) { // TODO vl4 remove
 
     return (dispatch, getState) => {
         dispatch(requestViews());
@@ -149,14 +150,14 @@ export function changeHistoryData(sampleId, filterId, viewId) {
     };
 }
 
-export function changeViews(views) {
+export function changeViews(views) { // TODO vl4 need?
     return {
         type: CHANGE_VIEWS,
         views
     };
 }
 
-export function deleteView(viewId) {
+export function deleteView(viewId) { // TODO vl4 need?
     return {
         type: DELETE_VIEW,
         viewId
