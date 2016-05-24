@@ -1,14 +1,5 @@
 import * as ActionTypes from '../actions/viewBuilder';
 
-const EMPTY_VIEW_ITEM = {
-    fieldId: null,
-    keywords: []
-};
-
-function filterEmptyListItems(viewListItems) {
-    return _.filter(viewListItems, item => item !== EMPTY_VIEW_ITEM);
-}
-
 function getNextDirection(direction) {
     if (!direction) {
         return 'asc';
@@ -46,11 +37,7 @@ function reduceVBuilderStartEdit(state, action) {
 }
 
 function reduceVBuilderSaveEdit(state) {
-    return Object.assign({}, state, {
-        editingView: Object.assign({}, state.editingView, {
-            viewListItems: filterEmptyListItems(state.editingView.viewListItems)
-        })
-    });
+    return state;
 }
 
 function reduceVBuilderEndEdit(state) {
