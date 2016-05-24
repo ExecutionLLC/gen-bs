@@ -62,41 +62,60 @@ export default class ExistentFilterSelect extends Component {
                     <div className='col-sm-6'>
                         <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
                              data-placement='bottom' data-container='body'>
-                            <button type='button'
-                                    className='btn btn-default in'
-                                    id='dblBtn'
-                                    onClick={() => this.onDuplicateClick(selectedFilter, fields)}
-                                    disabled={disabledClass}
-                                    title={title}
-                            >
-                                <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
-                                <span className='visible-xs'><i className='md-i'>content_copy</i></span>
-                            </button>
+                            {this.renderDuplicateFilterButton(disabledClass)}
                             {
                                 //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
                             }
-                            { isFilterEditable &&
-                                <button type='button' className='btn btn-default'
-                                        onClick={() => this.onResetFilterClick(selectedFilter, fields)}
-                                >
-                                    <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset Filter</span>
-                                    <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
-                                </button>
-                            }
-                            { isFilterEditable &&
-                                <button type='button'
-                                        className='btn btn-default'
-                                        onClick={() => this.onDeleteFilterClick(selectedFilter.id)}>
-                                    <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete Filter</span>
-                                    <span className='visible-xs'><i className='md-i'>close</i></span>
-                                </button>
-                            }
+                            { isFilterEditable && this.renderResetFilterButton() }
+                            { isFilterEditable && this.renderDeleteFilterButton() }
                         </div>                            
                     </div>
                 </div>
             </div>
-
         );
+    }
+
+    renderDuplicateFilterButton(isDisabled) {
+        return (
+            <button type='button'
+                    className='btn btn-default in'
+                    id='dblBtn'
+                    onClick={() => this.onDuplicateClick(this.getSelectedFilter(), this.props.fields)}
+                    disabled={isDisabled}
+                    title={title}
+            >
+                <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
+                <span className='visible-xs'><i className='md-i'>content_copy</i></span>
+            </button>
+        );
+    }
+
+    renderResetFilterButton() {
+        return (
+            <button type='button'
+                    className='btn btn-default'
+                    onClick={() => this.onResetFilterClick(this.getSelectedFilter(), this.props.fields)}
+            >
+                <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset Filter</span>
+                <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
+            </button>
+        );
+    }
+
+    renderDeleteFilterButton() {
+        return (
+            <button type='button'
+                    className='btn btn-default'
+                    onClick={() => this.onDeleteFilterClick(this.getSelectedFilter())}
+            >
+                <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete Filter</span>
+                <span className='visible-xs'><i className='md-i'>close</i></span>
+            </button>
+        );
+    }
+
+    getSelectedFilter() {
+        return this.props.filterBuilder.editingFilter.filter;
     }
 
     onSelectChange(filters, filterId, fields) {
