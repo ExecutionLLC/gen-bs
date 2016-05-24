@@ -228,6 +228,8 @@ export function viewBuilderDeleteView(viewId) {
                 const selectedViewId = state.viewBuilder.editedView.id;
                 const newViewId = (result.id == selectedViewId) ? state.userData.views[0].id : selectedViewId;
                 dispatch(changeView(newViewId));
+                const newView = _.find(state.userData.views, {id: newViewId});
+                dispatch(viewBuilderStartEdit(false, newView));
             }
         });
     };
