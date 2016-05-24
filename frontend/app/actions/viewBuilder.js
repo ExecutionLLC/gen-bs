@@ -129,8 +129,7 @@ function viewBuilderUpdateView() {
         const state = getState();
         const editedView = state.viewBuilder.editedView;
         const isNotEdited = _.includes(['advanced', 'standard'], editedView.type)
-            || state.viewBuilder.selectedView === state.viewBuilder.editedView; // TODO sv: check editingView===originalView
-
+            || state.viewBuilder.originalView === editedView;
         dispatch(viewBuilderRequestUpdateView());
         if (state.auth.isDemo || isNotEdited) {
             dispatch(closeModal('views'));
