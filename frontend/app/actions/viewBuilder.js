@@ -22,15 +22,6 @@ export const VBUILDER_ADD_COLUMN = 'VBUILDER_ADD_COLUMN';
 export const VBUILDER_CHANGE_SORT_COLUMN = 'VBUILDER_CHANGE_SORT_COLUMN';
 export const VBUILDER_SET_ITEM_KEYWORDS = 'VBUILDER_SET_ITEM_KEYWORDS';
 
-export const VBUILDER_REQUEST_UPDATE_VIEW = 'VBUILDER_REQUEST_UPDATE_VIEW';
-export const VBUILDER_RECEIVE_UPDATE_VIEW = 'VBUILDER_RECEIVE_UPDATE_VIEW';
-
-export const VBUILDER_REQUEST_CREATE_VIEW = 'VBUILDER_REQUEST_CREATE_VIEW';
-export const VBUILDER_RECEIVE_CREATE_VIEW = 'VBUILDER_RECEIVE_CREATE_VIEW';
-
-export const VBUILDER_REQUEST_DELETE_VIEW = 'VBUILDER_REQUEST_DELETE_VIEW';
-export const VBUILDER_RECEIVE_DELETE_VIEW = 'VBUILDER_RECEIVE_DELETE_VIEW';
-
 const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
 const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
 
@@ -119,13 +110,6 @@ function viewBuilderRequestUpdateView() {
     };
 }
 
-function viewBuilderReceiveUpdateView(json) {
-    return {
-        type: VBUILDER_RECEIVE_UPDATE_VIEW,
-        view: json
-    };
-}
-
 function viewBuilderCreateView() {
 
     return (dispatch, getState) => {
@@ -176,19 +160,6 @@ export function viewBuilderSaveAndSelectView() {
     };
 }
 
-function viewBuilderRequestCreateView() {
-    return {
-        type: VBUILDER_REQUEST_CREATE_VIEW
-    };
-}
-
-function viewBuilderReceiveCreateView(json) {
-    return {
-        type: VBUILDER_RECEIVE_CREATE_VIEW,
-        view: json
-    };
-}
-
 export function viewBuilderDeleteView(viewId) {
     return (dispatch, getState) => {
         const {auth: {sessionId}} = getState();
@@ -201,19 +172,5 @@ export function viewBuilderDeleteView(viewId) {
                 const newView = _.find(views, {id: newViewId});
                 dispatch(viewBuilderStartEdit(false, newView));
             });
-    };
-}
-
-function viewBuilderRequestDeleteView(viewId) {
-    return {
-        type: VBUILDER_REQUEST_DELETE_VIEW,
-        viewId
-    };
-}
-
-function viewBuilderReceiveDeleteView(json) {
-    return {
-        type: VBUILDER_RECEIVE_DELETE_VIEW,
-        view: json
     };
 }

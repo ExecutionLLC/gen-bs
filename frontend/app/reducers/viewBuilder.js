@@ -77,46 +77,6 @@ export default function viewBuilder(state = {
             return reduceVBuilderSaveEdit(state);
         case ActionTypes.VBUILDER_END_EDIT:
             return reduceVBuilderEndEdit(state);
-        case ActionTypes.VBUILDER_REQUEST_UPDATE_VIEW: {
-            return Object.assign({}, state, {
-                isFetching: true,
-                editingView: Object.assign({}, state.editingView, {
-                    viewListItems: filterEmptyListItems(state.editingView.viewListItems)
-                })
-            });
-        }
-        case ActionTypes.VBUILDER_RECEIVE_UPDATE_VIEW: {
-            return Object.assign({}, state, {
-                isFetching: false,
-                editingView: action.view,
-                originalView: action.view
-            });
-        }
-        case ActionTypes.VBUILDER_REQUEST_CREATE_VIEW: {
-            return Object.assign({}, state, {
-                isFetching: true,
-                editingView: Object.assign({}, state.editingView, {
-                    viewListItems: filterEmptyListItems(state.editingView.viewListItems)
-                })
-            });
-        }
-        case ActionTypes.VBUILDER_RECEIVE_CREATE_VIEW: {
-            return Object.assign({}, state, {
-                isFetching: false,
-                editingView: action.view,
-                originalView: action.view
-            });
-        }
-        case ActionTypes.VBUILDER_REQUEST_DELETE_VIEW: {
-            return Object.assign({}, state, {
-                isFetching: true
-            });
-        }
-        case ActionTypes.VBUILDER_RECEIVE_DELETE_VIEW: {
-            return Object.assign({}, state, {
-                isFetching: false
-            });
-        }
         case ActionTypes.VBUILDER_DELETE_COLUMN: {
             return Object.assign({}, state, {
                 editingView: Object.assign({}, state.editingView, {
