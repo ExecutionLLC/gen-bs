@@ -4,6 +4,7 @@ const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const AppServerUploadUtils = require('../../../utils/AppServerUploadUtils');
+const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const RESULT_TYPES = require('./AppServerResultTypes');
 const METHODS = require('./AppServerMethods');
@@ -96,6 +97,16 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
                     sampleFileName, sampleReference, fieldsMetadata, callback)
             ], (error, sampleVersionId) => {
+                let result;
+                if (error) {
+                    result = ErrorUtils.createInternalError(error);
+                } else {
+                    result = {
+                        status,
+                        progress,
+                        sampleId: sampleVersionId
+                    };
+                }
                 /**
                  * @type AppServerOperationResult
                  * */
@@ -103,12 +114,8 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     operation,
                     eventName: EVENTS.onOperationResultReceived,
                     shouldCompleteOperation: true,
-                    resultType: RESULT_TYPES.ERROR,
-                    result: {
-                        status,
-                        progress,
-                        sampleId: sampleVersionId
-                    }
+                    resultType: error ? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
+                    result
                 }; 
                 callback(error, operationResult);
             });

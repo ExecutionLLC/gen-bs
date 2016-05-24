@@ -2,6 +2,8 @@
 
 const _ = require('lodash');
 
+const INTERNAL_ERROR_CODE = 500;
+
 class ErrorUtils {
     static createErrorMessage(error) {
         if (!error) {
@@ -24,6 +26,14 @@ class ErrorUtils {
             message = error.toString();
         }
         return message;
+    }
+    
+    static createInternalError(message) {
+        message = this.createErrorMessage(message);
+        return {
+            code: INTERNAL_ERROR_CODE,
+            message
+        }
     }
 }
 

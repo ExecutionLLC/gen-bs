@@ -149,7 +149,11 @@ class OperationsService extends ServiceBase {
             (callback) => this.find(sessionId, operationId, callback),
             (operation, callback) => {
                 if (operation.getType() === OPERATION_TYPES.SEARCH || operation.getType() === OPERATION_TYPES.UPLOAD) {
-                    this.services.applicationServer.requestCloseSession(operation.getSessionId(), operation.getId(), callback);
+                    this.services.applicationServer.requestCloseSession(
+                        operation.getSessionId(),
+                        operation.getId(),
+                        (error) => callback(error, operation)
+                    );
                 } else {
                     callback(null, operation);
                 }

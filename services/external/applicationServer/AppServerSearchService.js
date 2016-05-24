@@ -190,6 +190,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             resultType: (error)? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
             eventName: EVENTS.onSearchDataReceived,
             result: {
+                progress: 100,
+                status: SESSION_STATUS.READY,
                 sampleId: operation.getId(),
                 limit: operation.getLimit(),
                 offset: operation.getOffset(),
