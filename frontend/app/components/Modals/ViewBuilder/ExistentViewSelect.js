@@ -8,7 +8,6 @@ import {
     getReadonlyReasonForSessionAndType
 } from '../../../utils/stringUtils';
 import {
-    viewBuilderSelectView,
     viewBuilderStartEdit,
     viewBuilderDeleteView
 } from '../../../actions/viewBuilder';
@@ -136,8 +135,8 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onSelectedViewChanged(viewId) {
-        const {dispatch, userData: {views}} = this.props;
-        dispatch(viewBuilderSelectView(views, viewId));  // TODO replace by dispatch(viewBuilderStartEdit(false, this.getViewForId(viewId)));
+        const {dispatch} = this.props;
+        dispatch(viewBuilderStartEdit(false, this.getViewForId(viewId)));
     }
 
     onDuplicateViewClick() {
@@ -147,9 +146,9 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onResetViewClick() {
-        const {dispatch, userData: {views}} = this.props;
+        const {dispatch} = this.props;
         const selectedViewId = this.getSelectedViewId();
-        dispatch(viewBuilderSelectView(views, selectedViewId)); // TODO replace by dispatch(viewBuilderStartEdit(false, this.getViewForId(selectedViewId)));
+        dispatch(viewBuilderStartEdit(false, this.getViewForId(selectedViewId)));
     }
 
     onDeleteViewClick() {
