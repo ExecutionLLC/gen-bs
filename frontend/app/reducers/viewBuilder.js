@@ -46,7 +46,11 @@ function reduceVBuilderStartEdit(state, action) {
 }
 
 function reduceVBuilderSaveEdit(state) {
-    return state;
+    return Object.assign({}, state, {
+        editingView: Object.assign({}, state.editingView, {
+            viewListItems: filterEmptyListItems(state.editingView.viewListItems)
+        })
+    });
 }
 
 function reduceVBuilderEndEdit(state) {
