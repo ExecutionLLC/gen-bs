@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
-import classNames from 'classnames';
 import _ from 'lodash';
 
 import {
