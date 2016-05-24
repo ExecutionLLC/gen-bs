@@ -59,17 +59,20 @@ export default class ExistentFilterSelect extends Component {
                             onChange={(val) => this.onSelectChange(filters, val.value, fields)}
                         />
                     </div>
-                    <div className='col-sm-6'>
-                        <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
-                             data-placement='bottom' data-container='body'>
-                            {this.renderDuplicateFilterButton(disabledClass)}
-                            {
-                                //<!--   Видимы когда в селекторе выбраны пользовательские вью, которые можно редактировать -->
-                            }
-                            { isFilterEditable && this.renderResetFilterButton() }
-                            { isFilterEditable && this.renderDeleteFilterButton() }
-                        </div>                            
-                    </div>
+                    {this.renderButtonGroup(disabledClass, isFilterEditable)}
+                </div>
+            </div>
+        );
+    }
+
+    renderButtonGroup(isDuplicateDisabled, isFilterEditable) {
+        return (
+            <div className='col-sm-6'>
+                <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
+                     data-placement='bottom' data-container='body'>
+                    {this.renderDuplicateFilterButton(isDuplicateDisabled)}
+                    {isFilterEditable && this.renderResetFilterButton()}
+                    {isFilterEditable && this.renderDeleteFilterButton()}
                 </div>
             </div>
         );
