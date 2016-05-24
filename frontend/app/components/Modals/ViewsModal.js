@@ -15,22 +15,22 @@ class ViewsModal extends React.Component {
         const {auth} = this.props;
         const {views} = this.props.userData;
         const {showModal, viewBuilder} = this.props;
-        const editedView = viewBuilder.editedView; // TODO replace by const editedView = viewBuilder.editingView;
-        const isNew = editedView ? editedView.id === null : false;
-        const isViewEditable = editedView && editedView.type === 'user';
-        const isViewAdvanced = editedView && editedView.type === 'advanced';
+        const editingView = viewBuilder.editingView;
+        const isNew = editingView ? editingView.id === null : false;
+        const isViewEditable = editingView && editingView.type === 'user';
+        const isViewAdvanced = editingView && editingView.type === 'advanced';
         const isLoginRequired = isViewAdvanced && auth.isDemo;
-        const editedViewNameTrimmed = editedView && editedView.name.trim();
+        const editedViewNameTrimmed = editingView && editingView.name.trim();
 
         const viewNameExists = isViewEditable && _(views)
                 .filter(view => view.type !== 'history')
                 .some(view => view.name.trim() === editedViewNameTrimmed
-                    && view.id != editedView.id
+                    && view.id != editingView.id
                 );
 
         const validationMessage =
             viewNameExists ? 'View with this name is already exists.' :
-                editedView && !editedViewNameTrimmed ? 'View name cannot be empty' :
+                editingView && !editedViewNameTrimmed ? 'View name cannot be empty' :
                     '';
 
         const confirmButtonParams = {
@@ -48,10 +48,10 @@ class ViewsModal extends React.Component {
                 show={showModal}
                 onHide={() => this.onClose()}
             >
-                { !editedView &&
+                { !editingView &&
                 <div >&nbsp;</div>
                 }
-                { editedView &&
+                { editingView &&
                 <div>
                     <ViewBuilderHeader />
                     <form>

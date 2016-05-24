@@ -12,14 +12,14 @@ export default class ViewBuilder extends React.Component {
 
     shouldComponentUpdate(nextProps) {
         return this.props.fields !== nextProps.fields
-            || this.props.viewBuilder.editedView.type !== nextProps.viewBuilder.editedView.type
-            || this.props.viewBuilder.editedView.viewListItems !== nextProps.viewBuilder.editedView.viewListItems;
+            || this.props.viewBuilder.editingView.type !== nextProps.viewBuilder.editingView.type
+            || this.props.viewBuilder.editingView.viewListItems !== nextProps.viewBuilder.editingView.viewListItems;
     }
 
     render() {
         const {dispatch, fields, viewBuilder} = this.props;
         const allAvailableFields = fields.allowedFieldsList;
-        const view = viewBuilder.editedView;
+        const view = viewBuilder.editingView;
         const viewItemsLength = view.viewListItems.length;
         const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         // Exclude fields that are already selected.

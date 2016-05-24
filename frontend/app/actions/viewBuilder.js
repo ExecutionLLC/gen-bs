@@ -127,18 +127,18 @@ function viewBuilderUpdateView() {
 
     return (dispatch, getState) => {
         const state = getState();
-        const editedView = state.viewBuilder.editedView;
-        const isNotEdited = _.includes(['advanced', 'standard'], editedView.type)
-            || state.viewBuilder.originalView === editedView;
+        const editingView = state.viewBuilder.editingView;
+        const isNotEdited = _.includes(['advanced', 'standard'], editingView.type)
+            || state.viewBuilder.originalView === editingView;
         dispatch(viewBuilderRequestUpdateView());
         if (state.auth.isDemo || isNotEdited) {
             dispatch(closeModal('views'));
-            dispatch(changeView(editedView.id));
+            dispatch(changeView(editingView.id));
         } else {
             const sessionId = state.auth.sessionId;
 
             dispatch(viewBuilderRequestUpdateView());
-            viewsClient.update(sessionId, editedView, (error, response) => {
+            viewsClient.update(sessionId, editingView, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, UPDATE_VIEW_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
@@ -159,8 +159,8 @@ function viewBuilderCreateView() {
     return (dispatch, getState) => {
         dispatch(viewBuilderRequestCreateView());
 
-        const {auth: {sessionId}, viewBuilder: {editedView}, ui: {languageId}} = getState();
-        viewsClient.add(sessionId, languageId, editedView, (error, response) => {
+        const {auth: {sessionId}, viewBuilder: {editingView}, ui: {languageId}} = getState();
+        viewsClient.add(sessionId, languageId, editingView, (error, response) => {
             if (error) {
                 dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
@@ -179,8 +179,8 @@ export function viewBuilderSaveAndSelectView() {
     return (dispatch, getState) => {
         dispatch(viewBuilderSaveEdit());
         const viewBuilder = getState().viewBuilder;
-        const editedView = viewBuilder.editedView;
-        if (editedView.id !== null) {
+        const editingView = viewBuilder.editingView;
+        if (editingView.id !== null) {
             dispatch(viewBuilderUpdateView());
         } else {
             dispatch(viewBuilderCreateView());
@@ -215,8 +215,8 @@ export function viewBuilderDeleteView(viewId) {
                 dispatch(viewBuilderReceiveDeleteView(result));
                 dispatch(deleteView(result.id));
                 const state = getState();
-                const selectedViewId = state.viewBuilder.editedView.id;
-                const newViewId = (result.id == selectedViewId) ? state.userData.views[0].id : selectedViewId;
+                const editingViewId = state.viewBuilder.editingView.id;
+                const newViewId = (result.id == editingViewId) ? state.userData.views[0].id : editingViewId;
                 dispatch(changeView(newViewId));
                 const newView = _.find(state.userData.views, {id: newViewId});
                 dispatch(viewBuilderStartEdit(false, newView));

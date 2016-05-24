@@ -16,7 +16,7 @@ import {
 export default class ExistentViewSelect extends React.Component {
 
     render() {
-        const {auth: {isDemo: isDemoSession}, viewBuilder: {editedView: {type: selectedViewType}}, userData: {views}} = this.props;
+        const {auth: {isDemo: isDemoSession}, viewBuilder: {editingView: {type: selectedViewType}}, userData: {views}} = this.props;
         const isEditableView = selectedViewType === 'user';
 
         return (
@@ -67,7 +67,7 @@ export default class ExistentViewSelect extends React.Component {
             <div className='col-sm-6'>
                 <Select
                     options={selectorItems}
-                    value={this.getSelectedViewId()}
+                    value={this.getEditingViewId()}
                     onChange={(item) => this.onSelectedViewChanged(item.value)}
                 />
             </div>
@@ -126,8 +126,8 @@ export default class ExistentViewSelect extends React.Component {
         );
     }
 
-    getSelectedViewId() {
-        return this.props.viewBuilder.editedView.id;
+    getEditingViewId() {
+        return this.props.viewBuilder.editingView.id;
     }
 
     getViewForId(viewId) {
@@ -141,19 +141,19 @@ export default class ExistentViewSelect extends React.Component {
 
     onDuplicateViewClick() {
         const {dispatch} = this.props;
-        const selectedView = this.props.viewBuilder.editedView;
-        dispatch(viewBuilderStartEdit(true, selectedView));
+        const editingView = this.props.viewBuilder.editingView;
+        dispatch(viewBuilderStartEdit(true, editingView));
     }
 
     onResetViewClick() {
         const {dispatch} = this.props;
-        const selectedViewId = this.getSelectedViewId();
-        dispatch(viewBuilderStartEdit(false, this.getViewForId(selectedViewId)));
+        const editingViewId = this.getEditingViewId();
+        dispatch(viewBuilderStartEdit(false, this.getViewForId(editingViewId)));
     }
 
     onDeleteViewClick() {
         const {dispatch} = this.props;
-        const selectedViewId = this.getSelectedViewId();
-        dispatch(viewBuilderDeleteView(selectedViewId));
+        const editingViewId = this.getEditingViewId();
+        dispatch(viewBuilderDeleteView(editingViewId));
     }
 }

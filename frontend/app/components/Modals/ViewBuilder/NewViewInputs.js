@@ -7,7 +7,7 @@ export default class NewViewInputs extends React.Component {
     render() {
 
         const {viewBuilder, validationMessage} = this.props;
-        const newView = viewBuilder.editedView;
+        const newView = viewBuilder.editingView;
 
         return (
             <div className='collapse in'>
@@ -55,17 +55,17 @@ export default class NewViewInputs extends React.Component {
     }
 
     onNameChange(name) {
-        const {editedView} = this.props.viewBuilder;
+        const {editingView} = this.props.viewBuilder;
         this.props.dispatch(viewBuilderChangeAttr({
             name,
-            description: editedView.description
+            description: editingView.description
         }));
     }
 
     onDescriptionChange(description) {
-        const {editedView} = this.props.viewBuilder;
+        const {editingView} = this.props.viewBuilder;
         this.props.dispatch(viewBuilderChangeAttr({
-            name: editedView.name,
+            name: editingView.name,
             description
         }));
     }
