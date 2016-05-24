@@ -112,6 +112,7 @@ function mapStateToProps(state) {
             ui,
             samplesList,
             filtersList,
+            viewsList,
             errorHandler: { showErrorWindow },
             queryHistory: { showQueryHistoryModal } } = state;
 
@@ -125,6 +126,7 @@ function mapStateToProps(state) {
         ui,
         samplesList,
         filtersList,
+        viewsList,
         showErrorWindow,
         showQueryHistoryModal
     };
