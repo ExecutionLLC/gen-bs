@@ -38,7 +38,6 @@ function reduceVBuilderStartEdit(state, action) {
         }) :
         view;
     return Object.assign({}, state, {
-        selectedView: editingView, // TODO sv: remove
         editedView: editingView, // TODO remove
         editingView: editingView,
         originalView: editingView,
@@ -61,7 +60,6 @@ function reduceVBuilderEndEdit(state) {
 }
 
 export default function viewBuilder(state = {
-    selectedView: null, // TODO sv: remove
     editedView: null,
     editingView: null,
     originalView: null,
@@ -88,7 +86,6 @@ export default function viewBuilder(state = {
         case ActionTypes.VBUILDER_RECEIVE_UPDATE_VIEW: {
             return Object.assign({}, state, {
                 isFetching: false,
-                selectedView: action.view, // TODO sv: remove
                 editedView: action.view,
                 editingView: action.view,
                 originalView: action.view
@@ -106,7 +103,6 @@ export default function viewBuilder(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 editedView: action.view,
-                selectedView: action.view, // TODO sv: remove
                 editingView: action.view,
                 originalView: action.view
             });
