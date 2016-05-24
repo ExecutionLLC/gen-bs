@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 
+const RESULT_TYPES = require('./AppServerResultTypes'); 
 const ServiceBase = require('../../ServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
@@ -41,11 +42,15 @@ class ApplicationServerServiceBase extends ServiceBase {
 
     _rpcReply(rpcMessage) {
         this.logger.info('RPC REPLY: ' + JSON.stringify(rpcMessage, null, 2));
-        this.services.applicationServerReply.onRpcReplyReceived(rpcMessage, (error) => {
-            if (error) {
-                this.logger.error('Error processing RPC reply: ' + ErrorUtils.createErrorMessage(error));
-            }
-        });
+        if (!rpcMessage.id) {
+            this.logger.error('Message has no id, so will be ignored.');
+        } else {
+            this.services.applicationServerReply.onRpcReplyReceived(rpcMessage, (error) => {
+                if (error) {
+                    this.logger.error('Error processing RPC reply: ' + ErrorUtils.createErrorMessage(error));
+                }
+            });
+        }
     }
     
     /**
@@ -79,6 +84,29 @@ class ApplicationServerServiceBase extends ServiceBase {
      * @property {(AppServerProgressMessage|AppServerUploadResult|Array|undefined)}result Operation result data.
      * @property {(AppServerErrorResult|undefined)}error Error object in case of error occurred.
      * */
+
+    /**
+     * @param {OperationBase}operation
+     * @param {string}eventName
+     * @param {boolean}shouldCompleteOperation
+     * @param {AppServerErrorResult}error
+     * @param {function(Error, AppServerOperationResult)}callback
+     */
+    _createErrorOperationResult(operation, eventName, shouldCompleteOperation, error, callback) {
+        /**@type AppServerOperationResult*/
+        const result = {
+            operation,
+            eventName,
+            shouldCompleteOperation,
+            resultType: RESULT_TYPES.ERROR,
+            error
+        };
+        callback(null, result);
+    }
+    
+    _isAsErrorMessage(message) {
+        return message.error;
+    }
 }
 
 module.exports = ApplicationServerServiceBase;

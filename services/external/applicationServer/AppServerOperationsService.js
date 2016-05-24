@@ -6,6 +6,7 @@ const async = require('async');
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
+const ErrorUtils = require('../../../utils/ErrorUtils');
 
 class AppServerOperationsService extends ApplicationServerServiceBase {
     constructor(services) {
@@ -45,32 +46,48 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
     }
 
     processKeepAliveResult(operation, rpcMessage, callback) {
-        const operationIdToCheck = operation.getOperationIdToCheck();
-        const result = rpcMessage.result;
-        /**
-         * @type AppServerOperationResult
-         * */
-        const operationResult = {
-            eventName: EVENTS.onKeepAliveResultReceived,
-            shouldCompleteOperation: true,
-            operation,
-            result: null
-        };
-        const isAlive = result;
-        if (!isAlive) {
-            async.waterfall([
-                // The keep-alive operation belongs to system session.
-                // So we need to find the operation id in all sessions.
-                (callback) => this.services.operations.findInAllSessions(operationIdToCheck, callback),
-                (operation, callback) => this.services.operations.remove(operation.getSessionId(), operation.getId(), callback)
-            ], (error) => {
-                if (error) {
-                    this.logger.error('Error while closing dead search operation: ' + error);
-                }
-
+        if (this._isAsErrorMessage(rpcMessage)) {
+            this._createErrorOperationResult(
+                operation,
+                EVENTS.onKeepAliveResultReceived,
+                true,
+                ErrorUtils.createAppServerInternalError(rpcMessage),
+                callback
+            );
+        } else {
+            const isAlive = rpcMessage.result;
+            this._silentlyCloseSearchOperationIfNeeded(isAlive, operation, () => {
+                /**
+                 * @type AppServerOperationResult
+                 * */
+                const operationResult = {
+                    eventName: EVENTS.onKeepAliveResultReceived,
+                    shouldCompleteOperation: true,
+                    operation,
+                    result: null
+                };
                 callback(null, operationResult);
             });
         }
+    }
+    
+    _silentlyCloseSearchOperationIfNeeded(isAlive, operation, callback) {
+        if (isAlive) {
+            callback(null);
+            return;
+        }
+        const operationIdToCheck = operation.getOperationIdToCheck();
+        async.waterfall([
+            // The keep-alive operation belongs to system session.
+            // So we need to find the operation id in all sessions.
+            (callback) => this.services.operations.findInAllSessions(operationIdToCheck, callback),
+            (operation, callback) => this.services.operations.remove(operation.getSessionId(), operation.getId(), callback)
+        ], (error) => {
+            if (error) {
+                this.logger.error('Error while closing dead search operation: ' + error);
+            }
+            callback(null);
+        });
     }
 }
 

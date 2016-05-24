@@ -6,7 +6,6 @@ import {changeFileUploadProgress, fileUploadError} from './fileUpload';
 export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
-export const WS_RECEIVE_AS_UPLOAD_ERROR = 'WS_RECEIVE_AS_UPLOAD_ERROR';
 export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_MESSAGE';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
@@ -27,6 +26,19 @@ export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
  * other consts
  */
 
+const WS_PROGRESS_STATUSES = {
+    READY: 'ready'
+};
+
+const WS_OPERATION_TYPES = {
+    UPLOAD: 'upload',
+    SEARCH: 'search'
+};
+
+const WS_RESULT_TYPES = {
+    ERROR: 'error',
+    SUCCESS: 'success'
+};
 
 /*
  * action creators
@@ -73,16 +85,6 @@ function tableMessage(wsData) {
     };
 }
 
-function progressMessageRouter(wsData) {
-    return (dispatch, getState) => {
-        dispatch(progressMessage(wsData));
-
-        if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
-        }
-    };
-}
-
 function progressMessage(wsData) {
     return {
         type: WS_PROGRESS_MESSAGE,
@@ -94,17 +96,6 @@ function receiveError(err) {
     return {
         type: WS_RECEIVE_ERROR,
         err
-    };
-}
-
-function asErrorRouter(wsData) {
-    return (dispatch, getState) => {
-
-        if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(fileUploadError(wsData.result.error.message));
-        } else {
-            dispatch(asError(wsData.result.error));
-        }
     };
 }
 
@@ -123,22 +114,48 @@ function otherMessage(wsData) {
     };
 }
 
-function receiveMessage(msg) {
+function receiveSearchMessage(wsData) {
     return (dispatch, getState) => {
-        const wsData = JSON.parse(JSON.parse(msg));
-        if (wsData.result) {
-            if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
-                dispatch(tableMessage(wsData));
-                if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
-                    dispatch(receiveSearchedResults());
-                }
-            } else if (wsData.result.progress !== undefined) {
-                dispatch(progressMessageRouter(wsData));
-            } else if (wsData.result.error) {
-                dispatch(asErrorRouter(wsData));
-            } else {
-                dispatch(otherMessage(wsData));
+        if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
+            dispatch(tableMessage(wsData));
+            if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
+                dispatch(receiveSearchedResults());
             }
+        } else {
+            dispatch(progressMessage(wsData));
+        }
+    };
+}
+
+function receiveUploadMessage(wsData) {
+    return (dispatch) => {
+        dispatch(progressMessage(wsData)); // TODO Remove
+        dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
+    };
+}
+
+function receiveErrorMessage(wsData) {
+    return (dispatch) => {
+        console.error('Error: ' + JSON.stringify(wsData.error));
+        const message = wsData.error.message;
+        if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
+            dispatch(fileUploadError(message));
+        } else {
+            dispatch(asError(message));
+        }
+    };
+}
+
+function receiveMessage(msg) {
+    return (dispatch) => {
+        const wsData = JSON.parse(JSON.parse(msg));
+        const {operationType, resultType} = wsData;
+        if (resultType == WS_RESULT_TYPES.ERROR) {
+            dispatch(receiveErrorMessage(wsData));
+        } else if (operationType == WS_OPERATION_TYPES.SEARCH) {
+            dispatch(receiveSearchMessage(wsData));
+        } else if (operationType == WS_OPERATION_TYPES.UPLOAD) {
+            dispatch(receiveUploadMessage(wsData));
         } else {
             dispatch(otherMessage(wsData));
         }

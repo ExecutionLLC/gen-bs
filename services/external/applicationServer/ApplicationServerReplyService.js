@@ -5,7 +5,9 @@ const _ = require('lodash');
 
 const ServiceBase = require('../../ServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
+const ErrorUtils = require('../../../utils/ErrorUtils');
 const OperationBase = require('../../operations/OperationBase');
+const RESULT_TYPES = require('./AppServerResultTypes');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 
@@ -49,25 +51,15 @@ class ApplicationServerReplyService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    _ensureMessageIsSuccessful(message, callback) {
-        if (!message.id) {
-            callback(new Error('Operation id is not defined.'));
-        } else if (!message.error) {
-            callback(null);
-        } else {
-            callback(message.error);
-        }
-    }
-
     /**
      * Here RPC results are distributed by the actual handlers.
-     * Errors should also be handled on this level.
+     * Handlers are expected to produce {AppServerOperationResult} 
+     * in both error and success results.
      * @param rpcMessage Message to process.
      * @param callback
      */
     onRpcReplyReceived(rpcMessage, callback) {
         async.waterfall([
-            (callback) => this._ensureMessageIsSuccessful(rpcMessage, callback),
             (callback) => {
                 this.services.operations.findInAllSessions(rpcMessage.id, callback);
             },
@@ -99,7 +91,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 callback(null, operationResult, clientOperationResult);
             },
             (operationResult, clientOperationResult, callback) => {
-                this._emitEvent(operationResult, clientOperationResult, callback);
+                this._emitEvent(operationResult.eventName, clientOperationResult, callback);
             }
         ], (error) => {
             callback(error);
@@ -118,7 +110,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 this._createClientOperationResult(operationResult, sessionIds, callback);
             },
             (operationResult, clientOperationResult, callback) => {
-                this._emitEvent(operationResult, clientOperationResult, callback)
+                this._emitEvent(operationResult.eventName, clientOperationResult, callback)
             }
         ], (error) => {
             callback(error);
@@ -154,8 +146,8 @@ class ApplicationServerReplyService extends ServiceBase {
         callback(null, operationResult, eventData);
     }
 
-    _emitEvent(operationResult, clientOperationResult, callback) {
-        this.eventEmitter.emit(operationResult.eventName, clientOperationResult);
+    _emitEvent(eventName, clientOperationResult, callback) {
+        this.eventEmitter.emit(eventName, clientOperationResult);
         callback(null);
     }
 
@@ -168,20 +160,6 @@ class ApplicationServerReplyService extends ServiceBase {
      */
     _processOperationResult(operation, rpcMessage, callback) {
         const method = operation.getMethod();
-        const rpcError = rpcMessage.error;
-
-        if (rpcError) {
-            // Errors in any types of the operations except the search operations should make them completed.
-            const shouldCompleteOperation = operation.getType() !== this.services.operations.operationTypes().SEARCH;
-            callback(null, {
-                operationId: operation.getId(),
-                error: rpcError,
-                result: rpcMessage,
-                eventName: EVENTS.onOperationResultReceived,
-                shouldCompleteOperation
-            });
-            return;
-        }
 
         switch (method) {
             case METHODS.openSearchSession:

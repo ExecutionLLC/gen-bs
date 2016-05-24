@@ -7,6 +7,7 @@ const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const RESULT_TYPES = require('./AppServerResultTypes');
+const ErrorUtils = require('../../../utils/ErrorUtils');
 const EventEmitter = require('../../../utils/EventProxy');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
@@ -62,26 +63,23 @@ class AppServerSearchService extends ApplicationServerServiceBase {
      * @param {function(Error, AppServerOperationResult)} callback
      * */
     processSearchResult(operation, message, callback) {
-        async.waterfall([
-            (callback) => {
-                if (!message || !message.result || !message.result.sessionState) {
-                    callback(new Error('Incorrect RPC message come, ignore request. Message: ' + JSON.stringify(message, null, 2)));
-                } else {
-                    callback(null);
-                }
-            },
-            (callback) => {
-                const sessionState = message.result.sessionState;
+        if (this._isAsErrorMessage(message)) {
+            this._createErrorOperationResult(
+                operation, 
+                EVENTS.onOperationResultReceived, 
+                false, 
+                ErrorUtils.createAppServerInternalError(message), 
+                callback
+            );
+        } else {
+            const sessionState = message.result.sessionState;
 
-                if (sessionState.status !== SESSION_STATUS.READY) {
-                    this._processProgressMessage(operation, message, callback);
-                } else {
-                    this._processSearchResultMessage(operation, message, callback);
-                }
+            if (sessionState.status !== SESSION_STATUS.READY) {
+                this._processProgressMessage(operation, message, callback);
+            } else {
+                this._processSearchResultMessage(operation, message, callback);
             }
-        ], (error, result) => {
-            callback(error, result);
-        });
+        }
     }
 
     requestOpenSearchSession(sessionId, params, callback) {
