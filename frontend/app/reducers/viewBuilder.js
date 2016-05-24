@@ -71,15 +71,6 @@ export default function viewBuilder(state = {
 }, action) {
 
     switch (action.type) {
-        case ActionTypes.VBUILDER_SELECT_VIEW: {
-            const selectedView = _.find(action.views, {id: action.viewId}) || null;
-            return Object.assign({}, state, {
-                selectedView: selectedView, // TODO sv: remove
-                editedView: selectedView,
-                editingView: selectedView, // TODO: remove with SELECT_VIEW
-                originalView: selectedView // TODO: remove with SELECT_VIEW
-            });
-        }
         case ActionTypes.VBUILDER_START_EDIT:
             return reduceVBuilderStartEdit(state, action);
         case ActionTypes.VBUILDER_SAVE_EDIT:

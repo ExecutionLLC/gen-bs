@@ -7,8 +7,6 @@ import {changeView} from './ui';
 import {handleError} from './errorHandler';
 import {deleteView} from './userData';
 
-export const VBUILDER_SELECT_VIEW = 'VBUILDER_SELECT_VIEW';
-
 export const VBUILDER_START_EDIT = 'VBUILDER_START_EDIT';
 export const VBUILDER_SAVE_EDIT = 'VBUILDER_SAVE_EDIT';
 export const VBUILDER_END_EDIT = 'VBUILDER_END_EDIT';
@@ -61,14 +59,6 @@ export function viewBuilderSaveEdit() {
 export function viewBuilderEndEdit() {
     return {
         type: VBUILDER_END_EDIT
-    };
-}
-
-export function viewBuilderSelectView(views, viewId) {
-    return {
-        type: VBUILDER_SELECT_VIEW,
-        views,
-        viewId
     };
 }
 
