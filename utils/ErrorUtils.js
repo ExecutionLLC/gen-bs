@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Config = require('./Config');
 
 const ERROR_CODES = {
     INTERNAL_ERROR: -500,
@@ -21,7 +22,7 @@ class ErrorUtils {
         if (_.isObject(error)) {
             if (error.message) {
                 message = error.message;
-                if (error.stack) {
+                if (error.stack && Config.includeStackTraceToErrors) {
                     message += '\n' + error.stack;
                 }
             } else {
