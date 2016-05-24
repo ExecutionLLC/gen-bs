@@ -61,19 +61,17 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     renderViewSelector(views) {
-        const selectorItems = views.map(
-            (viewItem) => {
-                const value = viewItem.id;
-                const label = getItemLabelByNameAndType(viewItem.name, viewItem.type);
-                return {value, label};
-            }
-        );
+        const selectorItems = views.map( viewItem => ({
+            value: viewItem.id,
+            label: getItemLabelByNameAndType(viewItem.name, viewItem.type)
+        }));
 
         return (
             <div className='col-sm-6'>
-                <Select options={selectorItems}
-                        value={this.getSelectedViewId()}
-                        onChange={(item) => this.onSelectedViewChanged(item.value)}
+                <Select
+                    options={selectorItems}
+                    value={this.getSelectedViewId()}
+                    onChange={(item) => this.onSelectedViewChanged(item.value)}
                 />
             </div>
         );
@@ -93,16 +91,12 @@ export default class ExistentViewSelect extends React.Component {
 
     renderDuplicateViewButton(isDemoSession) {
         const duplicateButtonTooltip = isDemoSession ? 'Login or register to work with view' : 'Make a copy for editing';
-        const disabledClass = classNames({
-            'disabled': (isDemoSession) ? 'disabled' : ''
-        });
-
         return (
             <button type='button'
                     className='btn btn-default collapse in'
                     id='dblBtn'
-                    onClick={ () => {this.onDuplicateViewClick();} }
-                    disabled={disabledClass}
+                    onClick={() => this.onDuplicateViewClick()}
+                    disabled={isDemoSession}
                     title={duplicateButtonTooltip}
             >
                 <span data-localize='actions.duplicate.title' className='hidden-xs'>Duplicate</span>
@@ -115,7 +109,7 @@ export default class ExistentViewSelect extends React.Component {
         return (
             <button type='button'
                     className='btn btn-default'
-                    onClick={ () => {this.onResetViewClick();} }
+                    onClick={() => this.onResetViewClick()}
             >
                 <span data-localize='views.setup.reset.title' className='hidden-xs'>Reset View</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
@@ -127,7 +121,7 @@ export default class ExistentViewSelect extends React.Component {
         return (
             <button type='button'
                     className='btn btn-default'
-                    onClick={ () => {this.onDeleteViewClick();} }
+                    onClick={() => this.onDeleteViewClick()}
             >
                 <span data-localize='views.setup.delete.title' className='hidden-xs'>Delete View</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
