@@ -17,55 +17,56 @@ import {
 export default class ExistentFilterSelect extends Component {
 
     render() {
-
         const {auth, fields} = this.props;
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
         const {filters} = this.props.filtersList;
-        const disabledClass = classNames({
-            'disabled': (auth.isDemo) ? 'disabled' : ''
-        });
-        const title = (auth.isDemo) ? 'Login or register to work with filter' : 'Make a copy for editing';
-        const isFilterEditable = (selectedFilter.type === 'user');
-
-        const descriptionText = getReadonlyReasonForSessionAndType('filter', auth.isDemo, selectedFilter.type);
-
-        const selectItems = filters.map( filter => {
-            return {
-                value: filter.id,
-                label: getItemLabelByNameAndType(filter.name, filter.type)
-            };
-        });
+        const isDemoSession = auth.isDemo;
+        const isFilterEditable = selectedFilter.type === 'user';
 
         return (
-
             <div className='in'>
                 <div className='row grid-toolbar'>
-                    <div className='col-sm-6'>
-                        <label data-localize='filters.setup.selector.label'>Available Filters</label>
-                    </div>
+                    {this.renderTitle()}
                 </div>
-                { descriptionText &&
-                <div className='alert alert-help'>
-                        <span data-localize='filters.setup.selector.description'>
-                            {descriptionText}
-                        </span>
-                </div>
-                }
+                {this.renderDescription(isDemoSession, selectedFilter.type)}
                 <div className='row grid-toolbar row-head-selector'>
                     {this.renderFiltersSelector(filters, fields)}
-                    {this.renderButtonGroup(disabledClass, isFilterEditable)}
+                    {this.renderButtonGroup(isDemoSession, isFilterEditable)}
                 </div>
             </div>
         );
     }
 
+    renderTitle() {
+        return (
+            <div className='col-sm-6'>
+                <label data-localize='filters.setup.selector.label'>Available Filters</label>
+            </div>
+        );
+    }
+
+    renderDescription(isDemoSession, selectedFilterType) {
+        const descriptionText = getReadonlyReasonForSessionAndType('filter', isDemoSession, selectedFilterType);
+
+        if (descriptionText) {
+            return (
+                <div className='alert alert-help'>
+                    <span data-localize='filters.setup.selector.description'>
+                        {descriptionText}
+                    </span>
+                </div>
+            );
+        }
+
+        return null;
+    }
+
     renderFiltersSelector(filters, fields) {
-        const selectItems = filters.map( filter => {
-            return {
-                value: filter.id,
-                label: getItemLabelByNameAndType(filter.name, filter.type)
-            };
-        });
+        const selectItems = filters.map( filter => ({
+            value: filter.id,
+            label: getItemLabelByNameAndType(filter.name, filter.type)
+        }));
+
         return (
             <div className='col-sm-6'>
                 <Select
@@ -77,12 +78,12 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderButtonGroup(isDuplicateDisabled, isFilterEditable) {
+    renderButtonGroup(isDemoSession, isFilterEditable) {
         return (
             <div className='col-sm-6'>
                 <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
                      data-placement='bottom' data-container='body'>
-                    {this.renderDuplicateFilterButton(isDuplicateDisabled)}
+                    {this.renderDuplicateFilterButton(isDemoSession)}
                     {isFilterEditable && this.renderResetFilterButton()}
                     {isFilterEditable && this.renderDeleteFilterButton()}
                 </div>
