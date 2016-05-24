@@ -130,7 +130,6 @@ export function viewBuilderSaveAndSelectView() {
     return (dispatch, getState) => {
         dispatch(viewBuilderSaveEdit());
         const viewBuilder = getState().viewBuilder;
-        const editingView = viewBuilder.editingView;
         if (!viewBuilder.editingViewIsNew) {
             dispatch(viewBuilderUpdateView());
         } else {

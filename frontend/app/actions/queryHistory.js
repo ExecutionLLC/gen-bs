@@ -4,7 +4,6 @@ import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
 import {analyze} from './ui';
-import {changeViews} from './userData';
 import {changeSamples} from './samplesList';
 import {changeSample} from './samplesList';
 import {fetchFields} from './fields';
