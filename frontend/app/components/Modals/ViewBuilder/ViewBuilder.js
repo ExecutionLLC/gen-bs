@@ -4,8 +4,13 @@ import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import _ from 'lodash';
 
-import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder';
-import {viewBuilderChangeSortColumn, viewBuilderChangeKeywords} from '../../../actions/viewBuilder';
+import {
+    viewBuilderDeleteColumn,
+    viewBuilderAddColumn,
+    viewBuilderChangeColumn,
+    viewBuilderChangeSortColumn,
+    viewBuilderChangeKeywords
+} from '../../../actions/viewBuilder';
 
 
 export default class ViewBuilder extends React.Component {

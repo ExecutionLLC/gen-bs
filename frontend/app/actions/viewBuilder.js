@@ -1,9 +1,11 @@
 import {closeModal} from './modalWindows';
 
-import {viewsListSelectView} from './viewsList';
-import {viewsListServerCreateView} from './viewsList';
-import {viewsListServerDeleteView} from './viewsList';
-import {viewsListServerUpdateView} from './viewsList';
+import {
+    viewsListSelectView,
+    viewsListServerCreateView,
+    viewsListServerDeleteView,
+    viewsListServerUpdateView
+} from './viewsList';
 
 export const VBUILDER_START_EDIT = 'VBUILDER_START_EDIT';
 export const VBUILDER_SAVE_EDIT = 'VBUILDER_SAVE_EDIT';

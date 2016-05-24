@@ -8,10 +8,14 @@ import {changeSample, receiveSamplesList} from './samplesList';
 
 import HttpStatus from 'http-status';
 import _ from 'lodash';
-import {filtersListReceive} from './filtersList';
-import {filtersListSelectFilter} from './filtersList';
-import {viewsListReceive} from './viewsList';
-import {viewsListSelectView} from './viewsList';
+import {
+    filtersListReceive,
+    filtersListSelectFilter
+} from './filtersList';
+import {
+    viewsListReceive,
+    viewsListSelectView
+} from './viewsList';
 
 /*
  * action types
