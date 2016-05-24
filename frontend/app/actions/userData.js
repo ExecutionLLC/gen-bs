@@ -10,6 +10,7 @@ import HttpStatus from 'http-status';
 import _ from 'lodash';
 import {filtersListReceive} from './filtersList';
 import {filtersListSelectFilter} from './filtersList';
+import {viewsListReceive} from './viewsList';
 
 /*
  * action types
@@ -83,7 +84,7 @@ export function fetchUserdata() {
 
                 dispatch(receiveUserdata(userData));
                 dispatch(filtersListReceive(userData.filters));
-                // TODO vl! use viewsListReceive
+                dispatch(viewsListReceive(userData.views));
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
