@@ -68,14 +68,16 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         };
         const {
             userData: {
-                attachedHistoryData: historyData,
-                views // TODO vl replace by viewsList
+                attachedHistoryData: historyData
             },
             samplesList: {
                 samples
             },
             filtersList: {
                 filters
+            },
+            viewsList: {
+                views
             },
             fields: {
                 sampleFieldsList

@@ -16,7 +16,7 @@ import {
 export default class ExistentViewSelect extends React.Component {
 
     render() {
-        const {auth: {isDemo: isDemoSession}, viewBuilder: {editingView: {type: selectedViewType}}, userData: {views}} = this.props; // TODO vl use viewsList
+        const {auth: {isDemo: isDemoSession}, viewBuilder: {editingView: {type: selectedViewType}}, viewsList: {views}} = this.props;
         const isEditableView = selectedViewType === 'user';
 
         return (

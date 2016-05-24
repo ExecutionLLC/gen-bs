@@ -13,7 +13,7 @@ class ViewsModal extends React.Component {
 
     render() {
         const {auth} = this.props;
-        const {views} = this.props.userData; // TODO vl use viewsList
+        const {views} = this.props.viewsList;
         const {showModal, viewBuilder} = this.props;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;
@@ -100,13 +100,14 @@ class ViewsModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, viewBuilder, userData, fields} = state;
+    const {auth, viewBuilder, userData, fields, viewsList} = state;
 
     return {
         auth,
         viewBuilder,
         userData,
-        fields
+        fields,
+        viewsList
     };
 }
 

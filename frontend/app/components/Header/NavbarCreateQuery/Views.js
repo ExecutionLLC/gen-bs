@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Select from '../../shared/Select';
-import 'react-select/dist/react-select.css';
 import {viewsListSelectView} from '../../../actions/viewsList';
+import 'react-select/dist/react-select.css';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {changeView} from '../../../actions/ui';
@@ -11,7 +11,7 @@ export default class Views extends Component {
 
     render() {
         const dispatch = this.props.dispatch;
-        const selectedView = this.props.ui.selectedView; // TODO vl use viewsList
+        const {selectedViewId} = this.props.viewsList;
         return (
 
             <div className='table-cell max-width'>
@@ -21,7 +21,7 @@ export default class Views extends Component {
 
                     <Select
                         options={this.getViewOptions()}
-                        value={selectedView ? selectedView.id: null}
+                        value={selectedViewId}
                         onChange={ (val) => {
                             dispatch(changeView(val.value)); // TODO vl3 need?
                             dispatch(viewsListSelectView(val.value));

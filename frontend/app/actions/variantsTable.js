@@ -91,7 +91,7 @@ export function clearSearchParams() {
 
 export function changeExcludedFields(viewId) {
     return (dispatch, getState) => {
-        const {fields:{sampleFieldsList}, userData:{views}}=getState(); // TODO vl use viewsList
+        const {fields:{sampleFieldsList}, viewsList:{views}}=getState();
         const view = _.find(views, {id: viewId});
         const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
         const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);

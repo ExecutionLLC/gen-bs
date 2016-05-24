@@ -12,6 +12,7 @@ import {prepareAnalyze} from './websocket';
 import {filtersListSelectFilter} from './filtersList';
 import {filtersListReceive} from './filtersList';
 import {viewsListSelectView} from './viewsList';
+import {viewsListReceive} from './viewsList';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -109,11 +110,12 @@ export function attachHistory(historyItem) {
             getState().filtersList.filters, filterId, historyItem.filters[0]
         );
         const {collection: views, historyItemId: newViewId} = changeHistoryItem(
-            getState().userData.views, viewId, historyItem.view // TODO vl use viewsList
+            getState().viewsList.views, viewId, historyItem.view
         );
         dispatch([
             changeHistoryData(newSampleId, newFilterId, newViewId),
             filtersListReceive(filters),
+            viewsListReceive(views),
             changeViews(views), // TODO vl2 use viewsListReceive
             changeSamples(samples)
         ]);
@@ -127,7 +129,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         if (!detachSample && !detachFilter && !detachView) {
             return;
         }
-        const {userData, samplesList, filtersList} = getState();
+        const {userData, samplesList, filtersList, viewsList} = getState();
         const attachedHistoryData = userData.attachedHistoryData;
         const {
             collection: samples,
@@ -140,7 +142,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         const {
             collection: views,
             historyItemId: viewId
-        } = detachHistoryItemIfNeedIt(detachView, userData.views, attachedHistoryData.viewId, null); // TODO vl use viewsList
+        } = detachHistoryItemIfNeedIt(detachView, viewsList.views, attachedHistoryData.viewId, null);
 
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),

@@ -26,7 +26,7 @@ class NavbarCreateQuery extends Component {
     render() {
 
         const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
-        const {selectedView} = this.props.ui; // TODO vl use viewsList
+        const {selectedViewId} = this.props.viewsList;
         const {selectedFilterId} = this.props.filtersList;
         const {selectedSample} = this.props.samplesList;
         const selectedSampleId = selectedSample ? selectedSample.id : null;
@@ -60,7 +60,7 @@ class NavbarCreateQuery extends Component {
 
                         <Analyze
                             {...this.props}
-                            clicked={ () => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilterId))}
+                            clicked={ () => dispatch(analyze(selectedSample.id, selectedViewId, selectedFilterId))}
                         />
                         <LoadHistory
                             dispatch={this.props.dispatch}
