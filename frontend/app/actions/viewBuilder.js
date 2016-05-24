@@ -178,6 +178,7 @@ function viewBuilderCreateView() {
 
 export function viewBuilderSaveAndSelectView() {
     return (dispatch, getState) => {
+        dispatch(viewBuilderSaveEdit());
         const viewBuilder = getState().viewBuilder;
         const editedView = viewBuilder.editedView;
         if (editedView.id !== null) {
