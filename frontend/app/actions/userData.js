@@ -19,25 +19,15 @@ import {viewsListSelectView} from './viewsList';
 export const RECEIVE_USERDATA = 'RECEIVE_USERDATA';
 export const REQUEST_USERDATA = 'REQUEST_USERDATA';
 
-export const RECEIVE_VIEWS = 'RECEIVE_VIEWS';
-export const REQUEST_VIEWS = 'REQUEST_VIEWS';
-
 export const CHANGE_HISTORY_DATA = 'CHANGE_HISTORY_DATA';
-export const CHANGE_VIEWS = 'CHANGE_VIEWS';
-
-export const DELETE_VIEW = 'DELETE_VIEW';
 
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
-
-const FETCH_VIEWS_NETWORK_ERROR = 'Cannot update views data (network error). You can reload page and try again.';
-const FETCH_VIEWS_SERVER_ERROR = 'Cannot update views data (server error). You can reload page and try again.';
 
 const CANNOT_FIND_DEFAULT_ITEMS_ERROR = 'Cannot determine set of default settings (sample, view, filter). ' +
                                         'You can try to set sample, filter, view by hand or try to reload page.';
 
 const dataClient = apiFacade.dataClient;
-const viewsClient = apiFacade.viewsClient;
 
 /*
  * action creators
@@ -106,62 +96,11 @@ export function fetchUserdata() {
     };
 }
 
-function requestViews() {
-    return {
-        type: REQUEST_VIEWS
-    };
-}
-
-function receiveViews(json) { // TODO vl4 need?
-    return {
-        type: RECEIVE_VIEWS,
-        views: json,
-        receivedAt: Date.now()
-    };
-}
-
-export function fetchViews(viewIdToSelect) { // TODO vl4 remove
-
-    return (dispatch, getState) => {
-        dispatch(requestViews());
-
-        const sessionId = getState().auth.sessionId;
-        viewsClient.getAll(sessionId, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, FETCH_VIEWS_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, FETCH_VIEWS_SERVER_ERROR));
-            } else {
-                const result = response.body;
-                const view = result[0] || null;
-                const viewId = viewIdToSelect || view.id;
-
-                dispatch(receiveViews(result));
-                dispatch(viewsListSelectView(viewId));
-            }
-        });
-    };
-}
-
 export function changeHistoryData(sampleId, filterId, viewId) {
     return {
         type: CHANGE_HISTORY_DATA,
         sampleId,
         filterId,
-        viewId
-    };
-}
-
-export function changeViews(views) { // TODO vl4 need?
-    return {
-        type: CHANGE_VIEWS,
-        views
-    };
-}
-
-export function deleteView(viewId) { // TODO vl4 need?
-    return {
-        type: DELETE_VIEW,
         viewId
     };
 }

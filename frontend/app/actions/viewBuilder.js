@@ -1,10 +1,5 @@
-import apiFacade from '../api/ApiFacade';
 import {closeModal} from './modalWindows';
-import {fetchViews} from './userData';
 
-import HttpStatus from 'http-status';
-import {handleError} from './errorHandler';
-import {deleteView} from './userData';
 import {viewsListSelectView} from './viewsList';
 import {viewsListServerCreateView} from './viewsList';
 import {viewsListServerDeleteView} from './viewsList';
@@ -22,16 +17,6 @@ export const VBUILDER_ADD_COLUMN = 'VBUILDER_ADD_COLUMN';
 export const VBUILDER_CHANGE_SORT_COLUMN = 'VBUILDER_CHANGE_SORT_COLUMN';
 export const VBUILDER_SET_ITEM_KEYWORDS = 'VBUILDER_SET_ITEM_KEYWORDS';
 
-const CREATE_VIEW_NETWORK_ERROR = 'Cannot create new view (network error). Please try again.';
-const CREATE_VIEW_SERVER_ERROR = 'Cannot create new view (server error). Please try again.';
-
-const UPDATE_VIEW_NETWORK_ERROR = 'Cannot update view (network error). Please try again.';
-const UPDATE_VIEW_SERVER_ERROR = 'Cannot update view (server error). Please try again.';
-
-const DELETE_VIEW_NETWORK_ERROR = 'Cannot delete view (network error). Please try again.';
-const DELETE_VIEW_SERVER_ERROR = 'Cannot delete view (server error). Please try again.';
-
-const viewsClient = apiFacade.viewsClient;
 
 /*
  * Action Creators
@@ -101,12 +86,6 @@ export function viewBuilderChangeKeywords(viewItemIndex, keywordsIds) {
         type: VBUILDER_SET_ITEM_KEYWORDS,
         viewItemIndex,
         keywordsIds
-    };
-}
-
-function viewBuilderRequestUpdateView() {
-    return {
-        type: VBUILDER_REQUEST_UPDATE_VIEW
     };
 }
 
