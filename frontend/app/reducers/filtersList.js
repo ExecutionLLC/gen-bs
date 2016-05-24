@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as ActionTypes from '../actions/filtersList';
 
 function reduceFilterListDeleteFilter(state, action) {
