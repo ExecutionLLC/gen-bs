@@ -11,6 +11,7 @@ import {fetchFields} from './fields';
 import {prepareAnalyze} from './websocket';
 import {filtersListSelectFilter} from './filtersList';
 import {filtersListReceive} from './filtersList';
+import {viewsListSelectView} from './viewsList';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -89,7 +90,8 @@ export function renewHistoryItem(historyItemId) {
                 .then(() => {
                     dispatch([
                         filtersListSelectFilter(clonedHistoryItem.filters[0].id),
-                        changeView(clonedHistoryItem.view.id), // TODO vl replace by viewsListSelectView
+                        viewsListSelectView(clonedHistoryItem.view.id),
+                        changeView(clonedHistoryItem.view.id), // TODO vl remove
                         analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
                     ]);
                 });

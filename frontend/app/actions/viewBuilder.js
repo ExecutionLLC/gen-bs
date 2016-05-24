@@ -6,6 +6,7 @@ import HttpStatus from 'http-status';
 import {changeView} from './ui';
 import {handleError} from './errorHandler';
 import {deleteView} from './userData';
+import {viewsListSelectView} from './viewsList';
 
 export const VBUILDER_START_EDIT = 'VBUILDER_START_EDIT';
 export const VBUILDER_SAVE_EDIT = 'VBUILDER_SAVE_EDIT';
@@ -133,7 +134,8 @@ function viewBuilderUpdateView() {
         dispatch(viewBuilderRequestUpdateView());
         if (state.auth.isDemo || isNotEdited) {
             dispatch(closeModal('views'));
-            dispatch(changeView(editingView.id));
+            dispatch(changeView(editingView.id)); // TODO vl remove
+            dispatch(viewsListSelectView(editingView.id));
         } else {
             const sessionId = state.auth.sessionId;
 
@@ -215,10 +217,12 @@ export function viewBuilderDeleteView(viewId) {
                 dispatch(viewBuilderReceiveDeleteView(result));
                 dispatch(deleteView(result.id));
                 const state = getState();
+                const views = state.viewsList.views;
                 const editingViewId = state.viewBuilder.editingView.id;
-                const newViewId = (result.id == editingViewId) ? state.userData.views[0].id : editingViewId; // TODO vl use viewsList
-                dispatch(changeView(newViewId));
-                const newView = _.find(state.userData.views, {id: newViewId}); // TODO vl use viewsList
+                const newViewId = (result.id == editingViewId) ? views[0].id : editingViewId;
+                dispatch(changeView(newViewId)); // TODO vl remove
+                dispatch(viewsListSelectView(newViewId)); // TODO vl3 need?
+                const newView = _.find(views, {id: newViewId});
                 dispatch(viewBuilderStartEdit(false, newView));
             }
         });

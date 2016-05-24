@@ -11,6 +11,7 @@ import _ from 'lodash';
 import {filtersListReceive} from './filtersList';
 import {filtersListSelectFilter} from './filtersList';
 import {viewsListReceive} from './viewsList';
+import {viewsListSelectView} from './viewsList';
 
 /*
  * action types
@@ -97,6 +98,7 @@ export function fetchUserdata() {
                 } else {
                     dispatch(changeSample(sample.id));
                     dispatch(filtersListSelectFilter(filter.id));
+                    dispatch(viewsListSelectView(view.id));
                     dispatch(changeView(view.id)); // TODO vl2 replace by viewsListSelectView
                     dispatch(analyze(sample.id, view.id, filter.id));
                 }
@@ -136,7 +138,8 @@ export function fetchViews(viewIdToSelect) { // TODO vl4 remove
                 const viewId = viewIdToSelect || view.id;
 
                 dispatch(receiveViews(result));
-                dispatch(changeView(viewId));
+                dispatch(viewsListSelectView(viewId));
+                dispatch(changeView(viewId)); // TODO vl2 remove
             }
         });
     };
