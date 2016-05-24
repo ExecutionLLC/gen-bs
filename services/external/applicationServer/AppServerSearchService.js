@@ -190,7 +190,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             result: {
                 progress: 100,
                 status: SESSION_STATUS.READY,
-                sampleId: operation.getId(),
+                sampleId: operation.getSampleId(),
                 limit: operation.getLimit(),
                 offset: operation.getOffset(),
                 fieldIdToValueHash

@@ -148,7 +148,7 @@ class OperationsService extends ServiceBase {
         async.waterfall([
             (callback) => this.find(sessionId, operationId, callback),
             (operation, callback) => {
-                if (operation.getType() === OPERATION_TYPES.SEARCH || operation.getType() === OPERATION_TYPES.UPLOAD) {
+                if (operation.getType() === OPERATION_TYPES.SEARCH) {
                     this.services.applicationServer.requestCloseSession(
                         operation.getSessionId(),
                         operation.getId(),
