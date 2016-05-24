@@ -19,7 +19,7 @@ class SearchService extends ServiceBase {
 
         this.eventEmitter = new EventProxy(EVENTS);
         this.searchKeyFieldName = this.services.redis.getSearchKeyFieldName();
-        this._subscribeToRedisEvents();
+        this._subscribeToRPCEvents();
     }
 
     registeredEvents() {
@@ -92,43 +92,16 @@ class SearchService extends ServiceBase {
     }
 
     loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
-        // The actual data or error should go to web socket for convenience.
-        async.waterfall([
-            (callback) => {
-                this.services.operations.find(sessionId, operationId, callback);
-            },
-            (operation, callback) => {
-                const redisData = operation.getRedisParams();
-                const userId = user.id;
-                const redisParams = {
-                    sessionId,
-                    operationId,
-                    host: redisData.host,
-                    port: redisData.port,
-                    sampleId: redisData.sampleId,
-                    userId,
-                    databaseNumber: redisData.databaseNumber,
-                    dataIndex: redisData.dataIndex,
-                    limit,
-                    offset
-                };
-                this.services.redis.fetch(redisParams, callback);
-            },
-            (results, callback) => {
-                // Results have already been sent by the Redis service through web socket.
-                callback(null, operationId);
-            }
-        ], callback);
+        this.services.applicationServer.loadResultsPage(user, sessionId, operationId, limit, offset, callback);
     }
 
-
-    _subscribeToRedisEvents() {
+    _subscribeToRPCEvents() {
         const events = this.services.applicationServerReply.registeredEvents();
         this.services.applicationServerReply.on(events.onSearchDataReceived, this._onSearchDataReceived.bind(this));
     }
 
     _onSearchDataReceived(message) {
-        const fieldIdToValueArray = message.result;
+        const fieldIdToValueArray = message.result.fieldIdToValueHash;
         // For search requests there is only one session.
         const sessionId = _.first(message.sessionIds);
 
@@ -184,7 +157,9 @@ class SearchService extends ServiceBase {
             });
         } else {
             clientMessage = Object.assign({}, message, {
-                result: convertedRows
+                result: Object.assign({}, message.result, {
+                    data: convertedRows
+                })
             });
         }
         this.eventEmitter.emit(EVENTS.onDataReceived, clientMessage);

@@ -44,10 +44,10 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     limit,
                     offset
                 };
-                this.services.redis.fetch(redisParams, callback);
+                this.services.redis.fetch(redisParams, (error, hash) => callback(error, operation, hash));
             },
-            (fieldIdToValueHash, callback) => {
-                this._createSearchDataResult(null, fieldIdToValueHash, callback);
+            (operation, fieldIdToValueHash, callback) => {
+                this._createSearchDataResult(null, operation, fieldIdToValueHash, callback);
             },
             (operationResult, callback) => {
                 this.services.applicationServerReply.processLoadNextPageResult(operationResult, callback);
@@ -189,7 +189,12 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             error,
             resultType: (error)? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
             eventName: EVENTS.onSearchDataReceived,
-            result: fieldIdToValueHash
+            result: {
+                sampleId: operation.getId(),
+                limit: operation.getLimit(),
+                offset: operation.getOffset(),
+                fieldIdToValueHash
+            }
         };
         callback(null, result);
     }

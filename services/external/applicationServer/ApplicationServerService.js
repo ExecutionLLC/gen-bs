@@ -54,6 +54,10 @@ class ApplicationServerService extends ApplicationServerServiceBase {
         this.services.applicationServerSearch.requestOpenSearchSession(sessionId, params, callback);
     }
 
+    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
+        this.services.applicationServerSearch.loadResultsPage(user, sessionId, operationId, limit, offset, callback);
+    }
+
     /**
      * Sends specified file sample to application server.
      *
