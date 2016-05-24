@@ -1,17 +1,15 @@
+import _ from 'lodash';
 import * as ActionTypes from '../actions/filtersList';
+import immutableArray from '../utils/immutableArray';
 
 function reduceFilterListDeleteFilter(state, action) {
     const deletedFilterIndex = _.findIndex(state.filters, {id: action.filterId});
     if (deletedFilterIndex < 0) {
         return state;
     }
-    const newFiltersArray = [
-        ...state.filters.slice(0, deletedFilterIndex),
-        ...state.filters.slice(deletedFilterIndex + 1)
-    ];
     const newSelectedFilterId = (state.selectedFilterId === action.filterId) ? state.filters[0].id : state.selectedFilterId;
     return Object.assign({}, state, {
-        filters: newFiltersArray,
+        filters: immutableArray.remove(state.filters, deletedFilterIndex),
         selectedFilterId: newSelectedFilterId
     });
 }
@@ -21,14 +19,9 @@ function reduceFilterListEditFilter(state, action) {
     if (editFilterIndex < 0) {
         return state;
     }
-    const filtersUpdated = [
-        ...state.filters.slice(0, editFilterIndex),
-        action.filter,
-        ...state.filters.slice(editFilterIndex + 1)
-    ];
     const updatedSelectedFilterId = (state.selectedFilterId === action.filterId) ? action.filter.id : state.selectedFilterId;
     return Object.assign({}, state, {
-        filters: filtersUpdated,
+        filters: immutableArray.replace(state.filters, editFilterIndex, action.filter),
         selectedFilterId: updatedSelectedFilterId
     });
 }
@@ -58,10 +51,7 @@ export default function filtersList(state = {
             });
         case ActionTypes.FILTERS_LIST_ADD_FILTER:
             return Object.assign({}, state, {
-                filters: [
-                    ...state.filters,
-                    action.filter
-                ]
+                filters: immutableArray.append(state.filters, action.filter)
             });
         case ActionTypes.FILTERS_LIST_DELETE_FILTER:
             return reduceFilterListDeleteFilter(state, action);
