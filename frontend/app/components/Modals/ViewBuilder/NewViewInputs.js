@@ -71,8 +71,8 @@ export default class NewViewInputs extends React.Component {
     }
 
     onCancelClick() {
-        const parentView = _.find(this.props.userData.views, {id: this.props.viewBuilder.editingViewParentId}); // TODO use viewsList
-        this.props.dispatch(viewBuilderStartEdit(false, parentView, this.props.userData.views)); // TODO use viewsList
+        const parentView = _.find(this.props.viewsList.views, {id: this.props.viewBuilder.editingViewParentId});
+        this.props.dispatch(viewBuilderStartEdit(false, parentView));
     }
 
 }

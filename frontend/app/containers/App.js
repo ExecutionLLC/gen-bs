@@ -106,7 +106,6 @@ function mapStateToProps(state) {
     const { auth,
             userData,
             modalWindows,
-            views, // TODO vl remove
             fields,
             savedFiles,
             ui,
@@ -120,7 +119,6 @@ function mapStateToProps(state) {
         auth,
         userData,
         modalWindows,
-        views, // TODO vl remove
         fields,
         savedFiles,
         ui,

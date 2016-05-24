@@ -131,7 +131,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     getViewForId(viewId) {
-        return _.find(this.props.userData.views, {id: viewId}); // TODO use viewsList
+        return _.find(this.props.viewsList.views, {id: viewId});
     }
 
     onSelectedViewChanged(viewId) {

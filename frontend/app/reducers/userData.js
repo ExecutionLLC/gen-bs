@@ -4,7 +4,6 @@ export default function userData(state = {
     isFetching: false,
     isValid: false,
     profileMetadata: {},
-    views: [], // TODO vl remove
     attachedHistoryData: {
         sampleId: null,
         filterId: null,
@@ -25,7 +24,6 @@ export default function userData(state = {
                 isValid: true,
 
                 profileMetadata: action.userData.profileMetadata,
-                views: action.userData.views, // TODO vl remove
 
                 lastUpdated: action.receivedAt
             });

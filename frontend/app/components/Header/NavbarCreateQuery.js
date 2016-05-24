@@ -76,28 +76,24 @@ class NavbarCreateQuery extends Component {
 function mapStateToProps(state) {
     const {
         modalWindows,
-        userData: {
-            views, // TODO vl replace by vievsList
-            filters // TODO remove
-        },
         ui,
         auth,
         samplesList,
         samplesList: {
             samples // TODO why not use samplesList.samples?
         },
-        filtersList
+        filtersList,
+        viewsList
     } = state;
 
     return {
         modalWindows,
         samples,
-        views, // TODO vl rename by viewsList
-        filters,
         ui,
         auth,
         samplesList,
-        filtersList
+        filtersList,
+        viewsList
     };
 }
 
