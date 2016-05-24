@@ -16,15 +16,15 @@ import {
 export default class ExistentViewSelect extends React.Component {
 
     render() {
-        const {auth: {isDemo: isDemoSession}, viewBuilder: {editedView: selectedView}, userData: {views}} = this.props; // TODO sv: editedView->editingView, get type
-        const isEditableView = selectedView.type === 'user';
+        const {auth: {isDemo: isDemoSession}, viewBuilder: {editedView: {type: selectedViewType}}, userData: {views}} = this.props; // TODO sv: editedView->editingView, get type
+        const isEditableView = selectedViewType === 'user';
 
         return (
             <div className='collapse in'>
                 <div className='row grid-toolbar'>
                     {this.renderTitle()}
                 </div>
-                {this.renderDescription(isDemoSession, selectedView.type)}
+                {this.renderDescription(isDemoSession, selectedViewType)}
                 <div className='row grid-toolbar row-head-selector'>
                     {this.renderViewSelector(views)}
                     {this.renderButtonGroup(isDemoSession, isEditableView)}
