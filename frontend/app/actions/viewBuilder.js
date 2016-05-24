@@ -1,4 +1,5 @@
 import {closeModal} from './modalWindows';
+import _ from 'lodash';
 
 import {
     viewsListSelectView,
