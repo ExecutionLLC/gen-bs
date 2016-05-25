@@ -79,6 +79,8 @@ const SETTINGS = {
 };
 
 // Add computational fields
+// Warning! Currently, base url should be set to HTTP scheme, as otherwise Google sends 'Missing parameter: scope' error.
+// The HTTP address will be redirected to HTTPS by NginX.
 SETTINGS.baseUrl = ENV.GEN_WS_BASE_URL || 'http://localhost:' + SETTINGS.port;
 SETTINGS.google = {
     // Google Application parameters
