@@ -15,7 +15,7 @@ import SavedFilesClient from './SavedFilesClient';
 
 class ApiFacade {
     constructor() {
-        var urls = new Urls(config.HOST, config.PORT);
+        var urls = new Urls(config.HTTP_SCHEME, config.HOST, config.PORT);
 
         this._dataClient = new DataClient(urls);
         this._commentsClient = new CommentsClient(urls);
