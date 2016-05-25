@@ -28,6 +28,7 @@ export default class NewViewInputs extends React.Component {
                             data-localize='views.setup.new.name.help'
                             placeholder='Set view name'
                             value={newView.name}
+                            maxLength='50'
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
                     </div>
@@ -40,6 +41,7 @@ export default class NewViewInputs extends React.Component {
                                 data-localize='views.setup.new.description'
                                 placeholder='Set view description (optional)'
                                 value={newView.description}
+                                maxLength='512'
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
                             <div className='input-group-btn btn-group-close'>
