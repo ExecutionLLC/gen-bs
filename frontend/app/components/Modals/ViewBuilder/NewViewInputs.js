@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder';
+import config from '../../../../config';
 
 
 export default class NewViewInputs extends React.Component {
@@ -28,7 +29,7 @@ export default class NewViewInputs extends React.Component {
                             data-localize='views.setup.new.name.help'
                             placeholder='Set view name'
                             value={newView.name}
-                            maxLength='50'
+                            maxLength={config.VIEWS.MAX_NAME_LENGTH}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
                     </div>
@@ -41,7 +42,7 @@ export default class NewViewInputs extends React.Component {
                                 data-localize='views.setup.new.description'
                                 placeholder='Set view description (optional)'
                                 value={newView.description}
-                                maxLength='512'
+                                maxLength={config.VIEWS.MAX_DESCRIPTION_LENGTH}
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
                             <div className='input-group-btn btn-group-close'>
