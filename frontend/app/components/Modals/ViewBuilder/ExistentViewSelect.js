@@ -24,7 +24,7 @@ export default class ExistentViewSelect extends React.Component {
                 <div className='row grid-toolbar'>
                     {this.renderTitle()}
                 </div>
-                {this.renderDescription(isDemoSession, selectedViewType)}
+                {this.renderWarning(isDemoSession, selectedViewType)}
                 <div className='row grid-toolbar row-head-selector'>
                     {this.renderViewSelector(views)}
                     {this.renderButtonGroup(isDemoSession, isEditableView)}
@@ -41,14 +41,14 @@ export default class ExistentViewSelect extends React.Component {
         );
     }
 
-    renderDescription(isDemoSession, selectedViewType) {
-        const descriptionText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType);
+    renderWarning(isDemoSession, selectedViewType) {
+        const warningText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType);
 
-        if (descriptionText) {
+        if (warningText) {
             return (
                 <div className='alert alert-help'>
                     <span data-localize='views.setup.selector.description'>
-                        {descriptionText}
+                        {warningText}
                     </span>
                 </div>
             );

@@ -27,7 +27,7 @@ export default class ExistentFilterSelect extends Component {
                 <div className='row grid-toolbar'>
                     {this.renderTitle()}
                 </div>
-                {this.renderDescription(isDemoSession, selectedFilter.type)}
+                {this.renderWarning(isDemoSession, selectedFilter.type)}
                 <div className='row grid-toolbar row-head-selector'>
                     {this.renderFiltersSelector(filters, fields)}
                     {this.renderButtonGroup(isDemoSession, isFilterEditable)}
@@ -44,14 +44,14 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderDescription(isDemoSession, selectedFilterType) {
-        const descriptionText = getReadonlyReasonForSessionAndType('filter', isDemoSession, selectedFilterType);
+    renderWarning(isDemoSession, selectedFilterType) {
+        const warningText = getReadonlyReasonForSessionAndType('filter', isDemoSession, selectedFilterType);
 
-        if (descriptionText) {
+        if (warningText) {
             return (
                 <div className='alert alert-help'>
                     <span data-localize='filters.setup.selector.description'>
-                        {descriptionText}
+                        {warningText}
                     </span>
                 </div>
             );
