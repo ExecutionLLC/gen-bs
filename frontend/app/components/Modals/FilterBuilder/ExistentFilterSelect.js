@@ -47,17 +47,16 @@ export default class ExistentFilterSelect extends Component {
     renderWarning(isDemoSession, selectedFilterType) {
         const warningText = getReadonlyReasonForSessionAndType('filter', isDemoSession, selectedFilterType);
 
-        if (warningText) {
-            return (
-                <div className='alert alert-help'>
-                    <span data-localize='filters.setup.selector.description'>
-                        {warningText}
-                    </span>
-                </div>
-            );
+        if (!warningText) {
+            return null;
         }
-
-        return null;
+        return (
+            <div className='alert alert-help'>
+                <span data-localize='filters.setup.selector.description'>
+                    {warningText}
+                </span>
+            </div>
+        );
     }
 
     renderFiltersSelector(filters, fields) {

@@ -44,17 +44,16 @@ export default class ExistentViewSelect extends React.Component {
     renderWarning(isDemoSession, selectedViewType) {
         const warningText = getReadonlyReasonForSessionAndType('view', isDemoSession, selectedViewType);
 
-        if (warningText) {
-            return (
-                <div className='alert alert-help'>
-                    <span data-localize='views.setup.selector.description'>
-                        {warningText}
-                    </span>
-                </div>
-            );
+        if (!warningText) {
+            return null;
         }
-
-        return null;
+        return (
+            <div className='alert alert-help'>
+                <span data-localize='views.setup.selector.description'>
+                    {warningText}
+                </span>
+            </div>
+        );
     }
 
     renderViewSelector(views) {
