@@ -54,7 +54,7 @@ class App extends Component {
         return (
             <div className={mainDivClass} id='main'>
                 <nav className='navbar navbar-inverse navbar-static-top'></nav>
-                {<div >&nbsp;</div>}
+                {<div>&nbsp;</div>}
                 {samples.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain />

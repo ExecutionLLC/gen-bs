@@ -54,7 +54,7 @@ class FiltersModal extends Component {
                 onHide={() => this.onClose()}
             >
                 { (!editingFilter) &&
-                <div >&nbsp;</div>
+                <div>&nbsp;</div>
                 }
                 { (editingFilter) &&
                 <div>

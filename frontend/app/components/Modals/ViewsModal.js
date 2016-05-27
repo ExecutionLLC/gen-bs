@@ -49,7 +49,7 @@ class ViewsModal extends React.Component {
                 onHide={() => this.onClose()}
             >
                 { !editingView &&
-                <div >&nbsp;</div>
+                <div>&nbsp;</div>
                 }
                 { editingView &&
                 <div>
