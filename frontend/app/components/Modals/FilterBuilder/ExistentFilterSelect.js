@@ -95,7 +95,7 @@ export default class ExistentFilterSelect extends Component {
             <button type='button'
                     className='btn btn-default in'
                     id='dblBtn'
-                    onClick={() => this.onDuplicateClick(this.getSelectedFilter(), this.props.fields)}
+                    onClick={() => this.onDuplicateClick()}
                     disabled={isDemoSession}
                     title={title}
             >
@@ -109,7 +109,7 @@ export default class ExistentFilterSelect extends Component {
         return (
             <button type='button'
                     className='btn btn-default'
-                    onClick={() => this.onResetFilterClick(this.getSelectedFilter(), this.props.fields)}
+                    onClick={() => this.onResetFilterClick()}
             >
                 <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset Filter</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
@@ -121,7 +121,7 @@ export default class ExistentFilterSelect extends Component {
         return (
             <button type='button'
                     className='btn btn-default'
-                    onClick={() => this.onDeleteFilterClick(this.getSelectedFilter().id)}
+                    onClick={() => this.onDeleteFilterClick()}
             >
                 <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete Filter</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
@@ -137,15 +137,20 @@ export default class ExistentFilterSelect extends Component {
         this.props.dispatch(filterBuilderStartEdit(false, _.find(filters, {id: filterId}) || null, fields));
     }
 
-    onDuplicateClick(filter, fields) {
+    onDuplicateClick() {
+        const filter = this.getSelectedFilter();
+        const fields = this.props.fields;
         this.props.dispatch(filterBuilderStartEdit(true, filter, fields));
     }
 
-    onResetFilterClick(filter, fields) {
+    onResetFilterClick() {
+        const filter = this.getSelectedFilter();
+        const fields = this.props.fields;
         this.props.dispatch(filterBuilderStartEdit(false, filter, fields));
     }
 
-    onDeleteFilterClick(filterId) {
+    onDeleteFilterClick() {
+        const filterId = this.getSelectedFilter().id;
         this.props.dispatch(filterBuilderDeleteFilter(filterId));
     }
 
