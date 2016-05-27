@@ -80,7 +80,7 @@ function mapStateToProps(state) {
         auth,
         samplesList,
         samplesList: {
-            samples // TODO why not use samplesList.samples?
+            samples
         },
         filtersList,
         viewsList
