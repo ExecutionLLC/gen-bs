@@ -60,7 +60,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
                 filters
             },
             viewsList: {
-                views
+                viewIdToViewHash
             },
             fields: {
                 sampleFieldsList
@@ -75,7 +75,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(requestTableScrollPositionReset());
         dispatch(clearSearchParams());
         dispatch(requestAnalyze(searchParams));
-        const searchView = _.find(views, {id: viewId});
+        const searchView = viewIdToViewHash[viewId];
         const searchSample = _.find(samples, {id: sampleId});
         const searchFilter = _.find(filters, {id: filterId});
         dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));

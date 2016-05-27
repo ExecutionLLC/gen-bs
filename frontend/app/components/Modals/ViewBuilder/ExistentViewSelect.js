@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
-import _ from 'lodash';
 
 import {
     getItemLabelByNameAndType,
@@ -130,7 +129,7 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     getViewForId(viewId) {
-        return _.find(this.props.viewsList.views, {id: viewId});
+        return this.props.viewsList.viewIdToViewHash[viewId];
     }
 
     onSelectedViewChanged(viewId) {

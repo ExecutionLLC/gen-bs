@@ -91,8 +91,8 @@ export function clearSearchParams() {
 
 export function changeExcludedFields(viewId) {
     return (dispatch, getState) => {
-        const {fields:{sampleFieldsList}, viewsList:{views}}=getState();
-        const view = _.find(views, {id: viewId});
+        const {fields:{sampleFieldsList}, viewsList:{viewIdToViewHash}}=getState();
+        const view = viewIdToViewHash[viewId];
         const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
         const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);
         const viewFieldIds = _.map(view.viewListItems, viewItem =>viewItem.fieldId);

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {viewBuilderStartEdit} from '../../../actions/viewBuilder';
-import _ from 'lodash';
 
 export default class ViewsSetup extends Component {
 
@@ -9,9 +8,9 @@ export default class ViewsSetup extends Component {
     }
 
     onViewsClick() {
-        const {views} = this.props.viewsList;
+        const {viewIdToViewHash} = this.props.viewsList;
         const {selectedViewId} = this.props.viewsList;
-        const selectedView = _.find(views, {id: selectedViewId});
+        const selectedView = viewIdToViewHash[selectedViewId];
         this.props.dispatch(viewBuilderStartEdit(false, selectedView));
         this.props.openModal('views');
     }

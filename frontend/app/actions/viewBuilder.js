@@ -148,9 +148,10 @@ export function viewBuilderDeleteView(viewId) {
             .then(() => {
                 const state = getState();
                 const views = state.viewsList.views;
+                const viewIdToViewHash = state.viewsList.viewIdToViewHash;
                 const editingViewId = state.viewBuilder.editingView.id;
                 const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
-                const newView = _.find(views, {id: newViewId});
+                const newView = viewIdToViewHash[newViewId];
                 dispatch(viewBuilderStartEdit(false, newView));
             });
     };
