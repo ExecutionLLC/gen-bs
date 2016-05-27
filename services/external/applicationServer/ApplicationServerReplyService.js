@@ -7,15 +7,8 @@ const ServiceBase = require('../../ServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 const OperationBase = require('../../operations/OperationBase');
-const RESULT_TYPES = require('./AppServerResultTypes');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
-
-const SESSION_STATUS = {
-    LOADING: 'loading',
-    FILTERING: 'filtering',
-    READY: 'ready'
-};
 
 /**
  * @typedef {Object} AppServerResult
@@ -37,10 +30,6 @@ class ApplicationServerReplyService extends ServiceBase {
 
     registeredEvents() {
         return EVENTS;
-    }
-
-    sessionStatuses() {
-        return SESSION_STATUS;
     }
 
     on(eventName, callback) {
