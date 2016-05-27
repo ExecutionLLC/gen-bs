@@ -14,6 +14,7 @@ class OperationBase {
         this.method = method;
         this.sessionId = sessionId;
         this.timestamp = Date.now();
+        this.lastAppServerMessage = null;
     }
 
     getTimestamp() {
@@ -36,6 +37,20 @@ class OperationBase {
     /**@returns {string}*/
     getType() {
         throw new Error('Method is not implemented');
+    }
+
+    /**
+     * @param {AppServerResult}message
+     * */
+    setLastAppServerMessage(message) {
+        this.lastAppServerMessage = message;
+    }
+
+    /**
+     * @returns {object}message
+     * */
+    getLastAppServerMessage() {
+        return this.lastAppServerMessage;
     }
 
     static operationTypes() {
