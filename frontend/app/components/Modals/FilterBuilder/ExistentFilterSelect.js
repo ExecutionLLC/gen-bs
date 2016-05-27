@@ -133,8 +133,12 @@ export default class ExistentFilterSelect extends Component {
         return this.props.filterBuilder.editingFilter.filter;
     }
 
+    getFilterForId(filters, filterId) {
+        return _.find(filters, {id: filterId}) || null;
+    }
+
     onSelectChange(filters, filterId, fields) {
-        this.props.dispatch(filterBuilderStartEdit(false, _.find(filters, {id: filterId}) || null, fields));
+        this.props.dispatch(filterBuilderStartEdit(false, this.getFilterForId(filters, filterId), fields));
     }
 
     onDuplicateClick() {
