@@ -1,4 +1,4 @@
-import FieldUtils from "./fieldUtils";
+import FieldUtils from './fieldUtils';
 
 class immutableArray {
     /**
@@ -49,55 +49,119 @@ export const filterUtils = {
         default_condition: 'AND',
 
         genomicsOperators: {
-            equal:            function(v) { return { '$eq': v[0] }; },
-            not_equal:        function(v) { return { '$neq': v[0] }; },
-            in:               function(v) { return { '$in': v }; },
-            not_in:           function(v) { return { '$nin': v }; },
-            less:             function(v) { return { '$lt': v[0] }; },
-            less_or_equal:    function(v) { return { '$lte': v[0] }; },
-            greater:          function(v) { return { '$gt': v[0] }; },
-            greater_or_equal: function(v) { return { '$gte': v[0] }; },
-            between:          function(v) { return { '$between': v }; },
-            not_between:      function(v) { return { '$nbetween': v }; },
-            begins_with:      function(v) { return { '$begin_with': v[0] }; },
-            not_begins_with:  function(v) { return { '$nbegin_with': v[0] }; },
-            contains:         function(v) { return { '$contains': v[0] }; },
-            not_contains:     function(v) { return { '$ncontains': v[0] }; },
-            ends_with:        function(v) { return { '$end_with': v[0] }; },
-            not_ends_with:    function(v) { return { '$nend_with': v[0] }; },
-            is_null:          function(v) { return { '$eq': null }; },
-            is_not_null:      function(v) { return { '$neq': null }; }
+            equal: function (v) {
+                return {'$eq': v[0]};
+            },
+            not_equal: function (v) {
+                return {'$neq': v[0]};
+            },
+            in: function (v) {
+                return {'$in': v};
+            },
+            not_in: function (v) {
+                return {'$nin': v};
+            },
+            less: function (v) {
+                return {'$lt': v[0]};
+            },
+            less_or_equal: function (v) {
+                return {'$lte': v[0]};
+            },
+            greater: function (v) {
+                return {'$gt': v[0]};
+            },
+            greater_or_equal: function (v) {
+                return {'$gte': v[0]};
+            },
+            between: function (v) {
+                return {'$between': v};
+            },
+            not_between: function (v) {
+                return {'$nbetween': v};
+            },
+            begins_with: function (v) {
+                return {'$begin_with': v[0]};
+            },
+            not_begins_with: function (v) {
+                return {'$nbegin_with': v[0]};
+            },
+            contains: function (v) {
+                return {'$contains': v[0]};
+            },
+            not_contains: function (v) {
+                return {'$ncontains': v[0]};
+            },
+            ends_with: function (v) {
+                return {'$end_with': v[0]};
+            },
+            not_ends_with: function (v) {
+                return {'$nend_with': v[0]};
+            },
+            is_null: function () {
+                return {'$eq': null};
+            },
+            is_not_null: function () {
+                return {'$neq': null};
+            }
         },
 
         genomicsRuleOperators: {
-            $eq: function(v) {
+            $eq: function (v) {
                 v = v.$eq;
                 return {
                     'val': v,
                     'op': v === null ? 'is_null' : 'equal'
                 };
             },
-            $neq: function(v) {
+            $neq: function (v) {
                 v = v.$neq;
                 return {
                     'val': v,
                     'op': v === null ? 'is_not_null' : 'not_equal'
                 };
             },
-            $in: function(v) { return { 'val': v.$in, 'op': 'in' }; },
-            $nin: function(v) { return { 'val': v.$nin, 'op': 'not_in' }; },
-            $lt: function(v) { return { 'val': v.$lt, 'op': 'less' }; },
-            $lte: function(v) { return { 'val': v.$lte, 'op': 'less_or_equal' }; },
-            $gt: function(v) { return { 'val': v.$gt, 'op': 'greater' }; },
-            $gte: function(v) { return { 'val': v.$gte, 'op': 'greater_or_equal' }; },
-            $begin_with: function(v) { return { 'val': v.$begin_with, 'op': 'begins_with' }; },
-            $nbegin_with: function(v) { return { 'val': v.$nbegin_with, 'op': 'not_begins_with' }; },
-            $contains: function(v) { return { 'val': v.$contains, 'op': 'contains' }; },
-            $ncontains: function(v) { return { 'val': v.$ncontains, 'op': 'not_contains' }; },
-            $between: function(v) { return { 'val': v.$between, 'op': 'between' }; },
-            $nbetween: function(v) { return { 'val': v.$nbetween, 'op': 'not_between' }; },
-            $end_with: function(v) { return { 'val': v.$end_with, 'op': 'ends_with' }; },
-            $nend_with: function(v) { return { 'val': v.$nend_with, 'op': 'not_ends_with' }; }
+            $in: function (v) {
+                return {'val': v.$in, 'op': 'in'};
+            },
+            $nin: function (v) {
+                return {'val': v.$nin, 'op': 'not_in'};
+            },
+            $lt: function (v) {
+                return {'val': v.$lt, 'op': 'less'};
+            },
+            $lte: function (v) {
+                return {'val': v.$lte, 'op': 'less_or_equal'};
+            },
+            $gt: function (v) {
+                return {'val': v.$gt, 'op': 'greater'};
+            },
+            $gte: function (v) {
+                return {'val': v.$gte, 'op': 'greater_or_equal'};
+            },
+            $begin_with: function (v) {
+                return {'val': v.$begin_with, 'op': 'begins_with'};
+            },
+            $nbegin_with: function (v) {
+                return {'val': v.$nbegin_with, 'op': 'not_begins_with'};
+            },
+            $contains: function (v) {
+                return {'val': v.$contains, 'op': 'contains'};
+            },
+            $ncontains: function (v) {
+                return {'val': v.$ncontains, 'op': 'not_contains'};
+            },
+            $between: function (v) {
+                return {'val': v.$between, 'op': 'between'};
+            },
+            $nbetween: function (v) {
+                return {'val': v.$nbetween, 'op': 'not_between'};
+            },
+            $end_with: function (v) {
+                return {'val': v.$end_with, 'op': 'ends_with'};
+            },
+            $nend_with: function (v) {
+                return {'val': v.$nend_with, 'op': 'not_ends_with'};
+            }
         }
     },
     Utils: {
@@ -107,10 +171,10 @@ export const filterUtils = {
          * @param args,... {mixed}
          * @return {string}
          */
-        fmt: function(str/*, args*/) {
+        fmt: function (str/*, args*/) {
             var args = Array.prototype.slice.call(arguments, 1);
 
-            return str.replace(/{([0-9]+)}/g, function(m, i) {
+            return str.replace(/{([0-9]+)}/g, function (m, i) {
                 return args[parseInt(i)];
             });
         },
@@ -120,7 +184,7 @@ export const filterUtils = {
          * @param message {string}
          * @param args,... {mixed}
          */
-        error: function(type, message/*, args*/) {
+        error: function (type/*, message, args*/) {
             var err = new Error(this.fmt.apply(null, Array.prototype.slice.call(arguments, 1)));
             err.name = type + 'Error';
             err.args = Array.prototype.slice.call(arguments, 2);
@@ -133,36 +197,39 @@ export const filterUtils = {
          * @param boolAsInt {boolean} return 0 or 1 for booleans
          * @return {mixed}
          */
-        changeType: function(value, type, boolAsInt) {
+        changeType: function (value, type, boolAsInt) {
             switch (type) {
-                case 'integer': return parseInt(value);
-                case 'double': return parseFloat(value);
+                case 'integer':
+                    return parseInt(value);
+                case 'double':
+                    return parseFloat(value);
                 case 'boolean':
                     var bool = value.trim().toLowerCase() === 'true' || value.trim() === '1' || value === 1;
                     return boolAsInt ? (bool ? 1 : 0) : bool;
-                default: return value;
+                default:
+                    return value;
             }
         }
     },
     operators: [
-        { type: 'equal',            nbInputs: 1, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean'] },
-        { type: 'not_equal',        nbInputs: 1, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean'] },
-        { type: 'in',               nbInputs: 1, multiple: true,  applyTo: ['string', 'number', 'datetime'] },
-        { type: 'not_in',           nbInputs: 1, multiple: true,  applyTo: ['string', 'number', 'datetime'] },
-        { type: 'less',             nbInputs: 1, multiple: false, applyTo: ['number', 'datetime'] },
-        { type: 'less_or_equal',    nbInputs: 1, multiple: false, applyTo: ['number', 'datetime'] },
-        { type: 'greater',          nbInputs: 1, multiple: false, applyTo: ['number', 'datetime'] },
-        { type: 'greater_or_equal', nbInputs: 1, multiple: false, applyTo: ['number', 'datetime'] },
-        { type: 'between',          nbInputs: 2, multiple: false, applyTo: ['number', 'datetime'] },
-        { type: 'not_between',      nbInputs: 2, multiple: false, applyTo: ['number', 'datetime'] },
-        { type: 'begins_with',      nbInputs: 1, multiple: false, applyTo: ['string'] },
-        { type: 'not_begins_with',  nbInputs: 1, multiple: false, applyTo: ['string'] },
-        { type: 'contains',         nbInputs: 1, multiple: false, applyTo: ['string'] },
-        { type: 'not_contains',     nbInputs: 1, multiple: false, applyTo: ['string'] },
-        { type: 'ends_with',        nbInputs: 1, multiple: false, applyTo: ['string'] },
-        { type: 'not_ends_with',    nbInputs: 1, multiple: false, applyTo: ['string'] },
-        { type: 'is_null',          nbInputs: 0, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean'] },
-        { type: 'is_not_null',      nbInputs: 0, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean'] }
+        {type: 'equal', nbInputs: 1, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean']},
+        {type: 'not_equal', nbInputs: 1, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean']},
+        {type: 'in', nbInputs: 1, multiple: true, applyTo: ['string', 'number', 'datetime']},
+        {type: 'not_in', nbInputs: 1, multiple: true, applyTo: ['string', 'number', 'datetime']},
+        {type: 'less', nbInputs: 1, multiple: false, applyTo: ['number', 'datetime']},
+        {type: 'less_or_equal', nbInputs: 1, multiple: false, applyTo: ['number', 'datetime']},
+        {type: 'greater', nbInputs: 1, multiple: false, applyTo: ['number', 'datetime']},
+        {type: 'greater_or_equal', nbInputs: 1, multiple: false, applyTo: ['number', 'datetime']},
+        {type: 'between', nbInputs: 2, multiple: false, applyTo: ['number', 'datetime']},
+        {type: 'not_between', nbInputs: 2, multiple: false, applyTo: ['number', 'datetime']},
+        {type: 'begins_with', nbInputs: 1, multiple: false, applyTo: ['string']},
+        {type: 'not_begins_with', nbInputs: 1, multiple: false, applyTo: ['string']},
+        {type: 'contains', nbInputs: 1, multiple: false, applyTo: ['string']},
+        {type: 'not_contains', nbInputs: 1, multiple: false, applyTo: ['string']},
+        {type: 'ends_with', nbInputs: 1, multiple: false, applyTo: ['string']},
+        {type: 'not_ends_with', nbInputs: 1, multiple: false, applyTo: ['string']},
+        {type: 'is_null', nbInputs: 0, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean']},
+        {type: 'is_not_null', nbInputs: 0, multiple: false, applyTo: ['string', 'number', 'datetime', 'boolean']}
     ],
 
     /**
@@ -171,7 +238,7 @@ export const filterUtils = {
      * @param type {string}
      * @return {object|null}
      */
-    getOperatorByType: function(type) {
+    getOperatorByType: function (type) {
         if (type == '-1') {
             return null;
         }
@@ -369,7 +436,7 @@ export const filterUtils = {
      * @param {genomicsParsedData} data rules
      * @return {object}
      */
-    getGenomics: function(data) {
+    getGenomics: function (data) {
         var self = this;
 
         return (function parse(data) {
@@ -386,7 +453,7 @@ export const filterUtils = {
 
             var parts = [];
 
-            data.rules.forEach(function(rule) {
+            data.rules.forEach(function (rule) {
                 if (rule.rules && rule.rules.length > 0) {
                     parts.push(parse(rule));
                 }
@@ -429,7 +496,7 @@ export const filterUtils = {
      * @param {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} data query object
      * @return {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}}
      */
-    getRulesFromGenomics: function(data) {
+    getRulesFromGenomics: function (data) {
         if (data === undefined || data === null) {
             return null;
         }
@@ -453,7 +520,7 @@ export const filterUtils = {
             var rules = data[topKeys[0]];
             var parts = [];
 
-            rules.forEach(function(rule) {
+            rules.forEach(function (rule) {
                 var keys = Object.keys(rule);
 
                 if (conditions[keys[0].toLowerCase()]) {
@@ -463,7 +530,7 @@ export const filterUtils = {
                     var field = keys[0];
                     var value = rule[field];
 
-                    var operator = self.determineGenomicsOperator(value, field);
+                    var operator = self.determineGenomicsOperator(value);
                     if (operator === undefined) {
                         self.Utils.error('GenomicsParse', 'Invalid Genomics query format');
                     }
@@ -497,7 +564,7 @@ export const filterUtils = {
      * @param {string} field
      * @return {string|undefined}
      */
-    determineGenomicsOperator: function(value, field) {
+    determineGenomicsOperator: function (value) {
         if (value !== null && typeof value == 'object') {
             var subkeys = Object.keys(value);
 
@@ -513,24 +580,24 @@ export const opsUtils = {
      * Map operator type to operator label
      */
     genomicsRuleOperatorsLabels: {
-        "equal": "equal",
-        "not_equal": "not equal",
-        "in": "in",
-        "not_in": "not in",
-        "less": "less",
-        "less_or_equal": "less or equal",
-        "greater": "greater",
-        "greater_or_equal": "greater or equal",
-        "between": "between",
-        "not_between": "not between",
-        "begins_with": "begins with",
-        "not_begins_with": "doesn't begin with",
-        "contains": "contains",
-        "not_contains": "doesn't contain",
-        "ends_with": "ends with",
-        "not_ends_with": "doesn't end with",
-        "is_null": "is null",
-        "is_not_null": "is not null"
+        'equal': 'equal',
+        'not_equal': 'not equal',
+        'in': 'in',
+        'not_in': 'not in',
+        'less': 'less',
+        'less_or_equal': 'less or equal',
+        'greater': 'greater',
+        'greater_or_equal': 'greater or equal',
+        'between': 'between',
+        'not_between': 'not between',
+        'begins_with': 'begins with',
+        'not_begins_with': "doesn't begin with",
+        'contains': 'contains',
+        'not_contains': "doesn't contain",
+        'ends_with': 'ends with',
+        'not_ends_with': "doesn't end with",
+        'is_null': 'is null',
+        'is_not_null': 'is not null'
     },
     /**
      * Return operator wanted params count
@@ -542,7 +609,7 @@ export const opsUtils = {
      * @param {{type: string, nbInputs: number, multiple: boolean, applyTo: string[]}} operatorInfo as in filterUtils.operators
      * @returns {{noParams: boolean=, single: boolean=, arrayDynamic: boolean=, arraySize: number=}}
      */
-    getOperatorWantedParams: function(operatorInfo) {
+    getOperatorWantedParams: function (operatorInfo) {
         if (!operatorInfo.nbInputs) {
             return {noParams: true};
         }
@@ -624,7 +691,7 @@ export const genomicsParsedRulesValidate = {
         if (!rule.operator) {
             return ({errorMessage: 'no operator'});
         }
-    
+
         const field = FieldUtils.getFieldById(fields, rule.field);
         if (!field) {
             return {errorMessage: 'field id "' + rule.field + '" is invalid'};
@@ -632,20 +699,20 @@ export const genomicsParsedRulesValidate = {
         const fieldJSType = FieldUtils.getFieldJSType(field);
         const operatorType = rule.operator;
         const operatorInfo = filterUtils.getOperatorByType(operatorType);
-    
+
         if (!this.isAllowedOperatorType(operatorInfo, fieldJSType)) {
             return {errorMessage: 'field "' + JSON.stringify(field) + '" of type "' + fieldJSType + '" not allowed for operator "' + operatorType + '"'};
         }
-    
+
         const opWant = opsUtils.getOperatorWantedParams(operatorInfo);
-    
+
         const value = rule.value;
         const castedValue = opWant.noParams ?
             null :
             opWant.single ?
                 this.jsTypeCastValue(value, fieldJSType) :
                 this.jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
-    
+
         return {
             validRule: {
                 field: rule.field,

@@ -1,4 +1,14 @@
 //const HOST = window.location.hostname;
+/* global
+ API_HOST: false,
+ API_PORT: false,
+ HEADER_SESSION: false,
+ HEADER_LANGUAGE: false,
+ SESSION_KEEP_ALIVE_TIMEOUT: false,
+ SESSION_LOGOUT_TIMEOUT: false,
+ SESSION_LOGOUT_WARNING_TIMEOUT: false,
+ LOGIN_CALLBACK_PORT: false
+ */
 const HOST = API_HOST;
 const PORT = API_PORT;
 
@@ -20,7 +30,15 @@ const config = {
         LOGOUT_TIMEOUT: SESSION_LOGOUT_TIMEOUT,
         LOGOUT_WARNING_TIMEOUT: SESSION_LOGOUT_WARNING_TIMEOUT
     },
-    LOGIN_URL: `http://${HOST}:${PORT}/api/session/auth/google?callbackPort=${LOGIN_CALLBACK_PORT}`
+    LOGIN_URL: `http://${HOST}:${PORT}/api/session/auth/google?callbackPort=${LOGIN_CALLBACK_PORT}`,
+    FILTERS: {
+        MAX_NAME_LENGTH: 50,
+        MAX_DESCRIPTION_LENGTH: 512
+    },
+    VIEWS: {
+        MAX_NAME_LENGTH: 50,
+        MAX_DESCRIPTION_LENGTH: 512
+    }
 };
 
-export default config
+export default config;

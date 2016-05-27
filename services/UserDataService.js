@@ -4,6 +4,7 @@ const async = require('async');
 const _ = require('lodash');
 
 const ServiceBase = require('./ServiceBase');
+const UploadOperation = require('./operations/UploadOperation');
 
 class UserDataService extends ServiceBase {
     constructor(services, models) {
@@ -15,12 +16,11 @@ class UserDataService extends ServiceBase {
      * Gets data necessary for initial page loading.
      *
      * @param {Object}user User, to which the data request is related to.
-     * @param {string}sessionId Session id in request.
      * @param {function(Error, Object)}callback
      * */
-    getUserData(user, sessionId, callback) {
+    getUserData(user, callback) {
         async.waterfall([
-            (callback) => this._findGeneralData(user, sessionId, callback),
+            (callback) => this._findGeneralData(user, callback),
             (results, callback) => {
                 this.services.queryHistory.findLastEntryOrNull(user,
                     (error, lastEntry) => callback(error, results, lastEntry));
@@ -61,10 +61,9 @@ class UserDataService extends ServiceBase {
 
     /**
      * @param {Object}user Current user object.
-     * @param {string}sessionId Id of the session in request.
      * @param {function(Error, Object)}callback
      * */
-    _findGeneralData(user, sessionId, callback) {
+    _findGeneralData(user, callback) {
         async.waterfall([
             (callback) => {
                 async.parallel({
@@ -88,21 +87,33 @@ class UserDataService extends ServiceBase {
                         this.services.fieldsMetadata.findTotalMetadata(callback);
                     },
                     activeOperations: (callback) => {
-                        this.services.operations.findAll(sessionId, (error, operations) => {
-                            const clientOperations = _.map(operations, operation => {
-                                return {
-                                    id: operation.id,
-                                    type: operation.type
-                                };
-                            });
-                            callback(error, clientOperations);
-                        });
+                        this._findActiveOperations(user, callback);
                     }
                 }, callback);
             }
         ], (error, results) => {
             callback(error, results);
         });
+    }
+
+    _findActiveOperations(user, callback) {
+        async.waterfall([
+            (callback) => this.services.operations.findActiveOperations(user.id, callback),
+            (operations, callback) => {
+                const groupedOperations = _.groupBy(operations, operation => operation instanceof UploadOperation);
+                const nonUploadResults = _.map(groupedOperations['false'], operation => ({
+                    id: operation.getId(),
+                    type: operation.getType(),
+                    lastMessage: null
+                }));
+                const uploadResults = _.map(groupedOperations['true'], operation => ({
+                    id: operation.getId(),
+                    type: operation.getType(),
+                    lastMessage: operation.getLastAppServerMessage()
+                }));
+                callback(null, nonUploadResults.concat(uploadResults));
+            }
+        ], callback);
     }
 }
 

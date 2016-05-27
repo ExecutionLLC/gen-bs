@@ -1,34 +1,35 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 
 export default class NavbarSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            globalSearchString: ""
+            globalSearchString: ''
         };
     }
 
     render() {
         const isEnabled = !this.props.isVariantsLoading && this.props.isVariantsValid;
         return (
-            <div className="navbar-search">
-                <div className="navbar-search-field width">
+            <div className='navbar-search'>
+                <a data-target='#mobileSearch' data-toggle='modal' className='btn navbar-btn btn-block visible-xxs' type='button'><i className='md-i'>search</i></a>
+                <div className='navbar-search-field hidden-xxs'>
                     <input
-                     type="text"
-                     data-localize="results.search"
-                     className="form-control placeholder-inverse"
-                     placeholder="Search for mutations of current sample analysis"
-                     data-localize=""
+                     type='text'
+                     data-localize='results.search'
+                     className='form-control placeholder-inverse'
+                     placeholder='Search for mutations of current sample analysis'
+                     data-localize=''
                      onChange={(e) => this.onGlobalSearchInputChanged(e)}
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
-                     onBlur={(e) => this.onGlobalSearchInputBlur()}
+                     onBlur={() => this.onGlobalSearchInputBlur()}
                      disabled={!isEnabled}
                     />
                 </div>
             </div>
-        )
+        );
     }
 
     onGlobalSearchInputChanged(e) {

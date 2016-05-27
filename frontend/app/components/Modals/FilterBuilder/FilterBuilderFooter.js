@@ -1,49 +1,46 @@
 import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
-import classNames from 'classnames';
 
 import {filterBuilderSaveAndSelectRules} from '../../../actions/filterBuilder';
-
 
 export default class FilterBuilderFooter extends Component {
 
     render() {
-        const {dispatch, auth, closeModal} = this.props;
-        const filter = this.props.filterBuilder.editingFilter.filter;
-
-        const disabledClass = classNames({
-            'disabled': (filter.type === 'advanced' && auth.isDemo || !filter.name.trim()) ? 'disabled' : ''
-        });
-        const title = (filter.type === 'advanced' && auth.isDemo) ? 'Login or register to select advanced filters' : '';
-        const isFilterEditable = (filter.type === 'user');
-        const selectButtonLabel = isFilterEditable ? 'Save and Select': 'Select';
+        const {confirmButtonParams} = this.props;
 
         return (
             <Modal.Footer>
                 <button
-                    onClick={ () => { closeModal('filters')} }
-                    type="button"
-                    className="btn btn-default"
-                    data-dismiss="modal"
+                    onClick={() => this.onCancelClick()}
+                    type='button'
+                    className='btn btn-default'
+                    data-dismiss='modal'
                 >
-                    <span data-localize="actions.cancel">Cancel</span>
+                    <span data-localize='actions.cancel'>Cancel</span>
                 </button>
 
                 <button
-                    disabled={disabledClass}
-                    title={title}
-                    onClick={ () => {
-                        if (filter.name.trim()) {
-                            dispatch(filterBuilderSaveAndSelectRules())
-                        }
-                    }}
-                    type="button"
-                    className="btn btn-primary"
+                    onClick={() => this.onConfirmClick()}
+                    type='button'
+                    className='btn btn-primary'
+                    disabled={confirmButtonParams.disabled}
+                    title={confirmButtonParams.title}
                 >
-                    <span data-localize="actions.save_select.title">{selectButtonLabel}</span>
+                    <span data-localize='actions.save_select.title'>{confirmButtonParams.caption}</span>
                 </button>
             </Modal.Footer>
-
-        )
+        );
     }
+
+    onCancelClick() {
+        this.props.closeModal();
+    }
+
+    onConfirmClick() {
+        const filter = this.props.filterBuilder.editingFilter.filter;
+        if (filter.name.trim()) {
+            this.props.dispatch(filterBuilderSaveAndSelectRules());
+        }
+    }
+
 }

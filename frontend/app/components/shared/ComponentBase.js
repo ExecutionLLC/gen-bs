@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import shallowCompare from 'react-addons-shallow-compare';
 
 export default class ComponentBase extends Component {
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps) {
         return shallowCompare(this.props, nextProps);
     }
 }

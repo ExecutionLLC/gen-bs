@@ -1,24 +1,24 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import VariantsTableRow from './VariantsTableRow';
 
-import { getNextPartOfData, selectTableRow } from '../../actions/variantsTable';
+import {getNextPartOfData, selectTableRow} from '../../actions/variantsTable';
 import {completeTableScrollPositionReset} from '../../actions/ui';
 
 export default class VariantsTableRows extends Component {
 
     render() {
         const sampleRows = this.props.variants;
-        const { currentVariants } = this.props.ws;
-        const { sort } = this.props.variantsTable.searchInResultsParams;
-        const { isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
-        const { searchParams,ui,fields } = this.props;
+        const {currentVariants} = this.props.ws;
+        const {sort} = this.props.variantsTable.searchInResultsParams;
+        const {isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
+        const {fields} = this.props;
         const currentView = this.props.ws.variantsView;
 
         return (
-            <tbody className="table-variants-body"
-                   id="variants_table_body"
-                   ref="variantsTableBody">
+            <tbody className='table-variants-body'
+                   id='variants_table_body'
+                   ref='variantsTableBody'>
             {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
                 currentView, fields, selectedRowIndices)}
             {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
@@ -36,11 +36,11 @@ export default class VariantsTableRows extends Component {
         scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps) {
         return this.props.variants !== nextProps.variants
             || this.props.variantsTable.isFilteringOrSorting !== nextProps.variantsTable.isFilteringOrSorting
             || this.props.variantsTable.selectedRowIndices !==
-                    nextProps.variantsTable.selectedRowIndices;
+            nextProps.variantsTable.selectedRowIndices;
     }
 
     componentWillUnmount() {
@@ -52,8 +52,8 @@ export default class VariantsTableRows extends Component {
         if (isFilteringOrSorting || !currentView) {
             return (
                 <tr>
-                    <td colSpan="100">
-                        <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+                    <td colSpan='100'>
+                        <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
                         </div>
                     </td>
                 </tr>
@@ -67,7 +67,7 @@ export default class VariantsTableRows extends Component {
     }
 
     handleScroll(e) {
-        const { dispatch, ws: {currentVariants}, ui: {shouldResetTableScrollPosition} } = this.props;
+        const {dispatch, ws: {currentVariants}, ui: {shouldResetTableScrollPosition}} = this.props;
         // Workaround for bug #299
         if (shouldResetTableScrollPosition) {
             setTimeout(() => {
@@ -86,7 +86,7 @@ export default class VariantsTableRows extends Component {
             this.props.dispatch(getNextPartOfData());
         }
 
-        if(this.props.xScrollListener) {
+        if (this.props.xScrollListener) {
             this.props.xScrollListener(el.scrollLeft);
         }
     }
@@ -115,8 +115,8 @@ export default class VariantsTableRows extends Component {
         if (!isFilteringOrSorting && variantsLength > 99) {
             return (
                 <tr>
-                    <td colSpan="100">
-                        <div className="table-loader">Loading...<i className="md-i">autorenew</i>
+                    <td colSpan='100'>
+                        <div className='table-loader'>Loading...<i className='md-i'>autorenew</i>
                         </div>
                     </td>
                 </tr>

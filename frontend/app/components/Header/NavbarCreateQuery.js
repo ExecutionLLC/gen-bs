@@ -1,24 +1,24 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
-import Upload from './NavbarCreateQuery/Upload'
-import MetadataSearch from './NavbarCreateQuery/MetadataSearch'
-import FiltersSetup from './NavbarCreateQuery/FiltersSetup'
-import Filters from './NavbarCreateQuery/Filters'
-import ViewsSetup from './NavbarCreateQuery/ViewsSetup'
-import Views from './NavbarCreateQuery/Views'
-import Analyze from './NavbarCreateQuery/Analyze'
-import LoadHistory from './NavbarCreateQuery/LoadHistory'
-import {fetchFields} from '../../actions/fields'
+import Upload from './NavbarCreateQuery/Upload';
+import MetadataSearch from './NavbarCreateQuery/MetadataSearch';
+import FiltersSetup from './NavbarCreateQuery/FiltersSetup';
+import Filters from './NavbarCreateQuery/Filters';
+import ViewsSetup from './NavbarCreateQuery/ViewsSetup';
+import Views from './NavbarCreateQuery/Views';
+import Analyze from './NavbarCreateQuery/Analyze';
+import LoadHistory from './NavbarCreateQuery/LoadHistory';
+import {fetchFields} from '../../actions/fields';
 
-import { changeView, changeFilter, analyze } from '../../actions/ui'
-import { changeSample } from '../../actions/samplesList'
+import { analyze } from '../../actions/ui';
+import { changeSample } from '../../actions/samplesList';
 
 
 class NavbarCreateQuery extends Component {
 
     onSampleSelected(sampleId) {
-        const { dispatch, samples } = this.props;
+        const { dispatch } = this.props;
         dispatch(changeSample(sampleId));
         dispatch(fetchFields(sampleId));
     }
@@ -26,15 +26,16 @@ class NavbarCreateQuery extends Component {
     render() {
 
         const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
-        const {selectedView, selectedFilter} = this.props.ui;
+        const {selectedView} = this.props.ui;
+        const {selectedFilterId} = this.props.filtersList;
         const {selectedSample} = this.props.samplesList;
         const selectedSampleId = selectedSample ? selectedSample.id : null;
 
         return (
 
-            <nav className="navbar navbar-fixed-top navbar-default">
-                <div className="container-fluid">
-                    <div className="table-row">
+            <nav className='navbar navbar-fixed-top navbar-default'>
+                <div className='container-fluid'>
+                    <div className='table-row'>
                         <Upload
                             {...this.props}
                         />
@@ -59,7 +60,7 @@ class NavbarCreateQuery extends Component {
 
                         <Analyze
                             {...this.props}
-                            clicked={ (e) => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilter.id))}
+                            clicked={ () => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilterId))}
                         />
                         <LoadHistory
                             dispatch={this.props.dispatch}
@@ -68,7 +69,7 @@ class NavbarCreateQuery extends Component {
                 </div>
             </nav>
 
-        )
+        );
     }
 }
 
@@ -84,7 +85,8 @@ function mapStateToProps(state) {
         samplesList,
         samplesList: {
             samples
-        }
+        },
+        filtersList
     } = state;
 
     return {
@@ -94,8 +96,9 @@ function mapStateToProps(state) {
         filters,
         ui,
         auth,
-        samplesList
-    }
+        samplesList,
+        filtersList
+    };
 }
 
-export default connect(mapStateToProps)(NavbarCreateQuery)
+export default connect(mapStateToProps)(NavbarCreateQuery);

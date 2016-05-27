@@ -13,6 +13,10 @@ class FiltersService extends UserEntityServiceBase {
     add(user, languId, filter, callback) {
         async.waterfall([
             (callback) => this._checkFilterRules(filter, callback),
+            (callback) => super.findAll(user, callback),
+            (filters, callback) => {
+                this._checkFilterNameExists(filter, filters, callback)
+            },
             (callback) => super.add(user, languId, filter, callback)
         ], callback);
     }
@@ -21,21 +25,26 @@ class FiltersService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this._checkFilterRules(filter, callback),
             (callback) => super.find(user, filter.id, callback),
-            (existingFilter, callback) => {
-                if (existingFilter.type !== 'user') {
-                    callback(new Error('Default filter cannot be updated'));
-                } else {
-                    super.update(user, filter, callback);
-                }
-            }
+            (existingFilter, callback) => this._ensureItemOfUserType(existingFilter, callback),
+            (existingFilter, callback) => super.update(user, filter, callback)
         ], callback);
+    }
+
+    remove(user, filterId, callback) {
+        async.waterfall([
+            (callback) => super.find(user, filterId, callback),
+            (existingFilter, callback) => this._ensureItemOfUserType(existingFilter, callback),
+            (existingFilter, callback) => super.remove(user, existingFilter.id, callback)
+        ], (error, filter) => {
+            callback(error, filter);
+        });
     }
 
     _checkFilterRules(filter, callback) {
         async.waterfall([
             (callback) => {
                 if (!_.isObject(filter.rules)) {
-                    callback(new Error('Filter rules is not defined'))
+                    callback(new Error('Filter rules are not in correct format'))
                 } else {
                     callback(null);
                 }
@@ -72,6 +81,22 @@ class FiltersService extends UserEntityServiceBase {
             } else {
                 callback(null, mappedColumns[0]);
             }
+        }
+    }
+
+    _checkFilterNameExists(filter, filters, callback) {
+        if (!_.isString(filter.name)) {
+            callback(new Error('Filter name should be a string.'));
+            return;
+        }
+        const filterName = filter.name.trim();
+        const filterExists = _.some(
+            filters, f => f.name.trim() == filterName
+        );
+        if (filterExists) {
+            callback(new Error('Filter with this name already exists.'));
+        } else {
+            callback(null);
         }
     }
 }

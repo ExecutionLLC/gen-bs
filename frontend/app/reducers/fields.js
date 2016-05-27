@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions/fields'
+import * as ActionTypes from '../actions/fields';
 
 const initialState = {
     isFetching: {
@@ -10,7 +10,8 @@ const initialState = {
     editableFields: [],
     sourceFieldsList: [],
     totalFieldsList: [],
-    // Fields allowed for selection in a typical fields list.
+    totalFieldsHash: {},
+    // Fields allowed for selection in a typical fields list (include current sample fields and sources fields)
     allowedFieldsList: [],
     allowedIdToFieldHash: {}
 };

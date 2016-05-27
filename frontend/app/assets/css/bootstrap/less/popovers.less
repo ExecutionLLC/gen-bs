@@ -9,7 +9,6 @@
   left: 0;
   z-index: @zindex-popover;
   display: none;
-  max-width: @popover-max-width;
   padding: 1px;
   // Our parent element can be arbitrary since popovers are by default inserted as a sibling of their target element.
   // So reset our font and text properties to avoid inheriting weird values.
@@ -25,6 +24,30 @@
   &.right   { margin-left: @popover-arrow-width; }
   &.bottom  { margin-top: @popover-arrow-width; }
   &.left    { margin-left: -@popover-arrow-width; }
+   @media (max-width: @screen-xss-max) {
+    left: 0 !important;
+    margin: 10px !important;
+    max-width: none;
+    right: 0 !important;
+    top: 0 !important;
+     &:before { 
+       background: @modal-backdrop-bg;
+       position: fixed;
+       left: 0;
+       top:0;
+       right: 0;
+       bottom: 0;
+       opacity: @modal-backdrop-opacity;
+       content: '';
+     } 
+     .arrow { 
+       display: none !important;
+     } 
+     .popover-content {
+      background: #fff ;
+      position: relative;
+      }
+    }
 }
 
 .popover-title {

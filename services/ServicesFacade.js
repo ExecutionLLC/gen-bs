@@ -12,13 +12,18 @@ const AmazonS3Service = require('./external/AmazonS3Service');
 const SessionService = require('./SessionService');
 const OperationService = require('./operations/OperationsService');
 const FieldsMetadataService = require('./FieldsMetadataService');
-const ApplicationServerService = require('./external/ApplicationServerService');
-const ApplicationServerReplyService = require('./external/ApplicationServerReplyService');
 const SearchService = require('./SearchService');
 const SchedulerService = require('./tasks/SchedulerService');
 const SavedFilesService = require('./SavedFilesService');
 const QueryHistoryService = require('./QueryHistoryService');
 const UserDataService = require('./UserDataService');
+
+const ApplicationServerService = require('./external/applicationServer/ApplicationServerService');
+const ApplicationServerReplyService = require('./external/applicationServer/ApplicationServerReplyService');
+const AppServerUploadService = require('./external/applicationServer/AppServerUploadService');
+const AppServerSourcesService = require('./external/applicationServer/AppServerSourcesService');
+const AppServerOperationsService = require('./external/applicationServer/AppServerOperationsService');
+const AppServerSearchService = require('./external/applicationServer/AppServerSearchService');
 
 class ServiceFacade {
     constructor(config, logger, models) {
@@ -40,8 +45,12 @@ class ServiceFacade {
         this.sessions = new SessionService(this, models);
         this.operations = new OperationService(this, models);
 
-        this.applicationServer = new ApplicationServerService(this, models);
-        this.applicationServerReply = new ApplicationServerReplyService(this, models);
+        this.applicationServer = new ApplicationServerService(this);
+        this.applicationServerUpload = new AppServerUploadService(this);
+        this.applicationServerSources = new AppServerSourcesService(this);
+        this.applicationServerOperations = new AppServerOperationsService(this);
+        this.applicationServerReply = new ApplicationServerReplyService(this);
+        this.applicationServerSearch = new AppServerSearchService(this);
 
         this.redis = new RedisService(this, models);
         this.amazonS3 = new AmazonS3Service(this, models);

@@ -1,61 +1,84 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder'
+import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder';
+import config from '../../../../config';
 
 
 export default class NewViewInputs extends React.Component {
 
     render() {
 
-        const {dispatch, viewBuilder, views} = this.props;
+        const {viewBuilder, validationMessage} = this.props;
         const newView = viewBuilder.editedView;
 
         return (
-
-            <div className="collapse in copyview">
-                <div className="row grid-toolbar">
-
-                    <div className="col-sm-6">
-                        <label data-localize="views.setup.new.name.title">New View</label>
+            <div className='collapse in'>
+                { validationMessage &&
+                <div className='alert alert-help'>
+                        <span data-localize='views.setup.selector.description'>
+                            {validationMessage}
+                        </span>
+                </div>
+                }
+                <div className='row grid-toolbar row-noborder row-new-item'>
+                    <div className='col-sm-6'>
+                        <label data-localize='views.setup.new.name.title'>New View</label>
                         <input
-                            type="text"
-                            className="form-control text-primary"
-                            data-localize="views.setup.new.name.help"
-                            placeholder="Set view name a copy"
+                            type='text'
+                            className='form-control text-primary'
+                            data-localize='views.setup.new.name.help'
+                            placeholder='Set view name'
                             value={newView.name}
-                            onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: e.target.value, description: newView.description})) }
+                            maxLength={config.VIEWS.MAX_NAME_LENGTH}
+                            onChange={(e) => this.onNameChange(e.target.value)}
                         />
-                        { !newView.name &&
-                        <div className="help-text text-danger" data-localize="views.setup.new.name.error">
-                            View name cannot be empty
+                    </div>
+                    <div className='col-sm-6'>
+                        <label data-localize='general.description'>Description</label>
+                        <div className='input-group'>
+                            <input
+                                type='text'
+                                className='form-control'
+                                data-localize='views.setup.new.description'
+                                placeholder='Set view description (optional)'
+                                value={newView.description}
+                                maxLength={config.VIEWS.MAX_DESCRIPTION_LENGTH}
+                                onChange={(e) => this.onDescriptionChange(e.target.value)}
+                            />
+                            <div className='input-group-btn btn-group-close'>
+                                <button type='button' className='btn-link-default' type='button'
+                                        onClick={() => this.onCancelClick()}>
+                                    <i className='md-i'>close</i>
+                                </button>
+                            </div>
                         </div>
-                        }
                     </div>
-
-                    <div className="col-sm-5">
-                        <label data-localize="general.description">Description</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            data-localize="views.setup.new.description"
-                            placeholder="Set view description (optional)"
-                            value={newView.description}
-                            onChange={ (e) =>dispatch(viewBuilderChangeAttr({name: newView.name, description: e.target.value})) }
-                        />
-                    </div>
-
-                    <div className="col-sm-1">
-                        <button type="button" className="btn btn-default btn-label-indent delete-copy" type="button"
-                                data-toggle="collapse" data-target=".copyview "
-                                onClick={ () => dispatch(viewBuilderSelectView(views, newView.originalViewId)) }><span
-                            data-localize="actions.cancel">Cancel</span></button>
-                    </div>
-
                 </div>
             </div>
-
-        )
+        );
     }
+
+    onNameChange(name) {
+        const {editedView} = this.props.viewBuilder;
+        this.props.dispatch(viewBuilderChangeAttr({
+            name,
+            description: editedView.description
+        }));
+    }
+
+    onDescriptionChange(description) {
+        const {editedView} = this.props.viewBuilder;
+        this.props.dispatch(viewBuilderChangeAttr({
+            name: editedView.name,
+            description
+        }));
+    }
+
+    onCancelClick() {
+        const {editedView} = this.props.viewBuilder;
+        this.props.dispatch(viewBuilderSelectView(this.props.views, editedView.originalViewId));
+    }
+
 }
 
 function mapStateToProps(state) {
@@ -63,7 +86,7 @@ function mapStateToProps(state) {
     return {
         views,
         viewBuilder
-    }
+    };
 }
 
 export default connect(mapStateToProps)(NewViewInputs);

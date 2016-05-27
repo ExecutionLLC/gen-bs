@@ -103,7 +103,7 @@ describe('Views', () => {
     });
 
     describe('failure tests', () => {
-        it('should fail to update non-user view', (done) => {
+        it('should fail to update and remove non-user view', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
@@ -113,7 +113,12 @@ describe('Views', () => {
 
                 viewsClient.update(sessionId, nonUserView, (error, response) => {
                     ClientBase.expectErrorResponse(error, response);
-                    done();
+
+                    viewsClient.remove(sessionId, nonUserView, (error, response) => {
+                        ClientBase.expectErrorResponse(error, response);
+
+                        done();
+                    });
                 });
             });
         });
@@ -203,6 +208,35 @@ describe('Views', () => {
             });
         });
 
+        it('should fail to add view with existing name', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                });
+            });
+        });
+
+        it('should fail to add view with existing name with leading and trailing spaces', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = ' ' + view.name + ' ';
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                });
+            });
+        });
+
         it('should fail to add view with empty list item', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
@@ -276,6 +310,52 @@ describe('Views', () => {
             });
         });
 
+        it('should not return previous version of the view when current version is deleted (issue #337)', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = 'Test View ' + Uuid.v4();
+                // Will search the view by description below.
+                view.description = Uuid.v4();
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    const addedView = ClientBase.readBodyWithCheck(error, response);
+                    assert.ok(addedView);
+                    assert.equal(addedView.name, view.name);
+                    assert.equal(addedView.description, view.description);
+
+                    // Now it should return.
+                    viewsClient.getAll(sessionId, (error, response) => {
+                        const views = ClientBase.readBodyWithCheck(error, response);
+                        assert.ok(_.some(views, f => f.id === addedView.id));
+                        assert.ok(_.some(views, f => f.description === view.description));
+
+                        const viewToUpdate = Object.assign({}, addedView, {
+                            name: Uuid.v4()
+                        });
+
+                        // Make new version.
+                        viewsClient.update(sessionId, viewToUpdate, (error, response) => {
+                            const updatedView = ClientBase.readBodyWithCheck(error, response);
+
+                            // Delete the last version.
+                            viewsClient.remove(sessionId, updatedView.id, (error, response) => {
+                                ClientBase.readBodyWithCheck(error, response);
+
+                                viewsClient.getAll(sessionId, (error, response) => {
+                                    // Now list should not return the view.
+                                    const views = ClientBase.readBodyWithCheck(error, response);
+                                    assert.ok(!_.some(views, f => f.description === view.description));
+
+                                    done();
+                                });
+                            })
+                        })
+                    });
+                });
+            });
+        });
     });
 
     describe('positive tests after all tests', () => {

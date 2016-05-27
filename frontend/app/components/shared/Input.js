@@ -46,9 +46,11 @@ export default class Input extends Component {
     }
 
     onInputChanged(evt) {
-        const {onChanging} = this.props;
+        const {onChanging, validationRegex} = this.props;
         const value = evt.target.value;
-
+        if (validationRegex && !new RegExp(validationRegex).test(value)){
+            return;
+        }
         this.setState({value});
 
         if (onChanging) {
@@ -76,8 +78,8 @@ export default class Input extends Component {
     return (
       <div>
         <Input
-          className="i1"
-          type="number"
+          className='i1'
+          type='number'
           value={1234}
           onChange={ (val) => { console.log(val); } }
         />

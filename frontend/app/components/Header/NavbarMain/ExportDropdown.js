@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Nav, NavDropdown, MenuItem} from 'react-bootstrap';
 
 import {exportToFile} from '../../../actions/savedFiles';
@@ -7,10 +7,10 @@ import ComponentBase from '../../shared/ComponentBase';
 export default class ExportDropdown extends ComponentBase {
 
     constructor(props) {
-        super(props)
+        super(props);
     }
 
-    get haveSelectedVariants() {
+    haveSelectedVariants() {
         const {selectedRowIndices} = this.props;
         return !_.isEmpty(selectedRowIndices);
     }
@@ -21,13 +21,13 @@ export default class ExportDropdown extends ComponentBase {
             <div>
                 <Nav>
                     <NavDropdown title={exportDropdownTitle}
-                                 id="export-dropdown"
+                                 id='export-dropdown'
                                  onSelect={(e, item) => this.onExportItemSelected(e, item)}
-                                 disabled={!this.haveSelectedVariants}
+                                 disabled={!this.haveSelectedVariants()}
                     >
-                        <MenuItem eventKey="csv">CSV</MenuItem>
-                        <MenuItem eventKey="sql">SQL</MenuItem>
-                        <MenuItem eventKey="txt">Text</MenuItem>
+                        <MenuItem eventKey='csv'>CSV</MenuItem>
+                        <MenuItem eventKey='sql'>SQL</MenuItem>
+                        <MenuItem eventKey='txt'>Text</MenuItem>
                     </NavDropdown>
                 </Nav>
             </div>
@@ -35,12 +35,12 @@ export default class ExportDropdown extends ComponentBase {
     }
 
     renderExportButtonTitle() {
-        if (!this.haveSelectedVariants) {
-            return (<span>Export</span>);
+        if (!this.haveSelectedVariants()) {
+            return (<span><span className='hidden-xxs'>Export</span><span className='visible-xxs'><i className='md-i'>file_download</i></span></span>);
         } else {
             const {selectedRowIndices} = this.props;
             const selectedVariantsCount = selectedRowIndices.length;
-            return (<span>Export  <span className="badge badge-warning">{selectedVariantsCount}</span></span>);
+            return (<span><span className='hidden-xxs'>Export</span><span className='visible-xxs'><i className='md-i'>file_download</i></span><span className='badge badge-warning'>{selectedVariantsCount}</span></span>);
         }
     }
 

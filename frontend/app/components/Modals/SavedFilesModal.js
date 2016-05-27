@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Moment from 'moment';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 import DialogBase from './DialogBase';
 import {closeSavedFilesDialog, downloadSavedFile} from '../../actions/savedFiles';
@@ -37,11 +37,11 @@ class SavedFilesModal extends DialogBase {
         const {isDemo} = this.props;
         if (isDemo) {
             return (
-                <div>Please register to access your saved files here.</div>
+                <div className='empty'><h3><i className='md-i'>perm_identity</i>Please register to access your saved files here.</h3></div>
             );
         } else {
             return (
-                <div>Here will be the files you have exported, but there are no such files for now.</div>
+                <div className='empty'><h3><i className='md-i'>hourglass_empty</i>Here will be the files you have exported, but there are no such files for now.</h3></div>
             );
         }
     }
@@ -58,22 +58,20 @@ class SavedFilesModal extends DialogBase {
             .take(10)
             .value();
         return (
-            <div className="table-wrapper table-files-wrapper">
-                <div className="table-container table-variants-container">
-                    <table className="table table-condensed">
-                        <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Sample</th>
-                            <th>Filter</th>
-                            <th>View</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {_.map(sortedFiles, file => this.renderSavedFileRow(file))}
-                        </tbody>
-                    </table>
-                </div>
+            <div className='modal-body-scroll'>
+                  <table className='table table-condensed table-vertical-top table-responsive-transform'>
+                      <thead>
+                      <tr>
+                          <th>Date</th>
+                          <th>Sample</th>
+                          <th>Filter</th>
+                          <th>View</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {_.map(sortedFiles, file => this.renderSavedFileRow(file))}
+                      </tbody>
+                  </table>
             </div>
         );
     }
@@ -89,8 +87,8 @@ class SavedFilesModal extends DialogBase {
                 <td>
                     <button
                         onClick={() => this.onDownloadClick(savedFile)}
-                        type="button"
-                        className="btn btn-uppercase btn-link"
+                        type='button'
+                        className='btn btn-uppercase btn-link'
                     >
                         <span>Download</span>
                     </button>

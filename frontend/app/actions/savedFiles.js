@@ -22,7 +22,7 @@ function createUserDownload(fileBlob, fileName) {
         type: CREATE_EXPORT_DOWNLOAD,
         fileBlob,
         fileName
-    }
+    };
 }
 
 function saveExportedFileToServer(fileBlob, fileName, totalResults) {
@@ -30,7 +30,6 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
         const {
             ui: {
                 selectedView,
-                selectedFilter,
                 language
             },
             auth: {
@@ -38,12 +37,15 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             },
             samplesList: {
                 selectedSample
+            },
+            filtersList: {
+                selectedFilterId
             }
         } = getState();
         const fileMetadata = {
             sampleId: selectedSample.id,
             viewId: selectedView.id,
-            filterIds: [selectedFilter.id],
+            filterIds: [selectedFilterId],
             name: fileName,
             url: null,
             totalResults
@@ -63,7 +65,7 @@ function savedFileUploadResultReceived(savedFile) {
     return {
         type: SAVED_FILE_UPLOAD_RESULT_RECEIVED,
         savedFile
-    }
+    };
 }
 
 function savedFileDownloadResultReceived(savedFileBlob, fileName) {
@@ -71,19 +73,19 @@ function savedFileDownloadResultReceived(savedFileBlob, fileName) {
         type: SAVED_FILE_DOWNLOAD_RESULT_RECEIVED,
         savedFileBlob,
         fileName
-    }
+    };
 }
 
 export function showSavedFilesModal() {
     return {
         type: SHOW_SAVED_FILES_DIALOG
-    }
+    };
 }
 
 export function closeSavedFilesDialog() {
     return {
         type: CLOSE_SAVED_FILES_DIALOG
-    }
+    };
 }
 
 export function receiveSavedFilesList(savedFilesList) {
@@ -97,7 +99,7 @@ export function downloadSavedFile(savedFile) {
     return (dispatch, getState) => {
         const {
             auth: {
-                sessionId,
+                sessionId
             },
             ui: {
                 language
@@ -110,7 +112,7 @@ export function downloadSavedFile(savedFile) {
                 dispatch(savedFileDownloadResultReceived(response.blob, savedFile.name));
             }
         });
-    }
+    };
 }
 
 export function exportToFile(exportType) {
@@ -135,16 +137,16 @@ export function exportToFile(exportType) {
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
         const columns = _.map(variantsView.viewListItems, listItem => {
-                const field = totalFieldsHash[listItem.fieldId];
-                return {
-                    id: listItem.fieldId,
-                    name: field.label
-                }
-            })
-            .concat([{
-                id: 'comment',
-                name: 'Comment'
-            }]);
+            const field = totalFieldsHash[listItem.fieldId];
+            return {
+                id: listItem.fieldId,
+                name: field.label
+            };
+        })
+        .concat([{
+            id: 'comment',
+            name: 'Comment'
+        }]);
 
         // The export data should be array of objects in {field_id -> field_value} format.
         const dataToExport = _(selectedRowIndices.sort())
