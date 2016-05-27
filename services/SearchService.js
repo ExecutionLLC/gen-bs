@@ -97,7 +97,7 @@ class SearchService extends ServiceBase {
 
     _subscribeToRPCEvents() {
         const events = this.services.applicationServerReply.registeredEvents();
-        this.services.applicationServerReply.on(events.onSearchDataReceived, this._onSearchDataReceived.bind(this));
+        this.services.applicationServerReply.on(events.onSearchDataReceived, this._onSearchDataReceived);
     }
 
     _onSearchDataReceived(message) {
