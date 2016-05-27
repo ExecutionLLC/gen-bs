@@ -145,7 +145,7 @@ export function setViewVariantsSort(view) {
                     order: viewListItem.sortOrder
                 };
             })
-            .sortByOrder(['order'], true)
+            .orderBy(['order'], true)
             .value();
         //Fix for the case when another sort column is missing in the sample fields.
         if (sortOrder.length == 1) {
