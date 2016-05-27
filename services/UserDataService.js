@@ -100,18 +100,12 @@ class UserDataService extends ServiceBase {
         async.waterfall([
             (callback) => this.services.operations.findActiveOperations(user.id, callback),
             (operations, callback) => {
-                const groupedOperations = _.groupBy(operations, operation => operation instanceof UploadOperation);
-                const nonUploadResults = _.map(groupedOperations['false'], operation => ({
-                    id: operation.getId(),
-                    type: operation.getType(),
-                    lastMessage: null
-                }));
-                const uploadResults = _.map(groupedOperations['true'], operation => ({
+                const operationsWithLastMessage = _.map(operations, operation => ({
                     id: operation.getId(),
                     type: operation.getType(),
                     lastMessage: operation.getLastAppServerMessage()
                 }));
-                callback(null, nonUploadResults.concat(uploadResults));
+                callback(null, operationsWithLastMessage);
             }
         ], callback);
     }
