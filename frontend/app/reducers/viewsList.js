@@ -10,6 +10,7 @@ function reduceViewListDeleteView(state, action) {
     const newSelectedViewId = (state.selectedViewId === action.viewId) ? state.views[0].id : state.selectedViewId;
     return Object.assign({}, state, {
         views: immutableArray.remove(state.views, deletedViewIndex),
+        viewIdToViewHash: _.omit(state.viewIdToViewHash, action.viewId),
         selectedViewId: newSelectedViewId
     });
 }
@@ -22,12 +23,14 @@ function reduceViewListEditView(state, action) {
     const updatedSelectedViewId = (state.selectedViewId === action.viewId) ? action.view.id : state.selectedViewId;
     return Object.assign({}, state, {
         views: immutableArray.replace(state.views, editViewIndex, action.view),
+        viewIdToViewHash: {..._.omit(state.viewIdToViewHash, action.viewId), [action.view.id]: action.view},
         selectedViewId: updatedSelectedViewId
     });
 }
 
 export default function viewsList(state = {
     views: [],
+    viewIdToViewHash: {},
     selectedViewId: null,
     isServerOperation: false
 }, action) {
@@ -43,7 +46,8 @@ export default function viewsList(state = {
             });
         case ActionTypes.VIEWS_LIST_RECEIVE:
             return Object.assign({}, state, {
-                views: action.views
+                views: action.views,
+                viewIdToViewHash: _.keyBy(action.views, 'id')
             });
         case ActionTypes.VIEWS_LIST_SELECT_VIEW:
             return Object.assign({}, state, {
@@ -51,7 +55,8 @@ export default function viewsList(state = {
             });
         case ActionTypes.VIEWS_LIST_ADD_VIEW:
             return Object.assign({}, state, {
-                views: immutableArray.append(state.views, action.view)
+                views: immutableArray.append(state.views, action.view),
+                viewIdToViewHash: {...state.viewIdToViewHash, [action.view.id]: action.view}
             });
         case ActionTypes.VIEWS_LIST_DELETE_VIEW:
             return reduceViewListDeleteView(state, action);
