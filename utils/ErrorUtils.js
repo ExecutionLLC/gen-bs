@@ -59,10 +59,9 @@ class ErrorUtils {
      * @private
      * */
     static _createError(errorCode, message) {
-        message = this.createErrorMessage(message);
         return {
             code: errorCode,
-            message
+            message: this.createErrorMessage(message)
         };
     }
 }
