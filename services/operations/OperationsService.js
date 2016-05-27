@@ -148,18 +148,10 @@ class OperationsService extends ServiceBase {
         async.waterfall([
             (callback) => this.find(sessionId, operationId, callback),
             (operation, callback) => {
-                if (operation.getType() === OPERATION_TYPES.SEARCH) {
-                    this.services.applicationServer.requestCloseSession(
-                        operation.getSessionId(),
-                        operation.getId(),
-                        (error) => callback(error, operation)
-                    );
-                } else {
-                    callback(null, operation);
-                }
+                this._closeOperationIfNeeded(operation, callback);
             },
             (operation, callback) => {
-                this.logger.info('Removing operation ' + operation.getId() + ' of type ' + operation.getType());
+                this.logger.info('Removing ' + operation);
                 const sessionOperations = this.operations[sessionId];
                 delete sessionOperations[operation.getId()];
 
@@ -183,7 +175,7 @@ class OperationsService extends ServiceBase {
 
     _addOperation(operation, callback) {
         const sessionId = operation.getSessionId();
-        this.services.logger.info('Starting operation ' + operation.getId() + ' of type ' + operation.getType());
+        this.services.logger.info('Starting ' + operation);
         const sessionOperations = this.operations[sessionId] || (this.operations[sessionId] = {});
         const operationId = operation.getId();
         sessionOperations[operationId] = operation;
@@ -192,6 +184,18 @@ class OperationsService extends ServiceBase {
 
     _onOperationNotFound(callback) {
         callback(new Error('Operation is not found'));
+    }
+
+    _closeOperationIfNeeded(operation, callback) {
+        if (operation.shouldSendCloseToAppServer()) {
+            this.services.applicationServer.requestCloseSession(
+                operation.getSessionId(),
+                operation.getId(),
+                (error) => callback(error, operation)
+            );
+        } else {
+            callback(null, operation);
+        }
     }
 }
 

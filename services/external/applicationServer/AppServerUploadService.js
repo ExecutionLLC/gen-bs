@@ -54,7 +54,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     }
 
     processUploadResult(operation, message, callback) {
-        this.logger.info('Processing upload result for operation ' + operation.getId());
+        this.logger.info('Processing upload result for ' + operation);
         if (this._isAsErrorMessage(message)) {
             this._createErrorOperationResult(
                 operation, 
@@ -129,6 +129,9 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 );
                 return;
             }
+
+            // The upload operation is already completed on the app server.
+            operation.setSendCloseToAppServer(false);
 
             /**
              * @type AppServerOperationResult

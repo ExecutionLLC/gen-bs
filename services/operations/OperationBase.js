@@ -13,8 +13,9 @@ class OperationBase {
         this.id = Uuid.v4();
         this.method = method;
         this.sessionId = sessionId;
-        this.timestamp = Date.now();
+        this.timestamp = new Date(Date.now());
         this.lastAppServerMessage = null;
+        this.shouldSendClose = true;
     }
 
     getTimestamp() {
@@ -38,6 +39,14 @@ class OperationBase {
     getType() {
         throw new Error('Method is not implemented');
     }
+    
+    shouldSendCloseToAppServer() {
+        return this.shouldSendClose;
+    }
+    
+    setSendCloseToAppServer(flag) {
+        this.shouldSendClose = flag;
+    }
 
     /**
      * @param {AppServerResult}message
@@ -51,6 +60,10 @@ class OperationBase {
      * */
     getLastAppServerMessage() {
         return this.lastAppServerMessage;
+    }
+
+    toString() {
+        return 'operation ' + this.getId() + ' of type ' + this.getType() + ' (created: ' + this.getTimestamp() + ')';
     }
 
     static operationTypes() {

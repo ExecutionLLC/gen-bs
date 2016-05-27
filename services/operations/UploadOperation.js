@@ -6,6 +6,7 @@ class UploadOperation extends SystemOperation {
     constructor(sessionId, method, userId) {
         super(sessionId, method);
         this.userId = userId;
+        this.setSendCloseToAppServer(true);
     }
 
     getType() {

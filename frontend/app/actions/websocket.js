@@ -137,11 +137,11 @@ function receiveUploadMessage(wsData) {
 function receiveErrorMessage(wsData) {
     return (dispatch) => {
         console.error('Error: ' + JSON.stringify(wsData.error));
-        const message = wsData.error.message;
+        const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
-            dispatch(fileUploadError(message));
+            dispatch(fileUploadError(error));
         } else {
-            dispatch(asError(message));
+            dispatch(asError(error));
         }
     };
 }
