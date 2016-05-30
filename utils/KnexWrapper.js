@@ -60,13 +60,14 @@ class KnexWrapper {
      * @param callback (error, data)
      * */
     endTransaction(trx, error, data, callback) {
-        trx.complete(error, data, callback);
+        trx.complete(error, new Error().stack, data, callback);
     }
 
     transactionally(query, callback) {
         if (typeof callback !== 'function') {
             throw new Error('callback is not a function');
         }
+        const originalStack = new Error().stack;
         async.waterfall([
             (callback) => {
                 // 1. Create transaction
@@ -79,7 +80,7 @@ class KnexWrapper {
             },
             (trx, error, data, callback) => {
                 // 4. Complete transaction
-                trx.complete(error, data, callback);
+                trx.complete(error, originalStack, data, callback);
             }
         ], callback);
     }
