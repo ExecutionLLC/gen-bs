@@ -53,7 +53,7 @@ function reduceViewListDeleteView(state, action) {
     if (!newHashedArray) {
         return state;
     }
-    const newSelectedViewId = (state.selectedViewId === action.viewId) ? state.hashedArray[0].id : state.selectedViewId;
+    const newSelectedViewId = (state.selectedViewId === action.viewId) ? state.hashedArray.array[0].id : state.selectedViewId;
     return Object.assign({}, state, {
         selectedViewId: newSelectedViewId,
         hashedArray: newHashedArray
