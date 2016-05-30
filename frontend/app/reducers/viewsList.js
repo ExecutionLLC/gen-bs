@@ -25,6 +25,18 @@ function reduceViewListEditView(state, action) {
     });
 }
 
+function reduceViewListAddView(state, action) {
+    return Object.assign({}, state, {
+        hashedArray: ImmutableHashedArray.appendItem(state.hashedArray, action.view)
+    });
+}
+
+function reduceViewListReceive(state, action) {
+    return Object.assign({}, state, {
+        hashedArray: ImmutableHashedArray.makeFromArray(action.views)
+    });
+}
+
 export default function viewsList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     selectedViewId: null,
@@ -41,17 +53,13 @@ export default function viewsList(state = {
                 isServerOperation: false
             });
         case ActionTypes.VIEWS_LIST_RECEIVE:
-            return Object.assign({}, state, {
-                hashedArray: ImmutableHashedArray.makeFromArray(action.views)
-            });
+            return reduceViewListReceive(state, action);
         case ActionTypes.VIEWS_LIST_SELECT_VIEW:
             return Object.assign({}, state, {
                 selectedViewId: action.viewId
             });
         case ActionTypes.VIEWS_LIST_ADD_VIEW:
-            return Object.assign({}, state, {
-                hashedArray: ImmutableHashedArray.appendItem(state.hashedArray, action.view)
-            });
+            return reduceViewListAddView(state, action);
         case ActionTypes.VIEWS_LIST_DELETE_VIEW:
             return reduceViewListDeleteView(state, action);
         case ActionTypes.VIEWS_LIST_EDIT_VIEW:
