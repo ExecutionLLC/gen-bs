@@ -18,7 +18,7 @@ export default class ExistentFilterSelect extends Component {
     render() {
         const {auth, fields} = this.props;
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
-        const {filters} = this.props.filtersList;
+        const filters = this.props.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
         const isFilterEditable = selectedFilter.type === 'user';
 

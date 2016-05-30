@@ -1,37 +1,48 @@
-import _ from 'lodash';
 import * as ActionTypes from '../actions/filtersList';
-import immutableArray from '../utils/immutableArray';
+import {ImmutableHashedArray} from '../utils/immutable';
 
 function reduceFilterListDeleteFilter(state, action) {
-    const deletedFilterIndex = _.findIndex(state.filters, {id: action.filterId});
-    if (deletedFilterIndex < 0) {
+    const newHashedArray = ImmutableHashedArray.deleteItemId(state.hashedArray, action.filterId);
+    if (!newHashedArray) {
         return state;
     }
-    const newSelectedFilterId = (state.selectedFilterId === action.filterId) ? state.filters[0].id : state.selectedFilterId;
+    const newSelectedFilterId = (state.selectedFilterId === action.filterId) ? state.hashedArray.array[0].id : state.selectedFilterId;
     return Object.assign({}, state, {
-        filters: immutableArray.remove(state.filters, deletedFilterIndex),
-        selectedFilterId: newSelectedFilterId
+        selectedFilterId: newSelectedFilterId,
+        hashedArray: newHashedArray
     });
 }
 
 function reduceFilterListEditFilter(state, action) {
-    const editFilterIndex = _.findIndex(state.filters, {id: action.filterId});
-    if (editFilterIndex < 0) {
+    const newHashedArray = ImmutableHashedArray.replaceItemId(state.hashedArray, action.filterId, action.filter);
+    if (!newHashedArray) {
         return state;
     }
     const updatedSelectedFilterId = (state.selectedFilterId === action.filterId) ? action.filter.id : state.selectedFilterId;
     return Object.assign({}, state, {
-        filters: immutableArray.replace(state.filters, editFilterIndex, action.filter),
+        hashedArray: newHashedArray,
         selectedFilterId: updatedSelectedFilterId
     });
 }
 
+function reduceFilterListAddFilter(state, action) {
+    return Object.assign({}, state, {
+        hashedArray: ImmutableHashedArray.appendItem(state.hashedArray, action.filter)
+    });
+}
+
+function reduceFilterListReceive(state, action) {
+    return Object.assign({}, state, {
+        hashedArray: ImmutableHashedArray.makeFromArray(action.filters)
+    });
+}
+
 export default function filtersList(state = {
-    filters: [],
+    hashedArray: ImmutableHashedArray.makeFromArray([]),
     selectedFilterId: null,
     isServerOperation: false
 }, action) {
-    
+
     switch (action.type) {
         case ActionTypes.FILTERS_LIST_START_SERVER_OPERATION:
             return Object.assign({}, state, {
@@ -42,17 +53,13 @@ export default function filtersList(state = {
                 isServerOperation: false
             });
         case ActionTypes.FILTERS_LIST_RECEIVE:
-            return Object.assign({}, state, {
-                filters: action.filters
-            });
+            return reduceFilterListReceive(state, action);
         case ActionTypes.FILTERS_LIST_SELECT_FILTER:
             return Object.assign({}, state, {
                 selectedFilterId: action.filterId
             });
         case ActionTypes.FILTERS_LIST_ADD_FILTER:
-            return Object.assign({}, state, {
-                filters: immutableArray.append(state.filters, action.filter)
-            });
+            return reduceFilterListAddFilter(state, action);
         case ActionTypes.FILTERS_LIST_DELETE_FILTER:
             return reduceFilterListDeleteFilter(state, action);
         case ActionTypes.FILTERS_LIST_EDIT_FILTER:

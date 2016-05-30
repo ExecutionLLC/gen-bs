@@ -113,8 +113,8 @@ export function filterBuilderDeleteFilter(filterId) {
             .then( ()=> {
                 const state = getState();
                 const selectedFilterId = state.filtersList.selectedFilterId;
-                const newFilterId = (filterId == selectedFilterId) ? state.filtersList.filters[0].id : selectedFilterId;
-                const newFilter = _.find(state.filtersList.filters, {id: newFilterId});
+                const newFilterId = (filterId == selectedFilterId) ? state.filtersList.hashedArray.array[0].id : selectedFilterId;
+                const newFilter = state.filtersList.hashedArray.hash[newFilterId];
                 dispatch(filterBuilderStartEdit(false, newFilter, fields));
             });
     };

@@ -19,7 +19,7 @@ class FiltersModal extends Component {
 
     render() {
         const {auth} = this.props;
-        const {filters} = this.props.filtersList;
+        const filters = this.props.filtersList.hashedArray.array;
         const editingFilterObject = this.props.filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;

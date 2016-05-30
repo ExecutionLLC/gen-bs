@@ -57,7 +57,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
                 samples
             },
             filtersList: {
-                filters
+                hashedArray: {hash: filterIdToFilterHash}
             },
             viewsList: {
                 hashedArray: {hash: viewIdToViewHash}
@@ -77,7 +77,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(requestAnalyze(searchParams));
         const searchView = viewIdToViewHash[viewId];
         const searchSample = _.find(samples, {id: sampleId});
-        const searchFilter = _.find(filters, {id: filterId});
+        const searchFilter = filterIdToFilterHash[filterId];
         dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
         dispatch(fetchVariants(searchParams));
