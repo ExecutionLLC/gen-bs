@@ -26,10 +26,20 @@ const SETTINGS = {
         maxSizeInBytes: ENV.GEN_WS_SAVED_FILES_MAX_SIZE || 1024 * 1024,
         maxCount: ENV.GEN_WS_SAVED_FILES_MAX_COUNT || 2,
         path: ENV.GEN_WS_SAVED_FILES_PATH || __dirname + '/../uploads/',
-        amazonS3BucketName: ENV.GEN_WS_S3_BUCKET_NAME || 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b',
-        amazonS3AccessKeyId: ENV.GEN_WS_S3_ACCESS_KEY_ID || 'AKIAJKA73IEQR3ECGPVA',
-        amazonS3AccessKeySecret: ENV.GEN_WS_S3_ACCESS_KEY_SECRET || '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',
-        amazonS3RegionName: ENV.GEN_WS_S3_REGION_NAME || 'us-east-1'
+        // Object storage type to use. Supported values: 's3', 'oss'
+        objectStorageType: ENV.GEN_WS_OBJECT_STORAGE_TYPE || 's3',
+        amazon: {
+            amazonS3BucketName: ENV.GEN_WS_S3_BUCKET_NAME || 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b',
+            amazonS3AccessKeyId: ENV.GEN_WS_S3_ACCESS_KEY_ID || 'AKIAJKA73IEQR3ECGPVA',
+            amazonS3AccessKeySecret: ENV.GEN_WS_S3_ACCESS_KEY_SECRET || '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',
+            amazonS3RegionName: ENV.GEN_WS_S3_REGION_NAME || 'us-east-1'
+        },
+        oss: {
+            ossBucketName: ENV.GEN_WS_OSS_BUCKET_NAME || 'testwsgenomix',
+            ossAccessKeyId: ENV.GEN_WS_OSS_ACCESS_KEY_ID || 'j1ZHzIFv65VdK42B',
+            ossAccessKeySecret: ENV.GEN_WS_OSS_ACCESS_KEY_SECRET || 'QkLzlvbROdqHmpGnNZAGlDUpy7Tr1i',
+            ossRegionName: ENV.GEN_WS_OSS_REGION_NAME || 'oss-cn-beijing'
+        }
     },
     applicationServer: {
         host: ENV.GEN_WS_AS_HOST || 'localhost',
