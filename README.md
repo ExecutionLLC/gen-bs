@@ -26,11 +26,11 @@ This way GitHub will automatically link the commit and issue together.
 
 Issues should be labeled by the names of the application parts they are related to, ex. `web-server` or `frontend`. If there are several parts in issue, all labels should be added.
 
-When issue is fixed, and pull request is created for it, it should be marked by `fixed but not checked label`.
+When issue is fixed, and pull request is created for it, it should be marked by `fixed but not checked` label.
 
 Issue should be closed when published on the demo-server or VEP test server.
 
-Issues waiting for some external action (ex. next prototype completion) should be marked as `pending`.
+Issues waiting for some external action (ex. next prototype completion) should be labeled as `pending`.
 
 # Project Structure
 
