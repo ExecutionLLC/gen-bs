@@ -13,7 +13,7 @@ class ViewsModal extends React.Component {
 
     render() {
         const {auth} = this.props;
-        const {views} = this.props.viewsList;
+        const views = this.props.viewsList.hashedArray.array;
         const {showModal, viewBuilder} = this.props;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;

@@ -114,7 +114,7 @@ export function attachHistory(historyItem) {
             getState().filtersList.filters, filterId, historyItem.filters[0]
         );
         const {collection: views, historyItemId: newViewId} = changeHistoryItem(
-            getState().viewsList.views, viewId, historyItem.view
+            getState().viewsList.hashedArray.array, viewId, historyItem.view
         );
         dispatch([
             changeHistoryData(newSampleId, newFilterId, newViewId),
@@ -145,7 +145,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         const {
             collection: views,
             historyItemId: viewId
-        } = detachHistoryItemIfNeedIt(detachView, viewsList.views, attachedHistoryData.viewId, null);
+        } = detachHistoryItemIfNeedIt(detachView, viewsList.hashedArray.array, attachedHistoryData.viewId, null);
 
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),

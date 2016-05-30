@@ -39,7 +39,7 @@ export default class Views extends Component {
     }
 
     getViewOptions() {
-        const {views} = this.props.viewsList;
+        const views = this.props.viewsList.hashedArray.array;
         return views.map(
             (viewItem) => {
                 const isDisabled = this.isViewDisabled(viewItem);

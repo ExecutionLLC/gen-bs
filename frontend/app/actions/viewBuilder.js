@@ -147,8 +147,8 @@ export function viewBuilderDeleteView(viewId) {
         dispatch(viewsListServerDeleteView(viewId, sessionId))
             .then(() => {
                 const state = getState();
-                const views = state.viewsList.views;
-                const viewIdToViewHash = state.viewsList.viewIdToViewHash;
+                const views = state.viewsList.hashedArray.array;
+                const viewIdToViewHash = state.viewsList.hashedArray.hash;
                 const editingViewId = state.viewBuilder.editingView.id;
                 const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
                 const newView = viewIdToViewHash[newViewId];

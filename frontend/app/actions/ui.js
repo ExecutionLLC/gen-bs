@@ -60,7 +60,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
                 filters
             },
             viewsList: {
-                viewIdToViewHash
+                hashedArray: {hash: viewIdToViewHash}
             },
             fields: {
                 sampleFieldsList

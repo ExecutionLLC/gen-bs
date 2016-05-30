@@ -8,7 +8,7 @@ export default class ViewsSetup extends Component {
     }
 
     onViewsClick() {
-        const {viewIdToViewHash} = this.props.viewsList;
+        const viewIdToViewHash = this.props.viewsList.hashedArray.hash;
         const {selectedViewId} = this.props.viewsList;
         const selectedView = viewIdToViewHash[selectedViewId];
         this.props.dispatch(viewBuilderStartEdit(false, selectedView));

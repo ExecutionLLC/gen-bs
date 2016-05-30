@@ -71,7 +71,7 @@ export default class NewViewInputs extends React.Component {
     }
 
     onCancelClick() {
-        const parentView = this.props.viewsList.viewIdToViewHash[this.props.viewBuilder.editingViewParentId];
+        const parentView = this.props.viewsList.hashedArray.hash[this.props.viewBuilder.editingViewParentId];
         this.props.dispatch(viewBuilderStartEdit(false, parentView));
     }
 
