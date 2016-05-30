@@ -1,18 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "v1.get_session_state",
   "title": "get_session_state - backend API function",
-  "description": "return file session state",
+  "description": "Ask for backend session state",
   "type": "object",
   "properties": {
-    "params": {
-      "session_id": {
-        "type": "string",
-        "description": "GUID of the file session"
-      }
+    "id": {
+      "type": "string",
+      "description": "Session id to which the state request is related."
     },
-    "result": {
-      "$ref": "base_json/session_state.json#"
+    "method": {
+      "type": "string",
+      "enum": [
+        "v1.get_session_state"
+      ]
     }
   }
 }

@@ -6,6 +6,7 @@ class UploadOperation extends SystemOperation {
     constructor(sessionId, method, userId) {
         super(sessionId, method);
         this.userId = userId;
+        this.setSendCloseToAppServer(true);
     }
 
     getType() {
@@ -27,20 +28,6 @@ class UploadOperation extends SystemOperation {
 
     setSampleId(sampleId) {
         this.sampleId = sampleId;
-    }
-
-    /**
-     * @param {object}message
-     * */
-    setLastAppServerMessage(message) {
-        this.lastAppServerMessage = message;
-    }
-    
-    /**
-     * @returns {object}message
-     * */
-    getLastAppServerMessage() {
-        return this.lastAppServerMessage;
     }
 
     getSampleFileName() {

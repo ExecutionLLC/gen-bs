@@ -30,6 +30,8 @@ const SETTINGS = {
     // If enabled, demo users will have rights to create and delete filters and samples.
     // These filters and samples will be shared between them, as there is only one demo-user in the system.
     enableFullRightsForDemoUsers: makeDefault(ENV.GEN_WS_ENABLE_FULL_RIGHTS_FOR_DEMO_USERS, false),
+    // If true, client messages will include stack traces.
+    includeStackTraceToErrors: makeDefault(ENV.GEN_WS_INCLUDE_STACK_TRACE, false),
     samplesUpload: {
         path: makeDefault(ENV.GEN_WS_UPLOAD_PATH, __dirname + '/../uploads/'), // Temporary path for uploaded samples.
         maxSizeInBytes: makeDefault(ENV.GEN_WS_UPLOAD_MAX_SIZE, 25 * 1024 * 1024) // Max size of the uploaded sample.

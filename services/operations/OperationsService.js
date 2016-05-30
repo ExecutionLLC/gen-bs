@@ -148,15 +148,13 @@ class OperationsService extends ServiceBase {
         async.waterfall([
             (callback) => this.find(sessionId, operationId, callback),
             (operation, callback) => {
-                const sessionOperations = this.operations[sessionId];
-                if (operation.getType() === OPERATION_TYPES.SEARCH || operation.getType() === OPERATION_TYPES.UPLOAD) {
-                    this.services.applicationServer.requestCloseSession(operation.getSessionId(), operation.getId(), callback);
-                } else {
-                    callback(null, operation);
-                }
-                delete sessionOperations[operation.getId()];
+                this._closeOperationIfNeeded(operation, callback);
             },
             (operation, callback) => {
+                this.logger.info('Removing ' + operation);
+                const sessionOperations = this.operations[sessionId];
+                delete sessionOperations[operation.getId()];
+
                 // Remove empty entries to keep the object clean.
                 if (_.isEmpty(this.operations[sessionId])) {
                     delete this.operations[sessionId];
@@ -177,7 +175,7 @@ class OperationsService extends ServiceBase {
 
     _addOperation(operation, callback) {
         const sessionId = operation.getSessionId();
-        this.services.logger.info('Starting operation ' + operation.getId() + ' of type ' + operation.getType());
+        this.services.logger.info('Starting ' + operation);
         const sessionOperations = this.operations[sessionId] || (this.operations[sessionId] = {});
         const operationId = operation.getId();
         sessionOperations[operationId] = operation;
@@ -186,6 +184,18 @@ class OperationsService extends ServiceBase {
 
     _onOperationNotFound(callback) {
         callback(new Error('Operation is not found'));
+    }
+
+    _closeOperationIfNeeded(operation, callback) {
+        if (operation.shouldSendCloseToAppServer()) {
+            this.services.applicationServer.requestCloseSession(
+                operation.getSessionId(),
+                operation.getId(),
+                (error) => callback(error, operation)
+            );
+        } else {
+            callback(null, operation);
+        }
     }
 }
 

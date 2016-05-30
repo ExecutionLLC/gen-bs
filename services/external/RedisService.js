@@ -5,35 +5,40 @@ const _ = require('lodash');
 const Redis = require('redis');
 
 const ServiceBase = require('../ServiceBase');
-const EventEmitter = require('../../utils/EventProxy');
 
-const EVENTS = {
-    onRedisDataReceived: 'onRedisDataReceived'
-};
+/**
+ * @typedef {Object}RedisParams
+ * @property {string}host
+ * @property {number}port
+ * @property {number}databaseNumber
+ * @property {string}dataIndex
+ * @property {number}offset
+ * @property {number}limit
+ * @property {string}sampleId
+ * @property {string}userId
+ * @property {string}operationId
+ * @property {string}sessionId
+ * */
+    
+/**
+ * @typedef {Object}RedisData - Field id to value hash.
+ * */
 
 class RedisService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
-
-        this.eventEmitter = new EventEmitter(EVENTS);
-    }
-
-    registeredEvents() {
-        return EVENTS;
-    }
-
-    on(eventName, callback) {
-        this.eventEmitter.on(eventName, callback);
-    }
-
-    off(eventName, callback) {
-        this.eventEmitter.off(eventName, callback);
     }
 
     getSearchKeyFieldName() {
         return 'search_key';
     }
 
+    /**
+     * Fetches data from Redis using the specified params.
+     * 
+     * @param {RedisParams}redisParams
+     * @param {function(Error, RedisData)}callback
+     * */
     fetch(redisParams, callback) {
         async.waterfall([
             (callback) => {
@@ -54,29 +59,10 @@ class RedisService extends ServiceBase {
             },
             (dataWithUser, callback) => {
                 this._convertFields(dataWithUser.rawData, dataWithUser.user, redisParams.sampleId, callback);
-            },
-            (fieldIdToValueArray, callback) => {
-                this._emitDataReceivedEvent(redisParams.sessionId, redisParams.operationId, redisParams.sampleId,
-                    redisParams.offset, redisParams.limit, fieldIdToValueArray, callback);
             }
-        ], callback);
-    }
-
-    _emitDataReceivedEvent(sessionId, operationId, sampleId, offset, limit, fieldIdToValueArray, callback) {
-        const reply = {
-            sessionIds: [sessionId],
-            operationId,
-            result: {
-                sampleId,
-                offset,
-                limit,
-                fieldIdToValueArray
-            }
-        };
-
-        // Send data to both event listeners and callback.
-        this.eventEmitter.emit(EVENTS.onRedisDataReceived, reply);
-        callback(null, reply);
+        ], (error, redisData) => {
+            callback(error, redisData);
+        });
     }
 
     _createClient(host, port, databaseNumber, callback) {
@@ -209,7 +195,7 @@ class RedisService extends ServiceBase {
     }
 
     _mapFieldValue(actualFieldValue) {
-        // This is VCF way to mark files.
+        // This is VCF way to mark empty field values.
         return (actualFieldValue !== 'nan') ? actualFieldValue : '.';
     }
 }

@@ -1,15 +1,25 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "v1.get_sources",
-    "title": "get_sources - backend API function",
     "description": "returns list of available sources",
     "type": "object",
     "properties": {
+        "id": {
+            "type": "string",
+            "description": "Id of the session."
+        },
+        "method": {
+            "type": "string",
+            "enum": [
+                "v1.get_sources"
+            ]
+        },
         "params": {
             "type": "object",
-            "reference": {
-                "type": "string",
-                "description": "if empty, then all sources will be returned, if contain reference, then only sources with the same reference will be returned"
+            "properties": {
+                "reference": {
+                    "type": "string",
+                    "description": "if empty, then all sources will be returned, if contain reference, then only sources with the same reference will be returned"
+                }
             }
         },
         "result": {

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Progress message on converting user VCF to HDF5 format",
+  "type": "object",
+  "properties": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Converting - file upload to AS complete, conversion to hd5 is in progress. Uploading - conversion completed, uploading to S3.",
+          "enum": [
+            "converting",
+            "uploading"
+          ]
+        },
+        "sample_id": {
+          "type": "string",
+          "description": "UUID of the sample to which the message is related to."
+        },
+        "progress": {
+          "type": "integer",
+          "description": "progress of operation in %. Operation correspond to enum value in status."
+        }
+      }
+    }
+  }
+}

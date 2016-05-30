@@ -1,10 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "v1.search_in_results",
-  "title": "search in results - backend API function",
   "description": "updates column filter and/or global filter and/or sort order",
   "type": "object",
   "properties": {
+    "id": {
+      "type": "string",
+      "description": "Id of the opened search session"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "v1.search_in_results"
+      ]
+    },
     "params": {
       "type": "object",
       "properties": {
@@ -12,7 +20,7 @@
           "type": "array",
           "description": "list of filters",
           "items": {
-            "$ref": "base_json/column_filter.json#"
+            "$ref": "./base_json/column_filter.json#"
           }
         },
         "global_filter": {
@@ -26,7 +34,7 @@
               "type": "array",
               "description": "List of excluded columns",
               "items": {
-                "$ref": "base_json/excluded_column.json#"
+                "$ref": "./base_json/excluded_column.json#"
               }
             }
           }
@@ -34,11 +42,10 @@
         "sort_order": {
           "type": "array",
           "items": {
-            "$ref": "base_json/sort_order.json#"
+            "$ref": "./base_json/sort_order.json#"
           }
         }
       }
-    },
-    "result": {}
+    }
   }
 }
