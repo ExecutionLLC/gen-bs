@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/filterBuilder';
+import config from '../../../../config';
 
 export default class NewFilterInputs extends Component {
 
@@ -27,6 +28,7 @@ export default class NewFilterInputs extends Component {
                             data-localize='filters.setup.new.name.help'
                             placeholder='Set filter name'
                             value={editingFilter.name}
+                            maxLength={config.FILTERS.MAX_NAME_LENGTH}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
                     </div>
@@ -39,6 +41,7 @@ export default class NewFilterInputs extends Component {
                                 data-localize='filters.setup.new.description'
                                 placeholder='Set filter description (optional)'
                                 value={editingFilter.description}
+                                maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
                             <div className='input-group-btn  btn-group-close'>
