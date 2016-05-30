@@ -91,9 +91,9 @@ export default class FileUpload extends Component {
     renderUploadButton() {
         return (
             <button onClick={this.onUploadClick.bind(this)}
-                    onDragEnter={(e) => {e.stopPropagation();e.preventDefault();}}
-                    onDragOver={(e) => {e.stopPropagation();e.preventDefault();}}
-                    onDrop={(e) => {e.stopPropagation();e.preventDefault();this.onFilesDrop(e.dataTransfer.files);}}
+                    // onDragEnter={(e) => {e.stopPropagation();e.preventDefault();}}
+                    // onDragOver={(e) => {e.stopPropagation();e.preventDefault();}}
+                    // onDrop={(e) => {e.stopPropagation();e.preventDefault();this.onFilesDrop(e.dataTransfer.files);}}
                     className='btn-link-light-default btn-select-file'>
                 <input
                     onChange={ (e) => this.onUploadChanged(e.target.files)}
@@ -103,7 +103,6 @@ export default class FileUpload extends Component {
                     type='file'
                     accept='.vcf,.gz'
                     name='files[]'
-                    multiple='multiple'
                 />
                 <i className='md-i'>cloud_upload</i>
                 <span>Click here to upload new samples</span>
