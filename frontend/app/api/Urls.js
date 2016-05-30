@@ -43,8 +43,8 @@ class CollectionUrls {
 }
 
 class UploadableEntityUrls extends CollectionUrls {
-    constructor(baseUrl, host, port) {
-        super(baseUrl, host, port);
+    constructor(baseUrl, httpScheme, host, port) {
+        super(baseUrl, httpScheme, host, port);
     }
 
     upload() {
@@ -53,8 +53,8 @@ class UploadableEntityUrls extends CollectionUrls {
 }
 
 class SavedFilesUrls extends UploadableEntityUrls {
-    constructor(baseUrl, host, port) {
-        super(baseUrl, host, port);
+    constructor(baseUrl, httpScheme, host, port) {
+        super(baseUrl, httpScheme, host, port);
     }
 
     download(itemId) {

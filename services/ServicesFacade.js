@@ -9,6 +9,7 @@ const CommentsService = require('./CommentsService');
 const SamplesService = require('./SamplesService');
 const RedisService = require('./external/RedisService');
 const AmazonS3Service = require('./external/AmazonS3Service');
+const AliyunOSSService = require('./external/AliyunOSSService');
 const SessionService = require('./SessionService');
 const OperationService = require('./operations/OperationsService');
 const FieldsMetadataService = require('./FieldsMetadataService');
@@ -19,6 +20,7 @@ const SchedulerService = require('./tasks/SchedulerService');
 const SavedFilesService = require('./SavedFilesService');
 const QueryHistoryService = require('./QueryHistoryService');
 const UserDataService = require('./UserDataService');
+const ObjectStorageService = require('./ObjectStorageService');
 
 class ServiceFacade {
     constructor(config, logger, models) {
@@ -45,6 +47,9 @@ class ServiceFacade {
 
         this.redis = new RedisService(this, models);
         this.amazonS3 = new AmazonS3Service(this, models);
+        this.oss = new AliyunOSSService(this, models);
+        this.objectStorage = new ObjectStorageService(this, models);
+        // Currently search service should initialize after Redis service.
         this.search = new SearchService(this, models);
 
         this.scheduler = new SchedulerService(this, models);
