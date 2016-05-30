@@ -10,7 +10,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ENV = process.env;
 
 function makeDefault(value, defaultValue) {
-    if (value == undefined) {
+    if (value === undefined) {
         return defaultValue;
     }
 
