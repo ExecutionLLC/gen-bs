@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import Select from '../../shared/Select';
+import {viewsListSelectView} from '../../../actions/viewsList';
 import 'react-select/dist/react-select.css';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeView} from '../../../actions/ui';
 
 export default class Views extends Component {
 
 
     render() {
         const dispatch = this.props.dispatch;
-        const selectedView = this.props.ui.selectedView;
+        const {selectedViewId} = this.props.viewsList;
         return (
 
             <div className='table-cell max-width'>
@@ -20,8 +20,10 @@ export default class Views extends Component {
 
                     <Select
                         options={this.getViewOptions()}
-                        value={selectedView ? selectedView.id: null}
-                        onChange={ (val) => dispatch(changeView(val.value) )}
+                        value={selectedViewId}
+                        onChange={ (val) => {
+                            dispatch(viewsListSelectView(val.value));
+                        }}
                     />
 
                 </div>
@@ -37,7 +39,7 @@ export default class Views extends Component {
     }
 
     getViewOptions() {
-        const views = this.props.views;
+        const views = this.props.viewsList.hashedArray.array;
         return views.map(
             (viewItem) => {
                 const isDisabled = this.isViewDisabled(viewItem);

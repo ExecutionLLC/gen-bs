@@ -21,9 +21,9 @@ class KnexTransaction {
         });
     }
 
-    complete(error, data, callback) {
+    complete(error, originalStack, data, callback) {
         if (error) {
-            this.logger.warn('ROLLING BACK TRANSACTION ' + this.id +': ' + error);
+            this.logger.warn('ROLLING BACK TRANSACTION ' + this.id +': ' + error + '\n' + originalStack);
             this.transaction
                 .rollback()
                 .asCallback((rollbackError) => {

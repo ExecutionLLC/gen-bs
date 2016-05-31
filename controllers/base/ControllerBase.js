@@ -4,6 +4,8 @@ const _ = require('lodash');
 const HttpStatus = require('http-status');
 const RateLimit = require('express-rate-limit');
 
+const ErrorUtils = require('../../utils/ErrorUtils');
+
 /**
  * Base class for all controllers.
  * */
@@ -19,7 +21,8 @@ class ControllerBase {
     }
 
     sendInternalError(response, message) {
-        ControllerBase.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, message);
+        const errorObject = ErrorUtils.createInternalError(message);
+        ControllerBase.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, errorObject);
     }
 
     sendOk(response) {
@@ -68,17 +71,10 @@ class ControllerBase {
         }
     }
 
-    static sendError(response, httpError, message) {
-        console.error(message);
-        if (message && typeof message !== 'string') {
-            message = message.toString();
-        }
+    static sendError(response, httpError, errorObject) {
         response
             .status(httpError)
-            .json({
-                code: httpError,
-                message
-            })
+            .json(errorObject)
             .end();
     }
 

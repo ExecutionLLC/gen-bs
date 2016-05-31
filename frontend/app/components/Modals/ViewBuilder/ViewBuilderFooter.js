@@ -1,8 +1,7 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-import {connect} from 'react-redux';
 
-import {viewBuilderCreateView, viewBuilderSelectView, viewBuilderUpdateView} from '../../../actions/viewBuilder';
+import {viewBuilderSaveAndSelectView} from '../../../actions/viewBuilder';
 
 export default class ViewBuilderFooter extends React.Component {
 
@@ -17,7 +16,7 @@ export default class ViewBuilderFooter extends React.Component {
                     className='btn btn-default'
                     data-dismiss='modal'
                 >
-                    <span data-localize='actions.cancel'/>Cancel
+                    <span data-localize='actions.cancel'>Cancel</span>
                 </button>
 
                 <button
@@ -34,31 +33,12 @@ export default class ViewBuilderFooter extends React.Component {
     }
 
     cancelOnClick() {
-        const {dispatch, closeModal, views, viewBuilder} =this.props;
-        const selectedView = viewBuilder.selectedView;
-        closeModal('views');
-        dispatch(viewBuilderSelectView(views, selectedView.id));
+        this.props.closeModal();
     }
 
     selectOnClick(e) {
         e.preventDefault();
-        const {dispatch, viewBuilder} =this.props;
-        const editedView = viewBuilder.editedView;
-        if (!editedView.name.trim()) {
-            return;
-        }
-        editedView.id !== null ? dispatch(viewBuilderUpdateView()) : dispatch(viewBuilderCreateView());
+        this.props.dispatch(viewBuilderSaveAndSelectView());
     }
 
 }
-
-function mapStateToProps(state) {
-    const {auth, viewBuilder, userData :{views}} = state;
-    return {
-        views,
-        auth,
-        viewBuilder
-    };
-}
-
-export default connect(mapStateToProps)(ViewBuilderFooter);

@@ -7,7 +7,6 @@ import _ from 'lodash';
 export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
-export const WS_RECEIVE_AS_UPLOAD_ERROR = 'WS_RECEIVE_AS_UPLOAD_ERROR';
 export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_MESSAGE';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
@@ -28,6 +27,19 @@ export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
  * other consts
  */
 
+const WS_PROGRESS_STATUSES = {
+    READY: 'ready'
+};
+
+const WS_OPERATION_TYPES = {
+    UPLOAD: 'upload',
+    SEARCH: 'search'
+};
+
+const WS_RESULT_TYPES = {
+    ERROR: 'error',
+    SUCCESS: 'success'
+};
 
 /*
  * action creators
@@ -74,21 +86,6 @@ function tableMessage(wsData) {
     };
 }
 
-function progressMessageRouter(wsData) {
-    return (dispatch, getState) => {
-        dispatch(progressMessage(wsData));
-
-        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
-        if (fileIndex >= 0) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, fileIndex))
-        }
-
-        if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, null));
-        }
-    };
-}
-
 function progressMessage(wsData) {
     return {
         type: WS_PROGRESS_MESSAGE,
@@ -100,22 +97,6 @@ function receiveError(err) {
     return {
         type: WS_RECEIVE_ERROR,
         err
-    };
-}
-
-function asErrorRouter(wsData) {
-    return (dispatch, getState) => {
-
-        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
-        if (fileIndex >= 0) {
-            dispatch(fileUploadError(wsData.result.error.message, fileIndex))
-        }
-
-        if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(fileUploadError(wsData.result.error.message, null));
-        } else {
-            dispatch(asError(wsData.result.error));
-        }
     };
 }
 
@@ -134,24 +115,55 @@ function otherMessage(wsData) {
     };
 }
 
-function receiveMessage(msg) {
+function receiveSearchMessage(wsData) {
     return (dispatch, getState) => {
-        const wsData = JSON.parse(JSON.parse(msg));
-        const fileUploadIsSingleFile = getState().fileUpload.operationId !== wsData.operationId;
-        const fileUploadIsMultipleFile = !!_.find(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
-        if (wsData.result) {
-            if (wsData.result.sampleId && fileUploadIsSingleFile && !fileUploadIsMultipleFile) {
-                dispatch(tableMessage(wsData));
-                if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
-                    dispatch(receiveSearchedResults());
-                }
-            } else if (wsData.result.progress !== undefined) {
-                dispatch(progressMessageRouter(wsData));
-            } else if (wsData.result.error) {
-                dispatch(asErrorRouter(wsData));
-            } else {
-                dispatch(otherMessage(wsData));
+        if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
+            dispatch(tableMessage(wsData));
+            if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
+                dispatch(receiveSearchedResults());
             }
+        } else {
+            dispatch(progressMessage(wsData));
+        }
+    };
+}
+
+function receiveUploadMessage(wsData) {
+    return (dispatch, getState) => {
+        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
+        if (fileIndex < 0) {
+            return;
+        }
+        dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, getState().fileUpload.filesProcesses[fileIndex].id));
+    };
+}
+
+function receiveErrorMessage(wsData) {
+    return (dispatch, getState) => {
+        console.error('Error: ' + JSON.stringify(wsData.error));
+        const error = wsData.error;
+        if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
+            const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
+            if (fileIndex < 0) {
+                return;
+            }
+            dispatch(fileUploadError(getState().fileUpload.filesProcesses[fileIndex].id, error));
+        } else {
+            dispatch(asError(error));
+        }
+    };
+}
+
+function receiveMessage(msg) {
+    return (dispatch) => {
+        const wsData = JSON.parse(JSON.parse(msg));
+        const {operationType, resultType} = wsData;
+        if (resultType == WS_RESULT_TYPES.ERROR) {
+            dispatch(receiveErrorMessage(wsData));
+        } else if (operationType == WS_OPERATION_TYPES.SEARCH) {
+            dispatch(receiveSearchMessage(wsData));
+        } else if (operationType == WS_OPERATION_TYPES.UPLOAD) {
+            dispatch(receiveUploadMessage(wsData));
         } else {
             dispatch(otherMessage(wsData));
         }

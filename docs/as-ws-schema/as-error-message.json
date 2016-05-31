@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "Application server error message format",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "AS Session id, which was specified in the request message."
+    },
+    "error": {
+      "type": "object",
+      "description": "Object describing error.",
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "Human-readable error message"
+        },
+        "code": {
+          "type": "integer",
+          "description": "Error code."
+        }
+      }
+    }
+  },
+  "required": [
+    "id",
+    "error"
+  ]
+}

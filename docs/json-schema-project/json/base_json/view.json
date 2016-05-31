@@ -11,7 +11,7 @@
       "type": "string"
     },
     "description": {
-      "description": "Localized filter description for UI",
+      "description": "Localized view description for UI",
       "type": "string"
     },
     "type": {

@@ -7,19 +7,22 @@
  SESSION_KEEP_ALIVE_TIMEOUT: false,
  SESSION_LOGOUT_TIMEOUT: false,
  SESSION_LOGOUT_WARNING_TIMEOUT: false,
- LOGIN_CALLBACK_PORT: false
+ LOGIN_CALLBACK_PORT: false,
+ USE_SECURE_CONNECTION: false
  */
+const HTTP_SCHEME = USE_SECURE_CONNECTION ? 'https' : 'http';
+const WS_SCHEME = USE_SECURE_CONNECTION ? 'wss' : 'ws';
 const HOST = API_HOST;
 const PORT = API_PORT;
 
-console.log(`Using API ${HOST}:${PORT}`);
-
 const config = {
-    HOST: HOST,
-    PORT: PORT,
+    HOST,
+    PORT,
+    HTTP_SCHEME,
+    WS_SCHEME,
     URLS: {
-        WS: `ws://${HOST}:${PORT}`,
-        FILE_UPLOAD: `http://${HOST}:${PORT}/api/samples/upload`
+        WS: `${WS_SCHEME}://${HOST}:${PORT}`,
+        FILE_UPLOAD: `${HTTP_SCHEME}://${HOST}:${PORT}/api/samples/upload`
     },
     HEADERS: {
         SESSION: HEADER_SESSION,
@@ -30,7 +33,17 @@ const config = {
         LOGOUT_TIMEOUT: SESSION_LOGOUT_TIMEOUT,
         LOGOUT_WARNING_TIMEOUT: SESSION_LOGOUT_WARNING_TIMEOUT
     },
-    LOGIN_URL: `http://${HOST}:${PORT}/api/session/auth/google?callbackPort=${LOGIN_CALLBACK_PORT}`
+    LOGIN_URL: `${HTTP_SCHEME}://${HOST}:${PORT}/api/session/auth/google?callbackPort=${LOGIN_CALLBACK_PORT}`,
+    FILTERS: {
+        MAX_NAME_LENGTH: 50,
+        MAX_DESCRIPTION_LENGTH: 512
+    },
+    VIEWS: {
+        MAX_NAME_LENGTH: 50,
+        MAX_DESCRIPTION_LENGTH: 512
+    }
 };
+
+console.log(JSON.stringify(config, null, 2));
 
 export default config;

@@ -10,8 +10,6 @@ const UploadOperation = require('./UploadOperation');
 const SystemOperation = require('./SystemOperation');
 const KeepAliveOperation = require('./KeepAliveOperation');
 
-const SYSTEM_SESSION = '9c952e80-c2db-4a09-a0b0-6ea667d254a1';
-
 const OPERATION_TYPES = {
     SYSTEM: 'system',
     SEARCH: 'search',
@@ -25,32 +23,38 @@ class OperationsService extends ServiceBase {
         this.operations = {};
     }
 
-    systemSessionId() {
-        return SYSTEM_SESSION;
-    }
-
     operationTypes() {
         return OperationBase.operationTypes();
     }
 
     addSearchOperation(sessionId, method, callback) {
         const operation = new SearchOperation(sessionId, method);
-        this._addOperation(sessionId, operation, callback);
+        this._addOperation(operation, callback);
     }
 
-    addUploadOperation(sessionId, method, callback) {
-        const operation = new UploadOperation(sessionId, method);
-        this._addOperation(sessionId, operation, callback);
+    addUploadOperation(method, userId, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => {
+                const operation = new UploadOperation(sessionId, method, userId);
+                this._addOperation(operation, callback);
+            }
+        ], callback);
     }
 
-    addSystemOperation(sessionId, method, callback) {
-        const operation = new SystemOperation(sessionId, method);
-        this._addOperation(sessionId, operation, callback);
+    addSystemOperation(method, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            (sessionId, callback) => {
+                const operation = new SystemOperation(sessionId, method);
+                this._addOperation(operation, callback);
+            }
+        ], callback);
     }
 
     addKeepAliveOperation(sessionId, sessionIdToCheck, callback) {
         const operation = new KeepAliveOperation(sessionId, sessionIdToCheck);
-        this._addOperation(sessionId, operation, callback);
+        this._addOperation(operation, callback);
     }
 
     /**
@@ -99,6 +103,24 @@ class OperationsService extends ServiceBase {
         }
     }
 
+    /**
+     * Finds active system operations started by the specified user.
+     * Currently there can only be upload operations.
+     *
+     * @param {string}userId
+     * @param {function(Error, Array<UploadOperation>)}callback
+     * */
+    findActiveOperations(userId, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSessionId(callback),
+            // Find upload operations of all users.
+            (sessionId, callback) => this.findAllByType(sessionId, OPERATION_TYPES.UPLOAD, callback),
+            (operations, callback) => callback(null,
+                _.filter(operations, operation => operation.getUserId() === userId)
+            )
+        ], callback);
+    }
+
     findAll(sessionId, callback) {
         const sessionOperations = this.operations[sessionId];
         if (sessionOperations) {
@@ -126,15 +148,13 @@ class OperationsService extends ServiceBase {
         async.waterfall([
             (callback) => this.find(sessionId, operationId, callback),
             (operation, callback) => {
-                const sessionOperations = this.operations[sessionId];
-                if (operation.getType() === OPERATION_TYPES.SEARCH || operation.getType() === OPERATION_TYPES.UPLOAD) {
-                    this.services.applicationServer.requestCloseSession(operation.getSessionId(), operation.getId(), callback);
-                } else {
-                    callback(null, operation);
-                }
-                delete sessionOperations[operation.getId()];
+                this._closeOperationIfNeeded(operation, callback);
             },
             (operation, callback) => {
+                this.logger.info('Removing ' + operation);
+                const sessionOperations = this.operations[sessionId];
+                delete sessionOperations[operation.getId()];
+
                 // Remove empty entries to keep the object clean.
                 if (_.isEmpty(this.operations[sessionId])) {
                     delete this.operations[sessionId];
@@ -153,8 +173,9 @@ class OperationsService extends ServiceBase {
         }
     }
 
-    _addOperation(sessionId, operation, callback) {
-        this.services.logger.info('Starting operation ' + operation.getId() + ' of type ' + operation.getType());
+    _addOperation(operation, callback) {
+        const sessionId = operation.getSessionId();
+        this.services.logger.info('Starting ' + operation);
         const sessionOperations = this.operations[sessionId] || (this.operations[sessionId] = {});
         const operationId = operation.getId();
         sessionOperations[operationId] = operation;
@@ -163,6 +184,18 @@ class OperationsService extends ServiceBase {
 
     _onOperationNotFound(callback) {
         callback(new Error('Operation is not found'));
+    }
+
+    _closeOperationIfNeeded(operation, callback) {
+        if (operation.shouldSendCloseToAppServer()) {
+            this.services.applicationServer.requestCloseSession(
+                operation.getSessionId(),
+                operation.getId(),
+                (error) => callback(error, operation)
+            );
+        } else {
+            callback(null, operation);
+        }
     }
 }
 

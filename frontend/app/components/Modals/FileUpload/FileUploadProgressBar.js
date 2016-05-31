@@ -27,8 +27,8 @@ export default class FileUploadProgressBar extends Component {
             'ready': 3
         };
 
-        const currentStage = STAGES[progressStatusFromAS] || null;
-        if (currentStage === null) {
+        const currentStage = STAGES[progressStatusFromAS];
+        if (currentStage == null) {
             return null;
         }
         const currentProgress = currentStage < STAGES.TOTAL ? progressValueFromAS : 0;

@@ -27,25 +27,25 @@ export function clearUploadState() {
     };
 }
 
-export function fileUploadError(msg, index) {
+export function fileUploadError(id, error) {
     return {
         type: FILE_UPLOAD_ERROR,
-        msg,
-        index
+        error,
+        id
     };
 }
 
-function requestGzip(index) {
+function requestGzip(id) {
     return {
         type: REQUEST_GZIP,
-        index
+        id
     };
 }
 
-function receiveGzip(index) {
+function receiveGzip(id) {
     return {
         type: RECEIVE_GZIP,
-        index
+        id
     };
 }
 
@@ -72,9 +72,7 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
         || file.type === 'text/directory'
         || file.name.split('.').pop() === 'vcf') {
         onGzipStart();
-        gzip(file).then(gzippedFile => {
-            setTimeout(() => {onGzipped(gzippedFile)}, 1000); // TODO: remove before merge
-        })
+        gzip(file).then(gzippedFile => onGzipped(gzippedFile))
     } else {
         onError('Unsupported file type: must be Variant Calling Format'
             +' (VCF) 4.1 or higher or VCF compressed with gzip');
@@ -84,73 +82,56 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
 export function addFilesForUpload(files) {
     return (dispatch, getState) => {
         dispatch(clearUploadState());
-        const addedFilesIndex = getState().fileUpload.filesProcesses.length;
-        dispatch(addNoGZippedForUpload(files));
-        ensureGzippedFile(
-            files[0],
-            () => {
-                dispatch(requestGzip(null));
-            },
-            (gzippedFile) => {
-                dispatch(addGZippedFileForUpload([gzippedFile], null));
-                if (gzippedFile !== files[0]) {
-                    dispatch(receiveGzip(null));
-                }
-            },
-            (message) => {
-                console.error('Wrong file type. Type must be vcard or gzip');
-                dispatch(fileUploadError(message, null))
-            }
-        );
-        files.forEach((file, fileLocalIndex) => {
-            const fileIndex = addedFilesIndex + fileLocalIndex;
+        const filesWithIds = files.map((file) => ({id: Math.random(), file: file}));
+        dispatch(addNoGZippedForUpload(filesWithIds));
+        filesWithIds.forEach((fileWithId) => {
             ensureGzippedFile(
-                file,
+                fileWithId.file,
                 () => {
-                    dispatch(requestGzip(fileIndex));
+                    dispatch(requestGzip(fileWithId.id));
                 },
                 (gzippedFile) => {
-                    dispatch(addGZippedFileForUpload([gzippedFile], fileIndex));
-                    if (gzippedFile !== file) {
-                        dispatch(receiveGzip(fileIndex));
+                    dispatch(addGZippedFileForUpload(gzippedFile, fileWithId.id));
+                    if (gzippedFile !== fileWithId.file) {
+                        dispatch(receiveGzip(fileWithId.id));
                     }
                 },
                 (message) => {
                     console.error('Wrong file type. Type must be vcard or gzip');
-                    dispatch(fileUploadError(message, fileIndex));
+                    dispatch(fileUploadError(fileWithId.id, message));
                 }
             );
         });
     }
 }
 
-function addGZippedFileForUpload(files, index) {
+function addGZippedFileForUpload(file, id) {
     return {
         type: ADD_GZIPPED_FILE_FOR_UPLOAD,
-        files,
-        index
+        file,
+        id
     };
 }
 
-function requestFileUpload(index) {
+function requestFileUpload(id) {
     return {
         type: REQUEST_FILE_UPLOAD,
-        index
+        id
     };
 }
 
-function receiveFileUpload(index) {
+function receiveFileUpload(id) {
     return {
         type: RECEIVE_FILE_UPLOAD,
-        index
+        id
     };
 }
 
-function receiveFileOperation(json, index) {
+function receiveFileOperation(operationId, id) {
     return {
         type: RECEIVE_FILE_OPERATION,
-        operationId: json.operationId,
-        index
+        operationId,
+        id
     };
 }
 
@@ -188,47 +169,25 @@ function sendFile(file, sessionId, onOperationId, onProgress, onError) {
 
 export function uploadFile() {
     return (dispatch, getState) => {
-
-        dispatch(requestFileUpload(null));
-        dispatch(changeFileUploadProgress(0, 'ajax', null));
-
-        sendFile(
-            getState().fileUpload.files[0],
-            getState().auth.sessionId,
-            (operationId) => {
-                dispatch(receiveFileOperation({operationId: operationId}, null));
-            },
-            (percentage) => {
-                console.log('progress', percentage);
-                dispatch(changeFileUploadProgress(percentage, 'ajax', null));
-                if (percentage === 100) {
-                    console.log('DONE!');
-                }
-            },
-            (err) => {
-                console.error('Upload FAILED: ', err.responseText);
-            }
-        );
-
-        getState().fileUpload.filesProcesses.forEach((fp, index) => {
+        getState().fileUpload.filesProcesses.forEach((fp) => {
             if (fp.isUploaded || fp.isUploading || !fp.isArchived || fp.isArchiving) {
                 return;
             }
-            dispatch(requestFileUpload(index));
-            dispatch(changeFileUploadProgress(0, 'ajax', index));
+            dispatch(requestFileUpload(fp.id));
+            dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
             sendFile(
                 fp.file,
                 getState().auth.sessionId,
                 (operationId) => {
-                    dispatch(receiveFileOperation({operationId: operationId}, index));
+                    dispatch(receiveFileOperation(operationId, fp.id));
                 },
                 (percentage) => {
                     console.log('progress', percentage);
-                    dispatch(changeFileUploadProgress(percentage, 'ajax', index));
+                    dispatch(changeFileUploadProgress(percentage, 'ajax', fp.id));
                 },
                 (err) => {
                     console.error('Upload FAILED: ', err.responseText);
-                    //dispatch(fileUploadError(err.responseText, index))
+                    dispatch(fileUploadError(fp.id, err.responseText))
                 }
             );
         });
@@ -238,24 +197,24 @@ export function uploadFile() {
 }
 
 
-export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS, index) {
+export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS, id) {
     return (dispatch) => {
-        dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, index));
+        dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, id));
         if (progressStatusFromAS === 'ready') {
-            dispatch(receiveFileUpload());
+            dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
-            //dispatch(closeModal('upload'));
+            dispatch(closeModal('upload'));
             dispatch(fetchSamples());
         }
     };
 }
 
-function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, index) {
+function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, id) {
     return {
         type: FILE_UPLOAD_CHANGE_PROGRESS,
         progressValueFromAS,
         progressStatusFromAS,
-        index
+        id
     };
 }
 

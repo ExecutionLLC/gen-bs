@@ -1,15 +1,18 @@
 import * as ActionTypes from '../actions/fileUpload';
 
 const initialState = {
-    progressValueFromAS: 0,
-    progressStatusFromAS: null,
-    operationId: null,
-    isFetching: false,
-    files: [],
-    error: null,
-    isArchiving: false,
     filesProcesses: []
 };
+
+/**
+ * @template {FP}
+ * @param {Array.<FP>} filesProcesses
+ * @param {number} id
+ * @return {number}
+ */
+function findFileProcessIndex(filesProcesses, id) {
+    return filesProcesses.findIndex((fp) => fp.id === id);
+}
 
 /**
  * @template {FP}
@@ -42,6 +45,26 @@ function editFilesProcessesIfIndex(filesProcesses, index, newFileProcess) {
 }
 
 /**
+ * @template {FP}
+ * @param {Array.<FP>} filesProcesses
+ * @param {number|null} id - null or undefined - return filesProcesses
+ * @param {FP} fp
+ * @returns {Array.<FP>}
+ */
+function assignFileProcess(filesProcesses, id, fp) {
+    if (id == null) {
+        return filesProcesses;
+    } else {
+        const index = findFileProcessIndex(filesProcesses, id);
+        if (index < 0) {
+            return filesProcesses;
+        } else {
+            return editFilesProcesses(filesProcesses, index, Object.assign({}, filesProcesses[index], fp));
+        }
+    }
+}
+
+/**
  * Full processing progress:
  * - file added: isArchived: false, isUploaded: false
  * - file starts to compress: isArchived: false, isArchiving: true, isUploaded: false
@@ -50,10 +73,12 @@ function editFilesProcessesIfIndex(filesProcesses, index, newFileProcess) {
  * - file upload operation id got: isUploading: true, operationId: !null
  * - file uploaded: isUploaded: true
  * @param {File} file
+ * @param {number} id
  * @returns {{progressValueFromAS: number, progressStatusFromAS: null, operationId: null, isUploading: boolean, file: *, error: null, isArchived: boolean, isArchiving: boolean, isUploaded: boolean}}
  */
-function createFileProcess(file) {
+function createFileProcess(file, id) {
     return {
+        id: id,
         progressValueFromAS: 0,
         progressStatusFromAS: null,
         operationId: null,
@@ -69,12 +94,12 @@ function createFileProcess(file) {
 /**
  * @template {FP}
  * @param {Array.<FP>} filesProcesses
- * @param {Array.<File>} newFiles
+ * @param {Array.<{file: File, id: number}>} newFiles
  */
 function addFilesProcesses(filesProcesses, newFiles) {
     return [
         ...filesProcesses,
-        ...newFiles.map((file) => createFileProcess(file))
+        ...newFiles.map((item) => createFileProcess(item.file, item.id))
     ];
 }
 
@@ -85,61 +110,29 @@ export default function fileUpload(state = initialState, action) {
 
         case ActionTypes.CLEAR_UPLOAD_STATE: {
             return Object.assign({}, initialState, {
-                filesProcesses: state.filesProcesses
+                filesProcesses: []
             });
         }
         case ActionTypes.REQUEST_GZIP: {
-            if (action.index == null) {
-                return Object.assign({}, state, {
+            return {
+                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
                     isArchiving: true
-                });
-            } else {
-                return Object.assign({}, state, {
-                    filesProcesses: editFilesProcesses(
-                        state.filesProcesses,
-                        action.index,
-                        Object.assign({}, state.filesProcesses[action.index], {
-                            isArchiving: true
-                        })
-                    )
-                });
-            }
+                })
+            };
         }
         case ActionTypes.RECEIVE_GZIP: {
-            if (action.index == null) {
-                return Object.assign({}, state, {
+            return {
+                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
                     isArchiving: false
-                });
-            } else {
-                return Object.assign({}, state, {
-                    filesProcesses: editFilesProcesses(
-                        state.filesProcesses,
-                        action.index,
-                        Object.assign({}, state.filesProcesses[action.index], {
-                            isArchiving: false,
-                            isArchived: true
-                        })
-                    )
-                });
-            }
+                })
+            };
         }
         case ActionTypes.FILE_UPLOAD_ERROR: {
-            if (action.index == null) {
-                return Object.assign({}, state, {
-                    files: [],
-                    error: action.msg
-                });
-            } else {
-                return Object.assign({}, state, {
-                    filesProcesses: editFilesProcesses(
-                        state.filesProcesses,
-                        action.index,
-                        Object.assign({}, state.filesProcesses[action.index], {
-                            msg: action.msg
-                        })
-                    )
-                });
-            }
+            return {
+                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+                    error: action.error
+                })
+            };
         }
         case ActionTypes.ADD_NOGZIPPED_FOR_UPLOAD: {
             return Object.assign({}, state, {
@@ -147,92 +140,42 @@ export default function fileUpload(state = initialState, action) {
             });
         }
         case ActionTypes.ADD_GZIPPED_FILE_FOR_UPLOAD: {
-            if (action.index == null) {
-                return Object.assign({}, state, {
-                    files: action.files,
-                    error: null
-                });
-            } else {
-                return Object.assign({}, state, {
-                    filesProcesses: editFilesProcesses(
-                        state.filesProcesses,
-                        action.index,
-                        Object.assign({}, state.filesProcesses[action.index], {
-                            error: null
-                        })
-                    )
-                });
-            }
+            return {
+                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+                    file: action.file,
+                    isArchived: true
+                })
+            };
         }
         case ActionTypes.REQUEST_FILE_UPLOAD: {
-            if (action.index == null) {
-                return Object.assign({}, state, {
-                    isFetching: true
-                });
-            } else {
-                return Object.assign({}, state, {
-                    filesProcesses: editFilesProcesses(
-                        state.filesProcesses,
-                        action.index,
-                        Object.assign({}, state.filesProcesses[action.index], {
-                            isUploading: true
-                        })
-                    )
-                });
-            }
+            return {
+                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+                    isUploading: true
+                })
+            };
         }
         case ActionTypes.RECEIVE_FILE_UPLOAD: {
-            if (action.index == null) {
-                return Object.assign({}, state, {
-                    isFetching: false
-                });
-            } else {
-                return Object.assign({}, state, {
-                    filesProcesses: editFilesProcesses(
-                        state.filesProcesses,
-                        action.index,
-                        Object.assign({}, state.filesProcesses[action.index], {
-                            isUploading: false
-                        })
-                    )
-                });
-            }
+            return {
+                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+                    isUploading: false,
+                    isUploaded: true
+                })
+            };
         }
         case  ActionTypes.RECEIVE_FILE_OPERATION: {
-            if (action.index == null) {
-                return Object.assign({}, state, {
+            return {
+                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
                     operationId: action.operationId
-                });
-            } else {
-                return Object.assign({}, state, {
-                    filesProcesses: editFilesProcesses(
-                        state.filesProcesses,
-                        action.index,
-                        Object.assign({}, state.filesProcesses[action.index], {
-                            operationId: action.operationId
-                        })
-                    )
-                });
-            }
+                })
+            };
         }
         case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS: {
-            if (action.index == null) {
-                return Object.assign({}, state, {
+            return {
+                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
                     progressValueFromAS: action.progressValueFromAS,
                     progressStatusFromAS: action.progressStatusFromAS
-                });
-            } else {
-                return Object.assign({}, state, {
-                    filesProcesses: editFilesProcesses(
-                        state.filesProcesses,
-                        action.index,
-                        Object.assign({}, state.filesProcesses[action.index], {
-                            progressValueFromAS: action.progressValueFromAS,
-                            progressStatusFromAS: action.progressStatusFromAS
-                        })
-                    )
-                });
-            }
+                })
+            };
         }
         default:
             return state;

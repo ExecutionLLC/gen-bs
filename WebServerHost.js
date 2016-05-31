@@ -117,15 +117,15 @@ class WebServerHost {
         if (response.headersSent) {
             return next(error);
         }
-        const message = ErrorUtils.createErrorMessage(error);
-        this.logger.error(message);
+        const errorObject = ErrorUtils.createInternalError(error);
+        this.logger.error(errorObject.message);
         if (error.stack) {
             this.logger.debug(error.stack);
         }
         ControllerBase.sendError(
             response,
             HttpStatus.INTERNAL_SERVER_ERROR,
-            'Unexpected error occurred, see the server logs for details.'
+            errorObject
         );
     }
 

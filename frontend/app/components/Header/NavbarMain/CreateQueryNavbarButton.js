@@ -2,13 +2,9 @@
 import React, { Component } from 'react';
 import Perf from 'react-addons-perf';
 
+const ENABLE_PERFORMANCE_CONTROLS = false;
 
 export default class CreateQeuryNavbarButton extends Component {
-    constructor(props) {
-        super(props);
-
-        this.enablePerformanceControls = false;
-    }
 
     onStop() {
         Perf.stop();
@@ -32,7 +28,7 @@ export default class CreateQeuryNavbarButton extends Component {
                               data-container='body' data-trigger='hover'>Analyze</span>
                         <span className='visible-xxs'><i className='md-i'>settings</i></span>
                     </a>
-                    {this.enablePerformanceControls &&
+                    {ENABLE_PERFORMANCE_CONTROLS &&
                     <div>
                         <button onClick={() => Perf.start()}>B</button>
                         <button onClick={() => this.onStop()}>E</button>

@@ -24,22 +24,7 @@ export default class FileUpload extends Component {
                         {error && this.renderUploadError(error)}
 
                         {this.renderUploadButton()}
-                        {this.renderSelectedFileInfo()}
 
-
-                        { isArchiving &&
-                        <div className='text-center'>
-                            <strong style={{color: '#2363a1'}}>Archiving...</strong>
-                            <i className='fa fa-spinner fa-spin'></i>
-                        </div>
-                        }
-                        { !error &&
-                        <FileUploadProgressBar
-                            progressStatusFromAS={this.props.fileUpload.progressStatusFromAS}
-                            progressValueFromAS={this.props.fileUpload.progressValueFromAS}
-                        />
-                        }
-                        {JSON.stringify(this.props.fileUpload)}
                         {this.props.fileUpload.filesProcesses.map((fp, index) => this.renderMultiFile(fp, index))}
 
                     </div>
@@ -48,22 +33,11 @@ export default class FileUpload extends Component {
         }
     }
 
-    renderSelectedFileInfo() {
-        const {files} = this.props.fileUpload;
-        return (
-            files[0] &&
-            <div className='text-center'>
-                <strong style={{color: '#2363a1'}}>{files[0].name}</strong>
-            </div>
-        );
-    }
-
     renderMultiFile(fileProcess, index) {
         return (
             <div key={index}>
                 {fileProcess.error && this.renderUploadError(fileProcess.error)}
                 {this.renderFileInfo(fileProcess.file)}
-                {JSON.stringify(fileProcess)}
                 {fileProcess.isArchiving &&
                 <div className='text-center'>
                     <strong style={{color: '#2363a1'}}>Archiving...</strong>
@@ -114,7 +88,8 @@ export default class FileUpload extends Component {
     renderUploadError(error) {
         return (
             <div className='alert'>
-                <p>{error}</p>
+                <p>{error.message}</p>
+                <small>Error code: {error.code}</small>
             </div>
         );
     }
@@ -131,12 +106,12 @@ export default class FileUpload extends Component {
 
     onUploadChanged(files) {
         const {dispatch} = this.props;
-        dispatch(addFilesForUpload(Array.prototype.slice.call(files)));
+        dispatch(addFilesForUpload(Array.prototype.slice.call(files, 0, 1)));
     }
 
     onFilesDrop(files) {
         const {dispatch} = this.props;
-        dispatch(addFilesForUpload(Array.prototype.slice.call(files)))
+        dispatch(addFilesForUpload(Array.prototype.slice.call(files, 0, 1)))
     }
 
     onUploadClick() {

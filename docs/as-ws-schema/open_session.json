@@ -1,36 +1,41 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "v1.open_session",
-  "title": "open_session - backend API function",
   "description": "apply complex filter and load data in redis",
   "type": "object",
   "properties": {
+    "id": {
+      "description": "Id of the search session",
+      "type": "string"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "v1.open_session"
+      ]
+    },
     "params": {
       "type": "object",
       "sample": {
         "type": "string",
-        "description": "name of the user file"
+        "description": "File name for default samples or sample id for the default samples."
       },
       "view_structure": {
-        "$ref": "base_json/view.json#",
+        "$ref": "./base_json/view.json#",
         "description": "view for loading"
       },
       "view_filter": {
         "type": "object",
         "params": {
           "type": "object",
-          "description": "filter for loading (should be simulare to the fronted filter, but has addition field 'source_name')"
+          "description": "filter for loading (should be similar to the fronted filter, but has addition field 'source_name')"
         }
       },
       "view_sort_order": {
         "type": "array",
         "items": {
-          "$ref": "base_json/sort_order.json#"
+          "$ref": "./base_json/sort_order.json#"
         }
       }
-    },
-    "result": {
-      "$ref": "base_json/session_state.json#"
     }
   }
 }
