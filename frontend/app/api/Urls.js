@@ -1,14 +1,15 @@
 'use strict';
 
-function _constructApiUrl(subUrl, host, port) {
-    return 'http://' + host + ':' + port + '/api' + subUrl;
+function _constructApiUrl(subUrl, httpScheme, host, port) {
+    return `${httpScheme}://${host}:${port}/api${subUrl}`;
 }
 
 class CollectionUrls {
-    constructor(baseUrl, host, port) {
+    constructor(baseUrl, httpScheme, host, port) {
         this.baseUrl = baseUrl;
         this.host = host;
         this.port = port;
+        this.httpScheme = httpScheme;
     }
 
     getAll() {
@@ -37,13 +38,13 @@ class CollectionUrls {
 
     _constructApiUrl(subUrl) {
         const url = subUrl ? this.baseUrl + '/' + subUrl : this.baseUrl;
-        return _constructApiUrl(url, this.host, this.port);
+        return _constructApiUrl(url, this.httpScheme, this.host, this.port);
     }
 }
 
 class UploadableEntityUrls extends CollectionUrls {
-    constructor(baseUrl, host, port) {
-        super(baseUrl, host, port);
+    constructor(baseUrl, httpScheme, host, port) {
+        super(baseUrl, httpScheme, host, port);
     }
 
     upload() {
@@ -52,8 +53,8 @@ class UploadableEntityUrls extends CollectionUrls {
 }
 
 class SavedFilesUrls extends UploadableEntityUrls {
-    constructor(baseUrl, host, port) {
-        super(baseUrl, host, port);
+    constructor(baseUrl, httpScheme, host, port) {
+        super(baseUrl, httpScheme, host, port);
     }
 
     download(itemId) {
@@ -63,9 +64,10 @@ class SavedFilesUrls extends UploadableEntityUrls {
 }
 
 export default class Urls {
-    constructor(host, port) {
+    constructor(httpScheme, host, port) {
         this.host = host;
         this.port = port;
+        this.httpScheme = httpScheme;
     }
 
     session() {
@@ -77,7 +79,7 @@ export default class Urls {
     }
 
     history() {
-        return this._constructApiUrl('/history', this.host, this.port);
+        return this._constructApiUrl('/history');
     }
 
     startSearch() {
@@ -105,26 +107,26 @@ export default class Urls {
     }
 
     viewsUrls() {
-        return new CollectionUrls('/views', this.host, this.port);
+        return new CollectionUrls('/views', this.httpScheme, this.host, this.port);
     }
 
     filtersUrls() {
-        return new CollectionUrls('/filters', this.host, this.port);
+        return new CollectionUrls('/filters', this.httpScheme, this.host, this.port);
     }
 
     samplesUrls() {
-        return new UploadableEntityUrls('/samples', this.host, this.port);
+        return new UploadableEntityUrls('/samples', this.httpScheme, this.host, this.port);
     }
 
     commentsUrls() {
-        return new CollectionUrls('/comments', this.host, this.port);
+        return new CollectionUrls('/comments', this.httpScheme, this.host, this.port);
     }
 
     savedFilesUrls() {
-        return new SavedFilesUrls('/files', this.host, this.port);
+        return new SavedFilesUrls('/files', this.httpScheme, this.host, this.port);
     }
 
     _constructApiUrl(subUrl) {
-        return _constructApiUrl(subUrl, this.host, this.port);
+        return _constructApiUrl(subUrl, this.httpScheme, this.host, this.port);
     }
 }
