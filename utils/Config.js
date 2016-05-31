@@ -37,22 +37,22 @@ const SETTINGS = {
         maxSizeInBytes: makeDefault(ENV.GEN_WS_UPLOAD_MAX_SIZE, 25 * 1024 * 1024) // Max size of the uploaded sample.
     },
     savedFilesUpload: {
-        maxSizeInBytes: ENV.GEN_WS_SAVED_FILES_MAX_SIZE || 1024 * 1024,
-        maxCount: ENV.GEN_WS_SAVED_FILES_MAX_COUNT || 2,
-        path: ENV.GEN_WS_SAVED_FILES_PATH || __dirname + '/../uploads/',
+        maxSizeInBytes: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_SIZE, 1024 * 1024),
+        maxCount: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_COUNT, 2),
+        path: makeDefault(ENV.GEN_WS_SAVED_FILES_PATH, __dirname + '/../uploads/'),
         // Object storage type to use. Supported values: 's3', 'oss'
-        objectStorageType: ENV.GEN_WS_OBJECT_STORAGE_TYPE || 's3',
+        objectStorageType: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
         amazon: {
-            amazonS3BucketName: ENV.GEN_WS_S3_BUCKET_NAME || 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b',
-            amazonS3AccessKeyId: ENV.GEN_WS_S3_ACCESS_KEY_ID || 'AKIAJKA73IEQR3ECGPVA',
-            amazonS3AccessKeySecret: ENV.GEN_WS_S3_ACCESS_KEY_SECRET || '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',
-            amazonS3RegionName: ENV.GEN_WS_S3_REGION_NAME || 'us-east-1'
+            amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b'),
+            amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'AKIAJKA73IEQR3ECGPVA'),
+            amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, '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'),
+            amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'us-east-1')
         },
         oss: {
-            ossBucketName: ENV.GEN_WS_OSS_BUCKET_NAME || 'testwsgenomix',
-            ossAccessKeyId: ENV.GEN_WS_OSS_ACCESS_KEY_ID || 'j1ZHzIFv65VdK42B',
-            ossAccessKeySecret: ENV.GEN_WS_OSS_ACCESS_KEY_SECRET || 'QkLzlvbROdqHmpGnNZAGlDUpy7Tr1i',
-            ossRegionName: ENV.GEN_WS_OSS_REGION_NAME || 'oss-cn-beijing'
+            ossBucketName: makeDefault(ENV.GEN_WS_OSS_BUCKET_NAME, 'testwsgenomix'),
+            ossAccessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, 'j1ZHzIFv65VdK42B'),
+            ossAccessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, 'QkLzlvbROdqHmpGnNZAGlDUpy7Tr1i'),
+            ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'oss-cn-beijing')
         }
     },
     applicationServer: {
