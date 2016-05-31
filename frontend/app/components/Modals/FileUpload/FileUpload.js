@@ -25,7 +25,6 @@ export default class FileUpload extends Component {
 
                         {this.renderUploadButton()}
 
-                        {JSON.stringify(this.props.fileUpload)}
                         {this.props.fileUpload.filesProcesses.map((fp, index) => this.renderMultiFile(fp, index))}
 
                     </div>
@@ -39,7 +38,6 @@ export default class FileUpload extends Component {
             <div key={index}>
                 {fileProcess.error && this.renderUploadError(fileProcess.error)}
                 {this.renderFileInfo(fileProcess.file)}
-                {JSON.stringify(fileProcess)}
                 {fileProcess.isArchiving &&
                 <div className='text-center'>
                     <strong style={{color: '#2363a1'}}>Archiving...</strong>
