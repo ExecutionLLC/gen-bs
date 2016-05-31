@@ -71,10 +71,11 @@ export function clearVariants() {
     };
 }
 
-export function createWsConnection(wsConn) {
+export function createWsConnection(wsConn, sessionId) {
     return {
         type: WS_CREATE_CONNECTION,
-        wsConn
+        wsConn,
+        sessionId
     };
 }
 
@@ -185,6 +186,14 @@ export function subscribeToWs(sessionId) {
         conn.onmessage = event => dispatch(receiveMessage(JSON.stringify(event.data)));
         conn.onerror = event => dispatch(receiveError(event.data));
         conn.onclose = event => dispatch(receiveClose(event.data));
+    };
+}
+
+export function initWSConnection(sessionId) {
+    return (dispatch) => {
+        var conn = new WebSocket(config.URLS.WS);
+        dispatch(createWsConnection(conn, sessionId));
+        dispatch(subscribeToWs(sessionId));
     };
 }
 

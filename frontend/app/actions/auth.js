@@ -6,7 +6,7 @@ import {getCookie} from '../utils/cookie';
 import {getUrlParameterByName} from '../utils/stringUtils';
 
 import {fetchUserdata} from './userData';
-import {createWsConnection, subscribeToWs} from './websocket';
+import {initWSConnection} from './websocket';
 import {handleError} from './errorHandler';
 import {clearQueryHistory} from './queryHistory';
 
@@ -112,10 +112,8 @@ function loginError(errorMessage) {
 }
 
 function updateLoginData(dispatch, sessionId, isDemo) {
-    var conn = new WebSocket(config.URLS.WS);
     dispatch(receiveSession(sessionId, isDemo));
-    dispatch(createWsConnection(conn));
-    dispatch(subscribeToWs(sessionId));
+    dispatch(initWSConnection(sessionId));
     if (isDemo) {
         dispatch(clearQueryHistory());
     }
