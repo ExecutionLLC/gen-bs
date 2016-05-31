@@ -32,21 +32,6 @@ function editFilesProcesses(filesProcesses, index, newFileProcess) {
 /**
  * @template {FP}
  * @param {Array.<FP>} filesProcesses
- * @param {number|null} index - null, undefined or <0 - return filesProcesses
- * @param {FP} newFileProcess
- * @returns {Array.<FP>}
- */
-function editFilesProcessesIfIndex(filesProcesses, index, newFileProcess) {
-    if (index == null || index < 0) {
-        return filesProcesses;
-    } else {
-        return editFilesProcesses(filesProcesses, index, newFileProcess);
-    }
-}
-
-/**
- * @template {FP}
- * @param {Array.<FP>} filesProcesses
  * @param {number|null} id - null or undefined - return filesProcesses
  * @param {FP} fp
  * @returns {Array.<FP>}

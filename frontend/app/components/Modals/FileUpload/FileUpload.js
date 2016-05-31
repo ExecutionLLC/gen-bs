@@ -13,7 +13,7 @@ export default class FileUpload extends Component {
 
     render() {
         const {auth: {isDemo}} = this.props;
-        const {error, isArchiving} = this.props.fileUpload;
+        const {error} = this.props.fileUpload;
         if (isDemo) {
             return this.renderDemoContent();
         } else {
@@ -56,7 +56,7 @@ export default class FileUpload extends Component {
 
     renderFileInfo(file) {
         return (
-            <div className="text-center">
+            <div className='text-center'>
                 <strong style={{color: '#2363a1'}}>{file.name}</strong>
             </div>
         );
@@ -111,7 +111,7 @@ export default class FileUpload extends Component {
 
     onFilesDrop(files) {
         const {dispatch} = this.props;
-        dispatch(addFilesForUpload(Array.prototype.slice.call(files, 0, 1)))
+        dispatch(addFilesForUpload(Array.prototype.slice.call(files, 0, 1)));
     }
 
     onUploadClick() {

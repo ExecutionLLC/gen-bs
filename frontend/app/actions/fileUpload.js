@@ -72,7 +72,7 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
         || file.type === 'text/directory'
         || file.name.split('.').pop() === 'vcf') {
         onGzipStart();
-        gzip(file).then(gzippedFile => onGzipped(gzippedFile))
+        gzip(file).then(gzippedFile => onGzipped(gzippedFile));
     } else {
         onError('Unsupported file type: must be Variant Calling Format'
             +' (VCF) 4.1 or higher or VCF compressed with gzip');
@@ -80,7 +80,7 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
 }
 
 export function addFilesForUpload(files) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(clearUploadState());
         const filesWithIds = files.map((file) => ({id: Math.random(), file: file}));
         dispatch(addNoGZippedForUpload(filesWithIds));
@@ -102,7 +102,7 @@ export function addFilesForUpload(files) {
                 }
             );
         });
-    }
+    };
 }
 
 function addGZippedFileForUpload(file, id) {
@@ -187,12 +187,12 @@ export function uploadFile() {
                 },
                 (err) => {
                     console.error('Upload FAILED: ', err.responseText);
-                    dispatch(fileUploadError(fp.id, err.responseText))
+                    dispatch(fileUploadError(fp.id, err.responseText));
                 }
             );
         });
         
-    }
+    };
 
 }
 

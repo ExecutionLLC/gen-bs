@@ -6,8 +6,8 @@ export default class FileUploadProgressBar extends Component {
     renderBar(title, now) {
         return (
             <div>
-                <div className="text-center"><strong>{title}</strong></div>
-                <ProgressBar now={now} label="%(percent)s%" bsStyle='success' />
+                <div className='text-center'><strong>{title}</strong></div>
+                <ProgressBar now={now} label='%(percent)s%' bsStyle='success' />
             </div>
         );
     }
