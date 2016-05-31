@@ -11,6 +11,7 @@ const ServiceBase = require('../ServiceBase');
  * @property {string}host
  * @property {number}port
  * @property {number}databaseNumber
+ * @property {string|null}password
  * @property {string}dataIndex
  * @property {number}offset
  * @property {number}limit
@@ -44,7 +45,13 @@ class RedisService extends ServiceBase {
             (callback) => {
                 // This is done to allow local port forwarding in dev env.
                 const redisHost = this.services.config.forceOverrideRedisToLocalhost ? 'localhost' : redisParams.host;
-                this._createClient(redisHost, redisParams.port, redisParams.databaseNumber, callback);
+                this._createClient(
+                    redisHost,
+                    redisParams.port,
+                    redisParams.password,
+                    redisParams.databaseNumber,
+                    callback
+                );
             },
             (client, callback) => {
                 this._fetchData(client, redisParams.dataIndex, redisParams.offset, redisParams.limit, callback);
@@ -65,11 +72,10 @@ class RedisService extends ServiceBase {
         });
     }
 
-    _createClient(host, port, databaseNumber, callback) {
-        const client = Redis.createClient({
-            host,
-            port
-        });
+    _createClient(host, port, password, databaseNumber, callback) {
+        password = password || '';
+        const url = 'redis://' + password + '@' + host + ':' + port;
+        const client = Redis.createClient({url});
 
         // Select Redis database by number
         client.select(databaseNumber, (error) => callback(error, client));
