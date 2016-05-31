@@ -24,7 +24,6 @@ export default class FileUpload extends Component {
                         {error && this.renderUploadError(error)}
 
                         {this.renderUploadButton()}
-                        {this.renderSelectedFileInfo()}
 
                         {JSON.stringify(this.props.fileUpload)}
                         {this.props.fileUpload.filesProcesses.map((fp, index) => this.renderMultiFile(fp, index))}
@@ -33,16 +32,6 @@ export default class FileUpload extends Component {
                 </div>
             );
         }
-    }
-
-    renderSelectedFileInfo() {
-        const {filesProcesses} = this.props.fileUpload;
-        return (
-            filesProcesses[0] &&
-            <div className='text-center'>
-                <strong style={{color: '#2363a1'}}>{filesProcesses[0].name}</strong>
-            </div>
-        );
     }
 
     renderMultiFile(fileProcess, index) {
