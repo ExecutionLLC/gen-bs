@@ -86,30 +86,6 @@ function tableMessage(wsData) {
     };
 }
 
-/* was before multiupload
-function progressMessageRouter(wsData) {
-    return (dispatch, getState) => {
-        dispatch(progressMessage(wsData));
-
-        if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
-        }
-    };
-}
- */
-/*now after multiupload
-function progressMessageRouter(wsData) {
-    return (dispatch, getState) => {
-        dispatch(progressMessage(wsData));
-
-        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
-        if (fileIndex >= 0) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, getState().fileUpload.filesProcesses[fileIndex].id))
-        }
-    };
-}
-*/
-
 function progressMessage(wsData) {
     return {
         type: WS_PROGRESS_MESSAGE,
@@ -123,31 +99,6 @@ function receiveError(err) {
         err
     };
 }
-/*was before multiupload
-function asErrorRouter(wsData) {
-    return (dispatch, getState) => {
-
-        if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(fileUploadError(wsData.result.error.message));
-        } else {
-            dispatch(asError(wsData.result.error));
-        }
-    };
-}
- */
-/*now after multiupload
-function asErrorRouter(wsData) {
-    return (dispatch, getState) => {
-
-        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
-        if (fileIndex >= 0) {
-            dispatch(fileUploadError(getState().fileUpload.filesProcesses[fileIndex].id, wsData.result.error.message))
-        } else {
-            dispatch(asError(wsData.result.error));
-        }
-    };
-}
-*/
 
 function asError(err) {
     return {
@@ -164,54 +115,6 @@ function otherMessage(wsData) {
     };
 }
 
-/*was before multiupload
-function receiveMessage(msg) {
-    return (dispatch, getState) => {
-        const wsData = JSON.parse(JSON.parse(msg));
-        if (wsData.result) {
-            if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
-                dispatch(tableMessage(wsData));
-                if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
-                    dispatch(receiveSearchedResults());
-                }
-            } else if (wsData.result.progress !== undefined) {
-                dispatch(progressMessageRouter(wsData));
-            } else if (wsData.result.error) {
-                dispatch(asErrorRouter(wsData));
-            } else {
-                dispatch(otherMessage(wsData));
-            }
-        } else {
-            dispatch(otherMessage(wsData));
-        }
-    };
-}
- */
-/*now after multiupload
-function receiveMessage(msg) {
-    return (dispatch, getState) => {
-        const wsData = JSON.parse(JSON.parse(msg));
-        const fileUploadIsMultipleFile = !!_.find(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
-        if (wsData.result) {
-            if (wsData.result.sampleId && !fileUploadIsMultipleFile) {
-                dispatch(tableMessage(wsData));
-                if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
-                    dispatch(receiveSearchedResults());
-                }
-            } else if (wsData.result.progress !== undefined) {
-                dispatch(progressMessageRouter(wsData));
-            } else if (wsData.result.error) {
-                dispatch(asErrorRouter(wsData));
-            } else {
-                dispatch(otherMessage(wsData));
-            }
-        } else {
-            dispatch(otherMessage(wsData));
-        }
-    };
-}
- */
-
 function receiveSearchMessage(wsData) {
     return (dispatch, getState) => {
         if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
@@ -226,18 +129,25 @@ function receiveSearchMessage(wsData) {
 }
 
 function receiveUploadMessage(wsData) {
-    return (dispatch) => {
-        dispatch(progressMessage(wsData)); // TODO Remove
-        dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
+    return (dispatch, getState) => {
+        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
+        if (fileIndex < 0) {
+            return;
+        }
+        dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, getState().fileUpload.filesProcesses[fileIndex].id));
     };
 }
 
 function receiveErrorMessage(wsData) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         console.error('Error: ' + JSON.stringify(wsData.error));
         const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
-            dispatch(fileUploadError(error));
+            const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
+            if (fileIndex < 0) {
+                return;
+            }
+            dispatch(fileUploadError(getState().fileUpload.filesProcesses[fileIndex].id, error));
         } else {
             dispatch(asError(error));
         }
