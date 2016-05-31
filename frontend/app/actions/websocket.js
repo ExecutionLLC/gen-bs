@@ -185,7 +185,7 @@ function reconnectWS() {
             () => dispatch(initWSConnection(getState().websocket.sessionId)),
             config.WEBSOCKET_RECONNECT_TIME_MS
         );
-    }
+    };
 }
 
 export function subscribeToWs(sessionId) {
@@ -194,7 +194,7 @@ export function subscribeToWs(sessionId) {
         conn.onopen = () => {
             conn.send(JSON.stringify({sessionId}));
         };
-        conn.onmessage = event => {dispatch(receiveMessage(JSON.stringify(event.data)))};
+        conn.onmessage = event => {dispatch(receiveMessage(JSON.stringify(event.data)));};
         conn.onerror = event => {dispatch(receiveError(event.data));dispatch(reconnectWS());};
         conn.onclose = event => {dispatch(receiveClose(event.data));dispatch(reconnectWS());};
     };
