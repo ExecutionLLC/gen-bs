@@ -1,17 +1,22 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "v1.get_source_metadata",
-  "title": "get_source_metadata - backend API function",
   "description": "returns source metadata by source name",
   "type": "object",
   "properties": {
+    "id": {
+      "type": "string",
+      "description": "Id of the session to use"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "v1.get_source_metadata"
+      ]
+    },
     "params": {
       "type": "string",
       "description": "name of the source DB",
       "example": "db_1.h5"
-    },
-    "result": {
-      "$ref": "base_json/file_metadata.json#"
     }
   }
 }

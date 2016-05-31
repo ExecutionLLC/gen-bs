@@ -27,10 +27,10 @@ export function clearUploadState() {
     };
 }
 
-export function fileUploadError(id, msg) {
+export function fileUploadError(id, error) {
     return {
         type: FILE_UPLOAD_ERROR,
-        msg,
+        error,
         id
     };
 }

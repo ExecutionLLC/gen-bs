@@ -1,14 +1,11 @@
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
-import {viewBuilderSelectView} from './viewBuilder';
 import {detachHistory} from './queryHistory';
 import {setViewVariantsSort} from './variantsTable';
 import {handleError} from './errorHandler';
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
-
-export const CHANGE_HEADER_VIEW = 'CHANGE_HEADER_VIEW';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
@@ -38,22 +35,6 @@ export function toggleQueryNavbar() {
     };
 }
 
-function changeHeaderView(views, viewId) {
-    return {
-        type: CHANGE_HEADER_VIEW,
-        views,
-        viewId
-    };
-}
-
-export function changeView(viewId) {
-    return (dispatch, getState) => {
-        const {userData: {views}} = getState();
-        dispatch(changeHeaderView(views, viewId));
-        dispatch(viewBuilderSelectView(views, viewId));
-    };
-}
-
 export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
     return (dispatch, getState) => {
         if (!sampleId || !viewId || !filterId) {
@@ -70,14 +51,16 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         };
         const {
             userData: {
-                attachedHistoryData: historyData,
-                views
+                attachedHistoryData: historyData
             },
             samplesList: {
                 samples
             },
             filtersList: {
-                filters
+                hashedArray: {hash: filterIdToFilterHash}
+            },
+            viewsList: {
+                hashedArray: {hash: viewIdToViewHash}
             },
             fields: {
                 sampleFieldsList
@@ -92,9 +75,9 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(requestTableScrollPositionReset());
         dispatch(clearSearchParams());
         dispatch(requestAnalyze(searchParams));
-        const searchView = _.find(views, {id: viewId});
+        const searchView = viewIdToViewHash[viewId];
         const searchSample = _.find(samples, {id: sampleId});
-        const searchFilter = _.find(filters, {id: filterId});
+        const searchFilter = filterIdToFilterHash[filterId];
         dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
         dispatch(fetchVariants(searchParams));

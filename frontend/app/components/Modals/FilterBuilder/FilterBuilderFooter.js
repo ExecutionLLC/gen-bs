@@ -37,10 +37,7 @@ export default class FilterBuilderFooter extends Component {
     }
 
     onConfirmClick() {
-        const filter = this.props.filterBuilder.editingFilter.filter;
-        if (filter.name.trim()) {
-            this.props.dispatch(filterBuilderSaveAndSelectRules());
-        }
+        this.props.dispatch(filterBuilderSaveAndSelectRules());
     }
 
 }

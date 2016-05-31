@@ -91,7 +91,8 @@ export default class FileUpload extends Component {
     renderUploadError(error) {
         return (
             <div className='alert'>
-                <p>{error}</p>
+                <p>{error.message}</p>
+                <small>Error code: {error.code}</small>
             </div>
         );
     }

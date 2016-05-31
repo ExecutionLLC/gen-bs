@@ -130,7 +130,7 @@ export default function fileUpload(state = initialState, action) {
         case ActionTypes.FILE_UPLOAD_ERROR: {
             return {
                 filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    error: action.msg
+                    error: action.error
                 })
             };
         }

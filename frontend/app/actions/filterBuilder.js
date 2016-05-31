@@ -15,8 +15,6 @@ export const FBUILDER_START_EDIT = 'FBUILDER_START_EDIT';
 export const FBUILDER_SAVE_EDIT = 'FBUILDER_SAVE_EDIT';
 export const FBUILDER_END_EDIT = 'FBUILDER_END_EDIT';
 
-export const FBUILDER_RECEIVE_RULES = 'FBUILDER_RECEIVE_RULES';
-
 
 /*
  * Action Creators
@@ -51,7 +49,7 @@ export function filterBuilderChangeAttr(attr) {
     };
 }
 
-export function filterBuilderCreateFilter() {
+function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
         const editingFilter = getState().filterBuilder.editingFilter.filter;
@@ -64,7 +62,7 @@ export function filterBuilderCreateFilter() {
     };
 }
 
-export function filterBuilderUpdateFilter() {
+function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
         const state = getState();
@@ -92,20 +90,11 @@ export function filterBuilderUpdateFilter() {
 export function filterBuilderSaveAndSelectRules() {
     return (dispatch, getState) => {
         dispatch(filterBuilderSaveEdit());
-        const rules = getState().filterBuilder.editingFilter.filter.rules;
-        dispatch(filterBuilderRules(rules));
         if (!getState().filterBuilder.editingFilter.isNew) {
             dispatch(filterBuilderUpdateFilter());
         } else {
             dispatch(filterBuilderCreateFilter());
         }
-    };
-}
-
-export function filterBuilderRules(rules) {
-    return {
-        type: FBUILDER_RECEIVE_RULES,
-        rules
     };
 }
 
@@ -124,8 +113,8 @@ export function filterBuilderDeleteFilter(filterId) {
             .then( ()=> {
                 const state = getState();
                 const selectedFilterId = state.filtersList.selectedFilterId;
-                const newFilterId = (filterId == selectedFilterId) ? state.filtersList.filters[0].id : selectedFilterId;
-                const newFilter = _.find(state.filtersList.filters, {id: newFilterId});
+                const newFilterId = (filterId == selectedFilterId) ? state.filtersList.hashedArray.array[0].id : selectedFilterId;
+                const newFilter = state.filtersList.hashedArray.hash[newFilterId];
                 dispatch(filterBuilderStartEdit(false, newFilter, fields));
             });
     };

@@ -7,7 +7,6 @@ import _ from 'lodash';
 export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
-export const WS_RECEIVE_AS_UPLOAD_ERROR = 'WS_RECEIVE_AS_UPLOAD_ERROR';
 export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_MESSAGE';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
@@ -28,6 +27,19 @@ export const REQUEST_SET_CURRENT_PARAMS = 'REQUEST_SET_CURRENT_PARAMS';
  * other consts
  */
 
+const WS_PROGRESS_STATUSES = {
+    READY: 'ready'
+};
+
+const WS_OPERATION_TYPES = {
+    UPLOAD: 'upload',
+    SEARCH: 'search'
+};
+
+const WS_RESULT_TYPES = {
+    ERROR: 'error',
+    SUCCESS: 'success'
+};
 
 /*
  * action creators
@@ -74,6 +86,18 @@ function tableMessage(wsData) {
     };
 }
 
+/* was before multiupload
+function progressMessageRouter(wsData) {
+    return (dispatch, getState) => {
+        dispatch(progressMessage(wsData));
+
+        if (getState().fileUpload.operationId === wsData.operationId) {
+            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
+        }
+    };
+}
+ */
+/*now after multiupload
 function progressMessageRouter(wsData) {
     return (dispatch, getState) => {
         dispatch(progressMessage(wsData));
@@ -84,6 +108,7 @@ function progressMessageRouter(wsData) {
         }
     };
 }
+*/
 
 function progressMessage(wsData) {
     return {
@@ -98,7 +123,19 @@ function receiveError(err) {
         err
     };
 }
+/*was before multiupload
+function asErrorRouter(wsData) {
+    return (dispatch, getState) => {
 
+        if (getState().fileUpload.operationId === wsData.operationId) {
+            dispatch(fileUploadError(wsData.result.error.message));
+        } else {
+            dispatch(asError(wsData.result.error));
+        }
+    };
+}
+ */
+/*now after multiupload
 function asErrorRouter(wsData) {
     return (dispatch, getState) => {
 
@@ -110,6 +147,7 @@ function asErrorRouter(wsData) {
         }
     };
 }
+*/
 
 function asError(err) {
     return {
@@ -126,6 +164,30 @@ function otherMessage(wsData) {
     };
 }
 
+/*was before multiupload
+function receiveMessage(msg) {
+    return (dispatch, getState) => {
+        const wsData = JSON.parse(JSON.parse(msg));
+        if (wsData.result) {
+            if (wsData.result.sampleId && getState().fileUpload.operationId !== wsData.operationId) {
+                dispatch(tableMessage(wsData));
+                if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
+                    dispatch(receiveSearchedResults());
+                }
+            } else if (wsData.result.progress !== undefined) {
+                dispatch(progressMessageRouter(wsData));
+            } else if (wsData.result.error) {
+                dispatch(asErrorRouter(wsData));
+            } else {
+                dispatch(otherMessage(wsData));
+            }
+        } else {
+            dispatch(otherMessage(wsData));
+        }
+    };
+}
+ */
+/*now after multiupload
 function receiveMessage(msg) {
     return (dispatch, getState) => {
         const wsData = JSON.parse(JSON.parse(msg));
@@ -143,6 +205,55 @@ function receiveMessage(msg) {
             } else {
                 dispatch(otherMessage(wsData));
             }
+        } else {
+            dispatch(otherMessage(wsData));
+        }
+    };
+}
+ */
+
+function receiveSearchMessage(wsData) {
+    return (dispatch, getState) => {
+        if (wsData.result.status === WS_PROGRESS_STATUSES.READY) {
+            dispatch(tableMessage(wsData));
+            if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
+                dispatch(receiveSearchedResults());
+            }
+        } else {
+            dispatch(progressMessage(wsData));
+        }
+    };
+}
+
+function receiveUploadMessage(wsData) {
+    return (dispatch) => {
+        dispatch(progressMessage(wsData)); // TODO Remove
+        dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
+    };
+}
+
+function receiveErrorMessage(wsData) {
+    return (dispatch) => {
+        console.error('Error: ' + JSON.stringify(wsData.error));
+        const error = wsData.error;
+        if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
+            dispatch(fileUploadError(error));
+        } else {
+            dispatch(asError(error));
+        }
+    };
+}
+
+function receiveMessage(msg) {
+    return (dispatch) => {
+        const wsData = JSON.parse(JSON.parse(msg));
+        const {operationType, resultType} = wsData;
+        if (resultType == WS_RESULT_TYPES.ERROR) {
+            dispatch(receiveErrorMessage(wsData));
+        } else if (operationType == WS_OPERATION_TYPES.SEARCH) {
+            dispatch(receiveSearchMessage(wsData));
+        } else if (operationType == WS_OPERATION_TYPES.UPLOAD) {
+            dispatch(receiveUploadMessage(wsData));
         } else {
             dispatch(otherMessage(wsData));
         }

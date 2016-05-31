@@ -3,14 +3,21 @@ import HttpStatus from 'http-status';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
-import {analyze, changeView} from './ui';
-import {changeViews} from './userData';
-import {changeSamples} from './samplesList';
-import {changeSample} from './samplesList';
+import {analyze} from './ui';
+import {
+    changeSamples,
+    changeSample
+} from './samplesList';
 import {fetchFields} from './fields';
 import {prepareAnalyze} from './websocket';
-import {filtersListSelectFilter} from './filtersList';
-import {filtersListReceive} from './filtersList';
+import {
+    filtersListSelectFilter,
+    filtersListReceive
+} from './filtersList';
+import {
+    viewsListSelectView,
+    viewsListReceive
+} from './viewsList';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -89,7 +96,7 @@ export function renewHistoryItem(historyItemId) {
                 .then(() => {
                     dispatch([
                         filtersListSelectFilter(clonedHistoryItem.filters[0].id),
-                        changeView(clonedHistoryItem.view.id),
+                        viewsListSelectView(clonedHistoryItem.view.id),
                         analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
                     ]);
                 });
@@ -104,15 +111,15 @@ export function attachHistory(historyItem) {
             getState().samplesList.samples, sampleId, historyItem.sample
         );
         const {collection: filters, historyItemId: newFilterId} = changeHistoryItem(
-            getState().filtersList.filters, filterId, historyItem.filters[0]
+            getState().filtersList.hashedArray.array, filterId, historyItem.filters[0]
         );
         const {collection: views, historyItemId: newViewId} = changeHistoryItem(
-            getState().userData.views, viewId, historyItem.view
+            getState().viewsList.hashedArray.array, viewId, historyItem.view
         );
         dispatch([
             changeHistoryData(newSampleId, newFilterId, newViewId),
             filtersListReceive(filters),
-            changeViews(views),
+            viewsListReceive(views),
             changeSamples(samples)
         ]);
     };
@@ -125,7 +132,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         if (!detachSample && !detachFilter && !detachView) {
             return;
         }
-        const {userData, samplesList, filtersList} = getState();
+        const {userData, samplesList, filtersList, viewsList} = getState();
         const attachedHistoryData = userData.attachedHistoryData;
         const {
             collection: samples,
@@ -134,16 +141,16 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         const {
             collection: filters,
             historyItemId: filterId
-        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.filters, attachedHistoryData.filterId, null);
+        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.hashedArray.array, attachedHistoryData.filterId, null);
         const {
             collection: views,
             historyItemId: viewId
-        } = detachHistoryItemIfNeedIt(detachView, userData.views, attachedHistoryData.viewId, null);
+        } = detachHistoryItemIfNeedIt(detachView, viewsList.hashedArray.array, attachedHistoryData.viewId, null);
 
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),
             filtersListReceive(filters),
-            changeViews(views),
+            viewsListReceive(views),
             changeSamples(samples)
         ]);
     };

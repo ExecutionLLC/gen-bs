@@ -208,6 +208,35 @@ describe('Views', () => {
             });
         });
 
+        it('should fail to add view with existing name', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                });
+            });
+        });
+
+        it('should fail to add view with existing name with leading and trailing spaces', (done) => {
+            viewsClient.getAll(sessionId, (error, response) => {
+                const views = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(views);
+                const view = views[0];
+                view.name = ' ' + view.name + ' ';
+
+                viewsClient.add(sessionId, languId, view, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                });
+            });
+        });
+
         it('should fail to add view with empty list item', (done) => {
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);

@@ -145,8 +145,8 @@ class FiltersModel extends SecureModelBase {
             (filters, filterIds, callback) => {
                 this._attachFiltersDescriptions(trx, filters, filterIds, callback);
             }
-        ], (error, views) => {
-            callback(error, views);
+        ], (error, filters) => {
+            callback(error, filters);
         });
     }
 

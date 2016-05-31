@@ -28,7 +28,7 @@
 		},
 		"is_copy_disabled": {
 			"type": "boolean",
-			"description": "If true, user should not be allowed to copy the view on UI."
+			"description": "If true, user should not be allowed to copy the filter on UI."
 		}
 	},
 	"required": [

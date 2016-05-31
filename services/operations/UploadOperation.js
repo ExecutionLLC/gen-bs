@@ -1,14 +1,25 @@
 'use strict';
 
-const OperationBase = require('./OperationBase');
+const SystemOperation = require('./SystemOperation');
 
-class UploadOperation extends OperationBase {
-    constructor(sessionId, method) {
+class UploadOperation extends SystemOperation {
+    constructor(sessionId, method, userId) {
         super(sessionId, method);
+        this.userId = userId;
+        this.setSendCloseToAppServer(true);
     }
 
     getType() {
-        return OperationBase.operationTypes().UPLOAD;
+        return SystemOperation.operationTypes().UPLOAD;
+    }
+
+    /**
+     * Gets file owner.
+     * 
+     * @returns {string}
+     * */
+    getUserId() {
+        return this.userId;
     }
 
     getSampleId() {

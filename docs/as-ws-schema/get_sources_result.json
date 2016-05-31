@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "returns list of available sources",
+  "type": "array",
+  "items": {
+    "$ref": "./base_json/source.json#",
+    "description": "Source and its reference object representation"
+  }
+}

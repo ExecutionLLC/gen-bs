@@ -1,56 +1,15 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "v1.load_file",
-  "title": "load_file - backend API function",
-  "description": "converts user VCF to HDF5 format and pull both files on storage",
+  "description": "converts user VCF to HDF5 format and pushes both files into storage. This is a REST request with the following parameters.",
   "type": "object",
   "properties": {
-    "params": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Upload session identifier."
-        },
-        "sample_id": {
-          "type": "string",
-          "description": "UUID of the sample on WS."
-        },
-        "size": {
-          "type": "string",
-          "description": "Sample file size in bytes"
-        }
-      }
+    "id": {
+      "type": "string",
+      "description": "Upload session identifier."
     },
-    "result": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string",
-          "description": "Converting - file upload to AS complete, conversion to hd5 is in progress. Uploading - conversion completed, uploading to S3. Ready - should contain file metadata.",
-          "enum": [
-            "converting",
-            "uploading",
-            "ready"
-          ]
-        },
-        "id": {
-          "type": "string",
-          "description": "Session identifier."
-        },
-        "sample_id": {
-          "type": "string",
-          "description": "UUID of the sample to which the message is related to."
-        },
-        "progress": {
-          "type": "integer",
-          "description": "progress of operation in %. Operation correspond to enum value in status."
-        },
-        "metadata": {
-          "$ref": "base_json/file_metadata.json#",
-          "description": "Sent one time when the file is parsed."
-        }
-      }
+    "sample_id": {
+      "type": "string",
+      "description": "UUID of the sample on WS."
     }
   }
 }

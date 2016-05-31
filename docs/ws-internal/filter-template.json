@@ -22,7 +22,7 @@
     },
     "is_copy_disabled": {
       "type": "boolean",
-      "description": "If true, user should not be allowed to copy the view"
+      "description": "If true, user should not be allowed to copy the filter"
     },
     "rules": {
       "type": "string",

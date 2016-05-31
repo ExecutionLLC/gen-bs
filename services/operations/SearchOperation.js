@@ -5,6 +5,7 @@ const OperationBase = require('./OperationBase');
 class SearchOperation extends OperationBase {
     constructor(sessionId, method) {
         super(sessionId, method);
+        this.setSendCloseToAppServer(true);
     }
 
     getType() {

@@ -60,11 +60,11 @@ export default class SamplesClient extends UserEntityClientBase {
             return false;
         }
         // Should contain editable fields.
-        if (!_.filter(fieldsMetadata, 'isEditable', true).length) {
+        if (!_.filter(fieldsMetadata, ['isEditable', true]).length) {
             return false;
         }
         // Should contain mandatory fields.
-        if (!_.filter(fieldsMetadata, 'isMandatory', true).length) {
+        if (!_.filter(fieldsMetadata, ['isMandatory', true]).length) {
             return false;
         }
 
