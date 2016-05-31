@@ -80,7 +80,7 @@ function progressMessageRouter(wsData) {
 
         const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
         if (fileIndex >= 0) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, fileIndex))
+            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, getState().fileUpload.filesProcesses[fileIndex].id))
         }
     };
 }
