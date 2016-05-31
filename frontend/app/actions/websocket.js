@@ -1,5 +1,7 @@
 import {receiveSearchedResults} from './variantsTable';
 import {changeFileUploadProgress, fileUploadError} from './fileUpload';
+import config from '../../config';
+
 /*
  * action types
  */
@@ -177,15 +179,24 @@ function sended(msg) {
     };
 }
 
+function reconnectWS() {
+    return (dispatch, getState) => {
+        setTimeout(
+            () => dispatch(initWSConnection(getState().websocket.sessionId)),
+            config.WEBSOCKET_RECONNECT_TIME_MS
+        );
+    }
+}
+
 export function subscribeToWs(sessionId) {
     return (dispatch, getState) => {
         const conn = getState().websocket.wsConn;
         conn.onopen = () => {
             conn.send(JSON.stringify({sessionId}));
         };
-        conn.onmessage = event => dispatch(receiveMessage(JSON.stringify(event.data)));
-        conn.onerror = event => dispatch(receiveError(event.data));
-        conn.onclose = event => dispatch(receiveClose(event.data));
+        conn.onmessage = event => {dispatch(receiveMessage(JSON.stringify(event.data)))};
+        conn.onerror = event => {dispatch(receiveError(event.data));dispatch(reconnectWS());};
+        conn.onclose = event => {dispatch(receiveClose(event.data));dispatch(reconnectWS());};
     };
 }
 
