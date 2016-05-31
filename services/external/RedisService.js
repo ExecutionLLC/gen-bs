@@ -73,8 +73,8 @@ class RedisService extends ServiceBase {
     }
 
     _createClient(host, port, password, databaseNumber, callback) {
-        password = password || '';
-        const url = 'redis://' + password + '@' + host + ':' + port;
+        const identityPart = (password) ? (password + '@') : '';
+        const url = 'redis://' + identityPart + host + ':' + port;
         const client = Redis.createClient({url});
 
         // Select Redis database by number
