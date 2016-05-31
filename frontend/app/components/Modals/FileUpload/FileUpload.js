@@ -26,19 +26,6 @@ export default class FileUpload extends Component {
                         {this.renderUploadButton()}
                         {this.renderSelectedFileInfo()}
 
-
-                        { isArchiving &&
-                        <div className='text-center'>
-                            <strong style={{color: '#2363a1'}}>Archiving...</strong>
-                            <i className='fa fa-spinner fa-spin'></i>
-                        </div>
-                        }
-                        { !error &&
-                        <FileUploadProgressBar
-                            progressStatusFromAS={this.props.fileUpload.progressStatusFromAS}
-                            progressValueFromAS={this.props.fileUpload.progressValueFromAS}
-                        />
-                        }
                         {JSON.stringify(this.props.fileUpload)}
                         {this.props.fileUpload.filesProcesses.map((fp, index) => this.renderMultiFile(fp, index))}
 
@@ -49,11 +36,11 @@ export default class FileUpload extends Component {
     }
 
     renderSelectedFileInfo() {
-        const {files} = this.props.fileUpload;
+        const {filesProcesses} = this.props.fileUpload;
         return (
-            files[0] &&
+            filesProcesses[0] &&
             <div className='text-center'>
-                <strong style={{color: '#2363a1'}}>{files[0].name}</strong>
+                <strong style={{color: '#2363a1'}}>{filesProcesses[0].name}</strong>
             </div>
         );
     }
@@ -132,12 +119,12 @@ export default class FileUpload extends Component {
 
     onUploadChanged(files) {
         const {dispatch} = this.props;
-        dispatch(addFilesForUpload(Array.prototype.slice.call(files)));
+        dispatch(addFilesForUpload(Array.prototype.slice.call(files, 0, 1)));
     }
 
     onFilesDrop(files) {
         const {dispatch} = this.props;
-        dispatch(addFilesForUpload(Array.prototype.slice.call(files)))
+        dispatch(addFilesForUpload(Array.prototype.slice.call(files, 0, 1)))
     }
 
     onUploadClick() {

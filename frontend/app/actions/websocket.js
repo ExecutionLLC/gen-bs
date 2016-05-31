@@ -82,10 +82,6 @@ function progressMessageRouter(wsData) {
         if (fileIndex >= 0) {
             dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, fileIndex))
         }
-
-        if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, null));
-        }
     };
 }
 
@@ -108,11 +104,7 @@ function asErrorRouter(wsData) {
 
         const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
         if (fileIndex >= 0) {
-            dispatch(fileUploadError(wsData.result.error.message, fileIndex))
-        }
-
-        if (getState().fileUpload.operationId === wsData.operationId) {
-            dispatch(fileUploadError(wsData.result.error.message, null));
+            dispatch(fileUploadError(getState().fileUpload.filesProcesses[fileIndex].id, wsData.result.error.message))
         } else {
             dispatch(asError(wsData.result.error));
         }
@@ -137,10 +129,9 @@ function otherMessage(wsData) {
 function receiveMessage(msg) {
     return (dispatch, getState) => {
         const wsData = JSON.parse(JSON.parse(msg));
-        const fileUploadIsSingleFile = getState().fileUpload.operationId !== wsData.operationId;
         const fileUploadIsMultipleFile = !!_.find(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
         if (wsData.result) {
-            if (wsData.result.sampleId && fileUploadIsSingleFile && !fileUploadIsMultipleFile) {
+            if (wsData.result.sampleId && !fileUploadIsMultipleFile) {
                 dispatch(tableMessage(wsData));
                 if (getState().variantsTable.isFilteringOrSorting || getState().variantsTable.isNextDataLoading) {
                     dispatch(receiveSearchedResults());
