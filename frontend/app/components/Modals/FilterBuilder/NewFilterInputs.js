@@ -74,7 +74,7 @@ export default class NewFilterInputs extends Component {
     }
 
     onCancelClick() {
-        const parentFilter = _.find(this.props.filtersList.filters, {id: this.props.filterBuilder.editingFilter.parentFilterId});
+        const parentFilter = this.props.filtersList.hashedArray.hash[this.props.filterBuilder.editingFilter.parentFilterId];
         this.props.dispatch(filterBuilderStartEdit(false, parentFilter, this.props.fields));
     }
 

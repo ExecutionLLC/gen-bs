@@ -141,25 +141,7 @@ function reduceFBuilderChangeAttr(state, action) {
     });
 }
 
-function reduceFBuilderReceiveRules(state, action) {
-    return Object.assign({}, state, {
-        rulesRequested: false,
-        rulesPrepared: true,
-        editingFilter: state.editingFilter ?
-            Object.assign({}, state.editingFilter, {
-                filter: Object.assign({}, state.editingFilter.filter,
-                    {
-                        rules: action.rules
-                    })
-            }) :
-            null
-    });
-}
-
-
 export default function filterBuilder(state = {
-    isReceivedFilters: false,
-    rulesRequested: false,
     /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
     editingFilter: null,
     originalFilter: null
@@ -171,9 +153,6 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_CHANGE_ATTR:
             return reduceFBuilderChangeAttr(state, action);
-
-        case ActionTypes.FBUILDER_RECEIVE_RULES:
-            return reduceFBuilderReceiveRules(state, action);
 
         case ActionTypes.FBUILDER_START_EDIT:
             return reduceFBuilderStartEdit(state, action);

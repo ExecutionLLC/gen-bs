@@ -3,10 +3,6 @@ import {Modal} from 'react-bootstrap';
 
 
 export default class ViewBuilderHeader extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <Modal.Header closeButton>

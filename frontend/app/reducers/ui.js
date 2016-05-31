@@ -2,7 +2,6 @@ import * as ActionTypes from '../actions/ui';
 
 export default function ui(state = {
     queryNavbarClosed: true,
-    selectedView: null,
     // Workaround for bug #299
     shouldResetTableScrollPosition: false,
     currentLimit: 100,
@@ -26,11 +25,6 @@ export default function ui(state = {
         case ActionTypes.COMPLETE_TABLE_SCROLL_POSITION_RESET:
             return Object.assign({}, state, {
                 shouldResetTableScrollPosition: false
-            });
-
-        case ActionTypes.CHANGE_HEADER_VIEW:
-            return Object.assign({}, state, {
-                selectedView: _.find(action.views, {id: action.viewId})
             });
 
         case ActionTypes.TOGGLE_ANALYZE_TOOLTIP:

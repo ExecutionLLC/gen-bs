@@ -2,25 +2,29 @@ import React from 'react';
 import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
-import {connect} from 'react-redux';
 import _ from 'lodash';
 
-import {viewBuilderDeleteColumn, viewBuilderAddColumn, viewBuilderChangeColumn} from '../../../actions/viewBuilder';
-import {viewBuilderChangeSortColumn, viewBuilderChangeKeywords} from '../../../actions/viewBuilder';
+import {
+    viewBuilderDeleteColumn,
+    viewBuilderAddColumn,
+    viewBuilderChangeColumn,
+    viewBuilderChangeSortColumn,
+    viewBuilderChangeKeywords
+} from '../../../actions/viewBuilder';
 
 
 export default class ViewBuilder extends React.Component {
 
     shouldComponentUpdate(nextProps) {
         return this.props.fields !== nextProps.fields
-            || this.props.viewBuilder.editedView.type !== nextProps.viewBuilder.editedView.type
-            || this.props.viewBuilder.editedView.viewListItems !== nextProps.viewBuilder.editedView.viewListItems;
+            || this.props.viewBuilder.editingView.type !== nextProps.viewBuilder.editingView.type
+            || this.props.viewBuilder.editingView.viewListItems !== nextProps.viewBuilder.editingView.viewListItems;
     }
 
     render() {
         const {dispatch, fields, viewBuilder} = this.props;
         const allAvailableFields = fields.allowedFieldsList;
-        const view = viewBuilder.editedView;
+        const view = viewBuilder.editingView;
         const viewItemsLength = view.viewListItems.length;
         const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);
         // Exclude fields that are already selected.
@@ -219,14 +223,3 @@ export default class ViewBuilder extends React.Component {
         );
     }
 }
-
-function mapStateToProps(state) {
-    const {viewBuilder, userData: {views}, fields} = state;
-    return {
-        viewBuilder,
-        views,
-        fields
-    };
-}
-
-export default connect(mapStateToProps)(ViewBuilder);

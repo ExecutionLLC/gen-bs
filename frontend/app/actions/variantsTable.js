@@ -91,8 +91,8 @@ export function clearSearchParams() {
 
 export function changeExcludedFields(viewId) {
     return (dispatch, getState) => {
-        const {fields:{sampleFieldsList}, userData:{views}}=getState();
-        const view = _.find(views, {id: viewId});
+        const {fields:{sampleFieldsList}, viewsList:{hashedArray: {hash: viewIdToViewHash}}}=getState();
+        const view = viewIdToViewHash[viewId];
         const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
         const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);
         const viewFieldIds = _.map(view.viewListItems, viewItem =>viewItem.fieldId);
@@ -145,7 +145,7 @@ export function setViewVariantsSort(view) {
                     order: viewListItem.sortOrder
                 };
             })
-            .sortByOrder(['order'], true)
+            .orderBy(['order'], true)
             .value();
         //Fix for the case when another sort column is missing in the sample fields.
         if (sortOrder.length == 1) {
