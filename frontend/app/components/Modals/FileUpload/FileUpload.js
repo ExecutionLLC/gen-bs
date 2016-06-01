@@ -12,7 +12,7 @@ export default class FileUpload extends Component {
     }
 
     render() {
-        const {auth: {isDemo}} = this.props;
+        const {auth: {isDemo}, fileUpload: {filesProcesses}} = this.props;
         if (isDemo) {
             return this.renderDemoContent();
         } else {
@@ -20,7 +20,7 @@ export default class FileUpload extends Component {
                 <div className='panel file-upload-panel panel-default'>
                     <div className='panel-body'>
                         {this.renderUploadButton()}
-                        {this.props.fileUpload.filesProcesses.map((fp, index) => this.renderMultiFile(fp, index))}
+                        {filesProcesses.map((fp, index) => this.renderMultiFile(fp, index))}
                     </div>
                 </div>
             );
