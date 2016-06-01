@@ -28,20 +28,21 @@ export default class FileUpload extends Component {
     }
 
     renderMultiFile(fileProcess, index) {
+        const {file, error, isArchiving, progressStatus, progressValue} = fileProcess;
         return (
             <div key={index}>
-                {fileProcess.error && this.renderUploadError(fileProcess.error)}
-                {this.renderFileInfo(fileProcess.file)}
-                {fileProcess.isArchiving &&
+                {error && this.renderUploadError(error)}
+                {this.renderFileInfo(file)}
+                {isArchiving &&
                 <div className='text-center'>
                     <strong style={{color: '#2363a1'}}>Archiving...</strong>
                     <i className='fa fa-spinner fa-spin'/>
                 </div>
                 }
-                {!fileProcess.error &&
+                {!error &&
                 <FileUploadProgressBar
-                    progressStatus={fileProcess.progressStatus}
-                    progressValue={fileProcess.progressValue}
+                    progressStatus={progressStatus}
+                    progressValue={progressValue}
                 />
                 }
             </div>
