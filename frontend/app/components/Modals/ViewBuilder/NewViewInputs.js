@@ -1,17 +1,16 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder';
-
+import {viewBuilderChangeAttr, viewBuilderStartEdit} from '../../../actions/viewBuilder';
+import config from '../../../../config';
 
 export default class NewViewInputs extends React.Component {
 
     render() {
 
         const {viewBuilder, validationMessage} = this.props;
-        const newView = viewBuilder.editedView;
+        const newView = viewBuilder.editingView;
 
         return (
-            <div className='collapse in copyview'>
+            <div className='collapse in'>
                 { validationMessage &&
                 <div className='alert alert-help'>
                         <span data-localize='views.setup.selector.description'>
@@ -26,8 +25,9 @@ export default class NewViewInputs extends React.Component {
                             type='text'
                             className='form-control text-primary'
                             data-localize='views.setup.new.name.help'
-                            placeholder='Set view name a copy'
+                            placeholder='Set view name'
                             value={newView.name}
+                            maxLength={config.VIEWS.MAX_NAME_LENGTH}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
                     </div>
@@ -40,6 +40,7 @@ export default class NewViewInputs extends React.Component {
                                 data-localize='views.setup.new.description'
                                 placeholder='Set view description (optional)'
                                 value={newView.description}
+                                maxLength={config.VIEWS.MAX_DESCRIPTION_LENGTH}
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
                             <div className='input-group-btn btn-group-close'>
@@ -56,34 +57,24 @@ export default class NewViewInputs extends React.Component {
     }
 
     onNameChange(name) {
-        const {editedView} = this.props.viewBuilder;
+        const {editingView} = this.props.viewBuilder;
         this.props.dispatch(viewBuilderChangeAttr({
             name,
-            description: editedView.description
+            description: editingView.description
         }));
     }
 
     onDescriptionChange(description) {
-        const {editedView} = this.props.viewBuilder;
+        const {editingView} = this.props.viewBuilder;
         this.props.dispatch(viewBuilderChangeAttr({
-            name: editedView.name,
+            name: editingView.name,
             description
         }));
     }
 
     onCancelClick() {
-        const {editedView} = this.props.viewBuilder;
-        this.props.dispatch(viewBuilderSelectView(this.props.views, editedView.originalViewId));
+        const parentView = this.props.viewsList.hashedArray.hash[this.props.viewBuilder.editingViewParentId];
+        this.props.dispatch(viewBuilderStartEdit(false, parentView));
     }
 
 }
-
-function mapStateToProps(state) {
-    const {viewBuilder, userData: {views}} = state;
-    return {
-        views,
-        viewBuilder
-    };
-}
-
-export default connect(mapStateToProps)(NewViewInputs);

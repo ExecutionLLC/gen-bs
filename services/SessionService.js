@@ -141,6 +141,14 @@ class SessionService extends ServiceBase {
             (sessions, callback) => callback(null, _.first(sessions).id)
         ], callback);
     }
+    
+    findAllByUserId(userId, callback) {
+        const sessionIds = _(this.sessions)
+            .filter(session => session.userId === userId)
+            .map(session => session.id)
+            .value();
+        callback(null, sessionIds);
+    }
 
     findSessionUserId(sessionId, callback) {
         async.waterfall([

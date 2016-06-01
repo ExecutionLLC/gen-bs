@@ -16,6 +16,9 @@ class VariantsTableReact extends Component {
     constructor(props) {
         super(props);
         this.scrollTarget = null;
+        this.state = {
+            scrollTarget: null
+        };
     }
 
     render() {
@@ -43,10 +46,12 @@ class VariantsTableReact extends Component {
                            ref='variantsTable'>
                         <VariantsTableHead variants={variants} fields={fields} {...this.props} ref='variantsTableHead'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)); } }
+                                           onRendered={() => this.onTablePartRendered(true)}
                         />
                         { !isVariantsEmpty &&
                         <VariantsTableRows variants={variants} fields={fields} {...this.props} ref='variantsTableRows'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)); } }
+                                           onRendered={() => this.onTablePartRendered(false)}
                         />
                         }
                     </table>
@@ -63,19 +68,28 @@ class VariantsTableReact extends Component {
 
     elementXScrollListener(scrollLeft, DOMNode) {
         // ignore if we want to scroll to already desired place
-        if (this.scrollTarget !== null && scrollLeft == this.scrollTarget) {
+        if (this.state.scrollTarget !== null && scrollLeft == this.state.scrollTarget) {
             return;
         }
         if (DOMNode) {
-            this.scrollTarget = scrollLeft;
             // we should move header manually, because "position" attribute of element is "fixed"
             if (DOMNode.scrollLeft == scrollLeft) {
                 // destination point reached - get ready to scroll again
-                this.scrollTarget = null;
+                this.setState({scrollTarget: null});
             } else {
+                this.setState({scrollTarget: scrollLeft});
                 DOMNode.scrollLeft = scrollLeft;
             }
         }
+    }
+
+    onTablePartRendered(isHeader) {
+        if (this.state.scrollTarget == null) {
+            return;
+        }
+        const tablePartRef = isHeader ? this.refs.variantsTableHead : this.refs.variantsTableRows;
+        const tablePartElement = ReactDOM.findDOMNode(tablePartRef);
+        tablePartElement.scrollLeft = this.state.scrollTarget;
     }
 }
 

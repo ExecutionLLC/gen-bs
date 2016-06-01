@@ -5,26 +5,33 @@ import {Modal} from 'react-bootstrap';
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader';
 import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter';
 import NewViewInputs from './ViewBuilder/NewViewInputs';
+import {viewBuilderEndEdit} from '../../actions/viewBuilder';
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
 
 class ViewsModal extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {auth} = this.props;
-        const {showModal, closeModal, viewBuilder} = this.props;
-        const editedView = viewBuilder.editedView;
-        const isNew = editedView ? editedView.id === null : false;
-        const isViewEditable = editedView && editedView.type === 'user';
-        const isViewAdvanced = editedView && editedView.type === 'advanced';
+        const views = this.props.viewsList.hashedArray.array;
+        const {showModal, viewBuilder} = this.props;
+        const editingView = viewBuilder.editingView;
+        const isNew = editingView ? editingView.id === null : false;
+        const isViewEditable = editingView && editingView.type === 'user';
+        const isViewAdvanced = editingView && editingView.type === 'advanced';
         const isLoginRequired = isViewAdvanced && auth.isDemo;
-        const editedViewNameTrimmed = editedView && editedView.name.trim();
+        const editedViewNameTrimmed = editingView && editingView.name.trim();
 
-        const validationMessage = !editedViewNameTrimmed ? 'View name cannot be empty' : '';
+        const viewNameExists = isViewEditable && _(views)
+                .filter(view => view.type !== 'history')
+                .some(view => view.name.trim() === editedViewNameTrimmed
+                    && view.id != editingView.id
+                );
+
+        const validationMessage =
+            viewNameExists ? 'View with this name is already exists.' :
+                editingView && !editedViewNameTrimmed ? 'View name cannot be empty' :
+                    '';
 
         const confirmButtonParams = {
             caption: isViewEditable ? 'Save and Select' : 'Select',
@@ -39,12 +46,12 @@ class ViewsModal extends React.Component {
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
                 show={showModal}
-                onHide={ () => closeModal('views') }
+                onHide={() => this.onClose()}
             >
-                { !editedView &&
-                <div >&nbsp;</div>
+                { !editingView &&
+                <div>&nbsp;</div>
                 }
-                { editedView &&
+                { editingView &&
                 <div>
                     <ViewBuilderHeader />
                     <form>
@@ -53,21 +60,29 @@ class ViewsModal extends React.Component {
                                 { isNew &&
                                     <div className='modal-padding'>
                                         <NewViewInputs
+                                            {...this.props}
                                             validationMessage={validationMessage}
                                         />
-                                        <ViewBuilder />
+                                        <ViewBuilder
+                                            {...this.props}
+                                        />
                                     </div>   
                                 }
                                 { !isNew &&
                                     <div className='modal-padding'>
-                                        <ExistentViewSelect />
-                                        <ViewBuilder />
+                                        <ExistentViewSelect
+                                            {...this.props}
+                                        />
+                                        <ViewBuilder
+                                            {...this.props}
+                                        />
                                     </div>
                                 }
                             </div>
                         </Modal.Body>
                         <ViewBuilderFooter
-                            closeModal={closeModal}
+                            {...this.props}
+                            closeModal={() => this.onClose()}
                             confirmButtonParams={confirmButtonParams}
                         />
                     </form>
@@ -77,14 +92,22 @@ class ViewsModal extends React.Component {
 
         );
     }
+
+    onClose() {
+        this.props.closeModal('views');
+        this.props.dispatch(viewBuilderEndEdit());
+    }
 }
 
 function mapStateToProps(state) {
-    const {auth, viewBuilder} = state;
+    const {auth, viewBuilder, userData, fields, viewsList} = state;
 
     return {
         auth,
-        viewBuilder
+        viewBuilder,
+        userData,
+        fields,
+        viewsList
     };
 }
 

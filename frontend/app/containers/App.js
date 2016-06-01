@@ -54,7 +54,7 @@ class App extends Component {
         return (
             <div className={mainDivClass} id='main'>
                 <nav className='navbar navbar-inverse navbar-static-top'></nav>
-                {<div >&nbsp;</div>}
+                {<div>&nbsp;</div>}
                 {samples.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain />
@@ -81,6 +81,7 @@ class App extends Component {
                 <ViewsModal
                     showModal={this.props.modalWindows.views.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
+                    dispatch={this.props.dispatch}
                 />
                 <FiltersModal
                     showModal={this.props.modalWindows.filters.showModal}
@@ -105,12 +106,12 @@ function mapStateToProps(state) {
     const { auth,
             userData,
             modalWindows,
-            views,
             fields,
             savedFiles,
             ui,
             samplesList,
             filtersList,
+            viewsList,
             errorHandler: { showErrorWindow },
             queryHistory: { showQueryHistoryModal } } = state;
 
@@ -118,12 +119,12 @@ function mapStateToProps(state) {
         auth,
         userData,
         modalWindows,
-        views,
         fields,
         savedFiles,
         ui,
         samplesList,
         filtersList,
+        viewsList,
         showErrorWindow,
         showQueryHistoryModal
     };

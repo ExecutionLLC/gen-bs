@@ -4,7 +4,10 @@
   "type": "object",
   "properties": {
     "sample_columns": {
-      "$ref": "./view_column.json#"
+      "type": "array",
+      "items": {
+        "$ref": "./view_column.json#"
+      }
     },
     "sources": {
       "name": {

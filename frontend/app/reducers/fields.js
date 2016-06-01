@@ -34,9 +34,9 @@ function reduceRequestFields(action, state) {
 function reduceReceiveFields(action, state) {
     const {sourceFieldsList} = state;
     const fields = action.fields.map(updateFieldLabelIfNeeded);
-    const editableFields = _.filter(fields, 'isEditable', true);
+    const editableFields = _.filter(fields, ['isEditable', true]);
     const allowedFieldsList = [
-        ..._.filter(fields, 'isEditable', false),
+        ..._.filter(fields, ['isEditable', false]),
         ...sourceFieldsList
     ];
     const sampleIdToFieldHash = _.reduce(fields, (result, field) => {

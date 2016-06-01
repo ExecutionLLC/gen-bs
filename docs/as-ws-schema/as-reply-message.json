@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "Application server reply message format",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "AS Session id, which was specified in the request message."
+    },
+    "result": {
+      "description": "Result of the requested operation.",
+      "oneOf": [
+        {
+          "description": "Search operation progress.",
+          "$ref": "./base_json/session_state_progress.json"
+        },
+        {
+          "description": "Search operation result.",
+          "$ref": "./base_json/session_state_ready.json"
+        },
+        {
+          "description": "Source metadata result.",
+          "$ref": "./base_json/file_metadata.json"
+        },
+        {
+          "description": "Sources list result.",
+          "$ref": "./get_sources_result.json"
+        },
+        {
+          "description": "File upload progress.",
+          "$ref": "./load_file_progress.json"
+        },
+        {
+          "description": "File upload result.",
+          "$ref": "./load_file_progress.json"
+        }
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ]
+}

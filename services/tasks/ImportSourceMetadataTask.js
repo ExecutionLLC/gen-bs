@@ -78,7 +78,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 }
             },
             (callback) => {
-                this.services.fieldsMetadata.addMissingSourceReferences(reply.result.sourcesList, callback);
+                this.services.fieldsMetadata.addMissingSourceReferences(reply.result, callback);
             },
             (availableSources, callback) => {
                 const availableSourceNames = _.pluck(availableSources, 'sourceName');
@@ -88,6 +88,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 if (missingSourceNames.length > 0) {
                     // Metadata will be received without source names in the same order,
                     // so save the list here to find the source name later.
+                    this.logger.info('Importing sources ' + JSON.stringify(missingSourceNames, null, 2));
                     this.requestedSources = missingSourceNames;
                     this.services.applicationServer.requestSourceMetadata(missingSourceNames, callback);
                 } else {
@@ -115,7 +116,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                 if (replyResult.error) {
                     callback(replyResult.error);
                 } else {
-                    callback(null, replyResult.sourcesMetadata);
+                    callback(null, replyResult);
                 }
             },
             (sourcesMetadata, callback) => {

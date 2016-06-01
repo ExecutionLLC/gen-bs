@@ -8,10 +8,10 @@ export default class VariantsTableLoadError extends Component {
 
             <div className='panel panel-danger'>
                 <div className='panel-heading'>
-                    <h3 className='panel-title'>Error loading Analyze Results Data</h3>
+                    <h3 className='panel-title'>Unexpected Error</h3>
                 </div>
                 <div className='panel-body'>
-                    Code: <strong>{error.code}</strong>; Message: <strong>{error.message}</strong>
+                    <strong>{error.message}</strong>&nbsp;<small>Error code: {error.code}</small>
                 </div>
             </div>
 

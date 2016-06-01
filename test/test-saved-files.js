@@ -14,7 +14,7 @@ const ClientBase = require('./utils/ClientBase');
 
 const DefaultViews = require('../defaults/views/default-views.json');
 const DefaultFilters = require('../defaults/filters/default-filters.json');
-const Sample = require('../defaults/samples/Sample_vcf4.1.vcf.gz.json').sample;
+const Sample = require('../defaults/samples/test-7.json').sample;
 
 const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/filterBuilder';
+import config from '../../../../config';
 
 export default class NewFilterInputs extends Component {
 
@@ -10,23 +11,24 @@ export default class NewFilterInputs extends Component {
         const {validationMessage} = this.props;
 
         return (
-            <div className='collapse in copyview'>
+            <div className='collapse in'>
                 { validationMessage &&
                 <div className='alert alert-help'>
-                        <span data-localize='views.setup.selector.description'>
+                        <span data-localize='filters.setup.selector.description'>
                             {validationMessage}
                         </span>
                 </div>
                 }
                 <div className='row grid-toolbar row-noborder row-new-item'>
                     <div className='col-sm-6'>
-                        <label data-localize='views.setup.new.name.title'>New View</label>
+                        <label data-localize='filters.setup.new.name.title'>New Filter</label>
                         <input
                             type='text'
                             className='form-control text-primary'
-                            data-localize='views.setup.new.name.help'
-                            placeholder='Set view name a copy'
+                            data-localize='filters.setup.new.name.help'
+                            placeholder='Set filter name'
                             value={editingFilter.name}
+                            maxLength={config.FILTERS.MAX_NAME_LENGTH}
                             onChange={(e) => this.onNameChange(e.target.value)}
                         />
                     </div>
@@ -36,9 +38,10 @@ export default class NewFilterInputs extends Component {
                             <input
                                 type='text'
                                 className='form-control'
-                                data-localize='views.setup.new.description'
-                                placeholder='Set view description (optional)'
+                                data-localize='filters.setup.new.description'
+                                placeholder='Set filter description (optional)'
                                 value={editingFilter.description}
+                                maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
                             <div className='input-group-btn  btn-group-close'>
@@ -71,8 +74,8 @@ export default class NewFilterInputs extends Component {
     }
 
     onCancelClick() {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderStartEdit(false, editingFilter, this.props.fields));
+        const parentFilter = this.props.filtersList.hashedArray.hash[this.props.filterBuilder.editingFilter.parentFilterId];
+        this.props.dispatch(filterBuilderStartEdit(false, parentFilter, this.props.fields));
     }
 
 }
