@@ -21,7 +21,7 @@ function findFileProcessIndex(filesProcesses, id) {
  * @param {FP} newFileProcess
  * @returns {Array.<FP>}
  */
-function editFilesProcesses(filesProcesses, index, newFileProcess) {
+function updateFileProcess(filesProcesses, index, newFileProcess) {
     return [
         ...filesProcesses.slice(0, index),
         newFileProcess,
@@ -44,7 +44,7 @@ function assignFileProcess(filesProcesses, id, fp) {
         if (index < 0) {
             return filesProcesses;
         } else {
-            return editFilesProcesses(filesProcesses, index, Object.assign({}, filesProcesses[index], fp));
+            return updateFileProcess(filesProcesses, index, Object.assign({}, filesProcesses[index], fp));
         }
     }
 }
