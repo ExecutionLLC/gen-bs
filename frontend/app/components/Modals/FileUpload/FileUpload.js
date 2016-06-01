@@ -121,7 +121,7 @@ export default class FileUpload extends Component {
 
     onUploadChanged(files) {
         const {dispatch} = this.props;
-        dispatch(addFilesForUpload(Array.prototype.slice.call(files, 0, 1)));
+        dispatch(addFilesForUpload([files[0]]));
     }
 
     onUploadClick() {
