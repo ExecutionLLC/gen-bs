@@ -46,8 +46,8 @@ export default class FileUpload extends Component {
                 }
                 {!fileProcess.error &&
                 <FileUploadProgressBar
-                    progressStatusFromAS={fileProcess.progressStatusFromAS}
-                    progressValueFromAS={fileProcess.progressValueFromAS}
+                    progressStatus={fileProcess.progressStatus}
+                    progressValue={fileProcess.progressValue}
                 />
                 }
             </div>

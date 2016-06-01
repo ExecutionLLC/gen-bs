@@ -197,10 +197,10 @@ export function uploadFile() {
 }
 
 
-export function changeFileUploadProgress(progressValueFromAS, progressStatusFromAS, id) {
+export function changeFileUploadProgress(progressValue, progressStatus, id) {
     return (dispatch) => {
-        dispatch(changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, id));
-        if (progressStatusFromAS === 'ready') {
+        dispatch(changeFileUploadProgressState(progressValue, progressStatus, id));
+        if (progressStatus === 'ready') {
             dispatch(receiveFileUpload(id));
             dispatch(fetchTotalFields());
             dispatch(closeModal('upload'));
@@ -209,11 +209,11 @@ export function changeFileUploadProgress(progressValueFromAS, progressStatusFrom
     };
 }
 
-function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS, id) {
+function changeFileUploadProgressState(progressValue, progressStatus, id) {
     return {
         type: FILE_UPLOAD_CHANGE_PROGRESS,
-        progressValueFromAS,
-        progressStatusFromAS,
+        progressValue,
+        progressStatus,
         id
     };
 }
@@ -222,11 +222,11 @@ function findFileProcessForOperationId(state, operationId) {
     return state.fileUpload.filesProcesses.find((fp) => fp.operationId === operationId);
 }
 
-export function changeFileUploadProgressForOperationId(progressValueFromAS, progressStatusFromAS, operationId) {
+export function changeFileUploadProgressForOperationId(progressValue, progressStatus, operationId) {
     return (dispatch, getState) => {
         const fileProcess = findFileProcessForOperationId(getState(), operationId);
         if (fileProcess) {
-            dispatch(changeFileUploadProgress(progressValueFromAS, progressStatusFromAS, fileProcess.id));
+            dispatch(changeFileUploadProgress(progressValue, progressStatus, fileProcess.id));
         }
     };
 }

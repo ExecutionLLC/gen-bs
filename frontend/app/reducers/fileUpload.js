@@ -59,13 +59,13 @@ function assignFileProcess(filesProcesses, id, fp) {
  * - file uploaded: isUploaded: true
  * @param {File} file
  * @param {number} id
- * @returns {{progressValueFromAS: number, progressStatusFromAS: null, operationId: null, isUploading: boolean, file: *, error: null, isArchived: boolean, isArchiving: boolean, isUploaded: boolean}}
+ * @returns {{progressValue: number, progressStatus: null, operationId: null, isUploading: boolean, file: *, error: null, isArchived: boolean, isArchiving: boolean, isUploaded: boolean}}
  */
 function createFileProcess(file, id) {
     return {
         id: id,
-        progressValueFromAS: 0,
-        progressStatusFromAS: null,
+        progressValue: 0,
+        progressStatus: null,
         operationId: null,
         isUploading: false,
         file: file,
@@ -157,8 +157,8 @@ export default function fileUpload(state = initialState, action) {
         case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS: {
             return {
                 filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    progressValueFromAS: action.progressValueFromAS,
-                    progressStatusFromAS: action.progressStatusFromAS
+                    progressValue: action.progressValue,
+                    progressStatus: action.progressStatus
                 })
             };
         }

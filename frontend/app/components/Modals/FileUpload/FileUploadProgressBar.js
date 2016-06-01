@@ -17,7 +17,7 @@ export default class FileUploadProgressBar extends Component {
     }
 
     render() {
-        const { progressStatusFromAS, progressValueFromAS } = this.props;
+        const { progressStatus, progressValue } = this.props;
 
         const STAGES = {
             TOTAL: 3,
@@ -27,11 +27,11 @@ export default class FileUploadProgressBar extends Component {
             'ready': 3
         };
 
-        const currentStage = STAGES[progressStatusFromAS];
+        const currentStage = STAGES[progressStatus];
         if (currentStage == null) {
             return null;
         }
-        const currentProgress = currentStage < STAGES.TOTAL ? progressValueFromAS : 0;
+        const currentProgress = currentStage < STAGES.TOTAL ? progressValue : 0;
         return this.renderProgress(currentStage, STAGES.TOTAL, currentProgress);
     }
 }
