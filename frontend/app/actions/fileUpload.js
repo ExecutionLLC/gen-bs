@@ -74,7 +74,7 @@ function ensureGzippedFile(file, onGzipStart, onGzipped, onError) {
         onGzipStart();
         gzip(file).then(gzippedFile => onGzipped(gzippedFile));
     } else {
-        onError('Unsupported file type: must be Variant Calling Format'
+        onError('Unsupported file type: must be Variant Call Format'
             +' (VCF) 4.1 or higher or VCF compressed with gzip');
     }
 }
