@@ -97,8 +97,8 @@ export function addFilesForUpload(files) {
                     }
                 },
                 (message) => {
-                    console.error('Wrong file type. Type must be vcard or gzip');
-                    dispatch(fileUploadError(fileWithId.id, message));
+                    console.error('Wrong file type. Type must be vcard or gzip:\n' + message);
+                    dispatch(fileUploadError(fileWithId.id, {code: null, message: message}));
                 }
             );
         });
@@ -187,7 +187,7 @@ export function uploadFile() {
                 },
                 (err) => {
                     console.error('Upload FAILED: ', err.responseText);
-                    dispatch(fileUploadError(fp.id, err.responseText));
+                    dispatch(fileUploadError(fp.id, {code: null, message: err.responseText}));
                 }
             );
         });
