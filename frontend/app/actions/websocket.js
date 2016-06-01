@@ -194,17 +194,19 @@ export function subscribeToWs() {
         conn.onopen = () => {
             conn.send(JSON.stringify({sessionId}));
         };
-        conn.onmessage = event => {dispatch(receiveMessage(event.data));};
-        conn.onerror = event => {dispatch(receiveError(event.data));dispatch(reconnectWS());};
-        conn.onclose = event => {dispatch(receiveClose(event.data));dispatch(reconnectWS());};
+        conn.onmessage = event => dispatch(receiveMessage(event.data));
+        conn.onerror = event => dispatch([receiveError(event.data), reconnectWS()]);
+        conn.onclose = event => dispatch([receiveClose(event.data), reconnectWS()]);
     };
 }
 
 export function initWSConnection() {
     return (dispatch) => {
         var conn = new WebSocket(config.URLS.WS);
-        dispatch(createWsConnection(conn));
-        dispatch(subscribeToWs());
+        dispatch([
+            createWsConnection(conn),
+            subscribeToWs()
+        ]);
     };
 }
 
