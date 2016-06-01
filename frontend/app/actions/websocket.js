@@ -150,7 +150,7 @@ function receiveErrorMessage(wsData) {
 
 function receiveMessage(msg) {
     return (dispatch) => {
-        const wsData = JSON.parse(JSON.parse(msg));
+        const wsData = JSON.parse(msg);
         const {operationType, resultType} = wsData;
         if (resultType == WS_RESULT_TYPES.ERROR) {
             dispatch(receiveErrorMessage(wsData));
@@ -194,7 +194,7 @@ export function subscribeToWs() {
         conn.onopen = () => {
             conn.send(JSON.stringify({sessionId}));
         };
-        conn.onmessage = event => {dispatch(receiveMessage(JSON.stringify(event.data)));};
+        conn.onmessage = event => {dispatch(receiveMessage(event.data));};
         conn.onerror = event => {dispatch(receiveError(event.data));dispatch(reconnectWS());};
         conn.onclose = event => {dispatch(receiveClose(event.data));dispatch(reconnectWS());};
     };
