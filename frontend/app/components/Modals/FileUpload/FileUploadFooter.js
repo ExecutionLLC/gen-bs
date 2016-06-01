@@ -12,7 +12,7 @@ export default class FileUploadFooter extends Component {
         const {dispatch} = this.props;
         const {filesProcesses} = this.props.fileUpload;
 
-        const isEnabledForMultiFile = _.some(filesProcesses, {isUploaded: false, isUploading: false, isArchived: true});
+        const isUploadEnabled = _.some(filesProcesses, {isUploaded: false, isUploading: false, isArchived: true});
 
         return (
 
@@ -27,7 +27,7 @@ export default class FileUploadFooter extends Component {
                 </button>
 
                 <button
-                    disabled={!isEnabledForMultiFile}
+                    disabled={!isUploadEnabled}
                     onClick={ () => {
                         dispatch(uploadFile());
                     }}
