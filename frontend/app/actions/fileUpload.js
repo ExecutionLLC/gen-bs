@@ -218,9 +218,13 @@ function changeFileUploadProgressState(progressValueFromAS, progressStatusFromAS
     };
 }
 
+function findFileProcessForOperationId(state, operationId) {
+    return state.fileUpload.filesProcesses.find((fp) => fp.operationId === operationId);
+}
+
 export function changeFileUploadProgressForOperationId(progressValueFromAS, progressStatusFromAS, operationId) {
     return (dispatch, getState) => {
-        const fileProcess = getState().fileUpload.filesProcesses.find((fp) => fp.operationId === operationId);
+        const fileProcess = findFileProcessForOperationId(getState(), operationId);
         if (fileProcess) {
             dispatch(changeFileUploadProgress(progressValueFromAS, progressStatusFromAS, fileProcess.id));
         }
@@ -229,7 +233,7 @@ export function changeFileUploadProgressForOperationId(progressValueFromAS, prog
 
 export function fileUploadErrorForOperationId(error, operationId) {
     return (dispatch, getState) => {
-        const fileProcess = getState().fileUpload.filesProcesses.find((fp) => fp.operationId === operationId);
+        const fileProcess = findFileProcessForOperationId(getState(), operationId);
         if (fileProcess) {
             dispatch(fileUploadError(fileProcess.id, error));
         }
