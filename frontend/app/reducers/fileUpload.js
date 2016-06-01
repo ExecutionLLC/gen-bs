@@ -76,19 +76,6 @@ function createFileProcess(file, id) {
     };
 }
 
-/**
- * @template {FP}
- * @param {Array.<FP>} filesProcesses
- * @param {Array.<{file: File, id: number}>} newFiles
- */
-function addFilesProcesses(filesProcesses, newFiles) {
-    return [
-        ...filesProcesses,
-        ...newFiles.map((item) => createFileProcess(item.file, item.id))
-    ];
-}
-
-
 export default function fileUpload(state = initialState, action) {
 
     switch (action.type) {
@@ -121,7 +108,10 @@ export default function fileUpload(state = initialState, action) {
         }
         case ActionTypes.ADD_NOGZIPPED_FOR_UPLOAD: {
             return Object.assign({}, state, {
-                filesProcesses: addFilesProcesses(state.filesProcesses, action.files)
+                filesProcesses: [
+                    ...state.filesProcesses,
+                    ...action.files.map((item) => createFileProcess(item.file, item.id))
+                ]
             });
         }
         case ActionTypes.ADD_GZIPPED_FILE_FOR_UPLOAD: {
