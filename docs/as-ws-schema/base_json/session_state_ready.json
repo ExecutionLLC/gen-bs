@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "file session status",
+  "type": "object",
+  "properties": {
+    "session_state": {
+      "type": "object",
+      "description": "Message which indicates that the data is available in Redis",
+      "parameters": {
+        "status": {
+          "enum": [
+            "ready"
+          ]
+        },
+        "progress": {
+          "type": "integer",
+          "description": "progress of operation in %",
+          "value": 100
+        },
+        "redis_db": {
+          "type": "object",
+          "description": "Redis host descriptor.",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "url of the redis"
+            },
+            "number": {
+              "type": "integer",
+              "description": "redis DB number"
+            },
+            "result_index": {
+              "type": "string",
+              "description": "key of the sorted and filtered index"
+            }
+          }
+        },
+        "view_structure": {
+          "$ref": "base_json/view.json#",
+          "description": "list of the view columns and keywords"
+        },
+        "view_filter": {
+          "type": "object",
+          "params": {
+            "type": "object",
+            "description": "filter applied on the view"
+          }
+        },
+        "view_sort_order": {
+          "type": "array",
+          "items": {
+            "$ref": "base_json/sort_order.json#"
+          }
+        },
+        "column_filters": {
+          "type": "array",
+          "description": "list of column filters",
+          "items": {
+            "$ref": "column_filter.json#"
+          }
+        },
+        "sort_order": {
+          "type": "array",
+          "description": "ordered list of the columns for sorting",
+          "items": {
+            "$ref": "sort_order.json#"
+          }
+        },
+        "global_filter": {
+          "type": "object",
+          "properties": {
+            "filter": {
+              "type": "string",
+              "description": "Global search string value"
+            },
+            "excluded_fields": {
+              "type": "array",
+              "description": "List of excluded columns",
+              "items": {
+                "$ref": "base_json/excluded_column.json#"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

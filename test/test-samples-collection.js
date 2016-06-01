@@ -32,7 +32,7 @@ describe('Samples Collection', function() {
             setTimeout(() => {
                 webSocketClient.associateSession(sessionId);
                 done();
-            }, 3000);
+            }, 1000);
         });
     });
 

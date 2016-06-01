@@ -48,6 +48,12 @@ export default class VariantsTableRows extends Component {
         scrollElement.removeEventListener('scroll', this.handleScroll);
     }
 
+    componentDidUpdate() {
+        if (this.props.onRendered) {
+            this.props.onRendered();
+        }
+    }
+
     renderTableBody(rows, sortState, isFilteringOrSorting, currentView, fields, selectedRowIndices) {
         if (isFilteringOrSorting || !currentView) {
             return (

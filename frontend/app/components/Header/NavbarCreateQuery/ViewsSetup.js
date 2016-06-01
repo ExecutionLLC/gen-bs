@@ -1,9 +1,18 @@
 import React, {Component} from 'react';
+import {viewBuilderStartEdit} from '../../../actions/viewBuilder';
 
 export default class ViewsSetup extends Component {
 
     constructor(props) {
         super(props);
+    }
+
+    onViewsClick() {
+        const viewIdToViewHash = this.props.viewsList.hashedArray.hash;
+        const {selectedViewId} = this.props.viewsList;
+        const selectedView = viewIdToViewHash[selectedViewId];
+        this.props.dispatch(viewBuilderStartEdit(false, selectedView));
+        this.props.openModal('views');
     }
 
     render() {
@@ -18,7 +27,7 @@ export default class ViewsSetup extends Component {
                      title='Select existing view or create a new one.'>
                     <button
                         className='btn btn-default' type='button' data-toggle='modal' data-target='#selectColumns'
-                        onClick={this.props.openModal.bind(this, 'views')}
+                        onClick={() => this.onViewsClick()}
                     >
                         <span data-localize='views.title'>Views</span>
                     </button>

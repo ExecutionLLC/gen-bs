@@ -30,7 +30,7 @@ export default function fileUpload(state = initialState, action) {
         case ActionTypes.FILE_UPLOAD_ERROR: {
             return Object.assign({}, state, {
                 files: [],
-                error: action.msg
+                error: action.error
             });
         }
         case ActionTypes.CHANGE_FILE_FOR_UPLOAD: {

@@ -9,21 +9,34 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const ENV = process.env;
 
+function makeDefault(value, defaultValue) {
+    if (value === undefined) {
+        return defaultValue;
+    }
+
+    if (typeof defaultValue === 'boolean') {
+        return JSON.parse(value);
+    }
+    return value;
+}
+
 // Default values are set in the package.json.
 // These values are fallback values in case
 // webpack is running directly, without npm run scripts.
-const API_HOST = ENV.GEN_FRONTEND_API_HOST || 'localhost';
-const API_PORT = ENV.GEN_FRONTEND_API_PORT || 5000;
-const LOGIN_CALLBACK_PORT = ENV.GEN_FRONTEND_LOGIN_CALLBACK_PORT || 8080;
+const API_HOST = makeDefault(ENV.GEN_FRONTEND_API_HOST, 'localhost');
+const API_PORT = makeDefault(ENV.GEN_FRONTEND_API_PORT, 5000);
+const USE_SECURE_CONNECTION = makeDefault(ENV.GEN_FRONTEND_USE_SECURE_CONNECTION, false);
+const LOGIN_CALLBACK_PORT = makeDefault(ENV.GEN_FRONTEND_LOGIN_CALLBACK_PORT, 8080);
 // All timeouts measured in seconds
-const SESSION_KEEP_ALIVE_TIMEOUT = ENV.GEN_FRONTEND_SESSION_KEEP_ALIVE_TIMEOUT || 60;
-const SESSION_LOGOUT_TIMEOUT = ENV.GEN_FRONTEND_SESSION_LOGOUT_TIMEOUT || 15*60;
-const SESSION_LOGOUT_WARNING_TIMEOUT = ENV.GEN_FRONTEND_SESSION_LOGOUT_WARNING_TIMEOUT || 15;
-const HEADER_SESSION = ENV.GEN_HEADER_SESSION || 'X-Session-Id';
-const HEADER_LANGUAGE = ENV.GEN_HEADER_LANGUAGE || 'X-Language-Id';
+const SESSION_KEEP_ALIVE_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_KEEP_ALIVE_TIMEOUT, 60);
+const SESSION_LOGOUT_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_LOGOUT_TIMEOUT, 15*60);
+const SESSION_LOGOUT_WARNING_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_LOGOUT_WARNING_TIMEOUT, 15);
+const HEADER_SESSION = makeDefault(ENV.GEN_HEADER_SESSION, 'X-Session-Id');
+const HEADER_LANGUAGE = makeDefault(ENV.GEN_HEADER_LANGUAGE, 'X-Language-Id');
 
-console.log(colors.bold('-> API host: ', API_HOST));
-console.log(colors.bold('-> API port: ', API_PORT));
+console.log(colors.bold('-> API host:   ', API_HOST));
+console.log(colors.bold('-> API port:   ', API_PORT));
+console.log(colors.bold('-> API Secure? ', USE_SECURE_CONNECTION));
 console.log('');
 
 module.exports = {
@@ -112,6 +125,7 @@ module.exports = {
         new webpack.DefinePlugin({
             API_PORT: JSON.stringify(API_PORT),
             API_HOST: JSON.stringify(API_HOST),
+            USE_SECURE_CONNECTION: JSON.stringify(USE_SECURE_CONNECTION),
             LOGIN_CALLBACK_PORT: JSON.stringify(LOGIN_CALLBACK_PORT),
             HEADER_SESSION: JSON.stringify(HEADER_SESSION),
             HEADER_LANGUAGE: JSON.stringify(HEADER_LANGUAGE),

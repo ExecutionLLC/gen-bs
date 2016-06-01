@@ -19,7 +19,7 @@ class FiltersModal extends Component {
 
     render() {
         const {auth} = this.props;
-        const {filters} = this.props.filtersList;
+        const filters = this.props.filtersList.hashedArray.array;
         const editingFilterObject = this.props.filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;
@@ -54,7 +54,7 @@ class FiltersModal extends Component {
                 onHide={() => this.onClose()}
             >
                 { (!editingFilter) &&
-                <div >&nbsp;</div>
+                <div>&nbsp;</div>
                 }
                 { (editingFilter) &&
                 <div>
@@ -84,7 +84,7 @@ class FiltersModal extends Component {
                             </div>
                         </Modal.Body>
                         <FilterBuilderFooter
-                            {...this.props}
+                            dispatch={this.props.dispatch}
                             confirmButtonParams={confirmButtonParams}
                             closeModal={() => this.onClose()}
                         />

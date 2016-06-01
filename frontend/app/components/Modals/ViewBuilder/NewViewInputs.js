@@ -1,15 +1,13 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {viewBuilderSelectView, viewBuilderChangeAttr} from '../../../actions/viewBuilder';
+import {viewBuilderChangeAttr, viewBuilderStartEdit} from '../../../actions/viewBuilder';
 import config from '../../../../config';
-
 
 export default class NewViewInputs extends React.Component {
 
     render() {
 
         const {viewBuilder, validationMessage} = this.props;
-        const newView = viewBuilder.editedView;
+        const newView = viewBuilder.editingView;
 
         return (
             <div className='collapse in'>
@@ -59,34 +57,24 @@ export default class NewViewInputs extends React.Component {
     }
 
     onNameChange(name) {
-        const {editedView} = this.props.viewBuilder;
+        const {editingView} = this.props.viewBuilder;
         this.props.dispatch(viewBuilderChangeAttr({
             name,
-            description: editedView.description
+            description: editingView.description
         }));
     }
 
     onDescriptionChange(description) {
-        const {editedView} = this.props.viewBuilder;
+        const {editingView} = this.props.viewBuilder;
         this.props.dispatch(viewBuilderChangeAttr({
-            name: editedView.name,
+            name: editingView.name,
             description
         }));
     }
 
     onCancelClick() {
-        const {editedView} = this.props.viewBuilder;
-        this.props.dispatch(viewBuilderSelectView(this.props.views, editedView.originalViewId));
+        const parentView = this.props.viewsList.hashedArray.hash[this.props.viewBuilder.editingViewParentId];
+        this.props.dispatch(viewBuilderStartEdit(false, parentView));
     }
 
 }
-
-function mapStateToProps(state) {
-    const {viewBuilder, userData: {views}} = state;
-    return {
-        views,
-        viewBuilder
-    };
-}
-
-export default connect(mapStateToProps)(NewViewInputs);

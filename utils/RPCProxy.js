@@ -12,6 +12,14 @@ const SocketState = {
 };
 
 class RPCProxy {
+    /**
+     * @param {string}host
+     * @param {number}port
+     * @param {object}logger
+     * @param {function()}connectCallback
+     * @param {function()}disconnectCallback
+     * @param {function(object)}replyCallback
+     */
     constructor(host, port, logger, connectCallback, disconnectCallback, replyCallback) {
         this.connectCallback = connectCallback;
         this.disconnectCallback = disconnectCallback;
@@ -50,9 +58,7 @@ class RPCProxy {
         const unconvertedMessage = JSON.parse(messageString);
         const message = ChangeCaseUtil.convertKeysToCamelCase(unconvertedMessage);
         if (this.replyCallback) {
-            this.replyCallback(message.error, {
-                id: message.id, result: message.result
-            });
+            this.replyCallback(message);
         } else {
             this.logger.error('No callback is registered for RPC reply');
         }

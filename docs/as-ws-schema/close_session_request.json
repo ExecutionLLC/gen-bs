@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Closes a session on backend side",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Id of the session to close"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "v1.close_session"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "enum": [
+        null
+      ]
+    }
+  }
+}

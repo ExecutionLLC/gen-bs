@@ -30,6 +30,8 @@ const SETTINGS = {
     // If enabled, demo users will have rights to create and delete filters and samples.
     // These filters and samples will be shared between them, as there is only one demo-user in the system.
     enableFullRightsForDemoUsers: makeDefault(ENV.GEN_WS_ENABLE_FULL_RIGHTS_FOR_DEMO_USERS, false),
+    // If true, client messages will include stack traces.
+    includeStackTraceToErrors: makeDefault(ENV.GEN_WS_INCLUDE_STACK_TRACE, false),
     samplesUpload: {
         path: makeDefault(ENV.GEN_WS_UPLOAD_PATH, __dirname + '/../uploads/'), // Temporary path for uploaded samples.
         maxSizeInBytes: makeDefault(ENV.GEN_WS_UPLOAD_MAX_SIZE, 25 * 1024 * 1024) // Max size of the uploaded sample.
@@ -38,10 +40,20 @@ const SETTINGS = {
         maxSizeInBytes: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_SIZE, 1024 * 1024),
         maxCount: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_COUNT, 2),
         path: makeDefault(ENV.GEN_WS_SAVED_FILES_PATH, __dirname + '/../uploads/'),
-        amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b'),
-        amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'AKIAJKA73IEQR3ECGPVA'),
-        amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, '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'),
-        amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'us-east-1')
+        // Object storage type to use. Supported values: 's3', 'oss'
+        objectStorageType: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
+        amazon: {
+            amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b'),
+            amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'AKIAJKA73IEQR3ECGPVA'),
+            amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, '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'),
+            amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'us-east-1')
+        },
+        oss: {
+            ossBucketName: makeDefault(ENV.GEN_WS_OSS_BUCKET_NAME, 'testwsgenomix'),
+            ossAccessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, 'j1ZHzIFv65VdK42B'),
+            ossAccessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, 'QkLzlvbROdqHmpGnNZAGlDUpy7Tr1i'),
+            ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'oss-cn-beijing')
+        }
     },
     applicationServer: {
         host: makeDefault(ENV.GEN_WS_AS_HOST, 'localhost'),
@@ -91,6 +103,8 @@ const SETTINGS = {
 };
 
 // Add computational fields
+// Warning! Currently, base url should be set to HTTP scheme, as otherwise Google sends 'Missing parameter: scope' error.
+// The HTTP address will be redirected to HTTPS by NginX.
 SETTINGS.baseUrl = makeDefault(ENV.GEN_WS_BASE_URL, 'http://localhost:' + SETTINGS.port);
 SETTINGS.google = {
     // Google Application parameters

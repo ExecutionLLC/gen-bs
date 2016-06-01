@@ -4,8 +4,16 @@ const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const AppServerUploadUtils = require('../../../utils/AppServerUploadUtils');
+const ErrorUtils = require('../../../utils/ErrorUtils');
 
+const RESULT_TYPES = require('./AppServerResultTypes');
 const METHODS = require('./AppServerMethods');
+const EVENTS = require('./AppServerEvents');
+const SESSION_STATUS = {
+    CONVERTING: 'converting',
+    UPLOADING: 'uploading',
+    READY: 'ready'
+};
 
 class AppServerUploadService extends ApplicationServerServiceBase {
     constructor(services, models) {
@@ -43,6 +51,104 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 this._rpcSend(operationId, method, null, callback);
             }
         ], callback);
+    }
+
+    processUploadResult(operation, message, callback) {
+        this.logger.info('Processing upload result for ' + operation);
+        if (this._isAsErrorMessage(message)) {
+            this._createErrorOperationResult(
+                operation, 
+                EVENTS.onOperationResultReceived, 
+                true,
+                ErrorUtils.createAppServerInternalError(message),
+                callback
+            );
+        } else {
+            const result = message.result;
+            /**@type {string}*/
+            const status = (result || {}).status;
+            // If not ready, just send the progress up
+            if (status !== SESSION_STATUS.READY) {
+                this._createProgressMessage(operation, message, callback);
+            } else {
+                this._createUploadResult(operation, message, callback);
+            }
+        }        
+    }
+    
+    _createProgressMessage(operation, message, callback) {
+        const result = message.result;
+        const status = result.status;
+        const progress = result.progress;
+        /**
+         * @type AppServerOperationResult
+         * */
+        const operationResult = {
+            operation,
+            eventName: EVENTS.onOperationResultReceived,
+            shouldCompleteOperation: false,
+            resultType: RESULT_TYPES.SUCCESS,
+            result: {
+                status,
+                progress
+            }
+        };
+        
+        callback(null, operationResult);
+    }
+    
+    _createUploadResult(operation, message, callback) {
+        // Sample is fully processed and the fields metadata is available.
+        // Now we need to:
+        // 1. Insert all the data into database.
+        // 2. Send a message to the frontend to indicate the processing is fully completed.
+        // 3. Close the operation.
+        const result = message.result;
+        const progress = result.progress;
+        const status = result.status;
+        /**@type {string}*/
+        const sampleId = operation.getSampleId();
+        const sampleMetadata = result.metadata;
+        const fieldsMetadata = sampleMetadata.columns;
+        const sampleReference = sampleMetadata.reference;
+        const sampleFileName = operation.getSampleFileName();
+        const userId = operation.getUserId();
+
+        async.waterfall([
+            (callback) => this.services.users.find(userId, callback),
+            (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
+                sampleFileName, sampleReference, fieldsMetadata, callback)
+        ], (error, sampleVersionId) => {
+            if (error) {
+                this._createErrorOperationResult(
+                    operation, 
+                    EVENTS.onOperationResultReceived, 
+                    true, 
+                    ErrorUtils.createInternalError(error), 
+                    callback
+                );
+                return;
+            }
+
+            // The upload operation is already completed on the app server.
+            operation.setSendCloseToAppServer(false);
+
+            /**
+             * @type AppServerOperationResult
+             * */
+            const operationResult = {
+                operation,
+                eventName: EVENTS.onOperationResultReceived,
+                shouldCompleteOperation: true,
+                resultType: error ? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
+                result: {
+                    status,
+                    progress,
+                    sampleId: sampleVersionId
+                }
+            };
+            callback(null, operationResult);
+        });
     }
 }
 

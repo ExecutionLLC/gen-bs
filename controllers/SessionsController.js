@@ -133,9 +133,7 @@ class SessionsController extends ControllerBase {
             }
 
             passport.authenticate('google', {
-                scope: [
-                    'https://www.googleapis.com/auth/plus.profile.emails.read'
-                ],
+                scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
                 returnURL: googleFullRedirectUrl,
                 realm: baseUrl,
                 session: false,

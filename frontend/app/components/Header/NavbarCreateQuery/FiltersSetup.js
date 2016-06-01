@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {filterBuilderStartEdit} from '../../../actions/filterBuilder';
-import _ from 'lodash';
 
 
 export default class FiltersSetup extends Component {
@@ -11,7 +10,7 @@ export default class FiltersSetup extends Component {
 
     onFiltersClick() {
         const {filtersList, fields, dispatch, openModal} = this.props;
-        const selectedFilter = _.find(filtersList.filters, {id: filtersList.selectedFilterId});
+        const selectedFilter = filtersList.hashedArray.hash[filtersList.selectedFilterId];
         dispatch(filterBuilderStartEdit(false, selectedFilter, fields));
         openModal('filters');
     }

@@ -1,10 +1,11 @@
 'use strict';
 
 const _ = require('lodash');
-const async = require('async');
 
+const RESULT_TYPES = require('./AppServerResultTypes'); 
 const ServiceBase = require('../../ServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
+const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const proxyProviderFunc = _.once(function () {
     // return new RPCProxy(...args);
@@ -39,13 +40,72 @@ class ApplicationServerServiceBase extends ServiceBase {
         });
     }
 
-    _rpcReply(rpcError, rpcMessage) {
-        this.logger.info('RPC REPLY, error: ' + JSON.stringify(rpcError, null, 2) + ', message: ' + JSON.stringify(rpcMessage, null, 2));
-        this.services.applicationServerReply.onRpcReplyReceived(rpcError, rpcMessage, (error) => {
-            if (error) {
-                this.logger.error('Error processing RPC reply: ' + error);
-            }
-        });
+    _rpcReply(rpcMessage) {
+        this.logger.info('RPC REPLY: ' + JSON.stringify(rpcMessage, null, 2));
+        if (!rpcMessage.id) {
+            this.logger.error('Message has no id, so will be ignored.');
+        } else {
+            this.services.applicationServerReply.onRpcReplyReceived(rpcMessage, (error) => {
+                if (error) {
+                    this.logger.error('Error processing RPC reply: ' + ErrorUtils.createErrorMessage(error));
+                }
+            });
+        }
+    }
+    
+    /**
+     * @typedef {Object}AppServerErrorResult
+     * @property {number}code
+     * @property {string}message
+     * */
+
+    /**
+     * @typedef {Object}AppServerProgressMessage
+     * @property {string}status
+     * @property {number}progress
+     * */
+    
+    /**
+     * @typedef {AppServerProgressMessage}AppServerUploadResult
+     * @property {string}sampleId
+     * */
+    
+    /**
+     * @typedef {AppServerProgressMessage}AppServerSearchResult
+     * @property {Array<Object>}data
+     * */
+    
+    /**
+     * @typedef {Object}AppServerOperationResult
+     * @property {OperationBase}operation
+     * @property {string}eventName Event to generate.
+     * @property {boolean}shouldCompleteOperation If true, corresponding operation descriptor should be destroyed.
+     * @property {string}resultType 'error' || 'normal'.
+     * @property {(AppServerProgressMessage|AppServerUploadResult|Array|undefined)}result Operation result data.
+     * @property {(AppServerErrorResult|undefined)}error Error object in case of error occurred.
+     * */
+
+    /**
+     * @param {OperationBase}operation
+     * @param {string}eventName
+     * @param {boolean}shouldCompleteOperation
+     * @param {AppServerErrorResult}error
+     * @param {function(Error, AppServerOperationResult)}callback
+     */
+    _createErrorOperationResult(operation, eventName, shouldCompleteOperation, error, callback) {
+        /**@type AppServerOperationResult*/
+        const result = {
+            operation,
+            eventName,
+            shouldCompleteOperation,
+            resultType: RESULT_TYPES.ERROR,
+            error
+        };
+        callback(null, result);
+    }
+    
+    _isAsErrorMessage(message) {
+        return message.error;
     }
 }
 

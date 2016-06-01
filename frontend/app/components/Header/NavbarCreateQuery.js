@@ -26,7 +26,7 @@ class NavbarCreateQuery extends Component {
     render() {
 
         const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
-        const {selectedView} = this.props.ui;
+        const {selectedViewId} = this.props.viewsList;
         const {selectedFilterId} = this.props.filtersList;
         const {selectedSample} = this.props.samplesList;
         const selectedSampleId = selectedSample ? selectedSample.id : null;
@@ -60,7 +60,7 @@ class NavbarCreateQuery extends Component {
 
                         <Analyze
                             {...this.props}
-                            clicked={ () => dispatch(analyze(selectedSample.id, selectedView.id, selectedFilterId))}
+                            clicked={ () => dispatch(analyze(selectedSample.id, selectedViewId, selectedFilterId))}
                         />
                         <LoadHistory
                             dispatch={this.props.dispatch}
@@ -76,28 +76,24 @@ class NavbarCreateQuery extends Component {
 function mapStateToProps(state) {
     const {
         modalWindows,
-        userData: {
-            views,
-            filters
-        },
         ui,
         auth,
         samplesList,
         samplesList: {
             samples
         },
-        filtersList
+        filtersList,
+        viewsList
     } = state;
 
     return {
         modalWindows,
         samples,
-        views,
-        filters,
         ui,
         auth,
         samplesList,
-        filtersList
+        filtersList,
+        viewsList
     };
 }
 

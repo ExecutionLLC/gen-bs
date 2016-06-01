@@ -3,13 +3,32 @@
 	"description": "Answer to API request for the main table",
 	"type": "object",
 	"properties": {
-		"session_id": {
-			"type": "string",
-			"description": "UUID of the user session the data is related to."
+		"session_ids": {
+			"type": "array",
+			"description": "UUIDs of the user sessions the data is related to.",
+			"items": {
+				"type": "string",
+				"description": "Session identifier string."
+			}
 		},
 		"operation_id": {
 			"type": "string",
 			"description": "UUID of the search operation."
+		},
+		"operation_type": {
+			"type": "string",
+			"enum": [
+				"search",
+				"upload"
+			]
+		},
+		"result_type": {
+			"type": "string",
+			"description": "Result type of the operation.",
+			"enum": [
+				"error",
+				"success"
+			]
 		},
 		"result": {
 			"type": "object",
