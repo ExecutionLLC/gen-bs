@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ReactDOM from 'react-dom';
-import classNames from 'classnames';
 
 import VariantsTableHead from './VariantsTableHead';
 import VariantsTableRows from './VariantsTableRows';
@@ -26,13 +25,9 @@ class VariantsTableReact extends Component {
         const {auth, fields} = this.props;
         const {variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error} = this.props.ws;
 
-        var tableWrapperClass = classNames({
-            'table-variants-wrapper': true
-        });
-
         return (
 
-            <div className={tableWrapperClass}>
+            <div className='table-variants-wrapper'>
                 { isVariantsLoading &&
                 <div className='loader'></div>
                 }
