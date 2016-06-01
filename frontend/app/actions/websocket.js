@@ -1,6 +1,5 @@
 import {receiveSearchedResults} from './variantsTable';
-import {changeFileUploadProgress, fileUploadError} from './fileUpload';
-import _ from 'lodash';
+import {changeFileUploadProgressForOperationId, fileUploadErrorForOperationId} from './fileUpload';
 /*
  * action types
  */
@@ -129,25 +128,17 @@ function receiveSearchMessage(wsData) {
 }
 
 function receiveUploadMessage(wsData) {
-    return (dispatch, getState) => {
-        const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
-        if (fileIndex < 0) {
-            return;
-        }
-        dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status, getState().fileUpload.filesProcesses[fileIndex].id));
+    return (dispatch) => {
+        dispatch(changeFileUploadProgressForOperationId(wsData.result.progress, wsData.result.status, wsData.operationId));
     };
 }
 
 function receiveErrorMessage(wsData) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         console.error('Error: ' + JSON.stringify(wsData.error));
         const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
-            const fileIndex = _.findIndex(getState().fileUpload.filesProcesses, {operationId: wsData.operationId});
-            if (fileIndex < 0) {
-                return;
-            }
-            dispatch(fileUploadError(getState().fileUpload.filesProcesses[fileIndex].id, error));
+            dispatch(fileUploadErrorForOperationId(error, wsData.operationId));
         } else {
             dispatch(asError(error));
         }
