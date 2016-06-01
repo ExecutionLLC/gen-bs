@@ -73,11 +73,10 @@ export function clearVariants() {
     };
 }
 
-export function createWsConnection(wsConn, sessionId) {
+export function createWsConnection(wsConn) {
     return {
         type: WS_CREATE_CONNECTION,
-        wsConn,
-        sessionId
+        wsConn
     };
 }
 
@@ -180,17 +179,18 @@ function sended(msg) {
 }
 
 function reconnectWS() {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         setTimeout(
-            () => dispatch(initWSConnection(getState().websocket.sessionId)),
+            () => dispatch(initWSConnection()),
             config.WEBSOCKET_RECONNECT_TIME_MS
         );
     };
 }
 
-export function subscribeToWs(sessionId) {
+export function subscribeToWs() {
     return (dispatch, getState) => {
         const conn = getState().websocket.wsConn;
+        const {sessionId} = getState().auth;
         conn.onopen = () => {
             conn.send(JSON.stringify({sessionId}));
         };
@@ -200,11 +200,11 @@ export function subscribeToWs(sessionId) {
     };
 }
 
-export function initWSConnection(sessionId) {
+export function initWSConnection() {
     return (dispatch) => {
         var conn = new WebSocket(config.URLS.WS);
-        dispatch(createWsConnection(conn, sessionId));
-        dispatch(subscribeToWs(sessionId));
+        dispatch(createWsConnection(conn));
+        dispatch(subscribeToWs());
     };
 }
 

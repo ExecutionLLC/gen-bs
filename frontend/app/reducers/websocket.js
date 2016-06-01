@@ -13,8 +13,7 @@ export default function websocket(state = {
     isVariantsEmpty: false,
     isVariantsValid: true,
     isVariantsLoading: false,
-    progress: null,
-    sessionId: null
+    progress: null
 }, action) {
     switch (action.type) {
         case  ActionTypes.WS_DELETE_COMMENT: {
@@ -75,8 +74,7 @@ export default function websocket(state = {
         case ActionTypes.WS_CREATE_CONNECTION:
             return Object.assign({}, state, {
                 wsConn: action.wsConn,
-                error: null,
-                sessionId: action.sessionId
+                error: null
             });
         case ActionTypes.WS_TABLE_MESSAGE: {
             const resultData = _.map(action.wsData.result.data, row => {

@@ -113,7 +113,7 @@ function loginError(errorMessage) {
 
 function updateLoginData(dispatch, sessionId, isDemo) {
     dispatch(receiveSession(sessionId, isDemo));
-    dispatch(initWSConnection(sessionId));
+    dispatch(initWSConnection());
     if (isDemo) {
         dispatch(clearQueryHistory());
     }
