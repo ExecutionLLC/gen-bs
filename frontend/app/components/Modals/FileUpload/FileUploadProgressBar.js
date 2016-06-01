@@ -13,7 +13,7 @@ export default class FileUploadProgressBar extends Component {
     }
 
     renderProgress(stage, stagesCount, progress) {
-        return this.renderBar('Files processing', 100 * ((stage + progress / 100) / stagesCount));
+        return this.renderBar('Files processing', Math.round(100 * ((stage + progress / 100) / stagesCount)));
     }
 
     render() {
