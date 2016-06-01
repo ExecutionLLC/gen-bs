@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
-import classNames from 'classnames';
 
 import {uploadFile} from '../../../actions/fileUpload';
 
@@ -12,10 +11,7 @@ export default class FileUploadFooter extends Component {
         const {dispatch} = this.props;
         const {files, isFetching} = this.props.fileUpload;
 
-        var disabledClass = classNames({
-            'disabled': (files.length === 0) || (isFetching) ? 'disabled' : ''
-        });
-
+        const disabled = files.length === 0 || isFetching;
 
         return (
 
@@ -30,7 +26,7 @@ export default class FileUploadFooter extends Component {
                 </button>
 
                 <button
-                    disabled={disabledClass}
+                    disabled={disabled}
                     onClick={ () => {
                         dispatch(uploadFile());
                     }}
