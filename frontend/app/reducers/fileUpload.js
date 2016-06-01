@@ -76,82 +76,133 @@ function createFileProcess(file, id) {
     };
 }
 
+
+function reduceClearUploadState() {
+    return {
+        ...initialState,
+        filesProcesses: []
+    };
+}
+
+function reduceRequestGZIP(state, action) {
+    return {
+        ...state,
+        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+            isArchiving: true
+        })
+    };
+}
+
+function reduceReceiveGZip(state, action) {
+    return {
+        ...state,
+        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+            isArchiving: false
+        })
+    };
+}
+
+function reduceFileUploadError(state, action) {
+    return {
+        ...state,
+        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+            error: action.error
+        })
+    };
+}
+
+function reduceAddNoGZippedForUpload(state, action) {
+    return {
+        ...state,
+        filesProcesses: [
+            ...state.filesProcesses,
+            ...action.files.map((item) => createFileProcess(item.file, item.id))
+        ]
+    };
+}
+
+function reduceAddGZippedFileForUpload(state, action) {
+    return {
+        ...state,
+        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+            file: action.file,
+            isArchived: true
+        })
+    };
+}
+
+function reduceRequestFileUpload(state, action) {
+    return {
+        ...state,
+        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+            isUploading: true
+        })
+    };
+}
+
+function reduceReceiveFileUpload(state, action) {
+    return {
+        ...state,
+        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+            isUploading: false,
+            isUploaded: true
+        })
+    };
+}
+
+function reduceReceiveFileOperation(state, action) {
+    return {
+        ...state,
+        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+            operationId: action.operationId
+        })
+    };
+}
+
+function reduceFileUploadChangeProgress(state, action) {
+    return {
+        ...state,
+        filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
+            progressValue: action.progressValue,
+            progressStatus: action.progressStatus
+        })
+    };
+}
+
 export default function fileUpload(state = initialState, action) {
 
     switch (action.type) {
 
-        case ActionTypes.CLEAR_UPLOAD_STATE: {
-            return Object.assign({}, initialState, {
-                filesProcesses: []
-            });
-        }
-        case ActionTypes.REQUEST_GZIP: {
-            return {
-                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    isArchiving: true
-                })
-            };
-        }
-        case ActionTypes.RECEIVE_GZIP: {
-            return {
-                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    isArchiving: false
-                })
-            };
-        }
-        case ActionTypes.FILE_UPLOAD_ERROR: {
-            return {
-                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    error: action.error
-                })
-            };
-        }
-        case ActionTypes.ADD_NOGZIPPED_FOR_UPLOAD: {
-            return Object.assign({}, state, {
-                filesProcesses: [
-                    ...state.filesProcesses,
-                    ...action.files.map((item) => createFileProcess(item.file, item.id))
-                ]
-            });
-        }
-        case ActionTypes.ADD_GZIPPED_FILE_FOR_UPLOAD: {
-            return {
-                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    file: action.file,
-                    isArchived: true
-                })
-            };
-        }
-        case ActionTypes.REQUEST_FILE_UPLOAD: {
-            return {
-                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    isUploading: true
-                })
-            };
-        }
-        case ActionTypes.RECEIVE_FILE_UPLOAD: {
-            return {
-                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    isUploading: false,
-                    isUploaded: true
-                })
-            };
-        }
-        case  ActionTypes.RECEIVE_FILE_OPERATION: {
-            return {
-                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    operationId: action.operationId
-                })
-            };
-        }
-        case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS: {
-            return {
-                filesProcesses: assignFileProcess(state.filesProcesses, action.id, {
-                    progressValue: action.progressValue,
-                    progressStatus: action.progressStatus
-                })
-            };
-        }
+        case ActionTypes.CLEAR_UPLOAD_STATE:
+            return reduceClearUploadState();
+
+        case ActionTypes.REQUEST_GZIP:
+            return reduceRequestGZIP(state, action);
+
+        case ActionTypes.RECEIVE_GZIP:
+            return reduceReceiveGZip(state, action);
+
+        case ActionTypes.FILE_UPLOAD_ERROR:
+            return reduceFileUploadError(state, action);
+
+        case ActionTypes.ADD_NOGZIPPED_FOR_UPLOAD:
+            return reduceAddNoGZippedForUpload(state, action);
+
+        case ActionTypes.ADD_GZIPPED_FILE_FOR_UPLOAD:
+            return reduceAddGZippedFileForUpload(state, action);
+
+        case ActionTypes.REQUEST_FILE_UPLOAD:
+            return reduceRequestFileUpload(state, action);
+
+        case ActionTypes.RECEIVE_FILE_UPLOAD:
+            return reduceReceiveFileUpload(state, action);
+
+        case  ActionTypes.RECEIVE_FILE_OPERATION:
+            return reduceReceiveFileOperation(state, action);
+
+        case ActionTypes.FILE_UPLOAD_CHANGE_PROGRESS:
+            return reduceFileUploadChangeProgress(state, action);
+
         default:
             return state;
 
