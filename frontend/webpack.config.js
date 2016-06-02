@@ -34,14 +34,19 @@ const SESSION_LOGOUT_WARNING_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_LOGO
 const HEADER_SESSION = makeDefault(ENV.GEN_HEADER_SESSION, 'X-Session-Id');
 const HEADER_LANGUAGE = makeDefault(ENV.GEN_HEADER_LANGUAGE, 'X-Language-Id');
 
-console.log(colors.bold('-> API host:   ', API_HOST));
-console.log(colors.bold('-> API port:   ', API_PORT));
-console.log(colors.bold('-> API Secure? ', USE_SECURE_CONNECTION));
+const isProductionBuild = ENV.NODE_ENV === 'production';
+
+console.log(colors.bold('-> API host:         ', API_HOST));
+console.log(colors.bold('-> API port:         ', API_PORT));
+console.log(colors.bold('-> Secure?           ', USE_SECURE_CONNECTION));
+console.log(colors.bold('-> Production build? ', isProductionBuild));
 console.log('');
+
+const devtool = isProductionBuild ? '#cheap-module-source-map' : '#eval';
 
 module.exports = {
 
-    devtool: '#eval',
+    devtool,
 
     entry: [
         'webpack-hot-middleware/client',
@@ -104,6 +109,11 @@ module.exports = {
     },
 
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(ENV.NODE_ENV || '')
+            }
+        }),
         new webpack.HotModuleReplacementPlugin(),
         // Cleanup target folder.
         new CleanWebpackPlugin(['public'], {
@@ -132,6 +142,18 @@ module.exports = {
             SESSION_KEEP_ALIVE_TIMEOUT: JSON.stringify(SESSION_KEEP_ALIVE_TIMEOUT),
             SESSION_LOGOUT_TIMEOUT: JSON.stringify(SESSION_LOGOUT_TIMEOUT),
             SESSION_LOGOUT_WARNING_TIMEOUT: JSON.stringify(SESSION_LOGOUT_WARNING_TIMEOUT)
-        })
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: false,
+            minimize: true,
+            output: {
+                comments: false
+            },
+            compress: true,
+            mangle: {
+                except: []
+            }
+        }),
+        new webpack.optimize.DedupePlugin()
     ]
 };
