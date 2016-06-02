@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
+import AnalysisHeader from './Analysis/AnalysisHeader';
 
 class AnalysisModal extends React.Component {
     render() {
@@ -13,11 +14,7 @@ class AnalysisModal extends React.Component {
                 show={showModal}
                 onHide={() => this.onClose()}
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        Analysis
-                    </Modal.Title>
-                </Modal.Header>
+                <AnalysisHeader />
                 <Modal.Body>
                 </Modal.Body>
                 <Modal.Footer>
