@@ -17,8 +17,6 @@ class AnalysisModal extends React.Component {
                 <AnalysisHeader />
                 <Modal.Body>
                 </Modal.Body>
-                <Modal.Footer>
-                </Modal.Footer>
             </Modal>
         );
     }
