@@ -3,6 +3,7 @@
 const Express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const compression = require('compression');
 const morgan = require('morgan');
 const Http = require('http');
 const HttpStatus = require('http-status');
@@ -32,6 +33,8 @@ class WebServerHost {
     start(callback) {
         // Create service
         const app = new Express();
+
+        app.use(compression());
 
         this._printServerConfig();
 
