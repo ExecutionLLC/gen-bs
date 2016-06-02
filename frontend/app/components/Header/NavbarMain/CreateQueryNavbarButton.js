@@ -28,6 +28,21 @@ export default class CreateQeuryNavbarButton extends Component {
                               data-container='body' data-trigger='hover'>Analyze</span>
                         <span className='visible-xxs'><i className='md-i'>settings</i></span>
                     </a>
+                    <a
+                        onClick={()=>{}}
+                        type='button'
+                        href='#'
+                        className='btn navbar-btn'>
+                        <span
+                            className='hidden-xxs'
+                            data-localize='query.title'
+                        >
+                            Analyses
+                        </span>
+                        <span className='visible-xxs'>
+                            <i className='md-i'>settings</i>
+                        </span>
+                    </a>
                     {ENABLE_PERFORMANCE_CONTROLS &&
                     <div>
                         <button onClick={() => Perf.start()}>B</button>
