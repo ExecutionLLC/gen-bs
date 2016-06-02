@@ -29,7 +29,7 @@ export default class CreateQeuryNavbarButton extends Component {
                         <span className='visible-xxs'><i className='md-i'>settings</i></span>
                     </a>
                     <a
-                        onClick={()=>{this.props.openAnalysisModal()}}
+                        onClick={()=>this.props.openAnalysisModal()}
                         type='button'
                         href='#'
                         className='btn navbar-btn'>
