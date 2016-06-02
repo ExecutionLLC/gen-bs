@@ -16,6 +16,7 @@ import FileUploadModal from '../components/Modals/FileUploadModal';
 import QueryHistoryModal from '../components/Modals/QueryHistoryModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
+import AnalysisModal from '../components/Modals/AnalysisModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
@@ -57,7 +58,7 @@ class App extends Component {
                 {<div>&nbsp;</div>}
                 {samples.length > 0 &&
                  <div className='container-fluid'>
-                    <NavbarMain />
+                    <NavbarMain openAnalysisModal={() => this.props.dispatch(openModal('analysis'))} />
                      <div className={navbarQueryClass} id='subnav'>
                          <NavbarCreateQuery
                           {...this.props}
@@ -70,6 +71,11 @@ class App extends Component {
                      </div>
                  </div>
                 }
+                <AnalysisModal
+                    showModal={this.props.modalWindows.analysis.showModal}
+                    closeModal={ () => { this.props.dispatch(closeModal('analysis')); } }
+                    dispatch={this.props.dispatch}
+                />
                 <ErrorModal
                     showModal={this.props.showErrorWindow}
                     closeModal={ () => { this.props.dispatch(lastErrorResolved()); } }
