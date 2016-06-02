@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 import AnalysisHeader from './Analysis/AnalysisHeader';
+import AnalysisBody from './Analysis/AnalysisBody';
 
 class AnalysisModal extends React.Component {
     render() {
@@ -15,8 +16,7 @@ class AnalysisModal extends React.Component {
                 onHide={() => this.onClose()}
             >
                 <AnalysisHeader />
-                <Modal.Body>
-                </Modal.Body>
+                <AnalysisBody />
             </Modal>
         );
     }
