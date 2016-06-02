@@ -11897,3 +11897,23 @@ a.editable-click:hover {
     font-weight: normal;
     font-family: "Roboto-Bold";
 }
+
+#analysis-modal .modal-dialog {
+    position: absolute;
+}
+
+#analysis-modal .modal-header {
+    position: absolute;
+}
+
+#analysis-modal .modal-body {
+    position: absolute;
+    top: 40px;
+    padding: 0;
+}
+
+#analysis-modal .split-left,
+#analysis-modal .split-right {
+    bottom: 0;
+    height: auto;
+}

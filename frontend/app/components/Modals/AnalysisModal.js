@@ -10,6 +10,7 @@ class AnalysisModal extends React.Component {
 
         return (
             <Modal
+                id='analysis-modal'
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
                 show={showModal}
