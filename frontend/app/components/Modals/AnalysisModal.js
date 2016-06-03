@@ -30,10 +30,9 @@ class AnalysisModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, queryHistory} = state;
+    const {queryHistory} = state;
 
     return {
-        auth,
         queryHistory
     };
 }
