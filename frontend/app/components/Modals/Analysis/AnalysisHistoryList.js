@@ -44,5 +44,6 @@ export default class AnalysisHistoryList extends React.Component {
     }
 
     onHistoryItemClick(id) {
+        console.log('onHistoryItemClick', id);
     }
 }
