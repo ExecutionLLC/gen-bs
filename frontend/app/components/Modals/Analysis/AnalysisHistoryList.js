@@ -15,7 +15,10 @@ export default class AnalysisHistoryList extends React.Component {
 
     renderListItem(isActive, historyItem) {
         return (
-            <li className={isActive ? 'active' : ''}>
+            <li
+                key={historyItem.id}
+                className={isActive ? 'active' : ''}
+            >
                 <a type='button'>
                     <label className='radio'>
                         <input type='radio' name='viewsRadios' />
