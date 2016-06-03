@@ -8,7 +8,9 @@ export default class AnalysisLeftPane extends React.Component {
         return (
             <div>
                 <AnalysisHistorySearch />
-                <AnalysisHistoryList />
+                <AnalysisHistoryList
+                    queryHistory={this.props.queryHistory}
+                />
             </div>
         );
     }

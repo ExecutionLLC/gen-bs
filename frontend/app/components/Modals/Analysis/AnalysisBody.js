@@ -11,7 +11,9 @@ export default class AnalysisBody extends React.Component {
                 <div className='split-layout'>
                     <div className='split-left'>
                         <div className='split-wrap'>
-                            <AnalysisLeftPane />
+                            <AnalysisLeftPane
+                                queryHistory={this.props.queryHistory}
+                            />
                         </div>
                     </div>
                     <div className='split-right tab-content'>

@@ -17,7 +17,9 @@ class AnalysisModal extends React.Component {
                 onHide={() => this.onClose()}
             >
                 <AnalysisHeader />
-                <AnalysisBody />
+                <AnalysisBody
+                    queryHistory={this.props.queryHistory}
+                />
             </Modal>
         );
     }
@@ -28,10 +30,11 @@ class AnalysisModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth} = state;
+    const {auth, queryHistory} = state;
 
     return {
-        auth
+        auth,
+        queryHistory
     };
 }
 
