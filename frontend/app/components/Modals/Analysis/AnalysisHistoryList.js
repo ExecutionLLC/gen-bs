@@ -19,7 +19,10 @@ export default class AnalysisHistoryList extends React.Component {
                 key={historyItem.id}
                 className={isActive ? 'active' : ''}
             >
-                <a type='button'>
+                <a
+                    type='button'
+                    onClick={() => this.onHistoryItemClick(historyItem.id)}
+                >
                     <label className='radio'>
                         <input type='radio' name='viewsRadios' />
                         <i />
@@ -38,5 +41,8 @@ export default class AnalysisHistoryList extends React.Component {
                 </a>
             </li>
         );
+    }
+
+    onHistoryItemClick(id) {
     }
 }
