@@ -34,15 +34,8 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderSelectAnalysis()}
                 {this.renderDeleteAnalysis()}
                 {this.renderAnalysisName(historyItem.name)}
+                {this.renderAnalysesDates(historyItem.createdDate, historyItem.lastQueryDate)}
 
-                <div className='label-date'>
-                    <label>
-                        <span data-localize='general.created_date'>Created date</span>: <span>{historyItem.createdDate}</span>
-                    </label>
-                    <label>
-                        <span data-localize='query.last_query_date'>Last query date</span>: <span>{historyItem.lastQueryDate}</span>
-                    </label>
-                </div>
                 <div className='form-group'>
                     <div className='col-md-12 col-xs-12'>
                         <input
@@ -127,6 +120,19 @@ export default class AnalysisRightPane extends React.Component {
             <ul role='tablist' className='nav nav-tabs' id='analisisTypes'>
                 {tabs.map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
             </ul>
+        );
+    }
+    
+    renderAnalysesDates(createdDate, lastQueryDate) {
+        return (
+            <div className='label-date'>
+                <label>
+                    <span data-localize='general.created_date'>Created date</span>: <span>{createdDate}</span>
+                </label>
+                <label>
+                    <span data-localize='query.last_query_date'>Last query date</span>: <span>{lastQueryDate}</span>
+                </label>
+            </div>
         );
     }
 
