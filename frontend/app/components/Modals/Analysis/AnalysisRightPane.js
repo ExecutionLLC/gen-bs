@@ -34,7 +34,7 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderSelectAnalysis()}
                 {this.renderDeleteAnalysis()}
                 {this.renderAnalysisName(historyItem.name)}
-                {this.renderAnalysesDates(historyItem.createdDate, historyItem.lastQueryDate)}
+                {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
 
                 <div className='form-group'>
                     <div className='col-md-12 col-xs-12'>
@@ -123,7 +123,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
     
-    renderAnalysesDates(createdDate, lastQueryDate) {
+    renderAnalysisDates(createdDate, lastQueryDate) {
         return (
             <div className='label-date'>
                 <label>
