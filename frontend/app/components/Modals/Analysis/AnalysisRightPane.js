@@ -31,20 +31,8 @@ export default class AnalysisRightPane extends React.Component {
     renderAnalysisHeader(historyItem) {
         return (
             <div className='split-right-top split-right-top-tabs form-horizontal'>
-                <div className='navbar navbar-list-toggle visible-xs'>
-                    <button
-                        id='openAnalisis'
-                        type='button'
-                        className='btn btn-link-default navbar-btn'
-                        onClick={() => this.onOpenAnalysisClick()}
-                    >
-                        <i className='md-i'>menu</i>
-                        <span data-localize='query.select_analysis'>
-                            Select analysis
-                        </span>
-                    </button>
-                </div>
-
+                {this.renderSelectAnalysis()}
+                
                 <button
                     className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
                     onClick={() => this.onDeleteAnalysisClick()}
@@ -82,6 +70,22 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                 </div>
                 {this.renderAnalysisHeaderTabs()}
+            </div>
+        );
+    }
+
+    renderSelectAnalysis() {
+        return (
+            <div className='navbar navbar-list-toggle visible-xs'>
+                <button
+                    id='openAnalisis'
+                    type='button'
+                    className='btn btn-link-default navbar-btn'
+                    onClick={() => this.onSelectAnalysisClick()}
+                >
+                    <i className='md-i'>menu</i>
+                    <span data-localize='query.select_analysis'>Select analysis</span>
+                </button>
             </div>
         );
     }
@@ -137,7 +141,7 @@ export default class AnalysisRightPane extends React.Component {
 
     }
 
-    onOpenAnalysisClick() {
+    onSelectAnalysisClick() {
 
     }
 
