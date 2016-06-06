@@ -73,7 +73,8 @@ export default function websocket(state = {
             });
         case ActionTypes.WS_CREATE_CONNECTION:
             return Object.assign({}, state, {
-                wsConn: action.wsConn
+                wsConn: action.wsConn,
+                error: null
             });
         case ActionTypes.WS_TABLE_MESSAGE: {
             const resultData = _.map(action.wsData.result.data, row => {
