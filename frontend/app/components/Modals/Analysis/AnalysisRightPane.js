@@ -32,13 +32,8 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='split-right-top split-right-top-tabs form-horizontal'>
                 {this.renderSelectAnalysis()}
-                
-                <button
-                    className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
-                    onClick={() => this.onDeleteAnalysisClick()}
-                >
-                    <span data-localize='query.delete_analysis'>Delete analysis</span>
-                </button>
+                {this.renderDeleteAnalysis()}
+
                 <div className='form-group'>
                     <div className='col-md-12 col-xs-12'>
                         <input
@@ -87,6 +82,17 @@ export default class AnalysisRightPane extends React.Component {
                     <span data-localize='query.select_analysis'>Select analysis</span>
                 </button>
             </div>
+        );
+    }
+
+    renderDeleteAnalysis() {
+        return (
+            <button
+                className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
+                onClick={() => this.onDeleteAnalysisClick()}
+            >
+                <span data-localize='query.delete_analysis'>Delete analysis</span>
+            </button>
         );
     }
 
