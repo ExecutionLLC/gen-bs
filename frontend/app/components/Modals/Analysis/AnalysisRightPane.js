@@ -7,6 +7,13 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 {this.renderNewAnalysisTitle()}
                 {this.renderAnalysisHeader(this.props.historyItem)}
+                <div className='split-scroll form-horizontal'>
+                    <div className='form-rows'>
+                        <div className='tab-content'>
+                            {this.renderAnalysisContent()}
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -38,6 +45,12 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderAnalysisDescription(historyItem.description)}
                 {this.renderAnalysisHeaderTabs()}
             </div>
+        );
+    }
+
+    renderAnalysisContent() {
+        return (
+            null
         );
     }
 
