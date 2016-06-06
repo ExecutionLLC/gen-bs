@@ -1,5 +1,5 @@
 import {receiveSearchedResults} from './variantsTable';
-import {changeFileUploadProgress, fileUploadError} from './fileUpload';
+import {changeFileUploadProgressForOperationId, fileUploadErrorForOperationId} from './fileUpload';
 import config from '../../config';
 
 /*
@@ -131,8 +131,7 @@ function receiveSearchMessage(wsData) {
 
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
-        dispatch(progressMessage(wsData)); // TODO Remove
-        dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
+        dispatch(changeFileUploadProgressForOperationId(wsData.result.progress, wsData.result.status, wsData.operationId));
     };
 }
 
@@ -141,7 +140,7 @@ function receiveErrorMessage(wsData) {
         console.error('Error: ' + JSON.stringify(wsData.error));
         const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
-            dispatch(fileUploadError(error));
+            dispatch(fileUploadErrorForOperationId(error, wsData.operationId));
         } else {
             dispatch(asError(error));
         }

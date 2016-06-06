@@ -33,18 +33,13 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (operation, callback) => {
                 const redisData = operation.getRedisParams();
                 const userId = user.id;
-                const redisParams = {
+                const redisParams = Object.assign({}, redisData, {
                     sessionId,
                     operationId,
-                    host: redisData.host,
-                    port: redisData.port,
-                    sampleId: redisData.sampleId,
                     userId,
-                    databaseNumber: redisData.databaseNumber,
-                    dataIndex: redisData.dataIndex,
                     limit,
                     offset
-                };
+                });
                 this.services.redis.fetch(redisParams, (error, hash) => callback(error, operation, hash));
             },
             (operation, fieldIdToValueHash, callback) => {
@@ -155,6 +150,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const redisParams = {
             host: redisInfo.host,
             port: redisInfo.port,
+            password: redisInfo.password,
             sampleId,
             userId,
             operationId: operation.getId(),
@@ -317,6 +313,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const params = {
             host: redisParams.host,
             port: redisParams.port,
+            password: redisParams.password,
             databaseNumber: redisParams.databaseNumber,
             dataIndex: redisParams.dataIndex,
             sampleId: redisParams.sampleId
