@@ -50,7 +50,78 @@ export default class AnalysisRightPane extends React.Component {
 
     renderAnalysisContent() {
         return (
-            null
+            <div>
+                {this.renderSamplesSelects()}
+                {this.renderFilterSelector()}
+                {this.renderFamilyModelSelector()}
+                {this.renderTumorModelSelector()}
+                {this.renderViewSelector()}
+                <hr className='invisible' />
+                {this.renderUseActualVersions()}
+                {this.renderAnalyzeButton()}
+            </div>
+        );
+    }
+
+    renderFilterSelector() {
+        return (
+            'filter selector'
+        );
+    }
+    
+    renderFamilyModelSelector() {
+        return (
+            'family model selector'
+        );
+    }
+
+    renderTumorModelSelector() {
+        return (
+            'tumor model selector'
+        );
+    }
+
+    renderViewSelector() {
+        return (
+            'view selector'
+        );
+    }
+
+    renderSamplesSelects() {
+        return (
+            'samples selects'
+        );
+    }
+
+    renderUseActualVersions() {
+        return (
+            <div className='form-group'>
+                <div className='col-sm-6 col-xs-12'>
+                    <label className='checkbox checkbox-inline' data-localize='query.reanalyze.help' title='Click for analyze with actual filters and view'>
+                        <input
+                            type='checkbox'
+                            onClick={(e) => this.onUseActionVersionsToggle(e.target.checked)}
+                        />
+                        <i/> <span data-localize='query.reanalyze.title'>Use actual versions filter, model, view</span>
+                    </label>
+                </div>
+            </div>
+        );
+    }
+
+    renderAnalyzeButton() {
+        return (
+            <div className='form-group'>
+                <div className='col-xs-12'>
+                    <button
+                        className='btn btn-primary'
+                        title='Click for analyze with analysis initial versions of filter and view'
+                        onClick={() => this.onAnalyzeButtonClick()}
+                    >
+                        <span data-localize='query.analyze.title'>Analyze</span>
+                    </button>
+                </div>
+            </div>
         );
     }
 
@@ -191,5 +262,13 @@ export default class AnalysisRightPane extends React.Component {
 
     onAnalysisDescriptionChange(description) {
         console.log('onAnalysisDescriptionChange', description);
+    }
+
+    onUseActionVersionsToggle(use) {
+        console.log('onUseActionVersionsToggle', use);
+    }
+
+    onAnalyzeButtonClick() {
+
     }
 }
