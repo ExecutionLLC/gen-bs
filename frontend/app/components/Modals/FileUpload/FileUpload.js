@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import FileUploadProgressBar from './FileUploadProgressBar';
 
-import {clearUploadState, changeFileForUpload} from '../../../actions/fileUpload';
+import {clearUploadState, addFilesForUpload} from '../../../actions/fileUpload';
 
 
 export default class FileUpload extends Component {
@@ -12,42 +12,47 @@ export default class FileUpload extends Component {
     }
 
     render() {
-        const {auth: {isDemo}} = this.props;
-        const {error, isArchiving} = this.props.fileUpload;
+        const {auth: {isDemo}, fileUpload: {filesProcesses}} = this.props;
         if (isDemo) {
             return this.renderDemoContent();
         } else {
             return (
                 <div className='panel file-upload-panel panel-default'>
                     <div className='panel-body'>
-
-                        {error && this.renderUploadError(error)}
-
                         {this.renderUploadButton()}
-                        {this.renderSelectedFileInfo()}
-
-
-                        { isArchiving &&
-                        <div className='text-center'>
-                            <strong style={{color: '#2363a1'}}>Archiving...</strong>
-                            <i className='fa fa-spinner fa-spin'></i>
-                        </div>
-                        }
-                        { !error &&
-                        <FileUploadProgressBar {...this.props} />
-                        }
+                        {filesProcesses.map((fp, index) => this.renderMultiFile(fp, index))}
                     </div>
                 </div>
             );
         }
     }
 
-    renderSelectedFileInfo() {
-        const {files} = this.props.fileUpload;
+    renderMultiFile(fileProcess, index) {
+        const {file, error, isArchiving, progressStatus, progressValue} = fileProcess;
         return (
-            files[0] &&
+            <div key={index}>
+                {error && this.renderUploadError(error)}
+                {this.renderFileInfo(file)}
+                {isArchiving &&
+                <div className='text-center'>
+                    <strong style={{color: '#2363a1'}}>Archiving...</strong>
+                    <i className='fa fa-spinner fa-spin'/>
+                </div>
+                }
+                {!error &&
+                <FileUploadProgressBar
+                    progressStatus={progressStatus}
+                    progressValue={progressValue}
+                />
+                }
+            </div>
+        );
+    }
+
+    renderFileInfo(file) {
+        return (
             <div className='text-center'>
-                <strong style={{color: '#2363a1'}}>{files[0].name}</strong>
+                <strong style={{color: '#2363a1'}}>{file.name}</strong>
             </div>
         );
     }
@@ -55,9 +60,13 @@ export default class FileUpload extends Component {
     renderUploadButton() {
         return (
             <button onClick={this.onUploadClick.bind(this)}
+                    // uncomment when drag'n'drop will need
+                    // onDragEnter={(e) => this.onDragEnter(e)}
+                    // onDragOver={(e) => this.onDragOver(e)}
+                    // onDrop={(e) => this.onDrop(e)}
                     className='btn-link-light-default btn-select-file'>
                 <input
-                    onChange={ (e) => this.onUploadChanged(e)}
+                    onChange={ (e) => this.onUploadChanged(e.target.files)}
                     style={{display: 'none'}}
                     ref='fileInput'
                     id='file-select'
@@ -91,9 +100,28 @@ export default class FileUpload extends Component {
         );
     }
 
-    onUploadChanged(e) {
+/* uncomment when drag'n'drop will need
+    onDragEnter(event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
+    onDragOver(event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
+    onDrop(event) {
+        event.stopPropagation();
+        event.preventDefault();
         const {dispatch} = this.props;
-        dispatch(changeFileForUpload(e.target.files));
+        dispatch(addFilesForUpload(Array.prototype.slice.call(event.dataTransfer.files, 0, 1)));
+    }
+*/
+
+    onUploadChanged(files) {
+        const {dispatch} = this.props;
+        dispatch(addFilesForUpload([files[0]]));
     }
 
     onUploadClick() {
