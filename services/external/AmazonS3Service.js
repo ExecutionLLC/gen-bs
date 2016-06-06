@@ -30,7 +30,7 @@ class AmazonS3Service extends ServiceBase {
                 queueSize: 1
             })
             .on('httpUploadProgress', function (evt) {
-                this.logger.info('Progress:', evt.loaded, '/', evt.total);
+                this.logger.debug('Progress:', evt.loaded, '/', evt.total);
             })
             .send((error) => callback(error));
     }

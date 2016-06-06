@@ -33,15 +33,15 @@ class ApplicationServerServiceBase extends ServiceBase {
             if (error) {
                 callback(error);
             } else {
-                this.logger.info('RPC SEND: ' + operationId + ' ' + method);
-                this.logger.info('Params: ' + JSON.stringify(params, null, 2));
+                this.logger.info('RPC SEND: \n\toperationId: ' + operationId + '\n\tMethod: ' + method);
+                this.logger.info('Params:\n' + JSON.stringify(params, null, 2));
                 callback(null, operationId);
             }
         });
     }
 
     _rpcReply(rpcMessage) {
-        this.logger.info('RPC REPLY: ' + JSON.stringify(rpcMessage, null, 2));
+        this.logger.info('RPC REPLY:\n' + JSON.stringify(rpcMessage, null, 2));
         if (!rpcMessage.id) {
             this.logger.error('Message has no id, so will be ignored.');
         } else {

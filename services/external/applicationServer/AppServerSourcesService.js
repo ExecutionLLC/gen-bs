@@ -64,7 +64,7 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
     }
 
     processGetSourceMetadataResult(operation, message, callback) {
-        this.logger.info('Processing get sources list result for operation ' + operation.getId());
+        this.logger.debug('Processing get sources list result for operation ' + operation.getId());
         if (this._isAsErrorMessage(message)) {
             this._createErrorOperationResult(
                 operation,

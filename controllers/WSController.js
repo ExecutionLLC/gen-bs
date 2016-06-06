@@ -26,8 +26,8 @@ class WSController extends ControllerBase {
                 try {
                     const message = JSON.parse(messageString);
                     const clientDescriptor = this._findClientByWs(ws);
-                    this.logger.info('Received: ' + JSON.stringify(message, null, 2));
-                    this.logger.info('In session: ' + clientDescriptor.sessionId);
+                    this.logger.info('Client message for session ' + clientDescriptor.sessionId);
+                    this.logger.info(JSON.stringify(message, null, 2));
                     this._onClientMessage(ws, message);
                 } catch (e) {
                     this.logger.error('Client WS message parse error: ' + JSON.stringify(e));
