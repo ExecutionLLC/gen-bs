@@ -35,18 +35,7 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderDeleteAnalysis()}
                 {this.renderAnalysisName(historyItem.name)}
                 {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
-
-                <div className='form-group'>
-                    <div className='col-md-12 col-xs-12'>
-                        <input
-                            value={historyItem.description}
-                            placeholder='Analysis description (optional)'
-                            className='form-control material-input-sm'
-                            data-localize='query.settings.description'
-                            onChange={(e) => this.onAnalysisDescriptionChange(e.target.value)}
-                        />
-                    </div>
-                </div>
+                {this.renderAnalysisDescription(historyItem.description)}
                 {this.renderAnalysisHeaderTabs()}
             </div>
         );
@@ -132,6 +121,22 @@ export default class AnalysisRightPane extends React.Component {
                 <label>
                     <span data-localize='query.last_query_date'>Last query date</span>: <span>{lastQueryDate}</span>
                 </label>
+            </div>
+        );
+    }
+
+    renderAnalysisDescription(description) {
+        return (
+            <div className='form-group'>
+                <div className='col-md-12 col-xs-12'>
+                    <input
+                        value={description}
+                        placeholder='Analysis description (optional)'
+                        className='form-control material-input-sm'
+                        data-localize='query.settings.description'
+                        onChange={(e) => this.onAnalysisDescriptionChange(e.target.value)}
+                    />
+                </div>
             </div>
         );
     }
