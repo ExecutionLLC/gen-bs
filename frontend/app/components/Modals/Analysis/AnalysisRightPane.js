@@ -33,18 +33,8 @@ export default class AnalysisRightPane extends React.Component {
             <div className='split-right-top split-right-top-tabs form-horizontal'>
                 {this.renderSelectAnalysis()}
                 {this.renderDeleteAnalysis()}
+                {this.renderAnalysisName(historyItem.name)}
 
-                <div className='form-group'>
-                    <div className='col-md-12 col-xs-12'>
-                        <input
-                            value={historyItem.name}
-                            className='form-control material-input-sm material-input-heading text-primary'
-                            placeholder="Analysis name (it can't be empty)"
-                            data-localize='query.settings.name'
-                            onChange={(e) => this.onAnalysisNameChange(e.target.value)}
-                        />
-                    </div>
-                </div>
                 <div className='label-date'>
                     <label>
                         <span data-localize='general.created_date'>Created date</span>: <span>{historyItem.createdDate}</span>
@@ -93,6 +83,22 @@ export default class AnalysisRightPane extends React.Component {
             >
                 <span data-localize='query.delete_analysis'>Delete analysis</span>
             </button>
+        );
+    }
+
+    renderAnalysisName(name) {
+        return (
+            <div className='form-group'>
+                <div className='col-md-12 col-xs-12'>
+                    <input
+                        value={name}
+                        className='form-control material-input-sm material-input-heading text-primary'
+                        placeholder="Analysis name (it can't be empty)"
+                        data-localize='query.settings.name'
+                        onChange={(e) => this.onAnalysisNameChange(e.target.value)}
+                    />
+                </div>
+            </div>
         );
     }
 
