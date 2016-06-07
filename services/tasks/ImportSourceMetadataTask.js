@@ -92,7 +92,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
                     this.requestedSources = missingSourceNames;
                     this.services.applicationServer.requestSourceMetadata(missingSourceNames, callback);
                 } else {
-                    this.logger.info('There are no sources to import.');
+                    this.logger.debug('There are no sources to import.');
                     this.completed = true;
                     callback(null);
                 }

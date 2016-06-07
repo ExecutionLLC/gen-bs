@@ -65,11 +65,7 @@ class RPCProxy {
     }
 
     _close(event) {
-        if (event.wasClean) {
-            this.logger.info('Socket closed (clean)', event);
-        } else {
-            this.logger.info('Socket closed (unclean)', event);
-        }
+        this.logger.info('App Server socket closed', event);
 
         if (this.disconnectCallback) {
             this.disconnectCallback();

@@ -12,7 +12,7 @@ class KnexTransaction {
 
     openTransaction(callback) {
         this.knex.transaction((trx) => {
-            this.logger.info('OPENING TRANSACTION ' + this.id);
+            this.logger.trace('OPENING TRANSACTION ' + this.id);
             if (this.transaction) {
                 throw new Error('Transaction is already opened.');
             }
@@ -34,7 +34,7 @@ class KnexTransaction {
                     callback(error);
                 });
         } else {
-            this.logger.info('COMMITTING TRANSACTION ' + this.id);
+            this.logger.debug('COMMITTING TRANSACTION ' + this.id);
             this.transaction
                 .commit()
                 .asCallback((error) => {

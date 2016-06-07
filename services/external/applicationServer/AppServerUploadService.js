@@ -54,7 +54,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     }
 
     processUploadResult(operation, message, callback) {
-        this.logger.info('Processing upload result for ' + operation);
+        this.logger.debug('Processing upload result for ' + operation);
         if (this._isAsErrorMessage(message)) {
             this._createErrorOperationResult(
                 operation, 
