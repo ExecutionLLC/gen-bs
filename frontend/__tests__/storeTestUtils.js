@@ -63,7 +63,7 @@ export default class StoreTestUtils {
         console.log('waiting for freeze...');
         setTimeout(() => {
             const newState = store.getState();
-            if (newState == state) {
+            if (newState === state) {
                 console.log('freeze!');
                 callback();
             } else {
