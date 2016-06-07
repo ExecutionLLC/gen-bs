@@ -37,6 +37,7 @@ export default class AnalysisBody extends React.Component {
                                 viewsList={this.props.viewsList}
                                 filtersList={this.props.filtersList}
                                 samplesList={this.props.samplesList}
+                                modelsList={this.props.modelsList}
                             />
                         </div>
                     </div>

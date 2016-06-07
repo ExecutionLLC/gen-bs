@@ -133,8 +133,8 @@ export default class AnalysisRightPane extends React.Component {
                                 id='modelSelect'
                                 className='select2'
                                 tabIndex='-1'
-                                value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
-                                options={this.getSampleOptions()}
+                                value={this.props.modelsList.selectedModelId}
+                                options={this.getModelOptions()}
                                 onChange={(item) => this.onModelSelect(item.value)}
                             />
                         </div>
@@ -364,6 +364,20 @@ export default class AnalysisRightPane extends React.Component {
             return {
                 value: filterItem.id, label, disabled: isDisabled
             };
+        });
+    }
+
+    isModelDisabled(model) {
+        const {auth} = this.props;
+        return auth.isDemo && model.type == 'advanced';
+    }
+
+    getModelOptions() {
+        const {models} = this.props.modelsList;
+        return models.map((sampleItem) => {
+            const isDisabled = this.isSampleDisabled(sampleItem);
+            const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
+            return {value: sampleItem.id, label, disabled: isDisabled};
         });
     }
 
