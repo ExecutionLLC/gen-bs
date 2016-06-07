@@ -83,7 +83,7 @@ export default class AnalysisRightPane extends React.Component {
                         <div className='btn-group btn-group-select2-max'>
                             <Select
                                 tabIndex='-1'
-                                className='select2-search select2-hidden-accessible1'
+                                className='select2-search'
                                 id='filterSelect'
                                 options={this.getFilterOptions()}
                                 value={this.props.filtersList.selectedFilterId}
@@ -127,7 +127,7 @@ export default class AnalysisRightPane extends React.Component {
                         <div className='btn-group btn-group-select2-max'>
                             <Select
                                 tabIndex='-1'
-                                className='select2 select2-hidden-accessible1'
+                                className='select2'
                                 id='viewSelect'
                                 options={this.getViewOptions()}
                                 value={this.props.viewsList.selectedViewId}
