@@ -21,6 +21,7 @@ class AnalysisModal extends React.Component {
                     auth={this.props.auth}
                     queryHistory={this.props.queryHistory}
                     viewsList={this.props.viewsList}
+                    filtersList={this.props.filtersList}
                 />
             </Modal>
         );
@@ -32,12 +33,13 @@ class AnalysisModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, queryHistory, viewsList} = state;
+    const {auth, queryHistory, viewsList, filtersList} = state;
 
     return {
         auth,
         queryHistory,
-        viewsList
+        viewsList,
+        filtersList
     };
 }
 

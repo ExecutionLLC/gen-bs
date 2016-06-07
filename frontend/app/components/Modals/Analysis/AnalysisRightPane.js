@@ -67,7 +67,33 @@ export default class AnalysisRightPane extends React.Component {
 
     renderFilterSelector() {
         return (
-            'filter selector'
+            <div>
+                <h5><span data-localize='general.filter'>Filter</span></h5>
+                <div className='form-group'>
+                    <div className='col-xs-10 btn-group-select2'>
+                        <div className='btn-group'>
+                            <button
+                                className='btn btn-default btn-fix-width'
+                                type='button'
+                                onClick={() => this.onFiltersClick()}
+                            >
+                                <span data-localize='filters.title'>Filters</span>
+                            </button>
+                        </div>
+                        <div className='btn-group btn-group-select2-max'>
+                            <Select
+                                tabIndex='-1'
+                                className='select2-search select2-hidden-accessible1'
+                                id='filterSelect'
+                                options={this.getFilterOptions()}
+                                value={this.props.filtersList.selectedFilterId}
+                                onChange={(item) => this.onFilterSelect(item.value)}
+                            />
+                        </div>
+                        <div className='col-xs-2'></div>
+                    </div>
+                </div>
+            </div>
         );
     }
     
@@ -289,6 +315,22 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    isFilterDisabled(filter) {
+        const {auth} = this.props;
+        return auth.isDemo && filter.type == 'advanced';
+    }
+
+    getFilterOptions() {
+        const filters = this.props.filtersList.hashedArray.array;
+        return filters.map((filterItem) => {
+            const isDisabled = this.isFilterDisabled(filterItem);
+            const label = getItemLabelByNameAndType(filterItem.name, filterItem.type);
+            return {
+                value: filterItem.id, label, disabled: isDisabled
+            };
+        });
+    }
+
     onNewAnalysisCancelClick() {
 
     }
@@ -323,5 +365,13 @@ export default class AnalysisRightPane extends React.Component {
 
     onViewSelect(viewId) {
         console.log('onViewSelect', viewId);
+    }
+    
+    onFiltersClick() {
+        
+    }
+
+    onFilterSelect(filterId) {
+        console.log('onFilterSelect', filterId);
     }
 }
