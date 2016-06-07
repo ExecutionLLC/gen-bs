@@ -178,7 +178,19 @@ export default class AnalysisRightPane extends React.Component {
 
     renderSamplesSelects() {
         return (
-            'samples selects'
+            <div className='tab-content'>
+                <div className='tab-pane active' id='single'>
+                    111
+                </div>
+                <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
+                    222
+                    <hr className='invisible' />
+                </div>
+                <div className='tab-pane active' role='tabpanel' id='family'>
+                    333
+                    <hr className='invisible' />
+                </div>
+            </div>
         );
     }
 
