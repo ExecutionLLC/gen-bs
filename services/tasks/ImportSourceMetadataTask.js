@@ -7,7 +7,6 @@ const SchedulerTaskBase = require('./SchedulerTaskBase');
 const FieldsMetadataService = require('../FieldsMetadataService.js');
 
 const TASK_NAME = 'importSourceMetadata';
-const AS_DISCONNECTED_TIMEOUT = 5000;
 
 class ImportSourceMetadataTask extends SchedulerTaskBase {
     constructor(services, models) {
@@ -26,6 +25,7 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
         this.completed = false;
 
         this.requestedSources = null;
+        this.waitForConnectionTimeout = this.config.scheduler.tasks.importSourceMetadata.reconnectTimeout;
     }
 
     execute(callback) {
@@ -49,8 +49,8 @@ class ImportSourceMetadataTask extends SchedulerTaskBase {
 
     calculateTimeout() {
         if (this.waitForConnection) {
-            this.logger.warn('Waiting web socket connection for 5 seconds...');
-            return AS_DISCONNECTED_TIMEOUT; // waiting for reconnection
+            this.logger.warn('Waiting web socket connection for ' + this.waitForConnectionTimeout + ' milliseconds...');
+            return this.waitForConnectionTimeout; // waiting for reconnection
         } else {
             return super.calculateTimeout();
         }

@@ -57,7 +57,9 @@ const SETTINGS = {
     },
     applicationServer: {
         host: makeDefault(ENV.GEN_WS_AS_HOST, 'localhost'),
-        port: makeDefault(ENV.GEN_WS_AS_PORT, 8888)
+        port: makeDefault(ENV.GEN_WS_AS_PORT, 8888),
+        // Reconnect timeout in milliseconds
+        reconnectTimeout: makeDefault(ENV.GEN_WS_AS_RECONNECT_TIMEOUT, 10000)
     },
     database: {
         host: makeDefault(ENV.GEN_WS_DATABASE_SERVER, 'localhost'),
@@ -84,7 +86,9 @@ const SETTINGS = {
             },
             importSourceMetadata: {
                 isEnabled: true,
-                taskTimeout: 60 * 60
+                taskTimeout: 60 * 60,
+                // Timeout in milliseconds to wait for AS RPC connection.
+                reconnectTimeout: 15000
             }
         }
     },
