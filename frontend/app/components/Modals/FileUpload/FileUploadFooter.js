@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
 
 import {uploadFile} from '../../../actions/fileUpload';
+import _ from 'lodash';
 
 
 export default class FileUploadFooter extends Component {
@@ -9,9 +10,9 @@ export default class FileUploadFooter extends Component {
     render() {
 
         const {dispatch} = this.props;
-        const {files, isFetching} = this.props.fileUpload;
+        const {filesProcesses} = this.props.fileUpload;
 
-        const disabled = files.length === 0 || isFetching;
+        const isUploadEnabled = _.some(filesProcesses, {isUploaded: false, isUploading: false, isArchived: true});
 
         return (
 
@@ -26,7 +27,7 @@ export default class FileUploadFooter extends Component {
                 </button>
 
                 <button
-                    disabled={disabled}
+                    disabled={!isUploadEnabled}
                     onClick={ () => {
                         dispatch(uploadFile());
                     }}
