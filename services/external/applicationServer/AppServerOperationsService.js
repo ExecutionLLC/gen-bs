@@ -35,7 +35,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.operations.find(sessionId, operationId, callback),
             (operation, callback) => {
-                this.logger.info('Requesting close for ' + operation);
+                this.logger.debug('Requesting close for ' + operation);
                 const method = METHODS.closeSession;
                 this._rpcSend(operation.getId(), method, null, callback);
             }

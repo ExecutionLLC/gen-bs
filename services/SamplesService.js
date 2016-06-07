@@ -33,7 +33,7 @@ class SamplesService extends UserEntityServiceBase {
      * Sends sample to application server for processing.
      * */
     upload(sessionId, user, localFileInfo, callback) {
-        this.logger.info('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
+        this.logger.debug('Uploading sample: ' + JSON.stringify(localFileInfo, null, 2));
         const sampleId = Uuid.v4();
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
