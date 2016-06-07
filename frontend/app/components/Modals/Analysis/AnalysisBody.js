@@ -36,6 +36,7 @@ export default class AnalysisBody extends React.Component {
                                 historyItem={editingHistoryItem}
                                 viewsList={this.props.viewsList}
                                 filtersList={this.props.filtersList}
+                                samplesList={this.props.samplesList}
                             />
                         </div>
                     </div>

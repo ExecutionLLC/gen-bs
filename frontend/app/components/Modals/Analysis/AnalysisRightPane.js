@@ -99,13 +99,49 @@ export default class AnalysisRightPane extends React.Component {
     
     renderFamilyModelSelector() {
         return (
-            'family model selector'
+            <div id='familyModelDiv'>
+                {this.renderModelSelector()}
+            </div>
         );
     }
 
     renderTumorModelSelector() {
         return (
-            'tumor model selector'
+            <div id='tumorModelDiv'>
+                {this.renderModelSelector()}
+            </div>
+        );
+    }
+
+    renderModelSelector() {
+        return (
+            <div>
+                <h5><span data-localize='general.model'>Model</span></h5>
+                <div className='form-group'>
+                    <div className='col-md-10 col-xs-12 btn-group-select2'>
+                        <div className='btn-group'>
+                            <button
+                                type='button'
+                                className='btn btn-default btn-fix-width'
+                                onClick={() => this.onModelClick()}
+                            >
+                                <span data-localize='models.title'>Models</span>
+                            </button>
+                        </div>
+                        <div className='btn-group btn-group-select2-max'>
+                            <Select
+                                id='modelSelect'
+                                className='select2'
+                                tabIndex='-1'
+                                value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                                options={this.getSampleOptions()}
+                                onChange={(item) => this.onModelSelect(item.value)}
+                            />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         );
     }
 
@@ -331,6 +367,20 @@ export default class AnalysisRightPane extends React.Component {
         });
     }
 
+    isSampleDisabled(sample) {
+        const {auth} = this.props;
+        return auth.isDemo && sample.type == 'advanced';
+    }
+
+    getSampleOptions() {
+        const {samples} = this.props.samplesList;
+        return samples.map((sampleItem) => {
+            const isDisabled = this.isSampleDisabled(sampleItem);
+            const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
+            return {value: sampleItem.id, label, disabled: isDisabled};
+        });
+    }
+
     onNewAnalysisCancelClick() {
 
     }
@@ -373,5 +423,13 @@ export default class AnalysisRightPane extends React.Component {
 
     onFilterSelect(filterId) {
         console.log('onFilterSelect', filterId);
+    }
+
+    onModelClick() {
+
+    }
+
+    onModelSelect(modelId) {
+        console.log('onModelSelect', modelId);
     }
 }
