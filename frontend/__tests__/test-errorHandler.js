@@ -1,7 +1,9 @@
 import storeTestUtils from './storeTestUtils';
 import {handleError, lastErrorResolved} from '../app/actions/errorHandler';
 
-const stateMapperFunc = (globalState) => globalState.errorHandler;
+function stateMapperFunc(globalState) {
+    return globalState.errorHandler;
+}
 
 describe('error handling', () => {
     it('should properly init state', (done) => {
