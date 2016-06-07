@@ -33,7 +33,7 @@ class RPCProxy {
 
         // Try to reconnect automatically if connection is closed
         this.connected = false;
-        setInterval(() => this._connect(), 1000);
+        setInterval(() => this._connect(), 10000);
     }
 
     isConnected() {
