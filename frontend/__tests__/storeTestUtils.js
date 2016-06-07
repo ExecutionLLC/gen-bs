@@ -23,13 +23,9 @@ export default class StoreTestUtils {
      * @param {function()}onCompleted
      * */
     static runTests(tests, onCompleted) {
-        var completedCount = 0;
-        tests.forEach(test => this.runTest(test, () => {
-            completedCount++;
-            if (completedCount === tests.length) {
-                onCompleted();
-            }
-        }));
+        const promises = _.map(tests, test => new Promise((resolve, reject) => this.runTest(test, resolve)));
+        Promise.all(promises)
+            .then(() => onCompleted());
     }
 
     /**
