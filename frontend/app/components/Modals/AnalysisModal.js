@@ -18,7 +18,9 @@ class AnalysisModal extends React.Component {
             >
                 <AnalysisHeader />
                 <AnalysisBody
+                    auth={this.props.auth}
                     queryHistory={this.props.queryHistory}
+                    viewsList={this.props.viewsList}
                 />
             </Modal>
         );
@@ -30,10 +32,12 @@ class AnalysisModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {queryHistory} = state;
+    const {auth, queryHistory, viewsList} = state;
 
     return {
-        queryHistory
+        auth,
+        queryHistory,
+        viewsList
     };
 }
 

@@ -1,4 +1,6 @@
 import React from 'react';
+import Select from '../../shared/Select';
+import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -83,7 +85,32 @@ export default class AnalysisRightPane extends React.Component {
 
     renderViewSelector() {
         return (
-            'view selector'
+            <div>
+                <h5><span data-localize='general.view'>View</span></h5>
+                <div className='form-group'>
+                    <div className='col-md-10 col-xs-12 btn-group-select2'>
+                        <div className='btn-group'>
+                            <button
+                                className='btn btn-default btn-fix-width'
+                                type='button'
+                                onClick={() => this.onViewsClick()}
+                            >
+                                <span data-localize='views.title'>Views</span>
+                            </button>
+                        </div>
+                        <div className='btn-group btn-group-select2-max'>
+                            <Select
+                                tabIndex='-1'
+                                className='select2 select2-hidden-accessible1'
+                                id='viewSelect'
+                                options={this.getViewOptions()}
+                                value={this.props.viewsList.selectedViewId}
+                                onChange={(item) => this.onViewSelect(item.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
         );
     }
 
@@ -244,6 +271,24 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
+    isViewDisabled(view) {
+        const {auth} = this.props;
+        return auth.isDemo && view.type == 'advanced';
+    }
+
+    getViewOptions() {
+        const views = this.props.viewsList.hashedArray.array;
+        return views.map(
+            (viewItem) => {
+                const isDisabled = this.isViewDisabled(viewItem);
+                const label = getItemLabelByNameAndType(viewItem.name, viewItem.type);
+                return {
+                    value: viewItem.id, label, disabled: isDisabled
+                };
+            }
+        );
+    }
+
     onNewAnalysisCancelClick() {
 
     }
@@ -270,5 +315,13 @@ export default class AnalysisRightPane extends React.Component {
 
     onAnalyzeButtonClick() {
 
+    }
+
+    onViewsClick() {
+
+    }
+
+    onViewSelect(viewId) {
+        console.log('onViewSelect', viewId);
     }
 }
