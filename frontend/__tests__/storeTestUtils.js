@@ -40,7 +40,7 @@ export default class StoreTestUtils {
         }
         this.waitForFreezing(store, timeout || 10, () => {
             const state = store.getState();
-            const mappedState = (test.stateMapperFunc) ? test.stateMapperFunc(state) : state;
+            const mappedState = test.stateMapperFunc ? test.stateMapperFunc(state) : state;
             if (!_.isEqual(mappedState, expectedState)) {
                 this._gracefulFail(test, mappedState);
             } else {
@@ -90,7 +90,7 @@ export default class StoreTestUtils {
      * */
     static _gracefulFail(test, state) {
         const difference = _.differenceWith(state, test.expectedState, _.isEqual);
-        const testNameString = (test.name) ? `[${test.name}] ` : '';
+        const testNameString = test.name ? `[${test.name}] ` : '';
         throw new Error(`${testNameString}States are different: ${JSON.stringify(difference, null, 2)}, `
             + `\nstate: ${JSON.stringify(state, null, 2)}`);
     }
