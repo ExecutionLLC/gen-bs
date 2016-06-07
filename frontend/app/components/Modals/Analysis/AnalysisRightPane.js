@@ -11,9 +11,7 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderAnalysisHeader(this.props.historyItem)}
                 <div className='split-scroll form-horizontal'>
                     <div className='form-rows'>
-                        <div className='tab-content'>
-                            {this.renderAnalysisContent()}
-                        </div>
+                        {this.renderAnalysisContent()}
                     </div>
                 </div>
             </div>
