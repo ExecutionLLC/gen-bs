@@ -7,7 +7,7 @@ export default class AnalysisHeader extends React.Component {
         return (
             <Modal.Header closeButton>
                 <Modal.Title>
-                    Analysis
+                    Analyses
                 </Modal.Title>
             </Modal.Header>
         );
