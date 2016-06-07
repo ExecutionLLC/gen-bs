@@ -9,7 +9,7 @@ const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const proxyProviderFunc = _.once(function () {
     // return new RPCProxy(...args);
-    const args = Array.prototype.slice.call(arguments);
+    const args = _.toArray(arguments);
     const ProxyConstructor = Function.prototype.bind.apply(RPCProxy, [null].concat(args));
     return new ProxyConstructor();
 });
@@ -24,8 +24,9 @@ class ApplicationServerServiceBase extends ServiceBase {
         this.logger = this.services.logger;
         const host = this.services.config.applicationServer.host;
         const port = this.services.config.applicationServer.port;
+        const reconnectTimeout = this.services.config.applicationServer.reconnectTimeout;
         
-        this.rpcProxy = proxyProviderFunc(host, port, this.logger, null, null, this._rpcReply)
+        this.rpcProxy = proxyProviderFunc(host, port, reconnectTimeout, this.logger, null, null, this._rpcReply)
     }
 
     _rpcSend(operationId, method, params, callback) {

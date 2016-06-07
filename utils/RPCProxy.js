@@ -15,12 +15,13 @@ class RPCProxy {
     /**
      * @param {string}host
      * @param {number}port
+     * @param {number}reconnectTimeout Timeout in milliseconds
      * @param {object}logger
      * @param {function()}connectCallback
      * @param {function()}disconnectCallback
      * @param {function(object)}replyCallback
      */
-    constructor(host, port, logger, connectCallback, disconnectCallback, replyCallback) {
+    constructor(host, port, reconnectTimeout, logger, connectCallback, disconnectCallback, replyCallback) {
         this.connectCallback = connectCallback;
         this.disconnectCallback = disconnectCallback;
         this.replyCallback = replyCallback;
@@ -33,7 +34,7 @@ class RPCProxy {
 
         // Try to reconnect automatically if connection is closed
         this.connected = false;
-        setInterval(() => this._connect(), 1000);
+        setInterval(() => this._connect(), reconnectTimeout);
     }
 
     isConnected() {

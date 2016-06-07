@@ -18,6 +18,10 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
         const method = METHODS.getSourcesList;
         async.waterfall([
             (callback) => this.services.operations.addSystemOperation(method, callback),
+            (operation, callback) => {
+                operation.setSendCloseToAppServer(false);
+                callback(null, operation);
+            },
             (operation, callback) => this._rpcSend(operation.getId(), method, null, callback)
         ], callback);
     }
