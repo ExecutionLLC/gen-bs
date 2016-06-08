@@ -5,8 +5,16 @@ import AnalysisRightPane from './AnalysisRightPane';
 
 
 export default class AnalysisBody extends React.Component {
+
+    constructor(props) { // TODO: rid of the state
+        super(props);
+        this.state = {
+            currentHistoryItemId: props.queryHistory.history[0].id
+        }
+    }
+
     render() {
-        const selectedHistoryItem = this.props.queryHistory.history[0];
+        const selectedHistoryItem = this.findHistoryItemForId(this.state.currentHistoryItemId);
         const editingHistoryItem = selectedHistoryItem ? {
             name: selectedHistoryItem.timestamp + '_' + selectedHistoryItem.sample.fileName + '_' + selectedHistoryItem.filters[0].name + '_' + selectedHistoryItem.view.name,
             description: '<description>',
@@ -26,6 +34,8 @@ export default class AnalysisBody extends React.Component {
                         <div className='split-wrap'>
                             <AnalysisLeftPane
                                 queryHistory={this.props.queryHistory}
+                                currentItemId={this.state.currentHistoryItemId}
+                                onSelectHistory={(id) => this.onSelectHistoryId(id)}
                             />
                         </div>
                     </div>
@@ -44,5 +54,13 @@ export default class AnalysisBody extends React.Component {
                 </div>
             </Modal.Body>
         );
+    }
+
+    findHistoryItemForId(id) {
+        return this.props.queryHistory.history.find((historyItem) => historyItem.id === id)
+    }
+
+    onSelectHistoryId(id) {
+        this.setState({currentHistoryItemId: id})
     }
 }

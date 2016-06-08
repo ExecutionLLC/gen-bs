@@ -3,11 +3,11 @@ import React from 'react';
 
 export default class AnalysisHistoryList extends React.Component {
     render() {
-        const {history} = this.props.queryHistory;
+        const {currentItemId, queryHistory: {history}} = this.props;
         return (
             <div className='split-scroll'>
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
-                    {history.map((historyItem, historyItemIndex) => this.renderListItem(!historyItemIndex, historyItem))}
+                    {history.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
                 </ul>
             </div>
         );
@@ -44,6 +44,6 @@ export default class AnalysisHistoryList extends React.Component {
     }
 
     onHistoryItemClick(id) {
-        console.log('onHistoryItemClick', id);
+        this.props.onSelectHistory(id);
     }
 }

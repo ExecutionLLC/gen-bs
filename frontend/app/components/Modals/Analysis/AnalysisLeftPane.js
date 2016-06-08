@@ -10,6 +10,8 @@ export default class AnalysisLeftPane extends React.Component {
                 <AnalysisHistorySearch />
                 <AnalysisHistoryList
                     queryHistory={this.props.queryHistory}
+                    currentItemId={this.props.currentItemId}
+                    onSelectHistory={this.props.onSelectHistory}
                 />
             </div>
         );
