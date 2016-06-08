@@ -187,7 +187,10 @@ export default class AnalysisRightPane extends React.Component {
                     <hr className='invisible' />
                 </div>
                 <div className='tab-pane active' role='tabpanel' id='family'>
-                    333
+                    {this.renderSamplesSelectsFamilyHeader()}
+                    {this.renderSamplesSelectsFamilyProband()}
+                    {this.renderSamplesSelectsFamilyMember1()}
+                    {this.renderSamplesSelectsFamilyMember2()}
                     <hr className='invisible' />
                 </div>
             </div>
@@ -287,6 +290,113 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             tabindex='-1'
                             className='select2-search select-right'
+                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            options={this.getSampleOptions()}
+                            onChange={(item) => this.onSampleSelect(item.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    renderSamplesSelectsFamilyHeader() {
+        return (
+            <h5><span data-localize='samples.title'>Samples</span></h5>
+        );
+    }
+
+    renderSamplesSelectsFamilyProband() {
+        return (
+            <div className='form-group'>
+                <div className='col-xs-10 btn-group-select2'>
+                    <div className='btn-group'>
+                        <button
+                            className='btn btn-default btn-fix-width'
+                            onClick={() => this.onSamplesClick()}
+                        >
+                            <span data-localize='samples.title'>Samples</span>
+                        </button>
+                    </div>
+                    <div className='btn-group btn-group-left'>
+                        <label className='label label-dark-default label-fix-width label-left'>
+                            <span data-localize='query.family.proband.title'>Proband</span>
+                        </label>
+                    </div>
+                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                        <Select
+                            className='select2-search select-right'
+                            tabindex='-1'
+                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            options={this.getSampleOptions()}
+                            onChange={(item) => this.onSampleSelect(item.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    renderSamplesSelectsFamilyMember1() {
+        return (
+            <div className='form-group'>
+                <div className='col-xs-10 btn-group-select2 '>
+                    <div className='btn-group'>
+                        <button
+                            className='btn btn-default btn-fix-width'
+                            onClick={() => this.onSamplesClick()}
+                        >
+                            <span data-localize='samples.title'>Samples</span>
+                        </button>
+                    </div>
+                    <div className='btn-group btn-group-left'>
+                        <Select
+                            tabindex='-1'
+                            className='select2 select2-default select-left select2-sign'
+                            value={null}
+                            options={this.getFamilyMemberOptions()}
+                            onChange={(item) => this.onFamilyMemberSelect(item.value)}
+                        />
+                    </div>
+                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                        <Select
+                            tabindex='-1'
+                            className='select2-search select-right select-right'
+                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            options={this.getSampleOptions()}
+                            onChange={(item) => this.onSampleSelect(item.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    renderSamplesSelectsFamilyMember2() {
+        return (
+            <div className='form-group'>
+                <div className='col-xs-10 btn-group-select2'>
+                    <div className='btn-group'>
+                        <button 
+                            className='btn btn-default btn-fix-width'
+                            onClick={() => this.onSamplesClick()}
+                        >
+                            <span data-localize='samples.title'>Samples</span>
+                        </button>
+                    </div>
+                    <div className='btn-group btn-group-left'>
+                        <Select
+                            tabindex='-1'
+                            className='select2 select2-default select-left select2-sign '
+                            value={null}
+                            options={this.getFamilyMemberOptions()}
+                            onChange={(item) => this.onFamilyMemberSelect(item.value)}
+                        />
+                    </div>
+                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                        <Select
+                            aria-hidden='true' tabindex='-1'
+                            className='select2-search select-right select-right'
                             value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
@@ -510,6 +620,13 @@ export default class AnalysisRightPane extends React.Component {
         });
     }
 
+    getFamilyMemberOptions() {
+        return [
+            {value: 'mother', label: 'Mother'},
+            {value: 'father', label: 'Father'},
+        ];
+    }
+
     onNewAnalysisCancelClick() {
 
     }
@@ -568,5 +685,9 @@ export default class AnalysisRightPane extends React.Component {
     
     onSampleSelect(sampleId) {
         console.log('onSampleSelect', sampleId);
+    }
+
+    onFamilyMemberSelect(familyMemberId) {
+        console.log('onFamilyMemberSelect', familyMemberId);
     }
 }
