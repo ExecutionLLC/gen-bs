@@ -15,7 +15,9 @@
     "user:add": "node ./scripts/add-user.js",
     "frontend": "cd frontend; npm start",
     "update": "cd scripts; bash amazon-update.sh",
-    "build": "cd scripts/build; ./build.sh"
+    "build:webserver": "cd scripts/build; ./build.sh",
+    "build:frontend": "cd frontend/; npm run build",
+    "build": "npm run build:frontend; npm run build:webserver"
   },
   "repository": {
     "type": "git",
