@@ -3,6 +3,7 @@ import {requestAnalyze, requestSetCurrentParams} from './websocket';
 import {detachHistory} from './queryHistory';
 import {setViewVariantsSort} from './variantsTable';
 import {handleError} from './errorHandler';
+import _ from 'lodash';
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';

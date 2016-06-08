@@ -4,6 +4,7 @@ import HttpStatus from 'http-status';
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleError} from './errorHandler';
+import _ from 'lodash';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';

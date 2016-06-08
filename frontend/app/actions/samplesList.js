@@ -1,6 +1,7 @@
 import HttpStatus from 'http-status';
 import {handleError} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
+import _ from 'lodash';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
