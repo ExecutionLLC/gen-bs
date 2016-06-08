@@ -125,7 +125,7 @@ export default function variantsTable(state = initialState, action) {
                 } else {
                     // replace existent item, which has the same order
                     fieldIndex = action.sortOrder - 1;
-                    // remove sorting with higer order
+                    // remove sorting with higher order
                     // NOTE: if you want to save state of the sorting with higher order, then
                     // just remove next line  
                     sortArray = sortArray.slice(0, fieldIndex);
