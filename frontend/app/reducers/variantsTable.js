@@ -47,11 +47,6 @@ export default function variantsTable(state = initialState, action) {
             });
         }
 
-        case ActionTypes.INIT_SEARCH_IN_RESULTS_PARAMS: {
-            return Object.assign({}, state, {
-                searchInResultsParams: action.searchInResultsParams
-            });
-        }
         case ActionTypes.CHANGE_VARIANTS_LIMIT: {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {

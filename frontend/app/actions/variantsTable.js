@@ -11,7 +11,6 @@ import HttpStatus from 'http-status';
  * action types
  */
 
-export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
 export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
@@ -69,13 +68,6 @@ export function getNextPartOfData() {
         setTimeout(() => {
             dispatch(searchInResultsNextData());
         }, 100);
-    };
-}
-
-export function initSearchInResultsParams(searchInResultsParams) {
-    return {
-        type: INIT_SEARCH_IN_RESULTS_PARAMS,
-        searchInResultsParams
     };
 }
 
