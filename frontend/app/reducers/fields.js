@@ -1,4 +1,5 @@
 import * as ActionTypes from '../actions/fields';
+import _ from 'lodash';
 
 const initialState = {
     isFetching: {

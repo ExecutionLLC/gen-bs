@@ -1,4 +1,5 @@
 import * as ActionTypes from '../actions/viewBuilder';
+import _ from 'lodash';
 
 function getNextDirection(direction) {
     if (!direction) {

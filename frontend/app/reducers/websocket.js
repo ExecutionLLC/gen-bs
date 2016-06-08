@@ -1,4 +1,5 @@
 import * as ActionTypes from '../actions/websocket';
+import _ from 'lodash';
 
 export default function websocket(state = {
     wsConn: null,

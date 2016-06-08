@@ -1,6 +1,7 @@
 import * as ActionTypes from '../actions/filterBuilder';
 import {filterUtils, genomicsParsedRulesValidate, opsUtils} from '../utils/filterUtils';
 import FieldUtils from '../utils/fieldUtils';
+import _ from 'lodash';
 
 
 /**
