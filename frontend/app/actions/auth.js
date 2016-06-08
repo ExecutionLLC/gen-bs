@@ -199,14 +199,14 @@ export function login() {
             // it is google authorization (detected by URL parameters)
             console.log('google authorization completed', sessionIdFromParams);
             updateLoginData(dispatch, sessionIdFromParams, false);
-            history.pushState({}, null, `${config.HTTP_SCHEME}://${location.host}`);
+            history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
         } else {
             if (errorFromParams) {
                 // it is error from google authorization page (detected by URL parameters)
                 console.log('google authorization failed', errorFromParams);
                 dispatch(loginError(errorFromParams));
                 dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
-                history.pushState({}, null, `${config.HTTP_SCHEME}://${location.host}`);
+                history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
             }
             // try to restore old session
             checkCookieSessionAndLogin(dispatch);
