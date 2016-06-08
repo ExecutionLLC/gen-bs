@@ -181,7 +181,9 @@ export default class AnalysisRightPane extends React.Component {
                     {this.renderSampleSelectSingle()}
                 </div>
                 <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
-                    222
+                    {this.renderSamplesSelectsTumorNormalHeader()}
+                    {this.renderSamplesSelectsTumorNormalSampleTumor()}
+                    {this.renderSamplesSelectsTumorNormalSampleNormal()}
                     <hr className='invisible' />
                 </div>
                 <div className='tab-pane active' role='tabpanel' id='family'>
@@ -221,6 +223,74 @@ export default class AnalysisRightPane extends React.Component {
                                 onChange={(item) => this.onSampleSelect(item.value)}
                             />
                         </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    renderSamplesSelectsTumorNormalHeader() {
+        return (
+            <h5><span data-localize='samples.title'>Samples</span></h5>
+        );
+    }
+
+    renderSamplesSelectsTumorNormalSampleTumor() {
+        return (
+            <div className='form-group'>
+                <div className='col-xs-10 btn-group-select2 '>
+                    <div className='btn-group'>
+                        <button
+                            className='btn btn-default btn-fix-width'
+                            onClick={() => this.onSamplesClick()}
+                        >
+                            <span data-localize='samples.title'>Samples</span>
+                        </button>
+                    </div>
+                    <div className='btn-group btn-group-left'>
+                        <label className='label label-dark-default  label-fix-width label-left'>
+                            <span data-localize='query.tumor_normal.tumor.title'>Tumor</span>
+                        </label>
+                    </div>
+                    <div className='btn-group btn-group-select2-max'>
+                        <Select
+                            className='select2-search'
+                            tabindex='-1'
+                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            options={this.getSampleOptions()}
+                            onChange={(item) => this.onSampleSelect(item.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    renderSamplesSelectsTumorNormalSampleNormal() {
+        return (
+            <div className='form-group'>
+                <div className='col-xs-10 btn-group-select2 '>
+                    <div className='btn-group'>
+                        <button
+                            className='btn btn-default btn-fix-width'
+                            onClick={() => this.onSamplesClick()}
+                        >
+                            <span data-localize='samples.title'>Samples</span>
+                        </button>
+                    </div>
+                    <div className='btn-group btn-group-left'>
+                        <label className='label label-default  label-fix-width label-left'>
+                            <span data-localize='query.tumor_normal.normal.title'>Normal</span>
+                        </label>
+                    </div>
+                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                        <Select
+                            tabindex='-1'
+                            className='select2-search select-right'
+                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            options={this.getSampleOptions()}
+                            onChange={(item) => this.onSampleSelect(item.value)}
+                        />
                     </div>
                 </div>
             </div>
