@@ -623,7 +623,7 @@ export default class AnalysisRightPane extends React.Component {
     getFamilyMemberOptions() {
         return [
             {value: 'mother', label: 'Mother'},
-            {value: 'father', label: 'Father'},
+            {value: 'father', label: 'Father'}
         ];
     }
 
