@@ -19,9 +19,6 @@ import SessionsClient from '../api/SessionsClient';
 export const RECEIVE_SESSION = 'RECEIVE_SESSION';
 export const REQUEST_SESSION = 'REQUEST_SESSION';
 
-export const RECEIVE_LOGOUT = 'RECEIVE_LOGOUT';
-export const REQUEST_LOGOUT = 'REQUEST_LOGOUT';
-
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 export const UPDATE_AUTOLOGOUT_TIMER = 'UPDATE_AUTOLOGOUT_TIMER';
