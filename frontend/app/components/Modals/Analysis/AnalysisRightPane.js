@@ -178,7 +178,7 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='tab-content'>
                 <div className='tab-pane active' id='single'>
-                    111
+                    {this.renderSampleSelectSingle()}
                 </div>
                 <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
                     222
@@ -187,6 +187,41 @@ export default class AnalysisRightPane extends React.Component {
                 <div className='tab-pane active' role='tabpanel' id='family'>
                     333
                     <hr className='invisible' />
+                </div>
+            </div>
+        );
+    }
+
+    renderSampleSelectSingle() {
+        return (
+            <div>
+                <h5><span data-localize='general.sample'>Sample</span></h5>
+                <div className='form-group'>
+                    <div className='col-xs-10 btn-group-select2'>
+                        <div className='btn-group'>
+                            <button
+                                className='btn btn-default btn-fix-width'
+                                onClick={() => this.onSamplesClick()}
+                            >
+                                <span data-localize='samples.title'>Samples</span>
+                            </button>
+                        </div>
+
+                        <div className='btn-group btn-group btn-group-left'>
+                            <label className='label label-dark-default label-fix-width label-left'>
+                                <span data-localize='query.single.title'>Single</span>
+                            </label>
+                        </div>
+                        <div className='btn-group btn-group-select2-max btn-group-right'>
+                            <Select
+                                className='select2-search select-right'
+                                tabindex='-1'
+                                value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                                options={this.getSampleOptions()}
+                                onChange={(item) => this.onSampleSelect(item.value)}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -455,5 +490,13 @@ export default class AnalysisRightPane extends React.Component {
 
     onModelSelect(modelId) {
         console.log('onModelSelect', modelId);
+    }
+    
+    onSamplesClick() {
+        
+    }
+    
+    onSampleSelect(sampleId) {
+        console.log('onSampleSelect', sampleId);
     }
 }
