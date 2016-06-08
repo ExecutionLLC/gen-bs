@@ -6,7 +6,7 @@ export default class FieldUtils {
     }
 
     /**
-     * Make field structure usable for filters dialog purpposes
+     * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sourceName: string, valueType: string}} f
      * @param {string=} sourceName
      * @returns {{id: string, label: string, type: string}}
