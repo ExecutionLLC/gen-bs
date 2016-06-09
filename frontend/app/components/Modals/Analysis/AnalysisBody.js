@@ -31,6 +31,7 @@ export default class AnalysisBody extends React.Component {
                     <div className='split-right tab-content'>
                         <div className='split-wrap tab-pane active'>
                             <AnalysisRightPane
+                                disabled={true}
                                 auth={this.props.auth}
                                 historyItem={selectedHistoryItem}
                                 viewsList={this.props.viewsList}

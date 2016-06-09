@@ -6,15 +6,15 @@ import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem} = this.props;
+        const {historyItem, disabled} = this.props;
 
         return (
             <div>
                 {this.renderNewAnalysisTitle()}
-                {historyItem && this.renderAnalysisHeader(historyItem)}
+                {historyItem && this.renderAnalysisHeader(historyItem, disabled)}
                 <div className='split-scroll form-horizontal'>
                     <div className='form-rows'>
-                        {historyItem && this.renderAnalysisContent(historyItem)}
+                        {historyItem && this.renderAnalysisContent(historyItem, disabled)}
                     </div>
                 </div>
             </div>
@@ -38,15 +38,15 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisHeader(historyItem) {
+    renderAnalysisHeader(historyItem, disabled) {
         return (
             <div className='split-right-top split-right-top-tabs form-horizontal'>
                 {this.renderSelectAnalysis()}
-                {this.renderDeleteAnalysis()}
-                {this.renderAnalysisName(historyItem.name)}
+                {this.renderDeleteAnalysis(disabled)}
+                {this.renderAnalysisName(historyItem.name, disabled)}
                 {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
-                {this.renderAnalysisDescription(historyItem.description)}
-                {this.renderAnalysisHeaderTabs()}
+                {this.renderAnalysisDescription(historyItem.description, disabled)}
+                {this.renderAnalysisHeaderTabs(disabled)}
             </div>
         );
     }
@@ -458,10 +458,11 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderDeleteAnalysis() {
+    renderDeleteAnalysis(disabled) {
         return (
             <button
                 className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
+                disabled={disabled}
                 onClick={() => this.onDeleteAnalysisClick()}
             >
                 <span data-localize='query.delete_analysis'>Delete analysis</span>
@@ -469,7 +470,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisName(name) {
+    renderAnalysisName(name, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -478,6 +479,7 @@ export default class AnalysisRightPane extends React.Component {
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder="Analysis name (it can't be empty)"
                         data-localize='query.settings.name'
+                        disabled={disabled}
                         onChange={(e) => this.onAnalysisNameChange(e.target.value)}
                     />
                 </div>
@@ -485,7 +487,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisHeaderTabs() {
+    renderAnalysisHeaderTabs(disabled) {
         const tabs = [
             {
                 isActive: true,
@@ -508,7 +510,7 @@ export default class AnalysisRightPane extends React.Component {
         ];
         return (
             <ul role='tablist' className='nav nav-tabs' id='analisisTypes'>
-                {tabs.map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
+                {tabs.filter((tab) => tab.isActive || !disabled).map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
             </ul>
         );
     }
@@ -526,7 +528,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisDescription(description) {
+    renderAnalysisDescription(description, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -535,6 +537,7 @@ export default class AnalysisRightPane extends React.Component {
                         placeholder='Analysis description (optional)'
                         className='form-control material-input-sm'
                         data-localize='query.settings.description'
+                        disabled={disabled}
                         onChange={(e) => this.onAnalysisDescriptionChange(e.target.value)}
                     />
                 </div>
