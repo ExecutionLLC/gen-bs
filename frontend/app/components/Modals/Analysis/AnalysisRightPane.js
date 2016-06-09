@@ -56,10 +56,10 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div>
                 {this.renderSamplesSelects(historyItem.type, disabled)}
-                {this.renderFilterSelector()}
-                {this.renderFamilyModelSelector()}
-                {this.renderTumorModelSelector()}
-                {this.renderViewSelector()}
+                {this.renderFilterSelector(historyItem.filter, disabled)}
+                {historyItem.type.family && this.renderFamilyModelSelector(historyItem.type.family.model, disabled)}
+                {historyItem.type.tumorNormal && this.renderTumorModelSelector(historyItem.type.tumorNormal.model, disabled)}
+                {this.renderViewSelector(historyItem.view, disabled)}
                 <hr className='invisible' />
                 {this.renderUseActualVersions()}
                 {this.renderAnalyzeButton()}
@@ -67,7 +67,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderFilterSelector() {
+    renderFilterSelector(filter, disabled) {
         return (
             <div>
                 <h5><span data-localize='general.filter'>Filter</span></h5>
@@ -77,6 +77,7 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 className='btn btn-default btn-fix-width'
                                 type='button'
+                                disabled={disabled}
                                 onClick={() => this.onFiltersClick()}
                             >
                                 <span data-localize='filters.title'>Filters</span>
@@ -87,8 +88,9 @@ export default class AnalysisRightPane extends React.Component {
                                 tabIndex='-1'
                                 className='select2-search'
                                 id='filterSelect'
+                                disabled={disabled}
                                 options={this.getFilterOptions()}
-                                value={this.props.filtersList.selectedFilterId}
+                                value={filter && filter.id || null}
                                 onChange={(item) => this.onFilterSelect(item.value)}
                             />
                         </div>
@@ -99,23 +101,23 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
     
-    renderFamilyModelSelector() {
+    renderFamilyModelSelector(model, disabled) {
         return (
             <div id='familyModelDiv'>
-                {this.renderModelSelector()}
+                {this.renderModelSelector(model, disabled)}
             </div>
         );
     }
 
-    renderTumorModelSelector() {
+    renderTumorModelSelector(model, disabled) {
         return (
             <div id='tumorModelDiv'>
-                {this.renderModelSelector()}
+                {this.renderModelSelector(model, disabled)}
             </div>
         );
     }
 
-    renderModelSelector() {
+    renderModelSelector(model, disabled) {
         return (
             <div>
                 <h5><span data-localize='general.model'>Model</span></h5>
@@ -125,6 +127,7 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 type='button'
                                 className='btn btn-default btn-fix-width'
+                                disabled={disabled}
                                 onClick={() => this.onModelClick()}
                             >
                                 <span data-localize='models.title'>Models</span>
@@ -135,7 +138,8 @@ export default class AnalysisRightPane extends React.Component {
                                 id='modelSelect'
                                 className='select2'
                                 tabIndex='-1'
-                                value={this.props.modelsList.selectedModelId}
+                                disabled={disabled}
+                                value={model && model.id || null}
                                 options={this.getModelOptions()}
                                 onChange={(item) => this.onModelSelect(item.value)}
                             />
@@ -147,7 +151,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderViewSelector() {
+    renderViewSelector(view, disabled) {
         return (
             <div>
                 <h5><span data-localize='general.view'>View</span></h5>
@@ -157,6 +161,7 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 className='btn btn-default btn-fix-width'
                                 type='button'
+                                disabled={disabled}
                                 onClick={() => this.onViewsClick()}
                             >
                                 <span data-localize='views.title'>Views</span>
@@ -167,8 +172,9 @@ export default class AnalysisRightPane extends React.Component {
                                 tabIndex='-1'
                                 className='select2'
                                 id='viewSelect'
+                                disabled={disabled}
                                 options={this.getViewOptions()}
-                                value={this.props.viewsList.selectedViewId}
+                                value={view && view.id || null}
                                 onChange={(item) => this.onViewSelect(item.value)}
                             />
                         </div>
