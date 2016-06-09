@@ -109,11 +109,6 @@ module.exports = {
     },
 
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': JSON.stringify(ENV.NODE_ENV || '')
-            }
-        }),
         new webpack.HotModuleReplacementPlugin(),
         // Cleanup target folder.
         new CleanWebpackPlugin(['public'], {
@@ -133,6 +128,9 @@ module.exports = {
         }),
 
         new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(ENV.NODE_ENV || '')
+            },
             API_PORT: JSON.stringify(API_PORT),
             API_HOST: JSON.stringify(API_HOST),
             USE_SECURE_CONNECTION: JSON.stringify(USE_SECURE_CONNECTION),
