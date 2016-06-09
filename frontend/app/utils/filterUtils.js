@@ -125,7 +125,6 @@ export const filterUtils = {
         /**
          * Replaces {0}, {1}, ... in a string
          * @param str {string}
-         * @param args,... {mixed}
          * @return {string}
          */
         fmt: function (str/*, args*/) {
@@ -138,8 +137,6 @@ export const filterUtils = {
         /**
          * Throw an Error object with custom name
          * @param type {string}
-         * @param message {string}
-         * @param args,... {mixed}
          */
         error: function (type/*, message, args*/) {
             var err = new Error(this.fmt.apply(null, Array.prototype.slice.call(arguments, 1)));
@@ -149,10 +146,10 @@ export const filterUtils = {
         },
         /**
          * Change type of a value to int or float
-         * @param value {mixed}
+         * @param value {string|number|boolean}
          * @param type {string} 'integer', 'double' or anything else
          * @param boolAsInt {boolean} return 0 or 1 for booleans
-         * @return {mixed}
+         * @return {number}
          */
         changeType: function (value, type, boolAsInt) {
             switch (type) {
@@ -517,8 +514,7 @@ export const filterUtils = {
     },
     /**
      * Find which operator is used in a Genomics sub-object
-     * @param {mixed} value
-     * @param {string} field
+     * @param {Object|null|*} value
      * @return {string|undefined}
      */
     determineGenomicsOperator: function (value) {
