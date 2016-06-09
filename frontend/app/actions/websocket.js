@@ -194,8 +194,13 @@ export function subscribeToWs() {
             conn.send(JSON.stringify({sessionId}));
         };
         conn.onmessage = event => dispatch(receiveMessage(event.data));
-        conn.onerror = event => dispatch([receiveError(event.data), reconnectWS()]);
-        conn.onclose = event => dispatch([receiveClose(event.data), reconnectWS()]);
+        conn.onerror = event => dispatch(receiveError(event.data));
+        conn.onclose = event => {
+            dispatch(receiveClose(event.data));
+            if (!event.wasClean) {
+                dispatch(reconnectWS());
+            }
+        };
     };
 }
 
