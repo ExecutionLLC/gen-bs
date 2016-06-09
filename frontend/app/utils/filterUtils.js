@@ -518,7 +518,7 @@ export const filterUtils = {
      * @return {string|undefined}
      */
     determineGenomicsOperator: function (value) {
-        if (value !== null && typeof value == 'object') {
+        if (value !== null && typeof value === 'object') {
             var subkeys = Object.keys(value);
 
             if (subkeys.length === 1) {
