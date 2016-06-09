@@ -52,10 +52,10 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisContent(historyItem) {
+    renderAnalysisContent(historyItem, disabled) {
         return (
             <div>
-                {this.renderSamplesSelects(historyItem.type)}
+                {this.renderSamplesSelects(historyItem.type, disabled)}
                 {this.renderFilterSelector()}
                 {this.renderFamilyModelSelector()}
                 {this.renderTumorModelSelector()}
@@ -178,28 +178,28 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelects(historyItemType) {
+    renderSamplesSelects(historyItemType, disabled) {
 
         const rendersForType = {
-            single: () => (
+            single: (disabled) => (
                 <div className='tab-pane active' id='single'>
-                     {this.renderSampleSelectSingle()}
+                     {this.renderSampleSelectSingle(disabled)}
                 </div>
             ),
-            tumorNormal: () => (
+            tumorNormal: (disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
-                     {this.renderSamplesSelectsTumorNormalSampleTumor()}
-                     {this.renderSamplesSelectsTumorNormalSampleNormal()}
+                     {this.renderSamplesSelectsTumorNormalSampleTumor(disabled)}
+                     {this.renderSamplesSelectsTumorNormalSampleNormal(disabled)}
                      <hr className='invisible' />
                 </div>
             ),
-            family: () => (
+            family: (disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='family'>
                      {this.renderSamplesSelectsFamilyHeader()}
-                     {this.renderSamplesSelectsFamilyProband()}
-                     {this.renderSamplesSelectsFamilyMember1()}
-                     {this.renderSamplesSelectsFamilyMember2()}
+                     {this.renderSamplesSelectsFamilyProband(disabled)}
+                     {this.renderSamplesSelectsFamilyMember1(disabled)}
+                     {this.renderSamplesSelectsFamilyMember2(disabled)}
                      <hr className='invisible' />
                 </div>
             )
@@ -209,12 +209,12 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='tab-content'>
-                {typeRender && typeRender()}
+                {typeRender && typeRender(disabled)}
             </div>
         );
     }
 
-    renderSampleSelectSingle() {
+    renderSampleSelectSingle(disabled) {
         return (
             <div>
                 <h5><span data-localize='general.sample'>Sample</span></h5>
@@ -223,6 +223,7 @@ export default class AnalysisRightPane extends React.Component {
                         <div className='btn-group'>
                             <button
                                 className='btn btn-default btn-fix-width'
+                                disabled={disabled}
                                 onClick={() => this.onSamplesClick()}
                             >
                                 <span data-localize='samples.title'>Samples</span>
@@ -238,6 +239,7 @@ export default class AnalysisRightPane extends React.Component {
                             <Select
                                 className='select2-search select-right'
                                 tabindex='-1'
+                                disabled={disabled}
                                 value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
                                 options={this.getSampleOptions()}
                                 onChange={(item) => this.onSampleSelect(item.value)}
@@ -255,13 +257,14 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsTumorNormalSampleTumor() {
+    renderSamplesSelectsTumorNormalSampleTumor(disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2 '>
                     <div className='btn-group'>
                         <button
                             className='btn btn-default btn-fix-width'
+                            disabled={disabled}
                             onClick={() => this.onSamplesClick()}
                         >
                             <span data-localize='samples.title'>Samples</span>
@@ -276,6 +279,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             className='select2-search'
                             tabindex='-1'
+                            disabled={disabled}
                             value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
@@ -286,13 +290,14 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsTumorNormalSampleNormal() {
+    renderSamplesSelectsTumorNormalSampleNormal(disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2 '>
                     <div className='btn-group'>
                         <button
                             className='btn btn-default btn-fix-width'
+                            disabled={disabled}
                             onClick={() => this.onSamplesClick()}
                         >
                             <span data-localize='samples.title'>Samples</span>
@@ -307,6 +312,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             tabindex='-1'
                             className='select2-search select-right'
+                            disabled={disabled}
                             value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
@@ -323,13 +329,14 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyProband() {
+    renderSamplesSelectsFamilyProband(disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2'>
                     <div className='btn-group'>
                         <button
                             className='btn btn-default btn-fix-width'
+                            disabled={disabled}
                             onClick={() => this.onSamplesClick()}
                         >
                             <span data-localize='samples.title'>Samples</span>
@@ -344,6 +351,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             className='select2-search select-right'
                             tabindex='-1'
+                            disabled={disabled}
                             value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
@@ -354,13 +362,14 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyMember1() {
+    renderSamplesSelectsFamilyMember1(disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2 '>
                     <div className='btn-group'>
                         <button
                             className='btn btn-default btn-fix-width'
+                            disabled={disabled}
                             onClick={() => this.onSamplesClick()}
                         >
                             <span data-localize='samples.title'>Samples</span>
@@ -370,6 +379,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             tabindex='-1'
                             className='select2 select2-default select-left select2-sign'
+                            disabled={disabled}
                             value={null}
                             options={this.getFamilyMemberOptions()}
                             onChange={(item) => this.onFamilyMemberSelect(item.value)}
@@ -379,6 +389,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             tabindex='-1'
                             className='select2-search select-right select-right'
+                            disabled={disabled}
                             value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
@@ -389,13 +400,14 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyMember2() {
+    renderSamplesSelectsFamilyMember2(disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2'>
                     <div className='btn-group'>
                         <button 
                             className='btn btn-default btn-fix-width'
+                            disabled={disabled}
                             onClick={() => this.onSamplesClick()}
                         >
                             <span data-localize='samples.title'>Samples</span>
@@ -405,6 +417,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             tabindex='-1'
                             className='select2 select2-default select-left select2-sign '
+                            disabled={disabled}
                             value={null}
                             options={this.getFamilyMemberOptions()}
                             onChange={(item) => this.onFamilyMemberSelect(item.value)}
@@ -414,6 +427,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             aria-hidden='true' tabindex='-1'
                             className='select2-search select-right select-right'
+                            disabled={disabled}
                             value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
