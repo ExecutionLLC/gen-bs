@@ -43,7 +43,7 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='split-right-top split-right-top-tabs form-horizontal'>
                 {this.renderSelectAnalysis()}
-                {this.renderDeleteAnalysis(disabled)}
+                {this.renderDeleteAnalysis(false)}
                 {this.renderAnalysisName(historyItem.name, disabled)}
                 {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
                 {this.renderAnalysisDescription(historyItem.description, disabled)}
