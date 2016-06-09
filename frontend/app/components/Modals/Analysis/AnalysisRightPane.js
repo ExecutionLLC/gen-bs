@@ -606,7 +606,7 @@ export default class AnalysisRightPane extends React.Component {
     getModelOptions() {
         const {models} = this.props.modelsList;
         return models.map((sampleItem) => {
-            const isDisabled = this.isSampleDisabled(sampleItem);
+            const isDisabled = this.isModelDisabled(sampleItem);
             const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
             return {value: sampleItem.id, label, disabled: isDisabled};
         });
