@@ -51,21 +51,21 @@ function makeHistoryListItem(historyItem) {
 /* TODO: make other types like this:
             tumorNormal: {
                 samples: {
-                    tumor: null,
-                    normal: null
+                    tumor: historyItem.sample,
+                    normal: historyItem.sample
                 },
-                model: null
+                model: historyItem.filters[0]
             }
 
             family: {
                 samples: {
-                    proband: null,
+                    proband: historyItem.sample,
                     members: [
-                        {memberId: null, sample: null},
-                        {memberId: null, sample: null}
+                        {memberId: 'father', sample: historyItem.sample},
+                        {memberId: 'mother', sample: historyItem.sample}
                     ]
                 },
-                model: null
+                model: historyItem.filters[0]
             }
 */
         }

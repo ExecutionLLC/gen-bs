@@ -189,17 +189,17 @@ export default class AnalysisRightPane extends React.Component {
             tumorNormal: (historyItemType, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
-                     {this.renderSamplesSelectsTumorNormalSampleTumor(disabled)}
-                     {this.renderSamplesSelectsTumorNormalSampleNormal(disabled)}
+                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItemType.tumorNormal.samples.tumor, disabled)}
+                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItemType.tumorNormal.samples.normal, disabled)}
                      <hr className='invisible' />
                 </div>
             ),
             family: (historyItemType, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='family'>
                      {this.renderSamplesSelectsFamilyHeader()}
-                     {this.renderSamplesSelectsFamilyProband(disabled)}
-                     {this.renderSamplesSelectsFamilyMember1(disabled)}
-                     {this.renderSamplesSelectsFamilyMember2(disabled)}
+                     {this.renderSamplesSelectsFamilyProband(historyItemType.family.samples.proband, disabled)}
+                     {this.renderSamplesSelectsFamilyMember1(historyItemType.family.samples.members[0], disabled)}
+                     {this.renderSamplesSelectsFamilyMember2(historyItemType.family.samples.members[1], disabled)}
                      <hr className='invisible' />
                 </div>
             )
@@ -240,7 +240,7 @@ export default class AnalysisRightPane extends React.Component {
                                 className='select2-search select-right'
                                 tabindex='-1'
                                 disabled={disabled}
-                                value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                                value={typeParams.sample && typeParams.sample.id || null}
                                 options={this.getSampleOptions()}
                                 onChange={(item) => this.onSampleSelect(item.value)}
                             />
@@ -257,7 +257,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsTumorNormalSampleTumor(disabled) {
+    renderSamplesSelectsTumorNormalSampleTumor(sample, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2 '>
@@ -280,7 +280,7 @@ export default class AnalysisRightPane extends React.Component {
                             className='select2-search'
                             tabindex='-1'
                             disabled={disabled}
-                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            value={sample && sample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
                         />
@@ -290,7 +290,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsTumorNormalSampleNormal(disabled) {
+    renderSamplesSelectsTumorNormalSampleNormal(sample, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2 '>
@@ -313,7 +313,7 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             className='select2-search select-right'
                             disabled={disabled}
-                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            value={sample && sample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
                         />
@@ -329,7 +329,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyProband(disabled) {
+    renderSamplesSelectsFamilyProband(sample, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2'>
@@ -352,7 +352,7 @@ export default class AnalysisRightPane extends React.Component {
                             className='select2-search select-right'
                             tabindex='-1'
                             disabled={disabled}
-                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            value={sample && sample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
                         />
@@ -362,7 +362,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyMember1(disabled) {
+    renderSamplesSelectsFamilyMember1(member, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2 '>
@@ -380,7 +380,7 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             className='select2 select2-default select-left select2-sign'
                             disabled={disabled}
-                            value={null}
+                            value={member.memberId}
                             options={this.getFamilyMemberOptions()}
                             onChange={(item) => this.onFamilyMemberSelect(item.value)}
                         />
@@ -390,7 +390,7 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             className='select2-search select-right select-right'
                             disabled={disabled}
-                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            value={member.sample && member.sample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
                         />
@@ -400,7 +400,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyMember2(disabled) {
+    renderSamplesSelectsFamilyMember2(member, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2'>
@@ -418,7 +418,7 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             className='select2 select2-default select-left select2-sign '
                             disabled={disabled}
-                            value={null}
+                            value={member.memberId}
                             options={this.getFamilyMemberOptions()}
                             onChange={(item) => this.onFamilyMemberSelect(item.value)}
                         />
@@ -428,7 +428,7 @@ export default class AnalysisRightPane extends React.Component {
                             aria-hidden='true' tabindex='-1'
                             className='select2-search select-right select-right'
                             disabled={disabled}
-                            value={this.props.samplesList.selectedSample && this.props.samplesList.selectedSample.id || null}
+                            value={member.sample && member.sample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
                         />
