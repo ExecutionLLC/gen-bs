@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from '../../shared/Select';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import _ from 'lodash';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -51,10 +52,10 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisContent(/*historyItem*/) {
+    renderAnalysisContent(historyItem) {
         return (
             <div>
-                {this.renderSamplesSelects()}
+                {this.renderSamplesSelects(historyItem.type)}
                 {this.renderFilterSelector()}
                 {this.renderFamilyModelSelector()}
                 {this.renderTumorModelSelector()}
@@ -177,25 +178,38 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelects() {
+    renderSamplesSelects(historyItemType) {
+
+        const rendersForType = {
+            single: () => (
+                <div className='tab-pane active' id='single'>
+                     {this.renderSampleSelectSingle()}
+                </div>
+            ),
+            tumorNormal: () => (
+                <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
+                     {this.renderSamplesSelectsTumorNormalHeader()}
+                     {this.renderSamplesSelectsTumorNormalSampleTumor()}
+                     {this.renderSamplesSelectsTumorNormalSampleNormal()}
+                     <hr className='invisible' />
+                </div>
+            ),
+            family: () => (
+                <div className='tab-pane active' role='tabpanel' id='family'>
+                     {this.renderSamplesSelectsFamilyHeader()}
+                     {this.renderSamplesSelectsFamilyProband()}
+                     {this.renderSamplesSelectsFamilyMember1()}
+                     {this.renderSamplesSelectsFamilyMember2()}
+                     <hr className='invisible' />
+                </div>
+            )
+        };
+
+        const typeRender = _.map(historyItemType, (type, typeName) => rendersForType[typeName]).filter((render) => !!render)[0];
+
         return (
             <div className='tab-content'>
-                <div className='tab-pane active' id='single'>
-                    {this.renderSampleSelectSingle()}
-                </div>
-                <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
-                    {this.renderSamplesSelectsTumorNormalHeader()}
-                    {this.renderSamplesSelectsTumorNormalSampleTumor()}
-                    {this.renderSamplesSelectsTumorNormalSampleNormal()}
-                    <hr className='invisible' />
-                </div>
-                <div className='tab-pane active' role='tabpanel' id='family'>
-                    {this.renderSamplesSelectsFamilyHeader()}
-                    {this.renderSamplesSelectsFamilyProband()}
-                    {this.renderSamplesSelectsFamilyMember1()}
-                    {this.renderSamplesSelectsFamilyMember2()}
-                    <hr className='invisible' />
-                </div>
+                {typeRender && typeRender()}
             </div>
         );
     }
