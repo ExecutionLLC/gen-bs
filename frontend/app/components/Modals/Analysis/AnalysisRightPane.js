@@ -4,14 +4,17 @@ import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 
 
 export default class AnalysisRightPane extends React.Component {
+
     render() {
+        const {historyItem} = this.props;
+
         return (
             <div>
                 {this.renderNewAnalysisTitle()}
-                {this.renderAnalysisHeader(this.props.historyItem)}
+                {historyItem && this.renderAnalysisHeader(historyItem)}
                 <div className='split-scroll form-horizontal'>
                     <div className='form-rows'>
-                        {this.renderAnalysisContent()}
+                        {historyItem && this.renderAnalysisContent(historyItem)}
                     </div>
                 </div>
             </div>
@@ -48,7 +51,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisContent() {
+    renderAnalysisContent(/*historyItem*/) {
         return (
             <div>
                 {this.renderSamplesSelects()}

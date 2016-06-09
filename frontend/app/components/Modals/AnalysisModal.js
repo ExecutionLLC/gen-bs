@@ -19,7 +19,7 @@ class AnalysisModal extends React.Component {
                 <AnalysisHeader />
                 <AnalysisBody
                     auth={this.props.auth}
-                    queryHistory={this.props.queryHistory}
+                    historyList={this.props.historyList}
                     viewsList={this.props.viewsList}
                     filtersList={this.props.filtersList}
                     samplesList={this.props.samplesList}
@@ -34,6 +34,44 @@ class AnalysisModal extends React.Component {
     }
 }
 
+function makeHistoryListItem(historyItem) {
+    const name = historyItem.timestamp + '_' + historyItem.sample.fileName + '_' + historyItem.filters[0].name + '_' + historyItem.view.name;
+    return {
+        id: historyItem.id,
+        name: name,
+        description: 'Description of ' + name,
+        createdDate: historyItem.timestamp,
+        lastQueryDate: historyItem.timestamp + 1000,
+        filter: historyItem.filters[0],
+        view: historyItem.view,
+        type: {
+            single: {
+                sample: historyItem.sample
+            }
+/* TODO: make other types like this:
+            tumorNormal: {
+                samples: {
+                    tumor: null,
+                    normal: null
+                },
+                model: null
+            }
+
+            family: {
+                samples: {
+                    proband: null,
+                    members: [
+                        {memberId: null, sample: null},
+                        {memberId: null, sample: null}
+                    ]
+                },
+                model: null
+            }
+*/
+        }
+    };
+}
+
 function mapStateToProps(state) {
     const {auth, queryHistory, viewsList, filtersList, samplesList} = state;
 
@@ -42,14 +80,16 @@ function mapStateToProps(state) {
         selectedModelId: filtersList.selectedFilterId
 
     };
+    
+    const historyList = queryHistory.history.map((historyItem) => makeHistoryListItem(historyItem));
 
     return {
         auth,
-        queryHistory,
         viewsList,
         filtersList,
         samplesList,
-        modelsList
+        modelsList,
+        historyList
     };
 }
 

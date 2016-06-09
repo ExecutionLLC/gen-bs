@@ -3,11 +3,11 @@ import React from 'react';
 
 export default class AnalysisHistoryList extends React.Component {
     render() {
-        const {currentItemId, queryHistory: {history}} = this.props;
+        const {currentItemId, historyList} = this.props;
         return (
             <div className='split-scroll'>
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
-                    {history.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
+                    {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
                 </ul>
             </div>
         );
@@ -28,15 +28,15 @@ export default class AnalysisHistoryList extends React.Component {
                         <i />
                     </label>
                     <span className='link-label'>
-                        {historyItem.timestamp + '_' + historyItem.sample.fileName + '_' + historyItem.filters[0].name + '_' + historyItem.view.name}
+                        {historyItem.name}
                     </span>
                     <span className='link-desc'>
-                        &lt;Text of description for analysis&gt;
+                        {historyItem.description}
                     </span>
                     <span className='small link-desc'>
                         <span data-localize='query.last_query_date'>
                             Last query date
-                        </span>: {historyItem.timestamp}
+                        </span>: {historyItem.lastQueryDate}
                     </span>
                 </a>
             </li>
