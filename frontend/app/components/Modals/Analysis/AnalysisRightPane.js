@@ -46,7 +46,7 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderAnalysisName(historyItem.name, disabled)}
                 {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
                 {this.renderAnalysisDescription(historyItem.description, disabled)}
-                {this.renderAnalysisHeaderTabs(disabled)}
+                {this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
             </div>
         );
     }
@@ -487,22 +487,22 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisHeaderTabs(disabled) {
+    renderAnalysisHeaderTabs(historyItemType, disabled) {
         const tabs = [
             {
-                isActive: true,
+                isActive: !!historyItemType.single,
                 className: 'single-tab',
                 caption: 'Single',
                 onSelect: () => {}
             },
             {
-                isActive: false,
+                isActive: !!historyItemType.tumorNormal,
                 className: 'tumor-normal-tab',
                 caption: 'Tumor/Normal',
                 onSelect: () => {}
             },
             {
-                isActive: false,
+                isActive: !!historyItemType.family,
                 className: 'family-tab',
                 caption: 'Family',
                 onSelect: () => {}
