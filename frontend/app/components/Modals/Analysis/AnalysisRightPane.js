@@ -181,12 +181,12 @@ export default class AnalysisRightPane extends React.Component {
     renderSamplesSelects(historyItemType, disabled) {
 
         const rendersForType = {
-            single: (disabled) => (
+            single: (historyItemType, disabled) => (
                 <div className='tab-pane active' id='single'>
-                     {this.renderSampleSelectSingle(disabled)}
+                     {this.renderSampleSelectSingle(historyItemType.single, disabled)}
                 </div>
             ),
-            tumorNormal: (disabled) => (
+            tumorNormal: (historyItemType, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
                      {this.renderSamplesSelectsTumorNormalSampleTumor(disabled)}
@@ -194,7 +194,7 @@ export default class AnalysisRightPane extends React.Component {
                      <hr className='invisible' />
                 </div>
             ),
-            family: (disabled) => (
+            family: (historyItemType, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='family'>
                      {this.renderSamplesSelectsFamilyHeader()}
                      {this.renderSamplesSelectsFamilyProband(disabled)}
@@ -209,12 +209,12 @@ export default class AnalysisRightPane extends React.Component {
 
         return (
             <div className='tab-content'>
-                {typeRender && typeRender(disabled)}
+                {typeRender && typeRender(historyItemType, disabled)}
             </div>
         );
     }
 
-    renderSampleSelectSingle(disabled) {
+    renderSampleSelectSingle(typeParams, disabled) {
         return (
             <div>
                 <h5><span data-localize='general.sample'>Sample</span></h5>
