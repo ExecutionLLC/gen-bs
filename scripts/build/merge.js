@@ -16,5 +16,5 @@ const optimizer = new NodeOptimize({
     ]
 });
 
-var mergedJs = optimizer.merge(PACKAGE_ROOT + '/index.js');
+const mergedJs = optimizer.merge(PACKAGE_ROOT + '/index.js');
 fs.writeFile(path.resolve(outFilePath), mergedJs);
