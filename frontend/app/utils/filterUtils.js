@@ -270,7 +270,7 @@ export const filterUtils = {
         /**
          * @param {genomicsParsedData|genomicsParsedDataGroup} data
          * @param {number[]} indexPath
-         * @param {function(genomicsParsedDataGroup, *):(genomicsParsedDataGroup)} doModifyFunction
+         * @param {function(genomicsParsedDataGroup):(genomicsParsedDataGroup)} doModifyFunction
          * @returns {genomicsParsedData|genomicsParsedDataGroup}
          */
         modifyGroup(data, indexPath, doModifyFunction) {
@@ -694,7 +694,8 @@ export const genomicsParsedRulesValidate = {
             }
             const ruleIndexPath = indexPath.concat([i]);
             if (validateRuleResult.isGroup) {
-                const validSubGroupResult = this.validateGroup(fields, rule, ruleIndexPath);
+                const group = /** @type {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */rule;
+                const validSubGroupResult = this.validateGroup(fields, group, ruleIndexPath);
                 report = report.concat(validSubGroupResult.report);
                 if (!validSubGroupResult.validGroup) {
                     report.push({indexPath: ruleIndexPath.slice(), message: 'invalid subgroup'});
