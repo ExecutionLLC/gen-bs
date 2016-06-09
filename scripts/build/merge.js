@@ -1,5 +1,8 @@
+const fs = require('fs');
+const path = require('path');
 const NodeOptimize = require('node-optimize');
 const args = require('optimist').argv;
+
 const PACKAGE_ROOT = '../..';
 
 const outFilePath = args.out;
@@ -14,4 +17,4 @@ const optimizer = new NodeOptimize({
 });
 
 var mergedJs = optimizer.merge(PACKAGE_ROOT + '/index.js');
-require('fs').writeFile(require('path').resolve(outFilePath), mergedJs);
+fs.writeFile(path.resolve(outFilePath), mergedJs);
