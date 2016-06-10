@@ -80,12 +80,17 @@ describe('fields', () => {
     });
 
     it('should receive fields', (done) => {
-        const inFields =            [   {id: 1, label: 'label1'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
-        const outSampleFields =     [   {id: 1, label: 'label1'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
-        const outSampleFieldsHash = {1: {id: 1, label: 'label1'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
+        const inFields =            [   {id: 1, label: 'label1'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false},     {id: '4',                 name: 'name4', isEditable: false}];
+        // all fields with 'label' properties
+        const outSampleFields =     [   {id: 1, label: 'label1'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false},     {id: '4', label: 'name4', name: 'name4', isEditable: false}];
+        // same as above in the hash
+        const outSampleFieldsHash = {1: {id: 1, label: 'label1'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false},  4: {id: '4', label: 'name4', name: 'name4', isEditable: false}};
+        // fields with 'isEditable' === true, labelled
         const outEditableFields =   [                                 {id: 2, label: 'name2', name: 'name2', isEditable: true}];
-        const outAllowedFieldList = [                                                                                               {id: '3', label: 'label3', name: 'name3', isEditable: false}];
-        const outAllowedFieldHash = {                                                                                            3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
+        // fields with 'isEditable' === false, labelled
+        const outAllowedFieldList = [                                                                                               {id: '3', label: 'label3', name: 'name3', isEditable: false},     {id: '4', label: 'name4', name: 'name4', isEditable: false}];
+        // same as above in the hash
+        const outAllowedFieldHash = {                                                                                            3: {id: '3', label: 'label3', name: 'name3', isEditable: false},  4: {id: '4', label: 'name4', name: 'name4', isEditable: false}};
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveFields(inFields)),
             stateMapperFunc,
