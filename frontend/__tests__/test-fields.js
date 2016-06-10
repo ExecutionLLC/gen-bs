@@ -48,8 +48,11 @@ describe('fields', () => {
 
     it('should receive total fields', (done) => {
         const fields =           [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        // all fields with 'label' properties
         const totalFieldsList =  [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        // same as above in the hash
         const totalFieldsHash =  {1: {id: 1, label: 'label1', sourceName: 'sample'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
+        // fields with 'sourceName' === 'sample', labelled
         const sourceFieldsList = [                                                       {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveTotalFields(fields)),
@@ -106,18 +109,28 @@ describe('fields', () => {
     });
 
     it('should receive sample fields after total fields', (done) => {
+        // total fields input
         const fieldsTotal =          [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        // all total fields with 'label' properties
         const totalFieldsList =      [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        // same as above in the hash
         const totalFieldsHash =      {1: {id: 1, label: 'label1', sourceName: 'sample'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
+        // total fields with 'sourceName' === 'sample', labelled
         const sourceFieldsList =     [                                                       {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
-        
+
+        // sample fields input
         const fieldsSample =         [   {id: 5, label: 'label5'},     {id: 6,                 name: 'name6', isEditable: true},     {id: '7', label: 'label7', name: 'name7', isEditable: false}];
+        // all sample fields with 'label' properties
         const sampleFieldsList =     [   {id: 5, label: 'label5'},     {id: 6, label: 'name6', name: 'name6', isEditable: true},     {id: '7', label: 'label7', name: 'name7', isEditable: false}];
+        // same as above in the hash
         const sampleIdToFieldHash =  {5: {id: 5, label: 'label5'},  6: {id: 6, label: 'name6', name: 'name6', isEditable: true},  7: {id: '7', label: 'label7', name: 'name7', isEditable: false}};
+        // sample fields with 'isEditable' === true, labelled
         const editableFields =       [                                 {id: 6, label: 'name6', name: 'name6', isEditable: true}];
 
+        // sample fields with 'isEditable' === false, labelled, concatenated with total fields with 'sourceName' === 'sample', labelled
         const allowedFieldsList =    [                                                                                               {id: '7', label: 'label7', name: 'name7', isEditable: false},
                                                                                              {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        // same as above in the hash
         const allowedIdToFieldHash = {                                                    2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false},
                                                                                                                                   7: {id: '7', label: 'label7', name: 'name7', isEditable: false}};
         
