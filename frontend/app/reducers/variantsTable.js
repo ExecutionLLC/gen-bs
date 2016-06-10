@@ -1,5 +1,6 @@
-import * as ActionTypes from '../actions/variantsTable';
 import _ from 'lodash';
+
+import * as ActionTypes from '../actions/variantsTable';
 
 const initialState = {
     operationId: null,

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Modal} from 'react-bootstrap';
+import _ from 'lodash';
 
 import {uploadFile} from '../../../actions/fileUpload';
-import _ from 'lodash';
 
 
 export default class FileUploadFooter extends Component {

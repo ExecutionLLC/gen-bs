@@ -1,5 +1,6 @@
-import ExporterBase from './ExporterBase';
 import _ from 'lodash';
+
+import ExporterBase from './ExporterBase';
 
 export default class CsvExporter extends ExporterBase {
     constructor() {

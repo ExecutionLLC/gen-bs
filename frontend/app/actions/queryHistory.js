@@ -1,4 +1,5 @@
 import HttpStatus from 'http-status';
+import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
@@ -18,7 +19,6 @@ import {
     viewsListSelectView,
     viewsListReceive
 } from './viewsList';
-import _ from 'lodash';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';

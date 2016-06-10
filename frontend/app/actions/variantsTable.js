@@ -1,11 +1,11 @@
+import _ from 'lodash';
+import HttpStatus from 'http-status';
+
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
 import {updateQueryHistory} from './queryHistory';
 import {requestTableScrollPositionReset} from './ui';
-import _ from 'lodash';
-
-import HttpStatus from 'http-status';
 
 /*
  * action types

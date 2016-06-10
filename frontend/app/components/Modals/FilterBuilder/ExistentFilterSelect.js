@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import _ from 'lodash';
 
+import Select from '../../shared/Select';
 import {
     getItemLabelByNameAndType,
     getReadonlyReasonForSessionAndType
