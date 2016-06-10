@@ -47,10 +47,12 @@ describe('fields', () => {
     });
 
     it('should receive fields', (done) => {
-        const inFields =            [   {id: 1, label: 'label1'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3'}];
-        const outSampleFields =     [   {id: 1, label: 'label1'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3'}];
-        const outSampleFieldsHash = {1: {id: 1, label: 'label1'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3'}};
-        const outEditableFields =   [                                 {id: 2, label: 'name2', name: 'name2', isEditable: true}                                               ];
+        const inFields =            [   {id: 1, label: 'label1'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        const outSampleFields =     [   {id: 1, label: 'label1'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        const outSampleFieldsHash = {1: {id: 1, label: 'label1'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
+        const outEditableFields =   [                                 {id: 2, label: 'name2', name: 'name2', isEditable: true}];
+        const outAllowedFieldList = [                                                                                               {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        const outAllowedFieldHash = {                                                                                            3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveFields(inFields)),
             stateMapperFunc,
@@ -58,7 +60,9 @@ describe('fields', () => {
                 ...initState,
                 sampleFieldsList: outSampleFields,
                 sampleIdToFieldHash: outSampleFieldsHash,
-                editableFields: outEditableFields
+                editableFields: outEditableFields,
+                allowedFieldsList: outAllowedFieldList,
+                allowedIdToFieldHash: outAllowedFieldHash
             }
         }, done);
     });
