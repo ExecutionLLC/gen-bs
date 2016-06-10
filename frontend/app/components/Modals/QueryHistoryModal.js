@@ -111,12 +111,13 @@ export default class QueryHistoryModal extends Component {
     }
 
     render() {
+        const {showModal, closeModal} = this.props;
         return (
             <Modal
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
-                show={ this.props.showModal }
-                onHide={ () => {this.props.closeModal();} }
+                show={ showModal }
+                onHide={ () => closeModal() }
             >
                 { this.renderHeader() }
                 { this.renderHistoryTable() }
@@ -126,8 +127,9 @@ export default class QueryHistoryModal extends Component {
     }
 
     onRenewButtonClicked(historyItemId) {
-        this.props.dispatch(renewHistoryItem(historyItemId));
-        this.props.closeModal();
+        const {dispatch, closeModal} = this.props;
+        dispatch(renewHistoryItem(historyItemId));
+        closeModal();
     }
 }
 
