@@ -104,11 +104,11 @@ var deepDiffMapper = function() {
 /**
  * @typedef {Object}TestCase
  * @property {string|undefined}name
- * @property {function(Object)|undefined}stateMapperFunc
- * @property {Object}expectedState
+ * @property {function(Object)|undefined}stateMapperFunc If undefined, full state is used.
+ * @property {Object|undefined}expectedState If undefined, no check is done at the end of the test.
  * @property {number|undefined}timeout
- * @property {Object|undefined}globalInitialState
- * @property {function(function)|undefined}applyActions
+ * @property {Object|undefined}globalInitialState If undefined, default state is constructed by reducers.
+ * @property {function(function)|undefined}applyActions If undefined, the comparison will be done immediately.
  * */
 
 export default class StoreTestUtils {
@@ -124,7 +124,7 @@ export default class StoreTestUtils {
 
     /**
      * @param {TestCase}test
-     * @param {function()}onCompleted
+     * @param {function(Object)}onCompleted Function accepting mapped state (full state if mapper is undefined).
      * */
     static runTest(test, onCompleted) {
         const {applyActions, timeout, expectedState} = test;
@@ -135,10 +135,10 @@ export default class StoreTestUtils {
         this.waitForFreezing(store, timeout || 10, () => {
             const state = store.getState();
             const mappedState = test.stateMapperFunc ? test.stateMapperFunc(state) : state;
-            if (!_.isEqual(mappedState, expectedState)) {
+            if (expectedState && !_.isEqual(mappedState, expectedState)) {
                 this._gracefulFail(test, mappedState);
             } else {
-                onCompleted();
+                onCompleted(mappedState);
             }
         });
     }
