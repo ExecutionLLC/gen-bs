@@ -126,10 +126,18 @@ export default class StoreTestUtils {
      * @param {function()}onCompleted
      * */
     static runTest(test, onCompleted) {
-        const {applyActions, timeout, expectedState} = test;
+        const {applyActions, timeout, expectedState, expectedError} = test;
         const store = this.makeStore(test);
         if (applyActions) {
-            applyActions(store.dispatch);
+            try {
+                applyActions(store.dispatch);
+            } catch(e) {
+                if (expectedError) {
+                    onCompleted();
+                } else {
+                    throw new Error('Throw exception expected');
+                }
+            }
         }
         this.waitForFreezing(store, timeout || 10, () => {
             const state = store.getState();
