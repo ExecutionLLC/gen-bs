@@ -100,6 +100,39 @@ describe('fields', () => {
         }, done);
     });
 
+    it('should receive sample fields after total fields', (done) => {
+        const inTotalFields =       [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        const outTotalFields =      [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        const outTotalFieldsHash =  {1: {id: 1, label: 'label1', sourceName: 'sample'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
+        const outSourceFieldsList = [                                                       {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        
+        const inSampleFields =      [   {id: 5, label: 'label5'},     {id: 6,                 name: 'name6', isEditable: true},     {id: '7', label: 'label7', name: 'name7', isEditable: false}];
+        const outSampleFields =     [   {id: 5, label: 'label5'},     {id: 6, label: 'name6', name: 'name6', isEditable: true},     {id: '7', label: 'label7', name: 'name7', isEditable: false}];
+        const outSampleFieldsHash = {5: {id: 5, label: 'label5'},  6: {id: 6, label: 'name6', name: 'name6', isEditable: true},  7: {id: '7', label: 'label7', name: 'name7', isEditable: false}};
+        const outEditableFields =   [                                 {id: 6, label: 'name6', name: 'name6', isEditable: true}];
+
+        const outAllowedFieldList = [                                                                                               {id: '7', label: 'label7', name: 'name7', isEditable: false},
+                                                                                            {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        const outAllowedFieldHash = {                                                    2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false},
+                                                                                                                                 7: {id: '7', label: 'label7', name: 'name7', isEditable: false}};
+        
+        storeTestUtils.runTest({
+            applyActions: (dispatch) => dispatch([receiveTotalFields(inTotalFields), receiveFields(inSampleFields)]),
+            stateMapperFunc,
+            expectedState: {
+                ...initState,
+                sampleFieldsList: outSampleFields,
+                sampleIdToFieldHash: outSampleFieldsHash,
+                editableFields: outEditableFields,
+                totalFieldsList: outTotalFields,
+                totalFieldsHash: outTotalFieldsHash,
+                sourceFieldsList: outSourceFieldsList,
+                allowedFieldsList: outAllowedFieldList,
+                allowedIdToFieldHash: outAllowedFieldHash
+            }
+        }, done);
+    });
+
     /*
         it('should resolve errors', (done) => {
             storeTestUtils.runTest({
