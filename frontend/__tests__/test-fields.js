@@ -47,13 +47,16 @@ describe('fields', () => {
     });
 
     it('should receive fields', (done) => {
+        const inFields =            [   {id: 1, label: 'label1'},     {id: 2,                 name: 'name2'},     {id: '3', label: 'label3', name: 'name3'}];
+        const outSampleFields =     [   {id: 1, label: 'label1'},     {id: 2, label: 'name2', name: 'name2'},     {id: '3', label: 'label3', name: 'name3'}];
+        const outSampleFieldsHash = {1: {id: 1, label: 'label1'},  2: {id: 2, label: 'name2', name: 'name2'},  3: {id: '3', label: 'label3', name: 'name3'}};
         storeTestUtils.runTest({
-            applyActions: (dispatch) => dispatch(receiveFields([{id: 1, label: 'label1'}, {id: 2, name: 'name2'}, {id: '3', label: 'label3', name: 'name3'}])),
+            applyActions: (dispatch) => dispatch(receiveFields(inFields)),
             stateMapperFunc,
             expectedState: {
                 ...initState,
-                sampleFieldsList: [{id: 1, label: 'label1'}, {id: 2, label: 'name2', name: 'name2'}, {id: '3', label: 'label3', name: 'name3'}],
-                sampleIdToFieldHash: {1: {id: 1, label: 'label1'}, 2: {id: 2, label: 'name2', name: 'name2'}, 3: {id: '3', label: 'label3', name: 'name3'}}
+                sampleFieldsList: outSampleFields,
+                sampleIdToFieldHash: outSampleFieldsHash
             }
         }, done);
     });
