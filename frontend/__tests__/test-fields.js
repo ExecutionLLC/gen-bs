@@ -1,5 +1,5 @@
 import storeTestUtils from './storeTestUtils';
-import {receiveFields} from '../app/actions/fields';
+import {receiveFields, receiveTotalFields} from '../app/actions/fields';
 
 function stateMapperFunc(globalState) {
     return {
@@ -30,6 +30,39 @@ describe('fields', () => {
         }, done);
     });
 
+    it('should receive total fields null', (done) => {
+        storeTestUtils.runTest({
+            applyActions: (dispatch) => dispatch(receiveTotalFields(null)),
+            stateMapperFunc,
+            expectedError: true
+        }, done);
+    });
+
+    it('should receive total fields empty', (done) => {
+        storeTestUtils.runTest({
+            applyActions: (dispatch) => dispatch(receiveTotalFields([])),
+            stateMapperFunc,
+            expectedState: initState
+        }, done);
+    });
+
+    it('should receive total fields', (done) => {
+        const inFields =            [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        const outTotalFields =      [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        const outTotalFieldsHash =  {1: {id: 1, label: 'label1', sourceName: 'sample'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
+        const outSourceFieldsList = [                                                       {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
+        storeTestUtils.runTest({
+            applyActions: (dispatch) => dispatch(receiveTotalFields(inFields)),
+            stateMapperFunc,
+            expectedState: {
+                ...initState,
+                totalFieldsList: outTotalFields,
+                totalFieldsHash: outTotalFieldsHash,
+                sourceFieldsList: outSourceFieldsList
+            }
+        }, done);
+    });
+    
     it('should receive fields null', (done) => {
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveFields(null)),
