@@ -1,5 +1,6 @@
 import Moment from 'moment';
 import HttpStatus from 'http-status';
+import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';

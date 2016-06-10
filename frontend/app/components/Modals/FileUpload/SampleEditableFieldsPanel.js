@@ -1,10 +1,9 @@
 import React, {PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
-import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 
+import Select from '../../shared/Select';
 import ComponentBase from '../../shared/ComponentBase';
-
 import {
     updateSampleValue, resetSampleInList,
     requestUpdateSampleFields

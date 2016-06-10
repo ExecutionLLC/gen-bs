@@ -115,7 +115,7 @@ export default class FieldHeaderControls extends Component {
                     <input type='text'
                            className='form-control material-input'
                            value='Non-filtered type'
-                           disabled
+                           disabled='true'
                     />
                 </div>
             );

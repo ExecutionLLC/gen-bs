@@ -4,7 +4,7 @@ import configureStore from '../store/configureStore';
 import App from './App';
 
 const store = configureStore();
-// it is workground for the keep alave task
+// it is workaround for the keep alive task
 // IMPORTANT: do not use window.reduxStore, it is dangerous
 window.reduxStore = store;
 

@@ -1,10 +1,12 @@
+import _ from 'lodash';
+
 export default class FieldUtils {
     static find(fieldId, fields) {
         return _.find(fields.totalFieldsList, (field) => field.id === fieldId);
     }
 
     /**
-     * Make field structure usable for filters dialog purpposes
+     * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sourceName: string, valueType: string}} f
      * @param {string=} sourceName
      * @returns {{id: string, label: string, type: string}}

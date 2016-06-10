@@ -44,7 +44,7 @@ export default class NewViewInputs extends React.Component {
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
                             />
                             <div className='input-group-btn btn-group-close'>
-                                <button type='button' className='btn-link-default' type='button'
+                                <button type='button' className='btn-link-default'
                                         onClick={() => this.onCancelClick()}>
                                     <i className='md-i'>close</i>
                                 </button>

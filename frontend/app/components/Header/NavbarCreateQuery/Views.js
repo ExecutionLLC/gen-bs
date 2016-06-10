@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import Select from '../../shared/Select';
-import {viewsListSelectView} from '../../../actions/viewsList';
 import 'react-select/dist/react-select.css';
 
+import Select from '../../shared/Select';
+import {viewsListSelectView} from '../../../actions/viewsList';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 
 export default class Views extends Component {
