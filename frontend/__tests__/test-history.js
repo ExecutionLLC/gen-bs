@@ -64,9 +64,9 @@ function buildHistoryState() {
     };
 }
 
-function mockGetFields(sessionId, sampleId, expectedSampleId) {
+function mockGetFields(sessionId, sampleId, expectedSampleId, callback) {
     expect(sampleId).toEqual(expectedSampleId);
-    return Promise.resolve(MOCK_APP_STATE.fields.sampleFieldsList);
+    return callback(null, MOCK_APP_STATE.fields.sampleFieldsList);
 }
 
 function mockGetAllFields(sessionId, callback) {
@@ -142,7 +142,7 @@ describe('History Tests', () => {
     } = buildHistoryState();
 
     beforeEach(() => {
-        apiFacade.samplesClient.getFields = (sessionId, sampleId) => mockGetFields(sessionId, sampleId, historySample.id);
+        apiFacade.samplesClient.getFields = (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback);
         apiFacade.samplesClient.getAllFields = mockGetAllFields;
     });
 
@@ -151,7 +151,7 @@ describe('History Tests', () => {
         delete apiFacade.samplesClient.getAllFields;
     });
     
-    it('should correctly renew history item', (done) => {
+    fit('should correctly renew history item', (done) => {
         storeTestUtils.runTest({
             globalInitialState: initialAppState,
             applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
