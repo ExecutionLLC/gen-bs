@@ -8,6 +8,11 @@ import configureStore from '../app/store/configureStore';
  * @property {function()}getState
  * */
 
+// Jest mocks timeouts by default.
+jasmine.clock().uninstall();
+const originalSetTimeout = setTimeout;
+jasmine.clock().install();
+
 
 var deepDiffMapper = function() {
     return {
@@ -112,6 +117,10 @@ var deepDiffMapper = function() {
  * */
 
 export default class StoreTestUtils {
+    static setTimeout(callback, timeout) {
+        return originalSetTimeout(callback, timeout)
+    }
+
     /**
      * @param {Array<TestCase>}tests
      * @param {function()}onCompleted
@@ -150,14 +159,15 @@ export default class StoreTestUtils {
      * */
     static waitForFreezing(store, timeout, callback) {
         var state = store.getState();
-        console.log('waiting for freeze...');
-        setTimeout(() => {
+        console.warn(`waiting for store freeze for ${timeout} ms...`);
+
+        this.setTimeout(() => {
             const newState = store.getState();
             if (newState === state) {
-                console.log('freeze!');
+                console.warn('freeze!');
                 callback();
             } else {
-                console.log('still waiting for freeze...');
+                console.warn('state was changed!');
                 this.waitForFreezing(store, timeout, callback);
             }
         }, timeout);
