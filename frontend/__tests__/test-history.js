@@ -151,7 +151,7 @@ describe('History Tests', () => {
         delete apiFacade.samplesClient.getAllFields;
     });
     
-    fit('should correctly renew history item', (done) => {
+    it('should correctly renew history item', (done) => {
         storeTestUtils.runTest({
             globalInitialState: initialAppState,
             applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
