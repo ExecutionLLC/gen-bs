@@ -117,7 +117,7 @@ var deepDiffMapper = function() {
  * */
 
 export default class StoreTestUtils {
-    static debugMode = true;
+    static debugMode = false;
 
     static setTimeout(callback, timeout) {
         return originalSetTimeout(callback, timeout)
