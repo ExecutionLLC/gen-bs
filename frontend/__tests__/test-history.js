@@ -8,6 +8,7 @@ import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
+import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
 
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
@@ -62,7 +63,9 @@ describe('History Tests', () => {
     const {
         initialAppState: {
             userData: {profileMetadata:{language}},
-            auth: {sessionId}
+            auth: {sessionId},
+            viewsList,
+            filtersList
         },
         initialAppState,
         historyView,
@@ -70,7 +73,8 @@ describe('History Tests', () => {
         historySample,
         historyEntry
     } = buildHistoryState();
-    const userView = initialAppState.viewsList.hashedArray.array.find(item => item.type === 'user');
+    const userView = viewsList.hashedArray.array.find(item => item.type === 'user');
+    const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
 
     beforeEach(() => {
         const {samplesClient, viewsClient, filtersClient} = apiFacade;
@@ -172,6 +176,23 @@ describe('History Tests', () => {
             const {views} = mapStateToCollections(globalState);
             expectItemByPredicate(views, item => item.id === userView.id).toBeFalsy();
             expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when creating filter', (done) => {
+        expect(userFilter).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                filtersListServerCreateFilter(userFilter.id, sessionId)
+            ])
+        }, (globalState) => {
+            const {filters} = mapStateToCollections(globalState);
+            expectItemByPredicate(filters, item => item.id === userFilter.id).toBeTruthy();
+            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
 
             done();
         });
