@@ -1,10 +1,13 @@
 jest.setMock('../app/api/ApiFacade', require('./__mocks__/apiFacade'));
 
+import HttpStatus from 'http-status';
+
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
+import {viewsListServerCreateView, viewsListServerUpdateView, viewsListDeleteView} from '../app/actions/viewsList';
 
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
@@ -47,21 +50,34 @@ describe('Mocked History State', () => {
 
 describe('History Tests', () => {
     const {
+        initialAppState: {
+            userData: {profileMetadata:{language}},
+            auth: {sessionId}
+        },
         initialAppState,
         historyView,
         historyFilter,
         historySample,
         historyEntry
     } = buildHistoryState();
+    const userView = initialAppState.viewsList.hashedArray.array.find(item => item.type === 'user');
 
     beforeEach(() => {
-        apiFacade.samplesClient.getFields = (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback);
-        apiFacade.samplesClient.getAllFields = mockGetAllFields;
+        const {samplesClient, viewsClient} = apiFacade;
+        samplesClient.getFields = (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback);
+        samplesClient.getAllFields = mockGetAllFields;
+        viewsClient.add = (sessionId, languageId, view, callback) => mockAddView(sessionId, languageId, view, userView.id, callback);
+        viewsClient.update = (sessionId, languageId, view, callback) => mockUpdateView(sessionId, languageId, view, userView.id, callback);
+        viewsClient.remove = (sessionId, languageId, view, callback) => mockDeleteView(sessionId, languageId, view, userView.id, callback);
     });
 
     afterEach(() => {
-        delete apiFacade.samplesClient.getFields;
-        delete apiFacade.samplesClient.getAllFields;
+        const {samplesClient, viewsClient} = apiFacade;
+        delete samplesClient.getFields;
+        delete samplesClient.getAllFields;
+        delete viewsClient.add;
+        delete viewsClient.update;
+        delete viewsClient.remove;
     });
     
     it('should correctly renew history item', (done) => {
@@ -88,6 +104,25 @@ describe('History Tests', () => {
             done();
         });
     });
+
+    it('should keep history items when creating view', (done) => {
+        expect(userView).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                viewsListServerCreateView(userView, sessionId, language)
+            ])
+        }, (globalState) => {
+            const {views} = mapStateToCollections(globalState);
+            // Update is done.
+            expectItemByPredicate(views, item => item.id === 'createdViewId').toBeTruthy();
+            // History item is still in the collection.
+            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+
+            done();
+        });
+    });
 });
 
 /**
@@ -102,6 +137,7 @@ describe('History Tests', () => {
  */
 function buildHistoryState() {
     const {
+        auth,
         viewsList: {hashedArray:{array: views}},
         samplesList: {samples},
         filtersList: {hashedArray:{array: filters}},
@@ -119,6 +155,12 @@ function buildHistoryState() {
     };
 
     const initialAppState = {
+        auth: {sessionId: auth.sessionId},
+        userData: {
+            profileMetadata: {
+                language: 'en'
+            }
+        },
         fields,
         viewsList: {
             hashedArray: ImmutableHashedArray.makeFromArray(views.slice(1)),
@@ -144,14 +186,46 @@ function buildHistoryState() {
         historyEntry
     };
 }
+function mockResponse(body, status = HttpStatus.OK) {
+    return {
+        body,
+        status
+    }
+}
+
+function mockAddView(sessionId, languageId, view, expectedViewId, callback) {
+    expect(view).toBeTruthy();
+    expect(view.id).toBe(expectedViewId);
+    expect(sessionId).toBeTruthy();
+    expect(languageId).toBeTruthy();
+    expect(callback).toBeTruthy();
+    const createdView = Object.assign({}, view, {id:'createdViewId'});
+    callback(null, mockResponse(createdView));
+}
+
+function mockUpdateView(sessionId, languageId, view, expectedViewId, callback) {
+    mockAddView(sessionId, languageId, view, expectedViewId, (e, view) => {
+       const updatedView = Object.assign(view, {id: 'updatedView'});
+        callback(null, mockResponse(updatedView));
+    });
+}
+
+function mockDeleteView(sessionId, languageId, view, expectedViewId, callback) {
+    expect(view).toBeTruthy();
+    expect(view.id).toBe(expectedViewId);
+    expect(sessionId).toBeTruthy();
+    expect(languageId).toBeTruthy();
+    expect(callback).toBeTruthy();
+    callback(null, mockResponse(view));
+}
 
 function mockGetFields(sessionId, sampleId, expectedSampleId, callback) {
     expect(sampleId).toEqual(expectedSampleId);
-    return callback(null, MOCK_APP_STATE.fields.sampleFieldsList);
+    return callback(null, mockResponse(MOCK_APP_STATE.fields.sampleFieldsList));
 }
 
 function mockGetAllFields(sessionId, callback) {
-    callback(null, MOCK_APP_STATE.fields.totalFieldsList);
+    callback(null, mockResponse(MOCK_APP_STATE.fields.totalFieldsList));
 }
 
 /**@returns {{views:Array, filters:Array, samples:Array, history:Array}}*/
