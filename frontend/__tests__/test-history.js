@@ -82,9 +82,7 @@ describe('History Tests', () => {
             (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback)
         );
         samplesClient.getAllFields = jest.fn(mockGetAllFields);
-        viewsClient.add = jest.fn((sessionId, languageId, view, callback) =>
-            mockAdd(sessionId, languageId, view, callback)
-        );
+        viewsClient.add = jest.fn(mockAdd);
         viewsClient.update = jest.fn((sessionId, view, callback) =>
             mockUpdate(sessionId, view, userView.id, callback)
         );
@@ -92,6 +90,14 @@ describe('History Tests', () => {
             const viewToDelete = initialAppState.viewsList.hashedArray.hash[viewId];
             mockDelete(sessionId, viewToDelete, userView.id, callback)
         });
+        filtersClient.add = jest.fn(mockAdd);
+        filtersClient.update = jest.fn((sessionId, item, callback) =>
+            mockUpdate(sessionId, item, userFilter.id, callback)
+        );
+        filtersClient.remove = jest.fn((sessionId, filterId, callback) => {
+            const filterToDelete = initialAppState.filtersList.hashedArray.hash[filterId];
+            mockDelete(sessionId, filterToDelete, userFilter.id, callback);
+        })
     });
 
     afterEach(() => {
@@ -187,7 +193,7 @@ describe('History Tests', () => {
             globalInitialState: initialAppState,
             applyActions: (dispatch) => dispatch([
                 renewHistoryItem(historyEntry.id),
-                filtersListServerCreateFilter(userFilter.id, sessionId)
+                filtersListServerCreateFilter(userFilter.id, sessionId, language)
             ])
         }, (globalState) => {
             const {filters} = mapStateToCollections(globalState);
@@ -197,6 +203,40 @@ describe('History Tests', () => {
             done();
         });
     });
+
+    it('should keep history items when updating filter', (done) => {
+        expect(userFilter).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                filtersListServerUpdateFilter(userFilter, sessionId)
+            ])
+        }, (globalState) => {
+            const {filters} = mapStateToCollections(globalState);
+            expectItemByPredicate(filters, item => item.id === TestIds.updatedItemId).toBeTruthy();
+            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when deleting filter', (done) => {
+        expect(userFilter).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                filtersListServerDeleteFilter(userFilter.id, sessionId)
+            ])
+        }, (globalState) => {
+            const {filters} = mapStateToCollections(globalState);
+            expectItemByPredicate(filters, item => item.id === userFilter.id).toBeFalsy();
+            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+
+            done();
+        });
+    })
 });
 
 /**
