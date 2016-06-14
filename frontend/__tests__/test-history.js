@@ -9,6 +9,87 @@ import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
 
+describe('Mocked History State', () => {
+    const state = buildHistoryState();
+    const {
+        initialAppState,
+        historyView,
+        historyFilter,
+        historySample,
+        historyEntry
+    } = state;
+    const {
+        filters, views, samples, history,
+        selectedFilterId, selectedViewId, selectedSampleId
+    } = mapStateToCollections(initialAppState);
+
+    it('should not contain history items', () => {
+        expectItemByPredicate(views, view => view.id === historyView.id).toBeFalsy();
+        expectItemByPredicate(filters, filter => filter.id === historyFilter.id).toBeFalsy();
+        expectItemByPredicate(samples, sample => sample.id === historySample.id).toBeFalsy();
+    });
+
+    it('should contain correct history entry', () => {
+        expectItemByPredicate(history, entry => entry.id === historyEntry.id).toBeTruthy();
+    });
+
+    it('should have selected items, and they should not be history items', () => {
+        function checkSelectionCorrect(selectedId, historyItem) {
+            expect(selectedId).toBeTruthy();
+            expect(selectedId).not.toEqual(historyItem.id);
+        }
+
+        checkSelectionCorrect(selectedFilterId, historyFilter);
+        checkSelectionCorrect(selectedViewId, historyView);
+        checkSelectionCorrect(selectedSampleId, historySample);
+    })
+});
+
+describe('History Tests', () => {
+    const {
+        initialAppState,
+        historyView,
+        historyFilter,
+        historySample,
+        historyEntry
+    } = buildHistoryState();
+
+    beforeEach(() => {
+        apiFacade.samplesClient.getFields = (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback);
+        apiFacade.samplesClient.getAllFields = mockGetAllFields;
+    });
+
+    afterEach(() => {
+        delete apiFacade.samplesClient.getFields;
+        delete apiFacade.samplesClient.getAllFields;
+    });
+    
+    it('should correctly renew history item', (done) => {
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
+        }, (globalState) => {
+            const {
+                views, samples, filters, history,
+                selectedFilterId, selectedViewId, selectedSampleId
+            } = mapStateToCollections(globalState);
+
+            // History items should be in collections.
+            expectItemByPredicate(history, item => item.id === historyEntry.id).toBeTruthy();
+            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+            expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
+
+            // History items should be selected in lists.
+            expect(selectedFilterId).toEqual(historyFilter.id);
+            expect(selectedViewId).toEqual(historyView.id);
+            expect(selectedSampleId).toEqual(historySample.id);
+
+            done();
+        });
+    });
+});
+
 /**
  * Build mock app state with one history entry.
  * @returns {{
@@ -95,84 +176,3 @@ function mapStateToCollections(globalState) {
 function expectItemByPredicate(collection, predicate) {
     return expect(_.find(collection, predicate));
 }
-
-describe('Mocked History State', () => {
-    const state = buildHistoryState();
-    const {
-        initialAppState,
-        historyView,
-        historyFilter,
-        historySample,
-        historyEntry
-    } = state;
-    const {
-        filters, views, samples, history,
-        selectedFilterId, selectedViewId, selectedSampleId
-    } = mapStateToCollections(initialAppState);
-
-    it('should not contain history items', () => {
-        expectItemByPredicate(views, view => view.id === historyView.id).toBeFalsy();
-        expectItemByPredicate(filters, filter => filter.id === historyFilter.id).toBeFalsy();
-        expectItemByPredicate(samples, sample => sample.id === historySample.id).toBeFalsy();
-    });
-
-    it('should contain correct history entry', () => {
-        expectItemByPredicate(history, entry => entry.id === historyEntry.id).toBeTruthy();
-    });
-
-    it('should have selected items, and they should not be history items', () => {
-        function checkSelectionCorrect(selectedId, historyItem) {
-            expect(selectedId).toBeTruthy();
-            expect(selectedId).not.toEqual(historyItem.id);
-        }
-
-        checkSelectionCorrect(selectedFilterId, historyFilter);
-        checkSelectionCorrect(selectedViewId, historyView);
-        checkSelectionCorrect(selectedSampleId, historySample);
-    })
-});
-
-describe('History Tests', () => {
-    const {
-        initialAppState,
-        historyView,
-        historyFilter,
-        historySample,
-        historyEntry
-    } = buildHistoryState();
-
-    beforeEach(() => {
-        apiFacade.samplesClient.getFields = (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback);
-        apiFacade.samplesClient.getAllFields = mockGetAllFields;
-    });
-
-    afterEach(() => {
-        delete apiFacade.samplesClient.getFields;
-        delete apiFacade.samplesClient.getAllFields;
-    });
-    
-    it('should correctly renew history item', (done) => {
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
-        }, (globalState) => {
-            const {
-                views, samples, filters, history,
-                selectedFilterId, selectedViewId, selectedSampleId
-            } = mapStateToCollections(globalState);
-
-            // History items should be in collections.
-            expectItemByPredicate(history, item => item.id === historyEntry.id).toBeTruthy();
-            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
-            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
-            expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
-
-            // History items should be selected in lists.
-            expect(selectedFilterId).toEqual(historyFilter.id);
-            expect(selectedViewId).toEqual(historyView.id);
-            expect(selectedSampleId).toEqual(historySample.id);
-
-            done();
-        });
-    });
-});
