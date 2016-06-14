@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import storeTestUtils from './storeTestUtils';
 import {receiveFields, receiveTotalFields} from '../app/actions/fields';
 
