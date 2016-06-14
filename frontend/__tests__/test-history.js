@@ -7,7 +7,7 @@ import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
-import {viewsListServerCreateView, viewsListServerUpdateView, viewsListDeleteView} from '../app/actions/viewsList';
+import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
 
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
@@ -87,8 +87,10 @@ describe('History Tests', () => {
         viewsClient.update = jest.fn((sessionId, view, callback) =>
             mockUpdateView(sessionId, view, userView.id, callback)
         );
-        viewsClient.remove = jest.fn((sessionId, languageId, view, callback) =>
-            mockDeleteView(sessionId, languageId, view, userView.id, callback));
+        viewsClient.remove = jest.fn((sessionId, viewId, callback) => {
+            const viewToDelete = initialAppState.viewsList.hashedArray.hash[viewId];
+            mockDeleteView(sessionId, viewToDelete, userView.id, callback)
+        });
     });
 
     afterEach(() => {
@@ -155,6 +157,23 @@ describe('History Tests', () => {
         }, (globalState) => {
             const {views} = mapStateToCollections(globalState);
             expectItemByPredicate(views, item => item.id === TestIds.updatedViewId).toBeTruthy();
+            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when deleting view', (done) => {
+        expect(userView).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                viewsListServerDeleteView(userView.id, sessionId)
+            ])
+        }, (globalState) => {
+            const {views} = mapStateToCollections(globalState);
+            expectItemByPredicate(views, item => item.id === userView.id).toBeFalsy();
             expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
 
             done();
@@ -248,11 +267,10 @@ function mockUpdateView(sessionId, view, expectedViewId, callback) {
     callback(null, mockResponse(updatedView));
 }
 
-function mockDeleteView(sessionId, languageId, view, expectedViewId, callback) {
+function mockDeleteView(sessionId, view, expectedViewId, callback) {
     expect(view).toBeTruthy();
     expect(view.id).toBe(expectedViewId);
     expect(sessionId).toBeTruthy();
-    expect(languageId).toBeTruthy();
     expect(callback).toBeTruthy();
     callback(null, mockResponse(view));
 }
