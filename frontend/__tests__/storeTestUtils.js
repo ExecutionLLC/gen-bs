@@ -174,7 +174,7 @@ export default class StoreTestUtils {
             }
         }, timeout);
 
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
     }
 
     /**
