@@ -236,7 +236,7 @@ describe('History Tests', () => {
 
             done();
         });
-    })
+    });
 });
 
 /**
