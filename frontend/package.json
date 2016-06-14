@@ -86,6 +86,7 @@
   },
   "jest": {
     "automock": false,
+    "collectCoverage": true,
     "globals": {
       "USE_SECURE_CONNECTION": false,
       "API_HOST": "localhost",
