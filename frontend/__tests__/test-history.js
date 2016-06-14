@@ -18,11 +18,8 @@ const TestIds = {
     historySampleId: 'historySampleId',
     historyEntryId: 'historyEntryId',
 
-    updatedViewId: 'updatedViewId',
-    createdViewId: 'createdViewId',
-
-    updatedFilterId: 'updatedFilterId',
-    createdFilterId: 'createdFilterId'
+    updatedItemId: 'updatedItemId',
+    createdItemId: 'createdItemId'
 };
 
 describe('Mocked History State', () => {
@@ -76,20 +73,20 @@ describe('History Tests', () => {
     const userView = initialAppState.viewsList.hashedArray.array.find(item => item.type === 'user');
 
     beforeEach(() => {
-        const {samplesClient, viewsClient} = apiFacade;
+        const {samplesClient, viewsClient, filtersClient} = apiFacade;
         samplesClient.getFields = jest.fn(
             (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback)
         );
         samplesClient.getAllFields = jest.fn(mockGetAllFields);
         viewsClient.add = jest.fn((sessionId, languageId, view, callback) =>
-            mockAddView(sessionId, languageId, view, callback)
+            mockAdd(sessionId, languageId, view, callback)
         );
         viewsClient.update = jest.fn((sessionId, view, callback) =>
-            mockUpdateView(sessionId, view, userView.id, callback)
+            mockUpdate(sessionId, view, userView.id, callback)
         );
         viewsClient.remove = jest.fn((sessionId, viewId, callback) => {
             const viewToDelete = initialAppState.viewsList.hashedArray.hash[viewId];
-            mockDeleteView(sessionId, viewToDelete, userView.id, callback)
+            mockDelete(sessionId, viewToDelete, userView.id, callback)
         });
     });
 
@@ -138,7 +135,7 @@ describe('History Tests', () => {
         }, (globalState) => {
             const {views} = mapStateToCollections(globalState);
             // Create is done.
-            expectItemByPredicate(views, item => item.id === TestIds.createdViewId).toBeTruthy();
+            expectItemByPredicate(views, item => item.id === TestIds.createdItemId).toBeTruthy();
             // History item is still in the collection.
             expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
 
@@ -156,7 +153,7 @@ describe('History Tests', () => {
             ])
         }, (globalState) => {
             const {views} = mapStateToCollections(globalState);
-            expectItemByPredicate(views, item => item.id === TestIds.updatedViewId).toBeTruthy();
+            expectItemByPredicate(views, item => item.id === TestIds.updatedItemId).toBeTruthy();
             expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
 
             done();
@@ -249,30 +246,30 @@ function mockResponse(body, status = HttpStatus.OK) {
     }
 }
 
-function mockAddView(sessionId, languageId, view, callback) {
-    expect(view).toBeTruthy();
+function mockAdd(sessionId, languageId, item, callback) {
+    expect(item).toBeTruthy();
     expect(sessionId).toBeTruthy();
     expect(languageId).toBeTruthy();
     expect(callback).toBeTruthy();
-    const createdView = Object.assign({}, view, {id:TestIds.createdViewId});
-    callback(null, mockResponse(createdView));
+    const createdItem = Object.assign({}, item, {id:TestIds.createdItemId});
+    callback(null, mockResponse(createdItem));
 }
 
-function mockUpdateView(sessionId, view, expectedViewId, callback) {
-    expect(view).toBeTruthy();
-    expect(view.id).toBe(expectedViewId);
+function mockUpdate(sessionId, item, expectedItemId, callback) {
+    expect(item).toBeTruthy();
+    expect(item.id).toBe(expectedItemId);
     expect(sessionId).toBeTruthy();
     expect(callback).toBeTruthy();
-    const updatedView = Object.assign({}, view, {id: TestIds.updatedViewId});
-    callback(null, mockResponse(updatedView));
+    const updatedItem = Object.assign({}, item, {id: TestIds.updatedItemId});
+    callback(null, mockResponse(updatedItem));
 }
 
-function mockDeleteView(sessionId, view, expectedViewId, callback) {
-    expect(view).toBeTruthy();
-    expect(view.id).toBe(expectedViewId);
+function mockDelete(sessionId, item, expectedItemId, callback) {
+    expect(item).toBeTruthy();
+    expect(item.id).toBe(expectedItemId);
     expect(sessionId).toBeTruthy();
     expect(callback).toBeTruthy();
-    callback(null, mockResponse(view));
+    callback(null, mockResponse(item));
 }
 
 function mockGetFields(sessionId, sampleId, expectedSampleId, callback) {
