@@ -12,6 +12,19 @@ import {viewsListServerCreateView, viewsListServerUpdateView, viewsListDeleteVie
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
 
+const TestIds = {
+    historyViewId: 'historyViewId',
+    historyFilterId: 'historyFilterId',
+    historySampleId: 'historySampleId',
+    historyEntryId: 'historyEntryId',
+
+    updatedViewId: 'updatedViewId',
+    createdViewId: 'createdViewId',
+
+    updatedFilterId: 'updatedFilterId',
+    createdFilterId: 'createdFilterId'
+};
+
 describe('Mocked History State', () => {
     const state = buildHistoryState();
     const {
@@ -64,11 +77,18 @@ describe('History Tests', () => {
 
     beforeEach(() => {
         const {samplesClient, viewsClient} = apiFacade;
-        samplesClient.getFields = (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback);
-        samplesClient.getAllFields = mockGetAllFields;
-        viewsClient.add = (sessionId, languageId, view, callback) => mockAddView(sessionId, languageId, view, userView.id, callback);
-        viewsClient.update = (sessionId, languageId, view, callback) => mockUpdateView(sessionId, languageId, view, userView.id, callback);
-        viewsClient.remove = (sessionId, languageId, view, callback) => mockDeleteView(sessionId, languageId, view, userView.id, callback);
+        samplesClient.getFields = jest.fn(
+            (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback)
+        );
+        samplesClient.getAllFields = jest.fn(mockGetAllFields);
+        viewsClient.add = jest.fn((sessionId, languageId, view, callback) =>
+            mockAddView(sessionId, languageId, view, callback)
+        );
+        viewsClient.update = jest.fn((sessionId, view, callback) =>
+            mockUpdateView(sessionId, view, userView.id, callback)
+        );
+        viewsClient.remove = jest.fn((sessionId, languageId, view, callback) =>
+            mockDeleteView(sessionId, languageId, view, userView.id, callback));
     });
 
     afterEach(() => {
@@ -115,9 +135,26 @@ describe('History Tests', () => {
             ])
         }, (globalState) => {
             const {views} = mapStateToCollections(globalState);
-            // Update is done.
-            expectItemByPredicate(views, item => item.id === 'createdViewId').toBeTruthy();
+            // Create is done.
+            expectItemByPredicate(views, item => item.id === TestIds.createdViewId).toBeTruthy();
             // History item is still in the collection.
+            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when updating view', (done) => {
+        expect(userView).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                viewsListServerUpdateView(userView, sessionId)
+            ])
+        }, (globalState) => {
+            const {views} = mapStateToCollections(globalState);
+            expectItemByPredicate(views, item => item.id === TestIds.updatedViewId).toBeTruthy();
             expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
 
             done();
@@ -143,11 +180,11 @@ function buildHistoryState() {
         filtersList: {hashedArray:{array: filters}},
         fields
     } = MOCK_APP_STATE;
-    const historyView = Object.assign({}, views[0], {id: 'historyViewId'});
-    const historyFilter = Object.assign({}, filters[0], {id: 'historyFilterId'});
-    const historySample = Object.assign({}, samples[0], {id: 'historySampleId'});
+    const historyView = Object.assign({}, views[0], {id: TestIds.historyViewId});
+    const historyFilter = Object.assign({}, filters[0], {id: TestIds.historyFilterId});
+    const historySample = Object.assign({}, samples[0], {id: TestIds.historySampleId});
     const historyEntry = {
-        id: 'historyEntryId',
+        id: TestIds.historyEntryId,
         timestamp: '2016-05-31T10:52:17.813Z',
         view: historyView,
         filters: [historyFilter],
@@ -193,21 +230,22 @@ function mockResponse(body, status = HttpStatus.OK) {
     }
 }
 
-function mockAddView(sessionId, languageId, view, expectedViewId, callback) {
+function mockAddView(sessionId, languageId, view, callback) {
     expect(view).toBeTruthy();
-    expect(view.id).toBe(expectedViewId);
     expect(sessionId).toBeTruthy();
     expect(languageId).toBeTruthy();
     expect(callback).toBeTruthy();
-    const createdView = Object.assign({}, view, {id:'createdViewId'});
+    const createdView = Object.assign({}, view, {id:TestIds.createdViewId});
     callback(null, mockResponse(createdView));
 }
 
-function mockUpdateView(sessionId, languageId, view, expectedViewId, callback) {
-    mockAddView(sessionId, languageId, view, expectedViewId, (e, view) => {
-       const updatedView = Object.assign(view, {id: 'updatedView'});
-        callback(null, mockResponse(updatedView));
-    });
+function mockUpdateView(sessionId, view, expectedViewId, callback) {
+    expect(view).toBeTruthy();
+    expect(view.id).toBe(expectedViewId);
+    expect(sessionId).toBeTruthy();
+    expect(callback).toBeTruthy();
+    const updatedView = Object.assign({}, view, {id: TestIds.updatedViewId});
+    callback(null, mockResponse(updatedView));
 }
 
 function mockDeleteView(sessionId, languageId, view, expectedViewId, callback) {
