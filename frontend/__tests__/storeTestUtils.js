@@ -8,6 +8,11 @@ import configureStore from '../app/store/configureStore';
  * @property {function()}getState
  * */
 
+// Jest mocks timeouts by default.
+jasmine.clock().uninstall();
+const originalSetTimeout = setTimeout;
+jasmine.clock().install();
+
 
 var deepDiffMapper = function() {
     return {
@@ -104,14 +109,18 @@ var deepDiffMapper = function() {
 /**
  * @typedef {Object}TestCase
  * @property {string|undefined}name
- * @property {function(Object)|undefined}stateMapperFunc
- * @property {Object}expectedState
+ * @property {function(Object)|undefined}stateMapperFunc If undefined, full state is used.
+ * @property {Object|undefined}expectedState If undefined, no check is done at the end of the test.
  * @property {number|undefined}timeout
- * @property {Object|undefined}globalInitialState
- * @property {function(function)|undefined}applyActions
+ * @property {Object|undefined}globalInitialState If undefined, default state is constructed by reducers.
+ * @property {function(function)|undefined}applyActions If undefined, the comparison will be done immediately.
  * */
 
 export default class StoreTestUtils {
+    static setTimeout(callback, timeout) {
+        return originalSetTimeout(callback, timeout)
+    }
+
     /**
      * @param {Array<TestCase>}tests
      * @param {function()}onCompleted
@@ -124,7 +133,7 @@ export default class StoreTestUtils {
 
     /**
      * @param {TestCase}test
-     * @param {function()}onCompleted
+     * @param {function(Object)}onCompleted Function accepting mapped state (full state if mapper is undefined).
      * */
     static runTest(test, onCompleted) {
         const {applyActions, timeout, expectedState, expectedError} = test;
@@ -143,10 +152,10 @@ export default class StoreTestUtils {
         this.waitForFreezing(store, timeout || 10, () => {
             const state = store.getState();
             const mappedState = test.stateMapperFunc ? test.stateMapperFunc(state) : state;
-            if (!_.isEqual(mappedState, expectedState)) {
+            if (expectedState && !_.isEqual(mappedState, expectedState)) {
                 this._gracefulFail(test, mappedState);
             } else {
-                onCompleted();
+                onCompleted(mappedState);
             }
         });
     }
@@ -158,14 +167,15 @@ export default class StoreTestUtils {
      * */
     static waitForFreezing(store, timeout, callback) {
         var state = store.getState();
-        console.log('waiting for freeze...');
-        setTimeout(() => {
+        console.warn(`waiting for store freeze for ${timeout} ms...`);
+
+        this.setTimeout(() => {
             const newState = store.getState();
             if (newState === state) {
-                console.log('freeze!');
+                console.warn('freeze!');
                 callback();
             } else {
-                console.log('still waiting for freeze...');
+                console.warn('state was changed!');
                 this.waitForFreezing(store, timeout, callback);
             }
         }, timeout);
