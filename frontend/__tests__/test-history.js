@@ -39,7 +39,7 @@ describe('Mocked History State', () => {
     it('should have selected items, and they should not be history items', () => {
         function checkSelectionCorrect(selectedId, historyItem) {
             expect(selectedId).toBeTruthy();
-            expect(selectedId).not.toEqual(historyItem.id);
+            expect(selectedId).not.toBe(historyItem.id);
         }
 
         checkSelectionCorrect(selectedFilterId, historyFilter);
@@ -97,9 +97,9 @@ describe('History Tests', () => {
             expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
 
             // History items should be selected in lists.
-            expect(selectedFilterId).toEqual(historyFilter.id);
-            expect(selectedViewId).toEqual(historyView.id);
-            expect(selectedSampleId).toEqual(historySample.id);
+            expect(selectedFilterId).toBe(historyFilter.id);
+            expect(selectedViewId).toBe(historyView.id);
+            expect(selectedSampleId).toBe(historySample.id);
 
             done();
         });
@@ -220,7 +220,7 @@ function mockDeleteView(sessionId, languageId, view, expectedViewId, callback) {
 }
 
 function mockGetFields(sessionId, sampleId, expectedSampleId, callback) {
-    expect(sampleId).toEqual(expectedSampleId);
+    expect(sampleId).toBe(expectedSampleId);
     return callback(null, mockResponse(MOCK_APP_STATE.fields.sampleFieldsList));
 }
 
