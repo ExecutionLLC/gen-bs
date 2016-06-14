@@ -1,5 +1,6 @@
-import configureStore from '../app/store/configureStore';
 import _ from 'lodash';
+
+import configureStore from '../app/store/configureStore';
 
 /**
  * @typedef {Object}ReduxStore

@@ -1,4 +1,5 @@
 import HttpStatus from 'http-status';
+import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';

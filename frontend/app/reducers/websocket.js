@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import * as ActionTypes from '../actions/websocket';
 
 export default function websocket(state = {

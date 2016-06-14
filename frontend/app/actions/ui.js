@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
 import {detachHistory} from './queryHistory';

@@ -1,6 +1,7 @@
+import HttpStatus from 'http-status';
+
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
-import HttpStatus from 'http-status';
 
 
 const viewsClient = apiFacade.viewsClient;
