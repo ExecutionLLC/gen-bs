@@ -72,8 +72,25 @@ describe('Filters list tests', () => {
     const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
 
+    function makeDeleteTest(filterId) {
+        return {
+            actions(dispatch) {
+                return dispatch(filtersListServerDeleteFilter(filterId, sessionId));
+            },
+            checkState(globalState) {
+                const {filtersList: {hashedArray: {array: filters}}} = globalState;
+                return expectItemByPredicate(filters, (item) => item.id === filterId).toBeFalsy();
+            },
+            mockRemote(requestSessionId, requestFilterId, callback) {
+                return mockFilterRemove(requestSessionId, requestFilterId, sessionId, filterId, callback);
+            }
+        };
+    }
+    
+    const delTest = makeDeleteTest(filtersIdsToDelete.first);
+
     beforeEach(() => {
-        apiFacade.filtersClient.remove = (requestSessionId, filterId, callback) => mockFilterRemove(requestSessionId, filterId, sessionId, filterId, callback);
+        apiFacade.filtersClient.remove = delTest.mockRemote;
     });
 
     afterEach(() => {
@@ -83,10 +100,9 @@ describe('Filters list tests', () => {
     it('should delete first item', (done) => {
         storeTestUtils.runTest({
             globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch(filtersListServerDeleteFilter(filtersIdsToDelete.first, sessionId))
+            applyActions: delTest.actions
         }, (globalState) => {
-            const {filtersList: {hashedArray: {array: filters}}} = globalState;
-            expectItemByPredicate(filters, (item) => item.id === filtersIdsToDelete.first).toBeFalsy();
+            delTest.checkState(globalState);
             done();
         });
     });
