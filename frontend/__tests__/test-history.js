@@ -1,11 +1,10 @@
-jest.setMock('../app/api/ApiFacade', require('./__mocks__/apiFacade'));
-
 import HttpStatus from 'http-status';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
+import apiMocks from './__mocks__/apiMocks';
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
 import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
@@ -24,6 +23,7 @@ const TestIds = {
     updatedItemId: 'updatedItemId',
     createdItemId: 'createdItemId'
 };
+const {sampleFieldsList, totalFieldsList} = MOCK_APP_STATE.fields;
 
 describe('Mocked History State', () => {
     const state = buildHistoryState();
@@ -83,26 +83,14 @@ describe('History Tests', () => {
 
     beforeAll(() => {
         const {samplesClient, viewsClient, filtersClient} = apiFacade;
-        samplesClient.getFields = jest.fn(
-            (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback)
-        );
-        samplesClient.getAllFields = jest.fn(mockGetAllFields);
-        viewsClient.add = jest.fn(mockAdd);
-        viewsClient.update = jest.fn((sessionId, view, callback) =>
-            mockUpdate(sessionId, view, userView.id, callback)
-        );
-        viewsClient.remove = jest.fn((sessionId, viewId, callback) => {
-            const viewToDelete = initialAppState.viewsList.hashedArray.hash[viewId];
-            mockDelete(sessionId, viewToDelete, userView.id, callback)
-        });
-        filtersClient.add = jest.fn(mockAdd);
-        filtersClient.update = jest.fn((sessionId, item, callback) =>
-            mockUpdate(sessionId, item, userFilter.id, callback)
-        );
-        filtersClient.remove = jest.fn((sessionId, filterId, callback) => {
-            const filterToDelete = initialAppState.filtersList.hashedArray.hash[filterId];
-            mockDelete(sessionId, filterToDelete, userFilter.id, callback);
-        })
+        samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, historySample.id, sampleFieldsList);
+        samplesClient.getAllFields = apiMocks.createGetAllFieldsMock(sessionId, totalFieldsList);
+        viewsClient.add = apiMocks.createAddMock();
+        viewsClient.update = apiMocks.createUpdateMock(userView.id);
+        viewsClient.remove = apiMocks.createDeleteMock(userView.id, initialAppState.viewsList.hashedArray.hash);
+        filtersClient.add = apiMocks.createAddMock();
+        filtersClient.update = apiMocks.createUpdateMock(userFilter.id);
+        filtersClient.remove = apiMocks.createDeleteMock(userFilter.id, initialAppState.filtersList.hashedArray.hash);
     });
 
     afterAll(() => {
@@ -146,6 +134,10 @@ describe('History Tests', () => {
             expect(selectedViewId).toBe(historyView.id);
             expect(selectedSampleId).toBe(historySample.id);
         });
+
+        it('should call analyze with proper arguments', () => {
+            expect(true).toBe(false);
+        });
     });
 
     describe('Renew History: non-history items', () => {
@@ -154,9 +146,7 @@ describe('History Tests', () => {
         const {view:{id: nonHistoryViewId}, sample:{id: nonHistorySampleId}} = nonHistoryEntry;
         const nonHistoryFilterId = nonHistoryEntry.filters[0].id;
         beforeAll((done) => {
-            apiFacade.samplesClient.getFields = jest.fn(
-                (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, nonHistorySampleId, callback)
-            );
+            apiFacade.samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, nonHistorySampleId, sampleFieldsList);
             storeTestUtils.runTest({
                 globalInitialState: initialAppState,
                 applyActions: (dispatch) => dispatch(renewHistoryItem(nonHistoryEntry.id))
@@ -371,41 +361,6 @@ function mockResponse(body, status = HttpStatus.OK) {
         body,
         status
     }
-}
-
-function mockAdd(sessionId, languageId, item, callback) {
-    expect(item).toBeTruthy();
-    expect(sessionId).toBeTruthy();
-    expect(languageId).toBeTruthy();
-    expect(callback).toBeTruthy();
-    const createdItem = Object.assign({}, item, {id:TestIds.createdItemId});
-    callback(null, mockResponse(createdItem));
-}
-
-function mockUpdate(sessionId, item, expectedItemId, callback) {
-    expect(item).toBeTruthy();
-    expect(item.id).toBe(expectedItemId);
-    expect(sessionId).toBeTruthy();
-    expect(callback).toBeTruthy();
-    const updatedItem = Object.assign({}, item, {id: TestIds.updatedItemId});
-    callback(null, mockResponse(updatedItem));
-}
-
-function mockDelete(sessionId, item, expectedItemId, callback) {
-    expect(item).toBeTruthy();
-    expect(item.id).toBe(expectedItemId);
-    expect(sessionId).toBeTruthy();
-    expect(callback).toBeTruthy();
-    callback(null, mockResponse(item));
-}
-
-function mockGetFields(sessionId, sampleId, expectedSampleId, callback) {
-    expect(sampleId).toBe(expectedSampleId);
-    return callback(null, mockResponse(MOCK_APP_STATE.fields.sampleFieldsList));
-}
-
-function mockGetAllFields(sessionId, callback) {
-    callback(null, mockResponse(MOCK_APP_STATE.fields.totalFieldsList));
 }
 
 /**@returns {{views:Array, filters:Array, samples:Array, history:Array}}*/
