@@ -87,23 +87,33 @@ describe('Filters list tests', () => {
         };
     }
     
-    const delTest = makeDeleteTest(filtersIdsToDelete.first);
+    function makeDeleteTestItMock(description, filterId) {
+        const delTest = makeDeleteTest(filterId);
+        return {
+            it: () => {
+                it(description, (done) => {
+                    storeTestUtils.runTest({
+                        globalInitialState: initialAppState,
+                        applyActions: delTest.actions
+                    }, (globalState) => {
+                        delTest.checkState(globalState);
+                        done();
+                    });
+                });
+            },
+            mockRemove: delTest.mockRemove
+        };
+    }
+
+    const delTestItMock = makeDeleteTestItMock('should delete first item', filtersIdsToDelete.first);
 
     beforeEach(() => {
-        apiFacade.filtersClient.remove = delTest.mockRemove;
+        apiFacade.filtersClient.remove = delTestItMock.mockRemove;
     });
 
     afterEach(() => {
         delete apiFacade.filtersClient.remove;
     });
 
-    it('should delete first item', (done) => {
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: delTest.actions
-        }, (globalState) => {
-            delTest.checkState(globalState);
-            done();
-        });
-    });
+    delTestItMock.it();
 });
