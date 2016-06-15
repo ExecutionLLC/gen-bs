@@ -17,7 +17,9 @@ const TestIds = {
     historyViewId: 'historyViewId',
     historyFilterId: 'historyFilterId',
     historySampleId: 'historySampleId',
+
     historyEntryId: 'historyEntryId',
+    nonHistoryEntryId: 'nonHistoryEntryId', // history entry which contains non-history items.
 
     updatedItemId: 'updatedItemId',
     createdItemId: 'createdItemId'
@@ -30,7 +32,8 @@ describe('Mocked History State', () => {
         historyView,
         historyFilter,
         historySample,
-        historyEntry
+        historyEntry,
+        nonHistoryEntry
     } = state;
     const {
         filters, views, samples, history,
@@ -43,8 +46,9 @@ describe('Mocked History State', () => {
         expectItemByPredicate(samples, sample => sample.id === historySample.id).toBeFalsy();
     });
 
-    it('should contain correct history entry', () => {
+    it('should contain correct history entries', () => {
         expectItemByPredicate(history, entry => entry.id === historyEntry.id).toBeTruthy();
+        expectItemByPredicate(history, entry => entry.id === nonHistoryEntry.id).toBeTruthy();
     });
 
     it('should have selected items, and they should not be history items', () => {
@@ -71,7 +75,8 @@ describe('History Tests', () => {
         historyView,
         historyFilter,
         historySample,
-        historyEntry
+        historyEntry,
+        nonHistoryEntry
     } = buildHistoryState();
     const userView = viewsList.hashedArray.array.find(item => item.type === 'user');
     const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
@@ -109,7 +114,7 @@ describe('History Tests', () => {
         delete viewsClient.remove;
     });
 
-    describe('Renew History', () => {
+    describe('Renew History: history items', () => {
         let renewGlobalState = null;
         beforeAll((done) => {
             storeTestUtils.runTest({
@@ -140,6 +145,48 @@ describe('History Tests', () => {
             expect(selectedFilterId).toBe(historyFilter.id);
             expect(selectedViewId).toBe(historyView.id);
             expect(selectedSampleId).toBe(historySample.id);
+        });
+    });
+
+    describe('Renew History: non-history items', () => {
+        let renewGlobalState = null;
+        const originalSamplesGetFields = apiFacade.samplesClient.getFields;
+        const {view:{id: nonHistoryViewId}, sample:{id: nonHistorySampleId}} = nonHistoryEntry;
+        const nonHistoryFilterId = nonHistoryEntry.filters[0].id;
+        beforeAll((done) => {
+            apiFacade.samplesClient.getFields = jest.fn(
+                (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, nonHistorySampleId, callback)
+            );
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(renewHistoryItem(nonHistoryEntry.id))
+            }, (globalState) => {
+                renewGlobalState = globalState;
+
+                done();
+            });
+        });
+        afterAll(() => {
+            apiFacade.samplesClient.getFields = originalSamplesGetFields;
+        });
+
+        it('should not add non-history items into collections', () => {
+            const {
+                views, samples, filters
+            } = mapStateToCollections(renewGlobalState);
+
+            expectCountByPredicate(views, view => view.id === nonHistoryViewId).toBe(1);
+            expectCountByPredicate(filters, filter => filter.id === nonHistoryFilterId).toBe(1);
+            expectCountByPredicate(samples, sample => sample.id === nonHistorySampleId).toBe(1);
+        });
+
+        it('should select non-history items in lists', () => {
+            const {
+                selectedFilterId, selectedViewId, selectedSampleId
+            } = mapStateToCollections(renewGlobalState);
+            expect(selectedFilterId).toBe(nonHistoryFilterId);
+            expect(selectedViewId).toBe(nonHistoryViewId);
+            expect(selectedSampleId).toBe(nonHistorySampleId);
         });
     });
 
@@ -278,6 +325,13 @@ function buildHistoryState() {
         filters: [historyFilter],
         sample: historySample
     };
+    const nonHistoryEntry = {
+        id: TestIds.nonHistoryEntryId,
+        timestamp: '2016-05-31T10:53:17.813Z',
+        view: views[2],
+        filters: [filters[2]],
+        sample: samples[2]
+    };
 
     const initialAppState = {
         auth: {sessionId: auth.sessionId},
@@ -300,7 +354,7 @@ function buildHistoryState() {
             selectedFilterId: filters[1].id
         },
         queryHistory: Object.assign({}, MOCK_APP_STATE.queryHistory, {
-            history: [historyEntry]
+            history: [historyEntry, nonHistoryEntry]
         })
     };
     return {
@@ -308,7 +362,8 @@ function buildHistoryState() {
         historyView,
         historyFilter,
         historySample,
-        historyEntry
+        historyEntry,
+        nonHistoryEntry
     };
 }
 function mockResponse(body, status = HttpStatus.OK) {
@@ -374,4 +429,8 @@ function mapStateToCollections(globalState) {
 
 function expectItemByPredicate(collection, predicate) {
     return expect(_.find(collection, predicate));
+}
+
+function expectCountByPredicate(collection, predicate) {
+    return expect((_.filter(collection, predicate) || []).length);
 }
