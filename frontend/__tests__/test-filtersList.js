@@ -78,8 +78,11 @@ describe('Filters list tests', () => {
                 return dispatch(filtersListServerDeleteFilter(filterId, sessionId));
             },
             checkState(globalState) {
-                const {filtersList: {hashedArray: {array: filters}}} = globalState;
-                return expectItemByPredicate(filters, (item) => item.id === filterId).toBeFalsy();
+                const {filtersList: {hashedArray: {array: filters, hash: filtersHash}}} = globalState;
+                const isInFilters = filters.find((item) => item.id === filterId);
+                expect(isInFilters).toBeFalsy();
+                const isInFiltersHash = _.find(filtersHash, (filter, filterHashKey) => filter.id === filterId || filterHashKey === filterId);
+                expect(isInFiltersHash).toBeFalsy();
             },
             mockRemove(requestSessionId, requestFilterId, callback) {
                 return mockFilterRemove(requestSessionId, requestFilterId, sessionId, filterId, callback);
