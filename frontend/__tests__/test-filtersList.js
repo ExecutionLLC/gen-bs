@@ -12,10 +12,12 @@ import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersLis
 
 function buildFiltersState(appState) {
     const {
+        auth,
         filtersList: {hashedArray: {array: filters}}
     } = appState;
 
     const initialAppState = {
+        auth: auth,
         filtersList: {
             hashedArray: ImmutableHashedArray.makeFromArray(filters),
             selectedFilterId: filters[0].id
@@ -68,7 +70,7 @@ describe('Mocked filters list state', () => {
 
 describe('Filters list tests', () => {
     const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
-    const sessionId = '' + Math.random();
+    const {sessionId} = initialAppState.auth;
 
     beforeEach(() => {
         apiFacade.filtersClient.remove = (requestSessionId, filterId, callback) => mockFilterRemove(requestSessionId, filterId, sessionId, filterId, callback);
