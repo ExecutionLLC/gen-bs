@@ -81,7 +81,7 @@ describe('Filters list tests', () => {
                 const {filtersList: {hashedArray: {array: filters}}} = globalState;
                 return expectItemByPredicate(filters, (item) => item.id === filterId).toBeFalsy();
             },
-            mockRemote(requestSessionId, requestFilterId, callback) {
+            mockRemove(requestSessionId, requestFilterId, callback) {
                 return mockFilterRemove(requestSessionId, requestFilterId, sessionId, filterId, callback);
             }
         };
@@ -90,7 +90,7 @@ describe('Filters list tests', () => {
     const delTest = makeDeleteTest(filtersIdsToDelete.first);
 
     beforeEach(() => {
-        apiFacade.filtersClient.remove = delTest.mockRemote;
+        apiFacade.filtersClient.remove = delTest.mockRemove;
     });
 
     afterEach(() => {
