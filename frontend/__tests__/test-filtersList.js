@@ -105,15 +105,32 @@ describe('Filters list tests', () => {
         };
     }
 
-    const delTestItMock = makeDeleteTestItMock('should delete first item', filtersIdsToDelete.first);
+    function makeDeleteTestsItsMocks(descriptionsIds) {
+        return descriptionsIds.reduce((result, descriptionsIds) => {
+            const test = makeDeleteTestItMock(descriptionsIds.description, descriptionsIds.filterId);
+            return {
+                its: [...result.its, test.it],
+                mocks: [...result.mocks, test.mockRemove]
+            };
+        }, {its: [], mocks: []});
+    }
+
+    const delTestsItsMocks = makeDeleteTestsItsMocks([
+        {description: 'should delete first filter', filterId: filtersIdsToDelete.first},
+        {description: 'should delete middle filter', filterId: filtersIdsToDelete.middle},
+        {description: 'should delete last filter', filterId: filtersIdsToDelete.last},
+        {description: 'should delete absent filter', filterId: filtersIdsToDelete.absent}
+    ]);
+
+    var mockIndex = 0;
 
     beforeEach(() => {
-        apiFacade.filtersClient.remove = delTestItMock.mockRemove;
+        apiFacade.filtersClient.remove = delTestsItsMocks.mocks[mockIndex++];
     });
 
     afterEach(() => {
         delete apiFacade.filtersClient.remove;
     });
 
-    delTestItMock.it();
+    delTestsItsMocks.its.forEach((it) => it());
 });
