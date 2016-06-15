@@ -24,6 +24,7 @@ const TestIds = {
     createdItemId: 'createdItemId'
 };
 const {sampleFieldsList, totalFieldsList} = MOCK_APP_STATE.fields;
+const searchOperationId = 'searchOperationId';
 
 describe('Mocked History State', () => {
     const state = buildHistoryState();
@@ -66,7 +67,7 @@ describe('Mocked History State', () => {
 describe('History Tests', () => {
     const {
         initialAppState: {
-            userData: {profileMetadata:{language}},
+            ui:{languageId},
             auth: {sessionId},
             viewsList,
             filtersList
@@ -82,7 +83,9 @@ describe('History Tests', () => {
     const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
 
     beforeAll(() => {
-        const {samplesClient, viewsClient, filtersClient} = apiFacade;
+        const {samplesClient, viewsClient, filtersClient, searchClient} = apiFacade;
+        searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
+            historySample.id, historyView.id, historyFilter.id, searchOperationId);
         samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, historySample.id, sampleFieldsList);
         samplesClient.getAllFields = apiMocks.createGetAllFieldsMock(sessionId, totalFieldsList);
         viewsClient.add = apiMocks.createAddMock();
@@ -136,7 +139,7 @@ describe('History Tests', () => {
         });
 
         it('should call analyze with proper arguments', () => {
-            expect(true).toBe(false);
+            expect(apiFacade.searchClient.sendSearchRequest).toBeCalled();
         });
     });
 
@@ -146,7 +149,10 @@ describe('History Tests', () => {
         const {view:{id: nonHistoryViewId}, sample:{id: nonHistorySampleId}} = nonHistoryEntry;
         const nonHistoryFilterId = nonHistoryEntry.filters[0].id;
         beforeAll((done) => {
-            apiFacade.samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, nonHistorySampleId, sampleFieldsList);
+            const {samplesClient, searchClient} = apiFacade;
+            samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, nonHistorySampleId, sampleFieldsList);
+            searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
+                nonHistorySampleId, nonHistoryViewId, nonHistoryFilterId, searchOperationId);
             storeTestUtils.runTest({
                 globalInitialState: initialAppState,
                 applyActions: (dispatch) => dispatch(renewHistoryItem(nonHistoryEntry.id))
@@ -178,6 +184,10 @@ describe('History Tests', () => {
             expect(selectedViewId).toBe(nonHistoryViewId);
             expect(selectedSampleId).toBe(nonHistorySampleId);
         });
+
+        it('should call analyze with proper arguments', () => {
+            expect(apiFacade.searchClient.sendSearchRequest).toBeCalled();
+        });
     });
 
     describe('History Items in Collections', () => {
@@ -187,7 +197,7 @@ describe('History Tests', () => {
                 globalInitialState: initialAppState,
                 applyActions: (dispatch) => dispatch([
                     renewHistoryItem(historyEntry.id),
-                    viewsListServerCreateView(userView, sessionId, language)
+                    viewsListServerCreateView(userView, sessionId, languageId)
                 ])
             }, (globalState) => {
                 const {views} = mapStateToCollections(globalState);
@@ -240,7 +250,7 @@ describe('History Tests', () => {
                 globalInitialState: initialAppState,
                 applyActions: (dispatch) => dispatch([
                     renewHistoryItem(historyEntry.id),
-                    filtersListServerCreateFilter(userFilter.id, sessionId, language)
+                    filtersListServerCreateFilter(userFilter.id, sessionId, languageId)
                 ])
             }, (globalState) => {
                 const {filters} = mapStateToCollections(globalState);
@@ -324,12 +334,8 @@ function buildHistoryState() {
     };
 
     const initialAppState = {
+        ui: {languageId: 'en'},
         auth: {sessionId: auth.sessionId},
-        userData: {
-            profileMetadata: {
-                language: 'en'
-            }
-        },
         fields,
         viewsList: {
             hashedArray: ImmutableHashedArray.makeFromArray(views.slice(1)),
@@ -355,12 +361,6 @@ function buildHistoryState() {
         historyEntry,
         nonHistoryEntry
     };
-}
-function mockResponse(body, status = HttpStatus.OK) {
-    return {
-        body,
-        status
-    }
 }
 
 /**@returns {{views:Array, filters:Array, samples:Array, history:Array}}*/
