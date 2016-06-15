@@ -72,13 +72,17 @@ describe('Filters list tests', () => {
     const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
 
-    function makeDeleteTest(filterId) {
+    function makeDeleteTest(filterId, actualDelete) {
+        const filtersCount = filters.length;
+        const expectedFiltersCount = actualDelete ? filtersCount - 1 : filtersCount;
         return {
             actions(dispatch) {
                 return dispatch(filtersListServerDeleteFilter(filterId, sessionId));
             },
             checkState(globalState) {
                 const {filtersList: {hashedArray: {array: filters, hash: filtersHash}}} = globalState;
+                expect(filters.length).toBe(expectedFiltersCount);
+                expect(Object.keys(filtersHash).length).toBe(expectedFiltersCount);
                 const isInFilters = filters.find((item) => item.id === filterId);
                 expect(isInFilters).toBeFalsy();
                 const isInFiltersHash = _.find(filtersHash, (filter, filterHashKey) => filter.id === filterId || filterHashKey === filterId);
@@ -90,8 +94,8 @@ describe('Filters list tests', () => {
         };
     }
     
-    function makeDeleteTestItMock(description, filterId) {
-        const delTest = makeDeleteTest(filterId);
+    function makeDeleteTestItMock(description, filterId, actualDelete) {
+        const delTest = makeDeleteTest(filterId, actualDelete);
         return {
             it: () => {
                 it(description, (done) => {
@@ -110,7 +114,7 @@ describe('Filters list tests', () => {
 
     function makeDeleteTestsItsMocks(descriptionsIds) {
         return descriptionsIds.reduce((result, descriptionsIds) => {
-            const test = makeDeleteTestItMock(descriptionsIds.description, descriptionsIds.filterId);
+            const test = makeDeleteTestItMock(descriptionsIds.description, descriptionsIds.filterId, descriptionsIds.actualDelete);
             return {
                 its: [...result.its, test.it],
                 mocks: [...result.mocks, test.mockRemove]
@@ -119,10 +123,10 @@ describe('Filters list tests', () => {
     }
 
     const delTestsItsMocks = makeDeleteTestsItsMocks([
-        {description: 'should delete first filter', filterId: filtersIdsToDelete.first},
-        {description: 'should delete middle filter', filterId: filtersIdsToDelete.middle},
-        {description: 'should delete last filter', filterId: filtersIdsToDelete.last},
-        {description: 'should delete absent filter', filterId: filtersIdsToDelete.absent}
+        {description: 'should delete first filter', filterId: filtersIdsToDelete.first, actualDelete:true},
+        {description: 'should delete middle filter', filterId: filtersIdsToDelete.middle, actualDelete:true},
+        {description: 'should delete last filter', filterId: filtersIdsToDelete.last, actualDelete:true},
+        {description: 'should delete absent filter', filterId: filtersIdsToDelete.absent, actualDelete:false}
     ]);
 
     var mockIndex = 0;
