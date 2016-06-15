@@ -117,6 +117,8 @@ var deepDiffMapper = function() {
  * */
 
 export default class StoreTestUtils {
+    static debugMode = false;
+
     static setTimeout(callback, timeout) {
         return originalSetTimeout(callback, timeout)
     }
@@ -159,20 +161,20 @@ export default class StoreTestUtils {
      * */
     static waitForFreezing(store, timeout, callback) {
         var state = store.getState();
-        console.warn(`waiting for store freeze for ${timeout} ms...`);
+        this._debug(`waiting for store freeze for ${timeout} ms...`);
 
         this.setTimeout(() => {
             const newState = store.getState();
             if (newState === state) {
-                console.warn('freeze!');
+                this._debug('freeze!');
                 callback();
             } else {
-                console.warn('state was changed!');
+                this._debug('state was changed!');
                 this.waitForFreezing(store, timeout, callback);
             }
         }, timeout);
 
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
     }
 
     /**
@@ -199,5 +201,11 @@ export default class StoreTestUtils {
             + `\n\nstate: ${JSON.stringify(state, null, 2)}`
             + `\n\ndiff: ${JSON.stringify(difference, null, 2)}`
         );
+    }
+
+    static _debug(msg, ...args) {
+        if (this.debugMode) {
+            console.warn.call(console, msg, ...args);
+        }
     }
 }

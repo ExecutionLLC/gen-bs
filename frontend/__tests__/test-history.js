@@ -1,100 +1,27 @@
 jest.setMock('../app/api/ApiFacade', require('./__mocks__/apiFacade'));
 
+import HttpStatus from 'http-status';
+
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
+import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
+import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
 
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
 
-/**
- * Build mock app state with one history entry.
- * @returns {{
- * initialAppState: Object,
- * historyView: Object,
- * historyFilter: Object,
- * historySample: Object,
- * historyEntry: Object
- * }}
- */
-function buildHistoryState() {
-    const {
-        viewsList: {hashedArray:{array: views}},
-        samplesList: {samples},
-        filtersList: {hashedArray:{array: filters}},
-        fields
-    } = MOCK_APP_STATE;
-    const historyView = Object.assign({}, views[0], {id: 'historyViewId'});
-    const historyFilter = Object.assign({}, filters[0], {id: 'historyFilterId'});
-    const historySample = Object.assign({}, samples[0], {id: 'historySampleId'});
-    const historyEntry = {
-        id: 'historyEntryId',
-        timestamp: '2016-05-31T10:52:17.813Z',
-        view: historyView,
-        filters: [historyFilter],
-        sample: historySample
-    };
+const TestIds = {
+    historyViewId: 'historyViewId',
+    historyFilterId: 'historyFilterId',
+    historySampleId: 'historySampleId',
+    historyEntryId: 'historyEntryId',
 
-    const initialAppState = {
-        fields,
-        viewsList: {
-            hashedArray: ImmutableHashedArray.makeFromArray(views.slice(1)),
-            selectedViewId: views[1].id
-        },
-        samplesList: {
-            samples: samples.slice(1),
-            selectedSample: samples[1]
-        },
-        filtersList: {
-            hashedArray: ImmutableHashedArray.makeFromArray(filters.slice(1)),
-            selectedFilterId: filters[1].id
-        },
-        queryHistory: Object.assign({}, MOCK_APP_STATE.queryHistory, {
-            history: [historyEntry]
-        })
-    };
-    return {
-        initialAppState,
-        historyView,
-        historyFilter,
-        historySample,
-        historyEntry
-    };
-}
-
-function mockGetFields(sessionId, sampleId, expectedSampleId, callback) {
-    expect(sampleId).toEqual(expectedSampleId);
-    return callback(null, MOCK_APP_STATE.fields.sampleFieldsList);
-}
-
-function mockGetAllFields(sessionId, callback) {
-    callback(null, MOCK_APP_STATE.fields.totalFieldsList);
-}
-
-/**@returns {{views:Array, filters:Array, samples:Array, history:Array}}*/
-function mapStateToCollections(globalState) {
-    const {
-        viewsList: {hashedArray:{array:views}, selectedViewId},
-        filtersList: {hashedArray:{array:filters}, selectedFilterId},
-        samplesList: {samples, selectedSample},
-        queryHistory: {history}
-    } = globalState;
-    return {
-        views,
-        filters,
-        samples,
-        history,
-        selectedViewId,
-        selectedFilterId,
-        selectedSampleId: selectedSample.id
-    };
-}
-
-function expectItemByPredicate(collection, predicate) {
-    return expect(_.find(collection, predicate));
-}
+    updatedItemId: 'updatedItemId',
+    createdItemId: 'createdItemId'
+};
 
 describe('Mocked History State', () => {
     const state = buildHistoryState();
@@ -123,7 +50,7 @@ describe('Mocked History State', () => {
     it('should have selected items, and they should not be history items', () => {
         function checkSelectionCorrect(selectedId, historyItem) {
             expect(selectedId).toBeTruthy();
-            expect(selectedId).not.toEqual(historyItem.id);
+            expect(selectedId).not.toBe(historyItem.id);
         }
 
         checkSelectionCorrect(selectedFilterId, historyFilter);
@@ -134,21 +61,52 @@ describe('Mocked History State', () => {
 
 describe('History Tests', () => {
     const {
+        initialAppState: {
+            userData: {profileMetadata:{language}},
+            auth: {sessionId},
+            viewsList,
+            filtersList
+        },
         initialAppState,
         historyView,
         historyFilter,
         historySample,
         historyEntry
     } = buildHistoryState();
+    const userView = viewsList.hashedArray.array.find(item => item.type === 'user');
+    const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
 
     beforeEach(() => {
-        apiFacade.samplesClient.getFields = (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback);
-        apiFacade.samplesClient.getAllFields = mockGetAllFields;
+        const {samplesClient, viewsClient, filtersClient} = apiFacade;
+        samplesClient.getFields = jest.fn(
+            (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback)
+        );
+        samplesClient.getAllFields = jest.fn(mockGetAllFields);
+        viewsClient.add = jest.fn(mockAdd);
+        viewsClient.update = jest.fn((sessionId, view, callback) =>
+            mockUpdate(sessionId, view, userView.id, callback)
+        );
+        viewsClient.remove = jest.fn((sessionId, viewId, callback) => {
+            const viewToDelete = initialAppState.viewsList.hashedArray.hash[viewId];
+            mockDelete(sessionId, viewToDelete, userView.id, callback)
+        });
+        filtersClient.add = jest.fn(mockAdd);
+        filtersClient.update = jest.fn((sessionId, item, callback) =>
+            mockUpdate(sessionId, item, userFilter.id, callback)
+        );
+        filtersClient.remove = jest.fn((sessionId, filterId, callback) => {
+            const filterToDelete = initialAppState.filtersList.hashedArray.hash[filterId];
+            mockDelete(sessionId, filterToDelete, userFilter.id, callback);
+        })
     });
 
     afterEach(() => {
-        delete apiFacade.samplesClient.getFields;
-        delete apiFacade.samplesClient.getAllFields;
+        const {samplesClient, viewsClient} = apiFacade;
+        delete samplesClient.getFields;
+        delete samplesClient.getAllFields;
+        delete viewsClient.add;
+        delete viewsClient.update;
+        delete viewsClient.remove;
     });
     
     it('should correctly renew history item', (done) => {
@@ -168,11 +126,241 @@ describe('History Tests', () => {
             expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
 
             // History items should be selected in lists.
-            expect(selectedFilterId).toEqual(historyFilter.id);
-            expect(selectedViewId).toEqual(historyView.id);
-            expect(selectedSampleId).toEqual(historySample.id);
+            expect(selectedFilterId).toBe(historyFilter.id);
+            expect(selectedViewId).toBe(historyView.id);
+            expect(selectedSampleId).toBe(historySample.id);
+
+            done();
+        });
+    });
+
+    it('should keep history items when creating view', (done) => {
+        expect(userView).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                viewsListServerCreateView(userView, sessionId, language)
+            ])
+        }, (globalState) => {
+            const {views} = mapStateToCollections(globalState);
+            // Create is done.
+            expectItemByPredicate(views, item => item.id === TestIds.createdItemId).toBeTruthy();
+            // History item is still in the collection.
+            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when updating view', (done) => {
+        expect(userView).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                viewsListServerUpdateView(userView, sessionId)
+            ])
+        }, (globalState) => {
+            const {views} = mapStateToCollections(globalState);
+            expectItemByPredicate(views, item => item.id === TestIds.updatedItemId).toBeTruthy();
+            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when deleting view', (done) => {
+        expect(userView).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                viewsListServerDeleteView(userView.id, sessionId)
+            ])
+        }, (globalState) => {
+            const {views} = mapStateToCollections(globalState);
+            expectItemByPredicate(views, item => item.id === userView.id).toBeFalsy();
+            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when creating filter', (done) => {
+        expect(userFilter).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                filtersListServerCreateFilter(userFilter.id, sessionId, language)
+            ])
+        }, (globalState) => {
+            const {filters} = mapStateToCollections(globalState);
+            expectItemByPredicate(filters, item => item.id === userFilter.id).toBeTruthy();
+            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when updating filter', (done) => {
+        expect(userFilter).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                filtersListServerUpdateFilter(userFilter, sessionId)
+            ])
+        }, (globalState) => {
+            const {filters} = mapStateToCollections(globalState);
+            expectItemByPredicate(filters, item => item.id === TestIds.updatedItemId).toBeTruthy();
+            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+
+            done();
+        });
+    });
+
+    it('should keep history items when deleting filter', (done) => {
+        expect(userFilter).toBeTruthy();
+        storeTestUtils.runTest({
+            globalInitialState: initialAppState,
+            applyActions: (dispatch) => dispatch([
+                renewHistoryItem(historyEntry.id),
+                filtersListServerDeleteFilter(userFilter.id, sessionId)
+            ])
+        }, (globalState) => {
+            const {filters} = mapStateToCollections(globalState);
+            expectItemByPredicate(filters, item => item.id === userFilter.id).toBeFalsy();
+            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
 
             done();
         });
     });
 });
+
+/**
+ * Build mock app state with one history entry.
+ * @returns {{
+ * initialAppState: Object,
+ * historyView: Object,
+ * historyFilter: Object,
+ * historySample: Object,
+ * historyEntry: Object
+ * }}
+ */
+function buildHistoryState() {
+    const {
+        auth,
+        viewsList: {hashedArray:{array: views}},
+        samplesList: {samples},
+        filtersList: {hashedArray:{array: filters}},
+        fields
+    } = MOCK_APP_STATE;
+    const historyView = Object.assign({}, views[0], {id: TestIds.historyViewId});
+    const historyFilter = Object.assign({}, filters[0], {id: TestIds.historyFilterId});
+    const historySample = Object.assign({}, samples[0], {id: TestIds.historySampleId});
+    const historyEntry = {
+        id: TestIds.historyEntryId,
+        timestamp: '2016-05-31T10:52:17.813Z',
+        view: historyView,
+        filters: [historyFilter],
+        sample: historySample
+    };
+
+    const initialAppState = {
+        auth: {sessionId: auth.sessionId},
+        userData: {
+            profileMetadata: {
+                language: 'en'
+            }
+        },
+        fields,
+        viewsList: {
+            hashedArray: ImmutableHashedArray.makeFromArray(views.slice(1)),
+            selectedViewId: views[1].id
+        },
+        samplesList: {
+            samples: samples.slice(1),
+            selectedSample: samples[1]
+        },
+        filtersList: {
+            hashedArray: ImmutableHashedArray.makeFromArray(filters.slice(1)),
+            selectedFilterId: filters[1].id
+        },
+        queryHistory: Object.assign({}, MOCK_APP_STATE.queryHistory, {
+            history: [historyEntry]
+        })
+    };
+    return {
+        initialAppState,
+        historyView,
+        historyFilter,
+        historySample,
+        historyEntry
+    };
+}
+function mockResponse(body, status = HttpStatus.OK) {
+    return {
+        body,
+        status
+    }
+}
+
+function mockAdd(sessionId, languageId, item, callback) {
+    expect(item).toBeTruthy();
+    expect(sessionId).toBeTruthy();
+    expect(languageId).toBeTruthy();
+    expect(callback).toBeTruthy();
+    const createdItem = Object.assign({}, item, {id:TestIds.createdItemId});
+    callback(null, mockResponse(createdItem));
+}
+
+function mockUpdate(sessionId, item, expectedItemId, callback) {
+    expect(item).toBeTruthy();
+    expect(item.id).toBe(expectedItemId);
+    expect(sessionId).toBeTruthy();
+    expect(callback).toBeTruthy();
+    const updatedItem = Object.assign({}, item, {id: TestIds.updatedItemId});
+    callback(null, mockResponse(updatedItem));
+}
+
+function mockDelete(sessionId, item, expectedItemId, callback) {
+    expect(item).toBeTruthy();
+    expect(item.id).toBe(expectedItemId);
+    expect(sessionId).toBeTruthy();
+    expect(callback).toBeTruthy();
+    callback(null, mockResponse(item));
+}
+
+function mockGetFields(sessionId, sampleId, expectedSampleId, callback) {
+    expect(sampleId).toBe(expectedSampleId);
+    return callback(null, mockResponse(MOCK_APP_STATE.fields.sampleFieldsList));
+}
+
+function mockGetAllFields(sessionId, callback) {
+    callback(null, mockResponse(MOCK_APP_STATE.fields.totalFieldsList));
+}
+
+/**@returns {{views:Array, filters:Array, samples:Array, history:Array}}*/
+function mapStateToCollections(globalState) {
+    const {
+        viewsList: {hashedArray:{array:views}, selectedViewId},
+        filtersList: {hashedArray:{array:filters}, selectedFilterId},
+        samplesList: {samples, selectedSample},
+        queryHistory: {history}
+    } = globalState;
+    return {
+        views,
+        filters,
+        samples,
+        history,
+        selectedViewId,
+        selectedFilterId,
+        selectedSampleId: selectedSample.id
+    };
+}
+
+function expectItemByPredicate(collection, predicate) {
+    return expect(_.find(collection, predicate));
+}
