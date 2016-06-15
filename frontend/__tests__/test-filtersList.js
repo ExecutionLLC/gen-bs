@@ -75,6 +75,13 @@ describe('Filters list tests', () => {
     function makeDeleteTest(filterId, actualDelete) {
         const filtersCount = filters.length;
         const expectedFiltersCount = actualDelete ? filtersCount - 1 : filtersCount;
+        const expectedFilters = actualDelete ? filters.filter((filter) => filter.id !== filterId) : filters;
+        const expectedFiltersHash = filters.reduce((hash, filter) => {
+            if (!actualDelete || filter.id !== filterId) {
+                hash[filter.id] = filter;
+            }
+            return hash;
+        }, {});
         return {
             actions(dispatch) {
                 return dispatch(filtersListServerDeleteFilter(filterId, sessionId));
@@ -87,6 +94,8 @@ describe('Filters list tests', () => {
                 expect(isInFilters).toBeFalsy();
                 const isInFiltersHash = _.find(filtersHash, (filter, filterHashKey) => filter.id === filterId || filterHashKey === filterId);
                 expect(isInFiltersHash).toBeFalsy();
+                expect(filters).toEqual(expectedFilters);
+                expect(filtersHash).toEqual(expectedFiltersHash);
             },
             mockRemove(requestSessionId, requestFilterId, callback) {
                 return mockFilterRemove(requestSessionId, requestFilterId, sessionId, filterId, callback);
