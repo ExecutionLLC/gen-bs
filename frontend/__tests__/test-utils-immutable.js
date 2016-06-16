@@ -3,6 +3,7 @@ import {ImmutableHashedArray} from '../app/utils/immutable';
 
 describe('Immutable array', () => {
     it('should replace item', () => {
+        expect(() => immutableArray.replace(null, 3, 123)).toThrow();
         // unexpected behavior when index out of range
         expect(immutableArray.replace([], 3, 123)).toEqual([123]);
         // unexpected behavior when index is negative
