@@ -96,20 +96,20 @@ describe('Filters list tests', () => {
                 const {filtersList: {hashedArray: {array: filters, hash: filtersHash}}} = globalState;
                 expect(filters.length).toBe(expectedFiltersCount);
                 expect(Object.keys(filtersHash).length).toBe(expectedFiltersCount);
-                const isInFilters = filters.find((item) => item.id === filterId);
+                const filterInArray = filters.find((item) => item.id === filterId);
                 if (!actualDelete || !mustError) {
-                    expect(isInFilters).toBeFalsy();
+                    expect(filterInArray).toBeFalsy();
                 } else {
-                    expect(isInFilters).toBeTruthy();
+                    expect(filterInArray).toBeTruthy();
                 }
-                const isInFiltersHash = _.find(filtersHash, (filter, filterHashKey) => filter.id === filterId || filterHashKey === filterId);
+                const filterInHash = _.find(filtersHash, (filter, filterHashKey) => filter.id === filterId || filterHashKey === filterId);
                 if (!actualDelete || !mustError) {
-                    expect(isInFiltersHash).toBeFalsy();
+                    expect(filterInHash).toBeFalsy();
                 } else {
-                    expect(isInFiltersHash).toBeTruthy();
+                    expect(filterInHash).toBeTruthy();
                 }
-                expect(isInFilters).toEqual(expectedFilter);
-                expect(isInFiltersHash).toEqual(expectedFilter);
+                expect(filterInArray).toEqual(expectedFilter);
+                expect(filterInHash).toEqual(expectedFilter);
                 expect(filters).toEqual(expectedFilters);
                 expect(filtersHash).toEqual(expectedFiltersHash);
             },
