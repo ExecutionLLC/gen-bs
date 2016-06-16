@@ -109,4 +109,29 @@ describe('Immutable hashed array', () => {
             hash: {'11': item11, '33': item33, 'undefined': itemNoId}
         });
     });
+
+    it('should append item', () => {
+        const hashedArrayFilled = ImmutableHashedArray.makeFromArray([
+            item11, item22, item33
+        ]);
+        const hashedArrayEmpty = ImmutableHashedArray.makeFromArray([]);
+        expect(ImmutableHashedArray.appendItem(hashedArrayFilled, item55)).toEqual({
+            array: [item11, item22, item33, item55],
+            hash: {'11': item11, '22': item22, '33': item33, 55: item55}
+        });
+        expect(ImmutableHashedArray.appendItem(hashedArrayEmpty, item55)).toEqual({
+            array: [item55],
+            hash: {55: item55}
+        });
+        // unexpected behavior when appending object with no id
+        expect(ImmutableHashedArray.appendItem(hashedArrayFilled, itemNoId)).toEqual({
+            array: [item11, item22, item33, itemNoId],
+            hash: {'11': item11, '22': item22, '33': item33, 'undefined': itemNoId}
+        });
+        // unexpected behavior when appending object with no id
+        expect(ImmutableHashedArray.appendItem(hashedArrayEmpty, itemNoId)).toEqual({
+            array: [itemNoId],
+            hash: {'undefined': itemNoId}
+        });
+    });
 });
