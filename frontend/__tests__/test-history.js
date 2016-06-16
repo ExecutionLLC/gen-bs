@@ -1,13 +1,17 @@
-import HttpStatus from 'http-status';
+import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
+import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
+import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import apiMocks from './__mocks__/apiMocks';
-import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
-import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
-import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
+import {
+    expectCountByPredicate,
+    expectItemByPredicate,
+    installMocks
+} from './jestUtils';
 
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
@@ -83,26 +87,48 @@ describe('History Tests', () => {
     const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
 
     beforeAll(() => {
+        installMocks(console, {log: jest.fn()});
         const {samplesClient, viewsClient, filtersClient, searchClient} = apiFacade;
-        searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
-            historySample.id, historyView.id, historyFilter.id, searchOperationId);
-        samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, historySample.id, sampleFieldsList);
-        samplesClient.getAllFields = apiMocks.createGetAllFieldsMock(sessionId, totalFieldsList);
-        viewsClient.add = apiMocks.createAddMock();
-        viewsClient.update = apiMocks.createUpdateMock(userView.id);
-        viewsClient.remove = apiMocks.createDeleteMock(userView.id, initialAppState.viewsList.hashedArray.hash);
-        filtersClient.add = apiMocks.createAddMock();
-        filtersClient.update = apiMocks.createUpdateMock(userFilter.id);
-        filtersClient.remove = apiMocks.createDeleteMock(userFilter.id, initialAppState.filtersList.hashedArray.hash);
+        installMocks(searchClient, {
+            sendSearchRequest: apiMocks.createSendSearchRequestMock(sessionId, languageId,
+                historySample.id, historyView.id, historyFilter.id, searchOperationId)
+        });
+        installMocks(samplesClient, {
+            getFields: apiMocks.createGetFieldsMock(sessionId, historySample.id, sampleFieldsList),
+            getAllFields: apiMocks.createGetAllFieldsMock(sessionId, totalFieldsList)
+        });
+        installMocks(viewsClient, {
+            add: apiMocks.createAddMock(),
+            update: apiMocks.createUpdateMock(userView.id),
+            remove: apiMocks.createDeleteMock(userView.id, initialAppState.viewsList.hashedArray.hash)
+        });
+        installMocks(filtersClient, {
+            add: apiMocks.createAddMock(),
+            update: apiMocks.createUpdateMock(userFilter.id),
+            remove: apiMocks.createDeleteMock(userFilter.id, initialAppState.filtersList.hashedArray.hash)
+        });
     });
 
     afterAll(() => {
-        const {samplesClient, viewsClient} = apiFacade;
-        delete samplesClient.getFields;
-        delete samplesClient.getAllFields;
-        delete viewsClient.add;
-        delete viewsClient.update;
-        delete viewsClient.remove;
+        installMocks(console, {log: null});
+        const {samplesClient, viewsClient, filtersClient} = apiFacade;
+        installMocks(searchClient, {
+            sendSearchRequest: null
+        });
+        installMocks(samplesClient, {
+            getFields: null,
+            getAllFields: null
+        });
+        installMocks(viewsClient, {
+            add: null,
+            update: null,
+            remove: null
+        });
+        installMocks(filtersClient, {
+            add: null,
+            update: null,
+            remove: null
+        });
     });
 
     describe('Renew History: history items', () => {
@@ -363,7 +389,15 @@ function buildHistoryState() {
     };
 }
 
-/**@returns {{views:Array, filters:Array, samples:Array, history:Array}}*/
+/**@returns {{
+* views:Array, 
+* filters:Array, 
+* samples:Array, 
+* history:Array,
+* selectedViewId:string,
+* selectedFilterId:string,
+* selectedSampleId:string
+* }}*/
 function mapStateToCollections(globalState) {
     const {
         viewsList: {hashedArray:{array:views}, selectedViewId},
@@ -380,12 +414,4 @@ function mapStateToCollections(globalState) {
         selectedFilterId,
         selectedSampleId: selectedSample.id
     };
-}
-
-function expectItemByPredicate(collection, predicate) {
-    return expect(_.find(collection, predicate));
-}
-
-function expectCountByPredicate(collection, predicate) {
-    return expect((_.filter(collection, predicate) || []).length);
 }
