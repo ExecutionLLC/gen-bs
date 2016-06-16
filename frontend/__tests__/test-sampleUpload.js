@@ -41,8 +41,7 @@ describe('Sample Upload', () => {
             createFile('file3.vcf', 'application/binary')
         ];
         storeTestUtils.runTest({
-            applyActions: (dispatch) => dispatch(addFilesForUpload(files)),
-            timeout: 100
+            applyActions: (dispatch) => dispatch(addFilesForUpload(files))
         }, (globalState) => {
             const {
                 filesProcesses,
@@ -51,6 +50,46 @@ describe('Sample Upload', () => {
             expect(filesProcesses.length).toBe(3);
             expect(processesWithError.length).toBe(0);
             expectCountByPredicate(filesProcesses, proc => proc.file.type === 'application/gzip').toBe(3);
+            done();
+        });
+    });
+
+    it('should set error for unsupported files keeping supported ones', (done) => {
+        const files = [
+            createFile('file1.txt', 'text/plain'),
+            createFile('file2.vcf.gz', 'application/gzip'),
+            createFile('file3.json', 'application/json'),
+            createFile('file4.txt', 'text/plain')
+        ];
+        storeTestUtils.runTest({
+            applyActions: (dispatch) => dispatch(addFilesForUpload(files))
+        }, (globalState) => {
+            const {
+                filesProcesses,
+                processesWithError
+            } = mapState(globalState);
+            expect(filesProcesses.length).toBe(4);
+            expect(processesWithError.length).toBe(3);
+
+            done();
+        });
+    });
+
+    it('should process mixed selections', (done) => {
+        const files = [
+            createFile('file1.vcf', 'text/vcard'),
+            createFile('file2.vcf.gz', 'application/binary'),
+            createFile('file3.vcf', 'text/directory'),
+            createFile('file4.txt', 'text/plain')
+        ];
+        storeTestUtils.runTest({
+            applyActions: (dispatch) => dispatch(addFilesForUpload(files))
+        }, (globalState) => {
+            const {filesProcesses, processesWithError} = mapState(globalState);
+            expect(filesProcesses.length).toBe(4);
+            expect(processesWithError.length).toBe(1);
+            expectCountByPredicate(filesProcesses, proc => proc.file.type === 'application/gzip').toBe(2);
+
             done();
         });
     });
