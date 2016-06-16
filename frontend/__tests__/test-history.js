@@ -7,7 +7,12 @@ import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import apiMocks from './__mocks__/apiMocks';
-import {expectCountByPredicate, expectItemByPredicate} from './jestUtils';
+import {
+    expectCountByPredicate,
+    expectItemByPredicate,
+    installMockFunc,
+    uninstallMock
+} from './jestUtils';
 
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
@@ -83,6 +88,7 @@ describe('History Tests', () => {
     const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
 
     beforeAll(() => {
+        installMockFunc(console, 'log', jest.fn());
         const {samplesClient, viewsClient, filtersClient, searchClient} = apiFacade;
         searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
             historySample.id, historyView.id, historyFilter.id, searchOperationId);
@@ -97,6 +103,7 @@ describe('History Tests', () => {
     });
 
     afterAll(() => {
+        uninstallMock(console, 'log');
         const {samplesClient, viewsClient} = apiFacade;
         delete samplesClient.getFields;
         delete samplesClient.getAllFields;
