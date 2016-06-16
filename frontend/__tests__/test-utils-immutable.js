@@ -83,4 +83,30 @@ describe('Immutable hashed array', () => {
             hash: {'11': item11, '22': item22}
         });
     });
+
+    it('should replace item', () => {
+        const hashedArray = ImmutableHashedArray.makeFromArray([
+            item11, item22, item33
+        ]);
+        const item55 = {id: 55, value: 555};
+        expect(ImmutableHashedArray.replaceItemId(hashedArray, 123, item55)).toEqual(null);
+        expect(ImmutableHashedArray.replaceItemId(hashedArray, 11, item55)).toEqual({
+            array: [item55, item22, item33],
+            hash: {'22': item22, '33': item33, 55: item55}
+        });
+        expect(ImmutableHashedArray.replaceItemId(hashedArray, 22, item55)).toEqual({
+            array: [item11, item55, item33],
+            hash: {'11': item11, '33': item33, 55: item55}
+        });
+        expect(ImmutableHashedArray.replaceItemId(hashedArray, 33, item55)).toEqual({
+            array: [item11, item22, item55],
+            hash: {'11': item11, '22': item22, 55: item55}
+        });
+        expect(ImmutableHashedArray.replaceItemId(hashedArray, 123, itemNoId)).toEqual(null);
+        // unexpected behavior when replacing object with no id
+        expect(ImmutableHashedArray.replaceItemId(hashedArray, 22, itemNoId)).toEqual({
+            array: [item11, itemNoId, item33],
+            hash: {'11': item11, '33': item33, 'undefined': itemNoId}
+        });
+    });
 });
