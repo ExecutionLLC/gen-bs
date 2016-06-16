@@ -1,10 +1,19 @@
 import {addFilesForUpload} from '../app/actions/fileUpload';
 
 import storeTestUtils from './storeTestUtils';
+import {installMockFunc, uninstallMock, expectCountByPredicate} from './jestUtils';
 
 const testDate = new Date('2016-06-15T12:28:27.272Z');
 
 describe('Sample Upload', () => {
+    beforeAll(() => {
+        installMockFunc(console, 'log', jest.fn());
+    });
+
+    afterAll(() => {
+        uninstallMock(console, 'log');
+    });
+
     it('should add gzipped files for upload', (done) => {
         const files = [
             createFile('file1.vcf.gz', 'application/gzip'),
@@ -24,13 +33,34 @@ describe('Sample Upload', () => {
             done();
         });
     });
+
+    it('should gzip files for upload', (done) => {
+        const files = [
+            createFile('file1.vcf', 'text/vcard'),
+            createFile('file2.vcf', 'text/directory'),
+            createFile('file3.vcf', 'application/binary')
+        ];
+        storeTestUtils.runTest({
+            applyActions: (dispatch) => dispatch(addFilesForUpload(files)),
+            timeout: 100
+        }, (globalState) => {
+            const {
+                filesProcesses,
+                processesWithError
+            } = mapState(globalState);
+            expect(filesProcesses.length).toBe(3);
+            expect(processesWithError.length).toBe(0);
+            expectCountByPredicate(filesProcesses, proc => proc.file.type === 'application/gzip').toBe(3);
+            done();
+        });
+    });
 });
 
 function createFile(name, type) {
     const size = 1024;
     const content = (typeof Uint8Array !== 'undefined') ? new Uint8Array(size) : new Array(size);
 
-    for (let i = content.length-1; i >= 0; i--) {
+    for (let i = 0; i < content.length; i++) {
         content[i] = (Math.random(256) * 256) & 0xff;
     }
 
