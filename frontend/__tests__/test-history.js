@@ -1,13 +1,13 @@
-import HttpStatus from 'http-status';
+import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
+import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
+import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import apiMocks from './__mocks__/apiMocks';
-import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
-import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
-import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
+import {expectCountByPredicate, expectItemByPredicate} from './jestUtils';
 
 // Remove to get bunch of test logs
 console.log = jest.genMockFunction();
@@ -363,7 +363,15 @@ function buildHistoryState() {
     };
 }
 
-/**@returns {{views:Array, filters:Array, samples:Array, history:Array}}*/
+/**@returns {{
+* views:Array, 
+* filters:Array, 
+* samples:Array, 
+* history:Array,
+* selectedViewId:string,
+* selectedFilterId:string,
+* selectedSampleId:string
+* }}*/
 function mapStateToCollections(globalState) {
     const {
         viewsList: {hashedArray:{array:views}, selectedViewId},
@@ -380,12 +388,4 @@ function mapStateToCollections(globalState) {
         selectedFilterId,
         selectedSampleId: selectedSample.id
     };
-}
-
-function expectItemByPredicate(collection, predicate) {
-    return expect(_.find(collection, predicate));
-}
-
-function expectCountByPredicate(collection, predicate) {
-    return expect((_.filter(collection, predicate) || []).length);
 }

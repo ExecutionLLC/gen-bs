@@ -18,6 +18,8 @@ export const CLEAR_UPLOAD_STATE = 'CLEAR_UPLOAD_STATE';
 export const REQUEST_GZIP = 'REQUEST_GZIP';
 export const RECEIVE_GZIP = 'RECEIVE_GZIP';
 
+let idCounter = 0;
+
 /*
  * action creators
  */
@@ -205,7 +207,7 @@ export function fileUploadErrorForOperationId(error, operationId) {
 export function addFilesForUpload(files) {
     return (dispatch) => {
         dispatch(clearUploadState());
-        const filesWithIds = files.map((file) => ({id: Math.random(), file: file}));
+        const filesWithIds = files.map((file) => ({id: idCounter++, file}));
         dispatch(addNoGZippedForUpload(filesWithIds));
         filesWithIds.forEach((fileWithId) => {
             ensureGzippedFile(
