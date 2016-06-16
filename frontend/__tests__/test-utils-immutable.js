@@ -64,4 +64,23 @@ describe('Immutable hashed array', () => {
             hash: {'11': item11, '22': item22, '33': item33, 'undefined': itemNoId}
         });
     });
+
+    it('should delete item', () => {
+        const hashedArray = ImmutableHashedArray.makeFromArray([
+            item11, item22, item33
+        ]);
+        expect(ImmutableHashedArray.deleteItemId(hashedArray, 123)).toEqual(null);
+        expect(ImmutableHashedArray.deleteItemId(hashedArray, 11)).toEqual({
+            array: [item22, item33],
+            hash: {'22': item22, '33': item33}
+        });
+        expect(ImmutableHashedArray.deleteItemId(hashedArray, 22)).toEqual({
+            array: [item11, item33],
+            hash: {'11': item11, '33': item33}
+        });
+        expect(ImmutableHashedArray.deleteItemId(hashedArray, 33)).toEqual({
+            array: [item11, item22],
+            hash: {'11': item11, '22': item22}
+        });
+    });
 });
