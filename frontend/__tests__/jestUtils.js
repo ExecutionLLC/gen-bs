@@ -5,7 +5,7 @@ export function expectItemByPredicate(collection, predicate) {
 }
 
 export function expectCountByPredicate(collection, predicate) {
-    return expect((_.filter(collection, predicate) || []).length);
+    return expect(_.filter(collection, predicate).length);
 }
 
 /**
@@ -25,7 +25,7 @@ export function installMocks(obj, mocksObj) {
         } else {
             // Uninstall mock.
             const originalFunc = obj[funcName].__mockedFunction;
-            if (originalFunc) {
+            if (mock.hasOwnProperty('__mockedFunction')) {
                 obj[funcName] = originalFunc;
             }
         }

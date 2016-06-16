@@ -97,11 +97,9 @@ describe('Sample Upload', () => {
 
 function createFile(name, type) {
     const size = 1024;
-    const content = (typeof Uint8Array !== 'undefined') ? new Uint8Array(size) : new Array(size);
-
-    for (let i = 0; i < content.length; i++) {
-        content[i] = (Math.random(256) * 256) & 0xff;
-    }
+    const content = ((typeof Uint8Array !== 'undefined') ? new Uint8Array(size) : new Array(size))
+        .fill(0)
+        .map(() => Math.floor(Math.random() * 256));
 
     return new File([content], name, {type, lastModified: testDate});
 }
