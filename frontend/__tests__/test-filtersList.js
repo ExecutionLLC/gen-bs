@@ -87,6 +87,7 @@ describe('Filters list tests', () => {
             }
             return hash;
         }, {});
+        const expectedFilter = actualDelete && !mustError ? void 0 : filters.find((item) => item.id === filterId);
         return {
             actions(dispatch) {
                 return dispatch(filtersListServerDeleteFilter(filterId, sessionId));
@@ -107,6 +108,8 @@ describe('Filters list tests', () => {
                 } else {
                     expect(isInFiltersHash).toBeTruthy();
                 }
+                expect(isInFilters).toEqual(expectedFilter);
+                expect(isInFiltersHash).toEqual(expectedFilter);
                 expect(filters).toEqual(expectedFilters);
                 expect(filtersHash).toEqual(expectedFiltersHash);
             },
