@@ -1,11 +1,10 @@
-jest.setMock('../app/api/ApiFacade', require('./__mocks__/apiFacade'));
-
 import HttpStatus from 'http-status';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
+import apiMocks from './__mocks__/apiMocks';
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
 import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
@@ -17,11 +16,15 @@ const TestIds = {
     historyViewId: 'historyViewId',
     historyFilterId: 'historyFilterId',
     historySampleId: 'historySampleId',
+
     historyEntryId: 'historyEntryId',
+    nonHistoryEntryId: 'nonHistoryEntryId', // history entry which contains non-history items.
 
     updatedItemId: 'updatedItemId',
     createdItemId: 'createdItemId'
 };
+const {sampleFieldsList, totalFieldsList} = MOCK_APP_STATE.fields;
+const searchOperationId = 'searchOperationId';
 
 describe('Mocked History State', () => {
     const state = buildHistoryState();
@@ -30,7 +33,8 @@ describe('Mocked History State', () => {
         historyView,
         historyFilter,
         historySample,
-        historyEntry
+        historyEntry,
+        nonHistoryEntry
     } = state;
     const {
         filters, views, samples, history,
@@ -43,8 +47,9 @@ describe('Mocked History State', () => {
         expectItemByPredicate(samples, sample => sample.id === historySample.id).toBeFalsy();
     });
 
-    it('should contain correct history entry', () => {
+    it('should contain correct history entries', () => {
         expectItemByPredicate(history, entry => entry.id === historyEntry.id).toBeTruthy();
+        expectItemByPredicate(history, entry => entry.id === nonHistoryEntry.id).toBeTruthy();
     });
 
     it('should have selected items, and they should not be history items', () => {
@@ -62,7 +67,7 @@ describe('Mocked History State', () => {
 describe('History Tests', () => {
     const {
         initialAppState: {
-            userData: {profileMetadata:{language}},
+            ui:{languageId},
             auth: {sessionId},
             viewsList,
             filtersList
@@ -71,36 +76,27 @@ describe('History Tests', () => {
         historyView,
         historyFilter,
         historySample,
-        historyEntry
+        historyEntry,
+        nonHistoryEntry
     } = buildHistoryState();
     const userView = viewsList.hashedArray.array.find(item => item.type === 'user');
     const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
 
-    beforeEach(() => {
-        const {samplesClient, viewsClient, filtersClient} = apiFacade;
-        samplesClient.getFields = jest.fn(
-            (sessionId, sampleId, callback) => mockGetFields(sessionId, sampleId, historySample.id, callback)
-        );
-        samplesClient.getAllFields = jest.fn(mockGetAllFields);
-        viewsClient.add = jest.fn(mockAdd);
-        viewsClient.update = jest.fn((sessionId, view, callback) =>
-            mockUpdate(sessionId, view, userView.id, callback)
-        );
-        viewsClient.remove = jest.fn((sessionId, viewId, callback) => {
-            const viewToDelete = initialAppState.viewsList.hashedArray.hash[viewId];
-            mockDelete(sessionId, viewToDelete, userView.id, callback)
-        });
-        filtersClient.add = jest.fn(mockAdd);
-        filtersClient.update = jest.fn((sessionId, item, callback) =>
-            mockUpdate(sessionId, item, userFilter.id, callback)
-        );
-        filtersClient.remove = jest.fn((sessionId, filterId, callback) => {
-            const filterToDelete = initialAppState.filtersList.hashedArray.hash[filterId];
-            mockDelete(sessionId, filterToDelete, userFilter.id, callback);
-        })
+    beforeAll(() => {
+        const {samplesClient, viewsClient, filtersClient, searchClient} = apiFacade;
+        searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
+            historySample.id, historyView.id, historyFilter.id, searchOperationId);
+        samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, historySample.id, sampleFieldsList);
+        samplesClient.getAllFields = apiMocks.createGetAllFieldsMock(sessionId, totalFieldsList);
+        viewsClient.add = apiMocks.createAddMock();
+        viewsClient.update = apiMocks.createUpdateMock(userView.id);
+        viewsClient.remove = apiMocks.createDeleteMock(userView.id, initialAppState.viewsList.hashedArray.hash);
+        filtersClient.add = apiMocks.createAddMock();
+        filtersClient.update = apiMocks.createUpdateMock(userFilter.id);
+        filtersClient.remove = apiMocks.createDeleteMock(userFilter.id, initialAppState.filtersList.hashedArray.hash);
     });
 
-    afterEach(() => {
+    afterAll(() => {
         const {samplesClient, viewsClient} = apiFacade;
         delete samplesClient.getFields;
         delete samplesClient.getAllFields;
@@ -108,133 +104,195 @@ describe('History Tests', () => {
         delete viewsClient.update;
         delete viewsClient.remove;
     });
-    
-    it('should correctly renew history item', (done) => {
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
-        }, (globalState) => {
-            const {
-                views, samples, filters, history,
-                selectedFilterId, selectedViewId, selectedSampleId
-            } = mapStateToCollections(globalState);
 
-            // History items should be in collections.
+    describe('Renew History: history items', () => {
+        let renewGlobalState = null;
+        beforeAll((done) => {
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
+            }, (globalState) => {
+                renewGlobalState = globalState;
+
+                done();
+            });
+        });
+
+        it('should add history items into collection', () => {
+            const {
+                views, samples, filters, history
+            } = mapStateToCollections(renewGlobalState);
+
             expectItemByPredicate(history, item => item.id === historyEntry.id).toBeTruthy();
             expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
             expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
             expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
+        });
 
-            // History items should be selected in lists.
+        it('should select history items in lists', () => {
+            const {
+                selectedFilterId, selectedViewId, selectedSampleId
+            } = mapStateToCollections(renewGlobalState);
             expect(selectedFilterId).toBe(historyFilter.id);
             expect(selectedViewId).toBe(historyView.id);
             expect(selectedSampleId).toBe(historySample.id);
+        });
 
-            done();
+        it('should call analyze with proper arguments', () => {
+            expect(apiFacade.searchClient.sendSearchRequest).toBeCalled();
         });
     });
 
-    it('should keep history items when creating view', (done) => {
-        expect(userView).toBeTruthy();
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch([
-                renewHistoryItem(historyEntry.id),
-                viewsListServerCreateView(userView, sessionId, language)
-            ])
-        }, (globalState) => {
-            const {views} = mapStateToCollections(globalState);
-            // Create is done.
-            expectItemByPredicate(views, item => item.id === TestIds.createdItemId).toBeTruthy();
-            // History item is still in the collection.
-            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+    describe('Renew History: non-history items', () => {
+        let renewGlobalState = null;
+        const originalSamplesGetFields = apiFacade.samplesClient.getFields;
+        const {view:{id: nonHistoryViewId}, sample:{id: nonHistorySampleId}} = nonHistoryEntry;
+        const nonHistoryFilterId = nonHistoryEntry.filters[0].id;
+        beforeAll((done) => {
+            const {samplesClient, searchClient} = apiFacade;
+            samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, nonHistorySampleId, sampleFieldsList);
+            searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
+                nonHistorySampleId, nonHistoryViewId, nonHistoryFilterId, searchOperationId);
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(renewHistoryItem(nonHistoryEntry.id))
+            }, (globalState) => {
+                renewGlobalState = globalState;
 
-            done();
+                done();
+            });
+        });
+        afterAll(() => {
+            apiFacade.samplesClient.getFields = originalSamplesGetFields;
+        });
+
+        it('should not add non-history items into collections', () => {
+            const {
+                views, samples, filters
+            } = mapStateToCollections(renewGlobalState);
+
+            expectCountByPredicate(views, view => view.id === nonHistoryViewId).toBe(1);
+            expectCountByPredicate(filters, filter => filter.id === nonHistoryFilterId).toBe(1);
+            expectCountByPredicate(samples, sample => sample.id === nonHistorySampleId).toBe(1);
+        });
+
+        it('should select non-history items in lists', () => {
+            const {
+                selectedFilterId, selectedViewId, selectedSampleId
+            } = mapStateToCollections(renewGlobalState);
+            expect(selectedFilterId).toBe(nonHistoryFilterId);
+            expect(selectedViewId).toBe(nonHistoryViewId);
+            expect(selectedSampleId).toBe(nonHistorySampleId);
+        });
+
+        it('should call analyze with proper arguments', () => {
+            expect(apiFacade.searchClient.sendSearchRequest).toBeCalled();
         });
     });
 
-    it('should keep history items when updating view', (done) => {
-        expect(userView).toBeTruthy();
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch([
-                renewHistoryItem(historyEntry.id),
-                viewsListServerUpdateView(userView, sessionId)
-            ])
-        }, (globalState) => {
-            const {views} = mapStateToCollections(globalState);
-            expectItemByPredicate(views, item => item.id === TestIds.updatedItemId).toBeTruthy();
-            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+    describe('History Items in Collections', () => {
+        it('should keep history items when creating view', (done) => {
+            expect(userView).toBeTruthy();
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch([
+                    renewHistoryItem(historyEntry.id),
+                    viewsListServerCreateView(userView, sessionId, languageId)
+                ])
+            }, (globalState) => {
+                const {views} = mapStateToCollections(globalState);
+                // Create is done.
+                expectItemByPredicate(views, item => item.id === TestIds.createdItemId).toBeTruthy();
+                // History item is still in the collection.
+                expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
 
-            done();
+                done();
+            });
         });
-    });
 
-    it('should keep history items when deleting view', (done) => {
-        expect(userView).toBeTruthy();
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch([
-                renewHistoryItem(historyEntry.id),
-                viewsListServerDeleteView(userView.id, sessionId)
-            ])
-        }, (globalState) => {
-            const {views} = mapStateToCollections(globalState);
-            expectItemByPredicate(views, item => item.id === userView.id).toBeFalsy();
-            expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+        it('should keep history items when updating view', (done) => {
+            expect(userView).toBeTruthy();
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch([
+                    renewHistoryItem(historyEntry.id),
+                    viewsListServerUpdateView(userView, sessionId)
+                ])
+            }, (globalState) => {
+                const {views} = mapStateToCollections(globalState);
+                expectItemByPredicate(views, item => item.id === TestIds.updatedItemId).toBeTruthy();
+                expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
 
-            done();
+                done();
+            });
         });
-    });
 
-    it('should keep history items when creating filter', (done) => {
-        expect(userFilter).toBeTruthy();
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch([
-                renewHistoryItem(historyEntry.id),
-                filtersListServerCreateFilter(userFilter.id, sessionId, language)
-            ])
-        }, (globalState) => {
-            const {filters} = mapStateToCollections(globalState);
-            expectItemByPredicate(filters, item => item.id === userFilter.id).toBeTruthy();
-            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+        it('should keep history items when deleting view', (done) => {
+            expect(userView).toBeTruthy();
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch([
+                    renewHistoryItem(historyEntry.id),
+                    viewsListServerDeleteView(userView.id, sessionId)
+                ])
+            }, (globalState) => {
+                const {views} = mapStateToCollections(globalState);
+                expectItemByPredicate(views, item => item.id === userView.id).toBeFalsy();
+                expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
 
-            done();
+                done();
+            });
         });
-    });
 
-    it('should keep history items when updating filter', (done) => {
-        expect(userFilter).toBeTruthy();
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch([
-                renewHistoryItem(historyEntry.id),
-                filtersListServerUpdateFilter(userFilter, sessionId)
-            ])
-        }, (globalState) => {
-            const {filters} = mapStateToCollections(globalState);
-            expectItemByPredicate(filters, item => item.id === TestIds.updatedItemId).toBeTruthy();
-            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+        it('should keep history items when creating filter', (done) => {
+            expect(userFilter).toBeTruthy();
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch([
+                    renewHistoryItem(historyEntry.id),
+                    filtersListServerCreateFilter(userFilter.id, sessionId, languageId)
+                ])
+            }, (globalState) => {
+                const {filters} = mapStateToCollections(globalState);
+                expectItemByPredicate(filters, item => item.id === userFilter.id).toBeTruthy();
+                expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
 
-            done();
+                done();
+            });
         });
-    });
 
-    it('should keep history items when deleting filter', (done) => {
-        expect(userFilter).toBeTruthy();
-        storeTestUtils.runTest({
-            globalInitialState: initialAppState,
-            applyActions: (dispatch) => dispatch([
-                renewHistoryItem(historyEntry.id),
-                filtersListServerDeleteFilter(userFilter.id, sessionId)
-            ])
-        }, (globalState) => {
-            const {filters} = mapStateToCollections(globalState);
-            expectItemByPredicate(filters, item => item.id === userFilter.id).toBeFalsy();
-            expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+        it('should keep history items when updating filter', (done) => {
+            expect(userFilter).toBeTruthy();
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch([
+                    renewHistoryItem(historyEntry.id),
+                    filtersListServerUpdateFilter(userFilter, sessionId)
+                ])
+            }, (globalState) => {
+                const {filters} = mapStateToCollections(globalState);
+                expectItemByPredicate(filters, item => item.id === TestIds.updatedItemId).toBeTruthy();
+                expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
 
-            done();
+                done();
+            });
+        });
+
+        it('should keep history items when deleting filter', (done) => {
+            expect(userFilter).toBeTruthy();
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch([
+                    renewHistoryItem(historyEntry.id),
+                    filtersListServerDeleteFilter(userFilter.id, sessionId)
+                ])
+            }, (globalState) => {
+                const {filters} = mapStateToCollections(globalState);
+                expectItemByPredicate(filters, item => item.id === userFilter.id).toBeFalsy();
+                expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+
+                done();
+            });
         });
     });
 });
@@ -267,14 +325,17 @@ function buildHistoryState() {
         filters: [historyFilter],
         sample: historySample
     };
+    const nonHistoryEntry = {
+        id: TestIds.nonHistoryEntryId,
+        timestamp: '2016-05-31T10:53:17.813Z',
+        view: views[2],
+        filters: [filters[2]],
+        sample: samples[2]
+    };
 
     const initialAppState = {
+        ui: {languageId: 'en'},
         auth: {sessionId: auth.sessionId},
-        userData: {
-            profileMetadata: {
-                language: 'en'
-            }
-        },
         fields,
         viewsList: {
             hashedArray: ImmutableHashedArray.makeFromArray(views.slice(1)),
@@ -289,7 +350,7 @@ function buildHistoryState() {
             selectedFilterId: filters[1].id
         },
         queryHistory: Object.assign({}, MOCK_APP_STATE.queryHistory, {
-            history: [historyEntry]
+            history: [historyEntry, nonHistoryEntry]
         })
     };
     return {
@@ -297,49 +358,9 @@ function buildHistoryState() {
         historyView,
         historyFilter,
         historySample,
-        historyEntry
+        historyEntry,
+        nonHistoryEntry
     };
-}
-function mockResponse(body, status = HttpStatus.OK) {
-    return {
-        body,
-        status
-    }
-}
-
-function mockAdd(sessionId, languageId, item, callback) {
-    expect(item).toBeTruthy();
-    expect(sessionId).toBeTruthy();
-    expect(languageId).toBeTruthy();
-    expect(callback).toBeTruthy();
-    const createdItem = Object.assign({}, item, {id:TestIds.createdItemId});
-    callback(null, mockResponse(createdItem));
-}
-
-function mockUpdate(sessionId, item, expectedItemId, callback) {
-    expect(item).toBeTruthy();
-    expect(item.id).toBe(expectedItemId);
-    expect(sessionId).toBeTruthy();
-    expect(callback).toBeTruthy();
-    const updatedItem = Object.assign({}, item, {id: TestIds.updatedItemId});
-    callback(null, mockResponse(updatedItem));
-}
-
-function mockDelete(sessionId, item, expectedItemId, callback) {
-    expect(item).toBeTruthy();
-    expect(item.id).toBe(expectedItemId);
-    expect(sessionId).toBeTruthy();
-    expect(callback).toBeTruthy();
-    callback(null, mockResponse(item));
-}
-
-function mockGetFields(sessionId, sampleId, expectedSampleId, callback) {
-    expect(sampleId).toBe(expectedSampleId);
-    return callback(null, mockResponse(MOCK_APP_STATE.fields.sampleFieldsList));
-}
-
-function mockGetAllFields(sessionId, callback) {
-    callback(null, mockResponse(MOCK_APP_STATE.fields.totalFieldsList));
 }
 
 /**@returns {{views:Array, filters:Array, samples:Array, history:Array}}*/
@@ -363,4 +384,8 @@ function mapStateToCollections(globalState) {
 
 function expectItemByPredicate(collection, predicate) {
     return expect(_.find(collection, predicate));
+}
+
+function expectCountByPredicate(collection, predicate) {
+    return expect((_.filter(collection, predicate) || []).length);
 }
