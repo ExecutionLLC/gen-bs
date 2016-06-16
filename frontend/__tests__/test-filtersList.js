@@ -36,10 +36,14 @@ function buildFiltersState(appState) {
     };
 }
 
-function mockFilterRemove(sessionId, filterId, expectedSessionId, expectedFilterId, callback) {
+function mockFilterRemove(sessionId, filterId, expectedSessionId, expectedFilterId, mustError, callback) {
     expect(filterId).toEqual(expectedFilterId);
     expect(sessionId).toEqual(expectedSessionId);
-    return callback(null, {status: HttpStatus.OK});
+    if (mustError) {
+        return callback({message: 'mockedError'}, {status: 500});
+    } else {
+        return callback(null, {status: HttpStatus.OK});
+    }
 }
 
 function expectItemByPredicate(collection, predicate) {
@@ -72,12 +76,13 @@ describe('Filters list tests', () => {
     const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
 
-    function makeDeleteTest(filterId, actualDelete) {
+    function makeDeleteTest(filterId, actualDelete, mustError) {
         const filtersCount = filters.length;
-        const expectedFiltersCount = actualDelete ? filtersCount - 1 : filtersCount;
-        const expectedFilters = actualDelete ? filters.filter((filter) => filter.id !== filterId) : filters;
+        const reallyDelete = actualDelete && !mustError;
+        const expectedFiltersCount = reallyDelete ? filtersCount - 1 : filtersCount;
+        const expectedFilters = reallyDelete ? filters.filter((filter) => filter.id !== filterId) : filters;
         const expectedFiltersHash = filters.reduce((hash, filter) => {
-            if (!actualDelete || filter.id !== filterId) {
+            if (!reallyDelete || filter.id !== filterId) {
                 hash[filter.id] = filter;
             }
             return hash;
@@ -91,20 +96,28 @@ describe('Filters list tests', () => {
                 expect(filters.length).toBe(expectedFiltersCount);
                 expect(Object.keys(filtersHash).length).toBe(expectedFiltersCount);
                 const isInFilters = filters.find((item) => item.id === filterId);
-                expect(isInFilters).toBeFalsy();
+                if (!actualDelete || !mustError) {
+                    expect(isInFilters).toBeFalsy();
+                } else {
+                    expect(isInFilters).toBeTruthy();
+                }
                 const isInFiltersHash = _.find(filtersHash, (filter, filterHashKey) => filter.id === filterId || filterHashKey === filterId);
-                expect(isInFiltersHash).toBeFalsy();
+                if (!actualDelete || !mustError) {
+                    expect(isInFiltersHash).toBeFalsy();
+                } else {
+                    expect(isInFiltersHash).toBeTruthy();
+                }
                 expect(filters).toEqual(expectedFilters);
                 expect(filtersHash).toEqual(expectedFiltersHash);
             },
             mockRemove(requestSessionId, requestFilterId, callback) {
-                return mockFilterRemove(requestSessionId, requestFilterId, sessionId, filterId, callback);
+                return mockFilterRemove(requestSessionId, requestFilterId, sessionId, filterId, mustError, callback);
             }
         };
     }
     
-    function makeDeleteTestItMock(description, filterId, actualDelete) {
-        const delTest = makeDeleteTest(filterId, actualDelete);
+    function makeDeleteTestItMock(description, filterId, actualDelete, mustError) {
+        const delTest = makeDeleteTest(filterId, actualDelete, mustError);
         return {
             it: () => {
                 it(description, (done) => {
@@ -121,28 +134,38 @@ describe('Filters list tests', () => {
         };
     }
 
-    function makeDeleteTestsItsMocksArray(descriptionsIds) {
+    function makeDeleteTestsItsMocksArray(descriptionsIds, mustError) {
         return descriptionsIds.map((descriptionsIds) => {
-            return makeDeleteTestItMock(descriptionsIds.description, descriptionsIds.filterId, descriptionsIds.actualDelete);
+            return makeDeleteTestItMock(descriptionsIds.description + ' (mustError=' + mustError + ')', descriptionsIds.filterId, descriptionsIds.actualDelete, mustError);
         });
     }
 
-    const delTestsItsMocksArray = makeDeleteTestsItsMocksArray([
+    const testCases = [
         {description: 'should delete first filter', filterId: filtersIdsToDelete.first, actualDelete:true},
         {description: 'should delete middle filter', filterId: filtersIdsToDelete.middle, actualDelete:true},
         {description: 'should delete last filter', filterId: filtersIdsToDelete.last, actualDelete:true},
         {description: 'should delete absent filter', filterId: filtersIdsToDelete.absent, actualDelete:false}
-    ]);
+    ];
 
-    var testIndex = 0;
+    const delTestsItsMocksArraySuccess = makeDeleteTestsItsMocksArray(testCases, false);
+    const delTestsItsMocksArrayError = makeDeleteTestsItsMocksArray(testCases, true);
 
-    beforeEach(() => {
-        apiFacade.filtersClient.remove = delTestsItsMocksArray[testIndex++].mockRemove;
-    });
+    function runTests(describeName, tests) {
+        describe(describeName, () => {
+            var testIndex = 0;
+    
+            beforeEach(() => {
+                apiFacade.filtersClient.remove = tests[testIndex++].mockRemove;
+            });
+    
+            afterEach(() => {
+                delete apiFacade.filtersClient.remove;
+            });
+    
+            tests.forEach((test) => test.it());
+        });
+    }
 
-    afterEach(() => {
-        delete apiFacade.filtersClient.remove;
-    });
-
-    delTestsItsMocksArray.forEach((test) => test.it());
+    runTests('run deletion success', delTestsItsMocksArraySuccess);
+    runTests('run deletion error', delTestsItsMocksArrayError);
 });
