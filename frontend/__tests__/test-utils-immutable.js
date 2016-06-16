@@ -28,3 +28,40 @@ describe('Immutable array', () => {
         expect(immutableArray.append([11, 22, 33], 123)).toEqual([11, 22, 33, 123]);
     });
 });
+
+describe('Immutable hashed array', () => {
+
+    const item11 = {id: 11, content: 111};
+    const item22 = {id: 22, message: 222};
+    const item33 = {id: 33, obj: {value: [11, 22], data: {q: 44, w: 55}}};
+    const item55 = {id: 55, value: 555};
+    const itemNoId = {some: 123, data: 456, here: 789};
+
+    it('should make from array', () => {
+        expect(ImmutableHashedArray.makeFromArray(
+            null
+        )).toEqual({
+            array: [],
+            hash: {}
+        });
+        expect(ImmutableHashedArray.makeFromArray(
+            []
+        )).toEqual({
+            array: [],
+            hash: {}
+        });
+        expect(ImmutableHashedArray.makeFromArray([
+            item11, item22, item33
+        ])).toEqual({
+            array: [item11, item22, item33],
+            hash: {'11': item11, '22': item22, '33': item33}
+        });
+        // unexpected behavior when has object with no id
+        expect(ImmutableHashedArray.makeFromArray([
+            item11, item22, item33, itemNoId
+        ])).toEqual({
+            array: [item11, item22, item33, itemNoId],
+            hash: {'11': item11, '22': item22, '33': item33, 'undefined': itemNoId}
+        });
+    });
+});
