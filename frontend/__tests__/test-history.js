@@ -10,8 +10,7 @@ import apiMocks from './__mocks__/apiMocks';
 import {
     expectCountByPredicate,
     expectItemByPredicate,
-    installMockFunc,
-    uninstallMock
+    installMocks
 } from './jestUtils';
 
 // Remove to get bunch of test logs
@@ -88,28 +87,48 @@ describe('History Tests', () => {
     const userFilter = filtersList.hashedArray.array.find(item => item.type === 'user');
 
     beforeAll(() => {
-        installMockFunc(console, 'log', jest.fn());
+        installMocks(console, {log: jest.fn()});
         const {samplesClient, viewsClient, filtersClient, searchClient} = apiFacade;
-        searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
-            historySample.id, historyView.id, historyFilter.id, searchOperationId);
-        samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, historySample.id, sampleFieldsList);
-        samplesClient.getAllFields = apiMocks.createGetAllFieldsMock(sessionId, totalFieldsList);
-        viewsClient.add = apiMocks.createAddMock();
-        viewsClient.update = apiMocks.createUpdateMock(userView.id);
-        viewsClient.remove = apiMocks.createDeleteMock(userView.id, initialAppState.viewsList.hashedArray.hash);
-        filtersClient.add = apiMocks.createAddMock();
-        filtersClient.update = apiMocks.createUpdateMock(userFilter.id);
-        filtersClient.remove = apiMocks.createDeleteMock(userFilter.id, initialAppState.filtersList.hashedArray.hash);
+        installMocks(searchClient, {
+            sendSearchRequest: apiMocks.createSendSearchRequestMock(sessionId, languageId,
+                historySample.id, historyView.id, historyFilter.id, searchOperationId)
+        });
+        installMocks(samplesClient, {
+            getFields: apiMocks.createGetFieldsMock(sessionId, historySample.id, sampleFieldsList),
+            getAllFields: apiMocks.createGetAllFieldsMock(sessionId, totalFieldsList)
+        });
+        installMocks(viewsClient, {
+            add: apiMocks.createAddMock(),
+            update: apiMocks.createUpdateMock(userView.id),
+            remove: apiMocks.createDeleteMock(userView.id, initialAppState.viewsList.hashedArray.hash)
+        });
+        installMocks(filtersClient, {
+            add: apiMocks.createAddMock(),
+            update: apiMocks.createUpdateMock(userFilter.id),
+            remove: apiMocks.createDeleteMock(userFilter.id, initialAppState.filtersList.hashedArray.hash)
+        });
     });
 
     afterAll(() => {
-        uninstallMock(console, 'log');
-        const {samplesClient, viewsClient} = apiFacade;
-        delete samplesClient.getFields;
-        delete samplesClient.getAllFields;
-        delete viewsClient.add;
-        delete viewsClient.update;
-        delete viewsClient.remove;
+        installMocks(console, {log: null});
+        const {samplesClient, viewsClient, filtersClient} = apiFacade;
+        installMocks(searchClient, {
+            sendSearchRequest: null
+        });
+        installMocks(samplesClient, {
+            getFields: null,
+            getAllFields: null
+        });
+        installMocks(viewsClient, {
+            add: null,
+            update: null,
+            remove: null
+        });
+        installMocks(filtersClient, {
+            add: null,
+            update: null,
+            remove: null
+        });
     });
 
     describe('Renew History: history items', () => {

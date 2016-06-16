@@ -1,17 +1,17 @@
 import {addFilesForUpload} from '../app/actions/fileUpload';
 
 import storeTestUtils from './storeTestUtils';
-import {installMockFunc, uninstallMock, expectCountByPredicate} from './jestUtils';
+import {installMocks, expectCountByPredicate} from './jestUtils';
 
 const testDate = new Date('2016-06-15T12:28:27.272Z');
 
 describe('Sample Upload', () => {
     beforeAll(() => {
-        installMockFunc(console, 'log', jest.fn());
+        installMocks(console, {log: jest.fn()});
     });
 
     afterAll(() => {
-        uninstallMock(console, 'log');
+        installMocks(console, {log: null});
     });
 
     it('should add gzipped files for upload', (done) => {
