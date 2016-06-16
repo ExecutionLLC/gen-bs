@@ -72,6 +72,23 @@ describe('Mocked filters list state', () => {
     });
 });
 
+function checkHashedArraysEqual(hashedArray, expectedHashedArray) {
+    expect(hashedArray.array).toEqual(expectedHashedArray.array);
+    expect(hashedArray.hash).toEqual(expectedHashedArray.hash);
+}
+
+function checkHashedArrayLength(hashedArray, expectedLength) {
+    expect(hashedArray.array.length).toBe(expectedLength);
+    expect(Object.keys(hashedArray.hash).length).toBe(expectedLength);
+}
+
+function checkObjectInHashedArray(hashedArray, objectId, expectedObject) {
+    const objectInArray = hashedArray.array.find((item) => item.id === objectId);
+    const objectInHash = _.find(hashedArray.hash, (filter, filterHashKey) => filter.id === objectId || filterHashKey === objectId);
+    expect(objectInArray).toEqual(expectedObject);
+    expect(objectInHash).toEqual(expectedObject);
+}
+
 describe('Filters list tests', () => {
     const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
@@ -93,25 +110,10 @@ describe('Filters list tests', () => {
                 return dispatch(filtersListServerDeleteFilter(filterId, sessionId));
             },
             checkState(globalState) {
-                const {filtersList: {hashedArray: {array: filters, hash: filtersHash}}} = globalState;
-                expect(filters.length).toBe(expectedFiltersCount);
-                expect(Object.keys(filtersHash).length).toBe(expectedFiltersCount);
-                const filterInArray = filters.find((item) => item.id === filterId);
-                if (!actualDelete || !mustError) {
-                    expect(filterInArray).toBeFalsy();
-                } else {
-                    expect(filterInArray).toBeTruthy();
-                }
-                const filterInHash = _.find(filtersHash, (filter, filterHashKey) => filter.id === filterId || filterHashKey === filterId);
-                if (!actualDelete || !mustError) {
-                    expect(filterInHash).toBeFalsy();
-                } else {
-                    expect(filterInHash).toBeTruthy();
-                }
-                expect(filterInArray).toEqual(expectedFilter);
-                expect(filterInHash).toEqual(expectedFilter);
-                expect(filters).toEqual(expectedFilters);
-                expect(filtersHash).toEqual(expectedFiltersHash);
+                const {filtersList: {hashedArray: filtersHashedArray}} = globalState;
+                checkHashedArrayLength(filtersHashedArray, expectedFiltersCount);
+                checkObjectInHashedArray(filtersHashedArray, filterId, expectedFilter);
+                checkHashedArraysEqual(filtersHashedArray, {array: expectedFilters, hash: expectedFiltersHash});
             },
             mockRemove(requestSessionId, requestFilterId, callback) {
                 return mockFilterRemove(requestSessionId, requestFilterId, sessionId, filterId, mustError, callback);
