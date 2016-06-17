@@ -362,47 +362,58 @@ describe('Filters list create tests', () => {
         {description: 'should create filter', newFilter: newFilter}
     ];
 
-    function makeTests(describeName, testCases, mustError) {
+    function makeTest(testCase, testsParams) {
+        const {mustError} = testsParams;
+        const {newFilter} = testCase;
+        const newFilterId = '' + Math.random();
+        const filterToResponse = {..._.cloneDeep(newFilter), id: newFilterId};
+        const initialFiltersHashedArray = ImmutableHashedArray.makeFromArray(filters);
+        const expectedFiltersHashedArray = mustError ?
+            initialFiltersHashedArray :
+            ImmutableHashedArray.appendItem(initialFiltersHashedArray, {...newFilter, id: newFilterId});
 
-        const tests = testCases.map((testCase) => {
-            const {description, newFilter} = testCase;
-            const newFilterId = '' + Math.random();
-            const filterToResponse = {..._.cloneDeep(newFilter), id: newFilterId};
-            const initialFiltersHashedArray = ImmutableHashedArray.makeFromArray(filters);
-            const expectedFiltersHashedArray = mustError ?
-                initialFiltersHashedArray :
-                ImmutableHashedArray.appendItem(initialFiltersHashedArray, {...newFilter, id: newFilterId});
-            
-            function actions(dispatch) {
+        return {
+            actions: (dispatch) => {
                 return dispatch(filtersListServerCreateFilter(newFilter, sessionId, languageId));
-            }
-
-            function checkState(globalState) {
-                //expect(123).toBe(456);
+            },
+            checkState: (globalState) => {
                 const {filtersList: {hashedArray: filtersHashedArray}} = globalState;
                 checkHashedArraysEqual(filtersHashedArray, expectedFiltersHashedArray);
-            }
-
-            function setMocks() {
+            },
+            setMocks: () => {
                 apiFacade.filtersClient.add = (sessionId, languageId, requestFilter, callback) => mockFilterCreate(
                     sessionId, languageId, requestFilter, callback,
-                    {sessionId: sessionId, languageId: languageId, filter: newFilter, filterResponse: filterToResponse, error: mustError ? {message: 'mockError'} : null}
+                    {
+                        sessionId: sessionId,
+                        languageId: languageId,
+                        filter: newFilter,
+                        filterResponse: filterToResponse,
+                        error: mustError ? {message: 'mockError'} : null
+                    }
                 );
             }
+        };
+    }
+    
+    function doTests(describeName, testCases, testsParams) {
+
+        const tests = testCases.map((testCase) => {
+            const {description} = testCase;
+            const test = makeTest(testCase, testsParams);
 
             return {
                 it: () => {
                     it(description, (done) => {
                         storeTestUtils.runTest({
                             globalInitialState: initialAppState,
-                            applyActions: actions
+                            applyActions: test.actions
                         }, (globalState) => {
-                            checkState(globalState);
+                            test.checkState(globalState);
                             done();
                         });
                     })
                 },
-                setMocks: setMocks
+                setMocks: test.setMocks
             };
         });
 
@@ -410,25 +421,21 @@ describe('Filters list create tests', () => {
             delete apiFacade.filtersClient.add;
         }
 
-        return () => {
-            describe(describeName, () => {
-                var testIndex = 0;
+        describe(describeName, () => {
+            var testIndex = 0;
 
-                beforeEach(() => {
-                    tests[testIndex++].setMocks();
-                });
+            beforeEach(() => {
+                tests[testIndex++].setMocks();
+            });
 
-                afterEach(() => {
-                    resetMocks();
-                });
+            afterEach(() => {
+                resetMocks();
+            });
 
-                tests.forEach((test) => test.it());
-            })
-        };
+            tests.forEach((test) => test.it());
+        })
     }
 
-    const testsSuccess = makeTests('run creating success', testCases, false);
-    const testsError = makeTests('run creating error', testCases, true);
-    testsSuccess();
-    testsError();
+    doTests('run creating success', testCases, {mustError: false});
+    doTests('run creating error', testCases, {mustError: true});
 });
