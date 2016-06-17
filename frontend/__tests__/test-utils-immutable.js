@@ -14,6 +14,7 @@ describe('Immutable array', () => {
         expect(immutableArray.replace([11, 22, 33], 4, 123)).toEqual([11, 22, 33, 123]);
     });
     it('should remove item', () => {
+        expect(() => immutableArray.remove(null, 3)).toThrow();
         expect(immutableArray.remove([], 3)).toEqual([]);
         // unexpected behavior when index is negative
         expect(immutableArray.remove([11, 22, 33], -1)).toEqual([11, 22, 11, 22, 33]);
@@ -23,6 +24,7 @@ describe('Immutable array', () => {
         expect(immutableArray.remove([11, 22, 33], 4)).toEqual([11, 22, 33]);
     });
     it('should append item', () => {
+        expect(() => immutableArray.append(null, 123)).toThrow();
         expect(immutableArray.append([], 123)).toEqual([123]);
         expect(immutableArray.append([11], 123)).toEqual([11, 123]);
         expect(immutableArray.append([11, 22, 33], 123)).toEqual([11, 22, 33, 123]);
