@@ -211,59 +211,7 @@ describe('Filters list update tests', () => {
     const {initialAppState, filters, filtersIdsToUpdate} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
 
-    function makeUpdateTest(filterId, newFilter, actualUpdate, mustError) {
-        //const filterToUpdate = filters.find((filter) => filter.id === filterId);
-        const filterToResponse = {..._.cloneDeep(newFilter), id: filterId};
-        const initialFiltersHashedArray = ImmutableHashedArray.makeFromArray(filters);
-        const expectedFiltersHashedArray = actualUpdate && !mustError ?
-            ImmutableHashedArray.replaceItemId(initialFiltersHashedArray, filterId, newFilter) :
-            initialFiltersHashedArray;
-        return {
-            actions(dispatch) {
-                return dispatch(filtersListServerUpdateFilter(newFilter, sessionId));
-            },
-            checkState(globalState) {
-                const {filtersList: {hashedArray: filtersHashedArray}} = globalState;
-                checkHashedArraysEqual(filtersHashedArray, expectedFiltersHashedArray);
-            },
-            mockUpdate(requestSessionId, requestFilter, callback) {
-                return mockFilterUpdate(
-                    requestSessionId, requestFilter, callback,
-                    {sessionId: sessionId, filter: newFilter, filterResponse: filterToResponse, error: mustError ? {message: 'mockError'} : null}
-                );
-            }
-        };
-    }
-
-    function makeUpdateTestItMock(description, filterId, newFilter, actualUpdate, mustError) {
-        const updateTest = makeUpdateTest(filterId, newFilter, actualUpdate, mustError);
-        return {
-            it: () => {
-                it(description, (done) => {
-                    storeTestUtils.runTest({
-                        globalInitialState: initialAppState,
-                        applyActions: updateTest.actions
-                    }, (globalState) => {
-                        updateTest.checkState(globalState);
-                        done();
-                    });
-                });
-            },
-            mockUpdate: updateTest.mockUpdate
-        };
-    }
-
-    function makeUpdateTestsItsMocksArray(descriptionsIds, mustError) {
-        return descriptionsIds.map((descriptionsIds) => {
-            return makeUpdateTestItMock(
-                descriptionsIds.description + ' (mustError=' + mustError + ')',
-                descriptionsIds.filterId,
-                descriptionsIds.newFilter,
-                descriptionsIds.actualUpdate,
-                mustError
-            );
-        });
-    }
+    const initialFiltersHashedArray = ImmutableHashedArray.makeFromArray(filters);
 
     const updatedFilter = {
         "id": "updatedf-ilte-ride-ntif-ier000000000",
@@ -301,27 +249,44 @@ describe('Filters list update tests', () => {
         {description: 'should update absent filter', filterId: filtersIdsToUpdate.absent, newFilter: updatedFilter, actualUpdate:false}
     ];
 
-    const updateTestsItsMocksArraySuccess = makeUpdateTestsItsMocksArray(testCases, false);
-    const updateTestsItsMocksArrayError = makeUpdateTestsItsMocksArray(testCases, true);
+    function makeTest(testCase, testsParams) {
+        const {mustError} = testsParams;
+        const {filterId, newFilter, actualUpdate} = testCase;
 
-    function runTests(describeName, tests) {
-        describe(describeName, () => {
-            var testIndex = 0;
+        const expectedFiltersHashedArray = actualUpdate && !mustError ?
+            ImmutableHashedArray.replaceItemId(initialFiltersHashedArray, filterId, newFilter) :
+            initialFiltersHashedArray;
+        const filterToResponse = {..._.cloneDeep(newFilter), id: filterId};
 
-            beforeEach(() => {
-                apiFacade.filtersClient.update = tests[testIndex++].mockUpdate;
-            });
-
-            afterEach(() => {
-                delete apiFacade.filtersClient.update;
-            });
-
-            tests.forEach((test) => test.it());
-        });
+        return {
+            initialAppState,
+            actions: (dispatch) => {
+                dispatch(filtersListServerUpdateFilter(newFilter, sessionId))
+            },
+            checkState: (globalState) => {
+                const {filtersList: {hashedArray: filtersHashedArray}} = globalState;
+                checkHashedArraysEqual(filtersHashedArray, expectedFiltersHashedArray);
+            },
+            setMocks: () => {
+                apiFacade.filtersClient.update = (requestSessionId, requestFilter, callback) => mockFilterUpdate(
+                    requestSessionId, requestFilter, callback,
+                    {
+                        filter: newFilter,
+                        sessionId: sessionId,
+                        filterResponse: filterToResponse,
+                        error: mustError ? {message: 'mockError'} : null
+                    }
+                )
+            }
+        };
     }
 
-    runTests('run updating success', updateTestsItsMocksArraySuccess);
-    runTests('run updating error', updateTestsItsMocksArrayError);
+    function resetMocks() {
+        delete apiFacade.filtersClient.update;
+    }
+
+    doTests('run updating success', testCases, makeTest, resetMocks, {mustError: false});
+    doTests('run updating error', testCases, makeTest, resetMocks, {mustError: true});
 });
 
 function doTests(describeName, testCases, makeTest, resetMocks, testsParams) {
