@@ -324,6 +324,43 @@ describe('Filters list update tests', () => {
     runTests('run updating error', updateTestsItsMocksArrayError);
 });
 
+function doTests(describeName, testCases, makeTest, resetMocks, testsParams) {
+
+    const tests = testCases.map((testCase) => {
+        const {description} = testCase;
+        const test = makeTest(testCase, testsParams);
+
+        return {
+            it: () => {
+                it(description, (done) => {
+                    storeTestUtils.runTest({
+                        globalInitialState: test.initialAppState,
+                        applyActions: test.actions
+                    }, (globalState) => {
+                        test.checkState(globalState);
+                        done();
+                    });
+                })
+            },
+            setMocks: test.setMocks
+        };
+    });
+
+    describe(describeName, () => {
+        var testIndex = 0;
+
+        beforeEach(() => {
+            tests[testIndex++].setMocks();
+        });
+
+        afterEach(() => {
+            resetMocks();
+        });
+
+        tests.forEach((test) => test.it());
+    })
+}
+
 describe('Filters list create tests', () => {
     const {initialAppState, filters} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
@@ -373,6 +410,7 @@ describe('Filters list create tests', () => {
             ImmutableHashedArray.appendItem(initialFiltersHashedArray, {...newFilter, id: newFilterId});
 
         return {
+            initialAppState: initialAppState,
             actions: (dispatch) => {
                 return dispatch(filtersListServerCreateFilter(newFilter, sessionId, languageId));
             },
@@ -394,48 +432,11 @@ describe('Filters list create tests', () => {
             }
         };
     }
-    
-    function doTests(describeName, testCases, testsParams) {
 
-        const tests = testCases.map((testCase) => {
-            const {description} = testCase;
-            const test = makeTest(testCase, testsParams);
-
-            return {
-                it: () => {
-                    it(description, (done) => {
-                        storeTestUtils.runTest({
-                            globalInitialState: initialAppState,
-                            applyActions: test.actions
-                        }, (globalState) => {
-                            test.checkState(globalState);
-                            done();
-                        });
-                    })
-                },
-                setMocks: test.setMocks
-            };
-        });
-
-        function resetMocks() {
-            delete apiFacade.filtersClient.add;
-        }
-
-        describe(describeName, () => {
-            var testIndex = 0;
-
-            beforeEach(() => {
-                tests[testIndex++].setMocks();
-            });
-
-            afterEach(() => {
-                resetMocks();
-            });
-
-            tests.forEach((test) => test.it());
-        })
+    function resetMocks() {
+        delete apiFacade.filtersClient.add;
     }
 
-    doTests('run creating success', testCases, {mustError: false});
-    doTests('run creating error', testCases, {mustError: true});
+    doTests('run creating success', testCases, makeTest, resetMocks, {mustError: false});
+    doTests('run creating error', testCases, makeTest, resetMocks, {mustError: true});
 });
