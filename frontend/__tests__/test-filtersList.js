@@ -36,11 +36,11 @@ function buildFiltersState(appState) {
     };
 }
 
-function mockFilterRemove(sessionId, filterId, expectedSessionId, expectedFilterId, mustError, callback) {
-    expect(filterId).toEqual(expectedFilterId);
-    expect(sessionId).toEqual(expectedSessionId);
-    if (mustError) {
-        return callback({message: 'mockedError'}, {status: 500});
+function mockFilterRemove(sessionId, filterId, callback, expected) {
+    expect(filterId).toEqual(expected.filterId);
+    expect(sessionId).toEqual(expected.sessionId);
+    if (expected.error) {
+        return callback(expected.error, {status: 500});
     } else {
         return callback(null, {status: HttpStatus.OK});
     }
@@ -116,7 +116,10 @@ describe('Filters list tests', () => {
                 checkHashedArraysEqual(filtersHashedArray, {array: expectedFilters, hash: expectedFiltersHash});
             },
             mockRemove(requestSessionId, requestFilterId, callback) {
-                return mockFilterRemove(requestSessionId, requestFilterId, sessionId, filterId, mustError, callback);
+                return mockFilterRemove(
+                    requestSessionId, requestFilterId, callback,
+                    {sessionId: sessionId, filterId: filterId, error: mustError ? {message: 'mockedError'} : null}
+                );
             }
         };
     }
