@@ -1,6 +1,7 @@
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
 import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
+import {analyze} from '../app/actions/ui';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
@@ -166,6 +167,55 @@ describe('History Tests', () => {
 
         it('should call analyze with proper arguments', () => {
             expect(apiFacade.searchClient.sendSearchRequest).toBeCalled();
+        });
+    });
+
+    describe('History Items Removal', () => {
+        const {sample, view, filters} = nonHistoryEntry;
+        const filter = filters[0];
+        const {searchClient} = apiFacade;
+        beforeEach(() => {
+            installMocks(searchClient, {
+                sendSearchRequest: apiMocks.createSendSearchRequestSimpleMock(searchOperationId)
+            });
+        });
+
+        afterEach(() => {
+            installMocks(searchClient, {
+                sendSearchRequest: null
+            });
+        });
+
+        it('should remove history items when a normal analyze is done', (done) => {
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
+            }, (globalState) => {
+                const {
+                    views, samples, filters
+                } = mapStateToCollections(globalState);
+
+                // now they are here.
+                expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+                expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+                expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
+
+                storeTestUtils.runTest({
+                    globalInitialState: globalState,
+                    applyActions: (dispatch) => dispatch(analyze(sample.id, view.id, filter.id))
+                }, (globalState) => {
+                    const {
+                        views, samples, filters
+                    } = mapStateToCollections(globalState);
+
+                    // And now they should be removed.
+                    expectItemByPredicate(views, item => item.id === historyView.id).toBeFalsy();
+                    expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeFalsy();
+                    expectItemByPredicate(samples, item => item.id === historySample.id).toBeFalsy();
+
+                    done();
+                });
+            });
         });
     });
 
