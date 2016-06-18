@@ -221,14 +221,17 @@ describe('History Tests', () => {
 
     describe('Renew History: non-history items', () => {
         let renewGlobalState = null;
-        const originalSamplesGetFields = apiFacade.samplesClient.getFields;
         const {view:{id: nonHistoryViewId}, sample:{id: nonHistorySampleId}} = nonHistoryEntry;
         const nonHistoryFilterId = nonHistoryEntry.filters[0].id;
         beforeAll((done) => {
             const {samplesClient, searchClient} = apiFacade;
-            samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, nonHistorySampleId, sampleFieldsList);
-            searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
-                nonHistorySampleId, nonHistoryViewId, nonHistoryFilterId, searchOperationId);
+            installMocks(samplesClient, {
+                getFields: apiMocks.createGetFieldsMock(sessionId, nonHistorySampleId, sampleFieldsList)
+            });
+            installMocks(searchClient, {
+                sendSearchRequest: apiMocks.createSendSearchRequestMock(sessionId, languageId,
+                    nonHistorySampleId, nonHistoryViewId, nonHistoryFilterId, searchOperationId)
+            });
             storeTestUtils.runTest({
                 globalInitialState: initialAppState,
                 applyActions: (dispatch) => dispatch(renewHistoryItem(nonHistoryEntry.id))
@@ -239,7 +242,13 @@ describe('History Tests', () => {
             });
         });
         afterAll(() => {
-            apiFacade.samplesClient.getFields = originalSamplesGetFields;
+            const {samplesClient, searchClient} = apiFacade;
+            installMocks(samplesClient, {
+                getFields: null
+            });
+            installMocks(searchClient, {
+                sendSearchRequest: null
+            });
         });
 
         it('should not add non-history items into collections', () => {
