@@ -63,20 +63,75 @@ function buildFiltersState(appState) {
         }
     };
 
+    function makeFiltersIds(absendFilterId) {
+        return {
+            first: filters[0].id,
+                last: filters[filters.length - 1].id,
+            middle: filters[Math.floor(filters.length / 2)].id,
+            absent: absendFilterId
+        }
+    }
+
     return {
         initialAppState,
         filters,
-        filtersIdsToDelete: {
-            first: filters[0].id,
-            last: filters[filters.length - 1].id,
-            middle: filters[Math.floor(filters.length / 2)].id,
-            absent: 'someabsentite-midt-odel-etehere00000'
+        filtersIdsToDelete: makeFiltersIds('someabsentite-midt-odel-etehere00000'),
+        filtersIdsToUpdate: makeFiltersIds('someabsentite-midt-oupd-atehere00000'),
+        updatedFilter: {
+            "id": "updatedf-ilte-ride-ntif-ier000000000",
+            "originalFilterId": null,
+            "name": "Updated Filter",
+            "rules": {
+                "$and": [
+                    {
+                        "00000000-0000-0000-0000-000000000007": {
+                            "$eq": "SAPP"
+                        }
+                    },
+                    {
+                        "00000000-0000-0000-0000-000000000005": {
+                            "$neq": "B"
+                        }
+                    },
+                    {
+                        "$or": [
+                            {
+                                "69d1d2db-1d7b-4a9e-a3ee-d5108da78c84": {
+                                    "$eq": "CBA"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
         },
-        filtersIdsToUpdate: {
-            first: filters[0].id,
-            last: filters[filters.length - 1].id,
-            middle: filters[Math.floor(filters.length / 2)].id,
-            absent: 'someabsentite-midt-oupd-atehere00000'
+        createdFilter: {
+            "id": null,
+            "originalFilterId": null,
+            "name": "Updated Filter",
+            "rules": {
+                "$and": [
+                    {
+                        "00000000-0000-0000-0000-000000000007": {
+                            "$eq": "SAPP"
+                        }
+                    },
+                    {
+                        "00000000-0000-0000-0000-000000000005": {
+                            "$neq": "B"
+                        }
+                    },
+                    {
+                        "$or": [
+                            {
+                                "69d1d2db-1d7b-4a9e-a3ee-d5108da78c84": {
+                                    "$eq": "CBA"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
         }
     };
 }
@@ -208,39 +263,10 @@ describe('Filters list delete tests', () => {
 });
 
 describe('Filters list update tests', () => {
-    const {initialAppState, filters, filtersIdsToUpdate} = buildFiltersState(MOCK_APP_STATE);
+    const {initialAppState, filters, filtersIdsToUpdate, updatedFilter} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
 
     const initialFiltersHashedArray = ImmutableHashedArray.makeFromArray(filters);
-
-    const updatedFilter = {
-        "id": "updatedf-ilte-ride-ntif-ier000000000",
-        "originalFilterId": null,
-        "name": "Updated Filter",
-        "rules": {
-            "$and": [
-                {
-                    "00000000-0000-0000-0000-000000000007": {
-                        "$eq": "SAPP"
-                    }
-                },
-                {
-                    "00000000-0000-0000-0000-000000000005": {
-                        "$neq": "B"
-                    }
-                },
-                {
-                    "$or": [
-                        {
-                            "69d1d2db-1d7b-4a9e-a3ee-d5108da78c84": {
-                                "$eq": "CBA"
-                            }
-                        }
-                    ]
-                }
-            ]
-        }
-    };
 
     const testCases = [
         {description: 'should update first filter', filterId: filtersIdsToUpdate.first, newFilter: {...updatedFilter, id: filtersIdsToUpdate.first}, actualUpdate:true},
@@ -290,41 +316,12 @@ describe('Filters list update tests', () => {
 });
 
 describe('Filters list create tests', () => {
-    const {initialAppState, filters} = buildFiltersState(MOCK_APP_STATE);
+    const {initialAppState, filters, createdFilter} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
     const languageId = initialAppState.ui.language;
 
-    const newFilter = {
-        "id": null,
-        "originalFilterId": null,
-        "name": "Updated Filter",
-        "rules": {
-            "$and": [
-                {
-                    "00000000-0000-0000-0000-000000000007": {
-                        "$eq": "SAPP"
-                    }
-                },
-                {
-                    "00000000-0000-0000-0000-000000000005": {
-                        "$neq": "B"
-                    }
-                },
-                {
-                    "$or": [
-                        {
-                            "69d1d2db-1d7b-4a9e-a3ee-d5108da78c84": {
-                                "$eq": "CBA"
-                            }
-                        }
-                    ]
-                }
-            ]
-        }
-    };
-
     const testCases = [
-        {description: 'should create filter', newFilter: newFilter}
+        {description: 'should create filter', newFilter: createdFilter}
     ];
 
     function makeTest(testCase, testsParams) {
