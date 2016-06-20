@@ -116,7 +116,7 @@ function buildFiltersState(appState) {
     function makeFiltersIds(absentFilterId) {
         return {
             first: filters[0].id,
-                last: filters[filters.length - 1].id,
+            last: filters[filters.length - 1].id,
             middle: filters[Math.floor(filters.length / 2)].id,
             absent: absentFilterId
         }
@@ -158,7 +158,7 @@ function buildFiltersState(appState) {
         createdFilter: {
             "id": null,
             "originalFilterId": null,
-            "name": "Updated Filter",
+            "name": "Created Filter",
             "rules": {
                 "$and": [
                     {
