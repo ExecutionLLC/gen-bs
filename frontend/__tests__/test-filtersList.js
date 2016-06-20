@@ -234,7 +234,117 @@ const filtersTests = makeListedObjectTests({
     }
 });
 
+
+function buildViewsState(appState) {
+    const {
+        auth,
+        ui,
+        viewsList: {hashedArray: {array: views}}
+    } = appState;
+
+    const initialAppState = {
+        auth: auth,
+        ui: ui,
+        viewsList: {
+            hashedArray: ImmutableHashedArray.makeFromArray(views),
+            selectedViewId: views[0].id
+        }
+    };
+
+    function makeViewsIds(absentViewId) {
+        return {
+            first: views[0].id,
+            last: views[views.length - 1].id,
+            middle: views[Math.floor(views.length / 2)].id,
+            absent: absentViewId
+        }
+    }
+
+    return {
+        initialAppState,
+        views,
+        viewsIdsToDelete: makeViewsIds('someabsentite-midt-odel-etehere00000'),
+        viewsIdsToUpdate: makeViewsIds('someabsentite-midt-oupd-atehere00000'),
+        updatedView: {
+            "id": "updatedv-iewi-dent-ifie-r00000000000",
+            "originalViewId": null,
+            "name": "Updated View",
+            "viewListItems": [
+                {
+                    "id": "db1a4f9f-60d6-416a-a2a1-86082dba551a",
+                    "viewId": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
+                    "fieldId": "00000000-0000-0000-0000-000000000001",
+                    "order": 1,
+                    "sortOrder": 1,
+                    "sortDirection": "asc",
+                    "filterControlEnable": false,
+                    "keywords": []
+                },
+                {
+                    "id": "d1b0bce8-c4c8-43b1-8a1d-4579e432537a",
+                    "viewId": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
+                    "fieldId": "00000000-0000-0000-0000-000000000002",
+                    "order": 2,
+                    "sortOrder": 2,
+                    "sortDirection": "desc",
+                    "filterControlEnable": false,
+                    "keywords": []
+                }
+            ]
+        },
+        createdFilter: {
+            "id": null,
+            "originalFilterId": null,
+            "name": "Created View",
+            "viewListItems": [
+                {
+                    "id": "5505f259-d611-4e0a-b9c9-2f8875c0522b",
+                    "viewId": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
+                    "fieldId": "00000000-0000-0000-0000-000000000007",
+                    "order": 3,
+                    "sortOrder": null,
+                    "sortDirection": null,
+                    "filterControlEnable": false,
+                    "keywords": []
+                },
+                {
+                    "id": "319e82a3-e634-4509-9a10-72e119a9f3ec",
+                    "viewId": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
+                    "fieldId": "00000000-0000-0000-0000-000000000005",
+                    "order": 4,
+                    "sortOrder": null,
+                    "sortDirection": null,
+                    "filterControlEnable": false,
+                    "keywords": [
+                        "7cd8167c-52d8-4b24-afe3-38d1b2bc82de"
+                    ]
+                }
+            ]
+        }
+    };
+}
+
+
+const viewsTests = makeListedObjectTests({
+    describes: {
+        initial: 'Mocked views list state'
+    },
+    buildInitState: () => {
+        const {views, viewsIdsToDelete} = buildViewsState(MOCK_APP_STATE);
+        return {
+            idsToDelete: {
+                first: viewsIdsToDelete.first,
+                middle: viewsIdsToDelete.middle,
+                last: viewsIdsToDelete.last,
+                absent: viewsIdsToDelete.absent
+            },
+            list: views
+        };
+    }
+});
+
 filtersTests();
+viewsTests();
 
 describe('Mocked filters list state', () => {
     const {filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
