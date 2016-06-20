@@ -112,10 +112,6 @@ function mockFilterCreate(sessionId, languageId, filter, callback, expected) {
     }
 }
 
-function expectItemByPredicate(collection, predicate) {
-    return expect(_.find(collection, predicate));
-}
-
 describe('Mocked filters list state', () => {
     const {filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
 
