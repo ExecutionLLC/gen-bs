@@ -61,6 +61,38 @@ function mockFilterCreate(sessionId, languageId, filter, callback, expected) {
 }
 
 
+function mockViewRemove(sessionId, viewId, callback, expected) {
+    expect(viewId).toEqual(expected.viewId);
+    expect(sessionId).toEqual(expected.sessionId);
+    if (expected.error) {
+        return callback(expected.error, {status: 500});
+    } else {
+        return callback(null, {status: HttpStatus.OK});
+    }
+}
+
+function mockViewUpdate(sessionId, view, callback, expected) {
+    expect(view).toEqual(expected.view);
+    expect(sessionId).toEqual(expected.sessionId);
+    if (expected.error) {
+        return callback(expected.error, {status: 500});
+    } else {
+        return callback(null, {status: HttpStatus.OK, body: expected.viewResponse});
+    }
+}
+
+function mockViewCreate(sessionId, languageId, view, callback, expected) {
+    expect(view).toEqual(expected.view);
+    expect(sessionId).toEqual(expected.sessionId);
+    expect(languageId).toEqual(expected.languageId);
+    if (expected.error) {
+        return callback(expected.error, {status: 500});
+    } else {
+        return callback(null, {status: HttpStatus.OK, body: expected.viewResponse});
+    }
+}
+
+
 function doTests(describeName, testCases, makeTest, resetMocks, testsParams) {
 
     const tests = testCases.map((testCase) => {
