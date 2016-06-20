@@ -298,48 +298,6 @@ function makeListedObjectTests(params) {
     };
 }
 
-const filtersTests = makeListedObjectTests({
-    describes: {
-        initial: 'Mocked filters list state',
-        deleteTests: 'Filters list delete tests'
-    },
-    buildInitState() {
-        const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
-        return {
-            initialAppState,
-            idsToDelete: {
-                first: filtersIdsToDelete.first,
-                middle: filtersIdsToDelete.middle,
-                last: filtersIdsToDelete.last,
-                absent: filtersIdsToDelete.absent
-            },
-            list: filters
-        };
-    },
-    makeActions: {
-        remove(filterId, sessionId) {
-            return (dispatch) => {
-                dispatch(filtersListServerDeleteFilter(filterId, sessionId));
-            };
-        }
-    },
-    makeMocks: {
-        remove(sessionId, itemId, mustError) {
-            return () => {
-                apiFacade.filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
-                    requestSessionId, requestFilterId, callback,
-                    {sessionId: sessionId, filterId: itemId, error: mustError ? {message: 'mockedError'} : null}
-                );
-            };
-        }
-    },
-    getStateHashedArray(globalState) {
-        const {filtersList: {hashedArray: filtersHashedArray}} = globalState;
-        return filtersHashedArray;
-    }
-});
-
-
 function buildViewsState(appState) {
     const {
         auth,
@@ -429,6 +387,47 @@ function buildViewsState(appState) {
     };
 }
 
+
+const filtersTests = makeListedObjectTests({
+    describes: {
+        initial: 'Mocked filters list state',
+        deleteTests: 'Filters list delete tests'
+    },
+    buildInitState() {
+        const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
+        return {
+            initialAppState,
+            idsToDelete: {
+                first: filtersIdsToDelete.first,
+                middle: filtersIdsToDelete.middle,
+                last: filtersIdsToDelete.last,
+                absent: filtersIdsToDelete.absent
+            },
+            list: filters
+        };
+    },
+    makeActions: {
+        remove(filterId, sessionId) {
+            return (dispatch) => {
+                dispatch(filtersListServerDeleteFilter(filterId, sessionId));
+            };
+        }
+    },
+    makeMocks: {
+        remove(sessionId, itemId, mustError) {
+            return () => {
+                apiFacade.filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
+                    requestSessionId, requestFilterId, callback,
+                    {sessionId: sessionId, filterId: itemId, error: mustError ? {message: 'mockedError'} : null}
+                );
+            };
+        }
+    },
+    getStateHashedArray(globalState) {
+        const {filtersList: {hashedArray: filtersHashedArray}} = globalState;
+        return filtersHashedArray;
+    }
+});
 
 const viewsTests = makeListedObjectTests({
     describes: {
