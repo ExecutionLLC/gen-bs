@@ -10,6 +10,43 @@ import apiFacade from '../app/api/ApiFacade';
 import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
 
 
+function doTests(describeName, testCases, makeTest, resetMocks, testsParams) {
+
+    const tests = testCases.map((testCase) => {
+        const {description} = testCase;
+        const test = makeTest(testCase, testsParams);
+
+        return {
+            it: () => {
+                it(description, (done) => {
+                    storeTestUtils.runTest({
+                        globalInitialState: test.initialAppState,
+                        applyActions: test.actions
+                    }, (globalState) => {
+                        test.checkState(globalState);
+                        done();
+                    });
+                })
+            },
+            setMocks: test.setMocks
+        };
+    });
+
+    describe(describeName, () => {
+        var testIndex = 0;
+
+        beforeEach(() => {
+            tests[testIndex++].setMocks();
+        });
+
+        afterEach(() => {
+            resetMocks();
+        });
+
+        tests.forEach((test) => test.it());
+    })
+}
+
 function buildFiltersState(appState) {
     const {
         auth,
@@ -255,43 +292,6 @@ describe('Filters list update tests', () => {
     doTests('run updating success', testCases, makeTest, resetMocks, {mustError: false});
     doTests('run updating error', testCases, makeTest, resetMocks, {mustError: true});
 });
-
-function doTests(describeName, testCases, makeTest, resetMocks, testsParams) {
-
-    const tests = testCases.map((testCase) => {
-        const {description} = testCase;
-        const test = makeTest(testCase, testsParams);
-
-        return {
-            it: () => {
-                it(description, (done) => {
-                    storeTestUtils.runTest({
-                        globalInitialState: test.initialAppState,
-                        applyActions: test.actions
-                    }, (globalState) => {
-                        test.checkState(globalState);
-                        done();
-                    });
-                })
-            },
-            setMocks: test.setMocks
-        };
-    });
-
-    describe(describeName, () => {
-        var testIndex = 0;
-
-        beforeEach(() => {
-            tests[testIndex++].setMocks();
-        });
-
-        afterEach(() => {
-            resetMocks();
-        });
-
-        tests.forEach((test) => test.it());
-    })
-}
 
 describe('Filters list create tests', () => {
     const {initialAppState, filters} = buildFiltersState(MOCK_APP_STATE);
