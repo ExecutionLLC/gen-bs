@@ -355,7 +355,7 @@ function buildViewsState(appState) {
                 }
             ]
         },
-        createdFilter: {
+        createdView: {
             "id": null,
             "originalFilterId": null,
             "name": "Created View",
