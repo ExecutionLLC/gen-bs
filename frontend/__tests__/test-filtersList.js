@@ -295,6 +295,85 @@ function makeListedObjectTests(params) {
             doTests('run deletion error', testCases, makeTest, resetMocks, {mustError: true});
         });
 
+        describe(params.describes.updateTests, () => {
+            const {initialAppState, list, idsToUpdate, updatedItem} = params.buildInitState(MOCK_APP_STATE);
+            const {sessionId} = initialAppState.auth;
+
+            const initialHashedArray = ImmutableHashedArray.makeFromArray(list);
+
+            const testCases = [
+                {description: 'should update first filter', itemId: idsToUpdate.first, newItem: {...updatedItem, id: idsToUpdate.first}, actualUpdate:true},
+                {description: 'should update middle filter', itemId: idsToUpdate.middle, newItem: {...updatedItem, id: idsToUpdate.middle}, actualUpdate:true},
+                {description: 'should update last filter', itemId: idsToUpdate.last, newItem: {...updatedItem, id: idsToUpdate.last}, actualUpdate:true},
+                {description: 'should update absent filter', itemId: idsToUpdate.absent, newItem: updatedItem, actualUpdate:false}
+            ];
+
+            function makeTest(testCase, testsParams) {
+                const {mustError} = testsParams;
+                const {itemId, newItem, actualUpdate} = testCase;
+
+                const expectedItemsHashedArray = actualUpdate && !mustError ?
+                    ImmutableHashedArray.replaceItemId(initialHashedArray, itemId, newItem) :
+                    initialHashedArray;
+                const itemToResponse = {..._.cloneDeep(newItem), id: itemId};
+
+                return {
+                    initialAppState,
+                    actions: params.makeActions.update(newItem, sessionId),
+                    checkState: (globalState) => {
+                        const stateHashedArray = params.getStateHashedArray(globalState);
+                        checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
+                    },
+                    setMocks: params.makeMocks.update(sessionId, newItem, itemToResponse, mustError)
+                };
+            }
+
+            function resetMocks() {
+                delete apiFacade.filtersClient.update;
+            }
+
+            doTests('run updating success', testCases, makeTest, resetMocks, {mustError: false});
+            doTests('run updating error', testCases, makeTest, resetMocks, {mustError: true});
+        });
+
+        describe(params.describes.createTests, () => {
+            const {initialAppState, list, createdItem} = params.buildInitState(MOCK_APP_STATE);
+            const {sessionId} = initialAppState.auth;
+            const languageId = initialAppState.ui.language;
+
+            const testCases = [
+                {description: 'should create item', newItem: createdItem}
+            ];
+
+            function makeTest(testCase, testsParams) {
+                const {mustError} = testsParams;
+                const {newItem} = testCase;
+                const newItemId = '' + Math.random(); // TODO get from init state
+                const itemToResponse = {..._.cloneDeep(newItem), id: newItemId};
+                const initialItemsHashedArray = ImmutableHashedArray.makeFromArray(list);
+                const expectedItemsHashedArray = mustError ?
+                    initialItemsHashedArray :
+                    ImmutableHashedArray.appendItem(initialItemsHashedArray, {...newItem, id: newItemId});
+
+                return {
+                    initialAppState: initialAppState,
+                    actions: params.makeActions.create(newItem, sessionId, languageId),
+                    checkState: (globalState) => {
+                        const stateHashedArray = params.getStateHashedArray(globalState);
+                        checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
+                    },
+                    setMocks: params.makeMocks.create(sessionId, languageId, newItem, itemToResponse, mustError)
+                };
+            }
+
+            function resetMocks() {
+                delete apiFacade.filtersClient.add;
+            }
+
+            doTests('run creating success', testCases, makeTest, resetMocks, {mustError: false});
+            doTests('run creating error', testCases, makeTest, resetMocks, {mustError: true});
+        });
+
     };
 }
 
@@ -391,10 +470,12 @@ function buildViewsState(appState) {
 const filtersTests = makeListedObjectTests({
     describes: {
         initial: 'Mocked filters list state',
-        deleteTests: 'Filters list delete tests'
+        deleteTests: 'Filters list delete tests',
+        updateTests: 'Filters list update tests',
+        createTests: 'Filters list create tests'
     },
     buildInitState() {
-        const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
+        const {initialAppState, filters, filtersIdsToDelete, updatedFilter, createdFilter} = buildFiltersState(MOCK_APP_STATE);
         return {
             initialAppState,
             idsToDelete: {
@@ -403,7 +484,15 @@ const filtersTests = makeListedObjectTests({
                 last: filtersIdsToDelete.last,
                 absent: filtersIdsToDelete.absent
             },
-            list: filters
+            idsToUpdate: {
+                first: filtersIdsToDelete.first,
+                middle: filtersIdsToDelete.middle,
+                last: filtersIdsToDelete.last,
+                absent: filtersIdsToDelete.absent
+            },
+            list: filters,
+            updatedItem: updatedFilter,
+            createdItem: createdFilter
         };
     },
     makeActions: {
@@ -411,6 +500,16 @@ const filtersTests = makeListedObjectTests({
             return (dispatch) => {
                 dispatch(filtersListServerDeleteFilter(filterId, sessionId));
             };
+        },
+        update(newFilter, sessionId) {
+            return (dispatch) => {
+                dispatch(filtersListServerUpdateFilter(newFilter, sessionId));
+            };
+        },
+        create(newFilter, sessionId, languageId) {
+            return (dispatch) => {
+                return dispatch(filtersListServerCreateFilter(newFilter, sessionId, languageId));
+            }
         }
     },
     makeMocks: {
@@ -419,6 +518,33 @@ const filtersTests = makeListedObjectTests({
                 apiFacade.filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
                     requestSessionId, requestFilterId, callback,
                     {sessionId: sessionId, filterId: itemId, error: mustError ? {message: 'mockedError'} : null}
+                );
+            };
+        },
+        update(sessionId, newItem, itemToResponse, mustError) {
+            return () => {
+                apiFacade.filtersClient.update = (requestSessionId, requestFilter, callback) => mockFilterUpdate(
+                    requestSessionId, requestFilter, callback,
+                    {
+                        filter: newItem,
+                        sessionId: sessionId,
+                        filterResponse: itemToResponse,
+                        error: mustError ? {message: 'mockError'} : null
+                    }
+                );
+            };
+        },
+        create(sessionId, languageId, newFilter, filterToResponse, mustError) {
+            return () => {
+                apiFacade.filtersClient.add = (requestSessionId, requestLanguageId, requestFilter, callback) => mockFilterCreate(
+                    requestSessionId, requestLanguageId, requestFilter, callback,
+                    {
+                        sessionId: sessionId,
+                        languageId: languageId,
+                        filter: newFilter,
+                        filterResponse: filterToResponse,
+                        error: mustError ? {message: 'mockError'} : null
+                    }
                 );
             };
         }
@@ -432,10 +558,12 @@ const filtersTests = makeListedObjectTests({
 const viewsTests = makeListedObjectTests({
     describes: {
         initial: 'Mocked views list state',
-        deleteTests: 'Views list delete tests'
+        deleteTests: 'Views list delete tests',
+        updateTests: 'Views list update tests',
+        createTests: 'Views list create tests'
     },
     buildInitState: () => {
-        const {initialAppState, views, viewsIdsToDelete} = buildViewsState(MOCK_APP_STATE);
+        const {initialAppState, views, viewsIdsToDelete, updatedView, createdView} = buildViewsState(MOCK_APP_STATE);
         return {
             initialAppState,
             idsToDelete: {
@@ -444,7 +572,15 @@ const viewsTests = makeListedObjectTests({
                 last: viewsIdsToDelete.last,
                 absent: viewsIdsToDelete.absent
             },
-            list: views
+            idsToUpdate: {
+                first: viewsIdsToDelete.first,
+                middle: viewsIdsToDelete.middle,
+                last: viewsIdsToDelete.last,
+                absent: viewsIdsToDelete.absent
+            },
+            list: views,
+            updatedItem: updatedView,
+            createdItem: createdView
         };
     },
     makeActions: {
@@ -452,6 +588,16 @@ const viewsTests = makeListedObjectTests({
             return (dispatch) => {
                 dispatch(viewsListServerDeleteView(viewId, sessionId));
             };
+        },
+        update(newView, sessionId) {
+            return (dispatch) => {
+                dispatch(viewsListServerUpdateView(newView, sessionId));
+            };
+        },
+        create(newView, sessionId, languageId) {
+            return (dispatch) => {
+                return dispatch(viewsListServerCreateView(newView, sessionId, languageId));
+            }
         }
     },
     makeMocks: {
@@ -460,6 +606,33 @@ const viewsTests = makeListedObjectTests({
                 apiFacade.viewsClient.remove = (requestSessionId, requestViewId, callback) => mockViewRemove(
                     requestSessionId, requestViewId, callback,
                     {sessionId: sessionId, viewId: itemId, error: mustError ? {message: 'mockedError'} : null}
+                );
+            };
+        },
+        update(sessionId, newItem, itemToResponse, mustError) {
+            return () => {
+                apiFacade.viewsClient.update = (requestSessionId, requestView, callback) => mockViewUpdate(
+                    requestSessionId, requestView, callback,
+                    {
+                        view: newItem,
+                        sessionId: sessionId,
+                        viewResponse: itemToResponse,
+                        error: mustError ? {message: 'mockError'} : null
+                    }
+                );
+            };
+        },
+        create(sessionId, languageId, newView, viewToResponse, mustError) {
+            return () => {
+                apiFacade.viewsClient.add = (requestSessionId, requestLanguageId, requestView, callback) => mockViewCreate(
+                    requestSessionId, requestLanguageId, requestView, callback,
+                    {
+                        sessionId: sessionId,
+                        languageId: languageId,
+                        view: newView,
+                        viewResponse: viewToResponse,
+                        error: mustError ? {message: 'mockError'} : null
+                    }
                 );
             };
         }
