@@ -186,6 +186,56 @@ function buildFiltersState(appState) {
     };
 }
 
+
+function makeListedObjectTests(params) {
+
+    return () => {
+
+        describe(params.describes.initial, () => {
+            const {list, idsToDelete} = params.buildInitState(MOCK_APP_STATE);
+
+            it('should contain first item to delete', () => {
+                expect(list[0].id === idsToDelete.first).toBeTruthy();
+            });
+
+            it('should contain last item to delete', () => {
+                expect(list[list.length - 1].id === idsToDelete.last).toBeTruthy();
+            });
+
+            it('should contain middle item to delete', () => {
+                const middleItemIndex = list.findIndex((filter) => filter.id === idsToDelete.middle);
+                expect(middleItemIndex > 0 && middleItemIndex < list.length - 1).toBeTruthy();
+            });
+
+            it('should contain no item to delete', () => {
+                const middleItemIndex = list.findIndex((filter) => filter.id === idsToDelete.absent);
+                expect(middleItemIndex === -1).toBeTruthy();
+            });
+        });
+
+    };
+}
+
+const filtersTests = makeListedObjectTests({
+    describes: {
+        initial: 'Mocked filters list state'
+    },
+    buildInitState: () => {
+        const {filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
+        return {
+            idsToDelete: {
+                first: filtersIdsToDelete.first,
+                middle: filtersIdsToDelete.middle,
+                last: filtersIdsToDelete.last,
+                absent: filtersIdsToDelete.absent
+            },
+            list: filters
+        };
+    }
+});
+
+filtersTests();
+
 describe('Mocked filters list state', () => {
     const {filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
 
