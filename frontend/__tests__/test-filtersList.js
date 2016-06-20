@@ -113,12 +113,12 @@ function buildFiltersState(appState) {
         }
     };
 
-    function makeFiltersIds(absendFilterId) {
+    function makeFiltersIds(absentFilterId) {
         return {
             first: filters[0].id,
                 last: filters[filters.length - 1].id,
             middle: filters[Math.floor(filters.length / 2)].id,
-            absent: absendFilterId
+            absent: absentFilterId
         }
     }
 
