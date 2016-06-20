@@ -122,9 +122,20 @@ describe('Filters list delete tests', () => {
     const {initialAppState, filters, filtersIdsToDelete} = buildFiltersState(MOCK_APP_STATE);
     const {sessionId} = initialAppState.auth;
 
-    function makeDeleteTest(filterId, actualDelete, mustError) {
-        const filtersCount = filters.length;
+    const testCases = [
+        {description: 'should delete first filter', filterId: filtersIdsToDelete.first, actualDelete:true},
+        {description: 'should delete middle filter', filterId: filtersIdsToDelete.middle, actualDelete:true},
+        {description: 'should delete last filter', filterId: filtersIdsToDelete.last, actualDelete:true},
+        {description: 'should delete absent filter', filterId: filtersIdsToDelete.absent, actualDelete:false}
+    ];
+
+    function makeTest(testCase, testParams) {
+        const {mustError} = testParams;
+        const {filterId, actualDelete} = testCase;
+
         const reallyDelete = actualDelete && !mustError;
+
+        const filtersCount = filters.length;
         const expectedFiltersCount = reallyDelete ? filtersCount - 1 : filtersCount;
         const expectedFilters = reallyDelete ? filters.filter((filter) => filter.id !== filterId) : filters;
         const expectedFiltersHash = filters.reduce((hash, filter) => {
@@ -134,77 +145,33 @@ describe('Filters list delete tests', () => {
             return hash;
         }, {});
         const expectedFilter = actualDelete && !mustError ? void 0 : filters.find((item) => item.id === filterId);
+
         return {
-            actions(dispatch) {
-                return dispatch(filtersListServerDeleteFilter(filterId, sessionId));
+            initialAppState,
+            actions: (dispatch) => {
+                dispatch(filtersListServerDeleteFilter(filterId, sessionId));
             },
-            checkState(globalState) {
+            checkState: (globalState) => {
                 const {filtersList: {hashedArray: filtersHashedArray}} = globalState;
                 checkHashedArrayLength(filtersHashedArray, expectedFiltersCount);
                 checkObjectInHashedArray(filtersHashedArray, filterId, expectedFilter);
                 checkHashedArraysEqual(filtersHashedArray, {array: expectedFilters, hash: expectedFiltersHash});
             },
-            mockRemove(requestSessionId, requestFilterId, callback) {
-                return mockFilterRemove(
+            setMocks: () => {
+                apiFacade.filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
                     requestSessionId, requestFilterId, callback,
                     {sessionId: sessionId, filterId: filterId, error: mustError ? {message: 'mockedError'} : null}
                 );
             }
         };
     }
-    
-    function makeDeleteTestItMock(description, filterId, actualDelete, mustError) {
-        const delTest = makeDeleteTest(filterId, actualDelete, mustError);
-        return {
-            it: () => {
-                it(description, (done) => {
-                    storeTestUtils.runTest({
-                        globalInitialState: initialAppState,
-                        applyActions: delTest.actions
-                    }, (globalState) => {
-                        delTest.checkState(globalState);
-                        done();
-                    });
-                });
-            },
-            mockRemove: delTest.mockRemove
-        };
+
+    function resetMocks() {
+        delete apiFacade.filtersClient.remove;
     }
 
-    function makeDeleteTestsItsMocksArray(descriptionsIds, mustError) {
-        return descriptionsIds.map((descriptionsIds) => {
-            return makeDeleteTestItMock(descriptionsIds.description + ' (mustError=' + mustError + ')', descriptionsIds.filterId, descriptionsIds.actualDelete, mustError);
-        });
-    }
-
-    const testCases = [
-        {description: 'should delete first filter', filterId: filtersIdsToDelete.first, actualDelete:true},
-        {description: 'should delete middle filter', filterId: filtersIdsToDelete.middle, actualDelete:true},
-        {description: 'should delete last filter', filterId: filtersIdsToDelete.last, actualDelete:true},
-        {description: 'should delete absent filter', filterId: filtersIdsToDelete.absent, actualDelete:false}
-    ];
-
-    const delTestsItsMocksArraySuccess = makeDeleteTestsItsMocksArray(testCases, false);
-    const delTestsItsMocksArrayError = makeDeleteTestsItsMocksArray(testCases, true);
-
-    function runTests(describeName, tests) {
-        describe(describeName, () => {
-            var testIndex = 0;
-    
-            beforeEach(() => {
-                apiFacade.filtersClient.remove = tests[testIndex++].mockRemove;
-            });
-    
-            afterEach(() => {
-                delete apiFacade.filtersClient.remove;
-            });
-    
-            tests.forEach((test) => test.it());
-        });
-    }
-
-    runTests('run deletion success', delTestsItsMocksArraySuccess);
-    runTests('run deletion error', delTestsItsMocksArrayError);
+    doTests('run deletion success', testCases, makeTest, resetMocks, {mustError: false});
+    doTests('run deletion error', testCases, makeTest, resetMocks, {mustError: false});
 });
 
 describe('Filters list update tests', () => {
