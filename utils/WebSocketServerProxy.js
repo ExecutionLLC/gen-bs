@@ -36,6 +36,13 @@ class WebSocketServerProxy {
     }
 
     /**
+     * @params {String}messageString
+     * */
+    sendToAll(messageString) {
+        this.clients.forEach(ws => ws.send(messageString));
+    }
+
+    /**
      * @param {function(Object)}handler
      * */
     onConnect(handler) {

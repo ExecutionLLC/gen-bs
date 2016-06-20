@@ -10,6 +10,7 @@ const ServicesFacade = require('../../services/ServicesFacade');
 const ControllersFacade = require('../../controllers/ControllersFacade');
 
 const MockUserModel = require('./MockUserModel');
+const MockRedisService = require('./MockRedisService');
 const MockSessionsController = require('./MockSessionsController');
 
 class MockWebServerHost {
@@ -20,6 +21,7 @@ class MockWebServerHost {
         this._setModelsMocks(models);
 
         const services = new ServicesFacade(Config, logger, models);
+        this._setServicesMocks(services);
 
         const controllers = new ControllersFacade(logger, services);
         this._setControllersMocks(controllers);
@@ -33,6 +35,10 @@ class MockWebServerHost {
 
     _setControllersMocks(controllers) {
         controllers.sessionsController = new MockSessionsController(controllers.sessionsController);
+    }
+
+    _setServicesMocks(services, models) {
+        services.redis = new MockRedisService(services, models);
     }
 
     start(callback) {
