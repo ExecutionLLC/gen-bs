@@ -215,7 +215,8 @@ function buildFiltersState(appState) {
                     }
                 ]
             }
-        }
+        },
+        createdFilterId: "createdf-ilte-ride-ntif-ier000000000"
     };
 }
 
@@ -337,7 +338,7 @@ function makeListedObjectTests(params) {
         });
 
         describe(params.describes.createTests, () => {
-            const {initialAppState, list, createdItem} = params.buildInitState(MOCK_APP_STATE);
+            const {initialAppState, list, createdItem, createdItemId} = params.buildInitState(MOCK_APP_STATE);
             const {sessionId} = initialAppState.auth;
             const languageId = initialAppState.ui.language;
 
@@ -348,12 +349,11 @@ function makeListedObjectTests(params) {
             function makeTest(testCase, testsParams) {
                 const {mustError} = testsParams;
                 const {newItem} = testCase;
-                const newItemId = '' + Math.random(); // TODO get from init state
-                const itemToResponse = {..._.cloneDeep(newItem), id: newItemId};
+                const itemToResponse = {..._.cloneDeep(newItem), id: createdItemId};
                 const initialItemsHashedArray = ImmutableHashedArray.makeFromArray(list);
                 const expectedItemsHashedArray = mustError ?
                     initialItemsHashedArray :
-                    ImmutableHashedArray.appendItem(initialItemsHashedArray, {...newItem, id: newItemId});
+                    ImmutableHashedArray.appendItem(initialItemsHashedArray, {...newItem, id: createdItemId});
 
                 return {
                     initialAppState: initialAppState,
@@ -462,7 +462,8 @@ function buildViewsState(appState) {
                     ]
                 }
             ]
-        }
+        },
+        createdViewId: "createdv-iewi-dent-ifie-r00000000000"
     };
 }
 
@@ -475,7 +476,7 @@ const filtersTests = makeListedObjectTests({
         createTests: 'Filters list create tests'
     },
     buildInitState() {
-        const {initialAppState, filters, filtersIdsToDelete, updatedFilter, createdFilter} = buildFiltersState(MOCK_APP_STATE);
+        const {initialAppState, filters, filtersIdsToDelete, updatedFilter, createdFilter, createdFilterId} = buildFiltersState(MOCK_APP_STATE);
         return {
             initialAppState,
             idsToDelete: {
@@ -492,7 +493,8 @@ const filtersTests = makeListedObjectTests({
             },
             list: filters,
             updatedItem: updatedFilter,
-            createdItem: createdFilter
+            createdItem: createdFilter,
+            createItemId: createdFilterId
         };
     },
     makeActions: {
@@ -563,7 +565,7 @@ const viewsTests = makeListedObjectTests({
         createTests: 'Views list create tests'
     },
     buildInitState: () => {
-        const {initialAppState, views, viewsIdsToDelete, updatedView, createdView} = buildViewsState(MOCK_APP_STATE);
+        const {initialAppState, views, viewsIdsToDelete, updatedView, createdView, createdViewId} = buildViewsState(MOCK_APP_STATE);
         return {
             initialAppState,
             idsToDelete: {
@@ -580,7 +582,8 @@ const viewsTests = makeListedObjectTests({
             },
             list: views,
             updatedItem: updatedView,
-            createdItem: createdView
+            createdItem: createdView,
+            createdItemId: createdViewId
         };
     },
     makeActions: {
