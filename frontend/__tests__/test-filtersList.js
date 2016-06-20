@@ -246,6 +246,55 @@ function makeListedObjectTests(params) {
             });
         });
 
+        describe(params.describes.deleteTests, () => {
+            const {initialAppState, list, idsToDelete} = params.buildInitState(MOCK_APP_STATE);
+            const {sessionId} = initialAppState.auth;
+
+            const testCases = [
+                {description: 'should delete first item', itemId: idsToDelete.first, actualDelete:true},
+                {description: 'should delete middle item', itemId: idsToDelete.middle, actualDelete:true},
+                {description: 'should delete last item', itemId: idsToDelete.last, actualDelete:true},
+                {description: 'should delete absent item', itemId: idsToDelete.absent, actualDelete:false}
+            ];
+
+            function makeTest(testCase, testParams) {
+                const {mustError} = testParams;
+                const {itemId, actualDelete} = testCase;
+
+                const reallyDelete = actualDelete && !mustError;
+
+                const filtersCount = list.length;
+                const expectedItemsCount = reallyDelete ? filtersCount - 1 : filtersCount;
+                const expectedItems = reallyDelete ? list.filter((item) => item.id !== itemId) : list;
+                const expectedItemsHash = list.reduce((hash, item) => {
+                    if (!reallyDelete || item.id !== itemId) {
+                        hash[item.id] = item;
+                    }
+                    return hash;
+                }, {});
+                const expectedItem = actualDelete && !mustError ? void 0 : list.find((item) => item.id === itemId);
+
+                return {
+                    initialAppState,
+                    actions: params.makeActions.remove(itemId, sessionId),
+                    checkState: (globalState) => {
+                        const stateHashedArray = params.getStateHashedArray(globalState);
+                        checkHashedArrayLength(stateHashedArray, expectedItemsCount);
+                        checkObjectInHashedArray(stateHashedArray, itemId, expectedItem);
+                        checkHashedArraysEqual(stateHashedArray, {array: expectedItems, hash: expectedItemsHash});
+                    },
+                    setMocks: params.makeMocks.remove(sessionId, itemId, mustError)
+                };
+            }
+
+            function resetMocks() {
+                delete apiFacade.filtersClient.remove;
+            }
+
+            doTests('run deletion success', testCases, makeTest, resetMocks, {mustError: false});
+            doTests('run deletion error', testCases, makeTest, resetMocks, {mustError: true});
+        });
+
     };
 }
 
