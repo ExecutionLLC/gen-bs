@@ -633,8 +633,8 @@ describe('Filters list create tests', () => {
                 checkHashedArraysEqual(filtersHashedArray, expectedFiltersHashedArray);
             },
             setMocks: () => {
-                apiFacade.filtersClient.add = (sessionId, languageId, requestFilter, callback) => mockFilterCreate(
-                    sessionId, languageId, requestFilter, callback,
+                apiFacade.filtersClient.add = (requestSessionId, requestLanguageId, requestFilter, callback) => mockFilterCreate(
+                    requestSessionId, requestLanguageId, requestFilter, callback,
                     {
                         sessionId: sessionId,
                         languageId: languageId,
