@@ -311,7 +311,7 @@ describe('Filters list delete tests', () => {
     }
 
     doTests('run deletion success', testCases, makeTest, resetMocks, {mustError: false});
-    doTests('run deletion error', testCases, makeTest, resetMocks, {mustError: false});
+    doTests('run deletion error', testCases, makeTest, resetMocks, {mustError: true});
 });
 
 describe('Filters list update tests', () => {
