@@ -35,11 +35,16 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     render() {
+        const {sample} = this.props;
+        const fieldIdToValuesHash = _.reduce(sample.values, (result, value) => {
+            return {...result, [value.fieldId]: value.values};
+        }, {});
+
         return (
             <div className='panel'>
                 {this.renderHeader()}
-                {this.renderCurrentValues()}
-                {this.renderEditableValues()}
+                {this.renderCurrentValues(fieldIdToValuesHash)}
+                {this.renderEditableValues(fieldIdToValuesHash)}
                 {this.renderFooter()}
             </div>
         );
@@ -115,12 +120,8 @@ export default class FileUploadSamplesRow extends Component {
         );
     }
 
-    renderCurrentValues() {
+    renderCurrentValues(fieldIdToValuesHash) {
         const {sample, fields} = this.props;
-        const fieldIdToValuesHash = _.reduce(sample.values, (result, value) => {
-            result[value.fieldId] = value.values;
-            return result;
-        }, {});
 
         if (_.some(sample.values, option => option.values)) {
             return (
