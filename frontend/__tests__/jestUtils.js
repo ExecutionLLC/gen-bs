@@ -17,16 +17,13 @@ export function installMocks(obj, mocksObj) {
     _.each(mocksObj, (mockFunc, funcName) => {
         if (mockFunc) {
             // Install mock.
-            function mock(...args) {
-                mockFunc(...args);
-            }
-            mock.__mockedFunction = obj[funcName];
-            obj[funcName] = mock;
+            mockFunc.__mockedFunction = obj[funcName];
+            obj[funcName] = mockFunc;
         } else {
             // Uninstall mock.
-            const originalFunc = obj[funcName].__mockedFunction;
-            if (mock.hasOwnProperty('__mockedFunction')) {
-                obj[funcName] = originalFunc;
+            const mockedFunc = obj[funcName];
+            if (mockedFunc.hasOwnProperty('__mockedFunction')) {
+                obj[funcName] = mockedFunc.__mockedFunction;
             }
         }
     });

@@ -1,6 +1,7 @@
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
 import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
+import {analyze} from '../app/actions/ui';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import storeTestUtils from './storeTestUtils';
@@ -169,16 +170,68 @@ describe('History Tests', () => {
         });
     });
 
+    describe('History Items Removal', () => {
+        const {sample, view, filters} = nonHistoryEntry;
+        const filter = filters[0];
+        const {searchClient} = apiFacade;
+        beforeEach(() => {
+            installMocks(searchClient, {
+                sendSearchRequest: apiMocks.createSendSearchRequestSimpleMock(searchOperationId)
+            });
+        });
+
+        afterEach(() => {
+            installMocks(searchClient, {
+                sendSearchRequest: null
+            });
+        });
+
+        it('should remove history items when a normal analyze is done', (done) => {
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => dispatch(renewHistoryItem(historyEntry.id))
+            }, (globalState) => {
+                const {
+                    views, samples, filters
+                } = mapStateToCollections(globalState);
+
+                // now they are here.
+                expectItemByPredicate(views, item => item.id === historyView.id).toBeTruthy();
+                expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
+                expectItemByPredicate(samples, item => item.id === historySample.id).toBeTruthy();
+
+                storeTestUtils.runTest({
+                    globalInitialState: globalState,
+                    applyActions: (dispatch) => dispatch(analyze(sample.id, view.id, filter.id))
+                }, (globalState) => {
+                    const {
+                        views, samples, filters
+                    } = mapStateToCollections(globalState);
+
+                    // And now they should be removed.
+                    expectItemByPredicate(views, item => item.id === historyView.id).toBeFalsy();
+                    expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeFalsy();
+                    expectItemByPredicate(samples, item => item.id === historySample.id).toBeFalsy();
+
+                    done();
+                });
+            });
+        });
+    });
+
     describe('Renew History: non-history items', () => {
         let renewGlobalState = null;
-        const originalSamplesGetFields = apiFacade.samplesClient.getFields;
         const {view:{id: nonHistoryViewId}, sample:{id: nonHistorySampleId}} = nonHistoryEntry;
         const nonHistoryFilterId = nonHistoryEntry.filters[0].id;
         beforeAll((done) => {
             const {samplesClient, searchClient} = apiFacade;
-            samplesClient.getFields = apiMocks.createGetFieldsMock(sessionId, nonHistorySampleId, sampleFieldsList);
-            searchClient.sendSearchRequest = apiMocks.createSendSearchRequestMock(sessionId, languageId,
-                nonHistorySampleId, nonHistoryViewId, nonHistoryFilterId, searchOperationId);
+            installMocks(samplesClient, {
+                getFields: apiMocks.createGetFieldsMock(sessionId, nonHistorySampleId, sampleFieldsList)
+            });
+            installMocks(searchClient, {
+                sendSearchRequest: apiMocks.createSendSearchRequestMock(sessionId, languageId,
+                    nonHistorySampleId, nonHistoryViewId, nonHistoryFilterId, searchOperationId)
+            });
             storeTestUtils.runTest({
                 globalInitialState: initialAppState,
                 applyActions: (dispatch) => dispatch(renewHistoryItem(nonHistoryEntry.id))
@@ -189,7 +242,13 @@ describe('History Tests', () => {
             });
         });
         afterAll(() => {
-            apiFacade.samplesClient.getFields = originalSamplesGetFields;
+            const {samplesClient, searchClient} = apiFacade;
+            installMocks(samplesClient, {
+                getFields: null
+            });
+            installMocks(searchClient, {
+                sendSearchRequest: null
+            });
         });
 
         it('should not add non-history items into collections', () => {

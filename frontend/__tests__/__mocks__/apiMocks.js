@@ -81,6 +81,12 @@ class apiMocks {
             callback(null, {operationId: resultOperationId});
         });
     }
+
+    static createSendSearchRequestSimpleMock(resultOperationId) {
+        return jest.fn((sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) => {
+            callback(null, {operationId: resultOperationId});
+        });
+    }
 }
 
 export default apiMocks;
