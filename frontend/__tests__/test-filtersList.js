@@ -146,20 +146,9 @@ function buildFiltersState(appState) {
         }
     };
 
-    function makeFiltersIds(absentFilterId) {
-        return {
-            first: filters[0].id,
-            last: filters[filters.length - 1].id,
-            middle: filters[Math.floor(filters.length / 2)].id,
-            absent: absentFilterId
-        }
-    }
-
     return {
         initialAppState,
         filters,
-        filtersIdsToDelete: makeFiltersIds('someabsentite-midt-odel-etehere00000'),
-        filtersIdsToUpdate: makeFiltersIds('someabsentite-midt-oupd-atehere00000'),
         updatedFilter: {
             "id": "updatedf-ilte-ride-ntif-ier000000000",
             "originalFilterId": null,
@@ -226,37 +215,31 @@ function makeListedObjectTests(params) {
     return () => {
 
         describe(params.describes.initial, () => {
-            const {list, idsToDelete} = params.buildInitState(MOCK_APP_STATE);
-
-            it('should contain first item to delete', () => {
-                expect(list[0].id === idsToDelete.first).toBeTruthy();
-            });
-
-            it('should contain last item to delete', () => {
-                expect(list[list.length - 1].id === idsToDelete.last).toBeTruthy();
-            });
-
-            it('should contain middle item to delete', () => {
-                const middleItemIndex = list.findIndex((filter) => filter.id === idsToDelete.middle);
-                expect(middleItemIndex > 0 && middleItemIndex < list.length - 1).toBeTruthy();
-            });
-
-            it('should contain no item to delete', () => {
-                const middleItemIndex = list.findIndex((filter) => filter.id === idsToDelete.absent);
-                expect(middleItemIndex === -1).toBeTruthy();
+            const {list, createItemId} = params.buildInitState(MOCK_APP_STATE);
+            it('should contain no create item', () => {
+                const absentItemIndex = list.findIndex((filter) => filter.id === createItemId);
+                expect(absentItemIndex).toBe(-1);
             });
         });
 
         describe(params.describes.deleteTests, () => {
-            const {initialAppState, list, idsToDelete} = params.buildInitState(MOCK_APP_STATE);
+            const {initialAppState, list, createdItemId} = params.buildInitState(MOCK_APP_STATE);
             const {sessionId} = initialAppState.auth;
 
-            const testCases = [
-                {description: 'should delete first item', itemId: idsToDelete.first, actualDelete:true},
-                {description: 'should delete middle item', itemId: idsToDelete.middle, actualDelete:true},
-                {description: 'should delete last item', itemId: idsToDelete.last, actualDelete:true},
-                {description: 'should delete absent item', itemId: idsToDelete.absent, actualDelete:false}
-            ];
+            const testCases = [];
+            var i;
+            for (i = 0; i < list.length; i++) {
+                testCases.push({
+                    description: 'should delete item #' + i,
+                    itemId: list[i].id,
+                    actualDelete:true
+                });
+            }
+            testCases.push({
+                description: 'should not delete',
+                itemId: createdItemId,
+                actualDelete:false
+            });
 
             function makeTest(testCase, testParams) {
                 const {mustError} = testParams;
@@ -297,17 +280,28 @@ function makeListedObjectTests(params) {
         });
 
         describe(params.describes.updateTests, () => {
-            const {initialAppState, list, idsToUpdate, updatedItem} = params.buildInitState(MOCK_APP_STATE);
+            const {initialAppState, list, createdItemId} = params.buildInitState(MOCK_APP_STATE);
             const {sessionId} = initialAppState.auth;
 
+            const updatedItem = _.cloneDeep(list[0]);
             const initialHashedArray = ImmutableHashedArray.makeFromArray(list);
 
-            const testCases = [
-                {description: 'should update first filter', itemId: idsToUpdate.first, newItem: {...updatedItem, id: idsToUpdate.first}, actualUpdate:true},
-                {description: 'should update middle filter', itemId: idsToUpdate.middle, newItem: {...updatedItem, id: idsToUpdate.middle}, actualUpdate:true},
-                {description: 'should update last filter', itemId: idsToUpdate.last, newItem: {...updatedItem, id: idsToUpdate.last}, actualUpdate:true},
-                {description: 'should update absent filter', itemId: idsToUpdate.absent, newItem: updatedItem, actualUpdate:false}
-            ];
+            const testCases = [];
+            var i;
+            for (i = 0; i < list.length; i++) {
+                testCases.push({
+                    description: 'should update item #' + i,
+                    itemId: list[i].id,
+                    newItem: {...updatedItem, id: list[i].id},
+                    actualUpdate:true
+                });
+            }
+            testCases.push({
+                description: 'should not update absent item',
+                itemId: createdItemId,
+                newItem: updatedItem,
+                actualUpdate:false
+            });
 
             function makeTest(testCase, testsParams) {
                 const {mustError} = testsParams;
@@ -316,7 +310,7 @@ function makeListedObjectTests(params) {
                 const expectedItemsHashedArray = actualUpdate && !mustError ?
                     ImmutableHashedArray.replaceItemId(initialHashedArray, itemId, newItem) :
                     initialHashedArray;
-                const itemToResponse = {..._.cloneDeep(newItem), id: itemId};
+                const itemToResponse = _.cloneDeep(newItem);
 
                 return {
                     initialAppState,
@@ -393,20 +387,9 @@ function buildViewsState(appState) {
         }
     };
 
-    function makeViewsIds(absentViewId) {
-        return {
-            first: views[0].id,
-            last: views[views.length - 1].id,
-            middle: views[Math.floor(views.length / 2)].id,
-            absent: absentViewId
-        }
-    }
-
     return {
         initialAppState,
         views,
-        viewsIdsToDelete: makeViewsIds('someabsentite-midt-odel-etehere00000'),
-        viewsIdsToUpdate: makeViewsIds('someabsentite-midt-oupd-atehere00000'),
         updatedView: {
             "id": "updatedv-iewi-dent-ifie-r00000000000",
             "originalViewId": null,
@@ -476,21 +459,9 @@ const filtersTests = makeListedObjectTests({
         createTests: 'Filters list create tests'
     },
     buildInitState() {
-        const {initialAppState, filters, filtersIdsToDelete, updatedFilter, createdFilter, createdFilterId} = buildFiltersState(MOCK_APP_STATE);
+        const {initialAppState, filters, updatedFilter, createdFilter, createdFilterId} = buildFiltersState(MOCK_APP_STATE);
         return {
             initialAppState,
-            idsToDelete: {
-                first: filtersIdsToDelete.first,
-                middle: filtersIdsToDelete.middle,
-                last: filtersIdsToDelete.last,
-                absent: filtersIdsToDelete.absent
-            },
-            idsToUpdate: {
-                first: filtersIdsToDelete.first,
-                middle: filtersIdsToDelete.middle,
-                last: filtersIdsToDelete.last,
-                absent: filtersIdsToDelete.absent
-            },
             list: filters,
             updatedItem: updatedFilter,
             createdItem: createdFilter,
@@ -565,21 +536,9 @@ const viewsTests = makeListedObjectTests({
         createTests: 'Views list create tests'
     },
     buildInitState: () => {
-        const {initialAppState, views, viewsIdsToDelete, updatedView, createdView, createdViewId} = buildViewsState(MOCK_APP_STATE);
+        const {initialAppState, views, updatedView, createdView, createdViewId} = buildViewsState(MOCK_APP_STATE);
         return {
             initialAppState,
-            idsToDelete: {
-                first: viewsIdsToDelete.first,
-                middle: viewsIdsToDelete.middle,
-                last: viewsIdsToDelete.last,
-                absent: viewsIdsToDelete.absent
-            },
-            idsToUpdate: {
-                first: viewsIdsToDelete.first,
-                middle: viewsIdsToDelete.middle,
-                last: viewsIdsToDelete.last,
-                absent: viewsIdsToDelete.absent
-            },
             list: views,
             updatedItem: updatedView,
             createdItem: createdView,
