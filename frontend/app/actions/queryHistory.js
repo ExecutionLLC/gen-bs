@@ -84,7 +84,7 @@ export function renewHistoryItem(historyItemId) {
         } else {
             // copy history item and update names of sample, view and filter. All items from history
             // should be marked as '(from history)'.
-            var clonedHistoryItem = _.cloneDeep(historyItem);
+            const clonedHistoryItem = _.cloneDeep(historyItem);
             clonedHistoryItem.sample.type = 'history';
             clonedHistoryItem.filters[0].type = 'history';
             clonedHistoryItem.view.type = 'history';
