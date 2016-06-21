@@ -145,7 +145,7 @@ function makeListedObjectTests(params) {
     return () => {
 
         describe(params.describes.initial, () => {
-            const {list, createItemId} = params.buildInitState(MOCK_APP_STATE);
+            const {list, createItemId} = params.buildInitState();
             it('should contain no create item', () => {
                 const absentItemIndex = list.findIndex((filter) => filter.id === createItemId);
                 expect(absentItemIndex).toBe(-1);
@@ -153,7 +153,7 @@ function makeListedObjectTests(params) {
         });
 
         describe(params.describes.deleteTests, () => {
-            const {initialAppState, list, createdItemId} = params.buildInitState(MOCK_APP_STATE);
+            const {initialAppState, list, createdItemId} = params.buildInitState();
             const {sessionId} = initialAppState.auth;
 
             const testCases = [];
@@ -210,7 +210,7 @@ function makeListedObjectTests(params) {
         });
 
         describe(params.describes.updateTests, () => {
-            const {initialAppState, list, createdItemId} = params.buildInitState(MOCK_APP_STATE);
+            const {initialAppState, list, createdItemId} = params.buildInitState();
             const {sessionId} = initialAppState.auth;
 
             const updatedItem = _.cloneDeep(list[0]);
@@ -262,7 +262,7 @@ function makeListedObjectTests(params) {
         });
 
         describe(params.describes.createTests, () => {
-            const {initialAppState, list, createdItemId} = params.buildInitState(MOCK_APP_STATE);
+            const {initialAppState, list, createdItemId} = params.buildInitState();
             const {sessionId} = initialAppState.auth;
             const languageId = initialAppState.ui.language;
 
@@ -404,7 +404,7 @@ const viewsTests = makeListedObjectTests({
         updateTests: 'Views list update tests',
         createTests: 'Views list create tests'
     },
-    buildInitState: () => {
+    buildInitState() {
         const {initialAppState, views, createdViewId} = buildViewsState(MOCK_APP_STATE);
         return {
             initialAppState,
