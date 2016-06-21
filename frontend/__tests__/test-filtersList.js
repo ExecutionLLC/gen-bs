@@ -135,62 +135,6 @@ function buildFiltersState(appState) {
     return {
         initialAppState,
         filters,
-        updatedFilter: {
-            "id": "updatedf-ilte-ride-ntif-ier000000000",
-            "originalFilterId": null,
-            "name": "Updated Filter",
-            "rules": {
-                "$and": [
-                    {
-                        "00000000-0000-0000-0000-000000000007": {
-                            "$eq": "SAPP"
-                        }
-                    },
-                    {
-                        "00000000-0000-0000-0000-000000000005": {
-                            "$neq": "B"
-                        }
-                    },
-                    {
-                        "$or": [
-                            {
-                                "69d1d2db-1d7b-4a9e-a3ee-d5108da78c84": {
-                                    "$eq": "CBA"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        createdFilter: {
-            "id": null,
-            "originalFilterId": null,
-            "name": "Created Filter",
-            "rules": {
-                "$and": [
-                    {
-                        "00000000-0000-0000-0000-000000000007": {
-                            "$eq": "SAPP"
-                        }
-                    },
-                    {
-                        "00000000-0000-0000-0000-000000000005": {
-                            "$neq": "B"
-                        }
-                    },
-                    {
-                        "$or": [
-                            {
-                                "69d1d2db-1d7b-4a9e-a3ee-d5108da78c84": {
-                                    "$eq": "CBA"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
         createdFilterId: "createdf-ilte-ride-ntif-ier000000000"
     };
 }
@@ -318,10 +262,12 @@ function makeListedObjectTests(params) {
         });
 
         describe(params.describes.createTests, () => {
-            const {initialAppState, list, createdItem, createdItemId} = params.buildInitState(MOCK_APP_STATE);
+            const {initialAppState, list, createdItemId} = params.buildInitState(MOCK_APP_STATE);
             const {sessionId} = initialAppState.auth;
             const languageId = initialAppState.ui.language;
 
+            const createdItem = {..._.cloneDeep(list[0]), id: null};
+            
             const testCases = [
                 {description: 'should create item', newItem: createdItem}
             ];
@@ -376,62 +322,6 @@ function buildViewsState(appState) {
     return {
         initialAppState,
         views,
-        updatedView: {
-            "id": "updatedv-iewi-dent-ifie-r00000000000",
-            "originalViewId": null,
-            "name": "Updated View",
-            "viewListItems": [
-                {
-                    "id": "db1a4f9f-60d6-416a-a2a1-86082dba551a",
-                    "viewId": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
-                    "fieldId": "00000000-0000-0000-0000-000000000001",
-                    "order": 1,
-                    "sortOrder": 1,
-                    "sortDirection": "asc",
-                    "filterControlEnable": false,
-                    "keywords": []
-                },
-                {
-                    "id": "d1b0bce8-c4c8-43b1-8a1d-4579e432537a",
-                    "viewId": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
-                    "fieldId": "00000000-0000-0000-0000-000000000002",
-                    "order": 2,
-                    "sortOrder": 2,
-                    "sortDirection": "desc",
-                    "filterControlEnable": false,
-                    "keywords": []
-                }
-            ]
-        },
-        createdView: {
-            "id": null,
-            "originalFilterId": null,
-            "name": "Created View",
-            "viewListItems": [
-                {
-                    "id": "5505f259-d611-4e0a-b9c9-2f8875c0522b",
-                    "viewId": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
-                    "fieldId": "00000000-0000-0000-0000-000000000007",
-                    "order": 3,
-                    "sortOrder": null,
-                    "sortDirection": null,
-                    "filterControlEnable": false,
-                    "keywords": []
-                },
-                {
-                    "id": "319e82a3-e634-4509-9a10-72e119a9f3ec",
-                    "viewId": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
-                    "fieldId": "00000000-0000-0000-0000-000000000005",
-                    "order": 4,
-                    "sortOrder": null,
-                    "sortDirection": null,
-                    "filterControlEnable": false,
-                    "keywords": [
-                        "7cd8167c-52d8-4b24-afe3-38d1b2bc82de"
-                    ]
-                }
-            ]
-        },
         createdViewId: "createdv-iewi-dent-ifie-r00000000000"
     };
 }
@@ -445,12 +335,10 @@ const filtersTests = makeListedObjectTests({
         createTests: 'Filters list create tests'
     },
     buildInitState() {
-        const {initialAppState, filters, updatedFilter, createdFilter, createdFilterId} = buildFiltersState(MOCK_APP_STATE);
+        const {initialAppState, filters, createdFilterId} = buildFiltersState(MOCK_APP_STATE);
         return {
             initialAppState,
             list: filters,
-            updatedItem: updatedFilter,
-            createdItem: createdFilter,
             createItemId: createdFilterId
         };
     },
@@ -517,12 +405,10 @@ const viewsTests = makeListedObjectTests({
         createTests: 'Views list create tests'
     },
     buildInitState: () => {
-        const {initialAppState, views, updatedView, createdView, createdViewId} = buildViewsState(MOCK_APP_STATE);
+        const {initialAppState, views, createdViewId} = buildViewsState(MOCK_APP_STATE);
         return {
             initialAppState,
             list: views,
-            updatedItem: updatedView,
-            createdItem: createdView,
             createdItemId: createdViewId
         };
     },
