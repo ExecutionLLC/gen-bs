@@ -10,7 +10,9 @@ export default class FileUploadSamples extends Component {
     }
 
     render() {
-        let {dispatch, closeModal, samplesList: {samples}} = this.props;
+        const {dispatch, closeModal, samplesList} = this.props;
+        const {samples} = samplesList;
+
         if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
             console.error('No editable fields found');
             return null;
@@ -39,7 +41,7 @@ export default class FileUploadSamples extends Component {
                                 isDemoSession={this.props.auth.isDemo}
                                 fields={this.props.editableFieldsList}
                                 key={sample.id}
-                                samples={samples}
+                                samplesList={samplesList}
                                 dispatch={dispatch}
                                 closeModal={closeModal}
                             />

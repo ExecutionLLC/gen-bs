@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
@@ -17,7 +16,7 @@ export default class FileUploadSamplesRow extends Component {
 
     onSelectForAnalysisClick(e, sample) {
         e.preventDefault();
-        const {dispatch, closeModal, samplesList: {samples}} = this.props;
+        const {dispatch, closeModal, samplesList: {samples}} = this.props; // TODO sl hashedArray
         dispatch(receiveSamplesList(samples));
         dispatch(changeSample(sample.id));
         closeModal('upload');
@@ -104,7 +103,7 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderEditableValues() {
-        const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props;
+        const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props; // TODO sl editedSamples.hashedArray
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        isExpanded={this.state.showValues}
@@ -157,10 +156,3 @@ export default class FileUploadSamplesRow extends Component {
         }
     }
 }
-
-function mapStateToProps(state) {
-    const {samplesList} = state;
-    return {samplesList};
-}
-
-export default connect(mapStateToProps)(FileUploadSamplesRow);
