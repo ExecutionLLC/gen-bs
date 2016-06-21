@@ -159,11 +159,8 @@ export default class FileUploadSamplesRow extends Component {
 }
 
 function mapStateToProps(state) {
-    const {ui, samplesList} = state;
-    return {
-        ui,
-        samplesList
-    };
+    const {samplesList} = state;
+    return {samplesList};
 }
 
 export default connect(mapStateToProps)(FileUploadSamplesRow);
