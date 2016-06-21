@@ -3,13 +3,19 @@
 const WebSocketServerProxy = require('../../../utils/WebSocketServerProxy');
 const RpcRouter = require('./RpcRouter');
 
-const searchHandler = require('./SearchHandler');
+const SearchHandler = require('./SearchHandler');
 
 class MockApplicationServer {
-    constructor(router) {
-        this.router = router;
+    constructor(services) {
+        Object.assign(this, {
+            services,
+            router: new RpcRouter(),
+            webSocketServer: new WebSocketServerProxy()
+        });
 
-        this.webSocketServer = new WebSocketServerProxy();
+        const searchHandler = new SearchHandler(services);
+
+        this.router.registerHandler(searchHandler);
         this.webSocketServer.onMessage(this.onClientMessage.bind(this));
     }
 
@@ -27,8 +33,4 @@ class MockApplicationServer {
     }
 }
 
-const rpcRouter = new RpcRouter();
-rpcRouter.registerHandler(searchHandler);
-
-const mockAppServer = new MockApplicationServer(rpcRouter);
-module.exports = mockAppServer;
+module.exports = MockApplicationServer;

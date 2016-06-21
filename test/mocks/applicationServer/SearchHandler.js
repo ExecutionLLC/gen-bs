@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const async = require('async');
 
 const STATUSES = {
     sample_loading: 'sample_loading',
@@ -11,52 +12,77 @@ const STATUSES = {
     ready: 'ready'
 };
 
-function handleCall(id, method, params, sendResultCallback) {
-    const {sample, view_structure, view_filter, view_sort_order} = params;
-    [sample, view_structure, view_filter, view_sort_order].forEach(item => assert.ok(item));
+let databaseNumber = 2;
 
-    const openSessionProgress = {
-        id,
-        result: {
-            progress: 0,
-            status: STATUSES.sample_loading,
-            sort_order: [],
-            view_structure,
-            view_filter,
-            view_sort_order,
-            global_filter: {}
-        }
-    };
+class SearchHandler {
+    constructor(services) {
+        this.services = services;
+    }
 
-    sendResultCallback(openSessionProgress);
-    sendResultCallback(Object.assign({}, openSessionProgress, {
-        result: {
-            progress: 33,
-            status: STATUSES.view_building
-        }
-    }));
-    sendResultCallback(Object.assign({}, openSessionProgress, {
-        result: {
-            progress: 66,
-            status: STATUSES.view_loading
-        }
-    }));
-    sendResultCallback(Object.assign({}, openSessionProgress, {
-        result: {
-            progress: 100,
-            status: STATUSES.ready,
-            redis_db: {
-                host: 'localhost',
-                number: 5,
-                password: null,
-                port: 6379,
-                result_index: 'index:final'
+    get methodName() {
+        return 'v1.open_session';
+    }
+
+    handleCall(id, method, params, sendResultCallback, callback) {
+        const {sample, view_structure, view_filter, view_sort_order} = params;
+        [sample, view_structure, view_filter, view_sort_order].forEach(item => assert.ok(item));
+
+        const openSessionProgress = {
+            id,
+            result: {
+                progress: 0,
+                status: STATUSES.sample_loading,
+                sort_order: [],
+                view_structure,
+                view_filter,
+                view_sort_order,
+                global_filter: {}
             }
-        }
-    }));
+        };
+
+        sendResultCallback(openSessionProgress);
+        sendResultCallback(Object.assign({}, openSessionProgress, {
+            result: {
+                progress: 33,
+                status: STATUSES.view_building
+            }
+        }));
+        sendResultCallback(Object.assign({}, openSessionProgress, {
+            result: {
+                progress: 66,
+                status: STATUSES.view_loading
+            }
+        }));
+
+        let redisParams = {
+            host: 'localhost',
+            number: databaseNumber,
+            password: null,
+            port: 6379,
+            result_index: 'index:final'
+        };
+        async.waterfall([
+            (callback) => this._loadDataToRedis(redisParams, callback),
+            (callback) => {
+                sendResultCallback(Object.assign({}, openSessionProgress, {
+                    result: {
+                        progress: 100,
+                        status: STATUSES.ready,
+                        redis_db: redisParams
+                    }
+                }));
+                callback(null);
+            }
+        ], callback);
+    }
+    
+    _loadDataToRedis(redisParams, callback) {
+        const mockData = require('./data/redis-data.json');
+        const redisTestData = Object.assign({}, redisParams, {
+            rows: mockData
+        });
+        this.services.redis.insertData(redisTestData, callback);
+    }
 }
 
-module.exports = {
-    methodName: 'v1.open_session',
-    handleCall
-};
+module.exports = SearchHandler;
