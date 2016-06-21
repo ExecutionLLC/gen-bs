@@ -30,8 +30,6 @@ function checkObjectInHashedArray(hashedArray, objectId, expectedObject) {
 
 
 function mockFilterRemove(sessionId, filterId, callback, expected) {
-    expect(filterId).toEqual(expected.filterId);
-    expect(sessionId).toEqual(expected.sessionId);
     if (expected.error) {
         return callback(expected.error, {status: 500});
     } else {
@@ -40,8 +38,6 @@ function mockFilterRemove(sessionId, filterId, callback, expected) {
 }
 
 function mockFilterUpdate(sessionId, filter, callback, expected) {
-    expect(filter).toEqual(expected.filter);
-    expect(sessionId).toEqual(expected.sessionId);
     if (expected.error) {
         return callback(expected.error, {status: 500});
     } else {
@@ -50,9 +46,6 @@ function mockFilterUpdate(sessionId, filter, callback, expected) {
 }
 
 function mockFilterCreate(sessionId, languageId, filter, callback, expected) {
-    expect(filter).toEqual(expected.filter);
-    expect(sessionId).toEqual(expected.sessionId);
-    expect(languageId).toEqual(expected.languageId);
     if (expected.error) {
         return callback(expected.error, {status: 500});
     } else {
@@ -62,8 +55,6 @@ function mockFilterCreate(sessionId, languageId, filter, callback, expected) {
 
 
 function mockViewRemove(sessionId, viewId, callback, expected) {
-    expect(viewId).toEqual(expected.viewId);
-    expect(sessionId).toEqual(expected.sessionId);
     if (expected.error) {
         return callback(expected.error, {status: 500});
     } else {
@@ -72,8 +63,6 @@ function mockViewRemove(sessionId, viewId, callback, expected) {
 }
 
 function mockViewUpdate(sessionId, view, callback, expected) {
-    expect(view).toEqual(expected.view);
-    expect(sessionId).toEqual(expected.sessionId);
     if (expected.error) {
         return callback(expected.error, {status: 500});
     } else {
@@ -82,9 +71,6 @@ function mockViewUpdate(sessionId, view, callback, expected) {
 }
 
 function mockViewCreate(sessionId, languageId, view, callback, expected) {
-    expect(view).toEqual(expected.view);
-    expect(sessionId).toEqual(expected.sessionId);
-    expect(languageId).toEqual(expected.languageId);
     if (expected.error) {
         return callback(expected.error, {status: 500});
     } else {
@@ -267,7 +253,7 @@ function makeListedObjectTests(params) {
                         checkObjectInHashedArray(stateHashedArray, itemId, expectedItem);
                         checkHashedArraysEqual(stateHashedArray, {array: expectedItems, hash: expectedItemsHash});
                     },
-                    setMocks: params.makeMocks.remove(sessionId, itemId, mustError)
+                    setMocks: params.makeMocks.remove(mustError)
                 };
             }
 
@@ -319,7 +305,7 @@ function makeListedObjectTests(params) {
                         const stateHashedArray = params.getStateHashedArray(globalState);
                         checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
                     },
-                    setMocks: params.makeMocks.update(sessionId, newItem, itemToResponse, mustError)
+                    setMocks: params.makeMocks.update(itemToResponse, mustError)
                 };
             }
 
@@ -356,7 +342,7 @@ function makeListedObjectTests(params) {
                         const stateHashedArray = params.getStateHashedArray(globalState);
                         checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
                     },
-                    setMocks: params.makeMocks.create(sessionId, languageId, newItem, itemToResponse, mustError)
+                    setMocks: params.makeMocks.create(itemToResponse, mustError)
                 };
             }
 
@@ -486,35 +472,30 @@ const filtersTests = makeListedObjectTests({
         }
     },
     makeMocks: {
-        remove(sessionId, itemId, mustError) {
+        remove(mustError) {
             return () => {
                 apiFacade.filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
                     requestSessionId, requestFilterId, callback,
-                    {sessionId: sessionId, filterId: itemId, error: mustError ? {message: 'mockedError'} : null}
+                    {error: mustError ? {message: 'mockedError'} : null}
                 );
             };
         },
-        update(sessionId, newItem, itemToResponse, mustError) {
+        update(itemToResponse, mustError) {
             return () => {
                 apiFacade.filtersClient.update = (requestSessionId, requestFilter, callback) => mockFilterUpdate(
                     requestSessionId, requestFilter, callback,
                     {
-                        filter: newItem,
-                        sessionId: sessionId,
                         filterResponse: itemToResponse,
                         error: mustError ? {message: 'mockError'} : null
                     }
                 );
             };
         },
-        create(sessionId, languageId, newFilter, filterToResponse, mustError) {
+        create(filterToResponse, mustError) {
             return () => {
                 apiFacade.filtersClient.add = (requestSessionId, requestLanguageId, requestFilter, callback) => mockFilterCreate(
                     requestSessionId, requestLanguageId, requestFilter, callback,
                     {
-                        sessionId: sessionId,
-                        languageId: languageId,
-                        filter: newFilter,
                         filterResponse: filterToResponse,
                         error: mustError ? {message: 'mockError'} : null
                     }
@@ -563,35 +544,30 @@ const viewsTests = makeListedObjectTests({
         }
     },
     makeMocks: {
-        remove(sessionId, itemId, mustError) {
+        remove(mustError) {
             return () => {
                 apiFacade.viewsClient.remove = (requestSessionId, requestViewId, callback) => mockViewRemove(
                     requestSessionId, requestViewId, callback,
-                    {sessionId: sessionId, viewId: itemId, error: mustError ? {message: 'mockedError'} : null}
+                    {error: mustError ? {message: 'mockedError'} : null}
                 );
             };
         },
-        update(sessionId, newItem, itemToResponse, mustError) {
+        update(itemToResponse, mustError) {
             return () => {
                 apiFacade.viewsClient.update = (requestSessionId, requestView, callback) => mockViewUpdate(
                     requestSessionId, requestView, callback,
                     {
-                        view: newItem,
-                        sessionId: sessionId,
                         viewResponse: itemToResponse,
                         error: mustError ? {message: 'mockError'} : null
                     }
                 );
             };
         },
-        create(sessionId, languageId, newView, viewToResponse, mustError) {
+        create(viewToResponse, mustError) {
             return () => {
                 apiFacade.viewsClient.add = (requestSessionId, requestLanguageId, requestView, callback) => mockViewCreate(
                     requestSessionId, requestLanguageId, requestView, callback,
                     {
-                        sessionId: sessionId,
-                        languageId: languageId,
-                        view: newView,
                         viewResponse: viewToResponse,
                         error: mustError ? {message: 'mockError'} : null
                     }
