@@ -1,5 +1,3 @@
-jest.setMock('../app/api/ApiFacade', require('./__mocks__/apiFacade'));
-
 import HttpStatus from 'http-status';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
