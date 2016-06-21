@@ -15,9 +15,10 @@ export default class FileUploadSamples extends Component {
             console.error('No editable fields found');
             return null;
         }
+        let filteredSamples = samples;
         if (this.state.searchWord.length > 0) {
             let searchWord = this.state.searchWord.toLowerCase();
-            samples = samples.filter(el => ~el.fileName.toLocaleLowerCase().indexOf(searchWord));
+            filteredSamples = samples.filter(el => ~el.fileName.toLocaleLowerCase().indexOf(searchWord));
         }
         return (
             <div>
@@ -31,7 +32,7 @@ export default class FileUploadSamples extends Component {
                     </div>
                 </div>
                 <div className='panel-group panel-group-scroll'>
-                    {samples.map(
+                    {filteredSamples.map(
                         sample => (
                             <FileUploadSamplesRow
                                 sample={sample}
