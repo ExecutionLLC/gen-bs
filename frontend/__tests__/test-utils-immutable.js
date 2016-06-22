@@ -4,12 +4,12 @@ import {ImmutableHashedArray} from '../app/utils/immutable';
 describe('Immutable array', () => {
     it('should replace item', () => {
         expect(() => immutableArray.replace(null, 3, 123)).toThrow();
-        expect(immutableArray.replace([], 3, 123)).toThrow();
-        expect(immutableArray.replace([11, 22, 33], -1, 123)).toThrow();
+        expect(() => immutableArray.replace([], 3, 123)).toThrow();
+        expect(() => immutableArray.replace([11, 22, 33], -1, 123)).toThrow();
         expect(immutableArray.replace([11, 22, 33], 0, 123)).toEqual([123, 22, 33]);
         expect(immutableArray.replace([11, 22, 33], 1, 123)).toEqual([11, 123, 33]);
         expect(immutableArray.replace([11, 22, 33], 2, 123)).toEqual([11, 22, 123]);
-        expect(immutableArray.replace([11, 22, 33], 4, 123)).toThrow();
+        expect(() => immutableArray.replace([11, 22, 33], 4, 123)).toThrow();
     });
     it('should remove item', () => {
         expect(() => immutableArray.remove(null, 3)).toThrow();
@@ -57,10 +57,10 @@ describe('Immutable hashed array', () => {
             array: [item11, item22, item33],
             hash: {'11': item11, '22': item22, '33': item33}
         });
-        expect(ImmutableHashedArray.makeFromArray([
+        expect(() => ImmutableHashedArray.makeFromArray([
             item11, item22, item11, item33
         ])).toThrow();
-        expect(ImmutableHashedArray.makeFromArray([
+        expect(() => ImmutableHashedArray.makeFromArray([
             item11, item22, item33, itemNoId
         ])).toThrow();
     });
@@ -89,7 +89,7 @@ describe('Immutable hashed array', () => {
             item11, item22, item33
         ]);
         const item55 = {id: 55, value: 555};
-        expect(ImmutableHashedArray.replaceItemId(hashedArray, 123, item55)).toThrow();
+        expect(() => ImmutableHashedArray.replaceItemId(hashedArray, 123, item55)).toThrow();
         expect(ImmutableHashedArray.replaceItemId(hashedArray, 11, item55)).toEqual({
             array: [item55, item22, item33],
             hash: {'22': item22, '33': item33, 55: item55}
@@ -102,9 +102,9 @@ describe('Immutable hashed array', () => {
             array: [item11, item22, item55],
             hash: {'11': item11, '22': item22, 55: item55}
         });
-        expect(ImmutableHashedArray.replaceItemId(hashedArray, 123, item55)).toThrow();
-        expect(ImmutableHashedArray.replaceItemId(hashedArray, 123, itemNoId)).toThrow();
-        expect(ImmutableHashedArray.replaceItemId(hashedArray, 22, itemNoId)).toThrow();
+        expect(() => ImmutableHashedArray.replaceItemId(hashedArray, 123, item55)).toThrow();
+        expect(() => ImmutableHashedArray.replaceItemId(hashedArray, 123, itemNoId)).toThrow();
+        expect(() => ImmutableHashedArray.replaceItemId(hashedArray, 22, itemNoId)).toThrow();
         expect(ImmutableHashedArray.replaceItemId(hashedArray, 22, item33)).toEqual({
             array: [item11, item33],
             hash: {'11': item11, '33': item33}
@@ -124,8 +124,8 @@ describe('Immutable hashed array', () => {
             array: [item55],
             hash: {55: item55}
         });
-        expect(ImmutableHashedArray.appendItem(hashedArrayFilled, itemNoId)).toThrow();
-        expect(ImmutableHashedArray.appendItem(hashedArrayEmpty, itemNoId)).toThrow();
-        expect(ImmutableHashedArray.appendItem(hashedArrayFilled, item22)).toThrow();
+        expect(() => ImmutableHashedArray.appendItem(hashedArrayFilled, itemNoId)).toThrow();
+        expect(() => ImmutableHashedArray.appendItem(hashedArrayEmpty, itemNoId)).toThrow();
+        expect(() => ImmutableHashedArray.appendItem(hashedArrayFilled, item22)).toThrow();
     });
 });
