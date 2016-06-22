@@ -34,6 +34,7 @@ describe('Immutable hashed array', () => {
 
     const item11 = {id: 11, content: 111};
     const item22 = {id: 22, message: 222};
+    const item22_2 = {id: 22, message: 222222};
     const item33 = {id: 33, obj: {value: [11, 22], data: {q: 44, w: 55}}};
     const item55 = {id: 55, value: 555};
     const itemNoId = {some: 123, data: 456, here: 789};
@@ -102,9 +103,10 @@ describe('Immutable hashed array', () => {
         expect(() => ImmutableHashedArray.replaceItemId(hashedArray, 123, item55)).toThrow();
         expect(() => ImmutableHashedArray.replaceItemId(hashedArray, 123, itemNoId)).toThrow();
         expect(() => ImmutableHashedArray.replaceItemId(hashedArray, 22, itemNoId)).toThrow();
-        expect(ImmutableHashedArray.replaceItemId(hashedArray, 22, item33)).toEqual({
-            array: [item11, item33],
-            hash: {'11': item11, '33': item33}
+        expect(() => ImmutableHashedArray.replaceItemId(hashedArray, 22, item33)).toThrow();
+        expect(ImmutableHashedArray.replaceItemId(hashedArray, 22, item22_2)).toEqual({
+            array: [item11, item22_2, item33],
+            hash: {'11': item11, '22': item22_2, '33': item33}
         });
     });
 

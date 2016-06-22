@@ -34,6 +34,12 @@ export class ImmutableHashedArray {
     }
 
     static replaceItemId({array, hash}, id, newItem) {
+        if (newItem.id == null) {
+            throw 'ImmutableHashedArray.replaceItemId missing id';
+        }
+        if (hash[newItem.id] && newItem.id !== id) {
+            throw 'ImmutableHashedArray.replaceItemId duplicate id ' + newItem.id;
+        }
         const itemIndex = this._findIndexForId(array, id);
         if (itemIndex < 0) {
             throw 'ImmutableHashedArray.replaceItemId absent id ' + id;
