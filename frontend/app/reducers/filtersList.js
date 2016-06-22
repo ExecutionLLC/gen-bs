@@ -3,9 +3,6 @@ import {ImmutableHashedArray} from '../utils/immutable';
 
 function reduceFilterListDeleteFilter(state, action) {
     const newHashedArray = ImmutableHashedArray.deleteItemId(state.hashedArray, action.filterId);
-    if (!newHashedArray) {
-        return state;
-    }
     const newSelectedFilterId = (state.selectedFilterId === action.filterId) ? state.hashedArray.array[0].id : state.selectedFilterId;
     return Object.assign({}, state, {
         selectedFilterId: newSelectedFilterId,

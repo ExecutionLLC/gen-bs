@@ -3,9 +3,6 @@ import {ImmutableHashedArray} from '../utils/immutable';
 
 function reduceViewListDeleteView(state, action) {
     const newHashedArray = ImmutableHashedArray.deleteItemId(state.hashedArray, action.viewId);
-    if (!newHashedArray) {
-        return state;
-    }
     const newSelectedViewId = (state.selectedViewId === action.viewId) ? state.hashedArray.array[0].id : state.selectedViewId;
     return Object.assign({}, state, {
         selectedViewId: newSelectedViewId,
