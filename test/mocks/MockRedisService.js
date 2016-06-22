@@ -44,10 +44,10 @@ class MockRedisService extends RedisService {
         const rowsWithIndex = rows.map((row, index) => ({row, index}));
         async.eachSeries(rowsWithIndex, ({row, index}, callback) => {
             const hashKey = `row:${index}`;
-            async.eachSeries(Object.keys(row), (columnName) => {
+            async.eachSeries(Object.keys(row), (columnName, callback) => {
                 const columnValue = row[columnName];
                 client.hset(hashKey, columnName, columnValue, callback);
-            });
+            }, callback);
         }, (error) => callback(error));
     }
 
