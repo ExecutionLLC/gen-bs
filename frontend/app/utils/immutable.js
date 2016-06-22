@@ -20,10 +20,11 @@ export class ImmutableHashedArray {
         return _.findIndex(array, {id: id});
     }
 
-    static deleteItemId({array, hash}, id) {
+    static deleteItemId(hashedArray, id) {
+        const {array, hash} = hashedArray;
         const itemIndex = this._findIndexForId(array, id);
         if (itemIndex < 0) {
-            return null;
+            return hashedArray;
         } else {
             return {
                 array: immutableArray.remove(array, itemIndex),
