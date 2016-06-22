@@ -36,13 +36,12 @@ export class ImmutableHashedArray {
     static replaceItemId({array, hash}, id, newItem) {
         const itemIndex = this._findIndexForId(array, id);
         if (itemIndex < 0) {
-            return null;
-        } else {
-            return {
-                array: immutableArray.replace(array, itemIndex, newItem),
-                hash: {..._.omit(hash, id), [newItem.id]: newItem}
-            };
+            throw 'ImmutableHashedArray.replaceItemId absent id ' + id;
         }
+        return {
+            array: immutableArray.replace(array, itemIndex, newItem),
+            hash: {..._.omit(hash, id), [newItem.id]: newItem}
+        };
     }
 
     static appendItem({array, hash}, newItem) {
