@@ -34,7 +34,6 @@ class RpcRouter {
                 }
             });
         } else {
-            // TODO: Generate error.
             console.error(`Incorrect params: \nid: ${id}\nmethod: ${method}\nhandleCall: ${handleCall}`);
         }
     }

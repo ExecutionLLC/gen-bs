@@ -50,9 +50,9 @@ class MockApplicationServer {
     }
 
     _createServer() {
-        console.log(`App Server mock is created on port ${APP_SERVER_PORT}`);
         this.webSocketServer = new WebSocketServer({port: APP_SERVER_PORT});
         this.webSocketServerProxy.addWebSocketCallbacks(this.webSocketServer);
+        console.log(`App Server mock is created on port ${APP_SERVER_PORT}`);
     }
 
     /**

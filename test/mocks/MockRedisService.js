@@ -22,7 +22,6 @@ class MockRedisService extends RedisService {
     }
 
     _createClient(host, port, password, databaseNumber, callback) {
-        //const databaseId = this._createDatabaseId(host, port, password);
         const client = FakeRedis.createClient(host, port, {verbose: false, fast: true});
         client.select(databaseNumber, (error) => callback(error, client));
     }

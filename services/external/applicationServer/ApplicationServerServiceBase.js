@@ -9,9 +9,6 @@ const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const proxyProviderFunc = _.once(function (...args) {
     return new RPCProxy(...args);
-    // const args = _.toArray(arguments);
-    // const ProxyConstructor = Function.prototype.bind.apply(RPCProxy, [null].concat(args));
-    // return new ProxyConstructor();
 });
 
 class ApplicationServerServiceBase extends ServiceBase {
