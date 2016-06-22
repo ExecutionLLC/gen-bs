@@ -7,7 +7,7 @@ export default class immutableArray {
      * @returns {*}
      */
     static replace(arr, index, item) {
-        if (index < 0 || index > arr.length) {
+        if (index < 0 || index >= arr.length) {
             throw 'immutableArray.replace wrong index = ' + index + ', arr.length = ' + arr.length;
         }
         return [
