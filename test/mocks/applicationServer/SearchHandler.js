@@ -3,6 +3,9 @@
 const assert = require('assert');
 const async = require('async');
 
+const HandlerBase = require('./HandlerBase');
+const mockData = require('./data/redis-data.json');
+
 const STATUSES = {
     sample_loading: 'sample_loading',
     view_building: 'view_building',
@@ -14,9 +17,9 @@ const STATUSES = {
 
 let databaseNumber = 2;
 
-class SearchHandler {
+class SearchHandler extends HandlerBase {
     constructor(services) {
-        this.services = services;
+        super(services);
     }
 
     get methodName() {
@@ -29,7 +32,7 @@ class SearchHandler {
 
         const openSessionProgress = {
             id,
-            result: {
+            sessionState: {
                 progress: 0,
                 status: STATUSES.sample_loading,
                 sort_order: [],
@@ -42,13 +45,13 @@ class SearchHandler {
 
         sendResultCallback(openSessionProgress);
         sendResultCallback(Object.assign({}, openSessionProgress, {
-            result: {
+            sessionState: {
                 progress: 33,
                 status: STATUSES.view_building
             }
         }));
         sendResultCallback(Object.assign({}, openSessionProgress, {
-            result: {
+            sessionState: {
                 progress: 66,
                 status: STATUSES.view_loading
             }
@@ -65,7 +68,7 @@ class SearchHandler {
             (callback) => this._loadDataToRedis(redisParams, callback),
             (callback) => {
                 sendResultCallback(Object.assign({}, openSessionProgress, {
-                    result: {
+                    sessionState: {
                         progress: 100,
                         status: STATUSES.ready,
                         redis_db: redisParams
@@ -77,7 +80,6 @@ class SearchHandler {
     }
     
     _loadDataToRedis(redisParams, callback) {
-        const mockData = require('./data/redis-data.json');
         const redisTestData = Object.assign({}, redisParams, {
             rows: mockData
         });

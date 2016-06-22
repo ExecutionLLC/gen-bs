@@ -6,6 +6,8 @@ class WebSocketServerProxy {
     constructor() {
         this.clients = [];
         this.messageHandler = null;
+
+        this.sendToAll = this.sendToAll.bind(this);
     }
 
     addWebSocketCallbacks(webSocketServer) {

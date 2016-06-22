@@ -23,11 +23,16 @@ class RpcRouter {
      * */
     handleCall(callParams, sendResultCallback) {
         assert.ok(callParams);
+        assert.ok(sendResultCallback);
         const {id, method, params} = callParams;
         const handleCall = this.handlers[method];
 
         if (id && method && handleCall) {
-            handleCall(id, method, params, sendResultCallback);
+            handleCall(id, method, params, (result) => sendResultCallback({id, result}), (error) => {
+                if (error) {
+                    console.error(error);
+                }
+            });
         } else {
             // TODO: Generate error.
             console.error(`Incorrect params: \nid: ${id}\nmethod: ${method}\nhandleCall: ${handleCall}`);

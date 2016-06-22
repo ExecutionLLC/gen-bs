@@ -63,6 +63,8 @@ class WSController extends ControllerBase {
                 this.logger.info('Connecting client WS to session ' + sessionId);
                 const clientDescriptor = this._findClientByWs(ws);
                 clientDescriptor.sessionId = sessionId;
+            } else {
+                this.logger.error('Unknown client message in web-socket.');
             }
         } catch (e) {
             this.logger.error('Client WS message parse error: ' + JSON.stringify(e));
