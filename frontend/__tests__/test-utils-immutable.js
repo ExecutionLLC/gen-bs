@@ -61,24 +61,20 @@ describe('Immutable hashed array', () => {
         expect(ImmutableHashedArray.makeFromArray([
             item11, item22, item11, item33
         ])).toEqual({
-            array: [item11, item22, item11, item33],
+            array: [item11, item22, item33],
             hash: {'11': item11, '22': item22, '33': item33}
         });
-        // unexpected behavior when has object with no id
         expect(ImmutableHashedArray.makeFromArray([
             item11, item22, item33, itemNoId
         ])).toEqual({
-            array: [item11, item22, item33, itemNoId],
-            hash: {'11': item11, '22': item22, '33': item33, 'undefined': itemNoId}
+            array: [item11, item22, item33],
+            hash: {'11': item11, '22': item22, '33': item33}
         });
     });
 
     it('should delete item', () => {
         const hashedArray = ImmutableHashedArray.makeFromArray([
             item11, item22, item33
-        ]);
-        const hashedArrayWDuplicate = ImmutableHashedArray.makeFromArray([
-            item11, item22, item33, item22
         ]);
         expect(ImmutableHashedArray.deleteItemId(hashedArray, 123)).toEqual(null);
         expect(ImmutableHashedArray.deleteItemId(hashedArray, 11)).toEqual({
@@ -93,19 +89,11 @@ describe('Immutable hashed array', () => {
             array: [item11, item22],
             hash: {'11': item11, '22': item22}
         });
-        // unexpected behavior when delete duplicate item
-        expect(ImmutableHashedArray.deleteItemId(hashedArrayWDuplicate, 22)).toEqual({
-            array: [item11, item33, item22],
-            hash: {'11': item11, '33': item33}
-        });
     });
 
     it('should replace item', () => {
         const hashedArray = ImmutableHashedArray.makeFromArray([
             item11, item22, item33
-        ]);
-        const hashedArrayWDuplicate = ImmutableHashedArray.makeFromArray([
-            item11, item22, item33, item22
         ]);
         const item55 = {id: 55, value: 555};
         expect(ImmutableHashedArray.replaceItemId(hashedArray, 123, item55)).toEqual(null);
@@ -121,20 +109,14 @@ describe('Immutable hashed array', () => {
             array: [item11, item22, item55],
             hash: {'11': item11, '22': item22, 55: item55}
         });
+        expect(ImmutableHashedArray.replaceItemId(hashedArray, 123, item55)).toEqual(null);
         expect(ImmutableHashedArray.replaceItemId(hashedArray, 123, itemNoId)).toEqual(null);
-        // unexpected behavior when replacing object with no id
         expect(ImmutableHashedArray.replaceItemId(hashedArray, 22, itemNoId)).toEqual({
-            array: [item11, itemNoId, item33],
-            hash: {'11': item11, '33': item33, 'undefined': itemNoId}
+            array: [item11, item22, item33],
+            hash: {'11': item11, '22': item22, '33': item33}
         });
-        // unexpected behavior when replacing duplicated item
-        expect(ImmutableHashedArray.replaceItemId(hashedArrayWDuplicate, 22, item55)).toEqual({
-            array: [item11, item55, item33, item22],
-            hash: {'11': item11, '33': item33, '55': item55}
-        });
-        // unexpected behavior when replacing with existing item
         expect(ImmutableHashedArray.replaceItemId(hashedArray, 22, item33)).toEqual({
-            array: [item11, item33, item33],
+            array: [item11, item33],
             hash: {'11': item11, '33': item33}
         });
     });
@@ -152,19 +134,16 @@ describe('Immutable hashed array', () => {
             array: [item55],
             hash: {55: item55}
         });
-        // unexpected behavior when appending object with no id
         expect(ImmutableHashedArray.appendItem(hashedArrayFilled, itemNoId)).toEqual({
-            array: [item11, item22, item33, itemNoId],
-            hash: {'11': item11, '22': item22, '33': item33, 'undefined': itemNoId}
+            array: [item11, item22, item33],
+            hash: {'11': item11, '22': item22, '33': item33}
         });
-        // unexpected behavior when appending object with no id
         expect(ImmutableHashedArray.appendItem(hashedArrayEmpty, itemNoId)).toEqual({
-            array: [itemNoId],
-            hash: {'undefined': itemNoId}
+            array: [],
+            hash: {}
         });
-        // unexpected behavior when append existing item
         expect(ImmutableHashedArray.appendItem(hashedArrayFilled, item22)).toEqual({
-            array: [item11, item22, item33, item22],
+            array: [item11, item22, item33],
             hash: {'11': item11, '22': item22, '33': item33}
         });
     });
