@@ -24,6 +24,9 @@ export default class immutableArray {
      * @returns {T[]}
      */
     static remove(arr, index) {
+        if (index < 0 || index >= arr.length) {
+            return arr;
+        }
         return [
             ...arr.slice(0, index),
             ...arr.slice(index + 1, arr.length)
