@@ -51,6 +51,12 @@ export class ImmutableHashedArray {
     }
 
     static appendItem({array, hash}, newItem) {
+        if (newItem.id == null) {
+            throw 'ImmutableHashedArray.appendItem missing id';
+        }
+        if (hash[newItem.id]) {
+            throw 'ImmutableHashedArray.appendItem duplicate id ' + newItem.id;
+        }
         return {
             array: immutableArray.append(array, newItem),
             hash: {...hash, [newItem.id]: newItem}
