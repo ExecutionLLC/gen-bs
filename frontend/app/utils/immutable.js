@@ -3,9 +3,16 @@ import immutableArray from './immutableArray';
 
 export class ImmutableHashedArray {
     static makeFromArray(array) {
+        const hash = _.keyBy(array, 'id');
+        if (Object.keys(hash).length !== array.length) {
+            throw 'ImmutableHashedArray.makeFromArray duplicate ids';
+        }
+        if (_.some(array, (item) => item.id == null)) {
+            throw 'ImmutableHashedArray.makeFromArray missing id';
+        }
         return {
-            array: array || [],
-            hash: _.keyBy(array, 'id')
+            array,
+            hash
         };
     }
 

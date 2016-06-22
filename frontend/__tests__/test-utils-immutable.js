@@ -39,12 +39,9 @@ describe('Immutable hashed array', () => {
     const itemNoId = {some: 123, data: 456, here: 789};
 
     it('should make from array', () => {
-        expect(ImmutableHashedArray.makeFromArray(
+        expect(() => ImmutableHashedArray.makeFromArray(
             null
-        )).toEqual({
-            array: [],
-            hash: {}
-        });
+        )).toThrow();
         expect(ImmutableHashedArray.makeFromArray(
             []
         )).toEqual({
