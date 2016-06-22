@@ -120,6 +120,17 @@ const filtersTests = makeListedObjectTests({
             };
         }
     },
+    removeMocks: {
+        remove() {
+            delete apiFacade.filtersClient.remove;
+        },
+        update() {
+            delete apiFacade.filtersClient.update;
+        },
+        create() {
+            delete apiFacade.filtersClient.add;
+        }
+    },
     getStateHashedArray(globalState) {
         const {filtersList: {hashedArray: filtersHashedArray}} = globalState;
         return filtersHashedArray;

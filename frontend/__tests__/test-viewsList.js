@@ -120,6 +120,17 @@ const viewsTests = makeListedObjectTests({
             };
         }
     },
+    removeMocks: {
+        remove() {
+            delete apiFacade.viewsClient.remove;
+        },
+        update() {
+            delete apiFacade.viewsClient.update;
+        },
+        create() {
+            delete apiFacade.viewsClient.add;
+        }
+    },
     getStateHashedArray(globalState) {
         const {viewsList: {hashedArray: viewsHashedArray}} = globalState;
         return viewsHashedArray;

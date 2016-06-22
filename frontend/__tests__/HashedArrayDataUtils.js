@@ -124,7 +124,7 @@ export function makeListedObjectTests(params) {
             }
 
             function resetMocks() {
-                delete apiFacade.filtersClient.remove;
+                params.removeMocks.remove();
             }
 
             HashedArrayDataUtils.doTests('run deletion success', testCases, makeTest, resetMocks, {mustError: false});
@@ -176,7 +176,7 @@ export function makeListedObjectTests(params) {
             }
 
             function resetMocks() {
-                delete apiFacade.filtersClient.update;
+                params.removeMocks.update();
             }
 
             HashedArrayDataUtils.doTests('run updating success', testCases, makeTest, resetMocks, {mustError: false});
@@ -215,7 +215,7 @@ export function makeListedObjectTests(params) {
             }
 
             function resetMocks() {
-                delete apiFacade.filtersClient.add;
+                params.removeMocks.create();
             }
 
             HashedArrayDataUtils.doTests('run creating success', testCases, makeTest, resetMocks, {mustError: false});
