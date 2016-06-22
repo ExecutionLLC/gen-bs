@@ -12,9 +12,6 @@ function reduceViewListDeleteView(state, action) {
 
 function reduceViewListEditView(state, action) {
     const newHashedArray = ImmutableHashedArray.replaceItemId(state.hashedArray, action.viewId, action.view);
-    if (!newHashedArray) {
-        return state;
-    }
     const updatedSelectedViewId = (state.selectedViewId === action.viewId) ? action.view.id : state.selectedViewId;
     return Object.assign({}, state, {
         hashedArray: newHashedArray,

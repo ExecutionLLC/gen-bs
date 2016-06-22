@@ -12,9 +12,6 @@ function reduceFilterListDeleteFilter(state, action) {
 
 function reduceFilterListEditFilter(state, action) {
     const newHashedArray = ImmutableHashedArray.replaceItemId(state.hashedArray, action.filterId, action.filter);
-    if (!newHashedArray) {
-        return state;
-    }
     const updatedSelectedFilterId = (state.selectedFilterId === action.filterId) ? action.filter.id : state.selectedFilterId;
     return Object.assign({}, state, {
         hashedArray: newHashedArray,
