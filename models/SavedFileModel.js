@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const async = require('async');
 
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const CollectionUtils = require('../utils/CollectionUtils');
 const SecureModelBase = require('./SecureModelBase');
 
 const mappedColumns = [
@@ -192,13 +192,8 @@ class SavedFileModel extends SecureModelBase {
                 .asCallback((error, rows) => callback(error, rows)),
             (rows, callback) => this._toCamelCase(rows, callback),
             (rows, callback) => {
-                const hash = _.reduce(rows, (result, row) => {
-                    if (!result[row.savedFileId]) {
-                        result[row.savedFileId] = [];
-                    }
-                    result[row.savedFileId].push(row.filterId);
-                    return result;
-                }, {});
+                const hash = CollectionUtils.createMultiValueHash(rows,
+                    (row) => row.savedFileId, (row) => row.filterId);
                 callback(null, hash);
             }
         ], callback);

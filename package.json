@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/ExecutionLLC/gen-bs#readme",
   "engines": {
-    "node": "4.2.2"
+    "node": "6.1.0"
   },
   "dependencies": {
     "ali-oss": "4.4.3",
@@ -64,6 +64,7 @@
     "ws": "1.0.1"
   },
   "devDependencies": {
+    "fakeredis": "1.0.3",
     "mocha": "2.4.5",
     "request": "2.67.0"
   }

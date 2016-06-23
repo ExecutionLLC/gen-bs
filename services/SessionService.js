@@ -19,7 +19,7 @@ class SessionService extends ServiceBase {
         this.config = this.services.config;
         this.logger = this.services.logger;
 
-        this.sessions = {};
+        this.sessions = Object.create(null);
 
         this.startSystem((error, systemSession) => {
             if (error) {

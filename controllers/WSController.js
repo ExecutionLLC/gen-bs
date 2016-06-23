@@ -3,6 +3,7 @@
 const _ = require('lodash');
 
 const ControllerBase = require('./base/ControllerBase');
+const WebSocketServerProxy = require('../utils/WebSocketServerProxy');
 
 /**
  * This controller handles client web socket connections,
@@ -14,57 +15,18 @@ class WSController extends ControllerBase {
         super(services);
 
         this.logger = this.services.logger;
+        this.webSocketServerProxy = new WebSocketServerProxy();
         this.clients = [];
+
+        this.webSocketServerProxy.onMessage(this._onClientMessage.bind(this));
+        this.webSocketServerProxy.onClose(this._onClientDisconnected.bind(this));
+        this.webSocketServerProxy.onConnect(this._onClientConnected.bind(this));
 
         this._subscribeAppServerReplyEvents();
     }
 
     addWebSocketServerCallbacks(webSocketServer) {
-        webSocketServer.on('connection', (ws) => {
-            this.logger.info('WS client connected');
-            ws.on('message', (messageString) => {
-                try {
-                    const message = JSON.parse(messageString);
-                    const clientDescriptor = this._findClientByWs(ws);
-                    this.logger.info('Client message for session ' + clientDescriptor.sessionId);
-                    this.logger.info(JSON.stringify(message, null, 2));
-                    this._onClientMessage(ws, message);
-                } catch (e) {
-                    this.logger.error('Client WS message parse error: ' + JSON.stringify(e));
-                    const error = {
-                        result: {
-                            error:'Error parsing message:' + JSON.stringify(e)
-                        }
-                    };
-                    ws.send(JSON.stringify(error), null, (error) => {
-                        if (error) {
-                            this.logger.error('Error sending response to the client: ' + JSON.stringify(error));
-                        }
-                    });
-                }
-            });
-            ws.on('error', error => {
-                this.logger.error('Error in client socket: ' + JSON.stringify(error, null, 2));
-            });
-            ws.on('close', () => {
-                this.logger.info('WS client disconnected');
-                this._removeClientByWs(ws);
-            });
-
-            this.clients.push({
-                ws,
-                sessionId: null
-            });
-        });
-    }
-
-    _onClientMessage(clientWs, message) {
-        const sessionId = message.sessionId;
-        if (sessionId) {
-            this.logger.info('Connecting client WS to session ' + sessionId);
-            const clientDescriptor = this._findClientByWs(clientWs);
-            clientDescriptor.sessionId = sessionId;
-        }
+        this.webSocketServerProxy.addWebSocketCallbacks(webSocketServer);
     }
 
     _onServerReply(reply) {
@@ -89,17 +51,56 @@ class WSController extends ControllerBase {
         });
     }
 
+    _onClientMessage(ws, messageString) {
+        try {
+            const message = JSON.parse(messageString);
+            const clientDescriptor = this._findClientByWs(ws);
+            this.logger.info('Client message for session ' + clientDescriptor.sessionId);
+            this.logger.info(JSON.stringify(message, null, 2));
+
+            const sessionId = message.sessionId;
+            if (sessionId) {
+                this.logger.info('Connecting client WS to session ' + sessionId);
+                const clientDescriptor = this._findClientByWs(ws);
+                clientDescriptor.sessionId = sessionId;
+            } else {
+                this.logger.error('Unknown client message in web-socket.');
+            }
+        } catch (e) {
+            this.logger.error('Client WS message parse error: ' + JSON.stringify(e));
+            const error = {
+                result: {
+                    error:'Error parsing message:' + JSON.stringify(e)
+                }
+            };
+            ws.send(JSON.stringify(error), null, (error) => {
+                if (error) {
+                    this.logger.error('Error sending response to the client: ' + JSON.stringify(error));
+                }
+            });
+        }
+    }
+
+    _onClientConnected(ws) {
+        this.logger.info('WS client connected');
+        this.clients.push({
+            ws,
+            sessionId: null
+        });
+    }
+
+    _onClientDisconnected(clientWs) {
+        this.logger.info('WS client disconnected');
+        const index = _.findIndex(this.clients, (client) => client.ws === clientWs);
+        this.clients.splice(index, 1);
+    }
+
     _findClientByWs(clientWs) {
         return _.find(this.clients, client => client.ws === clientWs);
     }
 
     _findClientBySessionId(sessionId) {
         return _.find(this.clients, client => client.sessionId === sessionId);
-    }
-
-    _removeClientByWs(clientWs) {
-        const index = _.findIndex(this.clients, (client) => client.ws === clientWs);
-        this.clients.splice(index, 1);
     }
 
     /**

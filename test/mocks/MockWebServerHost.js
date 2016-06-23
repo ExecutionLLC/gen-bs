@@ -10,21 +10,34 @@ const ServicesFacade = require('../../services/ServicesFacade');
 const ControllersFacade = require('../../controllers/ControllersFacade');
 
 const MockUserModel = require('./MockUserModel');
+const MockRedisService = require('./MockRedisService');
 const MockSessionsController = require('./MockSessionsController');
+
+const MockApplicationServer = require('./applicationServer/MockApplicationServer');
 
 class MockWebServerHost {
     constructor() {
+        this._setConfigMocks();
+
         const logger = new Logger(Config.logger);
 
         const models = new ModelsFacade(Config, logger);
         this._setModelsMocks(models);
 
         const services = new ServicesFacade(Config, logger, models);
+        this._setServicesMocks(services);
+
+        this._createAppServer(services);
 
         const controllers = new ControllersFacade(logger, services);
         this._setControllersMocks(controllers);
 
         this.server = new WebServerHost(controllers, services, models);
+    }
+    
+    _setConfigMocks() {
+        Config.applicationServer.host = MockApplicationServer.getApplicationServerHost();
+        Config.applicationServer.port = MockApplicationServer.getApplicationServerPort();
     }
 
     _setModelsMocks(models) {
@@ -35,12 +48,21 @@ class MockWebServerHost {
         controllers.sessionsController = new MockSessionsController(controllers.sessionsController);
     }
 
+    _setServicesMocks(services, models) {
+        services.redis = new MockRedisService(services, models);
+    }
+
+    _createAppServer(services) {
+        this.applicationServer = new MockApplicationServer(services);
+    }
+
     start(callback) {
         this.server.start(callback);
     }
 
     stop(callback) {
         this.server.stop(callback);
+        this.applicationServer.stop();
     }
 }
 
