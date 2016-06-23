@@ -54,7 +54,7 @@ function buildFiltersState(appState) {
     return {
         initialAppState,
         filters,
-        createdFilterId: "createdf-ilte-ride-ntif-ier000000000"
+        createdFilterId: 'createdf-ilte-ride-ntif-ier000000000'
     };
 }
 

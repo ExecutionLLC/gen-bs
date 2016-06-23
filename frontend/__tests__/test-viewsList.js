@@ -54,7 +54,7 @@ function buildViewsState(appState) {
     return {
         initialAppState,
         views,
-        createdViewId: "createdv-iewi-dent-ifie-r00000000000"
+        createdViewId: 'createdv-iewi-dent-ifie-r00000000000'
     };
 }
 
