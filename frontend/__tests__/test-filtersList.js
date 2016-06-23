@@ -36,12 +36,7 @@ function buildFiltersState(appState) {
 
 
 runListedObjectTests({
-    describes: {
-        initial: 'Mocked filters list state',
-        deleteTests: 'Filters list delete tests',
-        updateTests: 'Filters list update tests',
-        createTests: 'Filters list create tests'
-    },
+    listName: 'Filters list',
     buildInitState() {
         const {initialAppState, filters, createdFilterId} = buildFiltersState(MOCK_APP_STATE);
         return {

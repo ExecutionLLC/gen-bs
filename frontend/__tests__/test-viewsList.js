@@ -36,12 +36,7 @@ function buildViewsState(appState) {
 
 
 runListedObjectTests({
-    describes: {
-        initial: 'Mocked views list state',
-        deleteTests: 'Views list delete tests',
-        updateTests: 'Views list update tests',
-        createTests: 'Views list create tests'
-    },
+    listName: 'Views list',
     buildInitState() {
         const {initialAppState, views, createdViewId} = buildViewsState(MOCK_APP_STATE);
         return {
