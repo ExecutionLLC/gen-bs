@@ -77,7 +77,7 @@ runListedObjectTests({
                 }
             };
         },
-        update(itemToResponse, mustError) {
+        update(mustError) {
             viewsClient.update = (sessionId, view, callback) => {
                 if (mustError) {
                     return callback({message: 'mockError'}, {status: 500});
@@ -86,7 +86,7 @@ runListedObjectTests({
                 }
             };
         },
-        create(viewToResponse, mustError, newViewId) {
+        create(mustError, newViewId) {
             viewsClient.add = (sessionId, languageId, view, callback) => {
                 if (mustError) {
                     return callback({message: 'mockError'}, {status: 500});

@@ -77,7 +77,7 @@ runListedObjectTests({
                 }
             };
         },
-        update(itemToResponse, mustError) {
+        update(mustError) {
             filtersClient.update = (sessionId, filter, callback) => {
                 if (mustError) {
                     return callback({message: 'mockError'}, {status: 500});
@@ -86,7 +86,7 @@ runListedObjectTests({
                 }
             };
         },
-        create(filterToResponse, mustError, newFilterId) {
+        create(mustError, newFilterId) {
             filtersClient.add = (sessionId, languageId, filter, callback) => {
                 if (mustError) {
                     return callback({message: 'mockError'}, {status: 500});

@@ -159,7 +159,6 @@ export function runListedObjectTests(params) {
             const expectedItemsHashedArray = actualUpdate && !mustError ?
                 ImmutableHashedArray.replaceItemId(initialHashedArray, itemId, newItem) :
                 initialHashedArray;
-            const itemToResponse = _.cloneDeep(newItem);
 
             return {
                 initialAppState,
@@ -168,7 +167,7 @@ export function runListedObjectTests(params) {
                     const stateHashedArray = params.getStateHashedArray(globalState);
                     HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
                 },
-                setMocks: () => params.makeMocks.update(itemToResponse, mustError)
+                setMocks: () => params.makeMocks.update(mustError)
             };
         }
 
@@ -194,7 +193,6 @@ export function runListedObjectTests(params) {
         function makeTest(testCase, testsParams) {
             const {mustError} = testsParams;
             const {newItem} = testCase;
-            const itemToResponse = {..._.cloneDeep(newItem), id: createdItemId};
             const initialItemsHashedArray = ImmutableHashedArray.makeFromArray(list);
             const expectedItemsHashedArray = mustError ?
                 initialItemsHashedArray :
@@ -207,7 +205,7 @@ export function runListedObjectTests(params) {
                     const stateHashedArray = params.getStateHashedArray(globalState);
                     HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
                 },
-                setMocks: () => params.makeMocks.create(itemToResponse, mustError, createdItemId)
+                setMocks: () => params.makeMocks.create(mustError, createdItemId)
             };
         }
 
