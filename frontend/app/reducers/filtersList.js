@@ -3,9 +3,6 @@ import {ImmutableHashedArray} from '../utils/immutable';
 
 function reduceFilterListDeleteFilter(state, action) {
     const newHashedArray = ImmutableHashedArray.deleteItemId(state.hashedArray, action.filterId);
-    if (!newHashedArray) {
-        return state;
-    }
     const newSelectedFilterId = (state.selectedFilterId === action.filterId) ? state.hashedArray.array[0].id : state.selectedFilterId;
     return Object.assign({}, state, {
         selectedFilterId: newSelectedFilterId,
@@ -15,9 +12,6 @@ function reduceFilterListDeleteFilter(state, action) {
 
 function reduceFilterListEditFilter(state, action) {
     const newHashedArray = ImmutableHashedArray.replaceItemId(state.hashedArray, action.filterId, action.filter);
-    if (!newHashedArray) {
-        return state;
-    }
     const updatedSelectedFilterId = (state.selectedFilterId === action.filterId) ? action.filter.id : state.selectedFilterId;
     return Object.assign({}, state, {
         hashedArray: newHashedArray,
