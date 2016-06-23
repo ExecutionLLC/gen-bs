@@ -5,10 +5,10 @@ export class ImmutableHashedArray {
     static makeFromArray(array) {
         const hash = _.keyBy(array, 'id');
         if (Object.keys(hash).length !== array.length) {
-            throw 'ImmutableHashedArray.makeFromArray duplicate ids';
+            throw new Error('Duplicate ids');
         }
         if (_.some(array, (item) => item.id == null)) {
-            throw 'ImmutableHashedArray.makeFromArray missing id';
+            throw new Error('Missing id');
         }
         return {
             array,
@@ -35,14 +35,14 @@ export class ImmutableHashedArray {
 
     static replaceItemId({array, hash}, id, newItem) {
         if (newItem.id == null) {
-            throw 'ImmutableHashedArray.replaceItemId missing id';
+            throw new Error('Missing id');
         }
         if (hash[newItem.id] && newItem.id !== id) {
-            throw 'ImmutableHashedArray.replaceItemId duplicate id ' + newItem.id;
+            throw new Error(`Duplicate id ${newItem.id}`);
         }
         const itemIndex = this._findIndexForId(array, id);
         if (itemIndex < 0) {
-            throw 'ImmutableHashedArray.replaceItemId absent id ' + id;
+            throw new Error(`Absent id ${id}`);
         }
         return {
             array: immutableArray.replace(array, itemIndex, newItem),
@@ -52,10 +52,10 @@ export class ImmutableHashedArray {
 
     static appendItem({array, hash}, newItem) {
         if (newItem.id == null) {
-            throw 'ImmutableHashedArray.appendItem missing id';
+            throw new Error('Missing id');
         }
         if (hash[newItem.id]) {
-            throw 'ImmutableHashedArray.appendItem duplicate id ' + newItem.id;
+            throw new Error(`Duplicate id ${newItem.id}`);
         }
         return {
             array: immutableArray.append(array, newItem),
