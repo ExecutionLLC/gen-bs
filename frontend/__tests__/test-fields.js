@@ -32,7 +32,7 @@ describe('fields', () => {
         }, done);
     });
 
-    it('should receive total fields null', (done) => {
+    it('should throw error when receiving total fields as null', (done) => {
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveTotalFields(null)),
             stateMapperFunc,
@@ -68,7 +68,7 @@ describe('fields', () => {
         }, done);
     });
     
-    it('should receive fields null', (done) => {
+    it('should receive null as empty sample fields list', (done) => {
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveFields(null)),
             stateMapperFunc,
@@ -76,7 +76,7 @@ describe('fields', () => {
         }, done);
     });
 
-    it('should receive fields empty', (done) => {
+    it('should receive empty fields list', (done) => {
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveFields([])),
             stateMapperFunc,
