@@ -7,6 +7,9 @@ import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDel
 import {runListedObjectTests} from './HashedArrayDataUtils';
 
 
+const {viewsClient} = apiFacade;
+
+
 function mockViewRemove(sessionId, viewId, callback, expected) {
     if (expected.error) {
         return callback(expected.error, {status: 500});
@@ -91,7 +94,7 @@ runListedObjectTests({
     makeMocks: {
         remove(mustError) {
             return () => {
-                apiFacade.viewsClient.remove = (requestSessionId, requestViewId, callback) => mockViewRemove(
+                viewsClient.remove = (requestSessionId, requestViewId, callback) => mockViewRemove(
                     requestSessionId, requestViewId, callback,
                     {error: mustError ? {message: 'mockedError'} : null}
                 );
@@ -99,7 +102,7 @@ runListedObjectTests({
         },
         update(itemToResponse, mustError) {
             return () => {
-                apiFacade.viewsClient.update = (requestSessionId, requestView, callback) => mockViewUpdate(
+                viewsClient.update = (requestSessionId, requestView, callback) => mockViewUpdate(
                     requestSessionId, requestView, callback,
                     {
                         viewResponse: itemToResponse,
@@ -110,7 +113,7 @@ runListedObjectTests({
         },
         create(viewToResponse, mustError) {
             return () => {
-                apiFacade.viewsClient.add = (requestSessionId, requestLanguageId, requestView, callback) => mockViewCreate(
+                viewsClient.add = (requestSessionId, requestLanguageId, requestView, callback) => mockViewCreate(
                     requestSessionId, requestLanguageId, requestView, callback,
                     {
                         viewResponse: viewToResponse,
@@ -122,13 +125,13 @@ runListedObjectTests({
     },
     removeMocks: {
         remove() {
-            delete apiFacade.viewsClient.remove;
+            delete viewsClient.remove;
         },
         update() {
-            delete apiFacade.viewsClient.update;
+            delete viewsClient.update;
         },
         create() {
-            delete apiFacade.viewsClient.add;
+            delete viewsClient.add;
         }
     },
     getStateHashedArray(globalState) {

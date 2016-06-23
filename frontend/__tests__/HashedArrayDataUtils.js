@@ -1,6 +1,5 @@
 import _ from 'lodash';
 
-import apiFacade from '../app/api/ApiFacade';
 import storeTestUtils from './storeTestUtils';
 import {ImmutableHashedArray} from '../app/utils/immutable';
 

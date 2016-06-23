@@ -7,6 +7,9 @@ import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersLis
 import {runListedObjectTests} from './HashedArrayDataUtils';
 
 
+const {filtersClient} = apiFacade;
+
+
 function mockFilterRemove(sessionId, filterId, callback, expected) {
     if (expected.error) {
         return callback(expected.error, {status: 500});
@@ -91,7 +94,7 @@ runListedObjectTests({
     makeMocks: {
         remove(mustError) {
             return () => {
-                apiFacade.filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
+                filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
                     requestSessionId, requestFilterId, callback,
                     {error: mustError ? {message: 'mockedError'} : null}
                 );
@@ -99,7 +102,7 @@ runListedObjectTests({
         },
         update(itemToResponse, mustError) {
             return () => {
-                apiFacade.filtersClient.update = (requestSessionId, requestFilter, callback) => mockFilterUpdate(
+                filtersClient.update = (requestSessionId, requestFilter, callback) => mockFilterUpdate(
                     requestSessionId, requestFilter, callback,
                     {
                         filterResponse: itemToResponse,
@@ -110,7 +113,7 @@ runListedObjectTests({
         },
         create(filterToResponse, mustError) {
             return () => {
-                apiFacade.filtersClient.add = (requestSessionId, requestLanguageId, requestFilter, callback) => mockFilterCreate(
+                filtersClient.add = (requestSessionId, requestLanguageId, requestFilter, callback) => mockFilterCreate(
                     requestSessionId, requestLanguageId, requestFilter, callback,
                     {
                         filterResponse: filterToResponse,
@@ -122,13 +125,13 @@ runListedObjectTests({
     },
     removeMocks: {
         remove() {
-            delete apiFacade.filtersClient.remove;
+            delete filtersClient.remove;
         },
         update() {
-            delete apiFacade.filtersClient.update;
+            delete filtersClient.update;
         },
         create() {
-            delete apiFacade.filtersClient.add;
+            delete filtersClient.add;
         }
     },
     getStateHashedArray(globalState) {
