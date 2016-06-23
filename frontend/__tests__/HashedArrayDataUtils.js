@@ -116,7 +116,7 @@ export function runListedObjectTests(params) {
                     HashedArrayDataUtils.checkObjectInHashedArray(stateHashedArray, itemId, expectedItem);
                     HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, {array: expectedItems, hash: expectedItemsHash});
                 },
-                setMocks: params.makeMocks.remove(mustError)
+                setMocks: () => params.makeMocks.remove(mustError)
             };
         }
 
@@ -168,7 +168,7 @@ export function runListedObjectTests(params) {
                     const stateHashedArray = params.getStateHashedArray(globalState);
                     HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
                 },
-                setMocks: params.makeMocks.update(itemToResponse, mustError)
+                setMocks: () => params.makeMocks.update(itemToResponse, mustError)
             };
         }
 
@@ -207,7 +207,7 @@ export function runListedObjectTests(params) {
                     const stateHashedArray = params.getStateHashedArray(globalState);
                     HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
                 },
-                setMocks: params.makeMocks.create(itemToResponse, mustError)
+                setMocks: () => params.makeMocks.create(itemToResponse, mustError)
             };
         }
 

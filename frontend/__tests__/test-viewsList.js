@@ -93,34 +93,28 @@ runListedObjectTests({
     },
     makeMocks: {
         remove(mustError) {
-            return () => {
-                viewsClient.remove = (requestSessionId, requestViewId, callback) => mockViewRemove(
-                    requestSessionId, requestViewId, callback,
-                    {error: mustError ? {message: 'mockedError'} : null}
-                );
-            };
+            viewsClient.remove = (requestSessionId, requestViewId, callback) => mockViewRemove(
+                requestSessionId, requestViewId, callback,
+                {error: mustError ? {message: 'mockedError'} : null}
+            );
         },
         update(itemToResponse, mustError) {
-            return () => {
-                viewsClient.update = (requestSessionId, requestView, callback) => mockViewUpdate(
-                    requestSessionId, requestView, callback,
-                    {
-                        viewResponse: itemToResponse,
-                        error: mustError ? {message: 'mockError'} : null
-                    }
-                );
-            };
+            viewsClient.update = (requestSessionId, requestView, callback) => mockViewUpdate(
+                requestSessionId, requestView, callback,
+                {
+                    viewResponse: itemToResponse,
+                    error: mustError ? {message: 'mockError'} : null
+                }
+            );
         },
         create(viewToResponse, mustError) {
-            return () => {
-                viewsClient.add = (requestSessionId, requestLanguageId, requestView, callback) => mockViewCreate(
-                    requestSessionId, requestLanguageId, requestView, callback,
-                    {
-                        viewResponse: viewToResponse,
-                        error: mustError ? {message: 'mockError'} : null
-                    }
-                );
-            };
+            viewsClient.add = (requestSessionId, requestLanguageId, requestView, callback) => mockViewCreate(
+                requestSessionId, requestLanguageId, requestView, callback,
+                {
+                    viewResponse: viewToResponse,
+                    error: mustError ? {message: 'mockError'} : null
+                }
+            );
         }
     },
     removeMocks: {

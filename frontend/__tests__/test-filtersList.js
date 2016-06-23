@@ -93,34 +93,28 @@ runListedObjectTests({
     },
     makeMocks: {
         remove(mustError) {
-            return () => {
-                filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
-                    requestSessionId, requestFilterId, callback,
-                    {error: mustError ? {message: 'mockedError'} : null}
-                );
-            };
+            filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
+                requestSessionId, requestFilterId, callback,
+                {error: mustError ? {message: 'mockedError'} : null}
+            );
         },
         update(itemToResponse, mustError) {
-            return () => {
-                filtersClient.update = (requestSessionId, requestFilter, callback) => mockFilterUpdate(
-                    requestSessionId, requestFilter, callback,
-                    {
-                        filterResponse: itemToResponse,
-                        error: mustError ? {message: 'mockError'} : null
-                    }
-                );
-            };
+            filtersClient.update = (requestSessionId, requestFilter, callback) => mockFilterUpdate(
+                requestSessionId, requestFilter, callback,
+                {
+                    filterResponse: itemToResponse,
+                    error: mustError ? {message: 'mockError'} : null
+                }
+            );
         },
         create(filterToResponse, mustError) {
-            return () => {
-                filtersClient.add = (requestSessionId, requestLanguageId, requestFilter, callback) => mockFilterCreate(
-                    requestSessionId, requestLanguageId, requestFilter, callback,
-                    {
-                        filterResponse: filterToResponse,
-                        error: mustError ? {message: 'mockError'} : null
-                    }
-                );
-            };
+            filtersClient.add = (requestSessionId, requestLanguageId, requestFilter, callback) => mockFilterCreate(
+                requestSessionId, requestLanguageId, requestFilter, callback,
+                {
+                    filterResponse: filterToResponse,
+                    error: mustError ? {message: 'mockError'} : null
+                }
+            );
         }
     },
     removeMocks: {
