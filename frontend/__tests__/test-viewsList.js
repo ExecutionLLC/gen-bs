@@ -40,8 +40,8 @@ function buildViewsState(appState) {
     } = appState;
 
     const initialAppState = {
-        auth: auth,
-        ui: ui,
+        auth,
+        ui,
         viewsList: {
             hashedArray: ImmutableHashedArray.makeFromArray(views),
             selectedViewId: views[0].id

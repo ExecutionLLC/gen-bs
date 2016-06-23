@@ -40,8 +40,8 @@ function buildFiltersState(appState) {
     } = appState;
 
     const initialAppState = {
-        auth: auth,
-        ui: ui,
+        auth,
+        ui,
         filtersList: {
             hashedArray: ImmutableHashedArray.makeFromArray(filters),
             selectedFilterId: filters[0].id
