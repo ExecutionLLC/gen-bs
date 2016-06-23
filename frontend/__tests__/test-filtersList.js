@@ -1,4 +1,5 @@
 import HttpStatus from 'http-status';
+import _ from 'lodash';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import MOCK_APP_STATE from './__data__/appState.json';
@@ -8,31 +9,6 @@ import {runListedObjectTests} from './HashedArrayDataUtils';
 
 
 const {filtersClient} = apiFacade;
-
-
-function mockFilterRemove(sessionId, filterId, callback, expected) {
-    if (expected.error) {
-        return callback(expected.error, {status: 500});
-    } else {
-        return callback(null, {status: HttpStatus.OK});
-    }
-}
-
-function mockFilterUpdate(sessionId, filter, callback, expected) {
-    if (expected.error) {
-        return callback(expected.error, {status: 500});
-    } else {
-        return callback(null, {status: HttpStatus.OK, body: expected.filterResponse});
-    }
-}
-
-function mockFilterCreate(sessionId, languageId, filter, callback, expected) {
-    if (expected.error) {
-        return callback(expected.error, {status: 500});
-    } else {
-        return callback(null, {status: HttpStatus.OK, body: expected.filterResponse});
-    }
-}
 
 
 function buildFiltersState(appState) {
@@ -93,28 +69,31 @@ runListedObjectTests({
     },
     makeMocks: {
         remove(mustError) {
-            filtersClient.remove = (requestSessionId, requestFilterId, callback) => mockFilterRemove(
-                requestSessionId, requestFilterId, callback,
-                {error: mustError ? {message: 'mockedError'} : null}
-            );
+            filtersClient.remove = (sessionId, filterId, callback) => {
+                if (mustError) {
+                    return callback({message: 'mockedError'}, {status: 500});
+                } else {
+                    return callback(null, {status: HttpStatus.OK});
+                }
+            };
         },
         update(itemToResponse, mustError) {
-            filtersClient.update = (requestSessionId, requestFilter, callback) => mockFilterUpdate(
-                requestSessionId, requestFilter, callback,
-                {
-                    filterResponse: itemToResponse,
-                    error: mustError ? {message: 'mockError'} : null
+            filtersClient.update = (sessionId, filter, callback) => {
+                if (mustError) {
+                    return callback({message: 'mockError'}, {status: 500});
+                } else {
+                    return callback(null, {status: HttpStatus.OK, body: _.cloneDeep(filter)});
                 }
-            );
+            };
         },
-        create(filterToResponse, mustError) {
-            filtersClient.add = (requestSessionId, requestLanguageId, requestFilter, callback) => mockFilterCreate(
-                requestSessionId, requestLanguageId, requestFilter, callback,
-                {
-                    filterResponse: filterToResponse,
-                    error: mustError ? {message: 'mockError'} : null
+        create(filterToResponse, mustError, newFilterId) {
+            filtersClient.add = (sessionId, languageId, filter, callback) => {
+                if (mustError) {
+                    return callback({message: 'mockError'}, {status: 500});
+                } else {
+                    return callback(null, {status: HttpStatus.OK, body: {..._.cloneDeep(filter), id: newFilterId}});
                 }
-            );
+            };
         }
     },
     removeMocks: {

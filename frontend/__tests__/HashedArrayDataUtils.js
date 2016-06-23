@@ -207,7 +207,7 @@ export function runListedObjectTests(params) {
                     const stateHashedArray = params.getStateHashedArray(globalState);
                     HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
                 },
-                setMocks: () => params.makeMocks.create(itemToResponse, mustError)
+                setMocks: () => params.makeMocks.create(itemToResponse, mustError, createdItemId)
             };
         }
 

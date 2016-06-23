@@ -1,4 +1,5 @@
 import HttpStatus from 'http-status';
+import _ from 'lodash';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
 import MOCK_APP_STATE from './__data__/appState.json';
@@ -8,31 +9,6 @@ import {runListedObjectTests} from './HashedArrayDataUtils';
 
 
 const {viewsClient} = apiFacade;
-
-
-function mockViewRemove(sessionId, viewId, callback, expected) {
-    if (expected.error) {
-        return callback(expected.error, {status: 500});
-    } else {
-        return callback(null, {status: HttpStatus.OK});
-    }
-}
-
-function mockViewUpdate(sessionId, view, callback, expected) {
-    if (expected.error) {
-        return callback(expected.error, {status: 500});
-    } else {
-        return callback(null, {status: HttpStatus.OK, body: expected.viewResponse});
-    }
-}
-
-function mockViewCreate(sessionId, languageId, view, callback, expected) {
-    if (expected.error) {
-        return callback(expected.error, {status: 500});
-    } else {
-        return callback(null, {status: HttpStatus.OK, body: expected.viewResponse});
-    }
-}
 
 
 function buildViewsState(appState) {
@@ -93,28 +69,31 @@ runListedObjectTests({
     },
     makeMocks: {
         remove(mustError) {
-            viewsClient.remove = (requestSessionId, requestViewId, callback) => mockViewRemove(
-                requestSessionId, requestViewId, callback,
-                {error: mustError ? {message: 'mockedError'} : null}
-            );
+            viewsClient.remove = (sessionId, viewId, callback) => {
+                if (mustError) {
+                    return callback({message: 'mockedError'}, {status: 500});
+                } else {
+                    return callback(null, {status: HttpStatus.OK});
+                }
+            };
         },
         update(itemToResponse, mustError) {
-            viewsClient.update = (requestSessionId, requestView, callback) => mockViewUpdate(
-                requestSessionId, requestView, callback,
-                {
-                    viewResponse: itemToResponse,
-                    error: mustError ? {message: 'mockError'} : null
+            viewsClient.update = (sessionId, view, callback) => {
+                if (mustError) {
+                    return callback({message: 'mockError'}, {status: 500});
+                } else {
+                    return callback(null, {status: HttpStatus.OK, body: _.cloneDeep(view)});
                 }
-            );
+            };
         },
-        create(viewToResponse, mustError) {
-            viewsClient.add = (requestSessionId, requestLanguageId, requestView, callback) => mockViewCreate(
-                requestSessionId, requestLanguageId, requestView, callback,
-                {
-                    viewResponse: viewToResponse,
-                    error: mustError ? {message: 'mockError'} : null
+        create(viewToResponse, mustError, newViewId) {
+            viewsClient.add = (sessionId, languageId, view, callback) => {
+                if (mustError) {
+                    return callback({message: 'mockError'}, {status: 500});
+                } else {
+                    return callback(null, {status: HttpStatus.OK, body: {..._.cloneDeep(view), id: newViewId}});
                 }
-            );
+            };
         }
     },
     removeMocks: {
