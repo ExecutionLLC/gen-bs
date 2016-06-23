@@ -147,7 +147,7 @@ export default class StoreTestUtils {
                 if (expectedError) {
                     onCompleted();
                 } else {
-                    throw new Error('Throw exception expected');
+                    throw e;
                 }
             }
         }
