@@ -20,7 +20,7 @@ class OperationsService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
 
-        this.operations = {};
+        this.operations = Object.create(null);
     }
 
     operationTypes() {

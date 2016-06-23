@@ -7,15 +7,13 @@ const async = require('async');
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
 const EditableFields = require('../defaults/templates/metadata/editable-metadata.json');
+const CollectionUtils = require('../utils/CollectionUtils');
 
 class SamplesService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.samples);
 
-        this.editableFields = _.reduce(EditableFields, (result, field) => {
-            result[field.id] = field;
-            return result;
-        }, {});
+        this.editableFields = CollectionUtils.createHashByKey(EditableFields, 'id');
     }
 
     add(user, languId, sample, callback) {

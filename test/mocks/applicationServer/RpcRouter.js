@@ -11,10 +11,7 @@ const assert = require('assert');
 
 class RpcRouter {
     constructor() {
-        /**
-         * @type {Object}
-         * */
-        this.handlers = {};
+        this.handlers = Object.create(null);
     }
 
     /**
