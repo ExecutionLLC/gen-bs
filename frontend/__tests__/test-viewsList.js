@@ -4,7 +4,7 @@ import {ImmutableHashedArray} from '../app/utils/immutable';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
-import {makeListedObjectTests} from './HashedArrayDataUtils';
+import {runListedObjectTests} from './HashedArrayDataUtils';
 
 
 function mockViewRemove(sessionId, viewId, callback, expected) {
@@ -56,7 +56,7 @@ function buildViewsState(appState) {
 }
 
 
-const viewsTests = makeListedObjectTests({
+runListedObjectTests({
     describes: {
         initial: 'Mocked views list state',
         deleteTests: 'Views list delete tests',
@@ -136,5 +136,3 @@ const viewsTests = makeListedObjectTests({
         return viewsHashedArray;
     }
 });
-
-viewsTests();

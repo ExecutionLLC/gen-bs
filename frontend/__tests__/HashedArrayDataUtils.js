@@ -62,165 +62,162 @@ class HashedArrayDataUtils {
 
 }
 
-export function makeListedObjectTests(params) {
+export function runListedObjectTests(params) {
 
-    return () => {
-
-        describe(params.describes.initial, () => {
-            const {list, createItemId} = params.buildInitState();
-            it('should contain no create item', () => {
-                const absentItemIndex = list.findIndex((filter) => filter.id === createItemId);
-                expect(absentItemIndex).toBe(-1);
-            });
+    describe(params.describes.initial, () => {
+        const {list, createItemId} = params.buildInitState();
+        it('should contain no create item', () => {
+            const absentItemIndex = list.findIndex((filter) => filter.id === createItemId);
+            expect(absentItemIndex).toBe(-1);
         });
+    });
 
-        describe(params.describes.deleteTests, () => {
-            const {initialAppState, list, createdItemId} = params.buildInitState();
-            const {sessionId} = initialAppState.auth;
+    describe(params.describes.deleteTests, () => {
+        const {initialAppState, list, createdItemId} = params.buildInitState();
+        const {sessionId} = initialAppState.auth;
 
-            const testCases = [];
-            var i;
-            for (i = 0; i < list.length; i++) {
-                testCases.push({
-                    description: 'should delete item #' + i,
-                    itemId: list[i].id,
-                    actualDelete:true
-                });
-            }
+        const testCases = [];
+        var i;
+        for (i = 0; i < list.length; i++) {
             testCases.push({
-                description: 'should not delete',
-                itemId: createdItemId,
-                actualDelete:false
+                description: 'should delete item #' + i,
+                itemId: list[i].id,
+                actualDelete:true
             });
-
-            function makeTest(testCase, testParams) {
-                const {mustError} = testParams;
-                const {itemId, actualDelete} = testCase;
-
-                const reallyDelete = actualDelete && !mustError;
-
-                const filtersCount = list.length;
-                const expectedItemsCount = reallyDelete ? filtersCount - 1 : filtersCount;
-                const expectedItems = reallyDelete ? list.filter((item) => item.id !== itemId) : list;
-                const expectedItemsHash = list.reduce((hash, item) => {
-                    if (!reallyDelete || item.id !== itemId) {
-                        hash[item.id] = item;
-                    }
-                    return hash;
-                }, {});
-                const expectedItem = actualDelete && !mustError ? void 0 : list.find((item) => item.id === itemId);
-
-                return {
-                    initialAppState,
-                    actions: params.makeActions.remove(itemId, sessionId),
-                    checkState: (globalState) => {
-                        const stateHashedArray = params.getStateHashedArray(globalState);
-                        HashedArrayDataUtils.checkHashedArrayLength(stateHashedArray, expectedItemsCount);
-                        HashedArrayDataUtils.checkObjectInHashedArray(stateHashedArray, itemId, expectedItem);
-                        HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, {array: expectedItems, hash: expectedItemsHash});
-                    },
-                    setMocks: params.makeMocks.remove(mustError)
-                };
-            }
-
-            function resetMocks() {
-                params.removeMocks.remove();
-            }
-
-            HashedArrayDataUtils.doTests('run deletion success', testCases, makeTest, resetMocks, {mustError: false});
-            HashedArrayDataUtils.doTests('run deletion error', testCases, makeTest, resetMocks, {mustError: true});
+        }
+        testCases.push({
+            description: 'should not delete',
+            itemId: createdItemId,
+            actualDelete:false
         });
 
-        describe(params.describes.updateTests, () => {
-            const {initialAppState, list, createdItemId} = params.buildInitState();
-            const {sessionId} = initialAppState.auth;
+        function makeTest(testCase, testParams) {
+            const {mustError} = testParams;
+            const {itemId, actualDelete} = testCase;
 
-            const updatedItem = _.cloneDeep(list[0]);
-            const initialHashedArray = ImmutableHashedArray.makeFromArray(list);
+            const reallyDelete = actualDelete && !mustError;
 
-            const testCases = [];
-            var i;
-            for (i = 0; i < list.length; i++) {
-                testCases.push({
-                    description: 'should update item #' + i,
-                    itemId: list[i].id,
-                    newItem: {...updatedItem, id: list[i].id},
-                    actualUpdate:true
-                });
-            }
+            const filtersCount = list.length;
+            const expectedItemsCount = reallyDelete ? filtersCount - 1 : filtersCount;
+            const expectedItems = reallyDelete ? list.filter((item) => item.id !== itemId) : list;
+            const expectedItemsHash = list.reduce((hash, item) => {
+                if (!reallyDelete || item.id !== itemId) {
+                    hash[item.id] = item;
+                }
+                return hash;
+            }, {});
+            const expectedItem = actualDelete && !mustError ? void 0 : list.find((item) => item.id === itemId);
+
+            return {
+                initialAppState,
+                actions: params.makeActions.remove(itemId, sessionId),
+                checkState: (globalState) => {
+                    const stateHashedArray = params.getStateHashedArray(globalState);
+                    HashedArrayDataUtils.checkHashedArrayLength(stateHashedArray, expectedItemsCount);
+                    HashedArrayDataUtils.checkObjectInHashedArray(stateHashedArray, itemId, expectedItem);
+                    HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, {array: expectedItems, hash: expectedItemsHash});
+                },
+                setMocks: params.makeMocks.remove(mustError)
+            };
+        }
+
+        function resetMocks() {
+            params.removeMocks.remove();
+        }
+
+        HashedArrayDataUtils.doTests('run deletion success', testCases, makeTest, resetMocks, {mustError: false});
+        HashedArrayDataUtils.doTests('run deletion error', testCases, makeTest, resetMocks, {mustError: true});
+    });
+
+    describe(params.describes.updateTests, () => {
+        const {initialAppState, list, createdItemId} = params.buildInitState();
+        const {sessionId} = initialAppState.auth;
+
+        const updatedItem = _.cloneDeep(list[0]);
+        const initialHashedArray = ImmutableHashedArray.makeFromArray(list);
+
+        const testCases = [];
+        var i;
+        for (i = 0; i < list.length; i++) {
             testCases.push({
-                description: 'should not update absent item',
-                itemId: createdItemId,
-                newItem: updatedItem,
-                actualUpdate:false
+                description: 'should update item #' + i,
+                itemId: list[i].id,
+                newItem: {...updatedItem, id: list[i].id},
+                actualUpdate:true
             });
-
-            function makeTest(testCase, testsParams) {
-                const {mustError} = testsParams;
-                const {itemId, newItem, actualUpdate} = testCase;
-
-                const expectedItemsHashedArray = actualUpdate && !mustError ?
-                    ImmutableHashedArray.replaceItemId(initialHashedArray, itemId, newItem) :
-                    initialHashedArray;
-                const itemToResponse = _.cloneDeep(newItem);
-
-                return {
-                    initialAppState,
-                    actions: params.makeActions.update(newItem, sessionId),
-                    checkState: (globalState) => {
-                        const stateHashedArray = params.getStateHashedArray(globalState);
-                        HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
-                    },
-                    setMocks: params.makeMocks.update(itemToResponse, mustError)
-                };
-            }
-
-            function resetMocks() {
-                params.removeMocks.update();
-            }
-
-            HashedArrayDataUtils.doTests('run updating success', testCases, makeTest, resetMocks, {mustError: false});
-            HashedArrayDataUtils.doTests('run updating error', testCases, makeTest, resetMocks, {mustError: true});
+        }
+        testCases.push({
+            description: 'should not update absent item',
+            itemId: createdItemId,
+            newItem: updatedItem,
+            actualUpdate:false
         });
 
-        describe(params.describes.createTests, () => {
-            const {initialAppState, list, createdItemId} = params.buildInitState();
-            const {sessionId} = initialAppState.auth;
-            const languageId = initialAppState.ui.language;
+        function makeTest(testCase, testsParams) {
+            const {mustError} = testsParams;
+            const {itemId, newItem, actualUpdate} = testCase;
 
-            const createdItem = {..._.cloneDeep(list[0]), id: null};
+            const expectedItemsHashedArray = actualUpdate && !mustError ?
+                ImmutableHashedArray.replaceItemId(initialHashedArray, itemId, newItem) :
+                initialHashedArray;
+            const itemToResponse = _.cloneDeep(newItem);
 
-            const testCases = [
-                {description: 'should create item', newItem: createdItem}
-            ];
+            return {
+                initialAppState,
+                actions: params.makeActions.update(newItem, sessionId),
+                checkState: (globalState) => {
+                    const stateHashedArray = params.getStateHashedArray(globalState);
+                    HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
+                },
+                setMocks: params.makeMocks.update(itemToResponse, mustError)
+            };
+        }
 
-            function makeTest(testCase, testsParams) {
-                const {mustError} = testsParams;
-                const {newItem} = testCase;
-                const itemToResponse = {..._.cloneDeep(newItem), id: createdItemId};
-                const initialItemsHashedArray = ImmutableHashedArray.makeFromArray(list);
-                const expectedItemsHashedArray = mustError ?
-                    initialItemsHashedArray :
-                    ImmutableHashedArray.appendItem(initialItemsHashedArray, {...newItem, id: createdItemId});
+        function resetMocks() {
+            params.removeMocks.update();
+        }
 
-                return {
-                    initialAppState: initialAppState,
-                    actions: params.makeActions.create(newItem, sessionId, languageId),
-                    checkState: (globalState) => {
-                        const stateHashedArray = params.getStateHashedArray(globalState);
-                        HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
-                    },
-                    setMocks: params.makeMocks.create(itemToResponse, mustError)
-                };
-            }
+        HashedArrayDataUtils.doTests('run updating success', testCases, makeTest, resetMocks, {mustError: false});
+        HashedArrayDataUtils.doTests('run updating error', testCases, makeTest, resetMocks, {mustError: true});
+    });
 
-            function resetMocks() {
-                params.removeMocks.create();
-            }
+    describe(params.describes.createTests, () => {
+        const {initialAppState, list, createdItemId} = params.buildInitState();
+        const {sessionId} = initialAppState.auth;
+        const languageId = initialAppState.ui.language;
 
-            HashedArrayDataUtils.doTests('run creating success', testCases, makeTest, resetMocks, {mustError: false});
-            HashedArrayDataUtils.doTests('run creating error', testCases, makeTest, resetMocks, {mustError: true});
-        });
+        const createdItem = {..._.cloneDeep(list[0]), id: null};
 
-    };
+        const testCases = [
+            {description: 'should create item', newItem: createdItem}
+        ];
+
+        function makeTest(testCase, testsParams) {
+            const {mustError} = testsParams;
+            const {newItem} = testCase;
+            const itemToResponse = {..._.cloneDeep(newItem), id: createdItemId};
+            const initialItemsHashedArray = ImmutableHashedArray.makeFromArray(list);
+            const expectedItemsHashedArray = mustError ?
+                initialItemsHashedArray :
+                ImmutableHashedArray.appendItem(initialItemsHashedArray, {...newItem, id: createdItemId});
+
+            return {
+                initialAppState: initialAppState,
+                actions: params.makeActions.create(newItem, sessionId, languageId),
+                checkState: (globalState) => {
+                    const stateHashedArray = params.getStateHashedArray(globalState);
+                    HashedArrayDataUtils.checkHashedArraysEqual(stateHashedArray, expectedItemsHashedArray);
+                },
+                setMocks: params.makeMocks.create(itemToResponse, mustError)
+            };
+        }
+
+        function resetMocks() {
+            params.removeMocks.create();
+        }
+
+        HashedArrayDataUtils.doTests('run creating success', testCases, makeTest, resetMocks, {mustError: false});
+        HashedArrayDataUtils.doTests('run creating error', testCases, makeTest, resetMocks, {mustError: true});
+    });
+
 }

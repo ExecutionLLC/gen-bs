@@ -4,7 +4,7 @@ import {ImmutableHashedArray} from '../app/utils/immutable';
 import MOCK_APP_STATE from './__data__/appState.json';
 import apiFacade from '../app/api/ApiFacade';
 import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
-import {makeListedObjectTests} from './HashedArrayDataUtils';
+import {runListedObjectTests} from './HashedArrayDataUtils';
 
 
 function mockFilterRemove(sessionId, filterId, callback, expected) {
@@ -56,7 +56,7 @@ function buildFiltersState(appState) {
 }
 
 
-const filtersTests = makeListedObjectTests({
+runListedObjectTests({
     describes: {
         initial: 'Mocked filters list state',
         deleteTests: 'Filters list delete tests',
@@ -136,5 +136,3 @@ const filtersTests = makeListedObjectTests({
         return filtersHashedArray;
     }
 });
-
-filtersTests();
