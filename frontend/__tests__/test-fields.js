@@ -54,7 +54,7 @@ describe('fields', () => {
         const totalFieldsList =  [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
         // same as above in the hash
         const totalFieldsHash =  {1: {id: 1, label: 'label1', sourceName: 'sample'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
-        // fields with 'sourceName' === 'sample', labelled
+        // fields with 'sourceName' !== 'sample', labelled
         const sourceFieldsList = [                                                       {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveTotalFields(fields)),
@@ -117,7 +117,7 @@ describe('fields', () => {
         const totalFieldsList =      [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
         // same as above in the hash
         const totalFieldsHash =      {1: {id: 1, label: 'label1', sourceName: 'sample'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
-        // total fields with 'sourceName' === 'sample', labelled
+        // total fields with 'sourceName' !== 'sample', labelled
         const sourceFieldsList =     [                                                       {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
 
         // sample fields input
