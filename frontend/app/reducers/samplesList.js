@@ -1,32 +1,30 @@
 import _ from 'lodash';
 
 import * as ActionTypes from '../actions/samplesList';
-
+import immutableArray from '../utils/immutableArray';
 
 function reduceRequestSamples(state) {
     return state;
 }
 
-
 function reduceUpdateSampleValue(state, action) {
-    const {valueFieldId, value} = action;
-    let sampleId = action.sampleId;
-    const currentSampleIndex = _.findIndex(state.editedSamples, {id: sampleId});
+    const {valueFieldId, value, sampleId} = action;
+    const {editedSamples} = state;
 
-    const newValues = [...state.editedSamples[currentSampleIndex].values || []];
-    const valueIndex = _.findIndex(newValues, item => item.fieldId === valueFieldId);
     const newValue = {fieldId: valueFieldId, values: value};
 
-    if (valueIndex >= 0) {
-        newValues[valueIndex] = newValue;
-    } else {
-        newValues.push(newValue);
-    }
+    const sampleIndex = _.findIndex(editedSamples, {id: sampleId});
+    const editedSample = editedSamples[sampleIndex];
+    const sampleValues = editedSample.values;
+    const valueIndex = _.findIndex(sampleValues, {fieldId: valueFieldId});
 
-    const newSamples = [...state.editedSamples];
-    newSamples[currentSampleIndex].values = newValues;
+    const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
+    const newEditedSamples = immutableArray.replace(editedSamples, sampleIndex, {...editedSample, values: newSampleValues});
 
-    return Object.assign({}, state, {editedSamples: newSamples});
+    return {
+        ...state,
+        editedSamples: newEditedSamples
+    };
 }
 
 function reduceReceiveUpdatedSample(state, action) {
