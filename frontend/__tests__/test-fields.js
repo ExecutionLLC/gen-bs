@@ -35,7 +35,7 @@ describe('fields', () => {
         {id: '7', label: 'label7', name: 'name7', sourceName: 'sample',  isEditable: false},
         {id: '8',                  name: 'name8', sourceName: 'sample',  isEditable: false}
     ];
-    const fieldsSample = _.filter(fieldsSample, {sourceName: 'sample'});
+    const fieldsSample = _.filter(fieldsTotal, {sourceName: 'sample'});
 
     it('should properly init state', (done) => {
         storeTestUtils.runTest({
