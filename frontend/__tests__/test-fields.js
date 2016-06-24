@@ -97,10 +97,9 @@ describe('fields', () => {
         // same as above in the hash
         const sampleIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
         // fields with 'isEditable' === true, labelled
-        const sampleFieldsListSplitEditable = _.partition(sampleFieldsList, {isEditable: true});
-        const editableFields = sampleFieldsListSplitEditable[0];
+        const editableFields = _.filter(sampleFieldsList, {isEditable: true});
         // fields with 'isEditable' === false, labelled
-        const allowedFieldsList = _.filter(sampleFieldsList, {isEditable: false}); // not sampleFieldsListSplitEditable[1] to not inslude fields with no 'isEditable' property
+        const allowedFieldsList = _.filter(sampleFieldsList, {isEditable: false});
         // same as above in the hash
         const allowedIdToFieldHash = _.keyBy(allowedFieldsList, 'id');
         storeTestUtils.runTest({
