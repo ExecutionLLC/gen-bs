@@ -45,11 +45,12 @@ function reduceReceiveUpdatedSample(state, action) {
 
 function reduceReceiveSamplesList(state, action) {
     const {samples} = action;
-    const sortedSamples = _.sortBy(samples, sample => sample.fileName.toLowerCase());
-    return Object.assign({}, state, {
-        samples: [...sortedSamples],
-        editedSamples: _.cloneDeep(sortedSamples)
-    });
+    const sortedSamples = _.sortBy(samples, (sample) => sample.fileName.toLowerCase());
+    return {
+        ...state,
+        samples: sortedSamples,
+        editedSamples: sortedSamples
+    };
 }
 
 function reduceResetSampleInList(state, action) {
