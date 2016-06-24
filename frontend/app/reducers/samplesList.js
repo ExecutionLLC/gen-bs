@@ -4,9 +4,7 @@ import * as ActionTypes from '../actions/samplesList';
 
 
 function reduceRequestSamples(state) {
-    return Object.assign({}, state, {
-        isFetching: true
-    });
+    return state;
 }
 
 
