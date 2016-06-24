@@ -56,7 +56,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
                 attachedHistoryData: historyData
             },
             samplesList: {
-                samples
+                samples // TODO sl hashedArray
             },
             filtersList: {
                 hashedArray: {hash: filterIdToFilterHash}

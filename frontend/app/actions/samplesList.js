@@ -61,7 +61,7 @@ export function fetchSamples() {
             } else {
                 const {
                     samplesList: {
-                        selectedSample
+                        selectedSample // TODO sl selectedSampleId
                     }
                 } = getState();
                 const samples = response.body;
@@ -102,7 +102,7 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
 
 export function requestUpdateSampleFields(sampleId) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, samplesList: {editedSamples, selectedSample}} = getState();
+        const {auth: {sessionId}, samplesList: {editedSamples, selectedSample}} = getState(); // TODO sl selectedSampleId, 
         const sampleToUpdate = _.find(editedSamples, {id: sampleId});
         samplesClient.update(sessionId, sampleToUpdate, (error, response) => {
             if (error) {

@@ -38,7 +38,7 @@ class App extends Component {
     }
 
     render() {
-        const {samplesList: {samples}} = this.props;
+        const {samplesList: {samples}} = this.props; // TODO sl hashedArray
         const { ui } = this.props;
 
         const mainDivClass = classNames({

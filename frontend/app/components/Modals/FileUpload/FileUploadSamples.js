@@ -11,7 +11,7 @@ export default class FileUploadSamples extends Component {
 
     render() {
         const {dispatch, closeModal, samplesList} = this.props;
-        const {samples} = samplesList;
+        const {samples} = samplesList; // TODO sl hashedArray
 
         if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
             console.error('No editable fields found');

@@ -28,7 +28,7 @@ class NavbarCreateQuery extends Component {
         const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
         const {selectedViewId} = this.props.viewsList;
         const {selectedFilterId} = this.props.filtersList;
-        const {selectedSample} = this.props.samplesList;
+        const {selectedSample} = this.props.samplesList; // TODO sl selectedSampleId
         const selectedSampleId = selectedSample ? selectedSample.id : null;
 
         return (
@@ -79,7 +79,7 @@ function mapStateToProps(state) {
         ui,
         auth,
         samplesList,
-        samplesList: {
+        samplesList: { // TODO sl hashedArray
             samples
         },
         filtersList,
@@ -88,7 +88,7 @@ function mapStateToProps(state) {
 
     return {
         modalWindows,
-        samples,
+        samples, // TODO sl samples has at samplesList
         ui,
         auth,
         samplesList,

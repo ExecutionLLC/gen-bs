@@ -36,7 +36,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
                 sessionId
             },
             samplesList: {
-                selectedSample
+                selectedSample // TODO sl selectedSampleId
             },
             filtersList: {
                 selectedFilterId
