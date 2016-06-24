@@ -136,7 +136,7 @@ describe('fields', () => {
         expect(totalFieldsList).toEqual(totalFieldsList1);
         // same as above in the hash
         const totalFieldsHash =      {1: {id: 1, label: 'label1', sourceName: 'sample'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
-        const totalFieldsHash1 = _.keyBy(totalFieldsHash, 'id');
+        const totalFieldsHash1 = _.keyBy(totalFieldsList, 'id');
         expect(totalFieldsHash).toEqual(totalFieldsHash1);
         // total fields with 'sourceName' !== 'sample', labelled
         const sourceFieldsList =     [                                                       {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
