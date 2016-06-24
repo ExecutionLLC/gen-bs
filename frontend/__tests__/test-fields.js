@@ -25,6 +25,18 @@ const initState = {
 };
 
 describe('fields', () => {
+    const fieldsTotal = [
+        {id: '1', label: 'label1', name: 'name1', sourceName: 'sample',  isEditable: false},
+        {id: '2',                  name: 'name2', sourceName: 'source1', isEditable:  true},
+        {id: '3', label: 'label3', name: 'name3', sourceName: 'source2', isEditable: false},
+        {id: '4',                  name: 'name4', sourceName: 'source2', isEditable: false},
+        {id: '5', label: 'label5', name: 'name5', sourceName: 'sample',  isEditable: false},
+        {id: '6',                  name: 'name6', sourceName: 'sample',  isEditable:  true},
+        {id: '7', label: 'label7', name: 'name7', sourceName: 'sample',  isEditable: false},
+        {id: '8',                  name: 'name8', sourceName: 'sample',  isEditable: false}
+    ];
+    const fieldsSample = _.filter(fieldsSample, {sourceName: 'sample'});
+
     it('should properly init state', (done) => {
         storeTestUtils.runTest({
             expectedState: initState,
@@ -49,15 +61,14 @@ describe('fields', () => {
     });
 
     it('should receive total fields', (done) => {
-        const fields =           [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
         // all fields with 'label' properties
-        const totalFieldsList = _.map(fields, (item) => ({...item, label: item.label || item.name}));
+        const totalFieldsList = _.map(fieldsTotal, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
         const totalFieldsHash = _.keyBy(totalFieldsList, 'id');
         // fields with 'sourceName' !== 'sample', labelled
         const sourceFieldsList = _.filter(totalFieldsList, (field) => field.sourceName !== 'sample');
         storeTestUtils.runTest({
-            applyActions: (dispatch) => dispatch(receiveTotalFields(fields)),
+            applyActions: (dispatch) => dispatch(receiveTotalFields(fieldsTotal)),
             stateMapperFunc,
             expectedState: {
                 ...initState,
@@ -85,9 +96,8 @@ describe('fields', () => {
     });
 
     it('should receive fields', (done) => {
-        const fields =               [   {id: 1, label: 'label1'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false},     {id: '4',                 name: 'name4', isEditable: false}];
         // all fields with 'label' properties
-        const sampleFieldsList = _.map(fields, (item) => ({...item, label: item.label || item.name}));
+        const sampleFieldsList = _.map(fieldsTotal, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
         const sampleIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
         // fields with 'isEditable' === true, labelled
@@ -97,7 +107,7 @@ describe('fields', () => {
         // same as above in the hash
         const allowedIdToFieldHash = _.keyBy(allowedFieldsList, 'id');
         storeTestUtils.runTest({
-            applyActions: (dispatch) => dispatch(receiveFields(fields)),
+            applyActions: (dispatch) => dispatch(receiveFields(fieldsTotal)),
             stateMapperFunc,
             expectedState: {
                 ...initState,
@@ -111,8 +121,6 @@ describe('fields', () => {
     });
 
     it('should receive sample fields after total fields', (done) => {
-        // total fields input
-        const fieldsTotal =          [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
         // all total fields with 'label' properties
         const totalFieldsList = _.map(fieldsTotal, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
@@ -120,8 +128,6 @@ describe('fields', () => {
         // total fields with 'sourceName' !== 'sample', labelled
         const sourceFieldsList = _.filter(totalFieldsList, (field) => field.sourceName !== 'sample');
 
-        // sample fields input
-        const fieldsSample =         [   {id: 5, label: 'label5'},     {id: 6,                 name: 'name6', isEditable: true},     {id: '7', label: 'label7', name: 'name7', isEditable: false}];
         // all sample fields with 'label' properties
         const sampleFieldsList = _.map(fieldsSample, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
