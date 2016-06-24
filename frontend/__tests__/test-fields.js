@@ -100,10 +100,8 @@ describe('fields', () => {
         const sampleFieldsList = _.map(fieldsTotal, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
         const sampleIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
-        // fields with 'isEditable' === true, labelled
-        const editableFields = _.filter(sampleFieldsList, {isEditable: true});
-        // fields with 'isEditable' === false, labelled
-        const allowedFieldsList = _.filter(sampleFieldsList, {isEditable: false});
+        // fields split by 'isEditable', labelled
+        const [editableFields, allowedFieldsList] = _.partition(sampleFieldsList, {isEditable: true});
         // same as above in the hash
         const allowedIdToFieldHash = _.keyBy(allowedFieldsList, 'id');
         storeTestUtils.runTest({
@@ -132,11 +130,10 @@ describe('fields', () => {
         const sampleFieldsList = _.map(fieldsSample, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
         const sampleIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
-        // sample fields with 'isEditable' === true, labelled
-        const editableFields = _.filter(sampleFieldsList, {isEditable: true});
-
+        // fields split by 'isEditable', labelled
+        const [editableFields, allowedFieldsListFromSamples] = _.partition(sampleFieldsList, {isEditable: true});
         // sample fields with 'isEditable' === false, labelled, concatenated with total fields with 'sourceName' === 'sample', labelled
-        const allowedFieldsList = _.filter(sampleFieldsList, {isEditable: false}).concat(sourceFieldsList);
+        const allowedFieldsList = _.filter(allowedFieldsListFromSamples).concat(sourceFieldsList);
         // same as above in the hash
         const allowedIdToFieldHash = _.keyBy(allowedFieldsList, 'id');
 
