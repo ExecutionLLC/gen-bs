@@ -65,17 +65,23 @@ function reduceResetSampleInList(state, action) {
 }
 
 function reduceChangeSample(state, action) {
-    let {sampleId} = action;
-    return Object.assign({}, state, {
-        selectedSample: _.find(state.samples, {id: sampleId})
-    });
+    const {samples} = state;
+    const {sampleId} = action;
+
+    const sample = _.find(samples, {id: sampleId});
+
+    return {
+        ...state,
+        selectedSample: sample
+    };
 }
 
 function reduceChangeSamples(state, action) {
     const {samples} = action;
-    return Object.assign({}, state, {
-        samples: samples
-    });
+    return {
+        ...state,
+        samples
+    };
 }
 
 
