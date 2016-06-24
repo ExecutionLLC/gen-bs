@@ -93,26 +93,16 @@ describe('fields', () => {
     it('should receive fields', (done) => {
         const fields =               [   {id: 1, label: 'label1'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false},     {id: '4',                 name: 'name4', isEditable: false}];
         // all fields with 'label' properties
-        const sampleFieldsList =     [   {id: 1, label: 'label1'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false},     {id: '4', label: 'name4', name: 'name4', isEditable: false}];
-        const sampleFieldsList1 = _.map(fields, (item) => ({...item, label: item.label || item.name}));
-        expect(sampleFieldsList).toEqual(sampleFieldsList1);
+        const sampleFieldsList = _.map(fields, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
-        const sampleIdToFieldHash =  {1: {id: 1, label: 'label1'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false},  4: {id: '4', label: 'name4', name: 'name4', isEditable: false}};
-        const sampleIdToFieldHash1 = _.keyBy(sampleFieldsList, 'id');
-        expect(sampleIdToFieldHash).toEqual(sampleIdToFieldHash1);
+        const sampleIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
         // fields with 'isEditable' === true, labelled
-        const editableFields =       [                                 {id: 2, label: 'name2', name: 'name2', isEditable: true}];
         const sampleFieldsListSplitEditable = _.partition(sampleFieldsList, {isEditable: true});
-        const editableFields1 = sampleFieldsListSplitEditable[0];
-        expect(editableFields).toEqual(editableFields1);
+        const editableFields = sampleFieldsListSplitEditable[0];
         // fields with 'isEditable' === false, labelled
-        const allowedFieldsList =    [                                                                                               {id: '3', label: 'label3', name: 'name3', isEditable: false},     {id: '4', label: 'name4', name: 'name4', isEditable: false}];
-        const allowedFieldsList1 = _.filter(sampleFieldsList, {isEditable: false}); // not sampleFieldsListSplitEditable[1] to not inslude fields with no 'isEditable' property
-        expect(allowedFieldsList).toEqual(allowedFieldsList1);
+        const allowedFieldsList = _.filter(sampleFieldsList, {isEditable: false}); // not sampleFieldsListSplitEditable[1] to not inslude fields with no 'isEditable' property
         // same as above in the hash
-        const allowedIdToFieldHash = {                                                                                            3: {id: '3', label: 'label3', name: 'name3', isEditable: false},  4: {id: '4', label: 'name4', name: 'name4', isEditable: false}};
-        const allowedIdToFieldHash1 = _.keyBy(allowedFieldsList, 'id');
-        expect(allowedIdToFieldHash).toEqual(allowedIdToFieldHash1);
+        const allowedIdToFieldHash = _.keyBy(allowedFieldsList, 'id');
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch(receiveFields(fields)),
             stateMapperFunc,
@@ -131,44 +121,26 @@ describe('fields', () => {
         // total fields input
         const fieldsTotal =          [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2,                 name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
         // all total fields with 'label' properties
-        const totalFieldsList =      [   {id: 1, label: 'label1', sourceName: 'sample'},     {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
-        const totalFieldsList1 = _.map(fieldsTotal, (item) => ({...item, label: item.label || item.name}));
-        expect(totalFieldsList).toEqual(totalFieldsList1);
+        const totalFieldsList = _.map(fieldsTotal, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
-        const totalFieldsHash =      {1: {id: 1, label: 'label1', sourceName: 'sample'},  2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false}};
-        const totalFieldsHash1 = _.keyBy(totalFieldsList, 'id');
-        expect(totalFieldsHash).toEqual(totalFieldsHash1);
+        const totalFieldsHash = _.keyBy(totalFieldsList, 'id');
         // total fields with 'sourceName' !== 'sample', labelled
-        const sourceFieldsList =     [                                                       {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
-        const sourceFieldsList1 = _.filter(totalFieldsList, (field) => field.sourceName !== 'sample');
-        expect(sourceFieldsList).toEqual(sourceFieldsList1);
+        const sourceFieldsList = _.filter(totalFieldsList, (field) => field.sourceName !== 'sample');
 
         // sample fields input
         const fieldsSample =         [   {id: 5, label: 'label5'},     {id: 6,                 name: 'name6', isEditable: true},     {id: '7', label: 'label7', name: 'name7', isEditable: false}];
         // all sample fields with 'label' properties
-        const sampleFieldsList =     [   {id: 5, label: 'label5'},     {id: 6, label: 'name6', name: 'name6', isEditable: true},     {id: '7', label: 'label7', name: 'name7', isEditable: false}];
-        const sampleFieldsList1 = _.map(fieldsSample, (item) => ({...item, label: item.label || item.name}));
-        expect(sampleFieldsList).toEqual(sampleFieldsList1);
+        const sampleFieldsList = _.map(fieldsSample, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
-        const sampleIdToFieldHash =  {5: {id: 5, label: 'label5'},  6: {id: 6, label: 'name6', name: 'name6', isEditable: true},  7: {id: '7', label: 'label7', name: 'name7', isEditable: false}};
-        const sampleIdToFieldHash1 = _.keyBy(sampleFieldsList, 'id');
-        expect(sampleIdToFieldHash).toEqual(sampleIdToFieldHash1);
+        const sampleIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
         // sample fields with 'isEditable' === true, labelled
-        const editableFields =       [                                 {id: 6, label: 'name6', name: 'name6', isEditable: true}];
-        const editableFields1 = _.filter(sampleFieldsList, {isEditable: true});
-        expect(editableFields).toEqual(editableFields1);
+        const editableFields = _.filter(sampleFieldsList, {isEditable: true});
 
         // sample fields with 'isEditable' === false, labelled, concatenated with total fields with 'sourceName' === 'sample', labelled
-        const allowedFieldsList =    [                                                                                               {id: '7', label: 'label7', name: 'name7', isEditable: false},
-                                                                                             {id: 2, label: 'name2', name: 'name2', isEditable: true},     {id: '3', label: 'label3', name: 'name3', isEditable: false}];
-        const allowedFieldsList1 = _.filter(sampleFieldsList, {isEditable: false}).concat(sourceFieldsList);
-        expect(allowedFieldsList).toEqual(allowedFieldsList1);
+        const allowedFieldsList = _.filter(sampleFieldsList, {isEditable: false}).concat(sourceFieldsList);
         // same as above in the hash
-        const allowedIdToFieldHash = {                                                    2: {id: 2, label: 'name2', name: 'name2', isEditable: true},  3: {id: '3', label: 'label3', name: 'name3', isEditable: false},
-                                                                                                                                  7: {id: '7', label: 'label7', name: 'name7', isEditable: false}};
-        const allowedIdToFieldHash1 = _.keyBy(allowedFieldsList, 'id');
-        expect(allowedIdToFieldHash).toEqual(allowedIdToFieldHash1);
-        
+        const allowedIdToFieldHash = _.keyBy(allowedFieldsList, 'id');
+
         storeTestUtils.runTest({
             applyActions: (dispatch) => dispatch([receiveTotalFields(fieldsTotal), receiveFields(fieldsSample)]),
             stateMapperFunc,
