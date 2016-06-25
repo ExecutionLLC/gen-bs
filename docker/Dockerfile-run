@@ -1,0 +1,29 @@
+FROM ubuntu:14.04
+MAINTAINER Loginov Vasily <vasily.loginov@execution.su>
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    gcc \
+    g++ \
+    git \
+    openssh-client \
+    libssl-dev \
+    ca-certificates
+
+# Fix 'stdin: is not a tty' error
+RUN cat ${HOME}/.profile | grep -v mesg > ${HOME}/profile-modified
+RUN mv ${HOME}/profile-modified ${HOME}/.profile
+
+# Setting up Node Version Manager using manual installation.
+ENV NVM_VERSION=e1c84ba
+RUN git clone https://github.com/creationix/nvm.git ${HOME}/.nvm && cd ${HOME}/.nvm && git checkout ${NVM_VERSION}
+RUN echo '. ~/.nvm/nvm.sh' >> $HOME/.profile
+
+# Install web server using the separate script because we are unable to load .rc env here.
+RUN mkdir -p /webserver
+COPY ./build/* /webserver/
+RUN ["bash", "-c", "source /root/.nvm/nvm.sh && nvm install 6.1.0 && cd /webserver && NODE_ENV=production npm install"]
+
+CMD ["bash", "-c", "source /root/.nvm/nvm.sh && nvm use 6.1.0 && cd /webserver && ./start.sh"]
