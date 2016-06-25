@@ -13,6 +13,7 @@ BUILD_CONTAINER_ID=`sudo docker create ${BUILD_CONTAINER_NAME}`
 
 # Extracting build results into local folder
 BUILD_DIR=./build
+sudo rm -rf ${BUILD_DIR}
 sudo docker cp ${BUILD_CONTAINER_ID}:/webserver/build ${BUILD_DIR}
 
 # Remove temp container
