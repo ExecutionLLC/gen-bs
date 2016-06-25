@@ -13,4 +13,10 @@ source ${HOME}/.profile
 nvm install ${NODE_VERSION}
 
 # Install deps and run build in production mode
-cd ${WS_ROOT} && npm install && NODE_ENV=${BUILD_NODE_ENV} npm run build
+cd ${WS_ROOT}/frontend && npm install 
+cd ${WS_ROOT} && npm install && NODE_ENV=production npm run build
+
+# Install production deps
+cd ${WS_ROOT}/build && NODE_ENV=production npm install
+
+# At this point production build lays in ${WS_ROOT}/build and is ready to launch

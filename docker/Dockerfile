@@ -22,7 +22,7 @@ RUN chmod go-rwx /root/.ssh/*
 
 # Cloning sources
 RUN ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
-RUN GIT_SSH_COMMAND="ssh -i /root/.ssh/id_rsa -F /dev/null" git clone git@github.com:ExecutionLLC/gen-bs.git /webserver
+RUN GIT_SSH_COMMAND="ssh -i /root/.ssh/id_rsa -F /dev/null" git clone git@github.com:ExecutionLLC/gen-bs.git /webserver && cd /webserver && git checkout docker-image
 
 # Setting up Node Version Manager using manual installation.
 ENV NVM_VERSION=e1c84ba
@@ -31,4 +31,4 @@ RUN echo '. ~/.nvm/nvm.sh' >> $HOME/.profile
 
 # Install web server using the separate script because we are unable to load .rc env here.
 COPY scripts/install-webserver.sh /root
-RUN bash /root/install-webserver.sh
+RUN ["/bin/bash", "/root/install-webserver.sh"]
