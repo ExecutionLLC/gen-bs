@@ -35,9 +35,6 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     render() {
-        if (!this.props.isExpanded) {
-            return null;
-        }
         const {sample, editedSamples} = this.props;
         const currentSample = _.find(editedSamples, {id: sample.id});
         const sampleId = sample.id;
@@ -50,7 +47,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         }
         return (
             <Panel collapsible
-                   expanded={this.props.isExpanded}
+                   expanded={true}
                    className='samples-values'
             >
                 <div className='flex'>
@@ -137,7 +134,6 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 
 SampleEditableFieldsPanel.propTypes = {
     sample: PropTypes.object.isRequired,
-    isExpanded: PropTypes.bool.isRequired,
     editedSamples: PropTypes.array.isRequired,
     fields: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired

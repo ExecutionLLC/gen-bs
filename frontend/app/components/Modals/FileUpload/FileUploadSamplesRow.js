@@ -44,7 +44,7 @@ export default class FileUploadSamplesRow extends Component {
             <div className='panel'>
                 {this.renderHeader()}
                 {this.renderCurrentValues(fieldIdToValuesHash)}
-                {this.renderEditableValues(fieldIdToValuesHash)}
+                {this.state.showValues && this.renderEditableValues(fieldIdToValuesHash)}
                 {this.renderFooter()}
             </div>
         );
@@ -112,7 +112,6 @@ export default class FileUploadSamplesRow extends Component {
         const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props; // TODO sl editedSamples.hashedArray
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
-                                       isExpanded={this.state.showValues}
                                        fields={fields}
                                        sample={sample}
                                        editedSamples={editedSamples}
