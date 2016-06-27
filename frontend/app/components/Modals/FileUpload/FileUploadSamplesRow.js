@@ -15,11 +15,11 @@ export default class FileUploadSamplesRow extends Component {
         this.state = {showValues: false};
     }
 
-    onSelectForAnalysisClick(e, sample) {
+    onSelectForAnalysisClick(e, sampleId) {
         e.preventDefault();
         const {dispatch, closeModal, samplesList: {samples}} = this.props; // TODO sl hashedArray
         dispatch(receiveSamplesList(samples));
-        dispatch(changeSample(sample.id));
+        dispatch(changeSample(sampleId));
         closeModal('upload');
     }
 
@@ -41,9 +41,10 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     render() {
-        const {sample, samplesList: {editedSamples}} = this.props;
+        const {sampleId, samplesList: {samples, editedSamples}} = this.props;
+        const sample = _.find(samples, {id: sampleId});
         const fieldIdToValuesHash = this.makeFieldIsToValuesHash(sample);
-        const editedSample = this.state.showValues && _.find(editedSamples, {id: sample.id});
+        const editedSample = this.state.showValues && _.find(editedSamples, {id: sampleId});
         const editedFieldIdToValuesHash = editedSample && this.makeFieldIsToValuesHash(editedSample);
 
         return (
@@ -57,7 +58,8 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderHeader() {
-        const {sample} = this.props;
+        const {sampleId, samplesList: {samples}} = this.props;
+        const sample = _.find(samples, {id: sampleId});
         return (
             <div>
                 <div className='panel-heading'>
@@ -71,7 +73,8 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderFooter() {
-        const {isDemoSession, sample} = this.props;
+        const {isDemoSession, sampleId, samplesList: {samples}} = this.props;
+        const sample = _.find(samples, {id: sampleId});
         return (
             <div className='panel-footer'>
                 {this.renderSelectButton(isDemoSession, sample)}
@@ -90,7 +93,7 @@ export default class FileUploadSamplesRow extends Component {
         }
 
         return (
-            <a onClick={(e) => this.onSelectForAnalysisClick(e, sample)}
+            <a onClick={(e) => this.onSelectForAnalysisClick(e, sample.id)}
                className='btn btn-link btn-uppercase'
                type='button'
             >
@@ -115,18 +118,19 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderEditableValues(fieldIdToValuesHash) {
-        const {dispatch, fields, sample} = this.props;
+        const {dispatch, fields, sampleId} = this.props;
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        fields={fields}
-                                       sampleId={sample.id}
+                                       sampleId={sampleId}
                                        fieldIdToValuesHash={fieldIdToValuesHash}
             />
         );
     }
 
     renderCurrentValues(fieldIdToValuesHash) {
-        const {sample, fields} = this.props;
+        const {sampleId, samplesList: {samples}, fields} = this.props;
+        const sample = _.find(samples, {id: sampleId});
 
         if (_.some(sample.values, option => option.values)) {
             return (
