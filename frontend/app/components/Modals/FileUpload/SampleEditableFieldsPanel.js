@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
-import _ from 'lodash';
 import 'react-select/dist/react-select.css';
 
 import Select from '../../shared/Select';
@@ -35,16 +34,8 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     render() {
-        const {sample, editedSamples} = this.props;
-        const currentSample = _.find(editedSamples, {id: sample.id});
+        const {sample, fieldIdToValuesHash} = this.props;
         const sampleId = sample.id;
-        const fieldIdToValuesHash = {};
-        if (currentSample) {
-            _.reduce(currentSample.values, (result, value) => {
-                result[value.fieldId] = value.values;
-                return result;
-            }, fieldIdToValuesHash);
-        }
         return (
             <Panel collapsible
                    expanded={true}
@@ -134,7 +125,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 
 SampleEditableFieldsPanel.propTypes = {
     sample: PropTypes.object.isRequired,
-    editedSamples: PropTypes.array.isRequired,
+    fieldIdToValuesHash: PropTypes.object.isRequired,
     fields: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired
 };

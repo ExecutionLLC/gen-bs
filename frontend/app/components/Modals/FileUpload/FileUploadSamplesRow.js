@@ -34,17 +34,23 @@ export default class FileUploadSamplesRow extends Component {
         this.setShowValuesState(!this.state.showValues);
     }
 
-    render() {
-        const {sample} = this.props;
-        const fieldIdToValuesHash = _.reduce(sample.values, (result, value) => {
+    makeFieldIsToValuesHash(sample) {
+        return _.reduce(sample.values, (result, value) => {
             return {...result, [value.fieldId]: value.values};
         }, {});
+    }
+
+    render() {
+        const {sample, samplesList: {editedSamples}} = this.props;
+        const fieldIdToValuesHash = this.makeFieldIsToValuesHash(sample);
+        const editedSample = this.state.showValues && _.find(editedSamples, {id: sample.id});
+        const editedFieldIdToValuesHash = editedSample && this.makeFieldIsToValuesHash(editedSample);
 
         return (
             <div className='panel'>
                 {this.renderHeader()}
                 {this.renderCurrentValues(fieldIdToValuesHash)}
-                {this.state.showValues && this.renderEditableValues(fieldIdToValuesHash)}
+                {this.state.showValues && editedFieldIdToValuesHash && this.renderEditableValues(editedFieldIdToValuesHash)}
                 {this.renderFooter()}
             </div>
         );
@@ -108,13 +114,13 @@ export default class FileUploadSamplesRow extends Component {
         return null;
     }
 
-    renderEditableValues() {
-        const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props; // TODO sl editedSamples.hashedArray
+    renderEditableValues(fieldIdToValuesHash) {
+        const {dispatch, fields, sample} = this.props;
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        fields={fields}
                                        sample={sample}
-                                       editedSamples={editedSamples}
+                                       fieldIdToValuesHash={fieldIdToValuesHash}
             />
         );
     }
