@@ -39,11 +39,11 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
             return null;
         }
         const {sample, editedSamples} = this.props;
-        const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
+        const currentSample = _.find(editedSamples, {id: sample.id});
         const sampleId = sample.id;
         const fieldIdToValuesHash = {};
-        if (currentSampleIndex >= 0) {
-            _.reduce(editedSamples[currentSampleIndex].values, (result, value) => {
+        if (currentSample) {
+            _.reduce(currentSample.values, (result, value) => {
                 result[value.fieldId] = value.values;
                 return result;
             }, fieldIdToValuesHash);
