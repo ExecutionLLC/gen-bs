@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
+import _ from 'lodash';
 import 'react-select/dist/react-select.css';
 
 import Select from '../../shared/Select';
