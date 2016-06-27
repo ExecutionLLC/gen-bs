@@ -54,14 +54,22 @@ function reduceReceiveSamplesList(state, action) {
 }
 
 function reduceResetSampleInList(state, action) {
-    let sampleId = action.sampleId;
-    const currentSampleIndex = _.findIndex(state.editedSamples, {id: sampleId});
-    const restoredValues = [...state.samples[currentSampleIndex].values || []];
+    const {sampleId} = action;
+    const {samples, editedSamples} = state;
 
-    const newEditedSamples = [...state.editedSamples];
-    newEditedSamples[currentSampleIndex].values = restoredValues;
+    const sampleIndex = _.findIndex(editedSamples, {id: sampleId});
 
-    return Object.assign({}, state, {editedSamples: newEditedSamples});
+    const sample = samples[sampleIndex];
+    const editedSample = editedSamples[sampleIndex];
+    const sampleValues = sample.values;
+
+    const newEditedSample = {...editedSample, values: sampleValues};
+    const newEditedSamples = immutableArray.replace(editedSamples, sampleIndex, newEditedSample);
+
+    return {
+        ...state,
+        editedSamples: newEditedSamples
+    };
 }
 
 function reduceChangeSample(state, action) {
