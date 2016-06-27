@@ -119,7 +119,7 @@ export default class FileUploadSamplesRow extends Component {
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
                                        fields={fields}
-                                       sample={sample}
+                                       sampleId={sample.id}
                                        fieldIdToValuesHash={fieldIdToValuesHash}
             />
         );

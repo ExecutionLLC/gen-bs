@@ -19,23 +19,22 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         dispatch(updateSampleValue(sampleId, fieldId, newValue));
     }
 
-    onSaveEditedSampleClick(e, sample) {
+    onSaveEditedSampleClick(e, sampleId) {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(requestUpdateSampleFields(sample.id));
+        dispatch(requestUpdateSampleFields(sampleId));
     }
 
-    onResetSampleClick(e, sample) {
+    onResetSampleClick(e, sampleId) {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(resetSampleInList(sample.id));
+        dispatch(resetSampleInList(sampleId));
     }
 
     render() {
-        const {sample, fieldIdToValuesHash} = this.props;
-        const sampleId = sample.id;
+        const {sampleId, fieldIdToValuesHash} = this.props;
         return (
             <Panel collapsible
                    expanded={true}
@@ -59,13 +58,13 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     renderRowButtons() {
-        const {sample} = this.props;
+        const {sampleId} = this.props;
         return (
           <dl className='dl-horizontal dl-btns'>
               <dd>
                   <div className='btn-group '>
                       <button
-                          onClick={ (e) => this.onResetSampleClick(e, sample) }
+                          onClick={ (e) => this.onResetSampleClick(e, sampleId) }
                           type='button'
                           className='btn btn-default'
                       >
@@ -73,7 +72,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                       </button>
       
                       <button
-                          onClick={ (e) => this.onSaveEditedSampleClick(e, sample) }
+                          onClick={ (e) => this.onSaveEditedSampleClick(e, sampleId) }
                           type='button'
                           className='btn btn-primary'
                       >
@@ -124,7 +123,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 }
 
 SampleEditableFieldsPanel.propTypes = {
-    sample: PropTypes.object.isRequired,
+    sampleId: PropTypes.string.isRequired,
     fieldIdToValuesHash: PropTypes.object.isRequired,
     fields: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired
