@@ -15,7 +15,12 @@ function makeDefault(value, defaultValue) {
     }
 
     if (typeof defaultValue === 'boolean') {
-        return JSON.parse(value);
+        try {
+            return JSON.parse(value);
+        } catch (e) {
+            console.error(`Unexpected environment variable value: ${value}`);
+            return value;
+        }
     }
     return value;
 }
@@ -31,8 +36,8 @@ const LOGIN_CALLBACK_PORT = makeDefault(ENV.GEN_FRONTEND_LOGIN_CALLBACK_PORT, 80
 const SESSION_KEEP_ALIVE_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_KEEP_ALIVE_TIMEOUT, 60);
 const SESSION_LOGOUT_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_LOGOUT_TIMEOUT, 15*60);
 const SESSION_LOGOUT_WARNING_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_LOGOUT_WARNING_TIMEOUT, 15);
-const HEADER_SESSION = makeDefault(ENV.GEN_HEADER_SESSION, 'X-Session-Id');
-const HEADER_LANGUAGE = makeDefault(ENV.GEN_HEADER_LANGUAGE, 'X-Language-Id');
+const HEADER_SESSION = makeDefault(ENV.GEN_FRONTEND_HEADER_SESSION, 'X-Session-Id');
+const HEADER_LANGUAGE = makeDefault(ENV.GEN_FRONTEND_HEADER_LANGUAGE, 'X-Language-Id');
 
 const isProductionBuild = ENV.NODE_ENV === 'production';
 

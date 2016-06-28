@@ -10,8 +10,8 @@
  LOGIN_CALLBACK_PORT: false,
  USE_SECURE_CONNECTION: false
  */
-const HTTP_SCHEME = USE_SECURE_CONNECTION ? 'https' : 'http';
-const WS_SCHEME = USE_SECURE_CONNECTION ? 'wss' : 'ws';
+const HTTP_SCHEME = JSON.parse(USE_SECURE_CONNECTION) ? 'https' : 'http';
+const WS_SCHEME = JSON.parse(USE_SECURE_CONNECTION) ? 'wss' : 'ws';
 const HOST = API_HOST;
 const PORT = API_PORT;
 

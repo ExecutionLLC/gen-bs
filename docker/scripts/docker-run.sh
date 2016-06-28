@@ -1,28 +1,32 @@
 #!/bin/bash
 
-cd /webserver
+WS_ROOT=/webserver
+FRONTEND_JS_FILE=genomix.js
+FRONTEND_JS_TEMPLATE=${FRONTEND_JS_FILE}.template
+WS_SCRIPT_PATH=${WS_ROOT}/webserver.js
 
-# Create actual run root and move everything we need into it
-mkdir -p .tmp-run
-mv * .tmp-run/
-cd .tmp-run
+# Load NVM
+source ${HOME}/.profile
 
-# Now we need to pass env vars into built frontend
+# Now we need to pass env vars into built frontend using string replace.
 # Default values for the variables are set inside the Dockerfile during build.
-set_env() {
-    TARGET_FILE='genomix.js'
-    ENV_VAR_NAME=${1}
-    # This is the placeholder value inside the file.
-    ENV_VAR_STR="##${ENV_VAR_NAME}##"
-    ENV_VAR_VALUE=${2}
-    echo "=> Setting ${ENV_VAR_NAME} to ${ENV_VAR_VALUE}"
-    sed -i.bak s/${ENV_VAR_STR}/${ENV_VAR_VALUE}/g ${TARGET_FILE}
-}
+FRONTEND_ENV_VARS=$(env | grep GEN_FRONTEND)
+SED_REGEX=''
 
-FRONTEND_ENV_VARS = `env |grep GEN_FRONTEND`
 while read -r ENV_VAR; do
-    ENV_VAR_NAME="${ENV_VAR#*@}"
-    ENV_VAR_VALUE="${ENV_VAR%*@}"
-    set_env ${ENV_VAR_NAME} ${ENV_VAR_VALUE}
+    ENV_VAR_NAME="${ENV_VAR#*=}"
+    ENV_VAR_VALUE="${ENV_VAR%*=}"
+
+    ENV_VAR_TEMPLATE="##${ENV_VAR_NAME}##"
+    ENV_VAR_REGEX="s/${ENV_VAR_TEMPLATE}/${ENV_VAR_VALUE}/g"
+
+    SED_REGEX="${SED_REGEX};${ENV_VAR_REGEX}"
 done <<< "${FRONTEND_ENV_VARS}"
 
+# Build actual JS file.
+cat ${WS_ROOT}/public/${FRONTEND_JS_TEMPLATE} | sed "${SED_REGEX}" > ${WS_ROOT}/public/genomix.js
+
+GEN_WS_LOG_PATH=${WS_ROOT}/logs/webserver.log
+mkdir -p ${GEN_WS_LOG_PATH}
+
+node ${WS_SCRIPT_PATH}
