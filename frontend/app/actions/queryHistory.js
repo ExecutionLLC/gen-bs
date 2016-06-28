@@ -165,7 +165,7 @@ function detachHistoryItemIfNeedIt(needDetach, collection, historyItemId) {
 }
 
 function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
-    var newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
+    const newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
     if (oldHistoryItemId === newHistoryItemId) {
         // nothing to be changed
         return {collection, historyItemId: oldHistoryItemId};
@@ -188,7 +188,7 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
         } else {
             // reset history id, because we already have this item in collection (so it is not from history, it is
             // common item)
-            newHistoryItemId = null;
+            return {collection, historyItemId: null};
         }
     }
 
