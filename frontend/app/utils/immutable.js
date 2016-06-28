@@ -1,6 +1,49 @@
 import _ from 'lodash';
 import immutableArray from './immutableArray';
 
+
+export class ImmutableHash {
+    static makeFromObject(obj) {
+        return Object.assign(Object.create(null), obj);
+    }
+
+    static remove(immutableHash, key) {
+        if (!immutableHash[key]) {
+            throw new Error('absent key');
+        }
+        return _.omit(immutableHash, key);
+    }
+
+    static replace(immutableHash, key, newItem) {
+        if (!immutableHash[key]) {
+            throw new Error('absent key');
+        }
+        return {
+            ...immutableHash,
+            [key]: newItem
+        };
+    }
+
+    static add(immutableHash, key, newItem) {
+        if (immutableHash[key]) {
+            throw new Error('existent key');
+        }
+        return {
+            ...immutableHash,
+            [key]: newItem
+        };
+    }
+
+    static replaceAsNewKey(immutableHash, oldKey, newKey, newItem) {
+        return this.add(
+            this.remove(immutableHash, oldKey),
+            newKey,
+            newItem
+        );
+    }
+}
+
+
 export class ImmutableHashedArray {
     static makeFromArray(array) {
         return {
