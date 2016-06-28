@@ -102,8 +102,8 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
 
 export function requestUpdateSampleFields(sampleId) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, samplesList: {editedSamples, selectedSample}} = getState(); // TODO sl selectedSampleId, 
-        const sampleToUpdate = _.find(editedSamples, {id: sampleId});
+        const {auth: {sessionId}, samplesList: {editedSamplesHash, selectedSample}} = getState(); // TODO sl selectedSampleId,
+        const sampleToUpdate = editedSamplesHash[sampleId];
         samplesClient.update(sessionId, sampleToUpdate, (error, response) => {
             if (error) {
                 dispatch(handleError(null, NETWORK_ERROR));

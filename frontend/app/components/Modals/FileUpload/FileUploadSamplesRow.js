@@ -41,10 +41,10 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     render() {
-        const {sampleId, samplesList: {samples, editedSamples}} = this.props;
+        const {sampleId, samplesList: {samples, editedSamplesHash}} = this.props;
         const sample = _.find(samples, {id: sampleId});
         const fieldIdToValuesHash = this.makeFieldIsToValuesHash(sample);
-        const editedSample = this.state.showValues && _.find(editedSamples, {id: sampleId});
+        const editedSample = this.state.showValues && editedSamplesHash[sampleId];
         const editedFieldIdToValuesHash = editedSample && this.makeFieldIsToValuesHash(editedSample);
 
         return (
