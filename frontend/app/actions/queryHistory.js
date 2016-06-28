@@ -184,13 +184,15 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
         });
         if (!hasNewHistoryItem) {
             // if collection do not contain such item, we should insert it
-            collection = [...collection, newHistoryItem];
+            const collectionWithNewItem = [...collection, newHistoryItem];
+            return {collection: collectionWithNewItem, historyItemId: newHistoryItemId};
         } else {
             // reset history id, because we already have this item in collection (so it is not from history, it is
             // common item)
             return {collection, historyItemId: null};
         }
     }
-
-    return {collection, historyItemId: newHistoryItemId};
+    else {
+        return {collection, historyItemId: newHistoryItemId};
+    }
 }
