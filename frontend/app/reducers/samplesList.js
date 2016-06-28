@@ -10,40 +10,35 @@ function reduceRequestSamples(state) {
 
 function reduceUpdateSampleValue(state, action) {
     const {valueFieldId, value, sampleId} = action;
-    const {editedSamples, editedSamplesHash} = state;// rid of editedSamples
+    const {editedSamplesHash} = state;
     const newValue = {fieldId: valueFieldId, values: value};
 
-    const sampleIndex = _.findIndex(editedSamples, {id: sampleId});//rid of
     const editedSample = editedSamplesHash[sampleId];
     const sampleValues = editedSample.values;
     const valueIndex = _.findIndex(sampleValues, {fieldId: valueFieldId});
 
     const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
     const newEditedSample = {...editedSample, values: newSampleValues};
-    const newEditedSamples = immutableArray.replace(editedSamples, sampleIndex, newEditedSample);//rid of
     const newEditedSamplesHash = ImmutableHash.replace(editedSamplesHash, sampleId, newEditedSample);
 
     return {
         ...state,
-        editedSamples: newEditedSamples,//rid of
         editedSamplesHash: newEditedSamplesHash
     };
 }
 
 function reduceReceiveUpdatedSample(state, action) {
     const {updatedSample, updatedSampleId} = action;
-    const {samples, editedSamples, editedSamplesHash} = state;//rid of editedSamples
+    const {samples, editedSamplesHash} = state;
     const updatedSampleIndex = _.findIndex(samples, {id: updatedSampleId});
     const newSampleId = updatedSample.id;
 
     const newSamples = immutableArray.replace(samples, updatedSampleIndex, updatedSample);
-    const newEditedSamples = immutableArray.replace(editedSamples, updatedSampleIndex, updatedSample);//rid of
     const newEditedSamplesHash = ImmutableHash.replaceAsNewKey(editedSamplesHash, updatedSampleId, newSampleId, updatedSample);
 
     return {
         ...state,
         samples: newSamples,
-        editedSamples: newEditedSamples,//rid of
         editedSamplesHash: newEditedSamplesHash
     };
 }
@@ -54,27 +49,23 @@ function reduceReceiveSamplesList(state, action) {
     return {
         ...state,
         samples: sortedSamples,
-        editedSamples: sortedSamples,//rid of
         editedSamplesHash: ImmutableHash.makeFromObject(_.keyBy(samples, 'id'))
     };
 }
 
 function reduceResetSampleInList(state, action) {
     const {sampleId} = action;
-    const {samples, editedSamples, editedSamplesHash} = state;//rid of editedSamples
-    const sampleIndex = _.findIndex(samples, {id: sampleId});//rid of
+    const {samples, editedSamplesHash} = state;
     const sample = _.find(samples, {id: sampleId});
 
     const editedSample = editedSamplesHash[sampleId];
     const sampleValues = sample.values;
 
     const newEditedSample = {...editedSample, values: sampleValues};
-    const newEditedSamples = immutableArray.replace(editedSamples, sampleIndex, newEditedSample);//rid of
     const newEditedSamplesHash = ImmutableHash.replace(editedSamplesHash, sampleId, newEditedSample);
 
     return {
         ...state,
-        editedSamples: newEditedSamples,//rid of
         editedSamplesHash: newEditedSamplesHash
     };
 }
@@ -102,7 +93,6 @@ function reduceChangeSamples(state, action) {
 
 export default function samplesList(state = {
     samples: [],
-    editedSamples: [],
     editedSamplesHash: ImmutableHash.makeFromObject({}),
     selectedSample: null
 }, action) {
