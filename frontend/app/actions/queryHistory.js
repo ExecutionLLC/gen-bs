@@ -138,15 +138,15 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         const {
             collection: samples,
             historyItemId: sampleId
-        } = detachHistoryItemIfNeedIt(detachSample, samplesList.samples, attachedHistoryData.sampleId, null);
+        } = detachHistoryItemIfNeedIt(detachSample, samplesList.samples, attachedHistoryData.sampleId);
         const {
             collection: filters,
             historyItemId: filterId
-        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.hashedArray.array, attachedHistoryData.filterId, null);
+        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.hashedArray.array, attachedHistoryData.filterId);
         const {
             collection: views,
             historyItemId: viewId
-        } = detachHistoryItemIfNeedIt(detachView, viewsList.hashedArray.array, attachedHistoryData.viewId, null);
+        } = detachHistoryItemIfNeedIt(detachView, viewsList.hashedArray.array, attachedHistoryData.viewId);
 
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),
