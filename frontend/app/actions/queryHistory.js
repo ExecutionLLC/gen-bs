@@ -171,28 +171,25 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
         return {collection, historyItemId: oldHistoryItemId};
     }
 
-    if (oldHistoryItemId) {
-        // remove old item from collection
-        collection = _.filter(collection, (item) => {
-            return item.id !== oldHistoryItemId;
-        });
-    }
+    const collectionWOOldHistoryItem = oldHistoryItemId ? _.filter(collection, (item) => {
+        return item.id !== oldHistoryItemId;
+    }) : collection;
 
     if (newHistoryItemId) {
-        const hasNewHistoryItem = _.some(collection, (item) => {
+        const hasNewHistoryItem = _.some(collectionWOOldHistoryItem, (item) => {
             return item.id === newHistoryItemId;
         });
         if (!hasNewHistoryItem) {
             // if collection do not contain such item, we should insert it
-            const collectionWithNewItem = [...collection, newHistoryItem];
+            const collectionWithNewItem = [...collectionWOOldHistoryItem, newHistoryItem];
             return {collection: collectionWithNewItem, historyItemId: newHistoryItemId};
         } else {
             // reset history id, because we already have this item in collection (so it is not from history, it is
             // common item)
-            return {collection, historyItemId: null};
+            return {collection: collectionWOOldHistoryItem, historyItemId: null};
         }
     }
     else {
-        return {collection, historyItemId: newHistoryItemId};
+        return {collection: collectionWOOldHistoryItem, historyItemId: newHistoryItemId};
     }
 }
