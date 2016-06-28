@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WS_ROOT=/webserver
-FRONTEND_JS_FILE=genomix.js
+FRONTEND_JS_FILE=genomics.js
 FRONTEND_JS_TEMPLATE=${FRONTEND_JS_FILE}.template
 WS_SCRIPT_PATH=${WS_ROOT}/webserver.js
 
@@ -24,7 +24,7 @@ while read -r ENV_VAR; do
 done <<< "${FRONTEND_ENV_VARS}"
 
 # Build actual JS file.
-cat ${WS_ROOT}/public/${FRONTEND_JS_TEMPLATE} | sed "${SED_REGEX}" > ${WS_ROOT}/public/genomix.js
+cat ${WS_ROOT}/public/${FRONTEND_JS_TEMPLATE} | sed "${SED_REGEX}" > ${WS_ROOT}/public/${FRONTEND_JS_FILE}
 
 GEN_WS_LOG_PATH=${WS_ROOT}/logs/webserver.log
 mkdir -p ${GEN_WS_LOG_PATH}
