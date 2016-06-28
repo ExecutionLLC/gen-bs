@@ -41,7 +41,7 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     render() {
-        const {sampleId, samplesList: {samples, editedSamplesHash}} = this.props;
+        const {sampleId, samplesList: {samples, editedSamplesHash}} = this.props; // TODO sl hashedArray
         const sample = _.find(samples, {id: sampleId});
         const fieldIdToValuesHash = this.makeFieldIsToValuesHash(sample);
         const editedSample = this.state.showValues && editedSamplesHash[sampleId];
@@ -58,7 +58,7 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderHeader() {
-        const {sampleId, samplesList: {samples}} = this.props;
+        const {sampleId, samplesList: {samples}} = this.props; // TODO sl hashedArray
         const sample = _.find(samples, {id: sampleId});
         return (
             <div>
@@ -73,7 +73,7 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderFooter() {
-        const {isDemoSession, sampleId, samplesList: {samples}} = this.props;
+        const {isDemoSession, sampleId, samplesList: {samples}} = this.props; // TODO sl hashedArray
         const sample = _.find(samples, {id: sampleId});
         return (
             <div className='panel-footer'>
@@ -129,7 +129,7 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderCurrentValues(fieldIdToValuesHash) {
-        const {sampleId, samplesList: {samples}, fields} = this.props;
+        const {sampleId, samplesList: {samples}, fields} = this.props; // TODO sl hashedArray
         const sample = _.find(samples, {id: sampleId});
 
         if (_.some(sample.values, option => option.values)) {
