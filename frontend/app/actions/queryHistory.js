@@ -171,14 +171,14 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
         return {collection, historyItemId: oldHistoryItemId};
     }
 
-    const collectionWOOldHistoryItem = oldHistoryItemId ? _.filter(collection, (item) => {
-        return item.id !== oldHistoryItemId;
-    }) : collection;
+    const collectionWOOldHistoryItem = oldHistoryItemId ?
+        _.filter(collection, (item) => {
+            return item.id !== oldHistoryItemId;
+        }) :
+        collection;
 
     if (newHistoryItemId) {
-        const hasNewHistoryItem = _.some(collectionWOOldHistoryItem, (item) => {
-            return item.id === newHistoryItemId;
-        });
+        const hasNewHistoryItem = _.some(collectionWOOldHistoryItem, {id: newHistoryItemId});
         if (!hasNewHistoryItem) {
             // if collection do not contain such item, we should insert it
             const collectionWithNewItem = [...collectionWOOldHistoryItem, newHistoryItem];
