@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 
 import FileUploadSamplesRow from './FileUploadSamplesRow';
 
@@ -51,10 +50,3 @@ export default class FileUploadSamples extends Component {
         );
     }
 }
-
-function mapStateToProps(state) {
-    const {samplesList} = state;
-    return {samplesList};
-}
-
-export default connect(mapStateToProps)(FileUploadSamples);

@@ -32,13 +32,13 @@ class FileUploadModal extends Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, ui, fileUpload, samplesList: {samples}, fields: {editableFields}} = state; // TODO sl hashedArray
+    const {auth, ui, fileUpload, samplesList, fields: {editableFields}} = state; // TODO sl hashedArray
 
     return {
         auth,
         ui,
         fileUpload,
-        samples,  // TODO sl not whole samplesList?x
+        samplesList,
         editableFieldsList: editableFields
     };
 }
