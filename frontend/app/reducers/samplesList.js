@@ -59,9 +59,8 @@ function reduceReceiveSamplesList(state, action) {
 
 function reduceResetSampleInList(state, action) {
     const {sampleId} = action;
-    const {samples, hashedArray, editedSamplesHash} = state;//TODO remove samples
-    const sample = _.find(samples, {id: sampleId});
-    const sample_2 = hashedArray.hash[sampleId];
+    const {hashedArray, editedSamplesHash} = state;
+    const sample = hashedArray.hash[sampleId];
 
     const editedSample = editedSamplesHash[sampleId];
     const sampleValues = sample.values;
@@ -76,10 +75,10 @@ function reduceResetSampleInList(state, action) {
 }
 
 function reduceChangeSample(state, action) {
-    const {samples} = state;
+    const {hashedArray} = state;
     const {sampleId} = action;
 
-    const sample = _.find(samples, {id: sampleId});
+    const sample = hashedArray.hash[sampleId];
 
     return {
         ...state,
@@ -91,7 +90,7 @@ function reduceChangeSamples(state, action) {
     const {samples} = action;
     return {
         ...state,
-        samples,
+        samples, //TODO remove
         hashedArray: ImmutableHashedArray.makeFromArray(samples)
     };
 }
