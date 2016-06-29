@@ -25,7 +25,7 @@ class NavbarCreateQuery extends Component {
 
     render() {
 
-        const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
+        const {dispatch, auth: {isDemo: isDemoSession}, samplesList: {hashedArray: {array: samplesArray}}} = this.props;
         const {selectedViewId} = this.props.viewsList;
         const {selectedFilterId} = this.props.filtersList;
         const {selectedSample} = this.props.samplesList; // TODO sl selectedSampleId
@@ -40,7 +40,7 @@ class NavbarCreateQuery extends Component {
                             {...this.props}
                         />
 
-                        <MetadataSearch samples={samples}
+                        <MetadataSearch samplesArray={samplesArray}
                                         selectedSampleId={selectedSampleId}
                                         isDemoSession={isDemoSession}
                                         onSampleChangeRequested={(sampleId) => this.onSampleSelected(sampleId) }
@@ -79,16 +79,12 @@ function mapStateToProps(state) {
         ui,
         auth,
         samplesList,
-        samplesList: { // TODO sl hashedArray
-            samples
-        },
         filtersList,
         viewsList
     } = state;
 
     return {
         modalWindows,
-        samples, // TODO sl samples has at samplesList
         ui,
         auth,
         samplesList,
