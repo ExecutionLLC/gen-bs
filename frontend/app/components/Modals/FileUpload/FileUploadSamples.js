@@ -11,7 +11,7 @@ export default class FileUploadSamples extends Component {
 
     render() {
         const {dispatch, closeModal, samplesList} = this.props;
-        const {samples} = samplesList; // TODO sl hashedArray
+        const {hashedArray: {array: samplesArray}} = samplesList;
         const searchWord = this.state.searchWord.toLowerCase();
 
         if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
@@ -19,8 +19,8 @@ export default class FileUploadSamples extends Component {
             return null;
         }
         const filteredSamples = searchWord ?
-            samples.filter((sample) => sample.fileName.toLocaleLowerCase().indexOf(searchWord) >= 0) :
-            samples;
+            samplesArray.filter((sample) => sample.fileName.toLocaleLowerCase().indexOf(searchWord) >= 0) :
+            samplesArray;
         return (
             <div>
                 <div className='navbar navbar-search-full'>
