@@ -40,4 +40,7 @@ RUN ["bash", "-c", "source /root/.nvm/nvm.sh && nvm install 6.1.0 && cd /webserv
 # Move genomix.js with templates. The actual genomix.js file will be built during the container launch.
 RUN mv /webserver/public/genomics.js /webserver/public/genomics.js.template
 
+COPY ./scripts/docker-run.sh /webserver/
+RUN chmod u+x /webserver/docker-run.sh
+
 CMD ["bash", "-c", "source /root/.nvm/nvm.sh && nvm use 6.1.0 && cd /webserver && ./docker-run.sh"]
