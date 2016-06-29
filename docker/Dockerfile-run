@@ -1,8 +1,11 @@
 FROM ubuntu:14.04
 MAINTAINER Loginov Vasily <vasily.loginov@execution.su>
 
-ENV DEBIAN_FRONTEND noninteractive \
+ENV DEBIAN_FRONTEND=noninteractive \
     NVM_VERSION=e1c84ba \
+    GEN_WS_LOG_PATH='/data/logs/webserver.log' \
+    GEN_WS_SAVED_FILES_PATH='/data/saved-files' \
+    GEN_WS_UPLOAD_PATH='/data/uploads' \
     GEN_FRONTEND_API_HOST='localhost' \
     GEN_FRONTEND_API_PORT=8080 \
     GEN_FRONTEND_USE_SECURE_CONNECTION=false \
@@ -13,7 +16,7 @@ ENV DEBIAN_FRONTEND noninteractive \
     GEN_FRONTEND_HEADER_SESSION='X-Session-Id' \
     GEN_FRONTEND_HEADER_LANGUAGE='X-Language-Id'
 
-VOLUME ["/webserver/logs"]
+VOLUME ["/data"]
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
