@@ -2,6 +2,10 @@
 # This script runs web server bundle in production mode.
 SCRIPT='webserver.js'
 
+GEN_WS_LOG_PATH=${GEN_WS_LOG_PATH:-'./logs/webserver.log'} 
+
+mkdir -p ${GEN_WS_LOG_PATH}
+
 npm install
 
-GEN_WS_LOG_PATH=${GEN_WS_LOG_PATH:-'./logs/webserver.log'} node ${SCRIPT}
+node ${SCRIPT}
