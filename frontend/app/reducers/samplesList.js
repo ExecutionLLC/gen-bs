@@ -97,7 +97,6 @@ function reduceChangeSamples(state, action) {
 
 
 export default function samplesList(state = {
-    samples: [],
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editedSamplesHash: ImmutableHash.makeFromObject({}),
     selectedSample: null // TODO selectedSampleId: null
