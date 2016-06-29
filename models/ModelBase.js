@@ -6,6 +6,7 @@ const async = require('async');
 const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const CollectionUtils = require('../utils/CollectionUtils');
 
 class ModelBase {
     /**
@@ -71,10 +72,10 @@ class ModelBase {
 
     _mapColumns(item) {
         const itemData = ChangeCaseUtil.convertKeysToCamelCase(item);
-        return _.reduce(this.mappedColumns, (memo, column) => {
-            memo[column] = itemData[column];
-            return memo;
-        }, {});
+        return CollectionUtils.createHash(this.mappedColumns,
+            _.identity,
+            (column) => itemData[column]
+        );
     }
 
     _toCamelCase(itemOrItems, callback) {

@@ -7,11 +7,8 @@ const ServiceBase = require('../../ServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
-const proxyProviderFunc = _.once(function () {
-    // return new RPCProxy(...args);
-    const args = _.toArray(arguments);
-    const ProxyConstructor = Function.prototype.bind.apply(RPCProxy, [null].concat(args));
-    return new ProxyConstructor();
+const proxyProviderFunc = _.once(function (...args) {
+    return new RPCProxy(...args);
 });
 
 class ApplicationServerServiceBase extends ServiceBase {

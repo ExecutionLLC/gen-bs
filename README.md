@@ -58,15 +58,15 @@ Web server uses PostgreSQL to store project metadata (anything it needs, except 
 
 ## Web Server Launch
 
-Currently, Node v4.2.2 is used. To be able to switch node versions easily in future it is recommended to use Node version manager (NVM), which is downloadable by the link below:
+Currently, Node v6.1.0 is used. To be able to switch node versions easily in future it is recommended to use Node version manager (NVM), which is downloadable by the link below:
 
 https://github.com/creationix/nvm
 
 After `nvm` is installed and the terminal is relaunched, as `nvm` wants, please type the following:
 
-    nvm install 4.2.2
+    nvm install 6.1.0
 
-This will install Node version 4.2.2.
+This will install and use specified version of Node.
 
 After the proper node version is installed, go to the sources root and execute:
 

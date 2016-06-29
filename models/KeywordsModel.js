@@ -4,6 +4,7 @@ const _ = require('lodash');
 const Uuid = require('node-uuid');
 const async = require('async');
 
+const CollectionUtils = require('../utils/CollectionUtils');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const ModelBase = require('./ModelBase');
 
@@ -98,14 +99,8 @@ class KeywordsModel extends ModelBase {
                     (callback) => callback(error, results),
                     (ids, callback) => this._toCamelCase(ids, callback),
                     (ids, callback) => {
-                        const keywordIdsByFieldId = _.reduce(ids, (result, idObject) => {
-                            const fieldId = idObject.fieldId;
-                            if (!result[fieldId]) {
-                                result[fieldId] = [];
-                            }
-                            result[fieldId].push(idObject.id);
-                            return result;
-                        }, {});
+                        const keywordIdsByFieldId = CollectionUtils.createMultiValueHash(ids,
+                            (item) => item.fieldId, (item) => item.id);
                         callback(null, keywordIdsByFieldId);
                     }
                 ], callback);

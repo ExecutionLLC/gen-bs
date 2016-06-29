@@ -18,7 +18,7 @@ class SessionsController extends ControllerBase {
 
         this.config = this.services.config;
         this.sessions = this.services.sessions;
-        this.authStates = {};
+        this.authStates = Object.create(null);
     }
 
     /**

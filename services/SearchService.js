@@ -5,6 +5,7 @@ const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
 const EventProxy = require('../utils/EventProxy');
+const CollectionUtils = require('../utils/CollectionUtils');
 const RESULT_TYPES = require('./external/applicationServer/AppServerResultTypes');
 
 const EVENTS = {
@@ -183,14 +184,8 @@ class SearchService extends ServiceBase {
 
             // Group comments by search key.
             (comments, callback) => {
-                const searchKeyToCommentHash = _.reduce(comments, (result, comment) => {
-                    const searchKey = comment.searchKey;
-                    if (!result[searchKey]) {
-                        result[searchKey] = [];
-                    }
-                    result[searchKey].push(comment);
-                    return result;
-                }, {});
+                const searchKeyToCommentHash = CollectionUtils.createMultiValueHash(comments, 
+                    (comment) => comment.searchKey);
                 callback(null, searchKeyToCommentHash);
             }
         ], callback);
