@@ -12,16 +12,15 @@ export default class FileUploadSamples extends Component {
     render() {
         const {dispatch, closeModal, samplesList} = this.props;
         const {samples} = samplesList; // TODO sl hashedArray
+        const searchWord = this.state.searchWord.toLowerCase();
 
         if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
             console.error('No editable fields found');
             return null;
         }
-        let filteredSamples = samples;
-        if (this.state.searchWord.length > 0) {
-            let searchWord = this.state.searchWord.toLowerCase();
-            filteredSamples = samples.filter(el => ~el.fileName.toLocaleLowerCase().indexOf(searchWord));
-        }
+        const filteredSamples = searchWord ?
+            samples.filter((sample) => sample.fileName.toLocaleLowerCase().indexOf(searchWord) >= 0) :
+            samples;
         return (
             <div>
                 <div className='navbar navbar-search-full'>
