@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import * as ActionTypes from '../actions/samplesList';
 import immutableArray from '../utils/immutableArray';
-import {ImmutableHash} from '../utils/immutable';
+import {ImmutableHash, ImmutableHashedArray} from '../utils/immutable';
 
 function reduceRequestSamples(state) {
     return state;
@@ -29,16 +29,18 @@ function reduceUpdateSampleValue(state, action) {
 
 function reduceReceiveUpdatedSample(state, action) {
     const {updatedSample, updatedSampleId} = action;
-    const {samples, editedSamplesHash} = state;
-    const updatedSampleIndex = _.findIndex(samples, {id: updatedSampleId});
+    const {samples, hashedArray, editedSamplesHash} = state;//TODO remove samples
+    const updatedSampleIndex = _.findIndex(samples, {id: updatedSampleId});//TODO remove
     const newSampleId = updatedSample.id;
 
-    const newSamples = immutableArray.replace(samples, updatedSampleIndex, updatedSample);
+    const newSamples = immutableArray.replace(samples, updatedSampleIndex, updatedSample);//TODO remove
+    const newHashedArray = ImmutableHashedArray.replaceItemId(hashedArray, updatedSampleId, updatedSample);
     const newEditedSamplesHash = ImmutableHash.replaceAsNewKey(editedSamplesHash, updatedSampleId, newSampleId, updatedSample);
 
     return {
         ...state,
-        samples: newSamples,
+        samples: newSamples,//TODO remove
+        hashedArray: newHashedArray,
         editedSamplesHash: newEditedSamplesHash
     };
 }
@@ -46,17 +48,20 @@ function reduceReceiveUpdatedSample(state, action) {
 function reduceReceiveSamplesList(state, action) {
     const {samples} = action;
     const sortedSamples = _.sortBy(samples, (sample) => sample.fileName.toLowerCase());
+
     return {
         ...state,
-        samples: sortedSamples,
+        samples: sortedSamples,//TODO remove
+        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
         editedSamplesHash: ImmutableHash.makeFromObject(_.keyBy(samples, 'id'))
     };
 }
 
 function reduceResetSampleInList(state, action) {
     const {sampleId} = action;
-    const {samples, editedSamplesHash} = state;
+    const {samples, hashedArray, editedSamplesHash} = state;//TODO remove samples
     const sample = _.find(samples, {id: sampleId});
+    const sample_2 = hashedArray.hash[sampleId];
 
     const editedSample = editedSamplesHash[sampleId];
     const sampleValues = sample.values;
@@ -86,15 +91,17 @@ function reduceChangeSamples(state, action) {
     const {samples} = action;
     return {
         ...state,
-        samples
+        samples,
+        hashedArray: ImmutableHashedArray.makeFromArray(samples)
     };
 }
 
 
 export default function samplesList(state = {
     samples: [],
+    hashedArray: ImmutableHashedArray.makeFromArray([]),
     editedSamplesHash: ImmutableHash.makeFromObject({}),
-    selectedSample: null
+    selectedSample: null // TODO selectedSampleId: null
 }, action) {
 
     switch (action.type) {
