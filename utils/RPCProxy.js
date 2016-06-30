@@ -1,41 +1,30 @@
 'use strict';
 
-const WebSocket = require('ws');
+const _ = require('lodash');
+const async = require('async');
+const RabbitMQ = require('amqplib/callback_api');
 
 const ChangeCaseUtil = require('./ChangeCaseUtil');
 
-const SocketState = {
-    CONNECTING: 0,
-    CONNECTED: 1,
-    CLOSING: 2,
-    CLOSED: 3
-};
-
 class RPCProxy {
     /**
-     * @param {string}host
-     * @param {number}port
+     * @param {string}host RabbitMQ host.
+     * @param {string}requestQueueName Name of the task queue.
      * @param {number}reconnectTimeout Timeout in milliseconds
      * @param {object}logger
      * @param {function()}connectCallback
      * @param {function()}disconnectCallback
      * @param {function(object)}replyCallback
      */
-    constructor(host, port, reconnectTimeout, logger, connectCallback, disconnectCallback, replyCallback) {
-        this.connectCallback = connectCallback;
-        this.disconnectCallback = disconnectCallback;
-        this.replyCallback = replyCallback;
-
-        this.host = host;
-        this.port = port;
-
-        this.send = this.send.bind(this);
-        this.logger = logger;
-
+    constructor(host, requestQueueName, reconnectTimeout, logger, connectCallback, disconnectCallback, replyCallback) {
+        Object.assign(this, {host, requestQueueName, reconnectTimeout,
+            logger, connectCallback, disconnectCallback, replyCallback}, {
+                connected: false
+            });
+        _.bindAll(this, ['_address', '_replyResult', '_error', '_close', '_connect', 'send']);
         // Try to reconnect automatically if connection is closed
-        this.connected = false;
         this._connect();
-        setInterval(() => this._connect(), reconnectTimeout);
+        setInterval(this._connect, reconnectTimeout);
     }
 
     isConnected() {
@@ -43,17 +32,26 @@ class RPCProxy {
     }
 
     send(operationId, method, params, callback) {
-        const convertedParams = ChangeCaseUtil.convertKeysToSnakeCase(params);
-        const jsonData = this._formatJson(operationId, method, convertedParams);
-        this.ws.send(jsonData, null, callback);
+        const context = this.rabbitContext;
+        if (!context) {
+            callback(new Error('Connection to application server is lost.'));
+        } else {
+            const {channel, requestQueue, replyQueue} = this.rabbitContext;
+            const fullParams = Object.assign({}, params, {
+                replyTo: replyQueue
+            });
+            const convertedParams = ChangeCaseUtil.convertKeysToSnakeCase(fullParams);
+            const messageString = this._stringifyMessage(operationId, method, convertedParams);
+            channel.sendToQueue(requestQueue, new Buffer(messageString));
+        }
     }
 
-    _formatJson(operationId, method, params) {
+    _stringifyMessage(operationId, method, params) {
         return JSON.stringify({id: operationId, method: method, params: params});
     }
 
     _address() {
-        return 'ws://' + this.host + ':' + this.port + '/ws';
+        return `amqp://${this.host}`;
     }
 
     _replyResult(messageString) {
@@ -66,41 +64,115 @@ class RPCProxy {
         }
     }
 
-    _close(event) {
-        this.logger.info('App Server socket closed', event);
+    _close() {
+        this.logger.info('App Server socket closed');
+        this.connected = false;
+        this.rabbitContext = null;
 
         if (this.disconnectCallback) {
             this.disconnectCallback();
         }
-        if (!this.ws || this.ws.readyState == SocketState.CLOSED) {
-            this.connected = false;
-            this._connect();
-        }
     }
 
-    _error(event) {
-        if (this.ws.readyState != SocketState.CONNECTED) {
-            this.connected = false;
-        }
-        this.logger.error('Socket error', event, this.ws.readyState);
+    _error(error) {
+        this.logger.error(`Channel error: ${error}`);
     }
 
     _connect() {
-        if (this.connected) return;
-
-        const address = this._address();
-        this.ws = new WebSocket(address);
-        this.logger.info('Connecting to the socket server on ' + address);
-
-        this.connected = true;
-
-        this.ws.on('message', this._replyResult.bind(this));
-        this.ws.on('close', this._close.bind(this));
-        this.ws.on('error', this._error.bind(this));
-
-        if (this.connectCallback) {
-            this.connectCallback();
+        if (this.connected) {
+            return;
         }
+
+        async.waterfall([
+            (callback) => this._acquireRabbitContext(callback),
+            /**
+             * @param {RabbitContext}rabbitContext
+             * @param {function()}callback
+             * */
+            (rabbitContext, callback) => this._setQueryHandlers(rabbitContext, callback),
+            (rabbitContext, callback) => {
+                this.rabbitContext = rabbitContext;
+                callback(null);
+            }
+        ], (error) => {
+            if (error) {
+                this.logger.error(`Failed to connect to RabbitMQ: ${error}`);
+            } else {
+                this.connected = true;
+                if (this.connectCallback) {
+                    this.connectCallback();
+                }
+            }
+        });
+    }
+
+    /**
+     * @param {RabbitContext}rabbitContext
+     * @param {function(Error)}callback
+     * */
+    _setQueryHandlers(rabbitContext, callback) {
+        const {channel, replyQueue} = rabbitContext;
+        channel.consume(
+            replyQueue,
+            (message) => this._replyResult(message.content.toString()), {
+                noAck: true
+            }
+        );
+        callback(null);
+    }
+
+    /**
+     * @typedef {Object}RabbitContext
+     * @property {Object}connection
+     * @property {Object}channel
+     * @property {Object}requestQueue
+     * @property {Object}replyQueue
+     * */
+
+    /**
+     * @param {function({Error, RabbitContext})}callback
+     * */
+    _acquireRabbitContext(callback) {
+        const address = this._address();
+        this.logger.info(`Connecting to RabbitMQ on ${address}`);
+        async.waterfall([
+            (callback) => RabbitMQ.connect(address, callback),
+            (connection, callback) => connection.createChannel(
+                (error, channel) => callback(error, connection, channel)
+            ),
+            (connection, channel, callback) => {
+                async.series({
+                    requestQueue: (callback) => this._obtainRequestQueue(channel, callback),
+                    replyQueue: (callback) => this._obtainReplyQueue(channel, callback)
+                }, (error, queues) => callback(error, Object.assign({}, queues, {connection, channel})));
+            },
+            (rabbitContext, callback) => {
+                const {channel} = rabbitContext;
+                channel.on('error', this._error);
+                channel.on('close', this._close);
+                callback(null, rabbitContext);
+            }
+        ], callback);
+    }
+
+    _obtainRequestQueue(channel, callback) {
+        this._obtainQueue(channel, this.requestQueueName, {
+            durable: false
+        }, callback);
+    }
+
+    _obtainReplyQueue(channel, callback) {
+        this._obtainQueue(channel, null, {
+            exclusive: true,
+            durable: false
+        }, callback);
+    }
+
+    _obtainQueue(channel, queueName, queueParams, callback) {
+        async.waterfall([
+            (callback) => channel.assertQueue(queueName, queueParams, callback),
+            (queueDescriptor, callback) => callback(null, queueDescriptor.queue)
+        ], callback);
     }
 }
 
