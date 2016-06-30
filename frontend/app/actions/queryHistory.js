@@ -138,15 +138,15 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         const {
             collection: samples,
             historyItemId: sampleId
-        } = detachHistoryItemIfNeedIt(detachSample, samplesList.hashedArray.array, attachedHistoryData.sampleId, null);
+        } = detachHistoryItemIfNeedIt(detachSample, samplesList.hashedArray.array, attachedHistoryData.sampleId);
         const {
             collection: filters,
             historyItemId: filterId
-        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.hashedArray.array, attachedHistoryData.filterId, null);
+        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.hashedArray.array, attachedHistoryData.filterId);
         const {
             collection: views,
             historyItemId: viewId
-        } = detachHistoryItemIfNeedIt(detachView, viewsList.hashedArray.array, attachedHistoryData.viewId, null);
+        } = detachHistoryItemIfNeedIt(detachView, viewsList.hashedArray.array, attachedHistoryData.viewId);
 
         dispatch([
             changeHistoryData(sampleId, filterId, viewId),
@@ -165,32 +165,31 @@ function detachHistoryItemIfNeedIt(needDetach, collection, historyItemId) {
 }
 
 function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
-    var newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
+    const newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
     if (oldHistoryItemId === newHistoryItemId) {
         // nothing to be changed
         return {collection, historyItemId: oldHistoryItemId};
     }
 
-    if (oldHistoryItemId) {
-        // remove old item from collection
-        collection = _.filter(collection, (item) => {
+    const collectionWOOldHistoryItem = oldHistoryItemId ?
+        _.filter(collection, (item) => {
             return item.id !== oldHistoryItemId;
-        });
-    }
+        }) :
+        collection;
 
     if (newHistoryItemId) {
-        const hasNewHistoryItem = _.some(collection, (item) => {
-            return item.id === newHistoryItemId;
-        });
+        const hasNewHistoryItem = _.some(collectionWOOldHistoryItem, {id: newHistoryItemId});
         if (!hasNewHistoryItem) {
             // if collection do not contain such item, we should insert it
-            collection = [...collection, newHistoryItem];
+            const collectionWithNewItem = [...collectionWOOldHistoryItem, newHistoryItem];
+            return {collection: collectionWithNewItem, historyItemId: newHistoryItemId};
         } else {
             // reset history id, because we already have this item in collection (so it is not from history, it is
             // common item)
-            newHistoryItemId = null;
+            return {collection: collectionWOOldHistoryItem, historyItemId: null};
         }
     }
-
-    return {collection, historyItemId: newHistoryItemId};
+    else {
+        return {collection: collectionWOOldHistoryItem, historyItemId: newHistoryItemId};
+    }
 }

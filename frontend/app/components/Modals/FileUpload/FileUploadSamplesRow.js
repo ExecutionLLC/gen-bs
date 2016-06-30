@@ -3,9 +3,7 @@ import _ from 'lodash';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {
-    changeSample, receiveSamplesList
-} from '../../../actions/samplesList';
+import {changeSample} from '../../../actions/samplesList';
 
 
 export default class FileUploadSamplesRow extends Component {
@@ -17,8 +15,7 @@ export default class FileUploadSamplesRow extends Component {
 
     onSelectForAnalysisClick(e, sampleId) {
         e.preventDefault();
-        const {dispatch, closeModal, samplesList: {hashedArray: {array: samplesArray}}} = this.props;
-        dispatch(receiveSamplesList(samplesArray));
+        const {dispatch, closeModal} = this.props;
         dispatch(changeSample(sampleId));
         closeModal('upload');
     }

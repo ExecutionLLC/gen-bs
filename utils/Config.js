@@ -43,16 +43,16 @@ const SETTINGS = {
         // Object storage type to use. Supported values: 's3', 'oss'
         objectStorageType: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
         amazon: {
-            amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, 'wstestbucket-ae7b342f-9ec0-45ad-aa55-2298287b422b'),
-            amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'AKIAJKA73IEQR3ECGPVA'),
-            amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, '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'),
-            amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'us-east-1')
+            amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, ''),
+            amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, ''),
+            amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, ''),
+            amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, '')
         },
         oss: {
-            ossBucketName: makeDefault(ENV.GEN_WS_OSS_BUCKET_NAME, 'testwsgenomix'),
-            ossAccessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, 'j1ZHzIFv65VdK42B'),
-            ossAccessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, 'QkLzlvbROdqHmpGnNZAGlDUpy7Tr1i'),
-            ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'oss-cn-beijing')
+            ossBucketName: makeDefault(ENV.GEN_WS_OSS_BUCKET_NAME, ''),
+            ossAccessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, ''),
+            ossAccessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, ''),
+            ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, '')
         }
     },
     applicationServer: {
@@ -65,7 +65,7 @@ const SETTINGS = {
         host: makeDefault(ENV.GEN_WS_DATABASE_SERVER, 'localhost'),
         port: makeDefault(ENV.GEN_WS_DATABASE_PORT, 5432),
         user: makeDefault(ENV.GEN_WS_DATABASE_USER, 'postgres'),
-        password: makeDefault(ENV.GEN_WS_DATABASE_PASSWORD, 'zxcasdqwe'),
+        password: makeDefault(ENV.GEN_WS_DATABASE_PASSWORD, ''),
         databaseName: makeDefault(ENV.GEN_WS_DATABASE_NAME, 'genomixdb')
     },
     headers: {
@@ -112,11 +112,8 @@ const SETTINGS = {
 SETTINGS.baseUrl = makeDefault(ENV.GEN_WS_BASE_URL, 'http://localhost:' + SETTINGS.port);
 SETTINGS.google = {
     // Google Application parameters
-    clientId: makeDefault(
-        ENV.GEN_WS_GOOGLE_CLIENT_ID,
-        '1051611087780-4eo3v6k4oboivgha2l8jbi9jd6b0bfe9.apps.googleusercontent.com'
-    ),
-    clientSecret: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_SECRET, '7U3OeIgx-wO86CAGT7xYOGIz')
+    clientId: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_ID, ''),
+    clientSecret: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_SECRET, '')
 };
 
 module.exports = SETTINGS;
