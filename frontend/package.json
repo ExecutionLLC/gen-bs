@@ -42,7 +42,7 @@
     "handlebars-webpack-plugin": "0.0.6",
     "html-webpack-plugin": "1.7.0",
     "imports-loader": "0.6.5",
-    "jest-cli": "11.0.2",
+    "jest-cli": "12.1.1",
     "less": "2.5.3",
     "less-loader": "2.2.2",
     "react-addons-perf": "0.14.7",
