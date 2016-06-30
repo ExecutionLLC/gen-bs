@@ -43,16 +43,16 @@ const SETTINGS = {
         // Object storage type to use. Supported values: 's3', 'oss'
         objectStorageType: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
         amazon: {
-            amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, ''),
-            amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, ''),
-            amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, ''),
-            amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, '')
+            amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, 'placeholder'),
+            amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'placeholder'),
+            amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, 'placeholder'),
+            amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'placeholder')
         },
         oss: {
-            ossBucketName: makeDefault(ENV.GEN_WS_OSS_BUCKET_NAME, ''),
-            ossAccessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, ''),
-            ossAccessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, ''),
-            ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, '')
+            ossBucketName: makeDefault(ENV.GEN_WS_OSS_BUCKET_NAME, 'placeholder'),
+            ossAccessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, 'placeholder'),
+            ossAccessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, 'placeholder'),
+            ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'placeholder')
         }
     },
     applicationServer: {
@@ -112,8 +112,8 @@ const SETTINGS = {
 SETTINGS.baseUrl = makeDefault(ENV.GEN_WS_BASE_URL, 'http://localhost:' + SETTINGS.port);
 SETTINGS.google = {
     // Google Application parameters
-    clientId: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_ID, ''),
-    clientSecret: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_SECRET, '')
+    clientId: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_ID, 'placeholder'),
+    clientSecret: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_SECRET, 'placeholder')
 };
 
 module.exports = SETTINGS;
