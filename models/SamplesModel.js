@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const async = require('async');
 
+const {ENTITY_TYPES} = require('../utils/Enums');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const CollectionUtils = require('../utils/CollectionUtils');
 const SecureModelBase = require('./SecureModelBase');
@@ -426,7 +427,7 @@ class SamplesModel extends SecureModelBase {
             creator: userId,
             fileName: sample.fileName,
             hash: sample.hash,
-            type: sample.type || 'user'
+            type: sample.type || ENTITY_TYPES.USER
         };
     }
 

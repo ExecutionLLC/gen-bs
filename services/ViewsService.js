@@ -31,13 +31,8 @@ class ViewsService extends UserEntityServiceBase {
               this._viewItemsCheck(view, callback);
           },
           (view, callback) => super.find(user, view.id, callback),
-          (existingView, callback) => {
-              if (existingView.type !== 'user') {
-                  callback(new Error('Default view cannot be updated'));
-              } else {
-                super.update(user, view, callback);
-              }
-          }
+          (existingView, callback) => this._ensureItemOfUserType(existingView, callback),
+          (existingView, callback) => super.update(user, view, callback)
       ], callback);
   }
 

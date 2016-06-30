@@ -9,6 +9,7 @@ const EVENTS = require('./AppServerEvents');
 const RESULT_TYPES = require('./AppServerResultTypes');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 const EventEmitter = require('../../../utils/EventProxy');
+const {ENTITY_TYPES} = require('../../../utils/Enums');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 
@@ -280,7 +281,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
      * For user samples sample id is file name.
      * */
     _getAppServerSampleId(sample) {
-        return sample.type === 'standard' || sample.type === 'advanced' ?
+        return _.includes(ENTITY_TYPES.defaultTypes, sample.type) ?
             sample.fileName : sample.originalId;
     }
 

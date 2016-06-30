@@ -3,6 +3,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
+const {ENTITY_TYPES} = require('../../utils/Enums');
 const RequestWrapper = require('./RequestWrapper');
 const UserEntityClientBase = require('./UserEntityClientBase');
 
@@ -34,7 +35,7 @@ class SamplesClient extends UserEntityClientBase {
 
     static verifySampleFormat(sample, shouldCheckFieldValues) {
         assert.ok(sample.id);
-        assert.ok(_.includes(['standard', 'advanced', 'user'], sample.type));
+        assert.ok(_.includes(ENTITY_TYPES.allValidTypes, sample.type));
         assert.ok(sample.fileName);
         if (shouldCheckFieldValues) {
             assert.ok(sample.values && sample.values.length);
