@@ -36,7 +36,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
                 sessionId
             },
             samplesList: {
-                selectedSample // TODO sl selectedSampleId
+                selectedSampleId
             },
             filtersList: {
                 selectedFilterId
@@ -46,7 +46,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             }
         } = getState();
         const fileMetadata = {
-            sampleId: selectedSample.id,
+            sampleId: selectedSampleId,
             viewId: selectedViewId,
             filterIds: [selectedFilterId],
             name: fileName,

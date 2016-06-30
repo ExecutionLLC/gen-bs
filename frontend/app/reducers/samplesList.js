@@ -75,14 +75,11 @@ function reduceResetSampleInList(state, action) {
 }
 
 function reduceChangeSample(state, action) {
-    const {hashedArray} = state;
     const {sampleId} = action;
-
-    const sample = hashedArray.hash[sampleId];
 
     return {
         ...state,
-        selectedSample: sample
+        selectedSampleId: sampleId
     };
 }
 
@@ -99,7 +96,7 @@ function reduceChangeSamples(state, action) {
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     editedSamplesHash: ImmutableHash.makeFromObject({}),
-    selectedSample: null // TODO selectedSampleId: null
+    selectedSampleId: null
 }, action) {
 
     switch (action.type) {
