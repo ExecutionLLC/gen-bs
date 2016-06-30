@@ -11,6 +11,7 @@ import {
     viewBuilderChangeSortColumn,
     viewBuilderChangeKeywords
 } from '../../../actions/viewBuilder';
+import {entityTypeIsEditable} from '../../../utils/entityTypes';
 
 
 export default class ViewBuilder extends React.Component {
@@ -34,13 +35,13 @@ export default class ViewBuilder extends React.Component {
         );
         // This field will be chosen when a new item is created.
         const nextDefaultField = _.first(fieldsForSelection);
-        var plusDisabled = view.type !== 'user' || viewItemsLength >= 30 || !nextDefaultField;
-        var minusDisabled = view.type !== 'user' || viewItemsLength <= 1;
+        const isDisableEditing = !entityTypeIsEditable(view.type);
+        const plusDisabled = isDisableEditing || viewItemsLength >= 30 || !nextDefaultField;
+        const minusDisabled = isDisableEditing || viewItemsLength <= 1;
 
-        const isDisableEditing = view.type !== 'user';
         const selects = view.viewListItems.map(function (viewItem, index) {
 
-            var currentValue =
+            const currentValue =
                 _.find(fields.totalFieldsList, {id: viewItem.fieldId}) ||
                 {id: null};
 

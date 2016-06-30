@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Select from '../../shared/Select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 export default class MetadataSearch extends Component {
 
@@ -32,7 +33,7 @@ export default class MetadataSearch extends Component {
 
     isSampleDisabled(sample) {
         const {isDemoSession} = this.props;
-        return isDemoSession && sample.type == 'advanced';
+        return entityTypeIsDemoDisabled(sample.type, isDemoSession);
     }
 
     getSampleOptions() {

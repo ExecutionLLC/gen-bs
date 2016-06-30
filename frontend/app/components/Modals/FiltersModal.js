@@ -9,6 +9,7 @@ import FilterBuilder from './FilterBuilder/FilterBuilder';
 import {filterBuilderEndEdit} from '../../actions/filterBuilder';
 import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
+import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 
 class FiltersModal extends Component {
 
@@ -18,18 +19,17 @@ class FiltersModal extends Component {
     }
 
     render() {
-        const {auth} = this.props;
+        const {auth: {isDemo}} = this.props;
         const filters = this.props.filtersList.hashedArray.array;
         const editingFilterObject = this.props.filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;
-        const isFilterEditable = editingFilter && editingFilter.type === 'user';
-        const isFilterAdvanced = editingFilter && editingFilter.type === 'advanced';
-        const isLoginRequired = isFilterAdvanced && auth.isDemo;
+        const isFilterEditable = editingFilter && entityTypeIsEditable(editingFilter.type);
+        const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
         const filterNameExists = isFilterEditable && _(filters)
-                .filter(filter => filter.type !== 'history')
+                .filter(filter => filter.type !== entityType.HISTORY)
                 .some(filter => filter.name.trim() === editingFilterNameTrimmed
                     && filter.id != editingFilter.id
                 );

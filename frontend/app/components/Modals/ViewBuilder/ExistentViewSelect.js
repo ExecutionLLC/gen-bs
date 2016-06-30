@@ -10,13 +10,14 @@ import {
     viewBuilderStartEdit,
     viewBuilderDeleteView
 } from '../../../actions/viewBuilder';
+import {entityTypeIsEditable} from '../../../utils/entityTypes';
 
 
 export default class ExistentViewSelect extends React.Component {
 
     render() {
         const {auth: {isDemo: isDemoSession}, viewBuilder: {editingView: {type: selectedViewType}}, viewsList: {hashedArray: {array: views}}} = this.props;
-        const isEditableView = selectedViewType === 'user';
+        const isEditableView = entityTypeIsEditable(selectedViewType);
 
         return (
             <div className='collapse in'>

@@ -14,6 +14,7 @@ import {
     opsUtils,
     genomicsParsedRulesValidate
 } from '../../../utils/filterUtils';
+import {entityTypeIsEditable} from '../../../utils/entityTypes';
 
 
 /**
@@ -438,7 +439,7 @@ export default class FilterBuilder extends React.Component {
                     allowedFields={fields.allowedFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     totalFields={fields.totalFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     rules={parsedFilter}
-                    disabled={filter.type === 'standard' || filter.type === 'advanced' || filter.type === 'history'}
+                    disabled={!entityTypeIsEditable(filter.type)}
                     dispatch={dispatch}
                 />
             </div>

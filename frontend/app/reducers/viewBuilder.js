@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import * as ActionTypes from '../actions/viewBuilder';
+import {entityType} from '../utils/entityTypes';
 
 function getNextDirection(direction) {
     if (!direction) {
@@ -25,7 +26,7 @@ function reduceVBuilderStartEdit(state, action) {
     const {view, makeNew} = action;
     const editingView = makeNew ?
         Object.assign({}, view, {
-            type: 'user',
+            type: entityType.USER,
             name: `Copy of ${view.name}`,
             id: null
         }) :

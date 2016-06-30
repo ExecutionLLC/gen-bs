@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as ActionTypes from '../actions/filterBuilder';
 import {filterUtils, genomicsParsedRulesValidate, opsUtils} from '../utils/filterUtils';
 import FieldUtils from '../utils/fieldUtils';
+import {entityType} from '../utils/entityTypes';
 
 
 /**
@@ -81,7 +82,7 @@ function reduceFBuilderStartEdit(state, action) {
         makeNew,
         makeNew ?
             Object.assign({}, filter, {
-                type: 'user',
+                type: entityType.USER,
                 name: `Copy of ${filter.name}`,
                 id: null
             }) :
