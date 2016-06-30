@@ -64,9 +64,9 @@ class HashedArrayDataUtils {
 export function runListedObjectTests(params) {
 
     describe(`${params.listName} mocked state`, () => {
-        const {list, createItemId} = params.buildInitState();
+        const {list, createdItemId} = params.buildInitState();
         it('should contain no create item', () => {
-            const absentItemIndex = list.findIndex((filter) => filter.id === createItemId);
+            const absentItemIndex = list.findIndex((filter) => filter.id === createdItemId);
             expect(absentItemIndex).toBe(-1);
         });
     });

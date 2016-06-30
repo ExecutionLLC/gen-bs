@@ -42,7 +42,7 @@ runListedObjectTests({
         return {
             initialAppState,
             list: filters,
-            createItemId: createdFilterId
+            createdItemId: createdFilterId
         };
     },
     makeActions: {
