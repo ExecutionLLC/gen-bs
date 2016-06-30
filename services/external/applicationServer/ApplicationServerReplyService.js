@@ -53,6 +53,9 @@ class ApplicationServerReplyService extends ServiceBase {
                 this.services.operations.findInAllSessions(rpcMessage.id, callback);
             },
             (operation, callback) => {
+                this._setASQueryNameIfAny(operation, rpcMessage, callback)
+            },
+            (operation, callback) => {
                 this._processOperationResult(operation, rpcMessage, (error, operationResult) => {
                     callback(error, operationResult);
                 });
@@ -208,6 +211,13 @@ class ApplicationServerReplyService extends ServiceBase {
         } else {
             callback(null, operationResult);
         }
+    }
+
+    _setASQueryNameIfAny(operation, rpcMessage, callback) {
+        if (rpcMessage.replyTo) {
+            operation.setASQueryName(rpcMessage.replyTo);
+        }
+        callback(null, operation);
     }
 }
 

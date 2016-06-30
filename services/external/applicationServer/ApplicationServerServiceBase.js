@@ -15,8 +15,7 @@ class ApplicationServerServiceBase extends ServiceBase {
     constructor(services) {
         super(services);
 
-        this._rpcSend = this._rpcSend.bind(this);
-        this._rpcReply = this._rpcReply.bind(this);
+        _.bindAll(this, ['_rpcSend', '_rpcReply']);
 
         this.logger = this.services.logger;
         const host = this.services.config.applicationServer.host;
@@ -26,8 +25,16 @@ class ApplicationServerServiceBase extends ServiceBase {
         this.rpcProxy = proxyProviderFunc(host, port, reconnectTimeout, this.logger, null, null, this._rpcReply)
     }
 
-    _rpcSend(operationId, method, params, callback) {
-        this.rpcProxy.send(operationId, method, params, (error) => {
+    /**
+     * @param {OperationBase}operation
+     * @param {string}method
+     * @param {Object}params
+     * @param {function(Error, string=)}callback
+     * */
+    _rpcSend(operation, method, params, callback) {
+        const operationId = operation.getId();
+        const queryNameOrNull = operation.getASQueryName();
+        this.rpcProxy.send(operationId, method, params, queryNameOrNull, (error) => {
             if (error) {
                 callback(error);
             } else {

@@ -31,7 +31,7 @@ class RPCProxy {
         return this.connected;
     }
 
-    send(operationId, method, params, callback) {
+    send(operationId, method, params, queryNameOrNull, callback) {
         const context = this.rabbitContext;
         if (!context) {
             callback(new Error('Connection to application server is lost.'));
@@ -42,7 +42,9 @@ class RPCProxy {
             });
             const convertedParams = ChangeCaseUtil.convertKeysToSnakeCase(fullParams);
             const messageString = this._stringifyMessage(operationId, method, convertedParams);
-            channel.sendToQueue(requestQueue, new Buffer(messageString));
+            // Can send requests either to a particular AS instance, or to the tasks queue.
+            const actualQueryName = queryNameOrNull || requestQueue;
+            channel.sendToQueue(actualQueryName, new Buffer(messageString));
         }
     }
 
