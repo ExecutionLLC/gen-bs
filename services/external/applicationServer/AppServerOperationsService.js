@@ -20,7 +20,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             (callback) => this.services.operations.ensureOperationOfType(sessionId, searchOperationId, operationTypes.SEARCH, callback),
             (callback) => this.services.sessions.findSystemSessionId(callback),
             (sessionId, callback) => this.services.operations.addKeepAliveOperation(sessionId, searchOperationId, callback),
-            (operation, callback) => this._rpcSend(operation.getId(), method, {sessionId: searchOperationId}, callback)
+            (operation, callback) => this._rpcSend(operation, method, {sessionId: searchOperationId}, callback)
         ], callback);
     }
 
@@ -37,13 +37,16 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             (operation, callback) => {
                 this.logger.debug('Requesting close for ' + operation);
                 const method = METHODS.closeSession;
-                this._rpcSend(operation.getId(), method, null, callback);
+                this._rpcSend(operation, method, null, callback);
             }
         ], callback);
     }
 
     requestOperationState(operationId, callback) {
-        this._rpcSend(operationId, METHODS.checkSession, null, callback);
+        async.waterfall([
+            (callback) => this.services.operations.findInAllSessions(operationId, callback),
+            (operation, callback) => this._rpcSend(operation, METHODS.checkSession, null, callback)
+        ], callback);
     }
 
     processKeepAliveResult(operation, rpcMessage, callback) {

@@ -109,7 +109,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (operation, callback) => this.services.samples.makeSampleIsAnalyzedIfNeeded(params.userId, params.sample.id, (error) => {
                 callback(error, operation);
             }),
-            (operation, callback) => this._rpcSend(operation.getId(), method, searchSessionRequest, callback)
+            (operation, callback) => this._rpcSend(operation, method, searchSessionRequest, callback)
         ], callback);
     }
 
@@ -132,7 +132,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (excludedFields, operation, callback)=> {
                 const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue.filter,
                     excludedFields, params.fieldSearchValues, params.sortValues);
-                this._rpcSend(operationId, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
+                this._rpcSend(operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
     }

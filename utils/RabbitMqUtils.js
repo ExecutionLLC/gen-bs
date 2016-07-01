@@ -70,7 +70,6 @@ class RabbitMqUtils {
 
     /**
      * @param {RabbitContext}rabbitContext
-     * @param {string}queryName
      * @param {function(string)}handler
      * @param {boolean}noAck
      * @param {function(Error)}callback
@@ -84,8 +83,8 @@ class RabbitMqUtils {
     }
 
     static setReplayQueryHandler(rabbitContext, handler, noAck, callback) {
-        const {replayChannel, replayQueue} = rabbitContext;
-        replayChannel.consume(replayQueue, (message) => handler(message.content.toString()), {
+        const {replyChannel, replayQueue} = rabbitContext;
+        replyChannel.consume(replayQueue, (message) => handler(message.content.toString()), {
             noAck
         });
         callback(null);

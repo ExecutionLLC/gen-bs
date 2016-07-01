@@ -48,7 +48,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             (systemSessionId, callback) => this.services.operations.find(systemSessionId, operationId, callback),
             (operation, callback) => {
                 const method = METHODS.processSample;
-                this._rpcSend(operationId, method, null, callback);
+                this._rpcSend(operation, method, null, callback);
             }
         ], callback);
     }
