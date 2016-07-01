@@ -21,7 +21,7 @@ class RPCProxy {
             logger, connectCallback, disconnectCallback, replyCallback}, {
                 connected: false
             });
-        _.bindAll(this, ['_address', '_replyResult', '_error', '_close', '_connect', 'send']);
+        _.bindAll(this, ['_replyResult', '_error', '_close', '_connect', 'send']);
         // Try to reconnect automatically if connection is closed
         this._connect();
         setInterval(this._connect, reconnectTimeout);
@@ -44,7 +44,7 @@ class RPCProxy {
             const message = this._constructMessage(operationId, method, convertedParams);
             // Can send requests either to a particular AS instance, or to the tasks queue.
             const actualQueueName = queryNameOrNull || requestQueue;
-            RabbitMqUtils.sendJson(this.rabbitContext, actualQueueName, message, callback);
+            RabbitMqUtils.sendRequestJson(this.rabbitContext, actualQueueName, message, callback);
         }
     }
 
@@ -91,9 +91,8 @@ class RPCProxy {
              * @param {RabbitContext}rabbitContext
              * @param {function(Error, RabbitContext)}callback
              * */
-            (rabbitContext, callback) => RabbitMqUtils.setQueryHandler(
+            (rabbitContext, callback) => RabbitMqUtils.setReplayQueryHandler(
                 rabbitContext,
-                rabbitContext.replyQueue,
                 this._replyResult,
                 true,
                 (error) => callback(error, rabbitContext)

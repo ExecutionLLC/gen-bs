@@ -1,20 +1,21 @@
 'use strict';
 
-const WebSocketServer = require('ws').Server;
+const _ = require('lodash');
+const async = require('async');
 
-const WebSocketServerProxy = require('../../../utils/WebSocketServerProxy');
 const RpcRouter = require('./RpcRouter');
 
 const SearchHandler = require('./SearchHandler');
-
-const APP_SERVER_PORT = 8030;
+const RabbitMqUtils = require('../../../utils/RabbitMqUtils');
 
 class MockApplicationServer {
-    constructor(services) {
+    constructor(services, rabbitMqHost) {
         Object.assign(this, {
             services,
+            config: services.config,
+            logger: services.logger,
             router: new RpcRouter(),
-            webSocketServerProxy: new WebSocketServerProxy()
+            rabbitMqHost
         });
 
         this._sendResultToClients = this._sendResultToClients.bind(this);
@@ -23,36 +24,53 @@ class MockApplicationServer {
         const searchHandler = new SearchHandler(services);
 
         this.router.registerHandler(searchHandler);
-        this.webSocketServerProxy.onMessage(this.onClientMessage);
-
-        this._createServer();
     }
 
-    onClientMessage(ws, messageString) {
+    start(callback) {
+        const address = RabbitMqUtils.createAddress(this.rabbitMqHost);
+        const {requestQueueName} = this.config.rabbitMq;
+        async.waterfall([
+            (callback) => RabbitMqUtils.createContext(address, requestQueueName, {
+                onError: this._onError,
+                onClose: this._onClose
+            }, callback),
+            (rabbitContext, callback) => RabbitMqUtils.setRequestQueryHandler(
+                rabbitContext,
+                this.onClientMessage,
+                false,
+                (error) => callback(error, rabbitContext)
+            ),
+            (rabbitContext, callback) => {
+                this.rabbitContext = rabbitContext;
+                callback(null);
+            }
+        ], callback);
+    }
+
+    /**
+     * @param {string}messageString
+     * */
+    onClientMessage(messageString) {
         try {
             const message = JSON.parse(messageString);
             this.router.handleCall(message, this._sendResultToClients);
         } catch (e) {
-            console.error(`Error parsing message: ${message}`);
+            console.error(`Error parsing message: ${messageString}`);
         }
     }
 
-    stop() {
-        this.webSocketServer.close();
+    stop(callback) {
+        if (this.rabbitContext) {
+            RabbitMqUtils.freeContext(this.rabbitContext, callback);
+        }
     }
 
-    static getApplicationServerPort() {
-        return APP_SERVER_PORT;
+    _onError(error) {
+        console.error(`RabbitMQ channel error: ${error}`);
     }
 
-    static getApplicationServerHost() {
-        return 'localhost';
-    }
-
-    _createServer() {
-        this.webSocketServer = new WebSocketServer({port: APP_SERVER_PORT});
-        this.webSocketServerProxy.addWebSocketCallbacks(this.webSocketServer);
-        console.log(`App Server mock is created on port ${APP_SERVER_PORT}`);
+    _onClose() {
+        console.error('RabbitMQ channel is closed.');
     }
 
     /**

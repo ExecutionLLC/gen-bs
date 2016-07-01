@@ -35,19 +35,24 @@ class RabbitMqUtils {
     static createContext(address, requestQueueName, channelHandlers, callback) {
         async.waterfall([
             (callback) => RabbitMQ.connect(address, callback),
-            (connection, callback) => connection.createChannel(
-                (error, channel) => callback(error, connection, channel)
-            ),
-            (connection, channel, callback) => {
+            (connection, callback) => {
                 async.series({
-                    requestQueue: (callback) => this._obtainRequestQueue(channel, requestQueueName, callback),
-                    replyQueue: (callback) => this._obtainReplyQueue(channel, callback)
-                }, (error, queues) => callback(error, Object.assign({}, queues, {connection, channel})));
+                    requestChannel: (callback) => connection.createChannel(callback),
+                    replyChannel: (callback) => connection.createChannel(callback)
+                }, (error, channels) => callback(error, connection, channels));
+            },
+            (connection, channels, callback) => {
+                async.series({
+                    requestQueue: (callback) => this._obtainRequestQueue(channels.requestChannel, requestQueueName, callback),
+                    replyQueue: (callback) => this._obtainReplyQueue(channels.replyChannel, callback)
+                }, (error, queues) => callback(error, Object.assign({}, queues, {connection}, channels)));
             },
             (rabbitContext, callback) => {
-                const {channel} = rabbitContext;
-                channel.on('error', channelHandlers.onError);
-                channel.on('close', channelHandlers.onClose);
+                const {requestChannel, replyChannel} = rabbitContext;
+                [requestChannel, replyChannel].forEach((channel) => {
+                    channel.on('error', channelHandlers.onError);
+                    channel.on('close', channelHandlers.onClose);
+                });
                 callback(null, rabbitContext);
             }
         ], callback);
@@ -55,6 +60,7 @@ class RabbitMqUtils {
 
     /**
      * @param {RabbitContext}rabbitContext
+     * @param {function(Error)}callback
      * */
     static freeContext(rabbitContext, callback) {
         const {connection} = rabbitContext;
@@ -69,9 +75,17 @@ class RabbitMqUtils {
      * @param {boolean}noAck
      * @param {function(Error)}callback
      * */
-    static setQueryHandler(rabbitContext, queryName, handler, noAck, callback) {
-        const {channel} = rabbitContext;
-        channel.consume(queryName, (message) => handler(message.content.toString()), {
+    static setRequestQueryHandler(rabbitContext, handler, noAck, callback) {
+        const {requestChannel, requestQueue} = rabbitContext;
+        requestChannel.consume(requestQueue, (message) => handler(message.content.toString()), {
+            noAck
+        });
+        callback(null);
+    }
+
+    static setReplayQueryHandler(rabbitContext, handler, noAck, callback) {
+        const {replayChannel, replayQueue} = rabbitContext;
+        replayChannel.consume(replayQueue, (message) => handler(message.content.toString()), {
             noAck
         });
         callback(null);
@@ -83,10 +97,10 @@ class RabbitMqUtils {
      * @param {Object}messageObject
      * @param {function(Error)}callback
      * */
-    static sendJson(rabbitContext, queueName, messageObject, callback) {
-        const {channel} = rabbitContext;
+    static sendRequestJson(rabbitContext, queueName, messageObject, callback) {
+        const {requestChannel} = rabbitContext;
         const messageString = JSON.stringify(messageObject);
-        channel.sendToQueue(queueName, new Buffer(messageString));
+        requestChannel.sendToQueue(queueName, new Buffer(messageString));
         callback(null);
     }
 

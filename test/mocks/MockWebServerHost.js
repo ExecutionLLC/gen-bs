@@ -17,8 +17,6 @@ const MockApplicationServer = require('./applicationServer/MockApplicationServer
 
 class MockWebServerHost {
     constructor() {
-        this._setConfigMocks();
-
         const logger = new Logger(Config.logger);
 
         const models = new ModelsFacade(Config, logger);
@@ -35,11 +33,6 @@ class MockWebServerHost {
         this.server = new WebServerHost(controllers, services, models);
     }
     
-    _setConfigMocks() {
-        Config.applicationServer.host = MockApplicationServer.getApplicationServerHost();
-        Config.applicationServer.port = MockApplicationServer.getApplicationServerPort();
-    }
-
     _setModelsMocks(models) {
         models.users = new MockUserModel();
     }
