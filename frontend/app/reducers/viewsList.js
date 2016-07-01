@@ -26,8 +26,11 @@ function reduceViewListAddView(state, action) {
 }
 
 function reduceViewListReceive(state, action) {
+    const newHashedArray = ImmutableHashedArray.makeFromArray(action.views);
+    const newSelectedViewId = newHashedArray[state.selectedViewId] ? state.selectedViewId : newHashedArray.array[0].id;
     return Object.assign({}, state, {
-        hashedArray: ImmutableHashedArray.makeFromArray(action.views)
+        hashedArray: newHashedArray,
+        selectedViewId: newSelectedViewId
     });
 }
 
