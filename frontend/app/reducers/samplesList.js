@@ -29,17 +29,14 @@ function reduceUpdateSampleValue(state, action) {
 
 function reduceReceiveUpdatedSample(state, action) {
     const {updatedSample, updatedSampleId} = action;
-    const {samples, hashedArray, editedSamplesHash} = state;//TODO remove samples
-    const updatedSampleIndex = _.findIndex(samples, {id: updatedSampleId});//TODO remove
+    const {hashedArray, editedSamplesHash} = state;
     const newSampleId = updatedSample.id;
 
-    const newSamples = immutableArray.replace(samples, updatedSampleIndex, updatedSample);//TODO remove
     const newHashedArray = ImmutableHashedArray.replaceItemId(hashedArray, updatedSampleId, updatedSample);
     const newEditedSamplesHash = ImmutableHash.replaceAsNewKey(editedSamplesHash, updatedSampleId, newSampleId, updatedSample);
 
     return {
         ...state,
-        samples: newSamples,//TODO remove
         hashedArray: newHashedArray,
         editedSamplesHash: newEditedSamplesHash
     };
@@ -51,7 +48,6 @@ function reduceReceiveSamplesList(state, action) {
 
     return {
         ...state,
-        samples: sortedSamples,//TODO remove
         hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
         editedSamplesHash: ImmutableHash.makeFromObject(_.keyBy(samples, 'id'))
     };
@@ -87,7 +83,6 @@ function reduceChangeSamples(state, action) {
     const {samples} = action;
     return {
         ...state,
-        samples, //TODO remove
         hashedArray: ImmutableHashedArray.makeFromArray(samples)
     };
 }
