@@ -25,10 +25,13 @@ class NavbarCreateQuery extends Component {
 
     render() {
 
-        const {dispatch, auth: {isDemo: isDemoSession}, samplesList: {hashedArray: {array: samplesArray}}} = this.props;
-        const {selectedViewId} = this.props.viewsList;
-        const {selectedFilterId} = this.props.filtersList;
-        const {selectedSampleId} = this.props.samplesList;
+        const {
+            dispatch,
+            auth: {isDemo: isDemoSession},
+            samplesList: {hashedArray: {array: samplesArray}, selectedSampleId},
+            viewsList: {selectedViewId},
+            filtersList: {selectedFilterId}
+        } = this.props;
 
         return (
 
