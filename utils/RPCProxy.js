@@ -2,8 +2,8 @@
 
 const _ = require('lodash');
 const async = require('async');
-const RabbitMQ = require('amqplib/callback_api');
 
+const RabbitMqUtils = require('./RabbitMqUtils');
 const ChangeCaseUtil = require('./ChangeCaseUtil');
 
 class RPCProxy {
@@ -36,24 +36,20 @@ class RPCProxy {
         if (!context) {
             callback(new Error('Connection to application server is lost.'));
         } else {
-            const {channel, requestQueue, replyQueue} = this.rabbitContext;
+            const {requestQueue, replyQueue} = this.rabbitContext;
             const fullParams = Object.assign({}, params, {
                 replyTo: replyQueue
             });
             const convertedParams = ChangeCaseUtil.convertKeysToSnakeCase(fullParams);
-            const messageString = this._stringifyMessage(operationId, method, convertedParams);
+            const message = this._constructMessage(operationId, method, convertedParams);
             // Can send requests either to a particular AS instance, or to the tasks queue.
-            const actualQueryName = queryNameOrNull || requestQueue;
-            channel.sendToQueue(actualQueryName, new Buffer(messageString));
+            const actualQueueName = queryNameOrNull || requestQueue;
+            RabbitMqUtils.sendJson(this.rabbitContext, actualQueueName, message, callback);
         }
     }
 
-    _stringifyMessage(operationId, method, params) {
-        return JSON.stringify({id: operationId, method: method, params: params});
-    }
-
-    _address() {
-        return `amqp://${this.host}`;
+    _constructMessage(operationId, method, params) {
+        return {id: operationId, method: method, params: params};
     }
 
     _replyResult(messageString) {
@@ -84,14 +80,24 @@ class RPCProxy {
         if (this.connected) {
             return;
         }
-
+        const address = RabbitMqUtils.createAddress(this.host);
+        this.logger.info(`Connecting to RabbitMQ on ${address}`);
         async.waterfall([
-            (callback) => this._acquireRabbitContext(callback),
+            (callback) => RabbitMqUtils.createContext(address, this.requestQueueName, {
+                onError: this._error,
+                onClose: this._close
+            }, callback),
             /**
              * @param {RabbitContext}rabbitContext
-             * @param {function()}callback
+             * @param {function(Error, RabbitContext)}callback
              * */
-            (rabbitContext, callback) => this._setQueryHandlers(rabbitContext, callback),
+            (rabbitContext, callback) => RabbitMqUtils.setQueryHandler(
+                rabbitContext,
+                rabbitContext.replyQueue,
+                this._replyResult,
+                true,
+                (error) => callback(error, rabbitContext)
+            ),
             (rabbitContext, callback) => {
                 this.rabbitContext = rabbitContext;
                 callback(null);
@@ -106,75 +112,6 @@ class RPCProxy {
                 }
             }
         });
-    }
-
-    /**
-     * @param {RabbitContext}rabbitContext
-     * @param {function(Error)}callback
-     * */
-    _setQueryHandlers(rabbitContext, callback) {
-        const {channel, replyQueue} = rabbitContext;
-        channel.consume(
-            replyQueue,
-            (message) => this._replyResult(message.content.toString()), {
-                noAck: true
-            }
-        );
-        callback(null);
-    }
-
-    /**
-     * @typedef {Object}RabbitContext
-     * @property {Object}connection
-     * @property {Object}channel
-     * @property {Object}requestQueue
-     * @property {Object}replyQueue
-     * */
-
-    /**
-     * @param {function({Error, RabbitContext})}callback
-     * */
-    _acquireRabbitContext(callback) {
-        const address = this._address();
-        this.logger.info(`Connecting to RabbitMQ on ${address}`);
-        async.waterfall([
-            (callback) => RabbitMQ.connect(address, callback),
-            (connection, callback) => connection.createChannel(
-                (error, channel) => callback(error, connection, channel)
-            ),
-            (connection, channel, callback) => {
-                async.series({
-                    requestQueue: (callback) => this._obtainRequestQueue(channel, callback),
-                    replyQueue: (callback) => this._obtainReplyQueue(channel, callback)
-                }, (error, queues) => callback(error, Object.assign({}, queues, {connection, channel})));
-            },
-            (rabbitContext, callback) => {
-                const {channel} = rabbitContext;
-                channel.on('error', this._error);
-                channel.on('close', this._close);
-                callback(null, rabbitContext);
-            }
-        ], callback);
-    }
-
-    _obtainRequestQueue(channel, callback) {
-        this._obtainQueue(channel, this.requestQueueName, {
-            durable: false
-        }, callback);
-    }
-
-    _obtainReplyQueue(channel, callback) {
-        this._obtainQueue(channel, null, {
-            exclusive: true,
-            durable: false
-        }, callback);
-    }
-
-    _obtainQueue(channel, queueName, queueParams, callback) {
-        async.waterfall([
-            (callback) => channel.assertQueue(queueName, queueParams, callback),
-            (queueDescriptor, callback) => callback(null, queueDescriptor.queue)
-        ], callback);
     }
 }
 
