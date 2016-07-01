@@ -3,6 +3,8 @@
 const assert = require('assert');
 const _ = require('lodash');
 
+const {ENTITY_TYPES} = require('../../utils/Enums');
+
 class CollectionUtils {
     static checkCollectionIsValid(collection, expectedCollection, isDemoUser, checkType) {
         assert.ok(!_.isEmpty(collection));
@@ -15,7 +17,9 @@ class CollectionUtils {
                     'Item with id ' + item.id + ' is not found in the expected collection.');
             }
             if (checkType) {
-                const itemTypes = isDemoUser ? ['standard', 'advanced'] : ['standard', 'advanced', 'user'];
+                const itemTypes = isDemoUser ?
+                    ENTITY_TYPES.defaultTypes
+                    : ENTITY_TYPES.allValidTypes;
                 assert.ok(_.includes(itemTypes, item.type),
                     'Unexpected item type found: ' + item.type + ', expected: ' + JSON.stringify(itemTypes));
             }

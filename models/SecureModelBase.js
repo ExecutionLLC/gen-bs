@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const async = require('async');
 
+const {ENTITY_TYPES} = require('../utils/Enums');
 const RemovableModelBase = require('./RemovableModelBase');
 
 class SecureModelBase extends RemovableModelBase {
@@ -16,7 +17,7 @@ class SecureModelBase extends RemovableModelBase {
     }
 
     add(userId, languId, item, callback) {
-        item.type = 'user';
+        item.type = ENTITY_TYPES.USER;
         async.waterfall([
             (callback) => this._add(userId, languId, item, true, callback),
             (itemId, callback) => this.find(userId, itemId, callback)
@@ -24,7 +25,7 @@ class SecureModelBase extends RemovableModelBase {
     }
 
     addWithId(userId, languId, item, callback) {
-        item.type = 'user';
+        item.type = ENTITY_TYPES.USER;
         async.waterfall([
             (callback) => this._add(userId, languId, item, false, callback),
             (itemId, callback) => this.find(userId, itemId, callback)
