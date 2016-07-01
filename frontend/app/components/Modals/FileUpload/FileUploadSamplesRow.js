@@ -31,7 +31,7 @@ export default class FileUploadSamplesRow extends Component {
         this.setShowValuesState(!this.state.showValues);
     }
 
-    makeFieldIsToValuesHash(sample) {
+    makeFieldIdToValuesHash(sample) {
         return _.reduce(sample.values, (result, value) => {
             return {...result, [value.fieldId]: value.values};
         }, {});
@@ -40,9 +40,9 @@ export default class FileUploadSamplesRow extends Component {
     render() {
         const {sampleId, samplesList: {hashedArray: {hash: samplesHash}, editedSamplesHash}} = this.props;
         const sample = samplesHash[sampleId];
-        const fieldIdToValuesHash = this.makeFieldIsToValuesHash(sample);
+        const fieldIdToValuesHash = this.makeFieldIdToValuesHash(sample);
         const editedSample = this.state.showValues && editedSamplesHash[sampleId];
-        const editedFieldIdToValuesHash = editedSample && this.makeFieldIsToValuesHash(editedSample);
+        const editedFieldIdToValuesHash = editedSample && this.makeFieldIdToValuesHash(editedSample);
 
         return (
             <div className='panel'>
