@@ -5,6 +5,7 @@ const _ = require('lodash');
 
 const ServiceBase = require('./ServiceBase');
 const UploadOperation = require('./operations/UploadOperation');
+const {ENTITY_TYPES} = require('../utils/Enums');
 
 class UserDataService extends ServiceBase {
     constructor(services, models) {
@@ -48,10 +49,8 @@ class UserDataService extends ServiceBase {
     _findLastSampleInfo(user, allSamples, callback) {
         async.waterfall([
             (callback) => {
-                // If session is demo session, then we should pick first not 'advanced' sample.
-                const firstNotAdvancedSample = _.find(allSamples, (sample) => {
-                    return sample.type !== 'advanced';
-                });
+                // If session is demo session, then we should pick first standard sample.
+                const firstNotAdvancedSample = _.find(allSamples, (sample) => sample.type === ENTITY_TYPES.STANDARD);
                 let sampleId = firstNotAdvancedSample ? firstNotAdvancedSample.id : null;
                 this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId,
                     (error, sampleFields) => callback(error, sampleId, sampleFields));

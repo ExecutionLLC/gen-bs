@@ -3,6 +3,7 @@
 const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
+const {ENTITY_TYPES} = require('../utils/Enums');
 
 const DEMO_USER_ID = '00000000-0000-0000-0000-000000000000';
 
@@ -75,7 +76,7 @@ class UserService extends ServiceBase {
     }
 
     ensureUserHasAccessToItem(userId, itemType, callback) {
-        if (this.isDemoUserId(userId) && itemType === 'advanced') {
+        if (this.isDemoUserId(userId) && itemType === ENTITY_TYPES.ADVANCED) {
             callback(new Error('Advanced item is not accessible for demo user.'));
         } else {
             callback(null);

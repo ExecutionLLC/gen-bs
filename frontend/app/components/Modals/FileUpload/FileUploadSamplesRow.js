@@ -3,9 +3,7 @@ import {connect} from 'react-redux';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {
-    changeSample, receiveSamplesList
-} from '../../../actions/samplesList';
+import {changeSample} from '../../../actions/samplesList';
 
 
 export default class FileUploadSamplesRow extends Component {
@@ -17,8 +15,7 @@ export default class FileUploadSamplesRow extends Component {
 
     onSelectForAnalysisClick(e, sample) {
         e.preventDefault();
-        const {dispatch, closeModal, samplesList: {samples}} = this.props;
-        dispatch(receiveSamplesList(samples));
+        const {dispatch, closeModal} = this.props;
         dispatch(changeSample(sample.id));
         closeModal('upload');
     }
