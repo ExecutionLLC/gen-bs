@@ -76,8 +76,8 @@ class MockApplicationServer {
      * @param {Object}originalMessage
      * */
     _sendResultToClients(result, originalMessage) {
-        const {replyTo: replyQueueName} = originalMessage;
-        if (originalMessage.replyTo) {
+        const {reply_to: replyQueueName} = originalMessage;
+        if (replyQueueName) {
             this.publisher.publishToQueue(replyQueueName, result, (error) => {
                 if (error) {
                     this.logger.error(`Error publishing message to ${replyQueueName}: ${error}`);

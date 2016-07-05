@@ -23,7 +23,7 @@ class ApplicationServerServiceBase extends ServiceBase {
          * @type {RPCProxy}
          * */
         this.rpcProxy = proxyProviderFunc(host, requestExchangeName, reconnectTimeout, 
-            this.logger, null, null, this._rpcReply)
+            this.logger, this._rpcReply);
     }
 
     /**
