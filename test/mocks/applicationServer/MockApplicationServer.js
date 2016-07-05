@@ -9,76 +9,83 @@ const SearchHandler = require('./SearchHandler');
 const RabbitMqUtils = require('../../../utils/RabbitMqUtils');
 
 class MockApplicationServer {
-    constructor(services, rabbitMqHost) {
-        Object.assign(this, {
-            services,
-            config: services.config,
-            logger: services.logger,
+    constructor(services) {
+        const {logger, config} = services;
+        Object.assign(this, {services, config, logger}, {
             router: new RpcRouter(),
-            rabbitMqHost
+            /**@type {RabbitMQConsumer}*/
+            taskConsumer: null,
+            /**@type {RabbitMQConsumer}*/
+            privateConsumer: null,
+            /**@type {RabbitMQPublisher}*/
+            publisher: null
         });
 
         this._sendResultToClients = this._sendResultToClients.bind(this);
-        this.onClientMessage = this.onClientMessage.bind(this);
+        this.createClientMessageHandler = this.createClientMessageHandler.bind(this);
 
         const searchHandler = new SearchHandler(services);
-
         this.router.registerHandler(searchHandler);
     }
 
     start(callback) {
-        const address = RabbitMqUtils.createAddress(this.rabbitMqHost);
-        const {requestQueueName} = this.config.rabbitMq;
+        const {host, requestExchangeName} = this.config.rabbitMq;
         async.waterfall([
-            (callback) => RabbitMqUtils.createContext(address, requestQueueName, {
-                onError: this._onError,
-                onClose: this._onClose
-            }, callback),
-            (rabbitContext, callback) => RabbitMqUtils.setRequestQueryHandler(
-                rabbitContext,
-                this.onClientMessage,
-                false,
-                (error) => callback(error, rabbitContext)
-            ),
-            (rabbitContext, callback) => {
-                this.rabbitContext = rabbitContext;
+            (callback) => RabbitMqUtils.createConnection(host, callback),
+            (connection, callback) => {
+                async.series({
+                    connection: (callback) => callback(null, connection),
+                    // Create task query consumer bound to all messages of the request exchange.
+                    taskConsumer: (callback) => RabbitMqUtils.createConsumer(connection,
+                        this.logger, null, requestExchangeName, ['#'], false, callback),
+                    // Create private consumer for direct messages.
+                    privateConsumer: (callback) => RabbitMqUtils.createConsumer(connection,
+                        this.logger, null, null, null, false, callback),
+                    publisher: (callback) => RabbitMqUtils.createPublisher(connection, this.logger, null, callback)
+                }, callback);
+            },
+            (context, callback) => {
+                Object.assign(this, context);
+                callback(null);
+            },
+            (callback) => {
+                this.privateConsumer.onMessage(this.createClientMessageHandler(true));
+                this.taskConsumer.onMessage(this.createClientMessageHandler(false));
                 callback(null);
             }
         ], callback);
     }
 
     /**
-     * @param {string}messageString
+     * @param {boolean}isFromPrivateQueue
      * */
-    onClientMessage(messageString) {
-        try {
-            const message = JSON.parse(messageString);
-            this.router.handleCall(message, this._sendResultToClients);
-        } catch (e) {
-            console.error(`Error parsing message: ${messageString}`);
-        }
+    createClientMessageHandler(isFromPrivateQueue) {
+        return (message) => {
+            this.router.handleCall(message, isFromPrivateQueue, (results) => this._sendResultToClients(results, message));
+        };
     }
 
-    stop(callback) {
-        if (this.rabbitContext) {
-            RabbitMqUtils.freeContext(this.rabbitContext, callback);
-        }
-    }
-
-    _onError(error) {
-        console.error(`RabbitMQ channel error: ${error}`);
-    }
-
-    _onClose() {
-        console.error('RabbitMQ channel is closed.');
+    stop() {
+        this.privateConsumer.stop();
+        this.taskConsumer.stop();
+        this.publisher.stop();
     }
 
     /**
      * @param {Object}result
+     * @param {Object}originalMessage
      * */
-    _sendResultToClients(result) {
-        const resultString = JSON.stringify(result);
-        this.webSocketServerProxy.sendToAll(resultString);
+    _sendResultToClients(result, originalMessage) {
+        const {replyTo: replyQueueName} = originalMessage;
+        if (originalMessage.replyTo) {
+            this.publisher.publishToQueue(replyQueueName, result, (error) => {
+                if (error) {
+                    this.logger.error(`Error publishing message to ${replyQueueName}: ${error}`);
+                }
+            })
+        } else {
+            this.logger.error(`Original message ${JSON.stringify(originalMessage)} has no reply-to queue specified.`);
+        }
     }
 }
 

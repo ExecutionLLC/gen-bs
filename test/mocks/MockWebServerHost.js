@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 const WebServerHost = require('../../WebServerHost');
 
 const Config = require('../../utils/Config');
@@ -50,12 +52,15 @@ class MockWebServerHost {
     }
 
     start(callback) {
-        this.server.start(callback);
+        async.waterfall([
+            (callback) => this.server.start((error) => callback(error)),
+            (callback) => this.applicationServer.start((error) => callback(error))
+        ], callback);
     }
 
     stop(callback) {
-        this.server.stop(callback);
         this.applicationServer.stop();
+        this.server.stop(callback);
     }
 }
 

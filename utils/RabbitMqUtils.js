@@ -3,6 +3,9 @@
 const RabbitMQ = require('amqplib/callback_api');
 const async = require('async');
 
+const RabbitMQPublisher = require('./rabbitMq/RabbitMQPublisher');
+const RabbitMQConsumer = require('./rabbitMq/RabbitMQConsumer');
+
 /**
  * @typedef {Object}RabbitContext
  * @property {Object}connection
@@ -19,20 +22,69 @@ const async = require('async');
  * */
 
 class RabbitMqUtils {
+    static createConnection(host, callback) {
+        const address = this._createAddress(host);
+        RabbitMQ.connect(address, callback);
+    }
+
     /**
-     * @param {string}host
+     * @param {Object}connection
+     * @param {Logger}logger
+     * @param {(string|null)}exchangeName
+     * @param {function(Error, RabbitMQPublisher)}callback
      * */
-    static createAddress(host) {
-        return `amqp://${host}`;
+    static createPublisher(connection, logger, exchangeName, callback) {
+        async.waterfall([
+            (callback) => connection.createChannel(callback),
+            (channel, callback) => {
+                const publisher = new RabbitMQPublisher(logger, channel, exchangeName);
+                callback(null, publisher);
+            }
+        ], callback);
+    }
+
+    /**
+     * @param {Object}connection
+     * @param {Logger}logger
+     * @param {(string|null)}queueName
+     * @param {(string|null)}exchangeName
+     * @param {Array<string>|null}bindKeys
+     * @param {boolean}noAck
+     * @param {function(Error, RabbitMQConsumer)}callback
+     */
+    static createConsumer(connection, logger, queueName, exchangeName, bindKeys, noAck, callback) {
+        async.waterfall([
+            (callback) => connection.createChannel(callback),
+            // (channel, callback) => {
+            //     const exclusive = !queueName;
+            //     channel.assertQueue(
+            //         queueName,
+            //         {exclusive},
+            //         (error, queueDescriptor) => callback(error, channel, queueDescriptor)
+            //     );
+            // },
+            // (channel, queueDescriptor, callback) => callback(null, channel, queueDescriptor.queue, callback),
+            // // TODO: Here queue is registered twice.
+            // (channel, queueName, callback) => {
+            //     if (exchangeName && !_.isEmpty(bindKeys)) {
+            //         bindKeys.forEach(key => channel.bindQueue(queueName, exchangeName, key))
+            //     }
+            //     callback(null, channel, queueName);
+            // },
+            (channel, callback) => {
+                const consumer = new RabbitMQConsumer(logger, channel, queueName, noAck);
+                consumer.init(exchangeName, bindKeys, (error) => callback(error, consumer));
+            }
+        ], callback);
     }
 
     /**
      * @param {string}address
-     * @param {string}requestQueueName
+     * @param {string}requestExchangeName
      * @param {ChannelHandlers}channelHandlers
      * @param {function({Error, RabbitContext})}callback
      * */
-    static createContext(address, requestQueueName, channelHandlers, callback) {
+    static createContext(address, requestExchangeName, channelHandlers, callback) {
         async.waterfall([
             (callback) => RabbitMQ.connect(address, callback),
             (connection, callback) => {
@@ -43,7 +95,7 @@ class RabbitMqUtils {
             },
             (connection, channels, callback) => {
                 async.series({
-                    requestQueue: (callback) => this._obtainRequestQueue(channels.requestChannel, requestQueueName, callback),
+                    requestExchange: (callback) => this._obtainRequestExchange(channels.requestChannel, requestExchangeName, callback),
                     replyQueue: (callback) => this._obtainReplyQueue(channels.replyChannel, callback)
                 }, (error, queues) => callback(error, Object.assign({}, queues, {connection}, channels)));
             },
@@ -103,10 +155,11 @@ class RabbitMqUtils {
         callback(null);
     }
 
-    static _obtainRequestQueue(channel, requestQueueName, callback) {
-        this._obtainQueue(channel, requestQueueName, {
+    static _obtainRequestExchange(channel, requestExchangeName, callback) {
+        channel.assertExchange(requestExchangeName, 'topic', {
             durable: false
-        }, callback);
+        });
+        callback(null);
     }
 
     static _obtainReplyQueue(channel, callback) {
@@ -121,6 +174,13 @@ class RabbitMqUtils {
             (callback) => channel.assertQueue(queueName, queueParams, callback),
             (queueDescriptor, callback) => callback(null, queueDescriptor.queue)
         ], callback);
+    }
+
+    /**
+     * @param {string}host
+     * */
+    static _createAddress(host) {
+        return `amqp://${host}`;
     }
 }
 
