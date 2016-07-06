@@ -55,22 +55,6 @@ class RabbitMqUtils {
     static createConsumer(connection, logger, queueName, exchangeName, bindKeys, noAck, callback) {
         async.waterfall([
             (callback) => connection.createChannel(callback),
-            // (channel, callback) => {
-            //     const exclusive = !queueName;
-            //     channel.assertQueue(
-            //         queueName,
-            //         {exclusive},
-            //         (error, queueDescriptor) => callback(error, channel, queueDescriptor)
-            //     );
-            // },
-            // (channel, queueDescriptor, callback) => callback(null, channel, queueDescriptor.queue, callback),
-            // // TODO: Here queue is registered twice.
-            // (channel, queueName, callback) => {
-            //     if (exchangeName && !_.isEmpty(bindKeys)) {
-            //         bindKeys.forEach(key => channel.bindQueue(queueName, exchangeName, key))
-            //     }
-            //     callback(null, channel, queueName);
-            // },
             (channel, callback) => {
                 const consumer = new RabbitMQConsumer(logger, channel, queueName, noAck);
                 consumer.init(exchangeName, bindKeys, (error) => callback(error, consumer));
