@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const async = require('async');
 
-const RabbitMqUtils = require('./RabbitMqUtils');
+const RabbitMqUtils = require('./rabbitMq/RabbitMqUtils');
 const ChangeCaseUtil = require('./ChangeCaseUtil');
 
 class RPCProxy {

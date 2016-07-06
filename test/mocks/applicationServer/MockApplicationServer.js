@@ -6,7 +6,7 @@ const async = require('async');
 const RpcRouter = require('./RpcRouter');
 
 const SearchHandler = require('./SearchHandler');
-const RabbitMqUtils = require('../../../utils/RabbitMqUtils');
+const RabbitMqUtils = require('../../../utils/rabbitMq/RabbitMqUtils');
 
 class MockApplicationServer {
     constructor(services) {

@@ -3,8 +3,8 @@
 const RabbitMQ = require('amqplib/callback_api');
 const async = require('async');
 
-const RabbitMQPublisher = require('./rabbitMq/RabbitMQPublisher');
-const RabbitMQConsumer = require('./rabbitMq/RabbitMQConsumer');
+const RabbitMQPublisher = require('./RabbitMQPublisher');
+const RabbitMQConsumer = require('./RabbitMQConsumer');
 
 /**
  * @typedef {Object}RabbitContext
