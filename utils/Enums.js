@@ -18,6 +18,11 @@ ENTITY_TYPES.defaultTypes = [ENTITY_TYPES.STANDARD, ENTITY_TYPES.ADVANCED];
  * */
 ENTITY_TYPES.allValidTypes = _.map(ENTITY_TYPES);
 
+const WS_INSTANCE_MESSAGE_TYPES = {
+    SAMPLE_ADDED: 'sample_added'
+};
+
 module.exports = {
-    ENTITY_TYPES
+    ENTITY_TYPES,
+    WS_INSTANCE_MESSAGE_TYPES
 };
