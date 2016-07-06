@@ -80,40 +80,49 @@ class SamplesModel extends SecureModelBase {
      * @param callback (error, sampleVersionId)
      * */
     addSampleWithFields(userId, languId, sample, fieldsMetadata, callback) {
+        const sampleId = sample.id;
         this.db.transactionally((trx, callback) => {
-            async.waterfall([
-                // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
-                (callback) =>
-                    this.models.fields.addMissingFields(languId, fieldsMetadata, trx, (error, fieldsWithIds) => {
-                        callback(error, fieldsWithIds);
-                    }),
-                // Add editable fields to the field list.
-                (fieldsWithIds, callback) => {
-                    this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
-                        const mappedFields = _.map(fieldsMetadata || [], fieldMetadata => {
-                            return {
-                                id: fieldMetadata.id,
-                                fieldMetadata
-                            }
-                        });
-                        const aggregatedFields = fieldsWithIds.concat(mappedFields);
-                        callback(error, aggregatedFields);
-                    });
-                },
-                // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
-                (fieldsWithIds, callback) => {
-                    const sampleWithValues = _.cloneDeep(sample);
-                    sampleWithValues.values = _.map(fieldsWithIds, fieldWithId => {
-                        return {
-                            fieldId: fieldWithId.id,
-                            value: null
-                        }
-                    });
+            this._findLastVersionsBySampleIds(trx, [sampleId], (error, versionIds) => {
+                if (error || _.isEmpty(versionIds)) {
+                    // Sample is not found, so insert it.
+                    async.waterfall([
+                        // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
+                        (callback) =>
+                            this.models.fields.addMissingFields(languId, fieldsMetadata, trx, (error, fieldsWithIds) => {
+                                callback(error, fieldsWithIds);
+                            }),
+                        // Add editable fields to the field list.
+                        (fieldsWithIds, callback) => {
+                            this.models.fields.findEditableFieldsInTransaction(trx, (error, fieldsMetadata) => {
+                                const mappedFields = _.map(fieldsMetadata || [], fieldMetadata => {
+                                    return {
+                                        id: fieldMetadata.id,
+                                        fieldMetadata
+                                    }
+                                });
+                                const aggregatedFields = fieldsWithIds.concat(mappedFields);
+                                callback(error, aggregatedFields);
+                            });
+                        },
+                        // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
+                        (fieldsWithIds, callback) => {
+                            const sampleWithValues = _.cloneDeep(sample);
+                            sampleWithValues.values = _.map(fieldsWithIds, fieldWithId => {
+                                return {
+                                    fieldId: fieldWithId.id,
+                                    value: null
+                                }
+                            });
 
-                    // Add sample entries and return version id.
-                    this._addInTransaction(userId, sampleWithValues, false, trx, callback);
+                            // Add sample entries and return version id.
+                            this._addInTransaction(userId, sampleWithValues, false, trx, callback);
+                        }
+                    ], callback);
+                } else {
+                    // Sample has already been added, just return the version id found.
+                    callback(null, _.first(versionIds));
                 }
-            ], callback);
+            });
         }, callback);
     }
 
@@ -384,7 +393,7 @@ class SamplesModel extends SecureModelBase {
      * Finds last version id for each sample id in array.
      *
      * @param trx Knex transaction.
-     * @param sampleIds Array of sample ids to search versions for.
+     * @param {Array<string>}sampleIds Array of sample ids to search versions for.
      * @param callback (error, versions). Each version is an object
      * which has 'sampleId' and 'versionId' fields.
      * */

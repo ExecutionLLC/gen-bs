@@ -73,7 +73,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             } else {
                 this._createUploadResult(operation, message, callback);
             }
-        }        
+        }
     }
     
     _createProgressMessage(operation, message, callback) {
