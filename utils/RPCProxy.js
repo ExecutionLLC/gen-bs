@@ -18,8 +18,7 @@ class RPCProxy {
         Object.assign(this,
             {host, requestExchangeName, reconnectTimeout, logger, replyCallback}, {
                 consumer: null,
-                publisher: null,
-                connecting: false
+                publisher: null
             }
         );
         _.bindAll(this, ['_onMessage', '_onMessageReturned', '_connect', 'send']);
