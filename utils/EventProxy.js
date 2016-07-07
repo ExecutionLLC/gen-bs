@@ -4,7 +4,7 @@ const _ = require('lodash');
 const EventEmitter = require('events').EventEmitter;
 
 class EventProxy {
-    /**@param {(Array<string>|undefined)}knownEvents*/
+    /**@param {Array<string>}[knownEvents]*/
     constructor(knownEvents) {
         this.knownEvents = knownEvents;
         this.eventEmitter = new EventEmitter();
