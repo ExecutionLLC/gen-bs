@@ -49,16 +49,21 @@ class RabbitMQConsumer extends RabbitMQHandlerBase {
         ], callback);
     }
 
+    /**@param {function(Object, Object)}handler (Our message contents, original RMQ message)*/
     onMessage(handler) {
         this.messageHandler = handler;
     }
 
-    _onMessage(message) {
-        const messageString = message.content.toString();
+    ackMessage(rabbitMessage) {
+        this.channel.ack(rabbitMessage);
+    }
+
+    _onMessage(rabbitMessage) {
+        const messageString = rabbitMessage.content.toString();
         try {
             const messageObject = JSON.parse(messageString);
             if (this.messageHandler) {
-                this.messageHandler(messageObject);
+                this.messageHandler(messageObject, rabbitMessage);
             } else {
                 this.logger.error(
                     `Message come but no handler is registered in consumer for queue ${this.queueName}.`
