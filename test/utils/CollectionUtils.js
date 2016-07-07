@@ -19,7 +19,7 @@ class CollectionUtils {
             if (checkType) {
                 const itemTypes = isDemoUser ?
                     ENTITY_TYPES.defaultTypes
-                    : ENTITY_TYPES.allValidTypes;
+                    : ENTITY_TYPES.allValues;
                 assert.ok(_.includes(itemTypes, item.type),
                     'Unexpected item type found: ' + item.type + ', expected: ' + JSON.stringify(itemTypes));
             }

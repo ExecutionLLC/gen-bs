@@ -14,7 +14,8 @@ class RabbitMQPublisher extends RabbitMQHandlerBase {
 
         if (exchangeName) {
             channel.assertExchange(exchangeName, 'topic', {
-                durable: false
+                durable: false,
+                autoDelete: true
             });
         }
 
@@ -30,10 +31,13 @@ class RabbitMQPublisher extends RabbitMQHandlerBase {
     publishToDefaultExchange(messageObject, key, callback) {
         const messageString = JSON.stringify(messageObject);
         const message = new Buffer(messageString);
-        const replyTo = messageObject.replyTo;
+        // TODO: Fix this.
+        const replyTo = messageObject.replyTo || messageObject.reply_to;
+        const messageId = messageObject.id;
         this.channel.publish(this.exchangeName, key, message, {
             mandatory: true,
-            replyTo
+            replyTo,
+            messageId
         });
         callback(null);
     }

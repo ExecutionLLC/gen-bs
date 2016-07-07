@@ -144,10 +144,16 @@ class ApplicationServerReplyService extends ServiceBase {
     }
 
     /**
+     * @callback OperationResultCallback
+     * @param {Error}error
+     * @param {AppServerOperationResult}[operationResult]
+     * */
+
+    /**
      * Selects and runs proper message parser. Handles RPC-level errors.
      * @param {OperationBase}operation
      * @param rpcMessage
-     * @param {function(Error, AppServerOperationResult)}callback
+     * @param {OperationResultCallback}callback
      * @private
      */
     _processOperationResult(operation, rpcMessage, callback) {
@@ -175,8 +181,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 break;
 
             default:
-                this.logger.error('Unexpected result came from the application server, send as is.');
-                callback(null, rpcMessage.result);
+                callback(new Error('Ignoring unexpected result came from the application server.'));
                 break;
         }
     }

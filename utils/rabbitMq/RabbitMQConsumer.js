@@ -60,8 +60,12 @@ class RabbitMQConsumer extends RabbitMQHandlerBase {
 
     _onMessage(rabbitMessage) {
         const messageString = rabbitMessage.content.toString();
+        const {properties:{replyTo}} = rabbitMessage;
         try {
             const messageObject = JSON.parse(messageString);
+            if (replyTo) {
+                messageObject.replyTo = replyTo;
+            }
             if (this.messageHandler) {
                 this.messageHandler(messageObject, rabbitMessage);
             } else {

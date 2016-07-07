@@ -35,7 +35,7 @@ class SamplesClient extends UserEntityClientBase {
 
     static verifySampleFormat(sample, shouldCheckFieldValues) {
         assert.ok(sample.id);
-        assert.ok(_.includes(ENTITY_TYPES.allValidTypes, sample.type));
+        assert.ok(_.includes(ENTITY_TYPES.allValues, sample.type));
         assert.ok(sample.fileName);
         if (shouldCheckFieldValues) {
             assert.ok(sample.values && sample.values.length);

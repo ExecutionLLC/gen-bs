@@ -2,6 +2,7 @@
 
 const EVENTS = {
     onKeepAliveResultReceived: 'onKeepAliveResultReceived',
+    onSampleUploadCompleted: 'onSampleUploadCompleted',
     onOperationResultReceived: 'onOperationResultReceived',
     onSearchDataReceived: 'onSearchDataReceived',
     onSourcesListReceived: 'onSourcesListReceived',

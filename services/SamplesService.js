@@ -8,12 +8,17 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
 const EditableFields = require('../defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
+const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
 class SamplesService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.samples);
 
         this.editableFields = CollectionUtils.createHashByKey(EditableFields, 'id');
+    }
+
+    init() {
+        this.services.applicationServerReply.on(AppServerEvents.onSampleUploadCompleted, this._onSampleUploadCompleted);
     }
 
     add(user, languId, sample, callback) {
@@ -61,6 +66,13 @@ class SamplesService extends UserEntityServiceBase {
         } else {
             callback(null, false);
         }
+    }
+
+    _onSampleUploadCompleted(operationResult) {
+        const {operation:{sessionId}, result:{sampleId}} = operationResult;
+        async.waterfall([
+            (callback) => this.services.instances.broadcastSampleUploadCompleted()
+        ]);
     }
 
     _ensureOnlyEditableFieldsHaveValues(sample, callback) {

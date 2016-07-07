@@ -57,8 +57,7 @@ const SETTINGS = {
     },
     rabbitMq: {
         host: makeDefault(ENV.GEN_WS_RABBIT_MQ_HOST, 'localhost'),
-        requestExchangeName: makeDefault(ENV.GEN_WS_RABBIT_MQ_REQUEST_EXCHANGE, 'GenomicsExchange'),
-        instancesQueue: makeDefault(ENV.GEN_WS_RABBIT_MQ_INSTANCES_QUEUE, 'WebServersQueue'),
+        requestExchangeName: makeDefault(ENV.GEN_WS_RABBIT_MQ_REQUEST_EXCHANGE, 'genomics_exchange'),
         // Reconnect timeout in milliseconds
         reconnectTimeout: makeDefault(ENV.GEN_WS_RABBIT_MQ_RECONNECT_TIMEOUT, 10000)
     },
