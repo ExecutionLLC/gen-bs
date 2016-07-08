@@ -15,11 +15,15 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
 
     requestKeepOperationAlive(sessionId, searchOperationId, callback) {
         const method = METHODS.keepAlive;
-        const operationTypes = this.services.operations.operationTypes();
         async.waterfall([
-            (callback) => this.services.operations.ensureOperationOfType(sessionId, searchOperationId, operationTypes.SEARCH, callback),
-            (callback) => this.services.sessions.findSystemSessionId(callback),
-            (sessionId, callback) => this.services.operations.addKeepAliveOperation(sessionId, searchOperationId, callback),
+            (callback) => this.services.operations.find(sessionId, searchOperationId, callback),
+            (searchOperation, callback) => this._ensureSearchOperation(searchOperation, callback),
+            (searchOperation, callback) => this.services.sessions.findSystemSessionId(
+                (error, sessionId) => callback(error, sessionId, searchOperation)
+            ),
+            (sessionId, searchOperation, callback) => this.services.operations.addKeepAliveOperation(
+                sessionId, searchOperation, callback
+            ),
             (operation, callback) => this._rpcSend(operation, method, {sessionId: searchOperationId}, callback)
         ], callback);
     }
@@ -92,6 +96,15 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             }
             callback(null);
         });
+    }
+
+    _ensureSearchOperation(operation, callback) {
+        const operationTypes = this.services.operations.operationTypes();
+        if (operation.getType() === operationTypes.SEARCH) {
+            callback(null, operation);
+        } else {
+            callback(new Error(`Expected search operation, found: ${operation.getType()}`));
+        }
     }
 }
 

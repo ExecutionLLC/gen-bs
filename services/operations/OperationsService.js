@@ -52,32 +52,11 @@ class OperationsService extends ServiceBase {
         ], callback);
     }
 
-    addKeepAliveOperation(sessionId, sessionIdToCheck, callback) {
-        const operation = new KeepAliveOperation(sessionId, sessionIdToCheck);
+    addKeepAliveOperation(sessionId, searchOperation, callback) {
+        const operation = new KeepAliveOperation(sessionId, searchOperation.id);
+        // Keep-alive operation needs to go to the same AS instance as the search operation.
+        operation.setASQueryName(searchOperation.getASQueryName());
         this._addOperation(operation, callback);
-    }
-
-    /**
-     * Checks that the operation by id has requested type.
-     *
-     * @param {string}sessionId Id of the session holding the operation.
-     * @param {string}operationId Id of the operation to check.
-     * @param {string}operationType
-     * @param {function(Error)}callback
-     */
-    ensureOperationOfType(sessionId, operationId, operationType, callback) {
-        async.waterfall([
-            (callback) => this.find(sessionId, operationId, callback),
-            (operation, callback) => {
-                if (operation.getType() === operationType) {
-                    callback(null);
-                } else {
-                    callback(
-                        new Error('Expected operation type: ' + operationType + ', found: ' + operation.getType())
-                    );
-                }
-            }
-        ], callback);
     }
 
     findInAllSessions(operationId, callback) {
