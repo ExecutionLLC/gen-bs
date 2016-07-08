@@ -2,9 +2,39 @@
 
 const _ = require('lodash');
 
+/**
+ * @typedef {Object}RabbitMessageOptions
+ * @property {boolean}[mandatory]
+ * @property {string}[replyTo]
+ * @property {string}[messageId]
+ * */
+
+/**
+ * @callback ChannelPublish
+ * @param {(string|undefined)}exchangeName
+ * @param {string}routingKey Routing key or, when exchangeName is null, queue name.
+ * @param {Buffer}messageContent
+ * @param {RabbitMessageOptions}options
+ * */
+
+/**
+ * @callback ChannelSendToQueue
+ * @param {(string|null)}queueName
+ * @param {Buffer}messageContent
+ * @param {RabbitMessageOptions}options
+ * */
+
+/**
+ * @typedef {Object}RabbitMQChannel
+ * @property {ChannelPublish}publish
+ * @property {ChannelSendToQueue}sendToQueue
+ * @method close
+ * */
+
 class RabbitMQHandlerBase {
     constructor(channel, logger) {
         Object.assign(this, {
+            /**@type {RabbitMQChannel}*/
             channel,
             logger,
             connected: false
