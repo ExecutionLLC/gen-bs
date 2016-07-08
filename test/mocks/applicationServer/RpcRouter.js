@@ -3,7 +3,11 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const PRIVATE_QUEUE_MESSAGE_TYPES = ['v1.search_in_results'];
+const PRIVATE_QUEUE_MESSAGE_TYPES = [
+    'v1.search_in_results',
+    'v1.close_session',
+    'v1.keep_alive'
+];
 
 /**
  * @typedef {Object}RpcCallParams
