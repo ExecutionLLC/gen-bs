@@ -138,7 +138,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
          * */
         const operationResult = {
             operation,
-            eventName: EVENTS.onSampleUploadCompleted,
+            eventName: EVENTS.onOperationResultReceived,
             shouldCompleteOperation: true,
             resultType: RESULT_TYPES.SUCCESS,
             result: {

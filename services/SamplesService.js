@@ -17,10 +17,6 @@ class SamplesService extends UserEntityServiceBase {
         this.editableFields = CollectionUtils.createHashByKey(EditableFields, 'id');
     }
 
-    init() {
-        this.services.applicationServerReply.on(AppServerEvents.onSampleUploadCompleted, this._onSampleUploadCompleted);
-    }
-
     add(user, languId, sample, callback) {
         callback(new Error('The method is not supported.'));
     }
@@ -66,13 +62,6 @@ class SamplesService extends UserEntityServiceBase {
         } else {
             callback(null, false);
         }
-    }
-
-    _onSampleUploadCompleted(operationResult) {
-        const {operation:{sessionId}, result:{sampleId}} = operationResult;
-        async.waterfall([
-            (callback) => this.services.instances.broadcastSampleUploadCompleted()
-        ]);
     }
 
     _ensureOnlyEditableFieldsHaveValues(sample, callback) {
