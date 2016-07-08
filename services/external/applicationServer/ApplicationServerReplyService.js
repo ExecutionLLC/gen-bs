@@ -49,12 +49,8 @@ class ApplicationServerReplyService extends ServiceBase {
      */
     onRpcReplyReceived(rpcMessage, callback) {
         async.waterfall([
-            (callback) => {
-                this.services.operations.findInAllSessions(rpcMessage.id, callback);
-            },
-            (operation, callback) => {
-                this._setASQueryNameIfAny(operation, rpcMessage, callback)
-            },
+            (callback) => this.services.operations.findInAllSessions(rpcMessage.id, callback),
+            (operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage, callback),
             (operation, callback) => this._processOperationResult(operation, rpcMessage, (error, operationResult) => {
                     callback(error, operationResult);
             }),
