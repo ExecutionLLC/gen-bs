@@ -13,7 +13,7 @@ class RabbitMQPublisher extends RabbitMQHandlerBase {
         _.bindAll(this, ['_onMessageReturned']);
 
         if (exchangeName) {
-            channel.assertExchange(exchangeName, 'topic', {
+            channel.assertExchange(exchangeName, RabbitMQHandlerBase.exchangeTypes().TOPIC, {
                 durable: false,
                 autoDelete: true
             });
@@ -26,30 +26,28 @@ class RabbitMQPublisher extends RabbitMQHandlerBase {
     /**
      * @param {Object}messageObject
      * @param {string}key
+     * @param {(RabbitMessageOptions|null)}rabbitParams
      * @param {function(Error)}callback
      * */
-    publishToDefaultExchange(messageObject, key, callback) {
+    publishToDefaultExchange(messageObject, key, rabbitParams, callback) {
         const messageString = JSON.stringify(messageObject);
         const message = new Buffer(messageString);
-        // TODO: Fix this.
-        const replyTo = messageObject.replyTo || messageObject.reply_to;
-        const messageId = messageObject.id;
-        this.channel.publish(this.exchangeName, key, message, {
-            mandatory: true,
-            replyTo,
-            messageId
-        });
+        const messageParams = Object.assign({}, {mandatory: true}, rabbitParams);
+        this.channel.publish(this.exchangeName, key, message, messageParams);
         callback(null);
     }
 
-    publishToQueue(queueName, messageObject, callback) {
+    /**
+     * @param {string}queueName
+     * @param {Object}messageObject
+     * @param {(RabbitMessageOptions|null)}rabbitParams
+     * @param {function(Error)}callback
+     * */
+    publishToQueue(queueName, messageObject, rabbitParams, callback) {
         const messageString = JSON.stringify(messageObject);
         const message = new Buffer(messageString);
-        const replyTo = messageObject.replyTo;
-        this.channel.sendToQueue(queueName, message, {
-            mandatory: true,
-            replyTo
-        });
+        const rabbitMessageParams = Object.assign({}, {mandatory: true}, rabbitParams);
+        this.channel.sendToQueue(queueName, message, rabbitMessageParams);
         callback(null);
     }
 
