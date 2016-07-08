@@ -20,6 +20,7 @@ const MockApplicationServer = require('./applicationServer/MockApplicationServer
 class MockWebServerHost {
     constructor() {
         const logger = new Logger(Config.logger);
+        this._setConfigMocks(Config);
 
         const models = new ModelsFacade(Config, logger);
         this._setModelsMocks(models);
@@ -33,6 +34,10 @@ class MockWebServerHost {
         this._setControllersMocks(controllers);
 
         this.server = new WebServerHost(controllers, services, models);
+    }
+
+    _setConfigMocks(config) {
+        config.rabbitMq.requestExchangeName = 'test_exchange';
     }
     
     _setModelsMocks(models) {

@@ -7,6 +7,7 @@ const _ = require('lodash');
  * @property {boolean}[mandatory]
  * @property {string}[replyTo]
  * @property {string}[messageId]
+ * @property {string}[correlationId]
  * */
 
 /**

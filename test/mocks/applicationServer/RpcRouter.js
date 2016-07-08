@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const _ = require('lodash');
 
 const PRIVATE_QUEUE_MESSAGE_TYPES = ['v1.search_in_results'];
 

@@ -77,8 +77,9 @@ class MockApplicationServer {
      * */
     _sendResultToClients(result, originalMessage) {
         const {reply_to: replyQueueName} = originalMessage;
+        const asQueueName = this.privateConsumer.getActualQueueName();
         if (replyQueueName) {
-            this.publisher.publishToQueue(replyQueueName, result, (error) => {
+            this.publisher.publishToQueue(replyQueueName, result, {replyTo: asQueueName, correlationId: originalMessage.id}, (error) => {
                 if (error) {
                     this.logger.error(`Error publishing message to ${replyQueueName}: ${error}`);
                 }

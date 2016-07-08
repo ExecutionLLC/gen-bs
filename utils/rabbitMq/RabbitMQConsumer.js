@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const async = require('async');
 
+const ErrorUtils = require('../ErrorUtils');
 const RabbitMQHandlerBase = require('./RabbitMQHandlerBase');
 
 class RabbitMQConsumer extends RabbitMQHandlerBase {
@@ -75,7 +76,7 @@ class RabbitMQConsumer extends RabbitMQHandlerBase {
                 );
             }
         } catch (error) {
-            this.logger.error(`Error while consuming message from queue ${this.getActualQueueName()}: ${error}`);
+            this.logger.error(`Error while consuming message from queue ${this.getActualQueueName()}: ${ErrorUtils.createErrorMessage(error)}`);
         }
     }
 }

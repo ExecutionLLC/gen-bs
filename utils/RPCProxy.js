@@ -39,7 +39,7 @@ class RPCProxy {
             const publisher = this.publisher;
             const replyQueue = this.consumer.getActualQueueName();
             const message = this._constructMessage(operationId, method, replyQueue, params);
-            const messageParams = {replyTo: replyQueue};
+            const messageParams = {replyTo: replyQueue, correlationId: operationId};
             // Can send requests either to a particular AS instance, or to the tasks exchange.
             if (queryNameOrNull) {
                 publisher.publishToQueue(queryNameOrNull, message, messageParams, callback);
