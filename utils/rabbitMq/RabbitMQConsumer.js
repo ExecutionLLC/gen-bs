@@ -24,8 +24,8 @@ class RabbitMQConsumer extends RabbitMQHandlerBase {
 
     /**
      * @param {(string|null)}exchangeNameOrNull
-     * @param bindKeysOrNull
-     * @param callback
+     * @param {(Array<string>|null)}bindKeysOrNull
+     * @param {function(Error)}callback
      * */
     init(exchangeNameOrNull, bindKeysOrNull, callback) {
         const exclusive = !this.queueName;
