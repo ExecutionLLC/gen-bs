@@ -132,7 +132,7 @@ class OperationsService extends ServiceBase {
             (operation, callback) => {
                 this.logger.info('Removing ' + operation);
                 const sessionOperations = this.operations[sessionId];
-                delete sessionOperations[operation.getId()];
+                sessionOperations && delete sessionOperations[operation.getId()];
 
                 // Remove empty entries to keep the object clean.
                 if (_.isEmpty(this.operations[sessionId])) {
