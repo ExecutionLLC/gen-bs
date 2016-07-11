@@ -77,10 +77,11 @@ class ApplicationServerService extends ApplicationServerServiceBase {
      *
      * @param sessionId Id of the session the request is related to.
      * @param operationId Id of the upload operation.
+     * @param sampleId Id of the sample to be converted.
      * @param callback (error, operationId)
      * */
-    requestSampleProcessing(sessionId, operationId, callback) {
-        this.services.applicationServerUpload.requestSampleProcessing(sessionId, operationId, callback);
+    requestSampleProcessing(sessionId, operationId, sampleId, callback) {
+        this.services.applicationServerUpload.requestSampleProcessing(sessionId, operationId, sampleId, callback);
     }
 
     /**

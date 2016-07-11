@@ -50,17 +50,21 @@ const SETTINGS = {
     objectStorage: {
         // Object storage type to use. Supported values: 's3', 'oss'
         type: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
+        // parameters in the sections below are expected to have same names,
+        // as they are used in the services interchangeably.
         s3: {
             accessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'placeholder'),
             accessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, 'placeholder'),
             regionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'placeholder'),
-            savedFilesBucket: makeDefault(ENV.GEN_WS_S3_SAVED_FILES_BUCKET_NAME, 'placeholder')
+            savedFilesBucket: makeDefault(ENV.GEN_WS_S3_SAVED_FILES_BUCKET_NAME, 'placeholder'),
+            newSamplesBucket: makeDefault(ENV.GEN_WS_S3_NEW_SAMPLES_BUCKET_NAME, 'placeholder')
         },
         oss: {
             accessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, 'placeholder'),
             accessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, 'placeholder'),
             regionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'placeholder'),
-            savedFilesBucket: makeDefault(ENV.GEN_WS_OSS_SAVED_FILES_BUCKET_NAME, 'placeholder')
+            savedFilesBucket: makeDefault(ENV.GEN_WS_OSS_SAVED_FILES_BUCKET_NAME, 'placeholder'),
+            newSamplesBucket: makeDefault(ENV.GEN_WS_OSS_NEW_SAMPLES_BUCKET_NAME, 'placeholder')
         }
     },
     savedFilesUpload: {
