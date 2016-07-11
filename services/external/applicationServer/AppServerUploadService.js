@@ -119,7 +119,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 this.logger.error(`Error inserting new sample into database: ${error}`);
                 this._createErrorOperationResult(
                     operation,
-                    EVENTS.onSampleUploadCompleted,
+                    EVENTS.onOperationResultReceived,
                     true,
                     ErrorUtils.createInternalError(error),
                     callback
