@@ -16,6 +16,11 @@ class ServiceBase {
             callback(null);
         }
     }
+
+    /**
+     * @description This function will be executed right after all the services are constructed.
+     * */
+    init() {}
 }
 
 module.exports = ServiceBase;

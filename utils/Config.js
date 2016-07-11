@@ -55,11 +55,11 @@ const SETTINGS = {
             ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'placeholder')
         }
     },
-    applicationServer: {
-        host: makeDefault(ENV.GEN_WS_AS_HOST, 'localhost'),
-        port: makeDefault(ENV.GEN_WS_AS_PORT, 8888),
+    rabbitMq: {
+        host: makeDefault(ENV.GEN_WS_RABBIT_MQ_HOST, 'localhost'),
+        requestExchangeName: makeDefault(ENV.GEN_WS_RABBIT_MQ_REQUEST_EXCHANGE, 'genomics_exchange'),
         // Reconnect timeout in milliseconds
-        reconnectTimeout: makeDefault(ENV.GEN_WS_AS_RECONNECT_TIMEOUT, 10000)
+        reconnectTimeout: makeDefault(ENV.GEN_WS_RABBIT_MQ_RECONNECT_TIMEOUT, 10000)
     },
     database: {
         host: makeDefault(ENV.GEN_WS_DATABASE_SERVER, 'localhost'),

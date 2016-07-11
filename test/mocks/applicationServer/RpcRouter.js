@@ -1,11 +1,19 @@
 'use strict';
 
 const assert = require('assert');
+const _ = require('lodash');
+
+const PRIVATE_QUEUE_MESSAGE_TYPES = [
+    'v1.search_in_results',
+    'v1.close_session',
+    'v1.keep_alive'
+];
 
 /**
  * @typedef {Object}RpcCallParams
- * @property {String}method
- * @property {String}id
+ * @property {string}method
+ * @property {(string|null)}replyTo
+ * @property {string}id
  * @property {Object|null}params
  * */
 
@@ -16,14 +24,17 @@ class RpcRouter {
 
     /**
      * @param {RpcCallParams}callParams
+     * @param {boolean}isFromPrivateQueue
      * @param {function(Object)}sendResultCallback
      * */
-    handleCall(callParams, sendResultCallback) {
+    handleCall(callParams, isFromPrivateQueue, sendResultCallback) {
         assert.ok(callParams);
         assert.ok(sendResultCallback);
         const {id, method, params} = callParams;
         const handleCall = this.handlers[method];
-
+        if (isFromPrivateQueue && !_.includes(PRIVATE_QUEUE_MESSAGE_TYPES, method)) {
+            throw new Error(`Unexpected message with method ${method}`);
+        }
         if (id && method && handleCall) {
             handleCall(id, method, params, (result) => sendResultCallback({id, result}), (error) => {
                 if (error) {

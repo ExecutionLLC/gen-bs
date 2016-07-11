@@ -1,63 +1,75 @@
 'use strict';
 
-const WebSocket = require('ws');
+const _ = require('lodash');
+const async = require('async');
 
+const RabbitMqUtils = require('./rabbitMq/RabbitMqUtils');
 const ChangeCaseUtil = require('./ChangeCaseUtil');
-
-const SocketState = {
-    CONNECTING: 0,
-    CONNECTED: 1,
-    CLOSING: 2,
-    CLOSED: 3
-};
 
 class RPCProxy {
     /**
-     * @param {string}host
-     * @param {number}port
+     * @param {string}host RabbitMQ host.
+     * @param {string}requestExchangeName Name of the task queue.
      * @param {number}reconnectTimeout Timeout in milliseconds
      * @param {object}logger
-     * @param {function()}connectCallback
-     * @param {function()}disconnectCallback
      * @param {function(object)}replyCallback
      */
-    constructor(host, port, reconnectTimeout, logger, connectCallback, disconnectCallback, replyCallback) {
-        this.connectCallback = connectCallback;
-        this.disconnectCallback = disconnectCallback;
-        this.replyCallback = replyCallback;
-
-        this.host = host;
-        this.port = port;
-
-        this.send = this.send.bind(this);
-        this.logger = logger;
-
+    constructor(host, requestExchangeName, reconnectTimeout, logger, replyCallback) {
+        Object.assign(this,
+            {host, requestExchangeName, reconnectTimeout, logger, replyCallback}, {
+                consumer: null,
+                publisher: null
+            }
+        );
+        _.bindAll(this, ['_onMessage', '_onMessageReturned', '_connect', 'send']);
         // Try to reconnect automatically if connection is closed
-        this.connected = false;
         this._connect();
-        setInterval(() => this._connect(), reconnectTimeout);
+        setInterval(this._connect, reconnectTimeout);
     }
 
     isConnected() {
-        return this.connected;
+        return this.publisher && this.publisher.isConnected()
+            && this.consumer && this.consumer.isConnected();
     }
 
-    send(operationId, method, params, callback) {
-        const convertedParams = ChangeCaseUtil.convertKeysToSnakeCase(params);
-        const jsonData = this._formatJson(operationId, method, convertedParams);
-        this.ws.send(jsonData, null, callback);
+    send(operationId, method, params, queryNameOrNull, callback) {
+        if (!this.isConnected()) {
+            callback(new Error('Connection to application server is lost.'));
+        } else {
+            const publisher = this.publisher;
+            const replyQueue = this.consumer.getActualQueueName();
+            const message = this._constructMessage(operationId, method, replyQueue, params);
+            const messageParams = {replyTo: replyQueue, correlationId: operationId};
+            // Can send requests either to a particular AS instance, or to the tasks exchange.
+            if (queryNameOrNull) {
+                publisher.publishToQueue(queryNameOrNull, message, messageParams, callback);
+            } else {
+                publisher.publishToDefaultExchange(message, method, messageParams, callback);
+            }
+        }
     }
 
-    _formatJson(operationId, method, params) {
-        return JSON.stringify({id: operationId, method: method, params: params});
+    onMessageReturned(handler) {
+        this.messageReturnedHandler = handler;
     }
 
-    _address() {
-        return 'ws://' + this.host + ':' + this.port + '/ws';
+    _constructMessage(operationId, method, replyTo, params) {
+        const message = {id: operationId, method, params, replyTo};
+        return ChangeCaseUtil.convertKeysToSnakeCase(message);
     }
 
-    _replyResult(messageString) {
-        const unconvertedMessage = JSON.parse(messageString);
+    _onMessageReturned(messageObject) {
+        if (this.messageReturnedHandler) {
+            this.messageReturnedHandler(messageObject);
+        } else {
+            this.logger.error(
+                `Message returned but no handler is registered to`
+                + ` message returns. Message: ${JSON.stringify(messageObject)}`
+            );
+        }
+    }
+
+    _onMessage(unconvertedMessage) {
         const message = ChangeCaseUtil.convertKeysToCamelCase(unconvertedMessage);
         if (this.replyCallback) {
             this.replyCallback(message);
@@ -66,41 +78,45 @@ class RPCProxy {
         }
     }
 
-    _close(event) {
-        this.logger.info('App Server socket closed', event);
-
-        if (this.disconnectCallback) {
-            this.disconnectCallback();
-        }
-        if (!this.ws || this.ws.readyState == SocketState.CLOSED) {
-            this.connected = false;
-            this._connect();
-        }
-    }
-
-    _error(event) {
-        if (this.ws.readyState != SocketState.CONNECTED) {
-            this.connected = false;
-        }
-        this.logger.error('Socket error', event, this.ws.readyState);
-    }
-
     _connect() {
-        if (this.connected) return;
-
-        const address = this._address();
-        this.ws = new WebSocket(address);
-        this.logger.info('Connecting to the socket server on ' + address);
-
-        this.connected = true;
-
-        this.ws.on('message', this._replyResult.bind(this));
-        this.ws.on('close', this._close.bind(this));
-        this.ws.on('error', this._error.bind(this));
-
-        if (this.connectCallback) {
-            this.connectCallback();
+        if (this.isConnected()) {
+            return;
         }
+
+        this.logger.info(`Connecting to RabbitMQ on ${this.host}`);
+        async.waterfall([
+            (callback) => RabbitMqUtils.createConnection(this.host, callback),
+            (connection, callback) => {
+                async.series({
+                    publisher: (callback) => RabbitMqUtils.createPublisher(connection,
+                        this.logger, this.requestExchangeName, callback),
+                    consumer: (callback) => RabbitMqUtils.createConsumer(connection,
+                        this.logger, null, null, null, true, callback)
+                }, (error, context) => callback(error, context))
+            },
+            (context, callback) => {
+                const {publisher, consumer} = context;
+                callback(null, publisher, consumer);
+            },
+            /**
+             * @param {RabbitMQPublisher}publisher
+             * @param {RabbitMQConsumer}consumer
+             * @param {function(Error)}callback
+             * */
+            (publisher, consumer, callback) => {
+
+                publisher.onMessageReturned(this._onMessageReturned);
+                consumer.onMessage(this._onMessage);
+
+                this.publisher = publisher;
+                this.consumer = consumer;
+                callback(null);
+            }
+        ], (error) => {
+            if (error) {
+                this.logger.error(`Failed to connect to RabbitMQ: ${error} ${error.stack}`);
+            }
+        });
     }
 }
 

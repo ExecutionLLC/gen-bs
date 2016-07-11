@@ -22,7 +22,7 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
                 operation.setSendCloseToAppServer(false);
                 callback(null, operation);
             },
-            (operation, callback) => this._rpcSend(operation.getId(), method, null, callback)
+            (operation, callback) => this._rpcSend(operation, method, null, callback)
         ], callback);
     }
 
@@ -30,7 +30,7 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
             (callback) => this.services.operations.addSystemOperation(method, callback),
-            (operation, callback) => this._rpcSend(operation.getId(), method, _.map(sourceNames, (sourceName) => {
+            (operation, callback) => this._rpcSend(operation, method, _.map(sourceNames, (sourceName) => {
                 return sourceName + '.h5'
             }), callback)
         ], callback);

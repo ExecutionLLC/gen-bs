@@ -10,12 +10,15 @@ const OPERATION_TYPES = {
 
 class OperationBase {
     constructor(sessionId, method) {
-        this.id = Uuid.v4();
-        this.method = method;
-        this.sessionId = sessionId;
-        this.timestamp = new Date(Date.now());
-        this.lastAppServerMessage = null;
-        this.shouldSendClose = true;
+        Object.assign(this, {
+            id: Uuid.v4(),
+            method,
+            sessionId,
+            timestamp: new Date(Date.now()),
+            lastAppServerMessage: null,
+            shouldSendClose: true,
+            appServerQueryName: null
+        });
     }
 
     getTimestamp() {
@@ -33,6 +36,14 @@ class OperationBase {
 
     getMethod() {
         return this.method;
+    }
+
+    getASQueryName() {
+        return this.appServerQueryName;
+    }
+
+    setASQueryName(queryName) {
+        this.appServerQueryName = queryName;
     }
 
     /**@returns {string}*/

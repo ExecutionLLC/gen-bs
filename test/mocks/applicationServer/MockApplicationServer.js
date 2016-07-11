@@ -1,66 +1,92 @@
 'use strict';
 
-const WebSocketServer = require('ws').Server;
+const _ = require('lodash');
+const async = require('async');
 
-const WebSocketServerProxy = require('../../../utils/WebSocketServerProxy');
 const RpcRouter = require('./RpcRouter');
 
 const SearchHandler = require('./SearchHandler');
-
-const APP_SERVER_PORT = 8030;
+const RabbitMqUtils = require('../../../utils/rabbitMq/RabbitMqUtils');
 
 class MockApplicationServer {
     constructor(services) {
-        Object.assign(this, {
-            services,
+        const {logger, config} = services;
+        Object.assign(this, {services, config, logger}, {
             router: new RpcRouter(),
-            webSocketServerProxy: new WebSocketServerProxy()
+            /**@type {RabbitMQConsumer}*/
+            taskConsumer: null,
+            /**@type {RabbitMQConsumer}*/
+            privateConsumer: null,
+            /**@type {RabbitMQPublisher}*/
+            publisher: null
         });
 
         this._sendResultToClients = this._sendResultToClients.bind(this);
-        this.onClientMessage = this.onClientMessage.bind(this);
+        this.createClientMessageHandler = this.createClientMessageHandler.bind(this);
 
         const searchHandler = new SearchHandler(services);
-
         this.router.registerHandler(searchHandler);
-        this.webSocketServerProxy.onMessage(this.onClientMessage);
-
-        this._createServer();
     }
 
-    onClientMessage(ws, messageString) {
-        try {
-            const message = JSON.parse(messageString);
-            this.router.handleCall(message, this._sendResultToClients);
-        } catch (e) {
-            console.error(`Error parsing message: ${message}`);
-        }
+    start(callback) {
+        const {host, requestExchangeName} = this.config.rabbitMq;
+        async.waterfall([
+            (callback) => RabbitMqUtils.createConnection(host, callback),
+            (connection, callback) => {
+                async.series({
+                    connection: (callback) => callback(null, connection),
+                    // Create task query consumer bound to all messages of the request exchange.
+                    taskConsumer: (callback) => RabbitMqUtils.createConsumer(connection,
+                        this.logger, null, requestExchangeName, ['#'], false, callback),
+                    // Create private consumer for direct messages.
+                    privateConsumer: (callback) => RabbitMqUtils.createConsumer(connection,
+                        this.logger, null, null, null, false, callback),
+                    publisher: (callback) => RabbitMqUtils.createPublisher(connection, this.logger, null, callback)
+                }, callback);
+            },
+            (context, callback) => {
+                Object.assign(this, context);
+                callback(null);
+            },
+            (callback) => {
+                this.privateConsumer.onMessage(this.createClientMessageHandler(true));
+                this.taskConsumer.onMessage(this.createClientMessageHandler(false));
+                callback(null);
+            }
+        ], callback);
+    }
+
+    /**
+     * @param {boolean}isFromPrivateQueue
+     * */
+    createClientMessageHandler(isFromPrivateQueue) {
+        return (message) => {
+            this.router.handleCall(message, isFromPrivateQueue, (results) => this._sendResultToClients(results, message));
+        };
     }
 
     stop() {
-        this.webSocketServer.close();
-    }
-
-    static getApplicationServerPort() {
-        return APP_SERVER_PORT;
-    }
-
-    static getApplicationServerHost() {
-        return 'localhost';
-    }
-
-    _createServer() {
-        this.webSocketServer = new WebSocketServer({port: APP_SERVER_PORT});
-        this.webSocketServerProxy.addWebSocketCallbacks(this.webSocketServer);
-        console.log(`App Server mock is created on port ${APP_SERVER_PORT}`);
+        this.privateConsumer.stop();
+        this.taskConsumer.stop();
+        this.publisher.stop();
     }
 
     /**
      * @param {Object}result
+     * @param {Object}originalMessage
      * */
-    _sendResultToClients(result) {
-        const resultString = JSON.stringify(result);
-        this.webSocketServerProxy.sendToAll(resultString);
+    _sendResultToClients(result, originalMessage) {
+        const {reply_to: replyQueueName} = originalMessage;
+        const asQueueName = this.privateConsumer.getActualQueueName();
+        if (replyQueueName) {
+            this.publisher.publishToQueue(replyQueueName, result, {replyTo: asQueueName, correlationId: originalMessage.id}, (error) => {
+                if (error) {
+                    this.logger.error(`Error publishing message to ${replyQueueName}: ${error}`);
+                }
+            })
+        } else {
+            this.logger.error(`Original message ${JSON.stringify(originalMessage)} has no reply-to queue specified.`);
+        }
     }
 }
 
