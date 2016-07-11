@@ -36,8 +36,8 @@ export default class MetadataSearch extends Component {
     }
 
     getSampleOptions() {
-        const {samples} = this.props;
-        return samples.map((sampleItem) => {
+        const {samplesArray} = this.props;
+        return samplesArray.map((sampleItem) => {
             const isDisabled = this.isSampleDisabled(sampleItem);
             const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
             return {value: sampleItem.id, label, disabled: isDisabled};
@@ -46,8 +46,9 @@ export default class MetadataSearch extends Component {
 }
 
 MetadataSearch.propTypes = {
-    samples: React.PropTypes.array.isRequired,
+    samplesArray: React.PropTypes.array.isRequired,
     selectedSampleId: React.PropTypes.string,
+    isDemoSession: React.PropTypes.bool.isRequired,
     /**
      * @type Function(Uuid sampleId)
      * */

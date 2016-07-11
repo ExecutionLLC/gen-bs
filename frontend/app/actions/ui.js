@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
 import {detachHistory} from './queryHistory';
@@ -56,7 +54,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
                 attachedHistoryData: historyData
             },
             samplesList: {
-                samples
+                hashedArray: {hash: sampleIdToSampleHash}
             },
             filtersList: {
                 hashedArray: {hash: filterIdToFilterHash}
@@ -78,7 +76,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(clearSearchParams());
         dispatch(requestAnalyze(searchParams));
         const searchView = viewIdToViewHash[viewId];
-        const searchSample = _.find(samples, {id: sampleId});
+        const searchSample = sampleIdToSampleHash[sampleId];
         const searchFilter = filterIdToFilterHash[filterId];
         dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));

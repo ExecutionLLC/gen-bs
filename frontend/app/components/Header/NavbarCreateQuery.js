@@ -25,11 +25,13 @@ class NavbarCreateQuery extends Component {
 
     render() {
 
-        const { dispatch, auth: {isDemo: isDemoSession}, samples } = this.props;
-        const {selectedViewId} = this.props.viewsList;
-        const {selectedFilterId} = this.props.filtersList;
-        const {selectedSample} = this.props.samplesList;
-        const selectedSampleId = selectedSample ? selectedSample.id : null;
+        const {
+            dispatch,
+            auth: {isDemo: isDemoSession},
+            samplesList: {hashedArray: {array: samplesArray}, selectedSampleId},
+            viewsList: {selectedViewId},
+            filtersList: {selectedFilterId}
+        } = this.props;
 
         return (
 
@@ -40,7 +42,7 @@ class NavbarCreateQuery extends Component {
                             {...this.props}
                         />
 
-                        <MetadataSearch samples={samples}
+                        <MetadataSearch samplesArray={samplesArray}
                                         selectedSampleId={selectedSampleId}
                                         isDemoSession={isDemoSession}
                                         onSampleChangeRequested={(sampleId) => this.onSampleSelected(sampleId) }
@@ -60,7 +62,7 @@ class NavbarCreateQuery extends Component {
 
                         <Analyze
                             {...this.props}
-                            clicked={ () => dispatch(analyze(selectedSample.id, selectedViewId, selectedFilterId))}
+                            clicked={ () => dispatch(analyze(selectedSampleId, selectedViewId, selectedFilterId))}
                         />
                         <LoadHistory
                             dispatch={this.props.dispatch}
@@ -79,16 +81,12 @@ function mapStateToProps(state) {
         ui,
         auth,
         samplesList,
-        samplesList: {
-            samples
-        },
         filtersList,
         viewsList
     } = state;
 
     return {
         modalWindows,
-        samples,
         ui,
         auth,
         samplesList,

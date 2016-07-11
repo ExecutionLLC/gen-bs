@@ -38,7 +38,7 @@ class App extends Component {
     }
 
     render() {
-        const {samplesList: {samples}} = this.props;
+        const {samplesList: {hashedArray: {array: samplesArray}}} = this.props;
         const { ui } = this.props;
 
         const mainDivClass = classNames({
@@ -55,7 +55,7 @@ class App extends Component {
             <div className={mainDivClass} id='main'>
                 <nav className='navbar navbar-inverse navbar-static-top'/>
                 {<div>&nbsp;</div>}
-                {samples.length > 0 &&
+                {samplesArray.length > 0 &&
                  <div className='container-fluid'>
                     <NavbarMain />
                      <div className={navbarQueryClass} id='subnav'>

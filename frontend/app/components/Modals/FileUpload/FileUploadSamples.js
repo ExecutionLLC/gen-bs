@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 
 import FileUploadSamplesRow from './FileUploadSamplesRow';
 
@@ -10,15 +9,17 @@ export default class FileUploadSamples extends Component {
     }
 
     render() {
-        let {dispatch, closeModal, samplesList: {samples}} = this.props;
+        const {dispatch, closeModal, samplesList} = this.props;
+        const {hashedArray: {array: samplesArray}} = samplesList;
+        const searchWord = this.state.searchWord.toLowerCase();
+
         if (!this.props.editableFieldsList || !this.props.editableFieldsList.length) {
             console.error('No editable fields found');
             return null;
         }
-        if (this.state.searchWord.length > 0) {
-            let searchWord = this.state.searchWord.toLowerCase();
-            samples = samples.filter(el => ~el.fileName.toLocaleLowerCase().indexOf(searchWord));
-        }
+        const filteredSamples = searchWord ?
+            samplesArray.filter((sample) => sample.fileName.toLocaleLowerCase().indexOf(searchWord) >= 0) :
+            samplesArray;
         return (
             <div>
                 <div className='navbar navbar-search-full'>
@@ -31,14 +32,14 @@ export default class FileUploadSamples extends Component {
                     </div>
                 </div>
                 <div className='panel-group panel-group-scroll'>
-                    {samples.map(
+                    {filteredSamples.map(
                         sample => (
                             <FileUploadSamplesRow
-                                sample={sample}
+                                sampleId={sample.id}
                                 isDemoSession={this.props.auth.isDemo}
                                 fields={this.props.editableFieldsList}
                                 key={sample.id}
-                                samples={samples}
+                                samplesList={samplesList}
                                 dispatch={dispatch}
                                 closeModal={closeModal}
                             />
@@ -49,10 +50,3 @@ export default class FileUploadSamples extends Component {
         );
     }
 }
-
-function mapStateToProps(state) {
-    const {samplesList} = state;
-    return {samplesList};
-}
-
-export default connect(mapStateToProps)(FileUploadSamples);
