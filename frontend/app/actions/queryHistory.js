@@ -19,6 +19,7 @@ import {
     viewsListSelectView,
     viewsListReceive
 } from './viewsList';
+import {entityType} from '../utils/entityTypes';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
@@ -85,9 +86,9 @@ export function renewHistoryItem(historyItemId) {
             // copy history item and update names of sample, view and filter. All items from history
             // should be marked as '(from history)'.
             const clonedHistoryItem = _.cloneDeep(historyItem);
-            clonedHistoryItem.sample.type = 'history';
-            clonedHistoryItem.filters[0].type = 'history';
-            clonedHistoryItem.view.type = 'history';
+            clonedHistoryItem.sample.type = entityType.HISTORY;
+            clonedHistoryItem.filters[0].type = entityType.HISTORY;
+            clonedHistoryItem.view.type = entityType.HISTORY;
             dispatch([
                 attachHistory(clonedHistoryItem),
                 changeSample(clonedHistoryItem.sample.id),

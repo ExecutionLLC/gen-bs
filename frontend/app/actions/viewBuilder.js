@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {closeModal} from './modalWindows';
 import {
     viewsListSelectView,
@@ -7,6 +5,7 @@ import {
     viewsListServerDeleteView,
     viewsListServerUpdateView
 } from './viewsList';
+import {entityTypeIsEditable} from '../utils/entityTypes';
 
 export const VBUILDER_START_EDIT = 'VBUILDER_START_EDIT';
 export const VBUILDER_SAVE_EDIT = 'VBUILDER_SAVE_EDIT';
@@ -111,7 +110,7 @@ function viewBuilderUpdateView() {
         const state = getState();
         const editingView = state.viewBuilder.editingView;
         const originalView = state.viewBuilder.originalView;
-        const isNotEdited = _.includes(['advanced', 'standard'], editingView.type)
+        const isNotEdited = entityTypeIsEditable(editingView.type)
             || originalView === editingView;
 
         if (state.auth.isDemo || isNotEdited) {

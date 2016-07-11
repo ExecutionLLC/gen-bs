@@ -1,3 +1,5 @@
+import {entityType} from './entityTypes';
+
 export function firstCharToUpperCase(str) {
     return (
         str.charAt(0).toUpperCase() + str.slice(1)
@@ -25,19 +27,20 @@ export function getUrlParameterByName(name, url) {
 }
 
 export function getItemLabelByNameAndType(itemName, itemType) {
-    return itemType === 'history' ? itemName + ' (from history)' : itemName;
+    return itemType === entityType.HISTORY ? itemName + ' (from history)' : itemName;
 }
 
 export function getReadonlyReasonForSessionAndType(what, isDemoSession, selectedViewFilterType) {
-    var descriptionText = 'This ' + what + ' is not editable, duplicate it to make changes.';
-    descriptionText = isDemoSession ? descriptionText + ' (Only for registered users)' : descriptionText;
     switch (selectedViewFilterType) {
-        case 'history':
-            descriptionText = 'This ' + what + ' is history ' + what + ', duplicate it to make changes.';
-            break;
-        case 'user':
-            descriptionText = '';
-            break;
+        case entityType.HISTORY:
+            return `This ${what} is history ${what}, duplicate it to make changes.`;
+        case entityType.USER:
+            return '';
     }
-    return descriptionText;
+    const descriptionText = `This ${what} is not editable, duplicate it to make changes.`;
+    if (isDemoSession) {
+        return descriptionText + ' (Only for registered users)';
+    } else {
+        return descriptionText;
+    }
 }

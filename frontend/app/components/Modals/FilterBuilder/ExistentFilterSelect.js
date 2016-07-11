@@ -11,6 +11,7 @@ import {
     filterBuilderStartEdit,
     filterBuilderDeleteFilter
 } from '../../../actions/filterBuilder';
+import {entityTypeIsEditable} from '../../../utils/entityTypes';
 
 
 export default class ExistentFilterSelect extends Component {
@@ -20,7 +21,7 @@ export default class ExistentFilterSelect extends Component {
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
         const filters = this.props.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
-        const isFilterEditable = selectedFilter.type === 'user';
+        const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
 
         return (
             <div className='in'>

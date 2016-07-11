@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import {closeModal} from './modalWindows';
 import {
     filtersListSelectFilter,
@@ -7,6 +5,7 @@ import {
     filtersListServerUpdateFilter,
     filtersListServerDeleteFilter
 } from './filtersList';
+import {entityTypeIsEditable} from '../utils/entityTypes';
 
 export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR';
 export const FBUILDER_CHANGE_FILTER = 'FBUILDER_CHANGE_FILTER';
@@ -68,7 +67,7 @@ function filterBuilderUpdateFilter() {
         const state = getState();
         const editingFilter = state.filterBuilder.editingFilter;
         const originalFilter = state.filterBuilder.originalFilter;
-        const isNotEdited = _.includes(['advanced', 'standard'], editingFilter.filter.type)
+        const isNotEdited = !entityTypeIsEditable(editingFilter.filter.type)
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
         if (state.auth.isDemo || isNotEdited) {

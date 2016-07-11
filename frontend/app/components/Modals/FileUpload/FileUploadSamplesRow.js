@@ -4,6 +4,7 @@ import _ from 'lodash';
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {changeSample} from '../../../actions/samplesList';
+import {entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 
 export default class FileUploadSamplesRow extends Component {
@@ -81,7 +82,7 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderSelectButton(isDemoSession, sample) {
-        if(isDemoSession && sample.type === 'advanced') {
+        if(entityTypeIsDemoDisabled(sample.type, isDemoSession)) {
             return (
                 <span data-localize='samples.settings.select.title'>
                     Please register to analyze this sample.
@@ -100,7 +101,7 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderEditButton(sampleType) {
-        if (sampleType === 'user') {
+        if (entityTypeIsEditable(sampleType)) {
             return (
                 <a onClick={e => this.onShowValuesClick(e)}
                    className='btn btn-link btn-uppercase' role='button'
