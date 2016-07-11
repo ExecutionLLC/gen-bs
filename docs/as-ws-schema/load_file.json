@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "description": "converts user VCF to HDF5 format and pushes both files into storage. This is a REST request with the following parameters.",
+  "description": "converts user VCF to the internal format and pushes both files into storage.",
   "type": "object",
   "properties": {
     "id": {

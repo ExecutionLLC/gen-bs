@@ -11,11 +11,13 @@ class AliyunOSSService extends ServiceBase {
     constructor(services) {
         super(services);
 
+        this.regionName = this.config.objectStorage.oss.regionName;
         this.store = this._createStore();
     }
 
-    uploadObject(keyName, fileStream, callback) {
+    uploadObject(bucketName, keyName, fileStream, callback) {
         co(genbind(this, function*() {
+            yield this.store.useBucket(bucketName, this.regionName);
             return yield this.store.put(
                 keyName,
                 fileStream.path,
@@ -28,11 +30,12 @@ class AliyunOSSService extends ServiceBase {
         })
     }
 
-    createObjectStream(keyName, callback) {
+    createObjectStream(bucketName, keyName, callback) {
         // Dirty hack because the getStream function doesn't work.
         // Here we consider we can delete a file with read stream opened on it.
         const fileName = this.config.savedFilesUpload.path + '/' + keyName;
         co(genbind(this, function*() {
+            yield this.store.useBucket(bucketName, this.regionName);
             yield this.store.get(keyName, fileName);
         })).then(() => callback(null, fs.createReadStream(fileName)))
             .then(() => fs.unlinkSync(fileName))
@@ -40,13 +43,8 @@ class AliyunOSSService extends ServiceBase {
     }
 
     _createStore() {
-        const ossSettings = this.config.savedFilesUpload.oss;
-        return oss({
-            bucket: ossSettings.ossBucketName,
-            accessKeyId: ossSettings.ossAccessKeyId,
-            accessKeySecret: ossSettings.ossAccessKeySecret,
-            region: ossSettings.ossRegionName
-        });
+        const {accessKeyId, accessKeySecret, regionName: region} = this.config.objectStorage.oss;
+        return oss({accessKeyId, accessKeySecret, region});
     }
 }
 

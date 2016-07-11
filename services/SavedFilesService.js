@@ -1,5 +1,6 @@
 'use strict';
 
+const assert = require('assert');
 const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
@@ -7,6 +8,11 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 class SavedFilesService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.savedFiles);
+    }
+
+    init() {
+        this.bucketName = this.services.objectStorage.getStorageSettings().savedFilesBucket;
+        assert.ok(this.bucketName);
     }
 
     add(user, languId, fileMetadata, fileStream, callback) {
@@ -22,7 +28,7 @@ class SavedFilesService extends UserEntityServiceBase {
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.models.savedFiles.find(user.id, fileId, (error) => callback(error)),
             (callback) => callback(null, this._generateBucketKeyForFile(fileId)),
-            (keyName, callback) => this.services.objectStorage.createObjectStream(keyName, callback)
+            (keyName, callback) => this.services.objectStorage.createObjectStream(this.bucketName, keyName, callback)
         ], (error, readStream) => callback(error, readStream));
     }
 
@@ -63,7 +69,7 @@ class SavedFilesService extends UserEntityServiceBase {
             (fileId, transaction, callback) => {
                 transactionState = transaction;
                 const keyName = this._generateBucketKeyForFile(fileId);
-                this.services.objectStorage.uploadObject(keyName, fileStream,
+                this.services.objectStorage.uploadObject(this.bucketName, keyName, fileStream,
                     (error) => callback(error, fileId));
             }
         ], (error, fieldId) => {

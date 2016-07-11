@@ -15,13 +15,12 @@ class AmazonS3Service extends ServiceBase {
         this._configureAws();
 
         this.s3 = new AWS.S3();
-        this.bucketName = this.config.savedFilesUpload.amazon.amazonS3BucketName;
     }
 
-    uploadObject(keyName, fileStream, callback) {
+    uploadObject(bucketName, keyName, fileStream, callback) {
         this.s3.upload(
             {
-                Bucket: this.bucketName,
+                Bucket: bucketName,
                 Body: fileStream,
                 Key: keyName
             },
@@ -36,16 +35,17 @@ class AmazonS3Service extends ServiceBase {
     }
 
     /**
-     * @param keyName Key in the bucket.
-     * @param callback (error, readStream)
+     * @param {string}bucketName
+     * @param {string}keyName Key in the bucket.
+     * @param {function(Error, Readable)} callback (error, readStream)
      * */
-    createObjectStream(keyName, callback) {
+    createObjectStream(bucketName, keyName, callback) {
         const objectDescriptor = {
-            Bucket: this.bucketName,
+            Bucket: bucketName,
             Key: keyName
         };
         async.waterfall([
-            // CHeck object exists.
+            // Check object exists.
             (callback) => this.s3.headObject(objectDescriptor, (error) => callback(error)),
             (callback) => {
                 const request = this.s3.getObject(objectDescriptor);
@@ -55,10 +55,8 @@ class AmazonS3Service extends ServiceBase {
     }
 
     _configureAws() {
-        AWS.config.accessKeyId = this.config.savedFilesUpload.amazon.amazonS3AccessKeyId;
-        AWS.config.secretAccessKey = this.config.savedFilesUpload.amazon.amazonS3AccessKeySecret;
-        AWS.config.region = this.config.savedFilesUpload.amazon.amazonS3RegionName;
-        AWS.config.logger = this.logger.info.bind(this);
+        const {accessKeyId, accessKeySecret:secretAccessKey, regionName: region} = this.config.objectStorage.s3;
+        Object.assign(AWS.config, {accessKeyId, secretAccessKey, region});
     }
 }
 

@@ -38,7 +38,8 @@ class SamplesService extends UserEntityServiceBase {
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.applicationServer.uploadSample(sessionId, sampleId, user,
                 localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
-            (operationId, callback) => this.services.applicationServer.requestSampleProcessing(sessionId, operationId, callback)
+            (operationId, callback) => this.services.applicationServer.requestSampleProcessing(sessionId,
+                operationId, sampleId, callback)
         ], callback);
     }
 

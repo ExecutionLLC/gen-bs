@@ -1,9 +1,9 @@
 'use strict';
 
+const fs = require('fs');
 const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
-const AppServerUploadUtils = require('../../../utils/AppServerUploadUtils');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
 const RESULT_TYPES = require('./AppServerResultTypes');
@@ -29,26 +29,26 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 callback(null, operation);
             },
             (operation, callback) => {
-                const config = this.services.config;
-                const url = AppServerUploadUtils.createUploadUrl(
-                    config.applicationServer.host,
-                    config.applicationServer.port,
-                    sampleId,
-                    operation.getId()
+                const {newSamplesBucket} = this.services.objectService.getStorageSettings();
+                const fileStream = fs.createReadStream(sampleLocalPath);
+                this.services.objectStorage.uploadObject(newSamplesBucket, sampleId, fileStream,
+                    (error) => callback(error, operation.getId())
                 );
-                AppServerUploadUtils.uploadFile(url, sampleLocalPath, (error) => callback(error, operation.getId()));
             }
         ], callback);
     }
 
-    requestSampleProcessing(sessionId, operationId, callback) {
+    requestSampleProcessing(sessionId, operationId, sampleId, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSessionId(callback),
             (systemSessionId, callback) => this.services.operations.find(systemSessionId, operationId, callback),
             (operation, callback) => {
                 const method = METHODS.processSample;
-                this._rpcSend(operation, method, null, callback);
+                const params = {
+                    sampleId
+                };
+                this._rpcSend(operation, method, params, callback);
             }
         ], callback);
     }
@@ -119,7 +119,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 this.logger.error(`Error inserting new sample into database: ${error}`);
                 this._createErrorOperationResult(
                     operation,
-                    EVENTS.onSampleUploadCompleted,
+                    EVENTS.onOperationResultReceived,
                     true,
                     ErrorUtils.createInternalError(error),
                     callback
