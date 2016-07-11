@@ -9,22 +9,13 @@ const SearchOperation = require('./SearchOperation');
 const UploadOperation = require('./UploadOperation');
 const SystemOperation = require('./SystemOperation');
 const KeepAliveOperation = require('./KeepAliveOperation');
-
-const OPERATION_TYPES = {
-    SYSTEM: 'system',
-    SEARCH: 'search',
-    UPLOAD: 'upload'
-};
+const ReflectionUtils = require('../../utils/ReflectionUtils');
 
 class OperationsService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
 
         this.operations = Object.create(null);
-    }
-
-    operationTypes() {
-        return OperationBase.operationTypes();
     }
 
     addSearchOperation(sessionId, method, callback) {
@@ -93,7 +84,7 @@ class OperationsService extends ServiceBase {
         async.waterfall([
             (callback) => this.services.sessions.findSystemSessionId(callback),
             // Find upload operations of all users.
-            (sessionId, callback) => this.findAllByType(sessionId, OPERATION_TYPES.UPLOAD, callback),
+            (sessionId, callback) => this.findAllByClass(sessionId, UploadOperation, callback),
             (operations, callback) => callback(null,
                 _.filter(operations, operation => operation.getUserId() === userId)
             )
@@ -113,11 +104,12 @@ class OperationsService extends ServiceBase {
     /**
      * Finds all operations of the specified type.
      * */
-    findAllByType(sessionId, operationType, callback) {
+    findAllByClass(sessionId, operationClass, callback) {
         async.waterfall([
             (callback) => this.findAll(sessionId, callback),
             (operations, callback) => {
-                const result = _.filter(operations, operation => operation.getType() === operationType);
+                const result = _.filter(operations,
+                    operation => ReflectionUtils.isSubclassOf(operation, operationClass));
                 callback(null, result);
             }
         ], callback);

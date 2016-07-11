@@ -4,8 +4,10 @@ const _ = require('lodash');
 const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
+const SearchOperation = require('../../operations/SearchOperation');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
+const ReflectionUtils = require('../../../utils/ReflectionUtils');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
 class AppServerOperationsService extends ApplicationServerServiceBase {
@@ -99,11 +101,10 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
     }
 
     _ensureSearchOperation(operation, callback) {
-        const operationTypes = this.services.operations.operationTypes();
-        if (operation.getType() === operationTypes.SEARCH) {
+        if (ReflectionUtils.isSubclassOf(operation, SearchOperation)) {
             callback(null, operation);
         } else {
-            callback(new Error(`Expected search operation, found: ${operation.getType()}`));
+            callback(new Error(`Expected search operation, found: ${operation}`));
         }
     }
 }

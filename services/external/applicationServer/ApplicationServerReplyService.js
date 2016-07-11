@@ -6,7 +6,8 @@ const _ = require('lodash');
 const ServiceBase = require('../../ServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
-const OperationBase = require('../../operations/OperationBase');
+const ReflectionUtils = require('../../../utils/ReflectionUtils');
+const UploadOperation = require('../../operations/UploadOperation');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 
@@ -67,7 +68,7 @@ class ApplicationServerReplyService extends ServiceBase {
             (operationResult, clientOperationResult, callback) => {
                 // Store client message in the operation for active uploads.
                 const operation = operationResult.operation;
-                if (operation.getType() == OperationBase.operationTypes().UPLOAD
+                if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
                     && !clientOperationResult.isOperationCompleted) {
                     operation.setLastAppServerMessage(clientOperationResult);
                 }
@@ -172,8 +173,7 @@ class ApplicationServerReplyService extends ServiceBase {
     }
 
     _findSessionIdsForOperation(operation, callback) {
-        const operationTypes = this.services.operations.operationTypes();
-        if (operation.getType() !== operationTypes.UPLOAD) {
+        if (!ReflectionUtils.isSubclassOf(operation, UploadOperation)) {
             callback(null, [operation.getSessionId()]);
         } else {
             // Upload operations belong to the system session and contain user id.

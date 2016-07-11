@@ -9,10 +9,6 @@ class UploadOperation extends SystemOperation {
         this.setSendCloseToAppServer(true);
     }
 
-    getType() {
-        return SystemOperation.operationTypes().UPLOAD;
-    }
-
     /**
      * Gets file owner.
      * 

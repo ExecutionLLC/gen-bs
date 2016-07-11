@@ -4,6 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
+const SearchOperation = require('../../operations/SearchOperation');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const RESULT_TYPES = require('./AppServerResultTypes');
@@ -292,8 +293,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     _closePreviousSearchIfAny(sessionId, callback) {
-        const operationTypes = this.services.operations.operationTypes();
-        this.services.operations.findAllByType(sessionId, operationTypes.SEARCH, (error, operations) => {
+        this.services.operations.findAllByClass(sessionId, SearchOperation, (error, operations) => {
             if (error) {
                 callback(error);
             } else {

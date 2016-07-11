@@ -33,8 +33,8 @@ const WS_PROGRESS_STATUSES = {
 };
 
 const WS_OPERATION_TYPES = {
-    UPLOAD: 'upload',
-    SEARCH: 'search'
+    UPLOAD: 'UploadOperation',
+    SEARCH: 'SearchOperation'
 };
 
 const WS_RESULT_TYPES = {

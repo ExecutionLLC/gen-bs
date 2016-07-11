@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const async = require('async');
 
+const SearchOperation = require('../operations/SearchOperation');
 const SchedulerTaskBase = require('./SchedulerTaskBase');
 
 const TASK_NAME = 'checkSessions';
@@ -53,13 +54,12 @@ class CheckSessionsTask extends SchedulerTaskBase {
     }
 
     _renewSearchSessionsOnAppServer(callback) {
-        const operationTypes = this.services.operations.operationTypes();
         async.waterfall([
             // Find user sessions.
             (callback) => this.services.sessions.findAll(callback),
             // Find search operations for each session.
             (sessionIds, callback) => async.map(sessionIds, (sessionId, callback) => {
-                this.services.operations.findAllByType(sessionId, operationTypes.SEARCH, callback);
+                this.services.operations.findAllByClass(sessionId, SearchOperation, callback);
             }, callback),
             // Now we have arrays, each containing search operation.
             (operationsArrays, callback) => {
