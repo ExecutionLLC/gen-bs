@@ -71,7 +71,7 @@ class SamplesModel extends SecureModelBase {
     }
 
     /**
-     * Adds sample with specified params.
+     * Adds sample with specified params, if it doesn't already exist in database.
      *
      * @param userId The owner
      * @param languId Language to use for texts.
@@ -82,6 +82,7 @@ class SamplesModel extends SecureModelBase {
     addSampleWithFields(userId, languId, sample, fieldsMetadata, callback) {
         const sampleId = sample.id;
         this.db.transactionally((trx, callback) => {
+            // Check that the sample is not yet inserted, to be graceful to messages redelivered by RabbitMQ.
             this._findLastVersionsBySampleIds(trx, [sampleId], (error, versionIds) => {
                 if (error || _.isEmpty(versionIds)) {
                     // Sample is not found, so insert it.
