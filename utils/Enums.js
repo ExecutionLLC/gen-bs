@@ -8,6 +8,11 @@ function createEnum(keyValueObject) {
     });
 }
 
+const OBJECT_STORAGE_TYPES = createEnum({
+    S3: 's3',
+    OSS: 'oss'
+});
+
 const SEARCH_SERVICE_EVENTS = createEnum({
     onDataReceived: 'onDataReceived'
 });
@@ -29,6 +34,7 @@ const WS_INSTANCE_MESSAGE_TYPES = createEnum({
 });
 
 module.exports = {
+    OBJECT_STORAGE_TYPES,
     SEARCH_SERVICE_EVENTS,
     ENTITY_TYPES,
     WS_INSTANCE_MESSAGE_TYPES

@@ -47,24 +47,26 @@ const SETTINGS = {
         path: makeDefault(ENV.GEN_WS_UPLOAD_PATH, __dirname + '/../uploads/'), // Temporary path for uploaded samples.
         maxSizeInBytes: makeDefault(ENV.GEN_WS_UPLOAD_MAX_SIZE, 25 * 1024 * 1024) // Max size of the uploaded sample.
     },
+    objectStorage: {
+        // Object storage type to use. Supported values: 's3', 'oss'
+        type: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
+        s3: {
+            accessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'placeholder'),
+            accessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, 'placeholder'),
+            regionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'placeholder'),
+            savedFilesBucket: makeDefault(ENV.GEN_WS_S3_SAVED_FILES_BUCKET_NAME, 'placeholder')
+        },
+        oss: {
+            accessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, 'placeholder'),
+            accessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, 'placeholder'),
+            regionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'placeholder'),
+            savedFilesBucket: makeDefault(ENV.GEN_WS_OSS_SAVED_FILES_BUCKET_NAME, 'placeholder')
+        }
+    },
     savedFilesUpload: {
         maxSizeInBytes: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_SIZE, 1024 * 1024),
         maxCount: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_COUNT, 2),
-        path: makeDefault(ENV.GEN_WS_SAVED_FILES_PATH, __dirname + '/../uploads/'),
-        // Object storage type to use. Supported values: 's3', 'oss'
-        objectStorageType: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
-        amazon: {
-            amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, 'placeholder'),
-            amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'placeholder'),
-            amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, 'placeholder'),
-            amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'placeholder')
-        },
-        oss: {
-            ossBucketName: makeDefault(ENV.GEN_WS_OSS_BUCKET_NAME, 'placeholder'),
-            ossAccessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, 'placeholder'),
-            ossAccessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, 'placeholder'),
-            ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'placeholder')
-        }
+        path: makeDefault(ENV.GEN_WS_SAVED_FILES_PATH, __dirname + '/../uploads/')
     },
     rabbitMq: {
         host: makeDefault(ENV.GEN_WS_RABBIT_MQ_HOST, 'localhost'),
