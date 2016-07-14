@@ -1,8 +1,13 @@
 'use strict';
 
 class SafeObjectFactory {
-    static create() {
-        return new Proxy({}, {
+    /**
+     * Creates an object which throws when an undefined property value is accessed.
+     * @param {Object}[content]
+     * @return {Proxy}
+     */
+    static create(content) {
+        return new Proxy(content || {}, {
             get: (target, key, receiver) => {
                 if (key in target) {
                     return Reflect.get(target, key, receiver);
