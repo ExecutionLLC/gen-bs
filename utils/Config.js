@@ -72,6 +72,12 @@ const SETTINGS = {
         maxCount: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_COUNT, 2),
         path: makeDefault(ENV.GEN_WS_SAVED_FILES_PATH, __dirname + '/../uploads/')
     },
+    redis: {
+        host: makeDefault(ENV.GEN_WS_REDIS_HOST, 'localhost'),
+        port: makeDefault(ENV.GEN_WS_REDIS_PORT, 6379),
+        databaseNumber: makeDefault(ENV.GEN_WS_REDIS_DATABASE_NUMBER, 0),
+        password: makeDefault(ENV.GEN_WS_REDIS_PASSWORD, null)
+    },
     rabbitMq: {
         host: makeDefault(ENV.GEN_WS_RABBIT_MQ_HOST, 'localhost'),
         requestExchangeName: makeDefault(ENV.GEN_WS_RABBIT_MQ_REQUEST_EXCHANGE, 'genomics_exchange'),
