@@ -92,10 +92,11 @@ const SETTINGS = {
         databaseName: makeDefault(ENV.GEN_WS_DATABASE_NAME, 'genomixdb')
     },
     headers: {
-        sessionHeader: makeDefault(ENV.GEN_SESSION_HEADER, 'X-Session-Id'),
         languageHeader: makeDefault(ENV.GEN_LANGUAGE_HEADER, 'X-Langu-Id')
     },
     sessions: {
+        sessionCookieName: makeDefault(ENV.GEN_WS_SESSION_COOKIE_NAME, 'gen-ws-session'),
+        sessionSecret: makeDefault(ENV.GEN_WS_SESSION_SECRET, '811d0765-1940-4f44-96ac-4a349c13d681'),
         allowMultipleUserSessions: makeDefault(ENV.GEN_WS_ALLOW_MULTIPLE_USER_SESSIONS, true),
         sessionTimeoutSec: makeDefault(ENV.GEN_WS_USER_SESSION_TIMEOUT, 5 * 60)
     },
