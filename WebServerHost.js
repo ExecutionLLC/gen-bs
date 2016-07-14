@@ -1,6 +1,7 @@
 'use strict';
 
 const Express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const compression = require('compression');
@@ -31,12 +32,14 @@ class WebServerHost {
      * @param callback (error)
      * */
     start(callback) {
+        this._printServerConfig();
+
         // Create service
         const app = new Express();
 
         app.use(compression());
 
-        this._printServerConfig();
+        this._configureSession(app);
 
         this._enableCORSIfNeeded(app);
 
@@ -99,6 +102,15 @@ class WebServerHost {
             this.logger.info('Welcome to Genomix WebServer! The server is started on http://' + host + ':' + port);
         });
 
+    }
+
+    _configureSession(app) {
+        const {sessionCookieName, sessionSecret} = this.config.sessions;
+        app.use(session({
+            name: sessionCookieName,
+            secret: sessionSecret,
+            store: this.services.sessions.getSessionStore()
+        }));
     }
 
     _initWebSocketServer(httpServer) {

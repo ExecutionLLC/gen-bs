@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const async = require('async');
 const Uuid = require('node-uuid');
+const RedisStore = require('connect-redis');
 
 const ServiceBase = require('./ServiceBase');
 
@@ -28,6 +29,22 @@ class SessionService extends ServiceBase {
                 this.logger.info('System session created: ' + JSON.stringify(systemSession, null, 2))
             }
         });
+    }
+
+    init() {
+        const {host, port, password, databaseNumber} = this.config.redis;
+        const {sessionTimeoutSec} = this.config.sessions;
+        this.redisStore = new RedisStore({
+            host,
+            port,
+            ttl: sessionTimeoutSec,
+            pass: password,
+            db: databaseNumber
+        });
+    }
+
+    getSessionStore() {
+        return this.redisStore;
     }
 
     findSessionType(sessionId, callback) {
