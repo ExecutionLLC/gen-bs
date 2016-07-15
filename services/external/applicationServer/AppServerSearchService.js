@@ -28,28 +28,18 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
+        const method = METHODS.getSearchData;
+        const searchDataRequest = {
+            offset:offset,
+            limit:limit
+        };
         async.waterfall([
             (callback) => {
                 this.services.operations.find(sessionId, operationId, callback);
             },
-            (operation, callback) => {
-                const redisData = operation.getRedisParams();
-                const userId = user.id;
-                const redisParams = Object.assign({}, redisData, {
-                    sessionId,
-                    operationId,
-                    userId,
-                    limit,
-                    offset
-                });
-                this.services.redis.fetch(redisParams, (error, hash) => callback(error, operation, hash));
-            },
-            (operation, fieldIdToValueHash, callback) => {
-                this._createSearchDataResult(null, operation, fieldIdToValueHash, callback);
-            },
-            (operationResult, callback) => {
-                this.services.applicationServerReply.processLoadNextPageResult(operationResult, callback);
-            }
+            (operation, callback) => this._rpcSend(
+                operation, method, searchDataRequest, callback
+            )
         ], callback);
     }
 
@@ -134,7 +124,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             },
             (excludedFields, operation, callback)=> {
                 const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue.filter,
-                    excludedFields, params.fieldSearchValues, params.sortValues);
+                    excludedFields, params.fieldSearchValues, params.sortValues, params.offset, params.limit);
                 this._rpcSend(operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
@@ -291,7 +281,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         callback(null, result);
     }
 
-    _createSearchInResultsParams(globalSearchValue, excludedFields, fieldSearchValues, sortParams) {
+    _createSearchInResultsParams(globalSearchValue, excludedFields, fieldSearchValues, sortParams, offset, limit) {
         const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
         return {
             globalFilter: {
@@ -316,7 +306,9 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     columnName: this._getPrefixedFieldName(sortedParam.fieldMetadata),
                     isAscendingOrder: sortedParam.sortDirection === 'asc'
                 };
-            })
+            }),
+            offset: offset,
+            limit: limit
         };
     }
 
@@ -374,22 +366,6 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 }
             }
         });
-    }
-
-    _storeRedisParamsInOperation(redisParams, operation, callback) {
-        // Store Redis information in the operation.
-        // This is done to be able to fetch another page later.
-        const params = {
-            host: redisParams.host,
-            port: redisParams.port,
-            password: redisParams.password,
-            databaseNumber: redisParams.databaseNumber,
-            dataIndex: redisParams.dataIndex,
-            sampleId: redisParams.sampleId
-        };
-
-        operation.setRedisParams(params);
-        callback(null);
     }
 }
 

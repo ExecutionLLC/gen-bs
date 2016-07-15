@@ -80,20 +80,6 @@ class ApplicationServerReplyService extends ServiceBase {
         });
     }
 
-    processLoadNextPageResult(operationResult, callback) {
-        async.waterfall([
-            (callback) => this._findSessionIdsForOperation(operationResult.operation, callback),
-            (sessionIds, callback) => this._completeOperationIfNeeded(operationResult,
-                (error) => callback(error, sessionIds)
-            ),
-            (sessionIds, callback) => this._createClientOperationResult(operationResult, sessionIds, callback),
-            (operationResult, clientOperationResult, callback) => this._emitEvent(operationResult.eventName,
-                clientOperationResult, callback)
-        ], (error) => {
-            callback(error);
-        });
-    }
-
     /**
      * @callback ClientOperationResultCallback
      * @param {Error}error
