@@ -12,6 +12,7 @@ const EventEmitter = require('../../../utils/EventProxy');
 const {ENTITY_TYPES} = require('../../../utils/Enums');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
+const CollectionUtils = require('../../../utils/CollectionUtils');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -91,7 +92,9 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             sample: appServerSampleId,
             viewStructure: appServerView,
             viewFilter: appServerFilter,
-            viewSortOrder: appServerSortOrder
+            viewSortOrder: appServerSortOrder,
+            offset:params.offset,
+            limit:params.limit
         };
 
         async.waterfall([
@@ -142,36 +145,101 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
         const sampleId = operation.getSampleId();
         const userId = operation.getUserId();
-        const limit = operation.getLimit();
-        const offset = operation.getOffset();
 
-        // Get data from Redis
-        const redisInfo = sessionState.redisDb;
-        // TODO: Seems session, operation, user id and sample id shall be removed from below.
-        const redisParams = {
-            host: redisInfo.host,
-            port: redisInfo.port,
-            password: redisInfo.password,
-            sampleId,
-            userId,
-            operationId: operation.getId(),
-            sessionId: operation.getSessionId(),
-            databaseNumber: redisInfo.number,
-            dataIndex: redisInfo.resultIndex,
-            offset,
-            limit
-        };
         async.waterfall([
             (callback) => {
-                // Store params to be able to retrieve next page by user requests.
-                this._storeRedisParamsInOperation(redisParams, operation, callback);
-            },
-            (callback) => {
-                this.services.redis.fetch(redisParams, callback);
+                this._fetch(sessionState.data, userId, sampleId, callback);
             }
         ], (error, fieldIdToValueHash) => {
             this._createSearchDataResult(error, operation, fieldIdToValueHash, callback);
         });
+    }
+    //TODO: move data methods to another class
+
+    _getSearchKeyFieldName() {
+        return 'search_key';
+    }
+
+    _fetch(searchData, userId, sampleId, callback) {
+        async.waterfall([
+            (callback) => {
+                const rowData = this._fetchData(searchData);
+                this.services.users.find(userId, (error, user) => {
+                    callback(error, {
+                        user,
+                        rowData
+                    });
+                });
+            },
+            (dataWithUser, callback) => {
+                this._convertFields(dataWithUser.rowData, dataWithUser.user,sampleId, callback);
+            }
+        ], (error, redisData) => {
+            callback(error, redisData);
+        });
+    }
+
+    _fetchData(data){
+        return _.map(data,(function(fieldsArray) {
+            var dict = {};
+            _.forEach(fieldsArray, function(value) {
+                dict[value.fieldName] = value.fieldValue;
+            });
+            return dict;
+        }));
+    }
+
+    _convertFields(rawRedisRows, user, sampleId, callback) {
+        async.waterfall([
+            (callback) => {
+                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fields) => {
+                    callback(error, fields);
+                });
+            },
+            (fields, callback) => {
+                this.services.fieldsMetadata.findSourcesMetadata((error, sourcesFields) => {
+                    callback(error, fields.concat(sourcesFields));
+                });
+            },
+            (fields, callback) => {
+                // will be matching fields by name, so create fieldName->field hash
+                const fieldNameToFieldHash = CollectionUtils.createHash(fields,
+                    // Source fields will be prepended by the source name, sample fields - will not.
+                    (field) => field.sourceName === 'sample' ? field.name : field.sourceName + '_' + field.name
+                );
+                callback(null, fieldNameToFieldHash);
+            },
+            (fieldNameToFieldHash, callback) => {
+                const missingFieldsSet = new Set();
+                const fieldIdToValueArray = _.map(rawRedisRows, (rowObject) => {
+                    const searchKeyFieldName = this._getSearchKeyFieldName();
+                    const [fieldNames, missingFieldNames] = _(rowObject)
+                        .keys()
+                        // exclude search key
+                        .filter(fieldName => fieldName !== searchKeyFieldName)
+                        // group by existence
+                        .partition(fieldName => !!fieldNameToFieldHash[fieldName])
+                        .value();
+                    missingFieldNames.forEach(missingFieldName => missingFieldsSet.add(missingFieldName));
+                    // Map field names to field ids.
+                    const mappedRowObject = CollectionUtils.createHash(fieldNames,
+                        (fieldName) => fieldNameToFieldHash[fieldName].id,
+                        (fieldName) => this._mapFieldValue(rowObject[fieldName])
+                    );
+                    // add search key value.
+                    mappedRowObject[searchKeyFieldName] = rowObject[searchKeyFieldName];
+                    return mappedRowObject;
+                });
+                const missingFields = [...missingFieldsSet];
+                missingFields.length && this.logger.error(`The following fields were not found: ${missingFields}`);
+                callback(null, fieldIdToValueArray);
+            }
+        ], callback);
+    }
+
+    _mapFieldValue(actualFieldValue) {
+        // This is VCF way to mark empty field values.
+        return (actualFieldValue !== 'nan') ? actualFieldValue : '.';
     }
 
     _createSearchDataResult(error, operation, fieldIdToValueHash, callback) {
