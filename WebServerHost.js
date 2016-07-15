@@ -109,6 +109,8 @@ class WebServerHost {
         app.use(session({
             name: sessionCookieName,
             secret: sessionSecret,
+            resave: false,
+            saveUninitialized: false,
             store: this.services.sessions.getSessionStore()
         }));
     }

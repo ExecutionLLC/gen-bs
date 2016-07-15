@@ -32,14 +32,14 @@ class RPCProxy {
             && this.consumer && this.consumer.isConnected();
     }
 
-    send(operationId, method, params, queryNameOrNull, callback) {
+    send(messageId, method, params, queryNameOrNull, callback) {
         if (!this.isConnected()) {
             callback(new Error('Connection to application server is lost.'));
         } else {
             const publisher = this.publisher;
             const replyQueue = this.consumer.getActualQueueName();
-            const message = this._constructMessage(operationId, method, replyQueue, params);
-            const messageParams = {replyTo: replyQueue, correlationId: operationId};
+            const message = this._constructMessage(messageId, method, replyQueue, params);
+            const messageParams = {replyTo: replyQueue, correlationId: messageId};
             // Can send requests either to a particular AS instance, or to the tasks exchange.
             if (queryNameOrNull) {
                 publisher.publishToQueue(queryNameOrNull, message, messageParams, callback);

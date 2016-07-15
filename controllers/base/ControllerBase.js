@@ -16,7 +16,6 @@ class ControllerBase {
         this.config = services.config;
         this.logger = services.logger;
 
-        this.getSessionId = this.getSessionId.bind(this);
         this.getLanguageId = this.getLanguageId.bind(this);
     }
 
@@ -94,10 +93,6 @@ class ControllerBase {
         } else {
             callback(null, requestBody);
         }
-    }
-
-    getSessionId(request) {
-        return request.get(this.services.config.headers.sessionHeader);
     }
 
     getLanguageId(request) {

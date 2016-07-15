@@ -36,7 +36,7 @@ class SearchService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    sendSearchRequest(user, sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) {
+    sendSearchRequest(user, session, languageId, sampleId, viewId, filterId, limit, offset, callback) {
         const hasUndefOrNullParam = _.some([languageId, viewId, filterId, sampleId, limit, offset], (param) => {
             return _.isUndefined(param) || _.isNull(param);
         });
@@ -54,17 +54,13 @@ class SearchService extends ServiceBase {
             async.waterfall([
                 (callback) => this.services.queryHistory.add(user, languageId, sampleId, viewId, filterId,
                     (error) => callback(error)),
-                (callback) => {
-                    this.services.sessions.findById(sessionId, callback);
-                },
-                (sessionId, callback) => {
-                    this._createAppServerSearchParams(sessionId, user, languageId, sampleId, viewId, filterId, limit, offset, callback);
-                },
+                (callback) => this._createAppServerSearchParams(user, languageId, sampleId,
+                    viewId, filterId, limit, offset, callback),
+                (appServerRequestParams, callback) => this._validateAppServerSearchParams(appServerRequestParams,
+                    callback
+                ),
                 (appServerRequestParams, callback) => {
-                    this._validateAppServerSearchParams(appServerRequestParams, callback);
-                },
-                (appServerRequestParams, callback) => {
-                    this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
+                    this.services.applicationServer.requestOpenSearchSession(session,
                         appServerRequestParams, callback);
                 }
             ], callback);
@@ -248,7 +244,7 @@ class SearchService extends ServiceBase {
         callback);
     }
 
-    _createAppServerSearchParams(sessionId, user, languId, sampleId, viewId, filterId, limit, offset, callback) {
+    _createAppServerSearchParams(user, languId, sampleId, viewId, filterId, limit, offset, callback) {
         async.parallel({
             langu: (callback) => {
                 this.services.langu.find(languId, callback);
@@ -296,7 +292,6 @@ class SearchService extends ServiceBase {
                 callback(error);
             } else {
                 const appServerSearchParams = {
-                    sessionId,
                     langu: result.langu,
                     userId: user.id,
                     view: result.view,

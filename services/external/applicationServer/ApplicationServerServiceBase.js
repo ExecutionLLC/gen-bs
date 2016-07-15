@@ -27,20 +27,22 @@ class ApplicationServerServiceBase extends ServiceBase {
     }
 
     /**
+     * @param {Object}session
      * @param {OperationBase}operation
      * @param {string}method
      * @param {Object}params
      * @param {function(Error, string=)}callback
      * */
-    _rpcSend(operation, method, params, callback) {
+    _rpcSend(session, operation, method, params, callback) {
         const operationId = operation.getId();
         const queryNameOrNull = operation.getASQueryName();
-        this.rpcProxy.send(operationId, method, params, queryNameOrNull, (error) => {
+        const messageId = `${session.id}_${operation.getId()}`;
+        this.rpcProxy.send(messageId, method, params, queryNameOrNull, (error) => {
             if (error) {
                 callback(error);
             } else {
-                this.logger.info('RPC SEND: \n\toperationId: ' + operationId + '\n\tMethod: ' + method);
-                this.logger.info('Params:\n' + JSON.stringify(params, null, 2));
+                this.logger.info(`RPC SEND: \n\tmessageId: ${messageId}\n\tMethod: ${method}`);
+                this.logger.info(`Params:\n ${JSON.stringify(params, null, 2)}`);
                 callback(null, operationId);
             }
         });
@@ -48,10 +50,13 @@ class ApplicationServerServiceBase extends ServiceBase {
 
     _rpcReply(rpcMessage) {
         this.logger.info('RPC REPLY:\n' + JSON.stringify(rpcMessage, null, 2));
-        if (!rpcMessage.id) {
-            this.logger.error('Message has no id, so will be ignored.');
+        const parts = (rpcMessage.id || '').split('_');
+        if (!rpcMessage.id || !parts || parts.length != 2) {
+            this.logger.error(`Message id is of an incorrect format, message will be ignored. Id: ${rpcMessage.id}`);
         } else {
-            this.services.applicationServerReply.onRpcReplyReceived(rpcMessage, (error) => {
+            const sessionId = parts[0];
+            const operationId = parts[1];
+            this.services.applicationServerReply.onRpcReplyReceived(sessionId, operationId, rpcMessage, (error) => {
                 if (error) {
                     this.logger.error('Error processing RPC reply: ' + ErrorUtils.createErrorMessage(error));
                 }
@@ -83,6 +88,7 @@ class ApplicationServerServiceBase extends ServiceBase {
     
     /**
      * @typedef {Object}AppServerOperationResult
+     * @property {ExpressSession}session
      * @property {OperationBase}operation
      * @property {string}eventName Event to generate.
      * @property {boolean}shouldCompleteOperation If true, corresponding operation descriptor should be destroyed.
@@ -92,15 +98,17 @@ class ApplicationServerServiceBase extends ServiceBase {
      * */
 
     /**
+     * @param {ExpressSession}session
      * @param {OperationBase}operation
      * @param {string}eventName
      * @param {boolean}shouldCompleteOperation
      * @param {AppServerErrorResult}error
      * @param {function(Error, AppServerOperationResult)}callback
      */
-    _createErrorOperationResult(operation, eventName, shouldCompleteOperation, error, callback) {
+    _createErrorOperationResult(session, operation, eventName, shouldCompleteOperation, error, callback) {
         /**@type AppServerOperationResult*/
         const result = {
+            session,
             operation,
             eventName,
             shouldCompleteOperation,

@@ -20,7 +20,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         super(services, models);
     }
     
-    uploadSample(sessionId, sampleId, user, sampleLocalPath, sampleFileName, callback) {
+    uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback) {
         async.waterfall([
             (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, user.id, callback),
             (operation, callback) => {

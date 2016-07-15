@@ -96,7 +96,7 @@ const SETTINGS = {
     },
     sessions: {
         sessionCookieName: makeDefault(ENV.GEN_WS_SESSION_COOKIE_NAME, 'gen-ws-session'),
-        sessionSecret: makeDefault(ENV.GEN_WS_SESSION_SECRET, '811d0765-1940-4f44-96ac-4a349c13d681'),
+        sessionSecret: makeDefault(ENV.GEN_WS_SESSION_SECRET, 'session-secret-here'),
         allowMultipleUserSessions: makeDefault(ENV.GEN_WS_ALLOW_MULTIPLE_USER_SESSIONS, true),
         sessionTimeoutSec: makeDefault(ENV.GEN_WS_USER_SESSION_TIMEOUT, 5 * 60)
     },

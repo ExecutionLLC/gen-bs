@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const async = require('async');
 
 const SearchOperation = require('../operations/SearchOperation');
 const SchedulerTaskBase = require('./SchedulerTaskBase');
@@ -19,68 +18,12 @@ class CheckSessionsTask extends SchedulerTaskBase {
     }
 
     execute(callback) {
-        async.waterfall([
-            (callback) => this._destroyExpiredSessions(callback),
-            (callback) => this._renewSearchSessionsOnAppServer(callback)
-        ], callback);
-    }
-
-    calculateTimeout() {
-        const defaultTimeoutMsecs = this.defaultTimeoutSecs * 1000;
-        const lastActivityDate = this.services.sessions.getMinimumActivityTimestamp();
-        const msecsBeforeNextRun = _.isNull(lastActivityDate) ?
-            defaultTimeoutMsecs : (Date.now() - lastActivityDate);
-        return Math.min(msecsBeforeNextRun, defaultTimeoutMsecs);
-    }
-
-    _destroyExpiredSessions(callback) {
-        async.waterfall([
-            (callback) => {
-                this.services.sessions.findExpiredSessions(callback);
-            },
-            (expiredSessionIds, callback) => {
-                async.each(expiredSessionIds, (sessionId, callback) => {
-                    this.services.sessions.destroySession(sessionId, (error) => {
-                        if (error) {
-                            this.logger.error('Error destroying existing session: %s', error);
-                        } else {
-                            this.logger.info('Session is destroyed by timeout: ' + sessionId);
-                        }
-                        callback(null, sessionId);
-                    });
-                }, callback);
-            }
-        ], callback);
+        this._renewSearchSessionsOnAppServer(callback);
     }
 
     _renewSearchSessionsOnAppServer(callback) {
-        async.waterfall([
-            // Find user sessions.
-            (callback) => this.services.sessions.findAll(callback),
-            // Find search operations for each session.
-            (sessionIds, callback) => async.map(sessionIds, (sessionId, callback) => {
-                this.services.operations.findAllByClass(sessionId, SearchOperation, callback);
-            }, callback),
-            // Now we have arrays, each containing search operation.
-            (operationsArrays, callback) => {
-                const operations = _.flatten(operationsArrays);
-                callback(null, operations);
-            },
-            // Now ask session state for each operation.
-            (operations, callback) => {
-                async.each(operations, (operation, callback) => {
-                    const operationId = operation.getId();
-                    const sessionId = operation.getSessionId();
-                    this.services.applicationServer.requestKeepOperationAlive(sessionId, operationId, (error) => {
-                        // Continue even if one of the requests is failed, as we need to update all the operations.
-                        if (error) {
-                            this.logger.error('Error updating operation state.')
-                        }
-                        callback(null);
-                    });
-                }, callback);
-            }
-        ], callback);
+        // TODO: Remove or fix.
+        callback(null);
     }
 
     _onKeepAliveResultReceived() {

@@ -45,14 +45,21 @@ class ApplicationServerReplyService extends ServiceBase {
      * Here RPC results are distributed by the actual handlers.
      * Handlers are expected to produce {AppServerOperationResult} 
      * in both error and success results.
+     * @param sessionId
+     * @param operationId
      * @param rpcMessage Message to process.
      * @param callback
      */
-    onRpcReplyReceived(rpcMessage, callback) {
+    onRpcReplyReceived(sessionId, operationId, rpcMessage, callback) {
         async.waterfall([
-            (callback) => this.services.operations.findInAllSessions(rpcMessage.id, callback),
-            (operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage, callback),
-            (operation, callback) => this._processOperationResult(operation, rpcMessage, (error, operationResult) => {
+            (callback) => this.services.sessions.findById(sessionId, callback),
+            (session, callback) => this.services.operations.find(session, operationId,
+                (error, operation) => callback(error, session, operation)
+            ),
+            (session, operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage,
+                (error) => callback(error, session, operation)
+            ),
+            (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, (error, operationResult) => {
                     callback(error, operationResult);
             }),
             (operationResult, callback) => this._findSessionIdsForOperation(
@@ -137,33 +144,34 @@ class ApplicationServerReplyService extends ServiceBase {
 
     /**
      * Selects and runs proper message parser. Handles RPC-level errors.
+     * @param {ExpressSession}session
      * @param {OperationBase}operation
      * @param rpcMessage
      * @param {OperationResultCallback}callback
      * @private
      */
-    _processOperationResult(operation, rpcMessage, callback) {
+    _processOperationResult(session, operation, rpcMessage, callback) {
         const method = operation.getMethod();
 
         switch (method) {
             case METHODS.openSearchSession:
-                this.services.applicationServerSearch.processSearchResult(operation, rpcMessage, callback);
+                this.services.applicationServerSearch.processSearchResult(session, operation, rpcMessage, callback);
                 break;
 
             case METHODS.uploadSample:
-                this.services.applicationServerUpload.processUploadResult(operation, rpcMessage, callback);
+                this.services.applicationServerUpload.processUploadResult(session, operation, rpcMessage, callback);
                 break;
 
             case METHODS.getSourcesList:
-                this.services.applicationServerSources.processGetSourcesListResult(operation, rpcMessage, callback);
+                this.services.applicationServerSources.processGetSourcesListResult(session, operation, rpcMessage, callback);
                 break;
 
             case METHODS.getSourceMetadata:
-                this.services.applicationServerSources.processGetSourceMetadataResult(operation, rpcMessage, callback);
+                this.services.applicationServerSources.processGetSourceMetadataResult(session, operation, rpcMessage, callback);
                 break;
 
             case METHODS.keepAlive:
-                this.services.applicationServerOperations.processKeepAliveResult(operation, rpcMessage, callback);
+                this.services.applicationServerOperations.processKeepAliveResult(session, operation, rpcMessage, callback);
                 break;
 
             default:
@@ -176,10 +184,11 @@ class ApplicationServerReplyService extends ServiceBase {
         if (!ReflectionUtils.isSubclassOf(operation, UploadOperation)) {
             callback(null, [operation.getSessionId()]);
         } else {
+            return callback(new Error('Not implemented for upload methods'));
             // Upload operations belong to the system session and contain user id.
             // Here we need to find all active sessions for the specified user.
-            const userId = operation.getUserId();
-            this.services.sessions.findAllByUserId(userId, callback);
+            // const userId = operation.getUserId();
+            // this.services.sessions.findAllByUserId(userId, callback);
         }
     }
 
@@ -191,10 +200,9 @@ class ApplicationServerReplyService extends ServiceBase {
      * */
     _completeOperationIfNeeded(operationResult, callback) {
         const operations = this.services.operations;
-        const operation = operationResult.operation;
+        const {session, operation} = operationResult;
         if (operationResult.shouldCompleteOperation) {
-            operations.remove(
-                operation.sessionId,
+            operations.remove(session,
                 operation.getId(),
                 (error) => callback(error, operationResult)
             );

@@ -4,7 +4,6 @@ const Express = require('express');
 const async = require('async');
 
 const ControllerBase = require('./base/ControllerBase');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 class SearchController extends ControllerBase {
     constructor(services) {
@@ -20,17 +19,12 @@ class SearchController extends ControllerBase {
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
             (body, callback) => {
-                const user = request.user;
-                const sessionId = request.sessionId;
-                const languageId = request.languId;
+                const {user, session, languId:languageId} = request;
 
-                const sampleId = body.sampleId;
-                const viewId = body.viewId;
-                const filterId = body.filterId;
-                const limit = body.limit;
-                const offset = body.offset;
+                //noinspection UnnecessaryLocalVariableJS
+                const {sampleId, viewId, filterId, limit, offset} = body;
                 this.services.search
-                    .sendSearchRequest(user, sessionId, languageId,
+                    .sendSearchRequest(user, session, languageId,
                         sampleId, viewId, filterId, limit, offset, callback);
             }
         ], (error, operationId) => {
