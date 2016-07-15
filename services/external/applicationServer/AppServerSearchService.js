@@ -164,8 +164,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (dataWithUser, callback) => {
                 this._convertFields(dataWithUser.rowData, dataWithUser.user,sampleId, callback);
             }
-        ], (error, redisData) => {
-            callback(error, redisData);
+        ], (error, asData) => {
+            callback(error, asData);
         });
     }
 
@@ -179,7 +179,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         }));
     }
 
-    _convertFields(rawRedisRows, user, sampleId, callback) {
+    _convertFields(asData, user, sampleId, callback) {
         async.waterfall([
             (callback) => {
                 this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fields) => {
@@ -201,7 +201,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             },
             (fieldNameToFieldHash, callback) => {
                 const missingFieldsSet = new Set();
-                const fieldIdToValueArray = _.map(rawRedisRows, (rowObject) => {
+                const fieldIdToValueArray = _.map(asData, (rowObject) => {
                     const searchKeyFieldName = this._getSearchKeyFieldName();
                     const [fieldNames, missingFieldNames] = _(rowObject)
                         .keys()
