@@ -28,12 +28,10 @@ class SessionsController extends ControllerBase {
         const {session} = request;
         async.waterfall([
             (callback) => this.sessions.startDemo(session, callback),
-            (session, callback) => {
-                callback(null, {
+            (session, callback) => callback(null, {
                     sessionId: session.id,
                     sessionType: session.type
                 })
-            }
         ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 

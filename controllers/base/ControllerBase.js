@@ -21,6 +21,7 @@ class ControllerBase {
 
     sendInternalError(response, message) {
         const errorObject = ErrorUtils.createInternalError(message);
+        this.logger.debug(`Sending error ${message}`);
         ControllerBase.sendError(response, HttpStatus.INTERNAL_SERVER_ERROR, errorObject);
     }
 
