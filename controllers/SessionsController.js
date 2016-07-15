@@ -25,30 +25,28 @@ class SessionsController extends ControllerBase {
      * Opens new demo session.
      * */
     open(request, response) {
+        const {session} = request;
         async.waterfall([
-            (callback) => this.sessions.startDemo(callback),
-            (sessionId, callback) => this.sessions.findSessionType(
-                sessionId,
-                (error, sessionType) => callback(error, {
-                    sessionId,
-                    sessionType
+            (callback) => this.sessions.startDemo(session, callback),
+            (session, callback) => {
+                callback(null, {
+                    sessionId: session.id,
+                    sessionType: session.type
                 })
-            )
+            }
         ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 
     check(request, response) {
-        // The session lifetime update happens automatically in the ApiController for each API call.
-        // Here we need to only return the session type.
-        const sessionId = this.getSessionId(request);
-
-        async.waterfall([
-            (callback) => this.sessions.findSessionType(sessionId, callback),
-            (sessionType, callback) => callback(null, {
+        const {session:{type:sessionType, id:sessionId}} = request;
+        if (sessionType) {
+            this.sendJson(response, {
                 sessionId,
                 sessionType
-            })
-        ], (error, result) => this.sendErrorOrJson(response, error, result));
+            });
+        } else {
+            this.sendInternalError(response, new Error('Session is not found.'));
+        }
     }
 
     close(request, response) {

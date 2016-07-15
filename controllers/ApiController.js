@@ -79,7 +79,7 @@ class ApiController extends ControllerBase {
                 callback(null);
             },
             (callback) => this._findAndSetUser(request, callback),
-            (callback) => this._findAndSetLanguage(request, request, callback)
+            (callback) => this._findAndSetLanguage(request, callback)
         ], (error) => next(error));
     }
 
