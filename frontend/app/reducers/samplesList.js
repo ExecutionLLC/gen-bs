@@ -1,91 +1,120 @@
 import _ from 'lodash';
 
 import * as ActionTypes from '../actions/samplesList';
+import immutableArray from '../utils/immutableArray';
+import {ImmutableHash, ImmutableHashedArray} from '../utils/immutable';
+
+function reduceRequestSamples(state) {
+    return state;
+}
+
+function reduceUpdateSampleValue(state, action) {
+    const {valueFieldId, value, sampleId} = action;
+    const {editedSamplesHash} = state;
+    const newValue = {fieldId: valueFieldId, values: value};
+
+    const editedSample = editedSamplesHash[sampleId];
+    const sampleValues = editedSample.values;
+    const valueIndex = _.findIndex(sampleValues, {fieldId: valueFieldId});
+
+    const newSampleValues = immutableArray.replace(sampleValues, valueIndex, newValue);
+    const newEditedSample = {...editedSample, values: newSampleValues};
+    const newEditedSamplesHash = ImmutableHash.replace(editedSamplesHash, sampleId, newEditedSample);
+
+    return {
+        ...state,
+        editedSamplesHash: newEditedSamplesHash
+    };
+}
+
+function reduceReceiveUpdatedSample(state, action) {
+    const {updatedSample, updatedSampleId} = action;
+    const {hashedArray, editedSamplesHash} = state;
+    const newSampleId = updatedSample.id;
+
+    const newHashedArray = ImmutableHashedArray.replaceItemId(hashedArray, updatedSampleId, updatedSample);
+    const newEditedSamplesHash = ImmutableHash.replaceAsNewKey(editedSamplesHash, updatedSampleId, newSampleId, updatedSample);
+
+    return {
+        ...state,
+        hashedArray: newHashedArray,
+        editedSamplesHash: newEditedSamplesHash
+    };
+}
+
+function reduceReceiveSamplesList(state, action) {
+    const {samples} = action;
+    const sortedSamples = _.sortBy(samples, (sample) => sample.fileName.toLowerCase());
+
+    return {
+        ...state,
+        hashedArray: ImmutableHashedArray.makeFromArray(sortedSamples),
+        editedSamplesHash: ImmutableHash.makeFromObject(_.keyBy(samples, 'id'))
+    };
+}
+
+function reduceResetSampleInList(state, action) {
+    const {sampleId} = action;
+    const {hashedArray, editedSamplesHash} = state;
+    const sample = hashedArray.hash[sampleId];
+
+    const editedSample = editedSamplesHash[sampleId];
+    const sampleValues = sample.values;
+
+    const newEditedSample = {...editedSample, values: sampleValues};
+    const newEditedSamplesHash = ImmutableHash.replace(editedSamplesHash, sampleId, newEditedSample);
+
+    return {
+        ...state,
+        editedSamplesHash: newEditedSamplesHash
+    };
+}
+
+function reduceChangeSample(state, action) {
+    const {sampleId} = action;
+
+    return {
+        ...state,
+        selectedSampleId: sampleId
+    };
+}
+
+function reduceChangeSamples(state, action) {
+    const {samples} = action;
+    return {
+        ...state,
+        hashedArray: ImmutableHashedArray.makeFromArray(samples)
+    };
+}
 
 
 export default function samplesList(state = {
-    samples: [],
-    editedSamples: [],
-    selectedSample: null
+    hashedArray: ImmutableHashedArray.makeFromArray([]),
+    editedSamplesHash: ImmutableHash.makeFromObject({}),
+    selectedSampleId: null
 }, action) {
-
-    let currentSampleIndex;
-    let newSamples;
-    let newEditedSamples;
-    let newValues;
 
     switch (action.type) {
         case ActionTypes.REQUEST_SAMPLES:
-            return Object.assign({}, state, {
-                isFetching: true
-            });
+            return reduceRequestSamples(state);
 
-        case ActionTypes.UPDATE_SAMPLE_VALUE: {
-            const {valueFieldId, value} = action;
-            let sampleId = action.sampleId;
-            currentSampleIndex = _.findIndex(state.editedSamples, {id: sampleId});
+        case ActionTypes.UPDATE_SAMPLE_VALUE:
+            return reduceUpdateSampleValue(state, action);
 
-            newValues = [...state.editedSamples[currentSampleIndex].values || []];
-            const valueIndex = _.findIndex(newValues, item => item.fieldId === valueFieldId);
-            const newValue = {fieldId: valueFieldId, values: value};
+        case ActionTypes.RECEIVE_UPDATED_SAMPLE:
+            return reduceReceiveUpdatedSample(state, action);
 
-            if (valueIndex >= 0) {
-                newValues[valueIndex] = newValue;
-            } else {
-                newValues.push(newValue);
-            }
+        case ActionTypes.RECEIVE_SAMPLES_LIST:
+            return reduceReceiveSamplesList(state, action);
 
-            newSamples = [...state.editedSamples];
-            newSamples[currentSampleIndex].values = newValues;
+        case ActionTypes.RESET_SAMPLE_IN_LIST:
+            return reduceResetSampleInList(state, action);
 
-            return Object.assign({}, state, {editedSamples: newSamples});
-        }
+        case ActionTypes.CHANGE_SAMPLE:
+            return reduceChangeSample(state, action);
 
-        case ActionTypes.RECEIVE_UPDATED_SAMPLE: {
-            const {updatedSample, updatedSampleId} = action;
-            currentSampleIndex = _.findIndex(state.samples, {id: updatedSampleId});
-
-            newSamples = [...state.samples];
-            newEditedSamples = [...state.editedSamples];
-
-            newSamples[currentSampleIndex] = updatedSample;
-            newEditedSamples[currentSampleIndex] = Object.assign({}, updatedSample);
-
-            return Object.assign({}, state, {samples: newSamples, editedSamples: newEditedSamples});
-        }
-
-        case ActionTypes.RECEIVE_SAMPLES_LIST: {
-            const {samples} = action;
-            const sortedSamples = _.sortBy(samples, sample => sample.fileName.toLowerCase());
-            return Object.assign({}, state, {
-                samples: [...sortedSamples],
-                editedSamples: _.cloneDeep(sortedSamples)
-            });
-        }
-
-        case ActionTypes.RESET_SAMPLE_IN_LIST: {
-            let sampleId = action.sampleId;
-            currentSampleIndex = _.findIndex(state.editedSamples, {id: sampleId});
-            const restoredValues = [...state.samples[currentSampleIndex].values || []];
-
-            newEditedSamples = [...state.editedSamples];
-            newEditedSamples[currentSampleIndex].values = restoredValues;
-
-            return Object.assign({}, state, {editedSamples: newEditedSamples});
-        }
-            
-        case ActionTypes.CHANGE_SAMPLE: {
-            let {sampleId} = action;
-            return Object.assign({}, state, {
-                selectedSample: _.find(state.samples, {id: sampleId})
-            });
-        }
-        case ActionTypes.CHANGE_SAMPLES: {
-            const {samples} = action;
-            return Object.assign({}, state, {
-                samples: samples
-            });
-        }
+        case ActionTypes.CHANGE_SAMPLES:
+            return reduceChangeSamples(state, action);
 
         default:
             return state;

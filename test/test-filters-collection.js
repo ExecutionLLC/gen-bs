@@ -6,6 +6,7 @@ const Uuid = require('node-uuid');
 const HttpStatus = require('http-status');
 
 const Config = require('../utils/Config');
+const {ENTITY_TYPES} = require('../utils/Enums');
 const Urls = require('./utils/Urls');
 const SessionsClient = require('./utils/SessionsClient');
 const FiltersClient = require('./utils/FiltersClient');
@@ -28,7 +29,7 @@ const checkFilter = (filter) => {
     assert.ok(filter.id);
     assert.ok(filter.name);
     assert.ok(
-        _.any(['standard', 'advanced', 'user'], (type) => filter.type === type)
+        _.any(ENTITY_TYPES.allValues, (type) => filter.type === type)
     );
     assert.ok(filter.rules);
 };
@@ -82,19 +83,19 @@ describe('Filters', () => {
                     assert.ok(addedFilter);
                     assert.notEqual(addedFilter.id, filter.id, 'Filter id is not changed.');
                     assert.equal(addedFilter.name, filter.name);
-                    assert.equal(addedFilter.type, 'user');
+                    assert.equal(addedFilter.type, ENTITY_TYPES.USER);
 
                     // Update created filter.
                     const filterToUpdate = _.cloneDeep(addedFilter);
                     filterToUpdate.name = 'Test Filter ' + Uuid.v4();
-                    filterToUpdate.type = 'advanced';
+                    filterToUpdate.type = ENTITY_TYPES.ADVANCED;
 
                     filtersClient.update(sessionId, filterToUpdate, (error, response) => {
                         const updatedFilter = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(updatedFilter);
                         assert.notEqual(updatedFilter.id, filterToUpdate.id);
                         assert.equal(updatedFilter.name, filterToUpdate.name);
-                        assert.equal(updatedFilter.type, 'user', 'Filter type change should not be allowed by update.');
+                        assert.equal(updatedFilter.type, ENTITY_TYPES.USER, 'Filter type change should not be allowed by update.');
                         done();
                     });
                 });
@@ -107,7 +108,7 @@ describe('Filters', () => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(filters);
-                const nonUserFilter = _.find(filters, filter => filter.type !== 'user');
+                const nonUserFilter = _.find(filters, filter => filter.type !== ENTITY_TYPES.USER);
                 assert.ok(nonUserFilter, 'Cannot find any non-user filter');
                 nonUserFilter.name = 'Test Name' + Uuid.v4();
 

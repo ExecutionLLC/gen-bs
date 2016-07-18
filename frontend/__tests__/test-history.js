@@ -427,7 +427,7 @@ function buildHistoryState() {
     const {
         auth,
         viewsList: {hashedArray:{array: views}},
-        samplesList: {samples},
+        samplesList: {hashedArray:{array: samples}},
         filtersList: {hashedArray:{array: filters}},
         fields
     } = MOCK_APP_STATE;
@@ -458,8 +458,8 @@ function buildHistoryState() {
             selectedViewId: views[1].id
         },
         samplesList: {
-            samples: samples.slice(1),
-            selectedSample: samples[1]
+            hashedArray: ImmutableHashedArray.makeFromArray(samples.slice(1)),
+            selectedSampleId: samples[1].id
         },
         filtersList: {
             hashedArray: ImmutableHashedArray.makeFromArray(filters.slice(1)),
@@ -492,7 +492,7 @@ function mapStateToCollections(globalState) {
     const {
         viewsList: {hashedArray:{array:views}, selectedViewId},
         filtersList: {hashedArray:{array:filters}, selectedFilterId},
-        samplesList: {samples, selectedSample},
+        samplesList: {hashedArray:{array:samples}, selectedSampleId},
         queryHistory: {history}
     } = globalState;
     return {
@@ -502,6 +502,6 @@ function mapStateToCollections(globalState) {
         history,
         selectedViewId,
         selectedFilterId,
-        selectedSampleId: selectedSample.id
+        selectedSampleId
     };
 }

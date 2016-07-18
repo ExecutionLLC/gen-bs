@@ -8,6 +8,7 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
 const EditableFields = require('../defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
+const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
 class SamplesService extends UserEntityServiceBase {
     constructor(services, models) {
@@ -37,7 +38,8 @@ class SamplesService extends UserEntityServiceBase {
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.applicationServer.uploadSample(sessionId, sampleId, user,
                 localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
-            (operationId, callback) => this.services.applicationServer.requestSampleProcessing(sessionId, operationId, callback)
+            (operationId, callback) => this.services.applicationServer.requestSampleProcessing(sessionId,
+                operationId, sampleId, callback)
         ], callback);
     }
 

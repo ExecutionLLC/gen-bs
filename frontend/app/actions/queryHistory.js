@@ -110,7 +110,7 @@ export function attachHistory(historyItem) {
     return (dispatch, getState)=> {
         const {userData:{attachedHistoryData: {sampleId, filterId, viewId}}} = getState();
         const {collection: samples, historyItemId: newSampleId} = changeHistoryItem(
-            getState().samplesList.samples, sampleId, historyItem.sample
+            getState().samplesList.hashedArray.array, sampleId, historyItem.sample
         );
         const {collection: filters, historyItemId: newFilterId} = changeHistoryItem(
             getState().filtersList.hashedArray.array, filterId, historyItem.filters[0]
@@ -139,7 +139,7 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         const {
             collection: samples,
             historyItemId: sampleId
-        } = detachHistoryItemIfNeedIt(detachSample, samplesList.samples, attachedHistoryData.sampleId);
+        } = detachHistoryItemIfNeedIt(detachSample, samplesList.hashedArray.array, attachedHistoryData.sampleId);
         const {
             collection: filters,
             historyItemId: filterId

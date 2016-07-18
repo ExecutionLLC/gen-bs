@@ -4,6 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 const knex = require('knex');
 
+const {ENTITY_TYPES} = require('../utils/Enums');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const CollectionUtils = require('../utils/CollectionUtils');
 const SecureModelBase = require('./SecureModelBase');
@@ -66,7 +67,7 @@ class ViewsModel extends SecureModelBase {
                         id: shouldGenerateId ? this._generateId() : view.id,
                         creator: userId,
                         name: view.name,
-                        type: view.type || 'user'
+                        type: view.type || ENTITY_TYPES.USER
                     };
                     this._insert(dataToInsert, trx, callback);
                 },

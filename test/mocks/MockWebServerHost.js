@@ -1,5 +1,7 @@
 'use strict';
 
+const async = require('async');
+
 const WebServerHost = require('../../WebServerHost');
 
 const Config = require('../../utils/Config');
@@ -17,9 +19,8 @@ const MockApplicationServer = require('./applicationServer/MockApplicationServer
 
 class MockWebServerHost {
     constructor() {
-        this._setConfigMocks();
-
         const logger = new Logger(Config.logger);
+        this._setConfigMocks(Config);
 
         const models = new ModelsFacade(Config, logger);
         this._setModelsMocks(models);
@@ -34,12 +35,11 @@ class MockWebServerHost {
 
         this.server = new WebServerHost(controllers, services, models);
     }
-    
-    _setConfigMocks() {
-        Config.applicationServer.host = MockApplicationServer.getApplicationServerHost();
-        Config.applicationServer.port = MockApplicationServer.getApplicationServerPort();
-    }
 
+    _setConfigMocks(config) {
+        config.rabbitMq.requestExchangeName = 'test_exchange';
+    }
+    
     _setModelsMocks(models) {
         models.users = new MockUserModel();
     }
@@ -57,12 +57,15 @@ class MockWebServerHost {
     }
 
     start(callback) {
-        this.server.start(callback);
+        async.waterfall([
+            (callback) => this.server.start((error) => callback(error)),
+            (callback) => this.applicationServer.start((error) => callback(error))
+        ], callback);
     }
 
     stop(callback) {
-        this.server.stop(callback);
         this.applicationServer.stop();
+        this.server.stop(callback);
     }
 }
 

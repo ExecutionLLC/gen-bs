@@ -1,8 +1,19 @@
 'use strict';
 
 const _ = require('lodash');
+const path = require('path');
+const fs = require('fs');
 
-const ENV = process.env;
+// Load default config but prefer env variables
+const DEFAULT_CONFIG_PATH = path.resolve(`${__dirname}/../default-env.json`);
+let defaultConfig = {};
+try {
+    defaultConfig = require(DEFAULT_CONFIG_PATH);
+} catch (e) {
+    console.log(`Default config is not found by path ${DEFAULT_CONFIG_PATH}`);
+}
+
+const ENV = Object.assign({}, defaultConfig, process.env);
 
 function makeDefault(value, defaultValue) {
     if (_.isUndefined(value)) {
@@ -36,30 +47,36 @@ const SETTINGS = {
         path: makeDefault(ENV.GEN_WS_UPLOAD_PATH, __dirname + '/../uploads/'), // Temporary path for uploaded samples.
         maxSizeInBytes: makeDefault(ENV.GEN_WS_UPLOAD_MAX_SIZE, 25 * 1024 * 1024) // Max size of the uploaded sample.
     },
+    objectStorage: {
+        // Object storage type to use. Supported values: 's3', 'oss'
+        type: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
+        // parameters in the sections below are expected to have same names,
+        // as they are used in the services interchangeably.
+        s3: {
+            accessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, 'placeholder'),
+            accessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, 'placeholder'),
+            regionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, 'placeholder'),
+            savedFilesBucket: makeDefault(ENV.GEN_WS_S3_SAVED_FILES_BUCKET_NAME, 'placeholder'),
+            newSamplesBucket: makeDefault(ENV.GEN_WS_S3_NEW_SAMPLES_BUCKET_NAME, 'placeholder')
+        },
+        oss: {
+            accessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, 'placeholder'),
+            accessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, 'placeholder'),
+            regionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, 'placeholder'),
+            savedFilesBucket: makeDefault(ENV.GEN_WS_OSS_SAVED_FILES_BUCKET_NAME, 'placeholder'),
+            newSamplesBucket: makeDefault(ENV.GEN_WS_OSS_NEW_SAMPLES_BUCKET_NAME, 'placeholder')
+        }
+    },
     savedFilesUpload: {
         maxSizeInBytes: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_SIZE, 1024 * 1024),
         maxCount: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_COUNT, 2),
-        path: makeDefault(ENV.GEN_WS_SAVED_FILES_PATH, __dirname + '/../uploads/'),
-        // Object storage type to use. Supported values: 's3', 'oss'
-        objectStorageType: makeDefault(ENV.GEN_WS_OBJECT_STORAGE_TYPE, 's3'),
-        amazon: {
-            amazonS3BucketName: makeDefault(ENV.GEN_WS_S3_BUCKET_NAME, ''),
-            amazonS3AccessKeyId: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_ID, ''),
-            amazonS3AccessKeySecret: makeDefault(ENV.GEN_WS_S3_ACCESS_KEY_SECRET, ''),
-            amazonS3RegionName: makeDefault(ENV.GEN_WS_S3_REGION_NAME, '')
-        },
-        oss: {
-            ossBucketName: makeDefault(ENV.GEN_WS_OSS_BUCKET_NAME, ''),
-            ossAccessKeyId: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_ID, ''),
-            ossAccessKeySecret: makeDefault(ENV.GEN_WS_OSS_ACCESS_KEY_SECRET, ''),
-            ossRegionName: makeDefault(ENV.GEN_WS_OSS_REGION_NAME, '')
-        }
+        path: makeDefault(ENV.GEN_WS_SAVED_FILES_PATH, __dirname + '/../uploads/')
     },
-    applicationServer: {
-        host: makeDefault(ENV.GEN_WS_AS_HOST, 'localhost'),
-        port: makeDefault(ENV.GEN_WS_AS_PORT, 8888),
+    rabbitMq: {
+        host: makeDefault(ENV.GEN_WS_RABBIT_MQ_HOST, 'localhost'),
+        requestExchangeName: makeDefault(ENV.GEN_WS_RABBIT_MQ_REQUEST_EXCHANGE, 'genomics_exchange'),
         // Reconnect timeout in milliseconds
-        reconnectTimeout: makeDefault(ENV.GEN_WS_AS_RECONNECT_TIMEOUT, 10000)
+        reconnectTimeout: makeDefault(ENV.GEN_WS_RABBIT_MQ_RECONNECT_TIMEOUT, 10000)
     },
     database: {
         host: makeDefault(ENV.GEN_WS_DATABASE_SERVER, 'localhost'),
@@ -112,8 +129,8 @@ const SETTINGS = {
 SETTINGS.baseUrl = makeDefault(ENV.GEN_WS_BASE_URL, 'http://localhost:' + SETTINGS.port);
 SETTINGS.google = {
     // Google Application parameters
-    clientId: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_ID, ''),
-    clientSecret: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_SECRET, '')
+    clientId: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_ID, 'placeholder'),
+    clientSecret: makeDefault(ENV.GEN_WS_GOOGLE_CLIENT_SECRET, 'placeholder')
 };
 
 module.exports = SETTINGS;

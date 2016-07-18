@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import _ from 'lodash';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
@@ -14,10 +14,10 @@ export default class FileUploadSamplesRow extends Component {
         this.state = {showValues: false};
     }
 
-    onSelectForAnalysisClick(e, sample) {
+    onSelectForAnalysisClick(e, sampleId) {
         e.preventDefault();
         const {dispatch, closeModal} = this.props;
-        dispatch(changeSample(sample.id));
+        dispatch(changeSample(sampleId));
         closeModal('upload');
     }
 
@@ -32,19 +32,32 @@ export default class FileUploadSamplesRow extends Component {
         this.setShowValuesState(!this.state.showValues);
     }
 
+    makeFieldIdToValuesHash(sample) {
+        return _.reduce(sample.values, (result, value) => {
+            return {...result, [value.fieldId]: value.values};
+        }, {});
+    }
+
     render() {
+        const {sampleId, samplesList: {hashedArray: {hash: samplesHash}, editedSamplesHash}} = this.props;
+        const sample = samplesHash[sampleId];
+        const fieldIdToValuesHash = this.makeFieldIdToValuesHash(sample);
+        const editedSample = this.state.showValues && editedSamplesHash[sampleId];
+        const editedFieldIdToValuesHash = editedSample && this.makeFieldIdToValuesHash(editedSample);
+
         return (
             <div className='panel'>
                 {this.renderHeader()}
-                {this.renderCurrentValues()}
-                {this.renderEditableValues()}
+                {this.renderCurrentValues(fieldIdToValuesHash)}
+                {this.state.showValues && editedFieldIdToValuesHash && this.renderEditableValues(editedFieldIdToValuesHash)}
                 {this.renderFooter()}
             </div>
         );
     }
 
     renderHeader() {
-        const {sample} = this.props;
+        const {sampleId, samplesList: {hashedArray: {hash: samplesHash}}} = this.props;
+        const sample = samplesHash[sampleId];
         return (
             <div>
                 <div className='panel-heading'>
@@ -58,7 +71,8 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     renderFooter() {
-        const {isDemoSession, sample} = this.props;
+        const {isDemoSession, sampleId, samplesList: {hashedArray: {hash: samplesHash}}} = this.props;
+        const sample = samplesHash[sampleId];
         return (
             <div className='panel-footer'>
                 {this.renderSelectButton(isDemoSession, sample)}
@@ -77,7 +91,7 @@ export default class FileUploadSamplesRow extends Component {
         }
 
         return (
-            <a onClick={(e) => this.onSelectForAnalysisClick(e, sample)}
+            <a onClick={(e) => this.onSelectForAnalysisClick(e, sample.id)}
                className='btn btn-link btn-uppercase'
                type='button'
             >
@@ -101,24 +115,20 @@ export default class FileUploadSamplesRow extends Component {
         return null;
     }
 
-    renderEditableValues() {
-        const {dispatch, fields, samplesList: {editedSamples}, sample} = this.props;
+    renderEditableValues(fieldIdToValuesHash) {
+        const {dispatch, fields, sampleId} = this.props;
         return (
             <SampleEditableFieldsPanel dispatch={dispatch}
-                                       isExpanded={this.state.showValues}
                                        fields={fields}
-                                       sample={sample}
-                                       editedSamples={editedSamples}
+                                       sampleId={sampleId}
+                                       fieldIdToValuesHash={fieldIdToValuesHash}
             />
         );
     }
 
-    renderCurrentValues() {
-        const {sample, fields} = this.props;
-        const fieldIdToValuesHash = _.reduce(sample.values, (result, value) => {
-            result[value.fieldId] = value.values;
-            return result;
-        }, {});
+    renderCurrentValues(fieldIdToValuesHash) {
+        const {sampleId, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const sample = samplesHash[sampleId];
 
         if (_.some(sample.values, option => option.values)) {
             return (
@@ -155,13 +165,3 @@ export default class FileUploadSamplesRow extends Component {
         }
     }
 }
-
-function mapStateToProps(state) {
-    const {ui, samplesList} = state;
-    return {
-        ui,
-        samplesList
-    };
-}
-
-export default connect(mapStateToProps)(FileUploadSamplesRow);

@@ -1,5 +1,8 @@
 'use strict';
 
+const _ = require('lodash');
+
+const ServiceBase = require('./ServiceBase');
 const LanguService = require('./LanguService');
 const KeywordsService = require('./KeywordsService');
 const UsersService = require('./UsersService');
@@ -7,9 +10,6 @@ const ViewsService = require('./ViewsService');
 const FiltersService = require('./FiltersService');
 const CommentsService = require('./CommentsService');
 const SamplesService = require('./SamplesService');
-const RedisService = require('./external/RedisService');
-const AmazonS3Service = require('./external/AmazonS3Service');
-const AliyunOSSService = require('./external/AliyunOSSService');
 const SessionService = require('./SessionService');
 const OperationService = require('./operations/OperationsService');
 const FieldsMetadataService = require('./FieldsMetadataService');
@@ -19,6 +19,10 @@ const SavedFilesService = require('./SavedFilesService');
 const QueryHistoryService = require('./QueryHistoryService');
 const UserDataService = require('./UserDataService');
 const ObjectStorageService = require('./ObjectStorageService');
+
+const RedisService = require('./external/RedisService');
+const AmazonS3Service = require('./external/AmazonS3Service');
+const AliyunOSSService = require('./external/AliyunOSSService');
 
 const ApplicationServerService = require('./external/applicationServer/ApplicationServerService');
 const ApplicationServerReplyService = require('./external/applicationServer/ApplicationServerReplyService');
@@ -43,6 +47,7 @@ class ServiceFacade {
         this.savedFiles = new SavedFilesService(this, models);
         this.queryHistory = new QueryHistoryService(this, models);
         this.userData = new UserDataService(this, models);
+        this.search = new SearchService(this, models);
 
         this.sessions = new SessionService(this, models);
         this.operations = new OperationService(this, models);
@@ -58,11 +63,13 @@ class ServiceFacade {
         this.amazonS3 = new AmazonS3Service(this, models);
         this.oss = new AliyunOSSService(this, models);
         this.objectStorage = new ObjectStorageService(this, models);
-        // Currently search service should initialize after Redis service.
-        this.search = new SearchService(this, models);
 
         this.scheduler = new SchedulerService(this, models);
         this.scheduler.start();
+
+        _.map(this)
+            .filter(service => service instanceof ServiceBase)
+            .forEach(service => service.init());
     }
 }
 

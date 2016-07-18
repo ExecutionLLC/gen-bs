@@ -4,6 +4,7 @@ const _ = require('lodash');
 const EventEmitter = require('events').EventEmitter;
 
 class EventProxy {
+    /**@param {Array<string>}[knownEvents]*/
     constructor(knownEvents) {
         this.knownEvents = knownEvents;
         this.eventEmitter = new EventEmitter();
@@ -19,7 +20,6 @@ class EventProxy {
     }
 
     emit(eventName, data) {
-        this._checkEvent(eventName);
         const haveHandlers = this.eventEmitter.emit(eventName, data);
         if (!haveHandlers) {
             console.error('No event handlers registered for the event ' + eventName);
@@ -27,10 +27,10 @@ class EventProxy {
     }
 
     _checkEvent(eventName) {
-        if (this.knownEvents
-            && !_.some(this.knownEvents, event => event === eventName)) {
-            throw new Error('Unexpected event: ' + eventName)
+        if (_.isEmpty(this.knownEvents) || _.includes(this.knownEvents, eventName)) {
+            return;
         }
+        throw new Error('Unexpected event: ' + eventName);
     }
 }
 
