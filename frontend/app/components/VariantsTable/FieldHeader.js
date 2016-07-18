@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import classNames from 'classnames';
 
 import  {firstCharToUpperCase} from '../../utils/stringUtils';
+import config from '../../../config';
 
 export default class FieldHeaderControls extends Component {
     constructor(props) {
@@ -101,6 +102,7 @@ export default class FieldHeaderControls extends Component {
                            onKeyPress={(e) => this.onSearchInputKeyPressed(e)}
                            onBlur={() => this.onSearchInputBlur()}
                            disabled={disabled}
+                           maxLength={config.ANALYSIS.MAX_FILTER_LENGTH}
                     />
                 </div>
             );

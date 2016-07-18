@@ -43,7 +43,8 @@ const config = {
         MAX_DESCRIPTION_LENGTH: 512
     },
     ANALYSIS: {
-        MAX_COMMENT_LENGTH: 1024
+        MAX_COMMENT_LENGTH: 1024,
+        MAX_FILTER_LENGTH: 50
     },
     WEBSOCKET_RECONNECT_TIME_MS: 2000
 };
