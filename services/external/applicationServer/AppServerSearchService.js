@@ -138,7 +138,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    _processSearchResultMessage(operation, message, callback) {
+    _processSearchResultMessage(session, operation, message, callback) {
         const sessionState = message.result.sessionState;
 
         const sampleId = operation.getSampleId();
@@ -171,15 +171,16 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 this.services.redis.fetch(redisParams, callback);
             }
         ], (error, fieldIdToValueHash) => {
-            this._createSearchDataResult(error, operation, fieldIdToValueHash, callback);
+            this._createSearchDataResult(error, session, operation, fieldIdToValueHash, callback);
         });
     }
 
-    _createSearchDataResult(error, operation, fieldIdToValueHash, callback) {
+    _createSearchDataResult(error, session, operation, fieldIdToValueHash, callback) {
         /**
          * @type AppServerOperationResult
          * */
         const result = {
+            session,
             operation,
             shouldCompleteOperation: false,
             error,
