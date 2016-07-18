@@ -59,9 +59,7 @@ class ApplicationServerReplyService extends ServiceBase {
             (session, operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage,
                 (error) => callback(error, session, operation)
             ),
-            (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, (error, operationResult) => {
-                    callback(error, operationResult);
-            }),
+            (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, callback),
             (operationResult, callback) => this._findSessionIdsForOperation(
                 operationResult.operation,
                 (error, sessionIds) => callback(error, operationResult, sessionIds)
