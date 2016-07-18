@@ -53,8 +53,8 @@ class RPCProxy {
         this.messageReturnedHandler = handler;
     }
 
-    _constructMessage(operationId, method, replyTo, params) {
-        const message = {id: operationId, method, params, replyTo};
+    _constructMessage(id, method, replyTo, params) {
+        const message = {id, method, params, replyTo};
         return ChangeCaseUtil.convertKeysToSnakeCase(message);
     }
 

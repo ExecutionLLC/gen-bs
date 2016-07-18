@@ -88,7 +88,7 @@ class SearchController extends ControllerBase {
             maxCallCountBeforeBlock: 3,
             delayMs: 2 * 1000,
             keyGenerator: (request) => {
-                return this.getSessionId(request);
+                return request.session.id;
             }
         });
 

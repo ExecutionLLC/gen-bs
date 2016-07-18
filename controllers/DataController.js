@@ -14,7 +14,7 @@ class DataController extends ControllerBase {
     }
 
     getData(request, response) {
-        const user = request.user;
+        const {user} = request;
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.services.userData.getUserData(user, callback)

@@ -11,6 +11,8 @@ const SystemOperation = require('./SystemOperation');
 const KeepAliveOperation = require('./KeepAliveOperation');
 const ReflectionUtils = require('../../utils/ReflectionUtils');
 
+const OPERATION_CLASSES = [SearchOperation, UploadOperation, SystemOperation, KeepAliveOperation];
+
 class OperationsService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
@@ -53,6 +55,18 @@ class OperationsService extends ServiceBase {
             }
         ], callback);
     }
+    
+    findSystemOperationsForUser(user, callback) {
+        async.waterfall([
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (systemSession, callback) => {
+                const activeUserOperations = _.filter(systemSession.operations,
+                    operation => ReflectionUtils.isSubclassOf(operation, UploadOperation)
+                    && operation.getUserId() === user.id);
+                callback(null, activeUserOperations);
+            }
+        ], callback);
+    }
 
     find(session, operationId, callback) {
         const {operations} = session;
@@ -83,6 +97,21 @@ class OperationsService extends ServiceBase {
                 callback(null, operation);
             }
         ], callback);
+    }
+
+    stringifyOperations(operations) {
+        const operationStringsArray = _.map(operations, operation => ReflectionUtils.serialize(operation));
+        return JSON.stringify(operationStringsArray);
+    }
+
+    parseOperations(operationsString) {
+        const operationStringsArray = JSON.parse(operationsString);
+        return _(operationStringsArray)
+            .map(operationString => ReflectionUtils.deserialize(operationString, OPERATION_CLASSES))
+            .reduce((result, operation) => {
+                result[operation.getId()] = operation;
+                return result;
+            }, {});
     }
 
     _addOperation(session, operation, callback) {

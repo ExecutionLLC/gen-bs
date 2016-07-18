@@ -9,6 +9,7 @@ const morgan = require('morgan');
 const Http = require('http');
 const HttpStatus = require('http-status');
 const WebSocketServer = require('ws').Server;
+const Uuid = require('node-uuid');
 
 const ErrorUtils = require('./utils/ErrorUtils');
 const ControllerBase = require('./controllers/base/ControllerBase');
@@ -37,6 +38,7 @@ class WebServerHost {
         // Create service
         const app = new Express();
 
+        app.disable('x-powered-by');
         app.use(compression());
 
         this._configureSession(app);
@@ -107,9 +109,11 @@ class WebServerHost {
     _configureSession(app) {
         const {sessionCookieName, sessionSecret} = this.config.sessions;
         app.use(session({
+            // Change carefully, because it affects RPCProxy message id implementation.
+            genid: (request) => Uuid.v4(),
             name: sessionCookieName,
             secret: sessionSecret,
-            resave: false,
+            resave: true,
             saveUninitialized: false,
             store: this.services.sessions.getSessionStore()
         }));
@@ -147,9 +151,10 @@ class WebServerHost {
     }
 
     _enableCORSIfNeeded(app) {
-        if (this.config.enableCORS) {
-            app.use(cors());
-        }
+        app.use(cors({
+            origin: this.config.baseUrl,
+            credentials: true
+        }));
     }
 }
 

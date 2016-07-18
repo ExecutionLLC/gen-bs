@@ -30,7 +30,11 @@ class SessionService extends ServiceBase {
             port,
             ttl: sessionTimeoutSec,
             pass: password,
-            db: databaseNumber
+            db: databaseNumber,
+            serializer: {
+                stringify: (session) => this._stringifySession(session),
+                parse: (sessionString) => this._parseSession(sessionString)
+            }
         });
 
         this.systemSession = {
@@ -99,6 +103,20 @@ class SessionService extends ServiceBase {
 
     destroySession(session, callback) {
         session.destroy(callback);
+    }
+    
+    _stringifySession(session) {
+        const operationsString = this.services.operations.stringifyOperations(session.operations);
+        const sessionToSerialize = Object.assign({}, session, {
+            operations: operationsString
+        });
+        return JSON.stringify(sessionToSerialize);
+    }
+
+    _parseSession(sessionString) {
+        const session = JSON.parse(sessionString);
+        session.operations = this.services.operations.parseOperations(session.operations);
+        return session;
     }
 }
 
