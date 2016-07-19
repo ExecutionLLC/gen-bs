@@ -41,11 +41,26 @@ class SessionService extends ServiceBase {
             id: Uuid.v4(),
             operations:{}
         };
+
+        const {sessionCookieName, sessionSecret} = this.config.sessions;
+        this.sessionParser = session({
+            // Change carefully, because it affects RPCProxy message id implementation.
+            genid: (request) => Uuid.v4(),
+            name: sessionCookieName,
+            secret: sessionSecret,
+            resave: true,
+            saveUninitialized: false,
+            store: this.services.sessions.getSessionStore()
+        });
         this.logger.info(`Created system session ${this.systemSession.id}`);
     }
 
     getSessionStore() {
         return this.redisStore;
+    }
+
+    getSessionParserMiddleware() {
+        return this.sessionParser;
     }
 
     /**

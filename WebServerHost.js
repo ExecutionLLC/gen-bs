@@ -107,21 +107,17 @@ class WebServerHost {
     }
 
     _configureSession(app) {
-        const {sessionCookieName, sessionSecret} = this.config.sessions;
-        app.use(session({
-            // Change carefully, because it affects RPCProxy message id implementation.
-            genid: (request) => Uuid.v4(),
-            name: sessionCookieName,
-            secret: sessionSecret,
-            resave: true,
-            saveUninitialized: false,
-            store: this.services.sessions.getSessionStore()
-        }));
+        app.use(this.services.sessions.getSessionParserMiddleware());
     }
 
     _initWebSocketServer(httpServer) {
         const webSocketServer = new WebSocketServer({
-            server: httpServer
+            server: httpServer,
+            verifyClient: (info, callback) => {
+                const sessionParser = this.services.sessions.getSessionParserMiddleware();
+                // Allow connection only in case session is properly initialized.
+                sessionParser(info.req, {}, () => callback(info.req.session && info.req.session.userId));
+            }
         });
 
         const wsController = this.controllers.wsController;

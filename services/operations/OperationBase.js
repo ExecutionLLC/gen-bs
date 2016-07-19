@@ -54,7 +54,7 @@ class OperationBase {
     }
 
     /**
-     * @param {AppServerResult}message
+     * @param {AppServerOperationResult}message
      * */
     setLastAppServerMessage(message) {
         this.lastAppServerMessage = message;

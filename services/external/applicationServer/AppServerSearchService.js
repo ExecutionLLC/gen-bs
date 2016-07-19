@@ -44,8 +44,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 });
                 this.services.redis.fetch(redisParams, (error, hash) => callback(error, operation, hash));
             },
-            (operation, fieldIdToValueHash, callback) => {
-                this._createSearchDataResult(null, operation, fieldIdToValueHash, callback);
+            (operation, fieldIdToValueArray, callback) => {
+                this._createSearchDataResult(null, operation, fieldIdToValueArray, callback);
             },
             (operationResult, callback) => {
                 this.services.applicationServerReply.processLoadNextPageResult(operationResult, callback);
@@ -175,14 +175,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         });
     }
 
-    _createSearchDataResult(error, session, operation, fieldIdToValueHash, callback) {
+    _createSearchDataResult(error, session, operation, fieldIdToValueArray, callback) {
         super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onSearchDataReceived, false, {
             progress: 100,
             status: SESSION_STATUS.READY,
             sampleId: operation.getSampleId(),
             limit: operation.getLimit(),
             offset: operation.getOffset(),
-            fieldIdToValueHash
+            fieldIdToValueArray
         }, error, callback);
     }
 

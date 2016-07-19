@@ -60,27 +60,17 @@ class ApplicationServerReplyService extends ServiceBase {
                 (error) => callback(error, session, operation)
             ),
             (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, callback),
-            (operationResult, callback) => this._findSessionIdsForOperation(
-                operationResult.operation,
-                (error, sessionIds) => callback(error, operationResult, sessionIds)
-            ),
-            (operationResult, sessionIds, callback) => this._completeOperationIfNeeded(
-                    operationResult,
-                    (error) => callback(error, operationResult, sessionIds)
-            ),
-            (operationResult, sessionIds, callback) => this._createClientOperationResult(operationResult,
-                sessionIds, callback),
-            (operationResult, clientOperationResult, callback) => {
+            (operationResult, callback) => {
                 // Store client message in the operation for active uploads.
                 const operation = operationResult.operation;
                 if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
-                    && !clientOperationResult.isOperationCompleted) {
-                    operation.setLastAppServerMessage(clientOperationResult);
+                    && !operationResult.shouldCompleteOperation) {
+                    operation.setLastAppServerMessage(operationResult);
                 }
-                callback(null, operationResult, clientOperationResult);
+                callback(null, operationResult);
             },
-            (operationResult, clientOperationResult, callback) => this._emitEvent(operationResult.eventName,
-                clientOperationResult, callback)
+            (operationResult, callback) => this._emitEvent(operationResult.eventName,
+                operationResult, callback)
         ], (error) => {
             callback(error);
         });
@@ -88,13 +78,9 @@ class ApplicationServerReplyService extends ServiceBase {
 
     processLoadNextPageResult(operationResult, callback) {
         async.waterfall([
-            (callback) => this._findSessionIdsForOperation(operationResult.operation, callback),
-            (sessionIds, callback) => this._completeOperationIfNeeded(operationResult,
-                (error) => callback(error, sessionIds)
-            ),
-            (sessionIds, callback) => this._createClientOperationResult(operationResult, sessionIds, callback),
-            (operationResult, clientOperationResult, callback) => this._emitEvent(operationResult.eventName,
-                clientOperationResult, callback)
+            (callback) => this._completeOperationIfNeeded(operationResult, callback),
+            (callback) => this._emitEvent(operationResult.eventName,
+                operationResult, callback)
         ], (error) => {
             callback(error);
         });
@@ -106,28 +92,6 @@ class ApplicationServerReplyService extends ServiceBase {
      * @param {AppServerOperationResult}operationResult
      * @param {AppServerResult}appServerResult
      * */
-
-    /**
-     * @param {AppServerOperationResult}operationResult
-     * @param {string[]}sessionIds
-     * @param {ClientOperationResultCallback}callback
-     * */
-    _createClientOperationResult(operationResult, sessionIds, callback) {
-        const operation = operationResult.operation;
-        /**
-         * @type AppServerResult
-         * */
-        const eventData = {
-            operationId: operation.getId(),
-            sessionIds,
-            operationType: operation.getType(),
-            isOperationCompleted: operationResult.shouldCompleteOperation,
-            resultType: operationResult.resultType,
-            result: operationResult.result,
-            error: operationResult.error
-        };
-        callback(null, operationResult, eventData);
-    }
 
     _emitEvent(eventName, clientOperationResult, callback) {
         this.eventEmitter.emit(eventName, clientOperationResult);

@@ -16,9 +16,9 @@ class WSController extends ControllerBase {
 
         this.logger = this.services.logger;
         this.webSocketServerProxy = new WebSocketServerProxy();
+        /**@type {Array<WebSocketClient>}**/
         this.clients = [];
 
-        this.webSocketServerProxy.onMessage(this._onClientMessage.bind(this));
         this.webSocketServerProxy.onClose(this._onClientDisconnected.bind(this));
         this.webSocketServerProxy.onConnect(this._onClientConnected.bind(this));
 
@@ -29,15 +29,30 @@ class WSController extends ControllerBase {
         this.webSocketServerProxy.addWebSocketCallbacks(webSocketServer);
     }
 
-    _onServerReply(reply) {
-        _.each(reply.sessionIds, sessionId => {
-            const client = this._findClientBySessionId(sessionId);
-            if (client && client.ws) {
-                this._sendClientMessage(client.ws, reply);
-            } else {
-                this.logger.warn('No client WS is found for session ' + sessionId);
-            }
-        });
+    /**
+     * @param {AppServerOperationResult}operationResult
+     * @private
+     */
+    _onServerReply(operationResult) {
+        const {targetSessionId, targetUserId} = operationResult;
+        const clients = this._findClients(targetSessionId, targetUserId);
+        const clientOperationResult = WSController.createClientOperationResult(operationResult);
+        _.each(clients, client => this._sendClientMessage(client.ws, clientOperationResult));
+    }
+
+    /**
+     * @param {AppServerOperationResult}operationResult
+     * */
+    static createClientOperationResult(operationResult) {
+        const operation = operationResult.operation;
+        return {
+            operationId: operation.getId(),
+            operationType: operation.getType(),
+            isOperationCompleted: operationResult.shouldCompleteOperation,
+            resultType: operationResult.resultType,
+            result: operationResult.result,
+            error: operationResult.error
+        };
     }
 
     _sendClientMessage(clientWs, messageObject) {
@@ -51,56 +66,37 @@ class WSController extends ControllerBase {
         });
     }
 
-    _onClientMessage(ws, messageString) {
-        try {
-            const message = JSON.parse(messageString);
-            const clientDescriptor = this._findClientByWs(ws);
-            this.logger.info('Client message for session ' + clientDescriptor.sessionId);
-            this.logger.info(JSON.stringify(message, null, 2));
-
-            const sessionId = message.sessionId;
-            if (sessionId) {
-                this.logger.info('Connecting client WS to session ' + sessionId);
-                const clientDescriptor = this._findClientByWs(ws);
-                clientDescriptor.sessionId = sessionId;
-            } else {
-                this.logger.error('Unknown client message in web-socket.');
-            }
-        } catch (e) {
-            this.logger.error('Client WS message parse error: ' + JSON.stringify(e));
-            const error = {
-                result: {
-                    error:'Error parsing message:' + JSON.stringify(e)
-                }
-            };
-            ws.send(JSON.stringify(error), null, (error) => {
-                if (error) {
-                    this.logger.error('Error sending response to the client: ' + JSON.stringify(error));
-                }
-            });
-        }
-    }
-
     _onClientConnected(ws) {
-        this.logger.info('WS client connected');
+        const {id:sessionId, userId} = ws.upgradeReq.session;
+        this.logger.info(`WS client connected, sessionId: ${sessionId}, userId: ${userId}`);
         this.clients.push({
             ws,
-            sessionId: null
+            sessionId,
+            userId
         });
     }
 
     _onClientDisconnected(clientWs) {
         this.logger.info('WS client disconnected');
-        const index = _.findIndex(this.clients, (client) => client.ws === clientWs);
+        const index = _.findIndex(this.clients, {ws: clientWs});
         this.clients.splice(index, 1);
     }
 
-    _findClientByWs(clientWs) {
-        return _.find(this.clients, client => client.ws === clientWs);
-    }
-
-    _findClientBySessionId(sessionId) {
-        return _.find(this.clients, client => client.sessionId === sessionId);
+    /**
+     * @param sessionId
+     * @param userId
+     * @return {Array<WebSocketClient>}
+     * @private
+     */
+    _findClients(sessionId, userId) {
+        // If specified session is requested, find only client for this session.
+        // Otherwise, for user id, find all sessions for the specified user.
+        if (sessionId) {
+            const client = _.find(this.clients, {sessionId});
+            return client ? [client] : [];
+        } else {
+            return _.filter(this.clients, {userId})
+        }
     }
 
     /**
@@ -113,6 +109,13 @@ class WSController extends ControllerBase {
         this.services.applicationServerReply.on(appServerReplyEvents.onOperationResultReceived, this._onServerReply.bind(this));
         this.services.search.on(searchEvents.onDataReceived, this._onServerReply.bind(this));
     }
+
+    /**
+     * @typedef {Object}WebSocketClient
+     * @property {Object}ws client web socket
+     * @property {string}sessionId Session id of the specified client
+     * @property {string}userId User id of the specified client
+     */
 }
 
 module.exports = WSController;
