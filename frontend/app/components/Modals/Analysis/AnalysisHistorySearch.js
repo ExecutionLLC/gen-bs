@@ -8,7 +8,12 @@ export default class AnalysisHistorySearch extends React.Component {
                 <div className='table-row'>
                     <div className='max-width navbar-search navbar-search-left'>
                         <div className='navbar-search-field'>
-                            <input type='text' className='form-control material-input-sm' placeholder='Search for analyses name or description' />
+                            <input
+                                type='text'
+                                className='form-control material-input-sm'
+                                placeholder='Search for analyses name or description'
+                                onChange={(e) => this.props.onChange(e.target.value)}
+                            />
                         </div>
                     </div>
                     <div>
