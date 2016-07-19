@@ -48,7 +48,6 @@ class SessionService extends ServiceBase {
             genid: (request) => Uuid.v4(),
             name: sessionCookieName,
             secret: sessionSecret,
-            resave: true,
             saveUninitialized: false,
             store: this.services.sessions.getSessionStore()
         });
@@ -106,7 +105,10 @@ class SessionService extends ServiceBase {
 
     findById(sessionId, callback) {
         if (sessionId !== this.systemSession.id) {
-            this.redisStore.get(sessionId, (error, session) => callback(error, session));
+            this.redisStore.get(sessionId, (error, rawSession) => {
+                const session = Object.assign({}, rawSession, {id: sessionId});
+                callback(error, session)
+            });
         } else {
             callback(null, this.systemSession);
         }
@@ -118,6 +120,14 @@ class SessionService extends ServiceBase {
 
     destroySession(session, callback) {
         session.destroy(callback);
+    }
+
+    saveSession(session, callback) {
+        if (this.systemSession.id !== session.id) {
+            this.redisStore.set(session.id, session, (error) => callback(error));
+        } else {
+            callback(null);
+        }
     }
     
     _stringifySession(session) {

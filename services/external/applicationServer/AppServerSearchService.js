@@ -27,16 +27,16 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         this.eventEmitter = new EventEmitter(EVENTS);
     }
 
-    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
+    loadResultsPage(user, session, operationId, limit, offset, callback) {
         async.waterfall([
             (callback) => {
-                this.services.operations.find(sessionId, operationId, callback);
+                this.services.operations.find(session, operationId, callback);
             },
             (operation, callback) => {
                 const redisData = operation.getRedisParams();
                 const userId = user.id;
                 const redisParams = Object.assign({}, redisData, {
-                    sessionId,
+                    session,
                     operationId,
                     userId,
                     limit,
@@ -45,7 +45,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 this.services.redis.fetch(redisParams, (error, hash) => callback(error, operation, hash));
             },
             (operation, fieldIdToValueArray, callback) => {
-                this._createSearchDataResult(null, operation, fieldIdToValueArray, callback);
+                this._createSearchDataResult(null, session, operation, fieldIdToValueArray, callback);
             },
             (operationResult, callback) => {
                 this.services.applicationServerReply.processLoadNextPageResult(operationResult, callback);
@@ -165,7 +165,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => {
                 // Store params to be able to retrieve next page by user requests.
-                this._storeRedisParamsInOperation(redisParams, operation, callback);
+                this._storeRedisParamsInOperation(session, redisParams, operation, callback);
             },
             (callback) => {
                 this.services.redis.fetch(redisParams, callback);
@@ -287,7 +287,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         });
     }
 
-    _storeRedisParamsInOperation(redisParams, operation, callback) {
+    _storeRedisParamsInOperation(session, redisParams, operation, callback) {
         // Store Redis information in the operation.
         // This is done to be able to fetch another page later.
         const params = {

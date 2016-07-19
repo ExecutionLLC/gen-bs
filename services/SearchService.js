@@ -89,8 +89,8 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
-        this.services.applicationServer.loadResultsPage(user, sessionId, operationId, limit, offset, callback);
+    loadResultsPage(user, session, operationId, limit, offset, callback) {
+        this.services.applicationServer.loadResultsPage(user, session, operationId, limit, offset, callback);
     }
 
     _subscribeToRPCEvents() {

@@ -70,7 +70,9 @@ class ApplicationServerReplyService extends ServiceBase {
                 callback(null, operationResult);
             },
             (operationResult, callback) => this._emitEvent(operationResult.eventName,
-                operationResult, callback)
+                operationResult, (error) => callback(error, operationResult)),
+            // We are working with the session by ourselves, so need to explicitly save it here.
+            (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
         ], (error) => {
             callback(error);
         });
@@ -78,7 +80,7 @@ class ApplicationServerReplyService extends ServiceBase {
 
     processLoadNextPageResult(operationResult, callback) {
         async.waterfall([
-            (callback) => this._completeOperationIfNeeded(operationResult, callback),
+            (callback) => this._completeOperationIfNeeded(operationResult, (error) => callback(error)),
             (callback) => this._emitEvent(operationResult.eventName,
                 operationResult, callback)
         ], (error) => {
@@ -93,8 +95,8 @@ class ApplicationServerReplyService extends ServiceBase {
      * @param {AppServerResult}appServerResult
      * */
 
-    _emitEvent(eventName, clientOperationResult, callback) {
-        this.eventEmitter.emit(eventName, clientOperationResult);
+    _emitEvent(eventName, operationResult, callback) {
+        this.eventEmitter.emit(eventName, operationResult);
         callback(null);
     }
 
