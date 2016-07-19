@@ -12,7 +12,7 @@ export default class AnalysisHistorySearch extends React.Component {
                                 type='text'
                                 className='form-control material-input-sm'
                                 placeholder='Search for analyses name or description'
-                                onChange={(e) => this.props.onChange(e.target.value)}
+                                onChange={(e) => this.props.onFilter(e.target.value)}
                             />
                         </div>
                     </div>

@@ -20,7 +20,7 @@ export default class AnalysisLeftPane extends React.Component {
         return (
             <div>
                 <AnalysisHistorySearch
-                    onChange={(str) => this.onFilterChange(str)}
+                    onFilter={(str) => this.onFilterChange(str)}
                 />
                 <AnalysisHistoryList
                     historyList={historyListFilteredArray}
