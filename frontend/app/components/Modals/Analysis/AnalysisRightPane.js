@@ -652,7 +652,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getSampleOptions() {
-        const {samples} = this.props.samplesList;
+        const samples = this.props.samplesList.hashedArray.array;
         return samples.map((sampleItem) => {
             const isDisabled = this.isSampleDisabled(sampleItem);
             const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
