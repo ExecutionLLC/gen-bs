@@ -5,12 +5,14 @@ const _ = require('lodash');
 const Redis = require('redis');
 
 const ServiceBase = require('../ServiceBase');
+const CollectionUtils = require('../../utils/CollectionUtils');
 
 /**
  * @typedef {Object}RedisParams
  * @property {string}host
  * @property {number}port
  * @property {number}databaseNumber
+ * @property {string|null}password
  * @property {string}dataIndex
  * @property {number}offset
  * @property {number}limit
@@ -44,7 +46,13 @@ class RedisService extends ServiceBase {
             (callback) => {
                 // This is done to allow local port forwarding in dev env.
                 const redisHost = this.services.config.forceOverrideRedisToLocalhost ? 'localhost' : redisParams.host;
-                this._createClient(redisHost, redisParams.port, redisParams.databaseNumber, callback);
+                this._createClient(
+                    redisHost,
+                    redisParams.port,
+                    redisParams.password,
+                    redisParams.databaseNumber,
+                    callback
+                );
             },
             (client, callback) => {
                 this._fetchData(client, redisParams.dataIndex, redisParams.offset, redisParams.limit, callback);
@@ -65,11 +73,10 @@ class RedisService extends ServiceBase {
         });
     }
 
-    _createClient(host, port, databaseNumber, callback) {
-        const client = Redis.createClient({
-            host,
-            port
-        });
+    _createClient(host, port, password, databaseNumber, callback) {
+        const identityPart = (password) ? (password + '@') : '';
+        const url = 'redis://' + identityPart + host + ':' + port;
+        const client = Redis.createClient({url});
 
         // Select Redis database by number
         client.select(databaseNumber, (error) => callback(error, client));
@@ -162,33 +169,35 @@ class RedisService extends ServiceBase {
             },
             (fields, callback) => {
                 // will be matching fields by name, so create fieldName->field hash
-                const fieldNameToFieldHash = _.reduce(fields, (memo, field) => {
+                const fieldNameToFieldHash = CollectionUtils.createHash(fields,
                     // Source fields will be prepended by the source name, sample fields - will not.
-                    const fieldName = field.sourceName === 'sample' ? field.name : field.sourceName + '_' + field.name;
-                    memo[fieldName] = field;
-                    return memo;
-                }, {});
+                    (field) => field.sourceName === 'sample' ? field.name : field.sourceName + '_' + field.name
+                );
                 callback(null, fieldNameToFieldHash);
             },
             (fieldNameToFieldHash, callback) => {
+                const missingFieldsSet = new Set();
                 const fieldIdToValueArray = _.map(rawRedisRows, (rowObject) => {
-                    const fieldIdToValueObject = {};
-                    const fieldNames = _.keys(rowObject);
-                    _.each(fieldNames, fieldName => {
-                        const field = fieldNameToFieldHash[fieldName];
-                        const fieldValue = this._mapFieldValue(rowObject[fieldName]);
-
-                        // Keep the search key and transfer it to the client as is.
-                        if (fieldName === this.getSearchKeyFieldName()) {
-                            fieldIdToValueObject[fieldName] = fieldValue;
-                        } else if (field) {
-                            fieldIdToValueObject[field.id] = fieldValue;
-                        } else {
-                            console.error('Field is not found! The value will be ignored: ' + fieldName);
-                        }
-                    });
-                    return fieldIdToValueObject;
+                    const searchKeyFieldName = this.getSearchKeyFieldName();
+                    const [fieldNames, missingFieldNames] = _(rowObject)
+                        .keys()
+                        // exclude search key
+                        .filter(fieldName => fieldName !== searchKeyFieldName)
+                        // group by existence
+                        .partition(fieldName => !!fieldNameToFieldHash[fieldName])
+                        .value();
+                    missingFieldNames.forEach(missingFieldName => missingFieldsSet.add(missingFieldName));
+                    // Map field names to field ids.
+                    const mappedRowObject = CollectionUtils.createHash(fieldNames,
+                        (fieldName) => fieldNameToFieldHash[fieldName].id,
+                        (fieldName) => this._mapFieldValue(rowObject[fieldName])
+                    );
+                    // add search key value.
+                    mappedRowObject[searchKeyFieldName] = rowObject[searchKeyFieldName];
+                    return mappedRowObject;
                 });
+                const missingFields = [...missingFieldsSet];
+                missingFields.length && this.logger.error(`The following fields were not found: ${missingFields}`);
                 callback(null, fieldIdToValueArray);
             }
         ], callback);

@@ -5,6 +5,7 @@ const async = require('async');
 
 const CollectionUtils = require('../utils/CollectionUtils');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const {ENTITY_TYPES} = require('../utils/Enums');
 const SecureModelBase = require('./SecureModelBase');
 
 const TableNames = {
@@ -64,7 +65,7 @@ class FiltersModel extends SecureModelBase {
                         creator: userId,
                         name: filter.name,
                         rules: filter.rules,
-                        type: filter.type || 'user'
+                        type: filter.type || ENTITY_TYPES.USER
                     };
                     this._insert(dataToInsert, trx, callback);
                 },

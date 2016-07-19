@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Select from '../../shared/Select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 export default class MetadataSearch extends Component {
 
@@ -32,12 +33,12 @@ export default class MetadataSearch extends Component {
 
     isSampleDisabled(sample) {
         const {isDemoSession} = this.props;
-        return isDemoSession && sample.type == 'advanced';
+        return entityTypeIsDemoDisabled(sample.type, isDemoSession);
     }
 
     getSampleOptions() {
-        const {samples} = this.props;
-        return samples.map((sampleItem) => {
+        const {samplesArray} = this.props;
+        return samplesArray.map((sampleItem) => {
             const isDisabled = this.isSampleDisabled(sampleItem);
             const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
             return {value: sampleItem.id, label, disabled: isDisabled};
@@ -46,8 +47,9 @@ export default class MetadataSearch extends Component {
 }
 
 MetadataSearch.propTypes = {
-    samples: React.PropTypes.array.isRequired,
+    samplesArray: React.PropTypes.array.isRequired,
     selectedSampleId: React.PropTypes.string,
+    isDemoSession: React.PropTypes.bool.isRequired,
     /**
      * @type Function(Uuid sampleId)
      * */

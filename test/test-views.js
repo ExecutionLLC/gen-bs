@@ -6,6 +6,7 @@ const Uuid = require('node-uuid');
 const HttpStatus = require('http-status');
 
 const Config = require('../utils/Config');
+const {ENTITY_TYPES} = require('../utils/Enums');
 const Urls = require('./utils/Urls');
 const ClientBase = require('./utils/ClientBase');
 const SessionsClient = require('./utils/SessionsClient');
@@ -28,7 +29,7 @@ const checkView = (view) => {
     assert.ok(view.id);
     assert.ok(view.name);
     assert.ok(
-        _.any(['standard', 'advanced', 'user'], (type) => view.type === type)
+        _.any(ENTITY_TYPES.allValues, (type) => view.type === type)
     );
     assert.ok(view.viewListItems);
 };
@@ -82,19 +83,19 @@ describe('Views', () => {
                     assert.ok(addedView);
                     assert.notEqual(addedView.id, view.id, 'View id is not changed.');
                     assert.equal(addedView.name, view.name);
-                    assert.equal(addedView.type, 'user');
+                    assert.equal(addedView.type, ENTITY_TYPES.USER);
 
                     // Update created view.
                     const viewToUpdate = _.cloneDeep(addedView);
                     viewToUpdate.name = 'Test View ' + Uuid.v4();
-                    viewToUpdate.type = 'advanced';
+                    viewToUpdate.type = ENTITY_TYPES.ADVANCED;
 
                     viewsClient.update(sessionId, viewToUpdate, (error, response) => {
                         const updatedView = ClientBase.readBodyWithCheck(error, response);
                         assert.ok(updatedView);
                         assert.notEqual(updatedView.id, viewToUpdate.id);
                         assert.equal(updatedView.name, viewToUpdate.name);
-                        assert.equal(updatedView.type, 'user', 'View type change should not be allowed by update.');
+                        assert.equal(updatedView.type, ENTITY_TYPES.USER, 'View type change should not be allowed by update.');
                         done();
                     });
                 });
@@ -107,7 +108,7 @@ describe('Views', () => {
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(views);
-                const nonUserView = _.find(views, view => view.type !== 'user');
+                const nonUserView = _.find(views, view => view.type !== ENTITY_TYPES.USER);
                 assert.ok(nonUserView, 'Cannot find any non-user view');
                 nonUserView.name = 'Test Name' + Uuid.v4();
 
@@ -264,15 +265,15 @@ describe('Views', () => {
                     assert.ok(addedView);
                     assert.notEqual(addedView.id, view.id, 'View id is not changed.');
                     assert.equal(addedView.name, view.name);
-                    assert.equal(addedView.type, 'user');
+                    assert.equal(addedView.type, ENTITY_TYPES.USER);
 
                     // Update created view.
                     const viewToUpdate = _.cloneDeep(addedView);
                     viewToUpdate.name = 'Test View ' + Uuid.v4();
-                    viewToUpdate.type = 'advanced';
+                    viewToUpdate.type = ENTITY_TYPES.ADVANCED;
                     const viewItem = viewToUpdate.viewListItems[0];
                     viewItem.fieldId = null;
-                    viewToUpdate.viewListItems.push(viewItem)
+                    viewToUpdate.viewListItems.push(viewItem);
 
                     viewsClient.update(sessionId, viewToUpdate, (error, response) => {
                         ClientBase.expectErrorResponse(error, response);
@@ -294,12 +295,12 @@ describe('Views', () => {
                     assert.ok(addedView);
                     assert.notEqual(addedView.id, view.id, 'View id is not changed.');
                     assert.equal(addedView.name, view.name);
-                    assert.equal(addedView.type, 'user');
+                    assert.equal(addedView.type, ENTITY_TYPES.USER);
 
                     // Update created view.
                     const viewToUpdate = _.cloneDeep(addedView);
                     viewToUpdate.name = 'Test View ' + Uuid.v4();
-                    viewToUpdate.type = 'advanced';
+                    viewToUpdate.type = ENTITY_TYPES.ADVANCED;
                     viewToUpdate.viewListItems = [];
 
                     viewsClient.update(sessionId, viewToUpdate, (error, response) => {

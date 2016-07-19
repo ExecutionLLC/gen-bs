@@ -32,7 +32,7 @@ class SchedulerService extends ServiceBase {
             return;
         }
 
-        this.logger.info('Scheduler service is started.');
+        this.logger.debug('Scheduler service is started.');
 
         const activeTasks = this._getEnabledTasks();
         _.each(activeTasks, (task) => {
@@ -44,13 +44,13 @@ class SchedulerService extends ServiceBase {
         if (!task.isEnabled) {
             this.logger.warn('Task ' + task.name + ' is disabled, do nothing.');
         } else {
-            this.logger.info('Processing task: ' + task.name + '...');
+            this.logger.debug('Processing task: ' + task.name + '...');
             task.execute((error) => {
                 if (error) {
                     const message = ErrorUtils.createErrorMessage(error);
                     this.logger.error('Task ' + task.name + ': ' + message);
                 } else {
-                    this.logger.info('Task ' + task.name + ' processed.');
+                    this.logger.debug('Task ' + task.name + ' processed.');
                 }
                 task.timeoutId = setTimeout(this._executeTask, task.calculateTimeout(), task);
             });

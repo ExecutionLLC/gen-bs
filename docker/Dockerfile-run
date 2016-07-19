@@ -1,0 +1,49 @@
+FROM ubuntu:14.04
+MAINTAINER Loginov Vasily <vasily.loginov@execution.su>
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    NVM_VERSION=e1c84ba \
+    GEN_WS_LOG_PATH='/data/logs/webserver.log' \
+    GEN_WS_SAVED_FILES_PATH='/data/saved-files' \
+    GEN_WS_UPLOAD_PATH='/data/uploads' \
+    GEN_FRONTEND_API_HOST='localhost' \
+    GEN_FRONTEND_API_PORT=8080 \
+    GEN_FRONTEND_USE_SECURE_CONNECTION=false \
+    GEN_FRONTEND_LOGIN_CALLBACK_PORT=8080 \
+    GEN_FRONTEND_SESSION_KEEP_ALIVE_TIMEOUT=60 \
+    GEN_FRONTEND_SESSION_LOGOUT_TIMEOUT=15*60 \
+    GEN_FRONTEND_SESSION_LOGOUT_WARNING_TIMEOUT=15 \
+    GEN_FRONTEND_HEADER_SESSION='X-Session-Id' \
+    GEN_FRONTEND_HEADER_LANGUAGE='X-Language-Id'
+
+VOLUME ["/data"]
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    gcc \
+    g++ \
+    git \
+    openssh-client \
+    libssl-dev \
+    ca-certificates
+
+# Fix 'stdin: is not a tty' error
+RUN cat ${HOME}/.profile | grep -v mesg > ${HOME}/profile-modified
+RUN mv ${HOME}/profile-modified ${HOME}/.profile
+
+# Setting up Node Version Manager using manual installation.
+RUN git clone https://github.com/creationix/nvm.git ${HOME}/.nvm && cd ${HOME}/.nvm && git checkout ${NVM_VERSION}
+RUN echo '. ~/.nvm/nvm.sh' >> $HOME/.profile
+
+# Install web server using the separate script because we are unable to load .rc env here.
+RUN mkdir -p /webserver
+COPY ./build/ /webserver/
+RUN ["bash", "-c", "source /root/.nvm/nvm.sh && nvm install 6.1.0 && cd /webserver && NODE_ENV=production npm install"]
+
+# Move genomix.js with templates. The actual genomix.js file will be built during the container launch.
+RUN mv /webserver/public/genomics.js /webserver/public/genomics.js.template
+
+COPY ./scripts/docker-run.sh /webserver/
+RUN chmod u+x /webserver/docker-run.sh
+
+CMD ["bash", "-c", "source /root/.nvm/nvm.sh && nvm use 6.1.0 && cd /webserver && ./docker-run.sh"]

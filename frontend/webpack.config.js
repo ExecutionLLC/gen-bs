@@ -15,7 +15,12 @@ function makeDefault(value, defaultValue) {
     }
 
     if (typeof defaultValue === 'boolean') {
-        return JSON.parse(value);
+        try {
+            return JSON.parse(value);
+        } catch (e) {
+            console.error(`Unexpected environment variable value: ${value}`);
+            return value;
+        }
     }
     return value;
 }
@@ -31,17 +36,22 @@ const LOGIN_CALLBACK_PORT = makeDefault(ENV.GEN_FRONTEND_LOGIN_CALLBACK_PORT, 80
 const SESSION_KEEP_ALIVE_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_KEEP_ALIVE_TIMEOUT, 60);
 const SESSION_LOGOUT_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_LOGOUT_TIMEOUT, 15*60);
 const SESSION_LOGOUT_WARNING_TIMEOUT = makeDefault(ENV.GEN_FRONTEND_SESSION_LOGOUT_WARNING_TIMEOUT, 15);
-const HEADER_SESSION = makeDefault(ENV.GEN_HEADER_SESSION, 'X-Session-Id');
-const HEADER_LANGUAGE = makeDefault(ENV.GEN_HEADER_LANGUAGE, 'X-Language-Id');
+const HEADER_SESSION = makeDefault(ENV.GEN_FRONTEND_HEADER_SESSION, 'X-Session-Id');
+const HEADER_LANGUAGE = makeDefault(ENV.GEN_FRONTEND_HEADER_LANGUAGE, 'X-Language-Id');
 
-console.log(colors.bold('-> API host:   ', API_HOST));
-console.log(colors.bold('-> API port:   ', API_PORT));
-console.log(colors.bold('-> API Secure? ', USE_SECURE_CONNECTION));
+const isProductionBuild = ENV.NODE_ENV === 'production';
+
+console.log(colors.bold('-> API host:         ', API_HOST));
+console.log(colors.bold('-> API port:         ', API_PORT));
+console.log(colors.bold('-> Secure?           ', USE_SECURE_CONNECTION));
+console.log(colors.bold('-> Production build? ', isProductionBuild));
 console.log('');
+
+const devtool = isProductionBuild ? '#cheap-module-source-map' : '#eval';
 
 module.exports = {
 
-    devtool: '#eval',
+    devtool,
 
     entry: [
         'webpack-hot-middleware/client',
@@ -123,6 +133,9 @@ module.exports = {
         }),
 
         new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(ENV.NODE_ENV || null)
+            },
             API_PORT: JSON.stringify(API_PORT),
             API_HOST: JSON.stringify(API_HOST),
             USE_SECURE_CONNECTION: JSON.stringify(USE_SECURE_CONNECTION),
@@ -132,6 +145,18 @@ module.exports = {
             SESSION_KEEP_ALIVE_TIMEOUT: JSON.stringify(SESSION_KEEP_ALIVE_TIMEOUT),
             SESSION_LOGOUT_TIMEOUT: JSON.stringify(SESSION_LOGOUT_TIMEOUT),
             SESSION_LOGOUT_WARNING_TIMEOUT: JSON.stringify(SESSION_LOGOUT_WARNING_TIMEOUT)
-        })
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: false,
+            minimize: true,
+            output: {
+                comments: false
+            },
+            compress: true,
+            mangle: {
+                except: []
+            }
+        }),
+        new webpack.optimize.DedupePlugin()
     ]
 };

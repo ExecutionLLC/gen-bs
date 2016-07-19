@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import RequestWrapper from './RequestWrapper';
 import UserEntityClientBase from './UserEntityClientBase';
+import {entityType} from '../utils/entityTypes';
 
 export default class SamplesClient extends UserEntityClientBase {
     constructor(urls) {
@@ -40,7 +41,7 @@ export default class SamplesClient extends UserEntityClientBase {
         if (!sample.id || !sample.fileName) {
             return false;
         }
-        if (!_.includes(['standard', 'advanced', 'user'], sample.type)) {
+        if (!_.includes([entityType.STANDARD, entityType.ADVANCED, entityType.USER], sample.type)) {
             return false;
         }
         if (shouldCheckFieldValues) {

@@ -1,6 +1,7 @@
 'use strict';
 
 import Request from 'superagent';
+import _ from 'lodash';
 
 export default class RequestWrapper {
     static post(url, headers, bodyObject, callback) {

@@ -2,6 +2,7 @@
 
 const async = require('async');
 
+const {ENTITY_TYPES} = require('../utils/Enums');
 const ServiceBase = require('./ServiceBase');
 
 class UserEntityServiceBase extends ServiceBase {
@@ -59,7 +60,7 @@ class UserEntityServiceBase extends ServiceBase {
     }
 
     _ensureItemOfUserType(item, callback) {
-        if (item.type === 'user') {
+        if (item.type === ENTITY_TYPES.USER) {
             callback(null, item);
         } else {
             callback(new Error('Default items cannot be changed.'));

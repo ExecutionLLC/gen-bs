@@ -1,5 +1,6 @@
 import Moment from 'moment';
 import HttpStatus from 'http-status';
+import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
@@ -35,7 +36,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
                 sessionId
             },
             samplesList: {
-                selectedSample
+                selectedSampleId
             },
             filtersList: {
                 selectedFilterId
@@ -45,7 +46,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             }
         } = getState();
         const fileMetadata = {
-            sampleId: selectedSample.id,
+            sampleId: selectedSampleId,
             viewId: selectedViewId,
             filterIds: [selectedFilterId],
             name: fileName,

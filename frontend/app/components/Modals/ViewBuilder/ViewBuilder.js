@@ -1,9 +1,9 @@
 import React from 'react';
-import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 import classNames from 'classnames';
 import _ from 'lodash';
 
+import Select from '../../shared/Select';
 import {
     viewBuilderDeleteColumn,
     viewBuilderAddColumn,
@@ -11,6 +11,7 @@ import {
     viewBuilderChangeSortColumn,
     viewBuilderChangeKeywords
 } from '../../../actions/viewBuilder';
+import {entityTypeIsEditable} from '../../../utils/entityTypes';
 
 
 export default class ViewBuilder extends React.Component {
@@ -34,17 +35,13 @@ export default class ViewBuilder extends React.Component {
         );
         // This field will be chosen when a new item is created.
         const nextDefaultField = _.first(fieldsForSelection);
-        var plusDisabledClass = classNames({
-            'disabled': (view.type !== 'user' || viewItemsLength >= 30 || !nextDefaultField) ? 'disabled' : ''
-        });
-        var minusDisabledClass = classNames({
-            'disabled': (view.type !== 'user' || viewItemsLength <= 1) ? 'disabled' : ''
-        });
+        const isDisableEditing = !entityTypeIsEditable(view.type);
+        const plusDisabled = isDisableEditing || viewItemsLength >= 30 || !nextDefaultField;
+        const minusDisabled = isDisableEditing || viewItemsLength <= 1;
 
-        const isDisableEditing = view.type !== 'user';
         const selects = view.viewListItems.map(function (viewItem, index) {
 
-            var currentValue =
+            const currentValue =
                 _.find(fields.totalFieldsList, {id: viewItem.fieldId}) ||
                 {id: null};
 
@@ -102,11 +99,11 @@ export default class ViewBuilder extends React.Component {
                             />
                         </div>
                         <div className='btn-group'>
-                            <button className='btn-link-default' disabled={minusDisabledClass}
+                            <button className='btn-link-default' disabled={minusDisabled}
                                     onClick={ () => dispatch(viewBuilderDeleteColumn(index)) }
                                     type='button'>
                                 <i className='md-i'>close</i></button>
-                            <button className='btn-link-default' disabled={plusDisabledClass}
+                            <button className='btn-link-default' disabled={plusDisabled}
                                     onClick={ () => dispatch(viewBuilderAddColumn(index+1, nextDefaultField.id)) }
                                     type='button'>
                                 <i className='md-i'>add</i></button>
@@ -189,7 +186,9 @@ export default class ViewBuilder extends React.Component {
             return classNames(
                 'btn',
                 'btn-default',
-                'btn-sort', sortDirection, {
+                'btn-sort',
+                sortDirection,
+                {
                     'active': true
                 }
             );

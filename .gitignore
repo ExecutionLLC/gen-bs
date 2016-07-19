@@ -1,4 +1,5 @@
 deploy.sh
+build/
 *.name
 .idea/encodings.xml
 *.iml

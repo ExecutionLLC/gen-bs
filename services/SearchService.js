@@ -5,25 +5,27 @@ const async = require('async');
 
 const ServiceBase = require('./ServiceBase');
 const EventProxy = require('../utils/EventProxy');
+const CollectionUtils = require('../utils/CollectionUtils');
 const RESULT_TYPES = require('./external/applicationServer/AppServerResultTypes');
+const {SEARCH_SERVICE_EVENTS} = require('../utils/Enums');
 
-const EVENTS = {
-    onDataReceived: 'onDataReceived'
-};
 
 class SearchService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
 
         this._onSearchDataReceived = this._onSearchDataReceived.bind(this);
+        
+        this.eventEmitter = new EventProxy(SEARCH_SERVICE_EVENTS.allValues);
+    }
 
-        this.eventEmitter = new EventProxy(EVENTS);
+    init() {
         this.searchKeyFieldName = this.services.redis.getSearchKeyFieldName();
         this._subscribeToRPCEvents();
     }
 
     registeredEvents() {
-        return EVENTS;
+        return SEARCH_SERVICE_EVENTS;
     }
 
     on(eventName, callback) {
@@ -162,7 +164,7 @@ class SearchService extends ServiceBase {
                 })
             });
         }
-        this.eventEmitter.emit(EVENTS.onDataReceived, clientMessage);
+        this.eventEmitter.emit(SEARCH_SERVICE_EVENTS.onDataReceived, clientMessage);
     }
 
     /**
@@ -183,14 +185,8 @@ class SearchService extends ServiceBase {
 
             // Group comments by search key.
             (comments, callback) => {
-                const searchKeyToCommentHash = _.reduce(comments, (result, comment) => {
-                    const searchKey = comment.searchKey;
-                    if (!result[searchKey]) {
-                        result[searchKey] = [];
-                    }
-                    result[searchKey].push(comment);
-                    return result;
-                }, {});
+                const searchKeyToCommentHash = CollectionUtils.createMultiValueHash(comments, 
+                    (comment) => comment.searchKey);
                 callback(null, searchKeyToCommentHash);
             }
         ], callback);

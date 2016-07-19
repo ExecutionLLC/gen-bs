@@ -9,12 +9,15 @@
     "db:reset": "npm run db:create; npm run defaults:import",
     "defaults:import": "node ./scripts/import-defaults.js",
     "start": "node index.js",
-    "start-server": "cd frontend;npm run build;cd ../;node ./index.js",
+    "start-server": "cd frontend; npm run build;cd ../;node ./index.js",
     "defaults:generate": "node ./defaults/build-initial-data.js",
     "client": "node test-client/index.js",
     "user:add": "node ./scripts/add-user.js",
     "frontend": "cd frontend; npm start",
-    "update": "cd scripts; bash amazon-update.sh"
+    "update": "cd scripts; bash amazon-update.sh",
+    "build:webserver": "cd scripts/build; ./build.sh",
+    "build:frontend": "cd frontend/; npm run build",
+    "build": "npm run build:frontend; npm run build:webserver"
   },
   "repository": {
     "type": "git",
@@ -28,10 +31,11 @@
   },
   "homepage": "https://github.com/ExecutionLLC/gen-bs#readme",
   "engines": {
-    "node": "4.2.2"
+    "node": "6.1.0"
   },
   "dependencies": {
     "ali-oss": "4.4.3",
+    "amqplib": "0.4.2",
     "async": "1.5.1",
     "aws-sdk": "2.2.41",
     "body-parser": "1.14.1",
@@ -39,25 +43,30 @@
     "change-case": "2.3.1",
     "co": "4.6.0",
     "colors": "1.1.2",
+    "compression": "1.6.2",
     "cors": "2.7.1",
     "express": "4.13.3",
-    "express-rate-limit": "https://github.com/karatheodory/express-rate-limit.git#custom-condition",
+    "express-rate-limit": "2.3.1",
     "generator-bind": "1.0.1",
     "http-status": "0.2.0",
     "knex": "0.9.0",
     "lodash": "^3.10.1",
     "morgan": "1.6.1",
     "multer": "1.1.0",
+    "node-optimize": "https://github.com/karatheodory/node-optimize.git#es6-support",
     "node-uuid": "1.4.7",
     "optimist": "0.6.1",
     "passport": "0.3.2",
     "passport-google-oauth20": "1.0.0",
-    "pg": "4.4.3",
+    "pg": "4.5.6",
     "redis": "2.4.2",
+    "request": "2.67.0",
+    "uglify-js": "github:mishoo/UglifyJS2#6eaeb19",
+    "webpack": "1.13.1",
     "ws": "1.0.1"
   },
   "devDependencies": {
-    "mocha": "2.4.5",
-    "request": "2.67.0"
+    "fakeredis": "1.0.3",
+    "mocha": "2.4.5"
   }
 }

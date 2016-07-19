@@ -9,6 +9,7 @@ const EVENTS = require('./AppServerEvents');
 const RESULT_TYPES = require('./AppServerResultTypes');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 const EventEmitter = require('../../../utils/EventProxy');
+const {ENTITY_TYPES} = require('../../../utils/Enums');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 
@@ -33,18 +34,13 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (operation, callback) => {
                 const redisData = operation.getRedisParams();
                 const userId = user.id;
-                const redisParams = {
+                const redisParams = Object.assign({}, redisData, {
                     sessionId,
                     operationId,
-                    host: redisData.host,
-                    port: redisData.port,
-                    sampleId: redisData.sampleId,
                     userId,
-                    databaseNumber: redisData.databaseNumber,
-                    dataIndex: redisData.dataIndex,
                     limit,
                     offset
-                };
+                });
                 this.services.redis.fetch(redisParams, (error, hash) => callback(error, operation, hash));
             },
             (operation, fieldIdToValueHash, callback) => {
@@ -113,7 +109,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (operation, callback) => this.services.samples.makeSampleIsAnalyzedIfNeeded(params.userId, params.sample.id, (error) => {
                 callback(error, operation);
             }),
-            (operation, callback) => this._rpcSend(operation.getId(), method, searchSessionRequest, callback)
+            (operation, callback) => this._rpcSend(operation, method, searchSessionRequest, callback)
         ], callback);
     }
 
@@ -136,7 +132,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (excludedFields, operation, callback)=> {
                 const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue.filter,
                     excludedFields, params.fieldSearchValues, params.sortValues);
-                this._rpcSend(operationId, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
+                this._rpcSend(operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
     }
@@ -155,6 +151,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const redisParams = {
             host: redisInfo.host,
             port: redisInfo.port,
+            password: redisInfo.password,
             sampleId,
             userId,
             operationId: operation.getId(),
@@ -284,7 +281,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
      * For user samples sample id is file name.
      * */
     _getAppServerSampleId(sample) {
-        return sample.type === 'standard' || sample.type === 'advanced' ?
+        return _.includes(ENTITY_TYPES.defaultTypes, sample.type) ?
             sample.fileName : sample.originalId;
     }
 
@@ -317,6 +314,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const params = {
             host: redisParams.host,
             port: redisParams.port,
+            password: redisParams.password,
             databaseNumber: redisParams.databaseNumber,
             dataIndex: redisParams.dataIndex,
             sampleId: redisParams.sampleId

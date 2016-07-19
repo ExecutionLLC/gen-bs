@@ -1,5 +1,7 @@
 import {receiveSearchedResults} from './variantsTable';
-import {changeFileUploadProgress, fileUploadError} from './fileUpload';
+import {changeFileUploadProgressForOperationId, fileUploadErrorForOperationId} from './fileUpload';
+import config from '../../config';
+
 /*
  * action types
  */
@@ -129,8 +131,7 @@ function receiveSearchMessage(wsData) {
 
 function receiveUploadMessage(wsData) {
     return (dispatch) => {
-        dispatch(progressMessage(wsData)); // TODO Remove
-        dispatch(changeFileUploadProgress(wsData.result.progress, wsData.result.status));
+        dispatch(changeFileUploadProgressForOperationId(wsData.result.progress, wsData.result.status, wsData.operationId));
     };
 }
 
@@ -139,7 +140,7 @@ function receiveErrorMessage(wsData) {
         console.error('Error: ' + JSON.stringify(wsData.error));
         const error = wsData.error;
         if (wsData.operationType === WS_OPERATION_TYPES.UPLOAD) {
-            dispatch(fileUploadError(error));
+            dispatch(fileUploadErrorForOperationId(error, wsData.operationId));
         } else {
             dispatch(asError(error));
         }
@@ -148,7 +149,7 @@ function receiveErrorMessage(wsData) {
 
 function receiveMessage(msg) {
     return (dispatch) => {
-        const wsData = JSON.parse(JSON.parse(msg));
+        const wsData = JSON.parse(msg);
         const {operationType, resultType} = wsData;
         if (resultType == WS_RESULT_TYPES.ERROR) {
             dispatch(receiveErrorMessage(wsData));
@@ -176,15 +177,40 @@ function sended(msg) {
     };
 }
 
-export function subscribeToWs(sessionId) {
+function reconnectWS() {
+    return (dispatch) => {
+        setTimeout(
+            () => dispatch(initWSConnection()),
+            config.WEBSOCKET_RECONNECT_TIME_MS
+        );
+    };
+}
+
+export function subscribeToWs() {
     return (dispatch, getState) => {
         const conn = getState().websocket.wsConn;
+        const {sessionId} = getState().auth;
         conn.onopen = () => {
             conn.send(JSON.stringify({sessionId}));
         };
-        conn.onmessage = event => dispatch(receiveMessage(JSON.stringify(event.data)));
+        conn.onmessage = event => dispatch(receiveMessage(event.data));
         conn.onerror = event => dispatch(receiveError(event.data));
-        conn.onclose = event => dispatch(receiveClose(event.data));
+        conn.onclose = event => {
+            dispatch(receiveClose(event.data));
+            if (!event.wasClean) {
+                dispatch(reconnectWS());
+            }
+        };
+    };
+}
+
+export function initWSConnection() {
+    return (dispatch) => {
+        var conn = new WebSocket(config.URLS.WS);
+        dispatch([
+            createWsConnection(conn),
+            subscribeToWs()
+        ]);
     };
 }
 

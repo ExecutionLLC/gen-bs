@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import Select from '../../shared/Select';
-import {viewsListSelectView} from '../../../actions/viewsList';
 import 'react-select/dist/react-select.css';
 
+import Select from '../../shared/Select';
+import {viewsListSelectView} from '../../../actions/viewsList';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
+import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 export default class Views extends Component {
 
@@ -34,8 +35,8 @@ export default class Views extends Component {
     }
 
     isViewDisabled(view) {
-        const {auth} = this.props;
-        return auth.isDemo && view.type == 'advanced';
+        const {auth: {isDemo}} = this.props;
+        return entityTypeIsDemoDisabled(view.type, isDemo);
     }
 
     getViewOptions() {

@@ -1,10 +1,9 @@
 import React, {PropTypes} from 'react';
 import {Panel} from 'react-bootstrap';
-import Select from '../../shared/Select';
 import 'react-select/dist/react-select.css';
 
+import Select from '../../shared/Select';
 import ComponentBase from '../../shared/ComponentBase';
-
 import {
     updateSampleValue, resetSampleInList,
     requestUpdateSampleFields
@@ -20,39 +19,24 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         dispatch(updateSampleValue(sampleId, fieldId, newValue));
     }
 
-    onSaveEditedSampleClick(e, sample) {
+    onSaveEditedSampleClick(e, sampleId) {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(requestUpdateSampleFields(sample.id));
+        dispatch(requestUpdateSampleFields(sampleId));
     }
 
-    onResetSampleClick(e, sample) {
+    onResetSampleClick(e, sampleId) {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(resetSampleInList(sample.id));
+        dispatch(resetSampleInList(sampleId));
     }
 
     render() {
-        if (!this.props.isExpanded) {
-            return null;
-        }
-        const {sample, editedSamples} = this.props;
-        const currentSampleIndex = _.findIndex(editedSamples, {id: sample.id});
-        const sampleId = sample.id;
-        const fieldIdToValuesHash = {};
-        if (currentSampleIndex >= 0) {
-            _.reduce(editedSamples[currentSampleIndex].values, (result, value) => {
-                result[value.fieldId] = value.values;
-                return result;
-            }, fieldIdToValuesHash);
-        }
+        const {sampleId, fieldIdToValuesHash} = this.props;
         return (
-            <Panel collapsible
-                   expanded={this.props.isExpanded}
-                   className='samples-values'
-            >
+            <Panel className='samples-values'>
                 <div className='flex'>
                     {this.props.fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
                     {this.renderRowButtons()}
@@ -71,13 +55,13 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     renderRowButtons() {
-        const {sample} = this.props;
+        const {sampleId} = this.props;
         return (
           <dl className='dl-horizontal dl-btns'>
               <dd>
                   <div className='btn-group '>
                       <button
-                          onClick={ (e) => this.onResetSampleClick(e, sample) }
+                          onClick={ (e) => this.onResetSampleClick(e, sampleId) }
                           type='button'
                           className='btn btn-default'
                       >
@@ -85,7 +69,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
                       </button>
       
                       <button
-                          onClick={ (e) => this.onSaveEditedSampleClick(e, sample) }
+                          onClick={ (e) => this.onSaveEditedSampleClick(e, sampleId) }
                           type='button'
                           className='btn btn-primary'
                       >
@@ -136,9 +120,8 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 }
 
 SampleEditableFieldsPanel.propTypes = {
-    sample: PropTypes.object.isRequired,
-    isExpanded: PropTypes.bool.isRequired,
-    editedSamples: PropTypes.array.isRequired,
+    sampleId: PropTypes.string.isRequired,
+    fieldIdToValuesHash: PropTypes.object.isRequired,
     fields: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired
 };

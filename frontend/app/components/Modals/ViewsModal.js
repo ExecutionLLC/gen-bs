@@ -8,22 +8,22 @@ import NewViewInputs from './ViewBuilder/NewViewInputs';
 import {viewBuilderEndEdit} from '../../actions/viewBuilder';
 import ExistentViewSelect from './ViewBuilder/ExistentViewSelect';
 import ViewBuilder from './ViewBuilder/ViewBuilder';
+import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 
 class ViewsModal extends React.Component {
 
     render() {
-        const {auth} = this.props;
+        const {auth: {isDemo}} = this.props;
         const views = this.props.viewsList.hashedArray.array;
         const {showModal, viewBuilder} = this.props;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;
-        const isViewEditable = editingView && editingView.type === 'user';
-        const isViewAdvanced = editingView && editingView.type === 'advanced';
-        const isLoginRequired = isViewAdvanced && auth.isDemo;
+        const isViewEditable = editingView && entityTypeIsEditable(editingView.type);
+        const isLoginRequired = editingView && entityTypeIsDemoDisabled(editingView.type, isDemo);
         const editedViewNameTrimmed = editingView && editingView.name.trim();
 
         const viewNameExists = isViewEditable && _(views)
-                .filter(view => view.type !== 'history')
+                .filter(view => view.type !== entityType.HISTORY)
                 .some(view => view.name.trim() === editedViewNameTrimmed
                     && view.id != editingView.id
                 );

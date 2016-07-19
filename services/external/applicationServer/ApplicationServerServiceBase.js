@@ -7,41 +7,47 @@ const ServiceBase = require('../../ServiceBase');
 const RPCProxy = require('../../../utils/RPCProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
-const proxyProviderFunc = _.once(function () {
-    // return new RPCProxy(...args);
-    const args = Array.prototype.slice.call(arguments);
-    const ProxyConstructor = Function.prototype.bind.apply(RPCProxy, [null].concat(args));
-    return new ProxyConstructor();
+const proxyProviderFunc = _.once(function (...args) {
+    return new RPCProxy(...args);
 });
 
 class ApplicationServerServiceBase extends ServiceBase {
     constructor(services) {
         super(services);
 
-        this._rpcSend = this._rpcSend.bind(this);
-        this._rpcReply = this._rpcReply.bind(this);
+        _.bindAll(this, ['_rpcSend', '_rpcReply']);
 
         this.logger = this.services.logger;
-        const host = this.services.config.applicationServer.host;
-        const port = this.services.config.applicationServer.port;
-        
-        this.rpcProxy = proxyProviderFunc(host, port, this.logger, null, null, this._rpcReply)
+        const {host, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
+        /**
+         * @type {RPCProxy}
+         * */
+        this.rpcProxy = proxyProviderFunc(host, requestExchangeName, reconnectTimeout, 
+            this.logger, this._rpcReply);
     }
 
-    _rpcSend(operationId, method, params, callback) {
-        this.rpcProxy.send(operationId, method, params, (error) => {
+    /**
+     * @param {OperationBase}operation
+     * @param {string}method
+     * @param {Object}params
+     * @param {function(Error, string=)}callback
+     * */
+    _rpcSend(operation, method, params, callback) {
+        const operationId = operation.getId();
+        const queryNameOrNull = operation.getASQueryName();
+        this.rpcProxy.send(operationId, method, params, queryNameOrNull, (error) => {
             if (error) {
                 callback(error);
             } else {
-                this.logger.info('RPC SEND: ' + operationId + ' ' + method);
-                this.logger.info('Params: ' + JSON.stringify(params, null, 2));
+                this.logger.info('RPC SEND: \n\toperationId: ' + operationId + '\n\tMethod: ' + method);
+                this.logger.info('Params:\n' + JSON.stringify(params, null, 2));
                 callback(null, operationId);
             }
         });
     }
 
     _rpcReply(rpcMessage) {
-        this.logger.info('RPC REPLY: ' + JSON.stringify(rpcMessage, null, 2));
+        this.logger.info('RPC REPLY:\n' + JSON.stringify(rpcMessage, null, 2));
         if (!rpcMessage.id) {
             this.logger.error('Message has no id, so will be ignored.');
         } else {

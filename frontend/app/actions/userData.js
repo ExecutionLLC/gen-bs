@@ -1,3 +1,6 @@
+import HttpStatus from 'http-status';
+import _ from 'lodash';
+
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {receiveFields, receiveTotalFields} from './fields';
@@ -5,9 +8,6 @@ import {receiveSavedFilesList} from './savedFiles';
 import {receiveQueryHistory} from './queryHistory';
 import {analyze} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
-
-import HttpStatus from 'http-status';
-import _ from 'lodash';
 import {
     filtersListReceive,
     filtersListSelectFilter
@@ -16,6 +16,7 @@ import {
     viewsListReceive,
     viewsListSelectView
 } from './viewsList';
+import {entityType} from '../utils/entityTypes';
 
 /*
  * action types
@@ -65,6 +66,8 @@ export function fetchUserdata() {
                 const userData = response.body;
                 const {
                     samples,
+                    filters,
+                    views,
                     totalFields,
                     savedFiles,
                     queryHistory,
@@ -72,14 +75,14 @@ export function fetchUserdata() {
                     lastSampleFields
                 } = userData;
 
-                const sample = _.find(samples, sample => sample.id === lastSampleId) ||
-                               _.find(samples, sample => sample.type === 'standard');
-                const filter = _.find(userData.filters, filter => filter.type === 'standard');
-                const view = _.find(userData.views, view => view.type === 'standard');
+                const sample = _.find(samples, {id: lastSampleId}) ||
+                               _.find(samples, {type: entityType.STANDARD});
+                const filter = _.find(filters, {type: entityType.STANDARD});
+                const view = _.find(views, {type: entityType.STANDARD});
 
                 dispatch(receiveUserdata(userData));
-                dispatch(filtersListReceive(userData.filters));
-                dispatch(viewsListReceive(userData.views));
+                dispatch(filtersListReceive(filters));
+                dispatch(viewsListReceive(views));
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));

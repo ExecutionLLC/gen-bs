@@ -1,26 +1,22 @@
+import _ from 'lodash';
+import HttpStatus from 'http-status';
+
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
 import {updateQueryHistory} from './queryHistory';
 import {requestTableScrollPositionReset} from './ui';
 
-import HttpStatus from 'http-status';
-
 /*
  * action types
  */
 
-export const INIT_SEARCH_IN_RESULTS_PARAMS = 'INIT_SEARCH_IN_RESULTS_PARAMS';
 export const CHANGE_VARIANTS_GLOBAL_FILTER = 'CHANGE_VARIANTS_GLOBAL_FILTER';
 export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
 export const SET_VARIANTS_SORT = 'SET_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
 export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
-
-export const FILTER_VARIANTS = 'FILTER_VARIANTS';
-
-export const SORT_VARIANTS = 'SORT_VARIANTS';
 
 export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
 export const CLEAR_VARIANTS_ROWS_SELECTION = 'CLEAR_VARIANTS_ROWS_SELECTION';
@@ -32,7 +28,6 @@ export const REQUEST_SEARCHED_RESULTS = 'REQUEST_SEARCHED_RESULTS';
 export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
 
 export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT';
-export const RECEIVE_NEXT_PART_OF_DATA = 'RECEIVE_NEXT_PART_OF_DATA';
 
 const ANALYZE_SAMPLE_NETWORK_ERROR = 'Cannot analyze data (network error). Please try again.';
 const ANALYZE_SAMPLE_SERVER_ERROR = 'Cannot analyze data (server error). Please try again.';
@@ -73,13 +68,6 @@ export function getNextPartOfData() {
         setTimeout(() => {
             dispatch(searchInResultsNextData());
         }, 100);
-    };
-}
-
-export function initSearchInResultsParams(searchInResultsParams) {
-    return {
-        type: INIT_SEARCH_IN_RESULTS_PARAMS,
-        searchInResultsParams
     };
 }
 

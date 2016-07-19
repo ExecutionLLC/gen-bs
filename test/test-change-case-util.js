@@ -52,7 +52,7 @@ const generateAndCheckHash = (objectGenerator, converterFunc, objectChecker) => 
     const hash = _.reduce(objectArray, (result, item, index) => {
         result[index] = item;
         return result;
-    }, {});
+    }, Object.create(null));
     const convertedHash = converterFunc(hash);
     _.each(convertedHash, item => objectChecker(item));
 };

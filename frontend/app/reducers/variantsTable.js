@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import * as ActionTypes from '../actions/variantsTable';
 
 const initialState = {
@@ -47,11 +49,6 @@ export default function variantsTable(state = initialState, action) {
             });
         }
 
-        case ActionTypes.INIT_SEARCH_IN_RESULTS_PARAMS: {
-            return Object.assign({}, state, {
-                searchInResultsParams: action.searchInResultsParams
-            });
-        }
         case ActionTypes.CHANGE_VARIANTS_LIMIT: {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
@@ -129,7 +126,7 @@ export default function variantsTable(state = initialState, action) {
                 } else {
                     // replace existent item, which has the same order
                     fieldIndex = action.sortOrder - 1;
-                    // remove sorting with higer order
+                    // remove sorting with higher order
                     // NOTE: if you want to save state of the sorting with higher order, then
                     // just remove next line  
                     sortArray = sortArray.slice(0, fieldIndex);

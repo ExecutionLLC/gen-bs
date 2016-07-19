@@ -37,14 +37,14 @@ class Logger {
         if (params.console) {
             streams.push({
                 stream: new ConsoleStream(),
-                level:  params.console.level || "trace"
+                level:  params.console.level || 'trace'
             });
         }
 
         if (params.file) {
             var streamConfig = {
                 path:   params.file.path,
-                level:  params.file.level || "trace"
+                level:  params.file.level || 'trace'
             };
             if (params.file.rotatingFilesCount) {
                 Object.assign(streamConfig, {

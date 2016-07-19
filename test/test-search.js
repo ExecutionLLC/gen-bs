@@ -24,7 +24,7 @@ const TestUser = {
     userEmail: 'valarievaughn@electonic.com'
 };
 
-describe.skip('Search', function () {
+describe('Search', function () {
     // Search should fit into 60 seconds
     this.timeout(60000);
     let sessionId = null;

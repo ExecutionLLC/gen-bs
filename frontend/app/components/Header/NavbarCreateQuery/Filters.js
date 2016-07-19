@@ -3,6 +3,7 @@ import Select from '../../shared/Select';
 
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {filtersListSelectFilter} from '../../../actions/filtersList';
+import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 export default class Filters extends Component {
 
@@ -35,8 +36,8 @@ export default class Filters extends Component {
     }
 
     isFilterDisabled(filter) {
-        const {auth} = this.props;
-        return auth.isDemo && filter.type == 'advanced';
+        const {auth: {isDemo}} = this.props;
+        return entityTypeIsDemoDisabled(filter.type, isDemo);
     }
 
     getFilterOptions() {

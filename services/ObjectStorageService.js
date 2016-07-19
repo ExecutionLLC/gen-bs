@@ -1,29 +1,37 @@
 'use strict';
 
+const assert = require('assert');
+
+const {OBJECT_STORAGE_TYPES} = require('../utils/Enums');
 const ServiceBase = require('./ServiceBase');
 
 class ObjectStorageService extends ServiceBase {
     constructor(services) {
         super(services);
-        this.objectService = this._getActualObjectService();
+        const storageType = this.config.objectStorage.type;
+        const objectService = ObjectStorageService._getActualObjectService(storageType, services);
+        const storageSettings = this.config.objectStorage[storageType];
+        assert.ok(storageSettings);
+        Object.assign(this, {objectService, storageSettings});
     }
 
-    uploadObject(keyName, fileStream, callback) {
-        this.objectService.uploadObject(keyName, fileStream, callback);
+    uploadObject(bucketName, keyName, fileStream, callback) {
+        this.objectService.uploadObject(bucketName, keyName, fileStream, callback);
     }
 
-    createObjectStream(keyName, callback) {
-        this.objectService.createObjectStream(keyName, callback);
+    createObjectStream(bucketName, keyName, callback) {
+        this.objectService.createObjectStream(bucketName, keyName, callback);
     }
 
-    _getActualObjectService() {
-        const savedFilesUpload = this.config.savedFilesUpload;
-        const storageType = savedFilesUpload.objectStorageType;
+    getStorageSettings() {
+        return this.storageSettings;
+    }
 
-        if (storageType === 's3') {
-            return this.services.amazonS3;
-        } else if (storageType === 'oss') {
-            return this.services.oss;
+    static _getActualObjectService(storageType, services) {
+        if (storageType === OBJECT_STORAGE_TYPES.S3) {
+            return services.amazonS3;
+        } else if (storageType === OBJECT_STORAGE_TYPES.OSS) {
+            return services.oss;
         } else {
             throw new Error('Unsupported object storage type: ' + storageType);
         }

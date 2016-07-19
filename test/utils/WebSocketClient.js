@@ -16,9 +16,9 @@ class WebSocketClient {
   }
 
   associateSession(sessionId) {
-    const message = ChangeCaseUtil.convertKeysToSnakeCase({
+    const message = {
       sessionId
-    });
+    };
     this.wsClient.send(JSON.stringify(message));
   }
 
