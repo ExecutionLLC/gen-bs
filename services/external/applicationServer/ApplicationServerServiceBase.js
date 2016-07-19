@@ -88,6 +88,8 @@ class ApplicationServerServiceBase extends ServiceBase {
     
     /**
      * @typedef {Object}AppServerOperationResult
+     * @property {string}[targetSessionId] If specified, it will be used to match client web socket.
+     * @property {string}targetUserId If targetSessionId is undefined, result will be sent to all sessions of the specified user.
      * @property {ExpressSession}session
      * @property {OperationBase}operation
      * @property {string}eventName Event to generate.
@@ -116,6 +118,34 @@ class ApplicationServerServiceBase extends ServiceBase {
             error
         };
         callback(null, result);
+    }
+
+    /**
+     * @param {(string|null)}targetSessionId If specified, it will be used to match client web socket.
+     * @param {string}targetUserId If targetSessionId is undefined, result will be sent to all sessions of the specified user.
+     * @param {ExpressSession}session
+     * @param {OperationBase}operation
+     * @param {string}eventName Event to generate.
+     * @param {boolean}shouldCompleteOperation If true, corresponding operation descriptor should be destroyed.
+     * @param {(AppServerProgressMessage|AppServerUploadResult|Array|undefined)}result Operation result data.
+     * @param {(AppServerErrorResult|null)}error
+     * @param {function(Error, AppServerOperationResult)}callback
+     */
+    _createOperationResult(session, operation, targetSessionId, targetUserId,
+                           eventName, shouldCompleteOperation, result, error, callback) {
+        /**@type AppServerOperationResult*/
+        const operationResult = {
+            session,
+            operation,
+            targetSessionId,
+            targetUserId,
+            eventName,
+            shouldCompleteOperation,
+            resultType: (error)? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
+            error,
+            result
+        };
+        callback(null, operationResult);
     }
     
     _isAsErrorMessage(message) {

@@ -99,18 +99,10 @@ class SearchService extends ServiceBase {
     }
 
     _onSearchDataReceived(message) {
-        const fieldIdToValueArray = message.result.fieldIdToValueHash;
-        // For search requests there is only one session.
-        const sessionId = _.first(message.sessionIds);
+        const {session: {userId}, result: {fieldIdToValueArray}} = message;
 
         async.waterfall([
-            (callback) =>
-                this.services.sessions.findSessionUserId(
-                    sessionId,
-                    (error, userId) => callback(error, userId)
-                ),
-            // TODO: Store languId from request in the session to use here.
-            (userId, callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
+            (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
             (user, callback) => this._loadRowsComments(user.id, user.language, fieldIdToValueArray, callback),
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.

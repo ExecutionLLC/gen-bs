@@ -22,10 +22,11 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     
     uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback) {
         async.waterfall([
-            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, user.id, callback),
+            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, callback),
             (operation, callback) => {
                 operation.setSampleId(sampleId);
                 operation.setSampleFileName(sampleFileName);
+                operation.setUserId(user.id);
                 callback(null, operation);
             },
             (operation, callback) => {
@@ -38,7 +39,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestSampleProcessing(sessionId, operationId, sampleId, callback) {
+    requestSampleProcessing(session, operationId, sampleId, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSessionId(callback),
@@ -48,54 +49,39 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 const params = {
                     sampleId
                 };
-                this._rpcSend(operation, method, params, callback);
+                this._rpcSend(session, operation, method, params, callback);
             }
         ], callback);
     }
 
-    processUploadResult(operation, message, callback) {
+    processUploadResult(session, operation, message, callback) {
         this.logger.debug('Processing upload result for ' + operation);
         const result = message.result;
         /**@type {string}*/
         const status = (result || {}).status;
         if (this._isAsErrorMessage(message)) {
-            this._createErrorOperationResult(
-                operation, 
+            this._createOperationResult(
+                session,
+                operation,
+                null,
+                operation.getUserId(),
                 EVENTS.onOperationResultReceived, 
                 true,
+                null,
                 ErrorUtils.createAppServerInternalError(message),
                 callback
             );
         } else if (status !== SESSION_STATUS.READY) {
             // If not ready, just send the progress up
-            this._createProgressMessage(operation, message, callback);
+            const {result: {status, progress}} = message;
+            super._createOperationResult(session, operation, null, operation.getUserId(),
+                EVENTS.onOperationResultReceived, false, {status, progress}, null, callback);
         } else {
-            this._completeUpload(operation, message, callback);
+            this._completeUpload(session, operation, message, callback);
         }
     }
-    
-    _createProgressMessage(operation, message, callback) {
-        const result = message.result;
-        const status = result.status;
-        const progress = result.progress;
-        /**
-         * @type AppServerOperationResult
-         * */
-        const operationResult = {
-            operation,
-            eventName: EVENTS.onOperationResultReceived,
-            shouldCompleteOperation: false,
-            resultType: RESULT_TYPES.SUCCESS,
-            result: {
-                status,
-                progress
-            }
-        };
-        
-        callback(null, operationResult);
-    }
-    
-    _completeUpload(operation, message, callback) {
+
+    _completeUpload(session, operation, message, callback) {
         // Sample is fully processed and the fields metadata is available.
         // Now we need to:
         // 1. Insert all the data into database.
@@ -117,37 +103,19 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], (error, sampleVersionId) => {
             if (error) {
                 this.logger.error(`Error inserting new sample into database: ${error}`);
-                this._createErrorOperationResult(
-                    operation,
-                    EVENTS.onOperationResultReceived,
-                    true,
-                    ErrorUtils.createInternalError(error),
-                    callback
-                );
+                this._createOperationResult(session, operation, null, operation.getUserId(),
+                    EVENTS.onOperationResultReceived, true, null, ErrorUtils.createInternalError(error), callback);
+
             } else {
                 // The upload operation is already completed on the app server.
                 operation.setSendCloseToAppServer(false);
-                this._createUploadSuccessfulResult(operation, sampleVersionId, callback);
+                this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
+                    status: SESSION_STATUS.READY,
+                    progress: 100,
+                    sampleId: sampleVersionId
+                }, null, callback);
             }
         });
-    }
-
-    _createUploadSuccessfulResult(operation, sampleVersionId, callback) {
-        /**
-         * @type AppServerOperationResult
-         * */
-        const operationResult = {
-            operation,
-            eventName: EVENTS.onOperationResultReceived,
-            shouldCompleteOperation: true,
-            resultType: RESULT_TYPES.SUCCESS,
-            result: {
-                status: SESSION_STATUS.READY,
-                progress: 100,
-                sampleId: sampleVersionId
-            }
-        };
-        callback(null, operationResult);
     }
 }
 

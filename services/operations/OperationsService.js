@@ -23,11 +23,11 @@ class OperationsService extends ServiceBase {
         this._addOperation(session, operation, callback);
     }
 
-    addUploadOperation(method, userId, callback) {
+    addUploadOperation(method, callback) {
         async.waterfall([
             (callback) => this.services.sessions.findSystemSession(callback),
             (session, callback) => {
-                const operation = new UploadOperation(session.id, method, userId);
+                const operation = new UploadOperation(session.id, method);
                 this._addOperation(session, operation, callback);
             }
         ], callback);

@@ -176,26 +176,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     _createSearchDataResult(error, session, operation, fieldIdToValueHash, callback) {
-        /**
-         * @type AppServerOperationResult
-         * */
-        const result = {
-            session,
-            operation,
-            shouldCompleteOperation: false,
-            error,
-            resultType: (error)? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
-            eventName: EVENTS.onSearchDataReceived,
-            result: {
-                progress: 100,
-                status: SESSION_STATUS.READY,
-                sampleId: operation.getSampleId(),
-                limit: operation.getLimit(),
-                offset: operation.getOffset(),
-                fieldIdToValueHash
-            }
-        };
-        callback(null, result);
+        super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onSearchDataReceived, false, {
+            progress: 100,
+            status: SESSION_STATUS.READY,
+            sampleId: operation.getSampleId(),
+            limit: operation.getLimit(),
+            offset: operation.getOffset(),
+            fieldIdToValueHash
+        }, error, callback);
     }
 
     /**
@@ -209,22 +197,10 @@ class AppServerSearchService extends ApplicationServerServiceBase {
          * @type {{status:string, progress: number}}
          * */
         const sessionState = message.result.sessionState;
-
-        /**
-         * @type AppServerOperationResult
-         * */
-        const result = {
-            session,
-            operation,
-            eventName: EVENTS.onOperationResultReceived,
-            shouldCompleteOperation: false,
-            resultType: RESULT_TYPES.SUCCESS,
-            result: {
-                status: sessionState.status,
-                progress: sessionState.progress
-            }
-        };
-        callback(null, result);
+        super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onOperationResultReceived, false, {
+            status: sessionState.status,
+            progress: sessionState.progress
+        }, null, callback);
     }
 
     _createSearchInResultsParams(globalSearchValue, excludedFields, fieldSearchValues, sortParams) {

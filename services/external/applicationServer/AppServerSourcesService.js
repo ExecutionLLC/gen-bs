@@ -65,6 +65,8 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
              * */
             const operationResult = {
                 session,
+                sessionId: session.id,
+                userId: session.userId,
                 eventName: EVENTS.onSourcesListReceived,
                 operation,
                 shouldCompleteOperation: true,
