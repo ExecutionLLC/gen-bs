@@ -15,10 +15,10 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
         super(services);
     }
 
-    requestKeepOperationAlive(sessionId, searchOperationId, callback) {
+    requestKeepOperationAlive(session, searchOperationId, callback) {
         const method = METHODS.keepAlive;
         async.waterfall([
-            (callback) => this.services.operations.find(sessionId, searchOperationId, callback),
+            (callback) => this.services.operations.find(session, searchOperationId, callback),
             (searchOperation, callback) => this._ensureSearchOperation(searchOperation, callback),
             (searchOperation, callback) => this.services.sessions.findSystemSessionId(
                 (error, sessionId) => callback(error, sessionId, searchOperation)
@@ -26,32 +26,32 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             (sessionId, searchOperation, callback) => this.services.operations.addKeepAliveOperation(
                 sessionId, searchOperation, callback
             ),
-            (operation, callback) => this._rpcSend(operation, method, {sessionId: searchOperationId}, callback)
+            (operation, callback) => this._rpcSend(session, operation, method, {sessionId: searchOperationId}, callback)
         ], callback);
     }
 
     /**
      * Requests AS to close the specified operation.
      *
-     * @param sessionId Id of the session the operation is related to.
+     * @param session session the operation is related to.
      * @param operationId Id of the operation to close.
      * @param callback (error, operationId)
      * */
-    requestCloseSession(sessionId, operationId, callback) {
+    requestCloseSession(session, operationId, callback) {
         async.waterfall([
-            (callback) => this.services.operations.find(sessionId, operationId, callback),
+            (callback) => this.services.operations.find(session, operationId, callback),
             (operation, callback) => {
                 this.logger.debug('Requesting close for ' + operation);
                 const method = METHODS.closeSession;
-                this._rpcSend(operation, method, null, callback);
+                this._rpcSend(session, operation, method, null, callback);
             }
         ], callback);
     }
 
-    requestOperationState(operationId, callback) {
+    requestOperationState(session, operationId, callback) {
         async.waterfall([
             (callback) => this.services.operations.findInAllSessions(operationId, callback),
-            (operation, callback) => this._rpcSend(operation, METHODS.checkSession, null, callback)
+            (operation, callback) => this._rpcSend(session, operation, METHODS.checkSession, null, callback)
         ], callback);
     }
 

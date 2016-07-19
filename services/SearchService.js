@@ -67,18 +67,18 @@ class SearchService extends ServiceBase {
         }
     }
 
-    searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
+    searchInResults(user, session, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
         const sessions = this.services.sessions;
         async.waterfall([
             (callback) => {
-                sessions.findById(sessionId, callback);
+                sessions.findById(session, callback);
             },
             (sessionId, callback) => {
                 this._createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
                     fieldSearchValues, sortValues, limit, offset, callback);
             },
             (appServerParams, callback) => {
-                this.services.applicationServer.requestSearchInResults(sessionId, operationId, appServerParams, (error) => {
+                this.services.applicationServer.requestSearchInResults(session, operationId, appServerParams, (error) => {
                     if (error) {
                         callback(error);
                     } else {
