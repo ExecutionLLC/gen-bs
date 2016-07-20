@@ -59,10 +59,10 @@ export function clearQueryHistory() {
     };
 }
 
-export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
+export function updateQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {auth: {sessionId}, ui: {language}} = getState();
-        queryHistoryClient.getQueryHistory(sessionId, language, limit, offset, (error, response) => {
+        queryHistoryClient.getQueryHistory(sessionId, language, filter, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
