@@ -4,8 +4,7 @@ const CollectionUtils = require('./CollectionUtils');
 
 class ReflectionUtils {
     static isSubclassOf(obj, cls) {
-        return obj && obj.constructor
-            && obj.constructor.prototype instanceof cls;
+        return obj && obj instanceof cls;
     }
 
     static serialize(obj) {

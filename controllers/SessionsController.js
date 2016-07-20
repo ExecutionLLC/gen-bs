@@ -36,12 +36,14 @@ class SessionsController extends ControllerBase {
     }
 
     check(request, response) {
-        const {session:{type:sessionType, id:sessionId}} = request;
+        const {session, session:{type:sessionType, id:sessionId}} = request;
         if (sessionType) {
-            this.sendJson(response, {
+            async.waterfall([
+                (callback) => this.services.operations.keepOperationsAlive(session, callback)
+            ], (error) => this.sendErrorOrJson(response, error, {
                 sessionId,
                 sessionType
-            });
+            }));
         } else {
             this.sendInternalError(response, new Error('Session is not found.'));
         }
@@ -70,9 +72,11 @@ class SessionsController extends ControllerBase {
                 // User cancelled authentication.
                 this._onAuthCompleted(request, response, new Error('User cancelled authentication.'), null);
             } else {
+                const {session} = request;
                 // User is logged in to Google, try creating session.
                 this.logger.info('Creating session for user ' + userEmail);
                 this.services.sessions.startForEmail(
+                    session,
                     userEmail,
                     (error, sessionId) => this._onAuthCompleted(request, response, error, sessionId)
                 );

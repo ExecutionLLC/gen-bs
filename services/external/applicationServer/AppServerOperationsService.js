@@ -15,18 +15,13 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
         super(services);
     }
 
-    requestKeepOperationAlive(session, searchOperationId, callback) {
+    requestKeepOperationAlive(session, searchOperation, callback) {
         const method = METHODS.keepAlive;
         async.waterfall([
-            (callback) => this.services.operations.find(session, searchOperationId, callback),
-            (searchOperation, callback) => this._ensureSearchOperation(searchOperation, callback),
-            (searchOperation, callback) => this.services.sessions.findSystemSessionId(
-                (error, sessionId) => callback(error, sessionId, searchOperation)
-            ),
-            (sessionId, searchOperation, callback) => this.services.operations.addKeepAliveOperation(
-                sessionId, searchOperation, callback
-            ),
-            (operation, callback) => this._rpcSend(session, operation, method, {sessionId: searchOperationId}, callback)
+            (callback) => this._ensureSearchOperation(searchOperation, callback),
+            (callback) => this.services.operations.addKeepAliveOperation(session, searchOperation, callback),
+            (operation, callback) => this._rpcSend(session, operation, method,
+                {sessionId: this.createAppServerSessionId(searchOperation)}, callback)
         ], callback);
     }
 
@@ -55,9 +50,10 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    processKeepAliveResult(operation, rpcMessage, callback) {
+    processKeepAliveResult(session, operation, rpcMessage, callback) {
         if (this._isAsErrorMessage(rpcMessage)) {
             this._createErrorOperationResult(
+                session,
                 operation,
                 EVENTS.onKeepAliveResultReceived,
                 true,
@@ -66,35 +62,31 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             );
         } else {
             const isAlive = rpcMessage.result;
-            this._silentlyCloseSearchOperationIfNeeded(isAlive, operation, () => {
-                /**
-                 * @type AppServerOperationResult
-                 * */
-                const operationResult = {
-                    eventName: EVENTS.onKeepAliveResultReceived,
-                    shouldCompleteOperation: true,
-                    operation,
-                    result: null
-                };
-                callback(null, operationResult);
+            this._silentlyCloseSearchOperationIfNeeded(session, operation, isAlive, () => {
+                this._createOperationResult(session, operation, session.id,
+                    session.userId, EVENTS.onKeepAliveResultReceived, true,
+                    null, null, callback);
             });
         }
     }
     
-    _silentlyCloseSearchOperationIfNeeded(isAlive, operation, callback) {
+    _silentlyCloseSearchOperationIfNeeded(session, operation, isAlive, callback) {
         if (isAlive) {
             callback(null);
             return;
         }
         const operationIdToCheck = operation.getOperationIdToCheck();
         async.waterfall([
-            // The keep-alive operation belongs to system session.
-            // So we need to find the operation id in all sessions.
-            (callback) => this.services.operations.findInAllSessions(operationIdToCheck, callback),
-            (operation, callback) => this.services.operations.remove(operation.getSessionId(), operation.getId(), callback)
+            (callback) => this.services.operations.remove(
+                session,
+                operationIdToCheck,
+                callback
+            )
         ], (error) => {
             if (error) {
                 this.logger.error('Error while closing dead search operation: ' + error);
+            } else {
+                this.logger.info(`Search operation ${operationIdToCheck} is removed due to the absence on AS`);
             }
             callback(null);
         });
@@ -102,7 +94,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
 
     _ensureSearchOperation(operation, callback) {
         if (ReflectionUtils.isSubclassOf(operation, SearchOperation)) {
-            callback(null, operation);
+            callback(null);
         } else {
             callback(new Error(`Expected search operation, found: ${operation}`));
         }

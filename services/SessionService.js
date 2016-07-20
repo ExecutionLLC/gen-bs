@@ -129,6 +129,14 @@ class SessionService extends ServiceBase {
             callback(null);
         }
     }
+
+    touchSession(session, callback) {
+        if (this.systemSession.id !== session.id) {
+            this.redisStore.touch(session.id, session, (error) => callback(error));
+        } else {
+            callback(new Error('System session is unexpected here.'))
+        }
+    }
     
     _stringifySession(session) {
         const operationsString = this.services.operations.stringifyOperations(session.operations);

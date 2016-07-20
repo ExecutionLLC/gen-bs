@@ -26,6 +26,10 @@ class ApplicationServerServiceBase extends ServiceBase {
             this.logger, this._rpcReply);
     }
 
+    createAppServerSessionId(operation) {
+        return `${operation.getSessionId()}_${operation.getId()}`;
+    }
+
     /**
      * @param {Object}session
      * @param {OperationBase}operation
@@ -36,7 +40,7 @@ class ApplicationServerServiceBase extends ServiceBase {
     _rpcSend(session, operation, method, params, callback) {
         const operationId = operation.getId();
         const queryNameOrNull = operation.getASQueryName();
-        const messageId = `${session.id}_${operation.getId()}`;
+        const messageId = this.createAppServerSessionId(operation);
         this.rpcProxy.send(messageId, method, params, queryNameOrNull, (error) => {
             if (error) {
                 callback(error);
