@@ -22,20 +22,18 @@ class MockApiController {
      * */
     _openMock(request, response, originalMethod) {
         const services = this.sessionsController.services;
-        const body = request.body;
+        const {body, session} = request;
 
         if (_.isEmpty(body) || !body.email) {
             originalMethod(request, response);
         } else {
             const email = body.email;
             async.waterfall([
-                (callback) => services.sessions.startForEmail(email, callback),
-                (sessionId, callback) => services.sessions.findSessionType(sessionId,
-                    (error, sessionType) => callback(error, sessionId, sessionType))
-            ], (error, sessionId, sessionType) => {
+                (callback) => services.sessions.startForEmail(session, email, callback)
+            ], (error) => {
                 this.sessionsController.sendErrorOrJson(response, error, {
-                    sessionId,
-                    sessionType
+                    sessionId: session.id,
+                    sessionType: session.type
                 });
             });
         }

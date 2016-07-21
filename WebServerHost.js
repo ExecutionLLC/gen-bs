@@ -9,7 +9,6 @@ const morgan = require('morgan');
 const Http = require('http');
 const HttpStatus = require('http-status');
 const WebSocketServer = require('ws').Server;
-const Uuid = require('node-uuid');
 
 const ErrorUtils = require('./utils/ErrorUtils');
 const ControllerBase = require('./controllers/base/ControllerBase');
