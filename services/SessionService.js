@@ -48,6 +48,7 @@ class SessionService extends ServiceBase {
             genid: (request) => Uuid.v4(),
             name: sessionCookieName,
             secret: sessionSecret,
+            resave: false,
             saveUninitialized: false,
             session: {
                 secure: false
