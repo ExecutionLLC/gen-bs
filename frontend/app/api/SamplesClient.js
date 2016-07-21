@@ -11,27 +11,24 @@ export default class SamplesClient extends UserEntityClientBase {
         super(urls, urls.samplesUrls());
     }
 
-    getFields(sessionId, sampleId, callback) {
-        RequestWrapper.get(this.urls.getSampleFields(sampleId),
-            this._makeHeaders({sessionId}), null, null, callback);
+    getFields(sampleId, callback) {
+        RequestWrapper.get(this.urls.getSampleFields(sampleId), null, null, null, callback);
     }
 
-    getSourcesFields(sessionId, callback) {
-        RequestWrapper.get(this.urls.getSourcesFields(),
-            this._makeHeaders({sessionId}), null, null, callback);
+    getSourcesFields(callback) {
+        RequestWrapper.get(this.urls.getSourcesFields(), null, null, null, callback);
     }
 
-    getAllFields(sessionId, callback) {
-        RequestWrapper.get(this.urls.getAllFields(),
-            this._makeHeaders({sessionId}), null, null, callback);
+    getAllFields(callback) {
+        RequestWrapper.get(this.urls.getAllFields(), null, null, null, callback);
     }
 
-    add(sessionId, fileName, fileStream, callback) {
+    add(fileName, fileStream, callback) {
         RequestWrapper.upload(this.collectionUrls.upload(),
             'sample',
             fileName,
             fileStream,
-            this._makeHeaders({sessionId}),
+            null,
             {},
             callback
         );

@@ -61,8 +61,8 @@ export function clearQueryHistory() {
 
 export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, ui: {language}} = getState();
-        queryHistoryClient.getQueryHistory(sessionId, language, limit, offset, (error, response) => {
+        const {ui: {language}} = getState();
+        queryHistoryClient.getQueryHistory(language, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {

@@ -52,8 +52,8 @@ function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
         const editingFilter = getState().filterBuilder.editingFilter.filter;
-        const {auth: {sessionId}, ui: {languageId} } = getState();
-        dispatch(filtersListServerCreateFilter(editingFilter, sessionId, languageId))
+        const {ui: {languageId} } = getState();
+        dispatch(filtersListServerCreateFilter(editingFilter, languageId))
             .then( () => {
                 dispatch(closeModal('filters'));
                 dispatch(filterBuilderEndEdit());
@@ -75,9 +75,8 @@ function filterBuilderUpdateFilter() {
             dispatch(closeModal('filters'));
             dispatch(filterBuilderEndEdit());
         } else {
-            const sessionId = state.auth.sessionId;
             const resultEditingFilter = editingFilter.filter;
-            dispatch(filtersListServerUpdateFilter(resultEditingFilter, sessionId))
+            dispatch(filtersListServerUpdateFilter(resultEditingFilter))
                 .then( () => {
                     dispatch(closeModal('filters'));
                     dispatch(filterBuilderEndEdit());
@@ -107,8 +106,8 @@ export function filterBuilderChangeFilter(index, change) {
 
 export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, fields} = getState();
-        dispatch(filtersListServerDeleteFilter(filterId, sessionId))
+        const {fields} = getState();
+        dispatch(filtersListServerDeleteFilter(filterId))
             .then( ()=> {
                 const state = getState();
                 const selectedFilterId = state.filtersList.selectedFilterId;

@@ -9,28 +9,24 @@ export default class UserEntityClientBase extends ClientBase {
         this.collectionUrls = collectionUrls;
     }
 
-    getAll(sessionId, callback) {
-        RequestWrapper.get(this.collectionUrls.getAll(),
-            this._makeHeaders({sessionId}), null, null, callback);
+    getAll(callback) {
+        RequestWrapper.get(this.collectionUrls.getAll(), null, null, callback);
     }
 
-    get(sessionId, itemId, callback) {
-        RequestWrapper.get(this.collectionUrls.get(itemId),
-            this._makeHeaders({sessionId}), null, null, callback);
+    get(itemId, callback) {
+        RequestWrapper.get(this.collectionUrls.get(itemId), null, null, callback);
     }
 
-    add(sessionId, languId, item, callback) {
+    add(languId, item, callback) {
         RequestWrapper.post(this.collectionUrls.create(),
-            this._makeHeaders({sessionId, languId}), item, callback);
+            this._makeHeaders({languId}), item, callback);
     }
 
-    update(sessionId, item, callback) {
-        RequestWrapper.put(this.collectionUrls.update(item.id),
-            this._makeHeaders({sessionId}), item, callback);
+    update(item, callback) {
+        RequestWrapper.put(this.collectionUrls.update(item.id), item, callback);
     }
 
-    remove(sessionId, itemId, callback) {
-        RequestWrapper.del(this.collectionUrls.remove(itemId),
-            this._makeHeaders({sessionId}), null, callback);
+    remove(itemId, callback) {
+        RequestWrapper.del(this.collectionUrls.remove(itemId), null, callback);
     }
 }
