@@ -22,6 +22,8 @@ import {
 import {entityType} from '../utils/entityTypes';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
+export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
+export const PREPARE_TO_FILTER = 'PREPARE_TO_FILTER';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
 export const CLOSE_QUERY_HISTORY_MODAL = 'CLOSE_QUERY_HISTORY_MODAL';
 
@@ -41,6 +43,16 @@ export function receiveQueryHistory(history) {
     };
 }
 
+export function appendQueryHistory(filter, requestFrom, items, isReceivedAll) {
+    return {
+        type: APPEND_QUERY_HISTORY,
+        filter,
+        requestFrom,
+        history: items,
+        isReceivedAll
+    };
+}
+
 export function showQueryHistoryModal() {
     return {
         type: SHOW_QUERY_HISTORY_MODAL
@@ -56,6 +68,29 @@ export function closeQueryHistoryModal() {
 export function clearQueryHistory() {
     return (dispatch) => {
         dispatch(receiveQueryHistory([]));
+    };
+}
+
+export function prepareToFilter(filter) {
+    return {
+        type: PREPARE_TO_FILTER,
+        filter
+    };
+}
+
+export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
+    return (dispatch, getState) => {
+        const {auth: {sessionId}, ui: {language}} = getState();
+        // FIXME: 'offset + 1' below is the crutch - server does not return 0th item
+        queryHistoryClient.getQueryHistory(sessionId, language, filter, limit, offset + 1, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, HISTORY_SERVER_ERROR));
+            } else {
+                dispatch(appendQueryHistory(filter, offset, response.body.result, limit > response.body.result.length));
+            }
+        });
     };
 }
 
