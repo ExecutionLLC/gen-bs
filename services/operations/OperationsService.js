@@ -82,6 +82,13 @@ class OperationsService extends ServiceBase {
         ], callback);
     }
 
+    closeSearchOperationsIfAny(session, callback) {
+        async.waterfall([
+            (callback) => this.findAllByClass(session, SearchOperation, callback),
+            (searchOperations, callback) => async.each(searchOperations, (operation, callback) => this._closeOperationIfNeeded(session, operation, callback), callback)
+        ], callback);
+    }
+
     find(session, operationId, callback) {
         const {operations} = session;
         if (!operations || !operations[operationId]) {

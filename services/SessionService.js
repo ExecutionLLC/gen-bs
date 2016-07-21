@@ -49,6 +49,10 @@ class SessionService extends ServiceBase {
             name: sessionCookieName,
             secret: sessionSecret,
             saveUninitialized: false,
+            session: {
+                secure: false
+            },
+            unset: 'destroy',
             store: this.services.sessions.getSessionStore()
         });
         this.logger.info(`Created system session ${this.systemSession.id}`);
@@ -72,10 +76,9 @@ class SessionService extends ServiceBase {
     startForEmail(session, email, callback) {
         async.waterfall([
             (callback) => this.services.users.findIdByEmail(email, callback),
-            (userId, callback) => {
-                // TODO: Check and remove existing user session here.
-                callback(null, userId);
-            },
+            (userId, callback) => this.services.operations.closeSearchOperationsIfAny(session,
+                (error) => callback(error, userId)
+            ),
             (userId, callback) => {
                 Object.assign(session, {
                     userId,
@@ -119,7 +122,10 @@ class SessionService extends ServiceBase {
     }
 
     destroySession(session, callback) {
-        session.destroy(callback);
+        async.waterfall([
+            (callback) => this.services.operations.closeSearchOperationsIfAny(session, callback),
+            (callback) => session.destroy(callback)
+        ], callback);
     }
 
     saveSession(session, callback) {

@@ -50,10 +50,10 @@ class SessionsController extends ControllerBase {
     }
 
     close(request, response) {
-        const sessionId = this.getSessionId(request);
-        this.services.sessions.destroySession(sessionId, (error) => {
+        const {session} = request;
+        this.services.sessions.destroySession(session, (error) => {
             this.sendErrorOrJson(response, error, {
-                sessionId
+                sessionId: session.id
             });
         });
     }
@@ -61,33 +61,7 @@ class SessionsController extends ControllerBase {
     _parseGoogleProfile(accessToken, refreshToken, profile, callback) {
         this.services.logger.debug('Google profile: ' + JSON.stringify(profile, null, 2));
         const userEmail = profile.emails[0].value;
-        async.waterfall([
-            (callback) => this.services.users.models.users.findIdByEmail(userEmail, callback),
-            (userId, callback) => this.services.users.models.users.find(userId, callback)
-        ], callback);
-    }
-
-    _onAuthCompleted(request, response, error, session) {
-        let baseAddress = '/';
-        if (this.config.enableAuthCallbackPorts) {
-            const authStateKey = request.query.state;
-            if (this.authStates[authStateKey]) {
-                const callbackPort = this.authStates[authStateKey].callbackPort;
-                baseAddress = 'http://localhost:' + callbackPort + '/';
-                delete this.authStates[authStateKey];
-            }
-        }
-
-        let targetUrl = null;
-        if (error) {
-            targetUrl = baseAddress + '?error=' + encodeURIComponent(error.message);
-            this.logger.debug('Auth error: ' + error);
-        } else {
-            targetUrl = baseAddress + '?sessionId=' + encodeURIComponent(session.id);
-            this.logger.debug('Auth successful');
-        }
-        this.logger.debug('Redirecting to ' + targetUrl);
-        response.redirect(targetUrl);
+        callback(null, userEmail);
     }
 
     _configurePassport(router, controllerRelativePath) {
@@ -117,14 +91,13 @@ class SessionsController extends ControllerBase {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, user, info) => {
+            }, (error, userEmail, info) => {
                 if (error) {
                     return next(error);
                 }
-                request.login(user, (error) => {
-                    request.session.type = 'USER';
-                    request.session.userId = user.id;
-                    response.redirect('/');
+                this.services.sessions.startForEmail(request.session, userEmail, (error) => {
+                    const queryPart = error ? `?error=${error.message}` : '';
+                    response.redirect(`/${queryPart}`);
                 });
             });
             authFunc(request, response, next);

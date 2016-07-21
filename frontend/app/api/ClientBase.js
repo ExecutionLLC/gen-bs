@@ -9,7 +9,6 @@ export default class ClientBase {
 
     _makeHeaders(headersObj) {
         const headers = {};
-        headers[config.HEADERS.SESSION] = headersObj.sessionId;
         headers[config.HEADERS.LANGUAGE] = headersObj.languId;
         return headers;
     }

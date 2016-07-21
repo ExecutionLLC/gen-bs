@@ -131,6 +131,7 @@ const SETTINGS = {
 };
 
 // Add computational fields
+// Base url is used for auth redirects and enabling auth headers in CORS.
 // Warning! Currently, base url should be set to HTTP scheme, as otherwise Google sends 'Missing parameter: scope' error.
 // The HTTP address will be redirected to HTTPS by NginX.
 SETTINGS.baseUrl = makeDefault(ENV.GEN_WS_BASE_URL, 'http://localhost:' + SETTINGS.port);

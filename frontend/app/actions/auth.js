@@ -90,8 +90,6 @@ function receiveSession(sessionId, isDemo) {
     sessionId = sessionId || null;
     const isAuthenticated = (sessionId !== null);
 
-    document.cookie = `sessionId=${sessionId}`;
-
     return {
         type: RECEIVE_SESSION,
         sessionId: sessionId,

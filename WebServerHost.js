@@ -41,13 +41,13 @@ class WebServerHost {
         app.disable('x-powered-by');
         app.use(compression());
 
-        this._configureSession(app);
-
         this._enableCORSIfNeeded(app);
 
         this._warnAboutSettingsIfNeeded();
 
         this._addMiddleware(app);
+
+        this._configureSession(app);
 
         this._initRouters(app);
 
