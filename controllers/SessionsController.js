@@ -61,30 +61,13 @@ class SessionsController extends ControllerBase {
     _parseGoogleProfile(accessToken, refreshToken, profile, callback) {
         this.services.logger.debug('Google profile: ' + JSON.stringify(profile, null, 2));
         const userEmail = profile.emails[0].value;
-        callback(null, userEmail);
+        async.waterfall([
+            (callback) => this.services.users.models.users.findIdByEmail(userEmail, callback),
+            (userId, callback) => this.services.users.models.users.find(userId, callback)
+        ], callback);
     }
 
-    _processUserLogin(error, userEmail, request, response, next) {
-        if (error) {
-            next(error);
-        } else {
-            if (!userEmail) {
-                // User cancelled authentication.
-                this._onAuthCompleted(request, response, new Error('User cancelled authentication.'), null);
-            } else {
-                const {session} = request;
-                // User is logged in to Google, try creating session.
-                this.logger.info('Creating session for user ' + userEmail);
-                this.services.sessions.startForEmail(
-                    session,
-                    userEmail,
-                    (error, sessionId) => this._onAuthCompleted(request, response, error, sessionId)
-                );
-            }
-        }
-    }
-
-    _onAuthCompleted(request, response, error, sessionId) {
+    _onAuthCompleted(request, response, error, session) {
         let baseAddress = '/';
         if (this.config.enableAuthCallbackPorts) {
             const authStateKey = request.query.state;
@@ -100,7 +83,7 @@ class SessionsController extends ControllerBase {
             targetUrl = baseAddress + '?error=' + encodeURIComponent(error.message);
             this.logger.debug('Auth error: ' + error);
         } else {
-            targetUrl = baseAddress + '?sessionId=' + encodeURIComponent(sessionId);
+            targetUrl = baseAddress + '?sessionId=' + encodeURIComponent(session.id);
             this.logger.debug('Auth successful');
         }
         this.logger.debug('Redirecting to ' + targetUrl);
@@ -120,32 +103,30 @@ class SessionsController extends ControllerBase {
             callbackURL: googleFullRedirectUrl
         }, this._parseGoogleProfile.bind(this)));
 
-        router.use(passport.initialize());
-        router.get('/auth/google', (request, response, next) => {
-            const callbackPort = request.query['callbackPort'];
-            let state = undefined;
-            if (callbackPort && this.config.enableAuthCallbackPorts) {
-                const authStateKey = Uuid.v4();
-                this.authStates[authStateKey] = {
-                    callbackPort
-                };
-                state = authStateKey;
-            }
+        passport.serializeUser((user, callback) => callback(null, user.id));
+        passport.deserializeUser((userId, callback) => this.services.users.find(userId, callback));
 
-            passport.authenticate('google', {
-                scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
-                returnURL: googleFullRedirectUrl,
-                realm: baseUrl,
-                session: false,
-                state
-            })(request, response, next);
-        });
+        router.use(passport.initialize());
+        router.get('/auth/google', passport.authenticate('google', {
+            scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+            returnURL: googleFullRedirectUrl,
+            realm: baseUrl
+        }));
 
         router.get(googleRelativeRedirectUrl, (request, response, next) => {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, userEmail, info) => this._processUserLogin(error, userEmail, request, response, next));
+            }, (error, user, info) => {
+                if (error) {
+                    return next(error);
+                }
+                request.login(user, (error) => {
+                    request.session.type = 'USER';
+                    request.session.userId = user.id;
+                    response.redirect('/');
+                });
+            });
             authFunc(request, response, next);
         });
     }
