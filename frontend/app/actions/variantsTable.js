@@ -4,7 +4,7 @@ import HttpStatus from 'http-status';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
-import {updateQueryHistory} from './queryHistory';
+//import {updateQueryHistory} from './queryHistory';
 import {requestTableScrollPositionReset} from './ui';
 
 /*
@@ -282,10 +282,10 @@ export function fetchVariants(searchParams) {
                     dispatch(receiveAnalysisOperationId(operationId));
                     const state = getState();
                     dispatch(changeExcludedFields(state.websocket.variantsView.id));
-                    const isDemo = state.auth.isDemo;
-                    if (!isDemo) {
-                        dispatch(updateQueryHistory());
-                    }
+                    // const isDemo = state.auth.isDemo;
+                    // if (!isDemo) {
+                    //     dispatch(updateQueryHistory());
+                    // }
                 }
             }
         );
