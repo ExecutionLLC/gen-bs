@@ -41,7 +41,7 @@ class FieldsMetadataModel extends ModelBase {
     findMany(metadataIds, callback) {
         async.waterfall([
             (callback) => this._fetchByIds(metadataIds, callback),
-            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachAvailableValues(fieldsMetadata, callback),
             (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
         ], (error, fields) => {
             callback(error, fields);
@@ -82,7 +82,7 @@ class FieldsMetadataModel extends ModelBase {
                     .where('is_editable', true)
                     .asCallback(callback);
             },
-            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback)
+            (fieldsMetadata, callback) => this._attachAvailableValues(fieldsMetadata, callback)
         ], callback);
     }
 
@@ -99,7 +99,7 @@ class FieldsMetadataModel extends ModelBase {
     findSourcesMetadata(callback) {
         async.waterfall([
             (callback) => this._fetchSourcesMetadata(callback),
-            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachAvailableValues(fieldsMetadata, callback),
             (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
         ], callback);
     }
@@ -107,7 +107,7 @@ class FieldsMetadataModel extends ModelBase {
     findTotalMetadata(callback) {
         async.waterfall([
             (callback) => this._fetchTotalMetadata(callback),
-            (fieldsMetadata, callback) => this._mapFieldsMetadata(fieldsMetadata, callback),
+            (fieldsMetadata, callback) => this._attachAvailableValues(fieldsMetadata, callback),
             (fieldsMetadata, callback) => this._attachKeywords(fieldsMetadata, callback)
         ], callback);
     }
@@ -125,6 +125,46 @@ class FieldsMetadataModel extends ModelBase {
                 callback(null, fieldsWithKeywords);
             }
         ], callback);
+    }
+
+    _attachAvailableValues(fieldsMetaData, callback) {
+        const fieldIds = _.map(fieldsMetaData, field => field.id);
+        async.waterfall([
+            (callback) => this._findAvailableValuesForFieldIds(fieldIds, callback),
+            (availableValues, callback) => {
+                const fieldsIdsToAvailableValues = _.groupBy(
+                    availableValues, availableValue => availableValue.fieldId
+                );
+                const fieldsWithAvailableValues = _.map(
+                    fieldsMetaData,
+                    (field) => Object.assign(
+                        {},
+                        field,
+                        {
+                            availableValues: fieldsIdsToAvailableValues[field.id] || []
+                        }
+                    )
+                );
+                callback(null, fieldsWithAvailableValues)
+            }
+        ], callback);
+
+    }
+
+    _findAvailableValuesForFieldIds(fieldIds, callback) {
+        this.db.asCallback((knex, callback) => {
+            knex.select()
+                .from('field_available_value')
+                .innerJoin('field_available_value_text', 'field_available_value_text.field_available_value_id', 'field_available_value.id')
+                .whereIn('field_id', fieldIds[18])
+                .asCallback((error, fieldAvailableValues) => {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldAvailableValues));
+                    }
+                });
+        }, callback);
     }
 
 
@@ -323,73 +363,6 @@ class FieldsMetadataModel extends ModelBase {
                         callback(error);
                     } else {
                         callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
-                    }
-                });
-        }, callback);
-    }
-
-    _fetchMetadataBySourceName(sourceName, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from(this.baseTableName)
-                .orderBy('name')
-                .where('source_name', sourceName)
-                .asCallback((error, fieldsMetadata) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldsMetadata));
-                    }
-                });
-        }, callback);
-    }
-
-    _fetchMetadataKeywords(metadataId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from('keyword')
-                .where('field_id', metadataId)
-                .asCallback((error, keywords) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(keywords));
-                    }
-                });
-        }, callback);
-    }
-
-    _mapFieldsMetadata(fieldsMetadata, callback) {
-        async.map(fieldsMetadata, (fieldMetadata, callback) => {
-            this._mapFieldMetadata(fieldMetadata, callback);
-        }, callback);
-    }
-
-    _mapFieldMetadata(fieldMetadata, callback) {
-        async.waterfall([
-            (callback) => {
-                this._fetchFieldAvailableValues(fieldMetadata.id, callback);
-            },
-            (fieldAvailableValues, callback) => {
-                if (fieldAvailableValues && (fieldAvailableValues.length > 0)) {
-                    fieldMetadata.availableValues = fieldAvailableValues;
-                }
-                callback(null, this._mapColumns(fieldMetadata));
-            }
-        ], callback);
-    }
-
-    _fetchFieldAvailableValues(metadataId, callback) {
-        this.db.asCallback((knex, callback) => {
-            knex.select()
-                .from('field_available_value')
-                .innerJoin('field_available_value_text', 'field_available_value_text.field_available_value_id', 'field_available_value.id')
-                .whereIn('field_id', metadataId)
-                .asCallback((error, fieldAvailableValues) => {
-                    if (error) {
-                        callback(error);
-                    } else {
-                        callback(null, ChangeCaseUtil.convertKeysToCamelCase(fieldAvailableValues));
                     }
                 });
         }, callback);
