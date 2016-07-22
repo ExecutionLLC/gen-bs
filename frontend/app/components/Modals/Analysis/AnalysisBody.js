@@ -29,15 +29,21 @@ export default class AnalysisBody extends React.Component {
                                 isHistoryReceivedAll={this.props.isHistoryReceivedAll}
                                 currentItemId={this.state.currentHistoryItemId}
                                 onSelectHistory={(id) => this.onSelectHistoryId(id)}
+                                viewsList={this.props.viewsList}
+                                filtersList={this.props.filtersList}
+                                samplesList={this.props.samplesList}
+                                modelsList={this.props.modelsList}
                             />
                         </div>
                     </div>
                     <div className='split-right tab-content'>
                         <div className='split-wrap tab-pane active'>
                             <AnalysisRightPane
-                                disabled={true}
+                                dispatch={this.props.dispatch}
+                                disabled={!!this.state.currentHistoryItemId}
                                 auth={this.props.auth}
                                 historyItem={selectedHistoryItem}
+                                currentItemId={this.state.currentHistoryItemId}
                                 viewsList={this.props.viewsList}
                                 filtersList={this.props.filtersList}
                                 samplesList={this.props.samplesList}

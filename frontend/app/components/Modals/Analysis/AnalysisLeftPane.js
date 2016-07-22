@@ -24,6 +24,8 @@ export default class AnalysisLeftPane extends React.Component {
                     isHistoryReceivedAll={isHistoryReceivedAll}
                     currentItemId={this.props.currentItemId}
                     onSelectHistory={this.props.onSelectHistory}
+                    viewsList={this.props.viewsList}
+                    filtersList={this.props.filtersList}
                 />
             </div>
         );

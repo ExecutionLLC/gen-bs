@@ -2,6 +2,10 @@ import React from 'react';
 import Select from '../../shared/Select';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import _ from 'lodash';
+import {viewsListSelectView} from '../../../actions/viewsList';
+import {filtersListSelectFilter} from '../../../actions/filtersList';
+import {changeSample} from '../../../actions/samplesList';
+import {fetchFields} from '../../../actions/fields';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -700,7 +704,9 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewSelect(viewId) {
-        console.log('onViewSelect', viewId);
+        if (!this.props.currentItemId) {
+            this.props.dispatch(viewsListSelectView(viewId));
+        }
     }
     
     onFiltersClick() {
@@ -708,7 +714,9 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onFilterSelect(filterId) {
-        console.log('onFilterSelect', filterId);
+        if (!this.props.currentItemId) {
+            this.props.dispatch(filtersListSelectFilter(filterId));
+        }
     }
 
     onModelClick() {
@@ -724,7 +732,10 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onSampleSelect(sampleId) {
-        console.log('onSampleSelect', sampleId);
+        if (!this.props.currentItemId) {
+            this.props.dispatch(changeSample(sampleId));
+            this.props.dispatch(fetchFields(sampleId));
+        }
     }
 
     onFamilyMemberSelect(familyMemberId) {
