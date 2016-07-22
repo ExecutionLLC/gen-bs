@@ -144,18 +144,6 @@ class ApplicationServerReplyService extends ServiceBase {
         }
     }
 
-    _findSessionIdsForOperation(operation, callback) {
-        if (!ReflectionUtils.isSubclassOf(operation, UploadOperation)) {
-            callback(null, [operation.getSessionId()]);
-        } else {
-            return callback(new Error('Not implemented for upload methods'));
-            // Upload operations belong to the system session and contain user id.
-            // Here we need to find all active sessions for the specified user.
-            // const userId = operation.getUserId();
-            // this.services.sessions.findAllByUserId(userId, callback);
-        }
-    }
-
     /**
      * Deletes associated information for completed operations.
      *
