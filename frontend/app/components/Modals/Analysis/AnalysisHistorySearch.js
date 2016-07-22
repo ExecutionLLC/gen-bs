@@ -17,11 +17,6 @@ export default class AnalysisHistorySearch extends React.Component {
                             />
                         </div>
                     </div>
-                    <div>
-                        <button className='btn btn-default navbar-btn'>
-                            <i className='md-i'>add</i>
-                        </button>
-                    </div>
                 </div>
             </div>
         );
