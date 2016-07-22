@@ -18,8 +18,11 @@ class AnalysisModal extends React.Component {
             >
                 <AnalysisHeader />
                 <AnalysisBody
+                    dispatch={this.props.dispatch}
                     auth={this.props.auth}
                     historyList={this.props.historyList}
+                    historyListFilter={this.props.historyListFilter}
+                    isHistoryReceivedAll={this.props.isHistoryReceivedAll}
                     viewsList={this.props.viewsList}
                     filtersList={this.props.filtersList}
                     samplesList={this.props.samplesList}
@@ -89,7 +92,9 @@ function mapStateToProps(state) {
         filtersList,
         samplesList,
         modelsList,
-        historyList
+        historyList,
+        historyListFilter: queryHistory.filter,
+        isHistoryReceivedAll: queryHistory.isReceivedAll
     };
 }
 

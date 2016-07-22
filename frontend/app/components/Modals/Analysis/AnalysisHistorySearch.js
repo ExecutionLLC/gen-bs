@@ -10,6 +10,7 @@ export default class AnalysisHistorySearch extends React.Component {
                         <div className='navbar-search-field'>
                             <input
                                 type='text'
+                                value={this.props.filter}
                                 className='form-control material-input-sm'
                                 placeholder='Search for analyses name or description'
                                 onChange={(e) => this.props.onFilter(e.target.value)}

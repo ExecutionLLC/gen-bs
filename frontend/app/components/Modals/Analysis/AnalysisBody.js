@@ -22,7 +22,10 @@ export default class AnalysisBody extends React.Component {
                     <div className='split-left'>
                         <div className='split-wrap'>
                             <AnalysisLeftPane
+                                dispatch={this.props.dispatch}
                                 historyList={this.props.historyList}
+                                historyListFilter={this.props.historyListFilter}
+                                isHistoryReceivedAll={this.props.isHistoryReceivedAll}
                                 currentItemId={this.state.currentHistoryItemId}
                                 onSelectHistory={(id) => this.onSelectHistoryId(id)}
                             />

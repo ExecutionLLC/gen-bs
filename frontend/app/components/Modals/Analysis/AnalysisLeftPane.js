@@ -1,29 +1,26 @@
 import React from 'react';
 import AnalysisHistorySearch from './AnalysisHistorySearch';
 import AnalysisHistoryList from './AnalysisHistoryList';
+import {prepareToFilter} from '../../../actions/queryHistory';
 
 
 export default class AnalysisLeftPane extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filter: ''
-        };
-    }
 
     render() {
 
-        const historyListArray = this.props.historyList;
-        const filterLowercase = this.state.filter.toLowerCase();
-        const historyListFilteredArray = historyListArray.filter((item) => item.name.toLocaleLowerCase().indexOf(filterLowercase) >= 0);
+        const {historyList: historyListFilteredArray, historyListFilter, isHistoryReceivedAll} = this.props;
 
         return (
             <div>
                 <AnalysisHistorySearch
+                    filter={historyListFilter}
                     onFilter={(str) => this.onFilterChange(str)}
                 />
                 <AnalysisHistoryList
+                    dispatch={this.props.dispatch}
                     historyList={historyListFilteredArray}
+                    historyListFilter={historyListFilter}
+                    isHistoryReceivedAll={isHistoryReceivedAll}
                     currentItemId={this.props.currentItemId}
                     onSelectHistory={this.props.onSelectHistory}
                 />
@@ -32,6 +29,6 @@ export default class AnalysisLeftPane extends React.Component {
     }
 
     onFilterChange(str) {
-        this.setState({...this.state, filter: str});
+        this.props.dispatch(prepareToFilter(str));
     }
 }
