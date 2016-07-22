@@ -7,22 +7,23 @@ export default class AnalysisHistoryList extends React.Component {
         const {currentItemId, historyList} = this.props;
         return (
             <div className='split-scroll' ref='analysisHistoryListContainer'>
-                <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios' ref='analysisHistoryList'>
+                <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
+                    {!this.props.isHistoryReceivedAll && this.renderLoadingListItem()}
                 </ul>
             </div>
         );
     }
 
     componentDidMount() {
-        const scrollElement = this.refs.analysisHistoryList;
         const containerElement = this.refs.analysisHistoryListContainer;
+        const loadingElement = this.refs.analysisHistoryListLoading;
 
         const self = this;
 
         function f() {
             if (!self.props.isHistoryReceivedAll) {
-                if (scrollElement.scrollHeight - scrollElement.scrollTop < containerElement.clientHeight - 20) {
+                if (loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
                     self.props.dispatch(requestAppendQueryHistory(self.props.historyListFilter, 2, self.props.historyList.length));
                 }
             }
@@ -57,6 +58,14 @@ export default class AnalysisHistoryList extends React.Component {
                         </span>: {historyItem.lastQueryDate}
                     </span>
                 </a>
+            </li>
+        );
+    }
+
+    renderLoadingListItem() {
+        return (
+            <li className='loading' ref='analysisHistoryListLoading'>
+                Loading...
             </li>
         );
     }
