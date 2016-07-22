@@ -33,7 +33,8 @@ class MockApiController {
             ], (error) => {
                 this.sessionsController.sendErrorOrJson(response, error, {
                     sessionId: session.id,
-                    sessionType: session.type
+                    sessionType: session.type,
+                    userId: session.userId
                 });
             });
         }

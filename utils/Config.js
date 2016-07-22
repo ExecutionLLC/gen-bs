@@ -92,6 +92,8 @@ const SETTINGS = {
         databaseName: makeDefault(ENV.GEN_WS_DATABASE_NAME, 'genomixdb')
     },
     headers: {
+        // Session header is used for testing only.
+        sessionHeader: makeDefault(ENV.GEN_WS_TEST_SESSION_HEADER, 'X-Session-Id'),
         languageHeader: makeDefault(ENV.GEN_LANGUAGE_HEADER, 'X-Langu-Id')
     },
     sessions: {
