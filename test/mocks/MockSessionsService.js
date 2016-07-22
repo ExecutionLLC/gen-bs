@@ -19,7 +19,7 @@ class MockSessionsService extends SessionService {
             operations:{}
         };
 
-        this.redisStore = new MemoryStore();
+        this.redisStore = this._createMockSessionStore();
 
         this.sessionParser = session({
             // Change carefully, because it affects RPCProxy message id implementation.
@@ -31,9 +31,31 @@ class MockSessionsService extends SessionService {
             session: {
                 secure: false
             },
-            store: this.getSessionStore(),
+            store: this.redisStore,
             unset: 'destroy'
         });
+    }
+
+    _createMockSessionStore() {
+        const mockStore = new MemoryStore();
+        // Patch the store to make it call serializers.
+        const originalGet = mockStore.get.bind(mockStore);
+        mockStore.get = (sessionId, callback) => {
+            originalGet(sessionId, (error, sessionObject) => {
+                if (error || !sessionObject) {
+                    return callback(error, sessionObject);
+                }
+                const session = this._parseSession(JSON.stringify(sessionObject));
+                callback(null, session);
+            });
+        };
+
+        const originalSet = mockStore.set.bind(mockStore);
+        mockStore.set = (sessionId, session, callback) => {
+            const sessionObject = JSON.parse(this._stringifySession(session));
+            originalSet(sessionId, sessionObject, callback);
+        };
+        return mockStore;
     }
 }
 
