@@ -14,7 +14,7 @@ export default class AnalysisBody extends React.Component {
     }
 
     render() {
-        const selectedHistoryItem = this.findHistoryItemForId(this.state.currentHistoryItemId);
+        const selectedHistoryItem = this.state.currentHistoryItemId && this.findHistoryItemForId(this.state.currentHistoryItemId) || this.props.newListItem;
 
         return (
             <Modal.Body>
@@ -25,6 +25,7 @@ export default class AnalysisBody extends React.Component {
                                 dispatch={this.props.dispatch}
                                 historyList={this.props.historyList}
                                 historyListFilter={this.props.historyListFilter}
+                                newListItem={this.props.newListItem}
                                 isHistoryReceivedAll={this.props.isHistoryReceivedAll}
                                 currentItemId={this.state.currentHistoryItemId}
                                 onSelectHistory={(id) => this.onSelectHistoryId(id)}
