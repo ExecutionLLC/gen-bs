@@ -76,19 +76,22 @@ function makeHistoryListItem(historyItem) {
     };
 }
 
-function makeNewListItem() {
-    const name = new Date() + '_' + 'NoSample' + '_' + 'NoFilter' + '_' + 'NoView';
+function makeNewListItem(samplesList, filtersList, viewsList) {
+    const filter = filtersList.hashedArray.hash[filtersList.selectedFilterId];
+    const view = viewsList.hashedArray.hash[viewsList.selectedViewId];
+    const sample = samplesList.hashedArray.hash[samplesList.selectedSampleId];
+    const name = new Date() + '_' + (sample ? sample.fileName : '') + '_' + (filter ? filter.name : '') + '_' + (view ? view.name : '');
     return {
         id: null,
         name: name,
         description: 'Description of ' + name,
         createdDate: '' + new Date(),
         lastQueryDate: '' + new Date(),
-        filter: null,
-        view: null,
+        filter: filter,
+        view: view,
         type: {
             single: {
-                sample: null
+                sample: sample
             }
             /* TODO: make other types like this:
                         tumorNormal: {
@@ -134,7 +137,7 @@ function mapStateToProps(state) {
         historyList,
         historyListFilter: queryHistory.filter,
         isHistoryReceivedAll: queryHistory.isReceivedAll,
-        newListItem: makeNewListItem()
+        newListItem: makeNewListItem(samplesList, filtersList, viewsList)
     };
 }
 
