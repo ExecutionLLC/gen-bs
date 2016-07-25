@@ -5,7 +5,6 @@ const async = require('async');
 
 const ControllerBase = require('./base/ControllerBase');
 const ErrorUtils = require('../utils/ErrorUtils');
-const SafeObjectFactory = require('../utils/SafeObjectFactory');
 
 /**
  * Contains routing logic and common middleware for all API calls.
