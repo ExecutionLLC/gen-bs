@@ -37,6 +37,9 @@ class SessionService extends ServiceBase {
             }
         });
 
+        // System session is currently stored in memory, as it contains system-wide
+        // operations, and, if being put in Redis, there will be race conditions
+        // between different web server instances.
         this.systemSession = {
             id: Uuid.v4(),
             operations:{}
