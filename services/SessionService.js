@@ -67,6 +67,13 @@ class SessionService extends ServiceBase {
         return this.sessionParser;
     }
 
+    isSessionValid(session) {
+        return session
+            && session.id
+            && session.type
+            && session.userId;
+    }
+
     /**
      * Initializes session for a user with the specified email.
      *
