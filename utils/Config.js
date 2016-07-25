@@ -106,10 +106,6 @@ const SETTINGS = {
         enabled: makeDefault(ENV.GEN_WS_SCHEDULER_ENABLED, true),
         tasks: {
             // Task timeouts in seconds.
-            checkSessions: {
-                isEnabled: true,
-                taskTimeout: 10 * 60
-            },
             importSourceMetadata: {
                 isEnabled: true,
                 taskTimeout: 60 * 60,

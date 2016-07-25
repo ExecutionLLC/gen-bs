@@ -5,7 +5,6 @@ const _ = require('lodash');
 const ServiceBase = require('../ServiceBase');
 const ErrorUtils = require('../../utils/ErrorUtils');
 
-const CheckSessionsTask = require('./CheckSessionsTask');
 const ImportSourceMetadataTask = require('./ImportSourceMetadataTask');
 
 class SchedulerService extends ServiceBase {
@@ -15,11 +14,9 @@ class SchedulerService extends ServiceBase {
         this.config = this.services.config;
         this.logger = this.services.logger;
 
-        this.checkSessionsTask = new CheckSessionsTask(services, models);
         this.importSourceMetadataTask = new ImportSourceMetadataTask(services, models);
 
         this.tasks = [
-            this.checkSessionsTask,
             this.importSourceMetadataTask
         ];
 
