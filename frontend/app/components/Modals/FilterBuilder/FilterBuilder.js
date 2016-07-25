@@ -15,6 +15,7 @@ import {
     genomicsParsedRulesValidate
 } from '../../../utils/filterUtils';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
+import config from '../../../../config';
 
 
 /**
@@ -187,6 +188,7 @@ class FieldFilterItem extends React.Component {
                 disabled={disabled}
                 onChange={ (val) => onChange(val) }
                 validationRegex={validationRegex}
+                maxLength={config.FILTERS.MAX_VALUE_LENGTH}
             />
         );
     }
@@ -274,6 +276,7 @@ class FieldFilterItem extends React.Component {
                     InputComponent={FieldFilterItem.renderInputsArrayItem}
                     onChange={onChange}
                     validationRegex={validationRegex}
+                    maxLength={config.FILTERS.MAX_VALUE_LENGTH}
                 />
             </div>
         );
