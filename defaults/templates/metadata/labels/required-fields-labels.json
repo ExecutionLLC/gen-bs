@@ -1,0 +1,15 @@
+[
+  {
+    "field": {
+      "name": "ALT",
+      "source_name": "sample"
+    },
+    "label": "Alternate allele"
+  }, {
+    "field": {
+      "name": "CHROM",
+      "source_name": "sample"
+    },
+    "label": "Chromosome Id"
+  }
+]
