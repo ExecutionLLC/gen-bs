@@ -38,6 +38,7 @@ async.waterfall([
             }
         });
         knex.transaction((trx) => {
+            console.log('Transaction started.');
             callback(null, {
                 knex,
                 trx
@@ -71,7 +72,7 @@ async.waterfall([
     },
 
     (context, callback) => {
-        const {fieldsMetadata, trx, knex} = context;
+        const {fieldsMetadata, trx} = context;
         async.forEach(fieldsMetadata, (fieldMetadata, callback) => {
             const targetLabelTemplate = _.find(labelTemplates, (template) => {
                 const {field} = template;
@@ -84,12 +85,16 @@ async.waterfall([
             trx('field_text')
                 .where('field_id', fieldMetadata.id)
                 .update({label: targetLabelTemplate.label})
-                .asCallback(callback);
+                .asCallback((error) => {
+                    console.log(`${fieldMetadata.name} => ${targetLabelTemplate.label}: ${error? 'FAIL' : 'SUCCESS'}`);
+                    callback(error);
+                });
         }, (error) => callback(error, context));
     },
 
     (context, callback) => {
         const {trx} = context;
+        console.log('Committing transaction');
         trx.commit()
             .asCallback(callback);
     }
