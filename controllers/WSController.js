@@ -19,9 +19,9 @@ class WSController extends ControllerBase {
         /**@type {Array<WebSocketClient>}**/
         this.clients = [];
 
-        this.webSocketServerProxy.onMessage((ws, message) => this._onClientMessage(ws, message));
-        this.webSocketServerProxy.onClose((ws) => this._onClientDisconnected(ws));
-        this.webSocketServerProxy.onConnect((ws) => this._onClientConnected(ws));
+        this.webSocketServerProxy.onMessage(this._onClientMessage.bind(this));
+        this.webSocketServerProxy.onClose(this._onClientDisconnected.bind(this));
+        this.webSocketServerProxy.onConnect(this._onClientConnected.bind(this));
 
         this._subscribeAppServerReplyEvents();
     }
