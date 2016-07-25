@@ -45,14 +45,10 @@ class OperationsService extends ServiceBase {
     }
 
     addKeepAliveOperation(session, searchOperation, callback) {
-        async.waterfall([
-            (callback) => {
-                const operation = new KeepAliveOperation(session.id, searchOperation.id);
-                // Keep-alive operation needs to go to the same AS instance as the search operation.
-                operation.setASQueryName(searchOperation.getASQueryName());
-                this._addOperation(session, operation, callback);
-            }
-        ], callback);
+        const operation = new KeepAliveOperation(session.id, searchOperation.id);
+        // Keep-alive operation needs to go to the same AS instance as the search operation.
+        operation.setASQueryName(searchOperation.getASQueryName());
+        this._addOperation(session, operation, callback);
     }
     
     findSystemOperationsForUser(user, callback) {
