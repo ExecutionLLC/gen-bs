@@ -123,6 +123,7 @@ class ApiController extends ControllerBase {
      * @property {string}id
      * @property {string}userId
      * @property {string}languId
+     * @property {string}type Session type (USER or DEMO)
      * */
 }
 
