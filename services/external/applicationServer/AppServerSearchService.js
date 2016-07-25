@@ -98,7 +98,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         };
 
         async.waterfall([
-            (callback) => this._closePreviousSearchIfAny(session, (error) => callback(error)),
+            (callback) => this._closePreviousSearchIfAny(session, callback),
             (callback) => this.services.operations.addSearchOperation(session, method, callback),
             (operation, callback) => {
                 operation.setSampleId(params.sample.id);
@@ -281,7 +281,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 } else {
                     // Expect the only search operation here.
                     const searchOperation = operations[0];
-                    this.services.operations.remove(session, searchOperation.getId(), callback);
+                    this.services.operations.remove(session, searchOperation.getId(), (error) => callback(error));
                 }
             }
         });
