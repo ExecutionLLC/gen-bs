@@ -3,7 +3,7 @@
 const SystemOperation = require('./SystemOperation');
 
 class UploadOperation extends SystemOperation {
-    constructor(sessionId, method, userId) {
+    constructor(sessionId, method) {
         super(sessionId, method);
         this.setSendCloseToAppServer(true);
     }
