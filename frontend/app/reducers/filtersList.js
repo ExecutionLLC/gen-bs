@@ -26,8 +26,11 @@ function reduceFilterListAddFilter(state, action) {
 }
 
 function reduceFilterListReceive(state, action) {
+    const newHashedArray = ImmutableHashedArray.makeFromArray(action.filters);
+    const newSelectedFilterId = newHashedArray[state.selectedFilterId] ? state.selectedFilterId : newHashedArray.array[0].id;
     return Object.assign({}, state, {
-        hashedArray: ImmutableHashedArray.makeFromArray(action.filters)
+        hashedArray: newHashedArray,
+        selectedFilterId: newSelectedFilterId
     });
 }
 
