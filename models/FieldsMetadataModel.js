@@ -137,13 +137,9 @@ class FieldsMetadataModel extends ModelBase {
                 );
                 const fieldsWithAvailableValues = _.map(
                     fieldsMetaData,
-                    (field) => Object.assign(
-                        {},
-                        field,
-                        {
-                            availableValues: fieldsIdsToAvailableValues[field.id] || []
-                        }
-                    )
+                    (field) => Object.assign({}, field, {
+                        availableValues: fieldsIdsToAvailableValues[field.id] || []
+                    })
                 );
                 callback(null, fieldsWithAvailableValues)
             }
@@ -156,7 +152,7 @@ class FieldsMetadataModel extends ModelBase {
             knex.select()
                 .from('field_available_value')
                 .innerJoin('field_available_value_text', 'field_available_value_text.field_available_value_id', 'field_available_value.id')
-                .whereIn('field_id', fieldIds[18])
+                .whereIn('field_id', fieldIds)
                 .asCallback((error, fieldAvailableValues) => {
                     if (error) {
                         callback(error);
