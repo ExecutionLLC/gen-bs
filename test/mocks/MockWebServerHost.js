@@ -11,8 +11,17 @@ class MockWebServerHost extends WebServerHost {
     }
 
     _addMiddleware(app) {
-        // Session is passed by header in tests, so we need to load it here.
+        // Session is passed by header in tests, so we need to load it here by hand.
         app.use((request, response, next) => {
+            response.on('finish', () => {
+                const store = this.services.sessions.getSessionStore();
+                request.session && store.set(
+                    request.session.id,
+                    request.session,
+                    (error) => console.log(`Error saving mock session: ${error}`)
+                );
+            });
+
             const sessionId = request.get(this.sessionHeaderName);
             if (!sessionId) {
                 return next();
@@ -28,6 +37,7 @@ class MockWebServerHost extends WebServerHost {
                     }
                     callback(null, Object.assign(session, {
                         id: sessionId,
+                        save: (callback) => store.set(session.id, session, callback),
                         destroy: (callback) => store.destroy(session.id, callback)
                     }))
                 }
@@ -44,6 +54,10 @@ class MockWebServerHost extends WebServerHost {
         });
 
         super._addMiddleware(app);
+    }
+
+    _initRouters(app) {
+        super._initRouters(app);
     }
 
     _verifyWebSocketClient(info, callback) {

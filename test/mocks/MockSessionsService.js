@@ -1,5 +1,6 @@
 'use strict';
 
+const async = require('async');
 const Uuid = require('node-uuid');
 const session = require('express-session');
 const MemoryStore = require('express-session/session/memory');
@@ -26,11 +27,8 @@ class MockSessionsService extends SessionService {
             genid: (request) => Uuid.v4(),
             name: sessionCookieName,
             secret: sessionSecret,
-            resave: false,
+            resave: true,
             saveUninitialized: false,
-            session: {
-                secure: false
-            },
             store: this.redisStore,
             unset: 'destroy'
         });

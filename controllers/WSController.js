@@ -38,7 +38,11 @@ class WSController extends ControllerBase {
         const {targetSessionId, targetUserId} = operationResult;
         const clients = this._findClients(targetSessionId, targetUserId);
         const clientOperationResult = WSController.createClientOperationResult(operationResult);
-        _.each(clients, client => this._sendClientMessage(client.ws, clientOperationResult));
+        if (!_.isEmpty(clients)) {
+            _.each(clients, client => this._sendClientMessage(client.ws, clientOperationResult));
+        } else {
+            this.logger.warn(`No web-sockets found for session:user ${targetSessionId}:${targetUserId}`);
+        }
     }
 
     /**

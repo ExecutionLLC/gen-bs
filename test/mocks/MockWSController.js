@@ -18,7 +18,7 @@ class MockWSController extends WSController {
         if (!clientDescriptor) {
             return;
         }
-        const {sessionId, userId} = message;
+        const {sessionId, userId} = JSON.parse(message);
         Object.assign(clientDescriptor, {sessionId, userId});
     }
 }
