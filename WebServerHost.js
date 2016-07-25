@@ -113,7 +113,7 @@ class WebServerHost {
     _initWebSocketServer(httpServer) {
         const webSocketServer = new WebSocketServer({
             server: httpServer,
-            verifyClient: (info, callback) => this._verifyWebSocketClient(info, callback)
+            verifyClient: (info, callback) => this.controllers.wsController.verifyWebSocketClient(info, callback)
         });
 
         const wsController = this.controllers.wsController;
@@ -140,12 +140,6 @@ class WebServerHost {
             HttpStatus.INTERNAL_SERVER_ERROR,
             errorObject
         );
-    }
-    
-    _verifyWebSocketClient(info, callback) {
-        const sessionParser = this.services.sessions.getSessionParserMiddleware();
-        // Allow connection only in case session is properly initialized.
-        sessionParser(info.req, {}, () => callback(info.req.session && info.req.session.userId));
     }
 
     _enableCORSIfNeeded(app) {

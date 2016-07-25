@@ -21,6 +21,10 @@ class MockWSController extends WSController {
         const {sessionId, userId} = JSON.parse(message);
         Object.assign(clientDescriptor, {sessionId, userId});
     }
+
+    verifyWebSocketClient(info, callback) {
+        callback(true);
+    }
 }
 
 module.exports = MockWSController;

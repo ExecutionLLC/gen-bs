@@ -59,10 +59,6 @@ class MockWebServerHost extends WebServerHost {
     _initRouters(app) {
         super._initRouters(app);
     }
-
-    _verifyWebSocketClient(info, callback) {
-        callback(true);
-    }
 }
 
 module.exports = MockWebServerHost;
