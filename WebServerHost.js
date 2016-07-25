@@ -37,9 +37,6 @@ class WebServerHost {
         // Create service
         const app = new Express();
 
-        app.disable('x-powered-by');
-        app.use(compression());
-
         this._enableCORSIfNeeded(app);
 
         this._warnAboutSettingsIfNeeded();
@@ -66,6 +63,10 @@ class WebServerHost {
     }
 
     _addMiddleware(app) {
+        app.disable('x-powered-by');
+
+        app.use(compression());
+
         app.use(bodyParser.json());
 
         app.use(morgan('combined'));
