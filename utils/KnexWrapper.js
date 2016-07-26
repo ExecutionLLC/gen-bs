@@ -21,7 +21,7 @@ class KnexWrapper {
 
         const databaseSettings = config.database;
         const knexConfig = {
-            client: 'pg',
+            client: databaseSettings.client,
             connection: {
                 host: databaseSettings.host,
                 port: databaseSettings.port,

@@ -1,0 +1,226 @@
+[
+  {
+    "field": {
+      "name": "INFO_RV",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "rs strand"
+  },
+  {
+    "field": {
+      "name": "INFO_GENEINFO_0",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Gene name"
+  },
+  {
+    "field": {
+      "name": "INFO_GENEINFO_1",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "NCBI Gene ID"
+  },
+  {
+    "field": {
+      "name": "INFO_SAO",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Allele origin"
+  },
+  {
+    "field": {
+      "name": "INFO_SSR",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Artifact"
+  },
+  {
+    "field": {
+      "name": "INFO_VC",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Variant Class"
+  },
+  {
+    "field": {
+      "name": "INFO_PM",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Clinical & Cited"
+  },
+  {
+    "field": {
+      "name": "INFO_TPA",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Provisional"
+  },
+  {
+    "field": {
+      "name": "INFO_NSF",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Frameshift"
+  },
+  {
+    "field": {
+      "name": "INFO_NSM",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Missense"
+  },
+  {
+    "field": {
+      "name": "INFO_NSN",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Nonsense"
+  },
+  {
+    "field": {
+      "name": "INFO_REF",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Has reference"
+  },
+  {
+    "field": {
+      "name": "INFO_SYN",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Has synonymous"
+  },
+  {
+    "field": {
+      "name": "INFO_U3",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "3’ UTR"
+  },
+  {
+    "field": {
+      "name": "INFO_U5",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "5’ UTR"
+  },
+  {
+    "field": {
+      "name": "INFO_ASS",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Acceptor"
+  },
+  {
+    "field": {
+      "name": "INFO_DSS",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Donor"
+  },
+  {
+    "field": {
+      "name": "INFO_INT",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Intron variant"
+  },
+  {
+    "field": {
+      "name": "INFO_R3",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "3’ gene part"
+  },
+  {
+    "field": {
+      "name": "INFO_R5",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "5’ gene part"
+  },
+  {
+    "field": {
+      "name": "INFO_CFL",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Assembly conflict"
+  },
+  {
+    "field": {
+      "name": "INFO_ASP",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Assembly specific"
+  },
+  {
+    "field": {
+      "name": "INFO_MUT",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Known mutation"
+  },
+  {
+    "field": {
+      "name": "INFO_VLD",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Validated"
+  },
+  {
+    "field": {
+      "name": "INFO_G5A",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "MAF>5% in all"
+  },
+  {
+    "field": {
+      "name": "INFO_G5",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "MAF>5% in 1+"
+  },
+  {
+    "field": {
+      "name": "INFO_HD",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Marker on kit"
+  },
+  {
+    "field": {
+      "name": "INFO_KGPhase3",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "1000 genomes"
+  },
+  {
+    "field": {
+      "name": "INFO_CDA",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Clinical assay"
+  },
+  {
+    "field": {
+      "name": "INFO_LSD",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Locus specific"
+  },
+  {
+    "field": {
+      "name": "INFO_WTD",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Withdrawn"
+  },
+  {
+    "field": {
+      "name": "INFO_COMMON",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Common"
+  }
+]

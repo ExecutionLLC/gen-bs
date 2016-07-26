@@ -25,6 +25,15 @@ function updateFieldLabelIfNeeded(field) {
     });
 }
 
+function sortAndAddLabels(fields) {
+    return fields.map(updateFieldLabelIfNeeded)
+        .sort((a, b) => {
+            if (a.label > b.label) {return 1;}
+            if (a.label < b.label) {return -1;}
+            return 0;
+        });
+}
+
 function reduceRequestFields(action, state) {
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
@@ -35,7 +44,7 @@ function reduceRequestFields(action, state) {
 
 function reduceReceiveFields(action, state) {
     const {sourceFieldsList} = state;
-    const fields = action.fields.map(updateFieldLabelIfNeeded);
+    const fields = sortAndAddLabels(action.fields);
     const editableFields = _.filter(fields, ['isEditable', true]);
     const allowedFieldsList = [
         ..._.filter(fields, ['isEditable', false]),
@@ -64,8 +73,8 @@ function reduceReceiveFields(action, state) {
 }
 
 function reduceReceiveTotalFields(action, state) {
-    let totalFields = action.fields.map(updateFieldLabelIfNeeded);
-    let sourceFields = _.filter(totalFields, (field) => field.sourceName !== 'sample');
+    const totalFields = sortAndAddLabels(action.fields);
+    const sourceFields = _.filter(totalFields, (field) => field.sourceName !== 'sample');
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
             sources: false
