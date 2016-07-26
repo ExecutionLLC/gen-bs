@@ -61,6 +61,9 @@ export default class AnalysisBody extends React.Component {
     }
 
     onSelectHistoryId(id) {
-        this.setState({currentHistoryItemId: id});
+        this.setState({
+            ...this.state,
+            currentHistoryItemId: id
+        });
     }
 }
