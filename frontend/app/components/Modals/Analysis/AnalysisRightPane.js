@@ -6,6 +6,10 @@ import {viewsListSelectView} from '../../../actions/viewsList';
 import {filtersListSelectFilter} from '../../../actions/filtersList';
 import {changeSample} from '../../../actions/samplesList';
 import {fetchFields} from '../../../actions/fields';
+import {
+    startQueryHistoryEdit,
+    cancelQueryHistoryEdit
+} from '../../../actions/queryHistory';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -66,7 +70,7 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderViewSelector(historyItem.view, disabled)}
                 <hr className='invisible' />
                 {this.renderUseActualVersions()}
-                {this.renderAnalyzeButton()}
+                {this.renderAnalyzeButton(!disabled)}
             </div>
         );
     }
@@ -464,10 +468,28 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalyzeButton() {
+    renderAnalyzeButton(isEditing) {
         return (
             <div className='form-group'>
                 <div className='col-xs-12'>
+                    {
+                        isEditing ?
+                            <button
+                                className='btn btn-primary'
+                                title='Click for cancel'
+                                onClick={() => this.onCancelButtonClick()}
+                            >
+                                <span>Cancel</span>
+                            </button>
+                            :
+                            <button
+                                className='btn btn-primary'
+                                title='Click for edit'
+                                onClick={() => this.onEditButtonClick()}
+                            >
+                                <span>Edit</span>
+                            </button>
+                    }
                     <button
                         className='btn btn-primary'
                         title='Click for analyze with analysis initial versions of filter and view'
@@ -693,6 +715,14 @@ export default class AnalysisRightPane extends React.Component {
 
     onUseActionVersionsToggle(use) {
         console.log('onUseActionVersionsToggle', use);
+    }
+
+    onEditButtonClick() {
+        this.props.dispatch(startQueryHistoryEdit(this.props.historyItem.id));
+    }
+
+    onCancelButtonClick() {
+        this.props.dispatch(cancelQueryHistoryEdit(this.props.historyItem.id));
     }
 
     onAnalyzeButtonClick() {

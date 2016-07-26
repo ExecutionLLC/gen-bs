@@ -21,6 +21,7 @@ class AnalysisModal extends React.Component {
                     dispatch={this.props.dispatch}
                     auth={this.props.auth}
                     historyList={this.props.historyList}
+                    editingHistoryList={this.props.editingHistoryList}
                     historyListFilter={this.props.historyListFilter}
                     newListItem={this.props.newListItem}
                     isHistoryReceivedAll={this.props.isHistoryReceivedAll}
@@ -135,6 +136,7 @@ function mapStateToProps(state) {
         samplesList,
         modelsList,
         historyList,
+        editingHistoryList: queryHistory.editingHistory,
         historyListFilter: queryHistory.filter,
         isHistoryReceivedAll: queryHistory.isReceivedAll,
         newListItem: makeNewListItem(samplesList, filtersList, viewsList)

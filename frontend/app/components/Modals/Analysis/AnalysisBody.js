@@ -24,6 +24,7 @@ export default class AnalysisBody extends React.Component {
                             <AnalysisLeftPane
                                 dispatch={this.props.dispatch}
                                 historyList={this.props.historyList}
+                                editingHistoryList={this.props.editingHistoryList}
                                 historyListFilter={this.props.historyListFilter}
                                 newListItem={this.props.newListItem}
                                 isHistoryReceivedAll={this.props.isHistoryReceivedAll}
@@ -40,7 +41,7 @@ export default class AnalysisBody extends React.Component {
                         <div className='split-wrap tab-pane active'>
                             <AnalysisRightPane
                                 dispatch={this.props.dispatch}
-                                disabled={!!this.state.currentHistoryItemId}
+                                disabled={this.state.currentHistoryItemId && !this.props.editingHistoryList[this.state.currentHistoryItemId]}
                                 auth={this.props.auth}
                                 historyItem={selectedHistoryItem}
                                 currentItemId={this.state.currentHistoryItemId}

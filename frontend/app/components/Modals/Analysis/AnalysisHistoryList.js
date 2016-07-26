@@ -1,15 +1,16 @@
 import React from 'react';
+import classNames from 'classnames';
 import {requestAppendQueryHistory} from '../../../actions/queryHistory';
 
 
 export default class AnalysisHistoryList extends React.Component {
     render() {
-        const {currentItemId, historyList, newListItem} = this.props;
+        const {currentItemId, historyList, newListItem, editingHistoryList} = this.props;
         return (
             <div className='split-scroll' ref='analysisHistoryListContainer'>
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
                     {this.renderNewListItem(!currentItemId, newListItem)}
-                    {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
+                    {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, !!editingHistoryList[historyItem.id], historyItem))}
                     {!this.props.isHistoryReceivedAll && this.renderLoadingListItem()}
                 </ul>
             </div>
@@ -34,14 +35,17 @@ export default class AnalysisHistoryList extends React.Component {
     }
 
     renderNewListItem(isActive, item) {
-        return this.renderListItem(isActive, item);
+        return this.renderListItem(isActive, true, item);
     }
 
-    renderListItem(isActive, historyItem) {
+    renderListItem(isActive, isEditing, historyItem) {
         return (
             <li
                 key={historyItem.id}
-                className={isActive ? 'active' : ''}
+                className={classNames({
+                    'active': isActive,
+                    'editing': isEditing
+                })}
             >
                 <a
                     type='button'
