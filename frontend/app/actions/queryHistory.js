@@ -23,7 +23,7 @@ import {entityType} from '../utils/entityTypes';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
-export const PREPARE_TO_FILTER = 'PREPARE_TO_FILTER';
+export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
 export const CLOSE_QUERY_HISTORY_MODAL = 'CLOSE_QUERY_HISTORY_MODAL';
 
@@ -71,9 +71,9 @@ export function clearQueryHistory() {
     };
 }
 
-export function prepareToFilter(filter) {
+export function prepareQueryHistoryToFilter(filter) {
     return {
-        type: PREPARE_TO_FILTER,
+        type: PREPARE_QUERY_HISTORY_TO_FILTER,
         filter
     };
 }

@@ -16,7 +16,7 @@ function reduceReceiveQueryHistory(state, action) {
     });
 }
 
-function reducePrepareToFilter(state, action) {
+function reducePrepareQueryHistoryToFilter(state, action) {
     return {
         ...state,
         filter: action.filter,
@@ -57,8 +57,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceReceiveQueryHistory(state, action);
         case ActionTypes.APPEND_QUERY_HISTORY:
             return reduceAppendQueryHistory(state, action);
-        case ActionTypes.PREPARE_TO_FILTER:
-            return reducePrepareToFilter(state, action);
+        case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:
+            return reducePrepareQueryHistoryToFilter(state, action);
         case ActionTypes.SHOW_QUERY_HISTORY_MODAL:
             return reduceShowQueryHistoryModal(state);
         case ActionTypes.CLOSE_QUERY_HISTORY_MODAL:
