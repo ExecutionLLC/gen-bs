@@ -145,7 +145,7 @@ class ApplicationServerServiceBase extends ServiceBase {
             targetUserId,
             eventName,
             shouldCompleteOperation,
-            resultType: (error)? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
+            resultType: error? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
             error,
             result
         };

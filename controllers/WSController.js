@@ -89,8 +89,7 @@ class WSController extends ControllerBase {
 
     _onClientDisconnected(clientWs) {
         this.logger.info('WS client disconnected');
-        const index = _.findIndex(this.clients, {ws: clientWs});
-        this.clients.splice(index, 1);
+        _.remove(this.clients, (client) => client.ws === clientWs);
     }
 
     _onClientMessage(clientWs, message) {
