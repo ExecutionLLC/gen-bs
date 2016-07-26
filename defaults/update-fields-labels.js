@@ -14,7 +14,8 @@ const Config = require('../utils/Config');
 const labelTemplates = _([
     './templates/metadata/labels/required-fields-labels.json',
     './templates/metadata/labels/clinvar_20160705_v02.json',
-    './templates/metadata/labels/dbsnp_20160601_v01.json'
+    './templates/metadata/labels/dbsnp_20160601_v01.json',
+    './templates/metadata/labels/vep-fields.json'
     ])
     .map((path) => require(path))
     .map(ChangeCaseUtil.convertKeysToCamelCase)
