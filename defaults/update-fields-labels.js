@@ -80,8 +80,9 @@ async.waterfall([
             const targetLabelTemplate = _.find(labelTemplates, (template) => {
                 const {field} = template;
                 return field.name === fieldMetadata.name
-                    && (!field.valueType || field.valueType === fieldMetadata.valueType)
-                    && (!field.dimension || field.dimension === fieldMetadata.dimension);
+                        && field.sourceName == fieldMetadata.source_name
+                        && (!field.valueType || field.valueType === fieldMetadata.valueType)
+                        && (!field.dimension || field.dimension === fieldMetadata.dimension);
                 }
             );
             assert.ok(targetLabelTemplate);
@@ -107,12 +108,15 @@ async.waterfall([
         context.trx.rollback()
             .then(() => {
                 console.log('Rollback successful');
+                process.exit(1);
             })
             .catch((error) => {
                 console.log(`Rollback failed: ${error}`);
+                process.exit(1);
             });
     } else {
         console.log('Labels are successfully updated.');
+        process.exit(0);
     }
 });
 
