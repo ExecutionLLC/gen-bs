@@ -24,6 +24,8 @@ import {entityType} from '../utils/entityTypes';
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
+export const START_QUERY_HISTORY_EDIT = 'START_QUERY_HISTORY_EDIT';
+export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
 export const CLOSE_QUERY_HISTORY_MODAL = 'CLOSE_QUERY_HISTORY_MODAL';
 
@@ -75,6 +77,20 @@ export function prepareQueryHistoryToFilter(filter) {
     return {
         type: PREPARE_QUERY_HISTORY_TO_FILTER,
         filter
+    };
+}
+
+export function startQueryHistoryEdit(historyItemId) {
+    return {
+        type: START_QUERY_HISTORY_EDIT,
+        historyItemId
+    };
+}
+
+export function cancelQueryHistoryEdit(historyItemId) {
+    return {
+        type: CANCEL_QUERY_HISTORY_EDIT,
+        historyItemId
     };
 }
 

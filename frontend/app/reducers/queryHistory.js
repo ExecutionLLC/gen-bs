@@ -1,11 +1,16 @@
+import _ from 'lodash';
+
 import  * as ActionTypes from '../actions/queryHistory';
 import immutableArray from '../utils/immutableArray';
+import {ImmutableHash} from '../utils/immutable';
 
 const initialState = {
     history: [],
     filter: '',
     isReceivedAll: false,
-    showQueryHistoryModal: false
+    showQueryHistoryModal: false,
+    newHistoryItem: null,
+    editingHistory: {}
 };
 
 function reduceReceiveQueryHistory(state, action) {
@@ -22,6 +27,31 @@ function reducePrepareQueryHistoryToFilter(state, action) {
         filter: action.filter,
         isReceivedAll: false,
         history: []
+    };
+}
+
+function reduceStartQueryHistoryEdit(state, action) {
+    const {historyItemId} = action;
+    const {history, editingHistory} = state;
+    const historyItem = historyItemId && _.find(history);
+    const newEditingHistory = editingHistory[historyItemId] ?
+        ImmutableHash.replace(editingHistory, historyItemId, historyItem) :
+        ImmutableHash.add(editingHistory, historyItemId, historyItem);
+    return {
+        ...state,
+        editingHistory: newEditingHistory
+    };
+}
+
+function reduceCancelQueryHistoryEdit(state, action) {
+    const {historyItemId} = action;
+    const {editingHistory} = state;
+    const newEditingHistory = editingHistory[historyItemId] ?
+        ImmutableHash.remove(editingHistory, historyItemId) :
+        editingHistory;
+    return {
+        ...state,
+        editingHistory: newEditingHistory
     };
 }
 
@@ -59,6 +89,10 @@ export default function queryHistory(state = initialState, action) {
             return reduceAppendQueryHistory(state, action);
         case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:
             return reducePrepareQueryHistoryToFilter(state, action);
+        case ActionTypes.START_QUERY_HISTORY_EDIT:
+            return reduceStartQueryHistoryEdit(state, action);
+        case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:
+            return reduceCancelQueryHistoryEdit(state, action);
         case ActionTypes.SHOW_QUERY_HISTORY_MODAL:
             return reduceShowQueryHistoryModal(state);
         case ActionTypes.CLOSE_QUERY_HISTORY_MODAL:
