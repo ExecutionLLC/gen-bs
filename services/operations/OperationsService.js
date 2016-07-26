@@ -41,7 +41,6 @@ class OperationsService extends ServiceBase {
                 this._addOperation(session, operation, callback);
             }
         ], callback);
-
     }
 
     addKeepAliveOperation(session, searchOperation, callback) {
