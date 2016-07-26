@@ -36,7 +36,7 @@ class SessionsController extends ControllerBase {
     }
 
     check(request, response) {
-        const {session, session:{type:sessionType, id:sessionId}} = request;
+        const {session, session: {type: sessionType, id: sessionId}} = request;
         if (this.services.sessions.isSessionValid(session)) {
             async.waterfall([
                 (callback) => this.services.operations.keepOperationsAlive(session, callback)

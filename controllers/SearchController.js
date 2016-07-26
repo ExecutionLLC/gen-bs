@@ -19,9 +19,7 @@ class SearchController extends ControllerBase {
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
             (body, callback) => {
-                const {user, session, languId:languageId} = request;
-
-                //noinspection UnnecessaryLocalVariableJS
+                const {user, session, languId: languageId} = request;
                 const {sampleId, viewId, filterId, limit, offset} = body;
                 this.services.search
                     .sendSearchRequest(user, session, languageId,
@@ -55,7 +53,7 @@ class SearchController extends ControllerBase {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
-                const {user, session, params:{operationId}, query:{limit, offset}} = request;
+                const {user, session, params: {operationId}, query: {limit, offset}} = request;
                 if (!limit || !offset || isNaN(limit) || isNaN(offset)) {
                     callback(new Error('Please set "limit" and "offset" query parameters to valid numbers.'));
                 } else {
