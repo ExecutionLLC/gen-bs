@@ -4,12 +4,27 @@
       "name": "ALT",
       "source_name": "sample"
     },
-    "label": "Alternate allele"
-  }, {
+    "label": "Alternative Allele"
+  },
+  {
     "field": {
       "name": "CHROM",
       "source_name": "sample"
     },
-    "label": "Chromosome Id"
+    "label": "Chromosome"
+  },
+  {
+    "field": {
+      "name": "POS",
+      "source_name": "sample"
+    },
+    "label": "Position"
+  },
+  {
+    "field": {
+      "name": "REF",
+      "source_name": "sample"
+    },
+    "label": "Reference Allele"
   }
 ]

@@ -12,7 +12,8 @@ const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const Config = require('../utils/Config');
 
 const labelTemplates = _([
-        './templates/metadata/labels/required-fields-labels.json'
+    './templates/metadata/labels/required-fields-labels.json',
+    './templates/metadata/labels/clinvar_20160705_v02.json'
     ])
     .map((path) => require(path))
     .map(ChangeCaseUtil.convertKeysToCamelCase)
