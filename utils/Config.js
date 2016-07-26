@@ -79,6 +79,7 @@ const SETTINGS = {
         reconnectTimeout: makeDefault(ENV.GEN_WS_RABBIT_MQ_RECONNECT_TIMEOUT, 10000)
     },
     database: {
+        client: 'pg',
         host: makeDefault(ENV.GEN_WS_DATABASE_SERVER, 'localhost'),
         port: makeDefault(ENV.GEN_WS_DATABASE_PORT, 5432),
         user: makeDefault(ENV.GEN_WS_DATABASE_USER, 'postgres'),
