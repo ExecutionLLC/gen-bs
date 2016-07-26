@@ -1,6 +1,6 @@
 'use strict';
 
-const Uuid = require('node-uuid');
+const QueryString = require('querystring');
 const async = require('async');
 const Express = require('express');
 const passport = require('passport');
@@ -96,7 +96,7 @@ class SessionsController extends ControllerBase {
                     return next(error);
                 }
                 this.services.sessions.startForEmail(request.session, userEmail, (error) => {
-                    const queryPart = error ? `?error=${error.message}` : '';
+                    const queryPart = error ? `?error=${QueryString.escape(error.message)}` : '';
                     response.redirect(`/${queryPart}`);
                 });
             });
