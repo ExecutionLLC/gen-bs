@@ -41,10 +41,11 @@ class MockSessionsService extends SessionService {
         mockStore.get = (sessionId, callback) => {
             originalGet(sessionId, (error, sessionObject) => {
                 if (error || !sessionObject) {
-                    return callback(error, sessionObject);
+                    callback(error, sessionObject);
+                } else {
+                    const session = this._parseSession(JSON.stringify(sessionObject));
+                    callback(null, session);
                 }
-                const session = this._parseSession(JSON.stringify(sessionObject));
-                callback(null, session);
             });
         };
 
