@@ -71,12 +71,7 @@ class ApiController extends ControllerBase {
 
     _initRequestContext(request, response, next) {
         async.waterfall([
-            (callback) => {
-                if (!request.session) {
-                    return callback(new Error('Failed to initialize session.'));
-                }
-                callback(null);
-            },
+            (callback) => callback(request.session? null : new Error('Failed to initialize session.')),
             (callback) => this._findAndSetUser(request, callback),
             (callback) => this._findAndSetLanguage(request, callback)
         ], (error) => next(error));
