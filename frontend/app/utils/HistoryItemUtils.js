@@ -1,4 +1,4 @@
-function makeHistoryListItem(historyItem) {
+function makeHistoryItem(historyItem) {
     const name = historyItem.timestamp + '_' + historyItem.sample.fileName + '_' + historyItem.filters[0].name + '_' + historyItem.view.name;
     return {
         id: historyItem.id,
@@ -36,7 +36,7 @@ function makeHistoryListItem(historyItem) {
     };
 }
 
-function makeNewListItem(samplesList, filtersList, viewsList) {
+function makeNewHistoryItem(samplesList, filtersList, viewsList) {
     const filter = filtersList.hashedArray.hash[filtersList.selectedFilterId];
     const view = viewsList.hashedArray.hash[viewsList.selectedViewId];
     const sample = samplesList.hashedArray.hash[samplesList.selectedSampleId];
@@ -78,8 +78,8 @@ function makeNewListItem(samplesList, filtersList, viewsList) {
 }
 
 const HistoryItemUtils = {
-    makeHistoryListItem,
-    makeNewListItem
+    makeHistoryItem,
+    makeNewHistoryItem,
 };
 
 export default HistoryItemUtils;

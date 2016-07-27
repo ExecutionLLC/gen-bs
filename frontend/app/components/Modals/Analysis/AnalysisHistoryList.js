@@ -5,11 +5,11 @@ import {requestAppendQueryHistory} from '../../../actions/queryHistory';
 
 export default class AnalysisHistoryList extends React.Component {
     render() {
-        const {currentItemId, historyList, newListItem, editingHistoryList} = this.props;
+        const {currentItemId, historyList, newHistoryItem, editingHistoryList} = this.props;
         return (
             <div className='split-scroll' ref='analysisHistoryListContainer'>
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
-                    {this.renderNewListItem(!currentItemId, newListItem)}
+                    {this.renderNewListItem(!currentItemId, newHistoryItem)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, !!editingHistoryList[historyItem.id], historyItem))}
                     {!this.props.isHistoryReceivedAll && this.renderLoadingListItem()}
                 </ul>
