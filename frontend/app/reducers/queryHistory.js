@@ -47,6 +47,12 @@ function reduceStartQueryHistoryEdit(state, action) {
 
 function reduceCancelQueryHistoryEdit(state, action) {
     const {historyItemId} = action;
+    if (!historyItemId) {
+        return {
+            ...state,
+            newHistoryItem: null
+        };
+    }
     const {editingHistory} = state;
     const newEditingHistory = editingHistory[historyItemId] ?
         ImmutableHash.remove(editingHistory, historyItemId) :
