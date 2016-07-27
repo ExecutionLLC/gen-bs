@@ -88,6 +88,11 @@ class DatabaseCreator {
             'filter', // Model is similar to filter.
             'complex' // Model has a defined behavior and is not cloneable/editable.
         ];
+        const modelAnalysisTypeEnumValues = [
+            'all',      // Model should be available in all lists.
+            'tumor',    // Tumor/Normal analysis-only models.
+            'family'    // Family analysis-only models.
+        ];
 
         // Entity access rights, allowing users to share things like filters and views
         const accessRightsEnumValues = [
@@ -200,9 +205,14 @@ class DatabaseCreator {
                 table.uuid('original_model_id')
                     .references('id')
                     .inTable('model');
-                table.json('rules');
-                table.enu('type', entityTypeEnumValues);
-                table.enu('model_type', modelTypeEnumValues);
+                table.json('rules')
+                    .nullable();
+                table.enu('type', entityTypeEnumValues)
+                    .notNullable();
+                table.enu('model_type', modelTypeEnumValues)
+                    .notNullable();
+                table.enu('analysis_type', modelAnalysisTypeEnumValues)
+                    .notNullable();
                 table.boolean('is_deleted')
                     .defaultTo(false);
                 table.timestamp('timestamp')
