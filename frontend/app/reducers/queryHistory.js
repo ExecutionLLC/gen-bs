@@ -34,10 +34,11 @@ function reducePrepareQueryHistoryToFilter(state, action) {
 function reduceStartQueryHistoryEdit(state, action) {
     const {historyItemId} = action;
     const {history, editingHistory} = state;
-    const historyItem = historyItemId && _.find(history);
+    const historyItem = historyItemId && _.find(history, {id: historyItemId});
+    const historyItemConverted = historyItem && HistoryItemUtils.makeHistoryItem(historyItem);
     const newEditingHistory = editingHistory[historyItemId] ?
-        ImmutableHash.replace(editingHistory, historyItemId, historyItem) :
-        ImmutableHash.add(editingHistory, historyItemId, historyItem);
+        ImmutableHash.replace(editingHistory, historyItemId, historyItemConverted) :
+        ImmutableHash.add(editingHistory, historyItemId, historyItemConverted);
     return {
         ...state,
         editingHistory: newEditingHistory

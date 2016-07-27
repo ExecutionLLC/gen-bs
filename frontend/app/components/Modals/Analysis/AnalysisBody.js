@@ -14,7 +14,7 @@ export default class AnalysisBody extends React.Component {
     }
 
     render() {
-        const selectedHistoryItem = this.state.currentHistoryItemId && this.findHistoryItemForId(this.state.currentHistoryItemId) || this.props.newHistoryItem;
+        const selectedHistoryItem = this.state.currentHistoryItemId && (this.props.editingHistoryList[this.state.currentHistoryItemId] || this.findHistoryItemForId(this.state.currentHistoryItemId)) || this.props.newHistoryItem;
 
         return (
             <Modal.Body>
