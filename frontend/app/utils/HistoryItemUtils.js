@@ -8,31 +8,44 @@ function makeHistoryItem(historyItem) {
         lastQueryDate: historyItem.timestamp + 1000,
         filter: historyItem.filters[0],
         view: historyItem.view,
-        type: {
-            single: {
-                sample: historyItem.sample
-            }
+        // single
+        type: 'single', // 'tumor', 'family'
+        samples: [{
+            id: historyItem.sample && historyItem.sample.id || null,
+            type: 'single'
+        }]
 /* TODO: make other types like this:
-            tumorNormal: {
-                samples: {
-                    tumor: historyItem.sample,
-                    normal: historyItem.sample
-                },
-                model: historyItem.filters[0]
+        // tumor
+        type: 'tumor',
+        model: historyItem.filters[0]
+        samples: [
+            {
+                id: historyItem.sample.id,
+                type: 'tumor'
+            },
+            {
+                id: historyItem.sample.id,
+                type: 'normal'
             }
-
-            family: {
-                samples: {
-                    proband: historyItem.sample,
-                    members: [
-                        {memberId: 'father', sample: historyItem.sample},
-                        {memberId: 'mother', sample: historyItem.sample}
-                    ]
-                },
-                model: historyItem.filters[0]
+        ]
+        // family
+        type: 'family',
+        model: historyItem.filters[0]
+        samples: [
+            {
+                id: historyItem.sample.id,
+                type: 'proband'
+            },
+            {
+                id: historyItem.sample.id,
+                type: 'mother'
+            },
+            {
+                id: historyItem.sample.id,
+                type: 'father'
             }
-*/
-        }
+        ]
+ */
     };
 }
 
@@ -49,130 +62,116 @@ function makeNewHistoryItem(samplesList, filtersList, viewsList) {
         lastQueryDate: '' + new Date(),
         filter: filter,
         view: view,
-        type: {
-            single: {
-                sample: sample
+        type: 'single',
+        samples: [{
+            id: sample && sample.id || null,
+            type: 'single'
+        }]
+/* TODO: make other types like this:
+        // tumor
+        type: 'tumor',
+        model: historyItem.filters[0]
+        samples: [
+            {
+                id: sample.id,
+                type: 'tumor'
+            },
+            {
+                id: sample.id,
+                type: 'normal'
             }
-            /* TODO: make other types like this:
-                        tumorNormal: {
-                            samples: {
-                                tumor: historyItem.sample,
-                                normal: historyItem.sample
-                            },
-                            model: historyItem.filters[0]
-                        }
-
-                        family: {
-                            samples: {
-                                proband: historyItem.sample,
-                                members: [
-                                    {memberId: 'father', sample: historyItem.sample},
-                                    {memberId: 'mother', sample: historyItem.sample}
-                                ]
-                            },
-                            model: historyItem.filters[0]
-                        }
-            */
-        }
+        ]
+        // family
+        type: 'family',
+        model: historyItem.filters[0]
+        samples: [
+            {
+                id: sample.id,
+                type: 'proband'
+            },
+            {
+                id: sample.id,
+                type: 'mother'
+            },
+            {
+                id: historyItem.sample.id,
+                type: 'father'
+            }
+        ]
+ */
     };
 }
 
 function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, targetType) {
 
     const typeConverts = {
-        single: {
-            tumorNormal(type) {
+        'single': {
+            'tumor'(historyItem) {
                 return {
-                    tumorNormal: {
-                        samples: {
-                            tumor: type.single.sample,
-                            normal: type.single.sample
-                        },
-                        model: modelsList[0]
-                    }
+                    samples: [
+                        {id: historyItem.samples[0].id, type: 'tumor'},
+                        {id: historyItem.samples[0].id, type: 'normal'}
+                    ],
+                    model: modelsList.models[0]
                 };
             },
-            family(type) {
+            'family'(historyItem) {
                 return {
-                    family: {
-                        samples: {
-                            proband: type.single.sample,
-                            members: [
-                                {memberId: 'father', sample: type.single.sample},
-                                {memberId: 'mother', sample: type.single.sample}
-                            ]
-                        },
-                        model: modelsList[0]
-                    }
+                    samples: [
+                        {id: historyItem.samples[0].id, type: 'proband'},
+                        {id: historyItem.samples[0].id, type: 'mother'},
+                        {id: historyItem.samples[0].id, type: 'father'}
+                    ],
+                    model: modelsList.models[0]
                 };
             }
         },
-        tumorNormal: {
-            single(type) {
+        'tumor': {
+            'single'(historyItem) {
                 return {
-                    single: {
-                        sample: type.tumorNormal.samples.tumor
-                    }
+                    samples: [{id: historyItem.samples[0].id, type: 'single'}]
                 };
             },
-            family(type) {
+            'family'(historyItem) {
                 return {
-                    family: {
-                        samples: {
-                            proband: type.tumorNormal.samples.tumor,
-                            members: [
-                                {memberId: 'father', sample: type.tumorNormal.samples.normal},
-                                {memberId: 'mother', sample: type.tumorNormal.samples.normal}
-                            ]
-                        },
-                        model: modelsList[0]
-                    }
+                    samples: [
+                        {id: historyItem.samples[0].id, type: 'proband'},
+                        {id: historyItem.samples[1].id, type: 'mother'},
+                        {id: historyItem.samples[1].id, type: 'father'}
+                    ],
+                    model: modelsList.models[0]
                 };
             }
         },
-        family: {
-            single(type) {
+        'family': {
+            'single'(historyItem) {
                 return {
-                    single: {
-                        sample: type.family.samples.proband
-                    }
+                    samples: [{id: historyItem.samples[0].id, type: 'single'}]
                 };
             },
-            tumorNormal(type) {
+            'tumor'(historyItem) {
                 return {
-                    tumorNormal: {
-                        samples: {
-                            tumor: type.family.samples.proband,
-                            normal: type.family.samples.proband // TODO make if 'father' or 'mother'
-                        },
-                        model: modelsList[0]
-                    }
+                    samples: [
+                        {id: historyItem.samples[0].id, type: 'tumor'},
+                        {id: historyItem.samples[1].id, type: 'normal'}
+                    ],
+                    model: modelsList.models[0]
                 };
             }
         }
     };
 
-    const originalType = historyItem.type;
-    var convertTypeFrom;
-    if (originalType.single) {
-        convertTypeFrom = typeConverts.single;
-    } else if (originalType.tumorNormal) {
-        convertTypeFrom = typeConverts.tumorNormal;
-    } else {
-        convertTypeFrom = typeConverts.family;
+    const convertTypeFrom = typeConverts[historyItem.type];
+    const convertTypeTo = convertTypeFrom && convertTypeFrom[targetType];
+    if (!convertTypeTo) {
+        return historyItem;
     }
-    var convertTypeTo;
-    if (targetType.single) {
-        convertTypeTo = convertTypeFrom.single;
-    } else if (targetType.tumorNormal) {
-        convertTypeTo = convertTypeFrom.tumorNormal;
-    } else {
-        convertTypeTo = convertTypeFrom.family;
-    }
-    var newType = convertTypeTo ? convertTypeTo(historyItem.type) : historyItem.type;
+    var newSamplesModel = convertTypeTo ? convertTypeTo(historyItem) : historyItem;
     return {
         ...historyItem,
-        type: newType
+        samples: newSamplesModel.samples,
+        model: newSamplesModel.model,
+        type: targetType
     };
 }
 

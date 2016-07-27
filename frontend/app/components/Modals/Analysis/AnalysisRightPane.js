@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from '../../shared/Select';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import _ from 'lodash';
 import {viewsListSelectView} from '../../../actions/viewsList';
 import {filtersListSelectFilter} from '../../../actions/filtersList';
 import {changeSample} from '../../../actions/samplesList';
@@ -64,10 +63,10 @@ export default class AnalysisRightPane extends React.Component {
     renderAnalysisContent(historyItem, disabled) {
         return (
             <div>
-                {this.renderSamplesSelects(historyItem.type, disabled)}
+                {this.renderSamplesSelects(historyItem, disabled)}
                 {this.renderFilterSelector(historyItem.filter, disabled)}
-                {historyItem.type.family && this.renderFamilyModelSelector(historyItem.type.family.model, disabled)}
-                {historyItem.type.tumorNormal && this.renderTumorModelSelector(historyItem.type.tumorNormal.model, disabled)}
+                {historyItem.type === 'family' && this.renderFamilyModelSelector(historyItem.model, disabled)}
+                {historyItem.type === 'tumor' && this.renderTumorModelSelector(historyItem.model, disabled)}
                 {this.renderViewSelector(historyItem.view, disabled)}
                 <hr className='invisible' />
                 {this.renderUseActualVersions()}
@@ -193,43 +192,44 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelects(historyItemType, disabled) {
-
+    renderSamplesSelects(historyItem, disabled) {
         const rendersForType = {
-            single: (historyItemType, disabled) => (
+            'single': (historyItem, disabled) => (
                 <div className='tab-pane active' id='single'>
-                     {this.renderSampleSelectSingle(historyItemType.single, disabled)}
+                     {this.renderSampleSelectSingle(historyItem.samples[0], disabled)}
                 </div>
             ),
-            tumorNormal: (historyItemType, disabled) => (
+            'tumor': (historyItem, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
-                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItemType.tumorNormal.samples.tumor, disabled)}
-                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItemType.tumorNormal.samples.normal, disabled)}
+                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], disabled)}
+                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], disabled)}
                      <hr className='invisible' />
                 </div>
             ),
-            family: (historyItemType, disabled) => (
+            'family': (historyItem, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='family'>
                      {this.renderSamplesSelectsFamilyHeader()}
-                     {this.renderSamplesSelectsFamilyProband(historyItemType.family.samples.proband, disabled)}
-                     {this.renderSamplesSelectsFamilyMember1(historyItemType.family.samples.members[0], disabled)}
-                     {this.renderSamplesSelectsFamilyMember2(historyItemType.family.samples.members[1], disabled)}
+                     {historyItem.samples.map( (sample, i) =>
+                         sample.type === 'proband' ?
+                             this.renderSamplesSelectsFamilyProband(sample, disabled, i) :
+                             this.renderSamplesSelectsFamilyMember(sample, disabled, i)
+                     )}
                      <hr className='invisible' />
                 </div>
             )
         };
 
-        const typeRender = _.map(historyItemType, (type, typeName) => rendersForType[typeName]).filter((render) => !!render)[0];
-
+        const typeRender = rendersForType[historyItem.type];
+        console.log(historyItem);
         return (
             <div className='tab-content'>
-                {typeRender && typeRender(historyItemType, disabled)}
+                {typeRender && typeRender(historyItem, disabled)}
             </div>
         );
     }
 
-    renderSampleSelectSingle(typeParams, disabled) {
+    renderSampleSelectSingle(sample, disabled) {
         return (
             <div>
                 <h5><span data-localize='general.sample'>Sample</span></h5>
@@ -255,7 +255,7 @@ export default class AnalysisRightPane extends React.Component {
                                 className='select2-search select-right'
                                 tabindex='-1'
                                 disabled={disabled}
-                                value={typeParams.sample && typeParams.sample.id || null}
+                                value={sample && sample.id || null}
                                 options={this.getSampleOptions()}
                                 onChange={(item) => this.onSampleSelect(item.value)}
                             />
@@ -344,9 +344,9 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyProband(sample, disabled) {
+    renderSamplesSelectsFamilyProband(sample, disabled, i) {
         return (
-            <div className='form-group'>
+            <div className='form-group' key={i}>
                 <div className='col-xs-10 btn-group-select2'>
                     <div className='btn-group'>
                         <button
@@ -377,10 +377,10 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyMember1(member, disabled) {
+    renderSamplesSelectsFamilyMember(sample, disabled, i) {
         return (
-            <div className='form-group'>
-                <div className='col-xs-10 btn-group-select2 '>
+            <div className='form-group' key={i}>
+                <div className='col-xs-10 btn-group-select2'>
                     <div className='btn-group'>
                         <button
                             className='btn btn-default btn-fix-width'
@@ -395,7 +395,7 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             className='select2 select2-default select-left select2-sign'
                             disabled={disabled}
-                            value={member.memberId}
+                            value={sample && sample.type || null}
                             options={this.getFamilyMemberOptions()}
                             onChange={(item) => this.onFamilyMemberSelect(item.value)}
                         />
@@ -405,45 +405,7 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             className='select2-search select-right select-right'
                             disabled={disabled}
-                            value={member.sample && member.sample.id || null}
-                            options={this.getSampleOptions()}
-                            onChange={(item) => this.onSampleSelect(item.value)}
-                        />
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    renderSamplesSelectsFamilyMember2(member, disabled) {
-        return (
-            <div className='form-group'>
-                <div className='col-xs-10 btn-group-select2'>
-                    <div className='btn-group'>
-                        <button 
-                            className='btn btn-default btn-fix-width'
-                            disabled={disabled}
-                            onClick={() => this.onSamplesClick()}
-                        >
-                            <span data-localize='samples.title'>Samples</span>
-                        </button>
-                    </div>
-                    <div className='btn-group btn-group-left'>
-                        <Select
-                            tabindex='-1'
-                            className='select2 select2-default select-left select2-sign '
-                            disabled={disabled}
-                            value={member.memberId}
-                            options={this.getFamilyMemberOptions()}
-                            onChange={(item) => this.onFamilyMemberSelect(item.value)}
-                        />
-                    </div>
-                    <div className='btn-group btn-group-select2-max btn-group-right'>
-                        <Select
-                            aria-hidden='true' tabindex='-1'
-                            className='select2-search select-right select-right'
-                            disabled={disabled}
-                            value={member.sample && member.sample.id || null}
+                            value={sample && sample.id || null}
                             options={this.getSampleOptions()}
                             onChange={(item) => this.onSampleSelect(item.value)}
                         />
@@ -551,22 +513,22 @@ export default class AnalysisRightPane extends React.Component {
     renderAnalysisHeaderTabs(historyItemType, disabled) {
         const tabs = [
             {
-                isActive: !!historyItemType.single,
+                isActive: historyItemType === 'single',
                 className: 'single-tab',
                 caption: 'Single',
-                onSelect: () => this.dispatchEdit({type: {single: true}})
+                onSelect: () => this.dispatchEdit({type: 'single'})
             },
             {
-                isActive: !!historyItemType.tumorNormal,
+                isActive: historyItemType === 'tumor',
                 className: 'tumor-normal-tab',
                 caption: 'Tumor/Normal',
-                onSelect: () => this.dispatchEdit({type: {tumorNormal: true}})
+                onSelect: () => this.dispatchEdit({type: 'tumor'})
             },
             {
-                isActive: !!historyItemType.family,
+                isActive: historyItemType === 'family',
                 className: 'family-tab',
                 caption: 'Family',
-                onSelect: () => this.dispatchEdit({type: {family: true}})
+                onSelect: () => this.dispatchEdit({type: 'family'})
             }
         ];
         return (
