@@ -8,7 +8,8 @@ import {changeSample} from '../../../actions/samplesList';
 import {fetchFields} from '../../../actions/fields';
 import {
     startQueryHistoryEdit,
-    cancelQueryHistoryEdit
+    cancelQueryHistoryEdit,
+    editQueryHistoryItem
 } from '../../../actions/queryHistory';
 
 
@@ -548,24 +549,25 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderAnalysisHeaderTabs(historyItemType, disabled) {
+        const {dispatch} = this.props;
         const tabs = [
             {
                 isActive: !!historyItemType.single,
                 className: 'single-tab',
                 caption: 'Single',
-                onSelect: () => {}
+                onSelect: () => dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {type: {single: true}}, this.props.historyItem))
             },
             {
                 isActive: !!historyItemType.tumorNormal,
                 className: 'tumor-normal-tab',
                 caption: 'Tumor/Normal',
-                onSelect: () => {}
+                onSelect: () => dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {type: {tumorNormal: true}}, this.props.historyItem))
             },
             {
                 isActive: !!historyItemType.family,
                 className: 'family-tab',
                 caption: 'Family',
-                onSelect: () => {}
+                onSelect: () => dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {type: {family: true}}, this.props.historyItem))
             }
         ];
         return (
@@ -707,10 +709,12 @@ export default class AnalysisRightPane extends React.Component {
 
     onAnalysisNameChange(name) {
         console.log('onAnalysisNameChange', name);
+        this.props.dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {name: name}, this.props.historyItem));
     }
 
     onAnalysisDescriptionChange(description) {
         console.log('onAnalysisDescriptionChange', description);
+        this.props.dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {description: description}, this.props.historyItem));
     }
 
     onUseActionVersionsToggle(use) {

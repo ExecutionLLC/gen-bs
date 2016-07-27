@@ -3,6 +3,7 @@ import _ from 'lodash';
 import  * as ActionTypes from '../actions/queryHistory';
 import immutableArray from '../utils/immutableArray';
 import {ImmutableHash} from '../utils/immutable';
+import HistoryItemUtils from '../utils/HistoryItemUtils';
 
 const initialState = {
     history: [],
@@ -55,6 +56,25 @@ function reduceCancelQueryHistoryEdit(state, action) {
     };
 }
 
+function reduceEditQueryHistoryItem(state, action) {
+    const {historyItemId, samplesList, filtersList, viewsList, modelsList, changeItem, defaultHistoryItem} = action;
+    const {newHistoryItem, editingHistory} = state;
+    const editingHistoryItem = historyItemId && editingHistory[historyItemId];
+    if (editingHistoryItem) {
+        const editedHistoryItem = HistoryItemUtils.changeHistoryItem(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem);
+        const newEditingHistory = ImmutableHash.replace(editingHistory, historyItemId, editedHistoryItem);
+        return {
+            ...state,
+            editingHistory: newEditingHistory
+        };
+    } else {
+        return {
+            ...state,
+            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem || defaultHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem)
+        };
+    }
+}
+
 function reduceAppendQueryHistory(state, action) {
     // Check if data received for actual state
     // Seems like crutch, need to think about consistency
@@ -91,6 +111,8 @@ export default function queryHistory(state = initialState, action) {
             return reducePrepareQueryHistoryToFilter(state, action);
         case ActionTypes.START_QUERY_HISTORY_EDIT:
             return reduceStartQueryHistoryEdit(state, action);
+        case ActionTypes.EDIT_QUERY_HISTORY_ITEM:
+            return reduceEditQueryHistoryItem(state, action);
         case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:
             return reduceCancelQueryHistoryEdit(state, action);
         case ActionTypes.SHOW_QUERY_HISTORY_MODAL:

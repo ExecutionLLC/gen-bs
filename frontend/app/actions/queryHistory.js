@@ -25,6 +25,7 @@ export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
 export const START_QUERY_HISTORY_EDIT = 'START_QUERY_HISTORY_EDIT';
+export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
 export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
 export const CLOSE_QUERY_HISTORY_MODAL = 'CLOSE_QUERY_HISTORY_MODAL';
@@ -84,6 +85,19 @@ export function startQueryHistoryEdit(historyItemId) {
     return {
         type: START_QUERY_HISTORY_EDIT,
         historyItemId
+    };
+}
+
+export function editQueryHistoryItem(historyItemId, samplesList, filtersList, viewsList, modelsList, changeItem, defaultHistoryItem) {
+    return {
+        type: EDIT_QUERY_HISTORY_ITEM,
+        historyItemId,
+        samplesList,
+        filtersList,
+        viewsList,
+        modelsList,
+        changeItem,
+        defaultHistoryItem
     };
 }
 
