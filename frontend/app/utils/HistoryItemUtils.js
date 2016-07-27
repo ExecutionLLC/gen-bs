@@ -12,26 +12,26 @@ function makeHistoryItem(historyItem) {
             single: {
                 sample: historyItem.sample
             }
-            /* TODO: make other types like this:
-                        tumorNormal: {
-                            samples: {
-                                tumor: historyItem.sample,
-                                normal: historyItem.sample
-                            },
-                            model: historyItem.filters[0]
-                        }
+/* TODO: make other types like this:
+            tumorNormal: {
+                samples: {
+                    tumor: historyItem.sample,
+                    normal: historyItem.sample
+                },
+                model: historyItem.filters[0]
+            }
 
-                        family: {
-                            samples: {
-                                proband: historyItem.sample,
-                                members: [
-                                    {memberId: 'father', sample: historyItem.sample},
-                                    {memberId: 'mother', sample: historyItem.sample}
-                                ]
-                            },
-                            model: historyItem.filters[0]
-                        }
-            */
+            family: {
+                samples: {
+                    proband: historyItem.sample,
+                    members: [
+                        {memberId: 'father', sample: historyItem.sample},
+                        {memberId: 'mother', sample: historyItem.sample}
+                    ]
+                },
+                model: historyItem.filters[0]
+            }
+*/
         }
     };
 }
