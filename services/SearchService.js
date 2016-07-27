@@ -20,7 +20,7 @@ class SearchService extends ServiceBase {
     }
 
     init() {
-        this.searchKeyFieldName = this.services.redis.getSearchKeyFieldName();
+        this.searchKeyFieldName = this.services.applicationServerSearch.getSearchKeyFieldName();
         this._subscribeToRPCEvents();
     }
 

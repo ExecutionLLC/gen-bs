@@ -64,26 +64,19 @@ class SearchHandler extends HandlerBase {
             port: 6379,
             result_index: 'index:final'
         };
+        let data = []
         async.waterfall([
-            (callback) => this._loadDataToRedis(redisParams, callback),
             (callback) => {
                 sendResultCallback(Object.assign({}, openSessionProgress, {
                     sessionState: {
                         progress: 100,
                         status: STATUSES.ready,
-                        redis_db: redisParams
+                        data
                     }
                 }));
                 callback(null);
             }
         ], callback);
-    }
-    
-    _loadDataToRedis(redisParams, callback) {
-        const redisTestData = Object.assign({}, redisParams, {
-            rows: mockData
-        });
-        this.services.redis.insertData(redisTestData, callback);
     }
 }
 

@@ -143,7 +143,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
     //TODO: move data methods to another class
 
-    _getSearchKeyFieldName() {
+    getSearchKeyFieldName() {
         return 'search_key';
     }
 
@@ -194,7 +194,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (fieldNameToFieldHash, callback) => {
                 const missingFieldsSet = new Set();
                 const fieldIdToValueArray = _.map(asData, (rowObject) => {
-                    const searchKeyFieldName = this._getSearchKeyFieldName();
+                    const searchKeyFieldName = this.getSearchKeyFieldName();
                     const [fieldNames, missingFieldNames] = _(rowObject)
                         .keys()
                         // exclude search key
