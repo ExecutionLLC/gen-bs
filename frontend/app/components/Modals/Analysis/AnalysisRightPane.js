@@ -549,25 +549,24 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderAnalysisHeaderTabs(historyItemType, disabled) {
-        const {dispatch} = this.props;
         const tabs = [
             {
                 isActive: !!historyItemType.single,
                 className: 'single-tab',
                 caption: 'Single',
-                onSelect: () => dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {type: {single: true}}, this.props.historyItem))
+                onSelect: () => this.dispatchEdit({type: {single: true}})
             },
             {
                 isActive: !!historyItemType.tumorNormal,
                 className: 'tumor-normal-tab',
                 caption: 'Tumor/Normal',
-                onSelect: () => dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {type: {tumorNormal: true}}, this.props.historyItem))
+                onSelect: () => this.dispatchEdit({type: {tumorNormal: true}})
             },
             {
                 isActive: !!historyItemType.family,
                 className: 'family-tab',
                 caption: 'Family',
-                onSelect: () => dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {type: {family: true}}, this.props.historyItem))
+                onSelect: () => this.dispatchEdit({type: {family: true}})
             }
         ];
         return (
@@ -709,12 +708,12 @@ export default class AnalysisRightPane extends React.Component {
 
     onAnalysisNameChange(name) {
         console.log('onAnalysisNameChange', name);
-        this.props.dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {name: name}, this.props.historyItem));
+        this.dispatchEdit({name: name});
     }
 
     onAnalysisDescriptionChange(description) {
         console.log('onAnalysisDescriptionChange', description);
-        this.props.dispatch(editQueryHistoryItem(this.props.historyItem.id, this.props.samplesList, this.props.filtersList, this.props.viewsList, this.props.modelsList, {description: description}, this.props.historyItem));
+        this.dispatchEdit({description: description});
     }
 
     onUseActionVersionsToggle(use) {
@@ -774,5 +773,17 @@ export default class AnalysisRightPane extends React.Component {
 
     onFamilyMemberSelect(familyMemberId) {
         console.log('onFamilyMemberSelect', familyMemberId);
+    }
+
+    dispatchEdit(change) {
+        const {dispatch, historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        dispatch(editQueryHistoryItem(
+            historyItem.id,
+            samplesList,
+            filtersList,
+            viewsList,
+            modelsList,
+            change,
+            historyItem));
     }
 }
