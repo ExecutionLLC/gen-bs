@@ -18,7 +18,7 @@ class MockWebServerHost extends WebServerHost {
                 request.session && store.set(
                     request.session.id,
                     request.session,
-                    (error) => console.log(`Error saving mock session: ${error}`)
+                    (error) => error && console.error(`Error saving mock session: ${error}`)
                 );
             });
 
