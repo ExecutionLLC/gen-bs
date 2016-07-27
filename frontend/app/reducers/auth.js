@@ -2,8 +2,6 @@ import * as ActionTypes from '../actions/auth';
 
 export default function auth(state = {
     isFetching: false,
-    sessionId: null,
-    isAuthenticated: false,
     isDemo: false,
     showAutoLogoutDialog: false,
     secondsToAutoLogout: null,
@@ -20,8 +18,6 @@ export default function auth(state = {
         case ActionTypes.RECEIVE_SESSION: {
             return Object.assign({}, state, {
                 isFetching: false,
-                sessionId: action.sessionId,
-                isAuthenticated: action.isAuthenticated,
                 isDemo: action.isDemo,
                 lastUpdated: action.receivedAt
             });

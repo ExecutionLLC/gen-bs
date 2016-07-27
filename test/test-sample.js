@@ -56,7 +56,7 @@ describe.skip('One Sample', function () {
                     }
                 });
 
-                webSocketClient.associateSession(sessionId);
+                webSocketClient.associateSessionIdAndUserId(sessionId);
 
                 samplesClient.add(sessionId, sampleFileName, sampleFileStream, (error, response) => {
                     const body = ClientBase.readBodyWithCheck(error, response);

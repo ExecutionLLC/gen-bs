@@ -17,28 +17,37 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
     requestSourcesList(callback) {
         const method = METHODS.getSourcesList;
         async.waterfall([
-            (callback) => this.services.operations.addSystemOperation(method, callback),
-            (operation, callback) => {
-                operation.setSendCloseToAppServer(false);
-                callback(null, operation);
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (session, callback) => this.services.operations.addSystemOperation(method,
+                (error, operation) => callback(error, {session, operation})
+            ),
+            (context, callback) => {
+                context.operation.setSendCloseToAppServer(false);
+                callback(null, context);
             },
-            (operation, callback) => this._rpcSend(operation, method, null, callback)
+            ({session, operation}, callback) => {
+                this._rpcSend(session, operation, method, null, callback)
+            }
         ], callback);
     }
 
     requestSourceMetadata(sourceNames, callback) {
         const method = METHODS.getSourceMetadata;
         async.waterfall([
-            (callback) => this.services.operations.addSystemOperation(method, callback),
-            (operation, callback) => this._rpcSend(operation, method, _.map(sourceNames, (sourceName) => {
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (session, callback) => this.services.operations.addSystemOperation(method,
+                (error, operation) => callback(error, session, operation)
+            ),
+            (session, operation, callback) => this._rpcSend(session, operation, method, _.map(sourceNames, (sourceName) => {
                 return sourceName + '.h5'
             }), callback)
         ], callback);
     }
 
-    processGetSourcesListResult(operation, message, callback) {
+    processGetSourcesListResult(session, operation, message, callback) {
         if (this._isAsErrorMessage(message)) {
             this._createErrorOperationResult(
+                session,
                 operation,
                 EVENTS.onSourcesListReceived,
                 true,
@@ -55,6 +64,9 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
              * @type AppServerOperationResult
              * */
             const operationResult = {
+                session,
+                sessionId: session.id,
+                userId: session.userId,
                 eventName: EVENTS.onSourcesListReceived,
                 operation,
                 shouldCompleteOperation: true,
@@ -67,10 +79,11 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
         }
     }
 
-    processGetSourceMetadataResult(operation, message, callback) {
+    processGetSourceMetadataResult(session, operation, message, callback) {
         this.logger.debug('Processing get sources list result for operation ' + operation.getId());
         if (this._isAsErrorMessage(message)) {
             this._createErrorOperationResult(
+                session,
                 operation,
                 EVENTS.onSourceMetadataReceived,
                 true,
@@ -91,6 +104,7 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
              * */
             const operationResult = {
                 eventName: EVENTS.onSourceMetadataReceived,
+                session,
                 operation,
                 shouldCompleteOperation: true,
                 resultType: RESULT_TYPES.SUCCESS,

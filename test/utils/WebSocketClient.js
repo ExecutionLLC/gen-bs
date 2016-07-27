@@ -15,9 +15,10 @@ class WebSocketClient {
     this.wsClient.on('close', this._onWsError.bind(this));
   }
 
-  associateSession(sessionId) {
+  associateSessionIdAndUserId(sessionId, userId) {
     const message = {
-      sessionId
+      sessionId,
+      userId
     };
     this.wsClient.send(JSON.stringify(message));
   }

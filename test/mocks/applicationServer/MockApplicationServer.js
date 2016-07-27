@@ -60,9 +60,9 @@ class MockApplicationServer {
      * @param {boolean}isFromPrivateQueue
      * */
     createClientMessageHandler(isFromPrivateQueue) {
-        return (message) => {
-            this.router.handleCall(message, isFromPrivateQueue, (results) => this._sendResultToClients(results, message));
-        };
+        return (message) => this.router.handleCall(message, isFromPrivateQueue,
+            (results) => this._sendResultToClients(results, message)
+        );
     }
 
     stop() {

@@ -6,7 +6,8 @@ const _ = require('lodash');
 const ServiceBase = require('../../ServiceBase');
 const EventProxy = require('../../../utils/EventProxy');
 const ErrorUtils = require('../../../utils/ErrorUtils');
-const OperationBase = require('../../operations/OperationBase');
+const ReflectionUtils = require('../../../utils/ReflectionUtils');
+const UploadOperation = require('../../operations/UploadOperation');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 
@@ -44,37 +45,34 @@ class ApplicationServerReplyService extends ServiceBase {
      * Here RPC results are distributed by the actual handlers.
      * Handlers are expected to produce {AppServerOperationResult} 
      * in both error and success results.
+     * @param sessionId
+     * @param operationId
      * @param rpcMessage Message to process.
      * @param callback
      */
-    onRpcReplyReceived(rpcMessage, callback) {
+    onRpcReplyReceived(sessionId, operationId, rpcMessage, callback) {
         async.waterfall([
-            (callback) => this.services.operations.findInAllSessions(rpcMessage.id, callback),
-            (operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage, callback),
-            (operation, callback) => this._processOperationResult(operation, rpcMessage, (error, operationResult) => {
-                    callback(error, operationResult);
-            }),
-            (operationResult, callback) => this._findSessionIdsForOperation(
-                operationResult.operation,
-                (error, sessionIds) => callback(error, operationResult, sessionIds)
+            (callback) => this.services.sessions.findById(sessionId, callback),
+            (session, callback) => this.services.operations.find(session, operationId,
+                (error, operation) => callback(error, session, operation)
             ),
-            (operationResult, sessionIds, callback) => this._completeOperationIfNeeded(
-                    operationResult,
-                    (error) => callback(error, operationResult, sessionIds)
+            (session, operation, callback) => this._setASQueryNameIfAny(operation, rpcMessage,
+                (error) => callback(error, session, operation)
             ),
-            (operationResult, sessionIds, callback) => this._createClientOperationResult(operationResult,
-                sessionIds, callback),
-            (operationResult, clientOperationResult, callback) => {
+            (session, operation, callback) => this._processOperationResult(session, operation, rpcMessage, callback),
+            (operationResult, callback) => {
                 // Store client message in the operation for active uploads.
                 const operation = operationResult.operation;
-                if (operation.getType() == OperationBase.operationTypes().UPLOAD
-                    && !clientOperationResult.isOperationCompleted) {
-                    operation.setLastAppServerMessage(clientOperationResult);
+                if (ReflectionUtils.isSubclassOf(operation, UploadOperation)
+                    && !operationResult.shouldCompleteOperation) {
+                    operation.setLastAppServerMessage(operationResult);
                 }
-                callback(null, operationResult, clientOperationResult);
+                callback(null, operationResult);
             },
-            (operationResult, clientOperationResult, callback) => this._emitEvent(operationResult.eventName,
-                clientOperationResult, callback)
+            (operationResult, callback) => this._emitEvent(operationResult.eventName,
+                operationResult, (error) => callback(error, operationResult)),
+            // We are working with the session by ourselves, so need to explicitly save it here.
+            (operationResult, callback) => this.services.sessions.saveSession(operationResult.session, callback)
         ], (error) => {
             callback(error);
         });
@@ -82,13 +80,9 @@ class ApplicationServerReplyService extends ServiceBase {
 
     processLoadNextPageResult(operationResult, callback) {
         async.waterfall([
-            (callback) => this._findSessionIdsForOperation(operationResult.operation, callback),
-            (sessionIds, callback) => this._completeOperationIfNeeded(operationResult,
-                (error) => callback(error, sessionIds)
-            ),
-            (sessionIds, callback) => this._createClientOperationResult(operationResult, sessionIds, callback),
-            (operationResult, clientOperationResult, callback) => this._emitEvent(operationResult.eventName,
-                clientOperationResult, callback)
+            (callback) => this._completeOperationIfNeeded(operationResult, (error) => callback(error)),
+            (callback) => this._emitEvent(operationResult.eventName,
+                operationResult, callback)
         ], (error) => {
             callback(error);
         });
@@ -101,30 +95,8 @@ class ApplicationServerReplyService extends ServiceBase {
      * @param {AppServerResult}appServerResult
      * */
 
-    /**
-     * @param {AppServerOperationResult}operationResult
-     * @param {string[]}sessionIds
-     * @param {ClientOperationResultCallback}callback
-     * */
-    _createClientOperationResult(operationResult, sessionIds, callback) {
-        const operation = operationResult.operation;
-        /**
-         * @type AppServerResult
-         * */
-        const eventData = {
-            operationId: operation.getId(),
-            sessionIds,
-            operationType: operation.getType(),
-            isOperationCompleted: operationResult.shouldCompleteOperation,
-            resultType: operationResult.resultType,
-            result: operationResult.result,
-            error: operationResult.error
-        };
-        callback(null, operationResult, eventData);
-    }
-
-    _emitEvent(eventName, clientOperationResult, callback) {
-        this.eventEmitter.emit(eventName, clientOperationResult);
+    _emitEvent(eventName, operationResult, callback) {
+        this.eventEmitter.emit(eventName, operationResult);
         callback(null);
     }
 
@@ -136,50 +108,39 @@ class ApplicationServerReplyService extends ServiceBase {
 
     /**
      * Selects and runs proper message parser. Handles RPC-level errors.
+     * @param {ExpressSession}session
      * @param {OperationBase}operation
      * @param rpcMessage
      * @param {OperationResultCallback}callback
      * @private
      */
-    _processOperationResult(operation, rpcMessage, callback) {
+    _processOperationResult(session, operation, rpcMessage, callback) {
         const method = operation.getMethod();
 
         switch (method) {
             case METHODS.openSearchSession:
-                this.services.applicationServerSearch.processSearchResult(operation, rpcMessage, callback);
+                this.services.applicationServerSearch.processSearchResult(session, operation, rpcMessage, callback);
                 break;
 
             case METHODS.uploadSample:
-                this.services.applicationServerUpload.processUploadResult(operation, rpcMessage, callback);
+                this.services.applicationServerUpload.processUploadResult(session, operation, rpcMessage, callback);
                 break;
 
             case METHODS.getSourcesList:
-                this.services.applicationServerSources.processGetSourcesListResult(operation, rpcMessage, callback);
+                this.services.applicationServerSources.processGetSourcesListResult(session, operation, rpcMessage, callback);
                 break;
 
             case METHODS.getSourceMetadata:
-                this.services.applicationServerSources.processGetSourceMetadataResult(operation, rpcMessage, callback);
+                this.services.applicationServerSources.processGetSourceMetadataResult(session, operation, rpcMessage, callback);
                 break;
 
             case METHODS.keepAlive:
-                this.services.applicationServerOperations.processKeepAliveResult(operation, rpcMessage, callback);
+                this.services.applicationServerOperations.processKeepAliveResult(session, operation, rpcMessage, callback);
                 break;
 
             default:
                 callback(new Error('Ignoring unexpected result came from the application server.'));
                 break;
-        }
-    }
-
-    _findSessionIdsForOperation(operation, callback) {
-        const operationTypes = this.services.operations.operationTypes();
-        if (operation.getType() !== operationTypes.UPLOAD) {
-            callback(null, [operation.getSessionId()]);
-        } else {
-            // Upload operations belong to the system session and contain user id.
-            // Here we need to find all active sessions for the specified user.
-            const userId = operation.getUserId();
-            this.services.sessions.findAllByUserId(userId, callback);
         }
     }
 
@@ -191,10 +152,9 @@ class ApplicationServerReplyService extends ServiceBase {
      * */
     _completeOperationIfNeeded(operationResult, callback) {
         const operations = this.services.operations;
-        const operation = operationResult.operation;
+        const {session, operation} = operationResult;
         if (operationResult.shouldCompleteOperation) {
-            operations.remove(
-                operation.sessionId,
+            operations.remove(session,
                 operation.getId(),
                 (error) => callback(error, operationResult)
             );

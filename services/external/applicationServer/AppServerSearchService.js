@@ -4,6 +4,7 @@ const _ = require('lodash');
 const async = require('async');
 
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
+const SearchOperation = require('../../operations/SearchOperation');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const RESULT_TYPES = require('./AppServerResultTypes');
@@ -26,16 +27,16 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         this.eventEmitter = new EventEmitter(EVENTS);
     }
 
-    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
+    loadResultsPage(user, session, operationId, limit, offset, callback) {
         async.waterfall([
             (callback) => {
-                this.services.operations.find(sessionId, operationId, callback);
+                this.services.operations.find(session, operationId, callback);
             },
             (operation, callback) => {
                 const redisData = operation.getRedisParams();
                 const userId = user.id;
                 const redisParams = Object.assign({}, redisData, {
-                    sessionId,
+                    session,
                     operationId,
                     userId,
                     limit,
@@ -43,8 +44,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 });
                 this.services.redis.fetch(redisParams, (error, hash) => callback(error, operation, hash));
             },
-            (operation, fieldIdToValueHash, callback) => {
-                this._createSearchDataResult(null, operation, fieldIdToValueHash, callback);
+            (operation, fieldIdToValueArray, callback) => {
+                this._createSearchDataResult(null, session, operation, fieldIdToValueArray, callback);
             },
             (operationResult, callback) => {
                 this.services.applicationServerReply.processLoadNextPageResult(operationResult, callback);
@@ -54,13 +55,15 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     /**
      * Parses RPC message for the 'open_session' method calls.
+     * @param {ExpressSession}session
      * @param {OperationBase}operation
      * @param {Object}message
      * @param {function(Error, AppServerOperationResult)} callback
      * */
-    processSearchResult(operation, message, callback) {
+    processSearchResult(session, operation, message, callback) {
         if (this._isAsErrorMessage(message)) {
             this._createErrorOperationResult(
+                session,
                 operation, 
                 EVENTS.onOperationResultReceived, 
                 false, 
@@ -71,14 +74,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             const sessionState = message.result.sessionState;
 
             if (sessionState.status !== SESSION_STATUS.READY) {
-                this._processProgressMessage(operation, message, callback);
+                this._processProgressMessage(session, operation, message, callback);
             } else {
-                this._processSearchResultMessage(operation, message, callback);
+                this._processSearchResultMessage(session, operation, message, callback);
             }
         }
     }
 
-    requestOpenSearchSession(sessionId, params, callback) {
+    requestOpenSearchSession(session, params, callback) {
         const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
 
         const method = METHODS.openSearchSession;
@@ -95,10 +98,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         };
 
         async.waterfall([
-            (callback) => this._closePreviousSearchIfAny(sessionId, (error) => callback(error)),
-            (callback) => {
-                this.services.operations.addSearchOperation(sessionId, method, callback);
-            },
+            (callback) => this._closePreviousSearchIfAny(session, callback),
+            (callback) => this.services.operations.addSearchOperation(session, method, callback),
             (operation, callback) => {
                 operation.setSampleId(params.sample.id);
                 operation.setUserId(params.userId);
@@ -109,14 +110,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (operation, callback) => this.services.samples.makeSampleIsAnalyzedIfNeeded(params.userId, params.sample.id, (error) => {
                 callback(error, operation);
             }),
-            (operation, callback) => this._rpcSend(operation, method, searchSessionRequest, callback)
+            (operation, callback) => this._rpcSend(session, operation, method, searchSessionRequest, callback)
         ], callback);
     }
 
-    requestSearchInResults(sessionId, operationId, params, callback) {
+    requestSearchInResults(session, operationId, params, callback) {
         async.waterfall([
             (callback) => {
-                this.services.operations.find(sessionId, operationId, callback);
+                this.services.operations.find(session, operationId, callback);
             },
             (operation, callback) => {
                 // save necessary data to the operation to be able to fetch required amount of data.
@@ -132,12 +133,12 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (excludedFields, operation, callback)=> {
                 const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue.filter,
                     excludedFields, params.fieldSearchValues, params.sortValues);
-                this._rpcSend(operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
+                this._rpcSend(session, operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
     }
 
-    _processSearchResultMessage(operation, message, callback) {
+    _processSearchResultMessage(session, operation, message, callback) {
         const sessionState = message.result.sessionState;
 
         const sampleId = operation.getSampleId();
@@ -164,63 +165,42 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => {
                 // Store params to be able to retrieve next page by user requests.
-                this._storeRedisParamsInOperation(redisParams, operation, callback);
+                this._storeRedisParamsInOperation(session, redisParams, operation, callback);
             },
             (callback) => {
                 this.services.redis.fetch(redisParams, callback);
             }
         ], (error, fieldIdToValueHash) => {
-            this._createSearchDataResult(error, operation, fieldIdToValueHash, callback);
+            this._createSearchDataResult(error, session, operation, fieldIdToValueHash, callback);
         });
     }
 
-    _createSearchDataResult(error, operation, fieldIdToValueHash, callback) {
-        /**
-         * @type AppServerOperationResult
-         * */
-        const result = {
-            operation,
-            shouldCompleteOperation: false,
-            error,
-            resultType: (error)? RESULT_TYPES.ERROR : RESULT_TYPES.SUCCESS,
-            eventName: EVENTS.onSearchDataReceived,
-            result: {
-                progress: 100,
-                status: SESSION_STATUS.READY,
-                sampleId: operation.getSampleId(),
-                limit: operation.getLimit(),
-                offset: operation.getOffset(),
-                fieldIdToValueHash
-            }
-        };
-        callback(null, result);
+    _createSearchDataResult(error, session, operation, fieldIdToValueArray, callback) {
+        super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onSearchDataReceived, false, {
+            progress: 100,
+            status: SESSION_STATUS.READY,
+            sampleId: operation.getSampleId(),
+            limit: operation.getLimit(),
+            offset: operation.getOffset(),
+            fieldIdToValueArray
+        }, error, callback);
     }
 
     /**
+     * @param {ExpressSession}session
      * @param {OperationBase}operation
      * @param {Object}message
      * @param {function(Error, AppServerOperationResult)}callback
      * */
-    _processProgressMessage(operation, message, callback) {
+    _processProgressMessage(session, operation, message, callback) {
         /**
          * @type {{status:string, progress: number}}
          * */
         const sessionState = message.result.sessionState;
-
-        /**
-         * @type AppServerOperationResult
-         * */
-        const result = {
-            operation,
-            eventName: EVENTS.onOperationResultReceived,
-            shouldCompleteOperation: false,
-            resultType: RESULT_TYPES.SUCCESS,
-            result: {
-                status: sessionState.status,
-                progress: sessionState.progress
-            }
-        };
-        callback(null, result);
+        super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onOperationResultReceived, false, {
+            status: sessionState.status,
+            progress: sessionState.progress
+        }, null, callback);
     }
 
     _createSearchInResultsParams(globalSearchValue, excludedFields, fieldSearchValues, sortParams) {
@@ -291,9 +271,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             fieldMetadata.name : fieldMetadata.sourceName + '_' + fieldMetadata.name;
     }
 
-    _closePreviousSearchIfAny(sessionId, callback) {
-        const operationTypes = this.services.operations.operationTypes();
-        this.services.operations.findAllByType(sessionId, operationTypes.SEARCH, (error, operations) => {
+    _closePreviousSearchIfAny(session, callback) {
+        this.services.operations.findAllByClass(session, SearchOperation, (error, operations) => {
             if (error) {
                 callback(error);
             } else {
@@ -302,13 +281,13 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 } else {
                     // Expect the only search operation here.
                     const searchOperation = operations[0];
-                    this.services.operations.remove(sessionId, searchOperation.getId(), callback);
+                    this.services.operations.remove(session, searchOperation.getId(), (error) => callback(error));
                 }
             }
         });
     }
 
-    _storeRedisParamsInOperation(redisParams, operation, callback) {
+    _storeRedisParamsInOperation(session, redisParams, operation, callback) {
         // Store Redis information in the operation.
         // This is done to be able to fetch another page later.
         const params = {

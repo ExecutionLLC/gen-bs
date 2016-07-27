@@ -2,12 +2,6 @@
 
 const Uuid = require('node-uuid');
 
-const OPERATION_TYPES = {
-    SYSTEM: 'system',
-    SEARCH: 'search',
-    UPLOAD: 'upload'
-};
-
 class OperationBase {
     constructor(sessionId, method) {
         Object.assign(this, {
@@ -48,7 +42,7 @@ class OperationBase {
 
     /**@returns {string}*/
     getType() {
-        throw new Error('Method is not implemented');
+        return this.constructor.name;
     }
     
     shouldSendCloseToAppServer() {
@@ -60,7 +54,7 @@ class OperationBase {
     }
 
     /**
-     * @param {AppServerResult}message
+     * @param {AppServerOperationResult}message
      * */
     setLastAppServerMessage(message) {
         this.lastAppServerMessage = message;
@@ -74,11 +68,7 @@ class OperationBase {
     }
 
     toString() {
-        return 'operation ' + this.getId() + ' of type ' + this.getType() + ' (created: ' + this.getTimestamp() + ')';
-    }
-
-    static operationTypes() {
-        return OPERATION_TYPES;
+        return 'operation ' + this.getId() + ' of type ' + this.constructor.name + ' (created: ' + this.getTimestamp() + ')';
     }
 }
 
