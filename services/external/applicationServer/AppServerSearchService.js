@@ -29,10 +29,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
         const method = METHODS.getSearchData;
-        const searchDataRequest = {
-            offset:offset,
-            limit:limit
-        };
+        const searchDataRequest = { offset, limit };
         async.waterfall([
             (callback) => {
                 this.services.operations.find(sessionId, operationId, callback);
@@ -71,20 +68,20 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     requestOpenSearchSession(sessionId, params, callback) {
         const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
-
+        const {view, sample, filter, limit, offset} = params;
         const method = METHODS.openSearchSession;
-        const appServerSampleId = this._getAppServerSampleId(params.sample);
-        const appServerView = AppServerViewUtils.createAppServerView(params.view, fieldIdToFieldMetadata);
-        const appServerFilter = AppServerFilterUtils.createAppServerFilter(params.filter, fieldIdToFieldMetadata);
-        const appServerSortOrder = this._createAppServerViewSortOrder(params.view, fieldIdToFieldMetadata);
+        const appServerSampleId = this._getAppServerSampleId(sample);
+        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata);
+        const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata);
+        const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
             viewStructure: appServerView,
             viewFilter: appServerFilter,
             viewSortOrder: appServerSortOrder,
-            offset:params.offset,
-            limit:params.limit
+            offset,
+            limit
         };
 
         async.waterfall([
@@ -161,8 +158,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     });
                 });
             },
-            (dataWithUser, callback) => {
-                this._convertFields(dataWithUser.rowData, dataWithUser.user,sampleId, callback);
+            ({rowData, user}, callback) => {
+                this._convertFields(rowData, user,sampleId, callback);
             }
         ], (error, asData) => {
             callback(error, asData);
@@ -170,21 +167,16 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     _fetchData(data){
-        return _.map(data,(function(fieldsArray) {
-            var dict = {};
-            _.forEach(fieldsArray, function(value) {
-                dict[value.fieldName] = value.fieldValue;
-            });
-            return dict;
-        }));
+        return _.map(data, (fieldsArray) => _.reduce(fieldsArray, (result, {fieldName, fieldValue}) => {
+            result[fieldName] = fieldValue;
+            return result;
+        }, {}));
     }
 
     _convertFields(asData, user, sampleId, callback) {
         async.waterfall([
             (callback) => {
-                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, (error, fields) => {
-                    callback(error, fields);
-                });
+                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
             },
             (fields, callback) => {
                 this.services.fieldsMetadata.findSourcesMetadata((error, sourcesFields) => {
@@ -307,8 +299,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     isAscendingOrder: sortedParam.sortDirection === 'asc'
                 };
             }),
-            offset: offset,
-            limit: limit
+            offset,
+            limit
         };
     }
 
