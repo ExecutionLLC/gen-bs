@@ -30,7 +30,7 @@
           "$and": [
             {
               "field": {
-                "source_name": "source",
+                "source_name": "sample",
                 "name": "ALT",
                 "value_type": "string"
               },
