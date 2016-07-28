@@ -186,6 +186,18 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
     if (change.type != null) {
         editingHistoryItem = changeType(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, change.type);
     }
+    if (change.samples != null) {
+        editingHistoryItem = {...editingHistoryItem, samples: change.samples};
+    }
+    if (change.filter != null) {
+        editingHistoryItem = {...editingHistoryItem, filter: change.filter};
+    }
+    if (change.view != null) {
+        editingHistoryItem = {...editingHistoryItem, view: change.view};
+    }
+    if (change.model != null) {
+        editingHistoryItem = {...editingHistoryItem, model: change.model};
+    }
     return editingHistoryItem;
 }
 

@@ -1,15 +1,13 @@
+import _ from 'lodash';
 import React from 'react';
 import Select from '../../shared/Select';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {viewsListSelectView} from '../../../actions/viewsList';
-import {filtersListSelectFilter} from '../../../actions/filtersList';
-import {changeSample} from '../../../actions/samplesList';
-import {fetchFields} from '../../../actions/fields';
 import {
     startQueryHistoryEdit,
     cancelQueryHistoryEdit,
     editQueryHistoryItem
 } from '../../../actions/queryHistory';
+import immutableArray from '../../../utils/immutableArray';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -257,7 +255,7 @@ export default class AnalysisRightPane extends React.Component {
                                 disabled={disabled}
                                 value={sample && sample.id || null}
                                 options={this.getSampleOptions()}
-                                onChange={(item) => this.onSampleSelect(item.value)}
+                                onChange={(item) => this.onSampleSelect(0, item.value)}
                             />
                         </div>
                     </div>
@@ -297,7 +295,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             value={sample && sample.id || null}
                             options={this.getSampleOptions()}
-                            onChange={(item) => this.onSampleSelect(item.value)}
+                            onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
                 </div>
@@ -330,7 +328,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             value={sample && sample.id || null}
                             options={this.getSampleOptions()}
-                            onChange={(item) => this.onSampleSelect(item.value)}
+                            onChange={(item) => this.onSampleSelect(1, item.value)}
                         />
                     </div>
                 </div>
@@ -369,7 +367,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             value={sample && sample.id || null}
                             options={this.getSampleOptions()}
-                            onChange={(item) => this.onSampleSelect(item.value)}
+                            onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
                 </div>
@@ -407,7 +405,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             value={sample && sample.id || null}
                             options={this.getSampleOptions()}
-                            onChange={(item) => this.onSampleSelect(item.value)}
+                            onChange={(item) => this.onSampleSelect(i, item.value)}
                         />
                     </div>
                 </div>
@@ -699,9 +697,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewSelect(viewId) {
-        if (!this.props.currentItemId) {
-            this.props.dispatch(viewsListSelectView(viewId));
-        }
+        const {viewsList: {hashedArray: {hash: viewsHash}}} = this.props;
+        this.dispatchEdit({
+            view: viewsHash[viewId]
+        });
     }
     
     onFiltersClick() {
@@ -709,9 +708,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onFilterSelect(filterId) {
-        if (!this.props.currentItemId) {
-            this.props.dispatch(filtersListSelectFilter(filterId));
-        }
+        const {filtersList: {hashedArray: {hash: filtersHash}}} = this.props;
+        this.dispatchEdit({
+            filter: filtersHash[filterId]
+        });
     }
 
     onModelClick() {
@@ -719,18 +719,21 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelSelect(modelId) {
-        console.log('onModelSelect', modelId);
+        const {modelsList: {models}} = this.props;
+        this.dispatchEdit({
+            model: _.find(models, {id: modelId})
+        });
     }
     
     onSamplesClick() {
         
     }
     
-    onSampleSelect(sampleId) {
-        if (!this.props.currentItemId) {
-            this.props.dispatch(changeSample(sampleId));
-            this.props.dispatch(fetchFields(sampleId));
-        }
+    onSampleSelect(sampleIndex, sampleId) {
+        const {historyItem} = this.props;
+        this.dispatchEdit({
+            samples: immutableArray.replace(historyItem.samples, sampleIndex, {...historyItem.samples[sampleIndex], id: sampleId})
+        });
     }
 
     onFamilyMemberSelect(familyMemberId) {
