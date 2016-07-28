@@ -30,6 +30,7 @@ class AnalysisModal extends React.Component {
                     filtersList={this.props.filtersList}
                     samplesList={this.props.samplesList}
                     modelsList={this.props.modelsList}
+                    fields={this.props.fields}
                 />
             </Modal>
         );
@@ -41,7 +42,7 @@ class AnalysisModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, queryHistory, viewsList, filtersList, samplesList} = state;
+    const {auth, queryHistory, viewsList, filtersList, samplesList, fields} = state;
 
     const modelsList = {
         models: filtersList.hashedArray.array,
@@ -58,6 +59,7 @@ function mapStateToProps(state) {
         samplesList,
         modelsList,
         historyList,
+        fields,
         editingHistoryList: queryHistory.editingHistory,
         historyListFilter: queryHistory.filter,
         isHistoryReceivedAll: queryHistory.isReceivedAll,

@@ -9,6 +9,7 @@ import {
 } from '../../../actions/queryHistory';
 import immutableArray from '../../../utils/immutableArray';
 import {viewBuilderStartEdit} from '../../../actions/viewBuilder';
+import {filterBuilderStartEdit} from '../../../actions/filterBuilder';
 import {openModal} from '../../../actions/modalWindows';
 
 
@@ -707,7 +708,8 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onFiltersClick() {
-        
+        this.props.dispatch(filterBuilderStartEdit(false, this.props.historyItem.filter, this.props.fields));
+        this.props.dispatch(openModal('filters'));
     }
 
     onFilterSelect(filterId) {
