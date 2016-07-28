@@ -237,7 +237,7 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 className='btn btn-default btn-fix-width'
                                 disabled={disabled}
-                                onClick={() => this.onSamplesClick()}
+                                onClick={() => this.onSamplesClick(0)}
                             >
                                 <span data-localize='samples.title'>Samples</span>
                             </button>
@@ -278,7 +278,7 @@ export default class AnalysisRightPane extends React.Component {
                         <button
                             className='btn btn-default btn-fix-width'
                             disabled={disabled}
-                            onClick={() => this.onSamplesClick()}
+                            onClick={() => this.onSamplesClick(0)}
                         >
                             <span data-localize='samples.title'>Samples</span>
                         </button>
@@ -311,7 +311,7 @@ export default class AnalysisRightPane extends React.Component {
                         <button
                             className='btn btn-default btn-fix-width'
                             disabled={disabled}
-                            onClick={() => this.onSamplesClick()}
+                            onClick={() => this.onSamplesClick(1)}
                         >
                             <span data-localize='samples.title'>Samples</span>
                         </button>
@@ -350,7 +350,7 @@ export default class AnalysisRightPane extends React.Component {
                         <button
                             className='btn btn-default btn-fix-width'
                             disabled={disabled}
-                            onClick={() => this.onSamplesClick()}
+                            onClick={() => this.onSamplesClick(0)}
                         >
                             <span data-localize='samples.title'>Samples</span>
                         </button>
@@ -383,7 +383,7 @@ export default class AnalysisRightPane extends React.Component {
                         <button
                             className='btn btn-default btn-fix-width'
                             disabled={disabled}
-                            onClick={() => this.onSamplesClick()}
+                            onClick={() => this.onSamplesClick(i)}
                         >
                             <span data-localize='samples.title'>Samples</span>
                         </button>
