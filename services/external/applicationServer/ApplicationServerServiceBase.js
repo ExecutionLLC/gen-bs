@@ -106,7 +106,7 @@ class ApplicationServerServiceBase extends ServiceBase {
     }
     
     _isAsErrorMessage(message) {
-        return message.error;
+        return message.error || (message.result && message.result.error);
     }
 }
 

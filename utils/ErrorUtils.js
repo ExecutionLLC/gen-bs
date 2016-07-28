@@ -41,7 +41,8 @@ class ErrorUtils {
      * @returns {AppServerErrorResult}
      * */
     static createAppServerInternalError(message) {
-        return this._createError(ERROR_CODES.AS_INTERNAL_ERROR, message.error);
+        const error = message.error || (message.result && message.result.error);
+        return this._createError(ERROR_CODES.AS_INTERNAL_ERROR, error);
     }
     
     /**
