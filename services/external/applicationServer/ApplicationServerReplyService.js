@@ -78,16 +78,6 @@ class ApplicationServerReplyService extends ServiceBase {
         });
     }
 
-    processLoadNextPageResult(operationResult, callback) {
-        async.waterfall([
-            (callback) => this._completeOperationIfNeeded(operationResult, (error) => callback(error)),
-            (callback) => this._emitEvent(operationResult.eventName,
-                operationResult, callback)
-        ], (error) => {
-            callback(error);
-        });
-    }
-
     /**
      * @callback ClientOperationResultCallback
      * @param {Error}error

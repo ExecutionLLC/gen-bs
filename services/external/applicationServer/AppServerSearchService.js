@@ -13,6 +13,7 @@ const EventEmitter = require('../../../utils/EventProxy');
 const {ENTITY_TYPES} = require('../../../utils/Enums');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
+const CollectionUtils = require('../../../utils/CollectionUtils');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -28,28 +29,15 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     loadResultsPage(user, session, operationId, limit, offset, callback) {
+        const method = METHODS.getSearchData;
+        const searchDataRequest = { offset, limit };
         async.waterfall([
             (callback) => {
                 this.services.operations.find(session, operationId, callback);
             },
-            (operation, callback) => {
-                const redisData = operation.getRedisParams();
-                const userId = user.id;
-                const redisParams = Object.assign({}, redisData, {
-                    session,
-                    operationId,
-                    userId,
-                    limit,
-                    offset
-                });
-                this.services.redis.fetch(redisParams, (error, hash) => callback(error, operation, hash));
-            },
-            (operation, fieldIdToValueArray, callback) => {
-                this._createSearchDataResult(null, session, operation, fieldIdToValueArray, callback);
-            },
-            (operationResult, callback) => {
-                this.services.applicationServerReply.processLoadNextPageResult(operationResult, callback);
-            }
+            (operation, callback) => this._rpcSend(
+                operation, method, searchDataRequest, callback
+            )
         ], callback);
     }
 
@@ -64,7 +52,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         if (this._isAsErrorMessage(message)) {
             this._createErrorOperationResult(
                 session,
-                operation, 
+                operation,
                 EVENTS.onOperationResultReceived, 
                 false, 
                 ErrorUtils.createAppServerInternalError(message), 
@@ -83,18 +71,20 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     requestOpenSearchSession(session, params, callback) {
         const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
-
+        const {view, sample, filter, limit, offset} = params;
         const method = METHODS.openSearchSession;
-        const appServerSampleId = this._getAppServerSampleId(params.sample);
-        const appServerView = AppServerViewUtils.createAppServerView(params.view, fieldIdToFieldMetadata);
-        const appServerFilter = AppServerFilterUtils.createAppServerFilter(params.filter, fieldIdToFieldMetadata);
-        const appServerSortOrder = this._createAppServerViewSortOrder(params.view, fieldIdToFieldMetadata);
+        const appServerSampleId = this._getAppServerSampleId(sample);
+        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata);
+        const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata);
+        const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
             viewStructure: appServerView,
             viewFilter: appServerFilter,
-            viewSortOrder: appServerSortOrder
+            viewSortOrder: appServerSortOrder,
+            offset,
+            limit
         };
 
         async.waterfall([
@@ -132,7 +122,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             },
             (excludedFields, operation, callback)=> {
                 const setFilterRequest = this._createSearchInResultsParams(params.globalSearchValue.filter,
-                    excludedFields, params.fieldSearchValues, params.sortValues);
+                    excludedFields, params.fieldSearchValues, params.sortValues, params.offset, params.limit);
                 this._rpcSend(session, operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
@@ -143,36 +133,96 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
         const sampleId = operation.getSampleId();
         const userId = operation.getUserId();
-        const limit = operation.getLimit();
-        const offset = operation.getOffset();
 
-        // Get data from Redis
-        const redisInfo = sessionState.redisDb;
-        // TODO: Seems session, operation, user id and sample id shall be removed from below.
-        const redisParams = {
-            host: redisInfo.host,
-            port: redisInfo.port,
-            password: redisInfo.password,
-            sampleId,
-            userId,
-            operationId: operation.getId(),
-            sessionId: operation.getSessionId(),
-            databaseNumber: redisInfo.number,
-            dataIndex: redisInfo.resultIndex,
-            offset,
-            limit
-        };
         async.waterfall([
             (callback) => {
-                // Store params to be able to retrieve next page by user requests.
-                this._storeRedisParamsInOperation(session, redisParams, operation, callback);
-            },
-            (callback) => {
-                this.services.redis.fetch(redisParams, callback);
+                this._fetch(sessionState.data, userId, sampleId, callback);
             }
         ], (error, fieldIdToValueHash) => {
             this._createSearchDataResult(error, session, operation, fieldIdToValueHash, callback);
         });
+    }
+    //TODO: move data methods to another class
+
+    getSearchKeyFieldName() {
+        return 'search_key';
+    }
+
+    _fetch(searchData, userId, sampleId, callback) {
+        async.waterfall([
+            (callback) => {
+                const rowData = this._fetchData(searchData);
+                this.services.users.find(userId, (error, user) => {
+                    callback(error, {
+                        user,
+                        rowData
+                    });
+                });
+            },
+            ({rowData, user}, callback) => {
+                this._convertFields(rowData, user,sampleId, callback);
+            }
+        ], (error, asData) => {
+            callback(error, asData);
+        });
+    }
+
+    _fetchData(data){
+        return _.map(data, (fieldsArray) => _.reduce(fieldsArray, (result, {fieldName, fieldValue}) => {
+            result[fieldName] = fieldValue;
+            return result;
+        }, {}));
+    }
+
+    _convertFields(asData, user, sampleId, callback) {
+        async.waterfall([
+            (callback) => {
+                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+            },
+            (fields, callback) => {
+                this.services.fieldsMetadata.findSourcesMetadata((error, sourcesFields) => {
+                    callback(error, fields.concat(sourcesFields));
+                });
+            },
+            (fields, callback) => {
+                // will be matching fields by name, so create fieldName->field hash
+                const fieldNameToFieldHash = CollectionUtils.createHash(fields,
+                    // Source fields will be prepended by the source name, sample fields - will not.
+                    (field) => field.sourceName === 'sample' ? field.name : field.sourceName + '_' + field.name
+                );
+                callback(null, fieldNameToFieldHash);
+            },
+            (fieldNameToFieldHash, callback) => {
+                const missingFieldsSet = new Set();
+                const fieldIdToValueArray = _.map(asData, (rowObject) => {
+                    const searchKeyFieldName = this.getSearchKeyFieldName();
+                    const [fieldNames, missingFieldNames] = _(rowObject)
+                        .keys()
+                        // exclude search key
+                        .filter(fieldName => fieldName !== searchKeyFieldName)
+                        // group by existence
+                        .partition(fieldName => !!fieldNameToFieldHash[fieldName])
+                        .value();
+                    missingFieldNames.forEach(missingFieldName => missingFieldsSet.add(missingFieldName));
+                    // Map field names to field ids.
+                    const mappedRowObject = CollectionUtils.createHash(fieldNames,
+                        (fieldName) => fieldNameToFieldHash[fieldName].id,
+                        (fieldName) => this._mapFieldValue(rowObject[fieldName])
+                    );
+                    // add search key value.
+                    mappedRowObject[searchKeyFieldName] = rowObject[searchKeyFieldName];
+                    return mappedRowObject;
+                });
+                const missingFields = [...missingFieldsSet];
+                missingFields.length && this.logger.error(`The following fields were not found: ${missingFields}`);
+                callback(null, fieldIdToValueArray);
+            }
+        ], callback);
+    }
+
+    _mapFieldValue(actualFieldValue) {
+        // This is VCF way to mark empty field values.
+        return (actualFieldValue !== 'nan') ? actualFieldValue : '.';
     }
 
     _createSearchDataResult(error, session, operation, fieldIdToValueArray, callback) {
@@ -203,7 +253,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         }, null, callback);
     }
 
-    _createSearchInResultsParams(globalSearchValue, excludedFields, fieldSearchValues, sortParams) {
+    _createSearchInResultsParams(globalSearchValue, excludedFields, fieldSearchValues, sortParams, offset, limit) {
         const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
         return {
             globalFilter: {
@@ -228,7 +278,9 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     columnName: this._getPrefixedFieldName(sortedParam.fieldMetadata),
                     isAscendingOrder: sortedParam.sortDirection === 'asc'
                 };
-            })
+            }),
+            offset,
+            limit
         };
     }
 
@@ -285,22 +337,6 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 }
             }
         });
-    }
-
-    _storeRedisParamsInOperation(session, redisParams, operation, callback) {
-        // Store Redis information in the operation.
-        // This is done to be able to fetch another page later.
-        const params = {
-            host: redisParams.host,
-            port: redisParams.port,
-            password: redisParams.password,
-            databaseNumber: redisParams.databaseNumber,
-            dataIndex: redisParams.dataIndex,
-            sampleId: redisParams.sampleId
-        };
-
-        operation.setRedisParams(params);
-        callback(null);
     }
 }
 
