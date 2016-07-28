@@ -478,8 +478,8 @@ class DatabaseCreator {
                     .reference('id')
                     .inTable('filter')
                     .notNullable();
-                table.integer('total_results');
-                table.timestamp('createdDate')
+                table.uuid('model_id');
+                table.timestamp('timestamp')
                     .defaultTo(databaseKnex.fn.now());
                 table.timestamp('last_query_date')
                     .defaultTo(databaseKnex.fn.now());
@@ -496,7 +496,7 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('langu');
                 table.string('name', 50);
-                table.string('description', 512);
+                table.text('description');
 
                 table.primary(['analysis_id','langu_id'])
             })
