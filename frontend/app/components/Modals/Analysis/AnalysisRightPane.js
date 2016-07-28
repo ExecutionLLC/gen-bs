@@ -8,6 +8,8 @@ import {
     editQueryHistoryItem
 } from '../../../actions/queryHistory';
 import immutableArray from '../../../utils/immutableArray';
+import {viewBuilderStartEdit} from '../../../actions/viewBuilder';
+import {openModal} from '../../../actions/modalWindows';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -693,7 +695,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewsClick() {
-
+        this.props.dispatch(viewBuilderStartEdit(false, this.props.historyItem.view));
+        this.props.dispatch(openModal('views'));
     }
 
     onViewSelect(viewId) {
