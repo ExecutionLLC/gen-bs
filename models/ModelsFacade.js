@@ -12,6 +12,7 @@ const CommentsModel = require('./CommentsModel');
 const FieldsMetadataModel = require('./FieldsMetadataModel');
 const SavedFileModel = require('./SavedFileModel');
 const QueryHistoryModel = require('./QueryHistoryModel');
+const AnalysisModel = require('./AnalysisModel');
 
 class ModelsFacade {
     constructor(config, logger) {
@@ -31,6 +32,7 @@ class ModelsFacade {
         this.comments = new CommentsModel(this);
         this.savedFiles = new SavedFileModel(this);
         this.queryHistory = new QueryHistoryModel(this);
+        this.analysis = new AnalysisModel(this);
     }
 }
 
