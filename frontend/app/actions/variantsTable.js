@@ -261,7 +261,7 @@ export function fetchVariants(searchParams) {
         dispatch(requestVariants());
         dispatch(clearTableRowsSelection());
 
-        const {auth: {sessionId}, ui: {languageId}} = getState();
+        const {ui: {languageId}} = getState();
         searchClient.sendSearchRequest(
             languageId,
             searchParams.sampleId,
