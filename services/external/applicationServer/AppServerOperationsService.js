@@ -9,18 +9,25 @@ const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const ReflectionUtils = require('../../../utils/ReflectionUtils');
 const ErrorUtils = require('../../../utils/ErrorUtils');
+const AppServerEvents = require('./AppServerEvents');
 
 class AppServerOperationsService extends ApplicationServerServiceBase {
     constructor(services) {
         super(services);
     }
 
-    requestKeepOperationAlive(session, searchOperation, callback) {
+    init() {
+        this.services.applicationServerReply.on(AppServerEvents.onKeepAliveResultReceived, this._onKeepAliveResultReceived);
+    }
+
+    requestKeepOperationAlive(searchOperation, callback) {
         const method = METHODS.keepAlive;
         async.waterfall([
             (callback) => this._ensureSearchOperation(searchOperation, callback),
-            (callback) => this.services.operations.addKeepAliveOperation(session, searchOperation, callback),
-            (operation, callback) => this._rpcSend(session, operation, method,
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (session, callback) => this.services.operations.addKeepAliveOperation(session, searchOperation,
+                (error, operation) => callback(error, session, operation)),
+            (session, operation, callback) => this._rpcSend(session, operation, method,
                 {sessionId: this.createAppServerSessionId(searchOperation)}, callback)
         ], callback);
     }
@@ -69,7 +76,12 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             });
         }
     }
-    
+
+    _onKeepAliveResultReceived() {
+        // Currently, there is no other handler for the result,
+        // so this is done to avoid error message in logs.
+    }
+
     _silentlyCloseSearchOperationIfNeeded(session, operation, isAlive, callback) {
         if (isAlive) {
             callback(null);

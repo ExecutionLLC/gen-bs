@@ -10,11 +10,11 @@ export default class UserEntityClientBase extends ClientBase {
     }
 
     getAll(callback) {
-        RequestWrapper.get(this.collectionUrls.getAll(), null, null, callback);
+        RequestWrapper.get(this.collectionUrls.getAll(), null, null, null, callback);
     }
 
     get(itemId, callback) {
-        RequestWrapper.get(this.collectionUrls.get(itemId), null, null, callback);
+        RequestWrapper.get(this.collectionUrls.get(itemId), null, null, null, callback);
     }
 
     add(languId, item, callback) {
@@ -23,10 +23,10 @@ export default class UserEntityClientBase extends ClientBase {
     }
 
     update(item, callback) {
-        RequestWrapper.put(this.collectionUrls.update(item.id), item, callback);
+        RequestWrapper.put(this.collectionUrls.update(item.id), null, item, callback);
     }
 
     remove(itemId, callback) {
-        RequestWrapper.del(this.collectionUrls.remove(itemId), null, callback);
+        RequestWrapper.del(this.collectionUrls.remove(itemId), null, null, callback);
     }
 }

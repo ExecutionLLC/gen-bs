@@ -6,7 +6,6 @@ const async = require('async');
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
-const RESULT_TYPES = require('./AppServerResultTypes');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const SESSION_STATUS = {
@@ -30,11 +29,25 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 callback(null, operation);
             },
             (operation, callback) => {
-                const {newSamplesBucket} = this.services.objectService.getStorageSettings();
+                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const fileStream = fs.createReadStream(sampleLocalPath);
                 this.services.objectStorage.uploadObject(newSamplesBucket, sampleId, fileStream,
-                    (error) => callback(error, operation.getId())
+                    (error) => callback(null, error, operation)
                 );
+            },
+            (error, operation, callback) => {
+                if (error) {
+                    // We didn't start the upload session on app server yet.
+                    operation.setSendCloseToAppServer(false);
+
+                    // But started it locally, so remove it.
+                    async.waterfall([
+                        (callback) => this.services.sessions.findSystemSession(callback),
+                        (session, callback) => this.services.operations.remove(session, operation.getId(), callback)
+                    ], () => callback(error));
+                } else {
+                    callback(null, operation.getId());
+                }
             }
         ], callback);
     }
@@ -42,12 +55,14 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     requestSampleProcessing(session, operationId, sampleId, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
-            (callback) => this.services.sessions.findSystemSessionId(callback),
-            (systemSessionId, callback) => this.services.operations.find(systemSessionId, operationId, callback),
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (systemSession, callback) => this.services.operations.find(systemSession, operationId, callback),
             (operation, callback) => {
                 const method = METHODS.processSample;
+                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const params = {
-                    sampleId
+                    sample: sampleId,
+                    bucket: newSamplesBucket
                 };
                 this._rpcSend(session, operation, method, params, callback);
             }
