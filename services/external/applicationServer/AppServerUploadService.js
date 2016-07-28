@@ -55,14 +55,14 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     requestSampleProcessing(session, operationId, sampleId, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
-            (callback) => this.services.sessions.findSystemSessionId(callback),
-            (systemSessionId, callback) => this.services.operations.find(systemSessionId, operationId, callback),
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (systemSession, callback) => this.services.operations.find(systemSession, operationId, callback),
             (operation, callback) => {
                 const method = METHODS.processSample;
-                const bucket = this.services.objectStorage.getStorageSettings().newSamplesBucket;
+                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const params = {
-                    sampleId,
-                    bucket
+                    sample: sampleId,
+                    bucket: newSamplesBucket
                 };
                 this._rpcSend(session, operation, method, params, callback);
             }
