@@ -47,6 +47,59 @@ class AnalysisModel extends SecureModelBase {
         );
     }
 
+    _update(userId, analysis, analysisToUpdate, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._updateInTransaction(analysis.id, analysisToUpdate, trx, callback);
+        }, callback);
+    }
+
+    _updateInTransaction(analysisId, analysisToUpdate, trx, callback) {
+        const {name, description, languId, lastQueryDate} = analysisToUpdate;
+        async.waterfall(
+            [
+                (callback) => {
+                    const updateAnalysisData = {
+                        lastQueryDate
+                    };
+                    this._unsafeUpdate(
+                        analysisId,
+                        updateAnalysisData,
+                        trx,
+                        (error) =>{
+                            callback(error, null)
+                        }
+                    )
+                },
+                (callback) => {
+                    const updateAnalysisTextData = {
+                        name,
+                        description
+                    };
+                    this._unsafeTextDataUpdate(
+                        analysisId,
+                        languId,
+                        updateAnalysisTextData,
+                        trx,
+                        (error) =>{
+                            callback(error, analysisId)
+                        }
+                    )
+                }
+            ],
+            callback
+        );
+    }
+
+    _unsafeTextDataUpdate(analysisId, languageId, updateAnalysisTextData, trx, callback) {
+        trx(TableNames.AnalysisText)
+            .where('analysisId',analysisId)
+            .andWhere('languId', languageId)
+            .update(ChangeCaseUtil.convertKeysToSnakeCase(updateAnalysisTextData))
+            .asCallback(
+                (error) => callback(error, analysisId)
+            );
+    }
+
     _add(userId, languageId, analysis, shouldGenerateId, callback) {
         this.db.transactionally(
             (trx, callback) => {
@@ -107,7 +160,7 @@ class AnalysisModel extends SecureModelBase {
             sampleVersionId:id,
             sampleType:type,
             order
-        }
+        };
         this._unsafeInsert(
             TableNames.AnalysisSample, analysisSampleDataToInsert, trx, callback
         );
