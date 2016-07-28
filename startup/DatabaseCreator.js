@@ -468,14 +468,14 @@ class DatabaseCreator {
             .createTable('analysis', table => {
                 table.uuid('id')
                     .primary();
-                table.enum('type',['single', 'tumor', 'family'])
+                table.enu('type',['single', 'tumor', 'family'])
                     .notNullable();
                 table.uuid('view_id')
                     .references('id')
                     .inTable('view')
                     .notNullable();
                 table.uuid('filter_id')
-                    .reference('id')
+                    .references('id')
                     .inTable('filter')
                     .notNullable();
                 table.uuid('model_id');
@@ -492,13 +492,13 @@ class DatabaseCreator {
                 table.uuid('analysis_id')
                     .references('id')
                     .inTable('analysis');
-                table.string('langu_id',2)
+                table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
                 table.string('name', 50);
                 table.text('description');
 
-                table.primary(['analysis_id','langu_id'])
+                table.primary(['analysis_id','langu_id']);
             })
             .createTable('analysis_sample', table => {
                 table.uuid('analysis_id')
@@ -509,7 +509,7 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('vcf_file_sample_version')
                     .notNullable();
-                table.enum('type',['single', 'proband', 'mother', 'father', 'tumor', 'normal'])
+                table.enu('type',['single', 'proband', 'mother', 'father', 'tumor', 'normal'])
                     .notNullable();
                 table.integer('order')
                     . notNullable();
