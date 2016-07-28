@@ -34,7 +34,7 @@ class KnexTransaction {
                     callback(error);
                 });
         } else {
-            this.logger.debug('COMMITTING TRANSACTION ' + this.id);
+            this.logger.trace('COMMITTING TRANSACTION ' + this.id);
             this.transaction
                 .commit()
                 .asCallback((error) => {
