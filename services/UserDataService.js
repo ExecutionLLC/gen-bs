@@ -86,7 +86,7 @@ class UserDataService extends ServiceBase {
                         this.services.fieldsMetadata.findTotalMetadata(callback);
                     },
                     activeOperations: (callback) => {
-                        this._findActiveOperations(user, callback);
+                        this._findActiveSystemOperations(user, callback);
                     }
                 }, callback);
             }
@@ -95,9 +95,9 @@ class UserDataService extends ServiceBase {
         });
     }
 
-    _findActiveOperations(user, callback) {
+    _findActiveSystemOperations(user, callback) {
         async.waterfall([
-            (callback) => this.services.operations.findActiveOperations(user.id, callback),
+            (callback) => this.services.operations.findSystemOperationsForUser(user, callback),
             (operations, callback) => {
                 const operationsWithLastMessage = _.map(operations, operation => ({
                     id: operation.getId(),

@@ -4,62 +4,60 @@ const async = require('async');
 
 const WebServerHost = require('../../WebServerHost');
 
-const Config = require('../../utils/Config');
-const Logger = require('../../utils/Logger');
-
-const ModelsFacade = require('../../models/ModelsFacade');
-const ServicesFacade = require('../../services/ServicesFacade');
-const ControllersFacade = require('../../controllers/ControllersFacade');
-
-const MockUserModel = require('./MockUserModel');
-const MockSessionsController = require('./MockSessionsController');
-
-const MockApplicationServer = require('./applicationServer/MockApplicationServer');
-
-class MockWebServerHost {
-    constructor() {
-        const logger = new Logger(Config.logger);
-        this._setConfigMocks(Config);
-
-        const models = new ModelsFacade(Config, logger);
-        this._setModelsMocks(models);
-
-        const services = new ServicesFacade(Config, logger, models);
-
-        this._createAppServer(services);
-
-        const controllers = new ControllersFacade(logger, services);
-        this._setControllersMocks(controllers);
-
-        this.server = new WebServerHost(controllers, services, models);
+class MockWebServerHost extends WebServerHost {
+    constructor(controllers, services, models) {
+        super(controllers, services, models);
+        this.sessionHeaderName = services.config.headers.sessionHeader;
     }
 
-    _setConfigMocks(config) {
-        config.rabbitMq.requestExchangeName = 'test_exchange';
-    }
-    
-    _setModelsMocks(models) {
-        models.users = new MockUserModel();
+    _addMiddleware(app) {
+        // Session is passed by header in tests, so we need to load it here by hand.
+        app.use((request, response, next) => {
+            response.on('finish', () => {
+                const store = this.services.sessions.getSessionStore();
+                request.session && store.set(
+                    request.session.id,
+                    request.session,
+                    (error) => (error && console.error(`Error saving mock session: ${error}`))
+                );
+            });
+
+            const sessionId = request.get(this.sessionHeaderName);
+            if (!sessionId) {
+                return next();
+            }
+
+            const store = this.services.sessions.getSessionStore();
+
+            async.waterfall([
+                (callback) => store.get(sessionId, callback),
+                (session, callback) => {
+                    if (!session) {
+                        return callback(null, {});
+                    }
+                    callback(null, Object.assign(session, {
+                        id: sessionId,
+                        save: (callback) => store.set(session.id, session, callback),
+                        destroy: (callback) => store.destroy(session.id, callback)
+                    }))
+                }
+            ], (error, session) => {
+                if (error) {
+                    return next(error);
+                }
+                Object.assign(request, {
+                    sessionID: sessionId,
+                    session
+                });
+                next();
+            });
+        });
+
+        super._addMiddleware(app);
     }
 
-    _setControllersMocks(controllers) {
-        controllers.sessionsController = new MockSessionsController(controllers.sessionsController);
-    }
-
-    _createAppServer(services) {
-        this.applicationServer = new MockApplicationServer(services);
-    }
-
-    start(callback) {
-        async.waterfall([
-            (callback) => this.server.start((error) => callback(error)),
-            (callback) => this.applicationServer.start((error) => callback(error))
-        ], callback);
-    }
-
-    stop(callback) {
-        this.applicationServer.stop();
-        this.server.stop(callback);
+    _initRouters(app) {
+        super._initRouters(app);
     }
 }
 

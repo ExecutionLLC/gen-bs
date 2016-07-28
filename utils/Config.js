@@ -72,6 +72,12 @@ const SETTINGS = {
         maxCount: makeDefault(ENV.GEN_WS_SAVED_FILES_MAX_COUNT, 2),
         path: makeDefault(ENV.GEN_WS_SAVED_FILES_PATH, __dirname + '/../uploads/')
     },
+    redis: {
+        host: makeDefault(ENV.GEN_WS_REDIS_HOST, 'localhost'),
+        port: makeDefault(ENV.GEN_WS_REDIS_PORT, 6379),
+        databaseNumber: makeDefault(ENV.GEN_WS_REDIS_DATABASE_NUMBER, 0),
+        password: makeDefault(ENV.GEN_WS_REDIS_PASSWORD, null)
+    },
     rabbitMq: {
         host: makeDefault(ENV.GEN_WS_RABBIT_MQ_HOST, 'localhost'),
         requestExchangeName: makeDefault(ENV.GEN_WS_RABBIT_MQ_REQUEST_EXCHANGE, 'genomics_exchange'),
@@ -79,6 +85,7 @@ const SETTINGS = {
         reconnectTimeout: makeDefault(ENV.GEN_WS_RABBIT_MQ_RECONNECT_TIMEOUT, 10000)
     },
     database: {
+        client: 'pg',
         host: makeDefault(ENV.GEN_WS_DATABASE_SERVER, 'localhost'),
         port: makeDefault(ENV.GEN_WS_DATABASE_PORT, 5432),
         user: makeDefault(ENV.GEN_WS_DATABASE_USER, 'postgres'),
@@ -86,10 +93,13 @@ const SETTINGS = {
         databaseName: makeDefault(ENV.GEN_WS_DATABASE_NAME, 'genomixdb')
     },
     headers: {
-        sessionHeader: makeDefault(ENV.GEN_SESSION_HEADER, 'X-Session-Id'),
+        // Session header is used for testing only.
+        sessionHeader: makeDefault(ENV.GEN_WS_TEST_SESSION_HEADER, 'X-Session-Id'),
         languageHeader: makeDefault(ENV.GEN_LANGUAGE_HEADER, 'X-Langu-Id')
     },
     sessions: {
+        sessionCookieName: makeDefault(ENV.GEN_WS_SESSION_COOKIE_NAME, 'gen-ws-session'),
+        sessionSecret: makeDefault(ENV.GEN_WS_SESSION_SECRET, 'session-secret-here'),
         allowMultipleUserSessions: makeDefault(ENV.GEN_WS_ALLOW_MULTIPLE_USER_SESSIONS, true),
         sessionTimeoutSec: makeDefault(ENV.GEN_WS_USER_SESSION_TIMEOUT, 5 * 60)
     },
@@ -97,10 +107,6 @@ const SETTINGS = {
         enabled: makeDefault(ENV.GEN_WS_SCHEDULER_ENABLED, true),
         tasks: {
             // Task timeouts in seconds.
-            checkSessions: {
-                isEnabled: true,
-                taskTimeout: 10 * 60
-            },
             importSourceMetadata: {
                 isEnabled: true,
                 taskTimeout: 60 * 60,
@@ -124,6 +130,7 @@ const SETTINGS = {
 };
 
 // Add computational fields
+// Base url is used for auth redirects and enabling auth headers in CORS.
 // Warning! Currently, base url should be set to HTTP scheme, as otherwise Google sends 'Missing parameter: scope' error.
 // The HTTP address will be redirected to HTTPS by NginX.
 SETTINGS.baseUrl = makeDefault(ENV.GEN_WS_BASE_URL, 'http://localhost:' + SETTINGS.port);

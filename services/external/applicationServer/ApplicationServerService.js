@@ -40,67 +40,67 @@ class ApplicationServerService extends ApplicationServerServiceBase {
         this.services.applicationServerSources.requestSourceMetadata(sourceNames, callback);
     }
 
-    requestKeepOperationAlive(sessionId, searchOperationId, callback) {
-        this.services.applicationServerOperations.requestKeepOperationAlive(sessionId, searchOperationId, callback);
+    requestKeepOperationAlive(session, searchOperation, callback) {
+        this.services.applicationServerOperations.requestKeepOperationAlive(session, searchOperation, callback);
     }
 
     /**
      * Opens a new search session.
-     * @param sessionId Id of the session in which the operation should be opened.
+     * @param session Session in which the operation should be opened.
      * @param params All the params necessary to open search session.
      * @param callback (error, operationId)
      * */
-    requestOpenSearchSession(sessionId, params, callback) {
-        this.services.applicationServerSearch.requestOpenSearchSession(sessionId, params, callback);
+    requestOpenSearchSession(session, params, callback) {
+        this.services.applicationServerSearch.requestOpenSearchSession(session, params, callback);
     }
 
-    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
-        this.services.applicationServerSearch.loadResultsPage(user, sessionId, operationId, limit, offset, callback);
+    loadResultsPage(user, session, operationId, limit, offset, callback) {
+        this.services.applicationServerSearch.loadResultsPage(user, session, operationId, limit, offset, callback);
     }
 
     /**
      * Sends specified file sample to application server.
      *
-     * @param sessionId Id of the session to which the file belongs.
+     * @param session Session to which the file belongs.
      * @param sampleId Id of the sample.
      * @param user Session owner.
      * @param sampleLocalPath Full local path to the sample file.
      * @param sampleFileName Original name of the sample file.
      * @param callback (error, operationId)
      * */
-    uploadSample(sessionId, sampleId, user, sampleLocalPath, sampleFileName, callback) {
-        this.services.applicationServerUpload.uploadSample(sessionId, sampleId, user, sampleLocalPath, sampleFileName, callback);
+    uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback) {
+        this.services.applicationServerUpload.uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback);
     }
 
     /**
      * Sends request to process previously uploaded sample. Results will be sent by AS web socket.
      *
-     * @param sessionId Id of the session the request is related to.
+     * @param session Session the request is related to.
      * @param operationId Id of the upload operation.
      * @param sampleId Id of the sample to be converted.
      * @param callback (error, operationId)
      * */
-    requestSampleProcessing(sessionId, operationId, sampleId, callback) {
-        this.services.applicationServerUpload.requestSampleProcessing(sessionId, operationId, sampleId, callback);
+    requestSampleProcessing(session, operationId, sampleId, callback) {
+        this.services.applicationServerUpload.requestSampleProcessing(session, operationId, sampleId, callback);
     }
 
     /**
      * Requests AS to close the specified operation.
      *
-     * @param sessionId Id of the session the operation is related to.
+     * @param session Session the operation is related to.
      * @param operationId Id of the operation to close.
      * @param callback (error, operationId)
      * */
-    requestCloseSession(sessionId, operationId, callback) {
-        this.services.applicationServerOperations.requestCloseSession(sessionId, operationId, callback);
+    requestCloseSession(session, operationId, callback) {
+        this.services.applicationServerOperations.requestCloseSession(session, operationId, callback);
     }
 
-    requestSearchInResults(sessionId, operationId, params, callback) {
-        this.services.applicationServerSearch.requestSearchInResults(sessionId, operationId, params, callback);
+    requestSearchInResults(session, operationId, params, callback) {
+        this.services.applicationServerSearch.requestSearchInResults(session, operationId, params, callback);
     }
 
-    requestOperationState(operationId, callback) {
-        this.services.applicationServerOperations.requestOperationState(operationId, callback);
+    requestOperationState(session, operationId, callback) {
+        this.services.applicationServerOperations.requestOperationState(session, operationId, callback);
     }
 }
 

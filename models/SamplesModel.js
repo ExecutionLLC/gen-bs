@@ -84,6 +84,7 @@ class SamplesModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             // Check that the sample is not yet inserted, to be graceful to messages redelivered by RabbitMQ.
             this._findLastVersionsBySampleIds(trx, [sampleId], (error, versionIds) => {
+                // TODO: Fix here not to ignore the error.
                 if (error || _.isEmpty(versionIds)) {
                     // Sample is not found, so insert it.
                     async.waterfall([

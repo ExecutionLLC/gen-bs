@@ -2,7 +2,6 @@ import HttpStatus from 'http-status';
 import {addTimeout, removeTimeout} from 'redux-timeout';
 
 import config from '../../config';
-import {getCookie} from '../utils/cookie';
 import {getUrlParameterByName} from '../utils/stringUtils';
 
 import {fetchUserdata} from './userData';
@@ -61,15 +60,13 @@ export class KeepAliveTask {
 
     _scheduleTask() {
         this.keepAliveTaskId = setTimeout(() => {
-            const currentSessionId = window.reduxStore.getState().auth.sessionId;
-            if (currentSessionId) {
-                // update session on the web server
-                checkSession(currentSessionId, (error) => {
-                    if (error) {
-                        console.log('got unexpected error in keep alive task', error);
-                    }
-                });
-            }
+            // update session on the web server
+            checkSession((error) => {
+                if (error) {
+                    console.log('got unexpected error in keep alive task', error);
+                }
+            });
+
             // reschedule task
             this._scheduleTask();
         }, this.period);
@@ -86,16 +83,9 @@ function requestSession() {
     };
 }
 
-function receiveSession(sessionId, isDemo) {
-    sessionId = sessionId || null;
-    const isAuthenticated = (sessionId !== null);
-
-    document.cookie = `sessionId=${sessionId}`;
-
+function receiveSession(isDemo) {
     return {
         type: RECEIVE_SESSION,
-        sessionId: sessionId,
-        isAuthenticated: isAuthenticated,
         isDemo: isDemo,
         receivedAt: Date.now()
     };
@@ -108,8 +98,8 @@ function loginError(errorMessage) {
     };
 }
 
-function updateLoginData(dispatch, sessionId, isDemo) {
-    dispatch(receiveSession(sessionId, isDemo));
+function updateLoginData(dispatch, isDemo) {
+    dispatch(receiveSession(isDemo));
     dispatch(initWSConnection());
     if (isDemo) {
         dispatch(clearQueryHistory());
@@ -130,7 +120,7 @@ function openDemoSession(dispatch) {
         } else {
             const sessionId = SessionsClient.getSessionFromResponse(response);
             if (sessionId) {
-                updateLoginData(dispatch, sessionId, true);
+                updateLoginData(dispatch, true);
             } else {
                 dispatch(loginError('Session id is empty'));
                 dispatch(handleError(null, LOGIN_SERVER_ERROR));
@@ -139,13 +129,23 @@ function openDemoSession(dispatch) {
     });
 }
 
-// Checks session state by sessionId.
-function checkSession(sessionId, callback) {
+/**@callback CheckSessionCallback
+ * @param {(Error|null)}error
+ * @param {boolean}[isValidSession]
+ * @param {boolean}[isDemoSession]
+ */
+
+/**
+ *  Checks current session state.
+ * @param {CheckSessionCallback}callback
+ */
+function checkSession(callback) {
     console.log('checkSession');
-    sessionsClient.checkSession(sessionId, (error, response) => {
+    sessionsClient.checkSession((error, response) => {
         if (!error) {
-            const isValidSession = response.status === HttpStatus.OK;
-            const isDemoSession = isValidSession ? response.body.sessionType === 'DEMO' : false;
+            const {status, body: {sessionType}} = response;
+            const isValidSession = status === HttpStatus.OK;
+            const isDemoSession = isValidSession ? sessionType === 'DEMO' : false;
             callback(null, isValidSession, isDemoSession);
         } else {
             callback(error);
@@ -157,25 +157,20 @@ function checkSession(sessionId, callback) {
 // demo session.
 function checkCookieSessionAndLogin(dispatch) {
     dispatch(requestSession());
-    const sessionIdFromCookie = getCookie('sessionId');
-    if (sessionIdFromCookie) {
-        checkSession(sessionIdFromCookie, (error, isValidSession, isDemoSession) => {
-            if (error) {
-                // it is fatal network error
-                dispatch(loginError(error));
-                dispatch(handleError(null, LOGIN_NETWORK_ERROR));
-            } else if (isValidSession) {
-                // restore old session
-                updateLoginData(dispatch, sessionIdFromCookie, isDemoSession);
-            } else {
-                // old session is not valid, so we create new one
-                openDemoSession(dispatch);
-            }
-        });
-    } else {
-        // old session is not valid, so we create new one
-        openDemoSession(dispatch);
-    }
+
+    checkSession((error, isValidSession, isDemoSession) => {
+        if (error) {
+            // it is fatal network error
+            dispatch(loginError(error));
+            dispatch(handleError(null, LOGIN_NETWORK_ERROR));
+        } else if (isValidSession) {
+            // restore old session
+            updateLoginData(dispatch, isDemoSession);
+        } else {
+            // old session is not valid, so we create new one
+            openDemoSession(dispatch);
+        }
+    });
 }
 
 // Algorithm:
@@ -188,39 +183,30 @@ function checkCookieSessionAndLogin(dispatch) {
 //
 // It is legacy of previous developer :)
 export function login() {
-    const sessionIdFromParams = getUrlParameterByName('sessionId');
     const errorFromParams = getUrlParameterByName('error');
 
     return dispatch => {
-        if (!errorFromParams && sessionIdFromParams) {
-            // it is google authorization (detected by URL parameters)
-            console.log('google authorization completed', sessionIdFromParams);
-            updateLoginData(dispatch, sessionIdFromParams, false);
+        if (errorFromParams) {
+            // it is error from google authorization page (detected by URL parameters)
+            console.log('google authorization failed', errorFromParams);
+            dispatch(loginError(errorFromParams));
+            dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
             history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
-        } else {
-            if (errorFromParams) {
-                // it is error from google authorization page (detected by URL parameters)
-                console.log('google authorization failed', errorFromParams);
-                dispatch(loginError(errorFromParams));
-                dispatch(handleError(null, LOGIN_GOOGLE_ERROR));
-                history.pushState({}, '', `${config.HTTP_SCHEME}://${location.host}`);
-            }
-            // try to restore old session
-            checkCookieSessionAndLogin(dispatch);
         }
+        // try to restore old session
+        checkCookieSessionAndLogin(dispatch);
     };
 }
 
 export function logout() {
-    const sessionId = getCookie('sessionId');
-    sessionsClient.closeSession(sessionId, (error, response) => {
+    sessionsClient.closeSession((error, response) => {
         if (error || response.status !== HttpStatus.OK) {
             // We close session on the frontend and don't care about returned
             // status, because now it is problem of the web server
             const message = error || response.body;
-            console.log('cannot close session', sessionId, message);
+            console.log('cannot close session', message);
         } else {
-            console.log('session closed', sessionId);
+            console.log('session closed');
         }
         location.replace(location.origin);
     });

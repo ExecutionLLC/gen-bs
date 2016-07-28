@@ -1,6 +1,6 @@
 'use strict';
 
-const Uuid = require('node-uuid');
+const QueryString = require('querystring');
 const async = require('async');
 const Express = require('express');
 const passport = require('passport');
@@ -25,37 +25,35 @@ class SessionsController extends ControllerBase {
      * Opens new demo session.
      * */
     open(request, response) {
+        const {session} = request;
         async.waterfall([
-            (callback) => this.sessions.startDemo(callback),
-            (sessionId, callback) => this.sessions.findSessionType(
-                sessionId,
-                (error, sessionType) => callback(error, {
-                    sessionId,
-                    sessionType
+            (callback) => this.sessions.startDemo(session, callback),
+            (session, callback) => callback(null, {
+                    sessionId: session.id,
+                    sessionType: session.type
                 })
-            )
         ], (error, result) => this.sendErrorOrJson(response, error, result));
     }
 
     check(request, response) {
-        // The session lifetime update happens automatically in the ApiController for each API call.
-        // Here we need to only return the session type.
-        const sessionId = this.getSessionId(request);
-
-        async.waterfall([
-            (callback) => this.sessions.findSessionType(sessionId, callback),
-            (sessionType, callback) => callback(null, {
+        const {session, session: {type: sessionType, id: sessionId}} = request;
+        if (this.services.sessions.isSessionValid(session)) {
+            async.waterfall([
+                (callback) => this.services.operations.keepOperationsAlive(session, callback)
+            ], (error) => this.sendErrorOrJson(response, error, {
                 sessionId,
                 sessionType
-            })
-        ], (error, result) => this.sendErrorOrJson(response, error, result));
+            }));
+        } else {
+            this.sendInternalError(response, new Error('Session is not found.'));
+        }
     }
 
     close(request, response) {
-        const sessionId = this.getSessionId(request);
-        this.services.sessions.destroySession(sessionId, (error) => {
+        const {session} = request;
+        this.services.sessions.destroySession(session, (error) => {
             this.sendErrorOrJson(response, error, {
-                sessionId
+                sessionId: session.id
             });
         });
     }
@@ -64,47 +62,6 @@ class SessionsController extends ControllerBase {
         this.services.logger.debug('Google profile: ' + JSON.stringify(profile, null, 2));
         const userEmail = profile.emails[0].value;
         callback(null, userEmail);
-    }
-
-    _processUserLogin(error, userEmail, request, response, next) {
-        if (error) {
-            next(error);
-        } else {
-            if (!userEmail) {
-                // User cancelled authentication.
-                this._onAuthCompleted(request, response, new Error('User cancelled authentication.'), null);
-            } else {
-                // User is logged in to Google, try creating session.
-                this.logger.info('Creating session for user ' + userEmail);
-                this.services.sessions.startForEmail(
-                    userEmail,
-                    (error, sessionId) => this._onAuthCompleted(request, response, error, sessionId)
-                );
-            }
-        }
-    }
-
-    _onAuthCompleted(request, response, error, sessionId) {
-        let baseAddress = '/';
-        if (this.config.enableAuthCallbackPorts) {
-            const authStateKey = request.query.state;
-            if (this.authStates[authStateKey]) {
-                const callbackPort = this.authStates[authStateKey].callbackPort;
-                baseAddress = 'http://localhost:' + callbackPort + '/';
-                delete this.authStates[authStateKey];
-            }
-        }
-
-        let targetUrl = null;
-        if (error) {
-            targetUrl = baseAddress + '?error=' + encodeURIComponent(error.message);
-            this.logger.debug('Auth error: ' + error);
-        } else {
-            targetUrl = baseAddress + '?sessionId=' + encodeURIComponent(sessionId);
-            this.logger.debug('Auth successful');
-        }
-        this.logger.debug('Redirecting to ' + targetUrl);
-        response.redirect(targetUrl);
     }
 
     _configurePassport(router, controllerRelativePath) {
@@ -120,32 +77,29 @@ class SessionsController extends ControllerBase {
             callbackURL: googleFullRedirectUrl
         }, this._parseGoogleProfile.bind(this)));
 
-        router.use(passport.initialize());
-        router.get('/auth/google', (request, response, next) => {
-            const callbackPort = request.query['callbackPort'];
-            let state = undefined;
-            if (callbackPort && this.config.enableAuthCallbackPorts) {
-                const authStateKey = Uuid.v4();
-                this.authStates[authStateKey] = {
-                    callbackPort
-                };
-                state = authStateKey;
-            }
+        passport.serializeUser((user, callback) => callback(null, user.id));
+        passport.deserializeUser((userId, callback) => this.services.users.find(userId, callback));
 
-            passport.authenticate('google', {
-                scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
-                returnURL: googleFullRedirectUrl,
-                realm: baseUrl,
-                session: false,
-                state
-            })(request, response, next);
-        });
+        router.use(passport.initialize());
+        router.get('/auth/google', passport.authenticate('google', {
+            scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+            returnURL: googleFullRedirectUrl,
+            realm: baseUrl
+        }));
 
         router.get(googleRelativeRedirectUrl, (request, response, next) => {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, userEmail, info) => this._processUserLogin(error, userEmail, request, response, next));
+            }, (error, userEmail, info) => {
+                if (error) {
+                    return next(error);
+                }
+                this.services.sessions.startForEmail(request.session, userEmail, (error) => {
+                    const queryPart = error ? `?error=${QueryString.escape(error.message)}` : '';
+                    response.redirect(`/${queryPart}`);
+                });
+            });
             authFunc(request, response, next);
         });
     }

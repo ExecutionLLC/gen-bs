@@ -95,8 +95,8 @@ function viewBuilderCreateView() {
 
     return (dispatch, getState) => {
         const editingView = getState().viewBuilder.editingView;
-        const {auth: {sessionId}, ui: {languageId} } = getState();
-        dispatch(viewsListServerCreateView(editingView, sessionId, languageId))
+        const {ui: {languageId} } = getState();
+        dispatch(viewsListServerCreateView(editingView, languageId))
             .then(() => {
                 dispatch(closeModal('views'));
                 dispatch(viewBuilderEndEdit());
@@ -118,8 +118,7 @@ function viewBuilderUpdateView() {
             dispatch(closeModal('views'));
             dispatch(viewBuilderEndEdit());
         } else {
-            const sessionId = state.auth.sessionId;
-            dispatch(viewsListServerUpdateView(editingView, sessionId))
+            dispatch(viewsListServerUpdateView(editingView))
                 .then(() => {
                     dispatch(closeModal('views'));
                     dispatch(viewBuilderEndEdit());
@@ -142,8 +141,7 @@ export function viewBuilderSaveAndSelectView() {
 
 export function viewBuilderDeleteView(viewId) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}} = getState();
-        dispatch(viewsListServerDeleteView(viewId, sessionId))
+        dispatch(viewsListServerDeleteView(viewId))
             .then(() => {
                 const state = getState();
                 const views = state.viewsList.hashedArray.array;

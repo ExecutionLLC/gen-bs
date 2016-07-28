@@ -1,0 +1,206 @@
+column name: “RS” {
+name: “rs#”
+type: flag
+hidden
+    }
+column name: “RSPOS” {
+skip
+}
+column name: “RV” {
+name: “rs strand”
+type: string
+rule: replace(true - “reverse”, false - “forward”)
+    }
+column name: “VP” {
+skip
+}
+column name: “GENEINFO” {
+split “:”
+name: [“Gene name”,”NCBI Gene ID”]
+type: [string, hyperlink]
+[public, hidden]
+rule: hyperlink “http://www.ncbi.nlm.nih.gov/gene/” + hyperlink
+hyperlink text: hyperlink
+    }
+column name: “dbSNPBuildID” {
+skip
+}
+column name: “SAO” {
+name: “Allele origin”
+type: string
+rule: rename(0 - “unspecified”, 1 - “germline”, 2 - “somatic”, 3 - “both”)
+comment : “unspecified, germline, somatic, both”
+    }
+column name: “SSR” {
+name: “Artifact”
+type: flag
+rule: rename(0 - “true”, else - “false”)
+comment: “there are reasons to suspect the variant to be false positive: true, false”
+}
+column name: “WGT” {
+skip
+    }
+column name: “VC” {
+name: “Variant Class”
+type: string
+rule: rename(INS - “insertion”, DEL - “deletion”, INDEL - “indel”, DUP - “duplication”, VAR - “sequence alteration”, INV - “inversion”, STR - “microsatellite”, MON - “monomeric repeat”, CMPX - “complex”, TDM - “tandem duplication”, TRM - “translocation”, NOVAR - “no variation”)
+comment: “SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation
+}
+column name: “PM” {
+name: “Clinical & Cited”
+type: flag
+    }
+column name: “TPA” {
+name: “Provisional”
+type: flag
+}
+column name: “PMC” {
+skip
+    }
+column name: “S3D” {
+name: “3D structure”
+type: flag
+hidden
+}
+column name: “SLO” {
+skip
+    }
+column name: “NSF” {
+name: “Frameshift”
+type: flag
+}
+column name: “NSM” {
+name: “Missense”
+type: flag
+    }
+column name: “NSN” {
+name: “Nonsense”
+type: flag
+    }
+column name: “REF” {
+name: “Has reference”
+type: flag
+comment : “coding region variation where one allele in the set is identical to the reference sequence”
+}
+column name: “SYN” {
+name: “Has synonymous”
+type: flag
+comment: “coding region variation where one allele in the set does not change the encoded amino acid”
+    }
+column name: “U3” {
+name: “3’ UTR”
+type: flag
+    }
+column name: “U5” {
+name: “5’ UTR”
+type: flag
+}
+column name: “ASS” {
+name: “Acceptor”
+type: flag
+comment: “splice site”
+    }
+column name: “DSS” {
+name: “Donor”
+type: flag
+comment: “splice site”
+    }
+column name: “INT” {
+name: “Intron variant”
+type: flag
+}
+column name: “R3” {
+name: “3’ gene part”
+type: flag
+    }
+column name: “R5” {
+name: “5’ gene part”
+type: flag
+    }
+column name: “OTH” {
+skip
+}
+column name: “CFL” {
+name: “Assembly conflict”
+type: flag
+    }
+column name: “ASP” {
+name: “Assembly specific”
+type: flag
+    }
+column name: “MUT” {
+name: “Known mutation”
+type: flag
+}
+column name: “VLD” {
+name: “Validated”
+type: flag
+    }
+column name: “G5A” {
+name: “MAF>5% in all”
+type: flag
+comment: “MAF>5% in all 26 populations in 1000 genomes project”
+    }
+column name: “G5” {
+name: “MAF>5% in 1+”
+type: flag
+comment: “MAF>5% in 1+ out of 26 populations in 1000 genomes project”
+}
+column name: “HD” {
+name: “Marker on kit”
+type: flag
+comment: “Marker on kit with density >50k”
+    }
+column name: “GNO” {
+skip
+    }
+column name: “KGPhase1” {
+skip
+}
+column name: “KGPhase3” {
+name: “1000 genomes”
+type: flag
+comment: “variant found in 1000 genomes project phase 3 data”
+    }
+column name: “CDA” {
+name: “Clinical assay”
+type: flag
+comment: “variant studied in clinical assay”
+    }
+column name: “LSD” {
+name: “Locus specific”
+type: flag
+comment: “Locus specific database was used to submit the variant”
+}
+column name: “MTP” {
+skip
+    }
+column name: “OM” {
+name: “OMIM”
+type: flag
+hidden
+    }
+column name: “NOC” {
+skip
+}
+column name: “WTD” {
+name: “Withdrawn”
+type: flag
+comment: “Withdrawn by submitter”
+    }
+column name: “NOV” {
+skip
+    }
+column name: “CAF” {
+name: “Allele frequency”
+Number=R
+type: flag
+comment: “based on 1000 genomes project”
+hidden
+}
+column name: “COMMON” {
+name: “Common”
+type: flag
+comment: “Common variant based on 1000 genomes project, MAF>=1% for >=1 population”
+Rule: replace(1 - true, 0 - false, other - unknown)
+    }

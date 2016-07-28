@@ -72,11 +72,11 @@ export function filtersListEditFilter(filterId, filter) {
     };
 }
 
-export function filtersListServerCreateFilter(filter, sessionId, languageId) {
+export function filtersListServerCreateFilter(filter, languageId) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
         return new Promise( (resolve, reject) => {
-            filtersClient.add(sessionId, languageId, filter, (error, response) => {
+            filtersClient.add(languageId, filter, (error, response) => {
                 dispatch(filtersListEndServerOperation());
                 if (error) {
                     dispatch(handleError(null, CREATE_FILTER_NETWORK_ERROR));
@@ -96,11 +96,11 @@ export function filtersListServerCreateFilter(filter, sessionId, languageId) {
     };
 }
 
-export function filtersListServerUpdateFilter(filter, sessionId) {
+export function filtersListServerUpdateFilter(filter) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
         return new Promise( (resolve, reject) => {
-            filtersClient.update(sessionId, filter, (error, response) => {
+            filtersClient.update(filter, (error, response) => {
                 dispatch(filtersListEndServerOperation());
                 if (error) {
                     dispatch(handleError(null, UPDATE_FILTER_NETWORK_ERROR));
@@ -119,11 +119,11 @@ export function filtersListServerUpdateFilter(filter, sessionId) {
     };
 }
 
-export function filtersListServerDeleteFilter(filterId, sessionId) {
+export function filtersListServerDeleteFilter(filterId) {
     return (dispatch) => {
         dispatch(filtersListStartServerOperation());
         return new Promise( (resolve, reject) => {
-            filtersClient.remove(sessionId, filterId, (error, response) => {
+            filtersClient.remove(filterId, (error, response) => {
                 dispatch(filtersListEndServerOperation());
                 if (error) {
                     dispatch(handleError(null, DELETE_FILTER_NETWORK_ERROR));

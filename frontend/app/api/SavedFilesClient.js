@@ -8,16 +8,16 @@ export default class SavedFilesClient extends UserEntityClientBase {
         super(urls, urls.savedFilesUrls());
     }
 
-    download(languId, sessionId, itemId, callback) {
+    download(languId, itemId, callback) {
         RequestWrapper.download(
             this.collectionUrls.download(itemId),
-            this._makeHeaders({sessionId, languId}),
+            this._makeHeaders({languId}),
             null,
             callback
         );
     }
 
-    add(languId, sessionId, fileMetadata, fileBlob, callback) {
+    add(languId, fileMetadata, fileBlob, callback) {
         const formData = {
             file: fileBlob,
             metadata: JSON.stringify(fileMetadata)
@@ -25,7 +25,7 @@ export default class SavedFilesClient extends UserEntityClientBase {
 
         RequestWrapper.uploadMultipart(
             this.collectionUrls.upload(),
-            this._makeHeaders({sessionId, languId}),
+            this._makeHeaders({languId}),
             null,
             formData,
             callback

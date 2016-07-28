@@ -52,6 +52,7 @@ export default class RequestWrapper {
     }
 
     static _prepareRequest(request, headers, queryParams, bodyObject) {
+        request = request.withCredentials();
         if (headers) {
             request = request.set(headers);
         }

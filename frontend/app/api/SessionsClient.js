@@ -15,14 +15,12 @@ export default class SessionsClient extends ClientBase {
         RequestWrapper.post(this.urls.session(), null, null, callback);
     }
 
-    checkSession(sessionId, callback) {
-        RequestWrapper.put(this.urls.session(),
-            this._makeHeaders({sessionId}), null, callback);
+    checkSession(callback) {
+        RequestWrapper.put(this.urls.session(), null, null, callback);
     }
 
-    closeSession(sessionId, callback) {
-        RequestWrapper.del(this.urls.session(),
-            this._makeHeaders({sessionId}), null, callback);
+    closeSession(callback) {
+        RequestWrapper.del(this.urls.session(), null, null, callback);
     }
 
     /**

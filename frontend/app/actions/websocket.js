@@ -33,8 +33,8 @@ const WS_PROGRESS_STATUSES = {
 };
 
 const WS_OPERATION_TYPES = {
-    UPLOAD: 'upload',
-    SEARCH: 'search'
+    UPLOAD: 'UploadOperation',
+    SEARCH: 'SearchOperation'
 };
 
 const WS_RESULT_TYPES = {
@@ -189,9 +189,8 @@ function reconnectWS() {
 export function subscribeToWs() {
     return (dispatch, getState) => {
         const conn = getState().websocket.wsConn;
-        const {sessionId} = getState().auth;
         conn.onopen = () => {
-            conn.send(JSON.stringify({sessionId}));
+            console.log('Socket connection is ready');
         };
         conn.onmessage = event => dispatch(receiveMessage(event.data));
         conn.onerror = event => dispatch(receiveError(event.data));
