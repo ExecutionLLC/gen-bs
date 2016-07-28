@@ -37,22 +37,6 @@
       },
       {
         "field": {
-          "source_name": "common_no_known_medical_impact_20151201",
-          "name": "INFO_RSPOS",
-          "value_type": "integer"
-        },
-        "order": 3
-      },
-      {
-        "field": {
-          "source_name": "common_no_known_medical_impact_20151201",
-          "name": "INFO_VP",
-          "value_type": "string"
-        },
-        "order": 4
-      },
-      {
-        "field": {
           "source_name": "sample",
           "name": "ALT",
           "value_type": "string"
