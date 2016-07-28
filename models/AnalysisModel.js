@@ -23,7 +23,7 @@ const mappedColumns = [
     'name',
     'description',
     'languId',
-    'sampleId',
+    'sampleVersionId',
     'sampleType',
 ];
 
@@ -45,6 +45,85 @@ class AnalysisModel extends SecureModelBase {
             descriptionFilter,
             callback
         );
+    }
+
+    _add(userId, languageId, analysis, shouldGenerateId, callback) {
+        this.db.transactionally(
+            (trx, callback) => {
+                this._addInTransaction(
+                    userId, analysis, shouldGenerateId, trx, callback
+                );
+            },
+            callback
+        );
+    }
+
+    _addInTransaction(userId, analysis, shouldGenerateId, trx, callback) {
+        const {
+            languId, name, description, samples
+        } = analysis;
+        async.waterfall(
+            [
+                (callback) => {
+                    const analysisDataToInsert = this._createDataToInsert(
+                        userId, analysis, shouldGenerateId
+                    );
+                    this._insert(analysisDataToInsert, trx, callback);
+                },
+                (analysisId, callback) => {
+                    const analysisTextDataToInsert = {
+                        analysisId: analysisId,
+                        languId,
+                        name,
+                        description
+                    };
+                    this._unsafeInsert(
+                        TableNames.AnalysisText,
+                        analysisTextDataToInsert,
+                        trx,
+                        (error) => {
+                            callback(error, analysisId)
+                        }
+                    );
+                },
+                (analysisId, callback) => {
+                    _.forEach(samples, (sample, index) => {
+                            this._addNewAnalysisSample(
+                                analysisId, sample, index, trx, callback
+                            );
+                        }
+                    );
+                    callback(null, analysisId);
+                },
+            ],
+            callback
+        );
+    }
+
+    _addNewAnalysisSample(analysisId, sample, order, trx, callback) {
+        const {id, type} = sample;
+        const analysisSampleDataToInsert ={
+            analysisId,
+            sampleVersionId:id,
+            sampleType:type,
+            order
+        }
+        this._unsafeInsert(
+            TableNames.AnalysisSample, analysisSampleDataToInsert, trx, callback
+        );
+    }
+
+    _createDataToInsert(userId, analysis, shouldGenerateId) {
+        const {
+            id, viewId, filterId, modelId
+        } = analysis;
+        return {
+            id: shouldGenerateId ? this._generateId() :id,
+            creator: userId,
+            viewId,
+            filterId,
+            modelId
+        };
     }
 
     _findAnalysis(userId, limit, offset, nameFilter, descriptionFilter, callback) {
@@ -148,7 +227,7 @@ class AnalysisModel extends SecureModelBase {
             sortedAnalyses,
             (sortedAnalysis) => {
                 return {
-                    id: sortedAnalysis.sampleId,
+                    id: sortedAnalysis.sampleVersionId,
                     type: sortedAnalysis.sampleType
                 }
             }
