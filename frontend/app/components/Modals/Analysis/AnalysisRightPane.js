@@ -395,7 +395,7 @@ export default class AnalysisRightPane extends React.Component {
                             disabled={disabled}
                             value={sample && sample.type || null}
                             options={this.getFamilyMemberOptions()}
-                            onChange={(item) => this.onFamilyMemberSelect(item.value)}
+                            onChange={(item) => this.onFamilyMemberSelect(i, item.value)}
                         />
                     </div>
                     <div className='btn-group btn-group-select2-max btn-group-right'>
@@ -736,8 +736,11 @@ export default class AnalysisRightPane extends React.Component {
         });
     }
 
-    onFamilyMemberSelect(familyMemberId) {
-        console.log('onFamilyMemberSelect', familyMemberId);
+    onFamilyMemberSelect(sampleIndex, familyMemberId) {
+        const {historyItem} = this.props;
+        this.dispatchEdit({
+            samples: immutableArray.replace(historyItem.samples, sampleIndex, {...historyItem.samples[sampleIndex], type: familyMemberId})
+        });
     }
 
     dispatchEdit(change) {
