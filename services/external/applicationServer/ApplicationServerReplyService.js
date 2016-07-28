@@ -69,6 +69,7 @@ class ApplicationServerReplyService extends ServiceBase {
                 }
                 callback(null, operationResult);
             },
+            (operationResult, callback) => this._completeOperationIfNeeded(operationResult, callback),
             (operationResult, callback) => this._emitEvent(operationResult.eventName,
                 operationResult, (error) => callback(error, operationResult)),
             // We are working with the session by ourselves, so need to explicitly save it here.

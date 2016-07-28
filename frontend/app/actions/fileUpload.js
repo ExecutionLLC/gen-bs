@@ -153,7 +153,6 @@ export function uploadFile() {
             dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
             sendFile(
                 fp.file,
-                getState().auth.sessionId,
                 (operationId) => {
                     dispatch(receiveFileOperation(operationId, fp.id));
                 },

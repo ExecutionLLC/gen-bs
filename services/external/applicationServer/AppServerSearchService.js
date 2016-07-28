@@ -35,9 +35,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (callback) => {
                 this.services.operations.find(session, operationId, callback);
             },
-            (operation, callback) => this._rpcSend(
-                operation, method, searchDataRequest, callback
-            )
+            (operation, callback) => this._rpcSend(session, operation, method, searchDataRequest, callback)
         ], callback);
     }
 
