@@ -22,6 +22,7 @@ import {
 import {entityType} from '../utils/entityTypes';
 
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
+export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
 export const START_QUERY_HISTORY_EDIT = 'START_QUERY_HISTORY_EDIT';
@@ -42,6 +43,13 @@ const DEFAULT_LIMIT = 10;
 export function receiveQueryHistory(history) {
     return {
         type: RECEIVE_QUERY_HISTORY,
+        history
+    };
+}
+
+export function receiveInitialQueryHistory(history) {
+    return {
+        type: RECEIVE_INITIAL_QUERY_HISTORY,
         history
     };
 }

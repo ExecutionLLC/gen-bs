@@ -5,7 +5,7 @@ import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {receiveFields, receiveTotalFields} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
-//import {receiveQueryHistory} from './queryHistory';
+import {receiveInitialQueryHistory} from './queryHistory';
 import {analyze} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
 import {
@@ -70,7 +70,7 @@ export function fetchUserdata() {
                     views,
                     totalFields,
                     savedFiles,
-//                    queryHistory,
+                    queryHistory,
                     lastSampleId,
                     lastSampleFields
                 } = userData;
@@ -88,7 +88,7 @@ export function fetchUserdata() {
                 dispatch(receiveTotalFields(totalFields));
                 dispatch(receiveFields(lastSampleFields));
                 dispatch(receiveSamplesList(samples));
-                //dispatch(receiveQueryHistory(queryHistory));
+                dispatch(receiveInitialQueryHistory(queryHistory.slice(0, 10))); // FIXME sliced for testing purposes only
 
                 if (!sample || !filter || !view) {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));

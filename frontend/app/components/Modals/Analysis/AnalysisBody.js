@@ -24,6 +24,7 @@ export default class AnalysisBody extends React.Component {
                             <AnalysisLeftPane
                                 dispatch={this.props.dispatch}
                                 historyList={this.props.historyList}
+                                initialHistoryList={this.props.initialHistoryList}
                                 editingHistoryList={this.props.editingHistoryList}
                                 historyListFilter={this.props.historyListFilter}
                                 newHistoryItem={this.props.newHistoryItem}

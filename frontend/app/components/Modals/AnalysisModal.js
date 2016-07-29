@@ -22,6 +22,7 @@ class AnalysisModal extends React.Component {
                     dispatch={this.props.dispatch}
                     auth={this.props.auth}
                     historyList={this.props.historyList}
+                    initialHistoryList={this.props.initialHistoryList}
                     editingHistoryList={this.props.editingHistoryList}
                     historyListFilter={this.props.historyListFilter}
                     newHistoryItem={this.props.newHistoryItem}
@@ -51,6 +52,7 @@ function mapStateToProps(state) {
     };
     
     const historyList = queryHistory.history.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
+    const initialHistoryList = queryHistory.initialHistory;
 
     return {
         auth,
@@ -59,6 +61,7 @@ function mapStateToProps(state) {
         samplesList,
         modelsList,
         historyList,
+        initialHistoryList,
         fields,
         editingHistoryList: queryHistory.editingHistory,
         historyListFilter: queryHistory.filter,

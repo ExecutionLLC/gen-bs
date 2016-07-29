@@ -6,6 +6,7 @@ import {ImmutableHash} from '../utils/immutable';
 import HistoryItemUtils from '../utils/HistoryItemUtils';
 
 const initialState = {
+    initialHistory: [],
     history: [],
     filter: '',
     isReceivedAll: false,
@@ -16,6 +17,15 @@ const initialState = {
 
 function reduceReceiveQueryHistory(state, action) {
     return Object.assign({}, state, {
+        history: action.history || initialState.history,
+        isReceivedAll: false,
+        filter: ''
+    });
+}
+
+function reduceReceiveInitialQueryHistory(state, action) {
+    return Object.assign({}, state, {
+        initialHistory: action.history || initialState.history,
         history: action.history || initialState.history,
         isReceivedAll: false,
         filter: ''
@@ -112,6 +122,8 @@ export default function queryHistory(state = initialState, action) {
     switch (action.type) {
         case ActionTypes.RECEIVE_QUERY_HISTORY:
             return reduceReceiveQueryHistory(state, action);
+        case ActionTypes.RECEIVE_INITIAL_QUERY_HISTORY:
+            return reduceReceiveInitialQueryHistory(state, action);
         case ActionTypes.APPEND_QUERY_HISTORY:
             return reduceAppendQueryHistory(state, action);
         case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:
