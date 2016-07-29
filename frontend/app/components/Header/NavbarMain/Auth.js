@@ -4,15 +4,17 @@ import { logout } from '../../../actions/auth';
 import config from '../../../../config';
 
 const AUTHORIZED_USER_TITLE = '';
-const DEMO_USER_TITLE = 'Register or login for access to featured options';
+const DEMO_USER_TITLE = 'Register or login for access additional features';
 
 export default class Auth extends Component {
     _renderForAuthorizedUser() {
+        const {profileMetadata} = this.props.userData;
         return (
             <div>
                 <div className='dropdown'>
-                    <a href='#' className='btn navbar-btn dropdown-toggle' data-toggle='dropdown' data-target='#sidebarRight'>
-                        <span data-toggle='tooltip' data-localize='account.help'  data-placement='left' title={AUTHORIZED_USER_TITLE} data-container='body' data-trigger='hover' className='hidden-xs'>{ this.props.userData.profileMetadata.email }</span>
+                    <a href='#'
+                       className='btn navbar-btn dropdown-toggle' data-toggle='dropdown' data-target='#sidebarRight'>
+                        <span data-toggle='tooltip' data-localize='account.help'  data-placement='left' title={AUTHORIZED_USER_TITLE} data-container='body' data-trigger='hover' className='hidden-xs'>{ profileMetadata.name || profileMetadata.email }</span>
                         <span className='visible-xs'>
                             <i className='md-i'>person</i>
                         </span>
