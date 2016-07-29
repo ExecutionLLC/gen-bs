@@ -2,19 +2,13 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import AnalysisLeftPane from './AnalysisLeftPane';
 import AnalysisRightPane from './AnalysisRightPane';
+import {setCurrentQueryHistoryId} from '../../../actions/queryHistory';
 
 
 export default class AnalysisBody extends React.Component {
 
-    constructor(props) { // TODO: rid of the state
-        super(props);
-        this.state = {
-            currentHistoryItemId: props.historyList[0] && props.historyList[0].id || null
-        };
-    }
-
     render() {
-        const selectedHistoryItem = this.state.currentHistoryItemId && (this.props.editingHistoryList[this.state.currentHistoryItemId] || this.findHistoryItemForId(this.state.currentHistoryItemId)) || this.props.newHistoryItem;
+        const selectedHistoryItem = this.props.currentHistoryId && (this.props.editingHistoryList[this.props.currentHistoryId] || this.findHistoryItemForId(this.props.currentHistoryId)) || this.props.newHistoryItem;
 
         return (
             <Modal.Body>
@@ -29,7 +23,7 @@ export default class AnalysisBody extends React.Component {
                                 historyListFilter={this.props.historyListFilter}
                                 newHistoryItem={this.props.newHistoryItem}
                                 isHistoryReceivedAll={this.props.isHistoryReceivedAll}
-                                currentItemId={this.state.currentHistoryItemId}
+                                currentItemId={this.props.currentHistoryId}
                                 onSelectHistory={(id) => this.onSelectHistoryId(id)}
                                 viewsList={this.props.viewsList}
                                 filtersList={this.props.filtersList}
@@ -42,10 +36,10 @@ export default class AnalysisBody extends React.Component {
                         <div className='split-wrap tab-pane active'>
                             <AnalysisRightPane
                                 dispatch={this.props.dispatch}
-                                disabled={this.state.currentHistoryItemId && !this.props.editingHistoryList[this.state.currentHistoryItemId]}
+                                disabled={this.props.currentHistoryId && !this.props.editingHistoryList[this.props.currentHistoryId]}
                                 auth={this.props.auth}
                                 historyItem={selectedHistoryItem}
-                                currentItemId={this.state.currentHistoryItemId}
+                                currentItemId={this.props.currentHistoryId}
                                 viewsList={this.props.viewsList}
                                 filtersList={this.props.filtersList}
                                 samplesList={this.props.samplesList}
@@ -64,9 +58,6 @@ export default class AnalysisBody extends React.Component {
     }
 
     onSelectHistoryId(id) {
-        this.setState({
-            ...this.state,
-            currentHistoryItemId: id
-        });
+        this.props.dispatch(setCurrentQueryHistoryId(id));
     }
 }

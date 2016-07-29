@@ -5,6 +5,12 @@ import immutableArray from '../utils/immutableArray';
 import {ImmutableHash} from '../utils/immutable';
 import HistoryItemUtils from '../utils/HistoryItemUtils';
 
+
+function ensureHistoryId(history, id) {
+    return _.find(history, {id}) ? id : null;
+}
+
+
 const initialState = {
     initialHistory: [],
     history: [],
@@ -12,15 +18,24 @@ const initialState = {
     isReceivedAll: false,
     showQueryHistoryModal: false,
     newHistoryItem: null,
-    editingHistory: {}
+    editingHistory: {},
+    currentHistoryId: null
 };
+
+function reduceSetCurrentQueryHistoryId(state, action) {
+    return {
+        ...state,
+        currentHistoryId: ensureHistoryId(state.history, action.id)
+    };
+}
 
 function reduceReceiveQueryHistory(state, action) {
     const history = action.history || initialState.history;
     return Object.assign({}, state, {
         history: history,
         isReceivedAll: false,
-        filter: ''
+        filter: '',
+        currentHistoryId: ensureHistoryId(history, state.currentHistoryId)
     });
 }
 
@@ -30,7 +45,8 @@ function reduceReceiveInitialQueryHistory(state, action) {
         initialHistory: history,
         history: history,
         isReceivedAll: false,
-        filter: ''
+        filter: '',
+        currentHistoryId: ensureHistoryId(history, state.currentHistoryId)
     });
 }
 
@@ -39,7 +55,8 @@ function reducePrepareQueryHistoryToFilter(state, action) {
         ...state,
         filter: action.filter,
         isReceivedAll: false,
-        history: []
+        history: [],
+        currentHistoryId: null
     };
 }
 
@@ -122,6 +139,8 @@ function reduceCloseQueryHistoryModal(state) {
 
 export default function queryHistory(state = initialState, action) {
     switch (action.type) {
+        case ActionTypes.SET_CURRENT_QUERY_HISTORY_ID:
+            return reduceSetCurrentQueryHistoryId(state, action);
         case ActionTypes.RECEIVE_QUERY_HISTORY:
             return reduceReceiveQueryHistory(state, action);
         case ActionTypes.RECEIVE_INITIAL_QUERY_HISTORY:

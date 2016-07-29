@@ -21,6 +21,7 @@ import {
 } from './viewsList';
 import {entityType} from '../utils/entityTypes';
 
+export const SET_CURRENT_QUERY_HISTORY_ID = 'SET_CURRENT_QUERY_HISTORY_ID';
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
@@ -39,6 +40,13 @@ const queryHistoryClient = apiFacade.queryHistoryClient;
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
+
+export function setCurrentQueryHistoryId(id) {
+    return {
+        type: SET_CURRENT_QUERY_HISTORY_ID,
+        id
+    };
+}
 
 export function receiveQueryHistory(history) {
     return {
