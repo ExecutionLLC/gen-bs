@@ -35,7 +35,9 @@ export function toggleQueryNavbar() {
     };
 }
 
-export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
+export function analyze(sampleId, viewId, filterId) {
+    const limit = 100;
+    const offset = 0;
     return (dispatch, getState) => {
         if (!sampleId || !viewId || !filterId) {
             dispatch(handleError(null, ANALIZE_PARAMS_ERROR));
