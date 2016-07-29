@@ -110,7 +110,7 @@ function viewBuilderUpdateView() {
         const state = getState();
         const editingView = state.viewBuilder.editingView;
         const originalView = state.viewBuilder.originalView;
-        const isNotEdited = entityTypeIsEditable(editingView.type)
+        const isNotEdited = !entityTypeIsEditable(editingView.type)
             || originalView === editingView;
 
         if (state.auth.isDemo || isNotEdited) {
