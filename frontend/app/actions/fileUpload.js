@@ -98,12 +98,11 @@ function receiveFileOperation(operationId, id) {
     };
 }
 
-function sendFile(file, sessionId, onOperationId, onProgress, onError) {
+function sendFile(file, onOperationId, onProgress, onError) {
     const formData = new FormData();
     formData.append('sample', file);
     $.ajax(config.URLS.FILE_UPLOAD, {
         'type': 'POST',
-        'headers': {'X-Session-Id': sessionId},
         'data': formData,
         'contentType': false,
         'processData': false,
@@ -154,7 +153,6 @@ export function uploadFile() {
             dispatch(changeFileUploadProgress(0, 'ajax', fp.id));
             sendFile(
                 fp.file,
-                getState().auth.sessionId,
                 (operationId) => {
                     dispatch(receiveFileOperation(operationId, fp.id));
                 },

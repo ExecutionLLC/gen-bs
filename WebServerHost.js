@@ -1,6 +1,7 @@
 'use strict';
 
 const Express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const compression = require('compression');
@@ -31,18 +32,18 @@ class WebServerHost {
      * @param callback (error)
      * */
     start(callback) {
+        this._printServerConfig();
+
         // Create service
         const app = new Express();
-
-        app.use(compression());
-
-        this._printServerConfig();
 
         this._enableCORSIfNeeded(app);
 
         this._warnAboutSettingsIfNeeded();
 
         this._addMiddleware(app);
+
+        this._configureSession(app);
 
         this._initRouters(app);
 
@@ -62,6 +63,10 @@ class WebServerHost {
     }
 
     _addMiddleware(app) {
+        app.disable('x-powered-by');
+
+        app.use(compression());
+
         app.use(bodyParser.json());
 
         app.use(morgan('combined'));
@@ -101,9 +106,14 @@ class WebServerHost {
 
     }
 
+    _configureSession(app) {
+        app.use(this.services.sessions.getSessionParserMiddleware());
+    }
+
     _initWebSocketServer(httpServer) {
         const webSocketServer = new WebSocketServer({
-            server: httpServer
+            server: httpServer,
+            verifyClient: (info, callback) => this.controllers.wsController.verifyWebSocketClient(info, callback)
         });
 
         const wsController = this.controllers.wsController;
@@ -133,9 +143,10 @@ class WebServerHost {
     }
 
     _enableCORSIfNeeded(app) {
-        if (this.config.enableCORS) {
-            app.use(cors());
-        }
+        app.use(cors({
+            origin: this.config.baseUrl,
+            credentials: true
+        }));
     }
 }
 

@@ -3,14 +3,9 @@
 const SystemOperation = require('./SystemOperation');
 
 class UploadOperation extends SystemOperation {
-    constructor(sessionId, method, userId) {
+    constructor(sessionId, method) {
         super(sessionId, method);
-        this.userId = userId;
         this.setSendCloseToAppServer(true);
-    }
-
-    getType() {
-        return SystemOperation.operationTypes().UPLOAD;
     }
 
     /**
@@ -20,6 +15,10 @@ class UploadOperation extends SystemOperation {
      * */
     getUserId() {
         return this.userId;
+    }
+
+    setUserId(userId) {
+        this.userId = userId;
     }
 
     getSampleId() {

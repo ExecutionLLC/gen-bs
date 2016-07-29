@@ -73,11 +73,11 @@ export function viewsListEditView(viewId, view) {
     };
 }
 
-export function viewsListServerCreateView(view, sessionId, languageId) {
+export function viewsListServerCreateView(view, languageId) {
     return (dispatch) => {
         dispatch(viewsListStartServerOperation());
         return new Promise( (resolve, reject) => {
-            viewsClient.add(sessionId, languageId, view, (error, response) => {
+            viewsClient.add(languageId, view, (error, response) => {
                 dispatch(viewsListEndServerOperation());
                 if (error) {
                     dispatch(handleError(null, CREATE_VIEW_NETWORK_ERROR));
@@ -97,11 +97,11 @@ export function viewsListServerCreateView(view, sessionId, languageId) {
     };
 }
 
-export function viewsListServerUpdateView(view, sessionId) {
+export function viewsListServerUpdateView(view) {
     return (dispatch) => {
         dispatch(viewsListStartServerOperation());
         return new Promise( (resolve, reject) => {
-            viewsClient.update(sessionId, view, (error, response) => {
+            viewsClient.update(view, (error, response) => {
                 dispatch(viewsListEndServerOperation());
                 if (error) {
                     dispatch(handleError(null, UPDATE_VIEW_NETWORK_ERROR));
@@ -120,11 +120,11 @@ export function viewsListServerUpdateView(view, sessionId) {
     };
 }
 
-export function viewsListServerDeleteView(viewId, sessionId) {
+export function viewsListServerDeleteView(viewId) {
     return (dispatch) => {
         dispatch(viewsListStartServerOperation());
         return new Promise( (resolve, reject) => {
-            viewsClient.remove(sessionId, viewId, (error, response) => {
+            viewsClient.remove(viewId, (error, response) => {
                 dispatch(viewsListEndServerOperation());
                 if (error) {
                     dispatch(handleError(null, DELETE_VIEW_NETWORK_ERROR));

@@ -211,8 +211,8 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
-                table.string('description', 512);
-                table.string('label', 50);
+                table.text('description');
+                table.string('label', 128);
 
                 table.primary(['field_id', 'langu_id']);
             })
@@ -503,20 +503,16 @@ class DatabaseCreator {
 
     _createEmptyDatabase(postgresKnex) {
         // Create database
-        return postgresKnex.raw('CREATE DATABASE ' + this.databaseName);
+        return postgresKnex.raw(`CREATE DATABASE ${this.databaseName}`);
     }
 
     _dropDatabaseIfExists(postgresKnex) {
-        console.log('Dropping database ' + this.databaseName + '...');
-        // Disallow to connect to database
-        return postgresKnex.raw('UPDATE pg_database SET datallowconn = false WHERE datname = \'' + this.databaseName + '\'')
+        console.log(`Dropping database ${this.databaseName}...`);
+        // Terminate active database connections
+        return postgresKnex.raw(`SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${this.databaseName}'`)
             .then(() => {
-                // Terminate active database connections
-                return postgresKnex.raw('SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = \'' + this.databaseName + '\'')
-                    .then(() => {
-                        // Drop database if exists
-                        return postgresKnex.raw('DROP DATABASE IF EXISTS ' + this.databaseName);
-                    });
+                // Drop database if exists
+                return postgresKnex.raw(`DROP DATABASE IF EXISTS ${this.databaseName}`);
             });
     }
 

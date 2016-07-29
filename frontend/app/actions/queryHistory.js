@@ -126,9 +126,9 @@ export function cancelQueryHistoryEdit(historyItemId) {
 
 export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, ui: {language}} = getState();
+        const {ui: {language}} = getState();
         // FIXME: 'offset + 1' below is the crutch - server does not return 0th item
-        queryHistoryClient.getQueryHistory(sessionId, language, filter, limit, offset + 1, (error, response) => {
+        queryHistoryClient.getQueryHistory(language, filter, limit, offset + 1, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
@@ -142,8 +142,8 @@ export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, of
 
 export function updateQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, ui: {language}} = getState();
-        queryHistoryClient.getQueryHistory(sessionId, language, filter, limit, offset, (error, response) => {
+        const {ui: {language}} = getState();
+        queryHistoryClient.getQueryHistory(language, filter, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {

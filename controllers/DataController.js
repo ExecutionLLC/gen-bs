@@ -5,6 +5,7 @@ const Express = require('express');
 const async = require('async');
 
 const ControllerBase = require('./base/ControllerBase');
+const WSController = require('./WSController');
 
 class DataController extends ControllerBase {
     constructor(services) {
@@ -14,12 +15,13 @@ class DataController extends ControllerBase {
     }
 
     getData(request, response) {
-        const user = request.user;
+        const {user} = request;
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
-            (callback) => this.services.userData.getUserData(user, callback)
-        ], (error, results) => {
-            this.sendErrorOrJson(response, error, results);
+            (callback) => this.services.userData.getUserData(user, callback),
+            (userData, callback) => this._convertMessagesToClientFormat(userData, callback)
+        ], (error, userData) => {
+            this.sendErrorOrJson(response, error, userData);
         });
     }
 
@@ -27,6 +29,14 @@ class DataController extends ControllerBase {
         const router = new Express();
         router.get('/', this.getData);
         return router;
+    }
+
+    _convertMessagesToClientFormat(userData, callback) {
+        const activeOperations = userData.activeOperations.map(operation => Object.assign({}, operation, {
+            lastMessage: WSController.createClientOperationResult(operation.lastMessage)
+        }));
+        const convertedUserData = Object.assign({}, userData, {activeOperations});
+        callback(null, convertedUserData);
     }
 }
 

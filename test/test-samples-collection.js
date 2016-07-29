@@ -30,7 +30,7 @@ describe('Samples Collection', function() {
             webSocketClient = new WebSocketClient('localhost', Config.port);
             console.log('Waiting for the socket client to init...');
             setTimeout(() => {
-                webSocketClient.associateSession(sessionId);
+                webSocketClient.associateSessionIdAndUserId(sessionId);
                 done();
             }, 1000);
         });

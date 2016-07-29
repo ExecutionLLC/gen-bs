@@ -1,0 +1,303 @@
+[
+  {
+    "field": {
+      "name": "INFO_ASP",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Assembly Specific"
+  },
+  {
+    "field": {
+      "name": "INFO_ASS",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Acceptor"
+  },
+  {
+    "field": {
+      "name": "INFO_CAF",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Allele Frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_CDA",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Clinical Assay"
+  },
+  {
+    "field": {
+      "name": "INFO_CFL",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Assembly Conflict"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNACC",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "ClinVar ID"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNALLE",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "ClinVar Allele"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNDBN",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Disease"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNDSDB",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Disease Database"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNDSDBID",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Disease DB ID"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNORIGIN",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Allele Origin"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNREVSTAT",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Criteria"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNSIG",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Clinical Significance"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNSRC",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Clinical Chanel"
+  },
+  {
+    "field": {
+      "name": "INFO_COMMON",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Common"
+  },
+  {
+    "field": {
+      "name": "INFO_DSS",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Donor"
+  },
+  {
+    "field": {
+      "name": "INFO_G5",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "MAF>5% in 1+"
+  },
+  {
+    "field": {
+      "name": "INFO_G5A",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "MAF>5% in all"
+  },
+  {
+    "field": {
+      "name": "INFO_GENEINFO_0",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Gene name"
+  },
+  {
+    "field": {
+      "name": "INFO_GENEINFO_1",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "NCBI Gene ID"
+  },
+  {
+    "field": {
+      "name": "INFO_HD",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Marker on Kit"
+  },
+  {
+    "field": {
+      "name": "INFO_INT",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Intron Variant"
+  },
+  {
+    "field": {
+      "name": "INFO_KGPhase3",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "1000 genomes"
+  },
+  {
+    "field": {
+      "name": "INFO_MUT",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Known Mutation"
+  },
+  {
+    "field": {
+      "name": "INFO_NSF",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Frameshift"
+  },
+  {
+    "field": {
+      "name": "INFO_NSM",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Missense"
+  },
+  {
+    "field": {
+      "name": "INFO_NSN",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Nonsense"
+  },
+  {
+    "field": {
+      "name": "INFO_OM",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "OMIM"
+  },
+  {
+    "field": {
+      "name": "INFO_PM",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Clinical & Cited"
+  },
+  {
+    "field": {
+      "name": "INFO_R3",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "3’ gene part"
+  },
+  {
+    "field": {
+      "name": "INFO_R5",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "5’ gene part"
+  },
+  {
+    "field": {
+      "name": "INFO_REF",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Has reference"
+  },
+  {
+    "field": {
+      "name": "INFO_RS",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "dbSNP"
+  },
+  {
+    "field": {
+      "name": "INFO_S3D",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "3D structure"
+  },
+  {
+    "field": {
+      "name": "INFO_SAO",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Allele Origin"
+  },
+  {
+    "field": {
+      "name": "INFO_SSR",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Artifact"
+  },
+  {
+    "field": {
+      "name": "INFO_SYN",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Has Synonymous"
+  },
+  {
+    "field": {
+      "name": "INFO_TPA",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Provisional"
+  },
+  {
+    "field": {
+      "name": "INFO_U3",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "3’ UTR"
+  },
+  {
+    "field": {
+      "name": "INFO_U5",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "5’ UTR"
+  },
+  {
+    "field": {
+      "name": "INFO_VC",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Variant Class"
+  },
+  {
+    "field": {
+      "name": "INFO_VLD",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Validated"
+  },
+  {
+    "field": {
+      "name": "INFO_WTD",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Withdrawn"
+  }
+]

@@ -9,5 +9,6 @@ module.exports = {
     closeSession: 'v1.close_session',
     searchInResults: 'v1.search_in_results',
     uploadSample: 'v1.upload_file',
-    processSample: 'v1.convert_file'
+    processSample: 'v1.convert_file',
+    getSearchData: 'v1.get_search_data'
 };

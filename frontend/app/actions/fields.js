@@ -40,12 +40,11 @@ export function receiveFields(fields) {
 
 export function fetchFields(sampleId) {
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(requestFields());
 
-        const sessionId = getState().auth.sessionId;
         return new Promise((resolve) => {
-            samplesClient.getFields(sessionId, sampleId, (error, response) => {
+            samplesClient.getFields(sampleId, (error, response) => {
                 if (error) {
                     dispatch(handleError(null, SAMPLE_FIELDS_NETWORK_ERROR));
                 } else if (response.status !== HttpStatus.OK) {
@@ -75,11 +74,10 @@ export function receiveTotalFields(json) {
 
 export function fetchTotalFields() {
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(requestTotalFields());
 
-        const sessionId = getState().auth.sessionId;
-        samplesClient.getAllFields(sessionId, (error, response) => {
+        samplesClient.getAllFields((error, response) => {
             if (error) {
                 dispatch(handleError(null, TOTAL_FIELDS_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {

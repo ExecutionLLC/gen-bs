@@ -6,7 +6,6 @@ const async = require('async');
 const ApplicationServerServiceBase = require('./ApplicationServerServiceBase');
 const ErrorUtils = require('../../../utils/ErrorUtils');
 
-const RESULT_TYPES = require('./AppServerResultTypes');
 const METHODS = require('./AppServerMethods');
 const EVENTS = require('./AppServerEvents');
 const SESSION_STATUS = {
@@ -20,82 +19,84 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         super(services, models);
     }
     
-    uploadSample(sessionId, sampleId, user, sampleLocalPath, sampleFileName, callback) {
+    uploadSample(session, sampleId, user, sampleLocalPath, sampleFileName, callback) {
         async.waterfall([
-            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, user.id, callback),
+            (callback) => this.services.operations.addUploadOperation(METHODS.uploadSample, callback),
             (operation, callback) => {
                 operation.setSampleId(sampleId);
                 operation.setSampleFileName(sampleFileName);
+                operation.setUserId(user.id);
                 callback(null, operation);
             },
             (operation, callback) => {
-                const {newSamplesBucket} = this.services.objectService.getStorageSettings();
+                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const fileStream = fs.createReadStream(sampleLocalPath);
                 this.services.objectStorage.uploadObject(newSamplesBucket, sampleId, fileStream,
-                    (error) => callback(error, operation.getId())
+                    (error) => callback(null, error, operation)
                 );
+            },
+            (error, operation, callback) => {
+                if (error) {
+                    // We didn't start the upload session on app server yet.
+                    operation.setSendCloseToAppServer(false);
+
+                    // But started it locally, so remove it.
+                    async.waterfall([
+                        (callback) => this.services.sessions.findSystemSession(callback),
+                        (session, callback) => this.services.operations.remove(session, operation.getId(), callback)
+                    ], () => callback(error));
+                } else {
+                    callback(null, operation.getId());
+                }
             }
         ], callback);
     }
 
-    requestSampleProcessing(sessionId, operationId, sampleId, callback) {
+    requestSampleProcessing(session, operationId, sampleId, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
-            (callback) => this.services.sessions.findSystemSessionId(callback),
-            (systemSessionId, callback) => this.services.operations.find(systemSessionId, operationId, callback),
+            (callback) => this.services.sessions.findSystemSession(callback),
+            (systemSession, callback) => this.services.operations.find(systemSession, operationId, callback),
             (operation, callback) => {
                 const method = METHODS.processSample;
+                const {newSamplesBucket} = this.services.objectStorage.getStorageSettings();
                 const params = {
-                    sampleId
+                    sample: sampleId,
+                    bucket: newSamplesBucket
                 };
-                this._rpcSend(operation, method, params, callback);
+                this._rpcSend(session, operation, method, params, callback);
             }
         ], callback);
     }
 
-    processUploadResult(operation, message, callback) {
+    processUploadResult(session, operation, message, callback) {
         this.logger.debug('Processing upload result for ' + operation);
         const result = message.result;
         /**@type {string}*/
         const status = (result || {}).status;
         if (this._isAsErrorMessage(message)) {
-            this._createErrorOperationResult(
-                operation, 
+            this._createOperationResult(
+                session,
+                operation,
+                null,
+                operation.getUserId(),
                 EVENTS.onOperationResultReceived, 
                 true,
+                null,
                 ErrorUtils.createAppServerInternalError(message),
                 callback
             );
         } else if (status !== SESSION_STATUS.READY) {
             // If not ready, just send the progress up
-            this._createProgressMessage(operation, message, callback);
+            const {result: {status, progress}} = message;
+            super._createOperationResult(session, operation, null, operation.getUserId(),
+                EVENTS.onOperationResultReceived, false, {status, progress}, null, callback);
         } else {
-            this._completeUpload(operation, message, callback);
+            this._completeUpload(session, operation, message, callback);
         }
     }
-    
-    _createProgressMessage(operation, message, callback) {
-        const result = message.result;
-        const status = result.status;
-        const progress = result.progress;
-        /**
-         * @type AppServerOperationResult
-         * */
-        const operationResult = {
-            operation,
-            eventName: EVENTS.onOperationResultReceived,
-            shouldCompleteOperation: false,
-            resultType: RESULT_TYPES.SUCCESS,
-            result: {
-                status,
-                progress
-            }
-        };
-        
-        callback(null, operationResult);
-    }
-    
-    _completeUpload(operation, message, callback) {
+
+    _completeUpload(session, operation, message, callback) {
         // Sample is fully processed and the fields metadata is available.
         // Now we need to:
         // 1. Insert all the data into database.
@@ -117,37 +118,19 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], (error, sampleVersionId) => {
             if (error) {
                 this.logger.error(`Error inserting new sample into database: ${error}`);
-                this._createErrorOperationResult(
-                    operation,
-                    EVENTS.onOperationResultReceived,
-                    true,
-                    ErrorUtils.createInternalError(error),
-                    callback
-                );
+                this._createOperationResult(session, operation, null, operation.getUserId(),
+                    EVENTS.onOperationResultReceived, true, null, ErrorUtils.createInternalError(error), callback);
+
             } else {
                 // The upload operation is already completed on the app server.
                 operation.setSendCloseToAppServer(false);
-                this._createUploadSuccessfulResult(operation, sampleVersionId, callback);
+                this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
+                    status: SESSION_STATUS.READY,
+                    progress: 100,
+                    sampleId: sampleVersionId
+                }, null, callback);
             }
         });
-    }
-
-    _createUploadSuccessfulResult(operation, sampleVersionId, callback) {
-        /**
-         * @type AppServerOperationResult
-         * */
-        const operationResult = {
-            operation,
-            eventName: EVENTS.onOperationResultReceived,
-            shouldCompleteOperation: true,
-            resultType: RESULT_TYPES.SUCCESS,
-            result: {
-                status: SESSION_STATUS.READY,
-                progress: 100,
-                sampleId: sampleVersionId
-            }
-        };
-        callback(null, operationResult);
     }
 }
 

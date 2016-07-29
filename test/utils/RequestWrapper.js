@@ -8,6 +8,7 @@ const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 class RequestWrapper {
     static post(url, headers, bodyObject, callback) {
         Request.post({
+            jar: true,
             url,
             headers,
             json: bodyObject
@@ -16,6 +17,7 @@ class RequestWrapper {
 
     static get(url, headers, queryParams, bodyObject, callback) {
         Request.get({
+            jar: true,
             url,
             headers,
             qs: queryParams,
@@ -25,6 +27,7 @@ class RequestWrapper {
 
     static put(url, headers, bodyObject, callback) {
         Request.put({
+            jar: true,
             url,
             headers,
             json: bodyObject
@@ -33,6 +36,7 @@ class RequestWrapper {
 
     static del(url, headers, bodyObject, callback) {
         Request.del({
+            jar: true,
             url,
             headers,
             json: bodyObject
@@ -49,7 +53,7 @@ class RequestWrapper {
         };
 
         const formData = Object.assign({}, bodyObject, fileDescriptor);
-        Request.post({url, formData, headers}, RequestWrapper._createResponseConverter(callback));
+        Request.post({jar: true, url, formData, headers}, RequestWrapper._createResponseConverter(callback));
     }
 
     static _createResponseConverter(callback) {

@@ -22,7 +22,7 @@ class AliyunOSSService extends ServiceBase {
                 keyName,
                 fileStream.path,
                 null
-            )
+            );
         })).then(() => {
             callback(null);
         }).catch((error) => {

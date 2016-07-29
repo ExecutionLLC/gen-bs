@@ -1,6 +1,6 @@
 import {renewHistoryItem, detachHistoryItem} from '../app/actions/queryHistory';
-import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView} from '../app/actions/viewsList';
-import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter} from '../app/actions/filtersList';
+import {viewsListServerCreateView, viewsListServerUpdateView, viewsListServerDeleteView, viewsListReceive} from '../app/actions/viewsList';
+import {filtersListServerCreateFilter, filtersListServerUpdateFilter, filtersListServerDeleteFilter, filtersListReceive} from '../app/actions/filtersList';
 //import {analyze} from '../app/actions/ui';
 
 import {ImmutableHashedArray} from '../app/utils/immutable';
@@ -377,6 +377,37 @@ describe('History Tests', () => {
                 expectItemByPredicate(filters, item => item.id === userFilter.id).toBeFalsy();
                 expectItemByPredicate(filters, item => item.id === historyFilter.id).toBeTruthy();
 
+                done();
+            });
+        });
+    });
+
+    describe('Handle history items', () => {
+        it('should select sample after history', (done) => {
+
+            function checkSelection(itemId, itemsList) {
+                console.log('checkSelection', itemId, itemsList);
+                return !!itemsList.hashedArray.hash[itemId];
+            }
+
+            expect(userView).toBeTruthy();
+            expect(userFilter).toBeTruthy();
+            storeTestUtils.runTest({
+                globalInitialState: initialAppState,
+                applyActions: (dispatch) => {
+                    dispatch(renewHistoryItem(historyEntry.id));
+                    dispatch(viewsListServerUpdateView(userView, sessionId));
+                    dispatch(filtersListServerUpdateFilter(userFilter, sessionId))
+                        .then( () => {
+                            dispatch([
+                                viewsListReceive([userView]),
+                                filtersListReceive([userFilter])
+                            ]);
+                        });
+                }
+            }, (globalState) => {
+                expect(checkSelection(globalState.viewsList.selectedViewId, globalState.viewsList)).toBe(true);
+                expect(checkSelection(globalState.filtersList.selectedFilterId, globalState.filtersList)).toBe(true);
                 done();
             });
         });

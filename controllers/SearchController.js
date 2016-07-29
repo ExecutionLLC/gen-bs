@@ -4,7 +4,6 @@ const Express = require('express');
 const async = require('async');
 
 const ControllerBase = require('./base/ControllerBase');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
 class SearchController extends ControllerBase {
     constructor(services) {
@@ -20,17 +19,10 @@ class SearchController extends ControllerBase {
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
             (body, callback) => {
-                const user = request.user;
-                const sessionId = request.sessionId;
-                const languageId = request.languId;
-
-                const sampleId = body.sampleId;
-                const viewId = body.viewId;
-                const filterId = body.filterId;
-                const limit = body.limit;
-                const offset = body.offset;
+                const {user, session, languId: languageId} = request;
+                const {sampleId, viewId, filterId, limit, offset} = body;
                 this.services.search
-                    .sendSearchRequest(user, sessionId, languageId,
+                    .sendSearchRequest(user, session, languageId,
                         sampleId, viewId, filterId, limit, offset, callback);
             }
         ], (error, operationId) => {
@@ -43,18 +35,12 @@ class SearchController extends ControllerBase {
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => this.getRequestBody(request, callback),
             (body, callback) => {
-                const user = request.user;
-                const operationId = request.params.operationId;
-                const sessionId = request.sessionId;
-                const globalSearchValue = body.topSearch;
-                const fieldSearchValues = body.search;
-                const sortValues = body.sort;
-                const limit = body.limit;
-                const offset = body.offset;
+                const {user, session, params: {operationId}} = request;
+                const {topSearch: globalSearchValue, search: fieldSearchValues, sort: sortValues, limit, offset} = body;
                 if (isNaN(limit) || isNaN(offset)) {
                     callback(new Error('Offset or limit are not specified.'));
                 } else {
-                    this.services.search.searchInResults(user, sessionId, operationId,
+                    this.services.search.searchInResults(user, session, operationId,
                         globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback);
                 }
             }
@@ -67,16 +53,11 @@ class SearchController extends ControllerBase {
         async.waterfall([
             (callback) => this.checkUserIsDefined(request, callback),
             (callback) => {
-                const user = request.user;
-                const operationId = request.params.operationId;
-                const sessionId = request.sessionId;
-                const limit = request.query.limit;
-                const offset = request.query.offset;
-
+                const {user, session, params: {operationId}, query: {limit, offset}} = request;
                 if (!limit || !offset || isNaN(limit) || isNaN(offset)) {
                     callback(new Error('Please set "limit" and "offset" query parameters to valid numbers.'));
                 } else {
-                    this.services.search.loadResultsPage(user, sessionId, operationId,
+                    this.services.search.loadResultsPage(user, session, operationId,
                         parseInt(limit), parseInt(offset), (error) => callback(error, operationId));
                 }
             }
@@ -94,7 +75,7 @@ class SearchController extends ControllerBase {
             maxCallCountBeforeBlock: 3,
             delayMs: 2 * 1000,
             keyGenerator: (request) => {
-                return this.getSessionId(request);
+                return request.session.id;
             }
         });
 

@@ -1,0 +1,219 @@
+[
+  {
+    "field": {
+      "name": "VEP_Consequence",
+      "source_name": "sample"
+    },
+    "label": "Consequence"
+  },
+  {
+    "field": {
+      "name": "VEP_IMPACT",
+      "source_name": "sample"
+    },
+    "label": "Variant impact"
+  },
+  {
+    "field": {
+      "name": "VEP_SYMBOL",
+      "source_name": "sample"
+    },
+    "label": "Gene ID"
+  },
+  {
+    "field": {
+      "name": "VEP_Gene",
+      "source_name": "sample"
+    },
+    "label": "RefSeq gene ID"
+  },
+  {
+    "field": {
+      "name": "VEP_Feature_type",
+      "source_name": "sample"
+    },
+    "label": "Element type"
+  },
+  {
+    "field": {
+      "name": "VEP_Feature",
+      "source_name": "sample"
+    },
+    "label": "Element ID"
+  },
+  {
+    "field": {
+      "name": "VEP_BIOTYPE",
+      "source_name": "sample"
+    },
+    "label": "Gene type"
+  },
+  {
+    "field": {
+      "name": "VEP_cDNA_position",
+      "source_name": "sample"
+    },
+    "label": "cDNA position"
+  },
+  {
+    "field": {
+      "name": "VEP_CDS_position",
+      "source_name": "sample"
+    },
+    "label": "CDS position"
+  },
+  {
+    "field": {
+      "name": "VEP_Protein_position",
+      "source_name": "sample"
+    },
+    "label": "Protein position"
+  },
+  {
+    "field": {
+      "name": "VEP_Amino_acids",
+      "source_name": "sample"
+    },
+    "label": "Amino acid change"
+  },
+  {
+    "field": {
+      "name": "VEP_Codons",
+      "source_name": "sample"
+    },
+    "label": "Codon change"
+  },
+  {
+    "field": {
+      "name": "VEP_Existing_variation",
+      "source_name": "sample"
+    },
+    "label": "Existing variation"
+  },
+  {
+    "field": {
+      "name": "VEP_DISTANCE",
+      "source_name": "sample"
+    },
+    "label": "Distance"
+  },
+  {
+    "field": {
+      "name": "VEP_STRAND",
+      "source_name": "sample"
+    },
+    "label": "Element strand"
+  },
+  {
+    "field": {
+      "name": "VEP_SYMBOL_SOURCE",
+      "source_name": "sample"
+    },
+    "label": "Gene DB"
+  },
+  {
+    "field": {
+      "name": "VEP_HGNC_ID",
+      "source_name": "sample"
+    },
+    "label": "GeneCards"
+  },
+  {
+    "field": {
+      "name": "VEP_CCDS",
+      "source_name": "sample"
+    },
+    "label": "CCDS"
+  },
+  {
+    "field": {
+      "name": "VEP_SIFT",
+      "source_name": "sample"
+    },
+    "label": "SIFT"
+  },
+  {
+    "field": {
+      "name": "VEP_PolyPhen",
+      "source_name": "sample"
+    },
+    "label": "PolyPhen-2"
+  },
+  {
+    "field": {
+      "name": "VEP_HGVS_OFFSET",
+      "source_name": "sample"
+    },
+    "label": "HGVS shift"
+  },
+  {
+    "field": {
+      "name": "VEP_Genotype",
+      "source_name": "sample"
+    },
+    "label": "Genotype"
+  },
+  {
+    "field": {
+      "name": "VEP_Zygosity",
+      "source_name": "sample"
+    },
+    "label": "Zygosity"
+  },
+  {
+    "field": {
+      "name": "VEP_ExonNumber",
+      "source_name": "sample"
+    },
+    "label": "Exon number"
+  },
+  {
+    "field": {
+      "name": "VEP_HGVSc_nucleotide_changes",
+      "source_name": "sample"
+    },
+    "label": "HGVSc transcript change"
+  },
+  {
+    "field": {
+      "name": "VEP_HGVSc_transcript",
+      "source_name": "sample"
+    },
+    "label": "HGVSc transcript"
+  },
+  {
+    "field": {
+      "name": "VEP_HGVSp_nucleotide_changes",
+      "source_name": "sample"
+    },
+    "label": "HGVSp protein change"
+  },
+  {
+    "field": {
+      "name": "VEP_HGVSp_transcript",
+      "source_name": "sample"
+    },
+    "label": "HGVSp protein"
+  },
+  {
+    "field": {
+      "name": "VEP_IntronNumber",
+      "source_name": "sample"
+    },
+    "label": "Intron number"
+  },
+  {
+    "field": {
+      "name": "VEP_NumberOfExons",
+      "source_name": "sample"
+    },
+    "label": "Number of exons"
+  },
+  {
+    "field": {
+      "name": "VEP_NumberOfIntrons",
+      "source_name": "sample"
+    },
+    "label": "Number of introns"
+  }
+]

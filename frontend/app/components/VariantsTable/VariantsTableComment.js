@@ -3,6 +3,7 @@ import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 
 import {createComment, updateComment, removeComment} from '../../actions/variantsTable';
+import config from '../../../config';
 
 
 export default class VariantsTableComment extends Component {
@@ -98,6 +99,7 @@ export default class VariantsTableComment extends Component {
                                               className='form-control material-input input-large'
                                               onChange={(e) => this.onCommentChanged(e)}
                                               defaultValue={(_.isEmpty(comments)) ? '' : comments[0].comment}
+                                              maxLength={config.ANALYSIS.MAX_COMMENT_LENGTH}
                                     />
                             </div>
                             <div className='editable-buttons editable-buttons-bottom'>

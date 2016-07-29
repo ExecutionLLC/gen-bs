@@ -8,8 +8,8 @@ export default class QueryHistoryClient extends UserEntityClientBase {
         super(urls);
     }
 
-    getQueryHistory(sessionId, languageId, filter, limit, offset, callback) {
+    getQueryHistory(languageId, filter, limit, offset, callback) {
         RequestWrapper.get(this.urls.history(),
-            this._makeHeaders({sessionId, languageId}), {filter, limit, offset}, null, callback);
+            this._makeHeaders({languageId}), {filter, limit, offset}, null, callback);
     }
 }

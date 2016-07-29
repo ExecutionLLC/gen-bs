@@ -217,13 +217,6 @@ describe('Filters', () => {
             });
         });
 
-        it('should fail to get list in incorrect session', (done) => {
-            filtersClient.getAll(UnknownSessionId, (error, response) => {
-                ClientBase.expectErrorResponse(error, response);
-                done();
-            })
-        });
-
         it('should fail to get unknown filter', (done) => {
             filtersClient.get(sessionId, UnknownFilterId, (error, response) => {
                 ClientBase.expectErrorResponse(error, response);

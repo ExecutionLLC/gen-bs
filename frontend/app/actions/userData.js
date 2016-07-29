@@ -56,8 +56,8 @@ export function fetchUserdata() {
 
     return (dispatch, getState) => {
         dispatch(requestUserdata());
-        const {auth: {sessionId}, ui: {languageId}} = getState();
-        dataClient.getUserData(sessionId, languageId, (error, response) => {
+        const {ui: {languageId}} = getState();
+        dataClient.getUserData(languageId, (error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_USER_DATA_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {

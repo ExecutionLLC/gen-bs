@@ -20,7 +20,7 @@ class SearchService extends ServiceBase {
     }
 
     init() {
-        this.searchKeyFieldName = this.services.redis.getSearchKeyFieldName();
+        this.searchKeyFieldName = this.services.applicationServerSearch.getSearchKeyFieldName();
         this._subscribeToRPCEvents();
     }
 
@@ -36,7 +36,7 @@ class SearchService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    sendSearchRequest(user, sessionId, languageId, sampleId, viewId, filterId, limit, offset, callback) {
+    sendSearchRequest(user, session, languageId, sampleId, viewId, filterId, limit, offset, callback) {
         const hasUndefOrNullParam = _.some([languageId, viewId, filterId, sampleId, limit, offset], (param) => {
             return _.isUndefined(param) || _.isNull(param);
         });
@@ -54,35 +54,31 @@ class SearchService extends ServiceBase {
             async.waterfall([
                 (callback) => this.services.queryHistory.add(user, languageId, sampleId, viewId, filterId,
                     (error) => callback(error)),
-                (callback) => {
-                    this.services.sessions.findById(sessionId, callback);
-                },
-                (sessionId, callback) => {
-                    this._createAppServerSearchParams(sessionId, user, languageId, sampleId, viewId, filterId, limit, offset, callback);
-                },
+                (callback) => this._createAppServerSearchParams(user, languageId, sampleId,
+                    viewId, filterId, limit, offset, callback),
+                (appServerRequestParams, callback) => this._validateAppServerSearchParams(appServerRequestParams,
+                    callback
+                ),
                 (appServerRequestParams, callback) => {
-                    this._validateAppServerSearchParams(appServerRequestParams, callback);
-                },
-                (appServerRequestParams, callback) => {
-                    this.services.applicationServer.requestOpenSearchSession(appServerRequestParams.sessionId,
+                    this.services.applicationServer.requestOpenSearchSession(session,
                         appServerRequestParams, callback);
                 }
             ], callback);
         }
     }
 
-    searchInResults(user, sessionId, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
+    searchInResults(user, session, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
         const sessions = this.services.sessions;
         async.waterfall([
             (callback) => {
-                sessions.findById(sessionId, callback);
+                sessions.findById(session, callback);
             },
             (sessionId, callback) => {
                 this._createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
                     fieldSearchValues, sortValues, limit, offset, callback);
             },
             (appServerParams, callback) => {
-                this.services.applicationServer.requestSearchInResults(sessionId, operationId, appServerParams, (error) => {
+                this.services.applicationServer.requestSearchInResults(session, operationId, appServerParams, (error) => {
                     if (error) {
                         callback(error);
                     } else {
@@ -93,8 +89,8 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    loadResultsPage(user, sessionId, operationId, limit, offset, callback) {
-        this.services.applicationServer.loadResultsPage(user, sessionId, operationId, limit, offset, callback);
+    loadResultsPage(user, session, operationId, limit, offset, callback) {
+        this.services.applicationServer.loadResultsPage(user, session, operationId, limit, offset, callback);
     }
 
     _subscribeToRPCEvents() {
@@ -103,18 +99,10 @@ class SearchService extends ServiceBase {
     }
 
     _onSearchDataReceived(message) {
-        const fieldIdToValueArray = message.result.fieldIdToValueHash;
-        // For search requests there is only one session.
-        const sessionId = _.first(message.sessionIds);
+        const {session: {userId}, result: {fieldIdToValueArray}} = message;
 
         async.waterfall([
-            (callback) =>
-                this.services.sessions.findSessionUserId(
-                    sessionId,
-                    (error, userId) => callback(error, userId)
-                ),
-            // TODO: Store languId from request in the session to use here.
-            (userId, callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
+            (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
             (user, callback) => this._loadRowsComments(user.id, user.language, fieldIdToValueArray, callback),
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.
@@ -248,7 +236,7 @@ class SearchService extends ServiceBase {
         callback);
     }
 
-    _createAppServerSearchParams(sessionId, user, languId, sampleId, viewId, filterId, limit, offset, callback) {
+    _createAppServerSearchParams(user, languId, sampleId, viewId, filterId, limit, offset, callback) {
         async.parallel({
             langu: (callback) => {
                 this.services.langu.find(languId, callback);
@@ -296,7 +284,6 @@ class SearchService extends ServiceBase {
                 callback(error);
             } else {
                 const appServerSearchParams = {
-                    sessionId,
                     langu: result.langu,
                     userId: user.id,
                     view: result.view,
