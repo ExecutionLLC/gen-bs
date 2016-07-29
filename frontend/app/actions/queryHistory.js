@@ -4,7 +4,7 @@ import _ from 'lodash';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
-import {analyze} from './ui';
+//import {analyze} from './ui';
 import {
     changeSamples,
     changeSample
@@ -179,8 +179,8 @@ export function renewHistoryItem(historyItemId) {
                 .then(() => {
                     dispatch([
                         filtersListSelectFilter(clonedHistoryItem.filters[0].id),
-                        viewsListSelectView(clonedHistoryItem.view.id),
-                        analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
+                        viewsListSelectView(clonedHistoryItem.view.id)/*,
+                        analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id) FIXME analyze: replace by reanalyze */
                     ]);
                 });
         }

@@ -6,7 +6,7 @@ import {handleError} from './errorHandler';
 import {receiveFields, receiveTotalFields} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {receiveInitialQueryHistory} from './queryHistory';
-import {analyze} from './ui';
+//import {analyze} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
 import {
     filtersListReceive,
@@ -96,7 +96,7 @@ export function fetchUserdata() {
                     dispatch(changeSample(sample.id));
                     dispatch(filtersListSelectFilter(filter.id));
                     dispatch(viewsListSelectView(view.id));
-                    dispatch(analyze(sample.id, view.id, filter.id));
+                    /*dispatch(analyze(sample.id, view.id, filter.id)); FIXME analyze: replace by reanalyze */
                 }
             }
         });

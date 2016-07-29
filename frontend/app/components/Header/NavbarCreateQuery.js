@@ -11,7 +11,7 @@ import Analyze from './NavbarCreateQuery/Analyze';
 import LoadHistory from './NavbarCreateQuery/LoadHistory';
 import {fetchFields} from '../../actions/fields';
 
-import { analyze } from '../../actions/ui';
+//import { analyze } from '../../actions/ui';
 import { changeSample } from '../../actions/samplesList';
 
 
@@ -26,11 +26,11 @@ class NavbarCreateQuery extends Component {
     render() {
 
         const {
-            dispatch,
+//            dispatch,
             auth: {isDemo: isDemoSession},
-            samplesList: {hashedArray: {array: samplesArray}, selectedSampleId},
+            samplesList: {hashedArray: {array: samplesArray}, selectedSampleId}/*,
             viewsList: {selectedViewId},
-            filtersList: {selectedFilterId}
+            filtersList: {selectedFilterId}*/
         } = this.props;
 
         return (
@@ -62,7 +62,7 @@ class NavbarCreateQuery extends Component {
 
                         <Analyze
                             {...this.props}
-                            clicked={ () => dispatch(analyze(selectedSampleId, selectedViewId, selectedFilterId))}
+                            clicked={ () => null /*dispatch(analyze(selectedSampleId, selectedViewId, selectedFilterId)) FIXME analyze: cannot analyze from panel, remove the whole functionality */}
                         />
                         <LoadHistory
                             dispatch={this.props.dispatch}
