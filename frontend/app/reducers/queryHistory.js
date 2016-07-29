@@ -16,17 +16,19 @@ const initialState = {
 };
 
 function reduceReceiveQueryHistory(state, action) {
+    const history = action.history || initialState.history;
     return Object.assign({}, state, {
-        history: action.history || initialState.history,
+        history: history,
         isReceivedAll: false,
         filter: ''
     });
 }
 
 function reduceReceiveInitialQueryHistory(state, action) {
+    const history = action.history || initialState.history;
     return Object.assign({}, state, {
-        initialHistory: action.history || initialState.history,
-        history: action.history || initialState.history,
+        initialHistory: history,
+        history: history,
         isReceivedAll: false,
         filter: ''
     });
