@@ -16,11 +16,10 @@ export default class FileUploadProgressBar extends Component {
         const { progressStatus, progressValue } = this.props;
 
         const STAGES = {
-            TOTAL: 3,
+            TOTAL: 2,
             'ajax': 0,
-            'converting': 1,
-            's3_uploading': 2,
-            'ready': 3
+            'task_running': 1,
+            'ready': 2
         };
 
         const currentStage = STAGES[progressStatus];
