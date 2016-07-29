@@ -4,9 +4,9 @@
  * This file contains global hooks for all test suits.
  * */
 
-const MockWebServerHost = require('./mocks/MockWebServerHost');
+const MockHost = require('./mocks/MockHost');
 
-const webServer = new MockWebServerHost();
+const webServer = new MockHost();
 const START_TIMEOUT = 5000;
 
 before(function(done) {

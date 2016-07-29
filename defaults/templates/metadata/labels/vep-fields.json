@@ -1,219 +1,338 @@
 [
   {
     "field": {
-      "name": "INFO_Consequence",
+      "name": "VEP_Consequence",
       "source_name": "sample"
     },
     "label": "Consequence"
   },
   {
     "field": {
-      "name": "INFO_IMPACT",
+      "name": "VEP_IMPACT",
       "source_name": "sample"
     },
     "label": "Variant impact"
   },
   {
     "field": {
-      "name": "INFO_SYMBOL",
+      "name": "VEP_SYMBOL",
       "source_name": "sample"
     },
     "label": "Gene ID"
   },
   {
     "field": {
-      "name": "INFO_Gene",
+      "name": "VEP_Gene",
       "source_name": "sample"
     },
     "label": "RefSeq gene ID"
   },
   {
     "field": {
-      "name": "INFO_Feature_type",
+      "name": "VEP_Feature_type",
       "source_name": "sample"
     },
     "label": "Element type"
   },
   {
     "field": {
-      "name": "INFO_Feature",
+      "name": "VEP_Feature",
       "source_name": "sample"
     },
     "label": "Element ID"
   },
   {
     "field": {
-      "name": "INFO_BIOTYPE",
+      "name": "VEP_BIOTYPE",
       "source_name": "sample"
     },
     "label": "Gene type"
   },
   {
     "field": {
-      "name": "INFO_cDNA_position",
+      "name": "VEP_cDNA_position",
       "source_name": "sample"
     },
     "label": "cDNA position"
   },
   {
     "field": {
-      "name": "INFO_CDS_position",
+      "name": "VEP_CDS_position",
       "source_name": "sample"
     },
     "label": "CDS position"
   },
   {
     "field": {
-      "name": "INFO_Protein_position",
+      "name": "VEP_Protein_position",
       "source_name": "sample"
     },
     "label": "Protein position"
   },
   {
     "field": {
-      "name": "INFO_Amino_acids",
+      "name": "VEP_Amino_acids",
       "source_name": "sample"
     },
     "label": "Amino acid change"
   },
   {
     "field": {
-      "name": "INFO_Codons",
+      "name": "VEP_Codons",
       "source_name": "sample"
     },
     "label": "Codon change"
   },
   {
     "field": {
-      "name": "INFO_Existing_variation",
+      "name": "VEP_Existing_variation",
       "source_name": "sample"
     },
     "label": "Existing variation"
   },
   {
     "field": {
-      "name": "INFO_DISTANCE",
+      "name": "VEP_DISTANCE",
       "source_name": "sample"
     },
     "label": "Distance"
   },
   {
     "field": {
-      "name": "INFO_STRAND",
+      "name": "VEP_STRAND",
       "source_name": "sample"
     },
     "label": "Element strand"
   },
   {
     "field": {
-      "name": "INFO_SYMBOL_SOURCE",
+      "name": "VEP_SYMBOL_SOURCE",
       "source_name": "sample"
     },
     "label": "Gene DB"
   },
   {
     "field": {
-      "name": "INFO_HGNC_ID",
+      "name": "VEP_HGNC_ID",
       "source_name": "sample"
     },
     "label": "GeneCards"
   },
   {
     "field": {
-      "name": "INFO_CCDS",
+      "name": "VEP_CCDS",
       "source_name": "sample"
     },
     "label": "CCDS"
   },
   {
     "field": {
-      "name": "INFO_SIFT",
+      "name": "VEP_SIFT",
       "source_name": "sample"
     },
     "label": "SIFT"
   },
   {
     "field": {
-      "name": "INFO_PolyPhen",
+      "name": "VEP_PolyPhen",
       "source_name": "sample"
     },
     "label": "PolyPhen-2"
   },
   {
     "field": {
-      "name": "INFO_HGVS_OFFSET",
+      "name": "VEP_HGVS_OFFSET",
       "source_name": "sample"
     },
     "label": "HGVS shift"
   },
   {
     "field": {
-      "name": "INFO_Genotype",
+      "name": "VEP_Genotype",
       "source_name": "sample"
     },
     "label": "Genotype"
   },
   {
     "field": {
-      "name": "INFO_Zygosity",
+      "name": "VEP_Zygosity",
       "source_name": "sample"
     },
     "label": "Zygosity"
   },
   {
     "field": {
-      "name": "INFO_ExonNumber",
+      "name": "VEP_ExonNumber",
       "source_name": "sample"
     },
     "label": "Exon number"
   },
   {
     "field": {
-      "name": "INFO_HGVSc_nucleotide_changes",
+      "name": "VEP_HGVSc_nucleotide_changes",
       "source_name": "sample"
     },
     "label": "HGVSc transcript change"
   },
   {
     "field": {
-      "name": "INFO_HGVSc_transcript",
+      "name": "VEP_HGVSc_transcript",
       "source_name": "sample"
     },
     "label": "HGVSc transcript"
   },
   {
     "field": {
-      "name": "INFO_HGVSp_nucleotide_changes",
+      "name": "VEP_HGVSp_nucleotide_changes",
       "source_name": "sample"
     },
     "label": "HGVSp protein change"
   },
   {
     "field": {
-      "name": "INFO_HGVSp_transcript",
+      "name": "VEP_HGVSp_transcript",
       "source_name": "sample"
     },
     "label": "HGVSp protein"
   },
   {
     "field": {
-      "name": "INFO_IntronNumber",
+      "name": "VEP_IntronNumber",
       "source_name": "sample"
     },
     "label": "Intron number"
   },
   {
     "field": {
-      "name": "INFO_NumberOfExons",
+      "name": "VEP_NumberOfExons",
       "source_name": "sample"
     },
     "label": "Number of exons"
   },
   {
     "field": {
-      "name": "INFO_NumberOfIntrons",
+      "name": "VEP_NumberOfIntrons",
       "source_name": "sample"
     },
     "label": "Number of introns"
+  },
+  {
+    "field": {
+      "name": "VEP_SWISSPROT",
+      "source_name": "sample"
+    },
+    "label": "Swiss-Prot"
+  },
+  {
+    "field": {
+      "name": "VEP_VARIANT_CLASS",
+      "source_name": "sample"
+    },
+    "label": "Sequence Ontology"
+  },
+  {
+    "field": {
+      "name": "VEP_TREMBL",
+      "source_name": "sample"
+    },
+    "label": "TReMBL"
+  },
+  {
+    "field": {
+      "name": "VEP_MOTIF_NAME",
+      "source_name": "sample"
+    },
+    "label": "TFBS"
+  },
+  {
+    "field": {
+      "name": "VEP_MOTIF_POS",
+      "source_name": "sample"
+    },
+    "label": "TFBS  position"
+  },
+  {
+    "field": {
+      "name": "VEP_HIGH_INF_POS",
+      "source_name": "sample"
+    },
+    "label": "TFBS important position"
+  },
+  {
+    "field": {
+      "name": "VEP_MOTIF_SCORE_CHANGE",
+      "source_name": "sample"
+    },
+    "label": "TFBS score change"
+  },
+  {
+    "field": {
+      "name": "VEP_CELL_TYPE",
+      "source_name": "sample"
+    },
+    "label": "Cell type"
+  },
+  {
+    "field": {
+      "name": "VEP_CANONICAL",
+      "source_name": "sample"
+    },
+    "label": "If canonical gene"
+  },
+  {
+    "field": {
+      "name": "VEP_DOMAINS",
+      "source_name": "sample"
+    },
+    "label": "Domains"
+  },
+  {
+    "field": {
+      "name": "VEP_ZYG",
+      "source_name": "sample"
+    },
+    "label": "Zygosity"
+  },
+  {
+    "field": {
+      "name": "VEP_SV",
+      "source_name": "sample"
+    },
+    "label": "Overlapping structural variant analysis"
+  },
+  {
+    "field": {
+      "name": "VEP_TSL",
+      "source_name": "sample"
+    },
+    "label": "Transcripts "
+  },
+  {
+    "field": {
+      "name": "VEP_PUBMED",
+      "source_name": "sample"
+    },
+    "label": "PubMed"
+  },
+  {
+    "field": {
+      "name": "VEP_SOMATIC",
+      "source_name": "sample"
+    },
+    "label": "Somatic mutation"
+  },
+  {
+    "field": {
+      "name": "VEP_PHENO",
+      "source_name": "sample"
+    },
+    "label": "Phenotype"
+  },
+  {
+    "field": {
+      "name": "VEP_GENE_PHENO",
+      "source_name": "sample"
+    },
+    "label": "Cell phenotype"
   }
 ]

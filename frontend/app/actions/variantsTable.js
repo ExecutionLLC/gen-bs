@@ -194,8 +194,8 @@ export function createComment(alt, pos, reference, chrom, searchKey, comment) {
             comment
         };
 
-        const {auth: {sessionId}, ui: {languageId}} = getState();
-        commentsClient.add(sessionId, languageId, commentObject,
+        const {ui: {languageId}} = getState();
+        commentsClient.add(languageId, commentObject,
             (error, response) => {
                 if (error) {
                     dispatch(handleError(null, ADD_COMMENT_NETWORK_ERROR));
@@ -211,7 +211,7 @@ export function createComment(alt, pos, reference, chrom, searchKey, comment) {
 
 export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
 
         const commentObject = {
             id,
@@ -223,8 +223,7 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
             comment
         };
 
-        const sessionId = getState().auth.sessionId;
-        commentsClient.update(sessionId, commentObject,
+        commentsClient.update(commentObject,
             (error, response) => {
                 if (error) {
                     dispatch(handleError(null, UPDATE_COMMENT_NETWORK_ERROR));
@@ -240,9 +239,8 @@ export function updateComment(id, alt, pos, ref, chrom, searchKey, comment) {
 
 export function removeComment(id, searchKey) {
 
-    return (dispatch, getState) => {
-        const sessionId = getState().auth.sessionId;
-        commentsClient.remove(sessionId, id,
+    return (dispatch) => {
+        commentsClient.remove(id,
             (error, response) => {
                 if (error) {
                     dispatch(handleError(null, DELETE_COMMENT_NETWORK_ERROR));
@@ -263,9 +261,8 @@ export function fetchVariants(searchParams) {
         dispatch(requestVariants());
         dispatch(clearTableRowsSelection());
 
-        const {auth: {sessionId}, ui: {languageId}} = getState();
+        const {ui: {languageId}} = getState();
         searchClient.sendSearchRequest(
-            sessionId,
             languageId,
             searchParams.sampleId,
             searchParams.viewId,
@@ -321,12 +318,10 @@ export function searchInResultsNextData() {
         dispatch(requestSearchedResults({isNextDataLoading: true, isFilteringOrSorting: false}));
 
         const state = getState();
-        const sessionId = state.auth.sessionId;
         const operationId = state.variantsTable.operationId;
         const {offset, limit} = state.variantsTable.searchInResultsParams;
 
         searchClient.sendGetNextPartOfData(
-            sessionId,
             operationId,
             offset,
             limit,
@@ -350,12 +345,10 @@ export function searchInResults(flags) {
         dispatch(clearTableRowsSelection());
 
         const state = getState();
-        const sessionId = state.auth.sessionId;
         const operationId = state.variantsTable.operationId;
         const {search, sort, topSearch, limit, offset} = state.variantsTable.searchInResultsParams;
 
         searchClient.sendSearchInResultsRequest(
-            sessionId,
             operationId,
             topSearch,
             limit,

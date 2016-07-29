@@ -8,8 +8,8 @@ export default class DataClient extends ClientBase {
         super(urls);
     }
 
-    getUserData(sessionId, languageId, callback) {
+    getUserData(languageId, callback) {
         RequestWrapper.get(this.urls.data(),
-            this._makeHeaders({sessionId, languageId}), null, null, callback);
+            this._makeHeaders({languageId}), null, null, callback);
     }
 }

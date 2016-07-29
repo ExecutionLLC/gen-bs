@@ -8,10 +8,6 @@ class SearchOperation extends OperationBase {
         this.setSendCloseToAppServer(true);
     }
 
-    getType() {
-        return OperationBase.operationTypes().SEARCH;
-    }
-
     getLimit() {
         return this.limit;
     }

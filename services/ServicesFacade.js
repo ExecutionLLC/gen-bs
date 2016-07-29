@@ -20,7 +20,6 @@ const QueryHistoryService = require('./QueryHistoryService');
 const UserDataService = require('./UserDataService');
 const ObjectStorageService = require('./ObjectStorageService');
 
-const RedisService = require('./external/RedisService');
 const AmazonS3Service = require('./external/AmazonS3Service');
 const AliyunOSSService = require('./external/AliyunOSSService');
 
@@ -59,7 +58,6 @@ class ServiceFacade {
         this.applicationServerReply = new ApplicationServerReplyService(this);
         this.applicationServerSearch = new AppServerSearchService(this);
 
-        this.redis = new RedisService(this, models);
         this.amazonS3 = new AmazonS3Service(this, models);
         this.oss = new AliyunOSSService(this, models);
         this.objectStorage = new ObjectStorageService(this, models);

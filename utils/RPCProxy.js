@@ -9,14 +9,17 @@ const ChangeCaseUtil = require('./ChangeCaseUtil');
 class RPCProxy {
     /**
      * @param {string}host RabbitMQ host.
+     * @param {number}port
+     * @param {string}user
+     * @param {string}password
      * @param {string}requestExchangeName Name of the task queue.
      * @param {number}reconnectTimeout Timeout in milliseconds
      * @param {object}logger
      * @param {function(object)}replyCallback
      */
-    constructor(host, requestExchangeName, reconnectTimeout, logger, replyCallback) {
+    constructor(host, port, user, password, requestExchangeName, reconnectTimeout, logger, replyCallback) {
         Object.assign(this,
-            {host, requestExchangeName, reconnectTimeout, logger, replyCallback}, {
+            {host, port, user, password, requestExchangeName, reconnectTimeout, logger, replyCallback}, {
                 consumer: null,
                 publisher: null
             }
@@ -32,14 +35,14 @@ class RPCProxy {
             && this.consumer && this.consumer.isConnected();
     }
 
-    send(operationId, method, params, queryNameOrNull, callback) {
+    send(messageId, method, params, queryNameOrNull, callback) {
         if (!this.isConnected()) {
             callback(new Error('Connection to application server is lost.'));
         } else {
             const publisher = this.publisher;
             const replyQueue = this.consumer.getActualQueueName();
-            const message = this._constructMessage(operationId, method, replyQueue, params);
-            const messageParams = {replyTo: replyQueue, correlationId: operationId};
+            const message = this._constructMessage(messageId, method, replyQueue, params);
+            const messageParams = {replyTo: replyQueue, correlationId: messageId};
             // Can send requests either to a particular AS instance, or to the tasks exchange.
             if (queryNameOrNull) {
                 publisher.publishToQueue(queryNameOrNull, message, messageParams, callback);
@@ -53,8 +56,8 @@ class RPCProxy {
         this.messageReturnedHandler = handler;
     }
 
-    _constructMessage(operationId, method, replyTo, params) {
-        const message = {id: operationId, method, params, replyTo};
+    _constructMessage(id, method, replyTo, params) {
+        const message = {id, method, params, replyTo};
         return ChangeCaseUtil.convertKeysToSnakeCase(message);
     }
 
@@ -85,7 +88,7 @@ class RPCProxy {
 
         this.logger.info(`Connecting to RabbitMQ on ${this.host}`);
         async.waterfall([
-            (callback) => RabbitMqUtils.createConnection(this.host, callback),
+            (callback) => RabbitMqUtils.createConnection(this.host, this.port, this.user, this.password, callback),
             (connection, callback) => {
                 async.series({
                     publisher: (callback) => RabbitMqUtils.createPublisher(connection,

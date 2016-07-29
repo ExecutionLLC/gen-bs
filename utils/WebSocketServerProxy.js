@@ -15,8 +15,8 @@ class WebSocketServerProxy {
             this.clients.push(wsClient);
 
             wsClient.on('message', (messageString) => {
-                assert.ok(this.messageHandler);
-                this.messageHandler(wsClient, messageString);
+                this.messageHandler && this.messageHandler(wsClient, messageString);
+                !this.messageHandler && console.error('No handler is registered for client messages in web socket.');
             });
 
             wsClient.on('error', (error) => {

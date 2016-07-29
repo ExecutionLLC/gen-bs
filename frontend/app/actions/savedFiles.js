@@ -32,9 +32,6 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             ui: {
                 language
             },
-            auth: {
-                sessionId
-            },
             samplesList: {
                 selectedSampleId
             },
@@ -53,7 +50,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             url: null,
             totalResults
         };
-        savedFilesClient.add(language, sessionId, fileMetadata, fileBlob, (error, response) => {
+        savedFilesClient.add(language, fileMetadata, fileBlob, (error, response) => {
             if (error || response.status !== HttpStatus.OK) {
                 dispatch(handleError(response.status, ERROR_UPLOADING_EXPORTED_FILE));
             } else {
@@ -101,14 +98,11 @@ export function receiveSavedFilesList(savedFilesList) {
 export function downloadSavedFile(savedFile) {
     return (dispatch, getState) => {
         const {
-            auth: {
-                sessionId
-            },
             ui: {
                 language
             }
         } = getState();
-        savedFilesClient.download(language, sessionId, savedFile.id, (error, response) => {
+        savedFilesClient.download(language, savedFile.id, (error, response) => {
             if (error || response.status !== HttpStatus.OK) {
                 dispatch(handleError(response.status, ERROR_DOWNLOADING_EXPORTED_FILE));
             } else {

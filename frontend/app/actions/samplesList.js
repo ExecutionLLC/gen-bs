@@ -51,8 +51,7 @@ export function fetchSamples() {
     return (dispatch, getState) => {
         dispatch(requestSamples());
 
-        const sessionId = getState().auth.sessionId;
-        samplesClient.getAll(sessionId, (error, response) => {
+        samplesClient.getAll((error, response) => {
             if (error) {
                 dispatch(handleError(null, FETCH_SAMPLES_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
@@ -102,9 +101,9 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
 
 export function requestUpdateSampleFields(sampleId) {
     return (dispatch, getState) => {
-        const {auth: {sessionId}, samplesList: {editedSamplesHash, selectedSampleId}} = getState();
+        const {samplesList: {editedSamplesHash, selectedSampleId}} = getState();
         const sampleToUpdate = editedSamplesHash[sampleId];
-        samplesClient.update(sessionId, sampleToUpdate, (error, response) => {
+        samplesClient.update(sampleToUpdate, (error, response) => {
             if (error) {
                 dispatch(handleError(null, NETWORK_ERROR));
             } else {
