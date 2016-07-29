@@ -16,10 +16,9 @@ export default class FileUploadProgressBar extends Component {
         const { progressStatus, progressValue } = this.props;
 
         const STAGES = {
-            TOTAL: 2,
+            TOTAL: 1,
             'ajax': 0,
-            'task_running': 1,
-            'ready': 2
+            'task_running': 1
         };
 
         const currentStage = STAGES[progressStatus];
@@ -27,6 +26,8 @@ export default class FileUploadProgressBar extends Component {
             return null;
         }
         const currentProgress = currentStage < STAGES.TOTAL ? progressValue : 0;
-        return this.renderBar('Files processing', Math.round(100 * ((currentStage + currentProgress / 100) / STAGES.TOTAL)));
+        return this.renderBar('Your file is being processed...',
+            Math.round(100 * ((currentStage + currentProgress / 100) / STAGES.TOTAL))
+        );
     }
 }
