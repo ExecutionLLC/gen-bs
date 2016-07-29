@@ -215,5 +215,124 @@
       "source_name": "sample"
     },
     "label": "Number of introns"
+  },
+  {
+    "field": {
+      "name": "VEP_SWISSPROT",
+      "source_name": "sample"
+    },
+    "label": "Swiss-Prot"
+  },
+  {
+    "field": {
+      "name": "VEP_VARIANT_CLASS",
+      "source_name": "sample"
+    },
+    "label": "Sequence Ontology"
+  },
+  {
+    "field": {
+      "name": "VEP_TREMBL",
+      "source_name": "sample"
+    },
+    "label": "TReMBL"
+  },
+  {
+    "field": {
+      "name": "VEP_MOTIF_NAME",
+      "source_name": "sample"
+    },
+    "label": "TFBS"
+  },
+  {
+    "field": {
+      "name": "VEP_MOTIF_POS",
+      "source_name": "sample"
+    },
+    "label": "TFBS  position"
+  },
+  {
+    "field": {
+      "name": "VEP_HIGH_INF_POS",
+      "source_name": "sample"
+    },
+    "label": "TFBS important position"
+  },
+  {
+    "field": {
+      "name": "VEP_MOTIF_SCORE_CHANGE",
+      "source_name": "sample"
+    },
+    "label": "TFBS score change"
+  },
+  {
+    "field": {
+      "name": "VEP_CELL_TYPE",
+      "source_name": "sample"
+    },
+    "label": "Cell type"
+  },
+  {
+    "field": {
+      "name": "VEP_CANONICAL",
+      "source_name": "sample"
+    },
+    "label": "If canonical gene"
+  },
+  {
+    "field": {
+      "name": "VEP_DOMAINS",
+      "source_name": "sample"
+    },
+    "label": "Domains"
+  },
+  {
+    "field": {
+      "name": "VEP_ZYG",
+      "source_name": "sample"
+    },
+    "label": "Zygosity"
+  },
+  {
+    "field": {
+      "name": "VEP_SV",
+      "source_name": "sample"
+    },
+    "label": "Overlapping structural variant analysis"
+  },
+  {
+    "field": {
+      "name": "VEP_TSL",
+      "source_name": "sample"
+    },
+    "label": "Transcripts "
+  },
+  {
+    "field": {
+      "name": "VEP_PUBMED",
+      "source_name": "sample"
+    },
+    "label": "PubMed"
+  },
+  {
+    "field": {
+      "name": "VEP_SOMATIC",
+      "source_name": "sample"
+    },
+    "label": "Somatic mutation"
+  },
+  {
+    "field": {
+      "name": "VEP_PHENO",
+      "source_name": "sample"
+    },
+    "label": "Phenotype"
+  },
+  {
+    "field": {
+      "name": "VEP_GENE_PHENO",
+      "source_name": "sample"
+    },
+    "label": "Cell phenotype"
   }
 ]
