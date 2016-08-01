@@ -60,7 +60,7 @@ const columns = columnStrings
             params
         };
     })
-    .filter(col => !(col.params.hasOwnProperty('skip') || col.params.hasOwnProperty('hidden')));
+    .filter(col => !(col.params.hasOwnProperty('skip')));
 
 function cutQuotes(strOrArray) {
     if (_.isArray(strOrArray)) {
