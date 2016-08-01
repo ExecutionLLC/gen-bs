@@ -44,6 +44,8 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
                 session,
                 operation,
                 EVENTS.onSourcesListReceived,
+                session.id,
+                operation.getId(),
                 true,
                 ErrorUtils.createAppServerInternalError(message),
                 callback
@@ -80,6 +82,8 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
                 session,
                 operation,
                 EVENTS.onSourceMetadataReceived,
+                session.id,
+                operation.getId(),
                 true,
                 ErrorUtils.createAppServerInternalError(message),
                 callback

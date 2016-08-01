@@ -63,6 +63,8 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
                 session,
                 operation,
                 EVENTS.onKeepAliveResultReceived,
+                session.id,
+                operation.getId(),
                 true,
                 ErrorUtils.createAppServerInternalError(rpcMessage),
                 callback
