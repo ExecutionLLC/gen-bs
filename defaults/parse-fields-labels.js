@@ -16,13 +16,12 @@ const columnStrings = fs.readFileSync(__dirname + '/columns.txt')
 const columns = columnStrings
     .map(col => {
         const fieldName = col.substr(1, col.indexOf('"', 1) - 1);
-        const startIndex = col.indexOf('{');
-        const endIndex = col.indexOf('}');
-        if (startIndex === -1 || endIndex === -1) {
+        // Search trimmed string in {} as colDescriptionMatch[1]
+        const colDescriptionMatch = col.match(/{\s*([^}]*?)\s*}/);
+        if (!colDescriptionMatch) {
             throw new Error(`Field ${fieldName}: cannot find { or }.`);
         }
-        const params = col.substring(startIndex + 2, endIndex - 1)
-            .trim()
+        const params = colDescriptionMatch[1]
             // Each param is on it's own line.
             .split('\n')
             // Parse params to objects.
@@ -36,9 +35,10 @@ const columns = columnStrings
             })
             // Parse array values for params: [Something, "here"]
             .map(({name, rawValue}) => {
-                if (rawValue.startsWith('[') && rawValue.endsWith(']')) {
-                    const arr = rawValue.substring(rawValue.indexOf('[') + 1, rawValue.indexOf(']'))
-                        .trim()
+                // Search trimmed string in [], starting and ending with [ and ] as squaredMatch[1]
+                const squaredMatch = rawValue.match(/^\[\s*(.*?)\s*]$/);
+                if (squaredMatch) {
+                    const arr = squaredMatch[1]
                         .split(',')
                         .filter(val => val)
                         .map(val => val.trim());
@@ -66,8 +66,9 @@ function cutQuotes(strOrArray) {
     if (_.isArray(strOrArray)) {
         return strOrArray.map(cutQuotes);
     }
-    if (strOrArray.startsWith('"') && strOrArray.endsWith('"')) {
-        return strOrArray.substring(1, strOrArray.length - 1);
+    const quotedMatch = strOrArray.match(/^"(.*)"$/);
+    if (quotedMatch) {
+        return quotedMatch[1];
     }
     return strOrArray;
 }
