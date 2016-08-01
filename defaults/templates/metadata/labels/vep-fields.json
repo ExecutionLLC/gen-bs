@@ -1,6 +1,13 @@
 [
   {
     "field": {
+      "name": "VEP_Allele",
+      "source_name": "sample"
+    },
+    "label": "Allele"
+  },
+  {
+    "field": {
       "name": "VEP_Consequence",
       "source_name": "sample"
     },
@@ -50,6 +57,34 @@
   },
   {
     "field": {
+      "name": "VEP_EXON",
+      "source_name": "sample"
+    },
+    "label": "Exon"
+  },
+  {
+    "field": {
+      "name": "VEP_INTRON",
+      "source_name": "sample"
+    },
+    "label": "Intron"
+  },
+  {
+    "field": {
+      "name": "VEP_HGVSc",
+      "source_name": "sample"
+    },
+    "label": "HGVSc"
+  },
+  {
+    "field": {
+      "name": "VEP_HGVSp",
+      "source_name": "sample"
+    },
+    "label": "HGVSp"
+  },
+  {
+    "field": {
       "name": "VEP_cDNA_position",
       "source_name": "sample"
     },
@@ -89,6 +124,13 @@
       "source_name": "sample"
     },
     "label": "Existing variation"
+  },
+  {
+    "field": {
+      "name": "VEP_ALLELE_NUM",
+      "source_name": "sample"
+    },
+    "label": "ALLELE_NUM"
   },
   {
     "field": {
@@ -183,6 +225,13 @@
   },
   {
     "field": {
+      "name": "VEP_HGVSc_version",
+      "source_name": "sample"
+    },
+    "label": "HGVSc version"
+  },
+  {
+    "field": {
       "name": "VEP_HGVSp_nucleotide_changes",
       "source_name": "sample"
     },
@@ -194,6 +243,13 @@
       "source_name": "sample"
     },
     "label": "HGVSp protein"
+  },
+  {
+    "field": {
+      "name": "VEP_HGVSp_version",
+      "source_name": "sample"
+    },
+    "label": "HGVSp version"
   },
   {
     "field": {
@@ -249,7 +305,7 @@
       "name": "VEP_MOTIF_POS",
       "source_name": "sample"
     },
-    "label": "TFBS  position"
+    "label": "TFBS position"
   },
   {
     "field": {
