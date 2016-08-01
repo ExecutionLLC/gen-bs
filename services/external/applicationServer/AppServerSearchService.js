@@ -133,6 +133,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
         const sampleId = operation.getSampleId();
         const userId = operation.getUserId();
+        require('fs').writeFileSync('/home/vasily/app-server-data.json', JSON.stringify(sessionState.data));
 
         async.waterfall([
             (callback) => {
@@ -160,7 +161,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 });
             },
             ({rowData, user}, callback) => {
-                this._convertFields(rowData, user,sampleId, callback);
+                this._convertFields(rowData, user, sampleId, callback);
             }
         ], (error, asData) => {
             callback(error, asData);

@@ -15,8 +15,6 @@ const STATUSES = {
     ready: 'ready'
 };
 
-let databaseNumber = 2;
-
 class SearchHandler extends HandlerBase {
     constructor(services) {
         super(services);
@@ -57,21 +55,13 @@ class SearchHandler extends HandlerBase {
             }
         }));
 
-        let redisParams = {
-            host: 'localhost',
-            number: databaseNumber,
-            password: null,
-            port: 6379,
-            result_index: 'index:final'
-        };
-        let data = []
         async.waterfall([
             (callback) => {
                 sendResultCallback(Object.assign({}, openSessionProgress, {
                     sessionState: {
                         progress: 100,
                         status: STATUSES.ready,
-                        data
+                        data: mockData
                     }
                 }));
                 callback(null);
