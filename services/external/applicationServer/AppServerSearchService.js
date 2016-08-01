@@ -51,7 +51,9 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             this._createErrorOperationResult(
                 session,
                 operation,
-                EVENTS.onOperationResultReceived, 
+                EVENTS.onOperationResultReceived,
+                session.id,
+                operation.getId(),
                 false, 
                 ErrorUtils.createAppServerInternalError(message), 
                 callback
