@@ -82,7 +82,7 @@ describe('Search', function () {
                 const rows = endMessage.result.data;
                 const allFields = wsState.sourcesFields.concat(wsState.sampleFields);
 
-                const fieldIdToMetadata = _.indexBy(allFields, 'id');
+                const fieldIdToMetadata = _.keyBy(allFields, 'id');
 
                 // Check that all field ids from the data lay either in sample or in source fields.
                 _.each(rows, row => {
@@ -124,14 +124,29 @@ describe('Search', function () {
                             wsState.sample = sample;
                             wsState.sourcesFields = sourcesFields;
                             wsState.sampleFields = sampleFields;
+                            const analysis = {
+                                id :null,
+                                name: 'test name',
+                                description: 'test_descr',
+                                type: 'single',
+                                samples:[
+                                    {
+                                        id:sample.id,
+                                        type:'single'
+                                    }
+                                ],
+                                viewId:views[0].id,
+                                filterId:filters[0].id,
+                                modelId:filters[0].id
+                            };
 
-                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, wsState.sample.id,
-                                wsState.view.id, wsState.filter.id, wsState.limit, wsState.offset,
+                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId,analysis, wsState.limit, wsState.offset,
                                 (error, response) => {
                                 const body = ClientBase.readBodyWithCheck(error, response);
                                 const operationId = body.operationId;
                                 assert.ok(operationId);
                                 wsState.operationId = operationId;
+                                    // done()
                             });
                         });
                     });

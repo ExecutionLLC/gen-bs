@@ -28,7 +28,7 @@ class AnalysisService extends UserEntityServiceBase {
         if (this.services.users.isDemoUserId(user.id)) {
             return callback(null, null);
         }else {
-            const newAnalysys = {
+            const newAnalysis = {
                 creator:user.id,
                 name,
                 description,
@@ -39,7 +39,7 @@ class AnalysisService extends UserEntityServiceBase {
                 modelId,
                 samples
             };
-            super.add(user, languageId, newAnalysys, callback)
+            super.add(user, languageId, newAnalysis, callback)
         }
     }
 

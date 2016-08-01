@@ -100,20 +100,27 @@ class AnalysisModel extends SecureModelBase {
             );
     }
 
+    add(userId, languId, item, callback) {
+        async.waterfall([
+            (callback) => this._add(userId, languId, item, true, callback),
+            (itemId, callback) => this.find(userId, itemId, callback)
+        ], callback);
+    }
+
     _add(userId, languageId, analysis, shouldGenerateId, callback) {
         this.db.transactionally(
             (trx, callback) => {
                 this._addInTransaction(
-                    userId, analysis, shouldGenerateId, trx, callback
+                    userId,languageId, analysis, shouldGenerateId, trx, callback
                 );
             },
             callback
         );
     }
 
-    _addInTransaction(userId, analysis, shouldGenerateId, trx, callback) {
+    _addInTransaction(userId,languId, analysis, shouldGenerateId, trx, callback) {
         const {
-            languId, name, description, samples
+            name, description, samples
         } = analysis;
         async.waterfall(
             [
@@ -168,14 +175,15 @@ class AnalysisModel extends SecureModelBase {
 
     _createDataToInsert(userId, analysis, shouldGenerateId) {
         const {
-            id, viewId, filterId, modelId
+            id, viewId, filterId, modelId, type
         } = analysis;
         return {
             id: shouldGenerateId ? this._generateId() :id,
             creator: userId,
             viewId,
             filterId,
-            modelId
+            modelId,
+            type
         };
     }
 

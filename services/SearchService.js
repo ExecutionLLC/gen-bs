@@ -15,7 +15,7 @@ class SearchService extends ServiceBase {
         super(services, models);
 
         this._onSearchDataReceived = this._onSearchDataReceived.bind(this);
-        
+
         this.eventEmitter = new EventProxy(SEARCH_SERVICE_EVENTS.allValues);
     }
 
@@ -36,35 +36,75 @@ class SearchService extends ServiceBase {
         this.eventEmitter.off(eventName, callback);
     }
 
-    sendSearchRequest(user, session, languageId, sampleId, viewId, filterId, limit, offset, callback) {
-        const hasUndefOrNullParam = _.some([languageId, viewId, filterId, sampleId, limit, offset], (param) => {
-            return _.isUndefined(param) || _.isNull(param);
-        });
-
-        if (hasUndefOrNullParam) {
-            callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
-                    languId: languageId || 'undefined',
-                    viewId: viewId || 'undefined',
-                    filterId: filterId || 'undefined',
-                    sampleId: sampleId || 'undefined',
-                    limit: _.isNumber(limit) ? limit : 'undefined',
-                    offset: _.isNumber(offset) ? offset : 'undefined'
-                }, null, 2)));
-        } else {
-            async.waterfall([
-                (callback) => this.services.queryHistory.add(user, languageId, sampleId, viewId, filterId,
-                    (error) => callback(error)),
-                (callback) => this._createAppServerSearchParams(user, languageId, sampleId,
-                    viewId, filterId, limit, offset, callback),
-                (appServerRequestParams, callback) => this._validateAppServerSearchParams(appServerRequestParams,
+    sendSearchRequest(user, session, languageId, analysis, limit, offset, callback) {
+        const {id, name, description, type, samples, modelId, viewId, filterId} = analysis;
+        if (_.isUndefined(id) || _.isNull(id)) {
+            // this._sendSearchRequest(
+            //     languageId, viewId, filterId, name, description, type, samples, limit, offset, callback, user, session
+            // );
+            const hasUndefOrNullParam = _.some([languageId, viewId, filterId, modelId, name, description, type, samples, limit, offset], (param) => {
+                return _.isUndefined(param) || _.isNull(param);
+            });
+            if (hasUndefOrNullParam) {
+                callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
+                        languId: languageId || 'undefined',
+                        viewId: viewId || 'undefined',
+                        filterId: filterId || 'undefined',
+                        samples: samples || 'undefined',
+                        name: name || 'undefined',
+                        description: description || 'undefined',
+                        type: type || 'undefined',
+                        limit: _.isNumber(limit) ? limit : 'undefined',
+                        offset: _.isNumber(offset) ? offset : 'undefined'
+                    }, null, 2)));
+            } else {
+                async.waterfall(
+                    [
+                        (callback) => {
+                            this.services.analysis.add(
+                                user, languageId, name, description, type, viewId, filterId, modelId, samples, callback
+                            );
+                        },
+                        (analysis, callback) => {
+                            this._sendSearchRequest(
+                                user, session, languageId, viewId, filterId, samples, limit, offset, callback
+                            );
+                        }
+                    ],
                     callback
-                ),
-                (appServerRequestParams, callback) => {
-                    this.services.applicationServer.requestOpenSearchSession(session,
-                        appServerRequestParams, callback);
-                }
-            ], callback);
+                );
+            }
         }
+        else {
+            async.waterfall(
+                [
+                    (callback) => {
+                        this.services.analysis.find(user.id, id, callback);
+                    },
+                    (analysis, callback) => {
+                        const {samples, modelId, viewId, filterId} = analysis;
+                        this._sendSearchRequest(
+                            user, session, languageId, viewId, filterId, samples, limit, offset, callback
+                        );
+                    }
+                ],
+                callback
+            );
+        }
+    }
+
+    _sendSearchRequest(user, session, languageId, viewId, filterId, samples, limit, offset, callback) {
+        async.waterfall([
+            (callback) => this._createAppServerSearchParams(user, languageId, samples[0].id,
+                viewId, filterId, limit, offset, callback),
+            (appServerRequestParams, callback) => this._validateAppServerSearchParams(appServerRequestParams,
+                callback
+            ),
+            (appServerRequestParams, callback) => {
+                this.services.applicationServer.requestOpenSearchSession(session,
+                    appServerRequestParams, callback);
+            }
+        ], callback);
     }
 
     searchInResults(user, session, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
@@ -173,7 +213,7 @@ class SearchService extends ServiceBase {
 
             // Group comments by search key.
             (comments, callback) => {
-                const searchKeyToCommentHash = CollectionUtils.createMultiValueHash(comments, 
+                const searchKeyToCommentHash = CollectionUtils.createMultiValueHash(comments,
                     (comment) => comment.searchKey);
                 callback(null, searchKeyToCommentHash);
             }
@@ -220,20 +260,20 @@ class SearchService extends ServiceBase {
 
     _createAppServerSortValues(sortValues, callback) {
         async.map(sortValues, (sortValue, callback) => {
-            async.waterfall([
-                callback => {
-                    this.services.fieldsMetadata.find(sortValue.fieldId, callback);
-                },
-                (fieldMetadata, callback) => {
-                    callback(null, {
-                        fieldMetadata,
-                        sortOrder: sortValue.order,
-                        sortDirection: sortValue.direction
-                    });
-                }
-            ], callback);
-        },
-        callback);
+                async.waterfall([
+                    callback => {
+                        this.services.fieldsMetadata.find(sortValue.fieldId, callback);
+                    },
+                    (fieldMetadata, callback) => {
+                        callback(null, {
+                            fieldMetadata,
+                            sortOrder: sortValue.order,
+                            sortDirection: sortValue.direction
+                        });
+                    }
+                ], callback);
+            },
+            callback);
     }
 
     _createAppServerSearchParams(user, languId, sampleId, viewId, filterId, limit, offset, callback) {

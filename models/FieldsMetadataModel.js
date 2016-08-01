@@ -90,7 +90,7 @@ class FieldsMetadataModel extends ModelBase {
         async.waterfall([
             (callback) => this.models.samples.find(userId, sampleId, callback),
             (sample, callback) => {
-                const fieldIds = _.pluck(sample.values, 'fieldId');
+                const fieldIds = _.map(sample.values, 'fieldId');
                 this.findMany(fieldIds, callback);
             }
         ], callback);
@@ -176,7 +176,7 @@ class FieldsMetadataModel extends ModelBase {
                     if (error) {
                         callback(error);
                     } else {
-                        const sourceNames = _.pluck(ChangeCaseUtil.convertKeysToCamelCase(sources), 'sourceName');
+                        const sourceNames = _.map(ChangeCaseUtil.convertKeysToCamelCase(sources), 'sourceName');
                         callback(null, sourceNames);
                     }
                 });

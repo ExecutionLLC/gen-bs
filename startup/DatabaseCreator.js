@@ -509,7 +509,7 @@ class DatabaseCreator {
                     .references('id')
                     .inTable('vcf_file_sample_version')
                     .notNullable();
-                table.enu('sample_type',['single', 'proband', 'mother', 'father', 'tumor', 'normal'])
+                table.enu('sample_type', ['single', 'proband', 'mother', 'father', 'tumor', 'normal'])
                     .notNullable();
                 table.integer('order')
                     . notNullable();

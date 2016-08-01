@@ -79,6 +79,9 @@ class UserDataService extends ServiceBase {
                     queryHistory: (callback) => {
                         this.services.queryHistory.findAll(user, this.defaultLimit, 0, callback);
                     },
+                    analyses: (callback) =>{
+                        this.services.analysis.findAll(user, this.defaultLimit, 0, undefined, undefined, callback);
+                    },
                     savedFiles: (callback) => {
                         this.services.savedFiles.findAll(user, callback);
                     },

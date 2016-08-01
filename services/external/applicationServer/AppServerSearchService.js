@@ -82,7 +82,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     requestOpenSearchSession(session, params, callback) {
-        const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
+        const fieldIdToFieldMetadata = _.keyBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
 
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(params.sample);
