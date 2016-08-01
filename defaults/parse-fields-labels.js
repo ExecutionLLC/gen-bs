@@ -16,6 +16,11 @@ const columnStrings = fs.readFileSync(__dirname + '/columns.txt')
 const columns = columnStrings
     .map(col => {
         const fieldName = col.substr(1, col.indexOf('"', 1) - 1);
+        const startIndex = col.indexOf('{');
+        const endIndex = col.indexOf('}');
+        if (startIndex === -1 || endIndex === -1) {
+            throw new Error(`Field ${fieldName}: cannot find { or }.`);
+        }
         const params = col.substring(col.indexOf('{') + 2, col.indexOf('}') - 1)
             .trim()
             // Each param is on it's own line.
