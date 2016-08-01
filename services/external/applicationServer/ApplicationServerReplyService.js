@@ -79,17 +79,17 @@ class ApplicationServerReplyService extends ServiceBase {
         });
     }
 
+    _emitEvent(eventName, operationResult, callback) {
+        this.eventEmitter.emit(eventName, operationResult);
+        callback(null);
+    }
+
     /**
      * @callback ClientOperationResultCallback
      * @param {Error}error
      * @param {AppServerOperationResult}operationResult
      * @param {AppServerResult}appServerResult
      * */
-
-    _emitEvent(eventName, operationResult, callback) {
-        this.eventEmitter.emit(eventName, operationResult);
-        callback(null);
-    }
 
     /**
      * @callback OperationResultCallback
