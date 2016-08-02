@@ -126,10 +126,10 @@ export default function websocket(state = {
             });
         case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {
-                variantsView: action.view,
-                variantsSample: action.sample,
-                variantsFilter: action.filter,
-                variantsSampleFieldsList: action.sampleFields
+                variantsView: action.view, // used !variantsView, variantsView.viewListItems, variantsView.id,
+                variantsSamples: action.samples, // used variantsSample.fileName
+                variantsFilter: action.filter, // unused
+                variantsSampleFieldsList: action.sampleFields // used to check if field is requested
             });
         }
 
