@@ -82,7 +82,7 @@ export function analyze(searchParams) {
 
         dispatch(requestTableScrollPositionReset());
         dispatch(clearSearchParams());
-        dispatch(requestAnalyze(searchParamsLO));
+        dispatch(requestAnalyze());
         const searchView = viewIdToViewHash[searchParams.viewId];
         const searchSamples = _.map(searchParams.samples, (sample) => sampleIdToSampleHash[sample.id]);
         const searchFilter = filterIdToFilterHash[searchParams.filterId];

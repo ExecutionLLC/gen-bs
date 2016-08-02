@@ -7,7 +7,7 @@ import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../act
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, ws, searchParams} = this.props;
+        const {dispatch, fields, ws} = this.props;
         const {sort} = this.props.variantsTable.searchInResultsParams;
         const {isFetching} = this.props.variantsTable;
         const {
@@ -15,7 +15,7 @@ export default class VariantsTableHead extends Component {
             variantsSampleFieldsList: currentSampleFields
         } = ws;
 
-        if (!searchParams || !currentView) {
+        if (!currentView) {
             return (
                 <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
                 <tr />
