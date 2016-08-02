@@ -11,6 +11,7 @@ import immutableArray from '../../../utils/immutableArray';
 import {viewBuilderStartEdit} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit} from '../../../actions/filterBuilder';
 import {openModal} from '../../../actions/modalWindows';
+import {analyze} from '../../../actions/ui';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -692,7 +693,17 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onAnalyzeButtonClick() {
-
+        const {dispatch, historyItem} = this.props;
+        dispatch(analyze({
+            id: null,
+            name: historyItem.name,
+            description: historyItem.description,
+            type: historyItem.type,
+            samples: historyItem.samples,
+            viewId: historyItem.view.id,
+            filterId: historyItem.filter.id,
+            modelId: historyItem.model && historyItem.model.id || null
+        }));
     }
 
     onViewsClick() {

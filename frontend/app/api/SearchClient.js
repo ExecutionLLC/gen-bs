@@ -8,15 +8,13 @@ export default class SearchClient extends ClientBase {
         super(urls);
     }
 
-    sendSearchRequest(languId, sampleId, viewId, filterId, limit, offset, callback) {
+    sendSearchRequest(languId, analysis, limit, offset, callback) {
         RequestWrapper.post(
             this.urls.startSearch(),
             this._makeHeaders({languId}),
             {
                 languId,
-                sampleId,
-                viewId,
-                filterId,
+                analysis,
                 limit,
                 offset
             },

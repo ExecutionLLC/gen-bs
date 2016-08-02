@@ -3,6 +3,7 @@ import {requestAnalyze, requestSetCurrentParams} from './websocket';
 import {detachHistory} from './queryHistory';
 import {setViewVariantsSort} from './variantsTable';
 import {handleError} from './errorHandler';
+import * as _ from 'lodash';
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
@@ -35,31 +36,29 @@ export function toggleQueryNavbar() {
     };
 }
 
-export function analyze(sampleId, viewId, filterId) {
-    const limit = 100;
-    const offset = 0;
+/**
+ * @param {{id: string?, name: string, description: string, type: string, samples: {id: string, type: string}[], viewId: string, filterId: string, modelId: string?}} searchParams
+ * @returns {function(*, *)}
+ */
+export function analyze(searchParams) {
     return (dispatch, getState) => {
-        if (!sampleId || !viewId || !filterId) {
-            dispatch(handleError(null, ANALIZE_PARAMS_ERROR));
-            return;
-        }
-
-        const searchParams = {
-            sampleId,
-            viewId,
-            filterId,
-            limit,
-            offset
-        };
+        // TODO validate params
+        // if (!searchParams.samples || !searchParams.viewId || !searchParams.filterId) {
+        //     dispatch(handleError(null, ANALIZE_PARAMS_ERROR));
+        //     return;
+        // }
         const {
-            userData: {
-                attachedHistoryData: historyData
-            },
+            // userData: {
+            //     attachedHistoryData: historyData
+            // },
             samplesList: {
                 hashedArray: {hash: sampleIdToSampleHash}
             },
             filtersList: {
                 hashedArray: {hash: filterIdToFilterHash}
+            },
+            filtersList: {
+                hashedArray: {hash: modelIdToFilterHash} // TODO make models list
             },
             viewsList: {
                 hashedArray: {hash: viewIdToViewHash}
@@ -69,19 +68,27 @@ export function analyze(sampleId, viewId, filterId) {
             }
         } = getState();
 
-        const detachHistorySample = historyData.sampleId ? historyData.sampleId !== sampleId : false;
-        const detachHistoryFilter = historyData.filterId ? historyData.filterId !== filterId : false;
-        const detachHistoryView = historyData.viewId ? historyData.viewId !== viewId : false;
-        dispatch(detachHistory(detachHistorySample, detachHistoryFilter, detachHistoryView));
+        // TODO rid of detachHistory
+        // const detachHistorySample = historyData.sampleId ? historyData.sampleId !== searchParams.sampleId : false;
+        // const detachHistoryFilter = historyData.filterId ? historyData.filterId !== searchParams.filterId : false;
+        // const detachHistoryView = historyData.viewId ? historyData.viewId !== searchParams.viewId : false;
+        // dispatch(detachHistory(detachHistorySample, detachHistoryFilter, detachHistoryView));
+
+        const searchParamsLO = {
+            analyze: searchParams,
+            limit: 100,
+            offset: 0
+        };
 
         dispatch(requestTableScrollPositionReset());
         dispatch(clearSearchParams());
-        dispatch(requestAnalyze(searchParams));
-        const searchView = viewIdToViewHash[viewId];
-        const searchSample = sampleIdToSampleHash[sampleId];
-        const searchFilter = filterIdToFilterHash[filterId];
-        dispatch(requestSetCurrentParams(searchView, searchFilter, searchSample, sampleFieldsList));
+        dispatch(requestAnalyze(searchParamsLO));
+        const searchView = viewIdToViewHash[searchParams.viewId];
+        const searchSamples = _.map(searchParams.samples, (sample) => sampleIdToSampleHash[sample.id]);
+        const searchFilter = filterIdToFilterHash[searchParams.filterId];
+        const searchModel = modelIdToFilterHash[searchParams.modelId];
+        dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
-        dispatch(fetchVariants(searchParams));
+        dispatch(fetchVariants(searchParamsLO));
     };
 }
