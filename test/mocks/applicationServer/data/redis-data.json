@@ -1,2402 +1,3402 @@
 [
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "249152622",
-    "FILTER": "PASS",
-    "QUAL": "105.97",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33920652279809"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845471",
-    "FILTER": "PASS",
-    "QUAL": "735.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492708876289"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248845411",
-    "FILTER": "PASS",
-    "QUAL": "229.08",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33900518899713"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248844959",
-    "FILTER": "PASS",
-    "QUAL": "126.73",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492675321857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248844959",
-    "FILTER": "PASS",
-    "QUAL": "126.73",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492675321857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248844959",
-    "FILTER": "PASS",
-    "QUAL": "126.73",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492675321857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248844959",
-    "FILTER": "PASS",
-    "QUAL": "126.73",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492675321857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248844959",
-    "FILTER": "PASS",
-    "QUAL": "126.73",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492675321857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248844959",
-    "FILTER": "PASS",
-    "QUAL": "126.73",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492675321857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248844959",
-    "FILTER": "PASS",
-    "QUAL": "126.73",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51492675321857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248813135",
-    "FILTER": "PASS",
-    "QUAL": "1642.01",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33898403659777"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248813135",
-    "FILTER": "PASS",
-    "QUAL": "1642.01",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33898403659777"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248813135",
-    "FILTER": "PASS",
-    "QUAL": "1642.01",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33898403659777"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248813135",
-    "FILTER": "PASS",
-    "QUAL": "1642.01",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33898403659777"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248789504",
-    "FILTER": "PASS",
-    "QUAL": "808.33",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51489041022977"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248789454",
-    "FILTER": "PASS",
-    "QUAL": "796.43",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51489037746177"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248737645",
-    "FILTER": "PASS",
-    "QUAL": "505.71",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51485642391553"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248737645",
-    "FILTER": "PASS",
-    "QUAL": "505.71",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51485642391553"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248685253",
-    "FILTER": "PASS",
-    "QUAL": "2414.31",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51482208829441"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248652058",
-    "FILTER": "PASS",
-    "QUAL": "16.26",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33887847317505"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248616401",
-    "FILTER": "PASS",
-    "QUAL": "407.18",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33885510500353"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248570440",
-    "FILTER": "PASS",
-    "QUAL": "161.49",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33882498400257"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248551203",
-    "FILTER": "PASS",
-    "QUAL": "336.31",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51473423728641"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248551203",
-    "FILTER": "PASS",
-    "QUAL": "336.31",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51473423728641"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248525657",
-    "FILTER": "PASS",
-    "QUAL": "270.99",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33879563501569"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248525647",
-    "FILTER": "PASS",
-    "QUAL": "279.84",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33879562846209"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248487338",
-    "FILTER": "PASS",
-    "QUAL": "646.34",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33877052227585"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248487338",
-    "FILTER": "PASS",
-    "QUAL": "646.34",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33877052227585"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248458974",
-    "FILTER": "PASS",
-    "QUAL": "658.34",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "33875193364481"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248458875",
-    "FILTER": "PASS",
-    "QUAL": "572.17",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "CT",
-    "ID": ".",
-    "search_key": "104243931054081"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248458760",
-    "FILTER": "PASS",
-    "QUAL": "326.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33875179339777"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248458676",
-    "FILTER": "PASS",
-    "QUAL": "235.89",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51467359879169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248457979",
-    "FILTER": "PASS",
-    "QUAL": "687.61",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33875128156161"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248366792",
-    "FILTER": "PASS",
-    "QUAL": "310.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51461338169345"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248343990",
-    "FILTER": "PASS",
-    "QUAL": "528.06",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51459843817473"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248129240",
-    "FILTER": "PASS",
-    "QUAL": "601.36",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33853583917057"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248128929",
-    "FILTER": "PASS",
-    "QUAL": "128.38",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33853563535361"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248113121",
-    "FILTER": "PASS",
-    "QUAL": "156.33",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33852527542273"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248113026",
-    "FILTER": "PASS",
-    "QUAL": "2195.49",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "33852521316353"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248112627",
-    "FILTER": "PASS",
-    "QUAL": "998.14",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51444681211905"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248085341",
-    "FILTER": "PASS",
-    "QUAL": "170.75",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "33850706952193"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248085341",
-    "FILTER": "PASS",
-    "QUAL": "170.75",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "33850706952193"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248085124",
-    "FILTER": "PASS",
-    "QUAL": "735.96",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33850692730881"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248085124",
-    "FILTER": "PASS",
-    "QUAL": "735.96",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33850692730881"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248084511",
-    "FILTER": "PASS",
-    "QUAL": "1094.06",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51442838601729"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248084511",
-    "FILTER": "PASS",
-    "QUAL": "1094.06",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51442838601729"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248084473",
-    "FILTER": "PASS",
-    "QUAL": "196.75",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33850650066945"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248084473",
-    "FILTER": "PASS",
-    "QUAL": "196.75",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33850650066945"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248084464",
-    "FILTER": "PASS",
-    "QUAL": "1206.72",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51442835521537"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248084464",
-    "FILTER": "PASS",
-    "QUAL": "1206.72",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51442835521537"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248084434",
-    "FILTER": "PASS",
-    "QUAL": "249.71",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33850647511041"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248084434",
-    "FILTER": "PASS",
-    "QUAL": "249.71",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33850647511041"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248059856",
-    "FILTER": "PASS",
-    "QUAL": "306.59",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51441222811649"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248059856",
-    "FILTER": "PASS",
-    "QUAL": "306.59",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51441222811649"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248059712",
-    "FILTER": "PASS",
-    "QUAL": "721.56",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51441213374465"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248059712",
-    "FILTER": "PASS",
-    "QUAL": "721.56",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51441213374465"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248059703",
-    "FILTER": "PASS",
-    "QUAL": "682.89",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "33849026740225"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248059703",
-    "FILTER": "PASS",
-    "QUAL": "682.89",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "33849026740225"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248059476",
-    "FILTER": "PASS",
-    "QUAL": "116.97",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51441197907969"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248059476",
-    "FILTER": "PASS",
-    "QUAL": "116.97",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51441197907969"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248058845",
-    "FILTER": "PASS",
-    "QUAL": "2533.35",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51441156554753"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248058845",
-    "FILTER": "PASS",
-    "QUAL": "2533.35",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51441156554753"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248058761",
-    "FILTER": "PASS",
-    "QUAL": "620.63",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51441151049729"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248058761",
-    "FILTER": "PASS",
-    "QUAL": "620.63",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51441151049729"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248005213",
-    "FILTER": "PASS",
-    "QUAL": "1513.81",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33845455683585"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248005213",
-    "FILTER": "PASS",
-    "QUAL": "1513.81",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33845455683585"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248005213",
-    "FILTER": "PASS",
-    "QUAL": "1513.81",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51437641728001"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248005213",
-    "FILTER": "PASS",
-    "QUAL": "1513.81",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51437641728001"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248004884",
-    "FILTER": "PASS",
-    "QUAL": "2953.37",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51437620166657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248004884",
-    "FILTER": "PASS",
-    "QUAL": "2953.37",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51437620166657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248004848",
-    "FILTER": "PASS",
-    "QUAL": "2963.12",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51437617807361"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248004848",
-    "FILTER": "PASS",
-    "QUAL": "2963.12",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51437617807361"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248004614",
-    "FILTER": "PASS",
-    "QUAL": "2711.8",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33845416427521"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "248004614",
-    "FILTER": "PASS",
-    "QUAL": "2711.8",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33845416427521"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247978541",
-    "FILTER": "PASS",
-    "QUAL": "916.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "AAGG",
-    "ID": ".",
-    "search_key": "104212451885057"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247978541",
-    "FILTER": "PASS",
-    "QUAL": "916.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "AAGG",
-    "ID": ".",
-    "search_key": "104212451885057"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247978135",
-    "FILTER": "PASS",
-    "QUAL": "212.09",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33843681099777"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247978135",
-    "FILTER": "PASS",
-    "QUAL": "212.09",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33843681099777"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247978087",
-    "FILTER": "PASS",
-    "QUAL": "955.67",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33843677954049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247978087",
-    "FILTER": "PASS",
-    "QUAL": "955.67",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33843677954049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247921717",
-    "FILTER": "PASS",
-    "QUAL": "519.8",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33839983689729"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247835950",
-    "FILTER": "PASS",
-    "QUAL": "2425.52",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51426548908033"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247835950",
-    "FILTER": "PASS",
-    "QUAL": "2425.52",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51426548908033"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247752019",
-    "FILTER": "PASS",
-    "QUAL": "351.06",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51421048406017"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247695756",
-    "FILTER": "PASS",
-    "QUAL": "3138.21",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51417361154049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247695612",
-    "FILTER": "PASS",
-    "QUAL": "2779.1",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33825165672449"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247654498",
-    "FILTER": "PASS",
-    "QUAL": "2903.09",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33822471225345"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247654498",
-    "FILTER": "PASS",
-    "QUAL": "2903.09",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33822471225345"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247608167",
-    "FILTER": "PASS",
-    "QUAL": "339.21",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33819434876929"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247608167",
-    "FILTER": "PASS",
-    "QUAL": "339.21",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33819434876929"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247608167",
-    "FILTER": "PASS",
-    "QUAL": "339.21",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33819434876929"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247587477",
-    "FILTER": "PASS",
-    "QUAL": "1634.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33818078937089"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247587477",
-    "FILTER": "PASS",
-    "QUAL": "1634.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33818078937089"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247587477",
-    "FILTER": "PASS",
-    "QUAL": "1634.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33818078937089"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247419509",
-    "FILTER": "PASS",
-    "QUAL": "267.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51399257030657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247419509",
-    "FILTER": "PASS",
-    "QUAL": "267.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51399257030657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247419509",
-    "FILTER": "PASS",
-    "QUAL": "267.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51399257030657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247419509",
-    "FILTER": "PASS",
-    "QUAL": "267.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51399257030657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247419509",
-    "FILTER": "PASS",
-    "QUAL": "267.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51399257030657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247419509",
-    "FILTER": "PASS",
-    "QUAL": "267.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51399257030657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247419509",
-    "FILTER": "PASS",
-    "QUAL": "267.7",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51399257030657"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247319830",
-    "FILTER": "PASS",
-    "QUAL": "276.24",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33800538423297"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247319830",
-    "FILTER": "PASS",
-    "QUAL": "276.24",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33800538423297"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247163187",
-    "FILTER": "PASS",
-    "QUAL": "891.2",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51382458712065"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247163187",
-    "FILTER": "PASS",
-    "QUAL": "891.2",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51382458712065"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247163187",
-    "FILTER": "PASS",
-    "QUAL": "891.2",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51382458712065"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247163187",
-    "FILTER": "PASS",
-    "QUAL": "891.2",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51382458712065"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247163187",
-    "FILTER": "PASS",
-    "QUAL": "891.2",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51382458712065"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247150740",
-    "FILTER": "PASS",
-    "QUAL": "1122.82",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51381642985473"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247150740",
-    "FILTER": "PASS",
-    "QUAL": "1122.82",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51381642985473"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247150740",
-    "FILTER": "PASS",
-    "QUAL": "1122.82",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51381642985473"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247150475",
-    "FILTER": "PASS",
-    "QUAL": "62.32",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51381625618433"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247150475",
-    "FILTER": "PASS",
-    "QUAL": "62.32",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51381625618433"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247150475",
-    "FILTER": "PASS",
-    "QUAL": "62.32",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51381625618433"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109168",
-    "FILTER": "PASS",
-    "QUAL": "1642.65",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33786732478465"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109168",
-    "FILTER": "PASS",
-    "QUAL": "1642.65",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33786732478465"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109168",
-    "FILTER": "PASS",
-    "QUAL": "1642.65",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33786732478465"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109168",
-    "FILTER": "PASS",
-    "QUAL": "1642.65",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33786732478465"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109168",
-    "FILTER": "PASS",
-    "QUAL": "1642.65",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33786732478465"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109168",
-    "FILTER": "PASS",
-    "QUAL": "1642.65",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33786732478465"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109014",
-    "FILTER": "PASS",
-    "QUAL": "1447.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51378908430337"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109014",
-    "FILTER": "PASS",
-    "QUAL": "1447.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51378908430337"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109014",
-    "FILTER": "PASS",
-    "QUAL": "1447.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51378908430337"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109014",
-    "FILTER": "PASS",
-    "QUAL": "1447.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51378908430337"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109014",
-    "FILTER": "PASS",
-    "QUAL": "1447.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51378908430337"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247109014",
-    "FILTER": "PASS",
-    "QUAL": "1447.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51378908430337"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247048834",
-    "FILTER": "PASS",
-    "QUAL": "2292.91",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51374964473857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247048834",
-    "FILTER": "PASS",
-    "QUAL": "2292.91",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51374964473857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247048834",
-    "FILTER": "PASS",
-    "QUAL": "2292.91",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51374964473857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247048834",
-    "FILTER": "PASS",
-    "QUAL": "2292.91",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51374964473857"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247039256",
-    "FILTER": "PASS",
-    "QUAL": "3647.86",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51374336770049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247039256",
-    "FILTER": "PASS",
-    "QUAL": "3647.86",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51374336770049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247039256",
-    "FILTER": "PASS",
-    "QUAL": "3647.86",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51374336770049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247039256",
-    "FILTER": "PASS",
-    "QUAL": "3647.86",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "A",
-    "ID": ".",
-    "search_key": "51374336770049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247025207",
-    "FILTER": "PASS",
-    "QUAL": "1040.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33781230010369"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247025207",
-    "FILTER": "PASS",
-    "QUAL": "1040.22",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33781230010369"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247006051",
-    "FILTER": "PASS",
-    "QUAL": "1025.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51372160647169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247006051",
-    "FILTER": "PASS",
-    "QUAL": "1025.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51372160647169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247006051",
-    "FILTER": "PASS",
-    "QUAL": "1025.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51372160647169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247006051",
-    "FILTER": "PASS",
-    "QUAL": "1025.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51372160647169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247006051",
-    "FILTER": "PASS",
-    "QUAL": "1025.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51372160647169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247006051",
-    "FILTER": "PASS",
-    "QUAL": "1025.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51372160647169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247006051",
-    "FILTER": "PASS",
-    "QUAL": "1025.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51372160647169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "247006051",
-    "FILTER": "PASS",
-    "QUAL": "1025.98",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51372160647169"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246890158",
-    "FILTER": "PASS",
-    "QUAL": "132.82",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51364565483521"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246890158",
-    "FILTER": "PASS",
-    "QUAL": "132.82",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51364565483521"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246890158",
-    "FILTER": "PASS",
-    "QUAL": "132.82",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51364565483521"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246755124",
-    "FILTER": "PASS",
-    "QUAL": "2293.31",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51355715895297"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246755124",
-    "FILTER": "PASS",
-    "QUAL": "2293.31",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "51355715895297"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246720798",
-    "FILTER": "PASS",
-    "QUAL": "830.86",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33761280262145"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246714636",
-    "FILTER": "PASS",
-    "QUAL": "159.56",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "T",
-    "ID": ".",
-    "search_key": "33760876429313"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246714587",
-    "FILTER": "PASS",
-    "QUAL": "159.56",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "33760873218049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "246711787",
-    "FILTER": "PASS",
-    "QUAL": "331.95",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "AAT",
-    "ID": ".",
-    "search_key": "104129433894913"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245852005",
-    "FILTER": "PASS",
-    "QUAL": "16.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33704343044097"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245852005",
-    "FILTER": "PASS",
-    "QUAL": "16.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33704343044097"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245852005",
-    "FILTER": "PASS",
-    "QUAL": "16.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33704343044097"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245852005",
-    "FILTER": "PASS",
-    "QUAL": "16.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33704343044097"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245852005",
-    "FILTER": "PASS",
-    "QUAL": "16.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33704343044097"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245852005",
-    "FILTER": "PASS",
-    "QUAL": "16.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33704343044097"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245852005",
-    "FILTER": "PASS",
-    "QUAL": "16.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33704343044097"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245852005",
-    "FILTER": "PASS",
-    "QUAL": "16.46",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "A",
-    "REF": "C",
-    "ID": ".",
-    "search_key": "33704343044097"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245850506",
-    "FILTER": "PASS",
-    "QUAL": "169.76",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51296430850049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245850506",
-    "FILTER": "PASS",
-    "QUAL": "169.76",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51296430850049"
-  },
-  {
-    "common_no_known_medical_impact_20151201_INFO_RSPOS": ".",
-    "CHROM": "1",
-    "POS": "245850506",
-    "FILTER": "PASS",
-    "QUAL": "169.76",
-    "common_no_known_medical_impact_20151201_INFO_VP": ".",
-    "ALT": "C",
-    "REF": "G",
-    "ID": ".",
-    "search_key": "51296430850049"
-  }
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33920652279809,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 249152622,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 88.59,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492708876289,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845471,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1057.47,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33900518899713,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248845411,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 386.08,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492675321857,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248844959,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 15.1,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492675321857,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248844959,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 15.1,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492675321857,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248844959,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 15.1,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492675321857,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248844959,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 15.1,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492675321857,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248844959,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 15.1,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492675321857,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248844959,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 15.1,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51492675321857,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248844959,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 15.1,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33898403659777,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248813135,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 844.52,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33898403659777,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248813135,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 844.52,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33898403659777,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248813135,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 844.52,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33898403659777,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248813135,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 844.52,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51489041022977,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248789504,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 776.37,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51489037746177,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248789454,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 832.23,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51485642391553,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248737645,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 229.61,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51485642391553,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248737645,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 229.61,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51482208829441,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248685253,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1441.33,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33885510500353,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248616401,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 329,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33882498400257,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248570440,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 161.83,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51473423728641,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248551203,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 273.57,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51473423728641,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248551203,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 273.57,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33877052227585,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248487338,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 370.36,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33877052227585,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248487338,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 370.36,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33875193364481,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248458974,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 895.33,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 104243931054081,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248458875,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 780.56,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "CT",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33875179339777,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248458760,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 415.15,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51467359879169,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248458676,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 294.02,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33875128156161,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248457979,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 873.52,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51461338169345,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248366792,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 320.54,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51459843817473,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248343990,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 316.67,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33853583917057,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248129240,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 510.76,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33853563535361,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248128929,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 132.33,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33852527542273,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248113121,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 369.12,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33852521316353,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248113026,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 2313.04,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51444681211905,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248112627,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1027.94,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33850706952193,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248085341,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 246.69,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33850706952193,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248085341,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 246.69,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33850692730881,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248085124,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1080.69,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33850692730881,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248085124,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1080.69,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51442838601729,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248084511,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1126.01,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51442838601729,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248084511,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1126.01,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33850650066945,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248084473,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 262.54,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33850650066945,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248084473,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 262.54,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51442835521537,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248084464,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1353.4,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51442835521537,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248084464,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1353.4,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33850647511041,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248084434,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 293.39,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33850647511041,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248084434,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 293.39,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441222811649,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248059856,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 224.51,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441222811649,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248059856,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 224.51,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441213374465,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248059712,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 638.59,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441213374465,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248059712,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 638.59,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33849026740225,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248059703,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 697.65,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 33849026740225,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248059703,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 697.65,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441197907969,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248059476,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 45.83,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441197907969,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248059476,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 45.83,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441156554753,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248058845,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 2093.84,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441156554753,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248058845,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 2093.84,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "A",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441151049729,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248058761,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 482.25,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51441151049729,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248058761,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 482.25,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51437641728001,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248005213,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1767.7,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51437641728001,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248005213,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1767.7,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "G",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ],
+  [
+    {
+      "fieldValue": 1,
+      "fieldName": "CHROM"
+    },
+    {
+      "fieldValue": 51437620166657,
+      "fieldName": "search_key"
+    },
+    {
+      "fieldValue": 248004884,
+      "fieldName": "POS"
+    },
+    {
+      "fieldValue": "PASS",
+      "fieldName": "FILTER"
+    },
+    {
+      "fieldValue": 1499.38,
+      "fieldName": "QUAL"
+    },
+    {
+      "fieldValue": "C",
+      "fieldName": "ALT"
+    },
+    {
+      "fieldValue": "T",
+      "fieldName": "REF"
+    },
+    {
+      "fieldValue": ".",
+      "fieldName": "ID"
+    }
+  ]
 ]

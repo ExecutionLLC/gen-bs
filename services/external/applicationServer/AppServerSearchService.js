@@ -160,7 +160,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 });
             },
             ({rowData, user}, callback) => {
-                this._convertFields(rowData, user,sampleId, callback);
+                this._convertFields(rowData, user, sampleId, callback);
             }
         ], (error, asData) => {
             callback(error, asData);
