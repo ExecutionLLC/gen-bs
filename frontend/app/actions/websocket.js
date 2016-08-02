@@ -234,12 +234,12 @@ export function requestAnalyze() {
     };
 }
 
-export function requestSetCurrentParams(view, filter, sample, sampleFields) {
+export function requestSetCurrentParams(view, filter, samples, sampleFields) {
     return {
         type: REQUEST_SET_CURRENT_PARAMS,
         view,
         filter,
-        sample,
+        samples,
         sampleFields
     };
 }
