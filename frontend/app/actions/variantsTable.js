@@ -264,16 +264,7 @@ export function fetchVariants(searchParams) {
         const {ui: {languageId}} = getState();
         searchClient.sendSearchRequest(
             languageId,
-            {
-                id: searchParams.id,
-                name: searchParams.name,
-                description: searchParams.description,
-                type: searchParams.type,
-                samples: searchParams.samples,
-                viewId: searchParams.viewId,
-                filterId: searchParams.filterId,
-                modelId: searchParams.modelId
-            },
+            searchParams.analyze,
             searchParams.limit,
             searchParams.offset,
             (error, response) => {
