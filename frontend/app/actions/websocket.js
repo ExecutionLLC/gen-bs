@@ -205,7 +205,7 @@ export function subscribeToWs() {
 
 export function initWSConnection() {
     return (dispatch) => {
-        var conn = new WebSocket(config.URLS.WS + '/api/ws');
+        var conn = new WebSocket(`${config.URLS.WS}/api/ws`);
         dispatch([
             createWsConnection(conn),
             subscribeToWs()
