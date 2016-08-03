@@ -2,11 +2,11 @@
 
 const args = require('optimist').argv;
 
-const ModelsFacade = require('../models/ModelsFacade');
-const ServicesFacade = require('../services/ServicesFacade');
+const ModelsFacade = require('../../models/ModelsFacade');
+const ServicesFacade = require('../../services/ServicesFacade');
 
-const Config = require('../utils/Config');
-const Logger = require('../utils/Logger');
+const Config = require('../../utils/Config');
+const Logger = require('../../utils/Logger');
 
 const logger = new Logger(Config.logger);
 const models = new ModelsFacade(Config, logger);

@@ -1,12 +1,13 @@
 'use strict';
 
+const path = require('path');
 const _ = require('lodash');
 const async = require('async');
 
-const FsUtils = require('../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const FsUtils = require('../../../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
 
-const FieldsMetadataService = require('../services/FieldsMetadataService');
+const FieldsMetadataService = require('../../../services/FieldsMetadataService');
 
 /**
  * Imports initial data on the service start.
@@ -30,7 +31,7 @@ class InitialDataImportManager {
     }
 
     execute(callback) {
-        const defaultsDir = './defaults';
+        const defaultsDir = path.join(__dirname, '../../defaults');
 
         let result = {};
         async.waterfall([

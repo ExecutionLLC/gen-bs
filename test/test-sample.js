@@ -16,7 +16,7 @@ const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
 const samplesClient = new SamplesClient(urls);
 
-const EditableFieldsTemplates = require('../defaults/templates/metadata/editable-metadata.json');
+const EditableFieldsTemplates = require('./templates/metadata/editable-metadata.json');
 const TestUser = require('./mocks/mock-users.json')[1];
 
 describe.skip('One Sample', function () {

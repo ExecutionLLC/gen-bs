@@ -6,7 +6,7 @@ const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
-const EditableFields = require('../defaults/templates/metadata/editable-metadata.json');
+const EditableFields = require('./templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
