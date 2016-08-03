@@ -12,7 +12,6 @@ const ServicesFacade = require('../../services/ServicesFacade');
 const ControllersFacade = require('../../controllers/ControllersFacade');
 
 const MockUserModel = require('./MockUserModel');
-const MockRedisService = require('./MockRedisService');
 const MockSessionsService = require('./MockSessionsService');
 const MockSessionsController = require('./MockSessionsController');
 const MockWSController = require('./MockWSController');
@@ -53,10 +52,8 @@ class MockHost {
     }
 
     _setServicesMocks(services, models) {
-        services.redis = new MockRedisService(services, models);
         services.sessions = new MockSessionsService(services, models);
         // Initialization inside facade is already complete at this moment, so we need to call it by hand.
-        services.redis.init();
         services.sessions.init();
     }
 
