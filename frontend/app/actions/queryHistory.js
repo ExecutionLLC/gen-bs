@@ -189,15 +189,15 @@ export function renewHistoryItem(historyItemId) {
 
 export function attachHistory(historyItem) {
     return (dispatch, getState)=> {
-        const {userData:{attachedHistoryData: {sampleId, filterId, viewId}}} = getState();
+        const {userData:{attachedHistoryData: {sampleId, filterId, viewId}}, samplesList, filtersList, viewsList} = getState();
         const {collection: samples, historyItemId: newSampleId} = changeHistoryItem(
-            getState().samplesList.hashedArray.array, sampleId, historyItem.sample
+            samplesList.hashedArray.array, sampleId, historyItem.sample
         );
         const {collection: filters, historyItemId: newFilterId} = changeHistoryItem(
-            getState().filtersList.hashedArray.array, filterId, historyItem.filters[0]
+            filtersList.hashedArray.array, filterId, historyItem.filters[0]
         );
         const {collection: views, historyItemId: newViewId} = changeHistoryItem(
-            getState().viewsList.hashedArray.array, viewId, historyItem.view
+            viewsList.hashedArray.array, viewId, historyItem.view
         );
         dispatch([
             changeHistoryData(newSampleId, newFilterId, newViewId),
@@ -215,23 +215,15 @@ export function detachHistory(detachSample, detachFilter, detachView) {
         if (!detachSample && !detachFilter && !detachView) {
             return;
         }
-        const {userData, samplesList, filtersList, viewsList} = getState();
-        const attachedHistoryData = userData.attachedHistoryData;
-        const {
-            collection: samples,
-            historyItemId: sampleId
-        } = detachHistoryItemIfNeedIt(detachSample, samplesList.hashedArray.array, attachedHistoryData.sampleId);
-        const {
-            collection: filters,
-            historyItemId: filterId
-        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.hashedArray.array, attachedHistoryData.filterId);
-        const {
-            collection: views,
-            historyItemId: viewId
-        } = detachHistoryItemIfNeedIt(detachView, viewsList.hashedArray.array, attachedHistoryData.viewId);
-
+        const {userData: {attachedHistoryData: {sampleId, filterId, viewId}}, samplesList, filtersList, viewsList} = getState();
+        const {collection: samples, historyItemId: newSampleId } = detachHistoryItemIfNeedIt(
+            detachSample, samplesList.hashedArray.array, sampleId);
+        const {collection: filters, historyItemId: newFilterId} = detachHistoryItemIfNeedIt(
+            detachFilter, filtersList.hashedArray.array, filterId);
+        const {collection: views, historyItemId: newViewId} = detachHistoryItemIfNeedIt(
+            detachView, viewsList.hashedArray.array, viewId);
         dispatch([
-            changeHistoryData(sampleId, filterId, viewId),
+            changeHistoryData(newSampleId, newFilterId, newViewId),
             filtersListReceive(filters),
             viewsListReceive(views),
             changeSamples(samples)
