@@ -458,7 +458,7 @@ export default class AnalysisRightPane extends React.Component {
                     <button
                         className='btn btn-primary'
                         title='Click for analyze with analysis initial versions of filter and view'
-                        onClick={() => this.onAnalyzeButtonClick()}
+                        onClick={() => this.onAnalyzeButtonClick(isEditing)}
                     >
                         <span data-localize='query.analyze.title'>Analyze</span>
                     </button>
@@ -692,10 +692,10 @@ export default class AnalysisRightPane extends React.Component {
         this.props.dispatch(cancelQueryHistoryEdit(this.props.historyItem.id));
     }
 
-    onAnalyzeButtonClick() {
-        const {dispatch, historyItem} = this.props;
+    onAnalyzeButtonClick(isEditing) {
+        const {dispatch, historyItem, currentItemId} = this.props;
         dispatch(analyze({
-            id: null,
+            id: isEditing ? null : currentItemId,
             name: historyItem.name,
             description: historyItem.description,
             type: historyItem.type,

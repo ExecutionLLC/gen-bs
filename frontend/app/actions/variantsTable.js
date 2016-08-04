@@ -262,9 +262,12 @@ export function fetchVariants(searchParams) {
         dispatch(clearTableRowsSelection());
 
         const {ui: {languageId}} = getState();
-        searchClient.sendSearchRequest(
-            languageId,
-            searchParams.analyze,
+
+        const sendAPI = searchParams.analyze.id ?
+            searchClient.sendSearchAgainRequest.bind(searchClient, languageId, searchParams.analyze.id) :
+            searchClient.sendSearchRequest.bind(searchClient, languageId, searchParams.analyze);
+
+        sendAPI(
             searchParams.limit,
             searchParams.offset,
             (error, response) => {
