@@ -12,6 +12,7 @@ import {viewBuilderStartEdit} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit} from '../../../actions/filterBuilder';
 import {openModal} from '../../../actions/modalWindows';
 import {analyze} from '../../../actions/ui';
+import {closeModal} from '../../../actions/modalWindows';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -704,6 +705,7 @@ export default class AnalysisRightPane extends React.Component {
             filterId: historyItem.filter.id,
             modelId: historyItem.model && historyItem.model.id || null
         }));
+        dispatch(closeModal('analysis'));
     }
 
     onViewsClick() {
