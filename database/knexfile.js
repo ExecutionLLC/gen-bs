@@ -9,6 +9,8 @@ const {
     }
 } = require('./../utils/Config');
 
+console.log(`Using database '${database}' on ${host}:${port}`);
+
 // Table with metadata for Knex migrations.
 const migrationsTableName = 'knex_migrations';
 
