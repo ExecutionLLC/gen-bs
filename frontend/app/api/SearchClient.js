@@ -22,6 +22,20 @@ export default class SearchClient extends ClientBase {
         );
     }
 
+    sendSearchAgainRequest(languId, analysisId, limit, offset, callback) {
+        RequestWrapper.post(
+            this.urls.startSearchAgain(),
+            this._makeHeaders({languId}),
+            {
+                languId,
+                analysisId,
+                limit,
+                offset
+            },
+            callback
+        );
+    }
+
     sendSearchInResultsRequest(operationId, globalSearch, limit, offset,
                                fieldIdToSearchObject, fieldIdToOrderAndDirection, callback) {
         RequestWrapper.post(
