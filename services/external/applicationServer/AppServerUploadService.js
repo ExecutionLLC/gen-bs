@@ -106,7 +106,12 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         /**@type {string}*/
         const sampleId = operation.getSampleId();
         const sampleMetadata = result.metadata;
-        const fieldsMetadata = sampleMetadata.columns;
+        // Usual fields metadata. Values of these fields are the same for all genotypes.
+        const commonFieldsMetadata = sampleMetadata.columns;
+        // Array of names of the genotypes found in the file.
+        const genotypes = sampleMetadata.genotypes;
+        // Fields whose values are specific for the genotypes.
+        const genotypesFieldsMetadata = sampleMetadata.genotypeColumns;
         const sampleReference = sampleMetadata.reference;
         const sampleFileName = operation.getSampleFileName();
         const userId = operation.getUserId();
@@ -114,7 +119,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.users.find(userId, callback),
             (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
-                sampleFileName, sampleReference, fieldsMetadata, callback)
+                sampleFileName, sampleReference, commonFieldsMetadata, genotypes, genotypesFieldsMetadata, callback)
         ], (error, sampleVersionId) => {
             if (error) {
                 this.logger.error(`Error inserting new sample into database: ${error}`);

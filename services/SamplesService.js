@@ -43,9 +43,11 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
-    createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference, applicationServerFieldsMetadata, callback) {
+    createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference,
+                                    applicationServerCommonFieldsMetadata, genotypes,
+                                    genotypesFieldsMetadata, callback) {
         // Map AS fields metadata format into local.
-        const fieldsMetadata = _.map(applicationServerFieldsMetadata,
+        const fieldsMetadata = _.map(applicationServerCommonFieldsMetadata,
             appServerFieldMetadata => FieldsMetadataService.createFieldMetadata(sampleId, true, appServerFieldMetadata));
 
         const sample = {
