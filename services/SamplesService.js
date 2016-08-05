@@ -6,7 +6,7 @@ const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
-const EditableFields = require('./templates/metadata/editable-metadata.json');
+const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
@@ -44,11 +44,14 @@ class SamplesService extends UserEntityServiceBase {
     }
 
     createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference,
-                                    applicationServerCommonFieldsMetadata, genotypes,
-                                    genotypesFieldsMetadata, callback) {
+                                    asCommonFields, genotypes,
+                                    asGenotypesFields, callback) {
+        // Concat all fields into one array, as we don't need to internally separate them
+        // (and if we do, we will have 'GT_' prefix as a mark)
+        const appServerSampleFields = asCommonFields.concat(_.toArray(asGenotypesFields));
         // Map AS fields metadata format into local.
-        const fieldsMetadata = _.map(applicationServerCommonFieldsMetadata,
-            appServerFieldMetadata => FieldsMetadataService.createFieldMetadata(sampleId, true, appServerFieldMetadata));
+        const sampleFields = _.map(appServerSampleFields,
+            asField => FieldsMetadataService.createFieldMetadata(null, true, asField));
 
         const sample = {
             id: sampleId,
@@ -56,7 +59,7 @@ class SamplesService extends UserEntityServiceBase {
             hash: null
         };
 
-        this.theModel.addSampleWithFields(user.id, user.language, sample, fieldsMetadata, callback);
+        this.theModel.addSamplesWithFields(user.id, user.language, sample, sampleFields, genotypes, callback);
     }
 
     makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {

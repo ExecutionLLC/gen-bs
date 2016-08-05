@@ -20,7 +20,8 @@ const mappedColumns = [
 
 const SampleTableNames = {
     Metadata: 'vcf_file_sample',
-    Versions: 'vcf_file_sample_version',
+    Genotypes: 'sample_genotype',
+    Versions: 'genotype_version',
     Values: 'vcf_file_sample_value'
 };
 
@@ -29,11 +30,11 @@ class SamplesModel extends SecureModelBase {
         super(models, SampleTableNames.Metadata, mappedColumns);
     }
 
-    find(userId, sampleVersionId, callback) {
+    find(userId, genotypeVersionId, callback) {
         this.db.transactionally((trx, callback) => {
-            const sampleVersionIds = [sampleVersionId];
+            const genotypeVersionIds = [genotypeVersionId];
             async.waterfall([
-                (callback) => this._findManyInTransaction(trx, userId, sampleVersionIds, callback),
+                (callback) => this._findManyInTransaction(trx, userId, genotypeVersionIds, callback),
                 (samples, callback) => callback(null, samples[0])
             ], callback);
         }, callback);
@@ -51,9 +52,12 @@ class SamplesModel extends SecureModelBase {
                         .value();
                     callback(null, sampleIds);
                 },
+                (sampleIds, callback) => {
+                    this._findGenotypeIdsForSampleIds(sampleIds, trx, callback);
+                },
                 // Find last version for each sample
                 (sampleIds, callback) => {
-                    this._findLastVersionsBySampleIds(trx, sampleIds, callback);
+                    this._findLastVersionsByGenotypeIds(trx, sampleIds, callback);
                 },
                 // Use the find-many method to build the samples.
                 (versions, callback) => {
@@ -73,24 +77,32 @@ class SamplesModel extends SecureModelBase {
     /**
      * Adds sample with specified params, if it doesn't already exist in database.
      *
-     * @param userId The owner
-     * @param languId Language to use for texts.
-     * @param sample Sample metadata
-     * @param fieldsMetadata Fields metadata. New fields will be added, existing fields will be reused.
-     * @param callback (error, sampleVersionId)
+     * @param {Uuid}userId The owner
+     * @param {string}languId Language to use for texts.
+     * @param {object}sample Sample metadata
+     * @param {Array<Object>}fields Fields metadata. New fields will be added, existing fields will be reused.
+     * @param {Array<string>}genotypes List of genotype names found in the sample
+     * @param {function(Error, string)} callback (error, sampleVersionId)
      * */
-    addSampleWithFields(userId, languId, sample, fieldsMetadata, callback) {
+    addSamplesWithFields(userId, languId, sample, fields, genotypes, callback) {
+        // To insert samples we need to:
+        // 0. check that sample doesn't exist in the database
+        // (in case message has already been consumed but wasn't marked as complete in RMQ)
+        // 1. insert sample metadata
+        // 2. insert genotypes list and retrieve their ids
+        // 3. create versions for each of the genotypes
+        // 4. add fields for each version created
         const sampleId = sample.id;
         this.db.transactionally((trx, callback) => {
             // Check that the sample is not yet inserted, to be graceful to messages redelivered by RabbitMQ.
-            this._findLastVersionsBySampleIds(trx, [sampleId], (error, versionIds) => {
+            this._findLastVersionsByGenotypeIds(trx, [sampleId], (error, versionIds) => {
                 // TODO: Fix here not to ignore the error.
                 if (error || _.isEmpty(versionIds)) {
                     // Sample is not found, so insert it.
                     async.waterfall([
                         // Add all fields that aren't exist yet and get ids and metadata of all the fields for the sample.
                         (callback) =>
-                            this.models.fields.addMissingFields(languId, fieldsMetadata, trx, (error, fieldsWithIds) => {
+                            this.models.fields.addMissingFields(languId, fields, trx, (error, fieldsWithIds) => {
                                 callback(error, fieldsWithIds);
                             }),
                         // Add editable fields to the field list.
@@ -108,16 +120,15 @@ class SamplesModel extends SecureModelBase {
                         },
                         // Create entries for 'vcf_file_sample_values' table to keep field-to-sample connection.
                         (fieldsWithIds, callback) => {
-                            const sampleWithValues = _.cloneDeep(sample);
-                            sampleWithValues.values = _.map(fieldsWithIds, fieldWithId => {
-                                return {
+                            const sampleWithValues = Object.assign({}, sample, {
+                                values: _.map(fieldsWithIds, fieldWithId => ({
                                     fieldId: fieldWithId.id,
                                     value: null
-                                }
+                                }))
                             });
 
                             // Add sample entries and return version id.
-                            this._addInTransaction(userId, sampleWithValues, false, trx, callback);
+                            this._addInTransaction(userId, sampleWithValues, genotypes, false, trx, callback);
                         }
                     ], callback);
                 } else {
@@ -173,8 +184,8 @@ class SamplesModel extends SecureModelBase {
                     };
                     this._unsafeUpdate(sampleId, dataToUpdate, trx, (error) => callback(error, sampleId));
                 },
-                (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, callback),
-                (versionId, callback) => this._addFileSampleValues(trx, versionId, sampleToUpdate.values,
+                (sampleId, callback) => this._addNewGenotypeVersion(sampleId, trx, callback),
+                (versionId, callback) => this._addGenotypeValues(trx, versionId, sampleToUpdate.values,
                     (error) => callback(error, versionId)),
                 (versionId, callback) => this._findManyInTransaction(trx, userId, [versionId], callback),
                 (samples, callback) => callback(null, samples[0])
@@ -183,12 +194,12 @@ class SamplesModel extends SecureModelBase {
     }
 
     _setAnalyzed(sampleId, value, trx, callback) {
-        trx(this.baseTableName)
+        trx(SampleTableNames.Metadata)
             .where('id', sampleId)
-            .update({
-                is_analyzed: value,
-                analyzed_timestamp: value ? this.db.knex.fn.now() : null
-            })
+            .update(ChangeCaseUtil.convertKeysToSnakeCase({
+                isAnalyzed: value,
+                analyzedTimestamp: value ? this.db.knex.fn.now() : null
+            }))
             .asCallback((error) => {
                 callback(error, sampleId);
             });
@@ -196,58 +207,93 @@ class SamplesModel extends SecureModelBase {
 
     _add(userId, languId, sample, shouldGenerateId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._addInTransaction(userId, sample, shouldGenerateId, trx, callback);
+            this._addInTransaction(userId, sample, null, shouldGenerateId, trx, callback);
         }, callback);
+    }
+
+    _findGenotypeIdsForSampleIds(sampleIds, trx, callback) {
+        trx(SampleTableNames.Genotypes)
+            .select('id')
+            .whereIn('vcf_file_sample_id', sampleIds)
+            .map(result => result.id)
+            .asCallback(callback);
     }
 
     /**
      * @param {Uuid} userId The owner
      * @param {Object} sample Sample metadata to add.
+     * @param {Array<string>}genotypesOrNull List of genotype names in the sample.
+     * If null, one genotype with NULL-name will be added.
      * @param {boolean} shouldGenerateId If true, id will be generated.
      * @param {KnexTransaction} trx Knex transaction
      * @param {function(Error, Uuid)} callback (error, sampleVersionId)
      * */
-    _addInTransaction(userId, sample, shouldGenerateId, trx, callback) {
+    _addInTransaction(userId, sample, genotypesOrNull, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
                 const dataToInsert = this._createDataToInsert(userId, sample, shouldGenerateId);
                 this._insert(dataToInsert, trx, callback);
             },
             (sampleId, callback) => this._setAnalyzed(sampleId, sample.isAnalyzed || false, trx, callback),
-            (sampleId, callback) => this._addNewFileSampleVersion(sampleId, trx, (error, versionId) => {
-                callback(error, {
-                    sampleId,
-                    versionId
-                });
-            }),
-            (sampleObj, callback) => this._addFileSampleValues(trx, sampleObj.versionId, sample.values, (error) => {
-                callback(error, sampleObj.versionId);
-            })
+            (sampleId, callback) => this._createGenotypes(sampleId, genotypesOrNull, trx,
+                (error, genotypeIds) => callback(error, sampleId, genotypeIds)),
+            (sampleId, genotypeIds, callback) => async.map(genotypeIds,
+                (genotypeId, callback) => this._addNewGenotypeVersion(sampleId, trx, callback),
+                (error, genotypeVersionIds) => callback(error, sampleId, genotypeIds, genotypeVersionIds)),
+            (sampleId, genotypeIds, genotypeVersionIds, callback) => {
+                // Each genotype should have different fields.
+                async.each(genotypeVersionIds, (genotypeVersionId, callback) => {
+                    this._addGenotypeValues(trx, genotypeVersionId, sample.values, callback)
+                }, (error) => callback(error, genotypeVersionIds))
+            }
         ], callback);
     }
 
-    _addNewFileSampleVersion(sampleId, trx, callback) {
-        const dataToInsert = {
-            id: this._generateId(),
-            vcfFileSampleId: sampleId
-        };
-        this._unsafeInsert(SampleTableNames.Versions, dataToInsert, trx, callback);
+    /**
+     * @param {Uuid}sampleId
+     * @param {Array<string>}genotypesOrNull
+     * @param {KnexTransaction}trx
+     * @param {function(Error, Array<Uuid>)}callback
+     * */
+    _createGenotypes(sampleId, genotypesOrNull, trx, callback) {
+        const genotypes = genotypesOrNull || [null];
+        async.map(genotypes, (genotypeName, callback) => {
+            const genotypeId = this._generateId();
+            trx(SampleTableNames.Genotypes)
+                .insert(ChangeCaseUtil.convertKeysToSnakeCase({
+                    id: genotypeId,
+                    vcfFileSampleId: sampleId,
+                    genotypeName
+                }))
+                .asCallback((error) => callback(error, genotypeId))
+        }, callback);
+    }
+
+    _addNewGenotypeVersion(genotypeId, trx, callback) {
+        const genotypeVersionId = this._generateId();
+        trx(SampleTableNames.Versions)
+            .insert(ChangeCaseUtil.convertKeysToSnakeCase({
+                id: genotypeVersionId,
+                sampleGenotypeId: genotypeId,
+                timestamp: new Date()
+            }))
+            .asCallback((error) => callback(error, genotypeVersionId));
     }
 
     /**
      * Adds sample values into vcf_file_sample_value table.
      *
-     * @param {Object} trx Knex transaction object.
-     * @param {string} versionId Id of the sample version.
-     * @param {Array} values array of the sample values, each of form {fieldId, values (string value for the table column)}.
-     * @param {function(Error, Array)} callback (error, resulting values list)
+     * @param {Object}trx Knex transaction object.
+     * @param {string}versionId Id of the sample genotype version.
+     * @param {Array}values array of the sample values, each of form {fieldId, values (string value for the table column)}.
+     * @param {function(Error, Array<Object>)}callback (error, resulting values list)
      * */
-    _addFileSampleValues(trx, versionId, values, callback) {
-        async.map(values, (value, callback) => {
+    _addGenotypeValues(trx, versionId, values, callback) {
+        async.map(values, ({fieldId, values}, callback) => {
             const dataToInsert = {
-                vcfFileSampleVersionId: versionId,
-                fieldId: value.fieldId,
-                values: value.values
+                genotypeVersionId: versionId,
+                fieldId,
+                values
             };
             this._unsafeInsert(SampleTableNames.Values, dataToInsert, trx, callback);
         }, callback);
@@ -264,7 +310,7 @@ class SamplesModel extends SecureModelBase {
         // Find last version and compare with the specified.
         async.waterfall([
             (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
-            (sampleId, callback) => this._findLastVersionsBySampleIds(trx, [sampleId],
+            (sampleId, callback) => this._findLastVersionsByGenotypeIds(trx, [sampleId],
                 (error, lastVersions) => callback(error, _.first(lastVersions))),
             (version, callback) => {
                 if (version.versionId === sampleVersionId) {
@@ -276,10 +322,10 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
-    _findManyInTransaction(trx, userId, sampleVersionIds, callback) {
+    _findManyInTransaction(trx, userId, genotypeVersionIds, callback) {
         async.waterfall([
-            (callback) => this._findSampleVersionsByVersionIds(trx, sampleVersionIds, callback),
-            (sampleVersions, callback) => this._ensureAllItemsFound(sampleVersions, sampleVersionIds, callback),
+            (callback) => this._findVersionObjectsByVersionIds(trx, genotypeVersionIds, callback),
+            (sampleVersions, callback) => this._ensureAllItemsFound(sampleVersions, genotypeVersionIds, callback),
             (sampleVersions, callback) => {
                 // Here we can have request for different versions of the same sample. Load metadata only once.
                 const sampleIds = _(sampleVersions)
@@ -299,17 +345,22 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    _createSamplesWithValues(trx, samplesMetadata, sampleVersions, callback) {
-        const versionIds = _.map(sampleVersions, version => version.versionId);
+    /**
+     * @param trx
+     * @param {Array<Object>}samplesMetadata
+     * @param {Array<GenotypeVersionObject>}genotypeVersions
+     * @param {function(Error, Array<Object>)}callback
+     * */
+    _createSamplesWithValues(trx, samplesMetadata, genotypeVersions, callback) {
+        const versionIds = _.map(genotypeVersions, version => version.versionId);
         async.waterfall([
             (callback) => this._findValuesForVersions(trx, versionIds, callback),
             (values, callback) => {
-                const samplesValues = _.groupBy(values, 'vcfFileSampleVersionId');
+                const samplesValues = _.groupBy(values, 'genotypeVersionId');
                 const sampleIdToMetadataHash = CollectionUtils.createHashByKey(samplesMetadata, 'id');
-                const resultSamples = sampleVersions
-                    .map(sampleVersion => {
-                        const sampleId = sampleVersion.sampleId;
-                        const versionId = sampleVersion.versionId;
+                const resultSamples = genotypeVersions
+                    .map(genotypeVersion => {
+                        const {sampleId, versionId} = genotypeVersion;
                         const sampleMetadata = sampleIdToMetadataHash[sampleId];
                         return Object.assign({}, sampleMetadata, {
                             id: versionId,
@@ -322,11 +373,11 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
-    _findValuesForVersions(trx, sampleVersionIds, callback) {
+    _findValuesForVersions(trx, genotypeVersionIds, callback) {
         async.waterfall([
             (callback) => trx.select()
                 .from(SampleTableNames.Values)
-                .whereIn('vcf_file_sample_version_id', sampleVersionIds)
+                .whereIn('genotype_version_id', genotypeVersionIds)
                 .asCallback((error, rows) => callback(error, rows)),
             (rows, callback) => this._toCamelCase(rows, callback)
         ], (error, rows) => {
@@ -334,18 +385,47 @@ class SamplesModel extends SecureModelBase {
         });
     }
 
-    _findSampleVersionsByVersionIds(trx, sampleVersionIds, callback) {
+    /**
+     * @typedef {Object}GenotypeVersionObject
+     * @property {Uuid}genotypeId Id of the sample genotype.
+     * @property {Uuid}sampleId Id of the sample to which the genotype belongs.
+     * @property {Uuid}versionId Id of the genotype version.
+     * @property {string}genotypeName Name of the genotype.
+     * */
+
+    /**
+     * @param trx
+     * @param {Array<Uuid>}genotypeVersionIds
+     * @param {function(Error, GenotypeVersionObject)}callback
+     * */
+    _findVersionObjectsByVersionIds(trx, genotypeVersionIds, callback) {
+        const genotypeVersionIdColumnName = `${SampleTableNames.Versions}.id`;
+        const sampleIdColumnName = `${SampleTableNames.Genotypes}.sample_id`;
+        const genotypeIdColumnName = `${SampleTableNames.Genotypes}.id`;
+        const genotypeNameColumnName = `${SampleTableNames.Genotypes}.genotype_name`;
+
         async.waterfall([
-            (callback) => trx.select()
+            (callback) => trx.select(
+                genotypeVersionIdColumnName,
+                sampleIdColumnName,
+                genotypeIdColumnName,
+                genotypeNameColumnName
+            )
                 .from(SampleTableNames.Versions)
-                .whereIn('id', sampleVersionIds)
+                .leftJoin(SampleTableNames.Genotypes,
+                    `${SampleTableNames.Genotypes}.id`, `${SampleTableNames.Versions}.sample_genotype_id`)
+                .whereIn('id', genotypeVersionIds)
                 .orderBy('timestamp', 'desc')
                 .asCallback((error, results) => callback(error, results)),
-            (results, callback) => this._toCamelCase(results, callback)
+            (versionObjects, callback) => this._toCamelCase(versionObjects, callback),
+            (versionObjects, callback) => callback(null, _.map(versionObjects, (versionObj) => ({
+                genotypeId: versionObj[genotypeIdColumnName],
+                genotypeName: versionObj[genotypeNameColumnName],
+                versionId: versionObj[genotypeVersionIdColumnName],
+                sampleId: versionObj[sampleIdColumnName]
+            })))
         ], (error, versions) => {
-            const mappedVersions = _.map(versions, (version) =>
-                this._mapDatabaseSampleVersionToObject(version));
-            callback(error, mappedVersions);
+            callback(error, versions);
         });
     }
 
@@ -395,26 +475,26 @@ class SamplesModel extends SecureModelBase {
      * Finds last version id for each sample id in array.
      *
      * @param trx Knex transaction.
-     * @param {Array<string>}sampleIds Array of sample ids to search versions for.
+     * @param {Array<string>}genotypeIds Array of sample genotype ids to search versions for.
      * @param callback (error, versions). Each version is an object
      * which has 'sampleId' and 'versionId' fields.
      * */
-    _findLastVersionsBySampleIds(trx, sampleIds, callback) {
-        const sampleIdsInQuotes = _.map(sampleIds, id => '\'' + id + '\'');
+    _findLastVersionsByGenotypeIds(trx, genotypeIds, callback) {
+        const genotypeIdsInQuotes = _.map(genotypeIds, id => '\'' + id + '\'');
         async.waterfall([
             (callback) => trx.raw(
-                    'SELECT DISTINCT ON (vcf_file_sample_id)'
-                    + ' vcf_file_sample_id'
-                    + ', LAST_VALUE(id) OVER wnd AS id'
-                    + ', LAST_VALUE(timestamp) OVER wnd AS last_version_timestamp'
-                    + ' FROM vcf_file_sample_version'
-                    + ' WHERE vcf_file_sample_id IN'
-                    + ' (' + sampleIdsInQuotes.join(', ') + ')'
-                    + ' WINDOW wnd AS'
-                    + ' (PARTITION BY vcf_file_sample_id ORDER BY timestamp DESC)'
-                )
+                'SELECT DISTINCT ON (sample_genotype_id)'
+                + ' sample_genotype_id'
+                + ', LAST_VALUE(id) OVER wnd AS id'
+                + ', LAST_VALUE(timestamp) OVER wnd AS last_version_timestamp'
+                + ' FROM genotype_version'
+                + ' WHERE sample_genotype_id IN'
+                + ' (' + genotypeIdsInQuotes.join(', ') + ')'
+                + ' WINDOW wnd AS'
+                + ' (PARTITION BY sample_genotype_id ORDER BY timestamp DESC)'
+            )
                 .asCallback((error, results) => callback(error, results && results.rows)),
-            (versions, callback) => this._ensureAllItemsFound(versions, sampleIds, callback),
+            (versions, callback) => this._ensureAllItemsFound(versions, genotypeIds, callback),
             (versions, callback) => this._toCamelCase(versions, callback),
             (versions, callback) => {
                 const mappedVersions = _.map(versions, (version) => this._mapDatabaseSampleVersionToObject(version));
@@ -424,7 +504,7 @@ class SamplesModel extends SecureModelBase {
             callback(error, versions);
         });
     }
-    
+
     _mapDatabaseSampleVersionToObject(databaseVersion) {
         return {
             sampleId: databaseVersion.vcfFileSampleId,
