@@ -1,5 +1,7 @@
+import * as _ from 'lodash';
 import * as ActionTypes from '../actions/viewsList';
 import {ImmutableHashedArray} from '../utils/immutable';
+import {entityType} from '../utils/entityTypes';
 
 function reduceViewListDeleteView(state, action) {
     const newHashedArray = ImmutableHashedArray.deleteItemId(state.hashedArray, action.viewId);
@@ -34,6 +36,31 @@ function reduceViewListReceive(state, action) {
     });
 }
 
+function reduceViewListSetHistoryView(state, action) {
+    const {view} = action;
+    const {hashedArray, selectedViewId} = state;
+    const inListView = view && hashedArray.hash[view.id];
+    const isViewInListWOHistory = inListView && inListView.type !== entityType.HISTORY;
+    const isNeedToSet = view && !isViewInListWOHistory;
+    const viewsArrayHistoryParted = _.partition(hashedArray.array, {type: entityType.HISTORY});
+    const viewsArrayWOHistory = viewsArrayHistoryParted[0].length ? viewsArrayHistoryParted[1] : hashedArray.array;
+    if (viewsArrayWOHistory === hashedArray.array && !isNeedToSet) {
+        return state;
+    }
+    const viewToSet = isNeedToSet && {
+        ...view,
+        type: 'history'
+    };
+    const viewsArrayWNewHistory = isNeedToSet ? [viewToSet, ...viewsArrayWOHistory] : viewsArrayWOHistory;
+    const viewsHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(viewsArrayWNewHistory);
+    const newSelectedViewId = viewsHashedArrayWNewHistory.hash[selectedViewId] ? selectedViewId : viewsHashedArrayWNewHistory.array[0] && viewsHashedArrayWNewHistory.array[0].id || null;
+    return {
+        ...state,
+        hashedArray: viewsHashedArrayWNewHistory,
+        selectedViewId: newSelectedViewId
+    };
+}
+
 export default function viewsList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     selectedViewId: null,
@@ -61,6 +88,8 @@ export default function viewsList(state = {
             return reduceViewListDeleteView(state, action);
         case ActionTypes.VIEWS_LIST_EDIT_VIEW:
             return reduceViewListEditView(state, action);
+        case ActionTypes.VIEWS_LIST_SET_HISTORY_VIEW:
+            return reduceViewListSetHistoryView(state, action);
         default:
             return state;
     }
