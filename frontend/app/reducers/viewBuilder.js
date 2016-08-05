@@ -166,6 +166,12 @@ export default function viewBuilder(state = {
                 })
             });
         }
+        case ActionTypes.VBUILDER_ON_SAVE:
+            return {
+                ...state,
+                onSaveAction: action.onSaveAction,
+                onSaveActionProperty: action.onSaveActionProperty
+            };
         default:
             return state;
     }

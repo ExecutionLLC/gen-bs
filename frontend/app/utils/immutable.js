@@ -44,6 +44,25 @@ export class ImmutableHash {
 }
 
 
+export function immutableSetPathProperty(obj, path, val) {
+    const pathArray = path.split('.');
+
+    function setProp(obj, pathArray, pathIndex, val) {
+        const propName = pathArray[pathIndex];
+        if (!propName) {
+            return val;
+        } else {
+            return {
+                ...obj,
+                [propName]: setProp(obj[propName], pathArray, pathIndex + 1, val)
+            }
+        }
+    }
+
+    return setProp(obj, pathArray, 0, val);
+}
+
+
 export class ImmutableHashedArray {
     static makeFromArray(array) {
         const hash = _.keyBy(array, 'id');
