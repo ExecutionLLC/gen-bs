@@ -12,6 +12,7 @@ export const FILTERS_LIST_SELECT_FILTER = 'FILTERS_LIST_SELECT_FILTER';
 export const FILTERS_LIST_ADD_FILTER = 'FILTERS_LIST_ADD_FILTER';
 export const FILTERS_LIST_DELETE_FILTER = 'FILTERS_LIST_DELETE_FILTER';
 export const FILTERS_LIST_EDIT_FILTER = 'FILTERS_LIST_EDIT_FILTER';
+export const FILTERS_LIST_SET_HISTORY_FILTER = 'FILTERS_LIST_SET_HISTORY_FILTER';
 
 
 const CREATE_FILTER_NETWORK_ERROR = 'Cannot create new filter (network error). Please try again.';
@@ -137,5 +138,12 @@ export function filtersListServerDeleteFilter(filterId) {
                 }
             });
         });
+    };
+}
+
+export function filtersListSetHistoryFilter(filter) {
+    return {
+        type: FILTERS_LIST_SET_HISTORY_FILTER,
+        filter
     };
 }

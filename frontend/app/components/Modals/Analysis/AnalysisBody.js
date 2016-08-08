@@ -3,6 +3,8 @@ import {Modal} from 'react-bootstrap';
 import AnalysisLeftPane from './AnalysisLeftPane';
 import AnalysisRightPane from './AnalysisRightPane';
 import {setCurrentQueryHistoryId} from '../../../actions/queryHistory';
+import {filtersListSetHistoryFilter} from '../../../actions/filtersList';
+import {viewsListSetHistoryView} from '../../../actions/viewsList';
 
 
 export default class AnalysisBody extends React.Component {
@@ -58,6 +60,11 @@ export default class AnalysisBody extends React.Component {
     }
 
     onSelectHistoryId(id) {
+        const selectedHistoryItem = id && this.findHistoryItemForId(id) || this.props.newHistoryItem;
+        const filter = selectedHistoryItem.filter;
+        this.props.dispatch(filtersListSetHistoryFilter(filter));
+        const view = selectedHistoryItem.view;
+        this.props.dispatch(viewsListSetHistoryView(view));
         this.props.dispatch(setCurrentQueryHistoryId(id));
     }
 }

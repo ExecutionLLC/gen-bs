@@ -1,5 +1,7 @@
+import * as _ from 'lodash';
 import * as ActionTypes from '../actions/filtersList';
 import {ImmutableHashedArray} from '../utils/immutable';
+import {entityType} from '../utils/entityTypes';
 
 function reduceFilterListDeleteFilter(state, action) {
     const newHashedArray = ImmutableHashedArray.deleteItemId(state.hashedArray, action.filterId);
@@ -34,6 +36,32 @@ function reduceFilterListReceive(state, action) {
     });
 }
 
+function reduceFilterListSetHistoryFilter(state, action) {
+    const {filter} = action;
+    const {hashedArray, selectedFilterId} = state;
+    const inListFilter = filter && hashedArray.hash[filter.id];
+    const isFilterInListWOHistory = inListFilter && inListFilter.type !== entityType.HISTORY;
+    const isNeedToSet = filter && !isFilterInListWOHistory;
+    const filtersArrayHistoryParted = _.partition(hashedArray.array, {type: entityType.HISTORY});
+    const filtersArrayWOHistory = filtersArrayHistoryParted[0].length ? filtersArrayHistoryParted[1] : hashedArray.array;
+    if (filtersArrayWOHistory === hashedArray.array && !isNeedToSet) {
+        return state;
+    }
+    const filterToSet = isNeedToSet && {
+            ...filter,
+            type: 'history'
+        };
+    const filtersArrayWNewHistory = isNeedToSet ? [filterToSet, ...filtersArrayWOHistory] : filtersArrayWOHistory;
+    const filtersHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(filtersArrayWNewHistory);
+    const newSelectedFilterId = filtersHashedArrayWNewHistory.hash[selectedFilterId] ? selectedFilterId : filtersHashedArrayWNewHistory.array[0] && filtersHashedArrayWNewHistory.array[0].id || null;
+    return {
+        ...state,
+        hashedArray: filtersHashedArrayWNewHistory,
+        selectedFilterId: newSelectedFilterId
+    };
+}
+
+
 export default function filtersList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
     selectedFilterId: null,
@@ -61,6 +89,8 @@ export default function filtersList(state = {
             return reduceFilterListDeleteFilter(state, action);
         case ActionTypes.FILTERS_LIST_EDIT_FILTER:
             return reduceFilterListEditFilter(state, action);
+        case ActionTypes.FILTERS_LIST_SET_HISTORY_FILTER:
+            return reduceFilterListSetHistoryFilter(state, action);
         default:
             return state;
     }
