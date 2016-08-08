@@ -178,8 +178,8 @@ class QueryHistoryModel extends SecureModelBase {
                 .andWhere('creator', userId)
                 .orderBy('timestamp', 'desc')
                 .asCallback((error, result) => {
-                    const queryHistory = _.map(_.groupBy(result, 'id'), this._prepareQueryHistory);
-                    callback(null, queryHistory)
+                    const queryHistory = _.map(_.groupBy(result || [], 'id'), this._prepareQueryHistory);
+                    callback(error, queryHistory)
                 });
         }, callback);
     }
@@ -193,7 +193,7 @@ class QueryHistoryModel extends SecureModelBase {
                 return rawQueryHistoryItem.filterId;
             }
         );
-        const sampleId = camelcaseRawQueryHistory[0].vcfFileSampleVersionId;
+        const sampleId = camelcaseRawQueryHistory[0].genotypeVersionId;
         const timestamp = camelcaseRawQueryHistory[0].timestamp;
         const totalResults = camelcaseRawQueryHistory[0].totalResults;
         const viewId = camelcaseRawQueryHistory[0].viewId;

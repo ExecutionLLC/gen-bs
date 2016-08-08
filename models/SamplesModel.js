@@ -339,7 +339,7 @@ class SamplesModel extends SecureModelBase {
             },
             (samplesMetadata, sampleVersions, callback) =>
                 this._createSamplesWithValues(trx, samplesMetadata, sampleVersions,
-                    (error, resultSamples) => callback(error, resultSamples, sampleVersions))
+                    (error, resultSamples) => callback(error, resultSamples))
         ], (error, resultSample) => {
             callback(error, resultSample);
         });
@@ -360,11 +360,13 @@ class SamplesModel extends SecureModelBase {
                 const sampleIdToMetadataHash = CollectionUtils.createHashByKey(samplesMetadata, 'id');
                 const resultSamples = genotypeVersions
                     .map(genotypeVersion => {
-                        const {sampleId, versionId} = genotypeVersion;
+                        const {sampleId, versionId, genotypeId, genotypeName} = genotypeVersion;
                         const sampleMetadata = sampleIdToMetadataHash[sampleId];
                         return Object.assign({}, sampleMetadata, {
                             id: versionId,
                             originalId: sampleId,
+                            genotypeId,
+                            genotypeName,
                             values: samplesValues[versionId]
                         })
                     });
