@@ -399,10 +399,10 @@ class SamplesModel extends SecureModelBase {
      * @param {function(Error, GenotypeVersionObject)}callback
      * */
     _findVersionObjectsByVersionIds(trx, genotypeVersionIds, callback) {
-        const genotypeVersionIdColumnName = `${SampleTableNames.Versions}.id`;
-        const sampleIdColumnName = `${SampleTableNames.Genotypes}.sample_id`;
-        const genotypeIdColumnName = `${SampleTableNames.Genotypes}.id`;
-        const genotypeNameColumnName = `${SampleTableNames.Genotypes}.genotype_name`;
+        const genotypeVersionIdColumnName = `${SampleTableNames.Versions}.id as version_id`;
+        const sampleIdColumnName = `${SampleTableNames.Genotypes}.vcf_file_sample_id as sample_id`;
+        const genotypeIdColumnName = `${SampleTableNames.Genotypes}.id as genotype_id`;
+        const genotypeNameColumnName = `${SampleTableNames.Genotypes}.genotype_name as genotype_name`;
 
         async.waterfall([
             (callback) => trx.select(
@@ -414,16 +414,10 @@ class SamplesModel extends SecureModelBase {
                 .from(SampleTableNames.Versions)
                 .leftJoin(SampleTableNames.Genotypes,
                     `${SampleTableNames.Genotypes}.id`, `${SampleTableNames.Versions}.sample_genotype_id`)
-                .whereIn('id', genotypeVersionIds)
+                .whereIn(`${SampleTableNames.Versions}.id`, genotypeVersionIds)
                 .orderBy('timestamp', 'desc')
                 .asCallback((error, results) => callback(error, results)),
-            (versionObjects, callback) => this._toCamelCase(versionObjects, callback),
-            (versionObjects, callback) => callback(null, _.map(versionObjects, (versionObj) => ({
-                genotypeId: versionObj[genotypeIdColumnName],
-                genotypeName: versionObj[genotypeNameColumnName],
-                versionId: versionObj[genotypeVersionIdColumnName],
-                sampleId: versionObj[sampleIdColumnName]
-            })))
+            (versionObjects, callback) => this._toCamelCase(versionObjects, callback)
         ], (error, versions) => {
             callback(error, versions);
         });
