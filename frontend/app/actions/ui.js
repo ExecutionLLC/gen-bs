@@ -1,19 +1,17 @@
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
-import {detachHistory} from './queryHistory';
+//import {detachHistory} from './queryHistory';
 import {setViewVariantsSort} from './variantsTable';
-import {handleError} from './errorHandler';
+//import {handleError} from './errorHandler';
 import * as _ from 'lodash';
 
-
-export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
 export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
 export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSITION_RESET';
 
-const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameters.';
+//const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameters.';
 
 export function requestTableScrollPositionReset() {
     return {
@@ -30,11 +28,6 @@ export function completeTableScrollPositionReset() {
 /*
  * Action Creators
  */
-export function toggleQueryNavbar() {
-    return {
-        type: TOGGLE_QUERY_NAVBAR
-    };
-}
 
 /**
  * @param {{id: string?, name: string, description: string, type: string, samples: {id: string, type: string}[], viewId: string, filterId: string, modelId: string?}} searchParams

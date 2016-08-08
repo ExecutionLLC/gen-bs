@@ -9,7 +9,6 @@ import Language from './NavbarMain/Language';
 import Buy from './NavbarMain/Buy';
 import Auth from './NavbarMain/Auth';
 
-import {toggleQueryNavbar} from '../../actions/ui';
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
 
 class NavbarMain extends Component {
@@ -37,7 +36,7 @@ class NavbarMain extends Component {
                         className='btn navbar-btn brand' data-toggle='modal' data-target='#info'><span
                         data-localize='brand.title'>AGx</span><sup>i</sup></a></div>
 
-                    <CreateQueryNavbarButton toggleQueryNavbar={ () => { dispatch(toggleQueryNavbar()); } } openAnalysisModal={() => this.props.openAnalysisModal()} />
+                    <CreateQueryNavbarButton openAnalysisModal={() => this.props.openAnalysisModal()} />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
                         onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }

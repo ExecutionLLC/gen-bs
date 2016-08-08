@@ -62,7 +62,7 @@ export default class AnalysisBody extends React.Component {
     onSelectHistoryId(id) {
         const selectedHistoryItem = id && this.findHistoryItemForId(id) || this.props.newHistoryItem;
         const filter = selectedHistoryItem.filter;
-        this.props.dispatch(filtersListSetHistoryFilter());
+        this.props.dispatch(filtersListSetHistoryFilter(filter));
         const view = selectedHistoryItem.view;
         this.props.dispatch(viewsListSetHistoryView(view));
         this.props.dispatch(setCurrentQueryHistoryId(id));

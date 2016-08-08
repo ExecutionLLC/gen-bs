@@ -48,9 +48,9 @@ function reduceFilterListSetHistoryFilter(state, action) {
         return state;
     }
     const filterToSet = isNeedToSet && {
-            ...filter,
-            type: 'history'
-        };
+        ...filter,
+        type: 'history'
+    };
     const filtersArrayWNewHistory = isNeedToSet ? [filterToSet, ...filtersArrayWOHistory] : filtersArrayWOHistory;
     const filtersHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(filtersArrayWNewHistory);
     const newSelectedFilterId = filtersHashedArrayWNewHistory.hash[selectedFilterId] ? selectedFilterId : filtersHashedArrayWNewHistory.array[0] && filtersHashedArrayWNewHistory.array[0].id || null;

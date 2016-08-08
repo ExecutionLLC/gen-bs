@@ -49,10 +49,7 @@ function makeHistoryItem(historyItem) {
     };
 }
 
-function makeNewHistoryItem(samplesList, filtersList, viewsList) {
-    const filter = filtersList.hashedArray.hash[filtersList.selectedFilterId];
-    const view = viewsList.hashedArray.hash[viewsList.selectedViewId];
-    const sample = samplesList.hashedArray.hash[samplesList.selectedSampleId];
+function makeNewHistoryItem(sample, filter, view) {
     const name = new Date() + '_' + (sample ? sample.fileName : '') + '_' + (filter ? filter.name : '') + '_' + (view ? view.name : '');
     return {
         id: null,
