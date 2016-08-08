@@ -55,9 +55,9 @@ class SamplesModel extends SecureModelBase {
                 (sampleIds, callback) => {
                     this._findGenotypeIdsForSampleIds(sampleIds, trx, callback);
                 },
-                // Find last version for each sample
-                (sampleIds, callback) => {
-                    this._findLastVersionsByGenotypeIds(trx, sampleIds, callback);
+                // Find last version for each genotype
+                (genotypeIds, callback) => {
+                    this._findLastVersionsByGenotypeIds(trx, genotypeIds, callback);
                 },
                 // Use the find-many method to build the samples.
                 (versions, callback) => {
@@ -198,7 +198,7 @@ class SamplesModel extends SecureModelBase {
             .where('id', sampleId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase({
                 isAnalyzed: value,
-                analyzedTimestamp: value ? this.db.knex.fn.now() : null
+                analyzedTimestamp: value ? new Date() : null
             }))
             .asCallback((error) => {
                 callback(error, sampleId);
@@ -238,7 +238,7 @@ class SamplesModel extends SecureModelBase {
             (sampleId, callback) => this._createGenotypes(sampleId, genotypesOrNull, trx,
                 (error, genotypeIds) => callback(error, sampleId, genotypeIds)),
             (sampleId, genotypeIds, callback) => async.map(genotypeIds,
-                (genotypeId, callback) => this._addNewGenotypeVersion(sampleId, trx, callback),
+                (genotypeId, callback) => this._addNewGenotypeVersion(genotypeId, trx, callback),
                 (error, genotypeVersionIds) => callback(error, sampleId, genotypeIds, genotypeVersionIds)),
             (sampleId, genotypeIds, genotypeVersionIds, callback) => {
                 // Each genotype should have different fields.

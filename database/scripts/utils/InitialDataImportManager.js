@@ -137,12 +137,12 @@ class InitialDataImportManager {
     }
 
     _importSample(sampleMetadataFilePath, callback) {
-        const sampleFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
-        const sampleFields = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(sampleFieldsString));
+        const sampleWithFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
+        const sampleWithFields = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(sampleWithFieldsString));
 
-        let sample = sampleFields.sample;
-        sample.values = this._makeSampleValues(sampleFields.fieldIds);
-        this.models.samples.internalAdd(null, this.config.defaultLanguId, sampleFields.sample, callback);
+        const sample = sampleWithFields.sample;
+        sample.values = this._makeSampleValues(sampleWithFields.fieldIds);
+        this.models.samples.internalAdd(null, this.config.defaultLanguId, sampleWithFields.sample, callback);
     }
 
     _makeSampleValues(fieldIds) {

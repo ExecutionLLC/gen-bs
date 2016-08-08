@@ -1,4 +1,5 @@
 // See the issue for more information: https://github.com/ExecutionLLC/gen-bs/issues/447
+const assert = require('assert');
 const Uuid = require('node-uuid');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
@@ -101,9 +102,14 @@ function makeSampleVersionsToBeGenotypeVersions(knex, Promise, sampleIdToGenotyp
                 sampleGenotypeId: sampleIdToGenotypeId[sampleVersion],
                 timestamp: sampleVersion.timestamp
             }))
-            .map(({id, sampleGenotypeId, timestamp}) => knex('genotype_version')
-                .insert(ChangeCaseUtil.convertKeysToSnakeCase({id, sampleGenotypeId, timestamp}))
-            )
+            .map(({id, sampleGenotypeId, timestamp}) => {
+                assert.ok(id);
+                assert.ok(sampleGenotypeId);
+                assert.ok(timestamp);
+
+                knex('genotype_version')
+                    .insert(ChangeCaseUtil.convertKeysToSnakeCase({id, sampleGenotypeId, timestamp}));
+            })
         ))
 }
 
