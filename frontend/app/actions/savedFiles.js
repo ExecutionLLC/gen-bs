@@ -36,7 +36,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
                 variantsView,
                 variantsSample,
                 variantsFilter
-            },
+            }
         } = getState();
         const fileMetadata = {
             sampleId: variantsSample.id,
