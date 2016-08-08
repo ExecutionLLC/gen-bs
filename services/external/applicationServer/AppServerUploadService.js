@@ -120,7 +120,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
             (callback) => this.services.users.find(userId, callback),
             (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
                 sampleFileName, sampleReference, commonFieldsMetadata, genotypes, genotypesFieldsMetadata, callback)
-        ], (error, sampleVersionId) => {
+        ], (error, sampleVersionIds) => {
             if (error) {
                 this.logger.error(`Error inserting new sample into database: ${error}`);
                 this._createOperationResult(session, operation, null, operation.getUserId(),
@@ -132,7 +132,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
                     status: SESSION_STATUS.READY,
                     progress: 100,
-                    sampleId: sampleVersionId
+                    sampleIds: sampleVersionIds
                 }, null, callback);
             }
         });
