@@ -32,20 +32,16 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             ui: {
                 language
             },
-            samplesList: {
-                selectedSampleId
+            websocket: {
+                variantsView,
+                variantsSample,
+                variantsFilter
             },
-            filtersList: {
-                selectedFilterId
-            },
-            viewsList: {
-                selectedViewId
-            }
         } = getState();
         const fileMetadata = {
-            sampleId: selectedSampleId,
-            viewId: selectedViewId,
-            filterIds: [selectedFilterId],
+            sampleId: variantsSample.id,
+            viewId: variantsView.id,
+            filterIds: [variantsFilter.id],
             name: fileName,
             url: null,
             totalResults
