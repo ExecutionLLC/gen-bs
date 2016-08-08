@@ -142,7 +142,7 @@ class QueryHistoryModel extends SecureModelBase {
         return {
             id: shouldGenerateId ? this._generateId() : query.id,
             creator: userId,
-            vcfFileSampleVersionId: query.sampleId,
+            genotypeVersionId: query.sampleId,
             viewId: query.viewId,
             totalResults: query.totalResults
         };

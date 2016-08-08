@@ -3,8 +3,6 @@
 const assert = require('assert');
 const Request = require('request');
 
-const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
-
 class RequestWrapper {
     static post(url, headers, bodyObject, callback) {
         Request.post({
