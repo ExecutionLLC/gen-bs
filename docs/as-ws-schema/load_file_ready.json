@@ -19,8 +19,11 @@
         ]
       },
       "metadata": {
-        "$ref": "./base_json/file_metadata.json#",
-        "description": "Parsed file metadata."
+        "type": "array",
+        "items": {
+          "$ref": "./base_json/file_metadata.json#",
+          "description": "Parsed file metadata."
+        }
       }
     }
   }
