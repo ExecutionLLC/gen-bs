@@ -230,16 +230,18 @@ class FieldsMetadataModel extends ModelBase {
      * Result will contain both existing and new fields with ids.
      *
      * @param languId Language for the description.
-     * @param fieldsMetadata Collection of the fields metadata to check.
+     * @param fields Collection of the fields metadata to check.
      * @param trx Knex transaction object.
      * @param callback (error, results) where results - array,
      * item.id - new or existing field metadata id, item.fieldMetadata - input metadata.
      * */
-    addMissingFields(languId, fieldsMetadata, trx, callback) {
+    addMissingFields(languId, fields, trx, callback) {
+        // Ensure the coming fields are unique in terms of the same rule as below.
+        const uniqueFields = _.uniqBy(fields, (field) => `${field.name}#${field.valueType}#${field.dimension}`);
         async.waterfall([
             (callback) => {
                 // First, for each field try to find existing one.
-                async.mapSeries(fieldsMetadata, (fieldMetadata, callback) => {
+                async.mapSeries(uniqueFields, (fieldMetadata, callback) => {
                     this.findIdOfTheSameAsOrNullInTransaction(fieldMetadata, trx, (error, id) => {
                         callback(error, {
                             fieldMetadata,
