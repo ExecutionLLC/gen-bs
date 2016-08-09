@@ -42,7 +42,7 @@ class SearchService extends ServiceBase {
             // this._sendSearchRequest(
             //     languageId, viewId, filterId, name, description, type, samples, limit, offset, callback, user, session
             // );
-            const hasUndefOrNullParam = _.some([languageId, viewId, filterId, modelId, name, description, type, samples, limit, offset], (param) => {
+            const hasUndefOrNullParam = _.some([languageId, viewId, filterId, name, description, type, samples, limit, offset], (param) => {
                 return _.isUndefined(param) || _.isNull(param);
             });
             if (hasUndefOrNullParam) {
