@@ -119,8 +119,11 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.users.find(userId, callback),
             (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
-                sampleFileName, sampleReference, commonFieldsMetadata, genotypes, genotypesFieldsMetadata, callback)
-        ], (error, sampleVersionIds) => {
+                sampleFileName, sampleReference, commonFieldsMetadata, genotypes, genotypesFieldsMetadata,
+                (error, sampleVersionIds) => callback(error, user, sampleVersionIds)
+            ),
+            (user, sampleVersionIds, callback) => this.services.samples.findMany(user, sampleVersionIds, callback)
+        ], (error, samplesMetadata) => {
             if (error) {
                 this.logger.error(`Error inserting new sample into database: ${error}`);
                 this._createOperationResult(session, operation, null, operation.getUserId(),
@@ -132,7 +135,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
                     status: SESSION_STATUS.READY,
                     progress: 100,
-                    sampleIds: sampleVersionIds
+                    metadata: samplesMetadata
                 }, null, callback);
             }
         });
