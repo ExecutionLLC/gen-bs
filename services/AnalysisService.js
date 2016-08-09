@@ -19,7 +19,7 @@ class AnalysisService extends UserEntityServiceBase {
             callback(null, []);
         } else {
             this.models.analysis.findAll(
-                user, limit, offset, nameFilter, descriptionFilter, callback
+                user.id, limit, offset, nameFilter, descriptionFilter, callback
             );
         }
     }
