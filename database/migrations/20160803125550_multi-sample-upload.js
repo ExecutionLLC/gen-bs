@@ -22,6 +22,10 @@ function addSampleTimestamp(knex, Promise) {
     );
 }
 
+function fixFieldMetadataNameColumn(knex, Promise) {
+    return knex.raw('ALTER TABLE "field_metadata" ALTER COLUMN "name" SET NOT NULL');
+}
+
 function createGenotypeTablesAndColumns(knex, Promise) {
     console.log('=> Creating genotype-related tables...');
     const {schema} = knex;
@@ -180,6 +184,7 @@ function dropSampleVersionIds(knex, Promise) {
 
 exports.up = function (knex, Promise) {
     return addSampleTimestamp(knex, Promise)
+        .then(() => fixFieldMetadataNameColumn(knex, Promise))
         .then(() => createGenotypeTablesAndColumns(knex, Promise))
         .then(() => createGenotypesForExistingSamples(knex, Promise))
         .then((sampleIdToGenotypeIdHash) => makeSampleVersionsToBeGenotypeVersions(knex,
