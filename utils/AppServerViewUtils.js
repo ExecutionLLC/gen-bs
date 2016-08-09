@@ -7,7 +7,11 @@ const CollectionUtils = require('./CollectionUtils');
  * Here is the WS to AS view conversion logic.
  * */
 class AppServerViewUtils {
-    static createAppServerView(view, fieldIdToMetadata) {
+    static getGenotypeFieldsPrefix() {
+        return 'GT_';
+    }
+
+    static createAppServerView(view, fieldIdToMetadata, sampleGenotypeName) {
         const viewListItems = view.viewListItems;
 
         // Mandatory fields should always be in the results (ex. for comments).
@@ -45,7 +49,9 @@ class AppServerViewUtils {
         const itemsBySource = _.groupBy(listItems, (listItem) => listItem.sourceName);
 
         // 'sample' group contains all sample fields.
-        const appServerSampleColumns = _.map(itemsBySource['sample'], AppServerViewUtils._createAppServerViewColumn);
+        const appServerSampleColumns = _.map(itemsBySource['sample'],
+            (item) => AppServerViewUtils._createAppServerViewColumn(item, sampleGenotypeName)
+        );
 
         // Other groups except 'sample' are source names.
         const sourceNames = _(itemsBySource)
@@ -68,11 +74,11 @@ class AppServerViewUtils {
         };
     }
 
-    static _createAppServerViewColumn(listItem) {
-        return {
-            name: listItem.fieldName,
-            filter: listItem.filter
-        };
+    static _createAppServerViewColumn(listItem, genotypeName) {
+        const {fieldName, filter} = listItem;
+        // Prefix genotype fields with genotype name.
+        const name = (genotypeName && fieldName.startsWith(this.getGenotypeFieldsPrefix())) ? `${fieldName}_${genotypeName}` : fieldName;
+        return {name, filter};
     }
 }
 

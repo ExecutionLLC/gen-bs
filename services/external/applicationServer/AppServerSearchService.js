@@ -74,7 +74,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const {userId, view, sample, filter, limit, offset} = params;
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(sample);
-        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata);
+        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, sample.genotypeName);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata);
         const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata);
 
@@ -176,19 +176,30 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     _convertFields(asData, user, sampleId, callback) {
         async.waterfall([
-            (callback) => {
-                this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+            (callback) => async.series({
+                sample: (callback) => this.services.samples.find(user, sampleId, callback),
+                sampleFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback),
+                sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
+            }, callback),
+            ({sample, sampleFields, sourcesFields}, callback) => {
+                callback(null, {sample, fields: sampleFields.concat(sourcesFields)});
             },
-            (fields, callback) => {
-                this.services.fieldsMetadata.findSourcesMetadata((error, sourcesFields) => {
-                    callback(error, fields.concat(sourcesFields));
-                });
-            },
-            (fields, callback) => {
+            ({sample, fields}, callback) => {
                 // will be matching fields by name, so create fieldName->field hash
                 const fieldNameToFieldHash = CollectionUtils.createHash(fields,
                     // Source fields will be prepended by the source name, sample fields - will not.
-                    (field) => field.sourceName === 'sample' ? field.name : field.sourceName + '_' + field.name
+                    (field) => {
+                        const {sourceName, name} = field;
+                        // Prefix source fields with the source name.
+                        if (sourceName !== 'sample') {
+                            return `${sourceName}_${name}`;
+                        }
+                        // Postfix genotype fields with genotype name.
+                        if (name.startsWith(AppServerViewUtils.getGenotypeFieldsPrefix())) {
+                            return `${name}_${sample.genotypeName}`;
+                        }
+                        return name;
+                    }
                 );
                 callback(null, fieldNameToFieldHash);
             },

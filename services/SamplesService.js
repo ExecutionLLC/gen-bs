@@ -44,11 +44,8 @@ class SamplesService extends UserEntityServiceBase {
     }
 
     createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference,
-                                    asCommonFields, genotypes,
-                                    asGenotypesFields, callback) {
-        // Concat all fields into one array, as we don't need to internally separate them
-        // (and if we do, we will have 'GT_' prefix as a mark)
-        const appServerSampleFields = asCommonFields.concat(_.toArray(asGenotypesFields));
+                                    appServerSampleFields, genotypes,
+                                    asGenotypesFieldsNames, callback) {
         // Map AS fields metadata format into local.
         const sampleFields = _.map(appServerSampleFields,
             asField => FieldsMetadataService.createFieldMetadata(null, true, asField));
