@@ -19,15 +19,9 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.sessions.findSystemSession(callback),
             (session, callback) => this.services.operations.addSystemOperation(method,
-                (error, operation) => callback(error, {session, operation})
+                (error, operation) => callback(error, session, operation)
             ),
-            (context, callback) => {
-                context.operation.setSendCloseToAppServer(false);
-                callback(null, context);
-            },
-            ({session, operation}, callback) => {
-                this._rpcSend(session, operation, method, null, callback)
-            }
+            (session, operation, callback) => this._rpcSend(session, operation, method, null, callback)
         ], callback);
     }
 
@@ -50,6 +44,8 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
                 session,
                 operation,
                 EVENTS.onSourcesListReceived,
+                session.id,
+                operation.getId(),
                 true,
                 ErrorUtils.createAppServerInternalError(message),
                 callback
@@ -86,6 +82,8 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
                 session,
                 operation,
                 EVENTS.onSourceMetadataReceived,
+                session.id,
+                operation.getId(),
                 true,
                 ErrorUtils.createAppServerInternalError(message),
                 callback

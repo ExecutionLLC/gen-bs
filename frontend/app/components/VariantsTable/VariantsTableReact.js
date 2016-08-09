@@ -33,7 +33,7 @@ class VariantsTableReact extends Component {
                 }
 
                 { !isVariantsLoading && !isVariantsValid &&
-                <div className='col-xs-6 col-xs-offset-3'>
+                <div className='col-xs-6 col-xs-offset-3' id='unexpected_variants_error'>
                     <VariantsTableLoadError error={error}/>
                 </div>
                 }

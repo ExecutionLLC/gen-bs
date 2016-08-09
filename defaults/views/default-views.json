@@ -1,12 +1,12 @@
 [
   {
-    "id": "4035b337-ae13-46af-ba3a-9bc86deacef0",
+    "id": "1768b6b3-78f2-40db-b8ab-65d490d9a38e",
     "name": "Test Default View",
     "type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "491d1c60-fcc5-4250-91e2-04d5c66f75b1",
+        "id": "f0498580-d694-4c90-82fc-ceddff23cd52",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
@@ -14,7 +14,7 @@
         "keywords": []
       },
       {
-        "id": "c46a5b55-ae3d-46af-833c-2d822ce914e4",
+        "id": "1667f875-e1fc-4bbf-bf81-17bd240a6318",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
@@ -22,42 +22,30 @@
         "keywords": []
       },
       {
-        "id": "be08dce7-d001-4be5-90e6-30cffcb455b8",
+        "id": "eb2a7a13-18a9-486c-a3f9-17c08dc7e7e0",
         "field_id": "00000000-0000-0000-0000-000000000007",
         "order": 6,
         "keywords": []
       },
       {
-        "id": "b038a9b8-6493-4732-8691-c89229a6621f",
-        "field_id": "14b45fe4-8a57-4b40-a860-e731456a4dac",
-        "order": 3,
-        "keywords": []
-      },
-      {
-        "id": "51b9c828-cda1-4f22-8092-023b30ca1b62",
-        "field_id": "18603c1c-eeb4-429c-a132-2d22691a681a",
-        "order": 4,
-        "keywords": []
-      },
-      {
-        "id": "4438d580-9de1-499a-8c9b-80e8be696895",
+        "id": "5d1f50a9-d8ed-4e34-8dc4-5ce12e09153d",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 5,
         "keywords": [
-          "2007a78a-3bc4-4443-8cf2-e378eae435cb",
-          "7cd8167c-52d8-4b24-afe3-38d1b2bc82de"
+          "bed2d914-cb4b-46fc-aa83-0ac7e0f1be20",
+          "73b90dc1-07b4-4397-b0a8-30cfb76ec90d"
         ]
       }
     ]
   },
   {
-    "id": "a1fb42b1-bd2d-4ad3-baf3-1d3eb84619c5",
+    "id": "affe11bd-d047-4cba-baf9-b052082257e7",
     "name": "Another Default View",
     "type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "16d04b90-ef00-49ea-b11c-2fcf4c7befba",
+        "id": "c10ea804-19f2-4e64-8cc1-03beb79e743e",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
@@ -65,7 +53,7 @@
         "keywords": []
       },
       {
-        "id": "79d3155f-dd56-40b8-8089-f43218f0950f",
+        "id": "87832ffb-0f0a-49e1-a26c-88dc528428b4",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
@@ -73,17 +61,17 @@
         "keywords": []
       },
       {
-        "id": "d5b6232d-150a-478f-adc7-10ea4c87b9d7",
+        "id": "cf5abaab-9aae-432f-9bdc-7e1acf01016e",
         "field_id": "00000000-0000-0000-0000-000000000007",
         "order": 3,
         "keywords": []
       },
       {
-        "id": "0a07fa76-1d8d-4354-87c0-dfc73af827dd",
+        "id": "2f6f5008-c08b-4678-9290-a6cfde30c0a0",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 4,
         "keywords": [
-          "7cd8167c-52d8-4b24-afe3-38d1b2bc82de"
+          "73b90dc1-07b4-4397-b0a8-30cfb76ec90d"
         ]
       }
     ]

@@ -15,8 +15,6 @@ const STATUSES = {
     ready: 'ready'
 };
 
-let databaseNumber = 2;
-
 class SearchHandler extends HandlerBase {
     constructor(services) {
         super(services);
@@ -57,33 +55,18 @@ class SearchHandler extends HandlerBase {
             }
         }));
 
-        let redisParams = {
-            host: 'localhost',
-            number: databaseNumber,
-            password: null,
-            port: 6379,
-            result_index: 'index:final'
-        };
         async.waterfall([
-            (callback) => this._loadDataToRedis(redisParams, callback),
             (callback) => {
                 sendResultCallback(Object.assign({}, openSessionProgress, {
                     sessionState: {
                         progress: 100,
                         status: STATUSES.ready,
-                        redis_db: redisParams
+                        data: mockData
                     }
                 }));
                 callback(null);
             }
         ], callback);
-    }
-    
-    _loadDataToRedis(redisParams, callback) {
-        const redisTestData = Object.assign({}, redisParams, {
-            rows: mockData
-        });
-        this.services.redis.insertData(redisTestData, callback);
     }
 }
 

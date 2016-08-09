@@ -12,6 +12,7 @@ export default class Select extends Component {
         return (
             <OriginalSelect
                 {...selectProperties}
+                matchProp='label'
             />
         );
     }

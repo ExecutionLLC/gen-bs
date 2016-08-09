@@ -107,6 +107,9 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
                 FsUtils.getAllFiles(asMetadataTemplatesDir, '.json', callback);
             },
             (sampleFiles, callback) => {
+                if (!sampleFiles.length) {
+                    return callback(null);
+                }
                 let filesLeft = sampleFiles.length;
                 _.each(sampleFiles, sampleMetadataPath => {
                     this._importSample(sampleMetadataPath, targetDir, isSample, fieldsMetadata, (error) => {

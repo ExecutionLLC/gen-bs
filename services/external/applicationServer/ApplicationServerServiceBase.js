@@ -18,11 +18,11 @@ class ApplicationServerServiceBase extends ServiceBase {
         _.bindAll(this, ['_rpcSend', '_rpcReply']);
 
         this.logger = this.services.logger;
-        const {host, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
+        const {host, port, user, password, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
         /**
          * @type {RPCProxy}
          * */
-        this.rpcProxy = proxyProviderFunc(host, requestExchangeName, reconnectTimeout, 
+        this.rpcProxy = proxyProviderFunc(host, port, user, password, requestExchangeName, reconnectTimeout,
             this.logger, this._rpcReply);
     }
 
@@ -107,16 +107,21 @@ class ApplicationServerServiceBase extends ServiceBase {
      * @param {ExpressSession}session
      * @param {OperationBase}operation
      * @param {string}eventName
+     * @param {string}targetSessionId
+     * @param {string}targetOperationId
      * @param {boolean}shouldCompleteOperation
      * @param {AppServerErrorResult}error
      * @param {function(Error, AppServerOperationResult)}callback
      */
-    _createErrorOperationResult(session, operation, eventName, shouldCompleteOperation, error, callback) {
+    _createErrorOperationResult(session, operation, eventName, targetSessionId,
+                                targetOperationId, shouldCompleteOperation, error, callback) {
         /**@type AppServerOperationResult*/
         const result = {
             session,
             operation,
             eventName,
+            targetSessionId,
+            targetOperationId,
             shouldCompleteOperation,
             resultType: RESULT_TYPES.ERROR,
             error

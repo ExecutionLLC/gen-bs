@@ -1,6 +1,6 @@
 [
   {
-    "id": "137c60fe-792a-4a7a-b41e-5b1012352f5f",
+    "id": "301b4e00-c7e2-412e-9dba-ffc27063eb58",
     "name": "Test Filter",
     "description": "Test filter description",
     "type": "standard",
@@ -20,7 +20,7 @@
         {
           "$and": [
             {
-              "69d1d2db-1d7b-4a9e-a3ee-d5108da78c84": {
+              "00000000-0000-0000-0000-000000000005": {
                 "$neq": "ABC"
               }
             }
@@ -30,7 +30,7 @@
     }
   },
   {
-    "id": "70907a91-41a0-4845-bae7-64b961ec2af0",
+    "id": "cd907c22-b898-4bd8-8d29-39124c8be53d",
     "name": "Another Test Filter",
     "description": "Test filter description v2",
     "type": "advanced",

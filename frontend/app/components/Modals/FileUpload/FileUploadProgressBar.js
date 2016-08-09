@@ -16,18 +16,17 @@ export default class FileUploadProgressBar extends Component {
         const { progressStatus, progressValue } = this.props;
 
         const STAGES = {
-            TOTAL: 3,
+            TOTAL: 2,
             'ajax': 0,
-            'converting': 1,
-            's3_uploading': 2,
-            'ready': 3
+            'task_running': 1
         };
 
         const currentStage = STAGES[progressStatus];
-        if (currentStage == null) {
+        if (!currentStage && currentStage !== 0) {
             return null;
         }
-        const currentProgress = currentStage < STAGES.TOTAL ? progressValue : 0;
-        return this.renderBar('Files processing', Math.round(100 * ((currentStage + currentProgress / 100) / STAGES.TOTAL)));
+        return this.renderBar('Your file is being processed...',
+            Math.round((currentStage * 100 + progressValue) / STAGES.TOTAL)
+        );
     }
 }

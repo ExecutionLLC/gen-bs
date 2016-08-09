@@ -84,6 +84,9 @@ describe('Search', function () {
 
                 const fieldIdToMetadata = _.keyBy(allFields, 'id');
 
+                // Check that rows are received.
+                assert.ok(rows.length);
+
                 // Check that all field ids from the data lay either in sample or in source fields.
                 _.each(rows, row => {
                     _.each(row.fields, (rowField) => {

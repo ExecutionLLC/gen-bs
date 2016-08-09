@@ -55,6 +55,9 @@ class WSController extends ControllerBase {
      * @param {AppServerOperationResult}operationResult
      * */
     static createClientOperationResult(operationResult) {
+        if (!operationResult) {
+            return null;
+        }
         const operation = operationResult.operation;
         return {
             operationId: operation.getId(),
