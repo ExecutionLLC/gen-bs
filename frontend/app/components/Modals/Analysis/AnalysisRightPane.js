@@ -13,6 +13,7 @@ import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filt
 import {openModal} from '../../../actions/modalWindows';
 import {analyze} from '../../../actions/ui';
 import {closeModal} from '../../../actions/modalWindows';
+import {samplesOnSave} from '../../../actions/samplesList';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -769,8 +770,20 @@ export default class AnalysisRightPane extends React.Component {
         });
     }
     
-    onSamplesClick() {
-        
+    onSamplesClick(sampleIndex) {
+        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const action = editQueryHistoryItem(
+            historyItem.id,
+            samplesList,
+            filtersList,
+            viewsList,
+            modelsList,
+            {samples: historyItem.samples},
+            historyItem
+        );
+
+        this.props.dispatch(samplesOnSave(action, `changeItem.samples.${sampleIndex}.id`));
+        this.props.dispatch(openModal('upload'));
     }
     
     onSampleSelect(sampleIndex, sampleId) {

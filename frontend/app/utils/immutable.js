@@ -52,9 +52,13 @@ export function immutableSetPathProperty(obj, path, val) {
         if (!propName) {
             return val;
         } else {
-            return {
-                ...obj,
-                [propName]: setProp(obj[propName], pathArray, pathIndex + 1, val)
+            if (_.isArray(obj)) {
+                return immutableArray.replace(obj, +propName, setProp(obj[propName], pathArray, pathIndex + 1, val));
+            } else {
+                return {
+                    ...obj,
+                    [propName]: setProp(obj[propName], pathArray, pathIndex + 1, val)
+                };
             }
         }
     }
