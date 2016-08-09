@@ -24,11 +24,11 @@ export default class SearchClient extends ClientBase {
 
     sendSearchAgainRequest(languId, analysisId, limit, offset, callback) {
         RequestWrapper.post(
-            this.urls.startSearchAgain(),
+            this.urls.startSearch(),
             this._makeHeaders({languId}),
             {
                 languId,
-                analysisId,
+                analysis: {id: analysisId},
                 limit,
                 offset
             },
