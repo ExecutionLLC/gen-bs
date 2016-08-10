@@ -105,7 +105,7 @@ export function viewBuilderChangeKeywords(viewItemIndex, keywordsIds) {
 function fireOnSaveAction(view) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionProperty} = getState().viewBuilder;
-        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, view));
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, view.id));
     };
 }
 

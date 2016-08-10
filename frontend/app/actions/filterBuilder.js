@@ -58,10 +58,10 @@ export function filterBuilderChangeAttr(attr) {
     };
 }
 
-function fireOnSaveAction(view) {
+function fireOnSaveAction(filter) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionProperty} = getState().filterBuilder;
-        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, view));
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, filter.id));
     };
 }
 

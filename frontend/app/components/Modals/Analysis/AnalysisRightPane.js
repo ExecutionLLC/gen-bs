@@ -702,60 +702,58 @@ export default class AnalysisRightPane extends React.Component {
             description: historyItem.description,
             type: historyItem.type,
             samples: historyItem.samples,
-            viewId: historyItem.view.id,
-            filterId: historyItem.filter.id,
-            modelId: historyItem.model && historyItem.model.id || null
+            viewId: historyItem.viewId,
+            filterId: historyItem.filterId,
+            modelId: historyItem.modelId
         }));
         dispatch(closeModal('analysis'));
     }
 
     onViewsClick() {
-        this.props.dispatch(viewBuilderStartEdit(false, this.props.historyItem.view));
-
         const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId]));
+
         const action = editQueryHistoryItem(
             historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {view: null},
+            {viewId: null},
             historyItem
         );
 
-        this.props.dispatch(viewBuilderOnSave(action, 'changeItem.view'));
+        this.props.dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
         this.props.dispatch(openModal('views'));
     }
 
     onViewSelect(viewId) {
-        const {viewsList: {hashedArray: {hash: viewsHash}}} = this.props;
         this.dispatchEdit({
-            view: viewsHash[viewId]
+            viewId: viewId
         });
     }
     
     onFiltersClick() {
-        this.props.dispatch(filterBuilderStartEdit(false, this.props.historyItem.filter, this.props.fields));
-
         const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields));
+
         const action = editQueryHistoryItem(
             historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {filter: null},
+            {filterId: null},
             historyItem
         );
 
-        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filter'));
+        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         this.props.dispatch(openModal('filters'));
     }
 
     onFilterSelect(filterId) {
-        const {filtersList: {hashedArray: {hash: filtersHash}}} = this.props;
         this.dispatchEdit({
-            filter: filtersHash[filterId]
+            filterId: filterId
         });
     }
 
@@ -764,9 +762,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelSelect(modelId) {
-        const {modelsList: {models}} = this.props;
         this.dispatchEdit({
-            model: _.find(models, {id: modelId})
+            modelId: modelId
         });
     }
     

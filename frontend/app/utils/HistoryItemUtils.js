@@ -186,14 +186,14 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
     if (change.samples != null) {
         editingHistoryItem = {...editingHistoryItem, samples: change.samples};
     }
-    if (change.filter != null) {
-        editingHistoryItem = {...editingHistoryItem, filter: change.filter};
+    if (change.filterId != null) {
+        editingHistoryItem = {...editingHistoryItem, filterId: change.filterId};
     }
-    if (change.view != null) {
-        editingHistoryItem = {...editingHistoryItem, view: change.view};
+    if (change.viewId != null) {
+        editingHistoryItem = {...editingHistoryItem, viewId: change.viewId};
     }
-    if (change.model != null) {
-        editingHistoryItem = {...editingHistoryItem, model: change.model};
+    if (change.modelId != null) {
+        editingHistoryItem = {...editingHistoryItem, modelId: change.modelId};
     }
     return editingHistoryItem;
 }
