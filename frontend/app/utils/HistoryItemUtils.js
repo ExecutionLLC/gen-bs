@@ -57,8 +57,8 @@ function makeNewHistoryItem(sample, filter, view) {
         description: 'Description of ' + name,
         createdDate: '' + new Date(),
         lastQueryDate: '' + new Date(),
-        filter: filter,
-        view: view,
+        filterId: filter && filter.id || null,
+        viewId: view && view.id || null,
         type: 'single',
         samples: [{
             id: sample && sample.id || null,
@@ -109,7 +109,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'tumor'},
                         {id: historyItem.samples[0].id, type: 'normal'}
                     ],
-                    model: modelsList.models[0]
+                    modelId: modelsList.models[0].id
                 };
             },
             'family'(historyItem) {
@@ -119,7 +119,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'mother'},
                         {id: historyItem.samples[0].id, type: 'father'}
                     ],
-                    model: modelsList.models[0]
+                    modelId: modelsList.models[0].id
                 };
             }
         },
@@ -136,7 +136,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[1].id, type: 'mother'},
                         {id: historyItem.samples[1].id, type: 'father'}
                     ],
-                    model: modelsList.models[0]
+                    modelId: modelsList.models[0].id
                 };
             }
         },
@@ -152,7 +152,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'tumor'},
                         {id: historyItem.samples[1].id, type: 'normal'}
                     ],
-                    model: modelsList.models[0]
+                    modelId: modelsList.models[0].id
                 };
             }
         }
@@ -167,7 +167,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
     return {
         ...historyItem,
         samples: newSamplesModel.samples,
-        model: newSamplesModel.model,
+        modelId: newSamplesModel.modelId,
         type: targetType
     };
 }
