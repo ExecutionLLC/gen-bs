@@ -12,7 +12,7 @@ class KnexTransaction {
 
     openTransaction(callback) {
         this.knex.transaction((trx) => {
-            this.logger.trace('OPENING TRANSACTION ' + this.id);
+            this.logger.trace(`OPENING TRANSACTION ${this.id}`);
             if (this.transaction) {
                 throw new Error('Transaction is already opened.');
             }
@@ -23,7 +23,8 @@ class KnexTransaction {
 
     complete(error, originalStack, data, callback) {
         if (error) {
-            this.logger.warn('ROLLING BACK TRANSACTION ' + this.id +': ' + error + '\n' + originalStack);
+            this.logger.warn(`ROLLING BACK TRANSACTION ${this.id}: ${error}\n${error.stack}`);
+            this.logger.debug(`Original stack: ${originalStack}`);
             this.transaction
                 .rollback()
                 .asCallback((rollbackError) => {

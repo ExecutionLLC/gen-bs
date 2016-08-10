@@ -55,7 +55,7 @@ class SamplesClient extends UserEntityClientBase {
         if (sampleOrNull) {
             const values = sampleOrNull.values;
             _.each(values, value => {
-                assert.ok(_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId),
+                assert.ok(_.some(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId),
                 'Field from sample values is not found in the fields metadata collection: ' + value.fieldId);
             });
         }

@@ -68,13 +68,11 @@ class SearchService extends ServiceBase {
     }
 
     searchInResults(user, session, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
-        const sessions = this.services.sessions;
         async.waterfall([
-            (callback) => {
-                sessions.findById(session, callback);
-            },
-            (sessionId, callback) => {
-                this._createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
+            (callback) => this.services.operations.find(session, operationId, callback),
+            (operation, callback) => this.services.samples.find(user, operation.getSampleId(), callback),
+            (sample, callback) => {
+                this._createAppServerSearchInResultsParams(session.id, operationId, sample, globalSearchValue,
                     fieldSearchValues, sortValues, limit, offset, callback);
             },
             (appServerParams, callback) => {
@@ -180,7 +178,7 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createAppServerSearchInResultsParams(sessionId, operationId, globalSearchValue,
+    _createAppServerSearchInResultsParams(sessionId, operationId, sample, globalSearchValue,
                                           fieldSearchValues, sortValues, limit, offset, callback) {
         async.parallel({
             fieldSearchValues: (callback) => {
@@ -189,13 +187,14 @@ class SearchService extends ServiceBase {
             sortValues: (callback) => {
                 this._createAppServerSortValues(sortValues, callback);
             }
-        }, (error, result) => {
+        }, (error, {fieldSearchValues, sortValues}) => {
             callback(error, {
                 sessionId,
                 operationId,
+                sample,
                 globalSearchValue,
-                fieldSearchValues: result.fieldSearchValues,
-                sortValues: result.sortValues,
+                fieldSearchValues,
+                sortValues,
                 limit,
                 offset
             });
@@ -245,14 +244,7 @@ class SearchService extends ServiceBase {
                 this.services.samples.find(user, sampleId, callback);
             },
             filter: (callback) => {
-                // TODO: Made filters not required.
-                // The error should be raised here later in case user didn't choose any filter.
-                if (filterId) {
-                    this.services.filters.find(user, filterId, callback);
-                } else {
-                    callback(null, null);
-                }
-
+                this.services.filters.find(user, filterId, callback);
             },
             fieldsMetadata: (callback) => {
                 async.waterfall([
