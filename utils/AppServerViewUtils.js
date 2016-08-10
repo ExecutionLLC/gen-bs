@@ -53,7 +53,7 @@ class AppServerViewUtils {
                     order: listItem.order,
                     sortOrder: listItem.sortOrder,
                     sortDirection: listItem.sortDirection,
-                    filter: _.map(listItem.keywords, keywordId =>keyWordHash[keywordId].value)
+                    filter: _.map(listItem.keywords, keywordId => keyWordHash[keywordId].value)
                 };
             })
             .value();
