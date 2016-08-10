@@ -11,6 +11,18 @@ class AppServerViewUtils {
         return 'GT_';
     }
 
+    static createAppServerColumnName(fieldName, sourceName, genotypeName, shouldPrefixSources) {
+        // Prefix source fields with the source name.
+        if (sourceName !== 'sample' && shouldPrefixSources) {
+            return `${sourceName}_${fieldName}`;
+        }
+        // Postfix genotype fields with genotype name.
+        if (fieldName.startsWith(AppServerViewUtils.getGenotypeFieldsPrefix())) {
+            return `${fieldName}_${genotypeName}`;
+        }
+        return fieldName;
+    }
+
     static createAppServerView(view, fieldIdToMetadata, sampleGenotypeName) {
         const viewListItems = view.viewListItems;
 
@@ -50,7 +62,8 @@ class AppServerViewUtils {
 
         // 'sample' group contains all sample fields.
         const appServerSampleColumns = _.map(itemsBySource['sample'],
-            (item) => AppServerViewUtils._createAppServerViewColumn(item, sampleGenotypeName)
+            ({fieldName}) => AppServerViewUtils.createAppServerColumnName(fieldName,
+                'sample', sampleGenotypeName, false)
         );
 
         // Other groups except 'sample' are source names.
@@ -61,7 +74,9 @@ class AppServerViewUtils {
 
         // Make groups of columns separately for each source.
         const appServerSources = _.map(sourceNames, sourceName => {
-            const sourceColumns = _.map(itemsBySource[sourceName], AppServerViewUtils._createAppServerViewColumn);
+            const sourceColumns = _.map(itemsBySource[sourceName], ({fieldName}) =>
+                AppServerViewUtils.createAppServerColumnName(fieldName, null, null, false)
+            );
             return {
                 name: sourceName,
                 columns: sourceColumns
@@ -72,13 +87,6 @@ class AppServerViewUtils {
             sampleColumns: appServerSampleColumns,
             sources: appServerSources
         };
-    }
-
-    static _createAppServerViewColumn(listItem, genotypeName) {
-        const {fieldName, filter} = listItem;
-        // Prefix genotype fields with genotype name.
-        const name = (genotypeName && fieldName.startsWith(this.getGenotypeFieldsPrefix())) ? `${fieldName}_${genotypeName}` : fieldName;
-        return {name, filter};
     }
 }
 
