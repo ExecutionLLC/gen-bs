@@ -23,7 +23,7 @@ function addSampleTimestamp(knex, Promise) {
 }
 
 function fixFieldMetadataNameColumn(knex, Promise) {
-    return knex.raw('ALTER TABLE "field_metadata" ALTER COLUMN "name" SET NOT NULL');
+    return knex.raw('ALTER TABLE field_metadata ALTER COLUMN name SET NOT NULL');
 }
 
 function createGenotypeTablesAndColumns(knex, Promise) {
