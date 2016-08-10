@@ -1,10 +1,14 @@
+import * as _ from 'lodash';
+import * as async from 'async';
+
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import AnalysisLeftPane from './AnalysisLeftPane';
 import AnalysisRightPane from './AnalysisRightPane';
-import {setCurrentQueryHistoryId} from '../../../actions/queryHistory';
+import {setCurrentQueryHistoryId, toggleLoadingHistoryData} from '../../../actions/queryHistory';
 import {filtersListSetHistoryFilter} from '../../../actions/filtersList';
 import {viewsListSetHistoryView} from '../../../actions/viewsList';
+import apiFacade from '../../../api/ApiFacade';
 
 
 export default class AnalysisBody extends React.Component {
@@ -67,11 +71,33 @@ export default class AnalysisBody extends React.Component {
     }
 
     onSelectHistoryId(id) {
+
+        function getUsedSamplesIds(samples) {
+            return _.reduce(samples, ({hash, array}, sample) => (hash[sample.id] ? {hash, array} : {hash: {...hash, [sample.id]: true}, array: [...array, sample.id]}), {hash: {}, array: []}).array;
+        }
+
         const selectedHistoryItem = id && this.findHistoryItemForId(id) || this.props.newHistoryItem;
-        const filter = selectedHistoryItem.filter;
-        this.props.dispatch(filtersListSetHistoryFilter(filter));
-        const view = selectedHistoryItem.view;
-        this.props.dispatch(viewsListSetHistoryView(view));
-        this.props.dispatch(setCurrentQueryHistoryId(id));
+        const filterId = selectedHistoryItem.filterId;
+        const viewId = selectedHistoryItem.viewId;
+        const modelId = selectedHistoryItem.modelId;
+        const samplesIds = getUsedSamplesIds(selectedHistoryItem.samples);
+        async.waterfall([
+            (callback) => {this.props.dispatch(toggleLoadingHistoryData(true)); callback(null);},
+            (callback) => {
+                if (this.props.viewsList.hashedArray.hash[viewId]) {
+                    this.props.dispatch(viewsListSetHistoryView(this.props.viewsList.hashedArray.hash[viewId]));
+                    callback(null);
+                } else {
+                    const viewsClient = apiFacade.viewsClient;
+                    viewsClient.get(viewId, (error, response) => {
+                        const view = response.body;
+                        this.props.dispatch(viewsListSetHistoryView(view));
+                        callback(null);
+                    });
+                }
+            },
+            (callback) => {this.props.dispatch(setCurrentQueryHistoryId(id)); callback(null); },
+            (callback) => {this.props.dispatch(toggleLoadingHistoryData(false)); callback(null);}
+        ]);
     }
 }
