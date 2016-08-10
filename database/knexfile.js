@@ -33,11 +33,7 @@ const migrationSettings = {
 };
 
 module.exports = {
-
     development: migrationSettings,
-
     staging: migrationSettings,
-
     production: migrationSettings
-
 };
