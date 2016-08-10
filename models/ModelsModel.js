@@ -64,7 +64,6 @@ class ModelsModel extends SecureModelBase {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : model.id,
                         creator: userId,
-                        name: model.name,
                         rules: model.rules,
                         type: model.type || ENTITY_TYPES.USER,
                         analysisType: model.analysisType ,
@@ -76,6 +75,7 @@ class ModelsModel extends SecureModelBase {
                     const dataToInsert = {
                         modelId: modelId,
                         languId: languId,
+                        name: model.name,
                         description: model.description
                     };
                     this._unsafeInsert(TableNames.ModelText, dataToInsert, trx, (error) => {
@@ -94,7 +94,6 @@ class ModelsModel extends SecureModelBase {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
-                        name: modelToUpdate.name,
                         rules: modelToUpdate.rules,
                         type: model.type,
                         analysisType: model.analysisType ,
@@ -107,6 +106,7 @@ class ModelsModel extends SecureModelBase {
                     const dataToInsert = {
                         modelId: modelId,
                         languId: model.languId,
+                        name: model.name,
                         description: modelToUpdate.description
                     };
                     this._unsafeInsert(TableNames.ModelText, dataToInsert, trx, (error) => {
