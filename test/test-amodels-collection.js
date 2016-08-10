@@ -24,6 +24,7 @@ const TestUser = {
     userEmail: 'valarievaughn@electonic.com'
 };
 
+const UnknownModelId = Uuid.v4();
 
 const checkModel = (model) => {
     assert.ok(model.id);
@@ -58,6 +59,228 @@ describe('Model', () => {
                 assert.ok(Array.isArray(models));
                 _.each(models, filter => checkModel(filter));
                 done();
+            });
+        });
+
+        it('should get existing model', (done) => {
+            modelsClient.getAll(sessionId, (error, response) => {
+                const models = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(models);
+                const firstModel = models[0];
+
+                modelsClient.get(sessionId, firstModel.id, (error, response) => {
+                    const model = ClientBase.readBodyWithCheck(error, response);
+                    assert.ok(model);
+                    checkModel(model);
+                    done();
+                });
+            });
+        });
+
+        it('should create and update existing user model', (done) => {
+            modelsClient.getAll(sessionId, (error, response) => {
+                const models = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(models);
+                const model = models[0];
+                model.name = 'Test Model ' + Uuid.v4();
+
+                modelsClient.add(sessionId, languId, model, (error, response) => {
+                    const addedModel = ClientBase.readBodyWithCheck(error, response);
+                    assert.ok(addedModel);
+                    assert.notEqual(addedModel.id, model.id, 'Model id is not' +
+                        ' changed.');
+                    assert.equal(addedModel.name, model.name);
+                    assert.equal(addedModel.type, ENTITY_TYPES.USER);
+
+                    // Update created filter.
+                    const modelToUpdate = _.cloneDeep(addedModel);
+                    modelToUpdate.name = 'Test Model ' + Uuid.v4();
+                    modelToUpdate.type = ENTITY_TYPES.ADVANCED;
+
+                    modelsClient.update(sessionId, modelToUpdate, (error, response) => {
+                        const updatedModel = ClientBase.readBodyWithCheck(error, response);
+                        assert.ok(updatedModel);
+                        assert.notEqual(updatedModel.id, modelToUpdate.id);
+                        assert.equal(updatedModel.name, modelToUpdate.name);
+                        assert.equal(updatedModel.type, ENTITY_TYPES.USER, 'Model type change should not be allowed by update.');
+                        done();
+                    });
+                });
+            });
+        });
+
+    });
+
+    describe('failure tests', () => {
+        it('should fail to update or delete non-user model', (done) => {
+            modelsClient.getAll(sessionId, (error, response) => {
+                const models = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(models);
+                const nonUserModel = _.find(models, model => model.type !== ENTITY_TYPES.USER);
+                assert.ok(nonUserModel, 'Cannot find any non-user model');
+                nonUserModel.name = 'Test Name' + Uuid.v4();
+
+                modelsClient.update(sessionId, nonUserModel, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    modelsClient.remove(sessionId, nonUserModel.id, (error, response) => {
+                        ClientBase.expectErrorResponse(error, response);
+
+                        done();
+                    });
+                });
+            });
+        });
+
+        it('should not fail to get and fail to update deleted user model', (done) => {
+            modelsClient.getAll(sessionId, (error, response) => {
+                assert.ifError(error);
+                assert.equal(response.status, HttpStatus.OK);
+                const models = response.body;
+                assert.ok(models);
+                const model = models[0];
+                model.name = 'Test Model ' + Uuid.v4();
+                model.description = Uuid.v4();
+
+                modelsClient.add(sessionId, languId, model, (error, response) => {
+                    assert.ifError(error);
+                    assert.equal(response.status, HttpStatus.OK);
+                    const addedModel = response.body;
+                    assert.ok(addedModel);
+                    assert.equal(addedModel.name, model.name);
+                    assert.equal(addedModel.description, model.description);
+
+                    // Delete created filter
+                    modelsClient.remove(sessionId, addedModel.id, (error, response) => {
+                        assert.ifError(error);
+                        assert.equal(response.status, HttpStatus.OK);
+
+                        // It should not return with all user filters.
+                        modelsClient.getAll(sessionId, (error, response) => {
+                            const models = ClientBase.readBodyWithCheck(error, response);
+                            assert.ok(!_.some(models, f => f.id == addedModel.id));
+
+                            // It should be possible to retrieve it by id (history support).
+                            modelsClient.get(sessionId, addedModel.id, (error, response) => {
+                                assert.ifError(error);
+                                assert.equal(response.status, HttpStatus.OK);
+
+                                // It should fail to update removed filter.
+                                const modelToUpdate = _.cloneDeep(addedModel);
+                                modelToUpdate.name = 'Test Model ' + Uuid.v4();
+
+                                modelsClient.update(sessionId, modelToUpdate, (error, response) => {
+                                    ClientBase.expectErrorResponse(error, response);
+
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        it('should fail to create model with empty name', (done) => {
+            modelsClient.getAll(sessionId, (error, response) => {
+                const models = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(models);
+                const model = models[0];
+                model.name = '';
+
+                modelsClient.add(sessionId, languId, model, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                })
+            })
+        });
+
+        it('should fail to add model with existing name', (done) => {
+            modelsClient.getAll(sessionId, (error, response) => {
+                const models = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(models);
+                const model = models[0];
+
+                modelsClient.add(sessionId, languId, model, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                });
+            });
+        });
+
+        it('should fail to add model with existing name with leading and' +
+            ' trailing spaces', (done) => {
+            modelsClient.getAll(sessionId, (error, response) => {
+                const models = ClientBase.readBodyWithCheck(error, response);
+                assert.ok(models);
+                const model = models[0];
+                model.name = ' ' + model.name + ' ';
+
+                modelsClient.add(sessionId, languId, model, (error, response) => {
+                    ClientBase.expectErrorResponse(error, response);
+
+                    done();
+                });
+            });
+        });
+
+        it('should fail to get unknown model', (done) => {
+            modelsClient.get(sessionId, UnknownModelId, (error, response) => {
+                ClientBase.expectErrorResponse(error, response);
+                done();
+            });
+        });
+
+        it('should not return previous version of the filter when current version is deleted (issue #337)', (done) => {
+            modelsClient.getAll(sessionId, (error, response) => {
+                assert.ifError(error);
+                assert.equal(response.status, HttpStatus.OK);
+                const models = response.body;
+                assert.ok(models);
+                const model = models[0];
+                model.name = 'Test Model ' + Uuid.v4();
+                // Will search the filter by description below.
+                model.description = Uuid.v4();
+
+                modelsClient.add(sessionId, languId, model, (error, response) => {
+                    assert.ifError(error);
+                    assert.equal(response.status, HttpStatus.OK);
+                    const addedModel = response.body;
+                    assert.ok(addedModel);
+                    assert.equal(addedModel.name, model.name);
+                    assert.equal(addedModel.description, model.description);
+
+                    // Now it should return.
+                    modelsClient.getAll(sessionId, (error, response) => {
+                        const models = ClientBase.readBodyWithCheck(error, response);
+                        assert.ok(_.some(models, f => f.id === addedModel.id));
+                        assert.ok(_.some(models, f => f.description === model.description));
+
+                        const modelToUpdate = Object.assign({}, addedModel, {
+                            name: Uuid.v4()
+                        });
+
+                        // Make new version.
+                        modelsClient.update(sessionId, modelToUpdate, (error, response) => {
+                            const updatedModel = ClientBase.readBodyWithCheck(error, response);
+
+                            // Delete the last version.
+                            modelsClient.remove(sessionId, updatedModel.id, (error, response) => {
+                                ClientBase.readBodyWithCheck(error, response);
+
+                                modelsClient.getAll(sessionId, (error, response) => {
+                                    // Now filters list should not return the filter.
+                                    const models = ClientBase.readBodyWithCheck(error, response);
+                                    assert.ok(!_.some(models, f => f.description === model.description));
+
+                                    done();
+                                });
+                            })
+                        })
+                    });
+                });
             });
         });
     });

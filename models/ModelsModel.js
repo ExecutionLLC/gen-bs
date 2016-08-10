@@ -44,14 +44,14 @@ class ModelsModel extends SecureModelBase {
         }, callback);
     }
 
-    find(userId, filterId, callback) {
-        const filterIds = [filterId];
+    find(userId, modelId, callback) {
+        const modelIds = [modelId];
         this.db.transactionally((trx, callback) => {
             async.waterfall([
-                (callback) => this._findFilters(trx, filterIds, userId, false, false, callback),
-                (filters, callback) => callback(null, _.first(filters))
-            ], (error, filter) => {
-                callback(error, filter);
+                (callback) => this._findModels(trx, modelIds, userId, false, false, callback),
+                (models, callback) => callback(null, _.first(models))
+            ], (error, model) => {
+                callback(error, model);
             });
         }, callback);
     }
@@ -98,7 +98,7 @@ class ModelsModel extends SecureModelBase {
                         type: model.type,
                         analysisType: model.analysisType ,
                         modelType: model.modelType,
-                        originalFilterId: model.originalFilterId || model.id
+                        originalModelId: model.originalModelId || model.id
                     };
                     this._insert(dataToInsert, trx, callback);
                 },
@@ -106,7 +106,7 @@ class ModelsModel extends SecureModelBase {
                     const dataToInsert = {
                         modelId: modelId,
                         languId: model.languId,
-                        name: model.name,
+                        name: modelToUpdate.name,
                         description: modelToUpdate.description
                     };
                     this._unsafeInsert(TableNames.ModelText, dataToInsert, trx, (error) => {
@@ -189,7 +189,7 @@ class ModelsModel extends SecureModelBase {
         }
 
         if (modelIdsOrNull) {
-            query = query.andWhere('id', 'in', filterIdsOrNull);
+            query = query.andWhere('id', 'in', modelIdsOrNull);
         }
 
         async.waterfall([
