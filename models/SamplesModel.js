@@ -7,6 +7,7 @@ const {ENTITY_TYPES} = require('../utils/Enums');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const CollectionUtils = require('../utils/CollectionUtils');
 const SecureModelBase = require('./SecureModelBase');
+const Config = require('../utils/Config');
 
 const mappedColumns = [
     'id',
@@ -256,7 +257,7 @@ class SamplesModel extends SecureModelBase {
      * @param {function(Error, Array<Uuid>)}callback
      * */
     _createGenotypes(sampleId, genotypesOrNull, trx, callback) {
-        const genotypes = genotypesOrNull || [null];
+        const genotypes = genotypesOrNull || [Config.oneSampleGenotypeName];
         async.map(genotypes, (genotypeName, callback) => {
             const genotypeId = this._generateId();
             trx(SampleTableNames.Genotypes)
@@ -420,9 +421,7 @@ class SamplesModel extends SecureModelBase {
                 .orderBy('timestamp', 'desc')
                 .asCallback((error, results) => callback(error, results)),
             (versionObjects, callback) => this._toCamelCase(versionObjects, callback)
-        ], (error, versions) => {
-            callback(error, versions);
-        });
+        ], callback);
     }
 
     _findSampleIdByVersionId(trx, sampleVersionId, callback) {

@@ -2,8 +2,9 @@
 const assert = require('assert');
 const Uuid = require('node-uuid');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const Config = require('../../utils/Config');
 
-const ONE_SAMPLE_GENOTYPE_NAME = null;
+const ONE_SAMPLE_GENOTYPE_NAME = Config.oneSampleGenotypeName;
 
 function addSampleTimestamp(knex, Promise) {
     console.log('=> Adding sample timestamp...');
