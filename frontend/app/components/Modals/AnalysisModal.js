@@ -55,9 +55,9 @@ function mapStateToProps(state) {
     const historyList = queryHistory.history;//.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
     const initialHistoryList = queryHistory.initialHistory;
 
-    const filter = filtersList.hashedArray.hash[filtersList.selectedFilterId];
-    const view = viewsList.hashedArray.hash[viewsList.selectedViewId];
-    const sample = samplesList.hashedArray.hash[samplesList.selectedSampleId];
+    const filter = filtersList.hashedArray.array[0];
+    const view = viewsList.hashedArray.array[0];
+    const sample = samplesList.hashedArray.array[0];
 
     return {
         auth,
