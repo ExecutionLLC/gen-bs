@@ -222,7 +222,7 @@ class SamplesModel extends SecureModelBase {
     /**
      * @param {Uuid} userId The owner
      * @param {Object} sample Sample metadata to add.
-     * @param {Array<string>}genotypesOrNull List of genotype names in the sample.
+     * @param {?Array<string>}genotypesOrNull List of genotype names in the sample.
      * If null, one genotype with NULL-name will be added.
      * @param {boolean} shouldGenerateId If true, id will be generated.
      * @param {KnexTransaction} trx Knex transaction
