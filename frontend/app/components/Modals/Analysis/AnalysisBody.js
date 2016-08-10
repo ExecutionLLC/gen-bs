@@ -84,17 +84,18 @@ export default class AnalysisBody extends React.Component {
         async.waterfall([
             (callback) => {this.props.dispatch(toggleLoadingHistoryData(true)); callback(null);},
             (callback) => {
-                if (this.props.viewsList.hashedArray.hash[viewId]) {
-                    this.props.dispatch(viewsListSetHistoryView(this.props.viewsList.hashedArray.hash[viewId]));
-                    callback(null);
+                const existentView = this.props.viewsList.hashedArray.hash[viewId];
+                if (existentView) {
+                    callback(null, existentView);
                 } else {
-                    const viewsClient = apiFacade.viewsClient;
-                    viewsClient.get(viewId, (error, response) => {
-                        const view = response.body;
-                        this.props.dispatch(viewsListSetHistoryView(view));
-                        callback(null);
+                    apiFacade.viewsClient.get(viewId, (error, response) => {
+                        callback(null, response.body);
                     });
                 }
+            },
+            (view, callback) => {
+                this.props.dispatch(viewsListSetHistoryView(view));
+                callback(null);
             },
             (callback) => {this.props.dispatch(setCurrentQueryHistoryId(id)); callback(null); },
             (callback) => {this.props.dispatch(toggleLoadingHistoryData(false)); callback(null);}
