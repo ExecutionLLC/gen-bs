@@ -205,6 +205,7 @@ export function subscribeToWs() {
 
 export function initWSConnection() {
     return (dispatch) => {
+        // path just for redirecting to webserver (see nginx rule 'location ~ ^/api/(?<section>.*)'), did not used in webserver
         var conn = new WebSocket(`${config.URLS.WS}/api/ws`);
         dispatch([
             createWsConnection(conn),
