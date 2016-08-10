@@ -30,7 +30,7 @@ class ControllersFacade {
         this.fieldsMetadataController = new FieldsMetadataController(services);
         this.savedFilesController = new SavedFilesController(services);
         this.queryHistoryController = new QueryHistoryController(services);
-        this.modelController = new ModelController(services);
+        this.modelsController = new ModelController(services);
 
         this.searchController = new SearchController(services);
         this.sessionsController = new SessionsController(services);

@@ -218,7 +218,8 @@ class ModelsModel extends SecureModelBase {
                 const textsHash = CollectionUtils.createHashByKey(modelTexts, 'modelId');
                 const modelsWithDescription = _.map(models, model => {
                     return Object.assign({}, model, {
-                        description: textsHash[model.id].description
+                        description: textsHash[model.id].description,
+                        name: textsHash[model.id].name
                     });
                 });
                 callback(null, modelsWithDescription);

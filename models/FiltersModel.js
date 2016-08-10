@@ -164,7 +164,8 @@ class FiltersModel extends SecureModelBase {
                 const textsHash = CollectionUtils.createHashByKey(filterTexts, 'filterId');
                 const filtersWithDescription = _.map(filters, filter => {
                     return Object.assign({}, filter, {
-                        description: textsHash[filter.id].description
+                        description: textsHash[filter.id].description,
+                        name: textsHash[filter.id].name
                     });
                 });
                 callback(null, filtersWithDescription);
