@@ -193,8 +193,7 @@ exports.up = function (knex, Promise) {
         .then(() => createAndFillGenotypeIdInSavedFilesTable(knex, Promise))
         .then(() => createAndFillGenotypeIdInQueryHistoryTable(knex, Promise))
         .then(() => dropSampleVersionIds(knex, Promise))
-        .then(() => console.log('=> Complete.'))
-        ;
+        .then(() => console.log('=> Complete.'));
 };
 
 exports.down = function (knex, Promise) {
