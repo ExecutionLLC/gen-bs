@@ -1,5 +1,6 @@
 [
   {
+    "id": "343389c0-12db-4ca3-8ead-b5536c34a568",
     "name": "Test Model",
     "description": "Test model description",
     "type": "standard",
@@ -8,34 +9,19 @@
     "rules": {
       "$or": [
         {
-          "field": {
-            "source_name": "sample",
-            "name": "ALT",
-            "value_type": "string"
-          },
-          "condition": {
+          "00000000-0000-0000-0000-000000000005": {
             "$neq": "A"
           }
         },
         {
-          "field": {
-            "source_name": "sample",
-            "name": "FILTER",
-            "value_type": "string"
-          },
-          "condition": {
+          "00000000-0000-0000-0000-000000000007": {
             "$eq": "PASS"
           }
         },
         {
           "$and": [
             {
-              "field": {
-                "source_name": "sample",
-                "name": "ALT",
-                "value_type": "string"
-              },
-              "condition": {
+              "00000000-0000-0000-0000-000000000005": {
                 "$neq": "ABC"
               }
             }
@@ -45,6 +31,7 @@
     }
   },
   {
+    "id": "7f3fc9a3-c0d0-4b34-9c88-b5986dbc7153",
     "name": "Another Test Model",
     "description": "Test model description v2",
     "type": "advanced",
