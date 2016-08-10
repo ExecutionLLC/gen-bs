@@ -70,7 +70,7 @@ export function fetchUserdata() {
                     views,
                     totalFields,
                     savedFiles,
-                    queryHistory,
+                    analyses,
                     lastSampleId,
                     lastSampleFields
                 } = userData;
@@ -88,7 +88,7 @@ export function fetchUserdata() {
                 dispatch(receiveTotalFields(totalFields));
                 dispatch(receiveFields(lastSampleFields));
                 dispatch(receiveSamplesList(samples));
-                dispatch(receiveInitialQueryHistory(queryHistory.slice(0, 10))); // FIXME sliced for testing purposes only
+                dispatch(receiveInitialQueryHistory(analyses));
 
                 if (!sample || !filter || !view) {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));

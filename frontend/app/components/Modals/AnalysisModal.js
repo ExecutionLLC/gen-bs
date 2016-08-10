@@ -52,7 +52,7 @@ function mapStateToProps(state) {
 
     };
     
-    const historyList = queryHistory.history.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
+    const historyList = queryHistory.history;//.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
     const initialHistoryList = queryHistory.initialHistory;
 
     const filter = filtersList.hashedArray.hash[filtersList.selectedFilterId];
