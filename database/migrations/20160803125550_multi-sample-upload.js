@@ -65,7 +65,7 @@ function createGenotypeTablesAndColumns(knex, Promise) {
 }
 
 /**
- * @return {Object} sampleId -> genotypeId hash
+ * @returns {Promise<Object>} sampleId -> genotypeId hash
  * */
 function createGenotypesForExistingSamples(knex, Promise) {
     console.log('=> Creating genotypes for existing samples...');
