@@ -475,7 +475,7 @@ class SamplesModel extends SecureModelBase {
      * which has 'sampleId' and 'versionId' fields.
      * */
     _findLastVersionsByGenotypeIds(trx, genotypeIds, callback) {
-        const genotypeIdsInQuotes = _.map(genotypeIds, id => '\'' + id + '\'');
+        const genotypeIdsInQuotes = _.map(genotypeIds, id => `${id}`);
         async.waterfall([
             (callback) => trx.raw(
                 'SELECT DISTINCT ON (sample_genotype_id)'
@@ -484,7 +484,7 @@ class SamplesModel extends SecureModelBase {
                 + ', LAST_VALUE(timestamp) OVER wnd AS last_version_timestamp'
                 + ' FROM genotype_version'
                 + ' WHERE sample_genotype_id IN'
-                + ' (' + genotypeIdsInQuotes.join(', ') + ')'
+                + ` (${genotypeIdsInQuotes.join(', ')})`
                 + ' WINDOW wnd AS'
                 + ' (PARTITION BY sample_genotype_id ORDER BY timestamp DESC)'
             )
