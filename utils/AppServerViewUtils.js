@@ -42,11 +42,11 @@ class AppServerViewUtils {
 
         // Map list items' field ids to pair (field name, source name).
         const listItems = _(allListItems)
-            // Ignore missing fields, to be able to apply views generated for a different sample, with unique fields.
+        // Ignore missing fields, to be able to apply views generated for a different sample, with unique fields.
             .filter(listItem => fieldIdToMetadata[listItem.fieldId])
             .map(listItem => {
                 const field = fieldIdToMetadata[listItem.fieldId];
-                const keyWordHash = CollectionUtils.createHashByKey(field.keywords,'id');
+                const keyWordHash = CollectionUtils.createHashByKey(field.keywords, 'id');
                 return {
                     fieldName: field.name,
                     sourceName: field.sourceName,
@@ -62,9 +62,11 @@ class AppServerViewUtils {
 
         // 'sample' group contains all sample fields.
         const appServerSampleColumns = _.map(itemsBySource['sample'],
-            ({fieldName}) => AppServerViewUtils.createAppServerColumnName(fieldName,
-                'sample', sampleGenotypeName, false)
-        );
+            ({fieldName, filter}) => ({
+                name: AppServerViewUtils.createAppServerColumnName(fieldName,
+                    'sample', sampleGenotypeName, false),
+                filter
+            }));
 
         // Other groups except 'sample' are source names.
         const sourceNames = _(itemsBySource)
@@ -74,9 +76,10 @@ class AppServerViewUtils {
 
         // Make groups of columns separately for each source.
         const appServerSources = _.map(sourceNames, sourceName => {
-            const sourceColumns = _.map(itemsBySource[sourceName], ({fieldName}) =>
-                AppServerViewUtils.createAppServerColumnName(fieldName, null, null, false)
-            );
+            const sourceColumns = _.map(itemsBySource[sourceName], ({fieldName, filter}) => ({
+                name: AppServerViewUtils.createAppServerColumnName(fieldName, null, null, false),
+                filter
+            }));
             return {
                 name: sourceName,
                 columns: sourceColumns
