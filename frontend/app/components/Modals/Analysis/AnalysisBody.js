@@ -17,6 +17,7 @@ export default class AnalysisBody extends React.Component {
                 this.findHistoryItemForId(this.props.currentHistoryId)
             ) ||
             this.props.newHistoryItem;
+        const isLoadingHistoryData = this.props.isLoadingHistoryData;
 
         return (
             <Modal.Body>
@@ -42,7 +43,7 @@ export default class AnalysisBody extends React.Component {
                     </div>
                     <div className='split-right tab-content'>
                         <div className='split-wrap tab-pane active'>
-                            <AnalysisRightPane
+                            {!isLoadingHistoryData && <AnalysisRightPane
                                 dispatch={this.props.dispatch}
                                 disabled={this.props.currentHistoryId && !this.props.editingHistoryList[this.props.currentHistoryId]}
                                 auth={this.props.auth}
@@ -53,7 +54,7 @@ export default class AnalysisBody extends React.Component {
                                 samplesList={this.props.samplesList}
                                 modelsList={this.props.modelsList}
                                 fields={this.props.fields}
-                            />
+                            />}
                         </div>
                     </div>
                 </div>

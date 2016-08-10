@@ -31,6 +31,7 @@ export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
 export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
 export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
 export const CLOSE_QUERY_HISTORY_MODAL = 'CLOSE_QUERY_HISTORY_MODAL';
+export const TOGGLE_LOAING_HISTORY_DATA = 'TOGGLE_LOAING_HISTORY_DATA';
 
 const HISTORY_NETWORK_ERROR = 'Cannot update "query history" (network error).';
 const HISTORY_SERVER_ERROR = 'Cannot update "query history" (server error).';
@@ -266,4 +267,11 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
     else {
         return {collection: collectionWOOldHistoryItem, historyItemId: newHistoryItemId};
     }
+}
+
+export function toggleLoadingHistoryData(isLoading) {
+    return {
+        type: TOGGLE_LOAING_HISTORY_DATA,
+        isLoading
+    };
 }

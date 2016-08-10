@@ -73,7 +73,8 @@ function mapStateToProps(state) {
         historyListFilter: queryHistory.filter,
         currentHistoryId: queryHistory.currentHistoryId,
         isHistoryReceivedAll: queryHistory.isReceivedAll,
-        newHistoryItem
+        newHistoryItem,
+        isLoadingHistoryData: queryHistory.isLoadingHistoryData
     };
 }
 
