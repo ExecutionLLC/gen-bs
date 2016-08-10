@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 import 'react-select/dist/react-select.css';
 
@@ -47,7 +48,7 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
 
     renderEditableField(sampleId, field, fieldIdToValuesHash) {
         const fieldValue = fieldIdToValuesHash[field.id] || '';
-        if (field.availableValues) {
+        if (!_.isEmpty(field.availableValues)) {
             return this.renderSelectField(sampleId, field, fieldValue);
         } else {
             return this.renderTextField(sampleId, field, fieldValue);

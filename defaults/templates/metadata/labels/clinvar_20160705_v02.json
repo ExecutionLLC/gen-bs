@@ -1,6 +1,13 @@
 [
   {
     "field": {
+      "name": "INFO_RS",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "dbSNP"
+  },
+  {
+    "field": {
       "name": "INFO_GENEINFO_0",
       "source_name": "clinvar_20160705_v02"
     },
@@ -47,6 +54,13 @@
       "source_name": "clinvar_20160705_v02"
     },
     "label": "Provisional"
+  },
+  {
+    "field": {
+      "name": "INFO_S3D",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "3D structure"
   },
   {
     "field": {
@@ -204,6 +218,13 @@
   },
   {
     "field": {
+      "name": "INFO_OM",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "OMIM"
+  },
+  {
+    "field": {
       "name": "INFO_WTD",
       "source_name": "clinvar_20160705_v02"
     },
@@ -211,10 +232,24 @@
   },
   {
     "field": {
+      "name": "INFO_CAF",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "Allele frequency"
+  },
+  {
+    "field": {
       "name": "INFO_COMMON",
       "source_name": "clinvar_20160705_v02"
     },
     "label": "Common"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNALLE",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "ClinVar Allele"
   },
   {
     "field": {
@@ -239,6 +274,20 @@
   },
   {
     "field": {
+      "name": "INFO_CLNDSDB",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "disease database"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNDSDBID",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "disease DB ID"
+  },
+  {
+    "field": {
       "name": "INFO_CLNDBN",
       "source_name": "clinvar_20160705_v02"
     },
@@ -250,5 +299,12 @@
       "source_name": "clinvar_20160705_v02"
     },
     "label": "Criteria"
+  },
+  {
+    "field": {
+      "name": "INFO_CLNACC",
+      "source_name": "clinvar_20160705_v02"
+    },
+    "label": "ClinVar ID"
   }
 ]

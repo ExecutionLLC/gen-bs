@@ -107,16 +107,21 @@ class ApplicationServerServiceBase extends ServiceBase {
      * @param {ExpressSession}session
      * @param {OperationBase}operation
      * @param {string}eventName
+     * @param {string}targetSessionId
+     * @param {string}targetOperationId
      * @param {boolean}shouldCompleteOperation
      * @param {AppServerErrorResult}error
      * @param {function(Error, AppServerOperationResult)}callback
      */
-    _createErrorOperationResult(session, operation, eventName, shouldCompleteOperation, error, callback) {
+    _createErrorOperationResult(session, operation, eventName, targetSessionId,
+                                targetOperationId, shouldCompleteOperation, error, callback) {
         /**@type AppServerOperationResult*/
         const result = {
             session,
             operation,
             eventName,
+            targetSessionId,
+            targetOperationId,
             shouldCompleteOperation,
             resultType: RESULT_TYPES.ERROR,
             error

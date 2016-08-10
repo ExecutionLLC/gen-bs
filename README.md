@@ -41,6 +41,7 @@ WebServer consists of:
 - models, which are the data access layer abstraction. Models do actual requests for accessing data sources, such as DB or application service.
 - utils, where helper methods are placed, such as snake-to-camel case conversion utility.
 - startup contains scripts executing at service start, such as database creation, AS data retrieval, etc.
+- defaults, where the database seeds are living.
 
 NPM scripts are used to build and launch anything the project needs.
 
@@ -55,6 +56,7 @@ Web server uses PostgreSQL to store project metadata (anything it needs, except 
 * `GEN_WS_DATABASE_USER` - user with root access to the server, defaults to `postgres`.
 * `GEN_WS_DATABASE_PASSWORD` - root user password.
 * `GEN_WS_DATABASE_NAME` - name of the database to use for the project.
+* `GEN_WS_RABBIT_MQ_HOST`, `GEN_WS_RABBIT_MQ_PORT`, `GEN_WS_RABBIT_MQ_USER`, `GEN_WS_RABBIT_MQ_PASSWORD` - RabbitMQ settings. Please bear in mind that default "guest"/"guest" user works only for localhost connections.
 
 ## Web Server Launch
 

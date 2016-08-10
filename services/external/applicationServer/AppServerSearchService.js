@@ -51,7 +51,9 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             this._createErrorOperationResult(
                 session,
                 operation,
-                EVENTS.onOperationResultReceived, 
+                EVENTS.onOperationResultReceived,
+                session.id,
+                operation.getId(),
                 false, 
                 ErrorUtils.createAppServerInternalError(message), 
                 callback
@@ -69,7 +71,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     requestOpenSearchSession(session, params, callback) {
         const fieldIdToFieldMetadata = _.indexBy(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
-        const {view, sample, filter, limit, offset} = params;
+        const {userId, view, sample, filter, limit, offset} = params;
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(sample);
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata);
@@ -89,13 +91,13 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (callback) => this._closePreviousSearchIfAny(session, callback),
             (callback) => this.services.operations.addSearchOperation(session, method, callback),
             (operation, callback) => {
-                operation.setSampleId(params.sample.id);
-                operation.setUserId(params.userId);
-                operation.setOffset(params.offset);
-                operation.setLimit(params.limit);
+                operation.setSampleId(sample.id);
+                operation.setUserId(userId);
+                operation.setOffset(offset);
+                operation.setLimit(limit);
                 callback(null, operation);
             },
-            (operation, callback) => this.services.samples.makeSampleIsAnalyzedIfNeeded(params.userId, params.sample.id, (error) => {
+            (operation, callback) => this.services.samples.makeSampleIsAnalyzedIfNeeded(userId, sample.id, (error) => {
                 callback(error, operation);
             }),
             (operation, callback) => this._rpcSend(session, operation, method, searchSessionRequest, callback)
@@ -158,7 +160,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 });
             },
             ({rowData, user}, callback) => {
-                this._convertFields(rowData, user,sampleId, callback);
+                this._convertFields(rowData, user, sampleId, callback);
             }
         ], (error, asData) => {
             callback(error, asData);

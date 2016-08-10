@@ -15,12 +15,12 @@ const services = new ServicesFacade(Config, logger, models);
 if (args.name && args.lastName && args.speciality
     && args.email && args.defaultLanguage && args.numberPaidSamples) {
     services.users.add(args.defaultLanguage, args.name, args.lastName,
-        args.email, args.speciality, args.numberPaidSamples, (error, userId) => {
+        args.email, args.speciality, args.numberPaidSamples, (error, user) => {
             if (error) {
                 console.error(error);
                 process.exit(1);
             } else {
-                console.log('User ' + args.name + ' is added with id: ' + userId);
+                console.log('User ' + args.name + ' is added with id: ' + user.id);
                 process.exit(0);
             }
         });
