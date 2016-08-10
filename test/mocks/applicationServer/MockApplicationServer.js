@@ -33,7 +33,7 @@ class MockApplicationServer {
         async.waterfall([
             (callback) => RabbitMqUtils.createConnection(host, port, user, password, callback),
             (connection, callback) => {
-                async.series({
+                async.parallel({
                     connection: (callback) => callback(null, connection),
                     // Create task query consumer bound to all messages of the request exchange.
                     taskConsumer: (callback) => RabbitMqUtils.createConsumer(connection,

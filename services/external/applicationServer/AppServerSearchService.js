@@ -179,7 +179,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     _convertFields(asData, user, sampleId, callback) {
         async.waterfall([
-            (callback) => async.series({
+            (callback) => async.parallel({
                 sample: (callback) => this.services.samples.find(user, sampleId, callback),
                 sampleFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback),
                 sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
