@@ -97,6 +97,38 @@ export default class AnalysisBody extends React.Component {
                 this.props.dispatch(viewsListSetHistoryView(view));
                 callback(null);
             },
+            (callback) => {
+                const existentFilter = this.props.filtersList.hashedArray.hash[filterId];
+                if (existentFilter) {
+                    callback(null, existentFilter);
+                } else {
+                    apiFacade.filtersClient.get(filterId, (error, response) => {
+                        callback(null, response.body);
+                    });
+                }
+            },
+            (filter, callback) => {
+                this.props.dispatch(filtersListSetHistoryFilter(filter));
+                callback(null);
+            },
+            (callback) => {
+                if (modelId == null) {
+                    callback(null, null);
+                    return;
+                }
+                const existentModel = this.props.modelsList.hashedArray.hash[modelId];
+                if (existentModel) {
+                    callback(null, existentModel);
+                } else {
+                    apiFacade.filtersClient.get(modelId, (error, response) => { // TODO replace by modelsClient
+                        callback(null, response.body);
+                    });
+                }
+            },
+            (filter, callback) => {
+                // this.props.dispatch(filtersListSetHistoryFilter(filter)); // TODO replace by 'set history model'
+                callback(null);
+            },
             (callback) => {this.props.dispatch(setCurrentQueryHistoryId(id)); callback(null); },
             (callback) => {this.props.dispatch(toggleLoadingHistoryData(false)); callback(null);}
         ]);
