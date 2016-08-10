@@ -10,7 +10,13 @@ import {viewsListSetHistoryView} from '../../../actions/viewsList';
 export default class AnalysisBody extends React.Component {
 
     render() {
-        const selectedHistoryItem = this.props.currentHistoryId && (this.props.editingHistoryList[this.props.currentHistoryId] || this.findHistoryItemForId(this.props.currentHistoryId)) || this.props.newHistoryItem;
+        const selectedHistoryItem =
+            this.props.currentHistoryId &&
+            (
+                this.props.editingHistoryList[this.props.currentHistoryId] ||
+                this.findHistoryItemForId(this.props.currentHistoryId)
+            ) ||
+            this.props.newHistoryItem;
 
         return (
             <Modal.Body>
