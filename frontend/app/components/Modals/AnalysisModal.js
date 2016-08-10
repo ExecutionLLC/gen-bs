@@ -55,9 +55,10 @@ function mapStateToProps(state) {
     const historyList = queryHistory.history;//.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
     const initialHistoryList = queryHistory.initialHistory;
 
-    const filter = filtersList.hashedArray.array[0];
-    const view = viewsList.hashedArray.array[0];
-    const sample = samplesList.hashedArray.array[0];
+    const newHistoryItem = queryHistory.newHistoryItem || HistoryItemUtils.makeNewHistoryItem(
+            samplesList.hashedArray.array[0],
+            filtersList.hashedArray.array[0],
+            viewsList.hashedArray.array[0]);
 
     return {
         auth,
@@ -72,7 +73,7 @@ function mapStateToProps(state) {
         historyListFilter: queryHistory.filter,
         currentHistoryId: queryHistory.currentHistoryId,
         isHistoryReceivedAll: queryHistory.isReceivedAll,
-        newHistoryItem: queryHistory.newHistoryItem || HistoryItemUtils.makeNewHistoryItem(sample, filter, view)
+        newHistoryItem
     };
 }
 
