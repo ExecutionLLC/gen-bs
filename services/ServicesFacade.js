@@ -19,6 +19,7 @@ const SavedFilesService = require('./SavedFilesService');
 const QueryHistoryService = require('./QueryHistoryService');
 const UserDataService = require('./UserDataService');
 const ObjectStorageService = require('./ObjectStorageService');
+const ModelsService = require('./ModelsService');
 
 const AmazonS3Service = require('./external/AmazonS3Service');
 const AliyunOSSService = require('./external/AliyunOSSService');
@@ -47,6 +48,7 @@ class ServiceFacade {
         this.queryHistory = new QueryHistoryService(this, models);
         this.userData = new UserDataService(this, models);
         this.search = new SearchService(this, models);
+        this.models = new ModelsService(this, models);
 
         this.sessions = new SessionService(this, models);
         this.operations = new OperationService(this, models);
