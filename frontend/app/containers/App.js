@@ -7,7 +7,6 @@ import config from '../../config';
 
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact';
 import NavbarMain from '../components/Header/NavbarMain';
-import NavbarCreateQuery from '../components/Header/NavbarCreateQuery';
 
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
@@ -60,10 +59,6 @@ class App extends Component {
                  <div className='container-fluid'>
                     <NavbarMain openAnalysisModal={() => this.props.dispatch(openModal('analysis'))} />
                      <div className={navbarQueryClass} id='subnav'>
-                         <NavbarCreateQuery
-                          {...this.props}
-                          openModal={ (modalName) => { this.props.dispatch(openModal(modalName)); } }
-                         />
                      </div>
                      <VariantsTableReact {...this.props} />
                      <div id='fav-message' className='hidden'>

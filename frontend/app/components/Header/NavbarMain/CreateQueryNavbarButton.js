@@ -21,7 +21,7 @@ export default class CreateQeuryNavbarButton extends Component {
         return (
             <div>
                 <div>
-                    <a onClick={this.props.toggleQueryNavbar} type='button' href='#' className='btn navbar-btn'
+                    <a type='button' href='#' className='btn navbar-btn'
                        id='btnToggle'>
                         <span className='hidden-xxs' data-localize='query.help' data-toggle='tooltip'
                               data-placement='right' title='Open navbar and create new analises query'
