@@ -11,6 +11,7 @@ import Auth from './NavbarMain/Auth';
 
 import {toggleQueryNavbar} from '../../actions/ui';
 import {changeVariantsGlobalFilter, searchInResultsSortFilter} from '../../actions/variantsTable';
+import {changeGlobalString} from '../../actions/ui';
 
 class NavbarMain extends Component {
 
@@ -30,6 +31,7 @@ class NavbarMain extends Component {
         const sendSearchRequest = (globalSearchString) => {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
             dispatch(searchInResultsSortFilter());
+            dispatch(changeGlobalString(globalSearchString));
         };
         return (
 
@@ -45,7 +47,6 @@ class NavbarMain extends Component {
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
                         onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }
-                        dispatch={dispatch}
                         globalSearchString={globalSearchString}
                     />
                     <ExportDropdown dispatch={this.props.dispatch}
