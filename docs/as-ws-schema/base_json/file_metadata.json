@@ -7,40 +7,25 @@
       "type": "string",
       "description": "string id of assemblies reference"
     },
-    "items": {
+    "genotypes": {
       "type": "array",
+      "description": "Optional. Contains names of the genotypes in the file.",
       "items": {
-        "type": "object",
-        "description": "list of columns metadata",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "name of the column"
-          },
-          "is_mandatory": {
-            "type": "boolean",
-            "description": "true - column is mandatory for VCF format, false - column is part of INFO field"
-          },
-          "num": {
-            "type": "integer",
-            "description": "number of values per row (1 - one value, -1 - same as number of mutations, 0 - any)"
-          },
-          "type": {
-            "type": "string",
-            "description": "type of the column data",
-            "enum": [
-              "float",
-              "char",
-              "integer",
-              "string",
-              "boolean"
-            ]
-          },
-          "desc": {
-            "type": "string",
-            "description": "short description from VCF file"
-          }
-        }
+        "type": "string"
+      }
+    },
+    "columns": {
+      "type": "array",
+      "description": "list of the columns metadata common for all genotypes found in the sample",
+      "items": {
+        "$ref": "./column_metadata.json"
+      }
+    },
+    "genotype_columns": {
+      "type": "array",
+      "description": "Optional, absent in case the uploaded VCF file has no genotype columns.",
+      "items": {
+        "$ref": "./column_metadata.json"
       }
     }
   }

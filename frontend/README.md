@@ -19,6 +19,7 @@ App consists of:
 - Go to frontend folder. `cd frontend`
 - Install webpack global. `npm install -g webpack`
 - Install npm dependencies. `npm install`
+- Install nginx `apt-get install nginx`, copy its config `nginx-dev.conf` to the `/etc/nginx/sites-available` and rename it as `default` (Ubuntu nginx config lays here), reload config `nginx -s reload`. Now nginx will redirect all `/api/*` requests (including websockets) to the `127.0.0.1:5000` and all other requests to the `127.0.0.1:8080`.
 - Run dev server. `npm start`
 
 # Development

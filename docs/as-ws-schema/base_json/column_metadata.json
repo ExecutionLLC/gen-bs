@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "description": "Column metadata sent by the application server",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "name of the column"
+    },
+    "is_mandatory": {
+      "type": "boolean",
+      "description": "true - column is mandatory for VCF format, false - column is part of INFO field"
+    },
+    "num": {
+      "type": "integer",
+      "description": "number of values per row (1 - one value, -1 - same as number of mutations, 0 - any)"
+    },
+    "type": {
+      "type": "string",
+      "description": "type of the column data",
+      "enum": [
+        "float",
+        "char",
+        "integer",
+        "string",
+        "boolean"
+      ]
+    },
+    "desc": {
+      "type": "string",
+      "description": "short description from VCF file"
+    }
+  }
+}
