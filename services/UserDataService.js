@@ -10,7 +10,7 @@ const {ENTITY_TYPES} = require('../utils/Enums');
 class UserDataService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
-        this.defaultLimit = 100;
+        this.defaultLimit = 5; // TODO 5 for test purposes only, increase to 10
     }
 
     /**

@@ -42,7 +42,7 @@ class SearchService extends ServiceBase {
             // this._sendSearchRequest(
             //     languageId, viewId, filterId, name, description, type, samples, limit, offset, callback, user, session
             // );
-            const hasUndefOrNullParam = _.some([languageId, viewId, filterId, modelId, name, description, type, samples, limit, offset], (param) => {
+            const hasUndefOrNullParam = _.some([languageId, viewId, filterId, name, description, type, samples, limit, offset], (param) => {
                 return _.isUndefined(param) || _.isNull(param);
             });
             if (hasUndefOrNullParam) {
@@ -79,7 +79,7 @@ class SearchService extends ServiceBase {
             async.waterfall(
                 [
                     (callback) => {
-                        this.services.analysis.find(user.id, id, callback);
+                        this.services.analysis.find(user, id, callback);
                     },
                     (analysis, callback) => {
                         const {samples, modelId, viewId, filterId} = analysis;
