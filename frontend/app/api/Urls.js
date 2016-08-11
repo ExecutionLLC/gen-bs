@@ -86,10 +86,6 @@ export default class Urls {
         return this._constructApiUrl('/search');
     }
 
-    startSearchAgain() {
-        return this._constructApiUrl('/searchagain');
-    }
-
     getAllFields() {
         return this._constructApiUrl('/fields');
     }

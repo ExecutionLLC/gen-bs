@@ -1,9 +1,13 @@
+import * as _ from 'lodash';
+
 import React from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 import AnalysisHeader from './Analysis/AnalysisHeader';
 import AnalysisBody from './Analysis/AnalysisBody';
 import HistoryItemUtils from '../../utils/HistoryItemUtils';
+import {entityType} from '../../utils/entityTypes';
+
 
 class AnalysisModal extends React.Component {
     render() {
@@ -52,12 +56,17 @@ function mapStateToProps(state) {
 
     };
     
-    const historyList = queryHistory.history.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
+    const historyList = queryHistory.history;//.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
     const initialHistoryList = queryHistory.initialHistory;
 
-    const filter = filtersList.hashedArray.hash[filtersList.selectedFilterId];
-    const view = viewsList.hashedArray.hash[viewsList.selectedViewId];
-    const sample = samplesList.hashedArray.hash[samplesList.selectedSampleId];
+    function findFirstNonHistoryItem(list) {
+        return _.find(list.hashedArray.array, (item) => item.type !== entityType.HISTORY);
+    }
+
+    const newHistoryItem = queryHistory.newHistoryItem || HistoryItemUtils.makeNewHistoryItem(
+            findFirstNonHistoryItem(samplesList),
+            findFirstNonHistoryItem(filtersList),
+            findFirstNonHistoryItem(viewsList));
 
     return {
         auth,
@@ -72,7 +81,8 @@ function mapStateToProps(state) {
         historyListFilter: queryHistory.filter,
         currentHistoryId: queryHistory.currentHistoryId,
         isHistoryReceivedAll: queryHistory.isReceivedAll,
-        newHistoryItem: queryHistory.newHistoryItem || HistoryItemUtils.makeNewHistoryItem(sample, filter, view)
+        newHistoryItem,
+        isLoadingHistoryData: queryHistory.isLoadingHistoryData
     };
 }
 

@@ -68,10 +68,10 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div>
                 {this.renderSamplesSelects(historyItem, disabled)}
-                {this.renderFilterSelector(historyItem.filter, disabled)}
-                {historyItem.type === 'family' && this.renderFamilyModelSelector(historyItem.model, disabled)}
-                {historyItem.type === 'tumor' && this.renderTumorModelSelector(historyItem.model, disabled)}
-                {this.renderViewSelector(historyItem.view, disabled)}
+                {this.renderFilterSelector(historyItem.filterId, disabled)}
+                {historyItem.type === 'family' && this.renderFamilyModelSelector(historyItem.modelId, disabled)}
+                {historyItem.type === 'tumor' && this.renderTumorModelSelector(historyItem.modelId, disabled)}
+                {this.renderViewSelector(historyItem.viewId, disabled)}
                 <hr className='invisible' />
                 {this.renderUseActualVersions()}
                 {this.renderAnalyzeButton(!disabled)}
@@ -79,7 +79,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderFilterSelector(filter, disabled) {
+    renderFilterSelector(filterId, disabled) {
         return (
             <div>
                 <h5><span data-localize='general.filter'>Filter</span></h5>
@@ -102,7 +102,7 @@ export default class AnalysisRightPane extends React.Component {
                                 id='filterSelect'
                                 disabled={disabled}
                                 options={this.getFilterOptions()}
-                                value={filter && filter.id || null}
+                                value={filterId}
                                 onChange={(item) => this.onFilterSelect(item.value)}
                             />
                         </div>
@@ -113,23 +113,23 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
     
-    renderFamilyModelSelector(model, disabled) {
+    renderFamilyModelSelector(modelId, disabled) {
         return (
             <div id='familyModelDiv'>
-                {this.renderModelSelector(model, disabled)}
+                {this.renderModelSelector(modelId, disabled)}
             </div>
         );
     }
 
-    renderTumorModelSelector(model, disabled) {
+    renderTumorModelSelector(modelId, disabled) {
         return (
             <div id='tumorModelDiv'>
-                {this.renderModelSelector(model, disabled)}
+                {this.renderModelSelector(modelId, disabled)}
             </div>
         );
     }
 
-    renderModelSelector(model, disabled) {
+    renderModelSelector(modelId, disabled) {
         return (
             <div>
                 <h5><span data-localize='general.model'>Model</span></h5>
@@ -151,7 +151,7 @@ export default class AnalysisRightPane extends React.Component {
                                 className='select2'
                                 tabIndex='-1'
                                 disabled={disabled}
-                                value={model && model.id || null}
+                                value={modelId}
                                 options={this.getModelOptions()}
                                 onChange={(item) => this.onModelSelect(item.value)}
                             />
@@ -163,7 +163,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderViewSelector(view, disabled) {
+    renderViewSelector(viewId, disabled) {
         return (
             <div>
                 <h5><span data-localize='general.view'>View</span></h5>
@@ -186,7 +186,7 @@ export default class AnalysisRightPane extends React.Component {
                                 id='viewSelect'
                                 disabled={disabled}
                                 options={this.getViewOptions()}
-                                value={view && view.id || null}
+                                value={viewId}
                                 onChange={(item) => this.onViewSelect(item.value)}
                             />
                         </div>
@@ -702,60 +702,58 @@ export default class AnalysisRightPane extends React.Component {
             description: historyItem.description,
             type: historyItem.type,
             samples: historyItem.samples,
-            viewId: historyItem.view.id,
-            filterId: historyItem.filter.id,
-            modelId: historyItem.model && historyItem.model.id || null
+            viewId: historyItem.viewId,
+            filterId: historyItem.filterId,
+            modelId: historyItem.modelId
         }));
         dispatch(closeModal('analysis'));
     }
 
     onViewsClick() {
-        this.props.dispatch(viewBuilderStartEdit(false, this.props.historyItem.view));
-
         const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId]));
+
         const action = editQueryHistoryItem(
             historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {view: null},
+            {viewId: null},
             historyItem
         );
 
-        this.props.dispatch(viewBuilderOnSave(action, 'changeItem.view'));
+        this.props.dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
         this.props.dispatch(openModal('views'));
     }
 
     onViewSelect(viewId) {
-        const {viewsList: {hashedArray: {hash: viewsHash}}} = this.props;
         this.dispatchEdit({
-            view: viewsHash[viewId]
+            viewId: viewId
         });
     }
     
     onFiltersClick() {
-        this.props.dispatch(filterBuilderStartEdit(false, this.props.historyItem.filter, this.props.fields));
-
         const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields));
+
         const action = editQueryHistoryItem(
             historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {filter: null},
+            {filterId: null},
             historyItem
         );
 
-        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filter'));
+        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         this.props.dispatch(openModal('filters'));
     }
 
     onFilterSelect(filterId) {
-        const {filtersList: {hashedArray: {hash: filtersHash}}} = this.props;
         this.dispatchEdit({
-            filter: filtersHash[filterId]
+            filterId: filterId
         });
     }
 
@@ -764,9 +762,8 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelSelect(modelId) {
-        const {modelsList: {models}} = this.props;
         this.dispatchEdit({
-            model: _.find(models, {id: modelId})
+            modelId: modelId
         });
     }
     

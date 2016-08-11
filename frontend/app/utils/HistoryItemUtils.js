@@ -1,51 +1,9 @@
 function makeHistoryItem(historyItem) {
-    const name = historyItem.timestamp + '_' + historyItem.sample.fileName + '_' + historyItem.filters[0].name + '_' + historyItem.view.name;
     return {
-        id: historyItem.id,
-        name: name,
-        description: 'Description of ' + name,
-        createdDate: historyItem.timestamp,
-        lastQueryDate: historyItem.timestamp + 1000,
-        filter: historyItem.filters[0],
-        view: historyItem.view,
-        // single
-        type: 'single', // 'tumor', 'family'
-        samples: [{
-            id: historyItem.sample && historyItem.sample.id || null,
-            type: 'single'
-        }]
-/* TODO: make other types like this:
-        // tumor
-        type: 'tumor',
-        model: historyItem.filters[0]
-        samples: [
-            {
-                id: historyItem.sample.id,
-                type: 'tumor'
-            },
-            {
-                id: historyItem.sample.id,
-                type: 'normal'
-            }
-        ]
-        // family
-        type: 'family',
-        model: historyItem.filters[0]
-        samples: [
-            {
-                id: historyItem.sample.id,
-                type: 'proband'
-            },
-            {
-                id: historyItem.sample.id,
-                type: 'mother'
-            },
-            {
-                id: historyItem.sample.id,
-                type: 'father'
-            }
-        ]
- */
+        ...historyItem,
+        name: `Copy of ${historyItem.name}`,
+        createdDate: '' + new Date(),
+        lastQueryDate: '' + new Date(),
     };
 }
 
@@ -57,8 +15,8 @@ function makeNewHistoryItem(sample, filter, view) {
         description: 'Description of ' + name,
         createdDate: '' + new Date(),
         lastQueryDate: '' + new Date(),
-        filter: filter,
-        view: view,
+        filterId: filter && filter.id || null,
+        viewId: view && view.id || null,
         type: 'single',
         samples: [{
             id: sample && sample.id || null,
@@ -109,7 +67,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'tumor'},
                         {id: historyItem.samples[0].id, type: 'normal'}
                     ],
-                    model: modelsList.models[0]
+                    modelId: modelsList.models[0].id
                 };
             },
             'family'(historyItem) {
@@ -119,7 +77,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'mother'},
                         {id: historyItem.samples[0].id, type: 'father'}
                     ],
-                    model: modelsList.models[0]
+                    modelId: modelsList.models[0].id
                 };
             }
         },
@@ -136,7 +94,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[1].id, type: 'mother'},
                         {id: historyItem.samples[1].id, type: 'father'}
                     ],
-                    model: modelsList.models[0]
+                    modelId: modelsList.models[0].id
                 };
             }
         },
@@ -152,7 +110,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'tumor'},
                         {id: historyItem.samples[1].id, type: 'normal'}
                     ],
-                    model: modelsList.models[0]
+                    modelId: modelsList.models[0].id
                 };
             }
         }
@@ -167,7 +125,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
     return {
         ...historyItem,
         samples: newSamplesModel.samples,
-        model: newSamplesModel.model,
+        modelId: newSamplesModel.modelId,
         type: targetType
     };
 }
@@ -186,14 +144,14 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
     if (change.samples != null) {
         editingHistoryItem = {...editingHistoryItem, samples: change.samples};
     }
-    if (change.filter != null) {
-        editingHistoryItem = {...editingHistoryItem, filter: change.filter};
+    if (change.filterId != null) {
+        editingHistoryItem = {...editingHistoryItem, filterId: change.filterId};
     }
-    if (change.view != null) {
-        editingHistoryItem = {...editingHistoryItem, view: change.view};
+    if (change.viewId != null) {
+        editingHistoryItem = {...editingHistoryItem, viewId: change.viewId};
     }
-    if (change.model != null) {
-        editingHistoryItem = {...editingHistoryItem, model: change.model};
+    if (change.modelId != null) {
+        editingHistoryItem = {...editingHistoryItem, modelId: change.modelId};
     }
     return editingHistoryItem;
 }

@@ -19,7 +19,8 @@ const initialState = {
     showQueryHistoryModal: false,
     newHistoryItem: null,
     editingHistory: {},
-    currentHistoryId: null
+    currentHistoryId: null,
+    loadingHistoryData: false
 };
 
 function reduceSetCurrentQueryHistoryId(state, action) {
@@ -137,6 +138,13 @@ function reduceCloseQueryHistoryModal(state) {
     });
 }
 
+function reduceToggleLoadingHistoryData(state, action) {
+    return {
+        ...state,
+        loadingHistoryData: action.isLoading
+    };
+}
+
 export default function queryHistory(state = initialState, action) {
     switch (action.type) {
         case ActionTypes.SET_CURRENT_QUERY_HISTORY_ID:
@@ -159,6 +167,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceShowQueryHistoryModal(state);
         case ActionTypes.CLOSE_QUERY_HISTORY_MODAL:
             return reduceCloseQueryHistoryModal(state);
+        case ActionTypes.TOGGLE_LOAING_HISTORY_DATA:
+            return reduceToggleLoadingHistoryData(state, action);
     }
     return state;
 }
