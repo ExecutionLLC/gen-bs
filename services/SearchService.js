@@ -79,7 +79,7 @@ class SearchService extends ServiceBase {
             async.waterfall(
                 [
                     (callback) => {
-                        this.services.analysis.find(user.id, id, callback);
+                        this.services.analysis.find(user, id, callback);
                     },
                     (analysis, callback) => {
                         const {samples, modelId, viewId, filterId} = analysis;
