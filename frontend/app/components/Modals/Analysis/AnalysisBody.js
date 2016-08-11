@@ -9,6 +9,7 @@ import {setCurrentQueryHistoryId, toggleLoadingHistoryData} from '../../../actio
 import {filtersListSetHistoryFilter} from '../../../actions/filtersList';
 import {viewsListSetHistoryView} from '../../../actions/viewsList';
 import apiFacade from '../../../api/ApiFacade';
+import {samplesListSetHistorySamples} from '../../../actions/samplesList';
 
 
 export default class AnalysisBody extends React.Component {
@@ -81,6 +82,36 @@ export default class AnalysisBody extends React.Component {
         const viewId = selectedHistoryItem.viewId;
         const modelId = selectedHistoryItem.modelId;
         const samplesIds = getUsedSamplesIds(selectedHistoryItem.samples);
+
+        const samplesHash = this.props.samplesList.hashedArray.hash;
+
+        function getSamples(samplesIds, callback) {
+
+            function getSample(sampleId, callback) {
+                const existentSample = samplesHash[sampleId];
+                if (existentSample) {
+                    callback(existentSample);
+                } else {
+                    apiFacade.samplesClient.get(sampleId, (error, response) => {
+                        callback(response.body);
+                    });
+                }
+            }
+
+            function getNextSample(samplesIds, index, samples) {
+                if (index >= samplesIds.length) {
+                    callback(samples);
+                    return;
+                }
+                getSample(samplesIds[index], (sample) => {
+                    const newSamples = [...samples, sample];
+                    getNextSample(samplesIds, index + 1, newSamples);
+                });
+            }
+
+            getNextSample(samplesIds, 0, []);
+        }
+
         async.waterfall([
             (callback) => {this.props.dispatch(toggleLoadingHistoryData(true)); callback(null);},
             (callback) => {
@@ -127,6 +158,13 @@ export default class AnalysisBody extends React.Component {
             },
             (filter, callback) => {
                 // this.props.dispatch(filtersListSetHistoryFilter(filter)); // TODO replace by 'set history model'
+                callback(null);
+            },
+            (callback) => {
+                getSamples(samplesIds, (samples) => callback(null, samples));
+            },
+            (samples, callback) => {
+                this.props.dispatch(samplesListSetHistorySamples(samples));
                 callback(null);
             },
             (callback) => {this.props.dispatch(setCurrentQueryHistoryId(id)); callback(null); },
