@@ -2,7 +2,6 @@ import * as ActionTypes from '../actions/ui';
 
 export default function ui(state = {
     queryNavbarClosed: true,
-    globalSearchString: '',
     // Workaround for bug #299
     shouldResetTableScrollPosition: false,
     currentLimit: 100,
@@ -31,11 +30,6 @@ export default function ui(state = {
         case ActionTypes.TOGGLE_ANALYZE_TOOLTIP:
             return Object.assign({}, state, {
                 isAnalyzeTooltipVisible: action.flag
-            });
-
-        case ActionTypes.CHANGE_GLOBAL_STRING:
-            return Object.assign({}, state, {
-                globalSearchString: action.globalString
             });
 
         default:
