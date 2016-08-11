@@ -1,12 +1,13 @@
 'use strict';
 
+const path = require('path');
 const _ = require('lodash');
 const async = require('async');
 
-const FsUtils = require('../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const FsUtils = require('../../../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
 
-const FieldsMetadataService = require('../services/FieldsMetadataService');
+const FieldsMetadataService = require('../../../services/FieldsMetadataService');
 
 /**
  * Imports initial data on the service start.
@@ -30,7 +31,7 @@ class InitialDataImportManager {
     }
 
     execute(callback) {
-        const defaultsDir = './defaults';
+        const defaultsDir = path.join(__dirname, '../../defaults');
 
         let result = {};
         async.waterfall([
@@ -136,12 +137,12 @@ class InitialDataImportManager {
     }
 
     _importSample(sampleMetadataFilePath, callback) {
-        const sampleFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
-        const sampleFields = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(sampleFieldsString));
+        const sampleWithFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
+        const sampleWithFields = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(sampleWithFieldsString));
 
-        let sample = sampleFields.sample;
-        sample.values = this._makeSampleValues(sampleFields.fieldIds);
-        this.models.samples.internalAdd(null, this.config.defaultLanguId, sampleFields.sample, callback);
+        const sample = sampleWithFields.sample;
+        sample.values = this._makeSampleValues(sampleWithFields.fieldIds);
+        this.models.samples.internalAdd(null, this.config.defaultLanguId, sampleWithFields.sample, callback);
     }
 
     _makeSampleValues(fieldIds) {

@@ -20,11 +20,11 @@ const DEFAULT_PASSWORD = 'password';
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 
-const DefaultLangu = require('../defaults/langu/default-langu.json');
-const DefaultViews = require('../defaults/views/default-views.json');
-const DefaultFilters = require('../defaults/filters/default-filters.json');
-const Sample = require('../defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample;
-const AllFields = ChangeCaseUtil.convertKeysToCamelCase(require('../defaults/fields/fields-metadata.json'));
+const DefaultLangu = require('../database/defaults/langu/default-langu.json');
+const DefaultViews = require('../database/defaults/views/default-views.json');
+const DefaultFilters = require('../database/defaults/filters/default-filters.json');
+const Sample = require('../database/defaults/samples/ONH_400_1946141_IonXpress_022.vcf.gz.json').sample;
+const AllFields = ChangeCaseUtil.convertKeysToCamelCase(require('../database/defaults/fields/fields-metadata.json'));
 
 const Operations = require('./Operations');
 const Urls = require('./Urls');
@@ -109,7 +109,7 @@ operations.add('Open session', (callback) => {
           password: userDescriptor.password
         }
       }, (error, response, body) => {
-        console.log('Error:', stringify(error), 'Response: ', stringify(response), 'Body: ', stringify(body))
+        console.log('Error:', stringify(error), 'Response: ', stringify(response), 'Body: ', stringify(body));
         const bodyObject = ChangeCaseUtil.convertKeysToCamelCase(body);
         const sessionId = bodyObject.sessionId;
         console.log('Associate session with the opened socket');
@@ -382,7 +382,7 @@ operations.add('Close session', (callback) => {
   ], callback);
 });
 
-operations.add('Exit', (callback) => {
+operations.add('Exit', () => {
   process.exit(0);
 });
 

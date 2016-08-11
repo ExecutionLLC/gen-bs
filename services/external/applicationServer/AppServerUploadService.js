@@ -106,7 +106,12 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         /**@type {string}*/
         const sampleId = operation.getSampleId();
         const sampleMetadata = result.metadata;
-        const fieldsMetadata = sampleMetadata.columns;
+        // Usual fields metadata. Values of these fields are the same for all genotypes.
+        const commonFieldsMetadata = sampleMetadata.columns;
+        // Array of names of the genotypes found in the file.
+        const genotypes = sampleMetadata.genotypes;
+        // Fields whose values are specific for the genotypes.
+        const genotypesFieldsMetadata = sampleMetadata.genotypeColumns;
         const sampleReference = sampleMetadata.reference;
         const sampleFileName = operation.getSampleFileName();
         const userId = operation.getUserId();
@@ -114,8 +119,11 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.users.find(userId, callback),
             (user, callback) => this.services.samples.createMetadataForUploadedSample(user, sampleId,
-                sampleFileName, sampleReference, fieldsMetadata, callback)
-        ], (error, sampleVersionId) => {
+                sampleFileName, sampleReference, commonFieldsMetadata, genotypes, genotypesFieldsMetadata,
+                (error, sampleVersionIds) => callback(error, user, sampleVersionIds)
+            ),
+            (user, sampleVersionIds, callback) => this.services.samples.findMany(user, sampleVersionIds, callback)
+        ], (error, samplesMetadata) => {
             if (error) {
                 this.logger.error(`Error inserting new sample into database: ${error}`);
                 this._createOperationResult(session, operation, null, operation.getUserId(),
@@ -127,7 +135,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 this._createOperationResult(session, operation, null, operation.getUserId(), EVENTS.onOperationResultReceived, true, {
                     status: SESSION_STATUS.READY,
                     progress: 100,
-                    sampleId: sampleVersionId
+                    metadata: samplesMetadata
                 }, null, callback);
             }
         });

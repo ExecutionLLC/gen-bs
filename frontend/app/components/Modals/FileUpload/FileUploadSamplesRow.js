@@ -58,11 +58,13 @@ export default class FileUploadSamplesRow extends Component {
     renderHeader() {
         const {sampleId, samplesList: {hashedArray: {hash: samplesHash}}} = this.props;
         const sample = samplesHash[sampleId];
+        const {fileName, genotypeName} = sample;
+        const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
         return (
             <div>
                 <div className='panel-heading'>
                     <h3 className='panel-title'>
-                        {getItemLabelByNameAndType(sample.fileName, sample.type)}
+                        {getItemLabelByNameAndType(sampleName, sample.type)}
                         <span>{sample.description}</span>
                     </h3>
                 </div>

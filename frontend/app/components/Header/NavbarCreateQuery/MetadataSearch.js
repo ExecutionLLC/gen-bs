@@ -38,10 +38,12 @@ export default class MetadataSearch extends Component {
 
     getSampleOptions() {
         const {samplesArray} = this.props;
-        return samplesArray.map((sampleItem) => {
-            const isDisabled = this.isSampleDisabled(sampleItem);
-            const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
-            return {value: sampleItem.id, label, disabled: isDisabled};
+        return samplesArray.map((sample) => {
+            const {id: sampleId, type: sampleType, fileName, genotypeName} = sample;
+            const sampleName = genotypeName ? `${fileName}:${genotypeName}` : fileName;
+            const isDisabled = this.isSampleDisabled(sample);
+            const label = getItemLabelByNameAndType(sampleName, sampleType);
+            return {value: sampleId, label, disabled: isDisabled};
         });
     }
 }

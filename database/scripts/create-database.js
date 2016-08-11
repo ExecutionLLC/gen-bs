@@ -6,8 +6,8 @@
 
 const _ = require('lodash');
 
-const DatabaseCreator = require('../startup/DatabaseCreator');
-const Config = require('../utils/Config');
+const DatabaseCreator = require('./utils/DatabaseCreator');
+const Config = require('../../utils/Config');
 
 const DatabaseSettings = Config.database;
 
