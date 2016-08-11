@@ -8,11 +8,12 @@ import {
     editQueryHistoryItem
 } from '../../../actions/queryHistory';
 import immutableArray from '../../../utils/immutableArray';
-import {viewBuilderStartEdit} from '../../../actions/viewBuilder';
-import {filterBuilderStartEdit} from '../../../actions/filterBuilder';
+import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
+import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
 import {openModal} from '../../../actions/modalWindows';
 import {analyze} from '../../../actions/ui';
 import {closeModal} from '../../../actions/modalWindows';
+import {samplesOnSave} from '../../../actions/samplesList';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -710,6 +711,19 @@ export default class AnalysisRightPane extends React.Component {
 
     onViewsClick() {
         this.props.dispatch(viewBuilderStartEdit(false, this.props.historyItem.view));
+
+        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const action = editQueryHistoryItem(
+            historyItem.id,
+            samplesList,
+            filtersList,
+            viewsList,
+            modelsList,
+            {view: null},
+            historyItem
+        );
+
+        this.props.dispatch(viewBuilderOnSave(action, 'changeItem.view'));
         this.props.dispatch(openModal('views'));
     }
 
@@ -722,6 +736,19 @@ export default class AnalysisRightPane extends React.Component {
     
     onFiltersClick() {
         this.props.dispatch(filterBuilderStartEdit(false, this.props.historyItem.filter, this.props.fields));
+
+        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const action = editQueryHistoryItem(
+            historyItem.id,
+            samplesList,
+            filtersList,
+            viewsList,
+            modelsList,
+            {filter: null},
+            historyItem
+        );
+
+        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filter'));
         this.props.dispatch(openModal('filters'));
     }
 
@@ -743,8 +770,20 @@ export default class AnalysisRightPane extends React.Component {
         });
     }
     
-    onSamplesClick() {
-        
+    onSamplesClick(sampleIndex) {
+        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const action = editQueryHistoryItem(
+            historyItem.id,
+            samplesList,
+            filtersList,
+            viewsList,
+            modelsList,
+            {samples: historyItem.samples},
+            historyItem
+        );
+
+        this.props.dispatch(samplesOnSave(action, `changeItem.samples.${sampleIndex}.id`));
+        this.props.dispatch(openModal('upload'));
     }
     
     onSampleSelect(sampleIndex, sampleId) {

@@ -6,7 +6,10 @@ import {
     viewsListServerUpdateView
 } from './viewsList';
 import {entityTypeIsEditable} from '../utils/entityTypes';
+import {immutableSetPathProperty} from '../utils/immutable';
 
+
+export const VBUILDER_ON_SAVE = 'VBUILDER_ON_SAVE';
 export const VBUILDER_START_EDIT = 'VBUILDER_START_EDIT';
 export const VBUILDER_SAVE_EDIT = 'VBUILDER_SAVE_EDIT';
 export const VBUILDER_END_EDIT = 'VBUILDER_END_EDIT';
@@ -23,6 +26,14 @@ export const VBUILDER_SET_ITEM_KEYWORDS = 'VBUILDER_SET_ITEM_KEYWORDS';
 /*
  * Action Creators
  */
+export function viewBuilderOnSave(onSaveAction, onSaveActionProperty) {
+    return {
+        type: VBUILDER_ON_SAVE,
+        onSaveAction,
+        onSaveActionProperty
+    };
+}
+
 export function viewBuilderStartEdit(makeNew, view) {
     return {
         type: VBUILDER_START_EDIT,
@@ -91,13 +102,21 @@ export function viewBuilderChangeKeywords(viewItemIndex, keywordsIds) {
     };
 }
 
+function fireOnSaveAction(view) {
+    return (dispatch, getState) => {
+        const {onSaveAction, onSaveActionProperty} = getState().viewBuilder;
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, view));
+    };
+}
+
 function viewBuilderCreateView() {
 
     return (dispatch, getState) => {
         const editingView = getState().viewBuilder.editingView;
         const {ui: {languageId} } = getState();
         dispatch(viewsListServerCreateView(editingView, languageId))
-            .then(() => {
+            .then((view) => {
+                dispatch(fireOnSaveAction(view));
                 dispatch(closeModal('views'));
                 dispatch(viewBuilderEndEdit());
             });
@@ -115,11 +134,13 @@ function viewBuilderUpdateView() {
 
         if (state.auth.isDemo || isNotEdited) {
             dispatch(viewsListSelectView(editingView.id));
+            dispatch(fireOnSaveAction(editingView));
             dispatch(closeModal('views'));
             dispatch(viewBuilderEndEdit());
         } else {
             dispatch(viewsListServerUpdateView(editingView))
-                .then(() => {
+                .then((view) => {
+                    dispatch(fireOnSaveAction(view));
                     dispatch(closeModal('views'));
                     dispatch(viewBuilderEndEdit());
                 });

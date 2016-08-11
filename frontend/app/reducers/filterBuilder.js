@@ -144,6 +144,14 @@ function reduceFBuilderChangeAttr(state, action) {
     });
 }
 
+function reduceFBuilderOnSave(state, action) {
+    return {
+        ...state,
+        onSaveAction: action.onSaveAction,
+        onSaveActionProperty: action.onSaveActionProperty
+    };
+}
+
 export default function filterBuilder(state = {
     /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
     editingFilter: null,
@@ -165,6 +173,9 @@ export default function filterBuilder(state = {
 
         case ActionTypes.FBUILDER_END_EDIT:
             return reduceFBuilderEndEdit(state);
+
+        case ActionTypes.FBUILDER_ON_SAVE:
+            return reduceFBuilderOnSave(state, action);
 
         default:
             return state;

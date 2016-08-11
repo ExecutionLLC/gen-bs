@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeSample} from '../../../actions/samplesList';
+import {changeSample, sampleSaveCurrent} from '../../../actions/samplesList';
 import {entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 
@@ -18,6 +18,7 @@ export default class FileUploadSamplesRow extends Component {
         e.preventDefault();
         const {dispatch, closeModal} = this.props;
         dispatch(changeSample(sampleId));
+        dispatch(sampleSaveCurrent(sampleId));
         closeModal('upload');
     }
 

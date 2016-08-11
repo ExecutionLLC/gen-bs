@@ -6,7 +6,10 @@ import {
     filtersListServerDeleteFilter
 } from './filtersList';
 import {entityTypeIsEditable} from '../utils/entityTypes';
+import {immutableSetPathProperty} from '../utils/immutable';
 
+
+export const FBUILDER_ON_SAVE = 'FBUILDER_ON_SAVE';
 export const FBUILDER_CHANGE_ATTR = 'FBUILDER_CHANGE_ATTR';
 export const FBUILDER_CHANGE_FILTER = 'FBUILDER_CHANGE_FILTER';
 
@@ -18,6 +21,13 @@ export const FBUILDER_END_EDIT = 'FBUILDER_END_EDIT';
 /*
  * Action Creators
  */
+export function filterBuilderOnSave(onSaveAction, onSaveActionProperty) {
+    return {
+        type: FBUILDER_ON_SAVE,
+        onSaveAction,
+        onSaveActionProperty
+    };
+}
 
 export function filterBuilderStartEdit(makeNew, filter, fields) {
     return {
@@ -48,13 +58,21 @@ export function filterBuilderChangeAttr(attr) {
     };
 }
 
+function fireOnSaveAction(view) {
+    return (dispatch, getState) => {
+        const {onSaveAction, onSaveActionProperty} = getState().filterBuilder;
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, view));
+    };
+}
+
 function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
         const editingFilter = getState().filterBuilder.editingFilter.filter;
         const {ui: {languageId} } = getState();
         dispatch(filtersListServerCreateFilter(editingFilter, languageId))
-            .then( () => {
+            .then( (filter) => {
+                dispatch(fireOnSaveAction(filter));
                 dispatch(closeModal('filters'));
                 dispatch(filterBuilderEndEdit());
             });
@@ -72,12 +90,14 @@ function filterBuilderUpdateFilter() {
 
         if (state.auth.isDemo || isNotEdited) {
             dispatch(filtersListSelectFilter(editingFilter.filter.id));
+            dispatch(fireOnSaveAction(editingFilter.filter));
             dispatch(closeModal('filters'));
             dispatch(filterBuilderEndEdit());
         } else {
             const resultEditingFilter = editingFilter.filter;
             dispatch(filtersListServerUpdateFilter(resultEditingFilter))
-                .then( () => {
+                .then( (filter) => {
+                    dispatch(fireOnSaveAction(filter));
                     dispatch(closeModal('filters'));
                     dispatch(filterBuilderEndEdit());
                 });

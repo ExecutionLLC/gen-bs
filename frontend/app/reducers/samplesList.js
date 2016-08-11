@@ -87,6 +87,14 @@ function reduceChangeSamples(state, action) {
     };
 }
 
+function reduceSampleOnSave(state, action) {
+    return {
+        ...state,
+        onSaveAction: action.onSaveAction,
+        onSaveActionProperty: action.onSaveActionProperty
+    };
+}
+
 
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
@@ -115,6 +123,9 @@ export default function samplesList(state = {
 
         case ActionTypes.CHANGE_SAMPLES:
             return reduceChangeSamples(state, action);
+
+        case ActionTypes.SAMPLE_ON_SAVE:
+            return reduceSampleOnSave(state, action);
 
         default:
             return state;

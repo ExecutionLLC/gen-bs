@@ -2,6 +2,7 @@ import HttpStatus from 'http-status';
 
 import {handleError} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
+import {immutableSetPathProperty} from '../utils/immutable';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
@@ -11,6 +12,7 @@ export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
 export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const CHANGE_SAMPLES = 'CHANGE_SAMPLES';
+export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 
 const samplesClient = apiFacade.samplesClient;
 const NETWORK_ERROR = 'Network error. You can reload page and try again.';
@@ -23,6 +25,14 @@ const FETCH_SAMPLES_SERVER_ERROR = 'Cannot update samples data (server error). Y
 /*
  * Action Creators
  */
+
+export function samplesOnSave(onSaveAction, onSaveActionProperty) {
+    return {
+        type: SAMPLE_ON_SAVE,
+        onSaveAction,
+        onSaveActionProperty
+    };
+}
 
 function requestSamples() {
     return {
@@ -127,5 +137,12 @@ export function changeSamples(samples) {
     return {
         type: CHANGE_SAMPLES,
         samples
+    };
+}
+
+export function sampleSaveCurrent(sample) {
+    return (dispatch, getState) => {
+        const {onSaveAction, onSaveActionProperty} = getState().samplesList;
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, sample));
     };
 }
