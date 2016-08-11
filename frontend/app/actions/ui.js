@@ -6,7 +6,6 @@ import {handleError} from './errorHandler';
 
 
 export const TOGGLE_QUERY_NAVBAR = 'TOGGLE_QUERY_NAVBAR';
-export const CHANGE_GLOBAL_STRING = 'CHANGE_GLOBAL_STRING';
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
@@ -25,13 +24,6 @@ export function requestTableScrollPositionReset() {
 export function completeTableScrollPositionReset() {
     return {
         type: COMPLETE_TABLE_SCROLL_POSITION_RESET
-    };
-}
-
-export function changeGlobalString(globalString) {
-    return {
-        type: CHANGE_GLOBAL_STRING,
-        globalString
     };
 }
 
@@ -82,7 +74,6 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
         dispatch(detachHistory(detachHistorySample, detachHistoryFilter, detachHistoryView));
 
         dispatch(requestTableScrollPositionReset());
-        dispatch(changeGlobalString(''));
         dispatch(clearSearchParams());
         dispatch(requestAnalyze(searchParams));
         const searchView = viewIdToViewHash[viewId];
