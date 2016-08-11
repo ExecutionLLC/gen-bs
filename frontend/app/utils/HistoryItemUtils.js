@@ -1,51 +1,9 @@
 function makeHistoryItem(historyItem) {
-    const name = historyItem.timestamp + '_' + historyItem.sample.fileName + '_' + historyItem.filters[0].name + '_' + historyItem.view.name;
     return {
-        id: historyItem.id,
-        name: name,
-        description: 'Description of ' + name,
-        createdDate: historyItem.timestamp,
-        lastQueryDate: historyItem.timestamp + 1000,
-        filter: historyItem.filters[0],
-        view: historyItem.view,
-        // single
-        type: 'single', // 'tumor', 'family'
-        samples: [{
-            id: historyItem.sample && historyItem.sample.id || null,
-            type: 'single'
-        }]
-/* TODO: make other types like this:
-        // tumor
-        type: 'tumor',
-        model: historyItem.filters[0]
-        samples: [
-            {
-                id: historyItem.sample.id,
-                type: 'tumor'
-            },
-            {
-                id: historyItem.sample.id,
-                type: 'normal'
-            }
-        ]
-        // family
-        type: 'family',
-        model: historyItem.filters[0]
-        samples: [
-            {
-                id: historyItem.sample.id,
-                type: 'proband'
-            },
-            {
-                id: historyItem.sample.id,
-                type: 'mother'
-            },
-            {
-                id: historyItem.sample.id,
-                type: 'father'
-            }
-        ]
- */
+        ...historyItem,
+        name: `Copy of ${historyItem.name}`,
+        createdDate: '' + new Date(),
+        lastQueryDate: '' + new Date(),
     };
 }
 
