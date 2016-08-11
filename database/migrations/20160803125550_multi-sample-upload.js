@@ -104,7 +104,7 @@ function makeSampleVersionsToBeGenotypeVersions(knex, Promise, sampleIdToGenotyp
         .then((sampleVersions) => Promise.all(sampleVersions
             .map((sampleVersion) => ({
                 id: sampleVersion.id,
-                sampleGenotypeId: sampleIdToGenotypeId[sampleVersion],
+                sampleGenotypeId: sampleIdToGenotypeId[sampleVersion.vcfFileSampleId],
                 timestamp: sampleVersion.timestamp
             }))
             .map(({id, sampleGenotypeId, timestamp}) => {
