@@ -13,6 +13,7 @@ export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const CHANGE_SAMPLES = 'CHANGE_SAMPLES';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
+export const SAMPLES_LIST_SET_HISTORY_SAMPLE = 'SAMPLES_LIST_SET_HISTORY_SAMPLE';
 
 const samplesClient = apiFacade.samplesClient;
 const NETWORK_ERROR = 'Network error. You can reload page and try again.';
@@ -144,5 +145,12 @@ export function sampleSaveCurrent(sample) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionProperty} = getState().samplesList;
         dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, sample));
+    };
+}
+
+export function samplesListSetHistorySample(sample) {
+    return {
+        type: SAMPLES_LIST_SET_HISTORY_SAMPLE,
+        sample
     };
 }

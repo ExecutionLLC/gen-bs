@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as ActionTypes from '../actions/samplesList';
 import immutableArray from '../utils/immutableArray';
 import {ImmutableHash, ImmutableHashedArray} from '../utils/immutable';
+import {entityType} from '../utils/entityTypes';
 
 function reduceRequestSamples(state) {
     return state;
@@ -95,6 +96,30 @@ function reduceSampleOnSave(state, action) {
     };
 }
 
+function reduceSamplesListSetHistorySample(state, action) {
+    const {sample} = action;
+    const {hashedArray, selectedSampleId} = state;
+    const inListSample = sample && hashedArray.hash[sample.id];
+    const isSampleInListWOHistory = inListSample && inListSample.type !== entityType.HISTORY;
+    const isNeedToSet = sample && !isSampleInListWOHistory;
+    const samplesArrayHistoryParted = _.partition(hashedArray.array, {type: entityType.HISTORY});
+    const samplesArrayWOHistory = samplesArrayHistoryParted[0].length ? samplesArrayHistoryParted[1] : hashedArray.array;
+    if (samplesArrayWOHistory === hashedArray.array && !isNeedToSet) {
+        return state;
+    }
+    const sampleToSet = isNeedToSet && {
+            ...sample,
+            type: 'history'
+        };
+    const samplesArrayWNewHistory = isNeedToSet ? [sampleToSet, ...samplesArrayWOHistory] : samplesArrayWOHistory;
+    const samplesHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(samplesArrayWNewHistory);
+    const newSelectedSampleId = samplesHashedArrayWNewHistory.hash[selectedSampleId] ? selectedSampleId : samplesHashedArrayWNewHistory.array[0] && samplesHashedArrayWNewHistory.array[0].id || null;
+    return {
+        ...state,
+        hashedArray: samplesHashedArrayWNewHistory,
+        selectedSampleId: newSelectedSampleId
+    };
+}
 
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
@@ -126,6 +151,9 @@ export default function samplesList(state = {
 
         case ActionTypes.SAMPLE_ON_SAVE:
             return reduceSampleOnSave(state, action);
+
+        case ActionTypes.SAMPLES_LIST_SET_HISTORY_SAMPLE:
+            return reduceSamplesListSetHistorySample(state, action);
 
         default:
             return state;
