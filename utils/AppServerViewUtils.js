@@ -13,7 +13,7 @@ class AppServerViewUtils {
         // Mandatory fields should always be in the results (ex. for comments).
         const mandatoryFields = _.filter(fieldIdToMetadata, field => field.isMandatory);
         const missingMandatoryFieldsListItems = _(mandatoryFields)
-            .filter(mandatoryField => !_.any(viewListItems, listItem => listItem.fieldId === mandatoryField.id))
+            .filter(mandatoryField => !_.some(viewListItems, listItem => listItem.fieldId === mandatoryField.id))
             .map(field => {
                 return {
                     fieldId: field.id,

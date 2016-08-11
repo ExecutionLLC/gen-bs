@@ -18,6 +18,15 @@
     "number_paid_samples": 10
   },
   {
+    "id": "d942e9f5-d18f-4811-86fb-74ab28d74204",
+    "name": "Dmitry",
+    "last_name": "Zyryanov",
+    "email": "alternalizer@gmail.com",
+    "speciality": "Developer",
+    "language": "en",
+    "number_paid_samples": 11
+  },
+  {
     "id": "421214ac-a1e9-5afd-aa48-3c0bf7614123",
     "name": "Maria",
     "last_name": "Kuri",

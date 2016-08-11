@@ -157,7 +157,7 @@ class SavedFileModel extends SecureModelBase {
             (callback) => baseQuery.asCallback((error, files) => callback(error, files)),
             (files, callback) => this._toCamelCase(files, callback),
             (files, callback) => {
-                const fileIds = _.pluck(files, 'id');
+                const fileIds = _.map(files, 'id');
                 this._findSavedFilesFilters(trx, fileIds,
                     (error, fileIdToFilterIdsHash) => callback(error, files, fileIdToFilterIdsHash))
             },
