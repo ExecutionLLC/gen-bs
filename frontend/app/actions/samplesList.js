@@ -13,7 +13,7 @@ export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
 export const CHANGE_SAMPLES = 'CHANGE_SAMPLES';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
-export const SAMPLES_LIST_SET_HISTORY_SAMPLE = 'SAMPLES_LIST_SET_HISTORY_SAMPLE';
+export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 
 const samplesClient = apiFacade.samplesClient;
 const NETWORK_ERROR = 'Network error. You can reload page and try again.';
@@ -148,9 +148,9 @@ export function sampleSaveCurrent(sample) {
     };
 }
 
-export function samplesListSetHistorySample(sample) {
+export function samplesListSetHistorySamples(samples) {
     return {
-        type: SAMPLES_LIST_SET_HISTORY_SAMPLE,
-        sample
+        type: SAMPLES_LIST_SET_HISTORY_SAMPLES,
+        samples
     };
 }
