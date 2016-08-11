@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import {changeGlobalString} from '../../../actions/ui';
 
 export default class NavbarSearch extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            globalSearchString: ''
-        };
     }
 
     render() {
@@ -26,6 +23,7 @@ export default class NavbarSearch extends Component {
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={() => this.onGlobalSearchInputBlur()}
                      disabled={!isEnabled}
+                     value={this.props.globalSearchString}
                     />
                 </div>
             </div>
@@ -33,23 +31,20 @@ export default class NavbarSearch extends Component {
     }
 
     onGlobalSearchInputChanged(e) {
-        this.setState({
-            globalSearchString: e.target.value
-        });
+        const {dispatch} = this.props;
+        dispatch(changeGlobalString(e.target.value));
     }
 
     onGlobalSearchInputKeyPressed(e) {
         // user pressed "enter"
         if (e.charCode === 13) {
-            const { globalSearchString } = this.state;
-            const { onGlobalSearchRequested } = this.props;
+            const { globalSearchString, onGlobalSearchRequested} = this.props;
             onGlobalSearchRequested(globalSearchString);
         }
     }
 
     onGlobalSearchInputBlur() {
-        const { globalSearchString } = this.state;
-        const { onGlobalSearchStringChanged } = this.props;
+        const { globalSearchString, onGlobalSearchRequested} = this.props;
         onGlobalSearchStringChanged(globalSearchString);
     }
 }
