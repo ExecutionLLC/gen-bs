@@ -13,7 +13,7 @@ export default class VariantsTableRow extends ComponentBase {
             row,
             auth,
             rowIndex,
-            currentView,
+            currentView: {viewListItems},
             sortState,
             fields,
             isSelected
@@ -21,12 +21,11 @@ export default class VariantsTableRow extends ComponentBase {
         const rowFieldsHash = row.fieldsHash;
         const rowFields = row.fields;
         const comments = row.comments;
-        const viewFields = currentView.viewListItems;
 
-        const pos = this.getMainFieldValue('POS', rowFields, fields);
-        const alt = this.getMainFieldValue('ALT', rowFields, fields);
-        const chrom = this.getMainFieldValue('CHROM', rowFields, fields);
-        const ref = this.getMainFieldValue('REF', rowFields, fields);
+        const pos = this.getFieldValue('POS', rowFieldsHash, fields);
+        const alt = this.getFieldValue('ALT', rowFieldsHash, fields);
+        const chrom = this.getFieldValue('CHROM', rowFieldsHash, fields);
+        const ref = this.getFieldValue('REF', rowFieldsHash, fields);
         const searchKey = row.searchKey;
 
         return (
@@ -60,9 +59,18 @@ export default class VariantsTableRow extends ComponentBase {
                                       auth={auth}
                                       comments={comments}
                 />
-                {_.map(viewFields, (field) => this.renderFieldCell(field, sortState, rowFieldsHash))}
+                {this.renderFieldCells(viewListItems, sortState, rowFieldsHash, fields)}
             </tr>
         );
+    }
+
+    renderFieldCells(viewListItems, sortState, rowFieldsHash, fields) {
+        return viewListItems.map(({fieldId}) => {
+            const field = fields.totalFieldsHash[fieldId];
+            const fieldValue =  rowFieldsHash[fieldId];
+            const fieldSortState = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
+            return this.renderFieldCell(field, fieldSortState, fieldValue);
+        });
     }
 
     onRowSelectionChanged() {
@@ -70,26 +78,22 @@ export default class VariantsTableRow extends ComponentBase {
         onSelected(rowIndex, !isSelected);
     }
 
-    getMainFieldValue(colName, rowFields, fields) {
-        const mainField = _.find(fields.totalFieldsList, field => field.name === colName);
-        return _.find(rowFields, field => field.fieldId === mainField.id).value;
+    getFieldValue(colName, rowFieldsHash, fields) {
+        const field = _.find(fields.totalFieldsList, field => field.name === colName);
+        return rowFieldsHash[field.id].value;
     }
 
 
-    renderFieldCell(field, sortState, rowFields) {
-        const fieldId = field.fieldId;
-        const resultFieldValue = rowFields[fieldId];
-        const columnSortParams = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
-
+    renderFieldCell(field, fieldSortState, fieldValue) {
         const sortedActiveClass = classNames({
-            'active': columnSortParams
+            'active': fieldSortState
         });
 
         return (
             <td className={sortedActiveClass}
-                key={fieldId}>
+                key={field.id}>
                 <div>
-                    {resultFieldValue || ''}
+                    {fieldValue || ''}
                 </div>
             </td>
         );
