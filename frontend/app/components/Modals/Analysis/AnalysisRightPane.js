@@ -630,7 +630,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     getModelOptions() {
-        const {models} = this.props.modelsList;
+        const models = this.props.modelsList.hashedArray.array;
         return models.map((sampleItem) => {
             const isDisabled = this.isModelDisabled(sampleItem);
             const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
@@ -757,7 +757,21 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelClick() {
+        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields));
 
+        const action = editQueryHistoryItem(
+            historyItem.id,
+            samplesList,
+            filtersList,
+            viewsList,
+            modelsList,
+            {modelId: null},
+            historyItem
+        );
+
+        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
+        this.props.dispatch(openModal('filters'));
     }
 
     onModelSelect(modelId) {
