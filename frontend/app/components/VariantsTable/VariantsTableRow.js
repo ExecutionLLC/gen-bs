@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import classNames from 'classnames';
 
 import ComponentBase from '../shared/ComponentBase';
@@ -59,7 +60,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       auth={auth}
                                       comments={comments}
                 />
-                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
+                {_.map(viewFields, (field) => this.renderFieldCell(field, sortState, rowFieldsHash))}
             </tr>
         );
     }
@@ -75,12 +76,12 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
 
-    renderFieldValue(field, sortState, rowFields) {
+    renderFieldCell(field, sortState, rowFields) {
         const fieldId = field.fieldId;
         const resultFieldValue = rowFields[fieldId];
-        let columnSortParams = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
+        const columnSortParams = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
 
-        let sortedActiveClass = classNames({
+        const sortedActiveClass = classNames({
             'active': columnSortParams
         });
 
