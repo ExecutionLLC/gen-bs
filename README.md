@@ -54,7 +54,7 @@ Web server uses the following external services:
 * Postgres as a database server
 * Amazon S3 to store exported files (or co-called saved files) and upload samples to the Application Server.
 
-Use the following environment variables to configure access to these services. The names of the variables along with their defaults can be found in the `utils/Config.js` file.
+Use environment variables to configure access to these services. The names of the variables along with their defaults can be found in the `utils/Config.js` file.
 
 ## Dependencies
 
@@ -74,11 +74,11 @@ After the proper node version is installed, go to the sources root and execute:
 
 This command will install all the project dependencies.
 
-We use KnexJS console tool to do database migrations. Execute the following command to install the tool:
+We use KnexJS console tool to do database migrations. Execute this command to install the tool:
 
     npm install -g knex
 
-Currently, we have two jQuery plugins installed as submodules. To initialize them, from the sources root execute the following commands:
+Currently, we have two jQuery plugins installed as submodules. To initialize them, from the sources root execute:
 
     git submodule init
     git submodule update
@@ -91,7 +91,7 @@ Now the database should be created for the project. Use the following command to
 
     npm run db:create
 
-Now, it should be filled with default values, such as samples and views. To do that, execute the following command:
+Now, it should be filled with default values, such as samples and views. To do that, run:
 
     npm run defaults:import
 
@@ -123,9 +123,11 @@ For convenience, try to avoid creating large migration scripts. You can split th
 
 # Running Web Server
 
-After all of that done without errors, use the following command to launch the frontend with WS:
+After all of that done without errors, use this command to launch web server:
 
     npm start
+
+Be sure to build the frontend or run it in development mode to be able to access the site. See the `frontend/README.md` for more information.
 
 # Running WebServer Tests
 
