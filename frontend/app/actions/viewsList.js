@@ -10,7 +10,6 @@ const viewsClient = apiFacade.viewsClient;
 export const VIEWS_LIST_START_SERVER_OPERATION = 'VIEWS_LIST_START_SERVER_OPERATION';
 export const VIEWS_LIST_END_SERVER_OPERATION = 'VIEWS_LIST_END_SERVER_OPERATION';
 export const VIEWS_LIST_RECEIVE = 'VIEWS_LIST_RECEIVE';
-export const VIEWS_LIST_SELECT_VIEW = 'VIEWS_LIST_SELECT_VIEW';
 export const VIEWS_LIST_ADD_VIEW = 'VIEWS_LIST_ADD_VIEW';
 export const VIEWS_LIST_DELETE_VIEW = 'VIEWS_LIST_DELETE_VIEW';
 export const VIEWS_LIST_EDIT_VIEW = 'VIEWS_LIST_EDIT_VIEW';
@@ -42,13 +41,6 @@ export function viewsListReceive(views) {
     return {
         type: VIEWS_LIST_RECEIVE,
         views
-    };
-}
-
-export function viewsListSelectView(viewId) {
-    return {
-        type: VIEWS_LIST_SELECT_VIEW,
-        viewId
     };
 }
 
@@ -90,7 +82,6 @@ export function viewsListServerCreateView(view, languageId) {
                     const newView = response.body;
                     const viewId = newView.id;
                     dispatch(viewsListAddView(newView));
-                    dispatch(viewsListSelectView(viewId));
                     resolve(newView);
                 }
             });
@@ -113,7 +104,6 @@ export function viewsListServerUpdateView(view) {
                 } else {
                     const updatedView = response.body;
                     dispatch(viewsListEditView(view.id, updatedView));
-                    dispatch(viewsListSelectView(updatedView.id));
                     resolve();
                 }
             });
