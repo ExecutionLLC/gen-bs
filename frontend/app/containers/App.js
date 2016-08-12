@@ -12,7 +12,6 @@ import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
 import FiltersModal from '../components/Modals/FiltersModal';
 import FileUploadModal from '../components/Modals/FileUploadModal';
-import QueryHistoryModal from '../components/Modals/QueryHistoryModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
 import AnalysisModal from '../components/Modals/AnalysisModal';
@@ -94,10 +93,6 @@ class App extends Component {
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
                 />
                 <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
-                <QueryHistoryModal
-                    showModal={this.props.showQueryHistoryModal}
-                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()); } }
-                />
             </div>
         );
     }
