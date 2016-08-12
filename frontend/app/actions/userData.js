@@ -9,8 +9,7 @@ import {receiveInitialQueryHistory} from './queryHistory';
 //import {analyze} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
 import {
-    filtersListReceive,
-    filtersListSelectFilter
+    filtersListReceive
 } from './filtersList';
 import {
     viewsListReceive,
@@ -94,7 +93,6 @@ export function fetchUserdata() {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 } else {
                     dispatch(changeSample(sample.id));
-                    dispatch(filtersListSelectFilter(filter.id));
                     dispatch(viewsListSelectView(view.id));
                     /*dispatch(analyze(sample.id, view.id, filter.id)); FIXME analyze: replace by reanalyze */
                 }

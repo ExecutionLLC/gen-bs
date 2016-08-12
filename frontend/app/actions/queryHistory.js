@@ -12,7 +12,6 @@ import {
 import {fetchFields} from './fields';
 import {prepareAnalyze} from './websocket';
 import {
-    filtersListSelectFilter,
     filtersListReceive
 } from './filtersList';
 import {
@@ -179,7 +178,6 @@ export function renewHistoryItem(historyItemId) {
             dispatch(fetchFields(clonedHistoryItem.sample.id))
                 .then(() => {
                     dispatch([
-                        filtersListSelectFilter(clonedHistoryItem.filters[0].id),
                         viewsListSelectView(clonedHistoryItem.view.id)/*,
                         analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id) FIXME analyze: replace by reanalyze */
                     ]);
