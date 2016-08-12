@@ -28,6 +28,11 @@ class ProteinModal extends DialogBase {
         const {dispatch} = this.props;
         dispatch(showProteinModal(false));
     }
+
+    static protTypes = {
+        showModal: React.PropTypes.bool.isRequired,
+        currentProtein: React.PropTypes.string.isRequired
+    };
 }
 
 function mapStateToProps(state) {
@@ -37,10 +42,5 @@ function mapStateToProps(state) {
         currentProtein
     };
 }
-
-ProteinModal.propTypes = {
-    showModal: React.PropTypes.bool.isRequired,
-    currentProtein: React.PropTypes.string.isRequired
-};
 
 export default connect(mapStateToProps)(ProteinModal);
