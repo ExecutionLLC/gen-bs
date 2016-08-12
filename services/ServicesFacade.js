@@ -16,7 +16,6 @@ const FieldsMetadataService = require('./FieldsMetadataService');
 const SearchService = require('./SearchService');
 const SchedulerService = require('./tasks/SchedulerService');
 const SavedFilesService = require('./SavedFilesService');
-const QueryHistoryService = require('./QueryHistoryService');
 const AnalysisService = require('./AnalysisService');
 const UserDataService = require('./UserDataService');
 const ObjectStorageService = require('./ObjectStorageService');
@@ -46,7 +45,6 @@ class ServiceFacade {
         this.samples = new SamplesService(this, models);
         this.fieldsMetadata = new FieldsMetadataService(this, models);
         this.savedFiles = new SavedFilesService(this, models);
-        this.queryHistory = new QueryHistoryService(this, models);
         this.analysis = new AnalysisService(this, models);
         this.userData = new UserDataService(this, models);
         this.search = new SearchService(this, models);

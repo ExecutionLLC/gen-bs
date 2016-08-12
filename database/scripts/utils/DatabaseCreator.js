@@ -561,37 +561,6 @@ class DatabaseCreator {
                     . notNullable();
             })
 
-            // Query history
-            .createTable('query_history', table => {
-                table.uuid('id')
-                    .primary();
-                table.uuid('vcf_file_sample_version_id')
-                    .references('id')
-                    .inTable('vcf_file_sample_version')
-                    .notNullable();
-                table.uuid('view_id')
-                    .references('id')
-                    .inTable('view')
-                    .notNullable();
-                table.integer('total_results');
-                table.timestamp('timestamp')
-                    .defaultTo(databaseKnex.fn.now());
-                table.uuid('creator')
-                    .references('id')
-                    .inTable('user')
-                    .notNullable();
-            })
-            .createTable('query_history_filter', table => {
-                table.uuid('query_history_id')
-                    .references('id')
-                    .inTable('query_history');
-                table.uuid('filter_id')
-                    .references('id')
-                    .inTable('filter');
-
-                table.primary(['query_history_id', 'filter_id']);
-            })
-
             .then(() => {
                 console.log('Tables created successfully.')
             })
