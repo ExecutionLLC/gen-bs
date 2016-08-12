@@ -76,18 +76,32 @@ After the proper node version is installed, go to the sources root and execute:
 
 This command will install all the project dependencies.
 
+We also use KnexJS console tool to do database migrations. Execute the following command to install the tool:
+
+    npm install -g knex
+
 Currently, we have two jQuery plugins installed as submodules. To initialize them, from the sources root execute the following commands:
 
     git submodule init
     git submodule update
 
-Now the database should be created for the project. Use the following command to do that:
+Now the database should be created for the project. Use the following command to create an initial database:
 
     npm run db:create
 
-After the database is created, it should be filled with default values, such as samples and views. To do that, execute the following command:
+Now, it should be filled with default values, such as samples and views. To do that, execute the following command:
 
     npm run defaults:import
+
+We also need to apply all database migrations:
+
+    npm run db:migrate
+    
+To do a full database reset in the future you can use the following command:
+
+    npm run db:reset
+
+This command will drop and re-create the database and fill it with default values. **Use with caution**, as you will loose your current database. Use `npm run db:migrate` if you want to update database in production.
 
 After all of that done without errors, use the following command to launch the frontend with WS:
 
