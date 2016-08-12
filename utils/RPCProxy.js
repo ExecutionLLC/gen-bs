@@ -90,7 +90,7 @@ class RPCProxy {
         async.waterfall([
             (callback) => RabbitMqUtils.createConnection(this.host, this.port, this.user, this.password, callback),
             (connection, callback) => {
-                async.series({
+                async.parallel({
                     publisher: (callback) => RabbitMqUtils.createPublisher(connection,
                         this.logger, this.requestExchangeName, callback),
                     consumer: (callback) => RabbitMqUtils.createConsumer(connection,

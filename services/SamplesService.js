@@ -6,7 +6,7 @@ const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
-const EditableFields = require('../defaults/templates/metadata/editable-metadata.json');
+const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
@@ -43,10 +43,12 @@ class SamplesService extends UserEntityServiceBase {
         ], callback);
     }
 
-    createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference, applicationServerFieldsMetadata, callback) {
+    createMetadataForUploadedSample(user, sampleId, sampleFileName, sampleReference,
+                                    appServerSampleFields, genotypes,
+                                    asGenotypesFieldsNames, callback) {
         // Map AS fields metadata format into local.
-        const fieldsMetadata = _.map(applicationServerFieldsMetadata,
-            appServerFieldMetadata => FieldsMetadataService.createFieldMetadata(sampleId, true, appServerFieldMetadata));
+        const sampleFields = _.map(appServerSampleFields,
+            asField => FieldsMetadataService.createFieldMetadata(null, true, asField));
 
         const sample = {
             id: sampleId,
@@ -54,7 +56,7 @@ class SamplesService extends UserEntityServiceBase {
             hash: null
         };
 
-        this.theModel.addSampleWithFields(user.id, user.language, sample, fieldsMetadata, callback);
+        this.theModel.addSamplesWithFields(user.id, user.language, sample, sampleFields, genotypes, callback);
     }
 
     makeSampleIsAnalyzedIfNeeded(userId, sampleId, callback) {

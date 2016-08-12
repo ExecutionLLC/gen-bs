@@ -4,12 +4,12 @@
  * NPM script is used to import initial data, such as default samples, filters and views, if it is not imported yet.
  * */
 
-const InitialDataImportManager = require('../startup/InitialDataImportManager');
+const InitialDataImportManager = require('./utils/InitialDataImportManager');
 
-const ModelsFacade = require('../models/ModelsFacade');
+const ModelsFacade = require('../../models/ModelsFacade');
 
-const Config = require('../utils/Config');
-const Logger = require('../utils/Logger');
+const Config = require('../../utils/Config');
+const Logger = require('../../utils/Logger');
 
 const logger = new Logger(Config.logger);
 const models = new ModelsFacade(Config, logger);

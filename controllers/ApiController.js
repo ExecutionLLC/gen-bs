@@ -71,7 +71,8 @@ class ApiController extends ControllerBase {
 
     _initRequestContext(request, response, next) {
         async.waterfall([
-            (callback) => callback(request.session? null : new Error('Failed to initialize session.')),
+            (callback) => callback(request.session ?
+                null : new Error('Failed to initialize session. Possibly, Redis service is unavailable.')),
             (callback) => this._findAndSetUser(request, callback),
             (callback) => this._findAndSetLanguage(request, callback)
         ], (error) => next(error));
