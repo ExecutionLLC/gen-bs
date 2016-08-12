@@ -47,18 +47,16 @@ NPM scripts are used to build and launch anything the project needs.
 
 # Installation
 
-## Database Installation
+Web server uses the following external services: 
 
-Web server uses PostgreSQL to store project metadata (anything it needs, except the sample and source data itself, which is stored inside the application server). So, to be able to run it, you need to install PostgreSQL somewhere. If database access settings are different from defaults (which can be found in the `utils/Config.js`), use the following environment variables later when running to configure it:
+* RabbitMQ for communication with the Application Server
+* Redis as a user session storage
+* Postgres as a database server
+* Amazon S3 to store exported files (or co-called saved files) and upload samples to the Application Server.
 
-* `GEN_WS_DATABASE_SERVER` - to configure database host name.
-* `GEN_WS_DATABASE_PORT` - to configure database port.
-* `GEN_WS_DATABASE_USER` - user with root access to the server, defaults to `postgres`.
-* `GEN_WS_DATABASE_PASSWORD` - root user password.
-* `GEN_WS_DATABASE_NAME` - name of the database to use for the project.
-* `GEN_WS_RABBIT_MQ_HOST`, `GEN_WS_RABBIT_MQ_PORT`, `GEN_WS_RABBIT_MQ_USER`, `GEN_WS_RABBIT_MQ_PASSWORD` - RabbitMQ settings. Please bear in mind that default "guest"/"guest" user works only for localhost connections.
+Use the following environment variables to configure access to these services. The names of the variables along with their defaults can be found in the `utils/Config.js` file.
 
-## Web Server Launch
+## Dependencies
 
 Currently, Node v6.1.0 is used. To be able to switch node versions easily in future it is recommended to use Node version manager (NVM), which is downloadable by the link below:
 
@@ -76,7 +74,7 @@ After the proper node version is installed, go to the sources root and execute:
 
 This command will install all the project dependencies.
 
-We also use KnexJS console tool to do database migrations. Execute the following command to install the tool:
+We use KnexJS console tool to do database migrations. Execute the following command to install the tool:
 
     npm install -g knex
 
@@ -84,6 +82,10 @@ Currently, we have two jQuery plugins installed as submodules. To initialize the
 
     git submodule init
     git submodule update
+
+## Database
+
+Be sure to configure access to your Postgres server using the env vars before this section.
 
 Now the database should be created for the project. Use the following command to create an initial database:
 
@@ -97,11 +99,29 @@ We also need to apply all database migrations:
 
     npm run db:migrate
     
-To do a full database reset in the future you can use the following command:
+### Full Database Reset
+    
+To do a full database reset you can use the following command:
 
     npm run db:reset
 
 This command will drop and re-create the database and fill it with default values. **Use with caution**, as you will loose your current database. Use `npm run db:migrate` if you want to update database in production.
+
+### Creating Database Migrations
+
+The database in production is updated using KnexJS migrations which are JS scripts. All migrations are executed in one transaction, so nothing will happen if one of them fails. Migrations are executed in order determined by the creation date fixed in their names.
+
+Knex takes it's settings from the `./database/knexconfig.js` file. The settings there, in turn, are loaded from the main WebServer config.
+
+Migrations are stored in `./database/migrations` folder. To create a new migration, go to the `./database` folder and issue the following command:
+
+    knex migrate:make <name of your migration here>
+
+In a newly created file, the `up()` function is required. This function will move the database to the next version from the previous one. The `down()` function is usually hard to implement and therefore is considered an optional.
+
+For convenience, try to avoid creating large migration scripts. You can split the script into multiple files and put them in the subdirectory under `./database/migrations` folder. 
+
+# Running Web Server
 
 After all of that done without errors, use the following command to launch the frontend with WS:
 
