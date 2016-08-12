@@ -16,7 +16,6 @@ const initialState = {
     history: [],
     filter: '',
     isReceivedAll: false,
-    showQueryHistoryModal: false,
     newHistoryItem: null,
     editingHistory: {},
     currentHistoryId: null,
@@ -126,18 +125,6 @@ function reduceAppendQueryHistory(state, action) {
     }
 }
 
-function reduceShowQueryHistoryModal(state) {
-    return Object.assign({}, state, {
-        showQueryHistoryModal: true
-    });
-}
-
-function reduceCloseQueryHistoryModal(state) {
-    return Object.assign({}, state, {
-        showQueryHistoryModal: false
-    });
-}
-
 function reduceToggleLoadingHistoryData(state, action) {
     return {
         ...state,
@@ -163,10 +150,6 @@ export default function queryHistory(state = initialState, action) {
             return reduceEditQueryHistoryItem(state, action);
         case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:
             return reduceCancelQueryHistoryEdit(state, action);
-        case ActionTypes.SHOW_QUERY_HISTORY_MODAL:
-            return reduceShowQueryHistoryModal(state);
-        case ActionTypes.CLOSE_QUERY_HISTORY_MODAL:
-            return reduceCloseQueryHistoryModal(state);
         case ActionTypes.TOGGLE_LOAING_HISTORY_DATA:
             return reduceToggleLoadingHistoryData(state, action);
     }

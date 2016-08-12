@@ -12,7 +12,6 @@ import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
 import FiltersModal from '../components/Modals/FiltersModal';
 import FileUploadModal from '../components/Modals/FileUploadModal';
-import QueryHistoryModal from '../components/Modals/QueryHistoryModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
 import AnalysisModal from '../components/Modals/AnalysisModal';
@@ -20,7 +19,6 @@ import AnalysisModal from '../components/Modals/AnalysisModal';
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-import { closeQueryHistoryModal } from '../actions/queryHistory';
 
 
 class App extends Component {
@@ -94,10 +92,6 @@ class App extends Component {
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
                 />
                 <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
-                <QueryHistoryModal
-                    showModal={this.props.showQueryHistoryModal}
-                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()); } }
-                />
             </div>
         );
     }
@@ -113,8 +107,7 @@ function mapStateToProps(state) {
             samplesList,
             filtersList,
             viewsList,
-            errorHandler: { showErrorWindow },
-            queryHistory: { showQueryHistoryModal } } = state;
+            errorHandler: { showErrorWindow } } = state;
 
     return {
         auth,
@@ -126,8 +119,7 @@ function mapStateToProps(state) {
         samplesList,
         filtersList,
         viewsList,
-        showErrorWindow,
-        showQueryHistoryModal
+        showErrorWindow
     };
 }
 

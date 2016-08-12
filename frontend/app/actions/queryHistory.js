@@ -27,8 +27,6 @@ export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER'
 export const START_QUERY_HISTORY_EDIT = 'START_QUERY_HISTORY_EDIT';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
 export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
-export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
-export const CLOSE_QUERY_HISTORY_MODAL = 'CLOSE_QUERY_HISTORY_MODAL';
 export const TOGGLE_LOAING_HISTORY_DATA = 'TOGGLE_LOAING_HISTORY_DATA';
 
 const HISTORY_NETWORK_ERROR = 'Cannot update "query history" (network error).';
@@ -68,18 +66,6 @@ export function appendQueryHistory(filter, requestFrom, items, isReceivedAll) {
         requestFrom,
         history: items,
         isReceivedAll
-    };
-}
-
-export function showQueryHistoryModal() {
-    return {
-        type: SHOW_QUERY_HISTORY_MODAL
-    };
-}
-
-export function closeQueryHistoryModal() {
-    return {
-        type: CLOSE_QUERY_HISTORY_MODAL
     };
 }
 
@@ -154,7 +140,7 @@ export function updateQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = 
     };
 }
 
-export function renewHistoryItem(historyItemId) {
+export function renewHistoryItem(historyItemId) { // FIXME: remove after functionality moving
     return (dispatch, getState) => {
         const {history} = getState().queryHistory;
         const historyItem = _.find(history, (historyItem) => {

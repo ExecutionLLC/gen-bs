@@ -73,7 +73,7 @@ export default class AnalysisBody extends React.Component {
 
     onSelectHistoryId(id) {
 
-        function getUsedSamplesIds(samples) {
+        function getUsedSamplesIds(samples) { // TODO can it be rewritten through hashedArray?
             return _.reduce(samples, ({hash, array}, sample) => (hash[sample.id] ? {hash, array} : {hash: {...hash, [sample.id]: true}, array: [...array, sample.id]}), {hash: {}, array: []}).array;
         }
 
