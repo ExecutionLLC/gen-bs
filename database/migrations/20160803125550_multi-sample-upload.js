@@ -112,7 +112,7 @@ function makeSampleVersionsToBeGenotypeVersions(knex, Promise, sampleIdToGenotyp
                 assert.ok(sampleGenotypeId);
                 assert.ok(timestamp);
 
-                knex('genotype_version')
+                return knex('genotype_version')
                     .insert(ChangeCaseUtil.convertKeysToSnakeCase({id, sampleGenotypeId, timestamp}));
             })
         ))
