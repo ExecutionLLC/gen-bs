@@ -19,7 +19,6 @@ import AnalysisModal from '../components/Modals/AnalysisModal';
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-import { closeQueryHistoryModal } from '../actions/queryHistory';
 
 
 class App extends Component {
@@ -108,8 +107,7 @@ function mapStateToProps(state) {
             samplesList,
             filtersList,
             viewsList,
-            errorHandler: { showErrorWindow },
-            queryHistory: { showQueryHistoryModal } } = state;
+            errorHandler: { showErrorWindow } } = state;
 
     return {
         auth,
@@ -121,8 +119,7 @@ function mapStateToProps(state) {
         samplesList,
         filtersList,
         viewsList,
-        showErrorWindow,
-        showQueryHistoryModal
+        showErrorWindow
     };
 }
 
