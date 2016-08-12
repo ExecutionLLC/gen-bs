@@ -16,6 +16,8 @@ const initialState = {
     },
     scrollPos: 0,
     needUpdate: false,
+    showProteinModal: false,
+    currentProtein: null,
     isNextDataLoading: false,
     isFilteringOrSorting: false,
     selectedRowIndices: []
@@ -211,6 +213,18 @@ export default function variantsTable(state = initialState, action) {
         case ActionTypes.CLEAR_VARIANTS_ROWS_SELECTION: {
             return Object.assign({}, state, {
                 selectedRowIndices: initialState.selectedRowIndices
+            });
+        }
+
+        case ActionTypes.SET_CURRENT_PROTEIN: {
+            return Object.assign({}, state, {
+                currentProtein: action.proteinValue
+            });
+        }
+
+        case ActionTypes.SHOW_PROTEIN_MODAL: {
+            return Object.assign({}, state, {
+                showProteinModal: action.show
             });
         }
 

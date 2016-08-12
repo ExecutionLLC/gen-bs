@@ -29,6 +29,9 @@ export const RECEIVE_SEARCHED_RESULTS = 'RECEIVE_SEARCHED_RESULTS';
 
 export const CHANGE_VARIANTS_LIMIT = 'CHANGE_VARIANTS_LIMIT';
 
+export const SET_CURRENT_PROTEIN = 'SET_CURRENT_PROTEIN';
+export const SHOW_PROTEIN_MODAL = 'SHOW_PROTEIN_MODAL';
+
 const ANALYZE_SAMPLE_NETWORK_ERROR = 'Cannot analyze data (network error). Please try again.';
 const ANALYZE_SAMPLE_SERVER_ERROR = 'Cannot analyze data (server error). Please try again.';
 
@@ -379,5 +382,19 @@ export function selectTableRow(rowIndex, isSelected) {
 export function clearTableRowsSelection() {
     return {
         type: CLEAR_VARIANTS_ROWS_SELECTION
+    };
+}
+
+export function setCurrentProtein(proteinValue) {
+    return {
+        type: SET_CURRENT_PROTEIN,
+        proteinValue
+    };
+}
+
+export function showProteinModal(show) {
+    return {
+        type: SHOW_PROTEIN_MODAL,
+        show
     };
 }

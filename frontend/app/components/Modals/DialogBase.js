@@ -86,6 +86,5 @@ export default class DialogBase extends ComponentBase {
 }
 
 DialogBase.propTypes = {
-    savedFiles: React.PropTypes.array.isRequired,
     showModal: React.PropTypes.bool.isRequired
 };

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { addTimeout, WATCH_ALL } from 'redux-timeout';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {addTimeout, WATCH_ALL} from 'redux-timeout';
 import classNames from 'classnames';
 
 import config from '../../config';
@@ -16,11 +16,12 @@ import FileUploadModal from '../components/Modals/FileUploadModal';
 import QueryHistoryModal from '../components/Modals/QueryHistoryModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
+import ProteinModal from '../components/Modals/ProteinModal';
 
-import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
-import { openModal, closeModal } from '../actions/modalWindows';
-import { lastErrorResolved } from '../actions/errorHandler';
-import { closeQueryHistoryModal } from '../actions/queryHistory';
+import {KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer} from '../actions/auth';
+import {openModal, closeModal} from '../actions/modalWindows';
+import {lastErrorResolved} from '../actions/errorHandler';
+import {closeQueryHistoryModal} from '../actions/queryHistory';
 
 
 class App extends Component {
@@ -29,17 +30,19 @@ class App extends Component {
         const dispatch = this.props.dispatch;
         dispatch(login());
 
-        const autoLogoutTimeout = config.SESSION.LOGOUT_TIMEOUT*1000;
-        const autoLogoutFn = () => { dispatch(startAutoLogoutTimer()); };
+        const autoLogoutTimeout = config.SESSION.LOGOUT_TIMEOUT * 1000;
+        const autoLogoutFn = () => {
+            dispatch(startAutoLogoutTimer());
+        };
         dispatch(addTimeout(autoLogoutTimeout, WATCH_ALL, autoLogoutFn));
 
-        const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT*1000);
+        const keepAliveTask = new KeepAliveTask(config.SESSION.KEEP_ALIVE_TIMEOUT * 1000);
         keepAliveTask.start();
     }
 
     render() {
         const {samplesList: {hashedArray: {array: samplesArray}}} = this.props;
-        const { ui } = this.props;
+        const {ui} = this.props;
 
         const mainDivClass = classNames({
             'main': true,
@@ -56,64 +59,82 @@ class App extends Component {
                 <nav className='navbar navbar-inverse navbar-static-top'/>
                 {<div>&nbsp;</div>}
                 {samplesArray.length > 0 &&
-                 <div className='container-fluid'>
+                <div className='container-fluid'>
                     <NavbarMain />
-                     <div className={navbarQueryClass} id='subnav'>
-                         <NavbarCreateQuery
-                          {...this.props}
-                          openModal={ (modalName) => { this.props.dispatch(openModal(modalName)); } }
-                         />
-                     </div>
-                     <VariantsTableReact {...this.props} />
-                     <div id='fav-message' className='hidden'>
+                    <div className={navbarQueryClass} id='subnav'>
+                        <NavbarCreateQuery
+                            {...this.props}
+                            openModal={ (modalName) => {
+                                this.props.dispatch(openModal(modalName));
+                            } }
+                        />
+                    </div>
+                    <VariantsTableReact {...this.props} />
+                    <div id='fav-message' className='hidden'>
                         You can export these items to file
-                     </div>
-                 </div>
+                    </div>
+                </div>
                 }
                 <ErrorModal
                     showModal={this.props.showErrorWindow}
-                    closeModal={ () => { this.props.dispatch(lastErrorResolved()); } }
+                    closeModal={ () => {
+                        this.props.dispatch(lastErrorResolved());
+                    } }
                 />
                 <AutoLogoutModal
                     showModal={this.props.auth.showAutoLogoutDialog}
-                    closeModal={ () => { this.props.dispatch(stopAutoLogoutTimer()); } }
+                    closeModal={ () => {
+                        this.props.dispatch(stopAutoLogoutTimer());
+                    } }
                 />
                 <ViewsModal
                     showModal={this.props.modalWindows.views.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
+                    closeModal={ (modalName) => {
+                        this.props.dispatch(closeModal(modalName));
+                    } }
                     dispatch={this.props.dispatch}
                 />
                 <FiltersModal
                     showModal={this.props.modalWindows.filters.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
+                    closeModal={ (modalName) => {
+                        this.props.dispatch(closeModal(modalName));
+                    } }
                     dispatch={this.props.dispatch}
                 />
                 <FileUploadModal
                     showModal={this.props.modalWindows.upload.showModal}
-                    closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
+                    closeModal={ (modalName) => {
+                        this.props.dispatch(closeModal(modalName));
+                    } }
                 />
-                <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
+                <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal}/>
                 <QueryHistoryModal
                     showModal={this.props.showQueryHistoryModal}
-                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()); } }
+                    closeModal={ () => {
+                        this.props.dispatch(closeQueryHistoryModal());
+                    } }
                 />
+                <ProteinModal showModal={this.props.variantsTable.showProteinModal}/>
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const { auth,
-            userData,
-            modalWindows,
-            fields,
-            savedFiles,
-            ui,
-            samplesList,
-            filtersList,
-            viewsList,
-            errorHandler: { showErrorWindow },
-            queryHistory: { showQueryHistoryModal } } = state;
+    const {
+        auth,
+        userData,
+        modalWindows,
+        fields,
+        savedFiles,
+        ui,
+        samplesList,
+        variantsTable,
+        filtersList,
+        viewsList,
+        errorHandler: {showErrorWindow},
+        queryHistory: {showQueryHistoryModal}
+    } = state;
 
     return {
         auth,
@@ -122,6 +143,7 @@ function mapStateToProps(state) {
         fields,
         savedFiles,
         ui,
+        variantsTable,
         samplesList,
         filtersList,
         viewsList,

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import ComponentBase from '../shared/ComponentBase';
 
 import VariantsTableComment from './VariantsTableComment';
+import {setCurrentProtein, showProteinModal} from '../../actions/variantsTable';
 
 
 export default class VariantsTableRow extends ComponentBase {
@@ -19,7 +20,6 @@ export default class VariantsTableRow extends ComponentBase {
             isSelected
         } = this.props;
         const rowFieldsHash = row.fieldsHash;
-        const rowFields = row.fields;
         const comments = row.comments;
 
         const pos = this.getFieldValue('POS', rowFieldsHash, fields);
@@ -67,7 +67,7 @@ export default class VariantsTableRow extends ComponentBase {
     renderFieldCells(viewListItems, sortState, rowFieldsHash, fields) {
         return viewListItems.map(({fieldId}) => {
             const field = fields.totalFieldsHash[fieldId];
-            const fieldValue =  rowFieldsHash[fieldId];
+            const fieldValue = rowFieldsHash[fieldId];
             const fieldSortState = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
             return this.renderFieldCell(field, fieldSortState, fieldValue);
         });
@@ -80,7 +80,7 @@ export default class VariantsTableRow extends ComponentBase {
 
     getFieldValue(colName, rowFieldsHash, fields) {
         const field = _.find(fields.totalFieldsList, field => field.name === colName);
-        return rowFieldsHash[field.id].value;
+        return rowFieldsHash[field.id];
     }
 
 
@@ -93,10 +93,31 @@ export default class VariantsTableRow extends ComponentBase {
             <td className={sortedActiveClass}
                 key={field.id}>
                 <div>
-                    {fieldValue || ''}
+                    {this.renderFieldValue(field, fieldValue)}
                 </div>
             </td>
         );
+    }
+
+    renderFieldValue(field, fieldValue) {
+        if (fieldValue && field.name === 'POS') {
+            return (
+                <div>
+                    <a href='#' onClick={() => this.onHgvspValueClick(fieldValue)}>{fieldValue}</a>
+                </div>
+            );
+        }
+        return (
+            <div>{fieldValue || ''}</div>
+        );
+    }
+
+    onHgvspValueClick(fieldValue) {
+        const {dispatch} = this.props;
+        dispatch([
+            setCurrentProtein(fieldValue),
+            showProteinModal(true)
+        ]);
     }
 
     shouldComponentUpdate(nextProps) {
