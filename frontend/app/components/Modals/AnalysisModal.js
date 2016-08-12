@@ -52,8 +52,7 @@ function mapStateToProps(state) {
 
     const modelsList = {
         models: filtersList.hashedArray.array,
-        selectedModelId: filtersList.selectedFilterId
-
+        selectedModelId: null // did not used
     };
     
     const historyList = queryHistory.history;//.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
