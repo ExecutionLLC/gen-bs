@@ -17,6 +17,8 @@ class DefaultsBuilderBase {
         this.asSourcesDir = this.defaultsDir + '/templates/sources'; // AS sample metadata.
         this.viewsDir = this.defaultsDir + '/views'; // Output directory for default views.
         this.filtersDir = this.defaultsDir + '/filters'; // Output directory for default filters.
+        this.modelsDir = this.defaultsDir + '/models'; // Output directory for
+        // default filters.
         this.requiredFieldsFile = this.defaultsDir + '/templates/metadata/required-metadata.json'; // Metadata of the mandatory VCF fields.
         this.editableFieldsFile = this.defaultsDir + '/templates/metadata/editable-metadata.json'; // Metadata of the editable fields, which are used in the UI and WS only.
     }

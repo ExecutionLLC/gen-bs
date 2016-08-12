@@ -13,6 +13,7 @@ const FieldsMetadataModel = require('./FieldsMetadataModel');
 const SavedFileModel = require('./SavedFileModel');
 const QueryHistoryModel = require('./QueryHistoryModel');
 const AnalysisModel = require('./AnalysisModel');
+const ModelsModel = require('./ModelsModel');
 
 class ModelsFacade {
     constructor(config, logger) {
@@ -33,6 +34,7 @@ class ModelsFacade {
         this.savedFiles = new SavedFileModel(this);
         this.queryHistory = new QueryHistoryModel(this);
         this.analysis = new AnalysisModel(this);
+        this.models = new ModelsModel(this);
     }
 }
 

@@ -1,0 +1,55 @@
+[
+  {
+    "name": "Test Model",
+    "description": "Test model description",
+    "type": "standard",
+    "modelType": "filter",
+    "analysisType": "tumor",
+    "rules": {
+      "$or": [
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "ALT",
+            "value_type": "string"
+          },
+          "condition": {
+            "$neq": "A"
+          }
+        },
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "FILTER",
+            "value_type": "string"
+          },
+          "condition": {
+            "$eq": "PASS"
+          }
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "ALT",
+                "value_type": "string"
+              },
+              "condition": {
+                "$neq": "ABC"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Another Test Model",
+    "description": "Test model description v2",
+    "type": "advanced",
+    "modelType": "complex",
+    "analysisType": "tumor",
+    "rules": null
+  }
+]

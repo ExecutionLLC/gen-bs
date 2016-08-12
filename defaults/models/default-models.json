@@ -1,0 +1,42 @@
+[
+  {
+    "id": "343389c0-12db-4ca3-8ead-b5536c34a568",
+    "name": "Test Model",
+    "description": "Test model description",
+    "type": "standard",
+    "modelType": "filter",
+    "analysisType": "tumor",
+    "rules": {
+      "$or": [
+        {
+          "00000000-0000-0000-0000-000000000005": {
+            "$neq": "A"
+          }
+        },
+        {
+          "00000000-0000-0000-0000-000000000007": {
+            "$eq": "PASS"
+          }
+        },
+        {
+          "$and": [
+            {
+              "00000000-0000-0000-0000-000000000005": {
+                "$neq": "ABC"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "7f3fc9a3-c0d0-4b34-9c88-b5986dbc7153",
+    "name": "Another Test Model",
+    "description": "Test model description v2",
+    "type": "advanced",
+    "modelType": "complex",
+    "analysisType": "tumor",
+    "rules": null
+  }
+]

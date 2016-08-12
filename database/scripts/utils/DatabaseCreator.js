@@ -83,6 +83,17 @@ class DatabaseCreator {
             'user' // Created by user.
         ];
 
+        // Possible values for model types.
+        const modelTypeEnumValues = [
+            'filter', // Model is similar to filter.
+            'complex' // Model has a defined behavior and is not cloneable/editable.
+        ];
+        const modelAnalysisTypeEnumValues = [
+            'all',      // Model should be available in all lists.
+            'tumor',    // Tumor/Normal analysis-only models.
+            'family'    // Family analysis-only models.
+        ];
+
         // Entity access rights, allowing users to share things like filters and views
         const accessRightsEnumValues = [
             'r', // Share as read-only
@@ -152,12 +163,8 @@ class DatabaseCreator {
                 table.uuid('original_filter_id')
                     .references('id')
                     .inTable('filter');
-                table.string('name', 50)
-                    .notNullable();
                 table.json('rules');
                 table.enu('type', entityTypeEnumValues);
-                table.boolean('is_copy_disabled')
-                    .defaultTo(false);
                 table.boolean('is_deleted')
                     .defaultTo(false);
                 table.timestamp('timestamp')
@@ -173,6 +180,8 @@ class DatabaseCreator {
                 table.string('langu_id', 2)
                     .references('id')
                     .inTable('langu');
+                table.string('name', 50)
+                    .notNullable();
                 table.string('description', 512);
 
                 table.primary(['filter_id', 'langu_id']);
@@ -187,6 +196,43 @@ class DatabaseCreator {
                 table.enu('access_rights', accessRightsEnumValues);
 
                 table.primary(['user_id', 'filter_id']);
+            })
+
+            // Models
+            .createTable('model', table => {
+                table.uuid('id')
+                    .primary();
+                table.uuid('original_model_id')
+                    .references('id')
+                    .inTable('model');
+                table.json('rules')
+                    .nullable();
+                table.enu('type', entityTypeEnumValues)
+                    .notNullable();
+                table.enu('model_type', modelTypeEnumValues)
+                    .notNullable();
+                table.enu('analysis_type', modelAnalysisTypeEnumValues)
+                    .notNullable();
+                table.boolean('is_deleted')
+                    .defaultTo(false);
+                table.timestamp('timestamp')
+                    .defaultTo(databaseKnex.fn.now());
+                table.uuid('creator')
+                    .references('id')
+                    .inTable('user');
+            })
+            .createTable('model_text', table => {
+                table.uuid('model_id')
+                    .references('id')
+                    .inTable('model');
+                table.string('langu_id', 2)
+                    .references('id')
+                    .inTable('langu');
+                table.string('name', 50)
+                    .notNullable();
+                table.string('description', 512);
+
+                table.primary(['model_id', 'langu_id']);
             })
 
             // Fields
