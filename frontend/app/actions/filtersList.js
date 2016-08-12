@@ -79,7 +79,6 @@ export function filtersListServerCreateFilter(filter, languageId) {
                     reject();
                 } else {
                     const newFilter = response.body;
-                    const filterId = newFilter.id;
                     dispatch(filtersListAddFilter(newFilter));
                     resolve(newFilter);
                 }

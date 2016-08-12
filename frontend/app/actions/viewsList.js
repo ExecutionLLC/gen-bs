@@ -80,7 +80,6 @@ export function viewsListServerCreateView(view, languageId) {
                     reject();
                 } else {
                     const newView = response.body;
-                    const viewId = newView.id;
                     dispatch(viewsListAddView(newView));
                     resolve(newView);
                 }
