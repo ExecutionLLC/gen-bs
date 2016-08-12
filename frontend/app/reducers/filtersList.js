@@ -70,8 +70,6 @@ export default function filtersList(state = {
             });
         case ActionTypes.FILTERS_LIST_RECEIVE:
             return reduceFilterListReceive(state, action);
-        case ActionTypes.FILTERS_LIST_SELECT_FILTER:
-            return state; // FIXME rid of FILTERS_LIST_SELECT_FILTER
         case ActionTypes.FILTERS_LIST_ADD_FILTER:
             return reduceFilterListAddFilter(state, action);
         case ActionTypes.FILTERS_LIST_DELETE_FILTER:

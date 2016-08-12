@@ -1,6 +1,5 @@
 import {closeModal} from './modalWindows';
 import {
-    filtersListSelectFilter,
     filtersListServerCreateFilter,
     filtersListServerUpdateFilter,
     filtersListServerDeleteFilter
@@ -89,7 +88,6 @@ function filterBuilderUpdateFilter() {
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
         if (state.auth.isDemo || isNotEdited) {
-            dispatch(filtersListSelectFilter(editingFilter.filter.id));
             dispatch(fireOnSaveAction(editingFilter.filter));
             dispatch(closeModal('filters'));
             dispatch(filterBuilderEndEdit());
