@@ -5,19 +5,15 @@ import {entityType} from '../utils/entityTypes';
 
 function reduceViewListDeleteView(state, action) {
     const newHashedArray = ImmutableHashedArray.deleteItemId(state.hashedArray, action.viewId);
-    const newSelectedViewId = (state.selectedViewId === action.viewId) ? state.hashedArray.array[0].id : state.selectedViewId;
     return Object.assign({}, state, {
-        selectedViewId: newSelectedViewId,
         hashedArray: newHashedArray
     });
 }
 
 function reduceViewListEditView(state, action) {
     const newHashedArray = ImmutableHashedArray.replaceItemId(state.hashedArray, action.viewId, action.view);
-    const updatedSelectedViewId = (state.selectedViewId === action.viewId) ? action.view.id : state.selectedViewId;
     return Object.assign({}, state, {
-        hashedArray: newHashedArray,
-        selectedViewId: updatedSelectedViewId
+        hashedArray: newHashedArray
     });
 }
 
@@ -29,16 +25,14 @@ function reduceViewListAddView(state, action) {
 
 function reduceViewListReceive(state, action) {
     const newHashedArray = ImmutableHashedArray.makeFromArray(action.views);
-    const newSelectedViewId = newHashedArray[state.selectedViewId] ? state.selectedViewId : newHashedArray.array[0].id;
     return Object.assign({}, state, {
-        hashedArray: newHashedArray,
-        selectedViewId: newSelectedViewId
+        hashedArray: newHashedArray
     });
 }
 
 function reduceViewListSetHistoryView(state, action) {
     const {view} = action;
-    const {hashedArray, selectedViewId} = state;
+    const {hashedArray} = state;
     const inListView = view && hashedArray.hash[view.id];
     const isViewInListWOHistory = inListView && inListView.type !== entityType.HISTORY;
     const isNeedToSet = view && !isViewInListWOHistory;
@@ -53,17 +47,14 @@ function reduceViewListSetHistoryView(state, action) {
     };
     const viewsArrayWNewHistory = isNeedToSet ? [viewToSet, ...viewsArrayWOHistory] : viewsArrayWOHistory;
     const viewsHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(viewsArrayWNewHistory);
-    const newSelectedViewId = viewsHashedArrayWNewHistory.hash[selectedViewId] ? selectedViewId : viewsHashedArrayWNewHistory.array[0] && viewsHashedArrayWNewHistory.array[0].id || null;
     return {
         ...state,
-        hashedArray: viewsHashedArrayWNewHistory,
-        selectedViewId: newSelectedViewId
+        hashedArray: viewsHashedArrayWNewHistory
     };
 }
 
 export default function viewsList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
-    selectedViewId: null,
     isServerOperation: false
 }, action) {
 
@@ -80,7 +71,6 @@ export default function viewsList(state = {
             return reduceViewListReceive(state, action);
         case ActionTypes.VIEWS_LIST_SELECT_VIEW:
             return Object.assign({}, state, {
-                selectedViewId: action.viewId
             });
         case ActionTypes.VIEWS_LIST_ADD_VIEW:
             return reduceViewListAddView(state, action);
