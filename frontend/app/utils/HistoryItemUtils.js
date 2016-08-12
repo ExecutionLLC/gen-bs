@@ -3,7 +3,7 @@ function makeHistoryItem(historyItem) {
         ...historyItem,
         name: `Copy of ${historyItem.name}`,
         createdDate: '' + new Date(),
-        lastQueryDate: '' + new Date(),
+        lastQueryDate: '' + new Date()
     };
 }
 
