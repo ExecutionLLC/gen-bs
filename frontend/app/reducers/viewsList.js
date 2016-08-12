@@ -69,9 +69,6 @@ export default function viewsList(state = {
             });
         case ActionTypes.VIEWS_LIST_RECEIVE:
             return reduceViewListReceive(state, action);
-        case ActionTypes.VIEWS_LIST_SELECT_VIEW:
-            return Object.assign({}, state, {
-            });
         case ActionTypes.VIEWS_LIST_ADD_VIEW:
             return reduceViewListAddView(state, action);
         case ActionTypes.VIEWS_LIST_DELETE_VIEW:

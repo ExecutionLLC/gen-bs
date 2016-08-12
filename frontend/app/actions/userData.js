@@ -12,8 +12,7 @@ import {
     filtersListReceive
 } from './filtersList';
 import {
-    viewsListReceive,
-    viewsListSelectView
+    viewsListReceive
 } from './viewsList';
 import {entityType} from '../utils/entityTypes';
 
@@ -93,7 +92,6 @@ export function fetchUserdata() {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 } else {
                     dispatch(changeSample(sample.id));
-                    dispatch(viewsListSelectView(view.id));
                     /*dispatch(analyze(sample.id, view.id, filter.id)); FIXME analyze: replace by reanalyze */
                 }
             }

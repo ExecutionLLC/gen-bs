@@ -1,6 +1,5 @@
 import {closeModal} from './modalWindows';
 import {
-    viewsListSelectView,
     viewsListServerCreateView,
     viewsListServerDeleteView,
     viewsListServerUpdateView
@@ -133,7 +132,6 @@ function viewBuilderUpdateView() {
             || originalView === editingView;
 
         if (state.auth.isDemo || isNotEdited) {
-            dispatch(viewsListSelectView(editingView.id));
             dispatch(fireOnSaveAction(editingView));
             dispatch(closeModal('views'));
             dispatch(viewBuilderEndEdit());

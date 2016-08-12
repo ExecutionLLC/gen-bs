@@ -15,7 +15,6 @@ import {
     filtersListReceive
 } from './filtersList';
 import {
-    viewsListSelectView,
     viewsListReceive
 } from './viewsList';
 import {entityType} from '../utils/entityTypes';
@@ -178,8 +177,7 @@ export function renewHistoryItem(historyItemId) {
             dispatch(fetchFields(clonedHistoryItem.sample.id))
                 .then(() => {
                     dispatch([
-                        viewsListSelectView(clonedHistoryItem.view.id)/*,
-                        analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id) FIXME analyze: replace by reanalyze */
+                        /*analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id) FIXME analyze: replace by reanalyze */
                     ]);
                 });
         }
