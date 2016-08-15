@@ -79,12 +79,6 @@ class InitialDataImportManager {
             (filters, cb) => {
                 result.filters = filters;
 
-                const modelsDir = defaultsDir + '/models';
-                this._importFiles(modelsDir, this._importModels, cb);
-            },
-            (models, cb) => {
-                result.models = models;
-
                 console.log(JSON.stringify(result, null, 2));
                 cb(null, result);
             }
