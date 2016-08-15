@@ -70,10 +70,10 @@ function reduceDuplicateQueryHistoryItem(state, action) {
     const {historyItemId} = action;
     const {history, editingHistory} = state;
     const historyItem = historyItemId && _.find(history, {id: historyItemId});
-    const historyItemConverted = historyItem && HistoryItemUtils.makeHistoryItem(historyItem);
+    const newHistoryItem = historyItem && HistoryItemUtils.makeHistoryItem(historyItem);
     const newEditingHistory = editingHistory[historyItemId] ?
-        ImmutableHash.replace(editingHistory, historyItemId, historyItemConverted) :
-        ImmutableHash.add(editingHistory, historyItemId, historyItemConverted);
+        ImmutableHash.replace(editingHistory, historyItemId, newHistoryItem) :
+        ImmutableHash.add(editingHistory, historyItemId, newHistoryItem);
     return {
         ...state,
         editingHistory: newEditingHistory
