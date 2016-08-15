@@ -158,7 +158,7 @@ export default function queryHistory(state = initialState, action) {
             return reduceEditQueryHistoryItem(state, action);
         case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:
             return reduceCancelQueryHistoryEdit(state, action);
-        case ActionTypes.TOGGLE_LOAING_HISTORY_DATA:
+        case ActionTypes.TOGGLE_LOADING_HISTORY_DATA:
             return reduceToggleLoadingHistoryData(state, action);
         case ActionTypes.CREATE_NEW_HISTORY_ITEM:
             return reduceCreateNewHistoryItem(state, action);

@@ -26,7 +26,7 @@ export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER'
 export const START_QUERY_HISTORY_EDIT = 'START_QUERY_HISTORY_EDIT';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
 export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
-export const TOGGLE_LOAING_HISTORY_DATA = 'TOGGLE_LOAING_HISTORY_DATA';
+export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
 export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 
 const HISTORY_NETWORK_ERROR = 'Cannot update "query history" (network error).';
@@ -262,7 +262,7 @@ function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
 
 export function toggleLoadingHistoryData(isLoading) {
     return {
-        type: TOGGLE_LOAING_HISTORY_DATA,
+        type: TOGGLE_LOADING_HISTORY_DATA,
         isLoading
     };
 }
