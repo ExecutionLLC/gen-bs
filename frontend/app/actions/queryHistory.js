@@ -4,7 +4,6 @@ import _ from 'lodash';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
-//import {analyze} from './ui';
 import {
     changeSamples,
     changeSample
@@ -166,9 +165,9 @@ export function renewHistoryItem(historyItemId) { // FIXME: remove after functio
             clonedHistoryItem.filters[0].type = entityType.HISTORY;
             clonedHistoryItem.view.type = entityType.HISTORY;
             dispatch([
-                attachHistory(clonedHistoryItem),
-                changeSample(clonedHistoryItem.sample.id),
-                prepareAnalyze()
+                attachHistory(clonedHistoryItem), // do not need to
+                changeSample(clonedHistoryItem.sample.id), // needs to somehow mark current samples
+                prepareAnalyze() // replaced by requestAnalyse at analyse()
             ]);
             dispatch(fetchFields(clonedHistoryItem.sample.id))
                 .then(() => {
