@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import  * as ActionTypes from '../actions/queryHistory';
 import immutableArray from '../utils/immutableArray';
-import {ImmutableHash} from '../utils/immutable';
 import HistoryItemUtils from '../utils/HistoryItemUtils';
 
 
@@ -76,7 +75,7 @@ function reduceDuplicateQueryHistoryItem(state, action) {
     };
 }
 
-function reduceCancelQueryHistoryEdit(state) { // TODO: remove historyItemId from action
+function reduceCancelQueryHistoryEdit(state) {
     if (!state.history.length) {
         return state;
     } else {
@@ -87,7 +86,7 @@ function reduceCancelQueryHistoryEdit(state) { // TODO: remove historyItemId fro
     }
 }
 
-function reduceEditQueryHistoryItem(state, action) { // TODO remove historyItemId and defaultHistoryItem from action
+function reduceEditQueryHistoryItem(state, action) {
     const {samplesList, filtersList, viewsList, modelsList, changeItem} = action;
     const {newHistoryItem} = state;
     if (!newHistoryItem) {

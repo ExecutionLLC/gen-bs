@@ -99,16 +99,14 @@ export function duplicateQueryHistoryItem(historyItemId) {
     };
 }
 
-export function editQueryHistoryItem(historyItemId, samplesList, filtersList, viewsList, modelsList, changeItem, defaultHistoryItem) {
+export function editQueryHistoryItem(samplesList, filtersList, viewsList, modelsList, changeItem) {
     return {
         type: EDIT_QUERY_HISTORY_ITEM,
-        historyItemId,
         samplesList,
         filtersList,
         viewsList,
         modelsList,
-        changeItem,
-        defaultHistoryItem
+        changeItem
     };
 }
 
