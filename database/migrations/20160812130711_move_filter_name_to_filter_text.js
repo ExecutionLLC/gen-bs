@@ -30,11 +30,20 @@ function moveFilterNamesIntoNewColumn(knex, Promise){
 }
 
 function dropFilterIsCopyDisableColumnNameColumn(knex, Promise){
-    return knex.raw('ALTER TABLE filter DROP COLUMN is_copy_disabled');
+    const {schema} = knex;
+    return schema
+        .table('filter', (table) => {
+            table.dropColumn('is_copy_disabled');
+        });
 }
 
 function dropFilterColumn(knex, Promise){
     return knex.raw('ALTER TABLE filter DROP COLUMN name');
+    const {schema} = knex;
+    return schema
+        .table('filter', (table) => {
+            table.dropColumn('name');
+        });
 }
 
 function dropDefaultFilterTextNameColumn(knex, Promise){

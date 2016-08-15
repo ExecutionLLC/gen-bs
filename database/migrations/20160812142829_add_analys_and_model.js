@@ -1,8 +1,7 @@
 'use strict';
 
 const path = require('path');
-
-const FsUtils = require('../../utils/FileSystemUtils');
+const Config = require('../../utils/Config');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 const Uuid = require('node-uuid');
 const ModelsBuilder = require('../defaults/ModelsBuilder');
@@ -158,7 +157,6 @@ function importDefaultModels(knex, Promise) {
                     )
                     .then(
                         function (response) {
-                            console.log(response);
                             return knex('model_text')
                                 .insert(
                                     ChangeCaseUtil.convertKeysToSnakeCase(
@@ -166,7 +164,7 @@ function importDefaultModels(knex, Promise) {
                                             modelId: id,
                                             name,
                                             description,
-                                            languId:languId||"en"
+                                            languId:languId||Config.defaultLanguId
                                         }
                                     )
                                 )
