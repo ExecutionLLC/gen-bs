@@ -64,7 +64,7 @@ function mapStateToProps(state) {
     const newHistoryItem = queryHistory.newHistoryItem || HistoryItemUtils.makeNewHistoryItem(
             findFirstNonHistoryItem(samplesList),
             findFirstNonHistoryItem(filtersList),
-            findFirstNonHistoryItem(viewsList));
+            findFirstNonHistoryItem(viewsList)); // TODO also check for available for user items
 
     return {
         auth,
