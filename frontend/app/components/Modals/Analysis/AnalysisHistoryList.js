@@ -9,7 +9,7 @@ export default class AnalysisHistoryList extends React.Component {
         return (
             <div className='split-scroll' ref='analysisHistoryListContainer'>
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
-                    {this.renderNewListItem(!currentItemId, newHistoryItem)}
+                    {newHistoryItem && this.renderNewListItem(!currentItemId, newHistoryItem)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, !!editingHistoryList[historyItem.id], historyItem))}
                     {!this.props.isHistoryReceivedAll && this.renderLoadingListItem()}
                 </ul>

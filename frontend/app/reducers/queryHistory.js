@@ -132,6 +132,14 @@ function reduceToggleLoadingHistoryData(state, action) {
     };
 }
 
+function reduceCreateNewHistoryItem(state, action) {
+    const {sample, filter, view} = action;
+    return {
+        ...state,
+        newHistoryItem: HistoryItemUtils.makeNewHistoryItem(sample, filter, view)
+    };
+}
+
 export default function queryHistory(state = initialState, action) {
     switch (action.type) {
         case ActionTypes.SET_CURRENT_QUERY_HISTORY_ID:
@@ -152,6 +160,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceCancelQueryHistoryEdit(state, action);
         case ActionTypes.TOGGLE_LOAING_HISTORY_DATA:
             return reduceToggleLoadingHistoryData(state, action);
+        case ActionTypes.CREATE_NEW_HISTORY_ITEM:
+            return reduceCreateNewHistoryItem(state, action);
     }
     return state;
 }

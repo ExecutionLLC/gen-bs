@@ -5,7 +5,11 @@ import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {receiveFields, receiveTotalFields} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
-import {receiveInitialQueryHistory} from './queryHistory';
+import {
+    receiveInitialQueryHistory,
+    setCurrentQueryHistoryId,
+    createNewHistoryItem
+} from './queryHistory';
 //import {analyze} from './ui';
 import {changeSample, receiveSamplesList} from './samplesList';
 import {
@@ -87,6 +91,16 @@ export function fetchUserdata() {
                 dispatch(receiveFields(lastSampleFields));
                 dispatch(receiveSamplesList(samples));
                 dispatch(receiveInitialQueryHistory(analyses));
+                if (analyses[0]) {
+                    dispatch(setCurrentQueryHistoryId(analyses[0].id));
+                } else {
+                    if (!sample || !filter || !view) {
+                        dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                    } else {
+                        dispatch(createNewHistoryItem(sample, filter, view));
+                        dispatch(setCurrentQueryHistoryId(null));
+                    }
+                }
 
                 if (!sample || !filter || !view) {
                     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));

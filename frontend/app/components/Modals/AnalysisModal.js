@@ -1,12 +1,8 @@
-import * as _ from 'lodash';
-
 import React from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 import AnalysisHeader from './Analysis/AnalysisHeader';
 import AnalysisBody from './Analysis/AnalysisBody';
-import HistoryItemUtils from '../../utils/HistoryItemUtils';
-import {entityType} from '../../utils/entityTypes';
 
 
 class AnalysisModal extends React.Component {
@@ -57,14 +53,7 @@ function mapStateToProps(state) {
     const historyList = queryHistory.history;
     const initialHistoryList = queryHistory.initialHistory;
 
-    function findFirstNonHistoryItem(list) {
-        return _.find(list.hashedArray.array, (item) => item.type !== entityType.HISTORY);
-    }
-
-    const newHistoryItem = queryHistory.newHistoryItem || HistoryItemUtils.makeNewHistoryItem(
-            findFirstNonHistoryItem(samplesList),
-            findFirstNonHistoryItem(filtersList),
-            findFirstNonHistoryItem(viewsList)); // TODO also check for available for user items
+    const newHistoryItem = queryHistory.newHistoryItem;
 
     return {
         auth,

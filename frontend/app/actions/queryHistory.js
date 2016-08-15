@@ -28,6 +28,7 @@ export const START_QUERY_HISTORY_EDIT = 'START_QUERY_HISTORY_EDIT';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
 export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
 export const TOGGLE_LOAING_HISTORY_DATA = 'TOGGLE_LOAING_HISTORY_DATA';
+export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 
 const HISTORY_NETWORK_ERROR = 'Cannot update "query history" (network error).';
 const HISTORY_SERVER_ERROR = 'Cannot update "query history" (server error).';
@@ -42,6 +43,15 @@ export function setCurrentQueryHistoryId(id) {
     return {
         type: SET_CURRENT_QUERY_HISTORY_ID,
         id
+    };
+}
+
+export function createNewHistoryItem(sample, filter, view) {
+    return {
+        type: CREATE_NEW_HISTORY_ITEM,
+        sample,
+        filter,
+        view
     };
 }
 
