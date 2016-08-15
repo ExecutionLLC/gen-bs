@@ -134,13 +134,7 @@ function createAnalysisTables(knex, Promise) {
 }
 
 function importDefaultModels(knex, Promise) {
-    // const modelsBuil;
-    // console.log(__dirname);
-    // const modelDefaultsDir = path.join(__dirname, '../defaults/models/');
-    // const modelsString = FsUtils.getFileContentsAsString(modelDefaultsDir);
-    // const models = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(modelsString));
     const models = ModelsBuilder.getModels();
-    console.log(models);
 
     return Promise.all(
         models.map(
