@@ -56,9 +56,9 @@ export default class AnalysisRightPane extends React.Component {
             <div className='split-right-top split-right-top-tabs form-horizontal'>
                 {this.renderSelectAnalysis()}
                 {this.renderDeleteAnalysis(false)}
-                {this.renderAnalysisName(historyItem.name, disabled)}
+                {this.renderAnalysisName(historyItem.name)}
                 {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
-                {this.renderAnalysisDescription(historyItem.description, disabled)}
+                {this.renderAnalysisDescription(historyItem.description)}
                 {this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
             </div>
         );
@@ -497,7 +497,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisName(name, disabled) {
+    renderAnalysisName(name) {
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -507,7 +507,6 @@ export default class AnalysisRightPane extends React.Component {
                         placeholder="Analysis name (it can't be empty)"
                         data-localize='query.settings.name'
                         maxLength={50}
-                        disabled={disabled}
                         onChange={(str) => this.onAnalysisNameChange(str)}
                     />
                 </div>
@@ -556,7 +555,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisDescription(description, disabled) {
+    renderAnalysisDescription(description) {
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
@@ -565,7 +564,6 @@ export default class AnalysisRightPane extends React.Component {
                         placeholder='Analysis description (optional)'
                         className='form-control material-input-sm'
                         data-localize='query.settings.description'
-                        disabled={disabled}
                         onChange={(str) => this.onAnalysisDescriptionChange(str)}
                     />
                 </div>
