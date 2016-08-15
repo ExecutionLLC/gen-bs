@@ -5,7 +5,7 @@ import UserEntityClientBase from './UserEntityClientBase';
 
 export default class QueryHistoryClient extends UserEntityClientBase {
     constructor(urls) {
-        super(urls);
+        super(urls, urls.queryHistoryUrls());
     }
 
     getQueryHistory(languageId, filter, limit, offset, callback) {

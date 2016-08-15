@@ -129,4 +129,8 @@ export default class Urls {
     _constructApiUrl(subUrl) {
         return _constructApiUrl(subUrl, this.httpScheme, this.host, this.port);
     }
+
+    queryHistoryUrls() {
+        return new CollectionUrls('/analyse', this.httpScheme, this.host, this.port);
+    }
 }

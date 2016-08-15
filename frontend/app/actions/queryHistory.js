@@ -149,6 +149,19 @@ export function updateQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = 
     };
 }
 
+export function updateQueryHistoryItem(historyItem) {
+    return (dispatch, getState) => {
+        debugger;
+        queryHistoryClient.update(historyItem, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, HISTORY_SERVER_ERROR));
+            }
+        });
+    };
+}
+
 export function renewHistoryItem(historyItemId) { // FIXME: remove after functionality moving
     return (dispatch, getState) => {
         const {history} = getState().queryHistory;

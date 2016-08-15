@@ -5,7 +5,8 @@ import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     startQueryHistoryEdit,
     cancelQueryHistoryEdit,
-    editQueryHistoryItem
+    editQueryHistoryItem,
+    updateQueryHistoryItem
 } from '../../../actions/queryHistory';
 import immutableArray from '../../../utils/immutableArray';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
@@ -674,6 +675,7 @@ export default class AnalysisRightPane extends React.Component {
     onAnalysisNameChange(name) {
         console.log('onAnalysisNameChange', name);
         this.dispatchEdit({name: name});
+        this.props.dispatch(updateQueryHistoryItem(this.props.historyItem));
     }
 
     onAnalysisDescriptionChange(description) {
