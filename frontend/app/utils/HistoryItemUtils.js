@@ -1,14 +1,14 @@
 function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
-        name: `Copy of ${historyItem.name}`,
+        name: `Copy of ${historyItem.name}`.slice(0, 50),
         createdDate: '' + new Date(),
         lastQueryDate: '' + new Date()
     };
 }
 
 function makeNewHistoryItem(sample, filter, view) {
-    const name = new Date() + '_' + (sample ? sample.fileName : '') + '_' + (filter ? filter.name : '') + '_' + (view ? view.name : '');
+    const name = (new Date() + '_' + (sample ? sample.fileName : '') + '_' + (filter ? filter.name : '') + '_' + (view ? view.name : '')).slice(0, 50);
     return {
         id: null,
         name: name,

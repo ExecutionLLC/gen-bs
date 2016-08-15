@@ -505,6 +505,7 @@ export default class AnalysisRightPane extends React.Component {
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder="Analysis name (it can't be empty)"
                         data-localize='query.settings.name'
+                        maxLength={50}
                         disabled={disabled}
                         onChange={(e) => this.onAnalysisNameChange(e.target.value)}
                     />
