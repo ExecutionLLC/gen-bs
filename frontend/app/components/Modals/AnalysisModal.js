@@ -54,7 +54,7 @@ function mapStateToProps(state) {
         hashedArray: filtersList.hashedArray
     };
     
-    const historyList = queryHistory.history;//.map((historyItem) => HistoryItemUtils.makeHistoryItem(historyItem));
+    const historyList = queryHistory.history;
     const initialHistoryList = queryHistory.initialHistory;
 
     function findFirstNonHistoryItem(list) {
