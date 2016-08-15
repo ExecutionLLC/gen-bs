@@ -2,7 +2,7 @@ import React from 'react';
 import Select from '../../shared/Select';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
-    startQueryHistoryEdit,
+    duplicateQueryHistoryItem,
     cancelQueryHistoryEdit,
     editQueryHistoryItem
 } from '../../../actions/queryHistory';
@@ -451,9 +451,9 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 className='btn btn-primary'
                                 title='Click for edit'
-                                onClick={() => this.onEditButtonClick()}
+                                onClick={() => this.onDuplicateButtonClick()}
                             >
-                                <span>Edit</span>
+                                <span>Duplicate</span>
                             </button>
                     }
                     <button
@@ -686,8 +686,8 @@ export default class AnalysisRightPane extends React.Component {
         console.log('onUseActionVersionsToggle', use);
     }
 
-    onEditButtonClick() {
-        this.props.dispatch(startQueryHistoryEdit(this.props.historyItem.id));
+    onDuplicateButtonClick() {
+        this.props.dispatch(duplicateQueryHistoryItem(this.props.historyItem.id));
     }
 
     onCancelButtonClick() {

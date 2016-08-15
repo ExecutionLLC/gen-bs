@@ -24,7 +24,7 @@ export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
-export const START_QUERY_HISTORY_EDIT = 'START_QUERY_HISTORY_EDIT';
+export const DUPLICATE_QUERY_HISTORY_ITEM = 'DUPLICATE_QUERY_HISTORY_ITEM';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
 export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
 export const TOGGLE_LOAING_HISTORY_DATA = 'TOGGLE_LOAING_HISTORY_DATA';
@@ -92,9 +92,9 @@ export function prepareQueryHistoryToFilter(filter) {
     };
 }
 
-export function startQueryHistoryEdit(historyItemId) {
+export function duplicateQueryHistoryItem(historyItemId) {
     return {
-        type: START_QUERY_HISTORY_EDIT,
+        type: DUPLICATE_QUERY_HISTORY_ITEM,
         historyItemId
     };
 }

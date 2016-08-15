@@ -60,7 +60,7 @@ function reducePrepareQueryHistoryToFilter(state, action) {
     };
 }
 
-function reduceStartQueryHistoryEdit(state, action) {
+function reduceDuplicateQueryHistoryItem(state, action) {
     const {historyItemId} = action;
     const {history, editingHistory} = state;
     const historyItem = historyItemId && _.find(history, {id: historyItemId});
@@ -152,8 +152,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceAppendQueryHistory(state, action);
         case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:
             return reducePrepareQueryHistoryToFilter(state, action);
-        case ActionTypes.START_QUERY_HISTORY_EDIT:
-            return reduceStartQueryHistoryEdit(state, action);
+        case ActionTypes.DUPLICATE_QUERY_HISTORY_ITEM:
+            return reduceDuplicateQueryHistoryItem(state, action);
         case ActionTypes.EDIT_QUERY_HISTORY_ITEM:
             return reduceEditQueryHistoryItem(state, action);
         case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:
