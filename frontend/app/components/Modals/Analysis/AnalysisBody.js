@@ -16,11 +16,7 @@ export default class AnalysisBody extends React.Component {
 
     render() {
         const selectedHistoryItem =
-            this.props.currentHistoryId &&
-            (
-                this.props.editingHistoryList[this.props.currentHistoryId] ||
-                this.findHistoryItemForId(this.props.currentHistoryId)
-            ) ||
+            this.props.currentHistoryId && this.findHistoryItemForId(this.props.currentHistoryId) ||
             this.props.newHistoryItem;
         const isLoadingHistoryData = this.props.isLoadingHistoryData;
 
@@ -33,7 +29,6 @@ export default class AnalysisBody extends React.Component {
                                 dispatch={this.props.dispatch}
                                 historyList={this.props.historyList}
                                 initialHistoryList={this.props.initialHistoryList}
-                                editingHistoryList={this.props.editingHistoryList}
                                 historyListFilter={this.props.historyListFilter}
                                 newHistoryItem={this.props.newHistoryItem}
                                 isHistoryReceivedAll={this.props.isHistoryReceivedAll}
@@ -50,7 +45,7 @@ export default class AnalysisBody extends React.Component {
                         <div className='split-wrap tab-pane active'>
                             {!isLoadingHistoryData && <AnalysisRightPane
                                 dispatch={this.props.dispatch}
-                                disabled={this.props.currentHistoryId && !this.props.editingHistoryList[this.props.currentHistoryId]}
+                                disabled={this.props.currentHistoryId}
                                 auth={this.props.auth}
                                 historyItem={selectedHistoryItem}
                                 currentItemId={this.props.currentHistoryId}

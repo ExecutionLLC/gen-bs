@@ -11,7 +11,7 @@ export default class AnalysisLeftPane extends React.Component {
 
     render() {
 
-        const {historyList, initialHistoryList, editingHistoryList, historyListFilter, isHistoryReceivedAll, newHistoryItem} = this.props;
+        const {historyList, initialHistoryList, historyListFilter, isHistoryReceivedAll, newHistoryItem} = this.props;
 
         return (
             <div>
@@ -23,7 +23,6 @@ export default class AnalysisLeftPane extends React.Component {
                     dispatch={this.props.dispatch}
                     historyList={historyList}
                     initialHistoryList={initialHistoryList}
-                    editingHistoryList={editingHistoryList}
                     historyListFilter={historyListFilter}
                     newHistoryItem={newHistoryItem}
                     isHistoryReceivedAll={isHistoryReceivedAll}
