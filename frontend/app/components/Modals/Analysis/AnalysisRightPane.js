@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from '../../shared/Select';
+import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
     startQueryHistoryEdit,
@@ -500,14 +501,14 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
-                    <input
+                    <Input
                         value={name}
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder="Analysis name (it can't be empty)"
                         data-localize='query.settings.name'
                         maxLength={50}
                         disabled={disabled}
-                        onChange={(e) => this.onAnalysisNameChange(e.target.value)}
+                        onChange={(str) => this.onAnalysisNameChange(str)}
                     />
                 </div>
             </div>
@@ -559,13 +560,13 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
-                    <input
+                    <Input
                         value={description}
                         placeholder='Analysis description (optional)'
                         className='form-control material-input-sm'
                         data-localize='query.settings.description'
                         disabled={disabled}
-                        onChange={(e) => this.onAnalysisDescriptionChange(e.target.value)}
+                        onChange={(str) => this.onAnalysisDescriptionChange(str)}
                     />
                 </div>
             </div>
