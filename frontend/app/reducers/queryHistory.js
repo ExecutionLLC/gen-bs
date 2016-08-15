@@ -6,8 +6,14 @@ import {ImmutableHash} from '../utils/immutable';
 import HistoryItemUtils from '../utils/HistoryItemUtils';
 
 
-function ensureHistoryId(history, id) {
-    return _.find(history, {id}) ? id : null;
+function ensureHistoryId(history, id, hasNewHistoryItem) {
+    if (_.find(history, {id}))
+        return id;
+    if (hasNewHistoryItem)
+        return null;
+    if (history[0])
+        return history[0].id;
+    return null;
 }
 
 
@@ -25,7 +31,7 @@ const initialState = {
 function reduceSetCurrentQueryHistoryId(state, action) {
     return {
         ...state,
-        currentHistoryId: ensureHistoryId(state.history, action.id)
+        currentHistoryId: ensureHistoryId(state.history, action.id, !!state.newHistoryItem)
     };
 }
 
@@ -35,7 +41,7 @@ function reduceReceiveQueryHistory(state, action) {
         history: history,
         isReceivedAll: false,
         filter: '',
-        currentHistoryId: ensureHistoryId(history, state.currentHistoryId)
+        currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
     });
 }
 
@@ -46,7 +52,7 @@ function reduceReceiveInitialQueryHistory(state, action) {
         history: history,
         isReceivedAll: false,
         filter: '',
-        currentHistoryId: ensureHistoryId(history, state.currentHistoryId)
+        currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
     });
 }
 
