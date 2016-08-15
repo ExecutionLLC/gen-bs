@@ -23,7 +23,6 @@ const initialState = {
     filter: '',
     isReceivedAll: false,
     newHistoryItem: null,
-    editingHistory: {},
     currentHistoryId: null,
     loadingHistoryData: false
 };
@@ -68,51 +67,35 @@ function reducePrepareQueryHistoryToFilter(state, action) {
 
 function reduceDuplicateQueryHistoryItem(state, action) {
     const {historyItemId} = action;
-    const {history, editingHistory} = state;
+    const {history} = state;
     const historyItem = historyItemId && _.find(history, {id: historyItemId});
     const newHistoryItem = historyItem && HistoryItemUtils.makeHistoryItem(historyItem);
-    const newEditingHistory = editingHistory[historyItemId] ?
-        ImmutableHash.replace(editingHistory, historyItemId, newHistoryItem) :
-        ImmutableHash.add(editingHistory, historyItemId, newHistoryItem);
     return {
         ...state,
-        editingHistory: newEditingHistory
+        newHistoryItem
     };
 }
 
-function reduceCancelQueryHistoryEdit(state, action) {
-    const {historyItemId} = action;
-    if (!historyItemId) {
+function reduceCancelQueryHistoryEdit(state) { // TODO: remove historyItemId from action
+    if (!state.history.length) {
+        return state;
+    } else {
         return {
             ...state,
             newHistoryItem: null
         };
     }
-    const {editingHistory} = state;
-    const newEditingHistory = editingHistory[historyItemId] ?
-        ImmutableHash.remove(editingHistory, historyItemId) :
-        editingHistory;
-    return {
-        ...state,
-        editingHistory: newEditingHistory
-    };
 }
 
-function reduceEditQueryHistoryItem(state, action) {
-    const {historyItemId, samplesList, filtersList, viewsList, modelsList, changeItem, defaultHistoryItem} = action;
-    const {newHistoryItem, editingHistory} = state;
-    const editingHistoryItem = historyItemId && editingHistory[historyItemId];
-    if (editingHistoryItem) {
-        const editedHistoryItem = HistoryItemUtils.changeHistoryItem(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem);
-        const newEditingHistory = ImmutableHash.replace(editingHistory, historyItemId, editedHistoryItem);
-        return {
-            ...state,
-            editingHistory: newEditingHistory
-        };
+function reduceEditQueryHistoryItem(state, action) { // TODO remove historyItemId and defaultHistoryItem from action
+    const {samplesList, filtersList, viewsList, modelsList, changeItem} = action;
+    const {newHistoryItem} = state;
+    if (!newHistoryItem) {
+        return state;
     } else {
         return {
             ...state,
-            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem || defaultHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem)
+            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem)
         };
     }
 }

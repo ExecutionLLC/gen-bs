@@ -3,7 +3,8 @@ function makeHistoryItem(historyItem) {
         ...historyItem,
         name: `Copy of ${historyItem.name}`.slice(0, 50),
         createdDate: '' + new Date(),
-        lastQueryDate: '' + new Date()
+        lastQueryDate: '' + new Date(),
+        id: null
     };
 }
 
