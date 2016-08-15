@@ -67,7 +67,7 @@ class SearchService extends ServiceBase {
                         },
                         (analysis, callback) => {
                             this._sendSearchRequest(
-                                user, session, languageId, viewId, filterId, samples, limit, offset, callback
+                                user, session, languageId, viewId, filterId, modelId, samples, limit, offset, callback
                             );
                         }
                     ],
@@ -84,7 +84,7 @@ class SearchService extends ServiceBase {
                     (analysis, callback) => {
                         const {samples, modelId, viewId, filterId} = analysis;
                         this._sendSearchRequest(
-                            user, session, languageId, viewId, filterId, samples, limit, offset, callback
+                            user, session, languageId, viewId, filterId,modelId, samples, limit, offset, callback
                         );
                     }
                 ],
@@ -93,10 +93,10 @@ class SearchService extends ServiceBase {
         }
     }
 
-    _sendSearchRequest(user, session, languageId, viewId, filterId, samples, limit, offset, callback) {
+    _sendSearchRequest(user, session, languageId, viewId, filterId, modelId, samples, limit, offset, callback) {
         async.waterfall([
-            (callback) => this._createAppServerSearchParams(user, languageId, samples[0].id,
-                viewId, filterId, limit, offset, callback),
+            (callback) => this._createAppServerSearchParams(user, languageId, samples,
+                viewId, filterId, modelId, limit, offset, callback),
             (appServerRequestParams, callback) => this._validateAppServerSearchParams(appServerRequestParams,
                 callback
             ),
@@ -275,13 +275,14 @@ class SearchService extends ServiceBase {
             callback);
     }
 
-    _createAppServerSearchParams(user, languId, sampleId, viewId, filterId, limit, offset, callback) {
+    _createAppServerSearchParams(user, languId, samples, viewId, filterId, modelId, limit, offset, callback) {
+        const sampleIds = _.map(samples,(sample) => sample.id);
         async.parallel({
             langu: (callback) => {
                 this.services.langu.find(languId, callback);
             },
-            sample: (callback) => {
-                this.services.samples.find(user, sampleId, callback);
+            samples: (callback) => {
+                this.services.samples.findMany(user, sampleIds, callback);
             },
             filter: (callback) => {
                 this.services.filters.find(user, filterId, callback);
@@ -310,18 +311,22 @@ class SearchService extends ServiceBase {
             },
             view: (callback) => {
                 this.services.views.find(user, viewId, callback);
+            },
+            model: (callback) => {
+                this.services.models.find(user, modelId, callback);
             }
-        }, (error, result) => {
+        }, (error, {langu, view, filter, model, samples, fieldsMetadata}) => {
             if (error) {
                 callback(error);
             } else {
                 const appServerSearchParams = {
-                    langu: result.langu,
+                    langu,
                     userId: user.id,
-                    view: result.view,
-                    filter: result.filter,
-                    sample: result.sample,
-                    fieldsMetadata: result.fieldsMetadata,
+                    view,
+                    filter,
+                    samples,
+                    fieldsMetadata,
+                    model,
                     limit,
                     offset
                 };
@@ -332,10 +337,11 @@ class SearchService extends ServiceBase {
 
     _validateAppServerSearchParams(appServerRequestParams, callback) {
         const userId = appServerRequestParams.userId;
-        const sample = appServerRequestParams.sample;
+        const model = appServerRequestParams.model;
         const filter = appServerRequestParams.filter;
         const view = appServerRequestParams.view;
-        async.each([sample, filter, view], (item, callback) => {
+        const samples = appServerRequestParams.samples;
+        async.each([model, filter, view].concat(samples), (item, callback) => {
             this.services.users.ensureUserHasAccessToItem(userId, item.type, callback)
         }, (error) => {
             callback(error, appServerRequestParams);

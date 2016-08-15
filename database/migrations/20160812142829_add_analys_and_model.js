@@ -94,7 +94,9 @@ function createAnalysisTables(knex, Promise) {
                 .references('id')
                 .inTable('filter')
                 .notNullable();
-            table.uuid('model_id');
+            table.uuid('model_id')
+                .references('id')
+                .inTable('model');
             table.timestamp('timestamp')
                 .defaultTo(knex.fn.now());
             table.timestamp('last_query_date')
