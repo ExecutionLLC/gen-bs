@@ -783,24 +783,22 @@ export default class AnalysisRightPane extends React.Component {
             filtersList,
             viewsList,
             modelsList,
-            {samples: historyItem.samples}
+            {sample: {index: sampleIndex, id: null}}
         );
 
-        this.props.dispatch(samplesOnSave(action, `changeItem.samples.${sampleIndex}.id`));
+        this.props.dispatch(samplesOnSave(action, `changeItem.sample.id`));
         this.props.dispatch(openModal('upload'));
     }
     
     onSampleSelect(sampleIndex, sampleId) {
-        const {historyItem} = this.props;
         this.dispatchEdit({
-            samples: immutableArray.replace(historyItem.samples, sampleIndex, {...historyItem.samples[sampleIndex], id: sampleId})
+            sample: {index: sampleIndex, id: sampleId}
         });
     }
 
     onFamilyMemberSelect(sampleIndex, familyMemberId) {
-        const {historyItem} = this.props;
         this.dispatchEdit({
-            samples: immutableArray.replace(historyItem.samples, sampleIndex, {...historyItem.samples[sampleIndex], type: familyMemberId})
+            sample: {index: sampleIndex, id: familyMemberId}
         });
     }
 

@@ -1,3 +1,6 @@
+import immutableArray from './immutableArray';
+
+
 function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
@@ -57,6 +60,18 @@ function makeNewHistoryItem(sample, filter, view) {
         ]
  */
     };
+}
+
+function changeSampleId(oldSamples, sampleIndex, newSampleId) {
+    debugger;
+    const sampleExistIndex = _.findIndex(oldSamples, (model, index) => index !== sampleIndex && model.id === newSampleId);
+    const replacedSample = oldSamples[sampleIndex];
+    const newSamplesWithNewSample = immutableArray.replace(oldSamples, sampleIndex, {...replacedSample, id: newSampleId});
+    if (sampleExistIndex < 0) {
+        return newSamplesWithNewSample;
+    } else {
+        return immutableArray.replace(newSamplesWithNewSample, sampleExistIndex, {...newSamplesWithNewSample[sampleExistIndex], id: replacedSample.id});
+    }
 }
 
 function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, targetType) {
@@ -144,6 +159,9 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
     }
     if (change.type != null) {
         editingHistoryItem = changeType(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, change.type);
+    }
+    if (change.sample != null) {
+        editingHistoryItem = {...editingHistoryItem, samples: changeSampleId(editingHistoryItem.samples, change.sample.index, change.sample.id)};
     }
     if (change.samples != null) {
         editingHistoryItem = {...editingHistoryItem, samples: change.samples};
