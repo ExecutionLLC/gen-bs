@@ -86,7 +86,8 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         'tumor': {
             'single'(historyItem) {
                 return {
-                    samples: [{id: historyItem.samples[0].id, type: 'single'}]
+                    samples: [{id: historyItem.samples[0].id, type: 'single'}],
+                    modelId: null
                 };
             },
             'family'(historyItem) {
@@ -103,7 +104,8 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         'family': {
             'single'(historyItem) {
                 return {
-                    samples: [{id: historyItem.samples[0].id, type: 'single'}]
+                    samples: [{id: historyItem.samples[0].id, type: 'single'}],
+                    modelId: null
                 };
             },
             'tumor'(historyItem) {
