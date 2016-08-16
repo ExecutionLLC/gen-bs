@@ -30,13 +30,13 @@ const checkModel = (model) => {
     assert.ok(model.id);
     assert.ok(model.name);
     assert.ok(
-        _.any(ENTITY_TYPES.allValues, (type) => model.type === type)
+        _.some(ENTITY_TYPES.allValues, (type) => model.type === type)
     );
     assert.ok(
-        _.any(MODEL_TYPES.allValues, (type) => model.modelType === type)
+        _.some(MODEL_TYPES.allValues, (type) => model.modelType === type)
     );
     assert.ok(
-        _.any(ANALYSIS_TYPES.allValues, (type) => model.analysisType === type)
+        _.some(ANALYSIS_TYPES.allValues, (type) => model.analysisType === type)
     );
 };
 
