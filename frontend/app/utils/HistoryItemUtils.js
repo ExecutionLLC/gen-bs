@@ -18,6 +18,7 @@ function makeNewHistoryItem(sample, filter, view) {
         filterId: filter && filter.id || null,
         viewId: view && view.id || null,
         type: 'single',
+        modelId: null,
         samples: [{
             id: sample && sample.id || null,
             type: 'single'
