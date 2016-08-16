@@ -164,7 +164,7 @@ class AnalysisModel extends SecureModelBase {
         const {id, type} = sample;
         const analysisSampleDataToInsert ={
             analysisId,
-            sampleVersionId:id,
+            genotypeVersionId:id,
             sampleType:type,
             order
         };
