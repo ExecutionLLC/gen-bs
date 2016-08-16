@@ -8,7 +8,6 @@ import {
     editQueryHistoryItem,
     updateQueryHistoryItem
 } from '../../../actions/queryHistory';
-import immutableArray from '../../../utils/immutableArray';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
 import {openModal} from '../../../actions/modalWindows';
@@ -777,30 +776,28 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onSamplesClick(sampleIndex) {
-        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const {samplesList, filtersList, viewsList, modelsList} = this.props;
         const action = editQueryHistoryItem(
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {samples: historyItem.samples}
+            {sample: {index: sampleIndex, id: null}}
         );
 
-        this.props.dispatch(samplesOnSave(action, `changeItem.samples.${sampleIndex}.id`));
+        this.props.dispatch(samplesOnSave(action, 'changeItem.sample.id'));
         this.props.dispatch(openModal('upload'));
     }
     
     onSampleSelect(sampleIndex, sampleId) {
-        const {historyItem} = this.props;
         this.dispatchEdit({
-            samples: immutableArray.replace(historyItem.samples, sampleIndex, {...historyItem.samples[sampleIndex], id: sampleId})
+            sample: {index: sampleIndex, id: sampleId}
         });
     }
 
     onFamilyMemberSelect(sampleIndex, familyMemberId) {
-        const {historyItem} = this.props;
         this.dispatchEdit({
-            samples: immutableArray.replace(historyItem.samples, sampleIndex, {...historyItem.samples[sampleIndex], type: familyMemberId})
+            sample: {index: sampleIndex, id: familyMemberId}
         });
     }
 

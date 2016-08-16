@@ -1,3 +1,8 @@
+import * as _ from 'lodash';
+
+import immutableArray from './immutableArray';
+
+
 function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
@@ -59,26 +64,49 @@ function makeNewHistoryItem(sample, filter, view) {
     };
 }
 
+function changeSampleId(oldSamples, sampleIndex, newSampleId) {
+    const sampleExistIndex = _.findIndex(oldSamples, (model, index) => index !== sampleIndex && model.id === newSampleId);
+    const replacedSample = oldSamples[sampleIndex];
+    const newSamplesWithNewSample = immutableArray.replace(oldSamples, sampleIndex, {...replacedSample, id: newSampleId});
+    if (sampleExistIndex < 0) {
+        return newSamplesWithNewSample;
+    } else {
+        return immutableArray.replace(newSamplesWithNewSample, sampleExistIndex, {...newSamplesWithNewSample[sampleExistIndex], id: replacedSample.id});
+    }
+}
+
+function changeSamplesArray(oldSamples, samplesList, newSamplesTypes) {
+    const usedSamplesIds = {};
+    return newSamplesTypes.map(
+        (type, index) => {
+            const oldSample = oldSamples[index];
+            if (oldSample) {
+                const oldSampleId = oldSample.id;
+                usedSamplesIds[oldSampleId] = true;
+                return {id: oldSampleId, type: type};
+            } else {
+                const unusedSample = _.find(samplesList.hashedArray.array, (sample) => !usedSamplesIds[sample.id]) || samplesList.hashedArray.array[0];
+                const unusedSampleId = unusedSample.id;
+                usedSamplesIds[unusedSampleId] = true;
+                return {id: unusedSampleId, type: type};
+            }
+        }
+    );
+}
+
 function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, targetType) {
 
     const typeConverts = {
         'single': {
             'tumor'(historyItem) {
                 return {
-                    samples: [
-                        {id: historyItem.samples[0].id, type: 'tumor'},
-                        {id: historyItem.samples[0].id, type: 'normal'}
-                    ],
+                    samples: changeSamplesArray(historyItem.samples, samplesList, ['tumor', 'normal']),
                     modelId: modelsList.hashedArray.array[0].id
                 };
             },
             'family'(historyItem) {
                 return {
-                    samples: [
-                        {id: historyItem.samples[0].id, type: 'proband'},
-                        {id: historyItem.samples[0].id, type: 'mother'},
-                        {id: historyItem.samples[0].id, type: 'father'}
-                    ],
+                    samples: changeSamplesArray(historyItem.samples, samplesList, ['proband', 'mother', 'father']),
                     modelId: modelsList.hashedArray.array[0].id
                 };
             }
@@ -86,17 +114,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         'tumor': {
             'single'(historyItem) {
                 return {
-                    samples: [{id: historyItem.samples[0].id, type: 'single'}],
+                    samples: changeSamplesArray(historyItem.samples, samplesList, ['single']),
                     modelId: null
                 };
             },
             'family'(historyItem) {
                 return {
-                    samples: [
-                        {id: historyItem.samples[0].id, type: 'proband'},
-                        {id: historyItem.samples[1].id, type: 'mother'},
-                        {id: historyItem.samples[1].id, type: 'father'}
-                    ],
+                    samples: changeSamplesArray(historyItem.samples, samplesList, ['proband', 'mother', 'father']),
                     modelId: modelsList.hashedArray.array[0].id
                 };
             }
@@ -104,16 +128,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         'family': {
             'single'(historyItem) {
                 return {
-                    samples: [{id: historyItem.samples[0].id, type: 'single'}],
+                    samples: changeSamplesArray(historyItem.samples, samplesList, ['single']),
                     modelId: null
                 };
             },
             'tumor'(historyItem) {
                 return {
-                    samples: [
-                        {id: historyItem.samples[0].id, type: 'tumor'},
-                        {id: historyItem.samples[1].id, type: 'normal'}
-                    ],
+                    samples: changeSamplesArray(historyItem.samples, samplesList, ['tumor', 'normal']),
                     modelId: modelsList.hashedArray.array[0].id
                 };
             }
@@ -144,6 +165,9 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
     }
     if (change.type != null) {
         editingHistoryItem = changeType(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, change.type);
+    }
+    if (change.sample != null) {
+        editingHistoryItem = {...editingHistoryItem, samples: changeSampleId(editingHistoryItem.samples, change.sample.index, change.sample.id)};
     }
     if (change.samples != null) {
         editingHistoryItem = {...editingHistoryItem, samples: change.samples};
