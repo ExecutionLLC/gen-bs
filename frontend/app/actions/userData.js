@@ -18,6 +18,9 @@ import {
 import {
     viewsListReceive
 } from './viewsList';
+import {
+    modelsListReceive
+} from './modelsList';
 import {entityType} from '../utils/entityTypes';
 
 /*
@@ -70,6 +73,7 @@ export function fetchUserdata() {
                     samples,
                     filters,
                     views,
+                    models,
                     totalFields,
                     savedFiles,
                     analyses,
@@ -85,6 +89,7 @@ export function fetchUserdata() {
                 dispatch(receiveUserdata(userData));
                 dispatch(filtersListReceive(filters));
                 dispatch(viewsListReceive(views));
+                dispatch(modelsListReceive(models));
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));

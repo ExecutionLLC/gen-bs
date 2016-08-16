@@ -107,6 +107,7 @@ function mapStateToProps(state) {
             samplesList,
             filtersList,
             viewsList,
+            modelsList,
             errorHandler: { showErrorWindow } } = state;
 
     return {
@@ -119,6 +120,7 @@ function mapStateToProps(state) {
         samplesList,
         filtersList,
         viewsList,
+        modelsList,
         showErrorWindow
     };
 }
