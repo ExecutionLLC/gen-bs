@@ -69,7 +69,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'tumor'},
                         {id: historyItem.samples[0].id, type: 'normal'}
                     ],
-                    modelId: modelsList.models[0].id
+                    modelId: modelsList.hashedArray.array[0].id
                 };
             },
             'family'(historyItem) {
@@ -79,7 +79,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'mother'},
                         {id: historyItem.samples[0].id, type: 'father'}
                     ],
-                    modelId: modelsList.models[0].id
+                    modelId: modelsList.hashedArray.array[0].id
                 };
             }
         },
@@ -96,7 +96,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[1].id, type: 'mother'},
                         {id: historyItem.samples[1].id, type: 'father'}
                     ],
-                    modelId: modelsList.models[0].id
+                    modelId: modelsList.hashedArray.array[0].id
                 };
             }
         },
@@ -112,7 +112,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
                         {id: historyItem.samples[0].id, type: 'tumor'},
                         {id: historyItem.samples[1].id, type: 'normal'}
                     ],
-                    modelId: modelsList.models[0].id
+                    modelId: modelsList.hashedArray.array[0].id
                 };
             }
         }
