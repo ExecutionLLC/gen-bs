@@ -291,7 +291,7 @@ class SearchService extends ServiceBase {
                 async.waterfall([
                     (callback) => {
                         // Load sample metadata
-                        this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback);
+                        this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback);
                     },
                     (sampleMetadata, callback) => {
                         // Load sources metadata
@@ -313,7 +313,11 @@ class SearchService extends ServiceBase {
                 this.services.views.find(user, viewId, callback);
             },
             model: (callback) => {
-                this.services.models.find(user, modelId, callback);
+                if (modelId===null){
+                    callback(null, null)
+                }else {
+                    this.services.models.find(user, modelId, callback);
+                }
             }
         }, (error, {langu, view, filter, model, samples, fieldsMetadata}) => {
             if (error) {
@@ -336,13 +340,19 @@ class SearchService extends ServiceBase {
     }
 
     _validateAppServerSearchParams(appServerRequestParams, callback) {
+        let chej
         const userId = appServerRequestParams.userId;
         const model = appServerRequestParams.model;
         const filter = appServerRequestParams.filter;
         const view = appServerRequestParams.view;
         const samples = appServerRequestParams.samples;
         async.each([model, filter, view].concat(samples), (item, callback) => {
-            this.services.users.ensureUserHasAccessToItem(userId, item.type, callback)
+            if(item!==null)
+            {
+                this.services.users.ensureUserHasAccessToItem(userId, item.type, callback)
+            }else {
+                callback(null)
+            }
         }, (error) => {
             callback(error, appServerRequestParams);
         });

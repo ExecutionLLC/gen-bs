@@ -288,7 +288,7 @@ class AnalysisModel extends SecureModelBase {
             sortedAnalyses,
             (sortedAnalysis) => {
                 return {
-                    id: sortedAnalysis.sampleVersionId,
+                    id: sortedAnalysis.genotypeVersionId,
                     type: sortedAnalysis.sampleType
                 }
             }
