@@ -79,7 +79,7 @@ export default class Urls {
     }
 
     history() {
-        return this._constructApiUrl('/history');
+        return this._constructApiUrl('/analysis');
     }
 
     startSearch() {
