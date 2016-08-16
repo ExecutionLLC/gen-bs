@@ -4,9 +4,11 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const ClientBase = require('./utils/ClientBase');
+const CollectionUtils = require('../utils/CollectionUtils');
 const SessionsClient = require('./utils/SessionsClient');
 const FiltersClient = require('./utils/FiltersClient');
 const ViewsClient = require('./utils/ViewsClient');
+const ModelsClient = require('./utils/ModelsClient');
 const SamplesClient = require('./utils/SamplesClient');
 const SearchClient = require('./utils/SearchClient');
 const Config = require('../utils/Config');
@@ -17,6 +19,7 @@ const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
 const filtersClient = new FiltersClient(urls);
 const viewsClient = new ViewsClient(urls);
+const modelsClient = new ModelsClient(urls);
 const samplesClient = new SamplesClient(urls);
 const searchClient = new SearchClient(urls);
 
@@ -82,7 +85,7 @@ describe('Search', function () {
                 const rows = endMessage.result.data;
                 const allFields = wsState.sourcesFields.concat(wsState.sampleFields);
 
-                const fieldIdToMetadata = _.keyBy(allFields, 'id');
+                const fieldIdToMetadata = CollectionUtils.createHashByKey(allFields, 'id');
 
                 // Check that rows are received.
                 assert.ok(rows.length);
@@ -111,45 +114,48 @@ describe('Search', function () {
 
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);
+                modelsClient.getAll(sessionId, (error, response) => {
+                    const models = ClientBase.readBodyWithCheck(error, response);
 
-                samplesClient.getAll(sessionId, (error, response) => {
-                    const samples = ClientBase.readBodyWithCheck(error, response);
-                    const sample = samples[0];
+                    samplesClient.getAll(sessionId, (error, response) => {
+                        const samples = ClientBase.readBodyWithCheck(error, response);
+                        const sample = samples[0];
 
-                    samplesClient.getFields(sessionId, sample.id, (error, response) => {
-                        const sampleFields = ClientBase.readBodyWithCheck(error, response);
+                        samplesClient.getFields(sessionId, sample.id, (error, response) => {
+                            const sampleFields = ClientBase.readBodyWithCheck(error, response);
 
-                        samplesClient.getSourcesFields(sessionId, (error, response) => {
-                            const sourcesFields = ClientBase.readBodyWithCheck(error, response);
+                            samplesClient.getSourcesFields(sessionId, (error, response) => {
+                                const sourcesFields = ClientBase.readBodyWithCheck(error, response);
 
-                            wsState.filter = filters[0];
-                            wsState.view = views[0];
-                            wsState.sample = sample;
-                            wsState.sourcesFields = sourcesFields;
-                            wsState.sampleFields = sampleFields;
-                            const analysis = {
-                                id :null,
-                                name: 'test name',
-                                description: 'test_descr',
-                                type: 'single',
-                                samples:[
-                                    {
-                                        id:sample.id,
-                                        type:'single'
-                                    }
-                                ],
-                                viewId:views[0].id,
-                                filterId:filters[0].id,
-                                modelId:filters[0].id
-                            };
+                                wsState.filter = filters[0];
+                                wsState.view = views[0];
+                                wsState.sample = sample;
+                                wsState.sourcesFields = sourcesFields;
+                                wsState.sampleFields = sampleFields;
+                                const analysis = {
+                                    id: null,
+                                    name: 'test name',
+                                    description: 'test_descr',
+                                    type: 'single',
+                                    samples: [
+                                        {
+                                            id: sample.id,
+                                            type: 'single'
+                                        }
+                                    ],
+                                    viewId: views[0].id,
+                                    filterId: filters[0].id,
+                                    modelId: models[0].id
+                                };
 
-                            searchClient.sendSearchRequest(sessionId, Config.defaultLanguId,analysis, wsState.limit, wsState.offset,
-                                (error, response) => {
-                                const body = ClientBase.readBodyWithCheck(error, response);
-                                const operationId = body.operationId;
-                                assert.ok(operationId);
-                                wsState.operationId = operationId;
-                                    // done()
+                                searchClient.sendSearchRequest(sessionId, Config.defaultLanguId, analysis, wsState.limit, wsState.offset,
+                                    (error, response) => {
+                                        const body = ClientBase.readBodyWithCheck(error, response);
+                                        const operationId = body.operationId;
+                                        assert.ok(operationId);
+                                        wsState.operationId = operationId;
+                                        // done()
+                                    });
                             });
                         });
                     });
