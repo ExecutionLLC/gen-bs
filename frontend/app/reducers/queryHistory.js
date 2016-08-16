@@ -71,7 +71,8 @@ function reduceDuplicateQueryHistoryItem(state, action) {
     const newHistoryItem = historyItem && HistoryItemUtils.makeHistoryItem(historyItem);
     return {
         ...state,
-        newHistoryItem
+        newHistoryItem,
+        currentHistoryId: null
     };
 }
 
@@ -81,7 +82,8 @@ function reduceCancelQueryHistoryEdit(state) {
     } else {
         return {
             ...state,
-            newHistoryItem: null
+            newHistoryItem: null,
+            currentHistoryId: ensureHistoryId(state.history, state.currentHistoryId, false)
         };
     }
 }
