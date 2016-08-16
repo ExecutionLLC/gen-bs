@@ -29,7 +29,7 @@ const checkView = (view) => {
     assert.ok(view.id);
     assert.ok(view.name);
     assert.ok(
-        _.any(ENTITY_TYPES.allValues, (type) => view.type === type)
+        _.some(ENTITY_TYPES.allValues, (type) => view.type === type)
     );
     assert.ok(view.viewListItems);
 };

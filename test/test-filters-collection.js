@@ -23,13 +23,12 @@ const TestUser = {
 };
 
 const UnknownFilterId = Uuid.v4();
-const UnknownSessionId = Uuid.v4();
 
 const checkFilter = (filter) => {
     assert.ok(filter.id);
     assert.ok(filter.name);
     assert.ok(
-        _.any(ENTITY_TYPES.allValues, (type) => filter.type === type)
+        _.some(ENTITY_TYPES.allValues, (type) => filter.type === type)
     );
     assert.ok(filter.rules);
 };

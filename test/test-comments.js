@@ -61,7 +61,7 @@ describe('Comments', () => {
             commentsClient.getAll(sessionId, (error, response) => {
                 const comments = ClientBase.readBodyWithCheck(error, response);
                 assert.ok(comments && comments.length);
-                assert.ok(_.any(comments, comment => comment.id === addedComment.id));
+                assert.ok(_.some(comments, comment => comment.id === addedComment.id));
 
                 commentsClient.remove(sessionId, addedComment.id, (error, response) => {
                     ClientBase.readBodyWithCheck(error, response);
