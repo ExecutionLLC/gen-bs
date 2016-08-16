@@ -8,7 +8,6 @@ import {
     editQueryHistoryItem,
     updateQueryHistoryItem
 } from '../../../actions/queryHistory';
-import immutableArray from '../../../utils/immutableArray';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
 import {openModal} from '../../../actions/modalWindows';
@@ -777,7 +776,7 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onSamplesClick(sampleIndex) {
-        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const {samplesList, filtersList, viewsList, modelsList} = this.props;
         const action = editQueryHistoryItem(
             samplesList,
             filtersList,
@@ -786,7 +785,7 @@ export default class AnalysisRightPane extends React.Component {
             {sample: {index: sampleIndex, id: null}}
         );
 
-        this.props.dispatch(samplesOnSave(action, `changeItem.sample.id`));
+        this.props.dispatch(samplesOnSave(action, 'changeItem.sample.id'));
         this.props.dispatch(openModal('upload'));
     }
     
