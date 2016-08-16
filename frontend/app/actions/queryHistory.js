@@ -148,8 +148,7 @@ export function updateQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = 
 }
 
 export function updateQueryHistoryItem(historyItem) {
-    return (dispatch, getState) => {
-        debugger;
+    return (dispatch) => {
         queryHistoryClient.update(historyItem, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
