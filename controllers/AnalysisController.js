@@ -19,7 +19,7 @@ class AnalysisController extends UserEntityControllerBase {
                 if (isNaN(limit) || isNaN(offset)) {
                     callback(new Error('Offset or limit are not specified or incorrect'));
                 } else {
-                    this.services.queryHistory.findAll(
+                    this.services.analysis.findAll(
                         user, limit, offset,nameFilter, descriptionFilter, callback
                     );
                 }
