@@ -45,7 +45,7 @@ export default class AnalysisBody extends React.Component {
                         <div className='split-wrap tab-pane active'>
                             {!isLoadingHistoryData && <AnalysisRightPane
                                 dispatch={this.props.dispatch}
-                                disabled={this.props.currentHistoryId}
+                                disabled={!!this.props.currentHistoryId}
                                 auth={this.props.auth}
                                 historyItem={selectedHistoryItem}
                                 currentItemId={this.props.currentHistoryId}
