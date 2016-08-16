@@ -2,12 +2,17 @@ import _ from 'lodash';
 
 import  * as ActionTypes from '../actions/queryHistory';
 import immutableArray from '../utils/immutableArray';
-import {ImmutableHash} from '../utils/immutable';
 import HistoryItemUtils from '../utils/HistoryItemUtils';
 
 
-function ensureHistoryId(history, id) {
-    return _.find(history, {id}) ? id : null;
+function ensureHistoryId(history, id, hasNewHistoryItem) {
+    if (_.find(history, {id}))
+        return id;
+    if (hasNewHistoryItem)
+        return null;
+    if (history[0])
+        return history[0].id;
+    return null;
 }
 
 
@@ -17,7 +22,6 @@ const initialState = {
     filter: '',
     isReceivedAll: false,
     newHistoryItem: null,
-    editingHistory: {},
     currentHistoryId: null,
     loadingHistoryData: false
 };
@@ -25,7 +29,7 @@ const initialState = {
 function reduceSetCurrentQueryHistoryId(state, action) {
     return {
         ...state,
-        currentHistoryId: ensureHistoryId(state.history, action.id)
+        currentHistoryId: ensureHistoryId(state.history, action.id, !!state.newHistoryItem)
     };
 }
 
@@ -35,7 +39,7 @@ function reduceReceiveQueryHistory(state, action) {
         history: history,
         isReceivedAll: false,
         filter: '',
-        currentHistoryId: ensureHistoryId(history, state.currentHistoryId)
+        currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
     });
 }
 
@@ -46,7 +50,7 @@ function reduceReceiveInitialQueryHistory(state, action) {
         history: history,
         isReceivedAll: false,
         filter: '',
-        currentHistoryId: ensureHistoryId(history, state.currentHistoryId)
+        currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
     });
 }
 
@@ -60,53 +64,39 @@ function reducePrepareQueryHistoryToFilter(state, action) {
     };
 }
 
-function reduceStartQueryHistoryEdit(state, action) {
+function reduceDuplicateQueryHistoryItem(state, action) {
     const {historyItemId} = action;
-    const {history, editingHistory} = state;
+    const {history} = state;
     const historyItem = historyItemId && _.find(history, {id: historyItemId});
-    const historyItemConverted = historyItem && HistoryItemUtils.makeHistoryItem(historyItem);
-    const newEditingHistory = editingHistory[historyItemId] ?
-        ImmutableHash.replace(editingHistory, historyItemId, historyItemConverted) :
-        ImmutableHash.add(editingHistory, historyItemId, historyItemConverted);
+    const newHistoryItem = historyItem && HistoryItemUtils.makeHistoryItem(historyItem);
     return {
         ...state,
-        editingHistory: newEditingHistory
+        newHistoryItem,
+        currentHistoryId: null
     };
 }
 
-function reduceCancelQueryHistoryEdit(state, action) {
-    const {historyItemId} = action;
-    if (!historyItemId) {
-        return {
-            ...state,
-            newHistoryItem: null
-        };
-    }
-    const {editingHistory} = state;
-    const newEditingHistory = editingHistory[historyItemId] ?
-        ImmutableHash.remove(editingHistory, historyItemId) :
-        editingHistory;
-    return {
-        ...state,
-        editingHistory: newEditingHistory
-    };
-}
-
-function reduceEditQueryHistoryItem(state, action) {
-    const {historyItemId, samplesList, filtersList, viewsList, modelsList, changeItem, defaultHistoryItem} = action;
-    const {newHistoryItem, editingHistory} = state;
-    const editingHistoryItem = historyItemId && editingHistory[historyItemId];
-    if (editingHistoryItem) {
-        const editedHistoryItem = HistoryItemUtils.changeHistoryItem(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem);
-        const newEditingHistory = ImmutableHash.replace(editingHistory, historyItemId, editedHistoryItem);
-        return {
-            ...state,
-            editingHistory: newEditingHistory
-        };
+function reduceCancelQueryHistoryEdit(state) {
+    if (!state.history.length) {
+        return state;
     } else {
         return {
             ...state,
-            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem || defaultHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem)
+            newHistoryItem: null,
+            currentHistoryId: ensureHistoryId(state.history, state.currentHistoryId, false)
+        };
+    }
+}
+
+function reduceEditQueryHistoryItem(state, action) {
+    const {samplesList, filtersList, viewsList, modelsList, changeItem} = action;
+    const {newHistoryItem} = state;
+    if (!newHistoryItem) {
+        return state;
+    } else {
+        return {
+            ...state,
+            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem)
         };
     }
 }
@@ -152,8 +142,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceAppendQueryHistory(state, action);
         case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:
             return reducePrepareQueryHistoryToFilter(state, action);
-        case ActionTypes.START_QUERY_HISTORY_EDIT:
-            return reduceStartQueryHistoryEdit(state, action);
+        case ActionTypes.DUPLICATE_QUERY_HISTORY_ITEM:
+            return reduceDuplicateQueryHistoryItem(state, action);
         case ActionTypes.EDIT_QUERY_HISTORY_ITEM:
             return reduceEditQueryHistoryItem(state, action);
         case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:

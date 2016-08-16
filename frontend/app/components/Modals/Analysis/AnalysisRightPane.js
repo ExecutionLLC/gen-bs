@@ -3,7 +3,7 @@ import Select from '../../shared/Select';
 import Input from '../../shared/Input';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
 import {
-    startQueryHistoryEdit,
+    duplicateQueryHistoryItem,
     cancelQueryHistoryEdit,
     editQueryHistoryItem
 } from '../../../actions/queryHistory';
@@ -452,9 +452,9 @@ export default class AnalysisRightPane extends React.Component {
                             <button
                                 className='btn btn-primary'
                                 title='Click for edit'
-                                onClick={() => this.onEditButtonClick()}
+                                onClick={() => this.onDuplicateButtonClick()}
                             >
-                                <span>Edit</span>
+                                <span>Duplicate</span>
                             </button>
                     }
                     <button
@@ -687,12 +687,12 @@ export default class AnalysisRightPane extends React.Component {
         console.log('onUseActionVersionsToggle', use);
     }
 
-    onEditButtonClick() {
-        this.props.dispatch(startQueryHistoryEdit(this.props.historyItem.id));
+    onDuplicateButtonClick() {
+        this.props.dispatch(duplicateQueryHistoryItem(this.props.historyItem.id));
     }
 
     onCancelButtonClick() {
-        this.props.dispatch(cancelQueryHistoryEdit(this.props.historyItem.id));
+        this.props.dispatch(cancelQueryHistoryEdit());
     }
 
     onAnalyzeButtonClick(isEditing) {
@@ -715,13 +715,11 @@ export default class AnalysisRightPane extends React.Component {
         this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId]));
 
         const action = editQueryHistoryItem(
-            historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {viewId: null},
-            historyItem
+            {viewId: null}
         );
 
         this.props.dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
@@ -739,13 +737,11 @@ export default class AnalysisRightPane extends React.Component {
         this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields));
 
         const action = editQueryHistoryItem(
-            historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {filterId: null},
-            historyItem
+            {filterId: null}
         );
 
         this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
@@ -763,13 +759,11 @@ export default class AnalysisRightPane extends React.Component {
         this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields));
 
         const action = editQueryHistoryItem(
-            historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {modelId: null},
-            historyItem
+            {modelId: null}
         );
 
         this.props.dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
@@ -785,13 +779,11 @@ export default class AnalysisRightPane extends React.Component {
     onSamplesClick(sampleIndex) {
         const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
         const action = editQueryHistoryItem(
-            historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            {samples: historyItem.samples},
-            historyItem
+            {samples: historyItem.samples}
         );
 
         this.props.dispatch(samplesOnSave(action, `changeItem.samples.${sampleIndex}.id`));
@@ -813,14 +805,12 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     dispatchEdit(change) {
-        const {dispatch, historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const {dispatch, samplesList, filtersList, viewsList, modelsList} = this.props;
         dispatch(editQueryHistoryItem(
-            historyItem.id,
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            change,
-            historyItem));
+            change));
     }
 }
