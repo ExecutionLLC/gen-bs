@@ -28,7 +28,7 @@ const checkFilter = (filter) => {
     assert.ok(filter.id);
     assert.ok(filter.name);
     assert.ok(
-        _.some(ENTITY_TYPES.allValues, (type) => filter.type === type)
+        _.includes(ENTITY_TYPES.allValues, filter.type)
     );
     assert.ok(filter.rules);
 };
