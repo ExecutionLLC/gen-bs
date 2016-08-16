@@ -8,7 +8,7 @@ const FsUtils = require('../../../utils/FileSystemUtils');
 const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
 
 const FieldsMetadataService = require('../../../services/FieldsMetadataService');
-
+const ImportDatabaseModel = require('./ImportDatabaseModel');
 /**
  * Imports initial data on the service start.
  * */
@@ -17,6 +17,7 @@ class InitialDataImportManager {
         this.models = models;
         this.config = config;
         this.logger = logger;
+        this.model = new ImportDatabaseModel(config, logger);
 
         this._importFiles = this._importFiles.bind(this);
         this._importLangu = this._importLangu.bind(this);
@@ -79,12 +80,6 @@ class InitialDataImportManager {
             (filters, cb) => {
                 result.filters = filters;
 
-                const modelsDir = defaultsDir + '/models';
-                this._importFiles(modelsDir, this._importModels, cb);
-            },
-            (models, cb) => {
-                result.models = models;
-
                 console.log(JSON.stringify(result, null, 2));
                 cb(null, result);
             }
@@ -107,7 +102,7 @@ class InitialDataImportManager {
         const languagesString = FsUtils.getFileContentsAsString(languFilePath);
         const languages = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(languagesString));
         async.map(languages, (langu, cb) => {
-            this.models.langu.add(langu, cb)
+            this.model.addLanguage(langu, cb)
         }, callback);
     }
 
@@ -115,7 +110,7 @@ class InitialDataImportManager {
         const usersString = FsUtils.getFileContentsAsString(usersFilePath);
         const users = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(usersString));
         async.map(users, (user, cb) => {
-            this.models.users.addWithId(user, user.language, cb)
+            this.model.addUser(user, user.language,false, cb)
         }, callback);
     }
 
@@ -123,7 +118,7 @@ class InitialDataImportManager {
         const keywordsString = FsUtils.getFileContentsAsString(keywordsFilePath);
         const keywords = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(keywordsString));
         async.map(keywords, (keyword, cb) => {
-            this.models.keywords.addWithId(keyword, this.config.defaultLanguId, cb);
+            this.model.addKeyword(keyword, false, cb);
         }, callback);
     }
 
@@ -131,7 +126,7 @@ class InitialDataImportManager {
         const viewsString = FsUtils.getFileContentsAsString(viewsFilePath);
         const views = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(viewsString));
         async.map(views, (view, cb) => {
-            this.models.views.internalAdd(null, this.config.defaultLanguId, view, cb);
+            this.model.addView(null, this.config.defaultLanguId, view, false, cb);
         }, callback);
     }
 
@@ -139,7 +134,7 @@ class InitialDataImportManager {
         const filtersString = FsUtils.getFileContentsAsString(filtersFilePath);
         const filters = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(filtersString));
         async.map(filters, (filter, cb) => {
-            this.models.filters.internalAdd(null, this.config.defaultLanguId, filter, cb);
+            this.model.addFilter(null, this.config.defaultLanguId, filter, false, cb);
         }, callback);
     }
 
@@ -157,7 +152,7 @@ class InitialDataImportManager {
 
         const sample = sampleWithFields.sample;
         sample.values = this._makeSampleValues(sampleWithFields.fieldIds);
-        this.models.samples.internalAdd(null, this.config.defaultLanguId, sampleWithFields.sample, callback);
+        this.model.addSample(null, this.config.defaultLanguId, sampleWithFields.sample, false, callback);
     }
 
     _makeSampleValues(fieldIds) {
@@ -183,7 +178,7 @@ class InitialDataImportManager {
 
     _importMetadata(fieldsMetadata, callback) {
         async.map(fieldsMetadata, (fieldMetadata, cb) => {
-            this.models.fields.addWithId(this.config.defaultLanguId, fieldMetadata, cb)
+            this.model.addField(this.config.defaultLanguId, fieldMetadata, false, cb)
         }, callback);
     }
 }

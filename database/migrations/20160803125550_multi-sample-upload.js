@@ -104,7 +104,7 @@ function makeSampleVersionsToBeGenotypeVersions(knex, Promise, sampleIdToGenotyp
         .then((sampleVersions) => Promise.all(sampleVersions
             .map((sampleVersion) => ({
                 id: sampleVersion.id,
-                sampleGenotypeId: sampleIdToGenotypeId[sampleVersion],
+                sampleGenotypeId: sampleIdToGenotypeId[sampleVersion.vcfFileSampleId],
                 timestamp: sampleVersion.timestamp
             }))
             .map(({id, sampleGenotypeId, timestamp}) => {
@@ -112,7 +112,7 @@ function makeSampleVersionsToBeGenotypeVersions(knex, Promise, sampleIdToGenotyp
                 assert.ok(sampleGenotypeId);
                 assert.ok(timestamp);
 
-                knex('genotype_version')
+                return knex('genotype_version')
                     .insert(ChangeCaseUtil.convertKeysToSnakeCase({id, sampleGenotypeId, timestamp}));
             })
         ))

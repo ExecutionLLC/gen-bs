@@ -2,11 +2,11 @@
 
 const _ = require('lodash');
 const Uuid = require('node-uuid');
-const async = require('async');
+// const async = require('async');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
-const FsUtils = require('../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil.js');
+// const FsUtils = require('../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../../utils/ChangeCaseUtil.js');
 
 class ModelsBuilder extends DefaultsBuilderBase {
     constructor() {
@@ -15,37 +15,14 @@ class ModelsBuilder extends DefaultsBuilderBase {
         this.modelTemplates = ChangeCaseUtil.convertKeysToCamelCase(
             require(this.defaultsDir + '/templates/model-templates.json')
         );
-
-        this.build = this.build.bind(this);
-        this._storeModels = this._storeModels.bind(this);
-        this._createModel = this._createModel.bind(this);
-        this._createRules = this._createRules.bind(this);
-        this._processRulesRecursively = this._processRulesRecursively.bind(this);
     }
 
-    build(callback) {
+    getModels() {
         const fieldsMetadata = ChangeCaseUtil.convertKeysToCamelCase(
             require(this.fieldMetadataFile)
         );
 
-        async.waterfall([
-            (callback) => {
-                FsUtils.createDirectoryIfNotExists(this.modelsDir, callback);
-            },
-            (callback) => {
-                this._removeJsonFilesFromDirectory(this.modelsDir, callback);
-            },
-            (callback) => {
-                const models = _.map(this.modelTemplates, (model) => this._createModel(model, fieldsMetadata));
-                this._storeModels(models, callback);
-            }
-        ], callback);
-    }
-
-    _storeModels(models, callback) {
-        const json = JSON.stringify(models, null, 2);
-        const modelsFile = this.modelsDir + '/default-models.json';
-        FsUtils.writeStringToFile(modelsFile, json, callback);
+        return _.map(this.modelTemplates, (model) => this._createModel(model, fieldsMetadata));
     }
 
     _createModel(modelTemplate, fieldsMetadata) {

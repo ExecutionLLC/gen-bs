@@ -13,6 +13,7 @@ export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSIT
 
 //const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameters.';
 
+
 export function requestTableScrollPositionReset() {
     return {
         type: REQUEST_TABLE_SCROLL_POSITION_RESET
