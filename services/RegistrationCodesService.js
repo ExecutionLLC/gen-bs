@@ -10,8 +10,8 @@ class RegistrationCodesService extends ServiceBase {
     }
 
     activate(registrationCodeId, firstName, lastName, userEmail, callback) {
-        const {registrationCodes} = this.models;
-        this.models.db.transactionally((trx, callback) => {
+        const {registrationCodes, db} = this.models;
+        db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => registrationCodes.findInactive(registrationCodeId, trx, callback),
                 ({speciality, language, numberOfPaidSamples}, callback) => this.services.users.add(language, firstName,
@@ -21,9 +21,12 @@ class RegistrationCodesService extends ServiceBase {
         }, callback);
     }
 
-    createMany(count, language, speciality, description, numberOfPaidSamples, trx, callback) {
-        this.models.registrationCodes.createMany(count, language, speciality, description,
-            numberOfPaidSamples, trx, callback);
+    createMany(count, language, speciality, description, numberOfPaidSamples, callback) {
+        const {db, registrationCodes} = this.models;
+        db.transactionally((trx, callback) => {
+            registrationCodes.createMany(count, language, speciality, description,
+                numberOfPaidSamples, trx, callback);
+        }, callback);
     }
 }
 

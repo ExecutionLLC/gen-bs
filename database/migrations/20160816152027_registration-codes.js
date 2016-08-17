@@ -15,9 +15,7 @@ exports.up = function (knex, Promise) {
     })
     // Extend the email field to the maximum email address length
     // http://www.rfc-editor.org/errata_search.php?rfc=3696&eid=1690
-        .table('user', (table) => {
-            table.string('email', 256);
-        });
+        .raw('ALTER TABLE "user" ALTER COLUMN email TYPE varchar(256)');
 };
 
 exports.down = function (knex, Promise) {
