@@ -32,7 +32,7 @@ class AppServerFilterUtils {
                     const field = fieldIdToMetadata[fieldId];
                     const condition = filterRulesObject[fieldId];
                     return {
-                        columnName: AppServerUtils.createColumnName(field.name, sample.genotypeName),
+                        columnName: field.sourceName ==='sample'?AppServerUtils.createColumnName(field.name, sample.genotypeName):field.name,
                         sourceName: field.sourceName ==='sample'?AppServerUtils.createSampleName(sample):field.sourceName,
                         condition
                     };

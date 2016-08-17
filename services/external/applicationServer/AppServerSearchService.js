@@ -14,6 +14,7 @@ const {ENTITY_TYPES} = require('../../../utils/Enums');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 const CollectionUtils = require('../../../utils/CollectionUtils');
+const AppServerUtils = require('../../../utils/AppServerUtils');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -77,8 +78,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(sample);
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
-        const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, samples[0]);
-        const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, genotypeName);
+        const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
+        const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, sample);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
@@ -287,7 +288,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         };
     }
 
-    _createAppServerViewSortOrder(view, fieldIdToMetadata, genotypeName) {
+    _createAppServerViewSortOrder(view, fieldIdToMetadata, sample) {
         // Keep only items whose fields exist in the current sample.
         const viewListItems = _.filter(view.viewListItems, listItem => fieldIdToMetadata[listItem.fieldId]);
 
@@ -300,11 +301,12 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         //noinspection UnnecessaryLocalVariableJS leaved for debug.
         const appServerSortOrder = _.map(sortedSortItems, listItem => {
             const field = fieldIdToMetadata[listItem.fieldId];
-            const columnName = AppServerViewUtils.createAppServerColumnName(field.name,
-                field.sourceName, genotypeName, true);
+            const columnName = field.sourceName ==='sample'?AppServerUtils.createColumnName(field.name, sample.genotypeName):field.name;
+            const sourceName = field.sourceName ==='sample'?AppServerUtils.createSampleName(sample):field.sourceName;
             const isAscendingOrder = listItem.sortDirection === 'asc';
             return {
                 columnName,
+                sourceName,
                 isAscendingOrder
             };
         });
