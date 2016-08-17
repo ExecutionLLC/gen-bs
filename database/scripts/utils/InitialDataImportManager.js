@@ -1,13 +1,14 @@
 'use strict';
 
+const path = require('path');
 const _ = require('lodash');
 const async = require('async');
 
-const FsUtils = require('../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const FsUtils = require('../../../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../../../utils/ChangeCaseUtil');
 
-const FieldsMetadataService = require('../services/FieldsMetadataService');
-
+const FieldsMetadataService = require('../../../services/FieldsMetadataService');
+const ImportDatabaseModel = require('./ImportDatabaseModel');
 /**
  * Imports initial data on the service start.
  * */
@@ -16,6 +17,7 @@ class InitialDataImportManager {
         this.models = models;
         this.config = config;
         this.logger = logger;
+        this.model = new ImportDatabaseModel(config, logger);
 
         this._importFiles = this._importFiles.bind(this);
         this._importLangu = this._importLangu.bind(this);
@@ -30,7 +32,7 @@ class InitialDataImportManager {
     }
 
     execute(callback) {
-        const defaultsDir = './defaults';
+        const defaultsDir = path.join(__dirname, '../../defaults');
 
         let result = {};
         async.waterfall([
@@ -99,7 +101,7 @@ class InitialDataImportManager {
         const languagesString = FsUtils.getFileContentsAsString(languFilePath);
         const languages = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(languagesString));
         async.map(languages, (langu, cb) => {
-            this.models.langu.add(langu, cb)
+            this.model.addLanguage(langu, cb)
         }, callback);
     }
 
@@ -107,7 +109,7 @@ class InitialDataImportManager {
         const usersString = FsUtils.getFileContentsAsString(usersFilePath);
         const users = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(usersString));
         async.map(users, (user, cb) => {
-            this.models.users.addWithId(user, user.language, cb)
+            this.model.addUser(user, user.language,false, cb)
         }, callback);
     }
 
@@ -115,7 +117,7 @@ class InitialDataImportManager {
         const keywordsString = FsUtils.getFileContentsAsString(keywordsFilePath);
         const keywords = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(keywordsString));
         async.map(keywords, (keyword, cb) => {
-            this.models.keywords.addWithId(keyword, this.config.defaultLanguId, cb);
+            this.model.addKeyword(keyword, false, cb);
         }, callback);
     }
 
@@ -123,7 +125,7 @@ class InitialDataImportManager {
         const viewsString = FsUtils.getFileContentsAsString(viewsFilePath);
         const views = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(viewsString));
         async.map(views, (view, cb) => {
-            this.models.views.internalAdd(null, this.config.defaultLanguId, view, cb);
+            this.model.addView(null, this.config.defaultLanguId, view, false, cb);
         }, callback);
     }
 
@@ -131,17 +133,17 @@ class InitialDataImportManager {
         const filtersString = FsUtils.getFileContentsAsString(filtersFilePath);
         const filters = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(filtersString));
         async.map(filters, (filter, cb) => {
-            this.models.filters.internalAdd(null, this.config.defaultLanguId, filter, cb);
+            this.model.addFilter(null, this.config.defaultLanguId, filter, false, cb);
         }, callback);
     }
 
     _importSample(sampleMetadataFilePath, callback) {
-        const sampleFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
-        const sampleFields = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(sampleFieldsString));
+        const sampleWithFieldsString = FsUtils.getFileContentsAsString(sampleMetadataFilePath);
+        const sampleWithFields = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(sampleWithFieldsString));
 
-        let sample = sampleFields.sample;
-        sample.values = this._makeSampleValues(sampleFields.fieldIds);
-        this.models.samples.internalAdd(null, this.config.defaultLanguId, sampleFields.sample, callback);
+        const sample = sampleWithFields.sample;
+        sample.values = this._makeSampleValues(sampleWithFields.fieldIds);
+        this.model.addSample(null, this.config.defaultLanguId, sampleWithFields.sample, false, callback);
     }
 
     _makeSampleValues(fieldIds) {
@@ -167,7 +169,7 @@ class InitialDataImportManager {
 
     _importMetadata(fieldsMetadata, callback) {
         async.map(fieldsMetadata, (fieldMetadata, cb) => {
-            this.models.fields.addWithId(this.config.defaultLanguId, fieldMetadata, cb)
+            this.model.addField(this.config.defaultLanguId, fieldMetadata, false, cb)
         }, callback);
     }
 }

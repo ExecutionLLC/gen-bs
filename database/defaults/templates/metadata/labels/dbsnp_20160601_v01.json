@@ -1,6 +1,13 @@
 [
   {
     "field": {
+      "name": "INFO_RS",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "rs#"
+  },
+  {
+    "field": {
       "name": "INFO_RV",
       "source_name": "dbsnp_20160601_v01"
     },
@@ -54,6 +61,13 @@
       "source_name": "dbsnp_20160601_v01"
     },
     "label": "Provisional"
+  },
+  {
+    "field": {
+      "name": "INFO_S3D",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "3D structure"
   },
   {
     "field": {
@@ -211,10 +225,24 @@
   },
   {
     "field": {
+      "name": "INFO_OM",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "OMIM"
+  },
+  {
+    "field": {
       "name": "INFO_WTD",
       "source_name": "dbsnp_20160601_v01"
     },
     "label": "Withdrawn"
+  },
+  {
+    "field": {
+      "name": "INFO_CAF",
+      "source_name": "dbsnp_20160601_v01"
+    },
+    "label": "Allele frequency"
   },
   {
     "field": {

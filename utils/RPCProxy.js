@@ -12,14 +12,15 @@ class RPCProxy {
      * @param {number}port
      * @param {string}user
      * @param {string}password
+     * @param {string}virtualHost
      * @param {string}requestExchangeName Name of the task queue.
      * @param {number}reconnectTimeout Timeout in milliseconds
      * @param {object}logger
      * @param {function(object)}replyCallback
      */
-    constructor(host, port, user, password, requestExchangeName, reconnectTimeout, logger, replyCallback) {
+    constructor(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout, logger, replyCallback) {
         Object.assign(this,
-            {host, port, user, password, requestExchangeName, reconnectTimeout, logger, replyCallback}, {
+            {host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout, logger, replyCallback}, {
                 consumer: null,
                 publisher: null
             }
@@ -88,9 +89,9 @@ class RPCProxy {
 
         this.logger.info(`Connecting to RabbitMQ on ${this.host}`);
         async.waterfall([
-            (callback) => RabbitMqUtils.createConnection(this.host, this.port, this.user, this.password, callback),
+            (callback) => RabbitMqUtils.createConnection(this.host, this.port, this.user, this.password, this.virtualHost, callback),
             (connection, callback) => {
-                async.series({
+                async.parallel({
                     publisher: (callback) => RabbitMqUtils.createPublisher(connection,
                         this.logger, this.requestExchangeName, callback),
                     consumer: (callback) => RabbitMqUtils.createConsumer(connection,

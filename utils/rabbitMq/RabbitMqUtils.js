@@ -7,8 +7,8 @@ const RabbitMQPublisher = require('./RabbitMQPublisher');
 const RabbitMQConsumer = require('./RabbitMQConsumer');
 
 class RabbitMqUtils {
-    static createConnection(host, port, user, password, callback) {
-        const address = this._createAddress(host, port, user, password);
+    static createConnection(host, port, user, password, virtualHost, callback) {
+        const address = this._createAddress(host, port, user, password, virtualHost);
         RabbitMQ.connect(address, callback);
     }
 
@@ -52,9 +52,10 @@ class RabbitMqUtils {
      * @param {number}port
      * @param {string}user
      * @param {string}password
+     * @param {string}virtualHost
      * */
-    static _createAddress(host, port, user, password) {
-        return `amqp://${user}:${password}@${host}:${port}`;
+    static _createAddress(host, port, user, password, virtualHost) {
+        return `amqp://${user}:${password}@${host}:${port}/${virtualHost}`;
     }
 }
 

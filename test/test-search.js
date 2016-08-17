@@ -4,6 +4,7 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const ClientBase = require('./utils/ClientBase');
+const CollectionUtils = require('../utils/CollectionUtils');
 const SessionsClient = require('./utils/SessionsClient');
 const FiltersClient = require('./utils/FiltersClient');
 const ViewsClient = require('./utils/ViewsClient');
@@ -82,7 +83,10 @@ describe('Search', function () {
                 const rows = endMessage.result.data;
                 const allFields = wsState.sourcesFields.concat(wsState.sampleFields);
 
-                const fieldIdToMetadata = _.indexBy(allFields, 'id');
+                const fieldIdToMetadata = CollectionUtils.createHashByKey(allFields, 'id');
+
+                // Check that rows are received.
+                assert.ok(rows.length);
 
                 // Check that all field ids from the data lay either in sample or in source fields.
                 _.each(rows, row => {

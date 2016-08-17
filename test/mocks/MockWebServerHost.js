@@ -15,11 +15,13 @@ class MockWebServerHost extends WebServerHost {
         app.use((request, response, next) => {
             response.on('finish', () => {
                 const store = this.services.sessions.getSessionStore();
-                request.session && store.set(
-                    request.session.id,
-                    request.session,
-                    (error) => (error && console.error(`Error saving mock session: ${error}`))
-                );
+                const {session} = request;
+                if (session && !session.__destroyed) {
+                    store.set(session.id, session,
+                        (error) => (error && console.error(`Error saving mock session: ${error}`))
+                    );
+                }
+
             });
 
             const sessionId = request.get(this.sessionHeaderName);
@@ -38,7 +40,10 @@ class MockWebServerHost extends WebServerHost {
                     callback(null, Object.assign(session, {
                         id: sessionId,
                         save: (callback) => store.set(session.id, session, callback),
-                        destroy: (callback) => store.destroy(session.id, callback)
+                        destroy: (callback) => {
+                            store.destroy(session.id, callback);
+                            session.__destroyed = true;
+                        }
                     }))
                 }
             ], (error, session) => {

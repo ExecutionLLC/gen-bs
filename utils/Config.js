@@ -27,6 +27,7 @@ function makeDefault(value, defaultValue) {
 }
 
 const SETTINGS = {
+    oneSampleGenotypeName: null,
     port: makeDefault(ENV.GEN_WS_PORT, 5000),
     disableRequestLimits: makeDefault(ENV.GEN_WS_DISABLE_REQUEST_LIMITS, false),
     enableCORS: makeDefault(ENV.GEN_WS_CORS_ENABLE, true),
@@ -82,6 +83,7 @@ const SETTINGS = {
         host: makeDefault(ENV.GEN_WS_RABBIT_MQ_HOST, 'localhost'),
         port: makeDefault(ENV.GEN_WS_RABBIT_MQ_PORT, 5672),
         user: makeDefault(ENV.GEN_WS_RABBIT_MQ_USER, 'guest'),
+        virtualHost: makeDefault(ENV.GEN_WS_RABBIT_MQ_VIRTUAL_HOST, ''),
         password: makeDefault(ENV.GEN_WS_RABBIT_MQ_PASSWORD, 'guest'),
         requestExchangeName: makeDefault(ENV.GEN_WS_RABBIT_MQ_REQUEST_EXCHANGE, 'genomics_exchange'),
         // Reconnect timeout in milliseconds

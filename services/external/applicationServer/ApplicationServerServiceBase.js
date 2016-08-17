@@ -18,11 +18,11 @@ class ApplicationServerServiceBase extends ServiceBase {
         _.bindAll(this, ['_rpcSend', '_rpcReply']);
 
         this.logger = this.services.logger;
-        const {host, port, user, password, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
+        const {host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
         /**
          * @type {RPCProxy}
          * */
-        this.rpcProxy = proxyProviderFunc(host, port, user, password, requestExchangeName, reconnectTimeout,
+        this.rpcProxy = proxyProviderFunc(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout,
             this.logger, this._rpcReply);
     }
 
