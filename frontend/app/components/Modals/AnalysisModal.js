@@ -43,11 +43,8 @@ class AnalysisModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {auth, queryHistory, viewsList, filtersList, samplesList, fields} = state;
+    const {auth, queryHistory, viewsList, filtersList, modelsList, samplesList, fields} = state;
 
-    const modelsList = {
-        hashedArray: filtersList.hashedArray
-    };
     
     const historyList = queryHistory.history;
     const initialHistoryList = queryHistory.initialHistory;

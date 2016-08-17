@@ -28,11 +28,12 @@ export function filterBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function filterBuilderStartEdit(makeNew, filter, fields) {
+export function filterBuilderStartEdit(makeNew, filter, fields, filtersList) {
     return {
         type: FBUILDER_START_EDIT,
         makeNew,
         filter,
+        filtersList,
         fields
     };
 }
@@ -129,9 +130,10 @@ export function filterBuilderDeleteFilter(filterId) {
             .then( ()=> {
                 const state = getState();
                 const editingFilterId = state.filterBuilder.editingFilter.filter.id;
-                const newFilterId = (filterId == editingFilterId) ? state.filtersList.hashedArray.array[0].id : editingFilterId;
-                const newFilter = state.filtersList.hashedArray.hash[newFilterId];
-                dispatch(filterBuilderStartEdit(false, newFilter, fields));
+                const {filtersList} = state.filterBuilder;
+                const newFilterId = (filterId == editingFilterId) ? filtersList.hashedArray.array[0].id : editingFilterId;
+                const newFilter = filtersList.hashedArray.hash[newFilterId];
+                dispatch(filterBuilderStartEdit(false, newFilter, fields, filtersList));
             });
     };
 }

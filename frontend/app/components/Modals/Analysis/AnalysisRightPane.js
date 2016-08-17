@@ -733,7 +733,7 @@ export default class AnalysisRightPane extends React.Component {
     
     onFiltersClick() {
         const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
-        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields));
+        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields, filtersList));
 
         const action = editQueryHistoryItem(
             samplesList,
@@ -755,7 +755,7 @@ export default class AnalysisRightPane extends React.Component {
 
     onModelClick() {
         const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
-        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields));
+        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields, modelsList));
 
         const action = editQueryHistoryItem(
             samplesList,

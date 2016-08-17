@@ -139,19 +139,19 @@ export default class ExistentFilterSelect extends Component {
     }
 
     onSelectChange(filters, filterId, fields) {
-        this.props.dispatch(filterBuilderStartEdit(false, this.getFilterForId(filters, filterId), fields));
+        this.props.dispatch(filterBuilderStartEdit(false, this.getFilterForId(filters, filterId), fields, this.props.filtersList));
     }
 
     onDuplicateClick() {
         const filter = this.getSelectedFilter();
-        const fields = this.props.fields;
-        this.props.dispatch(filterBuilderStartEdit(true, filter, fields));
+        const {fields, filtersList} = this.props;
+        this.props.dispatch(filterBuilderStartEdit(true, filter, fields, filtersList));
     }
 
     onResetFilterClick() {
         const filter = this.getSelectedFilter();
-        const fields = this.props.fields;
-        this.props.dispatch(filterBuilderStartEdit(false, filter, fields));
+        const {fields, filtersList} = this.props;
+        this.props.dispatch(filterBuilderStartEdit(false, filter, fields, filtersList));
     }
 
     onDeleteFilterClick() {
