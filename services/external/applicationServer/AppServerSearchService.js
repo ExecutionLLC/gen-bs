@@ -76,7 +76,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const {genotypeName} = sample;
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(sample);
-        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, genotypeName);
+        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, genotypeName);
         const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, genotypeName);
 
