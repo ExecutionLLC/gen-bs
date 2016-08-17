@@ -19,7 +19,7 @@ class AppServerUtils{
         return fieldName;
     }
 
-    static createSourceName(sample) {
+    static createSampleName(sample) {
         return _.includes(ENTITY_TYPES.defaultTypes, sample.type) ?
             sample.fileName : sample.originalId;
     }

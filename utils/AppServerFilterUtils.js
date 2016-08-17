@@ -1,19 +1,20 @@
 'use strict';
 
 const _ = require('lodash');
+const AppServerUtils = require('./AppServerUtils');
 
 class AppServerFilterUtils {
-    static createAppServerFilter(filter, fieldIdToMetadata) {
-        return AppServerFilterUtils._createServerRulesRecursively(filter.rules, fieldIdToMetadata);
+    static createAppServerFilter(filter, fieldIdToMetadata, sample) {
+        return AppServerFilterUtils._createServerRulesRecursively(filter.rules, fieldIdToMetadata, sample);
     }
 
-    static _createServerRulesRecursively(filterRulesObject, fieldIdToMetadata) {
+    static _createServerRulesRecursively(filterRulesObject, fieldIdToMetadata, sample) {
         const operator = filterRulesObject['$and'] ? '$and' :
             filterRulesObject['$or'] ? '$or' : null;
         if (operator) {
             const operands = filterRulesObject[operator];
             const mappedOperands = _(operands)
-                .map((operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata))
+                .map((operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata, sample))
                 .filter(operand => operand)
                 .value();
             if (_.isEmpty(mappedOperands)) {
@@ -31,8 +32,8 @@ class AppServerFilterUtils {
                     const field = fieldIdToMetadata[fieldId];
                     const condition = filterRulesObject[fieldId];
                     return {
-                        columnName: field.name,
-                        sourceName: field.sourceName,
+                        columnName: AppServerUtils.createColumnName(field.name, sample.genotypeName),
+                        sourceName: field.sourceName ==='sample'?AppServerUtils.createSampleName(sample):field.sourceName,
                         condition
                     };
                 })

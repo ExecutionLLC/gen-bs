@@ -27,7 +27,7 @@ class AppServerViewUtils {
             .map(sample =>{
                 return {
                     columnName: AppServerUtils.createColumnName(sampleItem.fieldName, sample.genotypeName),
-                    sourceName: AppServerUtils.createSourceName(sample),
+                    sourceName: AppServerUtils.createSampleName(sample),
                     filter: sampleItem.filter
                 };
             })
@@ -87,7 +87,7 @@ class AppServerViewUtils {
             sampleNoneDuplicatedItems, sampleItem => {
                 return {
                     columnName: AppServerUtils.createColumnName(sampleItem.fieldName, samples[0].genotypeName),
-                    sourceName: AppServerUtils.createSourceName(samples[0]),
+                    sourceName: AppServerUtils.createSampleName(samples[0]),
                     filter: sampleItem.filter
                 }
             });
