@@ -83,7 +83,7 @@ class SessionsController extends ControllerBase {
 
         router.use(passport.initialize());
         // Registration code is optional.
-        router.get('/auth/google/:registrationCodeId?', (request, response, next) => {
+        router.get('/auth/google/login/:registrationCodeId?', (request, response, next) => {
             const {registrationCodeId} = request.params;
             const authCallback = passport.authenticate('google', {
                 scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
@@ -98,11 +98,13 @@ class SessionsController extends ControllerBase {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, {firstName, lastName, userEmail}, info) => {
-                const registrationCodeId = request.query.state;
+            }, (error, user, info) => {
                 if (error) {
                     return next(error);
                 }
+                const {firstName, lastName, userEmail} = user;
+                const registrationCodeId = request.query.state;
+
                 async.waterfall([
                     (callback) => {
                         if (registrationCodeId) {
