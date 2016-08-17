@@ -34,7 +34,9 @@ class AppServerFilterUtils {
                     return {
                         columnName: AppServerViewUtils.createAppServerColumnName(
                             field.name,
-                            'sample', sampleGenotypeName, false
+                            'sample',
+                            sampleGenotypeName,
+                            false
                         ),
                         sourceName: field.sourceName,
                         condition
