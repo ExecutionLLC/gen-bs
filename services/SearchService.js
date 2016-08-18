@@ -340,7 +340,6 @@ class SearchService extends ServiceBase {
     }
 
     _validateAppServerSearchParams(appServerRequestParams, callback) {
-        let chej
         const userId = appServerRequestParams.userId;
         const model = appServerRequestParams.model;
         const filter = appServerRequestParams.filter;

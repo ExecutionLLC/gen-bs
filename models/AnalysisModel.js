@@ -37,6 +37,22 @@ class AnalysisModel extends SecureModelBase {
     }
 
     findAll(userId, limit, offset, nameFilter, descriptionFilter, callback ){
+        async.waterfall(
+            [
+                (callback) => {
+                    this._findAnalysis(
+                        userId,
+                        limit,
+                        offset,
+                        nameFilter,
+                        descriptionFilter,
+                        callback
+                    );
+                },
+                (analysisIds, callback) =>{
+                    this._findAnalysisByIds(userId,analysisIds, callback)
+                }
+            ],callback);
         this._findAnalysis(
             userId,
             limit,
@@ -187,7 +203,28 @@ class AnalysisModel extends SecureModelBase {
         };
     }
 
-    _findAnalysis(userId, limit, offset, nameFilter, descriptionFilter, callback) {
+    _findAnalysisIds(userId, limit, offset, nameFilter, descriptionFilter, callback) {
+        this.db.asCallback(
+            (trx, callback) => {
+                trx.select('id')
+                    .from(this.baseTableName)
+                    .innerJoin(
+                        TableNames.AnalysisText,
+                        `${TableNames.AnalysisText}.analysis_id`,
+                        `${this.baseTableName}.id`
+                    )
+                    .where('creator', userId)
+                    .andWhere('name','like',`%${nameFilter}%`)
+                    .andWhere('description', 'like',`%${descriptionFilter}%`)
+                    .offset(offset)
+                    .limit(limit)
+                    .asCallback();
+            },
+            callback
+        );
+    }
+
+    _findAnalysisByIds(userId, analysisIds, callback) {
         this.db.asCallback(
             (trx, callback) => {
                 trx.select()
@@ -203,11 +240,7 @@ class AnalysisModel extends SecureModelBase {
                         `${this.baseTableName}.id`
                     )
                     .where('creator', userId)
-                    .andWhere('name','like',`%${nameFilter}%`)
-                    .andWhere('description', 'like',`%${descriptionFilter}%`)
-                    .orderBy('timestamp', 'desc')
-                    .offset(offset)
-                    .limit(limit)
+                    .andWhere('id', analysisIds)
                     .asCallback(
                         (error, result) => {
                             this._parseAnalysesResult(result, callback);
