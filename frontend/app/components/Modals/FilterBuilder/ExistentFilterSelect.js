@@ -8,7 +8,7 @@ import {
     getReadonlyReasonForSessionAndType
 } from '../../../utils/stringUtils';
 import {
-    filterBuilderStartEdit,
+    filterBuilderRestartEdit,
     filterBuilderDeleteFilter
 } from '../../../actions/filterBuilder';
 import {entityTypeIsEditable} from '../../../utils/entityTypes';
@@ -19,7 +19,7 @@ export default class ExistentFilterSelect extends Component {
     render() {
         const {auth, fields} = this.props;
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
-        const filters = this.props.filtersList.hashedArray.array;
+        const filters = this.props.filterBuilder.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
 
@@ -139,19 +139,19 @@ export default class ExistentFilterSelect extends Component {
     }
 
     onSelectChange(filters, filterId, fields) {
-        this.props.dispatch(filterBuilderStartEdit(false, this.getFilterForId(filters, filterId), fields, this.props.filtersList));
+        this.props.dispatch(filterBuilderRestartEdit(false, this.getFilterForId(filters, filterId)));
     }
 
     onDuplicateClick() {
         const filter = this.getSelectedFilter();
-        const {fields, filtersList} = this.props;
-        this.props.dispatch(filterBuilderStartEdit(true, filter, fields, filtersList));
+        const {fields, filterBuilder: {filtersData}} = this.props;
+        this.props.dispatch(filterBuilderRestartEdit(true, filter));
     }
 
     onResetFilterClick() {
         const filter = this.getSelectedFilter();
-        const {fields, filtersList} = this.props;
-        this.props.dispatch(filterBuilderStartEdit(false, filter, fields, filtersList));
+        const {fields, filterBuilder: {filtersData}} = this.props;
+        this.props.dispatch(filterBuilderRestartEdit(false, filter));
     }
 
     onDeleteFilterClick() {

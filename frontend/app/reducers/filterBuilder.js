@@ -77,7 +77,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
 }
 
 function reduceFBuilderStartEdit(state, action) {
-    const {fields: {totalFieldsList, allowedFieldsList}, filter, makeNew, filtersList} = action;
+    const {fields: {totalFieldsList, allowedFieldsList}, filter, makeNew, filtersData, filtersList} = action;
     const editingFilter = parseFilterForEditing(
         makeNew,
         makeNew ?
@@ -92,6 +92,7 @@ function reduceFBuilderStartEdit(state, action) {
         allowedFieldsList
     );
     return Object.assign({}, state, {
+        filtersData,
         filtersList,
         editingFilter: editingFilter,
         originalFilter: editingFilter
@@ -112,6 +113,7 @@ function reduceFBuilderSaveEdit(state) {
     
 function reduceFBuilderEndEdit(state) {
     return Object.assign({} ,state, {
+        filtersData: null,
         filtersList: null,
         editingFilter: null,
         originalFilter: null
@@ -155,6 +157,7 @@ function reduceFBuilderOnSave(state, action) {
 }
 
 export default function filterBuilder(state = {
+    filtersData: null,
     filtersList: null,
     /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
     editingFilter: null,

@@ -4,8 +4,33 @@ import {
     filtersListServerUpdateFilter,
     filtersListServerDeleteFilter
 } from './filtersList';
+import {
+    modelsListServerCreateModel,
+    modelsListServerUpdateModel,
+    modelsListServerDeleteModel
+} from './modelsList';
 import {entityTypeIsEditable} from '../utils/entityTypes';
 import {immutableSetPathProperty} from '../utils/immutable';
+
+
+export const filterBuilderData = {
+    'filter': {
+        getList(state) {
+            return state.filtersList;
+        },
+        serverCreate: filtersListServerCreateFilter,
+        serverUpdate: filtersListServerUpdateFilter,
+        serverDelete: filtersListServerDeleteFilter
+    },
+    'model': {
+        getList(state) {
+            return state.modelsList;
+        },
+        serverCreate: modelsListServerCreateModel,
+        serverUpdate: modelsListServerUpdateModel,
+        serverDelete: modelsListServerDeleteModel
+    }
+};
 
 
 export const FBUILDER_ON_SAVE = 'FBUILDER_ON_SAVE';
@@ -28,13 +53,21 @@ export function filterBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function filterBuilderStartEdit(makeNew, filter, fields, filtersList) {
+export function filterBuilderStartEdit(makeNew, filter, fields, filtersData, filtersList) {
+    debugger;//
     return {
         type: FBUILDER_START_EDIT,
         makeNew,
         filter,
+        filtersData,
         filtersList,
         fields
+    };
+}
+
+export function filterBuilderRestartEdit(makeNew, filter) {
+    return (dispatch, getState) => {
+        dispatch(filterBuilderStartEdit(makeNew, filter, getState().fields, getState().filterBuilder.filtersData, filterBuilderData[getState().filterBuilder.filtersData].getList(getState())));
     };
 }
 
@@ -70,7 +103,7 @@ function filterBuilderCreateFilter() {
     return (dispatch, getState) => {
         const editingFilter = getState().filterBuilder.editingFilter.filter;
         const {ui: {languageId} } = getState();
-        dispatch(filtersListServerCreateFilter(editingFilter, languageId))
+        dispatch(filterBuilderData[getState().filterBuilder.filtersData].serverCreate(editingFilter, languageId))
             .then( (filter) => {
                 dispatch(fireOnSaveAction(filter));
                 dispatch(closeModal('filters'));
@@ -94,7 +127,7 @@ function filterBuilderUpdateFilter() {
             dispatch(filterBuilderEndEdit());
         } else {
             const resultEditingFilter = editingFilter.filter;
-            dispatch(filtersListServerUpdateFilter(resultEditingFilter))
+            dispatch(filterBuilderData[state.filterBuilder.filtersData].serverUpdate(resultEditingFilter))
                 .then( (filter) => {
                     dispatch(fireOnSaveAction(filter));
                     dispatch(closeModal('filters'));
@@ -125,15 +158,15 @@ export function filterBuilderChangeFilter(index, change) {
 
 export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
-        const {fields} = getState();
-        dispatch(filtersListServerDeleteFilter(filterId))
+        const {filterBuilder} = getState();
+        dispatch(filterBuilderData[filterBuilder.filtersData].serverDelete(filterId))
             .then( ()=> {
                 const state = getState();
                 const editingFilterId = state.filterBuilder.editingFilter.filter.id;
-                const {filtersList} = state.filterBuilder;
+                const filtersList = state.filterBuilder.filtersList;
                 const newFilterId = (filterId == editingFilterId) ? filtersList.hashedArray.array[0].id : editingFilterId;
                 const newFilter = filtersList.hashedArray.hash[newFilterId];
-                dispatch(filterBuilderStartEdit(false, newFilter, fields, filtersList));
+                dispatch(filterBuilderRestartEdit(false, newFilter));
             });
     };
 }

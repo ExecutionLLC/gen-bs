@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {filterBuilderChangeAttr, filterBuilderStartEdit} from '../../../actions/filterBuilder';
+import {filterBuilderChangeAttr, filterBuilderRestartEdit} from '../../../actions/filterBuilder';
 import config from '../../../../config';
 
 export default class NewFilterInputs extends Component {
@@ -74,8 +74,8 @@ export default class NewFilterInputs extends Component {
     }
 
     onCancelClick() {
-        const parentFilter = this.props.filtersList.hashedArray.hash[this.props.filterBuilder.editingFilter.parentFilterId];
-        this.props.dispatch(filterBuilderStartEdit(false, parentFilter, this.props.fields, this.props.filtersList));
+        const parentFilter = this.props.filterBuilder.filtersList.hashedArray.hash[this.props.filterBuilder.editingFilter.parentFilterId];
+        this.props.dispatch(filterBuilderRestartEdit(false, parentFilter));
     }
 
 }
