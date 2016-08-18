@@ -32,7 +32,7 @@ const config = {
         LOGOUT_TIMEOUT: SESSION_LOGOUT_TIMEOUT,
         LOGOUT_WARNING_TIMEOUT: SESSION_LOGOUT_WARNING_TIMEOUT
     },
-    LOGIN_URL: `${HTTP_SCHEME}://${HOST}:${PORT}/api/session/auth/google`,
+    LOGIN_URL: `${HTTP_SCHEME}://${HOST}:${PORT}/api/session/auth/google/login`,
     FILTERS: {
         MAX_NAME_LENGTH: 50,
         MAX_DESCRIPTION_LENGTH: 512,
