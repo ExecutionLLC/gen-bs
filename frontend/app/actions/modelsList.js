@@ -3,7 +3,7 @@ import HttpStatus from 'http-status';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 
-const modelsClient = apiFacade.filtersClient; // TODO change client later
+const modelsClient = apiFacade.modelsClient;
 
 export const MODELS_LIST_START_SERVER_OPERATION = 'MODELS_LIST_START_SERVER_OPERATION';
 export const MODELS_LIST_END_SERVER_OPERATION = 'MODELS_LIST_END_SERVER_OPERATION';

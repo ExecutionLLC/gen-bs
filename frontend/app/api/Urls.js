@@ -114,6 +114,10 @@ export default class Urls {
         return new CollectionUrls('/filters', this.httpScheme, this.host, this.port);
     }
 
+    modelsUrls() {
+        return new CollectionUrls('/models', this.httpScheme, this.host, this.port);
+    }
+
     samplesUrls() {
         return new UploadableEntityUrls('/samples', this.httpScheme, this.host, this.port);
     }

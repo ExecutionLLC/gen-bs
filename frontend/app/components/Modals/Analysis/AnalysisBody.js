@@ -146,7 +146,7 @@ export default class AnalysisBody extends React.Component {
                 if (existentModel) {
                     callback(null, existentModel);
                 } else {
-                    apiFacade.filtersClient.get(modelId, (error, response) => { // TODO replace by modelsClient
+                    apiFacade.modelsClient.get(modelId, (error, response) => {
                         callback(null, response.body);
                     });
                 }
