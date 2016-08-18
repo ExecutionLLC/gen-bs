@@ -17,7 +17,7 @@ import {entityTypeIsEditable} from '../../../utils/entityTypes';
 export default class ExistentFilterSelect extends Component {
 
     render() {
-        const {auth, fields} = this.props;
+        const {auth} = this.props;
         const selectedFilter = this.props.filterBuilder.editingFilter.filter;
         const filters = this.props.filterBuilder.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
@@ -30,7 +30,7 @@ export default class ExistentFilterSelect extends Component {
                 </div>
                 {this.renderWarning(isDemoSession, selectedFilter.type)}
                 <div className='row grid-toolbar row-head-selector'>
-                    {this.renderFiltersSelector(filters, fields)}
+                    {this.renderFiltersSelector(filters)}
                     {this.renderButtonGroup(isDemoSession, isFilterEditable)}
                 </div>
             </div>
@@ -60,7 +60,7 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderFiltersSelector(filters, fields) {
+    renderFiltersSelector(filters) {
         const selectItems = filters.map( filter => ({
             value: filter.id,
             label: getItemLabelByNameAndType(filter.name, filter.type)
@@ -71,7 +71,7 @@ export default class ExistentFilterSelect extends Component {
                 <Select
                     options={selectItems}
                     value={this.getSelectedFilter().id}
-                    onChange={(val) => this.onSelectChange(filters, val.value, fields)}
+                    onChange={(val) => this.onSelectChange(filters, val.value)}
                 />
             </div>
         );
@@ -138,19 +138,17 @@ export default class ExistentFilterSelect extends Component {
         return _.find(filters, {id: filterId}) || null;
     }
 
-    onSelectChange(filters, filterId, fields) {
+    onSelectChange(filters, filterId) {
         this.props.dispatch(filterBuilderRestartEdit(false, this.getFilterForId(filters, filterId)));
     }
 
     onDuplicateClick() {
         const filter = this.getSelectedFilter();
-        const {fields, filterBuilder: {filtersData}} = this.props;
         this.props.dispatch(filterBuilderRestartEdit(true, filter));
     }
 
     onResetFilterClick() {
         const filter = this.getSelectedFilter();
-        const {fields, filterBuilder: {filtersData}} = this.props;
         this.props.dispatch(filterBuilderRestartEdit(false, filter));
     }
 
