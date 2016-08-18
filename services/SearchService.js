@@ -282,7 +282,20 @@ class SearchService extends ServiceBase {
                 this.services.langu.find(languId, callback);
             },
             samples: (callback) => {
-                this.services.samples.findMany(user, sampleIds, callback);
+                async.waterfall([
+                    (callback) => {
+                        this.services.samples.findMany(user, sampleIds, callback);
+                    },
+                    (analysisSamples, callback) => {
+                        const resultSamples = _.map(samples, (sample) => {
+                            const resultSample = _.find(analysisSamples, {id: sample.id});
+                            return Object.assign({}, resultSample,{
+                                sampleType: sample.type
+                            });
+                        });
+                        callback(null, resultSamples);
+                    }
+                ], callback);
             },
             filter: (callback) => {
                 this.services.filters.find(user, filterId, callback);
@@ -340,7 +353,6 @@ class SearchService extends ServiceBase {
     }
 
     _validateAppServerSearchParams(appServerRequestParams, callback) {
-        let chej
         const userId = appServerRequestParams.userId;
         const model = appServerRequestParams.model;
         const filter = appServerRequestParams.filter;

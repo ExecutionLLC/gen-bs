@@ -15,6 +15,7 @@ const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 const CollectionUtils = require('../../../utils/CollectionUtils');
 const AppServerUtils = require('../../../utils/AppServerUtils');
+const AppServerModelUtils = require('../../../utils/AppServerModelUtils');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -80,12 +81,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
         const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, sample);
+        const appServerModel = AppServerModelUtils.createAppServerModel(model, fieldIdToFieldMetadata, samples);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
             viewStructure: appServerView,
             viewFilter: appServerFilter,
             viewSortOrder: appServerSortOrder,
+            viewModel:appServerModel,
             offset,
             limit
         };
