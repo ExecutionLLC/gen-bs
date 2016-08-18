@@ -82,11 +82,11 @@ class App extends Component {
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
                     dispatch={this.props.dispatch}
                 />
-                {this.props.modalWindows.filters.showModal && <FiltersModal
+                <FiltersModal
                     showModal={this.props.modalWindows.filters.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
                     dispatch={this.props.dispatch}
-                />}
+                />
                 <FileUploadModal
                     showModal={this.props.modalWindows.upload.showModal}
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }

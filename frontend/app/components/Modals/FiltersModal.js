@@ -20,7 +20,7 @@ class FiltersModal extends Component {
 
     render() {
         const {auth: {isDemo}} = this.props;
-        const filters = this.props.filtersList.hashedArray.array;
+        const filters = this.props.filterBuilder.filtersList && this.props.filterBuilder.filtersList.hashedArray.array;
         const editingFilterObject = this.props.filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;
@@ -28,7 +28,7 @@ class FiltersModal extends Component {
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
-        const filterNameExists = isFilterEditable && _(filters)
+        const filterNameExists = filters && isFilterEditable && _(filters)
                 .filter(filter => filter.type !== entityType.HISTORY)
                 .some(filter => filter.name.trim() === editingFilterNameTrimmed
                     && filter.id != editingFilter.id
