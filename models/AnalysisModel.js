@@ -40,27 +40,25 @@ class AnalysisModel extends SecureModelBase {
         async.waterfall(
             [
                 (callback) => {
-                    this._findAnalysis(
+                    this._findAnalysisIds(
                         userId,
                         limit,
                         offset,
                         nameFilter,
                         descriptionFilter,
-                        callback
+                        (error, result) => {
+                            callback (error, result)
+                        }
                     );
                 },
                 (analysisIds, callback) =>{
-                    this._findAnalysisByIds(userId,analysisIds, callback)
+                    this._findAnalysisByIds(userId,analysisIds,
+                        (error, result) => {
+                            callback (error, result)
+                        }
+                    )
                 }
             ],callback);
-        this._findAnalysis(
-            userId,
-            limit,
-            offset,
-            nameFilter,
-            descriptionFilter,
-            callback
-        );
     }
 
     _update(userId, analysis, analysisToUpdate, callback) {
@@ -218,7 +216,11 @@ class AnalysisModel extends SecureModelBase {
                     .andWhere('description', 'like',`%${descriptionFilter}%`)
                     .offset(offset)
                     .limit(limit)
-                    .asCallback();
+                    .asCallback(
+                        (error, result) => {
+                            callback (error, _.map(result, resultItem => resultItem.id));
+                        }
+                    );
             },
             callback
         );
@@ -239,8 +241,8 @@ class AnalysisModel extends SecureModelBase {
                         `${TableNames.AnalysisSample}.analysis_id`,
                         `${this.baseTableName}.id`
                     )
-                    .where('creator', userId)
-                    .andWhere('id', analysisIds)
+                    .whereIn('id', analysisIds)
+                    .andWhere('creator', userId)
                     .asCallback(
                         (error, result) => {
                             this._parseAnalysesResult(result, callback);
