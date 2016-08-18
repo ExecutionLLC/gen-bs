@@ -11,6 +11,10 @@ class RegistrationCodesModel extends ModelBase {
             'id',
             'description',
             'isActivated',
+            'activatedTimestamp',
+            'language',
+            'speciality',
+            'numberOfPaidSamples',
             'email'
         ]);
     }
@@ -30,7 +34,7 @@ class RegistrationCodesModel extends ModelBase {
     }
 
     activateAsync(id, email, trx) {
-        return this.findInactiveAsync(id, email, trx)
+        return this.findInactiveAsync(id, trx)
             .then((item) => trx(this.baseTableName)
                 .where('id', item.id)
                 .update(ChangeCaseUtil.convertKeysToSnakeCase({

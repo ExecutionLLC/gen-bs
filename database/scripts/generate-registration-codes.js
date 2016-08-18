@@ -31,7 +31,7 @@ if (count && speciality && description && defaultLanguage && numberPaidSamples) 
             } else {
                 console.log(`${count} registration codes are added with ids: ${JSON.stringify(ids)}`);
                 ids.map(id => {
-                    console.log(`${Config.baseUrl}/register/${id}`);
+                    console.log(`${Config.baseUrl}/api/session/auth/google/login/${id}`);
                 });
                 process.exit(0);
             }
