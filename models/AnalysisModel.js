@@ -212,8 +212,10 @@ class AnalysisModel extends SecureModelBase {
                         `${this.baseTableName}.id`
                     )
                     .where('creator', userId)
-                    .andWhere('name','like',`%${nameFilter}%`)
-                    .orWhere('description', 'like',`%${descriptionFilter}%`)
+                    .andWhere(function () {
+                        this.where('name','like',`%${nameFilter}%`)
+                            .orWhere('description', 'like',`%${descriptionFilter}%`)
+                    })
                     .offset(offset)
                     .limit(limit)
                     .asCallback(
@@ -243,6 +245,7 @@ class AnalysisModel extends SecureModelBase {
                     )
                     .whereIn('id', analysisIds)
                     .andWhere('creator', userId)
+                    .orderBy('timestamp', 'desc')
                     .asCallback(
                         (error, result) => {
                             this._parseAnalysesResult(result, callback);
