@@ -16,16 +16,19 @@ import {entityType} from '../utils/entityTypes';
  */
 function parseFilterForEditing(isNew, filterToEdit, parentFilterId, fields, allowedFields) {
     const fieldDefaultId = FieldUtils.getDefaultId(allowedFields);
+    /** @type {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
     const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
-    const validateRulesResult = genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
+    const validateRulesResult = parsedRawRules && genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
     // Report validation results if any
-    if (!_.isEmpty(validateRulesResult.report)) {
+    if (validateRulesResult && !_.isEmpty(validateRulesResult.report)) {
         console.error('Filter rules are invalid:');
         console.error(JSON.stringify(parsedRawRules, null, 4));
         console.error('Filter validation report:');
         console.error(JSON.stringify(validateRulesResult.report, null, 4));
     }
-    const parsedFilter = validateRulesResult.validRules || filterUtils.genomicsParsedRulesModification.makeDefaultGroup(fieldDefaultId);
+    const parsedFilter = parsedRawRules ?
+        validateRulesResult.validRules || filterUtils.genomicsParsedRulesModification.makeDefaultGroup(fieldDefaultId) :
+        null;
     return {
         filter: filterToEdit,
         isNew,

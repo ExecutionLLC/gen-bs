@@ -391,6 +391,11 @@ export const filterUtils = {
      * @return {object}
      */
     getGenomics: function (data) {
+
+        if (!data) {
+            return null;
+        }
+
         var self = this;
 
         return (function parse(data) {
@@ -448,10 +453,10 @@ export const filterUtils = {
      * Convert Genomics object to rules
      * @throws GenomicsParseError, UndefinedGenomicsConditionError, UndefinedGenomicsOperatorError
      * @param {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} data query object
-     * @return {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}}
+     * @return {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}}
      */
     getRulesFromGenomics: function (data) {
-        if (data === undefined || data === null) {
+        if (data == null) {
             return null;
         }
 
