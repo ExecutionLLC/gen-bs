@@ -54,7 +54,6 @@ export function filterBuilderOnSave(onSaveAction, onSaveActionProperty) {
 }
 
 export function filterBuilderStartEdit(makeNew, filter, fields, filtersData, filtersList) {
-    debugger;//
     return {
         type: FBUILDER_START_EDIT,
         makeNew,
