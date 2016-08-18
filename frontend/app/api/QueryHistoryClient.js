@@ -10,6 +10,6 @@ export default class QueryHistoryClient extends UserEntityClientBase {
 
     getQueryHistory(languageId, filter, limit, offset, callback) {
         RequestWrapper.get(this.urls.history(),
-            this._makeHeaders({languageId}), {filter, limit, offset}, null, callback);
+            this._makeHeaders({languageId}), {search: filter, limit, offset}, null, callback);
     }
 }
