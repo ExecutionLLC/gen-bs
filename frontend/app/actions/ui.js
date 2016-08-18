@@ -51,8 +51,8 @@ export function analyze(searchParams) {
             filtersList: {
                 hashedArray: {hash: filterIdToFilterHash}
             },
-            filtersList: {
-                hashedArray: {hash: modelIdToFilterHash} // TODO make models list
+            modelsList: {
+                hashedArray: {hash: modelIdToFilterHash} // TODO make models list - ok
             },
             viewsList: {
                 hashedArray: {hash: viewIdToViewHash}
