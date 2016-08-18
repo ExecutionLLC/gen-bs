@@ -1,6 +1,7 @@
 'use strict';
 
 const Uuid = require('node-uuid');
+const Promise = require('bluebird');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const ModelBase = require('./ModelBase');
@@ -59,24 +60,6 @@ class RegistrationCodesModel extends ModelBase {
                 .insert(item));
         return Promise.all(promises)
             .then(() => itemIds);
-    }
-
-    findInactive(id, trx, callback) {
-        this.findInactiveAsync(id, trx)
-            .then((item) => callback(null, item))
-            .catch((error) => callback(error));
-    }
-
-    activate(id, email, trx, callback) {
-        this.activateAsync(id, email, trx)
-            .then(() => callback(null))
-            .catch((error) => callback(error));
-    }
-
-    createMany(count, language, speciality, description, numberOfPaidSamples, trx, callback) {
-        this.createManyAsync(count, language, speciality, description, numberOfPaidSamples, trx)
-            .then((ids) => callback(null, ids))
-            .catch((error) => callback(error));
     }
 }
 
