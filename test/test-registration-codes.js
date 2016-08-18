@@ -8,7 +8,7 @@ describe('Registration Codes', () => {
     const {registrationCodes, users} = global.webServer.server.services;
 
     function generateEmail() {
-        return `a${Uuid.v4()}@qwe.com`;
+        return `a${Uuid.v4()}@example.com`;
     }
 
     function generateCodeIdAsync() {
