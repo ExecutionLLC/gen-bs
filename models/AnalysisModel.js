@@ -213,7 +213,7 @@ class AnalysisModel extends SecureModelBase {
                     )
                     .where('creator', userId)
                     .andWhere('name','like',`%${nameFilter}%`)
-                    .andWhere('description', 'like',`%${descriptionFilter}%`)
+                    .orWhere('description', 'like',`%${descriptionFilter}%`)
                     .offset(offset)
                     .limit(limit)
                     .asCallback(
