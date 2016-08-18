@@ -56,5 +56,11 @@ describe('Registration Codes', () => {
                         .catch(() => done());
                 });
         });
+
+        it('should work fine with unknown code', (done) => {
+            registrationCodes.activateAsync(Uuid.v4(), 'Test', 'Test', generateEmail())
+                .then(() => assert.fail('Activation successful for unknown code.'))
+                .catch(() => done());
+        });
     });
 });

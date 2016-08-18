@@ -26,11 +26,15 @@ class RegistrationCodesModel extends ModelBase {
             .where('id', id)
             .map((item) => this._mapColumns(item))
             .then((items) => {
-                const item = items[0];
-                if (item.isActivated) {
-                    return Promise.reject('Code is already activated');
+                if (items && items.length) {
+                    const item = items[0];
+                    if (item.isActivated) {
+                        return Promise.reject('Code is already activated');
+                    }
+                    return item;
+                } else {
+                    return Promise.reject('Code is not found.');
                 }
-                return item;
             });
     }
 
