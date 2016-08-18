@@ -9,6 +9,9 @@ const MockHost = require('./mocks/MockHost');
 const webServer = new MockHost();
 const START_TIMEOUT = 5000;
 
+// Store web server as a global variable.
+global.webServer = webServer;
+
 before(function(done) {
     this.timeout(10000);
     webServer.start((error) => {
