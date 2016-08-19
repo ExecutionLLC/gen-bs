@@ -97,6 +97,7 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this.services.operations.find(session, operationIdToCheck, callback),
             (operation, callback) => {
+                // AS said it has no such session.
                 operation.setSendCloseToAppServer(false);
                 callback(null);
             },
