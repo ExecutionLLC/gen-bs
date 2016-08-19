@@ -23,15 +23,16 @@ class SearchClient extends ClientBase {
     }
 
     sendSearchInResultsRequest(sessionId, operationId, globalSearch,
-                               fieldIdToSearchObject, fieldIdToOrderAndDirection, callback) {
-        RequestWrapper.get(
+                               fieldIdToSearchObject, fieldIdToOrderAndDirection, limit, offset, callback) {
+        RequestWrapper.post(
             this.urls.startSearchInResults(operationId),
             this._makeHeaders({sessionId}),
-            null,
             {
                 topSearch: globalSearch,
                 search: fieldIdToSearchObject,
-                sort: fieldIdToOrderAndDirection
+                sort: fieldIdToOrderAndDirection,
+                limit,
+                offset
             },
             callback
         );

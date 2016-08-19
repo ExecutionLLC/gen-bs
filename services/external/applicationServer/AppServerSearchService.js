@@ -14,6 +14,9 @@ const {ENTITY_TYPES} = require('../../../utils/Enums');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 const CollectionUtils = require('../../../utils/CollectionUtils');
+const AppServerUtils = require('../../../utils/AppServerUtils');
+const AppServerModelUtils = require('../../../utils/AppServerModelUtils');
+const AppSearchInResultUtils = require('../../../utils/AppSearchInResultUtils');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -71,20 +74,21 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     requestOpenSearchSession(session, params, callback) {
         const fieldIdToFieldMetadata = CollectionUtils.createHash(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
-        const {userId, view, samples, filter, model, limit, offset} = params;
+        const {userId, analysisId, view, samples, filter, model, limit, offset} = params;
         const sample = samples[0];
-        const {genotypeName} = sample;
         const method = METHODS.openSearchSession;
         const appServerSampleId = this._getAppServerSampleId(sample);
-        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, genotypeName);
-        const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, genotypeName);
-        const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, genotypeName);
+        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
+        const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
+        const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, sample);
+        const appServerModel = AppServerModelUtils.createAppServerModel(model, fieldIdToFieldMetadata, samples);
 
         const searchSessionRequest = {
             sample: appServerSampleId,
             viewStructure: appServerView,
             viewFilter: appServerFilter,
             viewSortOrder: appServerSortOrder,
+            viewModel:appServerModel,
             offset,
             limit
         };
@@ -94,6 +98,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (callback) => this.services.operations.addSearchOperation(session, method, callback),
             (operation, callback) => {
                 operation.setSampleId(sample.id);
+                operation.setAnalysisId(analysisId);
                 operation.setUserId(userId);
                 operation.setOffset(offset);
                 operation.setLimit(limit);
@@ -117,14 +122,9 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 operation.setOffset(params.offset);
                 callback(null, operation);
             },
-            (operation, callback) => {
-                this.services.fieldsMetadata.findMany(
-                    params.globalSearchValue.excludedFields, (error, fields) => callback(error, fields, operation)
-                );
-            },
-            (excludedFields, operation, callback)=> {
-                const {sample, globalSearchValue: {filter}, fieldSearchValues, sortValues, offset, limit} = params;
-                const setFilterRequest = this._createSearchInResultsParams(sample, filter, excludedFields,
+            (operation, callback)=> {
+                const {samples, fieldsMetadata, globalSearchValue: {filter, excludedFields}, fieldSearchValues, sortValues, offset, limit} = params;
+                const setFilterRequest = this._createSearchInResultsParams(samples,fieldsMetadata, filter, excludedFields,
                     fieldSearchValues, sortValues, offset, limit);
                 this._rpcSend(session, operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
@@ -257,37 +257,20 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         }, null, callback);
     }
 
-    _createSearchInResultsParams(sample, globalSearchValue, excludedFields, fieldSearchValues, sortParams, offset, limit) {
-        const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
-        const {genotypeName} = sample;
+    _createSearchInResultsParams(samples, fieldsMetadata, globalSearchValue, excludedFields, fieldSearchValues, sortParams, offset, limit) {
+        const globalFilter = AppSearchInResultUtils.createAppGlobalFilter(globalSearchValue, excludedFields, samples, fieldsMetadata);
+        const columnFilters = AppSearchInResultUtils.createAppColumnFilter(fieldSearchValues, samples, fieldsMetadata);
+        const sortOrder = AppSearchInResultUtils.createAppSortOrder(sortParams, samples, fieldsMetadata);
         return {
-            globalFilter: {
-                filter: globalSearchValue,
-                excludedFields: _.map(
-                    excludedFields, excludedField => {
-                        return {
-                            sourceName: excludedField.sourceName,
-                            columnName: excludedField.name
-                        }
-                    }
-                )
-            },
-            columnFilters: _.map(fieldSearchValues, ({fieldMetadata, value}) => ({
-                columnName: AppServerViewUtils.createAppServerColumnName(fieldMetadata.name,
-                    fieldMetadata.sourceName, genotypeName, true),
-                columnFilter: value
-            })),
-            sortOrder: _.map(sortedParams, ({fieldMetadata, sortDirection}) => ({
-                columnName: AppServerViewUtils.createAppServerColumnName(fieldMetadata.name,
-                    fieldMetadata.sourceName, genotypeName, true),
-                isAscendingOrder: sortDirection === 'asc'
-            })),
+            globalFilter,
+            columnFilters,
+            sortOrder,
             offset,
             limit
         };
     }
 
-    _createAppServerViewSortOrder(view, fieldIdToMetadata, genotypeName) {
+    _createAppServerViewSortOrder(view, fieldIdToMetadata, sample) {
         // Keep only items whose fields exist in the current sample.
         const viewListItems = _.filter(view.viewListItems, listItem => fieldIdToMetadata[listItem.fieldId]);
 
@@ -300,11 +283,12 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         //noinspection UnnecessaryLocalVariableJS leaved for debug.
         const appServerSortOrder = _.map(sortedSortItems, listItem => {
             const field = fieldIdToMetadata[listItem.fieldId];
-            const columnName = AppServerViewUtils.createAppServerColumnName(field.name,
-                field.sourceName, genotypeName, true);
+            const columnName = field.sourceName ==='sample'?AppServerUtils.createColumnName(field.name, sample.genotypeName):field.name;
+            const sourceName = field.sourceName ==='sample'?AppServerUtils.createSampleName(sample):field.sourceName;
             const isAscendingOrder = listItem.sortDirection === 'asc';
             return {
                 columnName,
+                sourceName,
                 isAscendingOrder
             };
         });

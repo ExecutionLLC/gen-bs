@@ -3,6 +3,10 @@
   "title": "sort order for column",
   "type": "object",
   "properties": {
+    "source_name": {
+      "type": "string",
+      "description": "name of the sample or source"
+    },
     "column_name": {
       "type": "string",
       "description": "name of the column"

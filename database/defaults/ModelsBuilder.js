@@ -55,7 +55,8 @@ class ModelsBuilder extends DefaultsBuilderBase {
             const operands = rulesObject[operator];
             const mappedOperands = _.map(operands, (operand) => this._processRulesRecursively(operand, fieldsMetadata));
             const result = {};
-            result[operator] = mappedOperands;
+            result['condition'] = operator;
+            result['rules'] = mappedOperands;
             return result;
         } else {
             const fieldDescriptor = rulesObject.field;
@@ -65,8 +66,12 @@ class ModelsBuilder extends DefaultsBuilderBase {
             }
 
             const condition = rulesObject.condition;
+            console.log(`Condition: ${condition}`);
             const result = {};
-            result[field.id] = condition;
+            result['field'] = field.id;
+            result['sampleType'] = fieldDescriptor.sampleType;
+            result['operator'] = condition.operator;
+            result['value'] = condition.value;
             return result;
         }
     }

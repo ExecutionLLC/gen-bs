@@ -154,6 +154,13 @@ describe('Search', function () {
                                         const operationId = body.operationId;
                                         assert.ok(operationId);
                                         wsState.operationId = operationId;
+                                        const globalSearch = '';
+                                        const fieldIdSearch = [];
+                                        const sort = [];
+                                        searchClient.sendSearchInResultsRequest(sessionId,operationId,globalSearch,fieldIdSearch,sort, wsState.limit, wsState.offset,
+                                            (error, response) => {
+                                                const body = ClientBase.readBodyWithCheck(error, response);
+                                            });
                                         // done()
                                     });
                             });
