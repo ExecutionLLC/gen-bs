@@ -20,14 +20,13 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
         this.services.applicationServerReply.on(AppServerEvents.onKeepAliveResultReceived, this._onKeepAliveResultReceived);
     }
 
-    requestKeepOperationAlive(searchOperation, callback) {
+    requestKeepOperationAlive(session, searchOperation, callback) {
         const method = METHODS.keepAlive;
         async.waterfall([
             (callback) => this._ensureSearchOperation(searchOperation, callback),
-            (callback) => this.services.sessions.findSystemSession(callback),
-            (session, callback) => this.services.operations.addKeepAliveOperation(session, searchOperation,
-                (error, operation) => callback(error, session, operation)),
-            (session, operation, callback) => this._rpcSend(session, operation, method,
+            (callback) => this.services.operations.addKeepAliveOperation(session, searchOperation,
+                (error, operation) => callback(error, operation)),
+            (operation, callback) => this._rpcSend(session, operation, method,
                 {sessionId: this.createAppServerSessionId(searchOperation)}, callback)
         ], callback);
     }
@@ -89,13 +88,24 @@ class AppServerOperationsService extends ApplicationServerServiceBase {
             callback(null);
             return;
         }
+        // Here we have session without search operation, but frontend thinks the session is alive and functioning.
+        // Normally the sessions on AS live much longer than ours, so there is a bug here.
+        // We would better terminate this session with error message in logs.
+        this.logger.error(`Search operation with id ${operation.getId()} is dead on AS,`
+            + ' but still exists here! It will be explicitly destroyed.');
         const operationIdToCheck = operation.getOperationIdToCheck();
         async.waterfall([
+            (callback) => this.services.operations.find(session, operationIdToCheck, callback),
+            (operation, callback) => {
+                operation.setSendCloseToAppServer(false);
+                callback(null);
+            },
             (callback) => this.services.operations.remove(
                 session,
                 operationIdToCheck,
-                callback
-            )
+                (error) => callback(error)
+            ),
+            (callback) => session.destroy(callback)
         ], (error) => {
             if (error) {
                 this.logger.error('Error while closing dead search operation: ' + error);
