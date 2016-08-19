@@ -204,7 +204,7 @@ class AnalysisModel extends SecureModelBase {
     _findAnalysisIds(userId, limit, offset, nameFilter, descriptionFilter, callback) {
         this.db.asCallback(
             (trx, callback) => {
-                trx.select('id')
+                trx.select('id','timestamp')
                     .from(this.baseTableName)
                     .innerJoin(
                         TableNames.AnalysisText,
@@ -216,6 +216,7 @@ class AnalysisModel extends SecureModelBase {
                         this.where('name','like',`%${nameFilter}%`)
                             .orWhere('description', 'like',`%${descriptionFilter}%`)
                     })
+                    .orderBy('timestamp', 'desc')
                     .offset(offset)
                     .limit(limit)
                     .asCallback(
