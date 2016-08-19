@@ -9,8 +9,7 @@ class AppServerFilterUtils {
     }
 
     static _createServerRulesRecursively(filterRulesObject, fieldIdToMetadata, sample) {
-        const operator = filterRulesObject['$and'] ? '$and' :
-            filterRulesObject['$or'] ? '$or' : null;
+        const operator = filterRulesObject['condition'] || null;
         if (operator) {
             const operands = filterRulesObject[operator];
             const mappedOperands = _(operands)
@@ -24,24 +23,20 @@ class AppServerFilterUtils {
             result[operator] = mappedOperands;
             return result;
         } else {
-            const mappedColumns = _(filterRulesObject)
-                .keys()
-                // Ignore fields that don't exist, to be able to apply filters formed on other samples.
-                .filter(fieldId => fieldIdToMetadata[fieldId])
-                .map(fieldId => {
-                    const field = fieldIdToMetadata[fieldId];
-                    const condition = filterRulesObject[fieldId];
-                    return {
-                        columnName: field.sourceName ==='sample'?AppServerUtils.createColumnName(field.name, sample.genotypeName):field.name,
-                        sourceName: field.sourceName ==='sample'?AppServerUtils.createSampleName(sample):field.sourceName,
-                        condition
-                    };
-                })
-                .value();
-            if (!mappedColumns.length) {
+            const {field, operator,value} = filterRulesObject;
+            const fieldMetadata = fieldIdToMetadata[field];
+            if(fieldMetadata){
+                const columnName = fieldMetadata.sourceName ==='sample'?AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName):fieldMetadata.name;
+                const sourceName = fieldMetadata.sourceName ==='sample'?AppServerUtils.createSampleName(sample):fieldMetadata.sourceName;
+                const condition = {};
+                condition[operator] = value;
+                return{
+                    columnName,
+                    sourceName,
+                    condition,
+                }
+            }else {
                 return null;
-            } else {
-                return mappedColumns[0];
             }
         }
     }

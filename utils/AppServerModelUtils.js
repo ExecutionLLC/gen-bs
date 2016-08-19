@@ -43,30 +43,6 @@ class AppServerModelUtils {
             }else {
                 return null;
             }
-            // const mappedColumn = _(filterRulesObject)
-            //     .keys()
-            //     // Ignore fields that don't exist, to be able to apply filters formed on other samples.
-            //     .filter(fieldId => fieldIdToMetadata[fieldId])
-            //     .map(fieldId => {
-            //         if (fieldIdToMetadata[fieldId]){
-            //             const field = fieldIdToMetadata[fieldId];
-            //             const condition = filterRulesObject[fieldId];
-            //             return {
-            //                 columnName: field.sourceName ==='sample'?AppServerUtils.createColumnName(field.name, samples[0].genotypeName):field.name,
-            //                 sourceName: field.sourceName ==='sample'?AppServerUtils.createSampleName(samples[0]):field.sourceName,
-            //                 condition
-            //             };
-            //         }else {
-            //             return null
-            //         }
-            //
-            //     })
-            //     .value();
-            // if (!mappedColumns.length) {
-            //     return null;
-            // } else {
-            //     return mappedColumns[0];
-            // }
         }
     }
 }
