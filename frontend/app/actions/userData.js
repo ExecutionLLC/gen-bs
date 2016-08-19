@@ -76,15 +76,8 @@ export function fetchUserdata() {
                     models,
                     totalFields,
                     savedFiles,
-                    analyses,
-                    lastSampleId,
-                    lastSampleFields
+                    analyses
                 } = userData;
-
-                const sample = _.find(samples, {id: lastSampleId}) ||
-                               _.find(samples, {type: entityType.STANDARD});
-                const filter = _.find(filters, {type: entityType.STANDARD});
-                const view = _.find(views, {type: entityType.STANDARD});
 
                 dispatch(receiveUserdata(userData));
                 dispatch(filtersListReceive(filters));
@@ -93,12 +86,15 @@ export function fetchUserdata() {
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
-                dispatch(receiveFields(lastSampleFields));
+                //dispatch(receiveFields(lastSampleFields));// TODO replace by real fields
                 dispatch(receiveSamplesList(samples));
                 dispatch(receiveInitialQueryHistory(analyses));
                 if (analyses[0]) {
                     dispatch(setCurrentQueryHistoryId(analyses[0].id));
                 } else {
+                    const sample = _.find(samples, {type: entityType.STANDARD});
+                    const filter = _.find(filters, {type: entityType.STANDARD});
+                    const view = _.find(views, {type: entityType.STANDARD});
                     if (!sample || !filter || !view) {
                         dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                     } else {
