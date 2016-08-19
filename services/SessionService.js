@@ -129,9 +129,6 @@ class SessionService extends ServiceBase {
                     callback(null, session)
                 }
             ], callback);
-            this.redisStore.get(sessionId, (error, rawSession) => {
-
-            });
         } else {
             callback(null, this.systemSession);
         }
