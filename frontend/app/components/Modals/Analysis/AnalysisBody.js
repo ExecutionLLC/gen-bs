@@ -32,6 +32,7 @@ export default class AnalysisBody extends React.Component {
                                 historyListFilter={this.props.historyListFilter}
                                 newHistoryItem={this.props.newHistoryItem}
                                 isHistoryReceivedAll={this.props.isHistoryReceivedAll}
+                                isHistoryRequesting={this.props.isHistoryRequesting}
                                 currentItemId={this.props.currentHistoryId}
                                 onSelectHistory={(id) => this.onSelectHistoryId(id)}
                                 viewsList={this.props.viewsList}

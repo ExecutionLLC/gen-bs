@@ -27,6 +27,7 @@ class AnalysisModal extends React.Component {
                     currentHistoryId={this.props.currentHistoryId}
                     newHistoryItem={this.props.newHistoryItem}
                     isHistoryReceivedAll={this.props.isHistoryReceivedAll}
+                    isHistoryRequesting={this.props.isHistoryRequesting}
                     viewsList={this.props.viewsList}
                     filtersList={this.props.filtersList}
                     samplesList={this.props.samplesList}
@@ -63,6 +64,7 @@ function mapStateToProps(state) {
         historyListFilter: queryHistory.filter,
         currentHistoryId: queryHistory.currentHistoryId,
         isHistoryReceivedAll: queryHistory.isReceivedAll,
+        isHistoryRequesting: queryHistory.isRequesting,
         newHistoryItem,
         isLoadingHistoryData: queryHistory.isLoadingHistoryData
     };

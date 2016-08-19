@@ -11,7 +11,7 @@ export default class AnalysisHistoryList extends React.Component {
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
                     {newHistoryItem && this.renderNewListItem(!currentItemId, newHistoryItem)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
-                    {!this.props.isHistoryReceivedAll && this.renderLoadingListItem()}
+                    {!this.props.isHistoryReceivedAll && this.renderLoadingListItem(this.props.isHistoryRequesting)}
                 </ul>
             </div>
         );
@@ -24,7 +24,7 @@ export default class AnalysisHistoryList extends React.Component {
         const self = this;
 
         function f() {
-            if (!self.props.isHistoryReceivedAll) {
+            if (!self.props.isHistoryReceivedAll && !self.props.isHistoryRequesting) {
                 if (loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
                     self.props.dispatch(requestAppendQueryHistory(self.props.historyListFilter, 2, self.props.historyList.length));
                 }
@@ -70,10 +70,10 @@ export default class AnalysisHistoryList extends React.Component {
         );
     }
 
-    renderLoadingListItem() {
+    renderLoadingListItem(isRequesting) {
         return (
             <li className='loading' ref='analysisHistoryListLoading'>
-                Loading...
+                Loading...{isRequesting ? '( requesting)' : ''}
             </li>
         );
     }

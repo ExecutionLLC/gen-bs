@@ -22,6 +22,7 @@ export const SET_CURRENT_QUERY_HISTORY_ID = 'SET_CURRENT_QUERY_HISTORY_ID';
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
+export const REQUEST_QUERY_HISTORY = 'REQUEST_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
 export const DUPLICATE_QUERY_HISTORY_ITEM = 'DUPLICATE_QUERY_HISTORY_ITEM';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
@@ -65,6 +66,12 @@ export function receiveInitialQueryHistory(history) {
     return {
         type: RECEIVE_INITIAL_QUERY_HISTORY,
         history
+    };
+}
+
+export function requestQueryHistory() {
+    return {
+        type: REQUEST_QUERY_HISTORY
     };
 }
 
@@ -119,6 +126,7 @@ export function cancelQueryHistoryEdit(historyItemId) {
 export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
+        dispatch(requestQueryHistory());
         queryHistoryClient.getQueryHistory(language, filter, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));

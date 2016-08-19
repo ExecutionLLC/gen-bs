@@ -23,7 +23,8 @@ const initialState = {
     isReceivedAll: false,
     newHistoryItem: null,
     currentHistoryId: null,
-    loadingHistoryData: false
+    loadingHistoryData: false,
+    isRequesting: false
 };
 
 function reduceSetCurrentQueryHistoryId(state, action) {
@@ -59,6 +60,7 @@ function reducePrepareQueryHistoryToFilter(state, action) {
         ...state,
         filter: action.filter,
         isReceivedAll: false,
+        isRequesting: false,
         history: [],
         currentHistoryId: null
     };
@@ -101,6 +103,13 @@ function reduceEditQueryHistoryItem(state, action) {
     }
 }
 
+function reduceRequestQueryHistory(state) {
+    return {
+        ...state,
+        isRequesting: true
+    };
+}
+
 function reduceAppendQueryHistory(state, action) {
     // Check if data received for actual state
     // Seems like crutch, need to think about consistency
@@ -110,7 +119,8 @@ function reduceAppendQueryHistory(state, action) {
         return {
             ...state,
             history: immutableArray.concat(state.history, action.history),
-            isReceivedAll: action.isReceivedAll
+            isReceivedAll: action.isReceivedAll,
+            isRequesting: false
         };
     }
 }
@@ -138,6 +148,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceReceiveQueryHistory(state, action);
         case ActionTypes.RECEIVE_INITIAL_QUERY_HISTORY:
             return reduceReceiveInitialQueryHistory(state, action);
+        case ActionTypes.REQUEST_QUERY_HISTORY:
+            return reduceRequestQueryHistory(state, action);
         case ActionTypes.APPEND_QUERY_HISTORY:
             return reduceAppendQueryHistory(state, action);
         case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:
