@@ -32,6 +32,14 @@ class SearchOperation extends OperationBase {
         this.sampleId = sampleId;
     }
 
+    getAnalysisId() {
+        return this.analysisId;
+    }
+
+    setAnalysisId(analysisId) {
+        this.analysisId = analysisId;
+    }
+
     getUserId() {
         return this.userId;
     }
