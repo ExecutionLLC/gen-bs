@@ -143,9 +143,9 @@ function checkSession(callback) {
     console.log('checkSession');
     sessionsClient.checkSession((error, response) => {
         if (!error) {
-            const {status, body: {sessionType}} = response;
+            const {status, body} = response;
             const isValidSession = status === HttpStatus.OK;
-            const isDemoSession = isValidSession ? sessionType === 'DEMO' : false;
+            const isDemoSession = isValidSession ? body.sessionType === 'DEMO' : false;
             callback(null, isValidSession, isDemoSession);
         } else {
             callback(error);
