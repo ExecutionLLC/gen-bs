@@ -10,6 +10,7 @@ export default function websocket(state = {
     variantsSamples: null,
     variantsView: null,
     variantsFilter: null,
+    viriantsModel: null,
     variantsSampleFieldsList: [],
     currentVariants: null,
     isVariantsEmpty: false,
@@ -129,6 +130,7 @@ export default function websocket(state = {
                 variantsView: action.view, // used !variantsView, variantsView.viewListItems, variantsView.id,
                 variantsSamples: action.samples, // used variantsSample.fileName
                 variantsFilter: action.filter, // unused
+                variantsModel: action.model, // unused
                 variantsSampleFieldsList: action.sampleFields // used to check if field is requested
             });
         }

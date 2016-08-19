@@ -235,13 +235,13 @@ export function requestAnalyze() {
     };
 }
 
-export function requestSetCurrentParams(view, filter, samples, searchModel, sampleFields) {
+export function requestSetCurrentParams(view, filter, samples, model, sampleFields) {
     return {
         type: REQUEST_SET_CURRENT_PARAMS,
         view,
         filter,
         samples,
-        searchModel,
+        model,
         sampleFields
     };
 }

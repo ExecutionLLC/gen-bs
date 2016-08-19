@@ -36,12 +36,14 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
                 variantsView,
                 variantsSamples,
                 variantsFilter
+                // TODO variantsModel
             }
         } = getState();
         const fileMetadata = {
             sampleId: variantsSamples[0].id, // TODO samplesIds: variantsSamples,
             viewId: variantsView.id,
             filterIds: [variantsFilter.id], // TODO variantsFilter.id,
+            // TODO modelId: variantsModel && variantsModel.id || null,
             name: fileName,
             url: null,
             totalResults
