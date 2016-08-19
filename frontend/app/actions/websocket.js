@@ -229,10 +229,9 @@ export function prepareAnalyze() {
     };
 }
 
-export function requestAnalyze(searchParams) {
+export function requestAnalyze() {
     return {
-        type: REQUEST_ANALYZE,
-        searchParams
+        type: REQUEST_ANALYZE
     };
 }
 
