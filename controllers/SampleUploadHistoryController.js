@@ -26,6 +26,14 @@ class SampleUploadHistoryController extends UserEntityControllerBase {
             this.sendErrorOrJson(response, error, items);
         });
     }
+
+    add(request, response) {
+        this.sendErrorOrJson(response, new Error('Method is not supported'));
+    }
+
+    update(request, response) {
+        this.sendErrorOrJson(response, new Error('Method is not supported'));
+    }
 }
 
 module.exports = SampleUploadHistoryController;
