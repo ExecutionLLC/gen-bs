@@ -77,14 +77,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const {userId, analysisId, view, samples, filter, model, limit, offset} = params;
         const sample = samples[0];
         const method = METHODS.openSearchSession;
-        const appServerSampleId = this._getAppServerSampleId(sample);
+        const appServerSampleIds = _.map(sample => this._getAppServerSampleId(sample));
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
         const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, sample);
         const appServerModel = AppServerModelUtils.createAppServerModel(model, fieldIdToFieldMetadata, samples);
 
         const searchSessionRequest = {
-            sample: appServerSampleId,
+            samples: appServerSampleIds,
             viewStructure: appServerView,
             viewFilter: appServerFilter,
             viewSortOrder: appServerSortOrder,
