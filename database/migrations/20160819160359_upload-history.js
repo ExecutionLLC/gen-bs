@@ -12,6 +12,8 @@ exports.up = function (knex, Promise) {
             .notNullable();
         table.boolean('is_active')
             .defaultTo(true);
+        table.boolean('is_deleted')
+            .defaultTo(false);
         table.json('last_status_message');
         table.timestamp('created')
             .defaultTo(knex.fn.now());
