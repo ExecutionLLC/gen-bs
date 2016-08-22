@@ -9,6 +9,7 @@ const CommentsController = require('./CommentsController');
 const FieldsMetadataController = require('./FieldsMetadataController');
 const SavedFilesController = require('./SavedFilesController');
 const QueryHistoryController = require('./QueryHistoryController');
+const SampleUploadHistoryController = require('./SampleUploadHistoryController');
 
 const SearchController = require('./SearchController');
 
@@ -29,6 +30,7 @@ class ControllersFacade {
         this.fieldsMetadataController = new FieldsMetadataController(services);
         this.savedFilesController = new SavedFilesController(services);
         this.queryHistoryController = new QueryHistoryController(services);
+        this.sampleUploadHistoryController = new SampleUploadHistoryController(services);
 
         this.searchController = new SearchController(services);
         this.sessionsController = new SessionsController(services);

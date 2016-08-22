@@ -86,7 +86,7 @@ class UserDataService extends ServiceBase {
                         this.services.fieldsMetadata.findTotalMetadata(callback);
                     },
                     activeOperations: (callback) => {
-                        this._findActiveSystemOperations(user, callback);
+                        this._findActiveUploads(user, callback);
                     }
                 }, callback);
             }
@@ -95,16 +95,16 @@ class UserDataService extends ServiceBase {
         });
     }
 
-    _findActiveSystemOperations(user, callback) {
+    _findActiveUploads(user, callback) {
         async.waterfall([
-            (callback) => this.services.operations.findSystemOperationsForUser(user, callback),
-            (operations, callback) => {
-                const operationsWithLastMessage = _.map(operations, operation => ({
-                    id: operation.getId(),
-                    type: operation.getType(),
-                    lastMessage: operation.getLastAppServerMessage()
+            (callback) => this.services.sampleUploadHistory.findAll(user, this.defaultLimit, 0, callback),
+            (uploads, callback) => {
+                const clientResults = _.map(uploads, uploadEntry => ({
+                    id: uploadEntry.id,
+                    type: UploadOperation.name,
+                    lastMessage: uploadEntry.getLastAppServerMessage()
                 }));
-                callback(null, operationsWithLastMessage);
+                callback(null, clientResults);
             }
         ], callback);
     }

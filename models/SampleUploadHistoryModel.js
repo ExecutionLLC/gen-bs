@@ -20,15 +20,15 @@ class SampleUploadHistoryModel extends ModelBase {
 
     find(userId, entryId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, [entryId], userId, false, null)
+            this._findEntriesAsync(trx, [entryId], userId, false, null, null, null)
                 .then((entries) => _.first(entries))
                 .asCallback(callback);
         });
     }
 
-    findAll(userId, callback) {
+    findAll(userId, limit, offset, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true, null)
+            this._findEntriesAsync(trx, null, userId, true, null, limit, offset)
                 .asCallback(callback);
         }, callback);
     }
@@ -54,7 +54,7 @@ class SampleUploadHistoryModel extends ModelBase {
 
     findActive(userId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true, true)
+            this._findEntriesAsync(trx, null, userId, true, true, null, null)
                 .asCallback(callback);
         }, callback);
     }
@@ -66,7 +66,7 @@ class SampleUploadHistoryModel extends ModelBase {
                     id: entryId
                 }))
                 .update(ChangeCaseUtil.convertKeysToSnakeCase(entry))
-                .then(() => this._findEntriesAsync(trx, [entryId], userId, false))
+                .then(() => this._findEntriesAsync(trx, [entryId], userId, false, null, null, null))
                 .then((entries) => _.first(entries))
                 .asCallback(callback);
         }, callback);
@@ -76,7 +76,8 @@ class SampleUploadHistoryModel extends ModelBase {
         this.update(userId, entryId, {isDeleted: true}, callback);
     }
 
-    _findEntriesAsync(trx, entryIdsOrNull, userIdOrNull, excludeDeleted, isActiveOrNull) {
+    _findEntriesAsync(trx, entryIdsOrNull, userIdOrNull, excludeDeleted,
+                      isActiveOrNull, limitOrNull, offsetOrNull) {
         let query = trx.select()
             .from(this.baseTableName)
             .whereRaw('1 = 1');
@@ -96,7 +97,17 @@ class SampleUploadHistoryModel extends ModelBase {
             query = query.andWhere('is_active', isActiveOrNull);
         }
 
+        if (limitOrNull != null) {
+            query = query.limit(limitOrNull);
+        }
+
+        if (offsetOrNull != null) {
+            query = query.offset(offsetOrNull);
+        }
+
         return query
+            .offset(offsetOrNull)
+            .limit(limitOrNull)
             .then((entries) => this._ensureAllItemsFoundAsync(entries, entryIdsOrNull));
     }
 }
