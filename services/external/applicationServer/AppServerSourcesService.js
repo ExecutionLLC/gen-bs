@@ -21,7 +21,7 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
             (session, callback) => this.services.operations.addSystemOperation(method,
                 (error, operation) => callback(error, session, operation)
             ),
-            (session, operation, callback) => this._rpcSend(session, operation, method, null, callback)
+            (session, operation, callback) => this._rpcSend(session, operation, method, null, null, callback)
         ], callback);
     }
 
@@ -32,9 +32,10 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
             (session, callback) => this.services.operations.addSystemOperation(method,
                 (error, operation) => callback(error, session, operation)
             ),
-            (session, operation, callback) => this._rpcSend(session, operation, method, _.map(sourceNames, (sourceName) => {
-                return sourceName + '.h5'
-            }), callback)
+            (session, operation, callback) => this._rpcSend(session, operation, method,
+                _.map(sourceNames, (sourceName) => {
+                    return sourceName + '.h5'
+                }), null, callback)
         ], callback);
     }
 

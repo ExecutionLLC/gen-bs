@@ -36,10 +36,16 @@ class SamplesService extends UserEntityServiceBase {
         const sampleId = Uuid.v4();
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.services.applicationServer.uploadSample(session, sampleId, user,
-                localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
-            (operationId, callback) => this.services.applicationServer.requestSampleProcessing(session,
-                operationId, sampleId, callback)
+            (callback) => this._loadAndVerifyPriority(user, callback),
+            (priority, callback) => this.services.applicationServer.uploadSample(session, sampleId, user,
+                localFileInfo.localFilePath, localFileInfo.originalFileName,
+                (error, operationId) => callback(error, priority, operationId)
+            ),
+            (priority, operationId, callback) => this.services.applicationServer.requestSampleProcessing(session,
+                operationId, sampleId, priority, (error) => callback(error, operationId, sampleId)),
+            (operationId, sampleId, callback) => this._createHistoryEntry(user, operationId, sampleId,
+                (error) => callback(error, operationId)
+            )
         ], callback);
     }
 
@@ -65,6 +71,30 @@ class SamplesService extends UserEntityServiceBase {
         } else {
             callback(null, false);
         }
+    }
+
+    _loadAndVerifyPriority(user, callback) {
+        async.waterfall([
+            (callback) => this.services.sampleUploadHistory.countActive(user.id, callback),
+            (activeCount, callback) => {
+                if (activeCount < this.config.samplesUpload.maxCountPerUser) {
+                    callback(null, activeCount);
+                } else {
+                    callback(new Error(`Too many uploads for user ${user.id} (${user.email})`));
+                }
+            }
+        ], callback);
+    }
+
+    _createHistoryEntry(user, operationId, sampleId, fileName, callback) {
+        this.services.sampleUploadHistory.add({
+            id: operationId,
+            sampleId,
+            fileName,
+            userId: user.id,
+            isActive: true,
+            lastStatusMessage: null,
+        }, callback);
     }
 
     _ensureOnlyEditableFieldsHaveValues(sample, callback) {

@@ -20,7 +20,7 @@ class SampleUploadHistoryModel extends ModelBase {
 
     find(userId, entryId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, [entryId], userId, false)
+            this._findEntriesAsync(trx, [entryId], userId, false, null)
                 .then((entries) => _.first(entries))
                 .asCallback(callback);
         });
@@ -28,7 +28,7 @@ class SampleUploadHistoryModel extends ModelBase {
 
     findAll(userId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true)
+            this._findEntriesAsync(trx, null, userId, true, null)
                 .asCallback(callback);
         }, callback);
     }
@@ -52,6 +52,13 @@ class SampleUploadHistoryModel extends ModelBase {
         }, callback);
     }
 
+    findActive(userId, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._findEntriesAsync(trx, null, userId, true, true)
+                .asCallback(callback);
+        }, callback);
+    }
+
     update(userId, entryId, entry, callback) {
         this.db.transactionally((trx, callback) => {
             trx(this.baseTableName)
@@ -69,7 +76,7 @@ class SampleUploadHistoryModel extends ModelBase {
         this.update(userId, entryId, {isDeleted: true}, callback);
     }
 
-    _findEntriesAsync(trx, entryIdsOrNull, userIdOrNull, excludeDeleted) {
+    _findEntriesAsync(trx, entryIdsOrNull, userIdOrNull, excludeDeleted, isActiveOrNull) {
         let query = trx.select()
             .from(this.baseTableName)
             .whereRaw('1 = 1');
@@ -83,6 +90,10 @@ class SampleUploadHistoryModel extends ModelBase {
 
         if (excludeDeleted) {
             query = query.andWhere('is_deleted', false);
+        }
+
+        if (isActiveOrNull != null) {
+            query = query.andWhere('is_active', isActiveOrNull);
         }
 
         return query

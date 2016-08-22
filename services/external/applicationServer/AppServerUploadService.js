@@ -52,7 +52,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         ], callback);
     }
 
-    requestSampleProcessing(session, operationId, sampleId, callback) {
+    requestSampleProcessing(session, operationId, sampleId, priority, callback) {
         async.waterfall([
             // Upload operations lay in the system session.
             (callback) => this.services.sessions.findSystemSession(callback),
@@ -64,12 +64,25 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                     sample: sampleId,
                     bucket: newSamplesBucket
                 };
-                this._rpcSend(session, operation, method, params, callback);
+                this._rpcSend(session, operation, method, params, priority, callback);
             }
         ], callback);
     }
 
     processUploadResult(session, operation, message, callback) {
+        async.waterfall([
+            (callback) => this._processUploadAndCreateResult(session, operation, message, callback),
+            (operationResult, callback) => this.services.sampleUploadHistory.update(
+                session.userId,
+                operation.getId(), {
+                    lastStatusMessage: operationResult,
+                    isActive: !operationResult.shouldCompleteOperation,
+                }, (error) => callback(error, operationResult)
+            )
+        ], callback);
+    }
+
+    _processUploadAndCreateResult(session, operation, message, callback) {
         this.logger.debug('Processing upload result for ' + operation);
         const result = message.result;
         /**@type {string}*/
@@ -80,7 +93,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
                 operation,
                 null,
                 operation.getUserId(),
-                EVENTS.onOperationResultReceived, 
+                EVENTS.onOperationResultReceived,
                 true,
                 null,
                 ErrorUtils.createAppServerInternalError(message),
