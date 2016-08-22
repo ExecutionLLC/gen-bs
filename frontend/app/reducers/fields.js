@@ -50,14 +50,8 @@ function reduceReceiveFields(action, state) {
         ..._.filter(fields, ['isEditable', false]),
         ...sourceFieldsList
     ];
-    const fieldIdToFieldHash = _.reduce(fields, (result, field) => {
-        result[field.id] = field;
-        return result;
-    }, {});
-    const allowedIdToFieldHash = _.reduce(allowedFieldsList, (result, field) => {
-        result[field.id] = field;
-        return result;
-    }, {});
+    const fieldIdToFieldHash = _.keyBy(fields, (field) => field.id);
+    const allowedIdToFieldHash = _.keyBy(allowedFieldsList, (field) => field.id);
 
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
@@ -80,10 +74,7 @@ function reduceReceiveTotalFields(action, state) {
             sources: false
         }),
         totalFieldsList: totalFields,
-        totalFieldsHash: _.reduce(totalFields, (result, field) => {
-            result[field.id] = field;
-            return result;
-        }, {}),
+        totalFieldsHash: _.keyBy(totalFields, (field) => field.id),
         sourceFieldsList: sourceFields,
         lastUpdated: action.receivedAt
     });

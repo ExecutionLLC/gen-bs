@@ -154,10 +154,7 @@ export default class ViewBuilder extends React.Component {
         if (!field.id) {
             return {};
         } else {
-            return _.reduce(field.keywords, (result, keyword) => {
-                result[keyword.id] = keyword;
-                return result;
-            }, {});
+            return _.keyBy(field.keywords, (keyword) => keyword.id);
         }
     }
 
