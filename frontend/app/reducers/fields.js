@@ -8,7 +8,7 @@ const initialState = {
         sources: false
     },
     sampleFieldsList: [],
-    sampleIdToFieldHash: {},
+    fieldIdToFieldHash: {},
     editableFields: [],
     sourceFieldsList: [],
     totalFieldsList: [],
@@ -50,7 +50,7 @@ function reduceReceiveFields(action, state) {
         ..._.filter(fields, ['isEditable', false]),
         ...sourceFieldsList
     ];
-    const sampleIdToFieldHash = _.reduce(fields, (result, field) => {
+    const fieldIdToFieldHash = _.reduce(fields, (result, field) => {
         result[field.id] = field;
         return result;
     }, {});
@@ -67,7 +67,7 @@ function reduceReceiveFields(action, state) {
         editableFields,
         allowedFieldsList,
         allowedIdToFieldHash,
-        sampleIdToFieldHash,
+        fieldIdToFieldHash,
         lastUpdated: action.receivedAt
     });
 }

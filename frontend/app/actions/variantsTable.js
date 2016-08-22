@@ -118,13 +118,13 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
 export function setViewVariantsSort(view) {
     return (dispatch, getState) => {
 
-        const {fields:{sampleIdToFieldHash}} = getState();
+        const {fields:{fieldIdToFieldHash}} = getState();
         const sortOrder = _(view.viewListItems)
             .filter(viewListItem => {
                 return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
             })
             .filter(viewListItem => {
-                return sampleIdToFieldHash[viewListItem.fieldId];
+                return fieldIdToFieldHash[viewListItem.fieldId];
             })
             .map(viewListItem => {
                 return {
