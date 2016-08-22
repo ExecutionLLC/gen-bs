@@ -23,19 +23,19 @@ class AppServerFilterUtils {
             result[operator] = mappedOperands;
             return result;
         } else {
-            const {field, operator,value} = filterRulesObject;
+            const {field, operator, value} = filterRulesObject;
             const fieldMetadata = fieldIdToMetadata[field];
-            if(fieldMetadata){
-                const columnName = fieldMetadata.sourceName ==='sample'?AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName):fieldMetadata.name;
-                const sourceName = fieldMetadata.sourceName ==='sample'?AppServerUtils.createSampleName(sample):fieldMetadata.sourceName;
+            if (fieldMetadata) {
+                const columnName = fieldMetadata.sourceName === 'sample' ? AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName) : fieldMetadata.name;
+                const sourceName = fieldMetadata.sourceName === 'sample' ? AppServerUtils.createSampleName(sample) : fieldMetadata.sourceName;
                 const condition = {};
                 condition[operator] = value;
-                return{
+                return {
                     columnName,
                     sourceName,
                     condition,
                 }
-            }else {
+            } else {
                 return null;
             }
         }

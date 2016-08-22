@@ -78,9 +78,9 @@ describe('Search', function () {
             wsState.messages.push(message);
             assert.equal(message.operationId, wsState.operationId);
             const endMessage = _.find(wsState.messages, (message) => message
-                && message.result
-                && message.result.data
-                && _.isArray(message.result.data));
+            && message.result
+            && message.result.data
+            && _.isArray(message.result.data));
             if (endMessage) {
                 const rows = endMessage.result.data;
                 const allFields = wsState.sourcesFields.concat(wsState.sampleFields);
@@ -93,10 +93,10 @@ describe('Search', function () {
                 // Check that all field ids from the data lay either in sample or in source fields.
                 _.each(rows, row => {
                     _.each(row.fields, (rowField) => {
-                            const fieldId = rowField.fieldId;
-                            assert.ok(fieldId);
-                            assert.ok(fieldIdToMetadata[fieldId], 'Field ' + fieldId + ' is not found!');
-                        });
+                        const fieldId = rowField.fieldId;
+                        assert.ok(fieldId);
+                        assert.ok(fieldIdToMetadata[fieldId], 'Field ' + fieldId + ' is not found!');
+                    });
                     assert.ok(row.comments);
                     assert.ok(row.searchKey);
                 });
@@ -154,14 +154,7 @@ describe('Search', function () {
                                         const operationId = body.operationId;
                                         assert.ok(operationId);
                                         wsState.operationId = operationId;
-                                        const globalSearch = '';
-                                        const fieldIdSearch = [];
-                                        const sort = [];
-                                        searchClient.sendSearchInResultsRequest(sessionId,operationId,globalSearch,fieldIdSearch,sort, wsState.limit, wsState.offset,
-                                            (error, response) => {
-                                                const body = ClientBase.readBodyWithCheck(error, response);
-                                            });
-                                        // done()
+                                        done()
                                     });
                             });
                         });
