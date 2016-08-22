@@ -42,7 +42,7 @@ export default class ViewBuilder extends React.Component {
         const selects = view.viewListItems.map(function (viewItem, index) {
 
             const currentValue =
-                _.find(fields.totalFieldsList, {id: viewItem.fieldId}) ||
+                fields.totalFieldsHashedArray.hash[viewItem.fieldId] ||
                 {id: null};
 
             const isFieldAvailable = _.some(allAvailableFields, {id: viewItem.fieldId}) || currentValue.id == null;

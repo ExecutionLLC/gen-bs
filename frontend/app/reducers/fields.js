@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import * as ActionTypes from '../actions/fields';
+import {ImmutableHashedArray} from '../utils/immutable';
 
 const initialState = {
     isFetching: {
@@ -11,8 +12,7 @@ const initialState = {
     fieldIdToFieldHash: {},
     editableFields: [],
     sourceFieldsList: [],
-    totalFieldsList: [],
-    totalFieldsHash: {},
+    totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
     // Fields allowed for selection in a typical fields list (include current sample fields and sources fields)
     allowedFieldsList: [],
     allowedIdToFieldHash: {}
@@ -73,8 +73,7 @@ function reduceReceiveTotalFields(action, state) {
         isFetching: Object.assign({}, state.isFetching, {
             sources: false
         }),
-        totalFieldsList: totalFields,
-        totalFieldsHash: _.keyBy(totalFields, (field) => field.id),
+        totalFieldsHashedArray: ImmutableHashedArray.makeFromArray(totalFields),
         sourceFieldsList: sourceFields,
         lastUpdated: action.receivedAt
     });

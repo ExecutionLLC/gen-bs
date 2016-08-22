@@ -67,7 +67,7 @@ export default class VariantsTableHead extends Component {
     }
 
     renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sortState, dispatch) {
-        const {totalFieldsHash} = fields;
+        const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
         const areControlsEnabled = !!expectedFieldsHash[fieldId];
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>

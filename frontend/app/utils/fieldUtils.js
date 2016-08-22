@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default class FieldUtils {
     static find(fieldId, fields) {
-        return _.find(fields.totalFieldsList, (field) => field.id === fieldId);
+        return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
     /**
@@ -21,7 +21,7 @@ export default class FieldUtils {
 
     /**
      * Make fields array for filters
-     * @param {{sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
+     * @param {{sourceFieldsList: Object[], totalFieldsHashedArray: Object[], sampleFieldsList: Object[]}} fields
      * @returns {{id: string, label: string, type: string}[]}
      */
     static makeFieldsListForFiltersSelect(fields) {
