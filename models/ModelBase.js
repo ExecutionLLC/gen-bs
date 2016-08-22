@@ -1,12 +1,15 @@
 'use strict';
 
 const _ = require('lodash');
+const Promise = require('bluebird');
 const async = require('async');
 
 const Uuid = require('node-uuid');
 
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const CollectionUtils = require('../utils/CollectionUtils');
+
+const ITEM_NOT_FOUND = 'Item not found.';
 
 class ModelBase {
     /**
@@ -78,6 +81,14 @@ class ModelBase {
         );
     }
 
+    _ensureItemNotDeleted(item, callback) {
+        if (!item.isDeleted) {
+            callback(null, item);
+        } else {
+            callback(new Error(ITEM_NOT_FOUND));
+        }
+    }
+
     /**
      * @protected
      * */
@@ -102,8 +113,15 @@ class ModelBase {
         if (itemsFound && itemsFound.length === itemIdsToFind.length) {
             callback(null, itemsFound);
         } else {
-            callback('Part of the items is not found: ' + itemIdsToFind);
+            callback(new Error('Part of the items is not found: ' + itemIdsToFind));
         }
+    }
+
+    _ensureAllItemsFoundAsync(itemsFound, itemIdsToFind) {
+        if (itemsFound && itemsFound.length === itemIdsToFind.length) {
+            return Promise.resolve(itemsFound);
+        }
+        return Promise.reject(new Error(`Part of the items is not found: ${itemIdsToFind}`));
     }
 
     _mapItems(items, callback) {
