@@ -137,25 +137,27 @@ class SearchService extends ServiceBase {
     }
 
     _onSearchDataReceived(message) {
-        const {session: {userId}, result: {fieldIdToValueArray}} = message;
+        const {session: {userId}, result: {fieldsWithIdArray}} = message;
 
         async.waterfall([
             (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
-            (user, callback) => this._loadRowsComments(user.id, user.language, fieldIdToValueArray, callback),
+            (user, callback) => this._loadRowsComments(user.id, user.language, fieldsWithIdArray, callback),
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.
-                const rows = _.map(fieldIdToValueArray, fieldIdToValueHash => {
-                    const fieldValueObjects = _(fieldIdToValueHash)
-                        .keys()
-                        .filter(key => key != this.searchKeyFieldName)
-                        .map(fieldId => {
-                            return {
-                                fieldId,
-                                value: fieldIdToValueHash[fieldId]
-                            }
-                        })
-                        .value();
-                    const searchKey = fieldIdToValueHash[this.searchKeyFieldName];
+                const rows = _.map(fieldsWithIdArray, fieldsWithId => {
+                    const nonSearchKeyObjects = _.filter(fieldsWithId, fieldWithId => {
+                        return fieldWithId.fieldName !== this.searchKeyFieldName
+                    });
+                    const searchKeyObject = _.find(fieldsWithId, fieldWithId => {
+                        return fieldWithId.fieldName === this.searchKeyFieldName
+                    });
+                    const fieldValueObjects = _.map(nonSearchKeyObjects, fieldWithId => {
+                        return {
+                            fieldId: fieldWithId.fieldId,
+                            value: fieldWithId.fieldValue
+                        }
+                    });
+                    const searchKey = searchKeyObject.fieldValue;
                     const comments = _.map(searchKeyToCommentsArrayHash[searchKey], comment => {
                         return {
                             id: comment.id,
@@ -185,9 +187,9 @@ class SearchService extends ServiceBase {
             });
         } else {
             clientMessage = Object.assign({}, message, {
-                result: Object.assign({}, message.result, {
+                result: {
                     data: convertedRows
-                })
+                }
             });
         }
         this.eventEmitter.emit(SEARCH_SERVICE_EVENTS.onDataReceived, clientMessage);
@@ -203,7 +205,12 @@ class SearchService extends ServiceBase {
      * */
     _loadRowsComments(userId, languId, redisRows, callback) {
         // Extract search keys from all rows.
-        const searchKeys = _.map(redisRows, row => row[this.searchKeyFieldName]);
+        const searchKeys = _.map(redisRows, row => {
+            const searchField = _.find(row, field => {
+                field.fieldName = this.searchKeyFieldName
+            });
+            return searchField.fieldValue
+        });
 
         async.waterfall([
             // Load comments for all search keys.

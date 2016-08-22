@@ -134,15 +134,15 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     _processSearchResultMessage(session, operation, message, callback) {
         const sessionState = message.result.sessionState;
 
-        const sampleId = operation.getSampleId();
+        const analysisId = operation.getAnalysisId();
         const userId = operation.getUserId();
 
         async.waterfall([
             (callback) => {
-                this._fetch(sessionState.data, userId, sampleId, callback);
+                this._fetch(sessionState.data, userId, analysisId, callback);
             }
-        ], (error, fieldIdToValueHash) => {
-            this._createSearchDataResult(error, session, operation, fieldIdToValueHash, callback);
+        ], (error, fieldsWithIdArray) => {
+            this._createSearchDataResult(error, session, operation, fieldsWithIdArray, callback);
         });
     }
 
@@ -152,19 +152,27 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         return 'search_key';
     }
 
-    _fetch(searchData, userId, sampleId, callback) {
+    _fetch(searchData, userId, analysisId, callback) {
         async.waterfall([
             (callback) => {
-                const rowData = this._fetchData(searchData);
                 this.services.users.find(userId, (error, user) => {
                     callback(error, {
+                        user,
+                        rowData: searchData
+                    });
+                });
+            },
+            ({user, rowData}, callback) => {
+                this.services.analysis.find(user, analysisId, (error, analysis) => {
+                    callback(error, {
+                        analysis,
                         user,
                         rowData
                     });
                 });
             },
-            ({rowData, user}, callback) => {
-                this._convertFields(rowData, user, sampleId, callback);
+            ({analysis, rowData, user}, callback) => {
+                this._convertFields(rowData, user, analysis, callback);
             }
         ], (error, asData) => {
             callback(error, asData);
@@ -178,51 +186,73 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         }, {}));
     }
 
-    _convertFields(asData, user, sampleId, callback) {
+    //todo: Check more carefully
+    _convertFields(asData, user, analysis, callback) {
+        const sampleIds = _.map(analysis.samples, sample => sample.id);
         async.waterfall([
             (callback) => async.parallel({
-                sample: (callback) => this.services.samples.find(user, sampleId, callback),
-                sampleFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback),
+                samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
+                sampleFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
                 sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
             }, callback),
-            ({sample, sampleFields, sourcesFields}, callback) => {
+            ({samples, samplesFields, sourcesFields}, callback) => {
+                const samplesData = _.map(samples, sample => {
+                    const sampleFieldIds = _.map(sample.values, fieldValue => fieldValue.fieldId);
+                    const sampleFields = _.filter(samplesFields, sampleField => _.some(sampleFieldIds, sampleField.id));
+                    const fields = sampleFields.concat(sourcesFields);
+                    return {
+                        sample,
+                        fields
+                    }
+                });
                 callback(null, {
-                    sample,
-                    fields: sampleFields.concat(sourcesFields)
+                    samplesData
                 });
             },
-            ({sample: {genotypeName}, fields}, callback) => {
+            (samplesData, callback) => {
                 // will be matching fields by name, so create fieldName->field hash
-                const fieldNameToFieldHash = CollectionUtils.createHash(fields,
-                    ({name, sourceName}) => AppServerViewUtils.createAppServerColumnName(name,
-                        sourceName, genotypeName, true)
-                );
-                callback(null, fieldNameToFieldHash);
-            },
-            (fieldNameToFieldHash, callback) => {
-                const missingFieldsSet = new Set();
-                const fieldIdToValueArray = _.map(asData, (rowObject) => {
-                    const searchKeyFieldName = this.getSearchKeyFieldName();
-                    const [fieldNames, missingFieldNames] = _(rowObject)
-                        .keys()
-                        // exclude search key
-                        .filter(fieldName => fieldName !== searchKeyFieldName)
-                        // group by existence
-                        .partition(fieldName => !!fieldNameToFieldHash[fieldName])
-                        .value();
-                    missingFieldNames.forEach(missingFieldName => missingFieldsSet.add(missingFieldName));
-                    // Map field names to field ids.
-                    const mappedRowObject = CollectionUtils.createHash(fieldNames,
-                        (fieldName) => fieldNameToFieldHash[fieldName].id,
-                        (fieldName) => this._mapFieldValue(rowObject[fieldName])
+                const samplesFieldNameToFieldHash = _.map(samplesData, samplesData => {
+                    const fieldNameToFieldHash = CollectionUtils.createHash(samplesData.fields,
+                        ({name}) => AppServerUtils.createColumnName(name, samplesData.sample.name)
                     );
-                    // add search key value.
-                    mappedRowObject[searchKeyFieldName] = rowObject[searchKeyFieldName];
-                    return mappedRowObject;
+                    return fieldNameToFieldHash;
+                });
+                const samplesFieldNameToFieldHashMap = _.keyBy(samplesFieldNameToFieldHash, 'id');
+                callback(null, samplesFieldNameToFieldHashMap);
+            },
+            (samplesFieldNameToFieldHashMap, callback) => {
+                const missingFieldsSet = new Set();
+                const fieldsWithIdArray = _.map(asData, (rowObject) => {
+                    const searchKeyFieldName = this.getSearchKeyFieldName();
+                    const mappedRowObject = _.map(rowObject, rowField => {
+                        if (rowField.fieldName !== searchKeyFieldName) {
+                            const fieldMetadata = samplesFieldNameToFieldHashMap[rowField.sourceName][rowField.fieldName];
+                            if (fieldMetadata) {
+                                return {
+                                    fieldId: fieldMetadata.id,
+                                    fieldValue: this._mapFieldValue(rowField.fieldValue),
+                                    sourceName: rowField.sourceName
+                                }
+                            }
+                            else {
+                                missingFieldsSet.add(rowField.fieldName);
+                                return null
+                            }
+                        } else {
+                            return {
+                                fieldId: rowField.fieldName,
+                                fieldValue: rowField.fieldValue
+                            }
+                        }
+                    });
+                    const existingFieldsRowObject = _.filter(mappedRowObject, rowFields => {
+                        return !_.isNull(rowFields);
+                    });
+                    return existingFieldsRowObject;
                 });
                 const missingFields = [...missingFieldsSet];
                 missingFields.length && this.logger.error(`The following fields were not found: ${missingFields}`);
-                callback(null, fieldIdToValueArray);
+                callback(null, fieldsWithIdArray);
             }
         ], callback);
     }
@@ -232,14 +262,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         return (actualFieldValue !== 'nan') ? actualFieldValue : '.';
     }
 
-    _createSearchDataResult(error, session, operation, fieldIdToValueArray, callback) {
+    _createSearchDataResult(error, session, operation, fieldsWithIdArray, callback) {
         super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onSearchDataReceived, false, {
             progress: 100,
             status: SESSION_STATUS.READY,
             sampleId: operation.getSampleId(),
             limit: operation.getLimit(),
             offset: operation.getOffset(),
-            fieldIdToValueArray
+            fieldsWithIdArray
         }, error, callback);
     }
 
