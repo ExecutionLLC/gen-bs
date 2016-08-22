@@ -14,8 +14,8 @@ function updateFiltersRules(knex, Promise) {
                         .update({
                             rules: newRule
                         })
-                    }
-                )
+                }
+            )
             )
         );
 

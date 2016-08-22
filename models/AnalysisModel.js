@@ -32,11 +32,11 @@ class AnalysisModel extends SecureModelBase {
         super(models, TableNames.Analysis, mappedColumns);
     }
 
-    find(userId,analysisId, callback){
+    find(userId, analysisId, callback) {
         this._findAnalysisById(userId, analysisId, callback)
     }
 
-    findAll(userId, limit, offset, nameFilter, descriptionFilter, callback ){
+    findAll(userId, limit, offset, nameFilter, descriptionFilter, callback) {
         async.waterfall(
             [
                 (callback) => {
@@ -47,18 +47,18 @@ class AnalysisModel extends SecureModelBase {
                         nameFilter,
                         descriptionFilter,
                         (error, result) => {
-                            callback (error, result)
+                            callback(error, result)
                         }
                     );
                 },
-                (analysisIds, callback) =>{
-                    this._findAnalysisByIds(userId,analysisIds,
+                (analysisIds, callback) => {
+                    this._findAnalysisByIds(userId, analysisIds,
                         (error, result) => {
-                            callback (error, result)
+                            callback(error, result)
                         }
                     )
                 }
-            ],callback);
+            ], callback);
     }
 
     _update(userId, analysis, analysisToUpdate, callback) {
@@ -79,7 +79,7 @@ class AnalysisModel extends SecureModelBase {
                         analysisId,
                         updateAnalysisData,
                         trx,
-                        (error) =>{
+                        (error) => {
                             callback(error, null)
                         }
                     )
@@ -94,7 +94,7 @@ class AnalysisModel extends SecureModelBase {
                         languId,
                         updateAnalysisTextData,
                         trx,
-                        (error) =>{
+                        (error) => {
                             callback(error, analysisId)
                         }
                     )
@@ -106,7 +106,7 @@ class AnalysisModel extends SecureModelBase {
 
     _unsafeTextDataUpdate(analysisId, languageId, updateAnalysisTextData, trx, callback) {
         trx(TableNames.AnalysisText)
-            .where('analysisId',analysisId)
+            .where('analysisId', analysisId)
             .andWhere('languId', languageId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(updateAnalysisTextData))
             .asCallback(
@@ -125,14 +125,14 @@ class AnalysisModel extends SecureModelBase {
         this.db.transactionally(
             (trx, callback) => {
                 this._addInTransaction(
-                    userId,languageId, analysis, shouldGenerateId, trx, callback
+                    userId, languageId, analysis, shouldGenerateId, trx, callback
                 );
             },
             callback
         );
     }
 
-    _addInTransaction(userId,languId, analysis, shouldGenerateId, trx, callback) {
+    _addInTransaction(userId, languId, analysis, shouldGenerateId, trx, callback) {
         const {
             name, description, samples
         } = analysis;
@@ -176,10 +176,10 @@ class AnalysisModel extends SecureModelBase {
 
     _addNewAnalysisSample(analysisId, sample, order, trx, callback) {
         const {id, type} = sample;
-        const analysisSampleDataToInsert ={
+        const analysisSampleDataToInsert = {
             analysisId,
-            genotypeVersionId:id,
-            sampleType:type,
+            genotypeVersionId: id,
+            sampleType: type,
             order
         };
         this._unsafeInsert(
@@ -192,7 +192,7 @@ class AnalysisModel extends SecureModelBase {
             id, viewId, filterId, modelId, type
         } = analysis;
         return {
-            id: shouldGenerateId ? this._generateId() :id,
+            id: shouldGenerateId ? this._generateId() : id,
             creator: userId,
             viewId,
             filterId,
@@ -204,7 +204,7 @@ class AnalysisModel extends SecureModelBase {
     _findAnalysisIds(userId, limit, offset, nameFilter, descriptionFilter, callback) {
         this.db.asCallback(
             (trx, callback) => {
-                trx.select('id','timestamp')
+                trx.select('id', 'timestamp')
                     .from(this.baseTableName)
                     .innerJoin(
                         TableNames.AnalysisText,
@@ -213,15 +213,15 @@ class AnalysisModel extends SecureModelBase {
                     )
                     .where('creator', userId)
                     .andWhere(function () {
-                        this.where('name','like',`%${nameFilter}%`)
-                            .orWhere('description', 'like',`%${descriptionFilter}%`)
+                        this.where('name', 'like', `%${nameFilter}%`)
+                            .orWhere('description', 'like', `%${descriptionFilter}%`)
                     })
                     .orderBy('timestamp', 'desc')
                     .offset(offset)
                     .limit(limit)
                     .asCallback(
                         (error, result) => {
-                            callback (error, _.map(result, resultItem => resultItem.id));
+                            callback(error, _.map(result, resultItem => resultItem.id));
                         }
                     );
             },
@@ -276,14 +276,14 @@ class AnalysisModel extends SecureModelBase {
                     .andWhere('id', analysisId)
                     .asCallback(
                         (error, result) => {
-                            if (result && result.length){
+                            if (result && result.length) {
                                 this._parseAnalysesResult(
                                     result,
                                     (error, result) => {
                                         callback(null, result[0])
                                     }
                                 );
-                            }else {
+                            } else {
                                 callback(
                                     new Error(
                                         `Analysis item is not found ${analysisId}`
@@ -322,7 +322,7 @@ class AnalysisModel extends SecureModelBase {
             type
         } = camelcaseAnalysis[0];
 
-        const sortedAnalyses = _.orderBy(camelcaseAnalysis,['order'],['asc']);
+        const sortedAnalyses = _.orderBy(camelcaseAnalysis, ['order'], ['asc']);
         const samples = _.map(
             sortedAnalyses,
             (sortedAnalysis) => {

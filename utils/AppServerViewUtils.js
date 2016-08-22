@@ -21,10 +21,10 @@ class AppServerViewUtils {
         return fieldName;
     }
 
-    static getDuplicatedSampleColumns(sampleItem, samples){
+    static getDuplicatedSampleColumns(sampleItem, samples) {
         return _(samples)
-            .filter(sample => _.some(sample.values,value => value.fieldId ===sampleItem.fieldId))
-            .map(sample =>{
+            .filter(sample => _.some(sample.values, value => value.fieldId === sampleItem.fieldId))
+            .map(sample => {
                 return {
                     columnName: AppServerUtils.createColumnName(sampleItem.fieldName, sample.genotypeName),
                     sourceName: AppServerUtils.createSampleName(sample),
@@ -65,21 +65,20 @@ class AppServerViewUtils {
         const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(fieldIdToMetadata);
         const sampleDuplicatedItems = _(listItems)
             .filter(listItem => {
-                return listItem.sourceName ==='sample'&&
-                    !_.some(noneDuplicatedColumnNames, (columnName) => {
-                        return columnName ===listItem.fieldName
+                return listItem.sourceName === 'sample' && !_.some(noneDuplicatedColumnNames, (columnName) => {
+                        return columnName === listItem.fieldName
                     })
             })
             .value();
         const appServerSampleDuplicatedColumns = [].concat.apply(
-            [],_.map(sampleDuplicatedItems, sampleItem => AppServerViewUtils.getDuplicatedSampleColumns(sampleItem,samples))
+            [], _.map(sampleDuplicatedItems, sampleItem => AppServerViewUtils.getDuplicatedSampleColumns(sampleItem, samples))
         );
 
         const sampleNoneDuplicatedItems = _(listItems)
             .filter(listItem => {
-                return listItem.sourceName ==='sample'&&
+                return listItem.sourceName === 'sample' &&
                     _.some(noneDuplicatedColumnNames, (columnName) => {
-                        return columnName ===listItem.fieldName
+                        return columnName === listItem.fieldName
                     })
             })
             .value();
@@ -93,7 +92,7 @@ class AppServerViewUtils {
             });
 
         const sourceItems = _(listItems)
-            .filter(listItem => listItem.sourceName !=='sample')
+            .filter(listItem => listItem.sourceName !== 'sample')
             .value();
         const appServerSampleSourceColumns = _.map(
             sourceItems, sourceItem => {

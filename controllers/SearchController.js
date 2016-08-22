@@ -20,10 +20,10 @@ class SearchController extends ControllerBase {
             (callback) => this.getRequestBody(request, callback),
             (body, callback) => {
                 const {user, session, languId: languageId} = request;
-                const {analysis , limit, offset } = body;
+                const {analysis, limit, offset} = body;
                 this.services.search
                     .sendSearchRequest(
-                        user, session, languageId, analysis  , limit, offset, callback
+                        user, session, languageId, analysis, limit, offset, callback
                     );
             }
         ], (error, operationId) => {

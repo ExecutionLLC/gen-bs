@@ -141,7 +141,16 @@ function importDefaultModels(knex, Promise) {
         models.map(
             (model) => {
 
-                const {creator, rules, type, analysisType, modelType, name, description, languId} = model;
+                const {
+                    creator,
+                    rules,
+                    type,
+                    analysisType,
+                    modelType,
+                    name,
+                    description,
+                    languId
+                } = model;
                 const id = Uuid.v4();
                 console.log(model);
                 return knex('model')
@@ -166,11 +175,11 @@ function importDefaultModels(knex, Promise) {
                                             modelId: id,
                                             name,
                                             description,
-                                            languId:languId||Config.defaultLanguId
+                                            languId: languId || Config.defaultLanguId
                                         }
                                     )
                                 )
-                    });
+                        });
             }
         )
     );

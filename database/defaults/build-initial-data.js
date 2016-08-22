@@ -31,9 +31,6 @@ async.waterfall([
     (callback) => {
         filtersBuilder.build(callback);
     },
-    (callback) => {
-        modelsBuilder.build(callback);
-    },
     () => {
         console.log('Generation completed.');
         process.exit(0);

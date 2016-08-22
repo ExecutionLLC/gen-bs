@@ -39,7 +39,7 @@ class ModelsBuilder extends DefaultsBuilderBase {
     }
 
     _createRules(rulesTemplate, fieldsMetadata) {
-        if(rulesTemplate === null) {
+        if (rulesTemplate === null) {
             return null
         }
         return this._processRulesRecursively(rulesTemplate, fieldsMetadata);
@@ -66,7 +66,6 @@ class ModelsBuilder extends DefaultsBuilderBase {
             }
 
             const condition = rulesObject.condition;
-            console.log(`Condition: ${condition}`);
             const result = {};
             result['field'] = field.id;
             result['sampleType'] = fieldDescriptor.sampleType;

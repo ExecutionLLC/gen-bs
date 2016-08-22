@@ -66,7 +66,7 @@ class ModelsModel extends SecureModelBase {
                         creator: userId,
                         rules: model.rules,
                         type: model.type || ENTITY_TYPES.USER,
-                        analysisType: model.analysisType ,
+                        analysisType: model.analysisType,
                         modelType: model.modelType
                     };
                     this._insert(dataToInsert, trx, callback);
@@ -96,7 +96,7 @@ class ModelsModel extends SecureModelBase {
                         creator: userId,
                         rules: modelToUpdate.rules,
                         type: model.type,
-                        analysisType: model.analysisType ,
+                        analysisType: model.analysisType,
                         modelType: model.modelType,
                         originalModelId: model.originalModelId || model.id
                     };
@@ -128,7 +128,7 @@ class ModelsModel extends SecureModelBase {
         this.db.asCallback((knex, callback) => {
             knex.select()
                 .from(this.baseTableName)
-                .innerJoin(TableNames.ModelText,`${TableNames.ModelText}.model_id`,`${this.baseTableName}.id`)
+                .innerJoin(TableNames.ModelText, `${TableNames.ModelText}.model_id`, `${this.baseTableName}.id`)
                 .where('id', modelId)
                 .asCallback((error, modelData) => {
                     if (error || !modelData.length) {

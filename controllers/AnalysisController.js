@@ -14,14 +14,12 @@ class AnalysisController extends UserEntityControllerBase {
                 const user = request.user;
                 const limit = request.query.limit;
                 const offset = request.query.offset;
-                // const nameFilter = request.query.name;
-                // const descriptionFilter = request.query.description;
                 const search = request.query.search;
                 if (isNaN(limit) || isNaN(offset)) {
                     callback(new Error('Offset or limit are not specified or incorrect'));
                 } else {
                     this.services.analysis.findAll(
-                        user, limit, offset,search, search, callback
+                        user, limit, offset, search, search, callback
                     );
                 }
             }

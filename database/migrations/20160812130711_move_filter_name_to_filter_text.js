@@ -2,12 +2,12 @@
 
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
-function addColumnToFilterText(knex, Promise){
+function addColumnToFilterText(knex, Promise) {
     return knex.raw('ALTER TABLE filter_text ADD COLUMN name character' +
         ' varying(50) NOT NULL DEFAULT \'\'');
 }
 
-function moveFilterNamesIntoNewColumn(knex, Promise){
+function moveFilterNamesIntoNewColumn(knex, Promise) {
     console.log('=> Move filter names to filter_text table');
     return knex('filter')
         .select('id', 'name')
@@ -29,7 +29,7 @@ function moveFilterNamesIntoNewColumn(knex, Promise){
         );
 }
 
-function dropFilterIsCopyDisableColumnNameColumn(knex, Promise){
+function dropFilterIsCopyDisableColumnNameColumn(knex, Promise) {
     const {schema} = knex;
     return schema
         .table('filter', (table) => {
@@ -37,7 +37,7 @@ function dropFilterIsCopyDisableColumnNameColumn(knex, Promise){
         });
 }
 
-function dropFilterColumn(knex, Promise){
+function dropFilterColumn(knex, Promise) {
     return knex.raw('ALTER TABLE filter DROP COLUMN name');
     const {schema} = knex;
     return schema
@@ -46,19 +46,19 @@ function dropFilterColumn(knex, Promise){
         });
 }
 
-function dropDefaultFilterTextNameColumn(knex, Promise){
+function dropDefaultFilterTextNameColumn(knex, Promise) {
     return knex.raw('ALTER TABLE filter_text ALTER COLUMN name DROP DEFAULT');
 }
 
-exports.up = function(knex, Promise) {
-    return addColumnToFilterText(knex,Promise)
-        .then(() => moveFilterNamesIntoNewColumn(knex,Promise))
-        .then(() => dropDefaultFilterTextNameColumn(knex,Promise))
-        .then(() => dropFilterColumn(knex,Promise))
-        .then(() => dropFilterIsCopyDisableColumnNameColumn(knex,Promise))
+exports.up = function (knex, Promise) {
+    return addColumnToFilterText(knex, Promise)
+        .then(() => moveFilterNamesIntoNewColumn(knex, Promise))
+        .then(() => dropDefaultFilterTextNameColumn(knex, Promise))
+        .then(() => dropFilterColumn(knex, Promise))
+        .then(() => dropFilterIsCopyDisableColumnNameColumn(knex, Promise))
         .then(() => console.log('=> Complete'));
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function (knex, Promise) {
     throw new Error('Not implemented');
 };

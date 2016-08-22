@@ -64,10 +64,10 @@ class UserDataService extends ServiceBase {
                     samples: (callback) => {
                         this.services.samples.findAll(user, callback);
                     },
-                    analyses: (callback) =>{
+                    analyses: (callback) => {
                         this.services.analysis.findAll(user, this.defaultLimit, 0, undefined, undefined, callback);
                     },
-                    models:(callback)=>{
+                    models: (callback)=> {
                         this.services.models.findAll(user, callback)
                     },
                     savedFiles: (callback) => {
