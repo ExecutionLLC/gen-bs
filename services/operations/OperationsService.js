@@ -69,6 +69,7 @@ class OperationsService extends ServiceBase {
                 async.each(
                     searchOperations,
                     (searchOperation, callback) => this.services.applicationServer.requestKeepOperationAlive(
+                        session,
                         searchOperation,
                         callback
                     ), callback);
