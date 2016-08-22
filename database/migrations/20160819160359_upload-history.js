@@ -6,6 +6,8 @@ exports.up = function (knex, Promise) {
             .notNullable()
             .references('id')
             .inTable('user');
+        // Sample name should not be constrained by the 'vcf_file_sample' table,
+        // as the sample is not yet created.
         table.uuid('sample_id')
             .notNullable();
         table.string('file_name', 256)
