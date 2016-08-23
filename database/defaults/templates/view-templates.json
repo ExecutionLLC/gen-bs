@@ -1,5 +1,46 @@
 [
   {
+    "name": "Default Test View",
+    "description": "This is default view with two columns and no keywords",
+    "type": "default",
+    "items": [
+      {
+        "field": {
+          "source_name": "sample",
+          "name": "CHROM",
+          "value_type": "integer"
+        },
+        "keywords": [],
+        "order": 1,
+        "sort_order": 1,
+        "sort_direction": "asc"
+      },
+      {
+        "field": {
+          "source_name": "sample",
+          "name": "POS",
+          "value_type": "integer"
+        },
+        "keywords": [],
+        "order": 2,
+        "sort_order": 2,
+        "sort_direction": "desc"
+      },
+      {
+        "field": {
+          "source_name": "sample",
+          "name": "ALT",
+          "value_type": "string"
+        },
+        "keywords": [
+          "ALT A",
+          "ALT C"
+        ],
+        "order": 5
+      }
+    ]
+  },
+  {
     "name": "Test Default View",
     "description": "This is default view with two columns and no keywords",
     "type": "standard",
