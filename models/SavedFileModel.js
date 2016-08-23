@@ -99,23 +99,12 @@ class SavedFileModel extends SecureModelBase {
                 const dataToInsert = {
                     id: shouldGenerateId ? this._generateId() : fileMetadata.id,
                     creator: userId,
-                    viewId: fileMetadata.viewId,
-                    vcfFileSampleVersionId: fileMetadata.sampleId,
+                    analysisId: fileMetadata.analysisId,
                     name: fileMetadata.name,
                     url: fileMetadata.url,
                     totalResults: fileMetadata.totalResults
                 };
                 this._insert(dataToInsert, trx, callback);
-            },
-            (fileId, callback) => {
-                // Insert filters.
-                async.eachSeries(fileMetadata.filterIds, (filterId, callback) => {
-                    const dataToInsert = {
-                        savedFileId: fileId,
-                        filterId
-                    };
-                    this._unsafeInsert(SavedFileTables.Filters, dataToInsert, trx, callback);
-                }, (error) => callback(error, fileId));
             },
             (fileId, callback) => {
                 // Insert translated description.
@@ -152,51 +141,9 @@ class SavedFileModel extends SecureModelBase {
         if (shouldExcludeDeletedEntries) {
             baseQuery = baseQuery.andWhere('is_deleted', false);
         }
-
-        async.waterfall([
-            (callback) => baseQuery.asCallback((error, files) => callback(error, files)),
-            (files, callback) => this._toCamelCase(files, callback),
-            (files, callback) => {
-                const fileIds = _.map(files, 'id');
-                this._findSavedFilesFilters(trx, fileIds,
-                    (error, fileIdToFilterIdsHash) => callback(error, files, fileIdToFilterIdsHash))
-            },
-            (files, fileIdToFilterIdsHash, callback) => {
-                // Transform objects loaded from database.
-                const mappedFiles = _.map(files, file => {
-                    const fileWithFilters = _.cloneDeep(file);
-
-                    // Will be using sample version as sample id in the services layer.
-                    fileWithFilters.sampleId = file.vcfFileSampleVersionId;
-                    delete fileWithFilters.vcfFileSampleVersionId;
-
-                    fileWithFilters.filterIds = fileIdToFilterIdsHash[file.id];
-                    return fileWithFilters;
-                });
-
-                callback(null, mappedFiles);
-            }
-        ], callback);
-    }
-
-    /**
-     * @param trx Knex transaction
-     * @param fileIds Ids of the saved files to find filters for.
-     * @param callback (error, hash[fileId] = [filterIds]).
-     * */
-    _findSavedFilesFilters(trx, fileIds, callback) {
-        async.waterfall([
-            (callback) => trx.select('saved_file_id', 'filter_id')
-                .from(SavedFileTables.Filters)
-                .whereIn('saved_file_id', fileIds)
-                .asCallback((error, rows) => callback(error, rows)),
-            (rows, callback) => this._toCamelCase(rows, callback),
-            (rows, callback) => {
-                const hash = CollectionUtils.createMultiValueHash(rows,
-                    (row) => row.savedFileId, (row) => row.filterId);
-                callback(null, hash);
-            }
-        ], callback);
+        baseQuery.asCallback(
+            (error, files) => callback(error, files)
+        );
     }
 }
 
