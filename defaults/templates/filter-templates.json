@@ -1,7 +1,7 @@
 [
   {
-    "name": "Test Filter",
-    "description": "Test filter description",
+    "name": "Default Test Filter",
+    "description": "Default Test filter description",
     "type": "standard",
     "is_copy_disabled": false,
     "rules": {
