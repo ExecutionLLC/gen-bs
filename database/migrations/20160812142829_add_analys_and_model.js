@@ -152,7 +152,6 @@ function importDefaultModels(knex, Promise) {
                     languId
                 } = model;
                 const id = Uuid.v4();
-                console.log(model);
                 return knex('model')
                     .insert(
                         ChangeCaseUtil.convertKeysToSnakeCase(
@@ -185,9 +184,35 @@ function importDefaultModels(knex, Promise) {
     );
 }
 
+function clearSavedFileTable(knex, Promise) {
+    console.log('=> Clear savedFile Table');
+    return knex('saved_file')
+        .del();
+}
+
+function updateSavedFileColumnsAndTables(knex, Promise) {
+    console.log('=> Remove savedFile unused columns and tables');
+    const {schema} = knex;
+    return schema
+        .table('saved_file', (table) => {
+            table.dropColumn('view_id');
+            table.dropColumn('genotype_version_id');
+            table.uuid('analysis_id')
+                .references('id')
+                .inTable('analysis');
+        })
+        .dropTable('saved_file_filter');
+}
+
+function updateSavedFiles(knex , Promise) {
+    return updateSavedFileColumnsAndTables(knex, Promise)
+        .then(() => clearSavedFileTable(knex, Promise));
+}
+
 exports.up = function (knex, Promise) {
     return createAnalysisTables(knex, Promise)
         .then(() => importDefaultModels(knex, Promise))
+        .then(() => updateSavedFiles(knex, Promise))
         .then(() => console.log('=> Complete.'));
 };
 
