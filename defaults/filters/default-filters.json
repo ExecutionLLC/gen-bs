@@ -1,6 +1,6 @@
 [
   {
-    "id": "301b4e00-c7e2-412e-9dba-ffc27063eb58",
+    "id": "70953a27-7779-47dc-837c-cba696b6cda9",
     "name": "Test Filter",
     "description": "Test filter description",
     "type": "standard",
@@ -30,7 +30,7 @@
     }
   },
   {
-    "id": "cd907c22-b898-4bd8-8d29-39124c8be53d",
+    "id": "e81547ec-362b-4386-9341-112c550ad722",
     "name": "Another Test Filter",
     "description": "Test filter description v2",
     "type": "advanced",
