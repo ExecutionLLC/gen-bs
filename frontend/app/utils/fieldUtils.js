@@ -20,16 +20,6 @@ export default class FieldUtils {
     }
 
     /**
-     * Make fields array for filters
-     * @param {{sourceFieldsList: Object[], totalFieldsHashedArray: Object[], sampleFieldsHashedArray: Object[]}} fields
-     * @returns {{id: string, label: string, type: string}[]}
-     */
-    static makeFieldsListForFiltersSelect(fields) {
-        const allAvailableFields = _.filter(fields.sampleFieldsHashedArray.array.concat(fields.sourceFieldsList), field => !field.isEditable);
-        return allAvailableFields.map((f) => this.makeFieldSelectItemValue(f));
-    }
-
-    /**
      * Return default field id for adding new rule item or smth
      * @param {{id: string, label: string, type: string}[]} fields
      * @returns {string}
