@@ -99,22 +99,22 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "bb7e9dd4-8fb0-4981-a12b-311a0ddcdb0f",
+        "id": "2b10d013-ccf5-47a7-812d-0676821d153c",
         "langu_id": "en",
         "value": "Proband"
       },
       {
-        "id": "07ca0b95-a535-4952-b8a7-1731a7435ef5",
+        "id": "6fa8abbf-f134-4390-ac48-ccac80df8f48",
         "langu_id": "en",
         "value": "Mother"
       },
       {
-        "id": "1aa55dc2-eb0b-45bd-b71f-bba2ddb4ce97",
+        "id": "a6877cf5-fc7e-4d71-9770-8fbefe68fea5",
         "langu_id": "en",
         "value": "Father"
       },
       {
-        "id": "7a1e9a0f-0539-46ac-a595-f4d7866b3f1c",
+        "id": "5339f811-6bb5-4f91-8f00-76a74031cca5",
         "langu_id": "en",
         "value": "Sibling"
       }
@@ -132,17 +132,17 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "80c9f742-c1ac-4706-bcc5-f41dafca1f11",
+        "id": "e2868258-aee9-409c-b076-7610eb0f3c32",
         "langu_id": "en",
         "value": "Unknown"
       },
       {
-        "id": "417533d9-d2eb-4566-98c9-355a6b82fb19",
+        "id": "b3aa8d8d-19c0-4401-9fc7-3cbd3f9fc818",
         "langu_id": "en",
         "value": "Male"
       },
       {
-        "id": "0dbd79b7-dbc4-4d62-a379-7049cc57cf37",
+        "id": "b2cab407-480d-4854-91e0-ff5f46dbce4e",
         "langu_id": "en",
         "value": "Female"
       }
@@ -160,17 +160,17 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "e54e79ec-ef95-4d2a-b329-f4fde79a7a45",
+        "id": "6b8490d2-c95a-4a9f-bccb-e34faeaa7f5e",
         "langu_id": "en",
         "value": "Unknown"
       },
       {
-        "id": "5d8c9098-983c-4b2e-983d-63ab2f9151e0",
+        "id": "deb1143b-4719-4655-a744-286dac477729",
         "langu_id": "en",
         "value": "Big ears (hpo1)"
       },
       {
-        "id": "48004b5f-2232-4fad-b09b-16c2f6393cb9",
+        "id": "e911c5dd-1de9-4ae7-89b7-b488c180180f",
         "langu_id": "en",
         "value": "Small ears (hpo2)"
       }
@@ -210,12 +210,12 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "c929725f-025b-4006-8b11-ac798281a07f",
+        "id": "507b84df-6c38-4eb7-b13d-e660766ba02f",
         "langu_id": "en",
         "value": "hg19"
       },
       {
-        "id": "0488b40e-250b-4c8e-8f04-4ee7aa628d5f",
+        "id": "f63c57b8-9206-4b73-ba95-ee5279d399e8",
         "langu_id": "en",
         "value": "hg38"
       }
@@ -233,7 +233,7 @@
     "dimension": 1
   },
   {
-    "id": "131eb89b-d828-4fe9-91b1-cd77d2fc9838",
+    "id": "80cb374b-1acd-4a2c-99b0-ebdb98c52863",
     "name": "INFO_ExAC_AF_AMR_Adj",
     "label": "INFO_ExAC_AF_AMR_Adj",
     "source_name": "sample",
@@ -244,7 +244,7 @@
     "dimension": 1
   },
   {
-    "id": "f48c101c-8f17-4d22-b313-b622534b69fc",
+    "id": "474fb82c-f029-486f-867e-7f7505041a42",
     "name": "VEP_Feature",
     "label": "VEP_Feature",
     "source_name": "sample",
@@ -255,7 +255,7 @@
     "dimension": 0
   },
   {
-    "id": "58f02cf8-1b3d-49ad-8341-42d65b8922d6",
+    "id": "1bc89629-b2a1-45c6-9239-1b61b4184756",
     "name": "VEP_CELL_TYPE",
     "label": "VEP_CELL_TYPE",
     "source_name": "sample",
@@ -266,7 +266,7 @@
     "dimension": 0
   },
   {
-    "id": "6a4e2c69-b74f-48b7-8641-22cdfb5f3222",
+    "id": "935f7b88-4762-4960-ad43-aa788910f460",
     "name": "INFO_ExAC_AF",
     "label": "INFO_ExAC_AF",
     "source_name": "sample",
@@ -277,7 +277,7 @@
     "dimension": 1
   },
   {
-    "id": "91c5ec1b-d5ad-4694-b1e6-4c6eb98d158d",
+    "id": "577af8eb-d0d2-4c69-93c6-8b6eaba37b88",
     "name": "VEP_DOMAINS",
     "label": "VEP_DOMAINS",
     "source_name": "sample",
@@ -288,7 +288,7 @@
     "dimension": 0
   },
   {
-    "id": "f1701d88-c3f2-45f3-abe7-835cc4b60be6",
+    "id": "9d861b26-1d3a-479b-b3d9-0e7c020e887b",
     "name": "VEP_CLIN_SIG",
     "label": "VEP_CLIN_SIG",
     "source_name": "sample",
@@ -299,7 +299,7 @@
     "dimension": 0
   },
   {
-    "id": "e5608dc3-7330-4b37-994f-17d29b9c4b45",
+    "id": "b794458a-d37d-476a-8e67-f0cee0afb1cf",
     "name": "VEP_MOTIF_SCORE_CHANGE",
     "label": "VEP_MOTIF_SCORE_CHANGE",
     "source_name": "sample",
@@ -310,7 +310,7 @@
     "dimension": 0
   },
   {
-    "id": "a8d50685-0314-448f-ad57-8b7f4c575331",
+    "id": "669dacf0-fccd-4b6e-af86-06251965d8b8",
     "name": "INFO_ExAC_AF_NFE_Adj",
     "label": "INFO_ExAC_AF_NFE_Adj",
     "source_name": "sample",
@@ -321,7 +321,7 @@
     "dimension": 1
   },
   {
-    "id": "79c0e2c6-59f7-409c-b720-9ca7cc96515f",
+    "id": "883fc801-72e9-4c9b-8ace-3f5fa99a63de",
     "name": "INFO_ExAC_AF_Adj",
     "label": "INFO_ExAC_AF_Adj",
     "source_name": "sample",
@@ -332,7 +332,7 @@
     "dimension": 1
   },
   {
-    "id": "e8e13138-62ac-44e0-aba5-57c5a5a5e3d4",
+    "id": "9182944c-25b7-453b-a259-619739947f11",
     "name": "VEP_HGNC_ID",
     "label": "VEP_HGNC_ID",
     "source_name": "sample",
@@ -343,7 +343,7 @@
     "dimension": 0
   },
   {
-    "id": "5b2799aa-18c2-4475-9d4e-dc7655d8af58",
+    "id": "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4",
     "name": "VEP_HGVSc_transcript",
     "label": "VEP_HGVSc_transcript",
     "source_name": "sample",
@@ -354,7 +354,7 @@
     "dimension": 0
   },
   {
-    "id": "4d712976-a413-4d0b-b696-4de5acf81c6b",
+    "id": "366bb4d0-6077-4165-9ea4-0e27cb54fabf",
     "name": "VEP_ALLELE_NUM",
     "label": "VEP_ALLELE_NUM",
     "source_name": "sample",
@@ -365,7 +365,7 @@
     "dimension": 0
   },
   {
-    "id": "866197a4-7106-4894-8348-58089f304f8f",
+    "id": "f048cc37-55ec-4881-88af-0dded507fd9b",
     "name": "VEP_SWISSPROT",
     "label": "VEP_SWISSPROT",
     "source_name": "sample",
@@ -376,7 +376,7 @@
     "dimension": 0
   },
   {
-    "id": "951a6eb0-2430-433d-b03f-d14dba3e17c5",
+    "id": "fceaab54-f898-4bc4-9c05-ba99a313c5b8",
     "name": "VEP_AFR_MAF",
     "label": "VEP_AFR_MAF",
     "source_name": "sample",
@@ -387,7 +387,7 @@
     "dimension": 0
   },
   {
-    "id": "2340719d-f2cd-43ab-ad21-b20dd9a421b0",
+    "id": "2a6ad5eb-6ff4-4797-b47a-135198728ae6",
     "name": "VEP_NumberOfExons",
     "label": "VEP_NumberOfExons",
     "source_name": "sample",
@@ -398,7 +398,7 @@
     "dimension": 0
   },
   {
-    "id": "0316212e-25d6-4e2f-bbb0-21497561fb50",
+    "id": "13566796-662e-49d7-932a-b18c4caf69bd",
     "name": "VEP_TREMBL",
     "label": "VEP_TREMBL",
     "source_name": "sample",
@@ -409,7 +409,7 @@
     "dimension": 0
   },
   {
-    "id": "d7a23522-8d63-484f-8310-950fb763413d",
+    "id": "d4aa9820-6f3b-426f-9e9a-79b0ba54c1ac",
     "name": "VEP_Protein_position_0",
     "label": "VEP_Protein_position_0",
     "source_name": "sample",
@@ -420,7 +420,7 @@
     "dimension": 1
   },
   {
-    "id": "cd4ffd11-34aa-4870-8c5b-a2013757cec1",
+    "id": "e09dd061-4349-4b68-a147-d5452c2dcafb",
     "name": "VEP_Protein_position_1",
     "label": "VEP_Protein_position_1",
     "source_name": "sample",
@@ -431,7 +431,7 @@
     "dimension": 1
   },
   {
-    "id": "79c00b92-170c-4b75-9c48-34b224ea7ff6",
+    "id": "adae2e3b-146c-492e-b4f6-760b8052c1c0",
     "name": "VEP_STRAND",
     "label": "VEP_STRAND",
     "source_name": "sample",
@@ -442,7 +442,7 @@
     "dimension": 0
   },
   {
-    "id": "8a2f95b4-6aac-46d9-a260-fc35f5d15078",
+    "id": "c56dff04-f79e-4930-821e-e1d212e120af",
     "name": "VEP_CANONICAL",
     "label": "VEP_CANONICAL",
     "source_name": "sample",
@@ -453,7 +453,7 @@
     "dimension": 0
   },
   {
-    "id": "10d326e2-7c03-4d13-88cc-22dcd90b445e",
+    "id": "17d81a43-e752-4579-8d32-5e4ea2c9116b",
     "name": "VEP_ExAC_FIN_MAF",
     "label": "VEP_ExAC_FIN_MAF",
     "source_name": "sample",
@@ -464,7 +464,7 @@
     "dimension": 0
   },
   {
-    "id": "c3065a63-a260-4cb8-a0eb-3fe4715ca958",
+    "id": "3a2da9f0-69ae-4c5d-89fc-64af2eabe725",
     "name": "VEP_ExonNumber",
     "label": "VEP_ExonNumber",
     "source_name": "sample",
@@ -475,7 +475,7 @@
     "dimension": 0
   },
   {
-    "id": "0a749ffe-19f9-42b9-967e-430cbe8327da",
+    "id": "1c3461e8-b64b-4b4c-a8aa-3f3291245cb3",
     "name": "VEP_EAS_MAF",
     "label": "VEP_EAS_MAF",
     "source_name": "sample",
@@ -486,7 +486,7 @@
     "dimension": 0
   },
   {
-    "id": "a77d39fc-8dfc-479b-8d1c-4d81750fe5f7",
+    "id": "ad7f5cfb-5dc2-4373-92e6-13aa0dab68f8",
     "name": "VEP_HGMD",
     "label": "VEP_HGMD",
     "source_name": "sample",
@@ -497,7 +497,7 @@
     "dimension": 0
   },
   {
-    "id": "15083518-cbe7-42ea-9535-aa08eb54a471",
+    "id": "806776ec-ea68-4fe9-b72a-ba74729c0af5",
     "name": "VEP_HGVSp_transcript",
     "label": "VEP_HGVSp_transcript",
     "source_name": "sample",
@@ -508,7 +508,7 @@
     "dimension": 0
   },
   {
-    "id": "73621e1b-63bb-447d-8444-821b6eb97dab",
+    "id": "e61b0ca6-6301-4934-a32b-bfe4f3e289b3",
     "name": "VEP_ExAC_AFR_MAF",
     "label": "VEP_ExAC_AFR_MAF",
     "source_name": "sample",
@@ -519,7 +519,7 @@
     "dimension": 0
   },
   {
-    "id": "a964df25-b9bf-41e9-8852-3f3aeab227d8",
+    "id": "5c150ed8-fbb1-40b8-a451-13d780059f3c",
     "name": "VEP_Zygosity",
     "label": "VEP_Zygosity",
     "source_name": "sample",
@@ -530,7 +530,7 @@
     "dimension": 0
   },
   {
-    "id": "890db393-d787-48a0-971c-b7354878d5be",
+    "id": "4fb3ed6b-acd9-41b0-a573-be75b1e2b043",
     "name": "VEP_HGVS_OFFSET",
     "label": "VEP_HGVS_OFFSET",
     "source_name": "sample",
@@ -541,7 +541,7 @@
     "dimension": 0
   },
   {
-    "id": "fb2aee42-96d3-4160-a1e1-12feb98e2d9e",
+    "id": "b40a65c0-31f2-49ab-a7b3-f477382921f4",
     "name": "VEP_Feature_type",
     "label": "VEP_Feature_type",
     "source_name": "sample",
@@ -552,7 +552,7 @@
     "dimension": 0
   },
   {
-    "id": "5ddd4209-3342-445d-af2c-b05ec597066a",
+    "id": "7ea547fa-94f6-46a4-b2fb-c9f3017a85cf",
     "name": "VEP_ExAC_MAF",
     "label": "VEP_ExAC_MAF",
     "source_name": "sample",
@@ -563,7 +563,7 @@
     "dimension": 0
   },
   {
-    "id": "bef4df2a-17cb-49b1-bb38-f33b26f64013",
+    "id": "da50dcfc-8f6b-4ac6-85f0-fd0f7710dc9a",
     "name": "VEP_PHENO",
     "label": "VEP_PHENO",
     "source_name": "sample",
@@ -574,7 +574,7 @@
     "dimension": 0
   },
   {
-    "id": "d3d3378b-267d-47b7-826b-1d73c4636c96",
+    "id": "04c93cb1-4275-44e7-887e-8f4025237424",
     "name": "VEP_TSL",
     "label": "VEP_TSL",
     "source_name": "sample",
@@ -585,7 +585,7 @@
     "dimension": 0
   },
   {
-    "id": "82071d9d-0448-4eca-a0fe-95a47461a470",
+    "id": "5954d86a-c83b-445f-8d51-ce58b74f4015",
     "name": "VEP_ExAC_EAS_MAF",
     "label": "VEP_ExAC_EAS_MAF",
     "source_name": "sample",
@@ -596,7 +596,7 @@
     "dimension": 0
   },
   {
-    "id": "29c9d504-2a5c-498e-befb-e4ab039489d1",
+    "id": "1bfdd071-a4e3-4acb-80db-31fa6082b094",
     "name": "VEP_IMPACT",
     "label": "VEP_IMPACT",
     "source_name": "sample",
@@ -607,7 +607,7 @@
     "dimension": 0
   },
   {
-    "id": "471d8957-4169-47e7-956f-9b01b92e195f",
+    "id": "7022e5eb-f05e-4af8-9bed-6bed1f7a6dd0",
     "name": "VEP_SAS_MAF",
     "label": "VEP_SAS_MAF",
     "source_name": "sample",
@@ -618,7 +618,7 @@
     "dimension": 0
   },
   {
-    "id": "57f917db-1a15-42c3-8830-7222900a64f6",
+    "id": "fd6860e2-106b-4469-97bc-f2f660e6e232",
     "name": "INFO_ExAC_AF_SAS_Adj",
     "label": "INFO_ExAC_AF_SAS_Adj",
     "source_name": "sample",
@@ -629,7 +629,7 @@
     "dimension": 1
   },
   {
-    "id": "542d4728-3357-46ea-8dfa-5d17c4ad94a6",
+    "id": "0bd9849e-681a-492e-8dfc-bdff4553b68d",
     "name": "VEP_Amino_acids",
     "label": "VEP_Amino_acids",
     "source_name": "sample",
@@ -640,7 +640,7 @@
     "dimension": 0
   },
   {
-    "id": "6d5ac924-58b2-4ad1-a1b6-c0047999528f",
+    "id": "46e558ee-b611-429f-a4d6-b383ea748e93",
     "name": "VEP_GMAF",
     "label": "VEP_GMAF",
     "source_name": "sample",
@@ -651,7 +651,7 @@
     "dimension": 0
   },
   {
-    "id": "8fa9137a-e9bd-435d-824d-3dc3f3eaabcc",
+    "id": "be2d48a1-1e32-4898-8262-dd939592e65d",
     "name": "VEP_CDS_position_1",
     "label": "VEP_CDS_position_1",
     "source_name": "sample",
@@ -662,7 +662,7 @@
     "dimension": 1
   },
   {
-    "id": "1c6e5a81-063c-4af1-bfd7-65320e223cec",
+    "id": "1fa48d2e-902c-4272-acb9-524a75a05507",
     "name": "VEP_CDS_position_0",
     "label": "VEP_CDS_position_0",
     "source_name": "sample",
@@ -673,7 +673,7 @@
     "dimension": 1
   },
   {
-    "id": "f1c60fd2-78a1-4e76-a9f5-909d03ed0cf5",
+    "id": "8762f431-d35b-4f1a-8d6a-ebe792c5f136",
     "name": "VEP_MOTIF_POS",
     "label": "VEP_MOTIF_POS",
     "source_name": "sample",
@@ -684,7 +684,7 @@
     "dimension": 0
   },
   {
-    "id": "7f097b95-c066-43fe-9b1a-b128657751d9",
+    "id": "31d30ccd-75e8-46fe-8c60-b48db439d322",
     "name": "INFO_ExAC_AF_EAS_Adj",
     "label": "INFO_ExAC_AF_EAS_Adj",
     "source_name": "sample",
@@ -695,7 +695,7 @@
     "dimension": 1
   },
   {
-    "id": "03cf2c7b-6d4f-4428-a201-f1adc0e67346",
+    "id": "53e2f8af-91ff-43ca-b5fa-06b4f1d6bacd",
     "name": "VEP_PUBMED",
     "label": "VEP_PUBMED",
     "source_name": "sample",
@@ -706,7 +706,7 @@
     "dimension": 0
   },
   {
-    "id": "aeba8d95-22e6-49a5-9374-3419627fdce4",
+    "id": "6c36e35a-3ac0-4acc-ac11-8696a1c946f5",
     "name": "VEP_Codons",
     "label": "VEP_Codons",
     "source_name": "sample",
@@ -717,7 +717,7 @@
     "dimension": 0
   },
   {
-    "id": "dffff6ab-ac02-4c20-ae34-ef3656e1e90d",
+    "id": "e53432a0-29a9-404a-9414-a110a48cb9bb",
     "name": "VEP_SOMATIC",
     "label": "VEP_SOMATIC",
     "source_name": "sample",
@@ -728,7 +728,7 @@
     "dimension": 0
   },
   {
-    "id": "5178897c-4865-4898-b4c2-4d52ec84af1a",
+    "id": "5663f486-bfb9-4a4a-b786-f60a59ef419b",
     "name": "VEP_DISTANCE",
     "label": "VEP_DISTANCE",
     "source_name": "sample",
@@ -739,7 +739,7 @@
     "dimension": 0
   },
   {
-    "id": "21ee9e9f-0722-4928-a86e-5d01dbd627da",
+    "id": "4b1c7a0e-c7b2-47d1-8897-1d143cf9e145",
     "name": "INFO_ExAC_AF_AFR_Adj",
     "label": "INFO_ExAC_AF_AFR_Adj",
     "source_name": "sample",
@@ -750,7 +750,7 @@
     "dimension": 1
   },
   {
-    "id": "f96e8a83-54a5-4aa0-bb95-56c3af5b2b19",
+    "id": "a118952c-20fc-46b8-b142-61cc7869b989",
     "name": "VEP_SYMBOL",
     "label": "VEP_SYMBOL",
     "source_name": "sample",
@@ -761,7 +761,7 @@
     "dimension": 0
   },
   {
-    "id": "34064cac-786c-4f97-bd44-d85ea93bebc4",
+    "id": "9f1f4fe9-6765-4426-9748-fab96622a8d0",
     "name": "VEP_MOTIF_NAME",
     "label": "VEP_MOTIF_NAME",
     "source_name": "sample",
@@ -772,7 +772,7 @@
     "dimension": 0
   },
   {
-    "id": "76a474f5-3ada-4f46-9d29-c52b21cb305c",
+    "id": "3e96ece7-d715-4d46-95ae-29aaff3acce2",
     "name": "VEP_HGVSc_nucleotide_changes",
     "label": "VEP_HGVSc_nucleotide_changes",
     "source_name": "sample",
@@ -783,7 +783,7 @@
     "dimension": 0
   },
   {
-    "id": "5b7a5d11-8656-417b-b06d-ee50c7f25747",
+    "id": "2b052f04-ad98-43aa-89f5-7a13ccdf165d",
     "name": "VEP_cDNA_position_0",
     "label": "VEP_cDNA_position_0",
     "source_name": "sample",
@@ -794,7 +794,7 @@
     "dimension": 1
   },
   {
-    "id": "b1e029d0-1d33-4e6d-9bc0-8a385acdf961",
+    "id": "c09af4dd-68e5-4935-bc0d-15be6409c092",
     "name": "VEP_cDNA_position_1",
     "label": "VEP_cDNA_position_1",
     "source_name": "sample",
@@ -805,7 +805,7 @@
     "dimension": 1
   },
   {
-    "id": "5871ee7f-1368-4382-8812-c75b6d467907",
+    "id": "acd5d6d6-6e50-43fc-8169-575f5dae5af5",
     "name": "VEP_AA_MAF",
     "label": "VEP_AA_MAF",
     "source_name": "sample",
@@ -816,7 +816,7 @@
     "dimension": 0
   },
   {
-    "id": "84d04a76-d098-4603-a60f-d10c4b2b7bad",
+    "id": "8e2ab5f1-9889-4da3-bb7a-0505b1a665df",
     "name": "VEP_Gene",
     "label": "VEP_Gene",
     "source_name": "sample",
@@ -827,7 +827,7 @@
     "dimension": 0
   },
   {
-    "id": "3a32d6d7-5ce5-4fcd-9591-3e26c533413c",
+    "id": "3cabb629-727c-41f3-8c36-50e9a5065e7d",
     "name": "INFO_ExAC_AF_OTH_Adj",
     "label": "INFO_ExAC_AF_OTH_Adj",
     "source_name": "sample",
@@ -838,7 +838,7 @@
     "dimension": 1
   },
   {
-    "id": "6cf216bb-8a31-41dd-a626-e778a38556b5",
+    "id": "d4cdea99-e5ed-49c8-b0da-c7509f96955e",
     "name": "INFO_TYPE",
     "label": "INFO_TYPE",
     "source_name": "sample",
@@ -849,7 +849,7 @@
     "dimension": 1
   },
   {
-    "id": "c9c1f856-b8df-406e-b81e-7a6265d2beea",
+    "id": "ae1c8d7f-6180-4f4c-8e0a-5f290f7b92c4",
     "name": "VEP_HIGH_INF_POS",
     "label": "VEP_HIGH_INF_POS",
     "source_name": "sample",
@@ -860,7 +860,7 @@
     "dimension": 0
   },
   {
-    "id": "e1ccbff0-1d54-4ad7-ae3d-4a81b3ee16da",
+    "id": "b366b649-34a9-46bb-813c-79446ca9d384",
     "name": "VEP_HGVSp_nucleotide_changes",
     "label": "VEP_HGVSp_nucleotide_changes",
     "source_name": "sample",
@@ -871,7 +871,7 @@
     "dimension": 0
   },
   {
-    "id": "c3273aca-6105-47bf-b6f2-67caf64883fb",
+    "id": "51f7078c-5f96-4f40-bdbd-900837f90793",
     "name": "VEP_VARIANT_CLASS",
     "label": "VEP_VARIANT_CLASS",
     "source_name": "sample",
@@ -882,7 +882,7 @@
     "dimension": 0
   },
   {
-    "id": "c997c3bf-4cc0-460a-b16e-c4282a04ba14",
+    "id": "8d71aa15-56dc-4b7a-940b-b7869b7444ec",
     "name": "VEP_GENE_PHENO",
     "label": "VEP_GENE_PHENO",
     "source_name": "sample",
@@ -893,7 +893,7 @@
     "dimension": 0
   },
   {
-    "id": "fe9ce230-db68-4007-b967-31c0303748f9",
+    "id": "1a8b79d4-c487-4b1a-bcd7-f73965982393",
     "name": "VEP_SYMBOL_SOURCE",
     "label": "VEP_SYMBOL_SOURCE",
     "source_name": "sample",
@@ -904,7 +904,7 @@
     "dimension": 0
   },
   {
-    "id": "74614776-e053-459b-baf6-8e5223319cc2",
+    "id": "4ec595ef-0ada-4985-8c48-05112ba971aa",
     "name": "VEP_EUR_MAF",
     "label": "VEP_EUR_MAF",
     "source_name": "sample",
@@ -915,7 +915,7 @@
     "dimension": 0
   },
   {
-    "id": "78220cdc-4df4-4569-bc07-a44b38e4acc6",
+    "id": "ef4fbae5-1041-4152-9fc0-bf850aa5228c",
     "name": "VEP_ExAC_OTH_MAF",
     "label": "VEP_ExAC_OTH_MAF",
     "source_name": "sample",
@@ -926,7 +926,7 @@
     "dimension": 0
   },
   {
-    "id": "2575105e-43e1-4cc9-9903-d2900835d10c",
+    "id": "dc8f4481-a2f9-48ec-805f-0e4479915676",
     "name": "VEP_AMR_MAF",
     "label": "VEP_AMR_MAF",
     "source_name": "sample",
@@ -937,7 +937,7 @@
     "dimension": 0
   },
   {
-    "id": "e0a1f121-4c5a-4bb3-a0ae-a0dafbf13bcc",
+    "id": "62c1db84-b3b1-497a-bc59-0c85a2fc12f6",
     "name": "VEP_ExAC_AMR_MAF",
     "label": "VEP_ExAC_AMR_MAF",
     "source_name": "sample",
@@ -948,7 +948,7 @@
     "dimension": 0
   },
   {
-    "id": "59b86caa-4488-4efb-b0d5-43ea72aacf6f",
+    "id": "574fefc0-fc58-4800-9c9c-efada8a7c818",
     "name": "VEP_ASN_MAF",
     "label": "VEP_ASN_MAF",
     "source_name": "sample",
@@ -959,7 +959,7 @@
     "dimension": 0
   },
   {
-    "id": "1fe89510-27a7-4019-9cff-f9ee38b17b1b",
+    "id": "7f171b90-c897-4ddd-8574-064bbad3cf41",
     "name": "VEP_Consequence",
     "label": "VEP_Consequence",
     "source_name": "sample",
@@ -970,7 +970,7 @@
     "dimension": 0
   },
   {
-    "id": "7cb4b565-ab73-4acd-9699-9010f6f65107",
+    "id": "fce64bab-2d95-488b-8311-1ca9dd3ace93",
     "name": "VEP_SIFT",
     "label": "VEP_SIFT",
     "source_name": "sample",
@@ -981,7 +981,7 @@
     "dimension": 0
   },
   {
-    "id": "fe421a9b-a2a3-49a9-b7f1-b6e48d983794",
+    "id": "0d01f5d1-4c5a-4250-8579-16dd6054ae50",
     "name": "VEP_ExAC_SAS_MAF",
     "label": "VEP_ExAC_SAS_MAF",
     "source_name": "sample",
@@ -992,7 +992,7 @@
     "dimension": 0
   },
   {
-    "id": "97bd6310-ad8e-406c-a0ea-3c93c7706426",
+    "id": "76515578-8f6f-4919-a79b-0615fccc11a6",
     "name": "VEP_Genotype",
     "label": "VEP_Genotype",
     "source_name": "sample",
@@ -1003,7 +1003,7 @@
     "dimension": 0
   },
   {
-    "id": "8305c160-96e8-4174-895f-70b342bdee18",
+    "id": "90d7eaac-ac28-4880-bd51-13e899667acd",
     "name": "VEP_ZYG",
     "label": "VEP_ZYG",
     "source_name": "sample",
@@ -1014,7 +1014,7 @@
     "dimension": 0
   },
   {
-    "id": "74241588-ee6d-462d-b5ce-a8029c959349",
+    "id": "caae8651-ccbb-493c-a9d6-a8c57be9a04f",
     "name": "VEP_ExAC_NFE_MAF",
     "label": "VEP_ExAC_NFE_MAF",
     "source_name": "sample",
@@ -1025,7 +1025,7 @@
     "dimension": 0
   },
   {
-    "id": "52e20587-9609-4c47-b4f3-2657abf2b583",
+    "id": "12597250-ef22-4794-b404-5d1bd870bf9e",
     "name": "VEP_Existing_variation",
     "label": "VEP_Existing_variation",
     "source_name": "sample",
@@ -1036,7 +1036,7 @@
     "dimension": 0
   },
   {
-    "id": "5679ecd7-e135-43e6-9ab9-9b2b03ffd7ee",
+    "id": "a0da92fa-71e2-45dc-b358-1ed52f3cc782",
     "name": "VEP_ExAC_Adj_MAF",
     "label": "VEP_ExAC_Adj_MAF",
     "source_name": "sample",
@@ -1047,7 +1047,7 @@
     "dimension": 0
   },
   {
-    "id": "f7d37533-84da-422f-a4d5-3d6ca0aa3240",
+    "id": "de8b83c0-4121-4f3c-b400-5e2294f6595e",
     "name": "INFO_ExAC_AF_FIN_Adj",
     "label": "INFO_ExAC_AF_FIN_Adj",
     "source_name": "sample",
@@ -1058,7 +1058,7 @@
     "dimension": 1
   },
   {
-    "id": "97ec26dc-883e-454e-8b44-33344f15b7c1",
+    "id": "f93d3069-1e31-48a5-92de-a6107e3bb78a",
     "name": "VEP_INTRON",
     "label": "VEP_INTRON",
     "source_name": "sample",
@@ -1069,7 +1069,7 @@
     "dimension": 0
   },
   {
-    "id": "c6e4a3ff-e6e9-4617-ab55-5cab259ff01f",
+    "id": "1eb3e5f0-49a8-4c80-ba05-dd376df884de",
     "name": "VEP_CCDS",
     "label": "VEP_CCDS",
     "source_name": "sample",
@@ -1080,7 +1080,7 @@
     "dimension": 0
   },
   {
-    "id": "8420f1c2-924c-4e4b-837d-7a39e3e6412b",
+    "id": "a4b3fcd3-9b26-4bc3-9985-3144e9f306f1",
     "name": "VEP_BIOTYPE",
     "label": "VEP_BIOTYPE",
     "source_name": "sample",
@@ -1091,7 +1091,7 @@
     "dimension": 0
   },
   {
-    "id": "4eaaaa5d-51c3-42a0-88c8-1a75c9df4c92",
+    "id": "6edb2686-ba95-411a-ad23-164f35dbc151",
     "name": "VEP_EA_MAF",
     "label": "VEP_EA_MAF",
     "source_name": "sample",
@@ -1102,7 +1102,7 @@
     "dimension": 0
   },
   {
-    "id": "03d171c5-1798-4f67-bdca-4e9dea14609e",
+    "id": "ef407f6f-1299-49d7-90bb-7c9a65f65543",
     "name": "VEP_PolyPhen",
     "label": "VEP_PolyPhen",
     "source_name": "sample",
@@ -1113,7 +1113,7 @@
     "dimension": 0
   },
   {
-    "id": "535c2916-9e47-4277-a4da-b274bf33b884",
+    "id": "a46f78d4-bca4-4e4c-b7d7-9b78355fba78",
     "name": "VEP_Allele",
     "label": "VEP_Allele",
     "source_name": "sample",
@@ -1124,7 +1124,7 @@
     "dimension": 0
   },
   {
-    "id": "689e8b07-c8d0-468f-9fc1-5c0918699b4f",
+    "id": "74986f9f-2f93-43f7-8163-428d7548a0d6",
     "name": "VEP_SV",
     "label": "VEP_SV",
     "source_name": "sample",
@@ -1135,7 +1135,7 @@
     "dimension": 0
   },
   {
-    "id": "9e74480e-3968-47f7-a788-ca71a5dc2e55",
+    "id": "137f88f8-d374-4eb6-b3bf-a2805adcbecd",
     "name": "INFO_NC",
     "label": "INFO_NC",
     "source_name": "sample",
@@ -1146,7 +1146,7 @@
     "dimension": 1
   },
   {
-    "id": "29938d8d-a528-45a9-b1cb-d7b80769e568",
+    "id": "1835333f-f64f-442e-a0f1-3dbaf8dfd655",
     "name": "INFO_HOM",
     "label": "INFO_HOM",
     "source_name": "sample",
@@ -1157,7 +1157,7 @@
     "dimension": 1
   },
   {
-    "id": "54e6f1ec-44fa-48db-b074-7c5f8919bf2b",
+    "id": "66f3b922-2302-4d4e-a0e4-07bae1ed4465",
     "name": "INFO_ADP",
     "label": "INFO_ADP",
     "source_name": "sample",
@@ -1168,7 +1168,7 @@
     "dimension": 1
   },
   {
-    "id": "df135b60-83b2-44aa-b99c-b496a082be0c",
+    "id": "8774f0ca-3439-4348-b2f5-8b0d083e1bc5",
     "name": "INFO_HET",
     "label": "INFO_HET",
     "source_name": "sample",
@@ -1179,7 +1179,7 @@
     "dimension": 1
   },
   {
-    "id": "65c818bf-e080-4969-a3bf-5b4939b7c3f4",
+    "id": "50a8cc6b-f98e-496e-aaa6-81addc47e5fe",
     "name": "INFO_WT",
     "label": "INFO_WT",
     "source_name": "sample",
@@ -1190,216 +1190,7 @@
     "dimension": 1
   },
   {
-    "id": "bd0d581f-1048-4c5b-942f-524d98133b9e",
-    "name": "INFO_SGREFAA",
-    "label": "INFO_SGREFAA",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Reference Amino Acid",
-    "dimension": 1
-  },
-  {
-    "id": "aa7f07c8-294f-4e8a-8565-3ec2874d527f",
-    "name": "INFO_SGTI",
-    "label": "INFO_SGTI",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Transcript ID",
-    "dimension": 0
-  },
-  {
-    "id": "22cf5c1b-c9c9-451a-afb9-57dfea3a9c9d",
-    "name": "INFO_AF",
-    "label": "INFO_AF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele Frequency",
-    "dimension": -1
-  },
-  {
-    "id": "30c62fe9-ad0c-4a9d-a332-1d58dc48a2b7",
-    "name": "INFO_SGACOV",
-    "label": "INFO_SGACOV",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Allele Coverage",
-    "dimension": -1
-  },
-  {
-    "id": "e8b19586-98f4-4226-9ff3-65ed59444075",
-    "name": "INFO_SGGENEDIR",
-    "label": "INFO_SGGENEDIR",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "char",
-    "description": "Gene Direction",
-    "dimension": 1
-  },
-  {
-    "id": "b2d4e086-bae4-42ba-8439-ea7850b1a165",
-    "name": "INFO_SGANNOT",
-    "label": "INFO_SGANNOT",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Location-based Annotation: Coding Sequence(CDS),3'UTR(U3),5'UTR(U5),Acceptor Splice Site(AS),Donor Splice Site(DS),Intron(INT),Intergenic Region(ING)",
-    "dimension": 0
-  },
-  {
-    "id": "2e2fea80-6869-4105-b76c-c8f032cf565b",
-    "name": "INFO_SGCDSID",
-    "label": "INFO_SGCDSID",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "CDS Index",
-    "dimension": 1
-  },
-  {
-    "id": "355014ce-66e3-440b-b00d-34d640a02a51",
-    "name": "INFO_SGSEGDES",
-    "label": "INFO_SGSEGDES",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Segment Description",
-    "dimension": 1
-  },
-  {
-    "id": "b943acc3-846a-4dba-9c83-b96393e35a99",
-    "name": "INFO_SGSEGPOS",
-    "label": "INFO_SGSEGPOS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Segment Position",
-    "dimension": 1
-  },
-  {
-    "id": "0720398b-f2d2-414a-b466-cf8393ad8b69",
-    "name": "INFO_SGMRNAID",
-    "label": "INFO_SGMRNAID",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "mRNA Index",
-    "dimension": 1
-  },
-  {
-    "id": "5ea2d142-43cb-4670-9e05-dbe328d80c60",
-    "name": "INFO_SGAMBGAINPEN",
-    "label": "INFO_SGAMBGAINPEN",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Ambiguous Gain Penalty",
-    "dimension": 1
-  },
-  {
-    "id": "bd2d9a6d-e768-454f-b7f5-09e40c246b33",
-    "name": "INFO_DP",
-    "label": "INFO_DP",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Total Depth",
-    "dimension": 1
-  },
-  {
-    "id": "19a39abc-6a00-4f20-b285-23aa27845a3d",
-    "name": "INFO_SGPI",
-    "label": "INFO_SGPI",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Protein ID",
-    "dimension": 0
-  },
-  {
-    "id": "e30e8b3b-6ef9-4c01-b18d-3e2d8b2f4726",
-    "name": "INFO_SGGI",
-    "label": "INFO_SGGI",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Gene ID",
-    "dimension": 0
-  },
-  {
-    "id": "beca3d58-53ab-4336-90d7-647000a722ca",
-    "name": "INFO_SGAMBLOSSPEN",
-    "label": "INFO_SGAMBLOSSPEN",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Ambiguous Loss Penalty",
-    "dimension": 1
-  },
-  {
-    "id": "acd08fa9-9a30-4530-a411-3e7079d56a89",
-    "name": "INFO_NS",
-    "label": "INFO_NS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Number of Samples With Data",
-    "dimension": 1
-  },
-  {
-    "id": "5f29ab5a-de98-4050-a36f-51f23c051d27",
-    "name": "INFO_FC",
-    "label": "INFO_FC",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Functional Consequence",
-    "dimension": 0
-  },
-  {
-    "id": "18e61bca-3162-4df1-96df-1925a0d1dfe5",
-    "name": "INFO_SGAAC",
-    "label": "INFO_SGAAC",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "NextGEe Predicted Amino Acid Changed",
-    "dimension": -1
-  },
-  {
-    "id": "fa7f8fb7-3546-4299-aba4-e5a440a1761d",
-    "name": "INFO_SGASCORE",
-    "label": "INFO_SGASCORE",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele Score",
-    "dimension": -1
-  },
-  {
-    "id": "4716e4da-74af-44c8-adfb-41825e063ae3",
+    "id": "81b628cd-1bdd-406b-a447-5fcd124bfdca",
     "name": "INFO_REVB",
     "label": "INFO_REVB",
     "source_name": "sample",
@@ -1410,7 +1201,7 @@
     "dimension": -1
   },
   {
-    "id": "668092c6-62ad-4131-bc53-d50f5a043d0a",
+    "id": "d029debe-fe78-4a83-987a-d740abf98fec",
     "name": "INFO_FRO",
     "label": "INFO_FRO",
     "source_name": "sample",
@@ -1421,7 +1212,7 @@
     "dimension": 1
   },
   {
-    "id": "bf6eb26a-5bce-46e0-9355-897eceb46be6",
+    "id": "58e605da-15d0-4fd6-ab1e-bb89e19d9f3d",
     "name": "INFO_AO",
     "label": "INFO_AO",
     "source_name": "sample",
@@ -1432,7 +1223,7 @@
     "dimension": -1
   },
   {
-    "id": "28690ac4-9dd3-4aa6-bad8-4b8829b934e1",
+    "id": "bfcc3e8e-26e7-434d-b913-ae6c262b293c",
     "name": "INFO_SAR",
     "label": "INFO_SAR",
     "source_name": "sample",
@@ -1443,7 +1234,18 @@
     "dimension": -1
   },
   {
-    "id": "1a434e19-6791-4de1-8b8a-b84bc4a3b362",
+    "id": "e6f05837-c53c-4be0-ba18-1d544150be84",
+    "name": "INFO_AF",
+    "label": "INFO_AF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele frequency based on Flow Evaluator observation counts",
+    "dimension": -1
+  },
+  {
+    "id": "9a8beb6d-a79b-4a68-a36f-f73a50eeb0de",
     "name": "INFO_FSAF",
     "label": "INFO_FSAF",
     "source_name": "sample",
@@ -1454,7 +1256,7 @@
     "dimension": -1
   },
   {
-    "id": "6e2e36db-9584-4a7f-93ee-6228af06ed4c",
+    "id": "b6e9d405-efa7-4d92-a3d2-ed1a919aa241",
     "name": "INFO_SAF",
     "label": "INFO_SAF",
     "source_name": "sample",
@@ -1465,7 +1267,7 @@
     "dimension": -1
   },
   {
-    "id": "f33fb664-5682-4747-85f3-c88f9ecf7076",
+    "id": "6a520728-8308-4026-b0ae-c77e89d75b4e",
     "name": "INFO_MLLD",
     "label": "INFO_MLLD",
     "source_name": "sample",
@@ -1476,7 +1278,7 @@
     "dimension": -1
   },
   {
-    "id": "78f709cf-0f85-469c-aa1a-61dc119132da",
+    "id": "9a3d3eed-ac9f-4cf8-8c44-1e07735a4986",
     "name": "INFO_FSAR",
     "label": "INFO_FSAR",
     "source_name": "sample",
@@ -1487,7 +1289,7 @@
     "dimension": -1
   },
   {
-    "id": "f9b9a695-042a-49d6-ae5a-b8cd51d5f422",
+    "id": "d2ff8274-0e6b-45c8-a331-65f391ad5734",
     "name": "INFO_PB",
     "label": "INFO_PB",
     "source_name": "sample",
@@ -1498,7 +1300,7 @@
     "dimension": -1
   },
   {
-    "id": "491427f9-a3b4-43f1-8388-e814a25bacdf",
+    "id": "fb350ae3-815f-4962-8c4b-c22e6f9f0836",
     "name": "INFO_HS",
     "label": "INFO_HS",
     "source_name": "sample",
@@ -1509,7 +1311,7 @@
     "dimension": 1
   },
   {
-    "id": "0b98f61b-fbd2-4546-bcee-2e2c87b36668",
+    "id": "2a23d4d3-39e0-4111-88a5-97820490380a",
     "name": "INFO_OID",
     "label": "INFO_OID",
     "source_name": "sample",
@@ -1520,7 +1322,7 @@
     "dimension": 0
   },
   {
-    "id": "520f7d78-eb80-4f0b-bbee-b1db146082f5",
+    "id": "ced1808b-1a7b-419e-b894-ba86b9b638c2",
     "name": "INFO_REFB",
     "label": "INFO_REFB",
     "source_name": "sample",
@@ -1531,7 +1333,7 @@
     "dimension": -1
   },
   {
-    "id": "cfe2944e-4ccb-406b-82ba-8f41e109a7b1",
+    "id": "8c6c2127-d777-4370-b442-4c1d255d2c73",
     "name": "INFO_OREF",
     "label": "INFO_OREF",
     "source_name": "sample",
@@ -1542,7 +1344,7 @@
     "dimension": 0
   },
   {
-    "id": "75541dce-c2ec-4cbf-9375-68ebd855e554",
+    "id": "c4782121-141b-44c8-b5de-5e61fc73be1b",
     "name": "INFO_LEN",
     "label": "INFO_LEN",
     "source_name": "sample",
@@ -1553,7 +1355,7 @@
     "dimension": -1
   },
   {
-    "id": "b7389986-10e0-47aa-ab55-fc0e73898fd4",
+    "id": "270203c9-39b6-4a0a-a55b-88781d76527d",
     "name": "INFO_FWDB",
     "label": "INFO_FWDB",
     "source_name": "sample",
@@ -1564,7 +1366,7 @@
     "dimension": -1
   },
   {
-    "id": "6bbc2f8a-2f78-4469-aa3b-1d53def58367",
+    "id": "ac47aa6a-74cd-4f3c-9b29-624b192371c2",
     "name": "INFO_STB",
     "label": "INFO_STB",
     "source_name": "sample",
@@ -1575,7 +1377,7 @@
     "dimension": -1
   },
   {
-    "id": "8e4d541b-eb85-4864-ad9d-a77632d701c9",
+    "id": "9c9e673d-6695-473f-8c7b-c88238b7377f",
     "name": "INFO_SSSB",
     "label": "INFO_SSSB",
     "source_name": "sample",
@@ -1586,7 +1388,7 @@
     "dimension": -1
   },
   {
-    "id": "dd85601c-b5a3-4579-8de8-819a2f2b144f",
+    "id": "2a2189b1-7ffd-45a1-8c3c-8b0794d357d0",
     "name": "INFO_RO",
     "label": "INFO_RO",
     "source_name": "sample",
@@ -1597,7 +1399,18 @@
     "dimension": 1
   },
   {
-    "id": "838863e8-0def-486f-951c-4ce5efb2a647",
+    "id": "1ee5f733-2875-43a0-8ae0-51bcecc40ed3",
+    "name": "INFO_DP",
+    "label": "INFO_DP",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Total read depth at the locus",
+    "dimension": 1
+  },
+  {
+    "id": "9a76793d-c53f-4ff4-afe2-4b31806eb6f4",
     "name": "INFO_VARB",
     "label": "INFO_VARB",
     "source_name": "sample",
@@ -1608,7 +1421,7 @@
     "dimension": -1
   },
   {
-    "id": "b7cbcf0a-861e-49fb-9d48-f49f55f92dca",
+    "id": "315c7100-4de6-43fe-ae56-bceec33df302",
     "name": "INFO_PBP",
     "label": "INFO_PBP",
     "source_name": "sample",
@@ -1619,7 +1432,7 @@
     "dimension": -1
   },
   {
-    "id": "75a02c3a-5f0e-4b7a-9d02-34345509523c",
+    "id": "d6c33f79-0b62-44de-a5b5-a55775cfcb84",
     "name": "INFO_FSRF",
     "label": "INFO_FSRF",
     "source_name": "sample",
@@ -1630,7 +1443,7 @@
     "dimension": 1
   },
   {
-    "id": "aa55764d-fe13-4e4d-9048-cfbd24bc9d78",
+    "id": "21d8b72a-bdd0-4a79-8597-a5a8f03fad5c",
     "name": "INFO_RBI",
     "label": "INFO_RBI",
     "source_name": "sample",
@@ -1641,7 +1454,7 @@
     "dimension": -1
   },
   {
-    "id": "8397d642-c2b1-4d65-8d67-ace52720f2fe",
+    "id": "0bbfbba2-83f2-4fe5-88b6-c16dc4e30376",
     "name": "INFO_OPOS",
     "label": "INFO_OPOS",
     "source_name": "sample",
@@ -1652,7 +1465,7 @@
     "dimension": 0
   },
   {
-    "id": "23f608b2-9c8f-40f7-bba2-6eb872c9d727",
+    "id": "79ea6973-257a-4c4f-b692-1eaeafa5ffbc",
     "name": "INFO_TYPE",
     "label": "INFO_TYPE",
     "source_name": "sample",
@@ -1663,7 +1476,7 @@
     "dimension": -1
   },
   {
-    "id": "b6deff0b-be97-4c2b-aa6e-7a4bbd83dbc3",
+    "id": "322487b5-a04d-4474-886f-190112a5da20",
     "name": "INFO_FSRR",
     "label": "INFO_FSRR",
     "source_name": "sample",
@@ -1674,7 +1487,7 @@
     "dimension": 1
   },
   {
-    "id": "61916758-34b1-47b7-85dc-a1cf469538da",
+    "id": "91f33624-4595-4a87-80cf-2bfdda158f85",
     "name": "INFO_FDP",
     "label": "INFO_FDP",
     "source_name": "sample",
@@ -1685,7 +1498,7 @@
     "dimension": 1
   },
   {
-    "id": "e02f3b45-caff-46c8-94aa-4638c3bdc86d",
+    "id": "505cb432-64c9-4e94-9466-0142f5541e39",
     "name": "INFO_HRUN",
     "label": "INFO_HRUN",
     "source_name": "sample",
@@ -1696,7 +1509,7 @@
     "dimension": -1
   },
   {
-    "id": "a45f6155-452d-43b9-990f-b2366b8afb85",
+    "id": "dcebdf7e-843a-4bdf-b1c5-49a79f3facdb",
     "name": "INFO_SRF",
     "label": "INFO_SRF",
     "source_name": "sample",
@@ -1707,7 +1520,7 @@
     "dimension": 1
   },
   {
-    "id": "9b37879a-2b57-42ee-bb87-cf9c3b6371dc",
+    "id": "7afcfb0c-60c9-479d-bff6-a2da1eed11d4",
     "name": "INFO_SRR",
     "label": "INFO_SRR",
     "source_name": "sample",
@@ -1718,7 +1531,7 @@
     "dimension": 1
   },
   {
-    "id": "32ab49ce-2ea6-4a9f-95cb-19c335d58b02",
+    "id": "34736e9c-3199-49db-9ee2-cae77cd6c588",
     "name": "INFO_FR",
     "label": "INFO_FR",
     "source_name": "sample",
@@ -1729,7 +1542,18 @@
     "dimension": 0
   },
   {
-    "id": "6de4170d-6468-44bf-afd5-f070c420f4cb",
+    "id": "2c17037b-2fc6-418c-b674-87370cfa768e",
+    "name": "INFO_NS",
+    "label": "INFO_NS",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Number of samples with data",
+    "dimension": 1
+  },
+  {
+    "id": "f5ef0305-0ba2-4ea8-9f49-69874f4a6fd2",
     "name": "INFO_FAO",
     "label": "INFO_FAO",
     "source_name": "sample",
@@ -1740,7 +1564,7 @@
     "dimension": -1
   },
   {
-    "id": "cd506bcb-8d4f-41c2-9089-a993b70dc663",
+    "id": "7bf3c9d4-6a56-426d-bbfc-19bcc2b215eb",
     "name": "INFO_QD",
     "label": "INFO_QD",
     "source_name": "sample",
@@ -1751,7 +1575,7 @@
     "dimension": 1
   },
   {
-    "id": "9c3435ce-44f6-44bf-b47d-8b53b6fed37e",
+    "id": "c04dec6c-e63a-4db1-b239-e2327b9b8f05",
     "name": "INFO_FXX",
     "label": "INFO_FXX",
     "source_name": "sample",
@@ -1762,7 +1586,7 @@
     "dimension": 1
   },
   {
-    "id": "82ba4df1-34c8-444c-b382-b7088ba1f49e",
+    "id": "3b2fbe1a-c642-4835-92ec-e18228b09b1d",
     "name": "INFO_SSEN",
     "label": "INFO_SSEN",
     "source_name": "sample",
@@ -1773,7 +1597,7 @@
     "dimension": -1
   },
   {
-    "id": "1f7ac902-8ec9-48ab-9986-4a5105f9dea5",
+    "id": "b88a2a20-fe6a-4017-9120-fb6759f84690",
     "name": "INFO_SSEP",
     "label": "INFO_SSEP",
     "source_name": "sample",
@@ -1784,7 +1608,7 @@
     "dimension": -1
   },
   {
-    "id": "dd31f931-bb4a-4145-bac4-f628b9fe8fb5",
+    "id": "92751503-a305-4921-b310-36df70f0d39e",
     "name": "INFO_STBP",
     "label": "INFO_STBP",
     "source_name": "sample",
@@ -1795,7 +1619,7 @@
     "dimension": -1
   },
   {
-    "id": "fc8f8237-324a-446c-9e18-792e8aef3608",
+    "id": "98ced1b4-cabd-4de4-b4ca-ed4d8ca76211",
     "name": "INFO_OMAPALT",
     "label": "INFO_OMAPALT",
     "source_name": "sample",
@@ -1806,7 +1630,7 @@
     "dimension": 0
   },
   {
-    "id": "afce8c51-e341-4e4c-9432-5f92f50b9f9e",
+    "id": "d1cd8fbf-fe36-44f0-aee9-63bde571bdd4",
     "name": "INFO_OALT",
     "label": "INFO_OALT",
     "source_name": "sample",
@@ -1817,7 +1641,7 @@
     "dimension": 0
   },
   {
-    "id": "0e7683e6-2da6-4092-aa75-73998644ec96",
+    "id": "e4c0f5fd-1fd4-455c-ae5a-7b0c07f7fcce",
     "name": "INFO_SS",
     "label": "INFO_SS",
     "source_name": "sample",
@@ -1828,7 +1652,7 @@
     "dimension": 1
   },
   {
-    "id": "64833238-b5d9-4036-b092-fb5a23142fc5",
+    "id": "30b6f66c-ef97-4ac9-80a9-f06304943f1e",
     "name": "INFO_GPV",
     "label": "INFO_GPV",
     "source_name": "sample",
@@ -1839,7 +1663,7 @@
     "dimension": 1
   },
   {
-    "id": "ff7fd0da-d826-42b8-9ef4-fd243a835296",
+    "id": "f51a3abc-f565-4fea-98ea-b8903e4b167b",
     "name": "INFO_SSC",
     "label": "INFO_SSC",
     "source_name": "sample",
@@ -1850,7 +1674,7 @@
     "dimension": 1
   },
   {
-    "id": "e64af729-3a10-4a92-b6c0-970501d322a5",
+    "id": "3414216a-1f99-4d87-9090-7b139b35ac9e",
     "name": "INFO_SOMATIC",
     "label": "INFO_SOMATIC",
     "source_name": "sample",
@@ -1861,7 +1685,7 @@
     "dimension": 1
   },
   {
-    "id": "5a879c4d-47cc-4a2e-809f-e9c58a243187",
+    "id": "9c3a4cb7-4063-4ec0-b97f-93af598cff7a",
     "name": "INFO_SPV",
     "label": "INFO_SPV",
     "source_name": "sample",
@@ -1872,7 +1696,7 @@
     "dimension": 1
   },
   {
-    "id": "67c304b7-3a7e-428c-a461-4f3f403082e8",
+    "id": "5e8751c2-40e2-4ef0-9488-475d095cb528",
     "name": "INFO_EUR_AF",
     "label": "INFO_EUR_AF",
     "source_name": "sample",
@@ -1883,7 +1707,7 @@
     "dimension": -1
   },
   {
-    "id": "ae8b7a72-822f-4d34-a24d-f635f0b70bb1",
+    "id": "41f06462-d6ee-4c1a-9f69-37e8747a3b1f",
     "name": "INFO_MULTI_ALLELIC",
     "label": "INFO_MULTI_ALLELIC",
     "source_name": "sample",
@@ -1894,7 +1718,7 @@
     "dimension": 1
   },
   {
-    "id": "6b3587af-f92c-4211-8892-d6bfc6c29eda",
+    "id": "d4c6e503-fdcc-4bcf-b688-e88fcbf8ea9e",
     "name": "INFO_SAS_AF",
     "label": "INFO_SAS_AF",
     "source_name": "sample",
@@ -1905,7 +1729,7 @@
     "dimension": -1
   },
   {
-    "id": "deb0dedf-180a-4b54-8c24-a3cb660c6cf2",
+    "id": "e2da14bb-839b-4950-a520-d35420f3ff4f",
     "name": "INFO_AN",
     "label": "INFO_AN",
     "source_name": "sample",
@@ -1916,7 +1740,7 @@
     "dimension": 1
   },
   {
-    "id": "f3a3ee48-91f4-4d29-9c09-f83280e932a8",
+    "id": "df483f04-59a1-4d1e-bda5-a78480f516b4",
     "name": "INFO_AC",
     "label": "INFO_AC",
     "source_name": "sample",
@@ -1927,7 +1751,7 @@
     "dimension": -1
   },
   {
-    "id": "f9bc9096-73d1-479b-a409-764c47b2ab10",
+    "id": "9647122e-f84b-447c-8731-c23af80e2f09",
     "name": "INFO_AA",
     "label": "INFO_AA",
     "source_name": "sample",
@@ -1938,7 +1762,7 @@
     "dimension": 1
   },
   {
-    "id": "46cc3efc-3cce-4bac-9b34-44bf05231ced",
+    "id": "2a397b93-d0d8-4157-b305-b9c46a113cfa",
     "name": "INFO_EAS_AF",
     "label": "INFO_EAS_AF",
     "source_name": "sample",
@@ -1949,7 +1773,7 @@
     "dimension": -1
   },
   {
-    "id": "8044bd53-0863-456c-ba85-8b57155379a6",
+    "id": "17d057ea-4095-43c4-af5e-111037b0a7cc",
     "name": "INFO_END",
     "label": "INFO_END",
     "source_name": "sample",
@@ -1960,7 +1784,7 @@
     "dimension": 1
   },
   {
-    "id": "b55ddfaf-babc-4b46-9237-37b0b9bac280",
+    "id": "3f42b411-9138-4395-bb10-4e4aab8a30e3",
     "name": "INFO_SVTYPE",
     "label": "INFO_SVTYPE",
     "source_name": "sample",
@@ -1971,7 +1795,7 @@
     "dimension": 1
   },
   {
-    "id": "e048984b-9de6-47a4-a7ab-428c4647a4ba",
+    "id": "c8202c92-594a-434d-bf5e-e709510ec1e0",
     "name": "INFO_AMR_AF",
     "label": "INFO_AMR_AF",
     "source_name": "sample",
@@ -1982,7 +1806,7 @@
     "dimension": -1
   },
   {
-    "id": "ce7ae263-beb1-459a-b276-9568c378b3b8",
+    "id": "58b59313-48c8-4399-a1ed-e4e04f22637c",
     "name": "INFO_EX_TARGET",
     "label": "INFO_EX_TARGET",
     "source_name": "sample",
@@ -1993,7 +1817,7 @@
     "dimension": 1
   },
   {
-    "id": "ed9fc866-2d6b-4284-b306-31aa51016097",
+    "id": "491c4c27-f3fd-43a9-8675-9e0000300302",
     "name": "INFO_AFR_AF",
     "label": "INFO_AFR_AF",
     "source_name": "sample",
@@ -2004,7 +1828,7 @@
     "dimension": -1
   },
   {
-    "id": "0ea56841-7488-4291-97e9-19ed1993ce71",
+    "id": "7a59ddf7-e763-4930-8d96-8a32c9aaab68",
     "name": "INFO_VT",
     "label": "INFO_VT",
     "source_name": "sample",
@@ -2013,5 +1837,181 @@
     "value_type": "string",
     "description": "indicates what type of variant the line represents",
     "dimension": 0
+  },
+  {
+    "id": "fbfdd436-58ef-47b5-aaa4-b756f4a5f2fc",
+    "name": "INFO_SGREFAA",
+    "label": "INFO_SGREFAA",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Reference Amino Acid",
+    "dimension": 1
+  },
+  {
+    "id": "fe307bcd-d52a-400b-bbeb-ebc8624dc889",
+    "name": "INFO_SGTI",
+    "label": "INFO_SGTI",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Transcript ID",
+    "dimension": 0
+  },
+  {
+    "id": "31cadb71-71b6-4bbe-ad7c-63d88bb1b63f",
+    "name": "INFO_SGACOV",
+    "label": "INFO_SGACOV",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Allele Coverage",
+    "dimension": -1
+  },
+  {
+    "id": "b2841043-5be1-4c31-b947-b81d821ee1e2",
+    "name": "INFO_SGGENEDIR",
+    "label": "INFO_SGGENEDIR",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "char",
+    "description": "Gene Direction",
+    "dimension": 1
+  },
+  {
+    "id": "6a3a993d-35f8-4cea-886e-22e936cfe371",
+    "name": "INFO_SGANNOT",
+    "label": "INFO_SGANNOT",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Location-based Annotation: Coding Sequence(CDS),3'UTR(U3),5'UTR(U5),Acceptor Splice Site(AS),Donor Splice Site(DS),Intron(INT),Intergenic Region(ING)",
+    "dimension": 0
+  },
+  {
+    "id": "14f8fc9f-a2a2-4d58-a2e5-f73af72b15e2",
+    "name": "INFO_SGCDSID",
+    "label": "INFO_SGCDSID",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "CDS Index",
+    "dimension": 1
+  },
+  {
+    "id": "8777447e-e204-48ae-a409-a4767adf1bcc",
+    "name": "INFO_SGSEGDES",
+    "label": "INFO_SGSEGDES",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Segment Description",
+    "dimension": 1
+  },
+  {
+    "id": "b98132bb-ec80-45af-bb73-f72af6e33d3e",
+    "name": "INFO_SGSEGPOS",
+    "label": "INFO_SGSEGPOS",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Segment Position",
+    "dimension": 1
+  },
+  {
+    "id": "0ea7d79d-92f3-4624-b0be-623a458e2675",
+    "name": "INFO_SGMRNAID",
+    "label": "INFO_SGMRNAID",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "mRNA Index",
+    "dimension": 1
+  },
+  {
+    "id": "85fd451f-ce7f-4ec0-958c-b905085ea6dc",
+    "name": "INFO_SGAMBGAINPEN",
+    "label": "INFO_SGAMBGAINPEN",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Ambiguous Gain Penalty",
+    "dimension": 1
+  },
+  {
+    "id": "30ce864a-6104-4a17-843c-4a9a0e0ce2d5",
+    "name": "INFO_SGPI",
+    "label": "INFO_SGPI",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Protein ID",
+    "dimension": 0
+  },
+  {
+    "id": "e75cfc57-2f5d-4b85-83ea-ca62c361972b",
+    "name": "INFO_SGGI",
+    "label": "INFO_SGGI",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Gene ID",
+    "dimension": 0
+  },
+  {
+    "id": "de97f312-af06-4937-acc5-c0df4c9af48e",
+    "name": "INFO_SGAMBLOSSPEN",
+    "label": "INFO_SGAMBLOSSPEN",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Ambiguous Loss Penalty",
+    "dimension": 1
+  },
+  {
+    "id": "15629b68-31af-42cb-89a2-4bb4bedf8b1f",
+    "name": "INFO_FC",
+    "label": "INFO_FC",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Functional Consequence",
+    "dimension": 0
+  },
+  {
+    "id": "c7831e11-1506-473f-a529-150b57437124",
+    "name": "INFO_SGAAC",
+    "label": "INFO_SGAAC",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "NextGEe Predicted Amino Acid Changed",
+    "dimension": -1
+  },
+  {
+    "id": "50642057-4935-4055-8c1f-9069dc25fd56",
+    "name": "INFO_SGASCORE",
+    "label": "INFO_SGASCORE",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele Score",
+    "dimension": -1
   }
 ]

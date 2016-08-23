@@ -1,5 +1,5 @@
 {
-  "type": "standard",
+  "type": "default",
   "reference": "hg19",
   "fields": {
     "VEP_ExAC_Adj_MAF": {
