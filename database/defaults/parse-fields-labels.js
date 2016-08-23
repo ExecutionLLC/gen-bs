@@ -94,16 +94,14 @@ const labels = columns.reduce((result, col) => {
         // Therefore get only the first value for MEF fields
         if (fieldName.endsWith('MAF')) {
             const columnObject = createColumnObject(fieldName, label[0]);
-            result.push(columnObject);
+            return [...result, columnObject];
         } else {
-            label.map((l, index) => createColumnObject(`${fieldName}_${index}`, l))
-                .forEach(columnObject => result.push(columnObject));
+            return [...result, label.map((l, index) => createColumnObject(`${fieldName}_${index}`, l))];
         }
     } else {
         const columnObject = createColumnObject(fieldName, label);
-        result.push(columnObject);
+        return [...result, columnObject];
     }
-    return result;
 }, []);
 fs.writeFileSync(__dirname + `/${outputFile}`, JSON.stringify(labels, null, 2));
 
