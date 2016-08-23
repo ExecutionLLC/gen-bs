@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
-import {receiveFields, receiveTotalFields} from './fields';
+import {/*receiveFields, */receiveTotalFields} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {
     receiveInitialQueryHistory,
@@ -11,7 +11,7 @@ import {
     createNewHistoryItem
 } from './queryHistory';
 //import {analyze} from './ui';
-import {changeSample, receiveSamplesList} from './samplesList';
+import {/*changeSample, */receiveSamplesList} from './samplesList';
 import {
     filtersListReceive
 } from './filtersList';
