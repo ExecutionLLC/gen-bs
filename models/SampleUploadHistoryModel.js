@@ -10,7 +10,7 @@ class SampleUploadHistoryModel extends ModelBase {
         super(models, 'sample_upload_history', null);
     }
 
-    add(historyEntry, callback) {
+    add(user, languId, historyEntry, callback) {
         this.db.transactionally((trx, callback) => {
             trx(this.baseTableName)
                 .insert(ChangeCaseUtil.convertKeysToSnakeCase(historyEntry))
@@ -47,7 +47,7 @@ class SampleUploadHistoryModel extends ModelBase {
                 // In Postgres count returns BigInt which becomes string in JS.
                 // We know that the number of active uploads is not so big, so
                 // convert it here.
-                .then((countString) => +countString)
+                .then((countStrings) => +countStrings[0].count)
                 .asCallback(callback);
         }, callback);
     }
