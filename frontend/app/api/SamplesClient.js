@@ -38,7 +38,7 @@ export default class SamplesClient extends UserEntityClientBase {
         if (!sample.id || !sample.fileName) {
             return false;
         }
-        if (!_.includes([entityType.STANDARD, entityType.ADVANCED, entityType.USER], sample.type)) {
+        if (!_.includes([entityType.DEFAULT, entityType.STANDARD, entityType.ADVANCED, entityType.USER], sample.type)) {
             return false;
         }
         if (shouldCheckFieldValues) {
