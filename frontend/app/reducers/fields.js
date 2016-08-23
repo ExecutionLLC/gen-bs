@@ -13,8 +13,7 @@ const initialState = {
     sourceFieldsList: [],
     totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
     // Fields allowed for selection in a typical fields list (include current sample fields and sources fields)
-    allowedFieldsList: [],
-    allowedIdToFieldHash: {}
+    allowedFieldsList: []
 };
 
 // Patch field label because it may not exist
@@ -49,7 +48,6 @@ function reduceReceiveFields(action, state) {
         ..._.filter(fields, ['isEditable', false]),
         ...sourceFieldsList
     ];
-    const allowedIdToFieldHash = _.keyBy(allowedFieldsList, (field) => field.id);
 
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
@@ -58,7 +56,6 @@ function reduceReceiveFields(action, state) {
         sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray(fields),
         editableFields,
         allowedFieldsList,
-        allowedIdToFieldHash,
         lastUpdated: action.receivedAt
     });
 }
