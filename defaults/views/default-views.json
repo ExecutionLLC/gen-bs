@@ -1,12 +1,12 @@
 [
   {
-    "id": "301b4e00-c7e2-412e-9dba-ffc27063eb58",
+    "id": "ba5f2236-5baa-4ae0-aa18-5392ee702f28",
     "name": "Default Test View",
     "type": "default",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "f0498580-d694-4c90-82fc-ceddff23cd52",
+        "id": "56e5156e-2d8c-4489-ab1d-3259da0bce1e",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
@@ -14,7 +14,7 @@
         "keywords": []
       },
       {
-        "id": "1667f875-e1fc-4bbf-bf81-17bd240a6318",
+        "id": "5f0db362-b0de-416b-b46c-88a8b55b38e1",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
@@ -22,30 +22,24 @@
         "keywords": []
       },
       {
-        "id": "eb2a7a13-18a9-486c-a3f9-17c08dc7e7e0",
-        "field_id": "00000000-0000-0000-0000-000000000007",
-        "order": 6,
-        "keywords": []
-      },
-      {
-        "id": "5d1f50a9-d8ed-4e34-8dc4-5ce12e09153d",
+        "id": "3a2ca4f3-b4cd-49ce-b516-3d8e084a9955",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 5,
         "keywords": [
-          "bed2d914-cb4b-46fc-aa83-0ac7e0f1be20",
-          "73b90dc1-07b4-4397-b0a8-30cfb76ec90d"
+          "1770c591-5bfc-4bf9-90c3-20fc7c557f6c",
+          "7fd7384c-0201-4934-bef1-64628d311e14"
         ]
       }
     ]
   },
   {
-    "id": "1768b6b3-78f2-40db-b8ab-65d490d9a38e",
+    "id": "895ef840-bfd4-49c1-a32a-d46ac0afdf6c",
     "name": "Test Default View",
     "type": "standard",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "f0498580-d694-4c90-82fc-ceddff23cd52",
+        "id": "74ea7b1f-f4d4-4419-8884-30a290878546",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
@@ -53,7 +47,7 @@
         "keywords": []
       },
       {
-        "id": "1667f875-e1fc-4bbf-bf81-17bd240a6318",
+        "id": "702aae39-95c4-44c0-9c37-fce8a9d6c7a7",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
@@ -61,30 +55,30 @@
         "keywords": []
       },
       {
-        "id": "eb2a7a13-18a9-486c-a3f9-17c08dc7e7e0",
+        "id": "496e59fb-3565-4b2f-aa3d-2d2229638da6",
         "field_id": "00000000-0000-0000-0000-000000000007",
         "order": 6,
         "keywords": []
       },
       {
-        "id": "5d1f50a9-d8ed-4e34-8dc4-5ce12e09153d",
+        "id": "f5df6aea-5b31-4b17-b701-8eaa2cd29e0c",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 5,
         "keywords": [
-          "bed2d914-cb4b-46fc-aa83-0ac7e0f1be20",
-          "73b90dc1-07b4-4397-b0a8-30cfb76ec90d"
+          "1770c591-5bfc-4bf9-90c3-20fc7c557f6c",
+          "7fd7384c-0201-4934-bef1-64628d311e14"
         ]
       }
     ]
   },
   {
-    "id": "affe11bd-d047-4cba-baf9-b052082257e7",
+    "id": "e5e23c8b-915b-4621-9c58-e93c975d646e",
     "name": "Another Default View",
     "type": "advanced",
     "description": "This is default view with two columns and no keywords",
     "view_list_items": [
       {
-        "id": "c10ea804-19f2-4e64-8cc1-03beb79e743e",
+        "id": "f6e5837a-9a68-4460-8903-8ec5f6073c7b",
         "field_id": "00000000-0000-0000-0000-000000000001",
         "order": 1,
         "sort_order": 1,
@@ -92,7 +86,7 @@
         "keywords": []
       },
       {
-        "id": "87832ffb-0f0a-49e1-a26c-88dc528428b4",
+        "id": "be714b66-af2e-4dbf-bb88-4d80b5b799a3",
         "field_id": "00000000-0000-0000-0000-000000000002",
         "order": 2,
         "sort_order": 2,
@@ -100,17 +94,17 @@
         "keywords": []
       },
       {
-        "id": "cf5abaab-9aae-432f-9bdc-7e1acf01016e",
+        "id": "dfaf896b-e157-430a-8118-a6d3ae40e2e2",
         "field_id": "00000000-0000-0000-0000-000000000007",
         "order": 3,
         "keywords": []
       },
       {
-        "id": "2f6f5008-c08b-4678-9290-a6cfde30c0a0",
+        "id": "b6f04f42-1cc9-478e-a1ce-c123fe14617d",
         "field_id": "00000000-0000-0000-0000-000000000005",
         "order": 4,
         "keywords": [
-          "73b90dc1-07b4-4397-b0a8-30cfb76ec90d"
+          "7fd7384c-0201-4934-bef1-64628d311e14"
         ]
       }
     ]
