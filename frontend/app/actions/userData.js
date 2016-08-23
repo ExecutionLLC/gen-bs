@@ -91,8 +91,8 @@ export function fetchUserdata() {
                 dispatch(receiveSamplesList(samples));
                 dispatch(receiveInitialQueryHistory(analyses));
                 if (analyses[0]) {
-                    dispatch(fetchFields(sample.id)); // TODO check if no need to wait fetchFields
                     const historyItem = analyses[0];
+                    dispatch(fetchFields(historyItem.samples[0].id)); // TODO check if no need to wait fetchFields
                     dispatch(setCurrentQueryHistoryId(historyItem.id));
                     dispatch(analyze({
                         id: historyItem.id,
