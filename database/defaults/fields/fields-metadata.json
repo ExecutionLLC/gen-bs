@@ -99,22 +99,22 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "2b10d013-ccf5-47a7-812d-0676821d153c",
+        "id": "4e851371-3f8f-4be4-b78f-5bbb283d535c",
         "langu_id": "en",
         "value": "Proband"
       },
       {
-        "id": "6fa8abbf-f134-4390-ac48-ccac80df8f48",
+        "id": "e3a80246-ded7-483e-beb2-e524d02fe894",
         "langu_id": "en",
         "value": "Mother"
       },
       {
-        "id": "a6877cf5-fc7e-4d71-9770-8fbefe68fea5",
+        "id": "0fcba050-43c6-4711-a492-eb708cd6ca31",
         "langu_id": "en",
         "value": "Father"
       },
       {
-        "id": "5339f811-6bb5-4f91-8f00-76a74031cca5",
+        "id": "07e7e2b8-6afc-46cf-8f8c-d974ab82d867",
         "langu_id": "en",
         "value": "Sibling"
       }
@@ -132,17 +132,17 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "e2868258-aee9-409c-b076-7610eb0f3c32",
+        "id": "6449a38c-d9ac-4008-b16e-ab0d5fa096f8",
         "langu_id": "en",
         "value": "Unknown"
       },
       {
-        "id": "b3aa8d8d-19c0-4401-9fc7-3cbd3f9fc818",
+        "id": "e495751f-6a19-4bdc-864c-2ed8eac075e3",
         "langu_id": "en",
         "value": "Male"
       },
       {
-        "id": "b2cab407-480d-4854-91e0-ff5f46dbce4e",
+        "id": "528289cb-6f52-4706-bc11-07bae010b6e2",
         "langu_id": "en",
         "value": "Female"
       }
@@ -160,17 +160,17 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "6b8490d2-c95a-4a9f-bccb-e34faeaa7f5e",
+        "id": "2d3fb0e2-7a2c-4376-8ef6-e382d4fe4fe3",
         "langu_id": "en",
         "value": "Unknown"
       },
       {
-        "id": "deb1143b-4719-4655-a744-286dac477729",
+        "id": "3d8c55f4-a9b0-4d79-84f5-b9e139982a8d",
         "langu_id": "en",
         "value": "Big ears (hpo1)"
       },
       {
-        "id": "e911c5dd-1de9-4ae7-89b7-b488c180180f",
+        "id": "d2f7ab6e-030c-4524-8eeb-db72de9f8b27",
         "langu_id": "en",
         "value": "Small ears (hpo2)"
       }
@@ -210,12 +210,12 @@
     "dimension": 1,
     "available_values": [
       {
-        "id": "507b84df-6c38-4eb7-b13d-e660766ba02f",
+        "id": "b559ccd2-5bd5-47f5-9e29-91bb066592f6",
         "langu_id": "en",
         "value": "hg19"
       },
       {
-        "id": "f63c57b8-9206-4b73-ba95-ee5279d399e8",
+        "id": "ff9122f8-8de6-486c-9c4b-25a162ff27ce",
         "langu_id": "en",
         "value": "hg38"
       }
@@ -233,7 +233,7 @@
     "dimension": 1
   },
   {
-    "id": "80cb374b-1acd-4a2c-99b0-ebdb98c52863",
+    "id": "ece32624-a3cf-499a-9a0a-a9b4421e5e6d",
     "name": "INFO_ExAC_AF_AMR_Adj",
     "label": "INFO_ExAC_AF_AMR_Adj",
     "source_name": "sample",
@@ -244,7 +244,7 @@
     "dimension": 1
   },
   {
-    "id": "474fb82c-f029-486f-867e-7f7505041a42",
+    "id": "a629a83e-f803-4b4e-a639-ea7cfc650bd7",
     "name": "VEP_Feature",
     "label": "VEP_Feature",
     "source_name": "sample",
@@ -255,7 +255,7 @@
     "dimension": 0
   },
   {
-    "id": "1bc89629-b2a1-45c6-9239-1b61b4184756",
+    "id": "35331941-11ad-4425-90cf-c5de98357a8d",
     "name": "VEP_CELL_TYPE",
     "label": "VEP_CELL_TYPE",
     "source_name": "sample",
@@ -266,7 +266,7 @@
     "dimension": 0
   },
   {
-    "id": "935f7b88-4762-4960-ad43-aa788910f460",
+    "id": "d493dbe7-e072-4908-80e5-bfc7a8172ec7",
     "name": "INFO_ExAC_AF",
     "label": "INFO_ExAC_AF",
     "source_name": "sample",
@@ -277,7 +277,7 @@
     "dimension": 1
   },
   {
-    "id": "577af8eb-d0d2-4c69-93c6-8b6eaba37b88",
+    "id": "fbe667df-39d3-423d-a6da-629c0d02245e",
     "name": "VEP_DOMAINS",
     "label": "VEP_DOMAINS",
     "source_name": "sample",
@@ -288,7 +288,7 @@
     "dimension": 0
   },
   {
-    "id": "9d861b26-1d3a-479b-b3d9-0e7c020e887b",
+    "id": "c6204898-2c5c-4c5b-86b7-2e58024da67c",
     "name": "VEP_CLIN_SIG",
     "label": "VEP_CLIN_SIG",
     "source_name": "sample",
@@ -299,7 +299,7 @@
     "dimension": 0
   },
   {
-    "id": "b794458a-d37d-476a-8e67-f0cee0afb1cf",
+    "id": "09f86b12-c855-4a38-8840-4802833be2b0",
     "name": "VEP_MOTIF_SCORE_CHANGE",
     "label": "VEP_MOTIF_SCORE_CHANGE",
     "source_name": "sample",
@@ -310,7 +310,7 @@
     "dimension": 0
   },
   {
-    "id": "669dacf0-fccd-4b6e-af86-06251965d8b8",
+    "id": "a2db68e3-4cc2-4c7b-9fb5-06dab83382e5",
     "name": "INFO_ExAC_AF_NFE_Adj",
     "label": "INFO_ExAC_AF_NFE_Adj",
     "source_name": "sample",
@@ -321,7 +321,7 @@
     "dimension": 1
   },
   {
-    "id": "883fc801-72e9-4c9b-8ace-3f5fa99a63de",
+    "id": "fd40ab1d-eed3-4756-b078-cb8202b774f0",
     "name": "INFO_ExAC_AF_Adj",
     "label": "INFO_ExAC_AF_Adj",
     "source_name": "sample",
@@ -332,7 +332,7 @@
     "dimension": 1
   },
   {
-    "id": "9182944c-25b7-453b-a259-619739947f11",
+    "id": "a0abd690-ebe3-4cb1-94d5-dfade9054f58",
     "name": "VEP_HGNC_ID",
     "label": "VEP_HGNC_ID",
     "source_name": "sample",
@@ -343,7 +343,7 @@
     "dimension": 0
   },
   {
-    "id": "aec038d5-3d5a-44d4-9c2b-13e0ae0b08f4",
+    "id": "9f136774-f624-43e8-9148-df4d0e499048",
     "name": "VEP_HGVSc_transcript",
     "label": "VEP_HGVSc_transcript",
     "source_name": "sample",
@@ -354,7 +354,7 @@
     "dimension": 0
   },
   {
-    "id": "366bb4d0-6077-4165-9ea4-0e27cb54fabf",
+    "id": "1cb9c399-45c7-4a56-88f6-5a1089b16fcd",
     "name": "VEP_ALLELE_NUM",
     "label": "VEP_ALLELE_NUM",
     "source_name": "sample",
@@ -365,7 +365,7 @@
     "dimension": 0
   },
   {
-    "id": "f048cc37-55ec-4881-88af-0dded507fd9b",
+    "id": "5dbfb7d1-476f-427a-b507-88a21f2418c4",
     "name": "VEP_SWISSPROT",
     "label": "VEP_SWISSPROT",
     "source_name": "sample",
@@ -376,7 +376,7 @@
     "dimension": 0
   },
   {
-    "id": "fceaab54-f898-4bc4-9c05-ba99a313c5b8",
+    "id": "53b16be7-2fab-4c29-9df6-417860466211",
     "name": "VEP_AFR_MAF",
     "label": "VEP_AFR_MAF",
     "source_name": "sample",
@@ -387,7 +387,7 @@
     "dimension": 0
   },
   {
-    "id": "2a6ad5eb-6ff4-4797-b47a-135198728ae6",
+    "id": "3a7f4712-f4e6-47ec-a306-1c1decb2cfdf",
     "name": "VEP_NumberOfExons",
     "label": "VEP_NumberOfExons",
     "source_name": "sample",
@@ -398,7 +398,7 @@
     "dimension": 0
   },
   {
-    "id": "13566796-662e-49d7-932a-b18c4caf69bd",
+    "id": "16c80385-4e33-484e-87a8-1e70ca6dc099",
     "name": "VEP_TREMBL",
     "label": "VEP_TREMBL",
     "source_name": "sample",
@@ -409,7 +409,7 @@
     "dimension": 0
   },
   {
-    "id": "d4aa9820-6f3b-426f-9e9a-79b0ba54c1ac",
+    "id": "52c35b89-fe9f-46e0-8320-fa1d80879cf9",
     "name": "VEP_Protein_position_0",
     "label": "VEP_Protein_position_0",
     "source_name": "sample",
@@ -420,7 +420,7 @@
     "dimension": 1
   },
   {
-    "id": "e09dd061-4349-4b68-a147-d5452c2dcafb",
+    "id": "581dd6ff-50e7-47a7-8c7c-0dbed8a5f6a3",
     "name": "VEP_Protein_position_1",
     "label": "VEP_Protein_position_1",
     "source_name": "sample",
@@ -431,7 +431,7 @@
     "dimension": 1
   },
   {
-    "id": "adae2e3b-146c-492e-b4f6-760b8052c1c0",
+    "id": "ddd47a49-98db-45b9-ba80-5b8e44b649cf",
     "name": "VEP_STRAND",
     "label": "VEP_STRAND",
     "source_name": "sample",
@@ -442,7 +442,7 @@
     "dimension": 0
   },
   {
-    "id": "c56dff04-f79e-4930-821e-e1d212e120af",
+    "id": "5093c115-f541-4d0b-81ed-6fd2f37590b1",
     "name": "VEP_CANONICAL",
     "label": "VEP_CANONICAL",
     "source_name": "sample",
@@ -453,7 +453,7 @@
     "dimension": 0
   },
   {
-    "id": "17d81a43-e752-4579-8d32-5e4ea2c9116b",
+    "id": "64eaf799-2783-4e06-98e8-6a141bc9f673",
     "name": "VEP_ExAC_FIN_MAF",
     "label": "VEP_ExAC_FIN_MAF",
     "source_name": "sample",
@@ -464,7 +464,7 @@
     "dimension": 0
   },
   {
-    "id": "3a2da9f0-69ae-4c5d-89fc-64af2eabe725",
+    "id": "b31ebc27-38fa-48e3-ad2e-402e3bf5a8c9",
     "name": "VEP_ExonNumber",
     "label": "VEP_ExonNumber",
     "source_name": "sample",
@@ -475,7 +475,7 @@
     "dimension": 0
   },
   {
-    "id": "1c3461e8-b64b-4b4c-a8aa-3f3291245cb3",
+    "id": "bb61d626-be94-45e8-bc0a-d7257cee7d3c",
     "name": "VEP_EAS_MAF",
     "label": "VEP_EAS_MAF",
     "source_name": "sample",
@@ -486,7 +486,7 @@
     "dimension": 0
   },
   {
-    "id": "ad7f5cfb-5dc2-4373-92e6-13aa0dab68f8",
+    "id": "34f9e6d8-e52b-4601-a057-83af617669a3",
     "name": "VEP_HGMD",
     "label": "VEP_HGMD",
     "source_name": "sample",
@@ -497,7 +497,7 @@
     "dimension": 0
   },
   {
-    "id": "806776ec-ea68-4fe9-b72a-ba74729c0af5",
+    "id": "ed9670cf-2edc-4978-b6ca-6df06a97c34e",
     "name": "VEP_HGVSp_transcript",
     "label": "VEP_HGVSp_transcript",
     "source_name": "sample",
@@ -508,7 +508,7 @@
     "dimension": 0
   },
   {
-    "id": "e61b0ca6-6301-4934-a32b-bfe4f3e289b3",
+    "id": "21592172-ecd4-4ba5-b654-96d94b8924c2",
     "name": "VEP_ExAC_AFR_MAF",
     "label": "VEP_ExAC_AFR_MAF",
     "source_name": "sample",
@@ -519,7 +519,7 @@
     "dimension": 0
   },
   {
-    "id": "5c150ed8-fbb1-40b8-a451-13d780059f3c",
+    "id": "76f1f299-a9af-4f1e-90f4-73c5bbc56733",
     "name": "VEP_Zygosity",
     "label": "VEP_Zygosity",
     "source_name": "sample",
@@ -530,7 +530,7 @@
     "dimension": 0
   },
   {
-    "id": "4fb3ed6b-acd9-41b0-a573-be75b1e2b043",
+    "id": "d717bfea-ee72-4782-b06b-22cddebac423",
     "name": "VEP_HGVS_OFFSET",
     "label": "VEP_HGVS_OFFSET",
     "source_name": "sample",
@@ -541,7 +541,7 @@
     "dimension": 0
   },
   {
-    "id": "b40a65c0-31f2-49ab-a7b3-f477382921f4",
+    "id": "8e1a3bbf-dc93-4101-8be6-a9fb1ef817d8",
     "name": "VEP_Feature_type",
     "label": "VEP_Feature_type",
     "source_name": "sample",
@@ -552,7 +552,7 @@
     "dimension": 0
   },
   {
-    "id": "7ea547fa-94f6-46a4-b2fb-c9f3017a85cf",
+    "id": "07a82f2c-9b26-4f41-9664-f6a640292296",
     "name": "VEP_ExAC_MAF",
     "label": "VEP_ExAC_MAF",
     "source_name": "sample",
@@ -563,7 +563,7 @@
     "dimension": 0
   },
   {
-    "id": "da50dcfc-8f6b-4ac6-85f0-fd0f7710dc9a",
+    "id": "38264383-f822-441d-8d6d-faedcef3e547",
     "name": "VEP_PHENO",
     "label": "VEP_PHENO",
     "source_name": "sample",
@@ -574,7 +574,7 @@
     "dimension": 0
   },
   {
-    "id": "04c93cb1-4275-44e7-887e-8f4025237424",
+    "id": "220b5585-cfc1-41eb-9a8f-39560f7597c7",
     "name": "VEP_TSL",
     "label": "VEP_TSL",
     "source_name": "sample",
@@ -585,7 +585,7 @@
     "dimension": 0
   },
   {
-    "id": "5954d86a-c83b-445f-8d51-ce58b74f4015",
+    "id": "6c34bb42-f383-432f-8c1b-2ad79cc120bb",
     "name": "VEP_ExAC_EAS_MAF",
     "label": "VEP_ExAC_EAS_MAF",
     "source_name": "sample",
@@ -596,7 +596,7 @@
     "dimension": 0
   },
   {
-    "id": "1bfdd071-a4e3-4acb-80db-31fa6082b094",
+    "id": "2ab9bffb-5301-479f-bcb4-7390efd4b9af",
     "name": "VEP_IMPACT",
     "label": "VEP_IMPACT",
     "source_name": "sample",
@@ -607,7 +607,7 @@
     "dimension": 0
   },
   {
-    "id": "7022e5eb-f05e-4af8-9bed-6bed1f7a6dd0",
+    "id": "a9706808-66d9-4378-aa81-98701da5d85f",
     "name": "VEP_SAS_MAF",
     "label": "VEP_SAS_MAF",
     "source_name": "sample",
@@ -618,7 +618,7 @@
     "dimension": 0
   },
   {
-    "id": "fd6860e2-106b-4469-97bc-f2f660e6e232",
+    "id": "ee6dafe0-fe25-4bc1-a9dc-77300050e5dc",
     "name": "INFO_ExAC_AF_SAS_Adj",
     "label": "INFO_ExAC_AF_SAS_Adj",
     "source_name": "sample",
@@ -629,7 +629,7 @@
     "dimension": 1
   },
   {
-    "id": "0bd9849e-681a-492e-8dfc-bdff4553b68d",
+    "id": "56a6c3b2-17e1-486d-ba68-3659a7d894c9",
     "name": "VEP_Amino_acids",
     "label": "VEP_Amino_acids",
     "source_name": "sample",
@@ -640,7 +640,7 @@
     "dimension": 0
   },
   {
-    "id": "46e558ee-b611-429f-a4d6-b383ea748e93",
+    "id": "fe7956a0-ca6a-4985-b040-ca131e85e065",
     "name": "VEP_GMAF",
     "label": "VEP_GMAF",
     "source_name": "sample",
@@ -651,7 +651,7 @@
     "dimension": 0
   },
   {
-    "id": "be2d48a1-1e32-4898-8262-dd939592e65d",
+    "id": "025436ed-2123-4822-af10-a4d49840cb73",
     "name": "VEP_CDS_position_1",
     "label": "VEP_CDS_position_1",
     "source_name": "sample",
@@ -662,7 +662,7 @@
     "dimension": 1
   },
   {
-    "id": "1fa48d2e-902c-4272-acb9-524a75a05507",
+    "id": "0940ad9c-a7b5-4fa5-bf6b-ccf530476faf",
     "name": "VEP_CDS_position_0",
     "label": "VEP_CDS_position_0",
     "source_name": "sample",
@@ -673,7 +673,7 @@
     "dimension": 1
   },
   {
-    "id": "8762f431-d35b-4f1a-8d6a-ebe792c5f136",
+    "id": "7bd30b4e-23f2-4545-b5de-7a821aeeff44",
     "name": "VEP_MOTIF_POS",
     "label": "VEP_MOTIF_POS",
     "source_name": "sample",
@@ -684,7 +684,7 @@
     "dimension": 0
   },
   {
-    "id": "31d30ccd-75e8-46fe-8c60-b48db439d322",
+    "id": "fd752441-5ad1-488c-a568-ada2b7958174",
     "name": "INFO_ExAC_AF_EAS_Adj",
     "label": "INFO_ExAC_AF_EAS_Adj",
     "source_name": "sample",
@@ -695,7 +695,7 @@
     "dimension": 1
   },
   {
-    "id": "53e2f8af-91ff-43ca-b5fa-06b4f1d6bacd",
+    "id": "6d5ab165-53a4-4477-b0a2-2aaf2eb8f8e5",
     "name": "VEP_PUBMED",
     "label": "VEP_PUBMED",
     "source_name": "sample",
@@ -706,7 +706,7 @@
     "dimension": 0
   },
   {
-    "id": "6c36e35a-3ac0-4acc-ac11-8696a1c946f5",
+    "id": "7e1db2af-f788-40aa-a6f6-da5265ea3c78",
     "name": "VEP_Codons",
     "label": "VEP_Codons",
     "source_name": "sample",
@@ -717,7 +717,7 @@
     "dimension": 0
   },
   {
-    "id": "e53432a0-29a9-404a-9414-a110a48cb9bb",
+    "id": "ba75e2fc-128a-48f0-a77c-590a0a31194c",
     "name": "VEP_SOMATIC",
     "label": "VEP_SOMATIC",
     "source_name": "sample",
@@ -728,7 +728,7 @@
     "dimension": 0
   },
   {
-    "id": "5663f486-bfb9-4a4a-b786-f60a59ef419b",
+    "id": "761c68db-e764-4875-836e-21cfa72b38ac",
     "name": "VEP_DISTANCE",
     "label": "VEP_DISTANCE",
     "source_name": "sample",
@@ -739,7 +739,7 @@
     "dimension": 0
   },
   {
-    "id": "4b1c7a0e-c7b2-47d1-8897-1d143cf9e145",
+    "id": "6a0bfd86-99d6-4bb8-b903-662bef00f30f",
     "name": "INFO_ExAC_AF_AFR_Adj",
     "label": "INFO_ExAC_AF_AFR_Adj",
     "source_name": "sample",
@@ -750,7 +750,7 @@
     "dimension": 1
   },
   {
-    "id": "a118952c-20fc-46b8-b142-61cc7869b989",
+    "id": "24ae9c9e-7c37-49b3-b03b-4fa43dce4c66",
     "name": "VEP_SYMBOL",
     "label": "VEP_SYMBOL",
     "source_name": "sample",
@@ -761,7 +761,7 @@
     "dimension": 0
   },
   {
-    "id": "9f1f4fe9-6765-4426-9748-fab96622a8d0",
+    "id": "0b31987a-ede7-427e-855e-7781cc06f374",
     "name": "VEP_MOTIF_NAME",
     "label": "VEP_MOTIF_NAME",
     "source_name": "sample",
@@ -772,7 +772,7 @@
     "dimension": 0
   },
   {
-    "id": "3e96ece7-d715-4d46-95ae-29aaff3acce2",
+    "id": "258237eb-a5a8-418e-9d9e-db72dd4f1ee5",
     "name": "VEP_HGVSc_nucleotide_changes",
     "label": "VEP_HGVSc_nucleotide_changes",
     "source_name": "sample",
@@ -783,7 +783,7 @@
     "dimension": 0
   },
   {
-    "id": "2b052f04-ad98-43aa-89f5-7a13ccdf165d",
+    "id": "614a106c-f4b7-45d8-81dd-4e98f874144e",
     "name": "VEP_cDNA_position_0",
     "label": "VEP_cDNA_position_0",
     "source_name": "sample",
@@ -794,7 +794,7 @@
     "dimension": 1
   },
   {
-    "id": "c09af4dd-68e5-4935-bc0d-15be6409c092",
+    "id": "3d162ef7-bde6-46b1-ac95-852da044ab7f",
     "name": "VEP_cDNA_position_1",
     "label": "VEP_cDNA_position_1",
     "source_name": "sample",
@@ -805,7 +805,7 @@
     "dimension": 1
   },
   {
-    "id": "acd5d6d6-6e50-43fc-8169-575f5dae5af5",
+    "id": "69445b8c-44e3-469e-808d-18b1f3976d20",
     "name": "VEP_AA_MAF",
     "label": "VEP_AA_MAF",
     "source_name": "sample",
@@ -816,7 +816,7 @@
     "dimension": 0
   },
   {
-    "id": "8e2ab5f1-9889-4da3-bb7a-0505b1a665df",
+    "id": "4e168b58-e9d0-41bc-968f-f813a3c6e95f",
     "name": "VEP_Gene",
     "label": "VEP_Gene",
     "source_name": "sample",
@@ -827,7 +827,7 @@
     "dimension": 0
   },
   {
-    "id": "3cabb629-727c-41f3-8c36-50e9a5065e7d",
+    "id": "57cd028e-1d63-44f7-b283-9ceebfb17bad",
     "name": "INFO_ExAC_AF_OTH_Adj",
     "label": "INFO_ExAC_AF_OTH_Adj",
     "source_name": "sample",
@@ -838,7 +838,7 @@
     "dimension": 1
   },
   {
-    "id": "d4cdea99-e5ed-49c8-b0da-c7509f96955e",
+    "id": "9344e24e-d3fd-485a-adac-b3b17b865b09",
     "name": "INFO_TYPE",
     "label": "INFO_TYPE",
     "source_name": "sample",
@@ -849,7 +849,7 @@
     "dimension": 1
   },
   {
-    "id": "ae1c8d7f-6180-4f4c-8e0a-5f290f7b92c4",
+    "id": "59406f20-23fe-4b95-a715-ba78cb1aaadc",
     "name": "VEP_HIGH_INF_POS",
     "label": "VEP_HIGH_INF_POS",
     "source_name": "sample",
@@ -860,7 +860,7 @@
     "dimension": 0
   },
   {
-    "id": "b366b649-34a9-46bb-813c-79446ca9d384",
+    "id": "ae74ba91-0980-43a8-9ff2-4dbb7476cfa6",
     "name": "VEP_HGVSp_nucleotide_changes",
     "label": "VEP_HGVSp_nucleotide_changes",
     "source_name": "sample",
@@ -871,7 +871,7 @@
     "dimension": 0
   },
   {
-    "id": "51f7078c-5f96-4f40-bdbd-900837f90793",
+    "id": "362a135c-f3b0-470e-bb0f-07bd5f20a1c2",
     "name": "VEP_VARIANT_CLASS",
     "label": "VEP_VARIANT_CLASS",
     "source_name": "sample",
@@ -882,7 +882,7 @@
     "dimension": 0
   },
   {
-    "id": "8d71aa15-56dc-4b7a-940b-b7869b7444ec",
+    "id": "a245f802-3c0a-472c-9cb7-bdf34187cb08",
     "name": "VEP_GENE_PHENO",
     "label": "VEP_GENE_PHENO",
     "source_name": "sample",
@@ -893,7 +893,7 @@
     "dimension": 0
   },
   {
-    "id": "1a8b79d4-c487-4b1a-bcd7-f73965982393",
+    "id": "a3efdfa7-4b3f-4dc4-b852-e899e016ee4d",
     "name": "VEP_SYMBOL_SOURCE",
     "label": "VEP_SYMBOL_SOURCE",
     "source_name": "sample",
@@ -904,7 +904,7 @@
     "dimension": 0
   },
   {
-    "id": "4ec595ef-0ada-4985-8c48-05112ba971aa",
+    "id": "ef96d5e8-a792-414a-9232-086391e3fef3",
     "name": "VEP_EUR_MAF",
     "label": "VEP_EUR_MAF",
     "source_name": "sample",
@@ -915,7 +915,7 @@
     "dimension": 0
   },
   {
-    "id": "ef4fbae5-1041-4152-9fc0-bf850aa5228c",
+    "id": "471bf681-82bb-4d45-9b4d-316c1d124956",
     "name": "VEP_ExAC_OTH_MAF",
     "label": "VEP_ExAC_OTH_MAF",
     "source_name": "sample",
@@ -926,7 +926,7 @@
     "dimension": 0
   },
   {
-    "id": "dc8f4481-a2f9-48ec-805f-0e4479915676",
+    "id": "c252a797-b7c2-4ec3-8a07-c119d784b17f",
     "name": "VEP_AMR_MAF",
     "label": "VEP_AMR_MAF",
     "source_name": "sample",
@@ -937,7 +937,7 @@
     "dimension": 0
   },
   {
-    "id": "62c1db84-b3b1-497a-bc59-0c85a2fc12f6",
+    "id": "4d6dbae7-e57f-4b79-a8c2-ae0327ab91e8",
     "name": "VEP_ExAC_AMR_MAF",
     "label": "VEP_ExAC_AMR_MAF",
     "source_name": "sample",
@@ -948,7 +948,7 @@
     "dimension": 0
   },
   {
-    "id": "574fefc0-fc58-4800-9c9c-efada8a7c818",
+    "id": "12737bb3-97fa-423f-af22-fce24a43ef10",
     "name": "VEP_ASN_MAF",
     "label": "VEP_ASN_MAF",
     "source_name": "sample",
@@ -959,7 +959,7 @@
     "dimension": 0
   },
   {
-    "id": "7f171b90-c897-4ddd-8574-064bbad3cf41",
+    "id": "04f42884-a146-4dc0-be09-5c371dd0fc6b",
     "name": "VEP_Consequence",
     "label": "VEP_Consequence",
     "source_name": "sample",
@@ -970,7 +970,7 @@
     "dimension": 0
   },
   {
-    "id": "fce64bab-2d95-488b-8311-1ca9dd3ace93",
+    "id": "dfd7ebab-6f1c-43c6-9d9f-b8a54bf2a5cd",
     "name": "VEP_SIFT",
     "label": "VEP_SIFT",
     "source_name": "sample",
@@ -981,7 +981,7 @@
     "dimension": 0
   },
   {
-    "id": "0d01f5d1-4c5a-4250-8579-16dd6054ae50",
+    "id": "37223bba-6633-42f9-a2a0-1176b7532596",
     "name": "VEP_ExAC_SAS_MAF",
     "label": "VEP_ExAC_SAS_MAF",
     "source_name": "sample",
@@ -992,7 +992,7 @@
     "dimension": 0
   },
   {
-    "id": "76515578-8f6f-4919-a79b-0615fccc11a6",
+    "id": "91e5d91f-64e7-48bb-86ca-370842c8287a",
     "name": "VEP_Genotype",
     "label": "VEP_Genotype",
     "source_name": "sample",
@@ -1003,7 +1003,7 @@
     "dimension": 0
   },
   {
-    "id": "90d7eaac-ac28-4880-bd51-13e899667acd",
+    "id": "459e4231-e298-4d7b-a347-9221be255758",
     "name": "VEP_ZYG",
     "label": "VEP_ZYG",
     "source_name": "sample",
@@ -1014,7 +1014,7 @@
     "dimension": 0
   },
   {
-    "id": "caae8651-ccbb-493c-a9d6-a8c57be9a04f",
+    "id": "7e0b8398-8e2f-426f-9e4f-a2b2dce20abd",
     "name": "VEP_ExAC_NFE_MAF",
     "label": "VEP_ExAC_NFE_MAF",
     "source_name": "sample",
@@ -1025,7 +1025,7 @@
     "dimension": 0
   },
   {
-    "id": "12597250-ef22-4794-b404-5d1bd870bf9e",
+    "id": "a8b56da1-863a-4866-b8fd-95806a2559e1",
     "name": "VEP_Existing_variation",
     "label": "VEP_Existing_variation",
     "source_name": "sample",
@@ -1036,7 +1036,7 @@
     "dimension": 0
   },
   {
-    "id": "a0da92fa-71e2-45dc-b358-1ed52f3cc782",
+    "id": "6a6939e9-5a69-4db9-bb40-14611a21b931",
     "name": "VEP_ExAC_Adj_MAF",
     "label": "VEP_ExAC_Adj_MAF",
     "source_name": "sample",
@@ -1047,7 +1047,7 @@
     "dimension": 0
   },
   {
-    "id": "de8b83c0-4121-4f3c-b400-5e2294f6595e",
+    "id": "63205ca4-c567-42ac-9c65-f833894d19e4",
     "name": "INFO_ExAC_AF_FIN_Adj",
     "label": "INFO_ExAC_AF_FIN_Adj",
     "source_name": "sample",
@@ -1058,7 +1058,7 @@
     "dimension": 1
   },
   {
-    "id": "f93d3069-1e31-48a5-92de-a6107e3bb78a",
+    "id": "d35f1e52-a79b-4343-9034-55893f5a385a",
     "name": "VEP_INTRON",
     "label": "VEP_INTRON",
     "source_name": "sample",
@@ -1069,7 +1069,7 @@
     "dimension": 0
   },
   {
-    "id": "1eb3e5f0-49a8-4c80-ba05-dd376df884de",
+    "id": "09059be3-8b95-487f-9bbf-c2e9fc8c598f",
     "name": "VEP_CCDS",
     "label": "VEP_CCDS",
     "source_name": "sample",
@@ -1080,7 +1080,7 @@
     "dimension": 0
   },
   {
-    "id": "a4b3fcd3-9b26-4bc3-9985-3144e9f306f1",
+    "id": "16d4fbd7-d071-4284-a921-e5393c5eebc6",
     "name": "VEP_BIOTYPE",
     "label": "VEP_BIOTYPE",
     "source_name": "sample",
@@ -1091,7 +1091,7 @@
     "dimension": 0
   },
   {
-    "id": "6edb2686-ba95-411a-ad23-164f35dbc151",
+    "id": "7fdad764-ed22-4f49-a56a-990e8493c4ec",
     "name": "VEP_EA_MAF",
     "label": "VEP_EA_MAF",
     "source_name": "sample",
@@ -1102,7 +1102,7 @@
     "dimension": 0
   },
   {
-    "id": "ef407f6f-1299-49d7-90bb-7c9a65f65543",
+    "id": "1b9c9ba3-434c-4d59-b5ac-da78f2759eb8",
     "name": "VEP_PolyPhen",
     "label": "VEP_PolyPhen",
     "source_name": "sample",
@@ -1113,7 +1113,7 @@
     "dimension": 0
   },
   {
-    "id": "a46f78d4-bca4-4e4c-b7d7-9b78355fba78",
+    "id": "f6ff4930-5847-4790-8d87-a08eb39ff08a",
     "name": "VEP_Allele",
     "label": "VEP_Allele",
     "source_name": "sample",
@@ -1124,7 +1124,7 @@
     "dimension": 0
   },
   {
-    "id": "74986f9f-2f93-43f7-8163-428d7548a0d6",
+    "id": "5ab0f4dd-b138-49be-bf92-eeabb2321dca",
     "name": "VEP_SV",
     "label": "VEP_SV",
     "source_name": "sample",
@@ -1135,7 +1135,7 @@
     "dimension": 0
   },
   {
-    "id": "137f88f8-d374-4eb6-b3bf-a2805adcbecd",
+    "id": "f210dfe8-0f68-4895-87bf-d148ecfed4a1",
     "name": "INFO_NC",
     "label": "INFO_NC",
     "source_name": "sample",
@@ -1146,7 +1146,7 @@
     "dimension": 1
   },
   {
-    "id": "1835333f-f64f-442e-a0f1-3dbaf8dfd655",
+    "id": "e0e4fea1-8cb3-4cfb-8da5-24feedcca31a",
     "name": "INFO_HOM",
     "label": "INFO_HOM",
     "source_name": "sample",
@@ -1157,7 +1157,7 @@
     "dimension": 1
   },
   {
-    "id": "66f3b922-2302-4d4e-a0e4-07bae1ed4465",
+    "id": "082854c5-37dd-4f50-aefb-d09c47115716",
     "name": "INFO_ADP",
     "label": "INFO_ADP",
     "source_name": "sample",
@@ -1168,7 +1168,7 @@
     "dimension": 1
   },
   {
-    "id": "8774f0ca-3439-4348-b2f5-8b0d083e1bc5",
+    "id": "2f3b6610-2fa8-4a35-ad22-d7b7985e4e0a",
     "name": "INFO_HET",
     "label": "INFO_HET",
     "source_name": "sample",
@@ -1179,7 +1179,7 @@
     "dimension": 1
   },
   {
-    "id": "50a8cc6b-f98e-496e-aaa6-81addc47e5fe",
+    "id": "6e5978a8-a243-422a-a799-d5292a5434a7",
     "name": "INFO_WT",
     "label": "INFO_WT",
     "source_name": "sample",
@@ -1190,656 +1190,7 @@
     "dimension": 1
   },
   {
-    "id": "81b628cd-1bdd-406b-a447-5fcd124bfdca",
-    "name": "INFO_REVB",
-    "label": "INFO_REVB",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Reverse strand bias in prediction.",
-    "dimension": -1
-  },
-  {
-    "id": "d029debe-fe78-4a83-987a-d740abf98fec",
-    "name": "INFO_FRO",
-    "label": "INFO_FRO",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Flow Evaluator Reference allele observations",
-    "dimension": 1
-  },
-  {
-    "id": "58e605da-15d0-4fd6-ab1e-bb89e19d9f3d",
-    "name": "INFO_AO",
-    "label": "INFO_AO",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Alternate allele observations",
-    "dimension": -1
-  },
-  {
-    "id": "bfcc3e8e-26e7-434d-b913-ae6c262b293c",
-    "name": "INFO_SAR",
-    "label": "INFO_SAR",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Alternate allele observations on the reverse strand",
-    "dimension": -1
-  },
-  {
-    "id": "e6f05837-c53c-4be0-ba18-1d544150be84",
-    "name": "INFO_AF",
-    "label": "INFO_AF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency based on Flow Evaluator observation counts",
-    "dimension": -1
-  },
-  {
-    "id": "9a8beb6d-a79b-4a68-a36f-f73a50eeb0de",
-    "name": "INFO_FSAF",
-    "label": "INFO_FSAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Flow Evaluator Alternate allele observations on the forward strand",
-    "dimension": -1
-  },
-  {
-    "id": "b6e9d405-efa7-4d92-a3d2-ed1a919aa241",
-    "name": "INFO_SAF",
-    "label": "INFO_SAF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Alternate allele observations on the forward strand",
-    "dimension": -1
-  },
-  {
-    "id": "6a520728-8308-4026-b0ae-c77e89d75b4e",
-    "name": "INFO_MLLD",
-    "label": "INFO_MLLD",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Mean log-likelihood delta per read.",
-    "dimension": -1
-  },
-  {
-    "id": "9a3d3eed-ac9f-4cf8-8c44-1e07735a4986",
-    "name": "INFO_FSAR",
-    "label": "INFO_FSAR",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Flow Evaluator Alternate allele observations on the reverse strand",
-    "dimension": -1
-  },
-  {
-    "id": "d2ff8274-0e6b-45c8-a331-65f391ad5734",
-    "name": "INFO_PB",
-    "label": "INFO_PB",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Bias of relative variant position in reference reads versus variant reads. Equals Mann-Whitney U rho statistic P(Y>X)+0.5P(Y=X)",
-    "dimension": -1
-  },
-  {
-    "id": "fb350ae3-815f-4962-8c4b-c22e6f9f0836",
-    "name": "INFO_HS",
-    "label": "INFO_HS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Indicate it is at a hot spot",
-    "dimension": 1
-  },
-  {
-    "id": "2a23d4d3-39e0-4111-88a5-97820490380a",
-    "name": "INFO_OID",
-    "label": "INFO_OID",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "List of original Hotspot IDs",
-    "dimension": 0
-  },
-  {
-    "id": "ced1808b-1a7b-419e-b894-ba86b9b638c2",
-    "name": "INFO_REFB",
-    "label": "INFO_REFB",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Reference Hypothesis bias in prediction.",
-    "dimension": -1
-  },
-  {
-    "id": "8c6c2127-d777-4370-b442-4c1d255d2c73",
-    "name": "INFO_OREF",
-    "label": "INFO_OREF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "List of original reference bases",
-    "dimension": 0
-  },
-  {
-    "id": "c4782121-141b-44c8-b5de-5e61fc73be1b",
-    "name": "INFO_LEN",
-    "label": "INFO_LEN",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "allele length",
-    "dimension": -1
-  },
-  {
-    "id": "270203c9-39b6-4a0a-a55b-88781d76527d",
-    "name": "INFO_FWDB",
-    "label": "INFO_FWDB",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Forward strand bias in prediction.",
-    "dimension": -1
-  },
-  {
-    "id": "ac47aa6a-74cd-4f3c-9b29-624b192371c2",
-    "name": "INFO_STB",
-    "label": "INFO_STB",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Strand bias in variant relative to reference.",
-    "dimension": -1
-  },
-  {
-    "id": "9c9e673d-6695-473f-8c7b-c88238b7377f",
-    "name": "INFO_SSSB",
-    "label": "INFO_SSSB",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Strand-specific strand bias for allele.",
-    "dimension": -1
-  },
-  {
-    "id": "2a2189b1-7ffd-45a1-8c3c-8b0794d357d0",
-    "name": "INFO_RO",
-    "label": "INFO_RO",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Reference allele observations",
-    "dimension": 1
-  },
-  {
-    "id": "1ee5f733-2875-43a0-8ae0-51bcecc40ed3",
-    "name": "INFO_DP",
-    "label": "INFO_DP",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Total read depth at the locus",
-    "dimension": 1
-  },
-  {
-    "id": "9a76793d-c53f-4ff4-afe2-4b31806eb6f4",
-    "name": "INFO_VARB",
-    "label": "INFO_VARB",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Variant Hypothesis bias in prediction.",
-    "dimension": -1
-  },
-  {
-    "id": "315c7100-4de6-43fe-ae56-bceec33df302",
-    "name": "INFO_PBP",
-    "label": "INFO_PBP",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Pval of relative variant position in reference reads versus variant reads.  Related to GATK ReadPosRankSumTest",
-    "dimension": -1
-  },
-  {
-    "id": "d6c33f79-0b62-44de-a5b5-a55775cfcb84",
-    "name": "INFO_FSRF",
-    "label": "INFO_FSRF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Flow Evaluator Reference observations on the forward strand",
-    "dimension": 1
-  },
-  {
-    "id": "21d8b72a-bdd0-4a79-8597-a5a8f03fad5c",
-    "name": "INFO_RBI",
-    "label": "INFO_RBI",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Distance of bias parameters from zero.",
-    "dimension": -1
-  },
-  {
-    "id": "0bbfbba2-83f2-4fe5-88b6-c16dc4e30376",
-    "name": "INFO_OPOS",
-    "label": "INFO_OPOS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "List of original allele positions",
-    "dimension": 0
-  },
-  {
-    "id": "79ea6973-257a-4c4f-b692-1eaeafa5ffbc",
-    "name": "INFO_TYPE",
-    "label": "INFO_TYPE",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "The type of allele, either snp, mnp, ins, del, or complex.",
-    "dimension": -1
-  },
-  {
-    "id": "322487b5-a04d-4474-886f-190112a5da20",
-    "name": "INFO_FSRR",
-    "label": "INFO_FSRR",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Flow Evaluator Reference observations on the reverse strand",
-    "dimension": 1
-  },
-  {
-    "id": "91f33624-4595-4a87-80cf-2bfdda158f85",
-    "name": "INFO_FDP",
-    "label": "INFO_FDP",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Flow Evaluator read depth at the locus",
-    "dimension": 1
-  },
-  {
-    "id": "505cb432-64c9-4e94-9466-0142f5541e39",
-    "name": "INFO_HRUN",
-    "label": "INFO_HRUN",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Run length: the number of consecutive repeats of the alternate allele in the reference genome",
-    "dimension": -1
-  },
-  {
-    "id": "dcebdf7e-843a-4bdf-b1c5-49a79f3facdb",
-    "name": "INFO_SRF",
-    "label": "INFO_SRF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Number of reference observations on the forward strand",
-    "dimension": 1
-  },
-  {
-    "id": "7afcfb0c-60c9-479d-bff6-a2da1eed11d4",
-    "name": "INFO_SRR",
-    "label": "INFO_SRR",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Number of reference observations on the reverse strand",
-    "dimension": 1
-  },
-  {
-    "id": "34736e9c-3199-49db-9ee2-cae77cd6c588",
-    "name": "INFO_FR",
-    "label": "INFO_FR",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Reason why the variant was filtered.",
-    "dimension": 0
-  },
-  {
-    "id": "2c17037b-2fc6-418c-b674-87370cfa768e",
-    "name": "INFO_NS",
-    "label": "INFO_NS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Number of samples with data",
-    "dimension": 1
-  },
-  {
-    "id": "f5ef0305-0ba2-4ea8-9f49-69874f4a6fd2",
-    "name": "INFO_FAO",
-    "label": "INFO_FAO",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Flow Evaluator Alternate allele observations",
-    "dimension": -1
-  },
-  {
-    "id": "7bf3c9d4-6a56-426d-bbfc-19bcc2b215eb",
-    "name": "INFO_QD",
-    "label": "INFO_QD",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "QualityByDepth as 4*QUAL/FDP (analogous to GATK)",
-    "dimension": 1
-  },
-  {
-    "id": "c04dec6c-e63a-4db1-b239-e2327b9b8f05",
-    "name": "INFO_FXX",
-    "label": "INFO_FXX",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Flow Evaluator failed read ratio",
-    "dimension": 1
-  },
-  {
-    "id": "3b2fbe1a-c642-4835-92ec-e18228b09b1d",
-    "name": "INFO_SSEN",
-    "label": "INFO_SSEN",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Strand-specific-error prediction on negative strand.",
-    "dimension": -1
-  },
-  {
-    "id": "b88a2a20-fe6a-4017-9120-fb6759f84690",
-    "name": "INFO_SSEP",
-    "label": "INFO_SSEP",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Strand-specific-error prediction on positive strand.",
-    "dimension": -1
-  },
-  {
-    "id": "92751503-a305-4921-b310-36df70f0d39e",
-    "name": "INFO_STBP",
-    "label": "INFO_STBP",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Pval of Strand bias in variant relative to reference.",
-    "dimension": -1
-  },
-  {
-    "id": "98ced1b4-cabd-4de4-b4ca-ed4d8ca76211",
-    "name": "INFO_OMAPALT",
-    "label": "INFO_OMAPALT",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Maps OID,OPOS,OREF,OALT entries to specific ALT alleles",
-    "dimension": 0
-  },
-  {
-    "id": "d1cd8fbf-fe36-44f0-aee9-63bde571bdd4",
-    "name": "INFO_OALT",
-    "label": "INFO_OALT",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "List of original variant bases",
-    "dimension": 0
-  },
-  {
-    "id": "e4c0f5fd-1fd4-455c-ae5a-7b0c07f7fcce",
-    "name": "INFO_SS",
-    "label": "INFO_SS",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Somatic status of variant (0=Reference,1=Germline,2=Somatic,3=LOH, or 5=Unknown)",
-    "dimension": 1
-  },
-  {
-    "id": "30b6f66c-ef97-4ac9-80a9-f06304943f1e",
-    "name": "INFO_GPV",
-    "label": "INFO_GPV",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Fisher's Exact Test P-value of tumor+normal versus no variant for Germline calls",
-    "dimension": 1
-  },
-  {
-    "id": "f51a3abc-f565-4fea-98ea-b8903e4b167b",
-    "name": "INFO_SSC",
-    "label": "INFO_SSC",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Somatic score in Phred scale (0-255) derived from somatic p-value",
-    "dimension": 1
-  },
-  {
-    "id": "3414216a-1f99-4d87-9090-7b139b35ac9e",
-    "name": "INFO_SOMATIC",
-    "label": "INFO_SOMATIC",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "Indicates if record is a somatic mutation",
-    "dimension": 1
-  },
-  {
-    "id": "9c3a4cb7-4063-4ec0-b97f-93af598cff7a",
-    "name": "INFO_SPV",
-    "label": "INFO_SPV",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Fisher's Exact Test P-value of tumor versus normal for Somatic/LOH calls",
-    "dimension": 1
-  },
-  {
-    "id": "5e8751c2-40e2-4ef0-9488-475d095cb528",
-    "name": "INFO_EUR_AF",
-    "label": "INFO_EUR_AF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency in the EUR populations calculated from AC and AN, in the range (0,1)",
-    "dimension": -1
-  },
-  {
-    "id": "41f06462-d6ee-4c1a-9f69-37e8747a3b1f",
-    "name": "INFO_MULTI_ALLELIC",
-    "label": "INFO_MULTI_ALLELIC",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "indicates whether a site is multi-allelic",
-    "dimension": 1
-  },
-  {
-    "id": "d4c6e503-fdcc-4bcf-b688-e88fcbf8ea9e",
-    "name": "INFO_SAS_AF",
-    "label": "INFO_SAS_AF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency in the SAS populations calculated from AC and AN, in the range (0,1)",
-    "dimension": -1
-  },
-  {
-    "id": "e2da14bb-839b-4950-a520-d35420f3ff4f",
-    "name": "INFO_AN",
-    "label": "INFO_AN",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Total number of alleles in called genotypes",
-    "dimension": 1
-  },
-  {
-    "id": "df483f04-59a1-4d1e-bda5-a78480f516b4",
-    "name": "INFO_AC",
-    "label": "INFO_AC",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "Total number of alternate alleles in called genotypes",
-    "dimension": -1
-  },
-  {
-    "id": "9647122e-f84b-447c-8731-c23af80e2f09",
-    "name": "INFO_AA",
-    "label": "INFO_AA",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Ancestral allele",
-    "dimension": 1
-  },
-  {
-    "id": "2a397b93-d0d8-4157-b305-b9c46a113cfa",
-    "name": "INFO_EAS_AF",
-    "label": "INFO_EAS_AF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency in the EAS populations calculated from AC and AN, in the range (0,1)",
-    "dimension": -1
-  },
-  {
-    "id": "17d057ea-4095-43c4-af5e-111037b0a7cc",
-    "name": "INFO_END",
-    "label": "INFO_END",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "integer",
-    "description": "End coordinate of this variant",
-    "dimension": 1
-  },
-  {
-    "id": "3f42b411-9138-4395-bb10-4e4aab8a30e3",
-    "name": "INFO_SVTYPE",
-    "label": "INFO_SVTYPE",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "Type of structural variant",
-    "dimension": 1
-  },
-  {
-    "id": "c8202c92-594a-434d-bf5e-e709510ec1e0",
-    "name": "INFO_AMR_AF",
-    "label": "INFO_AMR_AF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency in the AMR populations calculated from AC and AN, in the range (0,1)",
-    "dimension": -1
-  },
-  {
-    "id": "58b59313-48c8-4399-a1ed-e4e04f22637c",
-    "name": "INFO_EX_TARGET",
-    "label": "INFO_EX_TARGET",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "boolean",
-    "description": "indicates whether a variant is within the exon pull down target boundaries",
-    "dimension": 1
-  },
-  {
-    "id": "491c4c27-f3fd-43a9-8675-9e0000300302",
-    "name": "INFO_AFR_AF",
-    "label": "INFO_AFR_AF",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "float",
-    "description": "Allele frequency in the AFR populations calculated from AC and AN, in the range (0,1)",
-    "dimension": -1
-  },
-  {
-    "id": "7a59ddf7-e763-4930-8d96-8a32c9aaab68",
-    "name": "INFO_VT",
-    "label": "INFO_VT",
-    "source_name": "sample",
-    "is_mandatory": false,
-    "is_editable": false,
-    "value_type": "string",
-    "description": "indicates what type of variant the line represents",
-    "dimension": 0
-  },
-  {
-    "id": "fbfdd436-58ef-47b5-aaa4-b756f4a5f2fc",
+    "id": "00ea9c37-75db-4697-baa8-d1ecd887cd89",
     "name": "INFO_SGREFAA",
     "label": "INFO_SGREFAA",
     "source_name": "sample",
@@ -1850,7 +1201,7 @@
     "dimension": 1
   },
   {
-    "id": "fe307bcd-d52a-400b-bbeb-ebc8624dc889",
+    "id": "d39632b3-c4dc-493f-b799-14d2cb1d91b0",
     "name": "INFO_SGTI",
     "label": "INFO_SGTI",
     "source_name": "sample",
@@ -1861,7 +1212,18 @@
     "dimension": 0
   },
   {
-    "id": "31cadb71-71b6-4bbe-ad7c-63d88bb1b63f",
+    "id": "d54f50a1-d277-4481-86dd-e7a8314c0c0f",
+    "name": "INFO_AF",
+    "label": "INFO_AF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele Frequency",
+    "dimension": -1
+  },
+  {
+    "id": "8db4ffdf-fc40-425c-bae3-1041df090fe0",
     "name": "INFO_SGACOV",
     "label": "INFO_SGACOV",
     "source_name": "sample",
@@ -1872,7 +1234,7 @@
     "dimension": -1
   },
   {
-    "id": "b2841043-5be1-4c31-b947-b81d821ee1e2",
+    "id": "15d4d135-afc2-411d-8257-30b60c6b4321",
     "name": "INFO_SGGENEDIR",
     "label": "INFO_SGGENEDIR",
     "source_name": "sample",
@@ -1883,7 +1245,7 @@
     "dimension": 1
   },
   {
-    "id": "6a3a993d-35f8-4cea-886e-22e936cfe371",
+    "id": "feabdc4b-c119-4279-a126-8737694355ec",
     "name": "INFO_SGANNOT",
     "label": "INFO_SGANNOT",
     "source_name": "sample",
@@ -1894,7 +1256,7 @@
     "dimension": 0
   },
   {
-    "id": "14f8fc9f-a2a2-4d58-a2e5-f73af72b15e2",
+    "id": "3ccacd3c-cf6a-4486-9e02-454164db31aa",
     "name": "INFO_SGCDSID",
     "label": "INFO_SGCDSID",
     "source_name": "sample",
@@ -1905,7 +1267,7 @@
     "dimension": 1
   },
   {
-    "id": "8777447e-e204-48ae-a409-a4767adf1bcc",
+    "id": "badf8df7-11f9-4f89-a675-ee5010aee2d4",
     "name": "INFO_SGSEGDES",
     "label": "INFO_SGSEGDES",
     "source_name": "sample",
@@ -1916,7 +1278,7 @@
     "dimension": 1
   },
   {
-    "id": "b98132bb-ec80-45af-bb73-f72af6e33d3e",
+    "id": "77e7860b-e844-45e0-a70b-cee861897a13",
     "name": "INFO_SGSEGPOS",
     "label": "INFO_SGSEGPOS",
     "source_name": "sample",
@@ -1927,7 +1289,7 @@
     "dimension": 1
   },
   {
-    "id": "0ea7d79d-92f3-4624-b0be-623a458e2675",
+    "id": "2672c01b-331e-4ed5-9973-e696a6e60b2e",
     "name": "INFO_SGMRNAID",
     "label": "INFO_SGMRNAID",
     "source_name": "sample",
@@ -1938,7 +1300,7 @@
     "dimension": 1
   },
   {
-    "id": "85fd451f-ce7f-4ec0-958c-b905085ea6dc",
+    "id": "2f60cfc4-1b7f-47e0-9d9c-3daafc4e47f1",
     "name": "INFO_SGAMBGAINPEN",
     "label": "INFO_SGAMBGAINPEN",
     "source_name": "sample",
@@ -1949,7 +1311,18 @@
     "dimension": 1
   },
   {
-    "id": "30ce864a-6104-4a17-843c-4a9a0e0ce2d5",
+    "id": "00aa394f-1f9b-4452-b0e0-292fb34c19f3",
+    "name": "INFO_DP",
+    "label": "INFO_DP",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Total Depth",
+    "dimension": 1
+  },
+  {
+    "id": "0421c77c-9880-46b3-a103-1e2166709e37",
     "name": "INFO_SGPI",
     "label": "INFO_SGPI",
     "source_name": "sample",
@@ -1960,7 +1333,7 @@
     "dimension": 0
   },
   {
-    "id": "e75cfc57-2f5d-4b85-83ea-ca62c361972b",
+    "id": "09c59946-f637-4120-add4-3b493f64eca4",
     "name": "INFO_SGGI",
     "label": "INFO_SGGI",
     "source_name": "sample",
@@ -1971,7 +1344,7 @@
     "dimension": 0
   },
   {
-    "id": "de97f312-af06-4937-acc5-c0df4c9af48e",
+    "id": "de32fcb9-397a-4bc0-becc-526c85c7d23e",
     "name": "INFO_SGAMBLOSSPEN",
     "label": "INFO_SGAMBLOSSPEN",
     "source_name": "sample",
@@ -1982,7 +1355,18 @@
     "dimension": 1
   },
   {
-    "id": "15629b68-31af-42cb-89a2-4bb4bedf8b1f",
+    "id": "14046c32-23e8-4d56-966a-9eaea05fb73c",
+    "name": "INFO_NS",
+    "label": "INFO_NS",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Number of Samples With Data",
+    "dimension": 1
+  },
+  {
+    "id": "6e51334f-106c-42a4-ae56-fd0756dc3b39",
     "name": "INFO_FC",
     "label": "INFO_FC",
     "source_name": "sample",
@@ -1993,7 +1377,7 @@
     "dimension": 0
   },
   {
-    "id": "c7831e11-1506-473f-a529-150b57437124",
+    "id": "78195a72-1ce0-4676-bd00-0ff7846c5a16",
     "name": "INFO_SGAAC",
     "label": "INFO_SGAAC",
     "source_name": "sample",
@@ -2004,7 +1388,7 @@
     "dimension": -1
   },
   {
-    "id": "50642057-4935-4055-8c1f-9069dc25fd56",
+    "id": "c2e68b75-a662-42d9-8a62-85bfa85439e2",
     "name": "INFO_SGASCORE",
     "label": "INFO_SGASCORE",
     "source_name": "sample",
@@ -2013,5 +1397,621 @@
     "value_type": "float",
     "description": "Allele Score",
     "dimension": -1
+  },
+  {
+    "id": "c613c976-21a2-4870-9480-22e67c8bedd3",
+    "name": "INFO_SS",
+    "label": "INFO_SS",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Somatic status of variant (0=Reference,1=Germline,2=Somatic,3=LOH, or 5=Unknown)",
+    "dimension": 1
+  },
+  {
+    "id": "04e1825d-7e62-4262-be39-013ea0683425",
+    "name": "INFO_GPV",
+    "label": "INFO_GPV",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Fisher's Exact Test P-value of tumor+normal versus no variant for Germline calls",
+    "dimension": 1
+  },
+  {
+    "id": "dceacc48-8a29-4e43-91e5-7a07d6487c48",
+    "name": "INFO_SSC",
+    "label": "INFO_SSC",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Somatic score in Phred scale (0-255) derived from somatic p-value",
+    "dimension": 1
+  },
+  {
+    "id": "32779041-fb4a-4269-806a-154c97721ab3",
+    "name": "INFO_SOMATIC",
+    "label": "INFO_SOMATIC",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Indicates if record is a somatic mutation",
+    "dimension": 1
+  },
+  {
+    "id": "f40e21e2-b25b-47ee-a663-9abccbcfd077",
+    "name": "INFO_SPV",
+    "label": "INFO_SPV",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Fisher's Exact Test P-value of tumor versus normal for Somatic/LOH calls",
+    "dimension": 1
+  },
+  {
+    "id": "834b4191-b030-406f-9be5-4eea500b60c5",
+    "name": "INFO_REVB",
+    "label": "INFO_REVB",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Reverse strand bias in prediction.",
+    "dimension": -1
+  },
+  {
+    "id": "d0059a60-f26d-4b64-b3eb-1cccabddd398",
+    "name": "INFO_FRO",
+    "label": "INFO_FRO",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Flow Evaluator Reference allele observations",
+    "dimension": 1
+  },
+  {
+    "id": "f80ebedf-030c-4ca2-b115-2025e7a1b8bc",
+    "name": "INFO_AO",
+    "label": "INFO_AO",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Alternate allele observations",
+    "dimension": -1
+  },
+  {
+    "id": "9f3f628f-0e10-43ca-a101-85c1b9e5f8fb",
+    "name": "INFO_SAR",
+    "label": "INFO_SAR",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Alternate allele observations on the reverse strand",
+    "dimension": -1
+  },
+  {
+    "id": "05619baf-55e4-40e4-962e-a13f78a89871",
+    "name": "INFO_FSAF",
+    "label": "INFO_FSAF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Flow Evaluator Alternate allele observations on the forward strand",
+    "dimension": -1
+  },
+  {
+    "id": "c9d030c2-1260-454b-b491-fa27a690d187",
+    "name": "INFO_SAF",
+    "label": "INFO_SAF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Alternate allele observations on the forward strand",
+    "dimension": -1
+  },
+  {
+    "id": "cb8a30aa-281c-4f2f-ba75-84d65971094f",
+    "name": "INFO_MLLD",
+    "label": "INFO_MLLD",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Mean log-likelihood delta per read.",
+    "dimension": -1
+  },
+  {
+    "id": "4871c8fd-abe7-47eb-b676-3f672e37a0fd",
+    "name": "INFO_FSAR",
+    "label": "INFO_FSAR",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Flow Evaluator Alternate allele observations on the reverse strand",
+    "dimension": -1
+  },
+  {
+    "id": "2cc3eacf-9a34-4ac1-9669-2954f1f06e00",
+    "name": "INFO_PB",
+    "label": "INFO_PB",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Bias of relative variant position in reference reads versus variant reads. Equals Mann-Whitney U rho statistic P(Y>X)+0.5P(Y=X)",
+    "dimension": -1
+  },
+  {
+    "id": "6dae2d4a-215e-400b-8219-c1309dfc312a",
+    "name": "INFO_HS",
+    "label": "INFO_HS",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "Indicate it is at a hot spot",
+    "dimension": 1
+  },
+  {
+    "id": "8c9ea974-f90a-4b94-86c1-95362eef13be",
+    "name": "INFO_OID",
+    "label": "INFO_OID",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "List of original Hotspot IDs",
+    "dimension": 0
+  },
+  {
+    "id": "008c7d44-da86-4b7b-95dd-703052315de8",
+    "name": "INFO_REFB",
+    "label": "INFO_REFB",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Reference Hypothesis bias in prediction.",
+    "dimension": -1
+  },
+  {
+    "id": "e32e5c96-19d0-4322-b09b-d4e7b14b8e01",
+    "name": "INFO_OREF",
+    "label": "INFO_OREF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "List of original reference bases",
+    "dimension": 0
+  },
+  {
+    "id": "9c4d466c-d31f-4350-ac3a-5e390c3d29a5",
+    "name": "INFO_LEN",
+    "label": "INFO_LEN",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "allele length",
+    "dimension": -1
+  },
+  {
+    "id": "265f2857-ca8d-469f-bf51-d48ea151df40",
+    "name": "INFO_FWDB",
+    "label": "INFO_FWDB",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Forward strand bias in prediction.",
+    "dimension": -1
+  },
+  {
+    "id": "5b14224d-3b1d-4f9a-a748-f8dcc890b918",
+    "name": "INFO_STB",
+    "label": "INFO_STB",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Strand bias in variant relative to reference.",
+    "dimension": -1
+  },
+  {
+    "id": "19e64ebc-8828-40bb-b42f-4ce564b1009b",
+    "name": "INFO_SSSB",
+    "label": "INFO_SSSB",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Strand-specific strand bias for allele.",
+    "dimension": -1
+  },
+  {
+    "id": "9f7010fe-2fa9-4b9b-a9f1-75a85578e7fc",
+    "name": "INFO_RO",
+    "label": "INFO_RO",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Reference allele observations",
+    "dimension": 1
+  },
+  {
+    "id": "f5473aa4-7b52-489e-8254-b8ed32a7c682",
+    "name": "INFO_VARB",
+    "label": "INFO_VARB",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Variant Hypothesis bias in prediction.",
+    "dimension": -1
+  },
+  {
+    "id": "a5a99070-925c-4a1c-badf-d0fa8ba433b1",
+    "name": "INFO_PBP",
+    "label": "INFO_PBP",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Pval of relative variant position in reference reads versus variant reads.  Related to GATK ReadPosRankSumTest",
+    "dimension": -1
+  },
+  {
+    "id": "e0b7139d-1499-4628-9c1a-a7774d964114",
+    "name": "INFO_FSRF",
+    "label": "INFO_FSRF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Flow Evaluator Reference observations on the forward strand",
+    "dimension": 1
+  },
+  {
+    "id": "9694838a-68f8-4d21-a9a1-0fecd27d3d7d",
+    "name": "INFO_RBI",
+    "label": "INFO_RBI",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Distance of bias parameters from zero.",
+    "dimension": -1
+  },
+  {
+    "id": "22beefe4-3b5a-41dd-b818-aeb58805570c",
+    "name": "INFO_OPOS",
+    "label": "INFO_OPOS",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "List of original allele positions",
+    "dimension": 0
+  },
+  {
+    "id": "de8727b4-63cb-4771-969d-40713de058fd",
+    "name": "INFO_TYPE",
+    "label": "INFO_TYPE",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "The type of allele, either snp, mnp, ins, del, or complex.",
+    "dimension": -1
+  },
+  {
+    "id": "4242aa0f-c034-4467-a54d-f69b426d15b7",
+    "name": "INFO_FSRR",
+    "label": "INFO_FSRR",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Flow Evaluator Reference observations on the reverse strand",
+    "dimension": 1
+  },
+  {
+    "id": "cf910ab2-eb8f-499a-9711-665ac218e44d",
+    "name": "INFO_FDP",
+    "label": "INFO_FDP",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Flow Evaluator read depth at the locus",
+    "dimension": 1
+  },
+  {
+    "id": "4999a2f8-16b3-4607-a301-4d873c76d5d7",
+    "name": "INFO_HRUN",
+    "label": "INFO_HRUN",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Run length: the number of consecutive repeats of the alternate allele in the reference genome",
+    "dimension": -1
+  },
+  {
+    "id": "005fdfa4-a80b-4974-bf34-167081f83f13",
+    "name": "INFO_SRF",
+    "label": "INFO_SRF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Number of reference observations on the forward strand",
+    "dimension": 1
+  },
+  {
+    "id": "bc51006b-ed86-4f1e-b51e-854e24f4b4eb",
+    "name": "INFO_SRR",
+    "label": "INFO_SRR",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Number of reference observations on the reverse strand",
+    "dimension": 1
+  },
+  {
+    "id": "64c21a5b-a9f1-4b5a-987e-0f387b94f448",
+    "name": "INFO_FR",
+    "label": "INFO_FR",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Reason why the variant was filtered.",
+    "dimension": 0
+  },
+  {
+    "id": "f283c725-7b33-4b19-afc1-4dfc962d99dc",
+    "name": "INFO_FAO",
+    "label": "INFO_FAO",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Flow Evaluator Alternate allele observations",
+    "dimension": -1
+  },
+  {
+    "id": "3de4e630-7b9c-45ea-b82c-150b4fa80491",
+    "name": "INFO_QD",
+    "label": "INFO_QD",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "QualityByDepth as 4*QUAL/FDP (analogous to GATK)",
+    "dimension": 1
+  },
+  {
+    "id": "a609120f-34b6-425e-a283-825e5caaf702",
+    "name": "INFO_FXX",
+    "label": "INFO_FXX",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Flow Evaluator failed read ratio",
+    "dimension": 1
+  },
+  {
+    "id": "6ce3f3d8-04e7-4638-9919-93959072ab32",
+    "name": "INFO_SSEN",
+    "label": "INFO_SSEN",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Strand-specific-error prediction on negative strand.",
+    "dimension": -1
+  },
+  {
+    "id": "dd149e19-4045-4d2d-bde3-c3b8f204911d",
+    "name": "INFO_SSEP",
+    "label": "INFO_SSEP",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Strand-specific-error prediction on positive strand.",
+    "dimension": -1
+  },
+  {
+    "id": "5303dcd4-e112-4595-ae92-5c8a5424b92d",
+    "name": "INFO_STBP",
+    "label": "INFO_STBP",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Pval of Strand bias in variant relative to reference.",
+    "dimension": -1
+  },
+  {
+    "id": "d0448240-4776-4cbc-8728-26e0ff0d847b",
+    "name": "INFO_OMAPALT",
+    "label": "INFO_OMAPALT",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Maps OID,OPOS,OREF,OALT entries to specific ALT alleles",
+    "dimension": 0
+  },
+  {
+    "id": "91a7d68b-43cd-4530-a88b-a034ddf0a8ea",
+    "name": "INFO_OALT",
+    "label": "INFO_OALT",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "List of original variant bases",
+    "dimension": 0
+  },
+  {
+    "id": "b7e59fff-1e8e-4811-8675-82482d5bc2d7",
+    "name": "INFO_EUR_AF",
+    "label": "INFO_EUR_AF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele frequency in the EUR populations calculated from AC and AN, in the range (0,1)",
+    "dimension": -1
+  },
+  {
+    "id": "00b033d1-2a84-421c-b06b-109d8a0395f2",
+    "name": "INFO_MULTI_ALLELIC",
+    "label": "INFO_MULTI_ALLELIC",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "indicates whether a site is multi-allelic",
+    "dimension": 1
+  },
+  {
+    "id": "05a77a3a-679b-4525-8374-42189ffaa9e1",
+    "name": "INFO_SAS_AF",
+    "label": "INFO_SAS_AF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele frequency in the SAS populations calculated from AC and AN, in the range (0,1)",
+    "dimension": -1
+  },
+  {
+    "id": "5eec3b31-3c61-4eec-bace-81f26d9c6c7d",
+    "name": "INFO_AN",
+    "label": "INFO_AN",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Total number of alleles in called genotypes",
+    "dimension": 1
+  },
+  {
+    "id": "11c20fc0-d2bc-4da1-8e69-1c239a3f5beb",
+    "name": "INFO_AC",
+    "label": "INFO_AC",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "Total number of alternate alleles in called genotypes",
+    "dimension": -1
+  },
+  {
+    "id": "8a8fd457-b457-4193-b708-44034625956b",
+    "name": "INFO_AA",
+    "label": "INFO_AA",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Ancestral allele",
+    "dimension": 1
+  },
+  {
+    "id": "e8002279-dae7-40f7-a12c-ecb7f660a7b9",
+    "name": "INFO_EAS_AF",
+    "label": "INFO_EAS_AF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele frequency in the EAS populations calculated from AC and AN, in the range (0,1)",
+    "dimension": -1
+  },
+  {
+    "id": "da870e5b-1a47-47f0-b5bc-c035bc766d8b",
+    "name": "INFO_END",
+    "label": "INFO_END",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "integer",
+    "description": "End coordinate of this variant",
+    "dimension": 1
+  },
+  {
+    "id": "13012d7b-b079-43bf-9e50-54ce34462f5c",
+    "name": "INFO_SVTYPE",
+    "label": "INFO_SVTYPE",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "Type of structural variant",
+    "dimension": 1
+  },
+  {
+    "id": "6bcd4277-25cd-41a0-be1a-ec98ae9318bd",
+    "name": "INFO_AMR_AF",
+    "label": "INFO_AMR_AF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele frequency in the AMR populations calculated from AC and AN, in the range (0,1)",
+    "dimension": -1
+  },
+  {
+    "id": "5454eb7d-da1f-4780-95b2-a8c7f87f4224",
+    "name": "INFO_EX_TARGET",
+    "label": "INFO_EX_TARGET",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "boolean",
+    "description": "indicates whether a variant is within the exon pull down target boundaries",
+    "dimension": 1
+  },
+  {
+    "id": "d0b1401e-4aff-48ea-b361-929030bd24d3",
+    "name": "INFO_AFR_AF",
+    "label": "INFO_AFR_AF",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "float",
+    "description": "Allele frequency in the AFR populations calculated from AC and AN, in the range (0,1)",
+    "dimension": -1
+  },
+  {
+    "id": "048685c7-3798-4a98-83e7-a18af41de0ba",
+    "name": "INFO_VT",
+    "label": "INFO_VT",
+    "source_name": "sample",
+    "is_mandatory": false,
+    "is_editable": false,
+    "value_type": "string",
+    "description": "indicates what type of variant the line represents",
+    "dimension": 0
   }
 ]
