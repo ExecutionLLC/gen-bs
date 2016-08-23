@@ -103,12 +103,12 @@ export function fetchUserdata() {
                     }
                 }
 
-                if (!sample || !filter || !view) {
-                    dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
-                } else {
-                    dispatch(changeSample(sample.id));
-                    /*dispatch(analyze(sample.id, view.id, filter.id)); FIXME analyze: replace by reanalyze */
-                }
+                // if (!sample || !filter || !view) {
+                //     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
+                // } else {
+                //     dispatch(changeSample(sample.id)); FIXME: change sample
+                //     /*dispatch(analyze(sample.id, view.id, filter.id)); FIXME analyze: replace by reanalyze */
+                // }
             }
         });
     };
