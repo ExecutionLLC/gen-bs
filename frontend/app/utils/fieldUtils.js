@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default class FieldUtils {
     static find(fieldId, fields) {
         return fields.totalFieldsHashedArray.hash[fieldId];
