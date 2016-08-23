@@ -187,9 +187,9 @@ class SearchService extends ServiceBase {
             });
         } else {
             clientMessage = Object.assign({}, message, {
-                result: {
+                result: Object.assign({}, _.omit(message.result, ['fieldsWithIdArray']), {
                     data: convertedRows
-                }
+                })
             });
         }
         this.eventEmitter.emit(SEARCH_SERVICE_EVENTS.onDataReceived, clientMessage);
