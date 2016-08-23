@@ -22,6 +22,8 @@ import {
     modelsListReceive
 } from './modelsList';
 import {entityType} from '../utils/entityTypes';
+import {fetchFields} from './fields';
+import {analyze} from './ui';
 
 /*
  * action types
@@ -86,11 +88,22 @@ export function fetchUserdata() {
 
                 dispatch(receiveSavedFilesList(savedFiles));
                 dispatch(receiveTotalFields(totalFields));
-                //dispatch(receiveFields(lastSampleFields));// TODO replace by real fields
                 dispatch(receiveSamplesList(samples));
                 dispatch(receiveInitialQueryHistory(analyses));
                 if (analyses[0]) {
-                    dispatch(setCurrentQueryHistoryId(analyses[0].id));
+                    dispatch(fetchFields(sample.id)); // TODO check if no need to wait fetchFields
+                    const historyItem = analyses[0];
+                    dispatch(setCurrentQueryHistoryId(historyItem.id));
+                    dispatch(analyze({
+                        id: historyItem.id,
+                        name: historyItem.name,
+                        description: historyItem.description,
+                        type: historyItem.type,
+                        samples: historyItem.samples,
+                        viewId: historyItem.viewId,
+                        filterId: historyItem.filterId,
+                        modelId: historyItem.modelId
+                    }));
                 } else {
                     const sample = _.find(samples, {type: entityType.STANDARD});
                     const filter = _.find(filters, {type: entityType.STANDARD});
@@ -98,8 +111,20 @@ export function fetchUserdata() {
                     if (!sample || !filter || !view) {
                         dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                     } else {
+                        dispatch(fetchFields(sample.id)); // TODO check if no need to wait fetchFields
                         dispatch(createNewHistoryItem(sample, filter, view));
                         dispatch(setCurrentQueryHistoryId(null));
+                        const historyItem = getState().queryHistory.newHistoryItem;
+                        dispatch(analyze({
+                            id: null,
+                            name: historyItem.name,
+                            description: historyItem.description,
+                            type: historyItem.type,
+                            samples: historyItem.samples,
+                            viewId: historyItem.viewId,
+                            filterId: historyItem.filterId,
+                            modelId: historyItem.modelId
+                        }));
                     }
                 }
 
