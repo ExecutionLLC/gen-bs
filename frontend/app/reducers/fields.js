@@ -32,14 +32,6 @@ function sortAndAddLabels(fields) {
         });
 }
 
-function reduceRequestFields(action, state) {
-    return Object.assign({}, state, {
-        isFetching: Object.assign({}, state.isFetching, {
-            samples: true
-        })
-    });
-}
-
 function reduceReceiveFields(action, state) {
     const {sourceFieldsList} = state;
     const fields = sortAndAddLabels(action.fields);
@@ -84,9 +76,6 @@ function reduceRequestTotalFields(action, state) {
 export default function fields(state = initialState, action) {
 
     switch (action.type) {
-
-        case ActionTypes.REQUEST_FIELDS:
-            return reduceRequestFields(action, state);
 
         case ActionTypes.RECEIVE_FIELDS:
             return reduceReceiveFields(action, state);
