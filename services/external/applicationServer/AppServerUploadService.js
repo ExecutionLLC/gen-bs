@@ -72,12 +72,18 @@ class AppServerUploadService extends ApplicationServerServiceBase {
     processUploadResult(session, operation, message, callback) {
         async.waterfall([
             (callback) => this._processUploadAndCreateResult(session, operation, message, callback),
-            (operationResult, callback) => this.services.sampleUploadHistory.update(
+            (operationResult, callback) => this.services.users.find(
                 session.userId,
-                operation.getId(), {
+                (error, user) => callback(error, operationResult, user)
+            ),
+            (operationResult, user, callback) => this.services.sampleUploadHistory.update(
+                user,
+                {
+                    id: operation.getId(),
                     lastStatusMessage: operationResult,
                     isActive: !operationResult.shouldCompleteOperation,
-                }, (error) => callback(error, operationResult)
+                },
+                (error) => callback(error, operationResult)
             )
         ], callback);
     }
