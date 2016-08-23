@@ -8,8 +8,7 @@ const initialState = {
         samples: false,
         sources: false
     },
-    sampleFieldsList: [],
-    fieldIdToFieldHash: {},
+    sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
     editableFields: [],
     sourceFieldsList: [],
     totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
@@ -50,18 +49,16 @@ function reduceReceiveFields(action, state) {
         ..._.filter(fields, ['isEditable', false]),
         ...sourceFieldsList
     ];
-    const fieldIdToFieldHash = _.keyBy(fields, (field) => field.id);
     const allowedIdToFieldHash = _.keyBy(allowedFieldsList, (field) => field.id);
 
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
             samples: false
         }),
-        sampleFieldsList: fields,
+        sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray(fields),
         editableFields,
         allowedFieldsList,
         allowedIdToFieldHash,
-        fieldIdToFieldHash,
         lastUpdated: action.receivedAt
     });
 }

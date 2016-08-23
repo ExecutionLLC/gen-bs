@@ -21,11 +21,11 @@ export default class FieldUtils {
 
     /**
      * Make fields array for filters
-     * @param {{sourceFieldsList: Object[], totalFieldsHashedArray: Object[], sampleFieldsList: Object[]}} fields
+     * @param {{sourceFieldsList: Object[], totalFieldsHashedArray: Object[], sampleFieldsHashedArray: Object[]}} fields
      * @returns {{id: string, label: string, type: string}[]}
      */
     static makeFieldsListForFiltersSelect(fields) {
-        const allAvailableFields = _.filter(fields.sampleFieldsList.concat(fields.sourceFieldsList), field => !field.isEditable);
+        const allAvailableFields = _.filter(fields.sampleFieldsHashedArray.array.concat(fields.sourceFieldsList), field => !field.isEditable);
         return allAvailableFields.map((f) => this.makeFieldSelectItemValue(f));
     }
 

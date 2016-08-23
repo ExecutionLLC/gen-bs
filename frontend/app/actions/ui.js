@@ -64,7 +64,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
                 hashedArray: {hash: viewIdToViewHash}
             },
             fields: {
-                sampleFieldsList
+                sampleFieldsHashedArray: {array: sampleFieldsList}
             }
         } = getState();
 
