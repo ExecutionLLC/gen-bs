@@ -15,6 +15,26 @@
           "condition": {
             "$neq": "A"
           }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Test Filter",
+    "description": "Test filter description",
+    "type": "standard",
+    "is_copy_disabled": false,
+    "rules": {
+      "$or": [
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "ALT",
+            "value_type": "string"
+          },
+          "condition": {
+            "$neq": "A"
+          }
         },
         {
           "field": {

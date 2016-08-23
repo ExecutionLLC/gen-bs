@@ -2,7 +2,8 @@ export const entityType = {
     USER: 'user',
     STANDARD: 'standard',
     ADVANCED: 'advanced',
-    HISTORY: 'history'
+    HISTORY: 'history',
+    DEFAULT: 'default'
 };
 
 export function entityTypeIsEditable(type) {

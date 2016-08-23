@@ -4,7 +4,7 @@
     "file_name": "test-7",
     "hash": null,
     "reference": "hg19",
-    "type": "advanced",
+    "type": "default",
     "is_analyzed": true,
     "is_source": false,
     "creator": null

@@ -71,14 +71,12 @@ export function fetchUserdata() {
                     totalFields,
                     savedFiles,
                     queryHistory,
-                    lastSampleId,
                     lastSampleFields
                 } = userData;
 
-                const sample = _.find(samples, {id: lastSampleId}) ||
-                               _.find(samples, {type: entityType.STANDARD});
-                const filter = _.find(filters, {type: entityType.STANDARD});
-                const view = _.find(views, {type: entityType.STANDARD});
+                const sample = _.find(samples, {type: entityType.DEFAULT});
+                const filter = _.find(filters, {type: entityType.DEFAULT});
+                const view = _.find(views, {type: entityType.DEFAULT});
 
                 dispatch(receiveUserdata(userData));
                 dispatch(filtersListReceive(filters));
