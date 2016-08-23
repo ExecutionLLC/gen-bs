@@ -92,17 +92,13 @@ class SavedFilesService extends UserEntityServiceBase {
                 // (ex. deleted or have different versions)
                 async.parallel({
                     savedFile: (callback) => callback(null, savedFile),
-                    view: (callback) => this.services.views.find(user, savedFile.viewId, callback),
-                    filter: (callback) => this.services.filters.find(user, savedFile.filterIds[0], callback),
-                    sample: (callback) => this.services.samples.find(user, savedFile.sampleId, callback)
+                    analysis: (callback) => this.services.analysis.find(user, savedFile.analysisId, callback)
                 }, callback);
             },
             // Build saved file with view, filter and sample.
             (fileWithEntities, callback) => callback(null,
                 Object.assign({}, fileWithEntities.savedFile, {
-                    view: fileWithEntities.view,
-                    filter: fileWithEntities.filter,
-                    sample: fileWithEntities.sample
+                    analysis: fileWithEntities.analysis
                 }))
         ], callback);
     }
