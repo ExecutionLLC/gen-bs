@@ -1,5 +1,21 @@
 [
   {
+    "id": "1768b6b3-78f2-40db-b8ab-65d490d9a38e",
+    "name": "Default Test Filter",
+    "description": "Default Test filter description",
+    "type": "default",
+    "isCopyDisabled": false,
+    "rules": {
+      "$or": [
+        {
+          "00000000-0000-0000-0000-000000000005": {
+            "$neq": "A"
+          }
+        }
+      ]
+    }
+  },
+  {
     "id": "301b4e00-c7e2-412e-9dba-ffc27063eb58",
     "name": "Test Filter",
     "description": "Test filter description",

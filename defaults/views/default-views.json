@@ -1,5 +1,44 @@
 [
   {
+    "id": "301b4e00-c7e2-412e-9dba-ffc27063eb58",
+    "name": "Default Test View",
+    "type": "default",
+    "description": "This is default view with two columns and no keywords",
+    "view_list_items": [
+      {
+        "id": "f0498580-d694-4c90-82fc-ceddff23cd52",
+        "field_id": "00000000-0000-0000-0000-000000000001",
+        "order": 1,
+        "sort_order": 1,
+        "sort_direction": "asc",
+        "keywords": []
+      },
+      {
+        "id": "1667f875-e1fc-4bbf-bf81-17bd240a6318",
+        "field_id": "00000000-0000-0000-0000-000000000002",
+        "order": 2,
+        "sort_order": 2,
+        "sort_direction": "desc",
+        "keywords": []
+      },
+      {
+        "id": "eb2a7a13-18a9-486c-a3f9-17c08dc7e7e0",
+        "field_id": "00000000-0000-0000-0000-000000000007",
+        "order": 6,
+        "keywords": []
+      },
+      {
+        "id": "5d1f50a9-d8ed-4e34-8dc4-5ce12e09153d",
+        "field_id": "00000000-0000-0000-0000-000000000005",
+        "order": 5,
+        "keywords": [
+          "bed2d914-cb4b-46fc-aa83-0ac7e0f1be20",
+          "73b90dc1-07b4-4397-b0a8-30cfb76ec90d"
+        ]
+      }
+    ]
+  },
+  {
     "id": "1768b6b3-78f2-40db-b8ab-65d490d9a38e",
     "name": "Test Default View",
     "type": "standard",
