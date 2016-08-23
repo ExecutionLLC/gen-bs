@@ -43,7 +43,6 @@ function reduceRequestFields(action, state) {
 function reduceReceiveFields(action, state) {
     const {sourceFieldsList} = state;
     const fields = sortAndAddLabels(action.fields);
-    const editableFields = _.filter(fields, ['isEditable', true]);
     const allowedFieldsList = [
         ..._.filter(fields, ['isEditable', false]),
         ...sourceFieldsList
@@ -54,7 +53,6 @@ function reduceReceiveFields(action, state) {
             samples: false
         }),
         sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray(fields),
-        editableFields,
         allowedFieldsList,
         lastUpdated: action.receivedAt
     });
@@ -62,6 +60,7 @@ function reduceReceiveFields(action, state) {
 
 function reduceReceiveTotalFields(action, state) {
     const totalFields = sortAndAddLabels(action.fields);
+    const editableFields = _.filter(totalFields, ['isEditable', true]);
     const sourceFields = _.filter(totalFields, (field) => field.sourceName !== 'sample');
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
@@ -69,6 +68,7 @@ function reduceReceiveTotalFields(action, state) {
         }),
         totalFieldsHashedArray: ImmutableHashedArray.makeFromArray(totalFields),
         sourceFieldsList: sourceFields,
+        editableFields,
         lastUpdated: action.receivedAt
     });
 }
