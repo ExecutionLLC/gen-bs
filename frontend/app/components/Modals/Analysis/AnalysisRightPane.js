@@ -14,6 +14,7 @@ import {openModal} from '../../../actions/modalWindows';
 import {analyze} from '../../../actions/ui';
 import {closeModal} from '../../../actions/modalWindows';
 import {samplesOnSave} from '../../../actions/samplesList';
+import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -591,8 +592,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isViewDisabled(view) {
-        const {auth} = this.props;
-        return auth.isDemo && view.type == 'advanced';
+        return entityTypeIsDemoDisabled(view.type, this.props.auth.isDemo);
     }
 
     getViewOptions() {
@@ -609,8 +609,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isFilterDisabled(filter) {
-        const {auth} = this.props;
-        return auth.isDemo && filter.type == 'advanced';
+        return entityTypeIsDemoDisabled(filter.type, this.props.auth.isDemo);
     }
 
     getFilterOptions() {
@@ -625,8 +624,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isModelDisabled(model) {
-        const {auth} = this.props;
-        return auth.isDemo && model.type == 'advanced';
+        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo);
     }
 
     getModelOptions() {
@@ -639,8 +637,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isSampleDisabled(sample) {
-        const {auth} = this.props;
-        return auth.isDemo && sample.type == 'advanced';
+        return entityTypeIsDemoDisabled(sample.type, this.props.auth.isDemo);
     }
 
     getSampleOptions() {

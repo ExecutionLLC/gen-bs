@@ -105,7 +105,7 @@ function reduceSamplesListSetHistorySamples(state, action) {
     if (samplesArrayWOHistory === hashedArray.array && !samplesToSet.length) {
         return state;
     }
-    const samplesToSetHistored = _.map(samplesToSet, (sample) => ({...sample, type: 'history'}));
+    const samplesToSetHistored = _.map(samplesToSet, (sample) => ({...sample, type: entityType.HISTORY}));
     const samplesArrayWNewHistory = samplesToSetHistored.length ? [...samplesToSetHistored, ...samplesArrayWOHistory] : samplesArrayWOHistory;
     const samplesHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(samplesArrayWNewHistory);
     const newSelectedSampleId = samplesHashedArrayWNewHistory.hash[selectedSampleId] ? selectedSampleId : samplesHashedArrayWNewHistory.array[0] && samplesHashedArrayWNewHistory.array[0].id || null;

@@ -43,7 +43,7 @@ function reduceViewListSetHistoryView(state, action) {
     }
     const viewToSet = isNeedToSet && {
         ...view,
-        type: 'history'
+        type: entityType.HISTORY
     };
     const viewsArrayWNewHistory = isNeedToSet ? [viewToSet, ...viewsArrayWOHistory] : viewsArrayWOHistory;
     const viewsHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(viewsArrayWNewHistory);

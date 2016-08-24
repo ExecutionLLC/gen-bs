@@ -43,7 +43,7 @@ function reduceModelListSetHistoryModel(state, action) {
     }
     const modelToSet = isNeedToSet && {
         ...model,
-        type: 'history'
+        type: entityType.HISTORY
     };
     const modelsArrayWNewHistory = isNeedToSet ? [modelToSet, ...modelsArrayWOHistory] : modelsArrayWOHistory;
     const modelsHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(modelsArrayWNewHistory);
