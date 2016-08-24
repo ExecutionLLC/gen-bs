@@ -383,6 +383,12 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSamplesSelectsFamilyMember(sample, disabled, i) {
+
+        const familyMemberLabel = {
+            'mother': 'M',
+            'father': 'F'
+        };
+
         return (
             <div className='form-group' key={i}>
                 <div className='col-xs-10 btn-group-select2'>
@@ -395,20 +401,16 @@ export default class AnalysisRightPane extends React.Component {
                             <span data-localize='samples.title'>Samples</span>
                         </button>
                     </div>
-                    <div className='btn-group btn-group-left'>
-                        <Select
-                            tabindex='-1'
-                            className='select2 select2-default select-left select2-sign'
-                            disabled={disabled}
-                            value={sample && sample.type || null}
-                            options={this.getFamilyMemberOptions()}
-                            onChange={(item) => this.onFamilyMemberSelect(i, item.value)}
-                        />
+                    <div className='btn-group'>
+                        <label className='label label-default label-fix-width'>
+                            <span data-localize='query.family.mother.short'>{sample && familyMemberLabel[sample.type] || ''}</span>
+                        </label>
                     </div>
-                    <div className='btn-group btn-group-select2-max btn-group-right'>
+                    <div className='btn-group btn-group-select2-max'>
                         <Select
+                            aria-hidden='true'
                             tabindex='-1'
-                            className='select2-search select-right select-right'
+                            className='select2-search select2-right select2-right form-control'
                             disabled={disabled}
                             value={sample && sample.id || null}
                             options={this.getSampleOptions()}
@@ -649,13 +651,6 @@ export default class AnalysisRightPane extends React.Component {
         });
     }
 
-    getFamilyMemberOptions() {
-        return [
-            {value: 'mother', label: 'Mother'},
-            {value: 'father', label: 'Father'}
-        ];
-    }
-
     onNewAnalysisCancelClick() {
 
     }
@@ -750,10 +745,6 @@ export default class AnalysisRightPane extends React.Component {
     
     onSampleSelect(sampleIndex, sampleId) {
         this.props.dispatch(this.actionEdit({sample: {index: sampleIndex, id: sampleId}}));
-    }
-
-    onFamilyMemberSelect(sampleIndex, familyMemberId) {
-        this.props.dispatch(this.actionEdit({sample: {index: sampleIndex, id: familyMemberId}}));
     }
 
     actionEdit(change) {
