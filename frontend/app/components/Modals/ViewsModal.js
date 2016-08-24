@@ -95,6 +95,13 @@ class ViewsModal extends React.Component {
         this.props.dispatch(viewBuilderEndEdit());
     }
 
+    /**
+     * @param {Object}editingView
+     * @param {string}editedViewName
+     * @param {boolean}isViewEditable
+     * @param {Array<Object>}views
+     * @return {string}
+     */
     getValidationMessage(editingView, editedViewName, isViewEditable, views) {
         const viewNameExists = isViewEditable && _(views)
                 .filter(view => view.type !== entityType.HISTORY)
@@ -105,11 +112,11 @@ class ViewsModal extends React.Component {
             return 'View with this name is already exists.';
         }
 
-        if (editingView && !editedViewName) {
+        if (!editedViewName) {
             return 'Name cannot be empty';
         }
 
-        if (editingView && editedViewName && editedViewName.length > config.VIEWS.MAX_NAME_LENGTH) {
+        if (editedViewName && editedViewName.length > config.VIEWS.MAX_NAME_LENGTH) {
             return `Name length should be less than ${config.VIEWS.MAX_NAME_LENGTH}.`;
         }
 

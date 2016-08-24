@@ -93,6 +93,13 @@ class FiltersModal extends Component {
         );
     }
 
+    /**
+     * @param {Object}editingFilter
+     * @param {boolean}isFilterEditable
+     * @param {string}editingFilterName
+     * @param {Array<Object>}filters
+     * @return {string}
+     */
     getValidationMessage(editingFilter, isFilterEditable, editingFilterName, filters) {
         const filterNameExists = isFilterEditable && _(filters)
                 .filter(filter => filter.type !== entityType.HISTORY)
@@ -103,11 +110,11 @@ class FiltersModal extends Component {
             return 'Filter with this name is already exists.';
         }
 
-        if (editingFilter && !editingFilterName) {
+        if (!editingFilterName) {
             return 'Name cannot be empty';
         }
 
-        if (editingFilter && editingFilterName && editingFilterName.length > config.FILTERS.MAX_NAME_LENGTH) {
+        if (editingFilterName && editingFilterName.length > config.FILTERS.MAX_NAME_LENGTH) {
             return `Name length should be less than ${config.FILTERS.MAX_NAME_LENGTH}`;
         }
 
