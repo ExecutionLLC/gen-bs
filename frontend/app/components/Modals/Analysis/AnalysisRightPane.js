@@ -520,19 +520,19 @@ export default class AnalysisRightPane extends React.Component {
                 isActive: historyItemType === 'single',
                 className: 'single-tab',
                 caption: 'Single',
-                onSelect: () => this.dispatchEdit({type: 'single'})
+                onSelect: () => this.props.dispatch(this.actionEdit({type: 'single'}))
             },
             {
                 isActive: historyItemType === 'tumor',
                 className: 'tumor-normal-tab',
                 caption: 'Tumor/Normal',
-                onSelect: () => this.dispatchEdit({type: 'tumor'})
+                onSelect: () => this.props.dispatch(this.actionEdit({type: 'tumor'}))
             },
             {
                 isActive: historyItemType === 'family',
                 className: 'family-tab',
                 caption: 'Family',
-                onSelect: () => this.dispatchEdit({type: 'family'})
+                onSelect: () => this.props.dispatch(this.actionEdit({type: 'family'}))
             }
         ];
         return (
@@ -673,13 +673,13 @@ export default class AnalysisRightPane extends React.Component {
 
     onAnalysisNameChange(name) {
         console.log('onAnalysisNameChange', name);
-        this.dispatchEdit({name: name});
+        this.props.dispatch(this.actionEdit({name: name}));
         this.props.dispatch(updateQueryHistoryItem(this.props.historyItem));
     }
 
     onAnalysisDescriptionChange(description) {
         console.log('onAnalysisDescriptionChange', description);
-        this.dispatchEdit({description: description});
+        this.props.dispatch(this.actionEdit({description: description})); // TODO: need to dispatch updateQueryHistoryItem?
     }
 
     onUseActionVersionsToggle(use) {
@@ -710,104 +710,63 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewsClick() {
-        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const {historyItem, viewsList} = this.props;
         this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId]));
-
-        const action = editQueryHistoryItem(
-            samplesList,
-            filtersList,
-            viewsList,
-            modelsList,
-            {viewId: null}
-        );
-
+        const action = this.actionEdit({viewId: null});
         this.props.dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
         this.props.dispatch(openModal('views'));
     }
 
     onViewSelect(viewId) {
-        this.dispatchEdit({
-            viewId: viewId
-        });
+        this.props.dispatch(this.actionEdit({viewId: viewId}));
     }
     
     onFiltersClick() {
-        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const {historyItem, filtersList} = this.props;
         this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields, 'filter', filtersList));
-
-        const action = editQueryHistoryItem(
-            samplesList,
-            filtersList,
-            viewsList,
-            modelsList,
-            {filterId: null}
-        );
-
+        const action = this.actionEdit({filterId: null});
         this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         this.props.dispatch(openModal('filters'));
     }
 
     onFilterSelect(filterId) {
-        this.dispatchEdit({
-            filterId: filterId
-        });
+        this.props.dispatch(this.actionEdit({filterId: filterId}));
     }
 
     onModelClick() {
-        const {historyItem, samplesList, filtersList, viewsList, modelsList} = this.props;
+        const {historyItem, modelsList} = this.props;
         this.props.dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], this.props.fields, 'model', modelsList));
-
-        const action = editQueryHistoryItem(
-            samplesList,
-            filtersList,
-            viewsList,
-            modelsList,
-            {modelId: null}
-        );
-
+        const action = this.actionEdit({modelId: null});
         this.props.dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         this.props.dispatch(openModal('filters'));
     }
 
     onModelSelect(modelId) {
-        this.dispatchEdit({
-            modelId: modelId
-        });
+        this.props.dispatch(this.actionEdit({modelId: modelId}));
     }
     
     onSamplesClick(sampleIndex) {
-        const {samplesList, filtersList, viewsList, modelsList} = this.props;
-        const action = editQueryHistoryItem(
-            samplesList,
-            filtersList,
-            viewsList,
-            modelsList,
-            {sample: {index: sampleIndex, id: null}}
-        );
-
+        const action = this.actionEdit({sample: {index: sampleIndex, id: null}});
         this.props.dispatch(samplesOnSave(action, 'changeItem.sample.id'));
         this.props.dispatch(openModal('upload'));
     }
     
     onSampleSelect(sampleIndex, sampleId) {
-        this.dispatchEdit({
-            sample: {index: sampleIndex, id: sampleId}
-        });
+        this.props.dispatch(this.actionEdit({sample: {index: sampleIndex, id: sampleId}}));
     }
 
     onFamilyMemberSelect(sampleIndex, familyMemberId) {
-        this.dispatchEdit({
-            sample: {index: sampleIndex, id: familyMemberId}
-        });
+        this.props.dispatch(this.actionEdit({sample: {index: sampleIndex, id: familyMemberId}}));
     }
 
-    dispatchEdit(change) {
-        const {dispatch, samplesList, filtersList, viewsList, modelsList} = this.props;
-        dispatch(editQueryHistoryItem(
+    actionEdit(change) {
+        const {samplesList, filtersList, viewsList, modelsList} = this.props;
+        return editQueryHistoryItem(
             samplesList,
             filtersList,
             viewsList,
             modelsList,
-            change));
+            change
+        );
     }
 }
