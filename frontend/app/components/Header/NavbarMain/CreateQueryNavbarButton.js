@@ -21,28 +21,16 @@ export default class CreateQueryNavbarButton extends Component {
         return (
             <div>
                 <div>
-                    <a type='button' href='#' className='btn navbar-btn'
-                       id='btnToggle'>
-                        <span className='hidden-xxs' data-localize='query.help' data-toggle='tooltip'
-                              data-placement='right' title='Open navbar and create new analises query'
-                              data-container='body' data-trigger='hover'>Analyze</span>
-                        <span className='visible-xxs'><i className='md-i'>settings</i></span>
-                    </a>
                     <a
-                        onClick={()=>this.props.openAnalysisModal()}
                         type='button'
                         href='#'
-                        className='btn navbar-btn'>
-                        <span
-                            className='hidden-xxs'
-                            data-localize='query.title'
-                        >
-                            Analyses
-                        </span>
-                        <span className='visible-xxs'>
-                            <i className='md-i'>settings</i>
-                        </span>
-                    </a>
+                        className='btn navbar-btn'
+                        id='btnToggle'
+                        data-target='#analysis'
+                        data-toggle='modal'
+                        onClick={()=>this.props.openAnalysisModal()}
+                    ><span className='hidden-xxs' data-localize='query.title'>Analysis</span><span
+                        className='visible-xxs'><i className='md-i'>settings</i></span></a>
                     {ENABLE_PERFORMANCE_CONTROLS &&
                     <div>
                         <button onClick={() => Perf.start()}>B</button>
