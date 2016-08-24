@@ -54,7 +54,6 @@ module.exports = {
     devtool,
 
     entry: [
-        'webpack-hot-middleware/client',
         'babel-polyfill',
         './app/app.js'
     ],
