@@ -146,15 +146,16 @@ class SearchService extends ServiceBase {
                 // Transform fields to the client representation.
                 const rows = _.map(fieldsWithIdArray, fieldsWithId => {
                     const nonSearchKeyObjects = _.filter(fieldsWithId, fieldWithId => {
-                        return fieldWithId.fieldName !== this.searchKeyFieldName
+                        return fieldWithId.fieldId !== this.searchKeyFieldName
                     });
                     const searchKeyObject = _.find(fieldsWithId, fieldWithId => {
-                        return fieldWithId.fieldName === this.searchKeyFieldName
+                        return fieldWithId.fieldId === this.searchKeyFieldName
                     });
                     const fieldValueObjects = _.map(nonSearchKeyObjects, fieldWithId => {
                         return {
                             fieldId: fieldWithId.fieldId,
-                            value: fieldWithId.fieldValue
+                            value: fieldWithId.fieldValue,
+                            sampleId: fieldWithId.sampleId
                         }
                     });
                     const searchKey = searchKeyObject.fieldValue;
@@ -207,7 +208,7 @@ class SearchService extends ServiceBase {
         // Extract search keys from all rows.
         const searchKeys = _.map(redisRows, row => {
             const searchField = _.find(row, field => {
-                field.fieldName = this.searchKeyFieldName
+                return field.fieldId == this.searchKeyFieldName
             });
             return searchField.fieldValue
         });

@@ -77,7 +77,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const {userId, analysisId, view, samples, filter, model, limit, offset} = params;
         const sample = samples[0];
         const method = METHODS.openSearchSession;
-        const appServerSampleIds = _.map(sample => this._getAppServerSampleId(sample));
+        const appServerSampleIds = _.map(samples, sample => this._getAppServerSampleId(sample));
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
         const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, sample);
@@ -192,46 +192,55 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => async.parallel({
                 samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
-                sampleFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
+                samplesFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
                 sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
             }, callback),
             ({samples, samplesFields, sourcesFields}, callback) => {
                 const samplesData = _.map(samples, sample => {
                     const sampleFieldIds = _.map(sample.values, fieldValue => fieldValue.fieldId);
-                    const sampleFields = _.filter(samplesFields, sampleField => _.some(sampleFieldIds, sampleField.id));
+                    const sampleFields = _.filter(samplesFields, sampleField => {
+                        return _.some(sampleFieldIds, sampleFieldId => {
+                            return sampleFieldId === sampleField.id
+                        })
+                    });
                     const fields = sampleFields.concat(sourcesFields);
                     return {
                         sample,
                         fields
                     }
                 });
-                callback(null, {
+                callback(null,
                     samplesData
-                });
+                );
             },
             (samplesData, callback) => {
                 // will be matching fields by name, so create fieldName->field hash
-                const samplesFieldNameToFieldHash = _.map(samplesData, samplesData => {
-                    const fieldNameToFieldHash = CollectionUtils.createHash(samplesData.fields,
+                const samplesFieldHashArray = _.map(samplesData, samplesData => {
+                    const sampleFieldHash = CollectionUtils.createHash(samplesData.fields,
                         ({name}) => AppServerUtils.createColumnName(name, samplesData.sample.name)
                     );
-                    return fieldNameToFieldHash;
+                    const appServerSampleId = this._getAppServerSampleId(samplesData.sample);
+                    return {
+                        appServerSampleId,
+                        sampleId: samplesData.sample.id,
+                        sampleFieldHash
+                    };
                 });
-                const samplesFieldNameToFieldHashMap = _.keyBy(samplesFieldNameToFieldHash, 'id');
-                callback(null, samplesFieldNameToFieldHashMap);
+                callback(null, samplesFieldHashArray);
             },
-            (samplesFieldNameToFieldHashMap, callback) => {
+            (samplesFieldHashArray, callback) => {
                 const missingFieldsSet = new Set();
                 const fieldsWithIdArray = _.map(asData, (rowObject) => {
                     const searchKeyFieldName = this.getSearchKeyFieldName();
                     const mappedRowObject = _.map(rowObject, rowField => {
                         if (rowField.fieldName !== searchKeyFieldName) {
-                            const fieldMetadata = samplesFieldNameToFieldHashMap[rowField.sourceName][rowField.fieldName];
+                            const currentSampleFieldHash = _.find(samplesFieldHashArray, sampleFieldHash => sampleFieldHash.appServerSampleId = rowField.sourceName);
+                            const fieldMetadata = currentSampleFieldHash.sampleFieldHash[rowField.fieldName];
                             if (fieldMetadata) {
                                 return {
                                     fieldId: fieldMetadata.id,
                                     fieldValue: this._mapFieldValue(rowField.fieldValue),
-                                    sourceName: rowField.sourceName
+                                    sampleId: currentSampleFieldHash.sampleId
                                 }
                             }
                             else {

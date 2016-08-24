@@ -11,7 +11,7 @@ class AppServerFilterUtils {
     static _createServerRulesRecursively(filterRulesObject, fieldIdToMetadata, sample) {
         const operator = filterRulesObject['condition'] || null;
         if (operator) {
-            const operands = filterRulesObject[operator];
+            const operands = filterRulesObject['rules'];
             const mappedOperands = _(operands)
                 .map((operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata, sample))
                 .filter(operand => operand)

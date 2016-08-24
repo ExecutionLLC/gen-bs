@@ -154,7 +154,6 @@ describe('Search', function () {
                                         const operationId = body.operationId;
                                         assert.ok(operationId);
                                         wsState.operationId = operationId;
-                                        done()
                                     });
                             });
                         });
