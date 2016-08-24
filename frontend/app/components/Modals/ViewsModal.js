@@ -23,7 +23,12 @@ class ViewsModal extends React.Component {
         const isLoginRequired = editingView && entityTypeIsDemoDisabled(editingView.type, isDemo);
         const editedViewNameTrimmed = editingView && editingView.name.trim();
 
-        const validationMessage = this.getValidationMessage(editingView, editedViewNameTrimmed, isViewEditable, views);
+        const validationMessage = editingView ? this.getValidationMessage(
+            editingView,
+            editedViewNameTrimmed,
+            isViewEditable,
+            views
+        ) : '';
 
         const confirmButtonParams = {
             caption: isViewEditable ? 'Save and Select' : 'Select',
