@@ -2,6 +2,7 @@ import React  from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
+import config from '../../../config';
 import ViewBuilderHeader from './ViewBuilder/ViewBuilderHeader';
 import ViewBuilderFooter from './ViewBuilder/ViewBuilderFooter';
 import NewViewInputs from './ViewBuilder/NewViewInputs';
@@ -22,16 +23,7 @@ class ViewsModal extends React.Component {
         const isLoginRequired = editingView && entityTypeIsDemoDisabled(editingView.type, isDemo);
         const editedViewNameTrimmed = editingView && editingView.name.trim();
 
-        const viewNameExists = isViewEditable && _(views)
-                .filter(view => view.type !== entityType.HISTORY)
-                .some(view => view.name.trim() === editedViewNameTrimmed
-                    && view.id != editingView.id
-                );
-
-        const validationMessage =
-            viewNameExists ? 'View with this name is already exists.' :
-                editingView && !editedViewNameTrimmed ? 'View name cannot be empty' :
-                    '';
+        const validationMessage = this.getValidationMessage(editingView, editedViewNameTrimmed, isViewEditable, views);
 
         const confirmButtonParams = {
             caption: isViewEditable ? 'Save and Select' : 'Select',
@@ -96,6 +88,27 @@ class ViewsModal extends React.Component {
     onClose() {
         this.props.closeModal('views');
         this.props.dispatch(viewBuilderEndEdit());
+    }
+
+    getValidationMessage(editingView, editedViewName, isViewEditable, views) {
+        const viewNameExists = isViewEditable && _(views)
+                .filter(view => view.type !== entityType.HISTORY)
+                .some(view => view.name.trim() === editedViewName
+                    && view.id != editingView.id
+                );
+        if (viewNameExists) {
+            return 'View with this name is already exists.';
+        }
+
+        if (editingView && !editedViewName) {
+            return 'Name cannot be empty';
+        }
+
+        if (editingView && editedViewName && editedViewName.length > config.VIEWS.MAX_NAME_LENGTH) {
+            return `Name length should be less than ${config.VIEWS.MAX_NAME_LENGTH}.`;
+        }
+
+        return '';
     }
 }
 
