@@ -80,7 +80,7 @@ export function analyze(searchParams) {
         const searchView = viewIdToViewHash[searchParams.viewId];
         const searchSamples = _.map(searchParams.samples, (sample) => sampleIdToSampleHash[sample.id]);
         const searchFilter = filterIdToFilterHash[searchParams.filterId];
-        const searchModel = modelIdToFilterHash[searchParams.modelId];
+        const searchModel = searchParams.modelId && modelIdToFilterHash[searchParams.modelId] || null;
         dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
         dispatch(fetchVariants(searchParamsLO));
