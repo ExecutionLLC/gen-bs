@@ -29,12 +29,12 @@ class FiltersModal extends Component {
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
-        const titleValidationMessage = this.getValidationMessage(
+        const titleValidationMessage = editingFilter ? this.getValidationMessage(
             editingFilter,
             isFilterEditable,
             editingFilterNameTrimmed,
             filters
-        );
+        ) : '';
 
         const confirmButtonParams = {
             caption: isFilterEditable ? 'Save and Select': 'Select',
