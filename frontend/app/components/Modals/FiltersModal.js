@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
 
+import config from '../../../config';
 import FilterBuilderHeader from './FilterBuilder/FilterBuilderHeader';
 import FilterBuilderFooter from './FilterBuilder/FilterBuilderFooter';
 import FilterBuilder from './FilterBuilder/FilterBuilder';
@@ -28,16 +29,12 @@ class FiltersModal extends Component {
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
-        const filterNameExists = isFilterEditable && _(filters)
-                .filter(filter => filter.type !== entityType.HISTORY)
-                .some(filter => filter.name.trim() === editingFilterNameTrimmed
-                    && filter.id != editingFilter.id
-                );
-
-        const titleValidationMessage =
-            filterNameExists ? 'Filter with this name is already exists.' :
-                editingFilter && !editingFilterNameTrimmed ? 'Filter name cannot be empty' :
-                    '';
+        const titleValidationMessage = this.getValidationMessage(
+            editingFilter,
+            isFilterEditable,
+            editingFilterNameTrimmed,
+            filters
+        );
 
         const confirmButtonParams = {
             caption: isFilterEditable ? 'Save and Select': 'Select',
@@ -94,6 +91,27 @@ class FiltersModal extends Component {
             </Modal>
 
         );
+    }
+
+    getValidationMessage(editingFilter, isFilterEditable, editingFilterName, filters) {
+        const filterNameExists = isFilterEditable && _(filters)
+                .filter(filter => filter.type !== entityType.HISTORY)
+                .some(filter => filter.name.trim() === editingFilterName
+                    && filter.id != editingFilter.id
+                );
+        if (filterNameExists) {
+            return 'Filter with this name is already exists.';
+        }
+
+        if (editingFilter && !editingFilterName) {
+            return 'Name cannot be empty';
+        }
+
+        if (editingFilter && editingFilterName && editingFilterName.length > config.FILTERS.MAX_NAME_LENGTH) {
+            return `Name length should be less than ${config.FILTERS.MAX_NAME_LENGTH}`;
+        }
+
+        return '';
     }
 }
 
