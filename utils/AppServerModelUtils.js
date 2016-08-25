@@ -4,8 +4,11 @@ const _ = require('lodash');
 const AppServerUtils = require('./AppServerUtils');
 
 class AppServerModelUtils {
-    static createAppServerModel(filter, fieldIdToMetadata, samples) {
-        return AppServerModelUtils._createServerRulesRecursively(filter.rules, fieldIdToMetadata, samples);
+    static createAppServerModel(model, fieldIdToMetadata, samples) {
+        if (_.isNull(model)){
+            return null
+        }
+        return AppServerModelUtils._createServerRulesRecursively(model.rules, fieldIdToMetadata, samples);
     }
 
     static _createServerRulesRecursively(filterRulesObject, fieldIdToMetadata, samples) {
