@@ -67,7 +67,7 @@ class SearchService extends ServiceBase {
                         },
                         (analysis, callback) => {
                             this._sendSearchRequest(
-                                user, session, languageId, analysis.id, viewId, filterId, modelId, samples, limit, offset, callback
+                                user, session, languageId, viewId, filterId, modelId, samples, limit, offset, callback
                             );
                         }
                     ],
@@ -93,9 +93,9 @@ class SearchService extends ServiceBase {
         }
     }
 
-    _sendSearchRequest(user, session, languageId, analysisId, viewId, filterId, modelId, samples, limit, offset, callback) {
+    _sendSearchRequest(user, session, languageId, viewId, filterId, modelId, samples, limit, offset, callback) {
         async.waterfall([
-            (callback) => this._createAppServerSearchParams(user, languageId, analysisId, samples,
+            (callback) => this._createAppServerSearchParams(user, languageId, samples,
                 viewId, filterId, modelId, limit, offset, callback),
             (appServerRequestParams, callback) => this._validateAppServerSearchParams(appServerRequestParams,
                 callback
@@ -110,9 +110,8 @@ class SearchService extends ServiceBase {
     searchInResults(user, session, operationId, globalSearchValue, fieldSearchValues, sortValues, limit, offset, callback) {
         async.waterfall([
             (callback) => this.services.operations.find(session, operationId, callback),
-            (operation, callback) => this.services.analysis.find(user, operation.getAnalysisId(), callback),
-            (analysis, callback) => {
-                this._createAppServerSearchInResultsParams(user, session.id, operationId, analysis, globalSearchValue,
+            (operation, callback) => {
+                this._createAppServerSearchInResultsParams(user, session.id, operationId, operation.getSampleIds(), globalSearchValue,
                     fieldSearchValues, sortValues, limit, offset, callback);
             },
             (appServerParams, callback) => {
@@ -226,9 +225,8 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createAppServerSearchInResultsParams(user, sessionId, operationId, analysis, globalSearchValue,
+    _createAppServerSearchInResultsParams(user, sessionId, operationId, sampleIds, globalSearchValue,
                                           fieldSearchValues, sortValues, limit, offset, callback) {
-        const sampleIds = _.map(analysis.samples, (sample) => sample.id);
         const excludedFieldIds = globalSearchValue.excludedFields;
         const sortFieldIds = _.map(sortValues, sortValue => sortValue.fieldId);
         const searchFieldIds = _.map(fieldSearchValues, fieldSearchValue => fieldSearchValue.fieldId);
@@ -255,43 +253,7 @@ class SearchService extends ServiceBase {
         });
     }
 
-    _createAppServerFieldSearchValues(fieldSearchValues, callback) {
-        async.map(fieldSearchValues, (fieldSearchValue, callback) => {
-            async.waterfall([
-                (callback) => {
-                    this.services.fieldsMetadata.find(fieldSearchValue.fieldId, callback);
-                },
-                (fieldMetadata, callback) => {
-                    callback(null, {
-                        fieldMetadata,
-                        value: fieldSearchValue.value,
-                        sampleId: fieldSearchValue.sampleId
-                    });
-                }
-            ], callback);
-        }, callback);
-    }
-
-    _createAppServerSortValues(sortValues, callback) {
-        async.map(sortValues, (sortValue, callback) => {
-                async.waterfall([
-                    callback => {
-                        this.services.fieldsMetadata.find(sortValue.fieldId, callback);
-                    },
-                    (fieldMetadata, callback) => {
-                        callback(null, {
-                            fieldMetadata,
-                            sortOrder: sortValue.order,
-                            sortDirection: sortValue.direction,
-                            sampleId: sortValue.sampleId
-                        });
-                    }
-                ], callback);
-            },
-            callback);
-    }
-
-    _createAppServerSearchParams(user, languId, analysisId, samples, viewId, filterId, modelId, limit, offset, callback) {
+    _createAppServerSearchParams(user, languId, samples, viewId, filterId, modelId, limit, offset, callback) {
         const sampleIds = _.map(samples, (sample) => sample.id);
         async.parallel({
             langu: (callback) => {
@@ -355,7 +317,6 @@ class SearchService extends ServiceBase {
                 const appServerSearchParams = {
                     langu,
                     userId: user.id,
-                    analysisId,
                     view,
                     filter,
                     samples,

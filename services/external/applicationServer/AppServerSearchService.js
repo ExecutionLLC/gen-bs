@@ -74,9 +74,10 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     requestOpenSearchSession(session, params, callback) {
         const fieldIdToFieldMetadata = CollectionUtils.createHash(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
-        const {userId, analysisId, view, samples, filter, model, limit, offset} = params;
+        const {userId, view, samples, filter, model, limit, offset} = params;
         const sample = samples[0];
         const method = METHODS.openSearchSession;
+        const sampleIds =  _.map(samples, sample => sample.id);
         const appServerSampleIds = _.map(samples, sample => this._getAppServerSampleId(sample));
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
@@ -97,8 +98,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (callback) => this._closePreviousSearchIfAny(session, callback),
             (callback) => this.services.operations.addSearchOperation(session, method, callback),
             (operation, callback) => {
-                operation.setSampleId(sample.id);
-                operation.setAnalysisId(analysisId);
+                operation.setSampleIds(sampleIds);
                 operation.setUserId(userId);
                 operation.setOffset(offset);
                 operation.setLimit(limit);
@@ -134,12 +134,12 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     _processSearchResultMessage(session, operation, message, callback) {
         const sessionState = message.result.sessionState;
 
-        const analysisId = operation.getAnalysisId();
+        const sampleIds = operation.getSampleIds();
         const userId = operation.getUserId();
 
         async.waterfall([
             (callback) => {
-                this._fetch(sessionState.data, userId, analysisId, callback);
+                this._fetch(sessionState.data, userId, sampleIds, callback);
             }
         ], (error, fieldsWithIdArray) => {
             this._createSearchDataResult(error, session, operation, fieldsWithIdArray, callback);
@@ -152,7 +152,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         return 'search_key';
     }
 
-    _fetch(searchData, userId, analysisId, callback) {
+    _fetch(searchData, userId, sampleIds, callback) {
         async.waterfall([
             (callback) => {
                 this.services.users.find(userId, (error, user) => {
@@ -162,17 +162,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     });
                 });
             },
-            ({user, rowData}, callback) => {
-                this.services.analysis.find(user, analysisId, (error, analysis) => {
-                    callback(error, {
-                        analysis,
-                        user,
-                        rowData
-                    });
-                });
-            },
-            ({analysis, rowData, user}, callback) => {
-                this._convertFields(rowData, user, analysis, callback);
+            ({rowData, user}, callback) => {
+                this._convertFields(rowData, user, sampleIds, callback);
             }
         ], (error, asData) => {
             callback(error, asData);
@@ -187,8 +178,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     //todo: Check more carefully
-    _convertFields(asData, user, analysis, callback) {
-        const sampleIds = _.map(analysis.samples, sample => sample.id);
+    _convertFields(asData, user, sampleIds, callback) {
         async.waterfall([
             (callback) => async.parallel({
                 samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
@@ -275,7 +265,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onSearchDataReceived, false, {
             progress: 100,
             status: SESSION_STATUS.READY,
-            sampleId: operation.getSampleId(),
+            sampleIds: operation.getSampleIds(),
             limit: operation.getLimit(),
             offset: operation.getOffset(),
             fieldsWithIdArray

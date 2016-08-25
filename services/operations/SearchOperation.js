@@ -24,20 +24,12 @@ class SearchOperation extends OperationBase {
         this.offset = offset;
     }
 
-    getSampleId() {
-        return this.sampleId;
+    getSampleIds() {
+        return this.sampleIds;
     }
 
-    setSampleId(sampleId) {
-        this.sampleId = sampleId;
-    }
-
-    getAnalysisId() {
-        return this.analysisId;
-    }
-
-    setAnalysisId(analysisId) {
-        this.analysisId = analysisId;
+    setSampleIds(sampleIds) {
+        this.sampleIds = sampleIds;
     }
 
     getUserId() {
