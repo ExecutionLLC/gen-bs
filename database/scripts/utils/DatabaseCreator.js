@@ -80,7 +80,8 @@ class DatabaseCreator {
         const entityTypeEnumValues = [
             'standard', // Available for demo user
             'advanced', // Shown in demo, but locked. Available for registered users.
-            'user' // Created by user.
+            'user' , // Created by user.
+            'default' //default entity type
         ];
 
         // Entity access rights, allowing users to share things like filters and views
