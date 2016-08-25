@@ -1,19 +1,19 @@
 'use strict';
 
 const _ = require('lodash');
+const AppServerUtils = require('./AppServerUtils');
 
 class AppServerFilterUtils {
-    static createAppServerFilter(filter, fieldIdToMetadata) {
-        return AppServerFilterUtils._createServerRulesRecursively(filter.rules, fieldIdToMetadata);
+    static createAppServerFilter(filter, fieldIdToMetadata, sample) {
+        return AppServerFilterUtils._createServerRulesRecursively(filter.rules, fieldIdToMetadata, sample);
     }
 
-    static _createServerRulesRecursively(filterRulesObject, fieldIdToMetadata) {
-        const operator = filterRulesObject['$and'] ? '$and' :
-            filterRulesObject['$or'] ? '$or' : null;
+    static _createServerRulesRecursively(filterRulesObject, fieldIdToMetadata, sample) {
+        const operator = filterRulesObject['condition'] || null;
         if (operator) {
-            const operands = filterRulesObject[operator];
+            const operands = filterRulesObject['rules'];
             const mappedOperands = _(operands)
-                .map((operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata))
+                .map((operand) => AppServerFilterUtils._createServerRulesRecursively(operand, fieldIdToMetadata, sample))
                 .filter(operand => operand)
                 .value();
             if (_.isEmpty(mappedOperands)) {
@@ -23,24 +23,20 @@ class AppServerFilterUtils {
             result[operator] = mappedOperands;
             return result;
         } else {
-            const mappedColumns = _(filterRulesObject)
-                .keys()
-                // Ignore fields that don't exist, to be able to apply filters formed on other samples.
-                .filter(fieldId => fieldIdToMetadata[fieldId])
-                .map(fieldId => {
-                    const field = fieldIdToMetadata[fieldId];
-                    const condition = filterRulesObject[fieldId];
-                    return {
-                        columnName: field.name,
-                        sourceName: field.sourceName,
-                        condition
-                    };
-                })
-                .value();
-            if (!mappedColumns.length) {
-                return null;
+            const {field, operator, value} = filterRulesObject;
+            const fieldMetadata = fieldIdToMetadata[field];
+            if (fieldMetadata) {
+                const columnName = fieldMetadata.sourceName === 'sample' ? AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName) : fieldMetadata.name;
+                const sourceName = fieldMetadata.sourceName === 'sample' ? AppServerUtils.createSampleName(sample) : fieldMetadata.sourceName;
+                const condition = {};
+                condition[operator] = value;
+                return {
+                    columnName,
+                    sourceName,
+                    condition,
+                }
             } else {
-                return mappedColumns[0];
+                return null;
             }
         }
     }

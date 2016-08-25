@@ -14,6 +14,9 @@ const {ENTITY_TYPES} = require('../../../utils/Enums');
 const AppServerViewUtils = require('../../../utils/AppServerViewUtils');
 const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 const CollectionUtils = require('../../../utils/CollectionUtils');
+const AppServerUtils = require('../../../utils/AppServerUtils');
+const AppServerModelUtils = require('../../../utils/AppServerModelUtils');
+const AppSearchInResultUtils = require('../../../utils/AppSearchInResultUtils');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
@@ -71,20 +74,21 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     requestOpenSearchSession(session, params, callback) {
         const fieldIdToFieldMetadata = CollectionUtils.createHash(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
-        const {userId, view, samples, filter, model, limit, offset} = params;
+        const {userId, analysisId, view, samples, filter, model, limit, offset} = params;
         const sample = samples[0];
-        const {genotypeName} = sample;
         const method = METHODS.openSearchSession;
-        const appServerSampleId = this._getAppServerSampleId(sample);
-        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, genotypeName);
-        const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, genotypeName);
-        const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, genotypeName);
+        const appServerSampleIds = _.map(samples, sample => this._getAppServerSampleId(sample));
+        const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
+        const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
+        const appServerSortOrder = this._createAppServerViewSortOrder(view, fieldIdToFieldMetadata, sample);
+        const appServerModel = AppServerModelUtils.createAppServerModel(model, fieldIdToFieldMetadata, samples);
 
         const searchSessionRequest = {
-            sample: appServerSampleId,
+            samples: appServerSampleIds,
             viewStructure: appServerView,
             viewFilter: appServerFilter,
             viewSortOrder: appServerSortOrder,
+            viewModel: appServerModel,
             offset,
             limit
         };
@@ -94,6 +98,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (callback) => this.services.operations.addSearchOperation(session, method, callback),
             (operation, callback) => {
                 operation.setSampleId(sample.id);
+                operation.setAnalysisId(analysisId);
                 operation.setUserId(userId);
                 operation.setOffset(offset);
                 operation.setLimit(limit);
@@ -117,14 +122,9 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 operation.setOffset(params.offset);
                 callback(null, operation);
             },
-            (operation, callback) => {
-                this.services.fieldsMetadata.findMany(
-                    params.globalSearchValue.excludedFields, (error, fields) => callback(error, fields, operation)
-                );
-            },
-            (excludedFields, operation, callback)=> {
-                const {sample, globalSearchValue: {filter}, fieldSearchValues, sortValues, offset, limit} = params;
-                const setFilterRequest = this._createSearchInResultsParams(sample, filter, excludedFields,
+            (operation, callback)=> {
+                const {samples, fieldsMetadata, globalSearchValue: {filter, excludedFields}, fieldSearchValues, sortValues, offset, limit} = params;
+                const setFilterRequest = this._createSearchInResultsParams(samples, fieldsMetadata, filter, excludedFields,
                     fieldSearchValues, sortValues, offset, limit);
                 this._rpcSend(session, operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
@@ -134,15 +134,15 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     _processSearchResultMessage(session, operation, message, callback) {
         const sessionState = message.result.sessionState;
 
-        const sampleId = operation.getSampleId();
+        const analysisId = operation.getAnalysisId();
         const userId = operation.getUserId();
 
         async.waterfall([
             (callback) => {
-                this._fetch(sessionState.data, userId, sampleId, callback);
+                this._fetch(sessionState.data, userId, analysisId, callback);
             }
-        ], (error, fieldIdToValueHash) => {
-            this._createSearchDataResult(error, session, operation, fieldIdToValueHash, callback);
+        ], (error, fieldsWithIdArray) => {
+            this._createSearchDataResult(error, session, operation, fieldsWithIdArray, callback);
         });
     }
 
@@ -152,19 +152,27 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         return 'search_key';
     }
 
-    _fetch(searchData, userId, sampleId, callback) {
+    _fetch(searchData, userId, analysisId, callback) {
         async.waterfall([
             (callback) => {
-                const rowData = this._fetchData(searchData);
                 this.services.users.find(userId, (error, user) => {
                     callback(error, {
+                        user,
+                        rowData: searchData
+                    });
+                });
+            },
+            ({user, rowData}, callback) => {
+                this.services.analysis.find(user, analysisId, (error, analysis) => {
+                    callback(error, {
+                        analysis,
                         user,
                         rowData
                     });
                 });
             },
-            ({rowData, user}, callback) => {
-                this._convertFields(rowData, user, sampleId, callback);
+            ({analysis, rowData, user}, callback) => {
+                this._convertFields(rowData, user, analysis, callback);
             }
         ], (error, asData) => {
             callback(error, asData);
@@ -178,48 +186,82 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         }, {}));
     }
 
-    _convertFields(asData, user, sampleId, callback) {
+    //todo: Check more carefully
+    _convertFields(asData, user, analysis, callback) {
+        const sampleIds = _.map(analysis.samples, sample => sample.id);
         async.waterfall([
             (callback) => async.parallel({
-                sample: (callback) => this.services.samples.find(user, sampleId, callback),
-                sampleFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleId(user, sampleId, callback),
+                samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
+                samplesFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
                 sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
             }, callback),
-            ({sample, sampleFields, sourcesFields}, callback) => {
-                callback(null, {sample, fields: sampleFields.concat(sourcesFields)});
-            },
-            ({sample: {genotypeName}, fields}, callback) => {
-                // will be matching fields by name, so create fieldName->field hash
-                const fieldNameToFieldHash = CollectionUtils.createHash(fields,
-                    ({name, sourceName}) => AppServerViewUtils.createAppServerColumnName(name,
-                        sourceName, genotypeName, true)
+            ({samples, samplesFields, sourcesFields}, callback) => {
+                const samplesData = _.map(samples, sample => {
+                    const sampleFieldIds = _.map(sample.values, fieldValue => fieldValue.fieldId);
+                    const sampleFields = _.filter(samplesFields, sampleField => {
+                        return _.some(sampleFieldIds, sampleFieldId => {
+                            return sampleFieldId === sampleField.id
+                        })
+                    });
+                    const fields = sampleFields.concat(sourcesFields);
+                    return {
+                        sample,
+                        fields
+                    }
+                });
+                callback(null,
+                    samplesData
                 );
-                callback(null, fieldNameToFieldHash);
             },
-            (fieldNameToFieldHash, callback) => {
-                const missingFieldsSet = new Set();
-                const fieldIdToValueArray = _.map(asData, (rowObject) => {
-                    const searchKeyFieldName = this.getSearchKeyFieldName();
-                    const [fieldNames, missingFieldNames] = _(rowObject)
-                        .keys()
-                        // exclude search key
-                        .filter(fieldName => fieldName !== searchKeyFieldName)
-                        // group by existence
-                        .partition(fieldName => !!fieldNameToFieldHash[fieldName])
-                        .value();
-                    missingFieldNames.forEach(missingFieldName => missingFieldsSet.add(missingFieldName));
-                    // Map field names to field ids.
-                    const mappedRowObject = CollectionUtils.createHash(fieldNames,
-                        (fieldName) => fieldNameToFieldHash[fieldName].id,
-                        (fieldName) => this._mapFieldValue(rowObject[fieldName])
+            (samplesData, callback) => {
+                // will be matching fields by name, so create fieldName->field hash
+                const samplesFieldHashArray = _.map(samplesData, samplesData => {
+                    const sampleFieldHash = CollectionUtils.createHash(samplesData.fields,
+                        ({name}) => AppServerUtils.createColumnName(name, samplesData.sample.name)
                     );
-                    // add search key value.
-                    mappedRowObject[searchKeyFieldName] = rowObject[searchKeyFieldName];
-                    return mappedRowObject;
+                    const appServerSampleId = this._getAppServerSampleId(samplesData.sample);
+                    return {
+                        appServerSampleId,
+                        sampleId: samplesData.sample.id,
+                        sampleFieldHash
+                    };
+                });
+                callback(null, samplesFieldHashArray);
+            },
+            (samplesFieldHashArray, callback) => {
+                const missingFieldsSet = new Set();
+                const fieldsWithIdArray = _.map(asData, (rowObject) => {
+                    const searchKeyFieldName = this.getSearchKeyFieldName();
+                    const mappedRowObject = _.map(rowObject, rowField => {
+                        if (rowField.fieldName !== searchKeyFieldName) {
+                            const currentSampleFieldHash = _.find(samplesFieldHashArray, sampleFieldHash => sampleFieldHash.appServerSampleId = rowField.sourceName);
+                            const fieldMetadata = currentSampleFieldHash.sampleFieldHash[rowField.fieldName];
+                            if (fieldMetadata) {
+                                return {
+                                    fieldId: fieldMetadata.id,
+                                    fieldValue: this._mapFieldValue(rowField.fieldValue),
+                                    sampleId: currentSampleFieldHash.sampleId
+                                }
+                            }
+                            else {
+                                missingFieldsSet.add(rowField.fieldName);
+                                return null
+                            }
+                        } else {
+                            return {
+                                fieldId: rowField.fieldName,
+                                fieldValue: rowField.fieldValue
+                            }
+                        }
+                    });
+                    const existingFieldsRowObject = _.filter(mappedRowObject, rowFields => {
+                        return !_.isNull(rowFields);
+                    });
+                    return existingFieldsRowObject;
                 });
                 const missingFields = [...missingFieldsSet];
                 missingFields.length && this.logger.error(`The following fields were not found: ${missingFields}`);
-                callback(null, fieldIdToValueArray);
+                callback(null, fieldsWithIdArray);
             }
         ], callback);
     }
@@ -229,14 +271,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         return (actualFieldValue !== 'nan') ? actualFieldValue : '.';
     }
 
-    _createSearchDataResult(error, session, operation, fieldIdToValueArray, callback) {
+    _createSearchDataResult(error, session, operation, fieldsWithIdArray, callback) {
         super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onSearchDataReceived, false, {
             progress: 100,
             status: SESSION_STATUS.READY,
             sampleId: operation.getSampleId(),
             limit: operation.getLimit(),
             offset: operation.getOffset(),
-            fieldIdToValueArray
+            fieldsWithIdArray
         }, error, callback);
     }
 
@@ -257,37 +299,20 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         }, null, callback);
     }
 
-    _createSearchInResultsParams(sample, globalSearchValue, excludedFields, fieldSearchValues, sortParams, offset, limit) {
-        const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
-        const {genotypeName} = sample;
+    _createSearchInResultsParams(samples, fieldsMetadata, globalSearchValue, excludedFields, fieldSearchValues, sortParams, offset, limit) {
+        const globalFilter = AppSearchInResultUtils.createAppGlobalFilter(globalSearchValue, excludedFields, samples, fieldsMetadata);
+        const columnFilters = AppSearchInResultUtils.createAppColumnFilter(fieldSearchValues, samples, fieldsMetadata);
+        const sortOrder = AppSearchInResultUtils.createAppSortOrder(sortParams, samples, fieldsMetadata);
         return {
-            globalFilter: {
-                filter: globalSearchValue,
-                excludedFields: _.map(
-                    excludedFields, excludedField => {
-                        return {
-                            sourceName: excludedField.sourceName,
-                            columnName: excludedField.name
-                        }
-                    }
-                )
-            },
-            columnFilters: _.map(fieldSearchValues, ({fieldMetadata, value}) => ({
-                columnName: AppServerViewUtils.createAppServerColumnName(fieldMetadata.name,
-                    fieldMetadata.sourceName, genotypeName, true),
-                columnFilter: value
-            })),
-            sortOrder: _.map(sortedParams, ({fieldMetadata, sortDirection}) => ({
-                columnName: AppServerViewUtils.createAppServerColumnName(fieldMetadata.name,
-                    fieldMetadata.sourceName, genotypeName, true),
-                isAscendingOrder: sortDirection === 'asc'
-            })),
+            globalFilter,
+            columnFilters,
+            sortOrder,
             offset,
             limit
         };
     }
 
-    _createAppServerViewSortOrder(view, fieldIdToMetadata, genotypeName) {
+    _createAppServerViewSortOrder(view, fieldIdToMetadata, sample) {
         // Keep only items whose fields exist in the current sample.
         const viewListItems = _.filter(view.viewListItems, listItem => fieldIdToMetadata[listItem.fieldId]);
 
@@ -300,11 +325,12 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         //noinspection UnnecessaryLocalVariableJS leaved for debug.
         const appServerSortOrder = _.map(sortedSortItems, listItem => {
             const field = fieldIdToMetadata[listItem.fieldId];
-            const columnName = AppServerViewUtils.createAppServerColumnName(field.name,
-                field.sourceName, genotypeName, true);
+            const columnName = field.sourceName === 'sample' ? AppServerUtils.createColumnName(field.name, sample.genotypeName) : field.name;
+            const sourceName = field.sourceName === 'sample' ? AppServerUtils.createSampleName(sample) : field.sourceName;
             const isAscendingOrder = listItem.sortDirection === 'asc';
             return {
                 columnName,
+                sourceName,
                 isAscendingOrder
             };
         });

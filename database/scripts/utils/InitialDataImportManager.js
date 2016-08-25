@@ -27,7 +27,6 @@ class InitialDataImportManager {
         this._importKeywords = this._importKeywords.bind(this);
         this._importViews = this._importViews.bind(this);
         this._importFilters = this._importFilters.bind(this);
-        this._importModels = this._importModels.bind(this);
         this._importSample = this._importSample.bind(this);
         this._makeSampleValues = this._makeSampleValues.bind(this);
     }
@@ -135,14 +134,6 @@ class InitialDataImportManager {
         const filters = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(filtersString));
         async.map(filters, (filter, cb) => {
             this.model.addFilter(null, this.config.defaultLanguId, filter, false, cb);
-        }, callback);
-    }
-
-    _importModels(modelsFilePath, callback) {
-        const modelsString = FsUtils.getFileContentsAsString(modelsFilePath);
-        const models = ChangeCaseUtil.convertKeysToCamelCase(JSON.parse(modelsString));
-        async.map(models, (model, cb) => {
-            this.models.models.internalAdd(null, this.config.defaultLanguId, model, cb);
         }, callback);
     }
 

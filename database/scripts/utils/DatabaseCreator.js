@@ -111,7 +111,7 @@ class DatabaseCreator {
 
         return databaseKnex.schema
 
-            // Language
+        // Language
             .createTable('langu', (table) => {
                 table.string('id', 2)
                     .primary();
@@ -152,7 +152,6 @@ class DatabaseCreator {
                 table.uuid('original_filter_id')
                     .references('id')
                     .inTable('filter');
-
                 table.string('name', 50)
                     .notNullable();
                 table.json('rules');

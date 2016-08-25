@@ -5,6 +5,8 @@ const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 
+const filterObjectKeys = ['field', 'operator', 'value'];
+
 class FiltersService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.filters);
@@ -58,8 +60,7 @@ class FiltersService extends UserEntityServiceBase {
     }
 
     _checkFilterRulesRecursively(filterRulesObject, callback) {
-        const operator = filterRulesObject['$and'] ? '$and' :
-            filterRulesObject['$or'] ? '$or' : null;
+        const operator = filterRulesObject['condition'] || null;
         if (operator) {
             const operands = filterRulesObject[operator];
             const mappedOperands = _.map(operands, (operand) => this._checkFilterRulesRecursively(operand, callback));
@@ -67,19 +68,11 @@ class FiltersService extends UserEntityServiceBase {
             result[operator] = mappedOperands;
             callback(null, result);
         } else {
-            const mappedColumns = _(filterRulesObject)
-                .keys()
-                .map(fieldId => {
-                    const condition = filterRulesObject[fieldId];
-                    return {
-                        condition
-                    };
-                })
-                .value();
-            if (mappedColumns.length != 1) {
-                callback(new Error('Unexpected filter format: there should be only one field condition per object.'));
+            const mappedColumnKeys = _.keys(filterRulesObject);
+            if (_.difference(filterObjectKeys, mappedColumnKeys).length != 0) {
+                callback(new Error(`Unexpected filter format: there should all fields from : ${filterObjectKeys}`));
             } else {
-                callback(null, mappedColumns[0]);
+                callback(null, filterRulesObject);
             }
         }
     }

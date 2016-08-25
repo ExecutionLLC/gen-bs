@@ -101,7 +101,6 @@ class FieldsMetadataModel extends ModelBase {
             (callback) => this.models.samples.findMany(userId, sampleIds, callback),
             (samples, callback) => {
                 const fieldIds =_.uniq([].concat.apply([],_.map(samples, sample => _.map(sample.values,'fieldId'))));
-                // = _.map(sample.values, 'fieldId');
                 this.findMany(fieldIds, callback);
             }
         ], callback);

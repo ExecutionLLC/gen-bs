@@ -1,10 +1,32 @@
 'use strict';
 
+const async = require('async');
 const _ = require('lodash');
 
 const MOCKED_USERS = require('./mock-users.json');
 
 class MockUserModel {
+    constructor() {
+        this.users = [...MOCKED_USERS];
+    }
+
+    add(user, defaultLanguage, callback) {
+        async.waterfall([
+            (callback) => this.findIdByEmail(user.email, (error) => callback(null, !error)),
+            (isFound, callback) => {
+                if (isFound) {
+                    callback(new Error('User already exists'));
+                } else {
+                    callback(null);
+                }
+            },
+            (callback) => {
+                this.users.push(user);
+                callback(null, user);
+            }
+        ], callback);
+    }
+
     findIdByEmail(email, callback) {
         const user = this._findUser(user => user.email === email);
         if (user) {
@@ -24,7 +46,7 @@ class MockUserModel {
     }
 
     _findUser(predicate) {
-        return _.find(MOCKED_USERS, predicate);
+        return _.find(this.users, predicate);
     }
 
     _callbackUserNotFound(callback) {

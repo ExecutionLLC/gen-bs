@@ -5,6 +5,8 @@ const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 
+const modelObjectKeys = ['field', 'operator', 'value', 'sample_type'];
+
 class ModelsService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.models);
@@ -43,9 +45,9 @@ class ModelsService extends UserEntityServiceBase {
     }
 
     _checkModelRules(model, callback) {
-        if (model.modelType == 'filter'){
+        if (model.modelType == 'filter') {
             this._checkFilterRules(model.rules, callback)
-        }else if (model.modelType == 'complex'){
+        } else if (model.modelType == 'complex') {
             this._checkComplexRules(model.rules, callback)
         }
     }
@@ -54,47 +56,40 @@ class ModelsService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => {
                 if (!_.isObject(rules)) {
-                    callback(new Error('Filter rules are not in correct format'))
+                    callback(new Error('Model rules are not in correct format'))
                 } else {
                     callback(null);
                 }
             },
             (callback) => {
-                this._checkFilterRulesRecursively(rules, (error) => {
+                this._checkModelFilterRulesRecursively(rules, (error) => {
                     callback(error);
                 });
             }
         ], callback);
     }
 
-    _checkFilterRulesRecursively(filterRulesObject, callback) {
-        const operator = filterRulesObject['$and'] ? '$and' :
-            filterRulesObject['$or'] ? '$or' : null;
+    _checkModelFilterRulesRecursively(modelRulesObject, callback) {
+        const operator = modelRulesObject['condition'] || null;
         if (operator) {
-            const operands = filterRulesObject[operator];
-            const mappedOperands = _.map(operands, (operand) => this._checkFilterRulesRecursively(operand, callback));
+            const operands = modelRulesObject[operator];
+            const mappedOperands = _.map(operands, (operand) => this._checkModelFilterRulesRecursively(operand, callback));
             const result = {};
             result[operator] = mappedOperands;
             callback(null, result);
         } else {
-            const mappedColumns = _(filterRulesObject)
-                .keys()
-                .map(fieldId => {
-                    const condition = filterRulesObject[fieldId];
-                    return {
-                        condition
-                    };
-                })
-                .value();
-            if (mappedColumns.length != 1) {
-                callback(new Error('Unexpected filter format: there should be only one field condition per object.'));
+            const mappedColumnKeys = _.keys(modelRulesObject);
+
+            const columnDifference = _.difference(modelObjectKeys, mappedColumnKeys);
+            if (columnDifference.length != 0) {
+                callback(new Error(`Unexpected model format: there should all fields : ${columnDifference}`));
             } else {
-                callback(null, mappedColumns[0]);
+                callback(null, modelRulesObject);
             }
         }
     }
 
-    _checkComplexRules(rules, callback){
+    _checkComplexRules(rules, callback) {
         //TODO: add some check for complex rules
         callback(null)
     }

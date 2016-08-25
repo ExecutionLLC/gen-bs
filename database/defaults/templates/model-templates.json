@@ -11,20 +11,24 @@
           "field": {
             "source_name": "sample",
             "name": "ALT",
+            "sampleType": "single",
             "value_type": "string"
           },
           "condition": {
-            "$neq": "A"
+            "operator":"$neq",
+            "value":"A"
           }
         },
         {
           "field": {
             "source_name": "sample",
             "name": "FILTER",
+            "sampleType": "single",
             "value_type": "string"
           },
           "condition": {
-            "$eq": "PASS"
+            "operator":"$eq",
+            "value":"PASS"
           }
         },
         {
@@ -33,10 +37,12 @@
               "field": {
                 "source_name": "sample",
                 "name": "ALT",
+                "sampleType": "single",
                 "value_type": "string"
               },
               "condition": {
-                "$neq": "ABC"
+                "operator":"$neq",
+                "value":"ABC"
               }
             }
           ]

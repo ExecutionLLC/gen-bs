@@ -24,12 +24,12 @@ class AnalysisService extends UserEntityServiceBase {
         }
     }
 
-    add(user, languageId, name, description, type, viewId, filterId, modelId, samples , callback) {
+    add(user, languageId, name, description, type, viewId, filterId, modelId, samples, callback) {
         if (this.services.users.isDemoUserId(user.id)) {
             return callback(null, null);
-        }else {
+        } else {
             const newAnalysis = {
-                creator:user.id,
+                creator: user.id,
                 name,
                 description,
                 languageId,
