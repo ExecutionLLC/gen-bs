@@ -123,7 +123,7 @@ class DatabaseCreator {
             .createTable('user', (table) => {
                 table.uuid('id')
                     .primary();
-                table.string('email', 50);
+                table.string('email', 256);
                 table.string('default_langu_id', 2)
                     .references('id')
                     .inTable('langu');
@@ -494,6 +494,20 @@ class DatabaseCreator {
                     .inTable('filter');
 
                 table.primary(['query_history_id', 'filter_id']);
+            })
+
+            .createTable('registration_code', (table) => {
+                table.uuid('id')
+                    .primary();
+                table.text('description');
+                table.string('speciality');
+                table.string('language');
+                table.integer('number_of_paid_samples');
+                table.string('email', 256)
+                    .defaultTo(null);
+                table.boolean('is_activated');
+                table.timestamp('activated_timestamp')
+                    .defaultTo(knex.fn.now());
             })
 
             .then(() => {
