@@ -506,8 +506,7 @@ class DatabaseCreator {
                 table.string('email', 256)
                     .defaultTo(null);
                 table.boolean('is_activated');
-                table.timestamp('activated_timestamp')
-                    .defaultTo(knex.fn.now());
+                table.timestamp('activated_timestamp');
             })
 
             .then(() => {
