@@ -698,6 +698,7 @@ export default class AnalysisRightPane extends React.Component {
             filterId: historyItem.filterId,
             modelId: historyItem.modelId
         }));
+        // TODO add new analyse item
         dispatch(closeModal('analysis'));
     }
 
