@@ -71,15 +71,6 @@ function reduceResetSampleInList(state, action) {
     };
 }
 
-function reduceChangeSample(state, action) {
-    const {sampleId} = action;
-
-    return {
-        ...state,
-        selectedSampleId: sampleId
-    };
-}
-
 function reduceChangeSamples(state, action) {
     const {samples} = action;
     return {
@@ -98,7 +89,7 @@ function reduceSampleOnSave(state, action) {
 
 function reduceSamplesListSetHistorySamples(state, action) {
     const {samples} = action;
-    const {hashedArray, selectedSampleId} = state;
+    const {hashedArray} = state;
     const samplesArrayHistoryParted = _.partition(hashedArray.array, {type: entityType.HISTORY});
     const samplesArrayWOHistory = samplesArrayHistoryParted[0].length ? samplesArrayHistoryParted[1] : hashedArray.array;
     const samplesToSet = _.filter(samples, (sample) => !hashedArray.hash[sample.id] || hashedArray.hash[sample.id].type === entityType.HISTORY);
@@ -108,18 +99,15 @@ function reduceSamplesListSetHistorySamples(state, action) {
     const samplesToSetHistored = _.map(samplesToSet, (sample) => ({...sample, type: entityType.HISTORY}));
     const samplesArrayWNewHistory = samplesToSetHistored.length ? [...samplesToSetHistored, ...samplesArrayWOHistory] : samplesArrayWOHistory;
     const samplesHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(samplesArrayWNewHistory);
-    const newSelectedSampleId = samplesHashedArrayWNewHistory.hash[selectedSampleId] ? selectedSampleId : samplesHashedArrayWNewHistory.array[0] && samplesHashedArrayWNewHistory.array[0].id || null;
     return {
         ...state,
         hashedArray: samplesHashedArrayWNewHistory,
-        selectedSampleId: newSelectedSampleId
     };
 }
 
 export default function samplesList(state = {
     hashedArray: ImmutableHashedArray.makeFromArray([]),
-    editedSamplesHash: ImmutableHash.makeFromObject({}),
-    selectedSampleId: null
+    editedSamplesHash: ImmutableHash.makeFromObject({})
 }, action) {
 
     switch (action.type) {
@@ -137,9 +125,6 @@ export default function samplesList(state = {
 
         case ActionTypes.RESET_SAMPLE_IN_LIST:
             return reduceResetSampleInList(state, action);
-
-        case ActionTypes.CHANGE_SAMPLE:
-            return reduceChangeSample(state, action);
 
         case ActionTypes.CHANGE_SAMPLES:
             return reduceChangeSamples(state, action);

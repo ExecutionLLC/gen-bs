@@ -7,7 +7,6 @@ import {immutableSetPathProperty} from '../utils/immutable';
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
 export const RECEIVE_SAMPLES_LIST = 'RECEIVE_SAMPLES_LIST';
-export const CHANGE_SAMPLE = 'CHANGE_SAMPLE';
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
 export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
@@ -41,13 +40,6 @@ function requestSamples() {
     };
 }
 
-export function changeSample(sampleId) {
-    return {
-        type: CHANGE_SAMPLE,
-        sampleId
-    };
-}
-
 export function updateSampleValue(sampleId, valueFieldId, value) {
     return {
         type: UPDATE_SAMPLE_VALUE,
@@ -59,7 +51,7 @@ export function updateSampleValue(sampleId, valueFieldId, value) {
 
 export function fetchSamples() {
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(requestSamples());
 
         samplesClient.getAll((error, response) => {
@@ -68,21 +60,8 @@ export function fetchSamples() {
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
             } else {
-                const {
-                    samplesList: {
-                        selectedSampleId,
-                        hashedArray: {hash: samplesHash}
-                    }
-                } = getState();
                 const samples = response.body;
-
                 dispatch(receiveSamplesList(samples));
-
-                if (samplesHash[selectedSampleId]) {
-                    dispatch(changeSample(selectedSampleId));
-                } else if (samples && samples.length) {
-                    dispatch(changeSample(samples[0].id));
-                }
             }
         });
     };
@@ -112,7 +91,7 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
 
 export function requestUpdateSampleFields(sampleId) {
     return (dispatch, getState) => {
-        const {samplesList: {editedSamplesHash, selectedSampleId}} = getState();
+        const {samplesList: {editedSamplesHash}} = getState();
         const sampleToUpdate = editedSamplesHash[sampleId];
         samplesClient.update(sampleToUpdate, (error, response) => {
             if (error) {
@@ -123,11 +102,6 @@ export function requestUpdateSampleFields(sampleId) {
                 } else {
                     const updatedSample = response.body;
                     dispatch(receiveUpdatedSample(sampleId, updatedSample));
-                    // If updating current sample, remember the sample id is changed during update
-                    // so select new version of the sample.
-                    if (selectedSampleId === sampleId) {
-                        dispatch(changeSample(updatedSample.id));
-                    }
                 }
             }
         });

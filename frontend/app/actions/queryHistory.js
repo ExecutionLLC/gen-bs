@@ -5,8 +5,7 @@ import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {changeHistoryData} from './userData';
 import {
-    changeSamples,
-    changeSample
+    changeSamples
 } from './samplesList';
 import {fetchFields} from './fields';
 import {prepareAnalyze} from './websocket';
@@ -183,7 +182,6 @@ export function renewHistoryItem(historyItemId) { // FIXME: remove after functio
             clonedHistoryItem.view.type = entityType.HISTORY;
             dispatch([
                 attachHistory(clonedHistoryItem), // do not need to
-                changeSample(clonedHistoryItem.sample.id), // needs to somehow mark current samples
                 prepareAnalyze() // replaced by requestAnalyse at analyse()
             ]);
             dispatch(fetchFields(clonedHistoryItem.sample.id))
