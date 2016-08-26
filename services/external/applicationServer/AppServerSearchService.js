@@ -222,7 +222,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                             sampleFieldHash
                         };
                     } else {
-                        const sample = _.find(samples, sample => sample.id = sampleData.sampleId);
+                        const sample = _.find(samples, sample => sample.id == sampleData.sampleId);
                         const appServerSampleId = this._getAppServerSampleId(sample);
                         return {
                             appServerSampleId,

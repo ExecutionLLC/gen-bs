@@ -5,7 +5,7 @@ const AppServerUtils = require('./AppServerUtils');
 
 class AppServerModelUtils {
     static createAppServerModel(model, fieldIdToMetadata, samples) {
-        if (_.isNull(model)){
+        if (_.isNull(model) || _.isNull(model.rules)){
             return null
         }
         return AppServerModelUtils._createServerRulesRecursively(model.rules, fieldIdToMetadata, samples);
