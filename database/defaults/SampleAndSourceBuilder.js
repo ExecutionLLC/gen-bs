@@ -4,11 +4,11 @@ const _ = require('lodash');
 const async = require('async');
 const Uuid = require('node-uuid');
 
-const FsUtils = require('../utils/FileSystemUtils');
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
+const FsUtils = require('../../utils/FileSystemUtils');
+const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
-const FieldsMetadataService = require('../services/FieldsMetadataService'); // Here lays the mapping function.
-const FieldsMetadataModel = require('../models/FieldsMetadataModel'); // Here is the metadata equality check.
+const FieldsMetadataService = require('../../services/FieldsMetadataService'); // Here lays the mapping function.
+const FieldsMetadataModel = require('../../models/FieldsMetadataModel'); // Here is the metadata equality check.
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
 

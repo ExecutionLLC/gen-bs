@@ -23,7 +23,7 @@ class KnexTransaction {
 
     complete(error, originalStack, data, callback) {
         if (error) {
-            this.logger.warn(`ROLLING BACK TRANSACTION ${this.id}: ${error}\n${error.stack}`);
+            this.logger.error(`ROLLING BACK TRANSACTION ${this.id}: ${error}\n${error.stack}`);
             this.logger.debug(`Original stack: ${originalStack}`);
             this.transaction
                 .rollback()
