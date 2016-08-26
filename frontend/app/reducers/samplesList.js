@@ -101,7 +101,7 @@ function reduceSamplesListSetHistorySamples(state, action) {
     const samplesHashedArrayWNewHistory = ImmutableHashedArray.makeFromArray(samplesArrayWNewHistory);
     return {
         ...state,
-        hashedArray: samplesHashedArrayWNewHistory,
+        hashedArray: samplesHashedArrayWNewHistory
     };
 }
 
