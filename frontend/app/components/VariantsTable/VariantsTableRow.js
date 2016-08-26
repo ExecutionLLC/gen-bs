@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import ComponentBase from '../shared/ComponentBase';
 
 import VariantsTableComment from './VariantsTableComment';
+import * as _ from 'lodash';
 
 
 export default class VariantsTableRow extends ComponentBase {
@@ -70,7 +71,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     getMainFieldValue(colName, rowFields, fields) {
-        const mainField = _.find(fields.totalFieldsList, field => field.name === colName);
+        const mainField = _.find(fields.totalFieldsHashedArray.array, field => field.name === colName);
         return _.find(rowFields, field => field.fieldId === mainField.id).value;
     }
 

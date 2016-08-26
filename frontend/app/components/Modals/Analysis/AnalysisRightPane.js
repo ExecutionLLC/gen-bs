@@ -15,6 +15,7 @@ import {analyze} from '../../../actions/ui';
 import {closeModal} from '../../../actions/modalWindows';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
+import {fetchFields} from '../../../actions/fields';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -698,6 +699,7 @@ export default class AnalysisRightPane extends React.Component {
             filterId: historyItem.filterId,
             modelId: historyItem.modelId
         }));
+        // TODO add new analyse item
         dispatch(closeModal('analysis'));
     }
 
@@ -745,6 +747,9 @@ export default class AnalysisRightPane extends React.Component {
     
     onSampleSelect(sampleIndex, sampleId) {
         this.props.dispatch(this.actionEdit({sample: {index: sampleIndex, id: sampleId}}));
+        if (!sampleIndex) {
+            this.props.dispatch(fetchFields(sampleId)); // TODO check if fetched correctly
+        }
     }
 
     actionEdit(change) {

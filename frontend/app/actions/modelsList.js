@@ -102,7 +102,7 @@ export function modelsListServerUpdateModel(model) {
                 } else {
                     const updatedModel = response.body;
                     dispatch(modelsListEditModel(model.id, updatedModel));
-                    resolve();
+                    resolve(updatedModel);
                 }
             });
         });

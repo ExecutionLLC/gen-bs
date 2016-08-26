@@ -103,7 +103,7 @@ export function viewsListServerUpdateView(view) {
                 } else {
                     const updatedView = response.body;
                     dispatch(viewsListEditView(view.id, updatedView));
-                    resolve();
+                    resolve(updatedView);
                 }
             });
         });

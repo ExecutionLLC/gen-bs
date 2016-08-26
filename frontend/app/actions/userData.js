@@ -11,7 +11,7 @@ import {
     createNewHistoryItem
 } from './queryHistory';
 //import {analyze} from './ui';
-import {/*changeSample, */receiveSamplesList} from './samplesList';
+import {receiveSamplesList} from './samplesList';
 import {
     filtersListReceive
 } from './filtersList';
@@ -131,7 +131,6 @@ export function fetchUserdata() {
                 // if (!sample || !filter || !view) {
                 //     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                 // } else {
-                //     dispatch(changeSample(sample.id)); FIXME: change sample
                 //     /*dispatch(analyze(sample.id, view.id, filter.id)); FIXME analyze: replace by reanalyze */
                 // }
             }

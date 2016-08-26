@@ -102,7 +102,7 @@ export function filtersListServerUpdateFilter(filter) {
                 } else {
                     const updatedFilter = response.body;
                     dispatch(filtersListEditFilter(filter.id, updatedFilter));
-                    resolve();
+                    resolve(updatedFilter);
                 }
             });
         });
