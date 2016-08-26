@@ -67,7 +67,8 @@ class SearchService extends ServiceBase {
                         },
                         (analysis, callback) => {
                             this._sendSearchRequest(
-                                user, session, languageId, viewId, filterId, modelId, samples, limit, offset, callback
+                                user, session, languageId, viewId, filterId, modelId, samples, limit, offset,
+                                (error, operationId) => callback(error , {operationId, analysis})
                             );
                         }
                     ],
@@ -84,7 +85,8 @@ class SearchService extends ServiceBase {
                     (analysis, callback) => {
                         const {samples, modelId, viewId, filterId} = analysis;
                         this._sendSearchRequest(
-                            user, session, languageId, viewId, filterId, modelId, samples, limit, offset, callback
+                            user, session, languageId, viewId, filterId, modelId, samples, limit, offset,
+                            (error, operationId) => callback(error ,  {operationId, analysis})
                         );
                     }
                 ],
