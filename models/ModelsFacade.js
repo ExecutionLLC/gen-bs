@@ -4,6 +4,7 @@ const KnexWrapper = require('../utils/KnexWrapper');
 
 const LanguageModel = require('./LanguageModel');
 const UserModel = require('./UserModel');
+const RegistrationCodesModel = require('./RegistrationCodesModel');
 const ViewsModel = require('./ViewsModel');
 const KeywordsModel = require('./KeywordsModel');
 const FiltersModel = require('./FiltersModel');
@@ -23,6 +24,7 @@ class ModelsFacade {
 
         this.langu = new LanguageModel(this);
         this.users = new UserModel(this);
+        this.registrationCodes = new RegistrationCodesModel(this);
         this.keywords = new KeywordsModel(this);
         this.views = new ViewsModel(this);
         this.filters = new FiltersModel(this);
