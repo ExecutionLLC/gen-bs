@@ -8,7 +8,7 @@ import config from '../../config';
 export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
-export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_MESSAGE';
+export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_CLOSE';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
 export const WS_TABLE_MESSAGE = 'WS_TABLE_MESSAGE';
