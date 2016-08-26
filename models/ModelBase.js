@@ -97,6 +97,13 @@ class ModelBase {
     }
 
     /**
+     * @protected
+     * */
+    _toCamelCaseAsync(itemOrItems) {
+        return Promise.resolve(ChangeCaseUtil.convertKeysToCamelCase(itemOrItems));
+    }
+
+    /**
      * @param {string}name
      * @param {function(Error)}callback
      */

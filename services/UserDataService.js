@@ -102,7 +102,7 @@ class UserDataService extends ServiceBase {
                 const clientResults = _.map(uploads, uploadEntry => ({
                     id: uploadEntry.id,
                     type: UploadOperation.name,
-                    lastMessage: uploadEntry.getLastAppServerMessage()
+                    lastMessage: uploadEntry.lastStatusMessage
                 }));
                 callback(null, clientResults);
             }

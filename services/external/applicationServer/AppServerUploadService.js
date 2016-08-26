@@ -73,7 +73,7 @@ class AppServerUploadService extends ApplicationServerServiceBase {
         async.waterfall([
             (callback) => this._processUploadAndCreateResult(session, operation, message, callback),
             (operationResult, callback) => this.services.users.find(
-                session.userId,
+                operation.getUserId(),
                 (error, user) => callback(error, operationResult, user)
             ),
             (operationResult, user, callback) => this.services.sampleUploadHistory.update(

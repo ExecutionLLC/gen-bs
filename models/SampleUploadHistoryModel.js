@@ -106,14 +106,13 @@ class SampleUploadHistoryModel extends ModelBase {
         }
 
         return query
-            .offset(offsetOrNull)
-            .limit(limitOrNull)
             .then((entries) => {
                 if (entryIdsOrNull) {
                     return this._ensureAllItemsFoundAsync(entries, entryIdsOrNull);
                 }
                 return entries;
-            });
+            })
+            .then((entries) => this._toCamelCaseAsync(entries));
     }
 }
 
