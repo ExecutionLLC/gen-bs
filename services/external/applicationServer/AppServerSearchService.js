@@ -77,7 +77,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const {userId, view, samples, filter, model, limit, offset} = params;
         const sample = samples[0];
         const method = METHODS.openSearchSession;
-        const sampleIds =  _.map(samples, sample => sample.id);
+        const sampleIds = _.map(samples, sample => sample.id);
         const appServerSampleIds = _.map(samples, sample => this._getAppServerSampleId(sample));
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
@@ -170,13 +170,6 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         });
     }
 
-    _fetchData(data) {
-        return _.map(data, (fieldsArray) => _.reduce(fieldsArray, (result, {fieldName, fieldValue}) => {
-            result[fieldName] = fieldValue;
-            return result;
-        }, {}));
-    }
-
     //todo: Check more carefully
     _convertFields(asData, user, sampleIds, callback) {
         async.waterfall([
@@ -186,35 +179,57 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
             }, callback),
             ({samples, samplesFields, sourcesFields}, callback) => {
-                const samplesData = _.map(samples, sample => {
+                const sourceFieldsMapArray = _.map(
+                    _.groupBy(sourcesFields, 'sourceName'),
+                    (sourceFields, sourceName)=> {
+                        return {
+                            sampleId: 'source',
+                            sampleName: sourceName,
+                            fields: sourceFields,
+                        }
+                    }
+                );
+                const sampleFieldMapArray = _.map(samples, sample => {
                     const sampleFieldIds = _.map(sample.values, fieldValue => fieldValue.fieldId);
                     const sampleFields = _.filter(samplesFields, sampleField => {
                         return _.some(sampleFieldIds, sampleFieldId => {
                             return sampleFieldId === sampleField.id
                         })
                     });
-                    const fields = sampleFields.concat(sourcesFields);
                     return {
-                        sample,
-                        fields
+                        sampleId: sample.id,
+                        sampleName: sample.genotypeName,
+                        fields: sampleFields
                     }
                 });
+                const samplesData = _.union(sourceFieldsMapArray, sampleFieldMapArray);
                 callback(null,
-                    samplesData
+                    {
+                        samplesData,
+                        samples
+                    }
                 );
             },
-            (samplesData, callback) => {
-                // will be matching fields by name, so create fieldName->field hash
-                const samplesFieldHashArray = _.map(samplesData, samplesData => {
-                    const sampleFieldHash = CollectionUtils.createHash(samplesData.fields,
-                        ({name}) => AppServerUtils.createColumnName(name, samplesData.sample.name)
+            ({samplesData, samples}, callback) => {
+                const samplesFieldHashArray = _.map(samplesData, sampleData => {
+                    const sampleFieldHash = CollectionUtils.createHash(sampleData.fields,
+                        ({name}) => AppServerUtils.createColumnName(name, sampleData.sampleName)
                     );
-                    const appServerSampleId = this._getAppServerSampleId(samplesData.sample);
-                    return {
-                        appServerSampleId,
-                        sampleId: samplesData.sample.id,
-                        sampleFieldHash
-                    };
+                    if (sampleData.sampleId == 'source') {
+                        return {
+                            appServerSampleId: sampleData.sampleName,
+                            sampleId: sampleData.sampleId,
+                            sampleFieldHash
+                        };
+                    } else {
+                        const sample = _.find(samples, sample => sample.id = sampleData.sampleId);
+                        const appServerSampleId = this._getAppServerSampleId(sample);
+                        return {
+                            appServerSampleId,
+                            sampleId: sampleData.sampleId,
+                            sampleFieldHash
+                        };
+                    }
                 });
                 callback(null, samplesFieldHashArray);
             },
@@ -224,13 +239,13 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     const searchKeyFieldName = this.getSearchKeyFieldName();
                     const mappedRowObject = _.map(rowObject, rowField => {
                         if (rowField.fieldName !== searchKeyFieldName) {
-                            const currentSampleFieldHash = _.find(samplesFieldHashArray, sampleFieldHash => sampleFieldHash.appServerSampleId = rowField.sourceName);
+                            const currentSampleFieldHash = _.find(samplesFieldHashArray, sampleFieldHash => sampleFieldHash.appServerSampleId == rowField.fieldSource);
                             const fieldMetadata = currentSampleFieldHash.sampleFieldHash[rowField.fieldName];
                             if (fieldMetadata) {
                                 return {
                                     fieldId: fieldMetadata.id,
                                     fieldValue: this._mapFieldValue(rowField.fieldValue),
-                                    sampleId: currentSampleFieldHash.sampleId
+                                    sampleId: currentSampleFieldHash.sampleId == 'source' ? null : currentSampleFieldHash.sampleId
                                 }
                             }
                             else {
