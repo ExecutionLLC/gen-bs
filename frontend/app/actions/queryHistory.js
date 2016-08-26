@@ -184,12 +184,10 @@ export function renewHistoryItem(historyItemId) { // FIXME: remove after functio
                 attachHistory(clonedHistoryItem), // do not need to
                 prepareAnalyze() // replaced by requestAnalyse at analyse()
             ]);
-            dispatch(fetchFields(clonedHistoryItem.sample.id))
-                .then(() => {
-                    dispatch([
-                        /*analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id) FIXME analyze: replace by reanalyze */
-                    ]);
-                });
+            dispatch([
+                fetchFields(clonedHistoryItem.sample.id)/*,
+                analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)*/
+            ]);
         }
     };
 }

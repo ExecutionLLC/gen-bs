@@ -80,7 +80,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
 }
 
 function reduceFBuilderStartEdit(state, action) {
-    const {fields: {totalFieldsList, allowedFieldsList}, filter, makeNew, filtersData, filtersList} = action;
+    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}, allowedFieldsList}, filter, makeNew, filtersData, filtersList} = action;
     const editingFilter = parseFilterForEditing(
         makeNew,
         makeNew ?

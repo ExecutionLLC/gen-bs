@@ -15,7 +15,7 @@ const initState = {
         sources: false
     },
     sampleFieldsList: [],
-    sampleIdToFieldHash: {},
+    fieldIdToFieldHash: {},
     editableFields: [],
     sourceFieldsList: [],
     totalFieldsList: [],
@@ -99,7 +99,7 @@ describe('fields', () => {
         // all fields with 'label' properties
         const sampleFieldsList = _.map(fieldsTotal, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
-        const sampleIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
+        const fieldIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
         // fields split by 'isEditable', labelled
         const [editableFields, allowedFieldsList] = _.partition(sampleFieldsList, {isEditable: true});
         // same as above in the hash
@@ -110,7 +110,7 @@ describe('fields', () => {
             expectedState: {
                 ...initState,
                 sampleFieldsList,
-                sampleIdToFieldHash,
+                fieldIdToFieldHash,
                 editableFields,
                 allowedFieldsList,
                 allowedIdToFieldHash
@@ -129,7 +129,7 @@ describe('fields', () => {
         // all sample fields with 'label' properties
         const sampleFieldsList = _.map(fieldsSample, (item) => ({...item, label: item.label || item.name}));
         // same as above in the hash
-        const sampleIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
+        const fieldIdToFieldHash = _.keyBy(sampleFieldsList, 'id');
         // fields split by 'isEditable', labelled
         const [editableFields, allowedFieldsListFromSamples] = _.partition(sampleFieldsList, {isEditable: true});
         // sample fields with 'isEditable' === false, labelled, concatenated with total fields with 'sourceName' === 'sample', labelled
@@ -143,7 +143,7 @@ describe('fields', () => {
             expectedState: {
                 ...initState,
                 sampleFieldsList,
-                sampleIdToFieldHash,
+                fieldIdToFieldHash,
                 editableFields,
                 totalFieldsList,
                 totalFieldsHash,

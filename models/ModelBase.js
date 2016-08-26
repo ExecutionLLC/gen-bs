@@ -78,6 +78,9 @@ class ModelBase {
         );
     }
 
+    /**
+     * @protected
+     * */
     _toCamelCase(itemOrItems, callback) {
         callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemOrItems));
     }

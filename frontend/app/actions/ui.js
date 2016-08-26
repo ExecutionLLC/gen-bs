@@ -58,7 +58,7 @@ export function analyze(searchParams) {
                 hashedArray: {hash: viewIdToViewHash}
             },
             fields: {
-                sampleFieldsList
+                sampleFieldsHashedArray: {array: sampleFieldsList}
             }
         } = getState();
 

@@ -1,8 +1,6 @@
-import _ from 'lodash';
-
 export default class FieldUtils {
     static find(fieldId, fields) {
-        return _.find(fields.totalFieldsList, (field) => field.id === fieldId);
+        return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
     /**
@@ -17,16 +15,6 @@ export default class FieldUtils {
             label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)}`,
             type: f.valueType === 'float' ? 'double' : f.valueType
         };
-    }
-
-    /**
-     * Make fields array for filters
-     * @param {{sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
-     * @returns {{id: string, label: string, type: string}[]}
-     */
-    static makeFieldsListForFiltersSelect(fields) {
-        const allAvailableFields = _.filter(fields.sampleFieldsList.concat(fields.sourceFieldsList), field => !field.isEditable);
-        return allAvailableFields.map((f) => this.makeFieldSelectItemValue(f));
     }
 
     /**

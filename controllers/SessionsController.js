@@ -18,7 +18,6 @@ class SessionsController extends ControllerBase {
 
         this.config = this.services.config;
         this.sessions = this.services.sessions;
-        this.authStates = Object.create(null);
     }
 
     /**
@@ -61,7 +60,8 @@ class SessionsController extends ControllerBase {
     _parseGoogleProfile(accessToken, refreshToken, profile, callback) {
         this.services.logger.debug('Google profile: ' + JSON.stringify(profile, null, 2));
         const userEmail = profile.emails[0].value;
-        callback(null, userEmail);
+        const {familyName, givenName} = profile.name;
+        callback(null, {firstName: givenName, lastName: familyName, userEmail});
     }
 
     _configurePassport(router, controllerRelativePath) {
@@ -77,28 +77,48 @@ class SessionsController extends ControllerBase {
             callbackURL: googleFullRedirectUrl
         }, this._parseGoogleProfile.bind(this)));
 
-        passport.serializeUser((user, callback) => callback(null, user.id));
+        passport.serializeUser((user, callback) => callback(null, user));
         passport.deserializeUser((userId, callback) => this.services.users.find(userId, callback));
 
         router.use(passport.initialize());
-        router.get('/auth/google', passport.authenticate('google', {
-            scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
-            returnURL: googleFullRedirectUrl,
-            realm: baseUrl
-        }));
+        // Registration code is optional.
+        router.get('/auth/google/login/:registrationCodeId?', (request, response, next) => {
+            const {registrationCodeId} = request.params;
+            const authCallback = passport.authenticate('google', {
+                scope: ['https://www.googleapis.com/auth/plus.profile.emails.read'],
+                returnURL: googleFullRedirectUrl,
+                realm: baseUrl,
+                state: registrationCodeId || ''
+            });
+            authCallback(request, response, next);
+        });
 
         router.get(googleRelativeRedirectUrl, (request, response, next) => {
             const authFunc = passport.authenticate('google', {
                 successRedirect: '/',
                 failureRedirect: '/'
-            }, (error, userEmail, info) => {
+            }, (error, user, info) => {
                 if (error) {
                     return next(error);
                 }
-                this.services.sessions.startForEmail(request.session, userEmail, (error) => {
-                    const queryPart = error ? `?error=${QueryString.escape(error.message)}` : '';
-                    response.redirect(`/${queryPart}`);
-                });
+                const {firstName, lastName, userEmail} = user;
+                const registrationCodeId = request.query.state;
+
+                async.waterfall([
+                    (callback) => {
+                        if (registrationCodeId) {
+                            // Activate registration code if any.
+                            this.services.registrationCodes.activate(registrationCodeId, firstName, lastName, userEmail, callback);
+                        } else {
+                            callback(null);
+                        }
+                    },
+                    () => this.services.sessions.startForEmail(request.session, userEmail, (error) => {
+                        const queryPart = error ? `?error=${QueryString.escape(error.message)}` : '';
+                        response.redirect(`/${queryPart}`);
+                    })
+                ], (error) => next(error)); // We can be here only in case of an error.
+
             });
             authFunc(request, response, next);
         });

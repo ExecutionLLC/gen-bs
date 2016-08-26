@@ -125,7 +125,7 @@ export function exportToFile(exportType) {
                 selectedRowIndices
             },
             fields: {
-                totalFieldsHash
+                totalFieldsHashedArray: {hash: totalFieldsHash}
             }
         } = getState();
 
