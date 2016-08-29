@@ -40,8 +40,8 @@ class ApplicationServerService extends ApplicationServerServiceBase {
         this.services.applicationServerSources.requestSourceMetadata(sourceNames, callback);
     }
 
-    requestKeepOperationAlive(searchOperation, callback) {
-        this.services.applicationServerOperations.requestKeepOperationAlive(searchOperation, callback);
+    requestKeepOperationAlive(session, searchOperation, callback) {
+        this.services.applicationServerOperations.requestKeepOperationAlive(session, searchOperation, callback);
     }
 
     /**

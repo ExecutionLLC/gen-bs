@@ -1,0 +1,601 @@
+{
+  "type": "advanced",
+  "reference": "hg19",
+  "fields": {
+    "INFO_DP": {
+      "name": "INFO_DP",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Total depth of quality bases"
+    },
+    "VEP_ExAC_Adj_MAF": {
+      "name": "VEP_ExAC_Adj_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_STRAND": {
+      "name": "VEP_STRAND",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_CANONICAL": {
+      "name": "VEP_CANONICAL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "float",
+      "desc": ""
+    },
+    "VEP_ExAC_FIN_MAF": {
+      "name": "VEP_ExAC_FIN_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_SYMBOL_SOURCE": {
+      "name": "VEP_SYMBOL_SOURCE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "database for \"Gene ID\" column"
+    },
+    "VEP_Protein_position_1": {
+      "name": "VEP_Protein_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    "INFO_SS": {
+      "name": "INFO_SS",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Somatic status of variant (0=Reference,1=Germline,2=Somatic,3=LOH, or 5=Unknown)"
+    },
+    "VEP_EAS_MAF": {
+      "name": "VEP_EAS_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_HGMD": {
+      "name": "VEP_HGMD",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_HGVSp_transcript": {
+      "name": "VEP_HGVSp_transcript",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "for use in HGVSp notation (left part before period glyph)"
+    },
+    "VEP_Feature": {
+      "name": "VEP_Feature",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "INFO_GPV": {
+      "name": "INFO_GPV",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Fisher's Exact Test P-value of tumor+normal versus no variant for Germline calls"
+    },
+    "FILTER": {
+      "name": "FILTER",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Filter status."
+    },
+    "VEP_SIFT": {
+      "name": "VEP_SIFT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "SIFT v5.2.2. Lower score is more likely deleterious. Common threshold is 0.05"
+    },
+    "VEP_SYMBOL": {
+      "name": "VEP_SYMBOL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Gene ID in database from \"Gene DB\" column"
+    },
+    "VEP_ExAC_AFR_MAF": {
+      "name": "VEP_ExAC_AFR_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_MOTIF_NAME": {
+      "name": "VEP_MOTIF_NAME",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_HGVSc_nucleotide_changes": {
+      "name": "VEP_HGVSc_nucleotide_changes",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "in HGVSc transcript coordinates"
+    },
+    "VEP_cDNA_position_0": {
+      "name": "VEP_cDNA_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    "VEP_ExonNumber": {
+      "name": "VEP_ExonNumber",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": "starting with 1"
+    },
+    "VEP_Zygosity": {
+      "name": "VEP_Zygosity",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Heterozygous, Homozygous, Hemizygous, Unknown. Indels considered equal for zygosity"
+    },
+    "VEP_DOMAINS": {
+      "name": "VEP_DOMAINS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_GMAF": {
+      "name": "VEP_GMAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_CLIN_SIG": {
+      "name": "VEP_CLIN_SIG",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_Gene": {
+      "name": "VEP_Gene",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "REF": {
+      "name": "REF",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "The value in the POS field refers to the position of the first base in the String."
+    },
+    "VEP_ExAC_MAF": {
+      "name": "VEP_ExAC_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_MOTIF_SCORE_CHANGE": {
+      "name": "VEP_MOTIF_SCORE_CHANGE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    "INFO_SSC": {
+      "name": "INFO_SSC",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "string",
+      "desc": "Somatic score in Phred scale (0-255) derived from somatic p-value"
+    },
+    "VEP_PHENO": {
+      "name": "VEP_PHENO",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "ID": {
+      "name": "ID",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Semi-colon separated list of unique identifiers where available."
+    },
+    "VEP_CCDS": {
+      "name": "VEP_CCDS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_SOMATIC": {
+      "name": "VEP_SOMATIC",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "boolean",
+      "desc": ""
+    },
+    "VEP_TSL": {
+      "name": "VEP_TSL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_HIGH_INF_POS": {
+      "name": "VEP_HIGH_INF_POS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "boolean",
+      "desc": ""
+    },
+    "VEP_HGNC_ID": {
+      "name": "VEP_HGNC_ID",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_HGVSp_nucleotide_changes": {
+      "name": "VEP_HGVSp_nucleotide_changes",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "in HGVSp transcript coordinates"
+    },
+    "VEP_ExAC_EAS_MAF": {
+      "name": "VEP_ExAC_EAS_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_cDNA_position_1": {
+      "name": "VEP_cDNA_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    "CHROM": {
+      "name": "CHROM",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "Chromosome identifier."
+    },
+    "VEP_HGVS_OFFSET": {
+      "name": "VEP_HGVS_OFFSET",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": "HGVS was calculated after ambiguous repeat shift. Column shows shift size"
+    },
+    "VEP_DISTANCE": {
+      "name": "VEP_DISTANCE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    "VEP_SAS_MAF": {
+      "name": "VEP_SAS_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_INTRON": {
+      "name": "VEP_INTRON",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_MOTIF_POS": {
+      "name": "VEP_MOTIF_POS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    "VEP_BIOTYPE": {
+      "name": "VEP_BIOTYPE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Gene type in Havana DB. Protein coding: IGC gene, IGD gene, IG gene, IGJ gene, IGLV gene, IGM gene, IGV gene, IGZ gene, nonsense mediated decay, nontranslating CDS, non stop decay, polymorphic pseudogene, TRC gene, TRD gene, TRJ gene. Pseudogene: disrupted domain, IGC pseudogene, IGJ pseudogene, IG pseudogene, IGV pseudogene, processed pseudogene, transcribed processed pseudogene, transcribed unitary pseudogene, transcribed unprocessed pseudogene, translated processed pseudogene, TRJ pseudogene, unprocessed pseudogene. Long noncoding: 3prime overlapping ncrna, ambiguous orf, antisense, antisense RNA, lincRNA, ncrna host, processed transcript, sense intronic, sense overlapping. Short noncoding: miRNA, miRNA_pseudogene, miscRNA, miscRNA pseudogene, Mt rRNA, Mt tRNA, rRNA, scRNA, snlRNA, snoRNA, snRNA, tRNA, tRNA_pseudogene"
+    },
+    "VEP_GENE_PHENO": {
+      "name": "VEP_GENE_PHENO",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    "VEP_PUBMED": {
+      "name": "VEP_PUBMED",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "QUAL": {
+      "name": "QUAL",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "float",
+      "desc": "Quality."
+    },
+    "VEP_HGVSc_transcript": {
+      "name": "VEP_HGVSc_transcript",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "for use in HGVSc notation (left part before period glyph)"
+    },
+    "VEP_ExAC_OTH_MAF": {
+      "name": "VEP_ExAC_OTH_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_AMR_MAF": {
+      "name": "VEP_AMR_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_SV": {
+      "name": "VEP_SV",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_EA_MAF": {
+      "name": "VEP_EA_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_PolyPhen": {
+      "name": "VEP_PolyPhen",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "float",
+      "desc": "PolyPhen-2 v2.2.2. Probability(variation is deleterious). Common threshold is 0.95"
+    },
+    "VEP_Protein_position_0": {
+      "name": "VEP_Protein_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    "VEP_Amino_acids": {
+      "name": "VEP_Amino_acids",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_AA_MAF": {
+      "name": "VEP_AA_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_CDS_position_1": {
+      "name": "VEP_CDS_position_1",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Stop position."
+    },
+    "VEP_CDS_position_0": {
+      "name": "VEP_CDS_position_0",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "integer",
+      "desc": "Start position."
+    },
+    "VEP_VARIANT_CLASS": {
+      "name": "VEP_VARIANT_CLASS",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+    },
+    "VEP_Existing_variation": {
+      "name": "VEP_Existing_variation",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_Allele": {
+      "name": "VEP_Allele",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_ExAC_AMR_MAF": {
+      "name": "VEP_ExAC_AMR_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_ASN_MAF": {
+      "name": "VEP_ASN_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_TREMBL": {
+      "name": "VEP_TREMBL",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "best match"
+    },
+    "VEP_CELL_TYPE": {
+      "name": "VEP_CELL_TYPE",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_AFR_MAF": {
+      "name": "VEP_AFR_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_Consequence": {
+      "name": "VEP_Consequence",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_EUR_MAF": {
+      "name": "VEP_EUR_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_NumberOfExons": {
+      "name": "VEP_NumberOfExons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    "INFO_SOMATIC": {
+      "name": "INFO_SOMATIC",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "boolean",
+      "desc": "Indicates if record is a somatic mutation"
+    },
+    "VEP_ExAC_SAS_MAF": {
+      "name": "VEP_ExAC_SAS_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_Genotype": {
+      "name": "VEP_Genotype",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "Capital case is for alternative alleles and lowercase is for reference allele"
+    },
+    "VEP_Codons": {
+      "name": "VEP_Codons",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_IMPACT": {
+      "name": "VEP_IMPACT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "high impact, changed protein effectiveness , no change, no evidence or difficult to predict"
+    },
+    "INFO_SPV": {
+      "name": "INFO_SPV",
+      "is_mandatory": false,
+      "num": 1,
+      "type": "float",
+      "desc": "Fisher's Exact Test P-value of tumor versus normal for Somatic/LOH calls"
+    },
+    "VEP_ZYG": {
+      "name": "VEP_ZYG",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_ExAC_NFE_MAF": {
+      "name": "VEP_ExAC_NFE_MAF",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": ""
+    },
+    "VEP_Feature_type": {
+      "name": "VEP_Feature_type",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "transcript, regulatory, motif"
+    },
+    "VEP_ALLELE_NUM": {
+      "name": "VEP_ALLELE_NUM",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "integer",
+      "desc": ""
+    },
+    "ALT": {
+      "name": "ALT",
+      "is_mandatory": true,
+      "num": 0,
+      "type": "string",
+      "desc": "Comma separated list of alternate non-reference alleles called on at least one of the samples."
+    },
+    "VEP_SWISSPROT": {
+      "name": "VEP_SWISSPROT",
+      "is_mandatory": false,
+      "num": 0,
+      "type": "string",
+      "desc": "best match"
+    },
+    "POS": {
+      "name": "POS",
+      "is_mandatory": true,
+      "num": 1,
+      "type": "integer",
+      "desc": "The reference position."
+    }
+  }
+}

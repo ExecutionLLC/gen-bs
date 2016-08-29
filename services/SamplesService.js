@@ -36,16 +36,23 @@ class SamplesService extends UserEntityServiceBase {
         const sampleId = Uuid.v4();
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this._loadAndVerifyPriority(user, callback),
-            (priority, callback) => this.services.applicationServer.uploadSample(session, sampleId, user,
+            (callback) => this.services.applicationServer.uploadSample(session, sampleId, user,
                 localFileInfo.localFilePath, localFileInfo.originalFileName,
-                (error, operationId) => callback(error, priority, operationId)
+                (error, operationId) => callback(error, operationId)
+            ),
+            (operationId, callback) => this._createHistoryEntry(
+                user,
+                operationId,
+                sampleId,
+                localFileInfo.originalFileName,
+                (error) => callback(error, operationId)
+            ),
+            (operationId, callback) => this._loadAndVerifyPriority(
+                user,
+                (error, priority) => callback(error, operationId, priority)
             ),
             (priority, operationId, callback) => this.services.applicationServer.requestSampleProcessing(session,
-                operationId, sampleId, priority, (error) => callback(error, operationId, sampleId)),
-            (operationId, sampleId, callback) => this._createHistoryEntry(user, operationId, sampleId,
-                (error) => callback(error, operationId)
-            )
+                operationId, sampleId, priority, (error) => callback(error, operationId))
         ], callback);
     }
 
@@ -87,7 +94,7 @@ class SamplesService extends UserEntityServiceBase {
     }
 
     _createHistoryEntry(user, operationId, sampleId, fileName, callback) {
-        this.services.sampleUploadHistory.add({
+        this.services.sampleUploadHistory.add(user, user.language, {
             id: operationId,
             sampleId,
             fileName,

@@ -17,7 +17,7 @@ const models = new ModelsFacade(Config, logger);
 const importManager = new InitialDataImportManager(models, Config, logger);
 importManager.execute((error) => {
     if (error) {
-        console.error('Error import initial data: ' + error);
+        console.error(`Error import initial data: ${error}\n${error.stack}`);
         // Indicate failure to the caller.
         process.exit(1);
     } else {
