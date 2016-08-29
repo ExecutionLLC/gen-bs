@@ -62,9 +62,14 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {_.map(fieldIds, (fieldId) =>
-                    _(firstRowFields).filter({fieldId}).map((fieldSample) => this.renderFieldHeader(fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch)).value()
-                )}
+                {_.map(fieldIds, (fieldId) => {
+                    const fieldSample = _.find(firstRowFields, {fieldId});
+                    if (!fieldSample) {
+                        return null;
+                    }
+                    return this.renderFieldHeader(fieldSample.fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch);
+
+                })}
             </tr>
             </tbody>
         );
@@ -82,7 +87,7 @@ export default class VariantsTableHead extends Component {
         };
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, searchValue));
         return (
-            <FieldHeader key={fieldId}
+            <FieldHeader key={fieldId + '-' + sampleId}
                          fieldMetadata={fieldMetadata}
                          sampleName={sampleId && this.props.samplesList.hashedArray.hash[sampleId].fileName || null}
                          areControlsEnabled={areControlsEnabled}
