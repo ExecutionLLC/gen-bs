@@ -51,7 +51,7 @@ class SamplesService extends UserEntityServiceBase {
                 user,
                 (error, priority) => callback(error, operationId, priority)
             ),
-            (priority, operationId, callback) => this.services.applicationServer.requestSampleProcessing(session,
+            (operationId, priority, callback) => this.services.applicationServer.requestSampleProcessing(session,
                 operationId, sampleId, priority, (error) => callback(error, operationId))
         ], callback);
     }
