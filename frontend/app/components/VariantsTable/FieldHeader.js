@@ -56,8 +56,8 @@ export default class FieldHeaderControls extends Component {
                 key={fieldMetadata.id}>
                 <div>
                     <div className='variants-table-header-label'>
-                        <a type='button' className='btn-link-default'>
-                            {label}
+                        <a type='button' className='btn-link-default' title={fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? fieldMetadata.sourceName : null}>
+                            {label}{fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? ('/' + fieldMetadata.sourceName) : null}
                         </a>
                         <div className={buttonGroupClasses}>
                             {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, disabled)}
