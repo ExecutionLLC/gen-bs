@@ -20,6 +20,7 @@ import {entityType} from '../utils/entityTypes';
 export const SET_CURRENT_QUERY_HISTORY_ID = 'SET_CURRENT_QUERY_HISTORY_ID';
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
+export const ADD_QUERY_HISTORY = 'ADD_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
 export const REQUEST_QUERY_HISTORY = 'REQUEST_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
@@ -120,6 +121,13 @@ export function cancelQueryHistoryEdit(historyItemId) {
         type: CANCEL_QUERY_HISTORY_EDIT,
         historyItemId
     };
+}
+
+export function addQueryHistory(newHistoryItem) {
+    return {
+        type: ADD_QUERY_HISTORY,
+        newHistoryItem
+    }
 }
 
 export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {

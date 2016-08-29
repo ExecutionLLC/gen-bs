@@ -110,6 +110,13 @@ function reduceRequestQueryHistory(state) {
     };
 }
 
+function reduceAddQueryHistory(state, action) {
+    return {
+        ...state,
+        history: [action.newHistoryItem, ...state.history]
+    };
+}
+
 function reduceAppendQueryHistory(state, action) {
     // Check if data received for actual state
     // Seems like crutch, need to think about consistency
@@ -150,6 +157,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceReceiveInitialQueryHistory(state, action);
         case ActionTypes.REQUEST_QUERY_HISTORY:
             return reduceRequestQueryHistory(state, action);
+        case ActionTypes.ADD_QUERY_HISTORY:
+            return reduceAddQueryHistory(state, action);
         case ActionTypes.APPEND_QUERY_HISTORY:
             return reduceAppendQueryHistory(state, action);
         case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:

@@ -83,6 +83,10 @@ export function analyze(searchParams) {
         const searchModel = searchParams.modelId && modelIdToFilterHash[searchParams.modelId] || null;
         dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList));
         dispatch(setViewVariantsSort(searchView));
-        dispatch(fetchVariants(searchParamsLO));
+        return new Promise((resolve, reject) => {
+            dispatch(fetchVariants(searchParamsLO)).then((result) => {
+                resolve(result.analysis);
+            }).catch((error) => reject(error));
+        });
     };
 }

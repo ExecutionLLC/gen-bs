@@ -267,26 +267,27 @@ export function fetchVariants(searchParams) {
             searchClient.sendSearchAgainRequest.bind(searchClient, languageId, searchParams.analyze.id) :
             searchClient.sendSearchRequest.bind(searchClient, languageId, searchParams.analyze);
 
-        sendAPI(
-            searchParams.limit,
-            searchParams.offset,
-            (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR));
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
-                } else {
-                    const {operationId} = response.body;
-                    dispatch(receiveAnalysisOperationId(operationId));
-                    const state = getState();
-                    dispatch(changeExcludedFields(state.websocket.variantsView.id));
-                    // const isDemo = state.auth.isDemo;
-                    // if (!isDemo) {
-                    //     dispatch(updateQueryHistory());
-                    // }
+        return new Promise((resolve, reject) => {
+            sendAPI(
+                searchParams.limit,
+                searchParams.offset,
+                (error, response) => {
+                    if (error) {
+                        dispatch(handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR));
+                        reject();
+                    } else if (response.status !== HttpStatus.OK) {
+                        dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
+                        reject();
+                    } else {
+                        const {operationId} = response.body;
+                        dispatch(receiveAnalysisOperationId(operationId));
+                        const state = getState();
+                        dispatch(changeExcludedFields(state.websocket.variantsView.id));
+                        resolve(response.body);
+                    }
                 }
-            }
-        );
+            );
+        });
     };
 }
 

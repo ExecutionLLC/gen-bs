@@ -6,7 +6,8 @@ import {
     duplicateQueryHistoryItem,
     cancelQueryHistoryEdit,
     editQueryHistoryItem,
-    updateQueryHistoryItem
+    updateQueryHistoryItem,
+    addQueryHistory
 } from '../../../actions/queryHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
@@ -698,8 +699,12 @@ export default class AnalysisRightPane extends React.Component {
             viewId: historyItem.viewId,
             filterId: historyItem.filterId,
             modelId: historyItem.modelId
-        }));
-        // TODO add new analyse item
+        })).then((analysis) => {
+            if (isEditing) {
+                dispatch(cancelQueryHistoryEdit());
+                dispatch(addQueryHistory(analysis));
+            }
+        });
         dispatch(closeModal('analysis'));
     }
 
