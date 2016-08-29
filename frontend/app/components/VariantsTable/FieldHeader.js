@@ -15,7 +15,7 @@ export default class FieldHeaderControls extends Component {
     }
 
     render() {
-        const {fieldMetadata, sortState, areControlsEnabled, disabled} = this.props;
+        const {fieldMetadata, sortState, areControlsEnabled, disabled, sampleName} = this.props;
         const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldMetadata.id)
             : null;
 
@@ -56,8 +56,8 @@ export default class FieldHeaderControls extends Component {
                 key={fieldMetadata.id}>
                 <div>
                     <div className='variants-table-header-label'>
-                        <a type='button' className='btn-link-default' title={fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? fieldMetadata.sourceName : null}>
-                            {label}{fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? ('/' + fieldMetadata.sourceName) : null}
+                        <a type='button' className='btn-link-default' title={fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? fieldMetadata.sourceName : sampleName}>
+                            {label}{fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? ('/' + fieldMetadata.sourceName) : sampleName ? '/' + sampleName : null}
                         </a>
                         <div className={buttonGroupClasses}>
                             {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, disabled)}

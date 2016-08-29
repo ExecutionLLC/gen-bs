@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import React, {Component} from 'react';
 
 import FieldHeader from './FieldHeader';
@@ -27,6 +27,8 @@ export default class VariantsTableHead extends Component {
         const fieldIds = _.map(currentView.viewListItems, item => item.fieldId);
         const expectedFields = [...fields.sourceFieldsList, ...currentSampleFields];
         const expectedFieldsHash = _.keyBy(expectedFields, (field) => field.id);
+
+        const firstRowFields = this.props.variants[0].fields;
 
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
@@ -60,13 +62,15 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sort, dispatch))}
+                {_.map(fieldIds, (fieldId) =>
+                    _(firstRowFields).filter({fieldId}).map((fieldSample) => this.renderFieldHeader(fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch)).value()
+                )}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, fields, expectedFieldsHash, isFetching, sortState, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
         const areControlsEnabled = !!expectedFieldsHash[fieldId];
@@ -80,6 +84,7 @@ export default class VariantsTableHead extends Component {
         return (
             <FieldHeader key={fieldId}
                          fieldMetadata={fieldMetadata}
+                         sampleName={sampleId && this.props.samplesList.hashedArray.hash[sampleId].fileName || null}
                          areControlsEnabled={areControlsEnabled}
                          sortState={sortState}
                          onSortRequested={sendSortRequestedAction}
