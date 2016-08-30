@@ -85,28 +85,17 @@ class UserDataService extends ServiceBase {
                     totalFields: (callback) => {
                         this.services.fieldsMetadata.findTotalMetadata(callback);
                     },
-                    activeOperations: (callback) => {
-                        this._findActiveUploads(user, callback);
+                    activeUploads: (callback) => {
+                        this.services.sampleUploadHistory.findActive(user, callback);
+                    },
+                    uploads: (callback) => {
+                        this.services.sampleUploadHistory.findAll(user, this.defaultLimit, 0, callback);
                     }
                 }, callback);
             }
         ], (error, results) => {
             callback(error, results);
         });
-    }
-
-    _findActiveUploads(user, callback) {
-        async.waterfall([
-            (callback) => this.services.sampleUploadHistory.findAll(user, this.defaultLimit, 0, callback),
-            (uploads, callback) => {
-                const clientResults = _.map(uploads, uploadEntry => ({
-                    id: uploadEntry.id,
-                    type: UploadOperation.name,
-                    lastMessage: uploadEntry.lastStatusMessage
-                }));
-                callback(null, clientResults);
-            }
-        ], callback);
     }
 }
 
