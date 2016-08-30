@@ -127,7 +127,7 @@ export function addQueryHistory(newHistoryItem) {
     return {
         type: ADD_QUERY_HISTORY,
         newHistoryItem
-    }
+    };
 }
 
 export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
