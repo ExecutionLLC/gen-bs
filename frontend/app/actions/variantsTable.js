@@ -282,8 +282,6 @@ export function fetchVariants(searchParams) {
                         const result = response.body;
                         const {operationId} = result;
                         dispatch(receiveAnalysisOperationId(operationId));
-                        const state = getState();
-                        dispatch(changeExcludedFields(state.websocket.variantsView.id));
                         resolve(result);
                     }
                 }

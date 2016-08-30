@@ -1,7 +1,10 @@
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
 //import {detachHistory} from './queryHistory';
-import {setViewVariantsSort} from './variantsTable';
+import {
+    setViewVariantsSort,
+    changeExcludedFields
+} from './variantsTable';
 //import {handleError} from './errorHandler';
 import * as _ from 'lodash';
 
@@ -85,6 +88,7 @@ export function analyze(searchParams) {
         dispatch(setViewVariantsSort(searchView));
         return new Promise((resolve, reject) => {
             dispatch(fetchVariants(searchParamsLO)).then((result) => {
+                dispatch(changeExcludedFields(searchParams.viewId));
                 resolve(result.analysis);
             }).catch((error) => reject(error));
         });
