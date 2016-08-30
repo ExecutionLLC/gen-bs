@@ -8,6 +8,7 @@ const UserEntityServiceBase = require('./UserEntityServiceBase');
 const FieldsMetadataService = require('./FieldsMetadataService.js');
 const EditableFields = require('../database/defaults/templates/metadata/editable-metadata.json');
 const CollectionUtils = require('../utils/CollectionUtils');
+const {SAMPLE_UPLOAD_STATUS} = require('../utils/Enums');
 const AppServerEvents = require('./external/applicationServer/AppServerEvents');
 
 class SamplesService extends UserEntityServiceBase {
@@ -99,8 +100,8 @@ class SamplesService extends UserEntityServiceBase {
             sampleId,
             fileName,
             userId: user.id,
-            isActive: true,
-            lastStatusMessage: null,
+            status: SAMPLE_UPLOAD_STATUS.IN_PROGRESS,
+            progress: 0
         }, callback);
     }
 

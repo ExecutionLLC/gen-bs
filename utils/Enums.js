@@ -24,6 +24,12 @@ const ENTITY_TYPES = createEnum({
     DEFAULT: 'default'
 });
 
+const SAMPLE_UPLOAD_STATUS = createEnum({
+    IN_PROGRESS: 'in_progress',     // Currently active
+    READY: 'ready',                 // Successfully uploaded
+    ERROR: 'error'                  // Failed with error
+});
+
 /**
  * Types which default elements can have.
  * */
@@ -42,5 +48,6 @@ module.exports = {
     OBJECT_STORAGE_TYPES,
     SEARCH_SERVICE_EVENTS,
     ENTITY_TYPES,
-    WS_INSTANCE_MESSAGE_TYPES
+    WS_INSTANCE_MESSAGE_TYPES,
+    SAMPLE_UPLOAD_STATUS
 };
