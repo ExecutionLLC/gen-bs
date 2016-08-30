@@ -2,6 +2,7 @@
 
 const _ = require('lodash');
 
+const {SAMPLE_UPLOAD_STATUS} = require('../utils/Enums');
 const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
 const ModelBase = require('./ModelBase');
 
@@ -54,7 +55,7 @@ class SampleUploadHistoryModel extends ModelBase {
 
     findActive(userId, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findEntriesAsync(trx, null, userId, true, true, null, null)
+            this._findEntriesAsync(trx, null, userId, true, SAMPLE_UPLOAD_STATUS.IN_PROGRESS, null, null)
                 .asCallback(callback);
         }, callback);
     }
@@ -77,7 +78,7 @@ class SampleUploadHistoryModel extends ModelBase {
     }
 
     _findEntriesAsync(trx, entryIdsOrNull, userIdOrNull, excludeDeleted,
-                      isActiveOrNull, limitOrNull, offsetOrNull) {
+                      statusOrNull, limitOrNull, offsetOrNull) {
         let query = trx.select()
             .from(this.baseTableName)
             .whereRaw('1 = 1');
@@ -93,8 +94,8 @@ class SampleUploadHistoryModel extends ModelBase {
             query = query.andWhere('is_deleted', false);
         }
 
-        if (isActiveOrNull != null) {
-            query = query.andWhere('is_active', isActiveOrNull);
+        if (statusOrNull != null) {
+            query = query.andWhere('status', statusOrNull);
         }
 
         if (limitOrNull != null) {

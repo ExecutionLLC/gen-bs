@@ -25,11 +25,15 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
     }
 
     findActive(user, callback) {
-        async.waterfall([
-            (callback) => this._checkUserIsSet(user, callback),
-            (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
-            (callback) => this.models.sampleUploadHistory.findActive(user.id, callback)
-        ], callback);
+        if (this.services.users.isDemoUserId(user.id)) {
+            callback(null, []);
+        } else {
+            async.waterfall([
+                (callback) => this._checkUserIsSet(user, callback),
+                (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
+                (callback) => this.models.sampleUploadHistory.findActive(user.id, callback)
+            ], callback);
+        }
     }
 }
 
