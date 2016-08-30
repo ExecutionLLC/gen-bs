@@ -10,7 +10,7 @@ export default function websocket(state = {
     variantsSamples: null,
     variantsView: null,
     variantsFilter: null,
-    viriantsModel: null,
+    variantsModel: null,
     variantsSampleFieldsList: [],
     currentVariants: null,
     isVariantsEmpty: false,
