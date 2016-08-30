@@ -100,7 +100,7 @@ class SavedFileModel extends SecureModelBase {
                     id: shouldGenerateId ? this._generateId() : fileMetadata.id,
                     creator: userId,
                     viewId: fileMetadata.viewId,
-                    vcfFileSampleVersionId: fileMetadata.sampleId,
+                    genotypeVersionId: fileMetadata.sampleId,
                     name: fileMetadata.name,
                     url: fileMetadata.url,
                     totalResults: fileMetadata.totalResults
@@ -167,8 +167,8 @@ class SavedFileModel extends SecureModelBase {
                     const fileWithFilters = _.cloneDeep(file);
 
                     // Will be using sample version as sample id in the services layer.
-                    fileWithFilters.sampleId = file.vcfFileSampleVersionId;
-                    delete fileWithFilters.vcfFileSampleVersionId;
+                    fileWithFilters.sampleId = file.genotypeVersionId;
+                    delete fileWithFilters.genotypeVersionId;
 
                     fileWithFilters.filterIds = fileIdToFilterIdsHash[file.id];
                     return fileWithFilters;
