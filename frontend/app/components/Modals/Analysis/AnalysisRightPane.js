@@ -6,6 +6,7 @@ import {
     duplicateQueryHistoryItem,
     cancelQueryHistoryEdit,
     editQueryHistoryItem,
+    editExistentQueryHistoryItem,
     updateQueryHistoryItem,
     addQueryHistory
 } from '../../../actions/queryHistory';
@@ -666,18 +667,22 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onAnalysisNameChange(name) {
-        console.log('onAnalysisNameChange', name);
-        this.props.dispatch(this.actionEdit({name: name}));
+        console.log('onAnalysisNameChange', name, this.props.historyItem);
         if (this.props.historyItem.id) {
-            this.props.dispatch(updateQueryHistoryItem(this.props.historyItem));
+            this.props.dispatch(editExistentQueryHistoryItem({...this.props.historyItem, name}));
+            this.props.dispatch(updateQueryHistoryItem(this.props.historyItem.id));
+        } else {
+            this.props.dispatch(this.actionEdit({name}));
         }
     }
 
     onAnalysisDescriptionChange(description) {
         console.log('onAnalysisDescriptionChange', description);
-        this.props.dispatch(this.actionEdit({description: description}));
         if (this.props.historyItem.id) {
-            this.props.dispatch(updateQueryHistoryItem(this.props.historyItem));
+            this.props.dispatch(editExistentQueryHistoryItem({...this.props.historyItem, description}));
+            this.props.dispatch(updateQueryHistoryItem(this.props.historyItem.id));
+        } else {
+            this.props.dispatch(this.actionEdit({description}));
         }
     }
 

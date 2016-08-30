@@ -90,6 +90,19 @@ function reduceCancelQueryHistoryEdit(state) {
     }
 }
 
+function reduceEditExistentHistoryItem(state, action) {
+    const {history} = state;
+    const {historyItem} = action;
+    const index = _.findIndex(history, {id: historyItem.id});
+    if (index < 0) {
+        return state;
+    }
+    return {
+        ...state,
+        history: immutableArray.replace(state.history, index, historyItem)
+    };
+}
+
 function reduceEditQueryHistoryItem(state, action) {
     const {samplesList, filtersList, viewsList, modelsList, changeItem} = action;
     const {newHistoryItem} = state;
@@ -167,6 +180,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceDuplicateQueryHistoryItem(state, action);
         case ActionTypes.EDIT_QUERY_HISTORY_ITEM:
             return reduceEditQueryHistoryItem(state, action);
+        case ActionTypes.EDIT_EXISTENT_HISTORY_ITEM:
+            return reduceEditExistentHistoryItem(state, action);
         case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:
             return reduceCancelQueryHistoryEdit(state, action);
         case ActionTypes.TOGGLE_LOADING_HISTORY_DATA:

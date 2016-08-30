@@ -26,6 +26,7 @@ export const REQUEST_QUERY_HISTORY = 'REQUEST_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
 export const DUPLICATE_QUERY_HISTORY_ITEM = 'DUPLICATE_QUERY_HISTORY_ITEM';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
+export const EDIT_EXISTENT_HISTORY_ITEM = 'EDIT_EXISTENT_HISTORY_ITEM';
 export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
 export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
 export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
@@ -116,6 +117,13 @@ export function editQueryHistoryItem(samplesList, filtersList, viewsList, models
     };
 }
 
+export function editExistentQueryHistoryItem(historyItem) {
+    return {
+        type: EDIT_EXISTENT_HISTORY_ITEM,
+        historyItem
+    };
+}
+
 export function cancelQueryHistoryEdit(historyItemId) {
     return {
         type: CANCEL_QUERY_HISTORY_EDIT,
@@ -161,8 +169,12 @@ export function updateQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = 
     };
 }
 
-export function updateQueryHistoryItem(historyItem) {
-    return (dispatch) => {
+export function updateQueryHistoryItem(historyItemId) {
+    return (dispatch, getState) => {
+        const {history} = getState().queryHistory;
+        const historyItem = _.find(history, (historyItem) => {
+            return historyItem.id === historyItemId;
+        });
         queryHistoryClient.update(historyItem, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
