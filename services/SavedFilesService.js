@@ -96,10 +96,12 @@ class SavedFilesService extends UserEntityServiceBase {
                 }, callback);
             },
             // Build saved file with view, filter and sample.
-            (fileWithEntities, callback) => callback(null,
-                Object.assign({}, fileWithEntities.savedFile, {
-                    analysis: fileWithEntities.analysis
-                }))
+            (fileWithEntities, callback) => {
+                callback(null,
+                    Object.assign({}, fileWithEntities.savedFile, {
+                        analysis: fileWithEntities.analysis
+                    }))
+            }
         ], callback);
     }
 }

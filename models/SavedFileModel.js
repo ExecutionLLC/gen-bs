@@ -34,7 +34,6 @@ class SavedFileModel extends SecureModelBase {
             const fileIds = [fileId];
             async.waterfall([
                 (callback) => this._fetchSavedFiles(trx, fileIds, userId, false, callback),
-                (files, callback) => this._ensureAllItemsFound(files, fileIds, callback),
                 (files, callback) => callback(null, files[0])
             ], callback);
         }, callback);
@@ -141,9 +140,17 @@ class SavedFileModel extends SecureModelBase {
         if (shouldExcludeDeletedEntries) {
             baseQuery = baseQuery.andWhere('is_deleted', false);
         }
-        baseQuery.asCallback(
-            (error, files) => callback(error, files)
-        );
+        async.waterfall([
+            callback => baseQuery.asCallback(callback),
+            (files, callback) => this._toCamelCase(files, callback),
+            (files, callback) => {
+                if (fileIdsOrNull) {
+                    this._ensureAllItemsFound(files, fileIdsOrNull, callback);
+                } else {
+                    callback(null, files);
+                }
+            }
+        ], callback);
     }
 }
 
