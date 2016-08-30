@@ -108,7 +108,7 @@ export function requestUpdateSampleFields(sampleId) {
     };
 }
 
-export function changeSamples(samples) {
+export function changeSamples(samples) { // TODO remove when after functional check
     return {
         type: CHANGE_SAMPLES,
         samples

@@ -31,8 +31,6 @@ import {analyze} from './ui';
 export const RECEIVE_USERDATA = 'RECEIVE_USERDATA';
 export const REQUEST_USERDATA = 'REQUEST_USERDATA';
 
-export const CHANGE_HISTORY_DATA = 'CHANGE_HISTORY_DATA';
-
 const FETCH_USER_DATA_NETWORK_ERROR = 'Cannot update user data (network error). You can reload page and try again.';
 const FETCH_USER_DATA_SERVER_ERROR = 'Cannot update user data (server error). You can reload page and try again.';
 
@@ -135,14 +133,5 @@ export function fetchUserdata() {
                 // }
             }
         });
-    };
-}
-
-export function changeHistoryData(sampleId, filterId, viewId) {
-    return {
-        type: CHANGE_HISTORY_DATA,
-        sampleId,
-        filterId,
-        viewId
     };
 }

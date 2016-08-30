@@ -1,6 +1,5 @@
 import {fetchVariants, clearSearchParams} from './variantsTable';
 import {requestAnalyze, requestSetCurrentParams} from './websocket';
-//import {detachHistory} from './queryHistory';
 import {
     setViewVariantsSort,
     changeExcludedFields
@@ -45,9 +44,6 @@ export function analyze(searchParams) {
         //     return;
         // }
         const {
-            // userData: {
-            //     attachedHistoryData: historyData
-            // },
             samplesList: {
                 hashedArray: {hash: sampleIdToSampleHash}
             },
@@ -64,12 +60,6 @@ export function analyze(searchParams) {
                 sampleFieldsHashedArray: {array: sampleFieldsList}
             }
         } = getState();
-
-        // TODO rid of detachHistory
-        // const detachHistorySample = historyData.sampleId ? historyData.sampleId !== searchParams.sampleId : false;
-        // const detachHistoryFilter = historyData.filterId ? historyData.filterId !== searchParams.filterId : false;
-        // const detachHistoryView = historyData.viewId ? historyData.viewId !== searchParams.viewId : false;
-        // dispatch(detachHistory(detachHistorySample, detachHistoryFilter, detachHistoryView));
 
         const searchParamsLO = {
             analyze: searchParams,
