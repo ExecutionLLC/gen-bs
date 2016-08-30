@@ -21,7 +21,7 @@
 		"is_advanced": {
 			"type": "boolean"
 		},
-		"is_copy_disabled": {
+		"isСopyDisabled": {
 			"type": "boolean"
 		}
 	},

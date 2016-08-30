@@ -20,6 +20,7 @@ const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
 const savedFilesClient = new SavedFilesClient(urls);
 const samplesClient = new SamplesClient(urls);
+const JsonValidator = require('../utils/JsonValidator');
 
 const testFilePath = __dirname + '/mocks/test-saved-file.csv';
 
@@ -29,6 +30,7 @@ const TestUser = {
 const languId = Config.defaultLanguId;
 const testViewId = DefaultViews[0].id;
 const testFilterId = DefaultFilters[0].id;
+const validator = new JsonValidator();
 
 const generateFileMetadata = (sampleId) => {
     return {
@@ -87,8 +89,8 @@ describe('Saved Files', () => {
 
     it('should list all available files.', (done) => {
         savedFilesClient.getAll(sessionId, (error, response) => {
-            ClientBase.readBodyWithCheck(error, response);
-
+            const savedFiles = ClientBase.readBodyWithCheck(error, response);
+            assert(validator.getValidateUserData(savedFiles));
             done();
         });
     });

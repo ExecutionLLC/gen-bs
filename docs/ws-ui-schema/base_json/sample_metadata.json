@@ -1,21 +1,22 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "ws-ui-schema/base_json/sample_metadata#",
   "type": "object",
   "properties": {
     "modified_timestamp": {
       "type": "string",
       "description": "Timestamp indicating the time this exact version has been created."
     },
-    "id": {
+    "genotypeId": {
       "type": "string",
       "description": "UUID, the unique identifier for the sample metadata"
     },
-    "file_name": {
+    "fileName": {
       "type": "string",
       "description": "Name of the file as it was during upload"
     },
     "hash": {
-      "type": "string"
+      "type": ["string","null"]
     },
     "values": {
       "type": "array",
@@ -43,7 +44,7 @@
         "user"
       ]
     },
-    "is_analyzed": {
+    "isAnalyzed": {
       "type": "boolean"
     },
     "analyzed_timestamp": {
@@ -51,10 +52,9 @@
     }
   },
   "required": [
-    "id",
-    "hash",
-    "is_analyzed",
-    "is_standard",
-    "is_advanced"
+    "genotypeId",
+    "isAnalyzed",
+    "type",
+    "fileName"
   ]
 }

@@ -5,6 +5,7 @@ const _ = require('lodash');
 
 const ClientBase = require('./utils/ClientBase');
 const CollectionUtils = require('../utils/CollectionUtils');
+const JsonValidator = require('../utils/JsonValidator');
 const SessionsClient = require('./utils/SessionsClient');
 const FiltersClient = require('./utils/FiltersClient');
 const ViewsClient = require('./utils/ViewsClient');
@@ -24,6 +25,8 @@ const searchClient = new SearchClient(urls);
 const TestUser = {
     userEmail: 'valarievaughn@electonic.com'
 };
+
+const validator = new JsonValidator();
 
 describe('Search', function () {
     // Search should fit into 60 seconds
@@ -80,6 +83,7 @@ describe('Search', function () {
                 && message.result.data
                 && _.isArray(message.result.data));
             if (endMessage) {
+                assert(validator.getValidateWsUiGetDataToTableAnswer(message));
                 const rows = endMessage.result.data;
                 const allFields = wsState.sourcesFields.concat(wsState.sampleFields);
 
@@ -109,6 +113,7 @@ describe('Search', function () {
 
         filtersClient.getAll(sessionId, (error, response) => {
             const filters = ClientBase.readBodyWithCheck(error, response);
+            assert(validator.getValidateWsUiGetFilters(filters));
 
             viewsClient.getAll(sessionId, (error, response) => {
                 const views = ClientBase.readBodyWithCheck(error, response);

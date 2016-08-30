@@ -1,5 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "ws-ui-schema/base_json/filter#",
 	"title": "One filter",
 	"type": "object",
 	"properties": {
@@ -23,10 +24,10 @@
 			"type": "string"
 		},
 		"rules": {
-			"type": "string",
+			"type": "object",
 			"description": "A JSON object with rules needed by the UI for this filter."
 		},
-		"is_copy_disabled": {
+		"isCopyDisabled": {
 			"type": "boolean",
 			"description": "If true, user should not be allowed to copy the filter on UI."
 		}
@@ -36,6 +37,6 @@
 		"name",
 		"type",
 		"rules",
-		"is_copy_disabled"
+		"isCopyDisabled"
 	]
 }

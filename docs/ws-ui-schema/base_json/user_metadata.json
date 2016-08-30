@@ -1,5 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "ws-ui-schema/base_json/user_metadata#",
 	"title": "User",
 	"type": "object",
 	"properties": {
@@ -23,5 +24,13 @@
 		"number_paid_samples": {
 			"type": "integer"
 		}
-	}
+	},
+	"required": [
+		"name",
+		"last_name",
+		"email",
+		"speciality",
+		"language",
+		"number_paid_samples"
+	]
 }

@@ -1,9 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "id":"ws-ui-schema/WS-UI/get_saved_files_answer#",
   "title": "Answer to the get_saved_files request.",
-  "id": {
-    "type":"string"
-  },
   "name": {
     "type":"string",
     "maxLength": 50

@@ -11,6 +11,7 @@ const Urls = require('./utils/Urls');
 const SessionsClient = require('./utils/SessionsClient');
 const FiltersClient = require('./utils/FiltersClient');
 const ClientBase = require('./utils/ClientBase');
+const JsonValidator = require('../utils/JsonValidator');
 
 const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
@@ -21,6 +22,8 @@ const languId = Config.defaultLanguId;
 const TestUser = {
     userEmail: 'valarievaughn@electonic.com'
 };
+
+const validator = new JsonValidator();
 
 const UnknownFilterId = Uuid.v4();
 
@@ -48,6 +51,7 @@ describe('Filters', () => {
         it('should get all filters', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 assert.ok(Array.isArray(filters));
                 _.each(filters, filter => checkFilter(filter));
@@ -58,11 +62,13 @@ describe('Filters', () => {
         it('should get existing filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 const firstFilter = filters[0];
 
                 filtersClient.get(sessionId, firstFilter.id, (error, response) => {
                     const filter = ClientBase.readBodyWithCheck(error, response);
+                    assert(validator.getValidateWsUiFilter(filter));
                     assert.ok(filter);
                     checkFilter(filter);
                     done();
@@ -73,6 +79,7 @@ describe('Filters', () => {
         it('should create and update existing user filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 const filter = filters[0];
                 filter.name = 'Test Filter ' + Uuid.v4();
@@ -106,6 +113,7 @@ describe('Filters', () => {
         it('should fail to update or delete non-user filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 const nonUserFilter = _.find(filters, filter => filter.type !== ENTITY_TYPES.USER);
                 assert.ok(nonUserFilter, 'Cannot find any non-user filter');
@@ -128,6 +136,7 @@ describe('Filters', () => {
                 assert.ifError(error);
                 assert.equal(response.status, HttpStatus.OK);
                 const filters = response.body;
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 const filter = filters[0];
                 filter.name = 'Test Filter ' + Uuid.v4();
@@ -149,6 +158,7 @@ describe('Filters', () => {
                         // It should not return with all user filters.
                         filtersClient.getAll(sessionId, (error, response) => {
                             const filters = ClientBase.readBodyWithCheck(error, response);
+                            assert(validator.getValidateWsUiGetFilters(filters));
                             assert.ok(!_.some(filters, f => f.id == addedFilter.id));
 
                             // It should be possible to retrieve it by id (history support).
@@ -175,6 +185,7 @@ describe('Filters', () => {
         it('should fail to create filter with empty name', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 const filter = filters[0];
                 filter.name = '';
@@ -190,6 +201,7 @@ describe('Filters', () => {
         it('should fail to add filter with existing name', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 const filter = filters[0];
 
@@ -204,6 +216,7 @@ describe('Filters', () => {
         it('should fail to add filter with existing name with leading and trailing spaces', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 const filter = filters[0];
                 filter.name = ' ' + filter.name + ' ';
@@ -228,6 +241,7 @@ describe('Filters', () => {
                 assert.ifError(error);
                 assert.equal(response.status, HttpStatus.OK);
                 const filters = response.body;
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 const filter = filters[0];
                 filter.name = 'Test Filter ' + Uuid.v4();
@@ -245,6 +259,7 @@ describe('Filters', () => {
                     // Now it should return.
                     filtersClient.getAll(sessionId, (error, response) => {
                         const filters = ClientBase.readBodyWithCheck(error, response);
+                        assert(validator.getValidateWsUiGetFilters(filters));
                         assert.ok(_.some(filters, f => f.id === addedFilter.id));
                         assert.ok(_.some(filters, f => f.description === filter.description));
 

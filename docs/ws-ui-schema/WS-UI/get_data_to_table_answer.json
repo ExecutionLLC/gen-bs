@@ -1,5 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "ws-ui-schema/WS-UI/get_data_to_table_answer#",
 	"description": "Answer to API request for the main table",
 	"type": "object",
 	"properties": {
@@ -73,7 +74,7 @@
 											"description": "Field identifier."
 										},
 										"value": {
-											"type": "string",
+											"type": ["string", "integer", "number", "boolean"],
 											"description": "Field value"
 										}
 									}

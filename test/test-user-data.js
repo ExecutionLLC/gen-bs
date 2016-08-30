@@ -10,6 +10,7 @@ const SessionsClient = require('./utils/SessionsClient');
 const SamplesClient = require('./utils/SamplesClient');
 const DataClient = require('./utils/DataClient');
 const CollectionUtils = require('./utils/CollectionUtils');
+const JsonValidator = require('../utils/JsonValidator');
 
 const TestUser = require('./mocks/mock-users.json')[1];
 
@@ -18,6 +19,7 @@ const sessionsClient = new SessionsClient(urls);
 const dataClient = new DataClient(urls);
 
 const languId = Config.defaultLanguId;
+const validator = new JsonValidator();
 
 const checkUserData = (userData, isDemoUser, callback) => {
     if (!isDemoUser) {
@@ -27,6 +29,7 @@ const checkUserData = (userData, isDemoUser, callback) => {
         assert.equal(profile.name, TestUser.name);
         assert.equal(profile.id, TestUser.id);
     }
+    assert(validator.getValidateUserData(userData));
 
     // No session operations.
     const operations = userData.activeOperations;
@@ -94,7 +97,6 @@ describe('User Data', () => {
     it('should get user data in appropriate format', (done) => {
         dataClient.getUserData(sessionId, languId, (error, response) => {
             const userData = ClientBase.readBodyWithCheck(error, response);
-
             checkUserData(userData, false, () => {
                 done();
             });
@@ -104,7 +106,6 @@ describe('User Data', () => {
     it('should get demo user data', (done) => {
         dataClient.getUserData(demoSessionId, languId, (error, response) => {
             const userData = ClientBase.readBodyWithCheck(error, response);
-
             checkUserData(userData, true, () => {
 
                 done();

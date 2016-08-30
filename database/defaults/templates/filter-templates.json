@@ -3,7 +3,7 @@
     "name": "Test Filter",
     "description": "Test filter description",
     "type": "standard",
-    "is_copy_disabled": false,
+    "isСopyDisabled": false,
     "rules": {
       "$or": [
         {
@@ -47,7 +47,7 @@
     "name": "Another Test Filter",
     "description": "Test filter description v2",
     "type": "advanced",
-    "is_copy_disabled": false,
+    "isСopyDisabled": false,
     "rules": {
       "$or": [
         {

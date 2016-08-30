@@ -1,5 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "ws-ui-schema/base_json/keyword#",
 	"title": "Keyword Title",
 	"type": "object",
 	"properties": {

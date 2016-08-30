@@ -1,24 +1,16 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id":"ws-ui-schema/WS-UI/get_user_data#",
 	"title": "User",
 	"type": "object",
 	"properties": {
-		"id": {
-			"type": "number"
-		},
-		"profile_metadata": {
-			"$ref": "../base_json/user_metadata.json#"
+		"profileMetadata": {
+			"$ref": "../base_json/user_metadata#"
 		},
 		"samples": {
 			"type": "array",
 			"items": {
-				"$ref": "../base_json/sample_metadata.json#"
-			}
-		},
-		"mutation_comments": {
-			"type": "array",
-			"items": {
-				"$ref": "../base_json/commentary.json#"
+				"$ref": "../base_json/sample_metadata#"
 			}
 		},
 		"filters": {
@@ -26,7 +18,7 @@
 			"minItems": 1,
 			"uniqueItems": true,
 			"items": {
-				"$ref": "../base_json/filter.json#"
+				"$ref": "../base_json/filter#"
 			}
 		},
 		"views": {
@@ -34,23 +26,29 @@
 			"minItems": 1,
 			"uniqueItems": true,
 			"items": {
-				"$ref": "../base_json/view.json#"
+				"$ref": "../base_json/view#"
 			}
 		},
-		"saved_files": {
+		"savedFiles": {
 			"type": "array",
 			"items": {
-				"$ref": "../WS_AS/save_file.json#"
+				"$ref": "../UI-WS/save_file#"
 			}
 		},
-		"queries_history": {
+		"queriesHistory": {
 			"type": "array",
 			"uniqueItems": true,
 			"items": {
-				"$ref": "../base_json/query_history.json#"
+				"$ref": "../base_json/query_history#"
 			}
 		},
-		"active_operations": {
+		"totalFields":{
+			"type": "array",
+			"items": {
+				"$ref": "../base_json/field_metadata#"
+			}
+		},
+		"activeOperations": {
 			"type": "array",
 			"description": "Array of active operations for the session specified in the request header.",
 			"items": {
@@ -70,13 +68,16 @@
 					}
 				}
 			}
-		},
-		"number_paid_samples": {
-			"type": "integer"
 		}
 	},
 	"required": [
-		"id",
-		"number_paid_samples"
+		"profileMetadata",
+		"views",
+		"filters",
+		"samples",
+		"queryHistory",
+		"savedFiles",
+		"totalFields",
+		"activeOperations"
 	]
 }

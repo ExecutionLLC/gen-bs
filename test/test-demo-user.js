@@ -14,6 +14,8 @@ const FiltersClient = require('./utils/FiltersClient');
 const ViewsClient = require('./utils/ViewsClient');
 const SamplesClient = require('./utils/SamplesClient');
 const CollectionUtils = require('./utils/CollectionUtils');
+const JsonValidator = require('../utils/JsonValidator');
+
 
 const languId = Config.defaultLanguId;
 
@@ -22,6 +24,7 @@ const sessionsClient = new SessionsClient(urls);
 const viewsClient = new ViewsClient(urls);
 const filtersClient = new FiltersClient(urls);
 const samplesClient = new SamplesClient(urls);
+const validator = new JsonValidator();
 
 const closeSessionWithCheck = (sessionId, done) => {
     sessionsClient.closeSession(sessionId, (error, response) => {
@@ -68,6 +71,7 @@ describe('Demo Users', () => {
         it('should be able to get filters', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
                 assert.ok(filters);
                 CollectionUtils.checkCollectionIsValid(filters, null, true, true);
 
@@ -113,6 +117,8 @@ describe('Demo Users', () => {
         it('should fail to create filter', (done) => {
             filtersClient.getAll(sessionId, (error, response) => {
                 const filters = ClientBase.readBodyWithCheck(error, response);
+                assert(validator.getValidateWsUiGetFilters(filters));
+
                 const originalFilter = filters[0];
                 const filterToUpdate = _.cloneDeep(originalFilter);
                 filterToUpdate.id = null;

@@ -20,7 +20,7 @@
         "user"
       ]
     },
-    "is_copy_disabled": {
+    "isСopyDisabled": {
       "type": "boolean",
       "description": "If true, user should not be allowed to copy the filter"
     },
