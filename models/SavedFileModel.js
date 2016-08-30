@@ -88,8 +88,8 @@ class SavedFileModel extends SecureModelBase {
     _insertFileMetadata(userId, languId, fileMetadata, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
-                if (!fileMetadata.filterIds) {
-                    callback(new Error('No filters specified for the exported file.'));
+                if (!fileMetadata.analysisId) {
+                    callback(new Error('No analysis specified for the exported file.'));
                 } else {
                     callback(null);
                 }
