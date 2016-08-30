@@ -135,6 +135,6 @@ export default class Urls {
     }
 
     queryHistoryUrls() {
-        return new CollectionUrls('/analyse', this.httpScheme, this.host, this.port);
+        return new CollectionUrls('/analysis', this.httpScheme, this.host, this.port);
     }
 }

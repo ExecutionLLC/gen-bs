@@ -668,12 +668,17 @@ export default class AnalysisRightPane extends React.Component {
     onAnalysisNameChange(name) {
         console.log('onAnalysisNameChange', name);
         this.props.dispatch(this.actionEdit({name: name}));
-        this.props.dispatch(updateQueryHistoryItem(this.props.historyItem));
+        if (this.props.historyItem.id) {
+            this.props.dispatch(updateQueryHistoryItem(this.props.historyItem));
+        }
     }
 
     onAnalysisDescriptionChange(description) {
         console.log('onAnalysisDescriptionChange', description);
-        this.props.dispatch(this.actionEdit({description: description})); // TODO: need to dispatch updateQueryHistoryItem?
+        this.props.dispatch(this.actionEdit({description: description}));
+        if (this.props.historyItem.id) {
+            this.props.dispatch(updateQueryHistoryItem(this.props.historyItem));
+        }
     }
 
     onUseActionVersionsToggle(use) {
@@ -700,7 +705,7 @@ export default class AnalysisRightPane extends React.Component {
             filterId: historyItem.filterId,
             modelId: historyItem.modelId
         })).then((analysis) => {
-            if (isEditing) {
+            if (isEditing && analysis) {
                 dispatch(cancelQueryHistoryEdit());
                 dispatch(addQueryHistory(analysis));
             }
