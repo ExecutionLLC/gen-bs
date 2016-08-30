@@ -85,24 +85,45 @@
   },
   {
     "field": {
-      "name": "VEP_cDNA_position",
+      "name": "VEP_cDNA_position_0",
       "source_name": "sample"
     },
-    "label": "cDNA position"
+    "label": "cDNA position start"
   },
   {
     "field": {
-      "name": "VEP_CDS_position",
+      "name": "VEP_cDNA_position_1",
       "source_name": "sample"
     },
-    "label": "CDS position"
+    "label": "cDNA position stop"
   },
   {
     "field": {
-      "name": "VEP_Protein_position",
+      "name": "VEP_CDS_position_0",
       "source_name": "sample"
     },
-    "label": "Protein position"
+    "label": "CDS position start"
+  },
+  {
+    "field": {
+      "name": "VEP_CDS_position_1",
+      "source_name": "sample"
+    },
+    "label": "CDS position stop"
+  },
+  {
+    "field": {
+      "name": "VEP_Protein_position_0",
+      "source_name": "sample"
+    },
+    "label": "Protein position start"
+  },
+  {
+    "field": {
+      "name": "VEP_Protein_position_1",
+      "source_name": "sample"
+    },
+    "label": "Protein position stop"
   },
   {
     "field": {
@@ -305,7 +326,7 @@
       "name": "VEP_MOTIF_POS",
       "source_name": "sample"
     },
-    "label": "TFBS position"
+    "label": "TFBS  position"
   },
   {
     "field": {
@@ -400,255 +421,129 @@
   },
   {
     "field": {
-      "name": "VEP_GMAF_0",
+      "name": "VEP_GMAF",
       "source_name": "sample"
     },
     "label": "Allele_GMAF"
   },
   {
     "field": {
-      "name": "VEP_GMAF_1",
-      "source_name": "sample"
-    },
-    "label": "1KG MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_AFR_MAF_0",
+      "name": "VEP_AFR_MAF",
       "source_name": "sample"
     },
     "label": "Allele_AFR_MAF"
   },
   {
     "field": {
-      "name": "VEP_AFR_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "1KG African MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_AMR_MAF_0",
+      "name": "VEP_AMR_MAF",
       "source_name": "sample"
     },
     "label": "Allele_AMR_MAF"
   },
   {
     "field": {
-      "name": "VEP_AMR_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "1KG American MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ASN_MAF_0",
+      "name": "VEP_ASN_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ASN_MAF"
   },
   {
     "field": {
-      "name": "VEP_ASN_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "1KG Asian MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_EUR_MAF_0",
+      "name": "VEP_EUR_MAF",
       "source_name": "sample"
     },
     "label": "Allele_EUR_MAF"
   },
   {
     "field": {
-      "name": "VEP_EUR_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "1KG European MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_EAS_MAF_0",
+      "name": "VEP_EAS_MAF",
       "source_name": "sample"
     },
     "label": "Allele_EAS_MAF"
   },
   {
     "field": {
-      "name": "VEP_EAS_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "1KG East Asian MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_SAS_MAF_0",
+      "name": "VEP_SAS_MAF",
       "source_name": "sample"
     },
     "label": "Allele_SAS_MAF"
   },
   {
     "field": {
-      "name": "VEP_SAS_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "1KG South Asian MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_AA_MAF_0",
+      "name": "VEP_AA_MAF",
       "source_name": "sample"
     },
     "label": "Allele_AA_MAF"
   },
   {
     "field": {
-      "name": "VEP_AA_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ESP African American MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_EA_MAF_0",
+      "name": "VEP_EA_MAF",
       "source_name": "sample"
     },
     "label": "Allele_EA_MAF"
   },
   {
     "field": {
-      "name": "VEP_EA_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ESP European American MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_MAF_0",
+      "name": "VEP_ExAC_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_MAF"
   },
   {
     "field": {
-      "name": "VEP_ExAC_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_Adj_MAF_0",
+      "name": "VEP_ExAC_Adj_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_Adj_MAF"
   },
   {
     "field": {
-      "name": "VEP_ExAC_Adj_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC adjusted MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_AFR_MAF_0",
+      "name": "VEP_ExAC_AFR_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_AFR_MAF"
   },
   {
     "field": {
-      "name": "VEP_ExAC_AFR_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC African MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_AMR_MAF_0",
+      "name": "VEP_ExAC_AMR_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_AMR_MAF"
   },
   {
     "field": {
-      "name": "VEP_ExAC_AMR_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC American MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_EAS_MAF_0",
+      "name": "VEP_ExAC_EAS_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_EAS_MAF"
   },
   {
     "field": {
-      "name": "VEP_ExAC_EAS_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC East Asian MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_FIN_MAF_0",
+      "name": "VEP_ExAC_FIN_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_FIN_MAF"
   },
   {
     "field": {
-      "name": "VEP_ExAC_FIN_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC Finnish MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_NFE_MAF_0",
+      "name": "VEP_ExAC_NFE_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_NFE_MAF"
   },
   {
     "field": {
-      "name": "VEP_ExAC_NFE_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC non-Finnish Europeans MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_OTH_MAF_0",
+      "name": "VEP_ExAC_OTH_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_OTH_MAF"
   },
   {
     "field": {
-      "name": "VEP_ExAC_OTH_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC other pops MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_SAS_MAF_0",
+      "name": "VEP_ExAC_SAS_MAF",
       "source_name": "sample"
     },
     "label": "Allele_ExAC_SAS_MAF"
-  },
-  {
-    "field": {
-      "name": "VEP_ExAC_SAS_MAF_1",
-      "source_name": "sample"
-    },
-    "label": "ExAC South Asian MAF"
   },
   {
     "field": {

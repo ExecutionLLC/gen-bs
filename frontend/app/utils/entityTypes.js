@@ -1,6 +1,7 @@
 export const entityType = {
     USER: 'user',
     STANDARD: 'standard',
+    DEFAULT: 'default',
     ADVANCED: 'advanced',
     HISTORY: 'history'
 };
