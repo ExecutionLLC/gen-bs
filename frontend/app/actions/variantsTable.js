@@ -279,11 +279,12 @@ export function fetchVariants(searchParams) {
                         dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
                         reject();
                     } else {
-                        const {operationId} = response.body;
+                        const result = response.body;
+                        const {operationId} = result;
                         dispatch(receiveAnalysisOperationId(operationId));
                         const state = getState();
                         dispatch(changeExcludedFields(state.websocket.variantsView.id));
-                        resolve(response.body);
+                        resolve(result);
                     }
                 }
             );
