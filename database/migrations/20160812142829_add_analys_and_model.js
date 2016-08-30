@@ -199,8 +199,8 @@ function updateSavedFileColumnsAndTables(knex, Promise) {
             table.dropColumn('genotype_version_id');
             table.uuid('analysis_id')
                 .references('id')
-                .notNullable()
-                .inTable('analysis');
+                .inTable('analysis')
+                .notNullable();
         })
         .dropTable('saved_file_filter');
 }
