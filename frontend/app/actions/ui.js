@@ -88,7 +88,7 @@ export function analyze(searchParams) {
         dispatch(setViewVariantsSort(searchView));
         return new Promise((resolve, reject) => {
             dispatch(fetchVariants(searchParamsLO)).then((result) => {
-                dispatch(changeExcludedFields(searchParams.viewId));
+                dispatch(changeExcludedFields(searchView));
                 resolve(result.analysis);
             }).catch((error) => reject(error));
         });

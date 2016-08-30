@@ -77,10 +77,9 @@ export function clearSearchParams() {
     };
 }
 
-export function changeExcludedFields(viewId) {
+export function changeExcludedFields(view) {
     return (dispatch, getState) => {
-        const {fields:{sampleFieldsHashedArray: {array: sampleFieldsList}}, viewsList:{hashedArray: {hash: viewIdToViewHash}}}=getState();
-        const view = viewIdToViewHash[viewId];
+        const {fields:{sampleFieldsHashedArray: {array: sampleFieldsList}}}=getState();
         const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
         const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);
         const viewFieldIds = _.map(view.viewListItems, viewItem =>viewItem.fieldId);
