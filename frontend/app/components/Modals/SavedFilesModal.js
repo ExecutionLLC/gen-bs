@@ -81,7 +81,7 @@ class SavedFilesModal extends DialogBase {
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
-                <td>{_.map(samples, (sample) => sample.name).join(', ')}</td>
+                <td>{_.map(samples, (sample) => sample.fileName).join(', ')}</td>
                 <td>{filter.name}</td>
                 <td>{view.name}</td>
                 <td>{model && model.name || ''}</td>
