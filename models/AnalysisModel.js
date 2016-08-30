@@ -80,11 +80,11 @@ class AnalysisModel extends SecureModelBase {
                         updateAnalysisData,
                         trx,
                         (error) => {
-                            callback(error, null)
+                            callback(error, analysisId)
                         }
                     )
                 },
-                (callback) => {
+                (analysisId, callback) => {
                     const updateAnalysisTextData = {
                         name,
                         description
@@ -106,8 +106,8 @@ class AnalysisModel extends SecureModelBase {
 
     _unsafeTextDataUpdate(analysisId, languageId, updateAnalysisTextData, trx, callback) {
         trx(TableNames.AnalysisText)
-            .where('analysisId', analysisId)
-            .andWhere('languId', languageId)
+            .where('analysis_id', analysisId)
+            .andWhere('langu_id', languageId)
             .update(ChangeCaseUtil.convertKeysToSnakeCase(updateAnalysisTextData))
             .asCallback(
                 (error) => callback(error, analysisId)
@@ -319,7 +319,8 @@ class AnalysisModel extends SecureModelBase {
             modelId,
             timestamp,
             lastQueryDate,
-            type
+            type,
+            languId
         } = camelcaseAnalysis[0];
 
         const sortedAnalyses = _.orderBy(camelcaseAnalysis, ['order'], ['asc']);
@@ -343,7 +344,8 @@ class AnalysisModel extends SecureModelBase {
             createdDate: timestamp,
             lastQueryDate,
             type,
-            samples
+            samples,
+            languId
         }
     }
 }
