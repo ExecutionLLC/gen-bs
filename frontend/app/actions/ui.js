@@ -80,14 +80,14 @@ export function analyze(searchParams) {
         dispatch(requestTableScrollPositionReset());
         dispatch(clearSearchParams());
         dispatch(requestAnalyze());
-        const searchView = viewIdToViewHash[searchParams.viewId];
-        const searchSamples = _.map(searchParams.samples, (sample) => sampleIdToSampleHash[sample.id]);
-        const searchFilter = filterIdToFilterHash[searchParams.filterId];
-        const searchModel = searchParams.modelId && modelIdToFilterHash[searchParams.modelId] || null;
-        dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList));
-        dispatch(setViewVariantsSort(searchView));
         return new Promise((resolve, reject) => {
             dispatch(fetchVariants(searchParamsLO)).then((result) => {
+                const searchView = viewIdToViewHash[searchParams.viewId];
+                const searchSamples = _.map(searchParams.samples, (sample) => sampleIdToSampleHash[sample.id]);
+                const searchFilter = filterIdToFilterHash[searchParams.filterId];
+                const searchModel = searchParams.modelId && modelIdToFilterHash[searchParams.modelId] || null;
+                dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList));
+                dispatch(setViewVariantsSort(searchView));
                 dispatch(changeExcludedFields(searchView));
                 resolve(result.analysis);
             }).catch((error) => reject(error));
