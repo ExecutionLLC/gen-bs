@@ -154,21 +154,6 @@ export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, of
     };
 }
 
-export function updateQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
-    return (dispatch, getState) => {
-        const {ui: {language}} = getState();
-        queryHistoryClient.getQueryHistory(language, filter, limit, offset, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
-            } else if (response.status !== HttpStatus.OK) {
-                dispatch(handleError(null, HISTORY_SERVER_ERROR));
-            } else {
-                dispatch(receiveQueryHistory(response.body.result));
-            }
-        });
-    };
-}
-
 export function updateQueryHistoryItem(historyItemId) {
     return (dispatch, getState) => {
         const {history} = getState().queryHistory;
