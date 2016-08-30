@@ -40,7 +40,7 @@ class ModelsModel extends SecureModelBase {
 
     findMany(userId, modelIds, callback) {
         this.db.transactionally((trx, callback) => {
-            this._findFilters(trx, modelIds, userId, false, false, callback);
+            this._findModels(trx, modelIds, userId, false, false, callback);
         }, callback);
     }
 

@@ -36,6 +36,10 @@ class AnalysisModel extends SecureModelBase {
         this._findAnalysisById(userId, analysisId, callback)
     }
 
+    findMany(userId, analysisIds, callback) {
+        this._findAnalysisByIds(userId, analysisIds, callback);
+    }
+
     findAll(userId, limit, offset, nameFilter, descriptionFilter, callback) {
         async.waterfall(
             [
