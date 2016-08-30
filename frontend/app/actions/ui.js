@@ -86,10 +86,11 @@ export function analyze(searchParams) {
                 const searchSamples = _.map(searchParams.samples, (sample) => sampleIdToSampleHash[sample.id]);
                 const searchFilter = filterIdToFilterHash[searchParams.filterId];
                 const searchModel = searchParams.modelId && modelIdToFilterHash[searchParams.modelId] || null;
-                dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList));
+                const searchAnalysis = result.analysis;
+                dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList, searchAnalysis));
                 dispatch(setViewVariantsSort(searchView));
                 dispatch(changeExcludedFields(searchView));
-                resolve(result.analysis);
+                resolve(searchAnalysis);
             }).catch((error) => reject(error));
         });
     };

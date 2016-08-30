@@ -35,8 +35,9 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             websocket: {
                 variantsView,
                 variantsSamples,
-                variantsFilter
+                variantsFilter,
                 // TODO variantsModel
+                variantsAnalysis
             }
         } = getState();
         const fileMetadata = {
@@ -44,6 +45,7 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
             viewId: variantsView.id,
             filterIds: [variantsFilter.id], // TODO variantsFilter.id,
             // TODO modelId: variantsModel && variantsModel.id || null,
+            analysisId: variantsAnalysis.id,
             name: fileName,
             url: null,
             totalResults
