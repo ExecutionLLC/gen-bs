@@ -3,6 +3,10 @@
 const fs = require('fs');
 const _ = require('lodash');
 
+const fieldNamePrefix = 'INFO';
+const sourceName = 'dbsnp_20160601_v01';
+const outputFile = `out__${sourceName}.json`;
+
 const columnStrings = fs.readFileSync(__dirname + '/columns.txt')
     .toString()
     .split('column name:')
@@ -76,8 +80,8 @@ function cutQuotes(strOrArray) {
 function createColumnObject(fieldName, label) {
     return {
         field: {
-            name: `INFO_${fieldName}`,
-            source_name: 'dbsnp_20160601_v01'
+            name: `${fieldNamePrefix}_${fieldName}`,
+            source_name: sourceName
         },
         label: cutQuotes(label)
     };
@@ -86,15 +90,20 @@ function createColumnObject(fieldName, label) {
 const labels = columns.reduce((result, col) => {
     const {fieldName, params: { name: label }} = col;
     if (_.isArray(label)) {
-        label.map((l, index) => createColumnObject(`${fieldName}_${index}`, l))
-            .forEach(columnObject => result.push(columnObject));
+        // TODO: Now MAF fields are not split, but the labels are written as if they are.
+        // Therefore get only the first value for MEF fields
+        if (fieldName.endsWith('MAF')) {
+            const columnObject = createColumnObject(fieldName, label[0]);
+            return [...result, columnObject];
+        } else {
+            return [...result, label.map((l, index) => createColumnObject(`${fieldName}_${index}`, l))];
+        }
     } else {
         const columnObject = createColumnObject(fieldName, label);
-        result.push(columnObject);
+        return [...result, columnObject];
     }
-    return result;
 }, []);
-fs.writeFileSync(__dirname + '/out__dbsnp_20160601_v01.json', JSON.stringify(labels, null, 2));
+fs.writeFileSync(__dirname + `/${outputFile}`, JSON.stringify(labels, null, 2));
 
 console.log('Parsing completed.');
 process.exit(0);

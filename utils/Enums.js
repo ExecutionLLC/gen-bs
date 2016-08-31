@@ -20,7 +20,8 @@ const SEARCH_SERVICE_EVENTS = createEnum({
 const ENTITY_TYPES = createEnum({
     STANDARD: 'standard',
     ADVANCED: 'advanced',
-    USER: 'user'
+    USER: 'user',
+    DEFAULT: 'default'
 });
 
 const MODEL_TYPES = createEnum({
@@ -37,7 +38,11 @@ const ANALYSIS_TYPES = createEnum({
 /**
  * Types which default elements can have.
  * */
-ENTITY_TYPES.defaultTypes = [ENTITY_TYPES.STANDARD, ENTITY_TYPES.ADVANCED];
+ENTITY_TYPES.defaultTypes = [
+    ENTITY_TYPES.DEFAULT,
+    ENTITY_TYPES.STANDARD,
+    ENTITY_TYPES.ADVANCED
+];
 
 const WS_INSTANCE_MESSAGE_TYPES = createEnum({
     RABBIT_CONNECTION_LOST: 'rabbit_connection_lost',
