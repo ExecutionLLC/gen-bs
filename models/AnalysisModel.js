@@ -201,7 +201,8 @@ class AnalysisModel extends SecureModelBase {
             viewId,
             filterId,
             modelId,
-            type
+            type,
+            lastQueryDate: new Date()
         };
     }
 

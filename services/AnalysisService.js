@@ -55,7 +55,8 @@ class AnalysisService extends UserEntityServiceBase {
                     (analysys, callback) => {
                         const newAnalysis = Object.assign({}, analysys, {
                             name: item.name,
-                            description: item.description
+                            description: item.description,
+                            lastQueryDate: item.lastQueryDate
                         });
                         super.update(user, newAnalysis, callback)
                     }
