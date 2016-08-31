@@ -124,12 +124,12 @@ export default function websocket(state = {
             });
         case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {
-                variantsView: action.view, // used !variantsView, variantsView.viewListItems, variantsView.id,
-                variantsSamples: action.samples, // used variantsSample.fileName
+                variantsView: action.view, // used variantsView.viewListItems (if variantsView) at exportToFile, VariantsTableHead, VariantsTableRows
+                variantsSamples: action.samples, // used variantsSample.fileName at exportToFile
                 variantsFilter: action.filter, // unused
                 variantsModel: action.model, // unused
-                variantsSampleFieldsList: action.sampleFields, // used to check if field is requested
-                variantsAnalysis: action.analysis
+                variantsSampleFieldsList: action.sampleFields, // used to check if field is requested at VariantsTableHead
+                variantsAnalysis: action.analysis // used variantsAnalysis.id at saveExportedFileToServer
             });
         }
 

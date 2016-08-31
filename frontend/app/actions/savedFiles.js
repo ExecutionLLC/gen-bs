@@ -33,21 +33,12 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
                 language
             },
             websocket: {
-                variantsView,
-                variantsSamples,
-                variantsFilter,
-                // TODO variantsModel
                 variantsAnalysis
             }
         } = getState();
         const fileMetadata = {
-            sampleId: variantsSamples[0].id, // TODO samplesIds: variantsSamples,
-            viewId: variantsView.id,
-            filterIds: [variantsFilter.id], // TODO variantsFilter.id,
-            // TODO modelId: variantsModel && variantsModel.id || null,
             analysisId: variantsAnalysis.id,
             name: fileName,
-            url: null,
             totalResults
         };
         savedFilesClient.add(language, fileMetadata, fileBlob, (error, response) => {
