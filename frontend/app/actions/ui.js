@@ -4,7 +4,6 @@ import {
     setViewVariantsSort,
     changeExcludedFields
 } from './variantsTable';
-//import {handleError} from './errorHandler';
 import * as _ from 'lodash';
 
 
@@ -12,8 +11,6 @@ export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
 
 export const REQUEST_TABLE_SCROLL_POSITION_RESET = 'REQUEST_TABLE_SCROLL_POSITION_RESET';
 export const COMPLETE_TABLE_SCROLL_POSITION_RESET = 'COMPLETE_TABLE_SCROLL_POSITION_RESET';
-
-//const ANALIZE_PARAMS_ERROR = 'Cannot start analysis process with empty parameters.';
 
 
 export function requestTableScrollPositionReset() {
@@ -38,11 +35,6 @@ export function completeTableScrollPositionReset() {
  */
 export function analyze(searchParams) {
     return (dispatch, getState) => {
-        // TODO validate params
-        // if (!searchParams.samples || !searchParams.viewId || !searchParams.filterId) {
-        //     dispatch(handleError(null, ANALIZE_PARAMS_ERROR));
-        //     return;
-        // }
         const {
             samplesList: {
                 hashedArray: {hash: sampleIdToSampleHash}
