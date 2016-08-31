@@ -9,6 +9,7 @@ import {filtersListSetHistoryFilter} from '../../../actions/filtersList';
 import {viewsListSetHistoryView} from '../../../actions/viewsList';
 import apiFacade from '../../../api/ApiFacade';
 import {samplesListSetHistorySamples} from '../../../actions/samplesList';
+import {modelsListSetHistoryModel} from '../../../actions/modelsList';
 
 
 export default class AnalysisBody extends React.Component {
@@ -148,7 +149,7 @@ export default class AnalysisBody extends React.Component {
                 });
             }
         }).then((model) => {
-            // this.props.dispatch(filtersListSetHistoryFilter(filter)); // TODO replace by 'set history model'
+            this.props.dispatch(modelsListSetHistoryModel(model));
             return new Promise((resolve) => {
                 getSamples(samplesIds, resolve);
             });
