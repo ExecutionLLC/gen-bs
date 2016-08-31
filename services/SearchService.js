@@ -82,6 +82,10 @@ class SearchService extends ServiceBase {
                     (callback) => {
                         this.services.analysis.find(user, id, callback);
                     },
+                    (analysis, callback) =>{
+                        analysis.lastQueryDate = new Date();
+                        this.services.analysis.update(user, analysis, callback);
+                    },
                     (analysis, callback) => {
                         const {samples, modelId, viewId, filterId} = analysis;
                         this._sendSearchRequest(
