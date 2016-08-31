@@ -1,10 +1,10 @@
+import _ from 'lodash';
 import React from 'react';
 import classNames from 'classnames';
 
 import ComponentBase from '../shared/ComponentBase';
 
 import VariantsTableComment from './VariantsTableComment';
-import * as _ from 'lodash';
 
 
 export default class VariantsTableRow extends ComponentBase {
