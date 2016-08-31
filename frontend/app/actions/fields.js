@@ -36,7 +36,10 @@ export function fetchFields(sampleId) {
         if (sample) {
             const sampleValues = sample.values;
             const sampleFields = sampleValues.reduce(
-                (sampleFieldsList, {fieldId}) => [...sampleFieldsList, totalFieldsHash[fieldId]],
+                (sampleFieldsList, {fieldId}) => {
+                    sampleFieldsList.push(totalFieldsHash[fieldId]);
+                    return sampleFieldsList;
+                },
                 []
             );
             dispatch(receiveFields(sampleFields));
