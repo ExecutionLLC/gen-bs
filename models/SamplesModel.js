@@ -429,13 +429,12 @@ class SamplesModel extends SecureModelBase {
             .from(SampleTableNames.Versions)
             .where('id', genotypeVersionId)
             .orderBy('timestamp', 'desc')
-            .limit(1)
             .map(item => ChangeCaseUtil.convertKeysToCamelCase(item).sampleGenotypeId)
             .then((genotypeIds) => {
                 if (_.isEmpty(genotypeIds)) {
                     return Promise.reject(new Error(`Genotype version is not found: ${genotypeVersionId}`))
                 } else {
-                    return _.first(genotypeIds);
+                    return genotypeIds[0];
                 }
             })
             .asCallback((error, sampleGenotypeId) => callback(error, sampleGenotypeId));
