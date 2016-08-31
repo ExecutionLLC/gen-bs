@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import async from 'async';
 
 import React from 'react';
 import {Modal} from 'react-bootstrap';
@@ -108,63 +107,55 @@ export default class AnalysisBody extends React.Component {
             getNextSample(samplesIds, 0, []);
         }
 
-        async.waterfall([
-            (callback) => {this.props.dispatch(toggleLoadingHistoryData(true)); callback(null);},
-            (callback) => {
-                const existentView = this.props.viewsList.hashedArray.hash[viewId];
-                if (existentView) {
-                    callback(null, existentView);
-                } else {
+        this.props.dispatch(toggleLoadingHistoryData(true));
+        new Promise((resolve) => {
+            const existentView = this.props.viewsList.hashedArray.hash[viewId];
+            if (existentView) {
+                resolve(existentView);
+                return existentView;
+            } else {
+                return new Promise((resolve) => {
                     apiFacade.viewsClient.get(viewId, (error, response) => {
-                        callback(null, response.body);
+                        resolve(response.body);
                     });
-                }
-            },
-            (view, callback) => {
-                this.props.dispatch(viewsListSetHistoryView(view));
-                callback(null);
-            },
-            (callback) => {
-                const existentFilter = this.props.filtersList.hashedArray.hash[filterId];
-                if (existentFilter) {
-                    callback(null, existentFilter);
-                } else {
+                });
+            }
+        }).then((view) => {
+            this.props.dispatch(viewsListSetHistoryView(view));
+            const existentFilter = this.props.filtersList.hashedArray.hash[filterId];
+            if (existentFilter) {
+                return existentFilter;
+            } else {
+                return new Promise((resolve) => {
                     apiFacade.filtersClient.get(filterId, (error, response) => {
-                        callback(null, response.body);
+                        resolve(response.body);
                     });
-                }
-            },
-            (filter, callback) => {
-                this.props.dispatch(filtersListSetHistoryFilter(filter));
-                callback(null);
-            },
-            (callback) => {
-                if (modelId == null) {
-                    callback(null, null);
-                    return;
-                }
-                const existentModel = this.props.modelsList.hashedArray.hash[modelId];
-                if (existentModel) {
-                    callback(null, existentModel);
-                } else {
+                });
+            }
+        }).then((filter) => {
+            this.props.dispatch(filtersListSetHistoryFilter(filter));
+            if (modelId == null) {
+                return null;
+            }
+            const existentModel = this.props.modelsList.hashedArray.hash[modelId];
+            if (existentModel) {
+                return existentModel;
+            } else {
+                return new Promise((resolve) => {
                     apiFacade.modelsClient.get(modelId, (error, response) => {
-                        callback(null, response.body);
+                        resolve(response.body);
                     });
-                }
-            },
-            (filter, callback) => {
-                // this.props.dispatch(filtersListSetHistoryFilter(filter)); // TODO replace by 'set history model'
-                callback(null);
-            },
-            (callback) => {
-                getSamples(samplesIds, (samples) => callback(null, samples));
-            },
-            (samples, callback) => {
-                this.props.dispatch(samplesListSetHistorySamples(samples));
-                callback(null);
-            },
-            (callback) => {this.props.dispatch(setCurrentQueryHistoryId(id)); callback(null); },
-            (callback) => {this.props.dispatch(toggleLoadingHistoryData(false)); callback(null);}
-        ]);
+                });
+            }
+        }).then((model) => {
+            // this.props.dispatch(filtersListSetHistoryFilter(filter)); // TODO replace by 'set history model'
+            return new Promise((resolve) => {
+                getSamples(samplesIds, resolve);
+            });
+        }).then((samples) => {
+            this.props.dispatch(samplesListSetHistorySamples(samples));
+            this.props.dispatch(setCurrentQueryHistoryId(id));
+            this.props.dispatch(toggleLoadingHistoryData(false));
+        });
     }
 }
