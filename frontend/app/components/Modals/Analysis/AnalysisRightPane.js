@@ -715,6 +715,8 @@ export default class AnalysisRightPane extends React.Component {
             if (isEditing && analysis) {
                 dispatch(cancelQueryHistoryEdit());
                 dispatch(addQueryHistory(analysis));
+            } else if (analysis) {
+                dispatch(editExistentQueryHistoryItem(analysis));
             }
         });
         dispatch(closeModal('analysis'));
