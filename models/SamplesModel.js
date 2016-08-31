@@ -178,14 +178,14 @@ class SamplesModel extends SecureModelBase {
         this.db.transactionally((trx, callback) => {
             async.waterfall([
                 (callback) => this._ensureVersionIsLatest(trx, sampleVersionId, callback),
-                (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
-                (sampleId, callback) => {
+                (callback) => this._findGenotypeIdByVersionId(trx, sampleVersionId, callback),
+                (genotypeId, callback) => {
                     const dataToUpdate = {
                         fileName: sampleToUpdate.fileName
                     };
-                    this._unsafeUpdate(sampleId, dataToUpdate, trx, (error) => callback(error, sampleId));
+                    this._unsafeUpdate(genotypeId, dataToUpdate, trx, (error) => callback(error, genotypeId));
                 },
-                (sampleId, callback) => this._addNewGenotypeVersion(sampleId, trx, callback),
+                (genotypeId, callback) => this._addNewGenotypeVersion(genotypeId, trx, callback),
                 (versionId, callback) => this._addGenotypeValues(trx, versionId, sampleToUpdate.values,
                     (error) => callback(error, versionId)),
                 (versionId, callback) => this._findManyInTransaction(trx, userId, [versionId], callback),
@@ -310,8 +310,8 @@ class SamplesModel extends SecureModelBase {
     _ensureVersionIsLatest(trx, sampleVersionId, callback) {
         // Find last version and compare with the specified.
         async.waterfall([
-            (callback) => this._findSampleIdByVersionId(trx, sampleVersionId, callback),
-            (sampleId, callback) => this._findLastVersionsByGenotypeIds(trx, [sampleId],
+            (callback) => this._findGenotypeIdByVersionId(trx, sampleVersionId, callback),
+            (genotypeId, callback) => this._findLastVersionsByGenotypeIds(trx, [genotypeId],
                 (error, lastVersions) => callback(error, _.first(lastVersions))),
             (version, callback) => {
                 if (version.versionId === sampleVersionId) {
@@ -424,22 +424,21 @@ class SamplesModel extends SecureModelBase {
         ], callback);
     }
 
-    _findSampleIdByVersionId(trx, sampleVersionId, callback) {
-        async.waterfall([
-            (callback) => trx.select('vcf_file_sample_id')
-                .from(SampleTableNames.Versions)
-                .where('id', sampleVersionId)
-                .orderBy('timestamp', 'desc')
-                .limit(1)
-                .asCallback((error, results) => callback(error, results)),
-            (results, callback) => this._toCamelCase(results, callback)
-        ], (error, results) => {
-            if (error || !results || !results.length) {
-                callback(error || new Error('Sample is not found:' + sampleVersionId));
-            } else {
-                callback(null, results[0].vcfFileSampleId);
-            }
-        });
+    _findGenotypeIdByVersionId(trx, genotypeVersionId, callback) {
+        trx.select('sample_genotype_id')
+            .from(SampleTableNames.Versions)
+            .where('id', genotypeVersionId)
+            .orderBy('timestamp', 'desc')
+            .limit(1)
+            .map(item => ChangeCaseUtil.convertKeysToCamelCase(item).sampleGenotypeId)
+            .then((genotypeIds) => {
+                if (_.isEmpty(genotypeIds)) {
+                    return Promise.reject(new Error(`Genotype version is not found: ${genotypeVersionId}`))
+                } else {
+                    return _.first(genotypeIds);
+                }
+            })
+            .asCallback((error, sampleGenotypeId) => callback(error, sampleGenotypeId));
     }
 
     _findSamplesMetadata(trx, userId, sampleIdsOrNull, shouldExcludeDeletedEntries, callback) {
