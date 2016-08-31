@@ -8,8 +8,8 @@ const _ = require('lodash');
 const async = require('async');
 const assert = require('assert');
 
-const ChangeCaseUtil = require('../utils/ChangeCaseUtil');
-const Config = require('../utils/Config');
+const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
+const Config = require('../../utils/Config');
 
 const labelTemplates = _([
     './templates/metadata/labels/required-fields-labels.json',

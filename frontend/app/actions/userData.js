@@ -104,9 +104,12 @@ export function fetchUserdata() {
                         modelId: historyItem.modelId
                     }));
                 } else {
-                    const sample = _.find(samples, {type: entityType.STANDARD});
-                    const filter = _.find(filters, {type: entityType.STANDARD});
-                    const view = _.find(views, {type: entityType.STANDARD});
+                    const sample = _.find(samples, {type: entityType.DEFAULT}) ||
+                                   _.find(samples, {type: entityType.STANDARD});
+                    const filter = _.find(filters, {type: entityType.DEFAULT}) ||
+                                   _.find(filters, {type: entityType.STANDARD});
+                    const view = _.find(views, {type: entityType.DEFAULT}) ||
+                                 _.find(views, {type: entityType.STANDARD});
                     if (!sample || !filter || !view) {
                         dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                     } else {
