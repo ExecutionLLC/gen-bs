@@ -12,9 +12,11 @@ import {
 } from '../../../actions/queryHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
-import {openModal} from '../../../actions/modalWindows';
+import {
+    openModal,
+    closeModal
+} from '../../../actions/modalWindows';
 import {analyze} from '../../../actions/ui';
-import {closeModal} from '../../../actions/modalWindows';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {fetchFields} from '../../../actions/fields';

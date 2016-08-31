@@ -1,9 +1,13 @@
-import {fetchVariants, clearSearchParams} from './variantsTable';
-import {requestAnalyze, requestSetCurrentParams} from './websocket';
 import {
+    fetchVariants,
+    clearSearchParams,
     setViewVariantsSort,
     changeExcludedFields
 } from './variantsTable';
+import {
+    requestAnalyze,
+    requestSetCurrentParams
+} from './websocket';
 import * as _ from 'lodash';
 
 

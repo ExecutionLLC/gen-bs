@@ -3,14 +3,16 @@ import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
-import {/*receiveFields, */receiveTotalFields} from './fields';
+import {
+    receiveTotalFields,
+    fetchFields
+} from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {
     receiveInitialQueryHistory,
     setCurrentQueryHistoryId,
     createNewHistoryItem
 } from './queryHistory';
-//import {analyze} from './ui';
 import {receiveSamplesList} from './samplesList';
 import {
     filtersListReceive
@@ -22,7 +24,6 @@ import {
     modelsListReceive
 } from './modelsList';
 import {entityType} from '../utils/entityTypes';
-import {fetchFields} from './fields';
 import {analyze} from './ui';
 
 /*
