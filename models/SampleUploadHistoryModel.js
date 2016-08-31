@@ -43,7 +43,7 @@ class SampleUploadHistoryModel extends ModelBase {
                 .from(this.baseTableName)
                 .where(ChangeCaseUtil.convertKeysToSnakeCase({
                     userId,
-                    isActive: true
+                    status: SAMPLE_UPLOAD_STATUS.IN_PROGRESS
                 }))
                 // In Postgres count returns BigInt which becomes string in JS.
                 // We know that the number of active uploads is not so big, so
