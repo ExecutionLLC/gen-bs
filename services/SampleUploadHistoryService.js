@@ -35,6 +35,10 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
             ], callback);
         }
     }
+
+    findActiveForAllUsers(entryId, callback) {
+        this.models.sampleUploadHistory.findActiveForAllUsers(entryId, callback);
+    }
 }
 
 module.exports = SampleUploadHistoryService;

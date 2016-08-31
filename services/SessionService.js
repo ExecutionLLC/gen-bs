@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+const Promise = require('bluebird');
 const async = require('async');
 const Uuid = require('node-uuid');
 const session = require('express-session');
@@ -40,9 +41,11 @@ class SessionService extends ServiceBase {
         // System session is currently stored in memory, as it contains system-wide
         // operations, and, if being put in Redis, there will be race conditions
         // between different web server instances.
+        // System session should have static id common for all web server instances
+        // for all instances to be able to find and process system operations properly.
         this.systemSession = {
-            id: Uuid.v4(),
-            operations:{}
+            id: 'eea1eefa-f8d6-4003-b2b7-c444dafcb092',
+            operations: {}
         };
 
         const {sessionCookieName, sessionSecret} = this.config.sessions;
@@ -75,6 +78,10 @@ class SessionService extends ServiceBase {
             && session.id
             && session.type
             && session.userId;
+    }
+
+    isSystemSessionId(sessionId) {
+        return sessionId === this.systemSession.id;
     }
 
     /**

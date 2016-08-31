@@ -60,6 +60,14 @@ class SampleUploadHistoryModel extends ModelBase {
         }, callback);
     }
 
+    findActiveForAllUsers(entryId, callback) {
+        this.db.transactionally((trx, callback) => {
+            this._findEntriesAsync(trx, [entryId], null, true, SAMPLE_UPLOAD_STATUS.IN_PROGRESS, null, null)
+                .then((entries) => _.first(entries))
+                .asCallback(callback);
+        }, callback);
+    }
+
     update(userId, entryId, entry, callback) {
         this.db.transactionally((trx, callback) => {
             trx(this.baseTableName)

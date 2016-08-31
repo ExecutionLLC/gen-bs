@@ -1,6 +1,7 @@
 'use strict';
 
 const SystemOperation = require('./SystemOperation');
+const AppServerMethods = require('../external/applicationServer/AppServerMethods');
 
 class UploadOperation extends SystemOperation {
     constructor(sessionId, method) {
@@ -35,6 +36,15 @@ class UploadOperation extends SystemOperation {
 
     setSampleFileName(sampleFileName) {
         this.sampleFileName = sampleFileName;
+    }
+
+    static recreate(id, systemSessionId, userId, sampleId, sampleFileName) {
+        const operation = new UploadOperation(systemSessionId, AppServerMethods.uploadSample);
+        operation.id = id;
+        operation.setUserId(userId);
+        operation.setSampleId(sampleId);
+        operation.setSampleFileName(sampleFileName);
+        return operation;
     }
 }
 
