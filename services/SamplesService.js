@@ -116,7 +116,7 @@ class SamplesService extends UserEntityServiceBase {
                 }
             },
             (callback) => {
-                const onlyEditableHaveValues = _.all(
+                const onlyEditableHaveValues = _.every(
                     values,
                     value => this.editableFields[value.fieldId] || !value.fieldValue
                 );
