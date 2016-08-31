@@ -1,5 +1,5 @@
-import * as _ from 'lodash';
-import * as async from 'async';
+import _ from 'lodash';
+import async from 'async';
 
 import React from 'react';
 import {Modal} from 'react-bootstrap';

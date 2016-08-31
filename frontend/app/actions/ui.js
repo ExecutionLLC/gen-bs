@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import {
     fetchVariants,
     clearSearchParams,
@@ -8,7 +10,6 @@ import {
     requestAnalyze,
     requestSetCurrentParams
 } from './websocket';
-import * as _ from 'lodash';
 
 
 export const TOGGLE_ANALYZE_TOOLTIP = 'TOGGLE_ANALYZE_TOOLTIP';
