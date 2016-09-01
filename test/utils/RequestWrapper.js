@@ -1,72 +1,104 @@
 'use strict';
 
 const assert = require('assert');
-const Request = require('request');
+const Request = require('superagent');
+const _ = require('lodash');
+var stream = require('stream');
 
 class RequestWrapper {
     static post(url, headers, bodyObject, callback) {
-        Request.post({
-            url,
-            headers,
-            json: bodyObject
-        }, RequestWrapper._createResponseConverter(callback));
+        RequestWrapper._prepareAndExecuteRequest(Request.post(url), headers, null, bodyObject, callback);
     }
 
     static get(url, headers, queryParams, bodyObject, callback) {
-        Request.get({
-            url,
-            headers,
-            qs: queryParams,
-            json: bodyObject
-        }, RequestWrapper._createResponseConverter(callback))
+        RequestWrapper._prepareAndExecuteRequest(Request.get(url), headers, queryParams, bodyObject, callback);
     }
 
     static put(url, headers, bodyObject, callback) {
-        Request.put({
-            url,
-            headers,
-            json: bodyObject
-        }, RequestWrapper._createResponseConverter(callback));
+        RequestWrapper._prepareAndExecuteRequest(Request.put(url), headers, null, bodyObject, callback);
     }
 
     static del(url, headers, bodyObject, callback) {
-        Request.del({
-            url,
-            headers,
-            json: bodyObject
-        }, RequestWrapper._createResponseConverter(callback));
+        RequestWrapper._prepareAndExecuteRequest(Request.del(url), headers, null, bodyObject, callback);
     }
 
-    static upload(url, fileParamName, fileName, fileStream, headers, bodyObject, callback) {
-        const fileDescriptor = {};
-        fileDescriptor[fileParamName] = {
-            value: fileStream,
-            options: {
-                filename: fileName
-            }
-        };
-
-        const formData = Object.assign({}, bodyObject, fileDescriptor);
-        Request.post({url, formData, headers}, RequestWrapper._createResponseConverter(callback));
-    }
-
-    static _createResponseConverter(callback) {
-        return (error, response, body) => {
+    static download(url, headers, queryParams, callback) {
+        let request = RequestWrapper._prepareRequest(Request.get(url), headers, queryParams, null);
+        request = request.responseType('blob');
+        RequestWrapper._sendRequest(request, (error, response) => {
             if (error) {
                 callback(error);
             } else {
+                const {status} = response;
+                const blob = response.response.xhr.response; // Hell yeah
+                callback(null, {
+                    status,
+                    blob,
+                    response
+                });
+            }
+        });
+    }
+
+    static uploadMultipart(url, headers, queryParams, formObject, callback) {
+        const request = RequestWrapper._prepareRequest(Request.post(url), headers, queryParams, null);
+        _.each(formObject, (fieldValue, fieldName) => {
+            if (fieldValue
+                && (fieldValue instanceof stream.Readable)) {
+                request.attach(fieldName, fieldValue, "test.txt");
+            } else {
+                request.field(fieldName, fieldValue);
+            }
+        });
+        RequestWrapper._sendRequest(request, callback);
+    }
+
+    static _prepareRequest(request, headers, queryParams, bodyObject) {
+        request = request.withCredentials();
+        if (headers) {
+            request = request.set(headers);
+        }
+
+        if (queryParams) {
+            request = request.query(queryParams);
+        }
+
+        if (bodyObject) {
+            request = request.send(bodyObject);
+        }
+
+        return request;
+    }
+
+    static _sendRequest(request, callback) {
+        request.end(RequestWrapper._createResponseConverter(callback));
+    }
+
+    static _prepareAndExecuteRequest(request, headers, queryParams, bodyObject, callback) {
+        request = RequestWrapper._prepareRequest(request, headers, queryParams, bodyObject);
+        RequestWrapper._sendRequest(request, callback);
+    }
+
+    static _createResponseConverter(callback) {
+        return (error, response) => {
+            if (error && !error.response) {
+                // Network error, send it as it is.
+                callback(error);
+            } else {
+                let body = response.body;
                 const status = response.statusCode;
                 if (typeof body === 'string') {
                     try {
                         body = JSON.parse(body);
                     } catch (e) {
-                        assert.fail('Error parsing request body: ' + body);
+                        callback('Error parsing request body: ' + body);
                     }
-
                 }
+
                 callback(null, {
                     status,
-                    body
+                    body,
+                    response
                 });
             }
         };

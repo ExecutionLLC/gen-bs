@@ -20,20 +20,21 @@ class SavedFilesClient extends UserEntityClientBase {
         );
     }
 
-    add(languId, sessionId, fileMetadata, fileStream, callback) {
+    add(languId ,sessionId, fileMetadata, fileStream, callback) {
         const formData = {
-            metadata: fileMetadata,
-            file: {
-                value: fileStream
-            }
+            file: fileStream,
+            metadata: JSON.stringify(fileMetadata)
         };
-        RequestWrapper.post(
-            this.collectionUrls.create(),
-            this._makeHeaders({sessionId, languId}),
+
+        RequestWrapper.uploadMultipart(
+            this.collectionUrls.upload(),
+            this._makeHeaders({languId, sessionId}),
+            null,
             formData,
             callback
-        )
+        );
     }
+    
 }
 
 module.exports = SavedFilesClient;

@@ -16,7 +16,6 @@ class ClientBase {
     _makeHeaders(headersObj) {
         const headers = Object.create(null);
         headers[SESSION_HEADER] = headersObj.sessionId;
-        headers[LANGUAGE_HEADER] = headersObj.languId;
         return headers;
     }
 

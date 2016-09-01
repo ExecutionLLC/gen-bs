@@ -52,7 +52,7 @@ class SavedFilesUrls extends CollectionUrls {
     }
 
     upload() {
-        return _constructApiUrl('/upload');
+        return this._constructApiUrl('upload');
     }
 }
 
