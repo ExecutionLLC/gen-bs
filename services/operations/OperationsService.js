@@ -80,7 +80,7 @@ class OperationsService extends ServiceBase {
         const {operations} = session;
         if (!operations || !operations[operationId]) {
             if (!this.services.sessions.isSystemSessionId(session.id)) {
-                return this._onOperationNotFound(callback);
+                this._onOperationNotFound(callback);
             } else {
                 // For system sessions also check active uploads.
                 this._findInActiveUploads(operationId, callback);
