@@ -59,7 +59,7 @@ class RPCProxy {
             const messageParams = {
                 replyTo: replyQueue,
                 correlationId: messageId,
-                priority: priorityOrNull ? priorityOrNull : MAX_PRIORITY
+                priority: priorityOrNull !== null ? priorityOrNull : MAX_PRIORITY
             };
             // Can send requests either to a particular AS instance, or to the tasks exchange.
             if (queryNameOrNull) {
