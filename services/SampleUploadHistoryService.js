@@ -25,7 +25,7 @@ class SampleUploadHistoryService extends UserEntityServiceBase {
     }
 
     findActive(user, callback) {
-        if (this.services.users.isDemoUserId(user.id)) {
+        if (user && this.services.users.isDemoUserId(user.id)) {
             callback(null, []);
         } else {
             async.waterfall([
