@@ -83,8 +83,10 @@ class SamplesService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this.services.sampleUploadHistory.countActive(user.id, callback),
             (activeCount, callback) => {
-                if (activeCount < this.config.samplesUpload.maxCountPerUser) {
-                    callback(null, activeCount);
+                const {maxCountPerUser} = this.config.samplesUpload;
+                if (activeCount < maxCountPerUser) {
+                    // More uploads - lower priority.
+                    callback(null,  maxCountPerUser - activeCount);
                 } else {
                     callback(new Error(`Too many uploads for user ${user.id} (${user.email})`));
                 }
