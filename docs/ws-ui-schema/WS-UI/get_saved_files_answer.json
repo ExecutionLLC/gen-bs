@@ -1,20 +1,34 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id":"ws-ui-schema/WS-UI/get_saved_files_answer#",
-  "title": "Answer to the get_saved_files request.",
-  "name": {
-    "type":"string",
-    "maxLength": 50
-  },
-  "url": {
-    "type": "string",
-    "description": "File download URL."
-  },
-  "total_results": {
-    "type": "integer",
-    "description": "Number of results in the file."
-  },
-  "createdTimestamp": {
-    "type": "integer"
+  "id": "ws-ui-schema/WS-UI/get_saved_files_answer#",
+  "description": "Answer to the get_saved_files request.",
+  "type": "array",
+  "items": {
+    "properties": {
+      "id": {
+        "type": "string",
+        "maxLength": 50
+      },
+      "timestamp": {
+        "type": "string",
+        "description": "Created time"
+      },
+      "filter": {
+        "$ref": "../base_json/filter#"
+      },
+      "view": {
+        "$ref": "../base_json/view#"
+      },
+      "sample": {
+        "$ref": "../base_json/sample#"
+      }
+    },
+    "required": [
+      "id",
+      "timestamp",
+      "filter",
+      "view",
+      "sample"
+    ]
   }
 }

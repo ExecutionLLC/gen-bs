@@ -24,6 +24,9 @@ class JsonValidator {
                 require('../docs/ws-ui-schema/base_json/field_metadata'),
                 require('../docs/ws-ui-schema/base_json/view_list_item'),
                 require('../docs/ws-ui-schema/base_json/keyword'),
+                require('../docs/ws-ui-schema/base_json/sample'),
+                require('../docs/ws-ui-schema/base_json/vcf_field'),
+                require('../docs/ws-ui-schema/base_json/comment'),
             ]
         });
     }

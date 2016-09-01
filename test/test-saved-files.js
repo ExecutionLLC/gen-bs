@@ -14,7 +14,7 @@ const ClientBase = require('./utils/ClientBase');
 
 const DefaultViews = require('../database/defaults/views/default-views.json');
 const DefaultFilters = require('../database/defaults/filters/default-filters.json');
-const Sample = require('../database/defaults/samples/test-7.json').sample;
+const Sample = require('../database/defaults/samples/DefaultSample.json').sample;
 
 const urls = new Urls('localhost', Config.port);
 const sessionsClient = new SessionsClient(urls);
@@ -72,7 +72,7 @@ describe('Saved Files', () => {
         });
     });
 
-    it.skip('should correctly upload exported file', (done) => {
+    it('should correctly upload exported file', (done) => {
         const fileStream = fs.createReadStream(testFilePath);
         const fileMetadata = generateFileMetadata(sampleId);
         savedFilesClient.add(languId, sessionId, fileMetadata, fileStream, (error, response) => {
@@ -90,7 +90,7 @@ describe('Saved Files', () => {
     it('should list all available files.', (done) => {
         savedFilesClient.getAll(sessionId, (error, response) => {
             const savedFiles = ClientBase.readBodyWithCheck(error, response);
-            assert(validator.getValidateUserData(savedFiles));
+            assert(validator.getValidateGetSavedFilesAnswer(savedFiles));
             done();
         });
     });

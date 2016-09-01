@@ -1,13 +1,22 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "ws-ui-schema/base_json/sample#",
 	"type": "object",
 	"properties": {
 		"id": {
 			"type": "string",
 			"description": "UUID, the unique identifier for the sample"
 		},
+		"genotypeName": {
+			"type": ["string", "null"],
+			"description": "Grnptypr name"
+		},
+		"fileName": {
+			"type": "string",
+			"description": "Name of the file as it was during upload"
+		},
 		"hash": {
-			"type": "string"
+			"type": ["string","null"]
 		},
 		"type": {
 			"type": "string",
@@ -15,16 +24,17 @@
 			"enum": [
 				"standard",
 				"advanced",
-				"user"
+				"user",
+				"default"
 			]
 		},
 		"metadata": {
-			"$ref": "./sample_metadata.json#"
+			"$ref": "sample_metadata#"
 		},
 		"vcf_fields": {
 			"type": "array",
 			"items": {
-				"$ref": "./vcf_field.json#"
+				"$ref": "vcf_field#"
 			}
 		},
 		"is_analyzed": {
@@ -40,14 +50,13 @@
 		"commentaries": {
 			"type": "array",
 			"items": {
-				"$ref": "./commentary.json#"
+				"$ref": "comment#"
 			}
 		}
 	},
 	"required": [
 		"id",
-		"hash",
-		"type",
-		"is_analyzed"
+		"genotypeName",
+		"fileName"
 	]
 }

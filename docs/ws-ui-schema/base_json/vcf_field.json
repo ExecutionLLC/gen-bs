@@ -1,5 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "ws-ui-schema/base_json/vcf_field#",
 	"title": "Vcf Filed Name",
 	"type": "object",
 	"properties": {
@@ -22,7 +23,7 @@
 			"type": "array",
 			"uniqueItems": true,
 			"items": {
-				"$ref": "./keyword.json#"
+				"$ref": "./keyword#"
 			}
 		},
 		"operators": {
