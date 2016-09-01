@@ -129,12 +129,6 @@ export function fetchUserdata() {
                         }));
                     }
                 }
-
-                // if (!sample || !filter || !view) {
-                //     dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
-                // } else {
-                //     /*dispatch(analyze(sample.id, view.id, filter.id)); FIXME analyze: replace by reanalyze */
-                // }
             }
         });
     };
