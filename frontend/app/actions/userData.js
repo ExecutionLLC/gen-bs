@@ -10,7 +10,7 @@ import {
 import {receiveSavedFilesList} from './savedFiles';
 import {
     receiveInitialQueryHistory,
-    setCurrentQueryHistoryId,
+    setCurrentQueryHistoryIdLoadData,
     createNewHistoryItem
 } from './queryHistory';
 import {receiveSamplesList} from './samplesList';
@@ -92,7 +92,7 @@ export function fetchUserdata() {
                 if (analyses[0]) {
                     const historyItem = analyses[0];
                     dispatch(fetchFields(historyItem.samples[0].id)); // TODO check if no need to wait fetchFields
-                    dispatch(setCurrentQueryHistoryId(historyItem.id));
+                    dispatch(setCurrentQueryHistoryIdLoadData(historyItem.id));
                     dispatch(analyze({
                         id: historyItem.id,
                         name: historyItem.name,
@@ -115,7 +115,7 @@ export function fetchUserdata() {
                     } else {
                         dispatch(fetchFields(sample.id)); // TODO check if no need to wait fetchFields
                         dispatch(createNewHistoryItem(sample, filter, view));
-                        dispatch(setCurrentQueryHistoryId(null));
+                        dispatch(setCurrentQueryHistoryIdLoadData(null));
                         const historyItem = getState().queryHistory.newHistoryItem;
                         dispatch(analyze({
                             id: null,
