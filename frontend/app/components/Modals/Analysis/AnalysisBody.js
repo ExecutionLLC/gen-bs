@@ -1,15 +1,10 @@
-import _ from 'lodash';
+//import _ from 'lodash';
 
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import AnalysisLeftPane from './AnalysisLeftPane';
 import AnalysisRightPane from './AnalysisRightPane';
-import {setCurrentQueryHistoryId, toggleLoadingHistoryData} from '../../../actions/queryHistory';
-import {filtersListSetHistoryFilter} from '../../../actions/filtersList';
-import {viewsListSetHistoryView} from '../../../actions/viewsList';
-import apiFacade from '../../../api/ApiFacade';
-import {samplesListSetHistorySamples} from '../../../actions/samplesList';
-import {modelsListSetHistoryModel} from '../../../actions/modelsList';
+import {setCurrentQueryHistoryIdLoadData} from '../../../actions/queryHistory';
 
 
 export default class AnalysisBody extends React.Component {
@@ -68,95 +63,6 @@ export default class AnalysisBody extends React.Component {
     }
 
     onSelectHistoryId(id) { // TODO make the same when first time displaying the dialog
-
-        function getUsedSamplesIds(samples) { // TODO can it be rewritten through hashedArray?
-            return _.reduce(samples, ({hash, array}, sample) => (hash[sample.id] ? {hash, array} : {hash: {...hash, [sample.id]: true}, array: [...array, sample.id]}), {hash: {}, array: []}).array;
-        }
-
-        const selectedHistoryItem = id && this.findHistoryItemForId(id) || this.props.newHistoryItem;
-        const filterId = selectedHistoryItem.filterId;
-        const viewId = selectedHistoryItem.viewId;
-        const modelId = selectedHistoryItem.modelId;
-        const samplesIds = getUsedSamplesIds(selectedHistoryItem.samples);
-
-        const samplesHash = this.props.samplesList.hashedArray.hash;
-
-        function getSamples(samplesIds, callback) {
-
-            function getSample(sampleId, callback) {
-                const existentSample = samplesHash[sampleId];
-                if (existentSample) {
-                    callback(existentSample);
-                } else {
-                    apiFacade.samplesClient.get(sampleId, (error, response) => {
-                        callback(response.body);
-                    });
-                }
-            }
-
-            function getNextSample(samplesIds, index, samples) {
-                if (index >= samplesIds.length) {
-                    callback(samples);
-                    return;
-                }
-                getSample(samplesIds[index], (sample) => {
-                    const newSamples = [...samples, sample];
-                    getNextSample(samplesIds, index + 1, newSamples);
-                });
-            }
-
-            getNextSample(samplesIds, 0, []);
-        }
-
-        this.props.dispatch(toggleLoadingHistoryData(true));
-        new Promise((resolve) => {
-            const existentView = this.props.viewsList.hashedArray.hash[viewId];
-            if (existentView) {
-                resolve(existentView);
-                return existentView;
-            } else {
-                return new Promise((resolve) => {
-                    apiFacade.viewsClient.get(viewId, (error, response) => {
-                        resolve(response.body);
-                    });
-                });
-            }
-        }).then((view) => {
-            this.props.dispatch(viewsListSetHistoryView(view));
-            const existentFilter = this.props.filtersList.hashedArray.hash[filterId];
-            if (existentFilter) {
-                return existentFilter;
-            } else {
-                return new Promise((resolve) => {
-                    apiFacade.filtersClient.get(filterId, (error, response) => {
-                        resolve(response.body);
-                    });
-                });
-            }
-        }).then((filter) => {
-            this.props.dispatch(filtersListSetHistoryFilter(filter));
-            if (modelId == null) {
-                return null;
-            }
-            const existentModel = this.props.modelsList.hashedArray.hash[modelId];
-            if (existentModel) {
-                return existentModel;
-            } else {
-                return new Promise((resolve) => {
-                    apiFacade.modelsClient.get(modelId, (error, response) => {
-                        resolve(response.body);
-                    });
-                });
-            }
-        }).then((model) => {
-            this.props.dispatch(modelsListSetHistoryModel(model));
-            return new Promise((resolve) => {
-                getSamples(samplesIds, resolve);
-            });
-        }).then((samples) => {
-            this.props.dispatch(samplesListSetHistorySamples(samples));
-            this.props.dispatch(setCurrentQueryHistoryId(id));
-            this.props.dispatch(toggleLoadingHistoryData(false));
-        });
+        this.props.dispatch(setCurrentQueryHistoryIdLoadData(id));
     }
 }

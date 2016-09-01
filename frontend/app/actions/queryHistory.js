@@ -3,6 +3,10 @@ import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
+import {viewsListSetHistoryView} from './viewsList';
+import {filtersListSetHistoryFilter} from './filtersList';
+import {modelsListSetHistoryModel} from './modelsList';
+import {samplesListSetHistorySamples} from './samplesList';
 
 export const SET_CURRENT_QUERY_HISTORY_ID = 'SET_CURRENT_QUERY_HISTORY_ID';
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
@@ -169,5 +173,106 @@ export function toggleLoadingHistoryData(isLoading) {
     return {
         type: TOGGLE_LOADING_HISTORY_DATA,
         isLoading
+    };
+}
+
+function getSamples(samplesIds, samplesHash, callback) {
+
+    function getSample(sampleId, callback) {
+        const existentSample = samplesHash[sampleId];
+        if (existentSample) {
+            callback(existentSample);
+        } else {
+            apiFacade.samplesClient.get(sampleId, (error, response) => {
+                callback(response.body);
+            });
+        }
+    }
+
+    function getNextSample(samplesIds, index, samples) {
+        if (index >= samplesIds.length) {
+            callback(samples);
+            return;
+        }
+        getSample(samplesIds[index], (sample) => {
+            const newSamples = [...samples, sample];
+            getNextSample(samplesIds, index + 1, newSamples);
+        });
+    }
+
+    getNextSample(samplesIds, 0, []);
+}
+
+export function setCurrentQueryHistoryIdLoadData(id) {
+
+    return (dispatch, getState) => {
+
+        const {
+            viewsList: {hashedArray: {hash: viewsHash}},
+            filtersList: {hashedArray: {hash: filtersHash}},
+            modelsList: {hashedArray: {hash: modelsHash}},
+            samplesList: {hashedArray: {hash: samplesHash}},
+            queryHistory: {newHistoryItem, history: historyList}
+        } = getState();
+
+        const historyItem = id && _.find(historyList, {id}) || newHistoryItem;
+
+        function getUsedSamplesIds(samples) { // TODO can it be rewritten through hashedArray?
+            return _.reduce(samples, ({hash, array}, sample) => (hash[sample.id] ? {hash, array} : {hash: {...hash, [sample.id]: true}, array: [...array, sample.id]}), {hash: {}, array: []}).array;
+        }
+
+        const {viewId, filterId, modelId, samples} = historyItem;
+        const samplesIds = getUsedSamplesIds(samples);
+
+        dispatch(toggleLoadingHistoryData(true));
+        new Promise((resolve) => {
+            const existentView = viewsHash[viewId];
+            if (existentView) {
+                resolve(existentView);
+                return existentView;
+            } else {
+                return new Promise((resolve) => {
+                    apiFacade.viewsClient.get(viewId, (error, response) => {
+                        resolve(response.body);
+                    });
+                });
+            }
+        }).then((view) => {
+            dispatch(viewsListSetHistoryView(view));
+            const existentFilter = filtersHash[filterId];
+            if (existentFilter) {
+                return existentFilter;
+            } else {
+                return new Promise((resolve) => {
+                    apiFacade.filtersClient.get(filterId, (error, response) => {
+                        resolve(response.body);
+                    });
+                });
+            }
+        }).then((filter) => {
+            dispatch(filtersListSetHistoryFilter(filter));
+            if (modelId == null) {
+                return null;
+            }
+            const existentModel = modelsHash[modelId];
+            if (existentModel) {
+                return existentModel;
+            } else {
+                return new Promise((resolve) => {
+                    apiFacade.modelsClient.get(modelId, (error, response) => {
+                        resolve(response.body);
+                    });
+                });
+            }
+        }).then((model) => {
+            dispatch(modelsListSetHistoryModel(model));
+            return new Promise((resolve) => {
+                getSamples(samplesIds, samplesHash, resolve);
+            });
+        }).then((samples) => {
+            dispatch(samplesListSetHistorySamples(samples));
+            dispatch(setCurrentQueryHistoryId(id));
+            dispatch(toggleLoadingHistoryData(false));
+        });
     };
 }
