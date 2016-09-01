@@ -225,10 +225,10 @@ export function setCurrentQueryHistoryIdLoadData(id) {
         const samplesIds = getUsedSamplesIds(samples);
 
         dispatch(toggleLoadingHistoryData(true));
-        new Promise((resolve) => {
+        Promise.resolve(
+        ).then(() => {
             const existentView = viewsHash[viewId];
             if (existentView) {
-                resolve(existentView);
                 return existentView;
             } else {
                 return new Promise((resolve) => {
