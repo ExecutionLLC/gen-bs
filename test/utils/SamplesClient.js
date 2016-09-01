@@ -22,6 +22,10 @@ class SamplesClient extends UserEntityClientBase {
             this._makeHeaders({sessionId}), null, null, callback);
     }
 
+    getAllFields(sessionId, callback) {
+        RequestWrapper.get(this.urls.getAllFields(), this._makeHeaders({sessionId}), null, null, callback);
+    }
+
     add(sessionId, fileName, fileStream, callback) {
         RequestWrapper.upload(this.collectionUrls.upload(),
             'sample',

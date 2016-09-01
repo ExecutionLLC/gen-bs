@@ -15,6 +15,7 @@ class JsonValidator {
                 require('../docs/ws-ui-schema/WS-UI/get_filters'),
                 require('../docs/ws-ui-schema/WS-UI/get_user_data'),
                 require('../docs/ws-ui-schema/WS-UI/get_saved_files_answer'),
+                require('../docs/ws-ui-schema/WS-UI/get_fields_metadata'),
                 require('../docs/ws-ui-schema/UI-WS/save_file'),
                 require('../docs/ws-ui-schema/base_json/filter'),
                 require('../docs/ws-ui-schema/base_json/user_metadata'),
@@ -47,6 +48,7 @@ class JsonValidator {
         const validate = this.ajv.getSchema('ws-ui-schema/WS-UI/get_data_to_table_answer#');
         return this._validateData(validate, data)
     }
+
     getValidateWsUiGetFilters(data) {
         const validate =  this.ajv.getSchema('ws-ui-schema/WS-UI/get_filters#');
         return this._validateData(validate, data)
@@ -56,12 +58,19 @@ class JsonValidator {
         const validate =  this.ajv.getSchema('ws-ui-schema/base_json/filter#');
         return this._validateData(validate, data)
     }
+
     getValidateUserData(data) {
         const validate =  this.ajv.getSchema('ws-ui-schema/WS-UI/get_user_data#');
         return this._validateData(validate, data)
     }
+
     getValidateGetSavedFilesAnswer(data) {
         const validate =  this.ajv.getSchema('ws-ui-schema/WS-UI/get_saved_files_answer#');
+        return this._validateData(validate, data)
+    }
+
+    getValidateGetFieldsMetadata(data) {
+        const validate =  this.ajv.getSchema('ws-ui-schema/WS-UI/get_fields_metadata#');
         return this._validateData(validate, data)
     }
 }

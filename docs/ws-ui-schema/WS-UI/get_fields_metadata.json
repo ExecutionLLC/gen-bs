@@ -1,7 +1,8 @@
 {
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "ws-ui-schema/WS-UI/get_fields_metadata#",
 	"type": "array",
 	"items": {
-		"$ref": "../base_json/field_metadata.json#"
+		"$ref": "../base_json/field_metadata#"
 	}
 }
