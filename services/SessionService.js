@@ -1,13 +1,14 @@
 'use strict';
 
 const _ = require('lodash');
-const Promise = require('bluebird');
 const async = require('async');
 const Uuid = require('node-uuid');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 
 const ServiceBase = require('./ServiceBase');
+
+const SYSTEM_SESSION_ID = 'eea1eefa-f8d6-4003-b2b7-c444dafcb092';
 
 const SESSION_TYPES = {
     USER: 'USER',
@@ -42,9 +43,9 @@ class SessionService extends ServiceBase {
         // operations, and, if being put in Redis, there will be race conditions
         // between different web server instances.
         // System session should have static id common for all web server instances
-        // for all instances to be able to find and process system operations properly.
+        // to be able to find and process system operations properly.
         this.systemSession = {
-            id: 'eea1eefa-f8d6-4003-b2b7-c444dafcb092',
+            id: SYSTEM_SESSION_ID,
             operations: {}
         };
 
