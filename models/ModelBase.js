@@ -93,7 +93,8 @@ class ModelBase {
      * @protected
      * */
     _toCamelCase(itemOrItems, callback) {
-        callback(null, ChangeCaseUtil.convertKeysToCamelCase(itemOrItems));
+        this._toCamelCaseAsync(itemOrItems)
+            .asCallback(callback);
     }
 
     /**
@@ -117,18 +118,15 @@ class ModelBase {
     }
 
     _ensureAllItemsFound(itemsFound, itemIdsToFind, callback) {
-        if (itemsFound && itemsFound.length === itemIdsToFind.length) {
-            callback(null, itemsFound);
-        } else {
-            callback(new Error('Part of the items is not found: ' + itemIdsToFind));
-        }
+        return this._ensureAllItemsFoundAsync(itemsFound, itemIdsToFind)
+            .asCallback(callback);
     }
 
     _ensureAllItemsFoundAsync(itemsFound, itemIdsToFind) {
         if (itemsFound && itemsFound.length === itemIdsToFind.length) {
             return Promise.resolve(itemsFound);
         }
-        return Promise.reject(new Error(`Part of the items is not found: ${itemIdsToFind}`));
+        return Promise.reject(new Error(`Part of the items is not found: ${itemIdsToFind}, found: ${itemsFound}`));
     }
 
     _mapItems(items, callback) {
