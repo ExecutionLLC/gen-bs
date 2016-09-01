@@ -38,9 +38,7 @@ class SamplesService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => this.services.applicationServer.uploadSample(session, sampleId, user,
-                localFileInfo.localFilePath, localFileInfo.originalFileName,
-                (error, operationId) => callback(error, operationId)
-            ),
+                localFileInfo.localFilePath, localFileInfo.originalFileName, callback),
             (operationId, callback) => this._createHistoryEntry(
                 user,
                 operationId,
