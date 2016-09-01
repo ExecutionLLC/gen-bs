@@ -33,9 +33,7 @@ class AppServerSourcesService extends ApplicationServerServiceBase {
                 (error, operation) => callback(error, session, operation)
             ),
             (session, operation, callback) => this._rpcSend(session, operation, method,
-                _.map(sourceNames, (sourceName) => {
-                    return sourceName + '.h5'
-                }), null, callback)
+                _.map(sourceNames, (sourceName) => `${sourceName}.h5`), null, callback)
         ], callback);
     }
 
