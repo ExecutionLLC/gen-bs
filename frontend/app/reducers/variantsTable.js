@@ -101,7 +101,6 @@ export default function variantsTable(state = initialState, action) {
             });
         }
         case ActionTypes.SET_VARIANTS_SORT: {
-            debugger;
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     sort: action.sortOrder
@@ -109,7 +108,6 @@ export default function variantsTable(state = initialState, action) {
             });
         }
         case ActionTypes.CHANGE_VARIANTS_SORT: {
-            debugger;
             // copy sort array
             var sortArray = [...state.searchInResultsParams.sort];
             var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId, sampleId: action.sampleId});
