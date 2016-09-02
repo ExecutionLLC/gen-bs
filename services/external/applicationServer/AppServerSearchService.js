@@ -207,7 +207,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     fieldId: viewField.id
                 });
             }else {
-                if (_.some(noneDuplicatedColumnNames, viewField.name)){
+                if (_.some(noneDuplicatedColumnNames,noneDuplicatedColumnName => noneDuplicatedColumnName === viewField.name)){
                     resultHeader.push({
                         fieldId: viewField.id,
                         sampleId: samples[0].id
