@@ -36,6 +36,14 @@ class SearchOperation extends OperationBase {
         return this.userId;
     }
 
+    setViewId(viewId) {
+        this.viewId = viewId;
+    }
+
+    getViewId() {
+        return this.viewId;
+    }
+
     setUserId(userId) {
         this.userId = userId;
     }

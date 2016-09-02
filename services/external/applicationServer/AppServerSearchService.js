@@ -78,6 +78,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const sample = samples[0];
         const method = METHODS.openSearchSession;
         const sampleIds = _.map(samples, sample => sample.id);
+        const viewId = view.id;
         const appServerSampleIds = _.map(samples, sample => this._getAppServerSampleId(sample));
         const appServerView = AppServerViewUtils.createAppServerView(view, fieldIdToFieldMetadata, samples);
         const appServerFilter = AppServerFilterUtils.createAppServerFilter(filter, fieldIdToFieldMetadata, sample);
@@ -100,6 +101,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             (operation, callback) => {
                 operation.setSampleIds(sampleIds);
                 operation.setUserId(userId);
+                operation.setViewId(viewId);
                 operation.setOffset(offset);
                 operation.setLimit(limit);
                 callback(null, operation);
@@ -136,10 +138,11 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
         const sampleIds = operation.getSampleIds();
         const userId = operation.getUserId();
+        const viewId = operation.getViewId();
 
         async.waterfall([
             (callback) => {
-                this._fetch(sessionState.data, userId, sampleIds, callback);
+                this._fetch(sessionState.data, userId, sampleIds, viewId, callback);
             }
         ], (error, fieldsWithIdArray) => {
             this._createSearchDataResult(error, session, operation, fieldsWithIdArray, callback);
@@ -152,7 +155,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         return 'search_key';
     }
 
-    _fetch(searchData, userId, sampleIds, callback) {
+    _fetch(searchData, userId, sampleIds, viewId, callback) {
         async.waterfall([
             (callback) => {
                 this.services.users.find(userId, (error, user) => {
@@ -162,23 +165,70 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     });
                 });
             },
-            ({rowData, user}, callback) => {
-                this._convertFields(rowData, user, sampleIds, callback);
+            ({rowData, user}, callback) => async.parallel({
+                    samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
+                    view: (callback) => this.services.views.find(user, viewId, callback),
+                    samplesFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
+                    sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
+                },
+                (error, {samples, view, samplesFields, sourcesFields})=> callback(error, {
+                    rowData,
+                    user,
+                    samples,
+                    view,
+                    samplesFields,
+                    sourcesFields
+                })
+            ),
+            ({rowData, user, samples, view, samplesFields, sourcesFields}, callback) => {
+                async.parallel({
+                    data: (callback) => this._convertFields(rowData, user, samples, view, samplesFields, sourcesFields, callback),
+                    header: (callback) => this._createDataHeader(view, samplesFields, sourcesFields, samples, callback),
+                }, callback)
             }
-        ], (error, asData) => {
-            callback(error, asData);
+        ], (error, tableData) => {
+            callback(error, tableData);
         });
     }
 
+    _createDataHeader(view, samplesFields, sourcesFields, samples , callback) {
+        const viewListItems = view.viewListItems;
+        const viewFields = _.map(viewListItems, viewListItem => _.find(
+                samplesFields, fieldIdToMetadata =>fieldIdToMetadata.id == viewListItem.fieldId
+            ) || _.find(
+                sourcesFields, fieldIdToMetadata =>fieldIdToMetadata.id == viewListItem.fieldId
+            )
+        );
+        const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(viewFields);
+        const resultHeader = [];
+        _.forEach(viewFields, viewField => {
+            if ( viewField.sourceName === 'sample'){
+                resultHeader.push({
+                    fieldId: viewField.id
+                });
+            }else {
+                if (_.some(noneDuplicatedColumnNames, viewField.name)){
+                    resultHeader.push({
+                        fieldId: viewField.id,
+                        sampleId: samples[0].id
+                    });
+                }else {
+                    _.forEach(samples, sample => {
+                        resultHeader.push({
+                            fieldId: viewField.id,
+                            sampleId: sample.id
+                        });
+                    })
+                }
+            }
+        });
+        callback(null, resultHeader);
+    }
+
     //todo: Check more carefully
-    _convertFields(asData, user, sampleIds, callback) {
+    _convertFields(asData, user, samples, view, samplesFields, sourcesFields, callback) {
         async.waterfall([
-            (callback) => async.parallel({
-                samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
-                samplesFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
-                sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
-            }, callback),
-            ({samples, samplesFields, sourcesFields}, callback) => {
+            (callback) => {
                 const sourceFieldsMapArray = _.map(
                     _.groupBy(sourcesFields, 'sourceName'),
                     (sourceFields, sourceName)=> {
@@ -276,14 +326,14 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         return (actualFieldValue !== 'nan') ? actualFieldValue : '.';
     }
 
-    _createSearchDataResult(error, session, operation, fieldsWithIdArray, callback) {
+    _createSearchDataResult(error, session, operation, tableData, callback) {
         super._createOperationResult(session, operation, session.id, session.userId, EVENTS.onSearchDataReceived, false, {
             progress: 100,
             status: SESSION_STATUS.READY,
             sampleIds: operation.getSampleIds(),
             limit: operation.getLimit(),
             offset: operation.getOffset(),
-            fieldsWithIdArray
+            tableData
         }, error, callback);
     }
 
