@@ -75,7 +75,7 @@ function changeSampleId(oldSamples, sampleIndex, newSampleId) {
     }
 }
 
-function changeSamplesArray(oldSamples, samplesList, newSamplesTypes) {
+function changeSamplesArray(oldSamples, samplesList, newSamplesTypes) { // TODO check if demo user
     const usedSamplesIds = {};
     return newSamplesTypes.map(
         (type, index) => {
@@ -101,7 +101,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
             'tumor'(historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, ['tumor', 'normal']),
-                    modelId: modelsList.hashedArray.array[0].id
+                    modelId: modelsList.hashedArray.array[0].id // TODO check if demo user here and below
                 };
             },
             'family'(historyItem) {
