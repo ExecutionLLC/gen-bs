@@ -415,7 +415,7 @@ export default class AnalysisRightPane extends React.Component {
                         <Select
                             aria-hidden='true'
                             tabindex='-1'
-                            className='select2-search select-righ'
+                            className='select2-search select-right'
                             disabled={disabled}
                             value={sample && sample.id || null}
                             options={this.getSampleOptions()}
