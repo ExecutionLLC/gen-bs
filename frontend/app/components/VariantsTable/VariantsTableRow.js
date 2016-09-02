@@ -29,6 +29,8 @@ export default class VariantsTableRow extends ComponentBase {
         const ref = this.getMainFieldValue('REF', rowFields, fields);
         const searchKey = row.searchKey;
 
+        const fieldIds = _.map(viewFields, item => item.fieldId);
+
         return (
             <tr>
                 <td className='btntd row_checkbox'>
@@ -60,7 +62,14 @@ export default class VariantsTableRow extends ComponentBase {
                                       auth={auth}
                                       comments={comments}
                 />
-                {_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))}
+                {/*_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))*/}
+                {_.map(fieldIds, (fieldId) =>
+                    _(rowFields)
+                        .filter({fieldId})
+                        .map((fieldSample) =>
+                            this.renderFieldValue(fieldId, fieldSample.sampleId, sortState, rowFieldsHash))
+                        .value()
+                )}
             </tr>
         );
     }
@@ -76,7 +85,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
 
-    renderFieldValue(field, sortState, rowFields) {
+    renderFieldValue(field, sampleId, sortState, rowFields) {
         const fieldId = field.fieldId;
         const resultFieldValue = rowFields[fieldId];
         let columnSortParams = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
@@ -87,7 +96,7 @@ export default class VariantsTableRow extends ComponentBase {
 
         return (
             <td className={sortedActiveClass}
-                key={fieldId}>
+                key={fieldId + '-' + sampleId}>
                 <div>
                     {resultFieldValue || ''}
                 </div>
