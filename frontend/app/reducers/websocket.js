@@ -91,6 +91,7 @@ export default function websocket(state = {
             });
             return Object.assign({}, state, {
                 variants: state.variants === null ? resultData : [...state.variants, ...(resultData || [])],
+                variantsHeader: action.wsData.result.header,
                 currentVariants: resultData,
                 isVariantsEmpty: (resultData && resultData.length === 0),
                 isVariantsLoading: false,

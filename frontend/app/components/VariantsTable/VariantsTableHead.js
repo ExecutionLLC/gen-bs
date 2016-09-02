@@ -28,7 +28,7 @@ export default class VariantsTableHead extends Component {
         const expectedFields = [...fields.sourceFieldsList, ...currentSampleFields];
         const expectedFieldsHash = _.keyBy(expectedFields, (field) => field.id);
 
-        const firstRowFields = this.props.variants[0].fields;
+        const firstRowFields = this.props.variantsHeader;
 
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
