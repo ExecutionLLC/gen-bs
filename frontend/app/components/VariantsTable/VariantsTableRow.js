@@ -62,7 +62,6 @@ export default class VariantsTableRow extends ComponentBase {
                                       auth={auth}
                                       comments={comments}
                 />
-                {/*_.map(viewFields, (field) => this.renderFieldValue(field, sortState, rowFieldsHash))*/}
                 {_.map(fieldIds, (fieldId) =>
                     _(rowFields)
                         .filter({fieldId})
@@ -85,9 +84,8 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
 
-    renderFieldValue(field, sampleId, sortState, rowFields) {
-        const fieldId = field.fieldId;
-        const resultFieldValue = rowFields[fieldId];
+    renderFieldValue(fieldId, sampleId, sortState, rowFields) {
+        const resultFieldValue = rowFields[`${fieldId}${sampleId ? '-' + sampleId : ''}`];
         let columnSortParams = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
 
         let sortedActiveClass = classNames({
