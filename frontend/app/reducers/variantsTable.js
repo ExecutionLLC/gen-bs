@@ -2,18 +2,24 @@ import _ from 'lodash';
 
 import * as ActionTypes from '../actions/variantsTable';
 
+const DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET = {
+    limit: 100,
+    offset: 0
+};
+
+const DEFAULT_SEARCH_PARAMS = {
+    ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET,
+    search: [],
+    sort: [],
+    topSearch: {
+        filter: '',
+        excludedFields: []
+    }
+};
+
 const initialState = {
     operationId: null,
-    searchInResultsParams: {
-        search: [],
-        sort: [],
-        limit: 100,
-        offset: 0,
-        topSearch: {
-            filter: '',
-            excludedFields: []
-        }
-    },
+    searchInResultsParams: DEFAULT_SEARCH_PARAMS,
     scrollPos: 0,
     needUpdate: false,
     isNextDataLoading: false,
@@ -26,16 +32,7 @@ export default function variantsTable(state = initialState, action) {
 
         case ActionTypes.CLEAR_SEARCH_PARAMS: {
             return Object.assign({}, state, {
-                searchInResultsParams: {
-                    sort: [],
-                    search: [],
-                    limit: 100,
-                    offset: 0,
-                    topSearch: {
-                        filter: '',
-                        excludedFields: []
-                    }
-                }
+                searchInResultsParams: DEFAULT_SEARCH_PARAMS
             });
         }
         case ActionTypes.SET_EXCLUDED_FIELDS: {
@@ -67,8 +64,7 @@ export default function variantsTable(state = initialState, action) {
                         filter: action.globalSearchString,
                         excludedFields: state.searchInResultsParams.topSearch.excludedFields
                     },
-                    limit: 100,
-                    offset: 0
+                    ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),
                 needUpdate: true
             });
@@ -99,8 +95,7 @@ export default function variantsTable(state = initialState, action) {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     search: searchArray,
-                    limit: 100,
-                    offset: 0
+                    ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),
                 needUpdate: true
             });
@@ -158,8 +153,7 @@ export default function variantsTable(state = initialState, action) {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     sort: sortArray,
-                    limit: 100,
-                    offset: 0
+                    ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),
                 needUpdate: true
             });
