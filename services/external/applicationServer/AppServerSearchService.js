@@ -202,7 +202,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(viewFields);
         const resultHeader = [];
         _.forEach(viewFields, viewField => {
-            if ( viewField.sourceName === 'sample'){
+            if ( viewField.sourceName !== 'sample'){
                 resultHeader.push({
                     fieldId: viewField.id
                 });
