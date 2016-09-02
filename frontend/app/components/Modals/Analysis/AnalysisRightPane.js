@@ -406,16 +406,16 @@ export default class AnalysisRightPane extends React.Component {
                             <span data-localize='samples.title'>Samples</span>
                         </button>
                     </div>
-                    <div className='btn-group'>
-                        <label className='label label-default label-fix-width'>
+                    <div className='btn-group btn-group-left'>
+                        <label className='label label-default label-fix-width  label-left'>
                             <span data-localize='query.family.mother.short'>{sample && familyMemberLabel[sample.type] || ''}</span>
                         </label>
                     </div>
-                    <div className='btn-group btn-group-select2-max'>
+                    <div className='btn-group btn-group-select2-max btn-group-right'>
                         <Select
                             aria-hidden='true'
                             tabindex='-1'
-                            className='select2-search select2-right select2-right form-control'
+                            className='select2-search select-right'
                             disabled={disabled}
                             value={sample && sample.id || null}
                             options={this.getSampleOptions()}
