@@ -89,6 +89,7 @@ export default class VariantsTableHead extends Component {
             <FieldHeader key={fieldId + '-' + sampleId}
                          fieldMetadata={fieldMetadata}
                          sampleName={sampleId && this.props.samplesList.hashedArray.hash[sampleId].fileName || null}
+                         sampleId={sampleId}
                          areControlsEnabled={areControlsEnabled}
                          sortState={sortState}
                          onSortRequested={sendSortRequestedAction}

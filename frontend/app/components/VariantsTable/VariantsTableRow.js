@@ -86,9 +86,9 @@ export default class VariantsTableRow extends ComponentBase {
 
     renderFieldValue(fieldId, sampleId, sortState, rowFields) {
         const resultFieldValue = rowFields[`${fieldId}${sampleId ? '-' + sampleId : ''}`];
-        let columnSortParams = _.find(sortState, sortItem => sortItem.fieldId === fieldId);
+        const columnSortParams = _.find(sortState, {fieldId, sampleId});
 
-        let sortedActiveClass = classNames({
+        const sortedActiveClass = classNames({
             'active': columnSortParams
         });
 

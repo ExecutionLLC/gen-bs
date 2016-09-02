@@ -16,8 +16,8 @@ export default class FieldHeaderControls extends Component {
     }
 
     render() {
-        const {fieldMetadata, sortState, areControlsEnabled, disabled, sampleName} = this.props;
-        const columnSortParams = sortState ? _.find(sortState, sortItem => sortItem.fieldId === fieldMetadata.id)
+        const {fieldMetadata, sortState, areControlsEnabled, disabled, sampleName, sampleId} = this.props;
+        const columnSortParams = sortState ? _.find(sortState, {fieldId: fieldMetadata.id, sampleId})
             : null;
 
         const isFilterOpened = this.state.isFilterOpened;
