@@ -72,7 +72,7 @@ export default function variantsTable(state = initialState, action) {
         case ActionTypes.SET_FIELD_FILTER: {
             // copy search array
             var searchArray = [...state.searchInResultsParams.search];
-            const fieldIndex = _.findIndex(searchArray, {fieldId: action.fieldId});
+            const fieldIndex = _.findIndex(searchArray, {fieldId: action.fieldId, sampleId: action.sampleId});
 
             if (action.filterValue !== '') {
                 if (fieldIndex !== -1) {
@@ -85,7 +85,7 @@ export default function variantsTable(state = initialState, action) {
                     searchArray[fieldIndex].value = action.filterValue;
                 } else {
                     // it is new filter
-                    searchArray.push({fieldId: action.fieldId, value: action.filterValue});
+                    searchArray.push({fieldId: action.fieldId, sampleId: action.sampleId, value: action.filterValue});
                 }
             } else {
                 // filter value is empty, so we should remove filter
@@ -101,6 +101,7 @@ export default function variantsTable(state = initialState, action) {
             });
         }
         case ActionTypes.SET_VARIANTS_SORT: {
+            debugger;
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     sort: action.sortOrder
@@ -108,13 +109,14 @@ export default function variantsTable(state = initialState, action) {
             });
         }
         case ActionTypes.CHANGE_VARIANTS_SORT: {
+            debugger;
             // copy sort array
             var sortArray = [...state.searchInResultsParams.sort];
-            var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId});
+            var fieldIndex = _.findIndex(sortArray, {fieldId: action.fieldId, sampleId: action.sampleId});
 
             if (fieldIndex === -1) {
                 // it is new column for sorting
-                const newItem = {fieldId: action.fieldId, direction: action.sortDirection};
+                const newItem = {fieldId: action.fieldId, sampleId: action.sampleId, direction: action.sortDirection};
                 if (sortArray.length < action.sortOrder) {
                     // put new item to the end of array
                     fieldIndex = sortArray.length; // FIXME will be pushed?

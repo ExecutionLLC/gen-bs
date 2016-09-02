@@ -80,12 +80,12 @@ export default class VariantsTableHead extends Component {
         const fieldMetadata = totalFieldsHash[fieldId];
         const areControlsEnabled = !!expectedFieldsHash[fieldId];
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
-            dispatch(sortVariants(fieldId, direction, isControlKeyPressed));
+            dispatch(sortVariants(fieldId, sampleId, direction, isControlKeyPressed));
         const sendSearchRequest = (fieldId, searchValue) => {
-            dispatch(setFieldFilter(fieldId, searchValue));
+            dispatch(setFieldFilter(fieldId, sampleId, searchValue));
             dispatch(searchInResultsSortFilter());
         };
-        const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, searchValue));
+        const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
         return (
             <FieldHeader key={fieldId + '-' + sampleId}
                          fieldMetadata={fieldMetadata}

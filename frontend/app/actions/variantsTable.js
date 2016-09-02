@@ -95,17 +95,18 @@ export function setExcludedFields(excludedFields) {
     };
 }
 
-export function setFieldFilter(fieldId, filterValue) {
+export function setFieldFilter(fieldId, sampleId, filterValue) {
     return {
         type: SET_FIELD_FILTER,
         fieldId,
+        sampleId,
         filterValue
     };
 }
 
-export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
+export function sortVariants(fieldId, sampleId, sortDirection, ctrlKeyPressed) {
     return (dispatch, getState) => {
-        dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2 : 1, sortDirection));
+        dispatch(changeVariantsSort(fieldId, sampleId, ctrlKeyPressed ? 2 : 1, sortDirection));
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}));
@@ -113,7 +114,7 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     };
 }
 
-export function setViewVariantsSort(view) {
+export function setViewVariantsSort(view, sampleId) {
     return (dispatch, getState) => {
 
         const {fields:{sampleFieldsHashedArray: {hash: sampleFieldsHash}}} = getState();
@@ -128,6 +129,7 @@ export function setViewVariantsSort(view) {
                 return {
                     direction: viewListItem.sortDirection,
                     fieldId: viewListItem.fieldId,
+                    sampleId,
                     order: viewListItem.sortOrder
                 };
             })
@@ -148,10 +150,11 @@ export function setVariantsSort(sortOrder) {
     };
 }
 
-export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
+export function changeVariantsSort(fieldId, sampleId, sortOrder, sortDirection) {
     return {
         type: CHANGE_VARIANTS_SORT,
         fieldId,
+        sampleId,
         sortOrder,
         sortDirection
     };

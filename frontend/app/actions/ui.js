@@ -75,7 +75,7 @@ export function analyze(searchParams) {
                 const searchModel = searchParams.modelId && modelIdToFilterHash[searchParams.modelId] || null;
                 const searchAnalysis = result.analysis;
                 dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList, searchAnalysis));
-                dispatch(setViewVariantsSort(searchView));
+                dispatch(setViewVariantsSort(searchView, searchParams.samples[0].id));
                 dispatch(changeExcludedFields(searchView));
                 resolve(searchAnalysis);
             }).catch((error) => reject(error));
