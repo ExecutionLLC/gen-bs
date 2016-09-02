@@ -64,7 +64,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
                 hashedArray: {hash: viewIdToViewHash}
             },
             fields: {
-                sampleFieldsList
+                sampleFieldsHashedArray: {array: sampleFieldsList}
             }
         } = getState();
 
@@ -75,7 +75,7 @@ export function analyze(sampleId, viewId, filterId, limit = 100, offset = 0) {
 
         dispatch(requestTableScrollPositionReset());
         dispatch(clearSearchParams());
-        dispatch(requestAnalyze(searchParams));
+        dispatch(requestAnalyze());
         const searchView = viewIdToViewHash[viewId];
         const searchSample = sampleIdToSampleHash[sampleId];
         const searchFilter = filterIdToFilterHash[filterId];

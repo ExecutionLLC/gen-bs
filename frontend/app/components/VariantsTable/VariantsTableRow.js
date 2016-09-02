@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -70,7 +71,7 @@ export default class VariantsTableRow extends ComponentBase {
     }
 
     getMainFieldValue(colName, rowFields, fields) {
-        const mainField = _.find(fields.totalFieldsList, field => field.name === colName);
+        const mainField = _.find(fields.totalFieldsHashedArray.array, field => field.name === colName);
         return _.find(rowFields, field => field.fieldId === mainField.id).value;
     }
 

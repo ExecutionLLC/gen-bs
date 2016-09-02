@@ -79,7 +79,7 @@ export function clearSearchParams() {
 
 export function changeExcludedFields(viewId) {
     return (dispatch, getState) => {
-        const {fields:{sampleFieldsList}, viewsList:{hashedArray: {hash: viewIdToViewHash}}}=getState();
+        const {fields:{sampleFieldsHashedArray: {array: sampleFieldsList}}, viewsList:{hashedArray: {hash: viewIdToViewHash}}} = getState();
         const view = viewIdToViewHash[viewId];
         const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
         const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);
@@ -118,13 +118,13 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
 export function setViewVariantsSort(view) {
     return (dispatch, getState) => {
 
-        const {fields:{sampleIdToFieldHash}} = getState();
+        const {fields:{sampleFieldsHashedArray: {hash: sampleFieldsHash}}} = getState();
         const sortOrder = _(view.viewListItems)
             .filter(viewListItem => {
                 return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
             })
             .filter(viewListItem => {
-                return sampleIdToFieldHash[viewListItem.fieldId];
+                return sampleFieldsHash[viewListItem.fieldId];
             })
             .map(viewListItem => {
                 return {

@@ -122,8 +122,7 @@ export default function websocket(state = {
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
                 variants: null,
-                isVariantsLoading: true,
-                searchParams: action.searchParams
+                isVariantsLoading: true
             });
         case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {

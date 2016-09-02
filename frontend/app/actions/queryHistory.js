@@ -94,14 +94,12 @@ export function renewHistoryItem(historyItemId) {
                 changeSample(clonedHistoryItem.sample.id),
                 prepareAnalyze()
             ]);
-            dispatch(fetchFields(clonedHistoryItem.sample.id))
-                .then(() => {
-                    dispatch([
-                        filtersListSelectFilter(clonedHistoryItem.filters[0].id),
-                        viewsListSelectView(clonedHistoryItem.view.id),
-                        analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
-                    ]);
-                });
+            dispatch([
+                fetchFields(clonedHistoryItem.sample.id),
+                filtersListSelectFilter(clonedHistoryItem.filters[0].id),
+                viewsListSelectView(clonedHistoryItem.view.id),
+                analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
+            ]);
         }
     };
 }

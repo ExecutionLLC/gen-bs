@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import React, {Component} from 'react';
 
 import FieldHeader from './FieldHeader';
@@ -7,7 +8,7 @@ import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../act
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, ws, searchParams} = this.props;
+        const {dispatch, fields, ws} = this.props;
         const {sort} = this.props.variantsTable.searchInResultsParams;
         const {isFetching} = this.props.variantsTable;
         const {
@@ -15,7 +16,7 @@ export default class VariantsTableHead extends Component {
             variantsSampleFieldsList: currentSampleFields
         } = ws;
 
-        if (!searchParams || !currentView) {
+        if (!currentView) {
             return (
                 <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
                 <tr />
@@ -25,10 +26,7 @@ export default class VariantsTableHead extends Component {
 
         const fieldIds = _.map(currentView.viewListItems, item => item.fieldId);
         const expectedFields = [...fields.sourceFieldsList, ...currentSampleFields];
-        const expectedFieldsHash = _.reduce(expectedFields, (result, field) => {
-            result[field.id] = field;
-            return result;
-        }, {});
+        const expectedFieldsHash = _.keyBy(expectedFields, (field) => field.id);
 
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
@@ -69,7 +67,7 @@ export default class VariantsTableHead extends Component {
     }
 
     renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sortState, dispatch) {
-        const {totalFieldsHash} = fields;
+        const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
         const areControlsEnabled = !!expectedFieldsHash[fieldId];
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
