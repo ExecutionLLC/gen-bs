@@ -142,14 +142,14 @@ class SearchService extends ServiceBase {
     }
 
     _onSearchDataReceived(message) {
-        const {session: {userId}, result: {fieldsWithIdArray}} = message;
+        const {session: {userId}, result: {tableData:{ header, data }}} = message;
 
         async.waterfall([
             (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
-            (user, callback) => this._loadRowsComments(user.id, user.language, fieldsWithIdArray, callback),
+            (user, callback) => this._loadRowsComments(user.id, user.language, data, callback),
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.
-                const rows = _.map(fieldsWithIdArray, fieldsWithId => {
+                const rows = _.map(data, fieldsWithId => {
                     const nonSearchKeyObjects = _.filter(fieldsWithId, fieldWithId => {
                         return fieldWithId.fieldId !== this.searchKeyFieldName
                     });
@@ -179,10 +179,10 @@ class SearchService extends ServiceBase {
                 });
                 callback(null, rows);
             }
-        ], (error, convertedRows) => this._emitDataReceivedEvent(error, message, convertedRows));
+        ], (error, convertedRows) => this._emitDataReceivedEvent(error, message, convertedRows, header));
     }
 
-    _emitDataReceivedEvent(error, message, convertedRows) {
+    _emitDataReceivedEvent(error, message, convertedRows, header) {
         /**@type AppServerResult*/
         let clientMessage;
         if (error) {
@@ -193,8 +193,9 @@ class SearchService extends ServiceBase {
             });
         } else {
             clientMessage = Object.assign({}, message, {
-                result: Object.assign({}, _.omit(message.result, ['fieldsWithIdArray']), {
-                    data: convertedRows
+                result: Object.assign({}, _.omit(message.result, ['tableData']), {
+                    data: convertedRows,
+                    header
                 })
             });
         }
