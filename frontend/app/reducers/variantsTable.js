@@ -89,7 +89,7 @@ export default function variantsTable(state = initialState, action) {
                 }
             } else {
                 // filter value is empty, so we should remove filter
-                searchArray.splice(fieldIndex, 1);
+                searchArray.splice(fieldIndex, 1); // FIXME fails when fieldIndex < 1
             }
 
             return Object.assign({}, state, {
@@ -117,7 +117,7 @@ export default function variantsTable(state = initialState, action) {
                 const newItem = {fieldId: action.fieldId, direction: action.sortDirection};
                 if (sortArray.length < action.sortOrder) {
                     // put new item to the end of array
-                    fieldIndex = sortArray.length;
+                    fieldIndex = sortArray.length; // FIXME will be pushed?
                 } else {
                     // replace existent item, which has the same order
                     fieldIndex = action.sortOrder - 1;
