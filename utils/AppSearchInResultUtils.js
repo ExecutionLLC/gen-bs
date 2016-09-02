@@ -11,7 +11,7 @@ class AppSearchInResultUtils {
             .filter(sample => _.some(sample.values, value => value.fieldId === searchItem.fieldId))
             .map(sample => {
                 return {
-                    columnName: AppServerUtils.createColumnName(searchItem.fieldName, sample.genotypeName),
+                    columnName: AppServerUtils.createColumnName(searchItem.name, sample.genotypeName),
                     sourceName: AppServerUtils.createSampleName(sample)
                 };
             })
@@ -19,12 +19,12 @@ class AppSearchInResultUtils {
     }
 
     static createAppGlobalFilter(globalSearchValue, excludedFieldIds, samples, fieldsMetadata) {
-        const excludedFields = _.map(excludedFieldIds, excludedFieldId => fieldsMetadata[excludedFieldId]);
+        const excludedFields = _.map(excludedFieldIds, excludedFieldId => _.find(fieldsMetadata, fieldMetadata => fieldMetadata.id ==excludedFieldId ));
         const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(excludedFields);
         const duplicatedItems = _(excludedFields)
             .filter(excludedField => {
                 return !_.some(noneDuplicatedColumnNames, (columnName) => {
-                    return columnName === excludedField.fieldName
+                    return columnName === excludedField.name
                 })
             })
             .value();
@@ -39,7 +39,7 @@ class AppSearchInResultUtils {
         const noneDuplicatedItems = _(excludedFields)
             .filter(excludedField => {
                 return _.some(noneDuplicatedColumnNames, (columnName) => {
-                    return columnName === excludedField.fieldName
+                    return columnName === excludedField.name
                 })
             })
             .value();
@@ -71,7 +71,7 @@ class AppSearchInResultUtils {
             const sample = _.find(samples, sample => sample.id === sampleId);
             const fieldMetadata = _.find(fieldsMetadata, fieldMetadata => fieldMetadata.id === fieldId);
             return {
-                columnName: AppServerUtils.createColumnName(fieldMetadata.fieldName, sample.genotypeName),
+                columnName: AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName),
                 sourceName: AppServerUtils.createSampleName(sample),
                 columnFilter: value
             }
@@ -80,13 +80,13 @@ class AppSearchInResultUtils {
 
     static createAppSortOrder(sortParams, samples, fieldsMetadata) {
         const sortedParams = _.sortBy(sortParams, sortParam => sortParam.sortOrder);
-        return _.map(sortedParams, ({fieldId, value, sampleId}) => {
+        return _.map(sortedParams, ({fieldId, direction, sampleId}) => {
             const sample = _.find(samples, sample => sample.id === sampleId);
             const fieldMetadata = _.find(fieldsMetadata, fieldMetadata => fieldMetadata.id === fieldId);
             return {
-                columnName: AppServerUtils.createColumnName(fieldMetadata.fieldName, sample.genotypeName),
+                columnName: AppServerUtils.createColumnName(fieldMetadata.name, sample.genotypeName),
                 sourceName: AppServerUtils.createSampleName(sample),
-                columnFilter: value
+                isAscendingOrder: direction === 'asc'
             }
         })
     }
