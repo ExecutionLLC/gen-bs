@@ -158,9 +158,9 @@ class SearchService extends ServiceBase {
                             return fieldData.fieldId == headerObject.fieldId && fieldData.sampleId == headerObject.sampleId
                         });
                         return {
-                            fieldId: fieldWithId.fieldId,
-                            value: fieldWithId.fieldValue,
-                            sampleId: fieldWithId.sampleId
+                            fieldId: headerObject.fieldId,
+                            value: fieldWithId ? fieldWithId.fieldValue: '.',
+                            sampleId: headerObject.sampleId
                         }
                     });
                     const searchKey = searchKeyObject.fieldValue;
