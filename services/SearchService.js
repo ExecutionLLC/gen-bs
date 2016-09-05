@@ -150,13 +150,13 @@ class SearchService extends ServiceBase {
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.
                 const rows = _.map(data, fieldsWithId => {
-                    const nonSearchKeyObjects = _.filter(fieldsWithId, fieldWithId => {
-                        return fieldWithId.fieldId !== this.searchKeyFieldName
-                    });
                     const searchKeyObject = _.find(fieldsWithId, fieldWithId => {
                         return fieldWithId.fieldId === this.searchKeyFieldName
                     });
-                    const fieldValueObjects = _.map(nonSearchKeyObjects, fieldWithId => {
+                    const fieldValueObjects = _.map(header, headerObject => {
+                        const fieldWithId = _.find(fieldsWithId,fieldData => {
+                            return fieldData.fieldId == headerObject.fieldId && fieldData.sampleId == headerObject.sampleId
+                        });
                         return {
                             fieldId: fieldWithId.fieldId,
                             value: fieldWithId.fieldValue,
