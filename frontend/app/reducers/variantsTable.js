@@ -12,8 +12,7 @@ const DEFAULT_SEARCH_PARAMS = {
     search: [],
     sort: [],
     topSearch: {
-        filter: '',
-        excludedFields: []
+        filter: ''
     }
 };
 
@@ -35,16 +34,6 @@ export default function variantsTable(state = initialState, action) {
                 searchInResultsParams: DEFAULT_SEARCH_PARAMS
             });
         }
-        case ActionTypes.SET_EXCLUDED_FIELDS: {
-            return Object.assign({}, state, {
-                searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
-                    topSearch: {
-                        filter: state.searchInResultsParams.topSearch.filter,
-                        excludedFields: action.excludedFields
-                    }
-                })
-            });
-        }
 
         case ActionTypes.CHANGE_VARIANTS_LIMIT: {
             return Object.assign({}, state, {
@@ -62,7 +51,7 @@ export default function variantsTable(state = initialState, action) {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     topSearch: {
                         filter: action.globalSearchString,
-                        excludedFields: state.searchInResultsParams.topSearch.excludedFields
+                        excludedFields: [] // TODO remove
                     },
                     ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),

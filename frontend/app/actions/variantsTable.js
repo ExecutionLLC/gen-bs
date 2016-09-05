@@ -15,7 +15,6 @@ export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
 export const SET_VARIANTS_SORT = 'SET_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
-export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
 
 export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
 export const CLEAR_VARIANTS_ROWS_SELECTION = 'CLEAR_VARIANTS_ROWS_SELECTION';
@@ -73,25 +72,6 @@ export function getNextPartOfData() {
 export function clearSearchParams() {
     return {
         type: CLEAR_SEARCH_PARAMS
-    };
-}
-
-export function changeExcludedFields(view) {
-    return (dispatch, getState) => {
-        const {fields:{sampleFieldsHashedArray: {array: sampleFieldsList}}} = getState();
-        const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
-        const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);
-        const viewFieldIds = _.map(view.viewListItems, viewItem =>viewItem.fieldId);
-
-        const excludedMandatoryFields = _.difference(mandatoryFieldIds, viewFieldIds);
-        dispatch(setExcludedFields(excludedMandatoryFields));
-    };
-}
-
-export function setExcludedFields(excludedFields) {
-    return {
-        type: SET_EXCLUDED_FIELDS,
-        excludedFields
     };
 }
 
