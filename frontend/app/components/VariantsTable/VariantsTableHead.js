@@ -8,9 +8,9 @@ import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../act
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, ws} = this.props;
-        const {sort} = this.props.variantsTable.searchInResultsParams;
-        const {isFetching} = this.props.variantsTable;
+        const {dispatch, fields, ws, variantsHeader, variantsTable} = this.props;
+        const {sort} = variantsTable.searchInResultsParams;
+        const {isFetching} = variantsTable;
         const {
             variantsView: currentView,
             variantsSampleFieldsList: currentSampleFields
@@ -27,8 +27,6 @@ export default class VariantsTableHead extends Component {
         const fieldIds = _.map(currentView.viewListItems, item => item.fieldId);
         const expectedFields = [...fields.sourceFieldsList, ...currentSampleFields];
         const expectedFieldsHash = _.keyBy(expectedFields, (field) => field.id);
-
-        const firstRowFields = this.props.variantsHeader;
 
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
@@ -63,7 +61,7 @@ export default class VariantsTableHead extends Component {
                     </div>
                 </td>
                 {_.map(fieldIds, (fieldId) =>
-                    _(firstRowFields)
+                    _(variantsHeader)
                         .filter({fieldId})
                         .map((fieldSample) =>
                             this.renderFieldHeader(fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch))
