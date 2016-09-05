@@ -77,4 +77,9 @@ export default class FieldUtils {
         return null;
     }
 
+    static getSampleFields(sample, totalFieldsHash) {
+        const sampleValues = sample.values;
+        const sampleFields = sampleValues.map(({fieldId}) => totalFieldsHash[fieldId]);
+        return sampleFields;
+    }
 }
