@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {Component} from 'react';
 
 import VariantsTableRow from './VariantsTableRow';
@@ -12,7 +13,7 @@ export default class VariantsTableRows extends Component {
         const {currentVariants} = this.props.ws;
         const {sort} = this.props.variantsTable.searchInResultsParams;
         const {isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
-        const {fields} = this.props;
+        const {fields, variantsHeader} = this.props;
         const currentView = this.props.ws.variantsView;
 
         return (
@@ -20,7 +21,7 @@ export default class VariantsTableRows extends Component {
                    id='variants_table_body'
                    ref='variantsTableBody'>
             {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
-                currentView, fields, selectedRowIndices)}
+                currentView, variantsHeader, fields, selectedRowIndices)}
             {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
             </tbody>
         );
@@ -54,7 +55,7 @@ export default class VariantsTableRows extends Component {
         }
     }
 
-    renderTableBody(rows, sortState, isFilteringOrSorting, currentView, fields, selectedRowIndices) {
+    renderTableBody(rows, sortState, isFilteringOrSorting, currentView, variantsHeader, fields, selectedRowIndices) {
         if (isFilteringOrSorting || !currentView) {
             return (
                 <tr>
@@ -67,7 +68,7 @@ export default class VariantsTableRows extends Component {
         } else {
             return _.map(rows,
                 (row, index) =>
-                    this.renderRow(row, index, sortState, currentView, fields, selectedRowIndices)
+                    this.renderRow(row, index, sortState, currentView, variantsHeader, fields, selectedRowIndices)
             );
         }
     }
@@ -97,7 +98,7 @@ export default class VariantsTableRows extends Component {
         }
     }
 
-    renderRow(row, rowIndex, sortState, currentView, fields, selectedRowIndices) {
+    renderRow(row, rowIndex, sortState, currentView, variantsHeader, fields, selectedRowIndices) {
         const isSelected = _.includes(selectedRowIndices, rowIndex);
         return (
             <VariantsTableRow key={rowIndex}
@@ -105,6 +106,7 @@ export default class VariantsTableRows extends Component {
                               rowIndex={rowIndex}
                               sortState={sortState}
                               currentView={currentView}
+                              variantsHeader={variantsHeader}
                               isSelected={isSelected}
                               fields={fields}
                               auth={this.props.auth}

@@ -60,13 +60,17 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {_.map(fieldIds, (fieldId) =>
+                {/*_.map(fieldIds, (fieldId) =>
                     _(variantsHeader)
                         .filter({fieldId})
                         .map((fieldSample) =>
                             this.renderFieldHeader(fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch))
                         .value()
-                )}
+                )*/
+                _.map(variantsHeader, (fieldSample) =>
+                    this.renderFieldHeader(fieldSample.fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch)
+                )
+                }
             </tr>
             </tbody>
         );

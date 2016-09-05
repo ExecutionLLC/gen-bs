@@ -14,6 +14,7 @@ export default class VariantsTableRow extends ComponentBase {
             auth,
             rowIndex,
             currentView,
+            variantsHeader,
             sortState,
             fields,
             isSelected
@@ -62,13 +63,17 @@ export default class VariantsTableRow extends ComponentBase {
                                       auth={auth}
                                       comments={comments}
                 />
-                {_.map(fieldIds, (fieldId) =>
+                {/*_.map(fieldIds, (fieldId) =>
                     _(rowFields)
                         .filter({fieldId})
                         .map((fieldSample) =>
                             this.renderFieldValue(fieldId, fieldSample.sampleId, sortState, rowFieldsHash))
                         .value()
-                )}
+                )*/
+                _.map(variantsHeader, (fieldSample) =>
+                    this.renderFieldValue(fieldSample.fieldId, fieldSample.sampleId, sortState, rowFieldsHash)
+                )
+                }
             </tr>
         );
     }
