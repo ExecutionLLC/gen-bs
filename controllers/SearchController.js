@@ -26,8 +26,8 @@ class SearchController extends ControllerBase {
                         user, session, languageId, analysis, limit, offset, callback
                     );
             }
-        ], (error, {operationId, analysis}) => {
-            this.sendErrorOrJson(response, error, {operationId, analysis});
+        ], (error, result) => {
+            this.sendErrorOrJson(response, error, result);
         });
     }
 

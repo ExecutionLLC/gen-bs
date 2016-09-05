@@ -28,18 +28,22 @@ class AnalysisService extends UserEntityServiceBase {
         if (this.services.users.isDemoUserId(user.id)) {
             return callback(null, null);
         } else {
-            const newAnalysis = {
-                creator: user.id,
-                name,
-                description,
-                languageId,
-                type,
-                viewId,
-                filterId,
-                modelId,
-                samples
-            };
-            super.add(user, languageId, newAnalysis, callback)
+            if ( name) {
+                const newAnalysis = {
+                    creator: user.id,
+                    name,
+                    description,
+                    languageId,
+                    type,
+                    viewId,
+                    filterId,
+                    modelId,
+                    samples
+                };
+                super.add(user, languageId, newAnalysis, callback)
+            }else {
+                return callback(new Error('Analysis name can not be empty'), null);
+            }
         }
     }
 
@@ -47,21 +51,25 @@ class AnalysisService extends UserEntityServiceBase {
         if (this.services.users.isDemoUserId(user.id)) {
             callback(null, []);
         } else {
-            async.waterfall(
-                [
-                    (callback) => {
-                        this.models.analysis.find(user.id, item.id, callback)
-                    },
-                    (analysys, callback) => {
-                        const newAnalysis = Object.assign({}, analysys, {
-                            name: item.name,
-                            description: item.description,
-                            lastQueryDate: item.lastQueryDate
-                        });
-                        super.update(user, newAnalysis, callback)
-                    }
-                ], callback
-            );
+            if (item.name) {
+                async.waterfall(
+                    [
+                        (callback) => {
+                            this.models.analysis.find(user.id, item.id, callback)
+                        },
+                        (analysys, callback) => {
+                            const newAnalysis = Object.assign({}, analysys, {
+                                name: item.name,
+                                description: item.description,
+                                lastQueryDate: item.lastQueryDate
+                            });
+                            super.update(user, newAnalysis, callback)
+                        }
+                    ], callback
+                );
+            }else {
+                return callback(new Error('Analysis name can not be empty'), null);
+            }
         }
     }
 }
