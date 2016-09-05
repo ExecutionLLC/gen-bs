@@ -218,8 +218,12 @@ class AnalysisModel extends SecureModelBase {
                     )
                     .where('creator', userId)
                     .andWhere(function () {
-                        this.where('name', 'like', `%${nameFilter}%`)
-                            .orWhere('description', 'like', `%${descriptionFilter}%`)
+                        this.where(
+                            trx.raw('LOWER("name") like ?', `%${nameFilter.toLowerCase()}%`)
+                        )
+                            .orWhere(
+                                trx.raw('LOWER("description") like ?', `%${descriptionFilter.toLowerCase()}%`)
+                            )
                     })
                     .orderBy('timestamp', 'desc')
                     .offset(offset)
