@@ -157,11 +157,7 @@ class SearchService extends ServiceBase {
                         const fieldWithId = _.find(fieldsWithId,fieldData => {
                             return fieldData.fieldId == headerObject.fieldId && fieldData.sampleId == headerObject.sampleId
                         });
-                        return {
-                            fieldId: headerObject.fieldId,
-                            value: fieldWithId ? fieldWithId.fieldValue: '.',
-                            sampleId: headerObject.sampleId
-                        }
+                        return fieldWithId ? fieldWithId.fieldValue: null
                     });
                     const searchKey = searchKeyObject.fieldValue;
                     const comments = _.map(searchKeyToCommentsArrayHash[searchKey], comment => {

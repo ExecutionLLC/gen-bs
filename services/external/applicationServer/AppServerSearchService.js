@@ -165,25 +165,30 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     });
                 });
             },
-            ({rowData, user}, callback) => async.parallel({
-                    samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
-                    view: (callback) => this.services.views.find(user, viewId, callback),
-                    samplesFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
-                    sourcesFields: (callback) => this.services.fieldsMetadata.findSourcesMetadata(callback)
-                },
-                (error, {samples, view, samplesFields, sourcesFields})=> callback(error, {
-                    rowData,
-                    user,
-                    samples,
-                    view,
-                    samplesFields,
-                    sourcesFields
-                })
+            ({rowData, user}, callback) => async.waterfall(
+                [
+                    (callback) => this.services.views.find(user, viewId, callback),
+                    (view, callback) => async.parallel({
+                            samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
+                            viewFields: (callback) => this.services.fieldsMetadata.findMany(
+                                _.map(view.viewListItems,item => item.fieldId),
+                                callback
+                            )
+                        },
+                        (error, {samples, viewFields})=> callback(error, {
+                            rowData,
+                            user,
+                            samples,
+                            view,
+                            viewFields
+                        })
+                    ),
+                ], callback
             ),
-            ({rowData, user, samples, view, samplesFields, sourcesFields}, callback) => {
+            ({rowData, user, samples, view, viewFields}, callback) => {
                 async.parallel({
-                    data: (callback) => this._convertFields(rowData, user, samples, view, samplesFields, sourcesFields, callback),
-                    header: (callback) => this._createDataHeader(view, samplesFields, sourcesFields, samples, callback),
+                    data: (callback) => this._convertFields(rowData, user, samples, viewFields, callback),
+                    header: (callback) => this._createDataHeader(view, viewFields, samples, callback),
                 }, callback)
             }
         ], (error, tableData) => {
@@ -191,32 +196,34 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         });
     }
 
-    _createDataHeader(view, samplesFields, sourcesFields, samples , callback) {
+    _createDataHeader(view, viewFields, samples , callback) {
         const viewListItems = view.viewListItems;
-        const viewFields = _.map(viewListItems, viewListItem => _.find(
-                samplesFields, fieldIdToMetadata =>fieldIdToMetadata.id == viewListItem.fieldId
-            ) || _.find(
-                sourcesFields, fieldIdToMetadata =>fieldIdToMetadata.id == viewListItem.fieldId
+        const viewFieldsOrdered = _.map(viewListItems, viewListItem => _.find(
+                viewFields, fieldIdToMetadata =>fieldIdToMetadata.id == viewListItem.fieldId
             )
         );
         const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(viewFields);
         const resultHeader = [];
-        _.forEach(viewFields, viewField => {
+        _.forEach(viewFieldsOrdered, viewField => {
             if ( viewField.sourceName !== 'sample'){
                 resultHeader.push({
                     fieldId: viewField.id
                 });
             }else {
                 if (_.some(noneDuplicatedColumnNames,noneDuplicatedColumnName => noneDuplicatedColumnName === viewField.name)){
+                    const exist = _.some(samples[0].values, field => field.fieldId == viewField.id);
                     resultHeader.push({
                         fieldId: viewField.id,
-                        sampleId: samples[0].id
+                        sampleId: samples[0].id,
+                        exist
                     });
                 }else {
                     _.forEach(samples, sample => {
+                        const exist = _.some(sample.values, field => field.fieldId == viewField.id);
                         resultHeader.push({
                             fieldId: viewField.id,
-                            sampleId: sample.id
+                            sampleId: sample.id,
+                            exist
                         });
                     })
                 }
@@ -226,9 +233,11 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     //todo: Check more carefully
-    _convertFields(asData, user, samples, view, samplesFields, sourcesFields, callback) {
+    _convertFields(asData, user, samples, viewFields, callback) {
         async.waterfall([
             (callback) => {
+                const sourcesFields = _.filter(viewFields, viewField => viewField.sourceName != 'sample');
+                const samplesFields = _.filter(viewFields, viewField => viewField.sourceName == 'sample');
                 const sourceFieldsMapArray = _.map(
                     _.groupBy(sourcesFields, 'sourceName'),
                     (sourceFields, sourceName)=> {
