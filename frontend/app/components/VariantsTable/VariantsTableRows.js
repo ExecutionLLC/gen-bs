@@ -68,7 +68,7 @@ export default class VariantsTableRows extends Component {
         } else {
             return _.map(rows,
                 (row, index) =>
-                    this.renderRow(row, index, sortState, currentView, variantsHeader, fields, selectedRowIndices)
+                    this.renderRow(row, index, sortState, variantsHeader, fields, selectedRowIndices)
             );
         }
     }
@@ -98,14 +98,13 @@ export default class VariantsTableRows extends Component {
         }
     }
 
-    renderRow(row, rowIndex, sortState, currentView, variantsHeader, fields, selectedRowIndices) {
+    renderRow(row, rowIndex, sortState, variantsHeader, fields, selectedRowIndices) {
         const isSelected = _.includes(selectedRowIndices, rowIndex);
         return (
             <VariantsTableRow key={rowIndex}
                               row={row}
                               rowIndex={rowIndex}
                               sortState={sortState}
-                              currentView={currentView}
                               variantsHeader={variantsHeader}
                               isSelected={isSelected}
                               fields={fields}

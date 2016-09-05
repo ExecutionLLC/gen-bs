@@ -24,7 +24,6 @@ export default class VariantsTableHead extends Component {
             );
         }
 
-        const fieldIds = _.map(currentView.viewListItems, item => item.fieldId);
         const expectedFields = [...fields.sourceFieldsList, ...currentSampleFields];
         const expectedFieldsHash = _.keyBy(expectedFields, (field) => field.id);
 
@@ -60,17 +59,9 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {/*_.map(fieldIds, (fieldId) =>
-                    _(variantsHeader)
-                        .filter({fieldId})
-                        .map((fieldSample) =>
-                            this.renderFieldHeader(fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch))
-                        .value()
-                )*/
-                _.map(variantsHeader, (fieldSample) =>
+                {_.map(variantsHeader, (fieldSample) =>
                     this.renderFieldHeader(fieldSample.fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch)
-                )
-                }
+                )}
             </tr>
             </tbody>
         );

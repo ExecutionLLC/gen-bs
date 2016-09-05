@@ -13,7 +13,6 @@ export default class VariantsTableRow extends ComponentBase {
             row,
             auth,
             rowIndex,
-            currentView,
             variantsHeader,
             sortState,
             fields,
@@ -22,15 +21,12 @@ export default class VariantsTableRow extends ComponentBase {
         const rowFieldsHash = row.fieldsHash;
         const rowFields = row.fields;
         const comments = row.comments;
-        const viewFields = currentView.viewListItems;
 
         const pos = this.getMainFieldValue('POS', rowFields, fields);
         const alt = this.getMainFieldValue('ALT', rowFields, fields);
         const chrom = this.getMainFieldValue('CHROM', rowFields, fields);
         const ref = this.getMainFieldValue('REF', rowFields, fields);
         const searchKey = row.searchKey;
-
-        const fieldIds = _.map(viewFields, item => item.fieldId);
 
         return (
             <tr>
@@ -63,17 +59,9 @@ export default class VariantsTableRow extends ComponentBase {
                                       auth={auth}
                                       comments={comments}
                 />
-                {/*_.map(fieldIds, (fieldId) =>
-                    _(rowFields)
-                        .filter({fieldId})
-                        .map((fieldSample) =>
-                            this.renderFieldValue(fieldId, fieldSample.sampleId, sortState, rowFieldsHash))
-                        .value()
-                )*/
-                _.map(variantsHeader, (fieldSample) =>
+                {_.map(variantsHeader, (fieldSample) =>
                     this.renderFieldValue(fieldSample.fieldId, fieldSample.sampleId, sortState, rowFieldsHash)
-                )
-                }
+                )}
             </tr>
         );
     }
