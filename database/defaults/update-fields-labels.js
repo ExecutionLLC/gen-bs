@@ -17,6 +17,7 @@ const labelTemplates = _([
     './fields/labels/ESP6500_v01.json',
     './fields/labels/dbsnp_20160601_v01.json',
     './fields/labels/ExAC_r0_3_1_sites_v01.json',
+    './fields/labels/one_thousand_genome_v01.json',
     './fields/labels/vep-fields.json'
 ])
     .map((path) => require(path))
