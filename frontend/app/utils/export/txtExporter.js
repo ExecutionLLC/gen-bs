@@ -41,7 +41,7 @@ export default class TxtExporter extends ExporterBase {
     _getLongestValueLengths(columnsArray, data) {
         return _.reduce(columnsArray, (result, column, columnIndex) => {
             // Find length of the longest value in the column.
-            const longestRowValue = _.reduce(data, (maxVal, row) => Math.max(row[columnIndex].length, maxVal), 0);
+            const longestRowValue = _.reduce(data, (maxVal, row) => Math.max((row[columnIndex] || '').length, maxVal), 0);
             // Take max between the value and the column name length.
             result.push(Math.max(longestRowValue, column.length));
             return result;
