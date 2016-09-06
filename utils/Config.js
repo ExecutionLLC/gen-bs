@@ -82,6 +82,7 @@ const SETTINGS = {
         host: makeDefault(ENV.GEN_WS_RABBIT_MQ_HOST, 'localhost'),
         port: makeDefault(ENV.GEN_WS_RABBIT_MQ_PORT, 5672),
         user: makeDefault(ENV.GEN_WS_RABBIT_MQ_USER, 'guest'),
+        virtualHost: makeDefault(ENV.GEN_WS_RABBIT_MQ_VIRTUAL_HOST, ''),
         password: makeDefault(ENV.GEN_WS_RABBIT_MQ_PASSWORD, 'guest'),
         requestExchangeName: makeDefault(ENV.GEN_WS_RABBIT_MQ_REQUEST_EXCHANGE, 'genomics_exchange'),
         // Reconnect timeout in milliseconds

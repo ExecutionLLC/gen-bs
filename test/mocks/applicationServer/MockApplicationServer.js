@@ -29,9 +29,9 @@ class MockApplicationServer {
     }
 
     start(callback) {
-        const {host, requestExchangeName} = this.config.rabbitMq;
+        const {host, port, user, password, virtualHost, requestExchangeName} = this.config.rabbitMq;
         async.waterfall([
-            (callback) => RabbitMqUtils.createConnection(host, callback),
+            (callback) => RabbitMqUtils.createConnection(host, port, user, password, virtualHost, callback),
             (connection, callback) => {
                 async.series({
                     connection: (callback) => callback(null, connection),
