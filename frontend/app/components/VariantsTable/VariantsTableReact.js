@@ -44,7 +44,7 @@ class VariantsTableReact extends Component {
                     }
                     <table className='table table-striped table-variants header-fixed' id='variants_table'
                            ref='variantsTable'>
-                        <VariantsTableHead variants={variants} fields={fields} variantsHeader={variantsHeader} {...this.props} ref='variantsTableHead'
+                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} {...this.props} ref='variantsTableHead'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)); } }
                                            onRendered={() => this.onTablePartRendered(true)}
                         />

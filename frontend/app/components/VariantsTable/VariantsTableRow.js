@@ -18,14 +18,13 @@ export default class VariantsTableRow extends ComponentBase {
             fields,
             isSelected
         } = this.props;
-        const rowFieldsHash = row.fieldsHash;
         const rowFields = row.fields;
         const comments = row.comments;
 
-        const pos = this.getMainFieldValue('POS', rowFields, fields);
-        const alt = this.getMainFieldValue('ALT', rowFields, fields);
-        const chrom = this.getMainFieldValue('CHROM', rowFields, fields);
-        const ref = this.getMainFieldValue('REF', rowFields, fields);
+        const pos = this.getMainFieldValue('POS', rowFields, fields, variantsHeader);
+        const alt = this.getMainFieldValue('ALT', rowFields, fields, variantsHeader);
+        const chrom = this.getMainFieldValue('CHROM', rowFields, fields, variantsHeader);
+        const ref = this.getMainFieldValue('REF', rowFields, fields, variantsHeader);
         const searchKey = row.searchKey;
 
         return (
@@ -59,8 +58,8 @@ export default class VariantsTableRow extends ComponentBase {
                                       auth={auth}
                                       comments={comments}
                 />
-                {_.map(variantsHeader, (fieldSample) =>
-                    this.renderFieldValue(fieldSample.fieldId, fieldSample.sampleId, sortState, rowFieldsHash)
+                {_.map(rowFields, (value, index) =>
+                    this.renderFieldValue(variantsHeader[index].fieldId, variantsHeader[index].sampleId, value, sortState)
                 )}
             </tr>
         );
@@ -71,14 +70,15 @@ export default class VariantsTableRow extends ComponentBase {
         onSelected(rowIndex, !isSelected);
     }
 
-    getMainFieldValue(colName, rowFields, fields) {
+    getMainFieldValue(colName, rowFields, fields, variantsHeader) {
         const mainField = _.find(fields.totalFieldsHashedArray.array, field => field.name === colName);
-        return _.find(rowFields, field => field.fieldId === mainField.id).value;
+        const index = _.findIndex(variantsHeader, field => field.fieldId === mainField.id);
+        return rowFields[index];
     }
 
 
-    renderFieldValue(fieldId, sampleId, sortState, rowFields) {
-        const resultFieldValue = rowFields[`${fieldId}${sampleId ? '-' + sampleId : ''}`];
+    renderFieldValue(fieldId, sampleId, value, sortState) {
+        const resultFieldValue = value;
         const columnSortParams = _.find(sortState, {fieldId, sampleId});
 
         const sortedActiveClass = classNames({

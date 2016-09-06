@@ -81,14 +81,14 @@ export default function websocket(state = {
                 error: null
             });
         case ActionTypes.WS_TABLE_MESSAGE: {
-            const resultData = _.map(action.wsData.result.data, row => {
+            const resultData = action.wsData.result.data/*_.map(action.wsData.result.data, row => {
                 return Object.assign({}, row, {
                     fieldsHash: _.reduce(row.fields, (result, {fieldId, sampleId, value}) => {
                         result[`${fieldId}${sampleId ? '-' + sampleId : ''}`] = value;
                         return result;
                     }, {})
                 });
-            });
+            })*/;
             return Object.assign({}, state, {
                 variants: state.variants === null ? resultData : [...state.variants, ...(resultData || [])],
                 variantsHeader: action.wsData.result.header,
