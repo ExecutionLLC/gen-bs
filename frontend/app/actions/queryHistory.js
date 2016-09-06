@@ -225,7 +225,7 @@ export function setCurrentQueryHistoryIdLoadData(id) {
         const samplesIds = getUsedSamplesIds(samples);
 
         dispatch(toggleLoadingHistoryData(true));
-        Promise.resolve(
+        return Promise.resolve(
         ).then(() => {
             const existentView = viewsHash[viewId];
             if (existentView) {

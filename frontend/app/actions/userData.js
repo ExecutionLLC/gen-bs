@@ -92,17 +92,19 @@ export function fetchUserdata() {
                 if (analyses[0]) {
                     const historyItem = analyses[0];
                     dispatch(fetchFields(historyItem.samples[0].id)); // TODO check if no need to wait fetchFields
-                    dispatch(setCurrentQueryHistoryIdLoadData(historyItem.id));
-                    dispatch(analyze({
-                        id: historyItem.id,
-                        name: historyItem.name,
-                        description: historyItem.description,
-                        type: historyItem.type,
-                        samples: historyItem.samples,
-                        viewId: historyItem.viewId,
-                        filterId: historyItem.filterId,
-                        modelId: historyItem.modelId
-                    }));
+                    dispatch(setCurrentQueryHistoryIdLoadData(historyItem.id))
+                        .then(() => {
+                            dispatch(analyze({
+                                id: historyItem.id,
+                                name: historyItem.name,
+                                description: historyItem.description,
+                                type: historyItem.type,
+                                samples: historyItem.samples,
+                                viewId: historyItem.viewId,
+                                filterId: historyItem.filterId,
+                                modelId: historyItem.modelId
+                            }));
+                        });
                 } else {
                     const sample = _.find(samples, {type: entityType.DEFAULT}) ||
                                    _.find(samples, {type: entityType.STANDARD});
@@ -115,18 +117,20 @@ export function fetchUserdata() {
                     } else {
                         dispatch(fetchFields(sample.id)); // TODO check if no need to wait fetchFields
                         dispatch(createNewHistoryItem(sample, filter, view));
-                        dispatch(setCurrentQueryHistoryIdLoadData(null));
-                        const historyItem = getState().queryHistory.newHistoryItem;
-                        dispatch(analyze({
-                            id: null,
-                            name: historyItem.name,
-                            description: historyItem.description,
-                            type: historyItem.type,
-                            samples: historyItem.samples,
-                            viewId: historyItem.viewId,
-                            filterId: historyItem.filterId,
-                            modelId: historyItem.modelId
-                        }));
+                        dispatch(setCurrentQueryHistoryIdLoadData(null))
+                            .then(() => {
+                                const historyItem = getState().queryHistory.newHistoryItem;
+                                dispatch(analyze({
+                                    id: null,
+                                    name: historyItem.name,
+                                    description: historyItem.description,
+                                    type: historyItem.type,
+                                    samples: historyItem.samples,
+                                    viewId: historyItem.viewId,
+                                    filterId: historyItem.filterId,
+                                    modelId: historyItem.modelId
+                                }));
+                            });
                     }
                 }
             }
