@@ -147,15 +147,16 @@ class SearchService extends ServiceBase {
 
         async.waterfall([
             (callback) => this.services.users.find(userId, (error, user) => callback(error, user)),
-            (user, callback) => this._loadRowsComments(user.id, user.language, data, callback),
+            (user, callback) => this._loadRowsComments(user.id, user.language, data.viewData, callback),
             (searchKeyToCommentsArrayHash, callback) => {
                 // Transform fields to the client representation.
-                const rows = _.map(data, fieldsWithId => {
-                    const searchKeyObject = _.find(fieldsWithId, fieldWithId => {
+                const rows = _.map(data, rowData => {
+                    const {viewData, mandatoryFields} = rowData;
+                    const searchKeyObject = _.find(viewData, fieldWithId => {
                         return fieldWithId.fieldId === this.searchKeyFieldName
                     });
                     const fieldValueObjects = _.map(header, headerObject => {
-                        const fieldWithId = _.find(fieldsWithId,fieldData => {
+                        const fieldWithId = _.find(viewData,fieldData => {
                             return fieldData.fieldId == headerObject.fieldId && fieldData.sampleId == headerObject.sampleId
                         });
                         return fieldWithId ? fieldWithId.fieldValue: null
@@ -171,7 +172,8 @@ class SearchService extends ServiceBase {
                     return {
                         searchKey,
                         comments,
-                        fields: fieldValueObjects
+                        fields: fieldValueObjects,
+                        mandatoryFields
                     };
                 });
                 callback(null, rows);
@@ -231,9 +233,6 @@ class SearchService extends ServiceBase {
 
     _createAppServerSearchInResultsParams(user, sessionId, operationId, sampleIds, viewId, globalSearchValue,
                                           fieldSearchValues, sortValues, limit, offset, callback) {
-        // const sortFieldIds = _.map(sortValues, sortValue => sortValue.fieldId);
-        // const searchFieldIds = _.map(fieldSearchValues, fieldSearchValue => fieldSearchValue.fieldId);
-        // const searchInResultMetadataIds = _.union(sortFieldIds, searchFieldIds);
         async.parallel({
             fieldsMetadata: (callback) => async.waterfall(
                 [

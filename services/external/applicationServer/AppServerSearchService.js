@@ -164,6 +164,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
 
     _fetch(searchData, userId, sampleIds, viewId, callback) {
+        const mainSampleId = sampleIds[0];
         async.waterfall([
             (callback) => {
                 this.services.users.find(userId, (error, user) => {
@@ -181,21 +182,27 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                             viewFields: (callback) => this.services.fieldsMetadata.findMany(
                                 _.map(view.viewListItems,item => item.fieldId),
                                 callback
-                            )
+                            ),
+                            samplesFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
                         },
-                        (error, {samples, viewFields})=> callback(error, {
+                        (error, {samples, viewFields, samplesFields})=> callback(error, {
                             rowData,
                             user,
                             samples,
                             view,
+                            samplesFields,
                             viewFields
                         })
                     ),
                 ], callback
             ),
-            ({rowData, user, samples, view, viewFields}, callback) => {
+            ({rowData, user, samples, view, viewFields, samplesFields}, callback) => {
+                const searchKeyFields = _.filter(samplesFields, samplesField => {
+                    return _.includes(AppServerUtils.getSearchKeyFieldsColumnNames(),samplesField.name)
+                });
+                const mainSample = _.find(samples, sample => sample.id == mainSampleId);
                 async.parallel({
-                    data: (callback) => this._convertFields(rowData, user, samples, viewFields, callback),
+                    data: (callback) => this._convertFields(rowData, user, samples ,mainSample, viewFields, searchKeyFields, callback),
                     header: (callback) => this._createDataHeader(view, viewFields, samples, callback),
                 }, callback)
             }
@@ -241,11 +248,12 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     //todo: Check more carefully
-    _convertFields(asData, user, samples, viewFields, callback) {
+    _convertFields(asData, user, samples, mainSample, viewFields, searchKeyFields, callback) {
         async.waterfall([
             (callback) => {
-                const sourcesFields = _.filter(viewFields, viewField => viewField.sourceName != 'sample');
-                const samplesFields = _.filter(viewFields, viewField => viewField.sourceName == 'sample');
+                const totalFields =  _.union(viewFields, searchKeyFields);
+                const sourcesFields = _.filter(totalFields, totalField => totalField.sourceName != 'sample');
+                const samplesFields = _.filter(totalFields, totalField => totalField.sourceName == 'sample');
                 const sourceFieldsMapArray = _.map(
                     _.groupBy(sourcesFields, 'sourceName'),
                     (sourceFields, sourceName)=> {
@@ -329,7 +337,17 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     const existingFieldsRowObject = _.filter(mappedRowObject, rowFields => {
                         return !_.isNull(rowFields);
                     });
-                    return existingFieldsRowObject;
+                    const mandatoryFields = {};
+                    _.forEach(searchKeyFields, searchKeyField => {
+                        const fieldRowObj = _.find(existingFieldsRowObject, rowObj => {
+                            return rowObj.fieldId == searchKeyField.id && rowObj.sampleId == mainSample.id
+                        });
+                        mandatoryFields[searchKeyField.name] = fieldRowObj.fieldValue;
+                    });
+                    return {
+                        viewData:existingFieldsRowObject,
+                        mandatoryFields
+                    };
                 });
                 const missingFields = [...missingFieldsSet];
                 missingFields.length && this.logger.error(`The following fields were not found: ${missingFields}`);

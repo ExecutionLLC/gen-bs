@@ -14,7 +14,7 @@ class AppServerUtils {
         return 'search_key';
     }
 
-    static getExcludedColumnNames(){
+    static getSearchKeyFieldsColumnNames(){
         return ['ALT', 'CHROM', 'POS', 'REF']
     }
 

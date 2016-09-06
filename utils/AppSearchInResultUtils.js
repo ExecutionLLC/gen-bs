@@ -19,7 +19,7 @@ class AppSearchInResultUtils {
     }
 
     static createAppGlobalFilter(globalSearchValue, samples, fieldsMetadata) {
-        const excludedColumnNames = AppServerUtils.getExcludedColumnNames();
+        const excludedColumnNames = AppServerUtils.getSearchKeyFieldsColumnNames();
         const viewExcludedColumnsNames = _.filter(excludedColumnNames, excludedColumnName =>{
                 return !_.some(fieldsMetadata, fieldMetadata => fieldMetadata.name ==excludedColumnName)
             }
@@ -35,8 +35,8 @@ class AppSearchInResultUtils {
         });
         // add search key
         excludedFields.push({
-            columnName: AppServerUtils.createColumnName(AppServerUtils.getSearchKeyFieldName(), samples[0].genotypeName),
-            sourceName: AppServerUtils.createSampleName(samples[0])
+            columnName: AppServerUtils.getSearchKeyFieldName(),
+            sourceName: ''
         });
 
         return {

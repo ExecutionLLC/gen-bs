@@ -36,8 +36,9 @@ class AppServerViewUtils {
 
     static createAppServerView(view, fieldIdToMetadata, samples) {
         const viewListItems = view.viewListItems;
-        const mandatoryFields = _.filter(fieldIdToMetadata, field => field.isMandatory);
-        const missingMandatoryFieldsListItems = _(mandatoryFields)
+        const searchKeyFieldNames = AppServerUtils.getSearchKeyFieldsColumnNames();
+        const searchKeyFields = _.filter(fieldIdToMetadata, field => _.includes(searchKeyFieldNames, field.name));
+        const missingSearchFieldsListItems = _(searchKeyFields)
             .filter(mandatoryField => !_.some(viewListItems, listItem => listItem.fieldId === mandatoryField.id))
             .map(field => {
                 return {
@@ -46,7 +47,7 @@ class AppServerViewUtils {
                 };
             })
             .value();
-        const allListItems = view.viewListItems.concat(missingMandatoryFieldsListItems);
+        const allListItems = view.viewListItems.concat(missingSearchFieldsListItems);
         // Map list items' field ids to pair (field name, source name).
         const listItems = _(allListItems)
         // Ignore missing fields, to be able to apply views generated for a different sample, with unique fields.
