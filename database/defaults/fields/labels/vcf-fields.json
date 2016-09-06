@@ -1,13 +1,6 @@
 [
   {
     "field": {
-      "name": "ALT",
-      "source_name": "sample"
-    },
-    "label": "Alternative Allele"
-  },
-  {
-    "field": {
       "name": "CHROM",
       "source_name": "sample"
     },
@@ -22,9 +15,352 @@
   },
   {
     "field": {
+      "name": "ID",
+      "source_name": "sample"
+    },
+    "label": "ID"
+  },
+  {
+    "field": {
       "name": "REF",
       "source_name": "sample"
     },
-    "label": "Reference Allele"
+    "label": "Reference allele"
+  },
+  {
+    "field": {
+      "name": "ALT",
+      "source_name": "sample"
+    },
+    "label": "Alternative allele"
+  },
+  {
+    "field": {
+      "name": "QUAL",
+      "source_name": "sample"
+    },
+    "label": "Phred call quality"
+  },
+  {
+    "field": {
+      "name": "FILTER",
+      "source_name": "sample"
+    },
+    "label": "Filter status"
+  },
+  {
+    "field": {
+      "name": "INFO_AA",
+      "source_name": "sample"
+    },
+    "label": "Ancestral allele"
+  },
+  {
+    "field": {
+      "name": "INFO_AC",
+      "source_name": "sample"
+    },
+    "label": "Allele counts"
+  },
+  {
+    "field": {
+      "name": "INFO_AD",
+      "source_name": "sample"
+    },
+    "label": "Read depth"
+  },
+  {
+    "field": {
+      "name": "INFO_ADF",
+      "source_name": "sample"
+    },
+    "label": "Read depth forward"
+  },
+  {
+    "field": {
+      "name": "INFO_ADR",
+      "source_name": "sample"
+    },
+    "label": "Read depth reverse"
+  },
+  {
+    "field": {
+      "name": "INFO_AF",
+      "source_name": "sample"
+    },
+    "label": "Allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AN",
+      "source_name": "sample"
+    },
+    "label": "Allele number"
+  },
+  {
+    "field": {
+      "name": "INFO_BQ",
+      "source_name": "sample"
+    },
+    "label": "RMS base quality at this position"
+  },
+  {
+    "field": {
+      "name": "INFO_CIGAR",
+      "source_name": "sample"
+    },
+    "label": "CIGAR"
+  },
+  {
+    "field": {
+      "name": "INFO_DB",
+      "source_name": "sample"
+    },
+    "label": "in dbSNP"
+  },
+  {
+    "field": {
+      "name": "INFO_DP",
+      "source_name": "sample"
+    },
+    "label": "Total depth"
+  },
+  {
+    "field": {
+      "name": "INFO_END",
+      "source_name": "sample"
+    },
+    "label": "Var end position"
+  },
+  {
+    "field": {
+      "name": "INFO_H2",
+      "source_name": "sample"
+    },
+    "label": "in HapMap2"
+  },
+  {
+    "field": {
+      "name": "INFO_H3",
+      "source_name": "sample"
+    },
+    "label": "in HapMap3"
+  },
+  {
+    "field": {
+      "name": "INFO_MQ",
+      "source_name": "sample"
+    },
+    "label": "Mapping Quality"
+  },
+  {
+    "field": {
+      "name": "INFO_MQ0",
+      "source_name": "sample"
+    },
+    "label": "0 quality reads"
+  },
+  {
+    "field": {
+      "name": "INFO_NS",
+      "source_name": "sample"
+    },
+    "label": "Samples with data"
+  },
+  {
+    "field": {
+      "name": "INFO_SB",
+      "source_name": "sample"
+    },
+    "label": "Strand bias"
+  },
+  {
+    "field": {
+      "name": "INFO_SOMATIC",
+      "source_name": "sample"
+    },
+    "label": "Somatic variant"
+  },
+  {
+    "field": {
+      "name": "INFO_VALIDATED",
+      "source_name": "sample"
+    },
+    "label": "Experimental validation"
+  },
+  {
+    "field": {
+      "name": "INFO_1000G",
+      "source_name": "sample"
+    },
+    "label": "in 1000 genomes"
+  },
+  {
+    "field": {
+      "name": "INFO_IMPRECISE",
+      "source_name": "sample"
+    },
+    "label": "Imprecise variant"
+  },
+  {
+    "field": {
+      "name": "INFO_NOVEL",
+      "source_name": "sample"
+    },
+    "label": "Novel structural variant"
+  },
+  {
+    "field": {
+      "name": "INFO_END",
+      "source_name": "sample"
+    },
+    "label": "End position"
+  },
+  {
+    "field": {
+      "name": "INFO_SVTYPE",
+      "source_name": "sample"
+    },
+    "label": "Structural variant type"
+  },
+  {
+    "field": {
+      "name": "INFO_SVLEN",
+      "source_name": "sample"
+    },
+    "label": "Structural variant length"
+  },
+  {
+    "field": {
+      "name": "INFO_CIEND",
+      "source_name": "sample"
+    },
+    "label": "End confidence"
+  },
+  {
+    "field": {
+      "name": "INFO_CIPOS",
+      "source_name": "sample"
+    },
+    "label": "Start confidence"
+  },
+  {
+    "field": {
+      "name": "INFO_HOMLEN",
+      "source_name": "sample"
+    },
+    "label": "Homology length"
+  },
+  {
+    "field": {
+      "name": "INFO_HOMSEQ",
+      "source_name": "sample"
+    },
+    "label": "Homology sequence"
+  },
+  {
+    "field": {
+      "name": "INFO_BKPTID",
+      "source_name": "sample"
+    },
+    "label": "Structure variant ID"
+  },
+  {
+    "field": {
+      "name": "INFO_MEINFO",
+      "source_name": "sample"
+    },
+    "label": "Mobile Element"
+  },
+  {
+    "field": {
+      "name": "INFO_METRANS",
+      "source_name": "sample"
+    },
+    "label": "Mobile Element transduction"
+  },
+  {
+    "field": {
+      "name": "INFO_DGVID",
+      "source_name": "sample"
+    },
+    "label": "DGV ID"
+  },
+  {
+    "field": {
+      "name": "INFO_DBVARID",
+      "source_name": "sample"
+    },
+    "label": "DGV ID"
+  },
+  {
+    "field": {
+      "name": "INFO_DBRIPVID",
+      "source_name": "sample"
+    },
+    "label": "DGV ID"
+  },
+  {
+    "field": {
+      "name": "INFO_MATEID",
+      "source_name": "sample"
+    },
+    "label": "Mate ID"
+  },
+  {
+    "field": {
+      "name": "INFO_RAPID",
+      "source_name": "sample"
+    },
+    "label": "Partner ID"
+  },
+  {
+    "field": {
+      "name": "INFO_EVENT",
+      "source_name": "sample"
+    },
+    "label": "Event ID"
+  },
+  {
+    "field": {
+      "name": "INFO_CILEN",
+      "source_name": "sample"
+    },
+    "label": "Confidence interval"
+  },
+  {
+    "field": {
+      "name": "INFO_DPADJ",
+      "source_name": "sample"
+    },
+    "label": "Adjacency read depth"
+  },
+  {
+    "field": {
+      "name": "INFO_CN",
+      "source_name": "sample"
+    },
+    "label": "Segment copy number"
+  },
+  {
+    "field": {
+      "name": "INFO_CNADJ",
+      "source_name": "sample"
+    },
+    "label": "Adjacency copy number"
+  },
+  {
+    "field": {
+      "name": "INFO_CICN",
+      "source_name": "sample"
+    },
+    "label": "Copy number confidence interval"
+  },
+  {
+    "field": {
+      "name": "INFO_CICNADJ",
+      "source_name": "sample"
+    },
+    "label": "Adjacency confidence interval"
   }
 ]
