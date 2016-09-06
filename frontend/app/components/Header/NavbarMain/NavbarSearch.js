@@ -75,5 +75,3 @@ NavbarSearch.propTypes = {
 };
 
 export default connect(mapStateToProps)(NavbarSearch);
-
-
