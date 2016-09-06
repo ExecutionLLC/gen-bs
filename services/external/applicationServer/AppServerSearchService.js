@@ -125,9 +125,19 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 callback(null, operation);
             },
             (operation, callback)=> {
-                const {samples, fieldsMetadata, globalSearchValue: {filter, excludedFields}, fieldSearchValues, sortValues, offset, limit} = params;
-                const setFilterRequest = this._createSearchInResultsParams(samples, fieldsMetadata, filter, excludedFields,
-                    fieldSearchValues, sortValues, offset, limit);
+                const {
+                    samples,
+                    fieldsMetadata,
+                    globalSearchValue: {
+                        filter
+                    },
+                    fieldSearchValues,
+                    sortValues,
+                    offset,
+                    limit} = params;
+                const setFilterRequest = this._createSearchInResultsParams(
+                    samples, fieldsMetadata, filter, fieldSearchValues, sortValues, offset, limit
+                );
                 this._rpcSend(session, operation, METHODS.searchInResults, setFilterRequest, (error) => callback(error, operation));
             }
         ], callback);
@@ -151,9 +161,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     //TODO: move data methods to another class
 
-    getSearchKeyFieldName() {
-        return 'search_key';
-    }
+
 
     _fetch(searchData, userId, sampleIds, viewId, callback) {
         async.waterfall([
@@ -363,8 +371,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         }, null, callback);
     }
 
-    _createSearchInResultsParams(samples, fieldsMetadata, globalSearchValue, excludedFields, fieldSearchValues, sortParams, offset, limit) {
-        const globalFilter = AppSearchInResultUtils.createAppGlobalFilter(globalSearchValue, excludedFields, samples, fieldsMetadata);
+    _createSearchInResultsParams(samples, fieldsMetadata, globalSearchValue, fieldSearchValues, sortParams, offset, limit) {
+        const globalFilter = AppSearchInResultUtils.createAppGlobalFilter(globalSearchValue, samples, fieldsMetadata);
         const columnFilters = AppSearchInResultUtils.createAppColumnFilter(fieldSearchValues, samples, fieldsMetadata);
         const sortOrder = AppSearchInResultUtils.createAppSortOrder(sortParams, samples, fieldsMetadata);
         return {

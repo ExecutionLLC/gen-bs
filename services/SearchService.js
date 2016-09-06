@@ -6,6 +6,7 @@ const async = require('async');
 const ServiceBase = require('./ServiceBase');
 const EventProxy = require('../utils/EventProxy');
 const CollectionUtils = require('../utils/CollectionUtils');
+const AppServerUtils = require('../utils/AppServerUtils');
 const RESULT_TYPES = require('./external/applicationServer/AppServerResultTypes');
 const {SEARCH_SERVICE_EVENTS} = require('../utils/Enums');
 
@@ -20,7 +21,7 @@ class SearchService extends ServiceBase {
     }
 
     init() {
-        this.searchKeyFieldName = this.services.applicationServerSearch.getSearchKeyFieldName();
+        this.searchKeyFieldName = AppServerUtils.getSearchKeyFieldName();
         this._subscribeToRPCEvents();
     }
 
@@ -230,10 +231,9 @@ class SearchService extends ServiceBase {
 
     _createAppServerSearchInResultsParams(user, sessionId, operationId, sampleIds, globalSearchValue,
                                           fieldSearchValues, sortValues, limit, offset, callback) {
-        const excludedFieldIds = globalSearchValue.excludedFields;
         const sortFieldIds = _.map(sortValues, sortValue => sortValue.fieldId);
         const searchFieldIds = _.map(fieldSearchValues, fieldSearchValue => fieldSearchValue.fieldId);
-        const searchInResultMetadataIds = _.union(sortFieldIds, searchFieldIds, excludedFieldIds);
+        const searchInResultMetadataIds = _.union(sortFieldIds, searchFieldIds);
         async.parallel({
             fieldsMetadata: (callback) => {
                 this.services.fieldsMetadata.findMany(searchInResultMetadataIds, callback)
