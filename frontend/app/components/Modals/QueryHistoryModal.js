@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 
 import { renewHistoryItem } from '../../actions/queryHistory';
 
-export default class QueryHistoryModal extends Component {
+class QueryHistoryModal extends Component {
     renderHeader() {
         return (
             <Modal.Header closeButton>
