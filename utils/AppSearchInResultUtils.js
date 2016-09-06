@@ -36,7 +36,7 @@ class AppSearchInResultUtils {
         // add search key
         excludedFields.push({
             columnName: AppServerUtils.getSearchKeyFieldName(),
-            sourceName: AppServerUtils.createSampleName(samples[0])
+            sourceName: ''
         });
 
         return {
