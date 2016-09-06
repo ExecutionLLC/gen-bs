@@ -53,20 +53,21 @@ export function filterBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function filterBuilderStartEdit(makeNew, filter, fields, filtersData, filtersList) {
+export function filterBuilderStartEdit(makeNew, filter, fields, allowedFields, filtersData, filtersList) {
     return {
         type: FBUILDER_START_EDIT,
         makeNew,
         filter,
         filtersData,
         filtersList,
-        fields
+        fields,
+        allowedFields
     };
 }
 
 export function filterBuilderRestartEdit(makeNew, filter) {
     return (dispatch, getState) => {
-        dispatch(filterBuilderStartEdit(makeNew, filter, getState().fields, getState().filterBuilder.filtersData, filterBuilderData[getState().filterBuilder.filtersData].getList(getState())));
+        dispatch(filterBuilderStartEdit(makeNew, filter, getState().fields, getState().filterBuilder.allowedFields, getState().filterBuilder.filtersData, filterBuilderData[getState().filterBuilder.filtersData].getList(getState())));
     };
 }
 

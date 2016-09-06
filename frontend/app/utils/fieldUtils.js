@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class FieldUtils {
     static find(fieldId, fields) {
         return fields.totalFieldsHashedArray.hash[fieldId];
@@ -97,5 +99,14 @@ export default class FieldUtils {
                 if (a.label < b.label) {return -1;}
                 return 0;
             });
+    }
+
+    static makeAllowedFields(mainSample, totalFieldsHash, sourceFieldsList) {
+        const sampleFields = FieldUtils.getSampleFields(mainSample, totalFieldsHash);
+        const sortedLabelledFields = FieldUtils.sortAndAddLabels(sampleFields);
+        return [
+            ..._.filter(sortedLabelledFields, ['isEditable', false]),
+            ...sourceFieldsList
+        ];
     }
 }

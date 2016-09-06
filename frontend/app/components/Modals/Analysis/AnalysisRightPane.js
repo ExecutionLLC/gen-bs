@@ -20,6 +20,7 @@ import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {fetchFields} from '../../../actions/fields';
+import FieldUtils from '../../../utils/fieldUtils';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -735,8 +736,10 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onFiltersClick() {
-        const {dispatch, historyItem, filtersList, fields} = this.props;
-        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, 'filter', filtersList));
+        const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const mainSample = samplesHash[historyItem.samples[0].id];
+        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, 'filter', filtersList));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         dispatch(openModal('filters'));
@@ -747,8 +750,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelClick() {
-        const {dispatch, historyItem, modelsList, fields} = this.props;
-        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, 'model', modelsList));
+        const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const mainSample = samplesHash[historyItem.samples[0].id];
+        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, 'model', modelsList));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         dispatch(openModal('filters'));
