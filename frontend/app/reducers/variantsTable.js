@@ -50,8 +50,7 @@ export default function variantsTable(state = initialState, action) {
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     topSearch: {
-                        filter: action.globalSearchString,
-                        excludedFields: [] // TODO remove
+                        filter: action.globalSearchString
                     },
                     ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),
