@@ -12,8 +12,7 @@ export default class VariantsTableHead extends Component {
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
         const {
-            variantsView: currentView,
-            variantsSampleFieldsList: currentSampleFields
+            variantsView: currentView
         } = ws;
 
         if (!currentView) {
@@ -23,9 +22,6 @@ export default class VariantsTableHead extends Component {
                 </tbody>
             );
         }
-
-        const expectedFields = [...fields.sourceFieldsList, ...currentSampleFields];
-        const expectedFieldsHash = _.keyBy(expectedFields, (field) => field.id);
 
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
@@ -60,17 +56,17 @@ export default class VariantsTableHead extends Component {
                     </div>
                 </td>
                 {_.map(variantsHeader, (fieldSample) =>
-                    this.renderFieldHeader(fieldSample.fieldId, fieldSample.sampleId, fields, expectedFieldsHash, isFetching, sort, dispatch)
+                    this.renderFieldHeader(fieldSample.fieldId, fieldSample.sampleId, fieldSample.exist, fields, isFetching, sort, dispatch)
                 )}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, fields, expectedFieldsHash, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist, fields, isFetching, sortState, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
-        const areControlsEnabled = !!expectedFieldsHash[fieldId];
+        const areControlsEnabled = !!isExist;
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
             dispatch(sortVariants(fieldId, sampleId, direction, isControlKeyPressed));
         const sendSearchRequest = (fieldId, searchValue) => {
