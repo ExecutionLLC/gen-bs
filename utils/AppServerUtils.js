@@ -4,7 +4,6 @@ const _ = require('lodash');
 const {ENTITY_TYPES} = require('./Enums');
 const ignoredColumnNames = ['CHROM', 'POS'];
 const ignoredColumnPrefixes = ['VEP_'];
-const excludedColumnNames = ['ALT', 'CHROM', 'POS', 'REF'];
 
 class AppServerUtils {
     static getGenotypeFieldsPrefix() {
@@ -15,13 +14,8 @@ class AppServerUtils {
         return 'search_key';
     }
 
-    static getExcludedColumnNames(fieldsMetadata){
-        const excludedColumnNames = _.filter(
-            excludedColumnNames,excludedColumnName =>  {
-                return !_.some(fieldsMetadata, fieldMetadata => fieldMetadata.name == excludedColumnName)
-            }
-        );
-        return _.union(excludedColumnNames, AppServerUtils.getSearchKeyFieldName())
+    static getExcludedColumnNames(){
+        return ['ALT', 'CHROM', 'POS', 'REF']
     }
 
     static getNoneDuplicatedColumnNames(fieldIdToMetadata) {

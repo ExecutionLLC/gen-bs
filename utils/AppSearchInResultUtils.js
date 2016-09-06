@@ -19,54 +19,29 @@ class AppSearchInResultUtils {
     }
 
     static createAppGlobalFilter(globalSearchValue, samples, fieldsMetadata) {
-        const excludedColumnNames = AppServerUtils.getExcludedColumnNames(fieldsMetadata);
-        const excludedFields = _.filter(fieldsMetadata, fieldMetadata => {
-            return !_.some(excludedColumnNames, (columnName) => {
-                return columnName === fieldMetadata.name
+        const excludedColumnNames = AppServerUtils.getExcludedColumnNames();
+        const viewExcludedColumnsNames = _.filter(excludedColumnNames, excludedColumnName =>{
+                return !_.some(fieldsMetadata, fieldMetadata => fieldMetadata.name ==excludedColumnName)
+            }
+        );
+        const excludedFields = [];
+        _.forEach(viewExcludedColumnsNames, viewExcludedColumnsName => {
+            _.forEach(samples, sample => {
+                excludedFields.push({
+                    columnName: AppServerUtils.createColumnName(viewExcludedColumnsName, sample.genotypeName),
+                    sourceName: AppServerUtils.createSampleName(sample)
+                });
             })
         });
-        const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(excludedFields);
-        const duplicatedItems = _(excludedFields)
-            .filter(excludedField => {
-                return !_.some(noneDuplicatedColumnNames, (columnName) => {
-                    return columnName === excludedField.name
-                })
-            })
-            .value();
-
-        const duplicatedColumns = [].concat.apply(
-            [], _.map(
-                duplicatedItems,
-                searchItem => AppSearchInResultUtils.getGlobalFilterDuplicatedColumns(searchItem, samples)
-            )
-        );
-
-        const noneDuplicatedItems = _(excludedFields)
-            .filter(excludedField => {
-                return _.some(noneDuplicatedColumnNames, (columnName) => {
-                    return columnName === excludedField.name
-                })
-            })
-            .value();
-
-        const noneDuplicatedColumns = [].concat.apply(
-            [], _.map(
-                noneDuplicatedItems,
-                searchItem => AppSearchInResultUtils.getGlobalFilterDuplicatedColumns(searchItem, samples)
-            )
-        );
-
-        const newExcludedFields = [].concat.apply(
-            [],
-            [
-                noneDuplicatedColumns,
-                duplicatedColumns
-            ]
-        );
+        // add search key
+        excludedFields.push({
+            columnName: AppServerUtils.createColumnName(AppServerUtils.getSearchKeyFieldName(), samples[0].genotypeName),
+            sourceName: AppServerUtils.createSampleName(samples[0])
+        });
 
         return {
             filter: globalSearchValue,
-            excludedFields: newExcludedFields
+            excludedFields: excludedFields
         }
     }
 

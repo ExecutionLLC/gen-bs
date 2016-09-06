@@ -118,7 +118,7 @@ class SearchService extends ServiceBase {
         async.waterfall([
             (callback) => this.services.operations.find(session, operationId, callback),
             (operation, callback) => {
-                this._createAppServerSearchInResultsParams(user, session.id, operationId, operation.getSampleIds(), globalSearchValue,
+                this._createAppServerSearchInResultsParams(user, session.id, operationId, operation.getSampleIds(), operation.getViewId(), globalSearchValue,
                     fieldSearchValues, sortValues, limit, offset, callback);
             },
             (appServerParams, callback) => {
@@ -229,15 +229,21 @@ class SearchService extends ServiceBase {
         ], callback);
     }
 
-    _createAppServerSearchInResultsParams(user, sessionId, operationId, sampleIds, globalSearchValue,
+    _createAppServerSearchInResultsParams(user, sessionId, operationId, sampleIds, viewId, globalSearchValue,
                                           fieldSearchValues, sortValues, limit, offset, callback) {
-        const sortFieldIds = _.map(sortValues, sortValue => sortValue.fieldId);
-        const searchFieldIds = _.map(fieldSearchValues, fieldSearchValue => fieldSearchValue.fieldId);
-        const searchInResultMetadataIds = _.union(sortFieldIds, searchFieldIds);
+        // const sortFieldIds = _.map(sortValues, sortValue => sortValue.fieldId);
+        // const searchFieldIds = _.map(fieldSearchValues, fieldSearchValue => fieldSearchValue.fieldId);
+        // const searchInResultMetadataIds = _.union(sortFieldIds, searchFieldIds);
         async.parallel({
-            fieldsMetadata: (callback) => {
-                this.services.fieldsMetadata.findMany(searchInResultMetadataIds, callback)
-            },
+            fieldsMetadata: (callback) => async.waterfall(
+                [
+                    (callback) => this.services.views.find(user, viewId, callback),
+                    (view, callback) => this.services.fieldsMetadata.findMany(
+                        _.map(view.viewListItems,item => item.fieldId),
+                        callback
+                    ),
+                ], callback
+            ),
             samples: (callback) => {
                 this.services.samples.findMany(user, sampleIds, callback);
             }
