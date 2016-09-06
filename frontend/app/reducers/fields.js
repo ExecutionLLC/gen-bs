@@ -9,23 +9,10 @@ const initialState = {
         samples: false,
         sources: false
     },
-    sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
     editableFields: [],
     sourceFieldsList: [],
     totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([])
 };
-
-function reduceReceiveFields(action, state) {
-    const fields = FieldUtils.sortAndAddLabels(action.fields);
-
-    return Object.assign({}, state, {
-        isFetching: Object.assign({}, state.isFetching, {
-            samples: false
-        }),
-        sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray(fields),
-        lastUpdated: action.receivedAt
-    });
-}
 
 function reduceReceiveTotalFields(action, state) {
     const totalFields = FieldUtils.sortAndAddLabels(action.fields);
@@ -53,9 +40,6 @@ function reduceRequestTotalFields(action, state) {
 export default function fields(state = initialState, action) {
 
     switch (action.type) {
-
-        case ActionTypes.RECEIVE_FIELDS:
-            return reduceReceiveFields(action, state);
 
         case ActionTypes.REQUEST_TOTAL_FIELDS:
             return reduceRequestTotalFields(action, state);

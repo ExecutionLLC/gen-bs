@@ -19,7 +19,6 @@ import {
 import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
-import {fetchFields} from '../../../actions/fields';
 import FieldUtils from '../../../utils/fieldUtils';
 
 
@@ -773,9 +772,6 @@ export default class AnalysisRightPane extends React.Component {
     
     onSampleSelect(sampleIndex, sampleId) {
         this.props.dispatch(this.actionEdit({sample: {index: sampleIndex, id: sampleId}}));
-        if (!sampleIndex) {
-            this.props.dispatch(fetchFields(sampleId)); // TODO check if fetched correctly
-        }
     }
 
     actionEdit(change) {

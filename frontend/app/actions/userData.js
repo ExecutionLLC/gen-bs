@@ -4,8 +4,7 @@ import _ from 'lodash';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {
-    receiveTotalFields,
-    fetchFields
+    receiveTotalFields
 } from './fields';
 import {receiveSavedFilesList} from './savedFiles';
 import {
@@ -91,7 +90,6 @@ export function fetchUserdata() {
                 dispatch(receiveInitialQueryHistory(analyses));
                 if (analyses[0]) {
                     const historyItem = analyses[0];
-                    dispatch(fetchFields(historyItem.samples[0].id)); // TODO check if no need to wait fetchFields
                     dispatch(setCurrentQueryHistoryIdLoadData(historyItem.id))
                         .then(() => {
                             dispatch(analyze({
@@ -115,7 +113,6 @@ export function fetchUserdata() {
                     if (!sample || !filter || !view) {
                         dispatch(handleError(null, CANNOT_FIND_DEFAULT_ITEMS_ERROR));
                     } else {
-                        dispatch(fetchFields(sample.id)); // TODO check if no need to wait fetchFields
                         dispatch(createNewHistoryItem(sample, filter, view));
                         dispatch(setCurrentQueryHistoryIdLoadData(null))
                             .then(() => {

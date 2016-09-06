@@ -2,13 +2,10 @@ import HttpStatus from 'http-status';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
-import FieldUtils from '../utils/fieldUtils';
 
 /*
  * action types
  */
-
-export const RECEIVE_FIELDS = 'RECEIVE_FIELDS';
 
 export const REQUEST_TOTAL_FIELDS = 'REQUEST_TOTAL_FIELDS';
 export const RECEIVE_TOTAL_FIELDS = 'RECEIVE_TOTAL_FIELDS';
@@ -21,25 +18,6 @@ const samplesClient = apiFacade.samplesClient;
 /*
  * action creators
  */
-export function receiveFields(fields) {
-    return {
-        type: RECEIVE_FIELDS,
-        fields: fields || [],
-        receivedAt: Date.now()
-    };
-}
-
-export function fetchFields(sampleId) {
-
-    return (dispatch, getState) => {
-        const {samplesList: {hashedArray: {hash: samplesHash}}, fields: {totalFieldsHashedArray: {hash: totalFieldsHash}}} = getState();
-        const sample = samplesHash[sampleId];
-        if (sample) {
-            dispatch(receiveFields(FieldUtils.getSampleFields(sample, totalFieldsHash)));
-        }
-    };
-}
-
 function requestTotalFields() {
     return {
         type: REQUEST_TOTAL_FIELDS
