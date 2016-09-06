@@ -18,8 +18,13 @@ class AppSearchInResultUtils {
             .value();
     }
 
-    static createAppGlobalFilter(globalSearchValue, excludedFieldIds, samples, fieldsMetadata) {
-        const excludedFields = _.map(excludedFieldIds, excludedFieldId => _.find(fieldsMetadata, fieldMetadata => fieldMetadata.id ==excludedFieldId ));
+    static createAppGlobalFilter(globalSearchValue, samples, fieldsMetadata) {
+        const excludedColumnNames = AppServerUtils.getExcludedColumnNames(fieldsMetadata);
+        const excludedFields = _.filter(fieldsMetadata, fieldMetadata => {
+            return !_.some(excludedColumnNames, (columnName) => {
+                return columnName === fieldMetadata.name
+            })
+        });
         const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(excludedFields);
         const duplicatedItems = _(excludedFields)
             .filter(excludedField => {
