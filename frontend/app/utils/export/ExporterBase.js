@@ -22,14 +22,13 @@ export default class ExporterBase {
 
     /**
      * Creates new Blob containing data in specified format.
-     * @param columnsArray Array of objects, each has {id, name}
-     * @param data Array of objects, each is a hash {columnId->value}
+     * @param {string[]} columnsArray Array of column names
+     * @param {string[]} data Array of column values
      * */
     buildBlob(columnsArray, data) {
         const headerRow = this.buildHeaderRow(columnsArray);
         const rows = _.map(data, row => {
-            const orderedValues = _.map(columnsArray, column => row[column.id] || '');
-            return this.buildRow(columnsArray, orderedValues, data);
+            return this.buildRow(columnsArray, row);
         });
 
         const documentBody = this.buildDocument(headerRow, rows);

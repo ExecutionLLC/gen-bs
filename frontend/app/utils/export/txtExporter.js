@@ -8,17 +8,16 @@ export default class TxtExporter extends ExporterBase {
     }
 
     buildHeaderRow(columnsArray) {
-        return _.map(columnsArray, column => {
-            const valueLength = this.longestValueLengthByColumn[column.id];
-
-            return this._addSpaces(column.name, valueLength);
+        return _.map(columnsArray, (column, index) => {
+            const valueLength = this.longestValueLengthByColumn[index];
+            return this._addSpaces(column, valueLength);
         }).join(this.valuesSeparator);
     }
 
     buildRow(columnsArray, rowValues) {
         return _.map(columnsArray, (column, columnIndex) => {
             const rowValue = rowValues[columnIndex];
-            const valueLength = this.longestValueLengthByColumn[column.id];
+            const valueLength = this.longestValueLengthByColumn[columnIndex];
             return this._addSpaces(rowValue, valueLength);
         }).join(this.valuesSeparator);
     }
@@ -40,14 +39,13 @@ export default class TxtExporter extends ExporterBase {
      * Finds longest value for each column, which allows us to build a straight results table later.
      * */
     _getLongestValueLengths(columnsArray, data) {
-        return _.reduce(columnsArray, (result, column) => {
+        return _.reduce(columnsArray, (result, column, columnIndex) => {
             // Find length of the longest value in the column.
-            const longestRowValue = _.reduce(data, (maxVal, row) => Math.max((row[column.id] || '').length, maxVal), 0);
-
+            const longestRowValue = _.reduce(data, (maxVal, row) => Math.max(row[columnIndex].length, maxVal), 0);
             // Take max between the value and the column name length.
-            result[column.id] = Math.max(longestRowValue, column.name.length);
+            result.push(Math.max(longestRowValue, column.length));
             return result;
-        }, {});
+        }, []);
     }
 }
 

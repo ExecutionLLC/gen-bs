@@ -118,7 +118,7 @@ export default function websocket(state = {
             });
         case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {
-                variantsView: action.view, // used variantsView.viewListItems (if variantsView) at exportToFile, VariantsTableHead, VariantsTableRows
+                variantsView: action.view, // used variantsView.viewListItems (if variantsView) at VariantsTableHead, VariantsTableRows
                 variantsSamples: action.samples, // used variantsSample.fileName at exportToFile
                 variantsFilter: action.filter, // unused
                 variantsModel: action.model, // unused

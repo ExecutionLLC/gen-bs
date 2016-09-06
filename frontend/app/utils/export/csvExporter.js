@@ -9,8 +9,7 @@ export default class CsvExporter extends ExporterBase {
     }
 
     buildHeaderRow(columnsArray) {
-        const columnNames = _.map(columnsArray, col => col.name);
-        return this._createRow(columnNames);
+        return this._createRow(columnsArray);
     }
 
     buildRow(columnsArray, rowValues) {

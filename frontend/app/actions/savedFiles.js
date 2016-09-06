@@ -111,7 +111,7 @@ export function exportToFile(exportType) {
             },
             websocket: {
                 variants,
-                variantsView,
+                variantsHeader,
                 variantsSamples
             },
             variantsTable: {
@@ -124,31 +124,14 @@ export function exportToFile(exportType) {
 
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
-        const columns = _.map(variantsView.viewListItems, listItem => {
+        const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
-            return {
-                id: listItem.fieldId,
-                name: field.label
-            };
+            return field.label;
         })
-        .concat([{
-            id: 'comment',
-            name: 'Comment'
-        }]);
+        .concat(['Comment']);
 
-        // The export data should be array of objects in {field_id -> field_value} format.
         const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
-            .map(rowIndex => Object.assign({}, rowIndex, {
-                rowIndex,
-                row: variants[rowIndex]
-            }))
-            .map(item => {
-                // Add first comment.
-                const comment = _.isEmpty(item.row.comments) ? '' : item.row.comments[0].comment;
-                return Object.assign({}, { // TODO check the export
-                    comment
-                });
-            })
+            .map(rowIndex => [...variants[rowIndex].fields, ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]])
             .value();
 
         const exporter = ExportUtils.createExporter(exportType);

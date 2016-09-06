@@ -18,7 +18,7 @@ export default class SqlExporter extends ExporterBase {
     }
 
     buildBlob(columnsArray, data) {
-        const sqlColumnNames = _.map(columnsArray, col => `"${col.name}"`);
+        const sqlColumnNames = _.map(columnsArray, col => `"${col}"`);
         this.baseSqlQuery = `INSERT INTO "${this.tableName}" (${sqlColumnNames.join(', ')}) VALUES `;
         return super.buildBlob(columnsArray, data);
     }
