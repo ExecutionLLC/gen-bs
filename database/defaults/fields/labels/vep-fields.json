@@ -176,7 +176,21 @@
   },
   {
     "field": {
+      "name": "VEP_HGNC_NAME",
+      "source_name": "sample"
+    },
+    "label": "HGNC name"
+  },
+  {
+    "field": {
       "name": "VEP_HGNC_ID",
+      "source_name": "sample"
+    },
+    "label": "HGNC ID"
+  },
+  {
+    "field": {
+      "name": "VEP_GENE_CARDS",
       "source_name": "sample"
     },
     "label": "GeneCards"
@@ -221,7 +235,7 @@
       "name": "VEP_Zygosity",
       "source_name": "sample"
     },
-    "label": "Zygosity"
+    "label": "Zygosity adjusted"
   },
   {
     "field": {
@@ -305,7 +319,7 @@
       "name": "VEP_VARIANT_CLASS",
       "source_name": "sample"
     },
-    "label": "Sequence Ontology"
+    "label": "Variant Ontology"
   },
   {
     "field": {
@@ -410,7 +424,7 @@
       "name": "VEP_GENE_PHENO",
       "source_name": "sample"
     },
-    "label": "Cell phenotype"
+    "label": "Gene phenotype"
   },
   {
     "field": {
@@ -551,5 +565,12 @@
       "source_name": "sample"
     },
     "label": "Clinicaly significant"
+  },
+  {
+    "field": {
+      "name": "VEP_PICK",
+      "source_name": "sample"
+    },
+    "label": "Longest transcript"
   }
 ]
