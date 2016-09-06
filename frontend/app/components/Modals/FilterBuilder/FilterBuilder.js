@@ -436,10 +436,11 @@ export default class FilterBuilder extends React.Component {
         } = this.props;
         const filter = filterBuilder.editingFilter.filter;
         const parsedFilter = filterBuilder.editingFilter.parsedFilter;
+        const allowedFields = filterBuilder.allowedFields;
         return (
             <div className='builder-wrapper'>
                 <FilterQueryBuilder
-                    allowedFields={fields.allowedFieldsList.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
+                    allowedFields={allowedFields.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     rules={parsedFilter}
                     disabled={!entityTypeIsEditable(filter.type)}

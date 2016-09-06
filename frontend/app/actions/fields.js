@@ -2,6 +2,7 @@ import HttpStatus from 'http-status';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
+import FieldUtils from '../utils/fieldUtils';
 
 /*
  * action types
@@ -34,9 +35,7 @@ export function fetchFields(sampleId) {
         const {samplesList: {hashedArray: {hash: samplesHash}}, fields: {totalFieldsHashedArray: {hash: totalFieldsHash}}} = getState();
         const sample = samplesHash[sampleId];
         if (sample) {
-            const sampleValues = sample.values;
-            const sampleFields = sampleValues.map(({fieldId}) => totalFieldsHash[fieldId]);
-            dispatch(receiveFields(sampleFields));
+            dispatch(receiveFields(FieldUtils.getSampleFields(sample, totalFieldsHash)));
         }
     };
 }

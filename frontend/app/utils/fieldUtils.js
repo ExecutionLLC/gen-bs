@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class FieldUtils {
     static find(fieldId, fields) {
         return fields.totalFieldsHashedArray.hash[fieldId];
@@ -77,4 +79,34 @@ export default class FieldUtils {
         return null;
     }
 
+    static getSampleFields(sample, totalFieldsHash) {
+        const sampleValues = sample.values;
+        const sampleFields = sampleValues.map(({fieldId}) => totalFieldsHash[fieldId]);
+        return sampleFields;
+    }
+
+    static sortAndAddLabels(fields) {
+        // Patch field label because it may not exist
+        function updateFieldLabelIfNeeded(field) {
+            return Object.assign({}, field, {
+                label: field.label ? field.label : field.name
+            });
+        }
+
+        return fields.map(updateFieldLabelIfNeeded)
+            .sort((a, b) => {
+                if (a.label > b.label) {return 1;}
+                if (a.label < b.label) {return -1;}
+                return 0;
+            });
+    }
+
+    static makeAllowedFields(mainSample, totalFieldsHash, sourceFieldsList) {
+        const sampleFields = FieldUtils.getSampleFields(mainSample, totalFieldsHash);
+        const sortedLabelledFields = FieldUtils.sortAndAddLabels(sampleFields);
+        return [
+            ..._.filter(sortedLabelledFields, ['isEditable', false]),
+            ...sourceFieldsList
+        ];
+    }
 }

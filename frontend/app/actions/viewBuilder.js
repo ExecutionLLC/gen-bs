@@ -33,11 +33,18 @@ export function viewBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function viewBuilderStartEdit(makeNew, view) {
+export function viewBuilderStartEdit(makeNew, view, allowedFields) {
     return {
         type: VBUILDER_START_EDIT,
         makeNew,
-        view
+        view,
+        allowedFields
+    };
+}
+
+export function viewBuilderRestartEdit(makeNew, view) {
+    return (dispatch, getState) => {
+        dispatch(viewBuilderStartEdit(makeNew, view, getState().viewBuilder.allowedFields));
     };
 }
 
@@ -168,7 +175,7 @@ export function viewBuilderDeleteView(viewId) {
                 const editingViewId = state.viewBuilder.editingView.id;
                 const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
                 const newView = viewIdToViewHash[newViewId];
-                dispatch(viewBuilderStartEdit(false, newView));
+                dispatch(viewBuilderRestartEdit(false, newView));
             });
     };
 }

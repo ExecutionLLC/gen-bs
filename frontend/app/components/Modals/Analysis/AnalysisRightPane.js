@@ -20,6 +20,7 @@ import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import {fetchFields} from '../../../actions/fields';
+import FieldUtils from '../../../utils/fieldUtils';
 
 
 export default class AnalysisRightPane extends React.Component {
@@ -723,8 +724,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewsClick() {
-        const {historyItem, viewsList} = this.props;
-        this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId]));
+        const {historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const mainSample = samplesHash[historyItem.samples[0].id];
+        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields));
         const action = this.actionEdit({viewId: null});
         this.props.dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
         this.props.dispatch(openModal('views'));
@@ -735,11 +738,13 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onFiltersClick() {
-        const {historyItem, filtersList} = this.props;
-        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields, 'filter', filtersList));
+        const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const mainSample = samplesHash[historyItem.samples[0].id];
+        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, 'filter', filtersList));
         const action = this.actionEdit({filterId: null});
-        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
-        this.props.dispatch(openModal('filters'));
+        dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
+        dispatch(openModal('filters'));
     }
 
     onFilterSelect(filterId) {
@@ -747,11 +752,13 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelClick() {
-        const {historyItem, modelsList} = this.props;
-        this.props.dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], this.props.fields, 'model', modelsList));
+        const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const mainSample = samplesHash[historyItem.samples[0].id];
+        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, 'model', modelsList));
         const action = this.actionEdit({modelId: null});
-        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
-        this.props.dispatch(openModal('filters'));
+        dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
+        dispatch(openModal('filters'));
     }
 
     onModelSelect(modelId) {

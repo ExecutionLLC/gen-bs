@@ -104,7 +104,6 @@ export default class VariantsTableRow extends ComponentBase {
 VariantsTableRow.propTypes = {
     row: React.PropTypes.object.isRequired,
     rowIndex: React.PropTypes.number.isRequired,
-    currentView: React.PropTypes.object.isRequired,
     sortState: React.PropTypes.array.isRequired,
     auth: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func.isRequired,

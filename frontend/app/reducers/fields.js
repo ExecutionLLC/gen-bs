@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import * as ActionTypes from '../actions/fields';
 import {ImmutableHashedArray} from '../utils/immutable';
+import FieldUtils from '../utils/fieldUtils';
 
 const initialState = {
     isFetching: {
@@ -11,47 +12,23 @@ const initialState = {
     sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
     editableFields: [],
     sourceFieldsList: [],
-    totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
-    // Fields allowed for selection in a typical fields list (include current sample fields and sources fields)
-    allowedFieldsList: []
+    totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([])
 };
 
-// Patch field label because it may not exist
-function updateFieldLabelIfNeeded(field) {
-    return Object.assign({}, field, {
-        label: field.label ? field.label : field.name
-    });
-}
-
-function sortAndAddLabels(fields) {
-    return fields.map(updateFieldLabelIfNeeded)
-        .sort((a, b) => {
-            if (a.label > b.label) {return 1;}
-            if (a.label < b.label) {return -1;}
-            return 0;
-        });
-}
-
 function reduceReceiveFields(action, state) {
-    const {sourceFieldsList} = state;
-    const fields = sortAndAddLabels(action.fields);
-    const allowedFieldsList = [
-        ..._.filter(fields, ['isEditable', false]),
-        ...sourceFieldsList
-    ];
+    const fields = FieldUtils.sortAndAddLabels(action.fields);
 
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
             samples: false
         }),
         sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray(fields),
-        allowedFieldsList,
         lastUpdated: action.receivedAt
     });
 }
 
 function reduceReceiveTotalFields(action, state) {
-    const totalFields = sortAndAddLabels(action.fields);
+    const totalFields = FieldUtils.sortAndAddLabels(action.fields);
     const editableFields = _.filter(totalFields, ['isEditable', true]);
     const sourceFields = _.filter(totalFields, (field) => field.sourceName !== 'sample');
     return Object.assign({}, state, {

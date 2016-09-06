@@ -1,5 +1,5 @@
 import React from 'react';
-import {viewBuilderChangeAttr, viewBuilderStartEdit} from '../../../actions/viewBuilder';
+import {viewBuilderChangeAttr, viewBuilderRestartEdit} from '../../../actions/viewBuilder';
 import config from '../../../../config';
 
 export default class NewViewInputs extends React.Component {
@@ -74,7 +74,7 @@ export default class NewViewInputs extends React.Component {
 
     onCancelClick() {
         const parentView = this.props.viewsList.hashedArray.hash[this.props.viewBuilder.editingViewParentId];
-        this.props.dispatch(viewBuilderStartEdit(false, parentView));
+        this.props.dispatch(viewBuilderRestartEdit(false, parentView));
     }
 
 }
