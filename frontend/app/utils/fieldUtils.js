@@ -82,4 +82,20 @@ export default class FieldUtils {
         const sampleFields = sampleValues.map(({fieldId}) => totalFieldsHash[fieldId]);
         return sampleFields;
     }
+
+    static sortAndAddLabels(fields) {
+        // Patch field label because it may not exist
+        function updateFieldLabelIfNeeded(field) {
+            return Object.assign({}, field, {
+                label: field.label ? field.label : field.name
+            });
+        }
+
+        return fields.map(updateFieldLabelIfNeeded)
+            .sort((a, b) => {
+                if (a.label > b.label) {return 1;}
+                if (a.label < b.label) {return -1;}
+                return 0;
+            });
+    }
 }

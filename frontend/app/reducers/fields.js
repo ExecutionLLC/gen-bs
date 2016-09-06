@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import * as ActionTypes from '../actions/fields';
 import {ImmutableHashedArray} from '../utils/immutable';
+import FieldUtils from '../utils/fieldUtils';
 
 const initialState = {
     isFetching: {
@@ -16,25 +17,9 @@ const initialState = {
     allowedFieldsList: []
 };
 
-// Patch field label because it may not exist
-function updateFieldLabelIfNeeded(field) {
-    return Object.assign({}, field, {
-        label: field.label ? field.label : field.name
-    });
-}
-
-function sortAndAddLabels(fields) {
-    return fields.map(updateFieldLabelIfNeeded)
-        .sort((a, b) => {
-            if (a.label > b.label) {return 1;}
-            if (a.label < b.label) {return -1;}
-            return 0;
-        });
-}
-
 function reduceReceiveFields(action, state) {
     const {sourceFieldsList} = state;
-    const fields = sortAndAddLabels(action.fields);
+    const fields = FieldUtils.sortAndAddLabels(action.fields);
     const allowedFieldsList = [
         ..._.filter(fields, ['isEditable', false]),
         ...sourceFieldsList
@@ -51,7 +36,7 @@ function reduceReceiveFields(action, state) {
 }
 
 function reduceReceiveTotalFields(action, state) {
-    const totalFields = sortAndAddLabels(action.fields);
+    const totalFields = FieldUtils.sortAndAddLabels(action.fields);
     const editableFields = _.filter(totalFields, ['isEditable', true]);
     const sourceFields = _.filter(totalFields, (field) => field.sourceName !== 'sample');
     return Object.assign({}, state, {
