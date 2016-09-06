@@ -145,7 +145,7 @@ export function exportToFile(exportType) {
             .map(item => {
                 // Add first comment.
                 const comment = _.isEmpty(item.row.comments) ? '' : item.row.comments[0].comment;
-                return Object.assign({}, item.row.fieldsHash, { // FIXME rid of fieldsHash
+                return Object.assign({}, { // TODO check the export
                     comment
                 });
             })

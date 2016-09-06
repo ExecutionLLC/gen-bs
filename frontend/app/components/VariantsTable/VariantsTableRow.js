@@ -21,7 +21,7 @@ export default class VariantsTableRow extends ComponentBase {
         const rowFields = row.fields;
         const comments = row.comments;
 
-        const pos = this.getMainFieldValue('POS', rowFields, fields, variantsHeader);
+        const pos = this.getMainFieldValue('POS', rowFields, fields, variantsHeader); // FIXME change mandatory fields get
         const alt = this.getMainFieldValue('ALT', rowFields, fields, variantsHeader);
         const chrom = this.getMainFieldValue('CHROM', rowFields, fields, variantsHeader);
         const ref = this.getMainFieldValue('REF', rowFields, fields, variantsHeader);
