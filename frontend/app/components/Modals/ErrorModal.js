@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
-export default class ErrorModal extends Component {
+class ErrorModal extends Component {
     renderHeader() {
         return (
             <Modal.Header>
