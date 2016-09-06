@@ -302,8 +302,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             },
             (samplesFieldHashArray, callback) => {
                 const missingFieldsSet = new Set();
+                const searchKeyFieldName = AppServerUtils.getSearchKeyFieldName();
                 const fieldsWithIdArray = _.map(asData, (rowObject) => {
-                    const searchKeyFieldName = this.getSearchKeyFieldName();
                     const mappedRowObject = _.map(rowObject, rowField => {
                         if (rowField.fieldName !== searchKeyFieldName) {
                             const currentSampleFieldHash = _.find(samplesFieldHashArray, sampleFieldHash => sampleFieldHash.appServerSampleId == rowField.fieldSource);
