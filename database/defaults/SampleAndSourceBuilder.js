@@ -191,7 +191,7 @@ class SampleAndSourceBuilder extends DefaultsBuilderBase {
         if (isSample) {
             const editableFieldsIds = _(fieldsMetadata)
                 .filter('isEditable', true)
-                .pluck('id')
+                .map('id')
                 .value();
             sampleFieldIds.push.apply(sampleFieldIds, editableFieldsIds);
         }
