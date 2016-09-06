@@ -735,11 +735,11 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onFiltersClick() {
-        const {historyItem, filtersList} = this.props;
-        this.props.dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], this.props.fields, 'filter', filtersList));
+        const {dispatch, historyItem, filtersList, fields} = this.props;
+        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, 'filter', filtersList));
         const action = this.actionEdit({filterId: null});
-        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
-        this.props.dispatch(openModal('filters'));
+        dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
+        dispatch(openModal('filters'));
     }
 
     onFilterSelect(filterId) {
@@ -747,11 +747,11 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onModelClick() {
-        const {historyItem, modelsList} = this.props;
-        this.props.dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], this.props.fields, 'model', modelsList));
+        const {dispatch, historyItem, modelsList, fields} = this.props;
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, 'model', modelsList));
         const action = this.actionEdit({modelId: null});
-        this.props.dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
-        this.props.dispatch(openModal('filters'));
+        dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
+        dispatch(openModal('filters'));
     }
 
     onModelSelect(modelId) {
