@@ -15,7 +15,6 @@ export default class VariantsTableRow extends ComponentBase {
             rowIndex,
             variantsHeader,
             sortState,
-            fields,
             isSelected
         } = this.props;
         const rowFields = row.fields;
