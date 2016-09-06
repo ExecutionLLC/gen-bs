@@ -97,7 +97,9 @@ export function sortVariants(fieldId, sampleId, sortDirection, ctrlKeyPressed) {
 export function setViewVariantsSort(view, sampleId) {
     return (dispatch, getState) => {
 
-        const {fields:{sampleFieldsHashedArray: {hash: sampleFieldsHash}}} = getState();
+        const {samplesList: {hashedArray: {hash: samplesHash}}} = getState();
+        const sample = samplesHash[sampleId];
+        const sampleFieldsHash = _.keyBy(sample.values, (value) => value.fieldId);
         const sortOrder = _(view.viewListItems)
             .filter(viewListItem => {
                 return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
