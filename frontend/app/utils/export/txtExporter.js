@@ -28,7 +28,7 @@ export default class TxtExporter extends ExporterBase {
     }
 
     _addSpaces(value, length) {
-        const spaceCount = length - (value || '').length;
+        const spaceCount = length - ('' + value).length;
         const spaces = new Array(spaceCount)
             .fill(' ')
             .join('');
