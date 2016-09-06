@@ -19,12 +19,13 @@ export default class VariantsTableRow extends ComponentBase {
             isSelected
         } = this.props;
         const rowFields = row.fields;
+        const mandatoryFields = row.mandatoryFields;
         const comments = row.comments;
 
-        const pos = this.getMainFieldValue('POS', rowFields, fields, variantsHeader); // FIXME change mandatory fields get
-        const alt = this.getMainFieldValue('ALT', rowFields, fields, variantsHeader);
-        const chrom = this.getMainFieldValue('CHROM', rowFields, fields, variantsHeader);
-        const ref = this.getMainFieldValue('REF', rowFields, fields, variantsHeader);
+        const pos = mandatoryFields['POS'];
+        const alt = mandatoryFields['ALT'];
+        const chrom = mandatoryFields['CHROM'];
+        const ref = mandatoryFields['REF'];
         const searchKey = row.searchKey;
 
         return (
@@ -69,13 +70,6 @@ export default class VariantsTableRow extends ComponentBase {
         const {onSelected, rowIndex, isSelected} = this.props;
         onSelected(rowIndex, !isSelected);
     }
-
-    getMainFieldValue(colName, rowFields, fields, variantsHeader) {
-        const mainField = _.find(fields.totalFieldsHashedArray.array, field => field.name === colName);
-        const index = _.findIndex(variantsHeader, field => field.fieldId === mainField.id);
-        return rowFields[index];
-    }
-
 
     renderFieldValue(fieldId, sampleId, value, sortState) {
         const resultFieldValue = value;
