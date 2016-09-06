@@ -24,7 +24,7 @@ export default class ViewBuilder extends React.Component {
 
     render() {
         const {dispatch, fields, viewBuilder} = this.props;
-        const allAvailableFields = fields.allowedFieldsList;
+        const allAvailableFields = viewBuilder.allowedFields;
         const view = viewBuilder.editingView;
         const viewItemsLength = view.viewListItems.length;
         const previouslySelectedFieldIds = view.viewListItems.map(viewItem => viewItem.fieldId);

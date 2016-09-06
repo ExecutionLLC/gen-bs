@@ -724,8 +724,10 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onViewsClick() {
-        const {historyItem, viewsList} = this.props;
-        this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId]));
+        const {historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
+        const mainSample = samplesHash[historyItem.samples[0].id];
+        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields));
         const action = this.actionEdit({viewId: null});
         this.props.dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
         this.props.dispatch(openModal('views'));

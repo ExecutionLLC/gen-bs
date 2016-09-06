@@ -12,25 +12,17 @@ const initialState = {
     sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
     editableFields: [],
     sourceFieldsList: [],
-    totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([]),
-    // Fields allowed for selection in a typical fields list (include current sample fields and sources fields)
-    allowedFieldsList: []
+    totalFieldsHashedArray: ImmutableHashedArray.makeFromArray([])
 };
 
 function reduceReceiveFields(action, state) {
-    const {sourceFieldsList} = state;
     const fields = FieldUtils.sortAndAddLabels(action.fields);
-    const allowedFieldsList = [
-        ..._.filter(fields, ['isEditable', false]),
-        ...sourceFieldsList
-    ];
 
     return Object.assign({}, state, {
         isFetching: Object.assign({}, state.isFetching, {
             samples: false
         }),
         sampleFieldsHashedArray: ImmutableHashedArray.makeFromArray(fields),
-        allowedFieldsList,
         lastUpdated: action.receivedAt
     });
 }
