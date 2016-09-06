@@ -3,7 +3,7 @@
 const fs = require('fs');
 const _ = require('lodash');
 
-const fieldNamePrefix = 'INFO';
+const FIELD_NAME_PREFIX = 'INFO';
 const sourceName = 'dbsnp_20160601_v01';
 const outputFile = `out__${sourceName}.json`;
 
@@ -78,9 +78,13 @@ function cutQuotes(strOrArray) {
 }
 
 function createColumnObject(fieldName, label) {
+    if (!label) {
+        throw new Error(`Field ${fieldName} has no label.`);
+    }
+    const name = (FIELD_NAME_PREFIX) ? `${FIELD_NAME_PREFIX}_${fieldName}` : fieldName;
     return {
         field: {
-            name: `${fieldNamePrefix}_${fieldName}`,
+            name,
             source_name: sourceName
         },
         label: cutQuotes(label)
