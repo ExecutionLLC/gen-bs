@@ -51,9 +51,6 @@ export function analyze(searchParams) {
             },
             viewsList: {
                 hashedArray: {hash: viewIdToViewHash}
-            },
-            fields: {
-                sampleFieldsHashedArray: {array: sampleFieldsList}
             }
         } = getState();
 
@@ -73,7 +70,7 @@ export function analyze(searchParams) {
                 const searchFilter = filterIdToFilterHash[searchParams.filterId];
                 const searchModel = searchParams.modelId && modelIdToFilterHash[searchParams.modelId] || null;
                 const searchAnalysis = result.analysis;
-                dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, sampleFieldsList, searchAnalysis));
+                dispatch(requestSetCurrentParams(searchView, searchFilter, searchSamples, searchModel, searchAnalysis));
                 dispatch(setViewVariantsSort(searchView, searchParams.samples[0].id));
                 resolve(searchAnalysis);
             }).catch((error) => reject(error));
