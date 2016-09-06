@@ -137,7 +137,7 @@ export function exportToFile(exportType) {
         }]);
 
         // The export data should be array of objects in {field_id -> field_value} format.
-        const dataToExport = _(selectedRowIndices.sort())
+        const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
             .map(rowIndex => Object.assign({}, rowIndex, {
                 rowIndex,
                 row: variants[rowIndex]
