@@ -12,7 +12,7 @@ const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 const Config = require('../../utils/Config');
 
 const labelTemplates = _([
-    './fields/labels/required-fields-labels.json',
+    './fields/labels/vcf-fields.json',
     './fields/labels/clinvar_20160705_v01.json',
     './fields/labels/ESP6500_v01.json',
     './fields/labels/dbsnp_20160601_v01.json',
