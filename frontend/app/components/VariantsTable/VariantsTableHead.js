@@ -80,7 +80,8 @@ export default class VariantsTableHead extends Component {
         return (
             <FieldHeader key={fieldId + '-' + sampleId}
                          fieldMetadata={fieldMetadata}
-                         sampleType={samplesTypesHash[sampleId].type/*sampleId && this.props.samplesList.hashedArray.hash[sampleId].fileName || null*/}
+                         sampleName={sampleId && this.props.samplesList.hashedArray.hash[sampleId].fileName || null}
+                         sampleType={samplesTypesHash[sampleId].type}
                          sampleId={sampleId}
                          areControlsEnabled={areControlsEnabled}
                          sortState={sortState}
