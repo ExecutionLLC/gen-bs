@@ -8,7 +8,8 @@ import {
     editQueryHistoryItem,
     editExistentQueryHistoryItem,
     updateQueryHistoryItem,
-    setEditedHistoryItem
+    setEditedHistoryItem,
+    deleteServerQueryHistoryItem
 } from '../../../actions/queryHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
@@ -665,7 +666,9 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onDeleteAnalysisClick() {
-
+        if (this.props.historyItem.id) {
+            this.props.dispatch(deleteServerQueryHistoryItem(this.props.historyItem.id));
+        }
     }
 
     onAnalysisNameChange(name) {

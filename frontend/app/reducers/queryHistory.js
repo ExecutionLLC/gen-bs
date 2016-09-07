@@ -116,6 +116,29 @@ function reduceEditQueryHistoryItem(state, action) {
     }
 }
 
+function reduceDeleteQueryHistoryItem(state, action) {
+    const {historyItemId} = action;
+    const {history, currentHistoryId} = state;
+    const historyItemIndex = _.findIndex(history, {id: historyItemId});
+    if (historyItemIndex < 0) {
+        return state;
+    }
+    const newHistory = immutableArray.remove(history, historyItemIndex);
+    var newHistoryItemId;
+    if (currentHistoryId === historyItemIndex) {
+        const newHistoryItemIndex = historyItemIndex >= history.length ? historyItemIndex - 1 : historyItemIndex;
+        const newHistoryItem = newHistoryItemIndex < 0 ? null : history[newHistoryItemIndex];
+        newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
+    } else {
+        newHistoryItemId = currentHistoryId;
+    }
+    return {
+        ...state,
+        history: newHistory,
+        currentHistoryId: newHistoryItemId
+    };
+}
+
 function reduceRequestQueryHistory(state) {
     return {
         ...state,
@@ -182,6 +205,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceDuplicateQueryHistoryItem(state, action);
         case ActionTypes.EDIT_QUERY_HISTORY_ITEM:
             return reduceEditQueryHistoryItem(state, action);
+        case ActionTypes.DELETE_QUERY_HISTORY_ITEM:
+            return reduceDeleteQueryHistoryItem(state, action);
         case ActionTypes.EDIT_EXISTENT_HISTORY_ITEM:
             return reduceEditExistentHistoryItem(state, action);
         case ActionTypes.CANCEL_QUERY_HISTORY_EDIT:

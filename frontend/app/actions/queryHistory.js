@@ -17,6 +17,7 @@ export const REQUEST_QUERY_HISTORY = 'REQUEST_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
 export const DUPLICATE_QUERY_HISTORY_ITEM = 'DUPLICATE_QUERY_HISTORY_ITEM';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
+export const DELETE_QUERY_HISTORY_ITEM = 'DELETE_QUERY_HISTORY_ITEM';
 export const EDIT_EXISTENT_HISTORY_ITEM = 'EDIT_EXISTENT_HISTORY_ITEM';
 export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
 export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
@@ -107,6 +108,13 @@ export function editQueryHistoryItem(samplesList, filtersList, viewsList, models
     };
 }
 
+export function deleteQueryHistoryItem(historyItemId) {
+    return {
+        type: EDIT_QUERY_HISTORY_ITEM,
+        historyItemId
+    };
+}
+
 export function editExistentQueryHistoryItem(historyItem) {
     return {
         type: EDIT_EXISTENT_HISTORY_ITEM,
@@ -155,6 +163,20 @@ export function updateQueryHistoryItem(historyItemId) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, HISTORY_SERVER_ERROR));
+            }
+        });
+    };
+}
+
+export function deleteServerQueryHistoryItem(historyItemId) {
+    return (dispatch) => {
+        queryHistoryClient.remove(historyItemId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, HISTORY_SERVER_ERROR));
+            } else {
+                dispatch(deleteQueryHistoryItem(historyItemId));
             }
         });
     };
