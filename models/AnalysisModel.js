@@ -33,18 +33,23 @@ class AnalysisModel extends SecureModelBase {
     }
 
     find(userId, analysisId, callback) {
-        this._findAnalysisById(userId, analysisId, callback)
+        this.db.transactionally((trx, callback) => {
+            this._findAnalysisById(trx, userId, analysisId, callback)
+        }, callback);
     }
 
     findMany(userId, analysisIds, callback) {
-        this._findAnalysisByIds(userId, analysisIds, callback);
+        this.db.transactionally((trx, callback) => {
+            this._findAnalysisByIds(trx, userId, analysisIds, callback);
+        }, callback);
     }
 
     findAll(userId, limit, offset, nameFilter, descriptionFilter, callback) {
-        async.waterfall(
-            [
+        this.db.transactionally((trx, callback) => {
+            async.waterfall([
                 (callback) => {
                     this._findAnalysisIds(
+                        trx,
                         userId,
                         limit,
                         offset,
@@ -56,13 +61,14 @@ class AnalysisModel extends SecureModelBase {
                     );
                 },
                 (analysisIds, callback) => {
-                    this._findAnalysisByIds(userId, analysisIds,
+                    this._findAnalysisByIds(trx, userId, analysisIds,
                         (error, result) => {
                             callback(error, result)
                         }
                     )
                 }
             ], callback);
+        }, callback);
     }
 
     _update(userId, analysis, analysisToUpdate, callback) {
@@ -140,12 +146,20 @@ class AnalysisModel extends SecureModelBase {
         const {
             name, description, samples
         } = analysis;
-        async.waterfall(
-            [
+        async.waterfall([
                 (callback) => {
-                    const analysisDataToInsert = this._createDataToInsert(
-                        userId, analysis, shouldGenerateId
-                    );
+                    const {
+                        id, viewId, filterId, modelId, type
+                    } = analysis;
+                    const analysisDataToInsert =  {
+                        id: shouldGenerateId ? this._generateId() : id,
+                        creator: userId,
+                        viewId,
+                        filterId,
+                        modelId,
+                        type,
+                        lastQueryDate: new Date()
+                    };
                     this._insert(analysisDataToInsert, trx, callback);
                 },
                 (analysisId, callback) => {
@@ -173,8 +187,7 @@ class AnalysisModel extends SecureModelBase {
                     );
                     callback(null, analysisId);
                 },
-            ],
-            callback
+            ], callback
         );
     }
 
@@ -191,120 +204,75 @@ class AnalysisModel extends SecureModelBase {
         );
     }
 
-    _createDataToInsert(userId, analysis, shouldGenerateId) {
-        const {
-            id, viewId, filterId, modelId, type
-        } = analysis;
-        return {
-            id: shouldGenerateId ? this._generateId() : id,
-            creator: userId,
-            viewId,
-            filterId,
-            modelId,
-            type,
-            lastQueryDate: new Date()
-        };
+    _findAnalysisIds(trx, userId, limit, offset, nameFilter, descriptionFilter, callback) {
+
+        trx.select('id', 'timestamp')
+            .from(this.baseTableName)
+            .innerJoin(
+                TableNames.AnalysisText,
+                `${TableNames.AnalysisText}.analysis_id`,
+                `${this.baseTableName}.id`
+            )
+            .where('creator', userId)
+            .andWhere(function () {
+                this.where(
+                    trx.raw('LOWER("name") like ?', `%${nameFilter.toLowerCase()}%`)
+                )
+                    .orWhere(
+                        trx.raw('LOWER("description") like ?', `%${descriptionFilter.toLowerCase()}%`)
+                    )
+            })
+            .orderBy('timestamp', 'desc')
+            .offset(offset)
+            .limit(limit)
+            .asCallback(
+                (error, result) => {
+                    callback(error, _.map(result, resultItem => resultItem.id));
+                }
+            );
     }
 
-    _findAnalysisIds(userId, limit, offset, nameFilter, descriptionFilter, callback) {
-        this.db.asCallback(
-            (trx, callback) => {
-                trx.select('id', 'timestamp')
-                    .from(this.baseTableName)
-                    .innerJoin(
-                        TableNames.AnalysisText,
-                        `${TableNames.AnalysisText}.analysis_id`,
-                        `${this.baseTableName}.id`
-                    )
-                    .where('creator', userId)
-                    .andWhere(function () {
-                        this.where(
-                            trx.raw('LOWER("name") like ?', `%${nameFilter.toLowerCase()}%`)
+    _findAnalysisByIds(trx, userId, analysisIds, callback) {
+        trx.select()
+            .from(this.baseTableName)
+            .innerJoin(
+                TableNames.AnalysisText,
+                `${TableNames.AnalysisText}.analysis_id`,
+                `${this.baseTableName}.id`
+            )
+            .innerJoin(
+                TableNames.AnalysisSample,
+                `${TableNames.AnalysisSample}.analysis_id`,
+                `${this.baseTableName}.id`
+            )
+            .whereIn('id', analysisIds)
+            .andWhere('creator', userId)
+            .orderBy('timestamp', 'desc')
+            .asCallback(
+                (error, result) => async.waterfall([
+                    (callback) => this._parseAnalysesResult(result, callback),
+                    (analyses, callback) => {
+                        this._ensureAllItemsFound(analyses, analysisIds, callback);
+                    }
+                ], callback)
+            );
+    }
+
+    _findAnalysisById(trx ,userId, analysisId, callback) {
+        async.waterfall([
+            (callback) =>  this._findAnalysisByIds( trx, userId, [analysisId], callback),
+            (analyses, callback) => {
+                if (analyses && analyses.length) {
+                    callback(null, analyses[0])
+                } else {
+                    callback(
+                        new Error(
+                            `Analysis item is not found ${analysisId}`
                         )
-                            .orWhere(
-                                trx.raw('LOWER("description") like ?', `%${descriptionFilter.toLowerCase()}%`)
-                            )
-                    })
-                    .orderBy('timestamp', 'desc')
-                    .offset(offset)
-                    .limit(limit)
-                    .asCallback(
-                        (error, result) => {
-                            callback(error, _.map(result, resultItem => resultItem.id));
-                        }
-                    );
-            },
-            callback
-        );
-    }
-
-    _findAnalysisByIds(userId, analysisIds, callback) {
-        this.db.asCallback(
-            (trx, callback) => {
-                trx.select()
-                    .from(this.baseTableName)
-                    .innerJoin(
-                        TableNames.AnalysisText,
-                        `${TableNames.AnalysisText}.analysis_id`,
-                        `${this.baseTableName}.id`
                     )
-                    .innerJoin(
-                        TableNames.AnalysisSample,
-                        `${TableNames.AnalysisSample}.analysis_id`,
-                        `${this.baseTableName}.id`
-                    )
-                    .whereIn('id', analysisIds)
-                    .andWhere('creator', userId)
-                    .orderBy('timestamp', 'desc')
-                    .asCallback(
-                        (error, result) => {
-                            this._parseAnalysesResult(result, callback);
-                        }
-                    );
-            },
-            callback
-        );
-    }
-
-    _findAnalysisById(userId, analysisId, callback) {
-        this.db.asCallback(
-            (trx, callback) => {
-                trx.select()
-                    .from(this.baseTableName)
-                    .innerJoin(
-                        TableNames.AnalysisText,
-                        `${TableNames.AnalysisText}.analysis_id`,
-                        `${this.baseTableName}.id`
-                    )
-                    .innerJoin(
-                        TableNames.AnalysisSample,
-                        `${TableNames.AnalysisSample}.analysis_id`,
-                        `${this.baseTableName}.id`
-                    )
-                    .where('creator', userId)
-                    .andWhere('id', analysisId)
-                    .asCallback(
-                        (error, result) => {
-                            if (result && result.length) {
-                                this._parseAnalysesResult(
-                                    result,
-                                    (error, result) => {
-                                        callback(null, result[0])
-                                    }
-                                );
-                            } else {
-                                callback(
-                                    new Error(
-                                        `Analysis item is not found ${analysisId}`
-                                    )
-                                )
-                            }
-
-                        }
-                    );
-            },
-            callback
-        );
+                }
+            }
+        ], callback);
     }
 
     _parseAnalysesResult(result, callback) {
