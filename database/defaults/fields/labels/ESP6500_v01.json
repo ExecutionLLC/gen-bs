@@ -1,0 +1,198 @@
+[
+  {
+    "field": {
+      "name": "INFO_DBSNP",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "dbSNP v137"
+  },
+  {
+    "field": {
+      "name": "INFO_EA_AC",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "European American Allele Count"
+  },
+  {
+    "field": {
+      "name": "INFO_AA_AC",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "African American Allele Count"
+  },
+  {
+    "field": {
+      "name": "INFO_TAC",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "ESP6500 Allele Count"
+  },
+  {
+    "field": {
+      "name": "INFO_MAF_0",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "MAF European American"
+  },
+  {
+    "field": {
+      "name": "INFO_MAF_1",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "MAF African American"
+  },
+  {
+    "field": {
+      "name": "INFO_MAF_2",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "MAF ESP6500"
+  },
+  {
+    "field": {
+      "name": "INFO_GTS",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Observed Genotypes"
+  },
+  {
+    "field": {
+      "name": "INFO_EA_GTC",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "European American Genotype Counts as in Observed Genotypes"
+  },
+  {
+    "field": {
+      "name": "INFO_AA_GTC",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "European American Genotype Counts as in Observed Genotypes"
+  },
+  {
+    "field": {
+      "name": "INFO_GTC",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "ESP6500 Genotype Counts as in Observed Genotypes"
+  },
+  {
+    "field": {
+      "name": "INFO_DP",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Average Sample Read Depth"
+  },
+  {
+    "field": {
+      "name": "INFO_AA",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Chimp Allele"
+  },
+  {
+    "field": {
+      "name": "INFO_FG",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "HGVS function"
+  },
+  {
+    "field": {
+      "name": "INFO_HGVS_CDNA_VAR",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "HGVS transcript change"
+  },
+  {
+    "field": {
+      "name": "INFO_HGVS_PROTEIN_VAR",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "HGVS protein change"
+  },
+  {
+    "field": {
+      "name": "INFO_CDS_SIZES",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "HGVS transcript length"
+  },
+  {
+    "field": {
+      "name": "INFO_PH",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "PolyPhen2"
+  },
+  {
+    "field": {
+      "name": "INFO_CP",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "PhastCons"
+  },
+  {
+    "field": {
+      "name": "INFO_CG",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Conservation score GERP"
+  },
+  {
+    "field": {
+      "name": "INFO_GL",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Gene List"
+  },
+  {
+    "field": {
+      "name": "INFO_GS",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Grantham Score"
+  },
+  {
+    "field": {
+      "name": "INFO_CA",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Clinical Association"
+  },
+  {
+    "field": {
+      "name": "INFO_EXOME_CHIP",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "HumanExome chip"
+  },
+  {
+    "field": {
+      "name": "INFO_GWAS_PUBMED",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "GWAS PubMed"
+  },
+  {
+    "field": {
+      "name": "INFO_EA_AGE",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Estimated Variant Age in European Americans"
+  },
+  {
+    "field": {
+      "name": "INFO_AA_AGE",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "Estimated Variant Age in African Americans"
+  },
+  {
+    "field": {
+      "name": "INFO_GRCh38_POSITION",
+      "source_name": "ESP6500_v01"
+    },
+    "label": "GRCh38 position"
+  }
+]
