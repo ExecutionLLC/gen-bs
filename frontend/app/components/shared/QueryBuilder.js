@@ -87,7 +87,7 @@ export default class QueryBuilder extends Component {
                     />
                 </div>
             </div>
-            || <div>Filter did not for looking at</div>
+            || <div>This model has no rules to setup</div>
         );
     }
 }

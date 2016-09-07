@@ -23,6 +23,7 @@ export default class ExistentFilterSelect extends Component {
         const filters = this.props.filterBuilder.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
+        const isFilterDuplicable = !!this.props.filterBuilder.editingFilter.parsedFilter;
 
         return (
             <div className='in'>
@@ -32,7 +33,7 @@ export default class ExistentFilterSelect extends Component {
                 {this.renderWarning(isDemoSession, selectedFilter.type)}
                 <div className='row grid-toolbar row-head-selector'>
                     {this.renderFiltersSelector(filters)}
-                    {this.renderButtonGroup(isDemoSession, isFilterEditable)}
+                    {this.renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable)}
                 </div>
             </div>
         );
@@ -78,12 +79,12 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderButtonGroup(isDemoSession, isFilterEditable) {
+    renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable) {
         return (
             <div className='col-sm-6'>
                 <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
                      data-placement='bottom' data-container='body'>
-                    {this.renderDuplicateFilterButton(isDemoSession)}
+                    {isFilterDuplicable && this.renderDuplicateFilterButton(isDemoSession)}
                     {isFilterEditable && this.renderResetFilterButton()}
                     {isFilterEditable && this.renderDeleteFilterButton()}
                 </div>
