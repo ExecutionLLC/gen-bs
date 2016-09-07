@@ -12,6 +12,21 @@ import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 
+export const filterBuilderVerb = {
+    'filter': {
+        filter: 'filter',
+        filters: 'filters',
+        Filter: 'Filter',
+        Filters: 'Filters'
+    },
+    'model': {
+        filter: 'model',
+        filters: 'models',
+        Filter: 'Model',
+        Filters: 'Models'
+    }
+};
+
 class FiltersModal extends Component {
 
     onClose() {
@@ -36,9 +51,11 @@ class FiltersModal extends Component {
             filters
         ) : '';
 
+        const verb = filterBuilderVerb[this.props.filterBuilder.filtersData] || {};
+
         const confirmButtonParams = {
             caption: isFilterEditable ? 'Save and Select': 'Select',
-            title: isLoginRequired ? 'Login or register to select advanced filters' : '',
+            title: isLoginRequired ? `Login or register to select advanced ${verb.filters}` : '',
             disabled: isLoginRequired || !!titleValidationMessage
         };
 
@@ -55,7 +72,9 @@ class FiltersModal extends Component {
                 }
                 { (editingFilter) &&
                 <div>
-                    <FilterBuilderHeader />
+                    <FilterBuilderHeader
+                        verb={verb}
+                    />
                     <form>
                         <Modal.Body>
                             <div className='modal-body-scroll'>
@@ -63,6 +82,7 @@ class FiltersModal extends Component {
                                 <div className='modal-padding'>
                                     <NewFilterInputs
                                         {...this.props}
+                                        verb={verb}
                                         validationMessage={titleValidationMessage}
                                     />
                                     <FilterBuilder
@@ -72,7 +92,10 @@ class FiltersModal extends Component {
                                 }
                                 { !editingFilterIsNew &&
                                 <div className='modal-padding'>
-                                    <ExistentFilterSelect {...this.props} />
+                                    <ExistentFilterSelect
+                                        verb={verb}
+                                        {...this.props}
+                                    />
                                     <FilterBuilder
                                         {...this.props}
                                     />
@@ -107,7 +130,7 @@ class FiltersModal extends Component {
                     && filter.id != editingFilter.id
                 );
         if (filterNameExists) {
-            return 'Filter with this name is already exists.';
+            return `${verb.Filter} with this name is already exists.`;
         }
 
         if (!editingFilterName) {
