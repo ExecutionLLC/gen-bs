@@ -81,7 +81,7 @@ function createColumnObject(fieldName, label) {
     if (!label) {
         throw new Error(`Field ${fieldName} has no label.`);
     }
-    const name = (FIELD_NAME_PREFIX) ? `${FIELD_NAME_PREFIX}_${fieldName}` : fieldName;
+    const name = FIELD_NAME_PREFIX ? `${FIELD_NAME_PREFIX}_${fieldName}` : fieldName;
     return {
         field: {
             name,
