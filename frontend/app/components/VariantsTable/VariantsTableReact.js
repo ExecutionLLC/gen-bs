@@ -49,7 +49,7 @@ class VariantsTableReact extends Component {
                                            onRendered={() => this.onTablePartRendered(true)}
                         />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} {...this.props} ref='variantsTableRows'
+                        <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props} ref='variantsTableRows'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)); } }
                                            onRendered={() => this.onTablePartRendered(false)}
                         />

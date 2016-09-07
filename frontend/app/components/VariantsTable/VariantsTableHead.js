@@ -8,25 +8,23 @@ import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../act
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, ws, variantsHeader, variantsTable, variantsAnalysis} = this.props;
+        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
-        const {
-            variantsView: currentView
-        } = ws;
-        const samplesTypesHash = variantsAnalysis ? _(variantsAnalysis.samples).map((sampleInfo) =>
-            variantsAnalysis.samples.length > 1 ?
-                ({id: sampleInfo.id, type: sampleInfo.type.slice(0, 1).toUpperCase()}) :// TODO: make table 'single'=>'S', 'mother'=>'M' and so on
-                ({id: sampleInfo.id, type: ''})
-        ).keyBy(sampleInfo => sampleInfo.id).value() : {};
 
-        if (!currentView) {
+        if (!variantsAnalysis) {
             return (
                 <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
                 <tr />
                 </tbody>
             );
         }
+
+        const samplesTypesHash = _(variantsAnalysis.samples).map((sampleInfo) =>
+            variantsAnalysis.samples.length > 1 ?
+                ({id: sampleInfo.id, type: sampleInfo.type.slice(0, 1).toUpperCase()}) :// TODO: make table 'single'=>'S', 'mother'=>'M' and so on
+                ({id: sampleInfo.id, type: ''})
+        ).keyBy(sampleInfo => sampleInfo.id).value();
 
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>

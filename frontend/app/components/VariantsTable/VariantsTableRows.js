@@ -13,15 +13,14 @@ export default class VariantsTableRows extends Component {
         const {currentVariants} = this.props.ws;
         const {sort} = this.props.variantsTable.searchInResultsParams;
         const {isFilteringOrSorting, selectedRowIndices} = this.props.variantsTable;
-        const {fields, variantsHeader} = this.props;
-        const currentView = this.props.ws.variantsView;
+        const {fields, variantsHeader, variantsAnalysis} = this.props;
 
         return (
             <tbody className='table-variants-body'
                    id='variants_table_body'
                    ref='variantsTableBody'>
             {this.renderTableBody(sampleRows, sort, isFilteringOrSorting,
-                currentView, variantsHeader, fields, selectedRowIndices)}
+                !!variantsAnalysis, variantsHeader, fields, selectedRowIndices)}
             {this.renderWaitingIfNeeded(isFilteringOrSorting, currentVariants)}
             </tbody>
         );
@@ -55,8 +54,8 @@ export default class VariantsTableRows extends Component {
         }
     }
 
-    renderTableBody(rows, sortState, isFilteringOrSorting, currentView, variantsHeader, fields, selectedRowIndices) {
-        if (isFilteringOrSorting || !currentView) {
+    renderTableBody(rows, sortState, isFilteringOrSorting, variantsAnalysisPresent, variantsHeader, fields, selectedRowIndices) {
+        if (isFilteringOrSorting || !variantsAnalysisPresent) {
             return (
                 <tr>
                     <td colSpan='100'>
