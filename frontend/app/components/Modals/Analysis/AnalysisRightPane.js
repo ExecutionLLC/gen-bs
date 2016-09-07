@@ -534,6 +534,7 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <ul role='tablist' className='nav nav-tabs' id='analisisTypes'>
                 {tabs.filter((tab) => tab.isActive || !disabled).map((tab) => this.renderAnalysisHeaderTab(tab.isActive, tab.className, tab.caption, tab.onSelect))}
+                {disabled && <li>Duplicate to make changes</li>}
             </ul>
         );
     }
