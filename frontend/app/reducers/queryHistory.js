@@ -114,25 +114,28 @@ function reduceEditQueryHistoryItem(state, action) {
 }
 
 function reduceDeleteQueryHistoryItem(state, action) {
-    const {historyItemId} = action;
+    const {historyItemId, newHistoryItem} = action;
     const {history, currentHistoryId} = state;
     const historyItemIndex = _.findIndex(history, {id: historyItemId});
     if (historyItemIndex < 0) {
         return state;
     }
+    const historyItem = history[historyItemIndex];
     var newHistoryItemIndex;
     if (currentHistoryId === historyItemId) {
         newHistoryItemIndex = historyItemIndex >= history.length - 1 ? historyItemIndex - 1 : historyItemIndex;
     } else {
         newHistoryItemIndex = historyItemIndex;
     }
-    const newHistory = immutableArray.remove(history, historyItemIndex);
-    const newHistoryItem = newHistoryItemIndex < 0 ? null : newHistory[newHistoryItemIndex];
-    const newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
+    const nowHistory = immutableArray.remove(history, historyItemIndex);
+    const nowHistoryItem = newHistoryItemIndex < 0 ? null : nowHistory[newHistoryItemIndex];
+    const nowHistoryItemId = nowHistoryItem ? nowHistoryItem.id : null;
+    const newNewHistoryItem = newHistoryItem || nowHistory.length ? newHistoryItem : HistoryItemUtils.makeHistoryItem(historyItem);
     return {
         ...state,
-        history: newHistory,
-        currentHistoryId: newHistoryItemId
+        history: nowHistory,
+        currentHistoryId: nowHistoryItemId,
+        newHistoryItem: newNewHistoryItem
     };
 }
 
