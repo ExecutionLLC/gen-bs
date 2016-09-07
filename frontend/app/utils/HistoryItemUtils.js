@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import immutableArray from './immutableArray';
+import {entityTypeIsDemoDisabled} from './entityTypes';
 
 
 function makeHistoryItem(historyItem) {
@@ -75,7 +76,7 @@ function changeSampleId(oldSamples, sampleIndex, newSampleId) {
     }
 }
 
-function changeSamplesArray(oldSamples, samplesList, newSamplesTypes) { // TODO check if demo user
+function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
     const usedSamplesIds = {};
     return newSamplesTypes.map(
         (type, index) => {
@@ -85,7 +86,7 @@ function changeSamplesArray(oldSamples, samplesList, newSamplesTypes) { // TODO 
                 usedSamplesIds[oldSampleId] = true;
                 return {id: oldSampleId, type: type};
             } else {
-                const unusedSample = _.find(samplesList.hashedArray.array, (sample) => !usedSamplesIds[sample.id]) || samplesList.hashedArray.array[0];
+                const unusedSample = _.find(samplesList.hashedArray.array, (sample) => !usedSamplesIds[sample.id] && !entityTypeIsDemoDisabled(sample.type, isDemo)) || samplesList.hashedArray.array[0];
                 const unusedSampleId = unusedSample.id;
                 usedSamplesIds[unusedSampleId] = true;
                 return {id: unusedSampleId, type: type};
@@ -94,48 +95,53 @@ function changeSamplesArray(oldSamples, samplesList, newSamplesTypes) { // TODO 
     );
 }
 
-function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, targetType) {
+function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, targetType) {
+
+    function getUserAvailableEntityId(entityArray, isDemo) {
+        const entity = _.find(entityArray, (entity) => !entityTypeIsDemoDisabled(entity.type, isDemo));
+        return entity && entity.id;
+    }
 
     const typeConverts = {
         'single': {
             'tumor'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, ['tumor', 'normal']),
-                    modelId: modelsList.hashedArray.array[0].id // TODO check if demo user here and below
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['tumor', 'normal']),
+                    modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             },
             'family'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, ['proband', 'mother', 'father']),
-                    modelId: modelsList.hashedArray.array[0].id
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['proband', 'mother', 'father']),
+                    modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
         },
         'tumor': {
             'single'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, ['single']),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['single']),
                     modelId: null
                 };
             },
             'family'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, ['proband', 'mother', 'father']),
-                    modelId: modelsList.hashedArray.array[0].id
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['proband', 'mother', 'father']),
+                    modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
         },
         'family': {
             'single'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, ['single']),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['single']),
                     modelId: null
                 };
             },
             'tumor'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, ['tumor', 'normal']),
-                    modelId: modelsList.hashedArray.array[0].id
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['tumor', 'normal']),
+                    modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
         }
@@ -155,7 +161,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
     };
 }
 
-function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, modelsList, change) {
+function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, change) {
     var editingHistoryItem = historyItem;
     if (change.name != null) {
         editingHistoryItem = {...editingHistoryItem, name: change.name};
@@ -164,7 +170,7 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
         editingHistoryItem = {...editingHistoryItem, description: change.description};
     }
     if (change.type != null) {
-        editingHistoryItem = changeType(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, change.type);
+        editingHistoryItem = changeType(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, isDemo, change.type);
     }
     if (change.sample != null) {
         editingHistoryItem = {...editingHistoryItem, samples: changeSampleId(editingHistoryItem.samples, change.sample.index, change.sample.id)};

@@ -101,14 +101,14 @@ function reduceEditExistentHistoryItem(state, action) {
 }
 
 function reduceEditQueryHistoryItem(state, action) {
-    const {samplesList, filtersList, viewsList, modelsList, changeItem} = action;
+    const {samplesList, filtersList, viewsList, modelsList, changeItem, isDemo} = action;
     const {newHistoryItem} = state;
     if (!newHistoryItem) {
         return state;
     } else {
         return {
             ...state,
-            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem, samplesList, filtersList, viewsList, modelsList, changeItem)
+            newHistoryItem: HistoryItemUtils.changeHistoryItem(newHistoryItem, samplesList, filtersList, viewsList, modelsList, isDemo, changeItem)
         };
     }
 }
