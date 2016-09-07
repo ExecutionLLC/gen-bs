@@ -205,7 +205,7 @@ function updateSavedFileColumnsAndTables(knex, Promise) {
         .dropTable('saved_file_filter');
 }
 
-function updateSavedFiles(knex , Promise) {
+function updateSavedFiles(knex, Promise) {
     return updateSavedFileColumnsAndTables(knex, Promise)
         .then(() => clearSavedFileTable(knex, Promise));
 }
@@ -218,5 +218,5 @@ exports.up = function (knex, Promise) {
 };
 
 exports.down = function (knex, Promise) {
-
+    throw new Error('Not implemented');
 };
