@@ -91,7 +91,7 @@ export function filterBuilderChangeAttr(attr) {
     };
 }
 
-function fireOnSaveAction(filter) {
+export function fireOnSaveAction(filter) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionProperty} = getState().filterBuilder;
         dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, filter.id));
@@ -158,15 +158,18 @@ export function filterBuilderChangeFilter(index, change) {
 
 export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
-        const {filterBuilder} = getState();
-        dispatch(filterBuilderData[filterBuilder.filtersData].serverDelete(filterId))
-            .then( ()=> {
-                const state = getState();
-                const editingFilterId = state.filterBuilder.editingFilter.filter.id;
-                const filtersList = state.filterBuilder.filtersList;
-                const newFilterId = (filterId == editingFilterId) ? filtersList.hashedArray.array[0].id : editingFilterId;
-                const newFilter = filtersList.hashedArray.hash[newFilterId];
-                dispatch(filterBuilderRestartEdit(false, newFilter));
-            });
+        return new Promise((resolve) => {
+            const {filterBuilder} = getState();
+            dispatch(filterBuilderData[filterBuilder.filtersData].serverDelete(filterId))
+                .then(()=> {
+                    const state = getState();
+                    const editingFilterId = state.filterBuilder.editingFilter.filter.id;
+                    const filtersList = state.filterBuilder.filtersList;
+                    const newFilterId = (filterId == editingFilterId) ? filtersList.hashedArray.array[0].id : editingFilterId;
+                    const newFilter = filtersList.hashedArray.hash[newFilterId];
+                    dispatch(filterBuilderRestartEdit(false, newFilter));
+                    resolve(newFilter);
+                });
+        });
     };
 }
