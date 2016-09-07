@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-export default class NavbarSearch extends Component {
+class NavbarSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -65,8 +65,6 @@ function mapStateToProps(state) {
     return { isVariantsLoading, isVariantsValid };
 }
 
-export default connect(mapStateToProps)(NavbarSearch);
-
 NavbarSearch.propTypes = {
     isVariantsLoading: React.PropTypes.bool.isRequired,
     isVariantsValid: React.PropTypes.bool.isRequired,
@@ -75,3 +73,5 @@ NavbarSearch.propTypes = {
     // callback(globalSearchString)
     onGlobalSearchStringChanged: React.PropTypes.func.isRequired
 };
+
+export default connect(mapStateToProps)(NavbarSearch);
