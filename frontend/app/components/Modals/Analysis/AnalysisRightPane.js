@@ -81,7 +81,6 @@ export default class AnalysisRightPane extends React.Component {
                 {historyItem.type === 'tumor' && this.renderTumorModelSelector(historyItem.modelId, disabled)}
                 {this.renderViewSelector(historyItem.viewId, disabled)}
                 <hr className='invisible' />
-                {this.renderUseActualVersions()}
                 {this.renderAnalyzeButton(!disabled, isOnlyItem)}
             </div>
         );
@@ -429,22 +428,6 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderUseActualVersions() {
-        return (
-            <div className='form-group'>
-                <div className='col-sm-6 col-xs-12'>
-                    <label className='checkbox checkbox-inline' data-localize='query.reanalyze.help' title='Click for analyze with actual filters and view'>
-                        <input
-                            type='checkbox'
-                            onClick={(e) => this.onUseActionVersionsToggle(e.target.checked)}
-                        />
-                        <i/> <span data-localize='query.reanalyze.title'>Use actual versions filter, model, view</span>
-                    </label>
-                </div>
-            </div>
-        );
-    }
-
     renderAnalyzeButton(isEditing, isOnlyItem) {
         return (
             <div className='form-group'>
@@ -693,10 +676,6 @@ export default class AnalysisRightPane extends React.Component {
         } else {
             this.props.dispatch(this.actionEdit({description}));
         }
-    }
-
-    onUseActionVersionsToggle(use) {
-        console.log('onUseActionVersionsToggle', use);
     }
 
     onDuplicateButtonClick() {
