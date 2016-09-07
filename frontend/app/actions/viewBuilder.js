@@ -108,7 +108,7 @@ export function viewBuilderChangeKeywords(viewItemIndex, keywordsIds) {
     };
 }
 
-function fireOnSaveAction(view) {
+export function fireOnSaveAction(view) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionProperty} = getState().viewBuilder;
         dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, view.id));
@@ -167,15 +167,18 @@ export function viewBuilderSaveAndSelectView() {
 
 export function viewBuilderDeleteView(viewId) {
     return (dispatch, getState) => {
-        dispatch(viewsListServerDeleteView(viewId))
-            .then(() => {
-                const state = getState();
-                const views = state.viewsList.hashedArray.array;
-                const viewIdToViewHash = state.viewsList.hashedArray.hash;
-                const editingViewId = state.viewBuilder.editingView.id;
-                const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
-                const newView = viewIdToViewHash[newViewId];
-                dispatch(viewBuilderRestartEdit(false, newView));
-            });
+        return new Promise((resolve) => {
+            dispatch(viewsListServerDeleteView(viewId))
+                .then(() => {
+                    const state = getState();
+                    const views = state.viewsList.hashedArray.array;
+                    const viewIdToViewHash = state.viewsList.hashedArray.hash;
+                    const editingViewId = state.viewBuilder.editingView.id;
+                    const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
+                    const newView = viewIdToViewHash[newViewId];
+                    dispatch(viewBuilderRestartEdit(false, newView));
+                    resolve(newView);
+                });
+        });
     };
 }
