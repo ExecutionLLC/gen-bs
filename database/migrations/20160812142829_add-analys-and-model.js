@@ -97,6 +97,8 @@ function createAnalysisTables(knex, Promise) {
             table.uuid('model_id')
                 .references('id')
                 .inTable('model');
+            table.boolean('is_deleted')
+                .defaultTo(false);
             table.timestamp('timestamp')
                 .defaultTo(knex.fn.now());
             table.timestamp('last_query_date')

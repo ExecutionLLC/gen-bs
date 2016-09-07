@@ -222,6 +222,7 @@ class AnalysisModel extends SecureModelBase {
                         trx.raw('LOWER("description") like ?', `%${descriptionFilter.toLowerCase()}%`)
                     )
             })
+            .andWhere('is_deleted', false)
             .orderBy('timestamp', 'desc')
             .offset(offset)
             .limit(limit)
