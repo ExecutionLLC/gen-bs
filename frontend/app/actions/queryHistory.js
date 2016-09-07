@@ -110,7 +110,7 @@ export function editQueryHistoryItem(samplesList, filtersList, viewsList, models
 
 export function deleteQueryHistoryItem(historyItemId) {
     return {
-        type: EDIT_QUERY_HISTORY_ITEM,
+        type: DELETE_QUERY_HISTORY_ITEM,
         historyItemId
     };
 }
