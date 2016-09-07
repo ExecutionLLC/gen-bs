@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
@@ -726,8 +727,8 @@ export default class AnalysisRightPane extends React.Component {
 
     onViewsClick() {
         const {historyItem, viewsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
-        const mainSample = samplesHash[historyItem.samples[0].id];
-        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
+        const allowedFields = FieldUtils.makeAllowedFields(samples, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
         this.props.dispatch(viewBuilderStartEdit(false, viewsList.hashedArray.hash[historyItem.viewId], allowedFields));
         const action = this.actionEdit({viewId: null});
         this.props.dispatch(viewBuilderOnSave(action, 'changeItem.viewId'));
@@ -741,7 +742,7 @@ export default class AnalysisRightPane extends React.Component {
     onFiltersClick() {
         const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
-        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        const allowedFields = FieldUtils.makeAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
         dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, 'filter', filtersList));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
@@ -755,7 +756,7 @@ export default class AnalysisRightPane extends React.Component {
     onModelClick() {
         const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
-        const allowedFields = FieldUtils.makeAllowedFields(mainSample, fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
+        const allowedFields = FieldUtils.makeAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
         dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, 'model', modelsList));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));

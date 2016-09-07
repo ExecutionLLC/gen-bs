@@ -101,9 +101,10 @@ export default class FieldUtils {
             });
     }
 
-    static makeAllowedFields(mainSample, totalFieldsHash, sourceFieldsList) {
-        const sampleFields = FieldUtils.getSampleFields(mainSample, totalFieldsHash);
-        const sortedLabelledFields = FieldUtils.sortAndAddLabels(sampleFields);
+    static makeAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
+        const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, totalFieldsHash));
+        const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
+        const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
         return [
             ..._.filter(sortedLabelledFields, ['isEditable', false]),
             ...sourceFieldsList
