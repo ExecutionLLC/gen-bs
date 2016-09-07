@@ -63,7 +63,7 @@ export default class AnalysisRightPane extends React.Component {
         return (
             <div className='split-right-top split-right-top-tabs form-horizontal'>
                 {this.renderSelectAnalysis()}
-                {this.renderDeleteAnalysis(!historyItem.id)}
+                {historyItem.id && this.renderDeleteAnalysis()}
                 {this.renderAnalysisName(historyItem.name)}
                 {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
                 {this.renderAnalysisDescription(historyItem.description)}
@@ -481,11 +481,10 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderDeleteAnalysis(disabled) {
+    renderDeleteAnalysis() {
         return (
             <button
                 className='btn btn-sm btn-link-light-default pull-right btn-right-in-form'
-                disabled={disabled}
                 onClick={() => this.onDeleteAnalysisClick()}
             >
                 <span data-localize='query.delete_analysis'>Delete analysis</span>
