@@ -178,7 +178,16 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 [
                     (callback) => this.services.views.find(user, viewId, callback),
                     (view, callback) => async.parallel({
-                            samples: (callback) => this.services.samples.findMany(user, sampleIds, callback),
+                            samples: (callback) => this.services.samples.findMany(
+                                user,
+                                sampleIds,
+                                (error, samples) => {
+                                    const resultSamples = _.map(
+                                        sampleIds, sampleId => _.find(samples, sample => sample.id == sampleId )
+                                    );
+                                    callback(error, resultSamples)
+                                }
+                            ),
                             viewFields: (callback) => this.services.fieldsMetadata.findMany(
                                 _.map(view.viewListItems,item => item.fieldId),
                                 callback
