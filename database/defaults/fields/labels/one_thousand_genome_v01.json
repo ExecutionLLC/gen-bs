@@ -1,0 +1,212 @@
+[
+  {
+    "field": {
+      "name": "INFO_CIEND",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "End confidence"
+  },
+  {
+    "field": {
+      "name": "INFO_CIPOS",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Start confidence"
+  },
+  {
+    "field": {
+      "name": "INFO_CS",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Source call set"
+  },
+  {
+    "field": {
+      "name": "INFO_END",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "End position"
+  },
+  {
+    "field": {
+      "name": "INFO_IMPRECISE",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Imprecise variant"
+  },
+  {
+    "field": {
+      "name": "INFO_MC",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Merged calls"
+  },
+  {
+    "field": {
+      "name": "INFO_MEINFO",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Mobile element"
+  },
+  {
+    "field": {
+      "name": "INFO_MEND",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "MT insert end"
+  },
+  {
+    "field": {
+      "name": "INFO_MLEN",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "MT insert length"
+  },
+  {
+    "field": {
+      "name": "INFO_MSTART",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "MT insert start"
+  },
+  {
+    "field": {
+      "name": "INFO_SVLEN",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Structural variant length"
+  },
+  {
+    "field": {
+      "name": "INFO_SVTYPE",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Structural variant type"
+  },
+  {
+    "field": {
+      "name": "INFO_TSD",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Duplication bases"
+  },
+  {
+    "field": {
+      "name": "INFO_AC",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Alternate alleles count"
+  },
+  {
+    "field": {
+      "name": "INFO_AF",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_NS",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Samples tested"
+  },
+  {
+    "field": {
+      "name": "INFO_AN",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "All alleles count"
+  },
+  {
+    "field": {
+      "name": "INFO_EAS_AF",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "East Asian allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_EUR_AF",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "European allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AFR_AF",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "African allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AMR_AF",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Native american allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_SAS_AF",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "South Asian allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_DP",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Total read depth"
+  },
+  {
+    "field": {
+      "name": "INFO_AA",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Ancestral allele"
+  },
+  {
+    "field": {
+      "name": "INFO_AREF",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Ancestral REF"
+  },
+  {
+    "field": {
+      "name": "INFO_AALT",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Ancestral ALT"
+  },
+  {
+    "field": {
+      "name": "INFO_AINDEL",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Ancestral InDel type"
+  },
+  {
+    "field": {
+      "name": "INFO_VT",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Variant type"
+  },
+  {
+    "field": {
+      "name": "INFO_EX_TARGET",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Exon pull down"
+  },
+  {
+    "field": {
+      "name": "INFO_MULTI_ALLELIC",
+      "source_name": "one_thousand_genome_v01"
+    },
+    "label": "Multi-allelic"
+  }
+]
