@@ -8,12 +8,17 @@ import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../act
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, ws, variantsHeader, variantsTable} = this.props;
+        const {dispatch, fields, ws, variantsHeader, variantsTable, variantsAnalysis} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
         const {
             variantsView: currentView
         } = ws;
+        const samplesTypesHash = variantsAnalysis ? _(variantsAnalysis.samples).map((sampleInfo) =>
+            variantsAnalysis.samples.length > 1 ?
+                ({id: sampleInfo.id, type: sampleInfo.type.slice(0, 1).toUpperCase()}) :// TODO: make table 'single'=>'S', 'mother'=>'M' and so on
+                ({id: sampleInfo.id, type: ''})
+        ).keyBy(sampleInfo => sampleInfo.id).value() : {};
 
         if (!currentView) {
             return (
@@ -56,14 +61,14 @@ export default class VariantsTableHead extends Component {
                     </div>
                 </td>
                 {_.map(variantsHeader, (fieldSampleExist) =>
-                    this.renderFieldHeader(fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, fields, isFetching, sort, dispatch)
+                    this.renderFieldHeader(fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, samplesTypesHash, fields, isFetching, sort, dispatch)
                 )}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist, fields, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist, samplesTypesHash, fields, isFetching, sortState, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
         const areControlsEnabled = !!isExist;
@@ -77,7 +82,7 @@ export default class VariantsTableHead extends Component {
         return (
             <FieldHeader key={fieldId + '-' + sampleId}
                          fieldMetadata={fieldMetadata}
-                         sampleName={sampleId && this.props.samplesList.hashedArray.hash[sampleId].fileName || null}
+                         sampleType={samplesTypesHash[sampleId].type/*sampleId && this.props.samplesList.hashedArray.hash[sampleId].fileName || null*/}
                          sampleId={sampleId}
                          areControlsEnabled={areControlsEnabled}
                          sortState={sortState}
