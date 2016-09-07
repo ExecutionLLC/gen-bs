@@ -51,14 +51,15 @@ export default class FieldHeaderControls extends Component {
         const label = firstCharToUpperCase(
             !fieldMetadata ? 'Unknown' : fieldMetadata.label
         );
+        const labelSuffix = fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? ('/' + fieldMetadata.sourceName) : sampleName ? '/' + sampleName : null;
+        const title = fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? fieldMetadata.sourceName : sampleName;
 
         return (
-            <td data-label={fieldMetadata.id}
-                key={fieldMetadata.id}>
+            <td>
                 <div>
                     <div className='variants-table-header-label'>
-                        <a type='button' className='btn-link-default' title={fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? fieldMetadata.sourceName : sampleName}>
-                            {label}{fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? ('/' + fieldMetadata.sourceName) : sampleName ? '/' + sampleName : null}
+                        <a type='button' className='btn-link-default' title={title}>
+                            {label}{labelSuffix}
                         </a>
                         <div className={buttonGroupClasses}>
                             {this.renderSortButton('asc', currentDirection, ascSortBtnClasses, order, disabled)}
