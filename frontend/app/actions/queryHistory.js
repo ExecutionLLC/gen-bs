@@ -23,8 +23,8 @@ export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
 export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
 export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 
-const HISTORY_NETWORK_ERROR = 'Cannot update "query history" (network error).';
-const HISTORY_SERVER_ERROR = 'Cannot update "query history" (server error).';
+const HISTORY_NETWORK_ERROR = 'Cannot update "analyses history" (network error).';
+const HISTORY_SERVER_ERROR = 'Cannot update "analyses history" (server error).';
 
 const queryHistoryClient = apiFacade.queryHistoryClient;
 
