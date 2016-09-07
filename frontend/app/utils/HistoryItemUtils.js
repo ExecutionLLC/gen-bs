@@ -29,7 +29,7 @@ function makeNewHistoryItem(sample, filter, view) {
             id: sample && sample.id || null,
             type: 'single'
         }]
-/* TODO: make other types like this:
+/* can make other types like this:
         // tumor
         type: 'tumor',
         model: historyItem.filters[0]
