@@ -90,10 +90,10 @@ export function prepareQueryHistoryToFilter(filter) {
     };
 }
 
-export function duplicateQueryHistoryItem(historyItemId) {
+export function duplicateQueryHistoryItem(historyItem) {
     return {
         type: DUPLICATE_QUERY_HISTORY_ITEM,
-        historyItemId
+        historyItem
     };
 }
 

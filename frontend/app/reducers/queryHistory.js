@@ -67,13 +67,10 @@ function reducePrepareQueryHistoryToFilter(state, action) {
 }
 
 function reduceDuplicateQueryHistoryItem(state, action) {
-    const {historyItemId} = action;
-    const {history} = state;
-    const historyItem = historyItemId && _.find(history, {id: historyItemId});
-    const newHistoryItem = historyItem && HistoryItemUtils.makeHistoryItem(historyItem);
+    const {historyItem} = action;
     return {
         ...state,
-        newHistoryItem,
+        newHistoryItem: HistoryItemUtils.makeHistoryItem(historyItem),
         currentHistoryId: null
     };
 }

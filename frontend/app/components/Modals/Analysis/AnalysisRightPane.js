@@ -696,7 +696,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onDuplicateButtonClick() {
-        this.props.dispatch(duplicateQueryHistoryItem(this.props.historyItem.id));
+        this.props.dispatch(duplicateQueryHistoryItem(this.props.historyItem));
     }
 
     onCancelButtonClick() {
