@@ -85,6 +85,10 @@ export default class FieldUtils {
         return sampleFields;
     }
 
+    static ridOfVepFields(fields) {
+        return _.filter(fields, (field) => !field.name.startsWith('VEP_'));
+    }
+
     static sortAndAddLabels(fields) {
         // Patch field label because it may not exist
         function updateFieldLabelIfNeeded(field) {
@@ -101,13 +105,31 @@ export default class FieldUtils {
             });
     }
 
-    static makeAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
+    static makeViewAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
         const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, totalFieldsHash));
+        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList);
+    }
+
+    static makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList) {
         const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
         return [
             ..._.filter(sortedLabelledFields, ['isEditable', false]),
             ...sourceFieldsList
         ];
+    }
+
+    static makeModelAllowedFields(samples, totalFieldsHash) {
+        const samplesFields = samples.map((sample, index) => {
+            const sampleFields = FieldUtils.getSampleFields(sample, totalFieldsHash);
+            if (index) {
+                return sampleFields;
+            } else {
+                return FieldUtils.ridOfVepFields(sampleFields);
+            }
+        });
+        const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
+        const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
+        return _.filter(sortedLabelledFields, ['isEditable', false]);
     }
 }
