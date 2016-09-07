@@ -123,15 +123,15 @@ function reduceDeleteQueryHistoryItem(state, action) {
     if (historyItemIndex < 0) {
         return state;
     }
-    const newHistory = immutableArray.remove(history, historyItemIndex);
-    var newHistoryItemId;
-    if (currentHistoryId === historyItemIndex) {
-        const newHistoryItemIndex = historyItemIndex >= history.length ? historyItemIndex - 1 : historyItemIndex;
-        const newHistoryItem = newHistoryItemIndex < 0 ? null : history[newHistoryItemIndex];
-        newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
+    var newHistoryItemIndex;
+    if (currentHistoryId === historyItemId) {
+        newHistoryItemIndex = historyItemIndex >= history.length - 1 ? historyItemIndex - 1 : historyItemIndex;
     } else {
-        newHistoryItemId = currentHistoryId;
+        newHistoryItemIndex = historyItemIndex;
     }
+    const newHistory = immutableArray.remove(history, historyItemIndex);
+    const newHistoryItem = newHistoryItemIndex < 0 ? null : newHistory[newHistoryItemIndex];
+    const newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
     return {
         ...state,
         history: newHistory,
