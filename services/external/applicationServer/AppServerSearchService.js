@@ -73,8 +73,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     requestOpenSearchSession(session, params, callback) {
-        const fieldIdToFieldMetadata = CollectionUtils.createHash(params.fieldsMetadata, fieldMetadata => fieldMetadata.id);
-        const {userId, view, samples, filter, model, limit, offset} = params;
+        const {fieldsMetadata, userId, view, samples, filter, model, limit, offset} = params;
+        const fieldIdToFieldMetadata = CollectionUtils.createHash(fieldsMetadata, fieldMetadata => fieldMetadata.id);
         const sample = samples[0];
         const method = METHODS.openSearchSession;
         const sampleIds = _.map(samples, sample => sample.id);
@@ -403,8 +403,11 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     _createAppServerViewSortOrder(view, fieldIdToMetadata, sample) {
-        // Keep only items whose fields exist in the current sample.
-        const viewListItems = _.filter(view.viewListItems, listItem => fieldIdToMetadata[listItem.fieldId]);
+        const mainSampleMetadata = _.map(sample.values, field => fieldIdToMetadata[field.fieldId]);
+        const sourceMetadata = _.filter(fieldIdToMetadata,metaData => metaData.sourceName!='sample');
+        const availableMetadata = mainSampleMetadata.concat(sourceMetadata);
+        const availableFieldIdToMetadata = CollectionUtils.createHash(availableMetadata, fieldMetadata => fieldMetadata.id);
+        const viewListItems = _.filter(view.viewListItems, listItem => availableFieldIdToMetadata[listItem.fieldId]);
 
         // Get all items which specify sort order.
         const sortItems = _.filter(viewListItems, listItem => !!listItem.sortOrder);
@@ -414,7 +417,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
         //noinspection UnnecessaryLocalVariableJS leaved for debug.
         const appServerSortOrder = _.map(sortedSortItems, listItem => {
-            const field = fieldIdToMetadata[listItem.fieldId];
+            const field = availableFieldIdToMetadata[listItem.fieldId];
             const columnName = field.sourceName === 'sample' ? AppServerUtils.createColumnName(field.name, sample.genotypeName) : field.name;
             const sourceName = field.sourceName === 'sample' ? AppServerUtils.createSampleName(sample) : field.sourceName;
             const isAscendingOrder = listItem.sortDirection === 'asc';
