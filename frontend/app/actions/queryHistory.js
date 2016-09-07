@@ -11,7 +11,7 @@ import {samplesListSetHistorySamples} from './samplesList';
 export const SET_CURRENT_QUERY_HISTORY_ID = 'SET_CURRENT_QUERY_HISTORY_ID';
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
 export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
-export const ADD_QUERY_HISTORY = 'ADD_QUERY_HISTORY';
+export const SET_EDITED_QUERY_HISTORY = 'SET_EDITED_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
 export const REQUEST_QUERY_HISTORY = 'REQUEST_QUERY_HISTORY';
 export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
@@ -121,9 +121,9 @@ export function cancelQueryHistoryEdit(historyItemId) {
     };
 }
 
-export function addQueryHistory(newHistoryItem) {
+export function setEditedHistoryItem(newHistoryItem) {
     return {
-        type: ADD_QUERY_HISTORY,
+        type: SET_EDITED_QUERY_HISTORY,
         newHistoryItem
     };
 }

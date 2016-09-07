@@ -123,9 +123,11 @@ function reduceRequestQueryHistory(state) {
     };
 }
 
-function reduceAddQueryHistory(state, action) {
+function reduceSetEditedQueryHistory(state, action) {
     return {
         ...state,
+        newHistoryItem: null,
+        currentHistoryId: action.newHistoryItem.id,
         history: [action.newHistoryItem, ...state.history]
     };
 }
@@ -170,8 +172,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceReceiveInitialQueryHistory(state, action);
         case ActionTypes.REQUEST_QUERY_HISTORY:
             return reduceRequestQueryHistory(state, action);
-        case ActionTypes.ADD_QUERY_HISTORY:
-            return reduceAddQueryHistory(state, action);
+        case ActionTypes.SET_EDITED_QUERY_HISTORY:
+            return reduceSetEditedQueryHistory(state, action);
         case ActionTypes.APPEND_QUERY_HISTORY:
             return reduceAppendQueryHistory(state, action);
         case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:

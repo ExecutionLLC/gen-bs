@@ -8,7 +8,7 @@ import {
     editQueryHistoryItem,
     editExistentQueryHistoryItem,
     updateQueryHistoryItem,
-    addQueryHistory
+    setEditedHistoryItem
 } from '../../../actions/queryHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
@@ -713,8 +713,7 @@ export default class AnalysisRightPane extends React.Component {
             modelId: historyItem.modelId
         })).then((analysis) => {
             if (isEditing && analysis) {
-                dispatch(cancelQueryHistoryEdit());
-                dispatch(addQueryHistory(analysis));
+                dispatch(setEditedHistoryItem(analysis));
             } else if (analysis) {
                 dispatch(editExistentQueryHistoryItem(analysis));
             }
