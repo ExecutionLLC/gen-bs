@@ -12,11 +12,14 @@ const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 const Config = require('../../utils/Config');
 
 const labelTemplates = _([
-    './templates/metadata/labels/required-fields-labels.json',
-    './templates/metadata/labels/clinvar_20160705_v02.json',
-    './templates/metadata/labels/dbsnp_20160601_v01.json',
-    './templates/metadata/labels/vep-fields.json'
-    ])
+    './fields/labels/vcf-fields.json',
+    './fields/labels/clinvar_20160705_v01.json',
+    './fields/labels/ESP6500_v01.json',
+    './fields/labels/dbsnp_20160601_v01.json',
+    './fields/labels/ExAC_r0_3_1_sites_v01.json',
+    './fields/labels/one_thousand_genome_v01.json',
+    './fields/labels/vep-fields.json'
+])
     .map((path) => require(path))
     .map(ChangeCaseUtil.convertKeysToCamelCase)
     .flatten()
@@ -58,7 +61,7 @@ async.waterfall([
         labelTemplates
             .map(template => template.field)
             .forEach(templateField => {
-                query = query.orWhere(function() {
+                query = query.orWhere(function () {
                     this.where('name', templateField.name)
                         .andWhere('source_name', templateField.sourceName);
 
@@ -78,8 +81,8 @@ async.waterfall([
         const {fieldsMetadata, trx} = context;
         async.forEach(fieldsMetadata, (fieldMetadata, callback) => {
             const targetLabelTemplate = _.find(labelTemplates, (template) => {
-                const {field} = template;
-                return field.name === fieldMetadata.name
+                    const {field} = template;
+                    return field.name === fieldMetadata.name
                         && field.sourceName == fieldMetadata.source_name
                         && (!field.valueType || field.valueType === fieldMetadata.valueType)
                         && (!field.dimension || field.dimension === fieldMetadata.dimension);
@@ -90,7 +93,7 @@ async.waterfall([
                 .where('field_id', fieldMetadata.id)
                 .update({label: targetLabelTemplate.label})
                 .asCallback((error) => {
-                    console.log(`${fieldMetadata.name} => ${targetLabelTemplate.label}: ${error? 'FAIL' : 'SUCCESS'}`);
+                    console.log(`${fieldMetadata.name} => ${targetLabelTemplate.label}: ${error ? 'FAIL' : 'SUCCESS'}`);
                     callback(error);
                 });
         }, (error) => callback(error, context));

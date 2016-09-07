@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Modal} from 'react-bootstrap';
 
-export default class AutoLogoutModal extends Component {
+class AutoLogoutModal extends Component {
     renderHeader() {
         return (
             <Modal.Header>
