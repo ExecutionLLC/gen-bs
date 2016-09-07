@@ -27,7 +27,7 @@ import FieldUtils from '../../../utils/fieldUtils';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled} = this.props;
+        const {historyItem, disabled, isOnlyItem} = this.props;
 
         return (
             <div>
@@ -35,7 +35,7 @@ export default class AnalysisRightPane extends React.Component {
                 {historyItem && this.renderAnalysisHeader(historyItem, disabled)}
                 <div className='split-scroll form-horizontal'>
                     <div className='form-rows'>
-                        {historyItem && this.renderAnalysisContent(historyItem, disabled)}
+                        {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisContent(historyItem, disabled) {
+    renderAnalysisContent(historyItem, disabled, isOnlyItem) {
         return (
             <div>
                 {this.renderSamplesSelects(historyItem, disabled)}
@@ -82,7 +82,7 @@ export default class AnalysisRightPane extends React.Component {
                 {this.renderViewSelector(historyItem.viewId, disabled)}
                 <hr className='invisible' />
                 {this.renderUseActualVersions()}
-                {this.renderAnalyzeButton(!disabled)}
+                {this.renderAnalyzeButton(!disabled, isOnlyItem)}
             </div>
         );
     }
@@ -445,19 +445,22 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalyzeButton(isEditing) {
+    renderAnalyzeButton(isEditing, isOnlyItem) {
         return (
             <div className='form-group'>
                 <div className='col-xs-12'>
                     {
                         isEditing ?
-                            <button
-                                className='btn btn-primary'
-                                title='Click for cancel'
-                                onClick={() => this.onCancelButtonClick()}
-                            >
-                                <span>Cancel</span>
-                            </button>
+                            isOnlyItem ?
+                                null
+                                :
+                                <button
+                                    className='btn btn-primary'
+                                    title='Click for cancel'
+                                    onClick={() => this.onCancelButtonClick()}
+                                >
+                                    <span>Cancel</span>
+                                </button>
                             :
                             <button
                                 className='btn btn-primary'
