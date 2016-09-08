@@ -27,12 +27,12 @@ import FieldUtils from '../../../utils/fieldUtils';
 export default class AnalysisRightPane extends React.Component {
 
     render() {
-        const {historyItem, disabled, isOnlyItem} = this.props;
+        const {historyItem, disabled, isOnlyItem, auth: {isDemo}} = this.props;
 
         return (
             <div>
                 {this.renderNewAnalysisTitle()}
-                {historyItem && this.renderAnalysisHeader(historyItem, disabled)}
+                {historyItem && this.renderAnalysisHeader(historyItem, disabled, isDemo)}
                 <div className='split-scroll form-horizontal'>
                     <div className='form-rows'>
                         {historyItem && this.renderAnalysisContent(historyItem, disabled, isOnlyItem)}
@@ -59,14 +59,14 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisHeader(historyItem, disabled) {
+    renderAnalysisHeader(historyItem, disabled, isDemo) {
         return (
             <div className='split-right-top split-right-top-tabs form-horizontal'>
                 {this.renderSelectAnalysis()}
                 {historyItem.id && this.renderDeleteAnalysis()}
-                {this.renderAnalysisName(historyItem.name)}
+                {this.renderAnalysisName(historyItem.name, isDemo)}
                 {this.renderAnalysisDates(historyItem.createdDate, historyItem.lastQueryDate)}
-                {this.renderAnalysisDescription(historyItem.description)}
+                {this.renderAnalysisDescription(historyItem.description, isDemo)}
                 {this.renderAnalysisHeaderTabs(historyItem.type, disabled)}
             </div>
         );
@@ -492,12 +492,13 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisName(name) {
+    renderAnalysisName(name, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
                     <Input
                         value={name}
+                        disabled={disabled}
                         className='form-control material-input-sm material-input-heading text-primary'
                         placeholder="Analysis name (it can't be empty)"
                         data-localize='query.settings.name'
@@ -551,12 +552,13 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderAnalysisDescription(description) {
+    renderAnalysisDescription(description, disabled) {
         return (
             <div className='form-group'>
                 <div className='col-md-12 col-xs-12'>
                     <Input
                         value={description}
+                        disabled={disabled}
                         placeholder='Analysis description (optional)'
                         className='form-control material-input-sm'
                         data-localize='query.settings.description'
