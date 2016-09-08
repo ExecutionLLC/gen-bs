@@ -8,7 +8,7 @@ import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../act
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis} = this.props;
+        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples} = this.props;
         const {sort} = variantsTable.searchInResultsParams;
         const {isFetching} = variantsTable;
 
@@ -59,14 +59,14 @@ export default class VariantsTableHead extends Component {
                     </div>
                 </td>
                 {_.map(variantsHeader, (fieldSampleExist) =>
-                    this.renderFieldHeader(fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, samplesTypesHash, fields, isFetching, sort, dispatch)
+                    this.renderFieldHeader(fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
                 )}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, sampleId, isExist, samplesTypesHash, fields, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist, samplesTypesHash, variantsSamples, fields, isFetching, sortState, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
         const areControlsEnabled = !!isExist;
@@ -77,10 +77,11 @@ export default class VariantsTableHead extends Component {
             dispatch(searchInResultsSortFilter());
         };
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
+        const sampleName = sampleId && _.keyBy(variantsSamples, sample => sample.id)[sampleId].fileName || null;
         return (
             <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}
                          fieldMetadata={fieldMetadata}
-                         sampleName={sampleId && this.props.samplesList.hashedArray.hash[sampleId].fileName || null}
+                         sampleName={sampleName}
                          sampleType={sampleId ? samplesTypesHash[sampleId].type : ''}
                          sampleId={sampleId}
                          areControlsEnabled={areControlsEnabled}

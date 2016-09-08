@@ -23,7 +23,7 @@ class VariantsTableReact extends Component {
 
     render() {
         const {auth, fields} = this.props;
-        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, error, variantsAnalysis} = this.props.ws;
+        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, error, variantsAnalysis, variantsSamples} = this.props.ws;
 
         return (
 
@@ -44,7 +44,7 @@ class VariantsTableReact extends Component {
                     }
                     <table className='table table-striped table-variants header-fixed' id='variants_table'
                            ref='variantsTable'>
-                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props} ref='variantsTableHead'
+                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props} ref='variantsTableHead'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)); } }
                                            onRendered={() => this.onTablePartRendered(true)}
                         />
