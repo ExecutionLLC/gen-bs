@@ -71,14 +71,6 @@ function reduceResetSampleInList(state, action) {
     };
 }
 
-function reduceChangeSamples(state, action) {
-    const {samples} = action;
-    return {
-        ...state,
-        hashedArray: ImmutableHashedArray.makeFromArray(samples)
-    };
-}
-
 function reduceSampleOnSave(state, action) {
     return {
         ...state,
@@ -127,9 +119,6 @@ export default function samplesList(state = {
 
         case ActionTypes.RESET_SAMPLE_IN_LIST:
             return reduceResetSampleInList(state, action);
-
-        case ActionTypes.CHANGE_SAMPLES:
-            return reduceChangeSamples(state, action);
 
         case ActionTypes.SAMPLE_ON_SAVE:
             return reduceSampleOnSave(state, action);

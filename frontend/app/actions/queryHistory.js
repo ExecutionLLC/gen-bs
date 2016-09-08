@@ -183,15 +183,6 @@ export function deleteServerQueryHistoryItem(historyItemId) {
     };
 }
 
-/*
-export function detachHistory(detachSample, detachFilter, detachView) {
-        dispatch([
-            changeSamples(samples) // TODO check samples change when select current
-        ]);
-    };
-}
-*/
-
 export function toggleLoadingHistoryData(isLoading) {
     return {
         type: TOGGLE_LOADING_HISTORY_DATA,

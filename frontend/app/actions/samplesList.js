@@ -11,7 +11,6 @@ export const RECEIVE_SAMPLES_LIST = 'RECEIVE_SAMPLES_LIST';
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
 export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
-export const CHANGE_SAMPLES = 'CHANGE_SAMPLES';
 export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
 export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 
@@ -113,13 +112,6 @@ export function requestUpdateSampleFields(sampleId) {
                 }
             });
         });
-    };
-}
-
-export function changeSamples(samples) { // TODO remove when after functional check
-    return {
-        type: CHANGE_SAMPLES,
-        samples
     };
 }
 
