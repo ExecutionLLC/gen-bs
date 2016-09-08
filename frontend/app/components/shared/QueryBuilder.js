@@ -70,9 +70,7 @@ export default class QueryBuilder extends Component {
             /** @type {function(number[], {}, boolean): Component} */
             makeItemComponent,
             /** @type {{onSwitch: (function(number[], boolean)), onAdd: (function(number[], boolean)), onDeleteGroup: (function(number[])), onDeleteItem: (function(number[], number))}} */
-            handlers,
-            /** @type {string} */
-            noRulesMessage
+            handlers
         } = this.props;
 
         return (rules &&
@@ -89,7 +87,6 @@ export default class QueryBuilder extends Component {
                     />
                 </div>
             </div>
-            || <div>{noRulesMessage}</div>
         );
     }
 }
