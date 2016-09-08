@@ -8,7 +8,7 @@ export default class NewFilterInputs extends Component {
     render() {
 
         const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        const {validationMessage} = this.props;
+        const {validationMessage, verb} = this.props;
 
         return (
             <div className='collapse in'>
@@ -21,12 +21,12 @@ export default class NewFilterInputs extends Component {
                 }
                 <div className='row grid-toolbar row-noborder row-new-item'>
                     <div className='col-sm-6'>
-                        <label data-localize='filters.setup.new.name.title'>New Filter</label>
+                        <label data-localize='filters.setup.new.name.title'>New {verb.Filter}</label>
                         <input
                             type='text'
                             className='form-control text-primary'
                             data-localize='filters.setup.new.name.help'
-                            placeholder='Set filter name'
+                            placeholder={`Set ${verb.filter} name`}
                             value={editingFilter.name}
                             maxLength={config.FILTERS.MAX_NAME_LENGTH}
                             onChange={(e) => this.onNameChange(e.target.value)}
@@ -39,7 +39,7 @@ export default class NewFilterInputs extends Component {
                                 type='text'
                                 className='form-control'
                                 data-localize='filters.setup.new.description'
-                                placeholder='Set filter description (optional)'
+                                placeholder={`Set ${verb.filter} description (optional)`}
                                 value={editingFilter.description}
                                 maxLength={config.FILTERS.MAX_DESCRIPTION_LENGTH}
                                 onChange={(e) => this.onDescriptionChange(e.target.value)}
