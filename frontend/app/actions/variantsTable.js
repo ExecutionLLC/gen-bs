@@ -94,26 +94,31 @@ export function sortVariants(fieldId, sampleId, sortDirection, ctrlKeyPressed) {
     };
 }
 
-export function setViewVariantsSort(view, sampleId) {
+export function setViewVariantsSort(view, samplesInfos) {
     return (dispatch, getState) => {
 
         const {samplesList: {hashedArray: {hash: samplesHash}}} = getState();
-        const sample = samplesHash[sampleId];
-        const sampleFieldsHash = _.keyBy(sample.values, (value) => value.fieldId);
+        const samples = _.map(samplesInfos, (sample) => samplesHash[sample.id]);
+        const samplesFieldsHashes = _.map(samples, (sample) => _.keyBy(sample.values, (value) => value.fieldId));
         const sortOrder = _(view.viewListItems)
             .filter(viewListItem => {
                 return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
             })
-            .filter(viewListItem => {
-                return sampleFieldsHash[viewListItem.fieldId];
-            })
             .map(viewListItem => {
+                const sampleIndex = _.findIndex(samplesFieldsHashes, (sampleFieldsHash) => sampleFieldsHash[viewListItem.fieldId]);
+                if (sampleIndex < 0) {
+                    return null;
+                }
+                const sampleId = samplesInfos[sampleIndex].id;
                 return {
                     direction: viewListItem.sortDirection,
                     fieldId: viewListItem.fieldId,
                     sampleId,
                     order: viewListItem.sortOrder
                 };
+            })
+            .filter(sort => {
+                return !!sort;
             })
             .orderBy(['order'], true)
             .value();
