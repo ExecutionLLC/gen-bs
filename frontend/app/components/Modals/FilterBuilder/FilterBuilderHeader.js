@@ -5,7 +5,6 @@ import {Modal} from 'react-bootstrap';
 export default class FilterBuilderHeader extends Component {
     render() {
         const {verb} = this.props;
-        debugger;
 
         return (
             <Modal.Header closeButton>
