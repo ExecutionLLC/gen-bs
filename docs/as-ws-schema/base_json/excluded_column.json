@@ -7,10 +7,6 @@
       "type": "string",
       "description": "name of the sample or source"
     },
-    "source_name": {
-      "type": "string",
-      "description": "Column source name. ('sample' for sample columns)"
-    },
     "column_name": {
       "type": "string",
       "description": "Column name."
