@@ -3,9 +3,11 @@ import _ from 'lodash';
 import immutableArray from './immutableArray';
 import {entityTypeIsDemoDisabled} from './entityTypes';
 import SamplesUtils from './samplesUtils';
+import AnalyseUtils from './analyseUtils';
 
 
 const {sampleType} = SamplesUtils;
+const {analysisType} = AnalyseUtils;
 
 function makeHistoryItem(historyItem) {
     return {
@@ -27,7 +29,7 @@ function makeNewHistoryItem(sample, filter, view) {
         lastQueryDate: '' + new Date(),
         filterId: filter && filter.id || null,
         viewId: view && view.id || null,
-        type: 'single',
+        type: analysisType.SINGLE,
         modelId: null,
         samples: [{
             id: sample && sample.id || null,
@@ -35,7 +37,7 @@ function makeNewHistoryItem(sample, filter, view) {
         }]
 /* can make other types like this:
         // tumor
-        type: 'tumor',
+        type: analysisType.TUMOR,
         model: historyItem.filters[0]
         samples: [
             {
@@ -48,7 +50,7 @@ function makeNewHistoryItem(sample, filter, view) {
             }
         ]
         // family
-        type: 'family',
+        type: analysisType.FAMILY,
         model: historyItem.filters[0]
         samples: [
             {
@@ -106,42 +108,42 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
     }
 
     const typeConverts = {
-        'single': {
-            'tumor'(historyItem) {
+        [analysisType.SINGLE]: {
+            [analysisType.TUMOR](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.TUMOR, sampleType.NORMAL]), // TODO make constant arrays here and below
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             },
-            'family'(historyItem) {
+            [analysisType.FAMILY](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
         },
-        'tumor': {
-            'single'(historyItem) {
+        [analysisType.TUMOR]: {
+            [analysisType.SINGLE](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.SINGLE]),
                     modelId: null
                 };
             },
-            'family'(historyItem) {
+            [analysisType.FAMILY](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
         },
-        'family': {
-            'single'(historyItem) {
+        [analysisType.FAMILY]: {
+            [analysisType.SINGLE](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.SINGLE]),
                     modelId: null
                 };
             },
-            'tumor'(historyItem) {
+            [analysisType.TUMOR](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.TUMOR, sampleType.NORMAL]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)

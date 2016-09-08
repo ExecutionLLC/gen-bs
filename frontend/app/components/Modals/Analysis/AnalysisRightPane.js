@@ -23,9 +23,11 @@ import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import SamplesUtils from '../../../utils/samplesUtils';
+import AnalyseUtils from '../../../utils/analyseUtils';
 
 
 const {sampleType} = SamplesUtils;
+const {analysisType} = AnalyseUtils;
 
 export default class AnalysisRightPane extends React.Component {
 
@@ -80,8 +82,8 @@ export default class AnalysisRightPane extends React.Component {
             <div>
                 {this.renderSamplesSelects(historyItem, disabled)}
                 {this.renderFilterSelector(historyItem.filterId, disabled)}
-                {historyItem.type === 'family' && this.renderFamilyModelSelector(historyItem.modelId, disabled)}
-                {historyItem.type === 'tumor' && this.renderTumorModelSelector(historyItem.modelId, disabled)}
+                {historyItem.type === analysisType.FAMILY && this.renderFamilyModelSelector(historyItem.modelId, disabled)}
+                {historyItem.type === analysisType.TUMOR && this.renderTumorModelSelector(historyItem.modelId, disabled)}
                 {this.renderViewSelector(historyItem.viewId, disabled)}
                 <hr className='invisible' />
                 {this.renderAnalyzeButton(!disabled, isOnlyItem)}
@@ -218,12 +220,12 @@ export default class AnalysisRightPane extends React.Component {
         );
 
         const rendersForType = {
-            'single': (historyItem, disabled) => (
+            [analysisType.SINGLE]: (historyItem, disabled) => (
                 <div className='tab-pane active' id='single'>
                      {this.renderSampleSelectSingle(historyItem.samples[0], disabled, selectedSamplesHash)}
                 </div>
             ),
-            'tumor': (historyItem, disabled) => (
+            [analysisType.TUMOR]: (historyItem, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
                      {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], disabled, selectedSamplesHash)}
@@ -231,7 +233,7 @@ export default class AnalysisRightPane extends React.Component {
                      <hr className='invisible' />
                 </div>
             ),
-            'family': (historyItem, disabled) => (
+            [analysisType.FAMILY]: (historyItem, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='family'>
                      {this.renderSamplesSelectsFamilyHeader()}
                      {historyItem.samples.map( (sample, i) =>
@@ -529,22 +531,22 @@ export default class AnalysisRightPane extends React.Component {
     renderAnalysisHeaderTabs(historyItemType, disabled) {
         const tabs = [
             {
-                isActive: historyItemType === 'single',
+                isActive: historyItemType === analysisType.SINGLE,
                 className: 'single-tab',
                 caption: 'Single',
-                onSelect: () => this.props.dispatch(this.actionEdit({type: 'single'}))
+                onSelect: () => this.props.dispatch(this.actionEdit({type: analysisType.SINGLE}))
             },
             {
-                isActive: historyItemType === 'tumor',
+                isActive: historyItemType === analysisType.TUMOR,
                 className: 'tumor-normal-tab',
                 caption: 'Tumor/Normal',
-                onSelect: () => this.props.dispatch(this.actionEdit({type: 'tumor'}))
+                onSelect: () => this.props.dispatch(this.actionEdit({type: analysisType.TUMOR}))
             },
             {
-                isActive: historyItemType === 'family',
+                isActive: historyItemType === analysisType.FAMILY,
                 className: 'family-tab',
                 caption: 'Family',
-                onSelect: () => this.props.dispatch(this.actionEdit({type: 'family'}))
+                onSelect: () => this.props.dispatch(this.actionEdit({type: analysisType.FAMILY}))
             }
         ];
         return (
