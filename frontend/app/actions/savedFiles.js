@@ -112,7 +112,8 @@ export function exportToFile(exportType) {
             websocket: {
                 variants,
                 variantsHeader,
-                variantsSamples
+                variantsSamples,
+                variantsAnalysis
             },
             variantsTable: {
                 selectedRowIndices
@@ -122,11 +123,13 @@ export function exportToFile(exportType) {
             }
         } = getState();
 
+        const variantsAnalysisSamplesHash = _.keyBy(variantsAnalysis.samples, (sample) => sample.id);
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
-            return field.label;
+            const sampleType = variantsAnalysisSamplesHash[listItem.sampleId] && variantsAnalysisSamplesHash[listItem.sampleId].type.slice(0, 1).toUpperCase();
+            return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
         })
         .concat(['Comment']);
 
