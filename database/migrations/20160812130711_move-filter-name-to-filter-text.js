@@ -3,44 +3,32 @@
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil');
 
 function addColumnToFilterText(knex, Promise) {
-    return knex.raw('ALTER TABLE filter_text ADD COLUMN name character' +
-        ' varying(50) NOT NULL DEFAULT \'\'');
+    return knex.raw('ALTER TABLE filter_text ADD COLUMN name character varying(50) NOT NULL DEFAULT \'\'');
 }
 
 function moveFilterNamesIntoNewColumn(knex, Promise) {
     console.log('=> Move filter names to filter_text table');
     return knex('filter')
         .select('id', 'name')
-        .then(
-            (filterNames) => ChangeCaseUtil.convertKeysToCamelCase(filterNames)
-        )
-        .then(
-            (filterNames) => Promise.all(
-                filterNames.map(
-                    (filterName) => knex('filter_text')
-                        .where('filter_id', filterName.id)
-                        .update(
-                            {
-                                name: filterName.name
-                            }
-                        )
-                )
+        .then((filterNames) => ChangeCaseUtil.convertKeysToCamelCase(filterNames))
+        .then((filterNames) => Promise.all(filterNames.map(
+            (filterName) => knex('filter_text')
+                .where('filter_id', filterName.id)
+                .update({
+                    name: filterName.name
+                })
             )
-        );
+        ));
 }
 
 function dropFilterIsCopyDisableColumnNameColumn(knex, Promise) {
-    const {schema} = knex;
-    return schema
-        .table('filter', (table) => {
+    return knex.schema.table('filter', (table) => {
             table.dropColumn('is_copy_disabled');
         });
 }
 
 function dropFilterColumn(knex, Promise) {
-    return knex.raw('ALTER TABLE filter DROP COLUMN name');
-    const {schema} = knex;
-    return schema
+    return knex.schema
         .table('filter', (table) => {
             table.dropColumn('name');
         });

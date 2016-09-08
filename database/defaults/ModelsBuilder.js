@@ -2,10 +2,8 @@
 
 const _ = require('lodash');
 const Uuid = require('node-uuid');
-// const async = require('async');
 
 const DefaultsBuilderBase = require('./DefaultsBuilderBase');
-// const FsUtils = require('../utils/FileSystemUtils');
 const ChangeCaseUtil = require('../../utils/ChangeCaseUtil.js');
 
 class ModelsBuilder extends DefaultsBuilderBase {
@@ -26,21 +24,22 @@ class ModelsBuilder extends DefaultsBuilderBase {
     }
 
     _createModel(modelTemplate, fieldsMetadata) {
-        const rules = this._createRules(modelTemplate.rules, fieldsMetadata);
+        const {name, description, type, modelType, analysisType, rules} = modelTemplate;
+        const createdRules = this._createRules(rules, fieldsMetadata);
         return {
             id: Uuid.v4(),
-            name: modelTemplate.name,
-            description: modelTemplate.description,
-            type: modelTemplate.type,
-            modelType: modelTemplate.modelType,
-            analysisType: modelTemplate.analysisType,
-            rules
+            name: name,
+            description: description,
+            type: type,
+            modelType: modelType,
+            analysisType: analysisType,
+            rules: createdRules
         };
     }
 
     _createRules(rulesTemplate, fieldsMetadata) {
-        if (rulesTemplate === null) {
-            return null
+        if (!rulesTemplate) {
+            return null;
         }
         return this._processRulesRecursively(rulesTemplate, fieldsMetadata);
     }
@@ -59,19 +58,19 @@ class ModelsBuilder extends DefaultsBuilderBase {
             result['rules'] = mappedOperands;
             return result;
         } else {
-            const fieldDescriptor = rulesObject.field;
-            const field = this._findField(fieldDescriptor.name, fieldDescriptor.sourceName, fieldDescriptor.valueType, fieldsMetadata);
+            const {field:fieldDescriptor, condition:{operator, value}} = rulesObject;
+            const {name: fieldName, sourceName, valueType, sampleType} = fieldDescriptor;
+            const field = this._findField(fieldName, sourceName, valueType, fieldsMetadata);
             if (!field) {
-                throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName + ', type: ' + fieldDescriptor.valueType);
+                throw new Error('Field is not found: ' + fieldDescriptor.name + ', source: ' + fieldDescriptor.sourceName + ', type: ' + valueType);
             }
-
-            const condition = rulesObject.condition;
             const result = {};
-            result['field'] = field.id;
-            result['sampleType'] = fieldDescriptor.sampleType;
-            result['operator'] = condition.operator;
-            result['value'] = condition.value;
-            return result;
+            return {
+                field: field.id,
+                sampleType,
+                operator,
+                value
+            };
         }
     }
 }

@@ -43,8 +43,7 @@ const analysesSampleTypeEnumValues = [
 
 function createAnalysisTables(knex, Promise) {
     console.log('=> Creating analysis-ralated tables...');
-    const {schema} = knex;
-    return schema
+    return knex.schema
         .createTableIfNotExists('model', (table) => {
             table.uuid('id')
                 .primary();
@@ -133,7 +132,7 @@ function createAnalysisTables(knex, Promise) {
                 .notNullable();
             table.integer('order')
                 .notNullable();
-        })
+        });
 }
 
 function importDefaultModels(knex, Promise) {
@@ -155,31 +154,23 @@ function importDefaultModels(knex, Promise) {
                 } = model;
                 const id = Uuid.v4();
                 return knex('model')
-                    .insert(
-                        ChangeCaseUtil.convertKeysToSnakeCase(
-                            {
-                                id,
-                                creator,
-                                rules,
-                                type,
-                                analysisType,
-                                modelType
-                            }
-                        )
-                    )
+                    .insert(ChangeCaseUtil.convertKeysToSnakeCase({
+                        id,
+                        creator,
+                        rules,
+                        type,
+                        analysisType,
+                        modelType
+                    }))
                     .then(
-                        function (response) {
+                        (response) => {
                             return knex('model_text')
-                                .insert(
-                                    ChangeCaseUtil.convertKeysToSnakeCase(
-                                        {
-                                            modelId: id,
-                                            name,
-                                            description,
-                                            languId: languId || Config.defaultLanguId
-                                        }
-                                    )
-                                )
+                                .insert(ChangeCaseUtil.convertKeysToSnakeCase({
+                                    modelId: id,
+                                    name,
+                                    description,
+                                    languId: languId || Config.defaultLanguId
+                                }))
                         });
             }
         )
@@ -194,8 +185,7 @@ function clearSavedFileTable(knex, Promise) {
 
 function updateSavedFileColumnsAndTables(knex, Promise) {
     console.log('=> Remove savedFile unused columns and tables');
-    const {schema} = knex;
-    return schema
+    return knex.schema
         .table('saved_file', (table) => {
             table.dropColumn('view_id');
             table.dropColumn('genotype_version_id');
