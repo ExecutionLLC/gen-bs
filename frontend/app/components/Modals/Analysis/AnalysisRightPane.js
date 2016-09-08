@@ -771,8 +771,10 @@ export default class AnalysisRightPane extends React.Component {
     }
     
     onSamplesClick(sampleIndex) {
+        const {historyItem} = this.props;
+        const selectedSamplesIds = _.map(historyItem.samples, (sample) => sample.id);
         const action = this.actionEdit({sample: {index: sampleIndex, id: null}});
-        this.props.dispatch(samplesOnSave(action, 'changeItem.sample.id'));
+        this.props.dispatch(samplesOnSave(selectedSamplesIds, action, 'changeItem.sample.index', 'changeItem.sample.id'));
         this.props.dispatch(openModal('upload'));
     }
     

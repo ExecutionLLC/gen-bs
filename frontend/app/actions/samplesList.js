@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import HttpStatus from 'http-status';
 
 import {handleError} from './errorHandler';
@@ -26,11 +27,13 @@ const FETCH_SAMPLES_SERVER_ERROR = 'Cannot update samples data (server error). Y
  * Action Creators
  */
 
-export function samplesOnSave(onSaveAction, onSaveActionProperty) {
+export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId) {
     return {
         type: SAMPLE_ON_SAVE,
+        selectedSamplesIds,
         onSaveAction,
-        onSaveActionProperty
+        onSaveActionPropertyIndex,
+        onSaveActionPropertyId
     };
 }
 
@@ -93,17 +96,22 @@ export function requestUpdateSampleFields(sampleId) {
     return (dispatch, getState) => {
         const {samplesList: {editedSamplesHash}} = getState();
         const sampleToUpdate = editedSamplesHash[sampleId];
-        samplesClient.update(sampleToUpdate, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, NETWORK_ERROR));
-            } else {
-                if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, SERVER_ERROR));
+        return new Promise((resolve, reject) => {
+            samplesClient.update(sampleToUpdate, (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, NETWORK_ERROR));
+                    reject();
                 } else {
-                    const updatedSample = response.body;
-                    dispatch(receiveUpdatedSample(sampleId, updatedSample));
+                    if (response.status !== HttpStatus.OK) {
+                        dispatch(handleError(null, SERVER_ERROR));
+                        reject();
+                    } else {
+                        const updatedSample = response.body;
+                        dispatch(receiveUpdatedSample(sampleId, updatedSample));
+                        resolve(updatedSample);
+                    }
                 }
-            }
+            });
         });
     };
 }
@@ -117,8 +125,24 @@ export function changeSamples(samples) { // TODO remove when after functional ch
 
 export function sampleSaveCurrent(sample) {
     return (dispatch, getState) => {
-        const {onSaveAction, onSaveActionProperty} = getState().samplesList;
-        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionProperty, sample));
+        const {onSaveAction, onSaveActionPropertyId} = getState().samplesList;
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sample));
+    };
+}
+
+export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
+    return (dispatch, getState) => {
+        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
+        const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
+        if (selectedSampleIndex >= 0) {
+            dispatch(
+                immutableSetPathProperty(
+                    immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, newSampleId),
+                    onSaveActionPropertyIndex,
+                    selectedSampleIndex
+                )
+            );
+        }
     };
 }
 
