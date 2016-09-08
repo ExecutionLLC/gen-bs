@@ -6,7 +6,7 @@ import SamplesUtils from './samplesUtils';
 import AnalyseUtils from './analyseUtils';
 
 
-const {sampleType} = SamplesUtils;
+const {sampleType, sampleTypeForAnalysisType} = SamplesUtils;
 const {analysisType} = AnalyseUtils;
 
 function makeHistoryItem(historyItem) {
@@ -111,13 +111,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         [analysisType.SINGLE]: {
             [analysisType.TUMOR](historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.TUMOR, sampleType.NORMAL]), // TODO make constant arrays here and below
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.TUMOR]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             },
             [analysisType.FAMILY](historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.FAMILY]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
@@ -125,13 +125,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         [analysisType.TUMOR]: {
             [analysisType.SINGLE](historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.SINGLE]),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.SINGLE]),
                     modelId: null
                 };
             },
             [analysisType.FAMILY](historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.FAMILY]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
@@ -139,13 +139,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         [analysisType.FAMILY]: {
             [analysisType.SINGLE](historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.SINGLE]),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.SINGLE]),
                     modelId: null
                 };
             },
             [analysisType.TUMOR](historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.TUMOR, sampleType.NORMAL]),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.TUMOR]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
