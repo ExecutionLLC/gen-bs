@@ -242,7 +242,6 @@ export default class AnalysisRightPane extends React.Component {
         };
 
         const typeRender = rendersForType[historyItem.type];
-        console.log(historyItem);
         return (
             <div className='tab-content'>
                 {typeRender && typeRender(historyItem, disabled)}
@@ -680,7 +679,6 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onAnalysisNameChange(name) {
-        console.log('onAnalysisNameChange', name, this.props.historyItem);
         if (!name) {
             return;
         }
@@ -693,7 +691,6 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     onAnalysisDescriptionChange(description) {
-        console.log('onAnalysisDescriptionChange', description);
         if (this.props.historyItem.id) {
             this.props.dispatch(editExistentQueryHistoryItem({...this.props.historyItem, description}));
             this.props.dispatch(updateQueryHistoryItem(this.props.historyItem.id));

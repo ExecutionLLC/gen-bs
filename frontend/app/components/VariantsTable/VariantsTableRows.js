@@ -29,8 +29,6 @@ export default class VariantsTableRows extends Component {
     componentDidMount() {
         const containerElement = document.getElementsByClassName('table-variants-container').item(0);
         const scrollElement = this.refs.variantsTableBody;
-        console.log('scrollElement', scrollElement);
-        console.log('containerElement', containerElement.clientHeight);
         scrollElement.style.height = `${containerElement.clientHeight - 100}px`;
 
         scrollElement.addEventListener('scroll', this.handleScroll.bind(this));
@@ -135,8 +133,5 @@ export default class VariantsTableRows extends Component {
     onTableRowSelected(rowIndex, isNowSelected) {
         const {dispatch} = this.props;
         dispatch(selectTableRow(rowIndex, isNowSelected));
-
-        const str = isNowSelected ? 'selected' : 'unselected';
-        console.log(`Row ${rowIndex} is ${str}`);
     }
 }
