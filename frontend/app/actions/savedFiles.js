@@ -5,6 +5,7 @@ import _ from 'lodash';
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleError} from './errorHandler';
+import SamplesUtils from '../utils/samplesUtils';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';
@@ -128,7 +129,7 @@ export function exportToFile(exportType) {
         // and add comments as a separate field values.
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
-            const sampleType = variantsAnalysisSamplesHash[listItem.sampleId] && variantsAnalysisSamplesHash[listItem.sampleId].type.slice(0, 1).toUpperCase();
+            const sampleType = variantsAnalysisSamplesHash[listItem.sampleId] && SamplesUtils.typeLabels[variantsAnalysisSamplesHash[listItem.sampleId].type];
             return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
         })
         .concat(['Comment']);
