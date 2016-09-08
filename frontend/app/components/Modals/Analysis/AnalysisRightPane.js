@@ -681,6 +681,9 @@ export default class AnalysisRightPane extends React.Component {
 
     onAnalysisNameChange(name) {
         console.log('onAnalysisNameChange', name, this.props.historyItem);
+        if (!name) {
+            return;
+        }
         if (this.props.historyItem.id) {
             this.props.dispatch(editExistentQueryHistoryItem({...this.props.historyItem, name}));
             this.props.dispatch(updateQueryHistoryItem(this.props.historyItem.id));
