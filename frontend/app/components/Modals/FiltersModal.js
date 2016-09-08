@@ -54,6 +54,8 @@ class FiltersModal extends Component {
             verb
         ) : '';
 
+        const verb = filterBuilderVerb[this.props.filterBuilder.filtersData] || {};
+
         const confirmButtonParams = {
             caption: isFilterEditable ? 'Save and Select': 'Select',
             title: isLoginRequired ? `Login or register to select advanced ${verb.filters}` : '',
