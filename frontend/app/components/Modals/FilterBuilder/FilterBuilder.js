@@ -155,6 +155,8 @@ class FilterQueryBuilder extends React.Component {
             rules,
             /** @type {boolean} */
             disabled,
+            /** @type {Object.<string, string>} */
+            verb,
             /** @type function(Object) */
             dispatch
         } = this.props;
@@ -165,6 +167,7 @@ class FilterQueryBuilder extends React.Component {
                 disabled={disabled}
                 makeItemComponent={ (indexPath, item, disabled) => FilterQueryBuilder.makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) }
                 handlers={FilterQueryBuilder.makeFilterQueryBuilderHandlers(dispatch)}
+                noRulesMessage={`This ${verb.filter} has no rules to setup`}
             />
         );
     }
@@ -432,6 +435,7 @@ export default class FilterBuilder extends React.Component {
         const {
             filterBuilder,
             fields,
+            verb,
             dispatch
         } = this.props;
         const filter = filterBuilder.editingFilter.filter;
@@ -444,6 +448,7 @@ export default class FilterBuilder extends React.Component {
                     totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
                     rules={parsedFilter}
                     disabled={!entityTypeIsEditable(filter.type)}
+                    verb={verb}
                     dispatch={dispatch}
                 />
             </div>

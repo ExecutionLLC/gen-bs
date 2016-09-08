@@ -88,6 +88,7 @@ class FiltersModal extends Component {
                                     />
                                     <FilterBuilder
                                         {...this.props}
+                                        verb={verb}
                                     />
                                 </div>
                                 }
@@ -99,6 +100,7 @@ class FiltersModal extends Component {
                                     />
                                     <FilterBuilder
                                         {...this.props}
+                                        verb={verb}
                                     />
                                 </div>
                                 }
