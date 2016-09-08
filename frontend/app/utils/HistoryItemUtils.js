@@ -107,63 +107,28 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         return entity && entity.id;
     }
 
-    const typeConverts = {
-        [analysisType.SINGLE]: {
-            [analysisType.TUMOR](historyItem) {
-                return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.TUMOR]),
-                    modelId: historyItem.modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
-                };
-            },
-            [analysisType.FAMILY](historyItem) {
-                return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.FAMILY]),
-                    modelId: historyItem.modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
-                };
-            }
-        },
-        [analysisType.TUMOR]: {
-            [analysisType.SINGLE](historyItem) {
-                return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.SINGLE]),
-                    modelId: null
-                };
-            },
-            [analysisType.FAMILY](historyItem) {
-                return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.FAMILY]),
-                    modelId: historyItem.modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
-                };
-            }
-        },
-        [analysisType.FAMILY]: {
-            [analysisType.SINGLE](historyItem) {
-                return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.SINGLE]),
-                    modelId: null
-                };
-            },
-            [analysisType.TUMOR](historyItem) {
-                return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.TUMOR]),
-                    modelId: historyItem.modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
-                };
-            }
-        }
-    };
+    function typeConvert(historyItem, newType) {
+        const {modelId} = historyItem;
 
-    const convertTypeFrom = typeConverts[historyItem.type];
-    const convertTypeTo = convertTypeFrom && convertTypeFrom[targetType];
-    if (!convertTypeTo) {
-        return historyItem;
+        const newModelId = newType === analysisType.SINGLE ?
+            null :
+            modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo);
+        const newSamples = changeSamplesArray(
+            historyItem.samples,
+            samplesList,
+            isDemo,
+            sampleTypeForAnalysisType[newType]
+        );
+
+        return {
+            ...historyItem,
+            samples: newSamples,
+            modelId: newModelId,
+            type: newType
+        };
     }
-    var newSamplesModel = convertTypeTo ? convertTypeTo(historyItem) : historyItem;
-    return {
-        ...historyItem,
-        samples: newSamplesModel.samples,
-        modelId: newSamplesModel.modelId,
-        type: targetType
-    };
+
+    return typeConvert(historyItem, targetType);
 }
 
 function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, change) {
