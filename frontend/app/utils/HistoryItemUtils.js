@@ -112,13 +112,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
             [analysisType.TUMOR](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.TUMOR]),
-                    modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
+                    modelId: historyItem.modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             },
             [analysisType.FAMILY](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.FAMILY]),
-                    modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
+                    modelId: historyItem.modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
         },
@@ -132,7 +132,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
             [analysisType.FAMILY](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.FAMILY]),
-                    modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
+                    modelId: historyItem.modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
         },
@@ -146,7 +146,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
             [analysisType.TUMOR](historyItem) {
                 return {
                     samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, sampleTypeForAnalysisType[analysisType.TUMOR]),
-                    modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
+                    modelId: historyItem.modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
         }
