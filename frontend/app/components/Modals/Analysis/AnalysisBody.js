@@ -63,7 +63,7 @@ export default class AnalysisBody extends React.Component {
         return this.props.historyList.find((historyItem) => historyItem.id === id);
     }
 
-    onSelectHistoryId(id) { // TODO make the same when first time displaying the dialog
+    onSelectHistoryId(id) {
         this.props.dispatch(setCurrentQueryHistoryIdLoadData(id));
     }
 }
