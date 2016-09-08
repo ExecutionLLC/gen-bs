@@ -2,7 +2,10 @@ import _ from 'lodash';
 
 import immutableArray from './immutableArray';
 import {entityTypeIsDemoDisabled} from './entityTypes';
+import SamplesUtils from './samplesUtils';
 
+
+const {sampleType} = SamplesUtils;
 
 function makeHistoryItem(historyItem) {
     return {
@@ -28,7 +31,7 @@ function makeNewHistoryItem(sample, filter, view) {
         modelId: null,
         samples: [{
             id: sample && sample.id || null,
-            type: 'single'
+            type: sampleType.SINGLE
         }]
 /* can make other types like this:
         // tumor
@@ -37,11 +40,11 @@ function makeNewHistoryItem(sample, filter, view) {
         samples: [
             {
                 id: sample.id,
-                type: 'tumor'
+                type: sampleType.TUMOR
             },
             {
                 id: sample.id,
-                type: 'normal'
+                type: sampleType.NORMAL
             }
         ]
         // family
@@ -50,15 +53,15 @@ function makeNewHistoryItem(sample, filter, view) {
         samples: [
             {
                 id: sample.id,
-                type: 'proband'
+                type: sampleType.PROBAND
             },
             {
                 id: sample.id,
-                type: 'mother'
+                type: sampleType.MOTHER
             },
             {
                 id: historyItem.sample.id,
-                type: 'father'
+                type: sampleType.FATHER
             }
         ]
  */
@@ -106,13 +109,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         'single': {
             'tumor'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['tumor', 'normal']),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.TUMOR, sampleType.NORMAL]), // TODO make constant arrays here and below
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             },
             'family'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['proband', 'mother', 'father']),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
@@ -120,13 +123,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         'tumor': {
             'single'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['single']),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.SINGLE]),
                     modelId: null
                 };
             },
             'family'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['proband', 'mother', 'father']),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }
@@ -134,13 +137,13 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
         'family': {
             'single'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['single']),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.SINGLE]),
                     modelId: null
                 };
             },
             'tumor'(historyItem) {
                 return {
-                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, ['tumor', 'normal']),
+                    samples: changeSamplesArray(historyItem.samples, samplesList, isDemo, [sampleType.TUMOR, sampleType.NORMAL]),
                     modelId: getUserAvailableEntityId(modelsList.hashedArray.array, isDemo)
                 };
             }

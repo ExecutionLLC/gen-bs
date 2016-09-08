@@ -22,7 +22,10 @@ import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
+import SamplesUtils from '../../../utils/samplesUtils';
 
+
+const {sampleType} = SamplesUtils;
 
 export default class AnalysisRightPane extends React.Component {
 
@@ -232,7 +235,7 @@ export default class AnalysisRightPane extends React.Component {
                 <div className='tab-pane active' role='tabpanel' id='family'>
                      {this.renderSamplesSelectsFamilyHeader()}
                      {historyItem.samples.map( (sample, i) =>
-                         sample.type === 'proband' ?
+                         sample.type === sampleType.PROBAND ?
                              this.renderSamplesSelectsFamilyProband(sample, disabled, i, selectedSamplesHash) :
                              this.renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash)
                      )}
@@ -408,11 +411,6 @@ export default class AnalysisRightPane extends React.Component {
     renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash) {
         const value = sample && sample.id || null;
 
-        const familyMemberLabel = {
-            'mother': 'M',
-            'father': 'F'
-        };
-
         return (
             <div className='form-group' key={i}>
                 <div className='col-xs-10 btn-group-select2'>
@@ -427,7 +425,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group btn-group-left'>
                         <label className='label label-default label-fix-width  label-left'>
-                            <span data-localize='query.family.mother.short'>{sample && familyMemberLabel[sample.type] || ''}</span>
+                            <span data-localize='query.family.mother.short'>{sample && SamplesUtils.typeLabels[sample.type] || ''}</span>
                         </label>
                     </div>
                     <div className='btn-group btn-group-select2-max btn-group-right'>
