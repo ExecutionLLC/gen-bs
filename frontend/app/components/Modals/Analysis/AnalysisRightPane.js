@@ -204,17 +204,27 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSamplesSelects(historyItem, disabled) {
+
+        const selectedSamplesHash = _.reduce(
+            historyItem.samples,
+            (hash, sample) => {
+                hash[sample.id] = sample;
+                return hash;
+            },
+            {}
+        );
+
         const rendersForType = {
             'single': (historyItem, disabled) => (
                 <div className='tab-pane active' id='single'>
-                     {this.renderSampleSelectSingle(historyItem.samples[0], disabled)}
+                     {this.renderSampleSelectSingle(historyItem.samples[0], disabled, selectedSamplesHash)}
                 </div>
             ),
             'tumor': (historyItem, disabled) => (
                 <div className='tab-pane active' role='tabpanel' id='tumorNormal'>
                      {this.renderSamplesSelectsTumorNormalHeader()}
-                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], disabled)}
-                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], disabled)}
+                     {this.renderSamplesSelectsTumorNormalSampleTumor(historyItem.samples[0], disabled, selectedSamplesHash)}
+                     {this.renderSamplesSelectsTumorNormalSampleNormal(historyItem.samples[1], disabled, selectedSamplesHash)}
                      <hr className='invisible' />
                 </div>
             ),
@@ -223,8 +233,8 @@ export default class AnalysisRightPane extends React.Component {
                      {this.renderSamplesSelectsFamilyHeader()}
                      {historyItem.samples.map( (sample, i) =>
                          sample.type === 'proband' ?
-                             this.renderSamplesSelectsFamilyProband(sample, disabled, i) :
-                             this.renderSamplesSelectsFamilyMember(sample, disabled, i)
+                             this.renderSamplesSelectsFamilyProband(sample, disabled, i, selectedSamplesHash) :
+                             this.renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash)
                      )}
                      <hr className='invisible' />
                 </div>
@@ -240,7 +250,9 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSampleSelectSingle(sample, disabled) {
+    renderSampleSelectSingle(sample, disabled, selectedSamplesHash) {
+        const value = sample && sample.id || null;
+
         return (
             <div>
                 <h5><span data-localize='general.sample'>Sample</span></h5>
@@ -266,8 +278,8 @@ export default class AnalysisRightPane extends React.Component {
                                 className='select2-search select-right'
                                 tabindex='-1'
                                 disabled={disabled}
-                                value={sample && sample.id || null}
-                                options={this.getSampleOptions()}
+                                value={value}
+                                options={this.getSampleOptions(value, selectedSamplesHash)}
                                 onChange={(item) => this.onSampleSelect(0, item.value)}
                             />
                         </div>
@@ -283,7 +295,9 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsTumorNormalSampleTumor(sample, disabled) {
+    renderSamplesSelectsTumorNormalSampleTumor(sample, disabled, selectedSamplesHash) {
+        const value = sample && sample.id || null;
+
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2 '>
@@ -306,8 +320,8 @@ export default class AnalysisRightPane extends React.Component {
                             className='select2-search'
                             tabindex='-1'
                             disabled={disabled}
-                            value={sample && sample.id || null}
-                            options={this.getSampleOptions()}
+                            value={value}
+                            options={this.getSampleOptions(value, selectedSamplesHash)}
                             onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
@@ -316,7 +330,9 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsTumorNormalSampleNormal(sample, disabled) {
+    renderSamplesSelectsTumorNormalSampleNormal(sample, disabled, selectedSamplesHash) {
+        const value = sample && sample.id || null;
+
         return (
             <div className='form-group'>
                 <div className='col-xs-10 btn-group-select2 '>
@@ -339,8 +355,8 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             className='select2-search select-right'
                             disabled={disabled}
-                            value={sample && sample.id || null}
-                            options={this.getSampleOptions()}
+                            value={value}
+                            options={this.getSampleOptions(value, selectedSamplesHash)}
                             onChange={(item) => this.onSampleSelect(1, item.value)}
                         />
                     </div>
@@ -355,7 +371,9 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyProband(sample, disabled, i) {
+    renderSamplesSelectsFamilyProband(sample, disabled, i, selectedSamplesHash) {
+        const value = sample && sample.id || null;
+
         return (
             <div className='form-group' key={i}>
                 <div className='col-xs-10 btn-group-select2'>
@@ -378,8 +396,8 @@ export default class AnalysisRightPane extends React.Component {
                             className='select2-search select-right'
                             tabindex='-1'
                             disabled={disabled}
-                            value={sample && sample.id || null}
-                            options={this.getSampleOptions()}
+                            value={value}
+                            options={this.getSampleOptions(value, selectedSamplesHash)}
                             onChange={(item) => this.onSampleSelect(0, item.value)}
                         />
                     </div>
@@ -388,7 +406,8 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderSamplesSelectsFamilyMember(sample, disabled, i) {
+    renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash) {
+        const value = sample && sample.id || null;
 
         const familyMemberLabel = {
             'mother': 'M',
@@ -418,8 +437,8 @@ export default class AnalysisRightPane extends React.Component {
                             tabindex='-1'
                             className='select2-search select-right'
                             disabled={disabled}
-                            value={sample && sample.id || null}
-                            options={this.getSampleOptions()}
+                            value={value}
+                            options={this.getSampleOptions(value, selectedSamplesHash)}
                             onChange={(item) => this.onSampleSelect(i, item.value)}
                         />
                     </div>
@@ -637,10 +656,10 @@ export default class AnalysisRightPane extends React.Component {
         return entityTypeIsDemoDisabled(sample.type, this.props.auth.isDemo);
     }
 
-    getSampleOptions() {
+    getSampleOptions(value, selectedSamplesHash) {
         const samples = this.props.samplesList.hashedArray.array;
         return samples.map((sampleItem) => {
-            const isDisabled = this.isSampleDisabled(sampleItem);
+            const isDisabled = sampleItem.id !== value && (this.isSampleDisabled(sampleItem) || !!selectedSamplesHash[sampleItem.id]);
             const label = getItemLabelByNameAndType(sampleItem.fileName, sampleItem.type);
             return {value: sampleItem.id, label, disabled: isDisabled};
         });
