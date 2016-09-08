@@ -231,8 +231,8 @@ export function setCurrentQueryHistoryIdLoadData(id) {
 
         const historyItem = id && _.find(historyList, {id}) || newHistoryItem;
 
-        function getUsedSamplesIds(samples) { // TODO can it be rewritten through hashedArray?
-            return _.reduce(samples, ({hash, array}, sample) => (hash[sample.id] ? {hash, array} : {hash: {...hash, [sample.id]: true}, array: [...array, sample.id]}), {hash: {}, array: []}).array;
+        function getUsedSamplesIds(samples) {
+            return _(samples).map((sample) => sample.id).uniq().value();
         }
 
         const {viewId, filterId, modelId, samples} = historyItem;
