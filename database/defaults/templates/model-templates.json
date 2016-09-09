@@ -1,7 +1,7 @@
 [
   {
-    "name": "Test Model",
-    "description": "Test model description",
+    "name": "Test Tumor Model",
+    "description": "Test tumor model description",
     "type": "standard",
     "modelType": "filter",
     "analysisType": "tumor",
@@ -51,11 +51,70 @@
     }
   },
   {
-    "name": "Another Test Model",
-    "description": "Test model description v2",
+    "name": "Another Test Tumor Model",
+    "description": "Test tumor model description v2",
     "type": "advanced",
     "modelType": "complex",
     "analysisType": "tumor",
+    "rules": null
+  },
+  {
+    "name": "Test Family Model",
+    "description": "Test family model description",
+    "type": "standard",
+    "modelType": "filter",
+    "analysisType": "family",
+    "rules": {
+      "$or": [
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "ALT",
+            "sampleType": "single",
+            "value_type": "string"
+          },
+          "condition": {
+            "operator":"$neq",
+            "value":"A"
+          }
+        },
+        {
+          "field": {
+            "source_name": "sample",
+            "name": "FILTER",
+            "sampleType": "single",
+            "value_type": "string"
+          },
+          "condition": {
+            "operator":"$eq",
+            "value":"PASS"
+          }
+        },
+        {
+          "$and": [
+            {
+              "field": {
+                "source_name": "sample",
+                "name": "ALT",
+                "sampleType": "single",
+                "value_type": "string"
+              },
+              "condition": {
+                "operator":"$neq",
+                "value":"ABC"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "Another Test Family Model",
+    "description": "Test family model description v2",
+    "type": "advanced",
+    "modelType": "complex",
+    "analysisType": "family",
     "rules": null
   }
 ]
