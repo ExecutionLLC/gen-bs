@@ -54,10 +54,14 @@ class FiltersModal extends Component {
             verb
         ) : '';
 
+        const title = isLoginRequired ?
+            `Login or register to select advanced ${verb.filters}` :
+            '';
+
         const confirmButtonParams = {
             caption: isFilterEditable ? 'Save and Select': 'Select',
-            title: isLoginRequired ? `Login or register to select advanced ${verb.filters}` : '',
-            disabled: isLoginRequired || !!titleValidationMessage
+            title: title,
+            disabled: !!title || !!titleValidationMessage
         };
 
         return (
