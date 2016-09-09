@@ -29,6 +29,8 @@ import AnalyseUtils from '../../../utils/analyseUtils';
 const {sampleType} = SamplesUtils;
 const {analysisType} = AnalyseUtils;
 
+// TODO class contains many similar and unused functions, refactor there with updated layout
+
 export default class AnalysisRightPane extends React.Component {
 
     render() {
