@@ -212,14 +212,7 @@ export default class AnalysisRightPane extends React.Component {
 
     renderSamplesSelects(historyItem, disabled) {
 
-        const selectedSamplesHash = _.reduce(
-            historyItem.samples,
-            (hash, sample) => {
-                hash[sample.id] = sample;
-                return hash;
-            },
-            {}
-        );
+        const selectedSamplesHash = _.keyBy(historyItem.samples, (sample) => sample.id);
 
         const rendersForType = {
             [analysisType.SINGLE]: (historyItem, disabled) => (

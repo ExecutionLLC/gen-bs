@@ -33,9 +33,10 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     makeFieldIdToValuesHash(sample) {
-        return _.reduce(sample.values, (result, value) => {
-            return {...result, [value.fieldId]: value.values};
-        }, {});
+        return _(sample.values)
+            .keyBy((value) => value.fieldId)
+            .mapValues((values) => values.values) // yes, values.values, we need all samples.values.values'es
+            .value();
     }
 
     render() {
