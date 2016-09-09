@@ -79,8 +79,7 @@ class AnalysisModel extends SecureModelBase {
 
     _updateInTransaction(analysisId, analysisToUpdate, trx, callback) {
         const {name, description, languId, lastQueryDate} = analysisToUpdate;
-        async.waterfall(
-            [
+        async.waterfall([
                 (callback) => {
                     const updateAnalysisData = {
                         lastQueryDate
@@ -205,7 +204,6 @@ class AnalysisModel extends SecureModelBase {
     }
 
     _findAnalysisIds(trx, userId, limit, offset, nameFilter, descriptionFilter, callback) {
-
         trx.select('id', 'timestamp')
             .from(this.baseTableName)
             .innerJoin(
