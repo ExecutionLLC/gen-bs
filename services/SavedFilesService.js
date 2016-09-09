@@ -51,12 +51,7 @@ class SavedFilesService extends UserEntityServiceBase {
         async.waterfall([
             (callback) => this.services.users.ensureUserIsNotDemo(user.id, callback),
             (callback) => super.findAll(user, callback),
-            (savedFiles, callback) => {
-                // async.mapSeries(savedFiles, (savedFile, callback) => {
-                //     this._loadAdditionalEntities(user, savedFile, callback)
-                // }, callback);
-                this._loadAdditionalEntities(user, savedFiles, callback)
-            }
+            (savedFiles, callback) =>  this._loadAdditionalEntities(user, savedFiles, callback)
         ], callback);
     }
 
@@ -96,23 +91,17 @@ class SavedFilesService extends UserEntityServiceBase {
                 (analyses, callback) => {
                     const viewIds = _.uniq(_.map(analyses, analysis => analysis.viewId));
                     const filterIds = _.uniq(_.map(analyses, analysis => analysis.filterId));
-                    const sampleIds = [].concat.apply(
-                        [], _.map(analyses, analysis => _.map(analysis.samples, sample => sample.id))
-                    );
+                    const sampleIds = _.flatMap(analyses, analysis => {
+                        return _.map( analysis.samples, sample => sample.id)
+                    });
                     const modelIds = _.filter(_.uniq(_.map(analyses, analysis => analysis.modelId)), modelId =>!_.isNull(modelId));
                     async.parallel({
+                            analyses: async.constant(analyses),
                             views: (callback) => this.services.views.findMany(user, viewIds, callback),
                             filters: (callback) => this.services.filters.findMany(user, filterIds, callback),
                             models: (callback) => this.services.models.findMany(user, modelIds, callback),
                             samples: (callback) => this.services.samples.findMany(user, sampleIds, callback)
-                        },
-                        (error, {views, filters, models, samples}) => callback(error, {
-                            views,
-                            filters,
-                            models,
-                            samples,
-                            analyses
-                        })
+                        },callback
                     );
                 },
                 // Build saved file with view, filter and sample.

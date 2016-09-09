@@ -2,8 +2,8 @@
 
 const _ = require('lodash');
 const {ENTITY_TYPES} = require('./Enums');
-const ignoredColumnNames = ['CHROM', 'POS'];
-const ignoredColumnPrefixes = ['VEP_'];
+const NOT_DUPLICATED_COLUMNS = ['CHROM', 'POS'];
+const NOT_DUPLICATED_COLUMN_PREFIXES = ['VEP_'];
 
 class AppServerUtils {
     static getGenotypeFieldsPrefix() {
@@ -18,13 +18,13 @@ class AppServerUtils {
         return ['ALT', 'CHROM', 'POS', 'REF']
     }
 
-    static getNoneDuplicatedColumnNames(fieldIdToMetadata) {
+    static getNotDuplicatedColumnNames(fieldIdToMetadata) {
         const  filteredMetadata = _.filter(fieldIdToMetadata, fieldMetadata => {
             return _.includes(
-                    ignoredColumnNames,
+                    NOT_DUPLICATED_COLUMNS,
                     fieldMetadata.name
                 ) || _.some(
-                    ignoredColumnPrefixes,
+                    NOT_DUPLICATED_COLUMN_PREFIXES,
                     prefix => {
                         return fieldMetadata.name.startsWith(prefix);
                     }

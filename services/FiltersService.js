@@ -62,11 +62,11 @@ class FiltersService extends UserEntityServiceBase {
     _checkFilterRulesRecursively(filterRulesObject, callback) {
         const operator = filterRulesObject['condition'] || null;
         if (operator) {
-            const operands = filterRulesObject[operator];
+            const operands = filterRulesObject['rules'];
             const mappedOperands = _.map(operands, (operand) => this._checkFilterRulesRecursively(operand, callback));
-            const result = {};
-            result[operator] = mappedOperands;
-            callback(null, result);
+            callback (null, {
+                [operator]: mappedOperands
+            })
         } else {
             const mappedColumnKeys = _.keys(filterRulesObject);
             if (_.difference(filterObjectKeys, mappedColumnKeys).length != 0) {
