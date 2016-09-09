@@ -11,26 +11,10 @@ import {filterBuilderEndEdit} from '../../actions/filterBuilder';
 import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
-import {
-    filtersListServerCreateFilter,
-    filtersListServerUpdateFilter,
-    filtersListServerDeleteFilter
-} from '../../actions/filtersList';
-import {
-    modelsListServerCreateModel,
-    modelsListServerUpdateModel,
-    modelsListServerDeleteModel
-} from '../../actions/modelsList';
 
 
 export const filterBuilderStrategy = {
     'filter': {
-        getList(state) {
-            return state.filtersList;
-        },
-        serverCreate: filtersListServerCreateFilter,
-        serverUpdate: filtersListServerUpdateFilter,
-        serverDelete: filtersListServerDeleteFilter,
         verb: {
             filter: 'filter',
             filters: 'filters',
@@ -42,12 +26,6 @@ export const filterBuilderStrategy = {
         }
     },
     'model': {
-        getList(state) {
-            return state.modelsList;
-        },
-        serverCreate: modelsListServerCreateModel,
-        serverUpdate: modelsListServerUpdateModel,
-        serverDelete: modelsListServerDeleteModel,
         verb: {
             filter: 'model',
             filters: 'models',
