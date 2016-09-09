@@ -4,16 +4,16 @@ const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 
-const DefaultNameFilter = '';
-const DefaultDescriptionFilter = '';
+const DEFAULT_NAME_FILTER = '';
+const DEFAULT_DESCRIPTION_FILTER = '';
 
 class AnalysisService extends UserEntityServiceBase {
     constructor(services, models) {
         super(services, models, models.analysis);
     }
 
-    findAll(user, limit, offset, nameFilter = DefaultNameFilter,
-            descriptionFilter = DefaultDescriptionFilter, callback) {
+    findAll(user, limit, offset, nameFilter = DEFAULT_NAME_FILTER,
+            descriptionFilter = DEFAULT_DESCRIPTION_FILTER, callback) {
         if (this.services.users.isDemoUserId(user.id)) {
             // Demo users have no history.
             callback(null, []);
@@ -26,7 +26,7 @@ class AnalysisService extends UserEntityServiceBase {
 
     add(user, languageId, name, description, type, viewId, filterId, modelId, samples, callback) {
         if (this.services.users.isDemoUserId(user.id)) {
-            return callback(null, null);
+            callback(null, null);
         } else {
             if (name) {
                 const newAnalysis = {
@@ -42,7 +42,7 @@ class AnalysisService extends UserEntityServiceBase {
                 };
                 super.add(user, languageId, newAnalysis, callback)
             } else {
-                return callback(new Error('Analysis name can not be empty'), null);
+                callback(new Error('Analysis name can not be empty'), null);
             }
         }
     }
@@ -50,26 +50,22 @@ class AnalysisService extends UserEntityServiceBase {
     update(user, item, callback) {
         if (this.services.users.isDemoUserId(user.id)) {
             callback(null, []);
+        } else if (item.name) {
+            async.waterfall([
+                (callback) => {
+                    this.models.analysis.find(user.id, item.id, callback)
+                },
+                (analysys, callback) => {
+                    const newAnalysis = Object.assign({}, analysys, {
+                        name: item.name,
+                        description: item.description,
+                        lastQueryDate: item.lastQueryDate
+                    });
+                    super.update(user, newAnalysis, callback)
+                }
+            ], callback);
         } else {
-            if (item.name) {
-                async.waterfall(
-                    [
-                        (callback) => {
-                            this.models.analysis.find(user.id, item.id, callback)
-                        },
-                        (analysys, callback) => {
-                            const newAnalysis = Object.assign({}, analysys, {
-                                name: item.name,
-                                description: item.description,
-                                lastQueryDate: item.lastQueryDate
-                            });
-                            super.update(user, newAnalysis, callback)
-                        }
-                    ], callback
-                );
-            } else {
-                return callback(new Error('Analysis name can not be empty'), null);
-            }
+            callback(new Error('Analysis name can not be empty'), null);
         }
     }
 }
