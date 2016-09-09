@@ -231,7 +231,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         _.forEach(viewFieldsOrdered, viewField => {
             if ( viewField.sourceName !== 'sample'){
                 resultHeader.push({
-                    fieldId: viewField.id
+                    fieldId: viewField.id,
+                    exist:true
                 });
             }else {
                 if (_.some(noneDuplicatedColumnNames,noneDuplicatedColumnName => noneDuplicatedColumnName === viewField.name)){
