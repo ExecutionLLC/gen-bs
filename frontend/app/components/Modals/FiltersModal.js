@@ -17,13 +17,21 @@ export const filterBuilderVerb = {
         filter: 'filter',
         filters: 'filters',
         Filter: 'Filter',
-        Filters: 'Filters'
+        Filters: 'Filters',
+        getStrategyValidationMessage() {
+            return '';
+        }
     },
     'model': {
         filter: 'model',
         filters: 'models',
         Filter: 'Model',
-        Filters: 'Models'
+        Filters: 'Models',
+        getStrategyValidationMessage(model, data) {
+            return model.analysisType === data.analysisType ?
+                '' :
+                'Model analysis type mismatch';
+        }
     }
 };
 
@@ -54,9 +62,13 @@ class FiltersModal extends Component {
             verb
         ) : '';
 
+        const strategyValidationMessage = verb.getStrategyValidationMessage ?
+            verb.getStrategyValidationMessage(editingFilter, this.props.filterBuilder.filtersData) :
+            '';
+
         const title = isLoginRequired ?
             `Login or register to select advanced ${verb.filters}` :
-            '';
+            strategyValidationMessage;
 
         const confirmButtonParams = {
             caption: isFilterEditable ? 'Save and Select': 'Select',
