@@ -190,6 +190,7 @@ export function toggleLoadingHistoryData(isLoading) {
     };
 }
 
+// TODO REFACTOR make parallel loading of history samples
 function getSamples(samplesIds, samplesHash, callback) {
 
     function getSample(sampleId, callback) {
@@ -217,6 +218,9 @@ function getSamples(samplesIds, samplesHash, callback) {
     getNextSample(samplesIds, 0, []);
 }
 
+// TODO REFACTOR make parallel loading of history data
+// Each promise gets existing or loads absent filter/view/model and then it inserts to the according list.
+// Samples inserts one-by-one by 'getSamples' function call
 export function setCurrentQueryHistoryIdLoadData(id) {
 
     return (dispatch, getState) => {
@@ -252,6 +256,9 @@ export function setCurrentQueryHistoryIdLoadData(id) {
                 });
             }
         }).then((view) => {
+            // TODO it is unclear that ...SetHistoryView can receive non-history item,
+            // in that case it is not adding it but this call is necessary because
+            // it removes old history items
             dispatch(viewsListSetHistoryView(view));
             const existentFilter = filtersHash[filterId];
             if (existentFilter) {
