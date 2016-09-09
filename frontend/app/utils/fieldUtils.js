@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import SamplesUtils from './samplesUtils';
+
 export default class FieldUtils {
     static find(fieldId, fields) {
         return fields.totalFieldsHashedArray.hash[fieldId];
@@ -7,14 +9,28 @@ export default class FieldUtils {
 
     /**
      * Make field structure usable for filters dialog purposes
-     * @param {{id: string, label: string, sourceName: string, valueType: string}} f
+     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
      * @param {string=} sourceName
      * @returns {{id: string, label: string, type: string}}
      */
     static makeFieldSelectItemValue(f, sourceName) {
+
+        var label;
+
+        if (f.sampleType) {
+            label = `(${SamplesUtils.typeLabels[f.sampleType]}) ${f.label}`;
+        } else {
+            if (sourceName) {
+                label = `${f.label} -- ${sourceName}`;
+            } else {
+                label = `${f.label} -- ${f.sourceName}`;
+            }
+        }
+
         return {
             id: f.id,
-            label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)}`,
+            label,
+            sampleType: f.sampleType,
             type: f.valueType === 'float' ? 'double' : f.valueType
         };
     }
