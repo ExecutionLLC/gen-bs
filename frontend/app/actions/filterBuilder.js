@@ -161,7 +161,7 @@ export function filterBuilderDeleteFilter(filterId) {
         return new Promise((resolve) => {
             const {filterBuilder} = getState();
             dispatch(filterBuilderData[filterBuilder.filtersData].serverDelete(filterId))
-                .then(()=> {
+                .then(() => {
                     const state = getState();
                     const editingFilterId = state.filterBuilder.editingFilter.filter.id;
                     const filtersList = state.filterBuilder.filtersList;

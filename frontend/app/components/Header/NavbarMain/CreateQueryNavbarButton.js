@@ -28,7 +28,7 @@ export default class CreateQueryNavbarButton extends Component {
                         id='btnToggle'
                         data-target='#analysis'
                         data-toggle='modal'
-                        onClick={()=>this.props.openAnalysisModal()}
+                        onClick={() => this.props.openAnalysisModal()}
                     ><span className='hidden-xxs' data-localize='query.title'>Analysis</span><span
                         className='visible-xxs'><i className='md-i'>settings</i></span></a>
                     {ENABLE_PERFORMANCE_CONTROLS &&
