@@ -1,5 +1,3 @@
-//import _ from 'lodash';
-
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import AnalysisLeftPane from './AnalysisLeftPane';
