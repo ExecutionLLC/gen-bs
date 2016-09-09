@@ -11,7 +11,7 @@
           "field": {
             "source_name": "sample",
             "name": "ALT",
-            "sampleType": "single",
+            "sampleType": "tumor",
             "value_type": "string"
           },
           "condition": {
@@ -23,7 +23,7 @@
           "field": {
             "source_name": "sample",
             "name": "FILTER",
-            "sampleType": "single",
+            "sampleType": "normal",
             "value_type": "string"
           },
           "condition": {
@@ -37,7 +37,7 @@
               "field": {
                 "source_name": "sample",
                 "name": "ALT",
-                "sampleType": "single",
+                "sampleType": "tumor",
                 "value_type": "string"
               },
               "condition": {
@@ -70,7 +70,7 @@
           "field": {
             "source_name": "sample",
             "name": "ALT",
-            "sampleType": "single",
+            "sampleType": "proband",
             "value_type": "string"
           },
           "condition": {
@@ -82,7 +82,7 @@
           "field": {
             "source_name": "sample",
             "name": "FILTER",
-            "sampleType": "single",
+            "sampleType": "mother",
             "value_type": "string"
           },
           "condition": {
@@ -96,7 +96,7 @@
               "field": {
                 "source_name": "sample",
                 "name": "ALT",
-                "sampleType": "single",
+                "sampleType": "father",
                 "value_type": "string"
               },
               "condition": {
