@@ -40,31 +40,31 @@ function makeNewHistoryItem(sample, filter, view) {
 /* can make other types like this:
         // tumor
         type: analysisType.TUMOR,
-        model: historyItem.filters[0]
+        model: historyItem.filters[0] // select approptiate
         samples: [
             {
-                id: sample.id,
+                id: sample.id, // select approptiate
                 type: sampleType.TUMOR
             },
             {
-                id: sample.id,
+                id: sample.id, // select approptiate
                 type: sampleType.NORMAL
             }
         ]
         // family
         type: analysisType.FAMILY,
-        model: historyItem.filters[0]
+        model: historyItem.filters[0] // select approptiate
         samples: [
             {
-                id: sample.id,
+                id: sample.id, // select approptiate
                 type: sampleType.PROBAND
             },
             {
-                id: sample.id,
+                id: sample.id, // select approptiate
                 type: sampleType.MOTHER
             },
             {
-                id: historyItem.sample.id,
+                id: historyItem.sample.id, // select approptiate
                 type: sampleType.FATHER
             }
         ]
