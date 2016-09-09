@@ -255,7 +255,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSampleSelectSingle(sample, disabled, selectedSamplesHash) {
-        const value = sample && sample.id || null;
+        const value = sample ? sample.id : null;
 
         return (
             <div>
@@ -300,7 +300,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSamplesSelectsTumorNormalSampleTumor(sample, disabled, selectedSamplesHash) {
-        const value = sample && sample.id || null;
+        const value = sample ? sample.id : null;
 
         return (
             <div className='form-group'>
@@ -335,7 +335,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSamplesSelectsTumorNormalSampleNormal(sample, disabled, selectedSamplesHash) {
-        const value = sample && sample.id || null;
+        const value = sample ? sample.id : null;
 
         return (
             <div className='form-group'>
@@ -376,7 +376,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSamplesSelectsFamilyProband(sample, disabled, i, selectedSamplesHash) {
-        const value = sample && sample.id || null;
+        const value = sample ? sample.id : null;
 
         return (
             <div className='form-group' key={i}>
@@ -411,7 +411,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     renderSamplesSelectsFamilyMember(sample, disabled, i, selectedSamplesHash) {
-        const value = sample && sample.id || null;
+        const value = sample ? sample.id : null;
 
         return (
             <div className='form-group' key={i}>
@@ -427,7 +427,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group btn-group-left'>
                         <label className='label label-default label-fix-width  label-left'>
-                            <span data-localize='query.family.mother.short'>{sample && SamplesUtils.typeLabels[sample.type] || ''}</span>
+                            <span data-localize='query.family.mother.short'>{sample ? SamplesUtils.typeLabels[sample.type] : ''}</span>
                         </label>
                     </div>
                     <div className='btn-group btn-group-select2-max btn-group-right'>

@@ -440,14 +440,15 @@ export default class FilterBuilder extends React.Component {
         const allowedFields = filterBuilder.allowedFields;
         return (
             <div className='builder-wrapper'>
-                {parsedFilter && <FilterQueryBuilder
-                    allowedFields={allowedFields.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
-                    totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
-                    rules={parsedFilter}
-                    disabled={!entityTypeIsEditable(filter.type)}
-                    dispatch={dispatch}
-                />
-                || <div>{`This ${verb.filter} has no rules to setup`}</div>
+                {parsedFilter ?
+                    <FilterQueryBuilder
+                        allowedFields={allowedFields.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
+                        totalFields={fields.totalFieldsHashedArray.array.map( (f) => FieldUtils.makeFieldSelectItemValue(f) )}
+                        rules={parsedFilter}
+                        disabled={!entityTypeIsEditable(filter.type)}
+                        dispatch={dispatch}
+                    /> :
+                    <div>{`This ${verb.filter} has no rules to setup`}</div>
                 }
             </div>
         );

@@ -11,8 +11,9 @@ export default class AnalysisBody extends React.Component {
 
     render() {
         const selectedHistoryItem =
-            this.props.currentHistoryId && this.findHistoryItemForId(this.props.currentHistoryId) ||
-            this.props.newHistoryItem;
+            this.props.currentHistoryId ?
+                this.findHistoryItemForId(this.props.currentHistoryId) :
+                this.props.newHistoryItem;
         const isLoadingHistoryData = this.props.isLoadingHistoryData;
 
         return (

@@ -84,7 +84,7 @@ class SavedFilesModal extends DialogBase {
                 <td>{_.map(samples, (sample) => sample.fileName).join(', ')}</td>
                 <td>{filter.name}</td>
                 <td>{view.name}</td>
-                <td>{model && model.name || ''}</td>
+                <td>{model ? model.name : ''}</td>
                 <td>
                     <button
                         onClick={() => this.onDownloadClick(savedFile)}

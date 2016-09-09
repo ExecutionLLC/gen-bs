@@ -229,7 +229,7 @@ export function setCurrentQueryHistoryIdLoadData(id) {
             queryHistory: {newHistoryItem, history: historyList}
         } = getState();
 
-        const historyItem = id && _.find(historyList, {id}) || newHistoryItem;
+        const historyItem = id ? _.find(historyList, {id}) : newHistoryItem;
 
         function getUsedSamplesIds(samples) {
             return _(samples).map((sample) => sample.id).uniq().value();

@@ -77,7 +77,9 @@ export default class VariantsTableHead extends Component {
             dispatch(searchInResultsSortFilter());
         };
         const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
-        const sampleName = sampleId && _.keyBy(variantsSamples, sample => sample.id)[sampleId].fileName || null;
+        const sampleName = sampleId ?
+            _.keyBy(variantsSamples, sample => sample.id)[sampleId].fileName :
+            null;
         return (
             <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}
                          fieldMetadata={fieldMetadata}

@@ -82,7 +82,9 @@ export default function websocket(state = {
         case ActionTypes.WS_TABLE_MESSAGE: {
             const resultData = action.wsData.result.data;
             return Object.assign({}, state, {
-                variants: state.variants === null ? resultData : [...state.variants, ...(resultData || [])],
+                variants: state.variants === null ?
+                    resultData :
+                    [...state.variants, ...(resultData || [])],
                 variantsHeader: action.wsData.result.header,
                 currentVariants: resultData,
                 isVariantsEmpty: (resultData && resultData.length === 0),

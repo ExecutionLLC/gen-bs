@@ -27,12 +27,14 @@ function makeNewHistoryItem(sample, filter, view) {
         description: 'Description of ' + name,
         createdDate: '' + new Date(),
         lastQueryDate: '' + new Date(),
-        filterId: filter && filter.id || null,
-        viewId: view && view.id || null,
+        filterId: filter ?
+            filter.id :
+            null,
+        viewId: view ? view.id : null,
         type: analysisType.SINGLE,
         modelId: null,
         samples: [{
-            id: sample && sample.id || null,
+            id: sample ? sample.id : null,
             type: sampleType.SINGLE
         }]
 /* can make other types like this:
@@ -91,7 +93,11 @@ function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
                 usedSamplesIds[oldSampleId] = true;
                 return {id: oldSampleId, type: type};
             } else {
-                const unusedSample = _.find(samplesList.hashedArray.array, (sample) => !usedSamplesIds[sample.id] && !entityTypeIsDemoDisabled(sample.type, isDemo)) || samplesList.hashedArray.array[0];
+                const unusedSample = _.find(
+                        samplesList.hashedArray.array,
+                        (sample) => !usedSamplesIds[sample.id] && !entityTypeIsDemoDisabled(sample.type, isDemo)
+                    ) ||
+                    samplesList.hashedArray.array[0];
                 const unusedSampleId = unusedSample.id;
                 usedSamplesIds[unusedSampleId] = true;
                 return {id: unusedSampleId, type: type};
