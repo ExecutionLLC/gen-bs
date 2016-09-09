@@ -49,7 +49,7 @@ export default class AnalysisRightPane extends React.Component {
         );
     }
 
-    renderNewAnalysisTitle() {
+    renderNewAnalysisTitle() { // TODO seems like unused block
         return (
             <div className='navbar navbar-fixed-top navbar-inverse visible-xs'>
                 <button
