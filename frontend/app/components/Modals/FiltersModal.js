@@ -53,7 +53,7 @@ class FiltersModal extends Component {
         const isFilterEditable = editingFilter && entityTypeIsEditable(editingFilter.type);
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
-        const verb = filterBuilderVerb[this.props.filterBuilder.filtersData] || {};
+        const verb = this.props.filterBuilder.filtersStrategy ? filterBuilderVerb[this.props.filterBuilder.filtersStrategy.name] : {};
 
         const titleValidationMessage = editingFilter ? this.getValidationMessage(
             editingFilter,
@@ -64,7 +64,7 @@ class FiltersModal extends Component {
         ) : '';
 
         const strategyValidationMessage = verb.getStrategyValidationMessage ?
-            verb.getStrategyValidationMessage(editingFilter, this.props.filterBuilder.filtersData) :
+            verb.getStrategyValidationMessage(editingFilter, this.props.filterBuilder.filtersStrategy) :
             '';
 
         const title = isLoginRequired ?

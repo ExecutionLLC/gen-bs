@@ -741,7 +741,8 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
         const allowedFields = FieldUtils.makeViewAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
-        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, 'filter', filtersList));
+        const filterFiltersStrategy = {name: 'filter'};
+        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         dispatch(openModal('filters'));
@@ -755,9 +756,8 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const allowedFields = FieldUtils.makeModelAllowedFields(samples, fields.totalFieldsHashedArray.hash);
-        const modelData = new String('model');
-        modelData.analysisType = historyItem.type;
-        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelData, modelsList));
+        const modelFiltersStrategy = {name: 'model', analysisType: historyItem.type};
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, modelsList));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         dispatch(openModal('filters'));
