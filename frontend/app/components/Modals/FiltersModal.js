@@ -11,29 +11,60 @@ import {filterBuilderEndEdit} from '../../actions/filterBuilder';
 import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
+import {
+    filtersListServerCreateFilter,
+    filtersListServerUpdateFilter,
+    filtersListServerDeleteFilter
+} from '../../actions/filtersList';
+import {
+    modelsListServerCreateModel,
+    modelsListServerUpdateModel,
+    modelsListServerDeleteModel
+} from '../../actions/modelsList';
 
-export const filterBuilderVerb = {
+
+export const filterBuilderStrategy = {
     'filter': {
-        filter: 'filter',
-        filters: 'filters',
-        Filter: 'Filter',
-        Filters: 'Filters',
-        getStrategyValidationMessage() {
-            return '';
+        getList(state) {
+            return state.filtersList;
+        },
+        serverCreate: filtersListServerCreateFilter,
+        serverUpdate: filtersListServerUpdateFilter,
+        serverDelete: filtersListServerDeleteFilter,
+        verb: {
+            filter: 'filter',
+            filters: 'filters',
+            Filter: 'Filter',
+            Filters: 'Filters',
+            getStrategyValidationMessage(/*filter*/) {
+                return '';
+            }
         }
     },
     'model': {
-        filter: 'model',
-        filters: 'models',
-        Filter: 'Model',
-        Filters: 'Models',
-        getStrategyValidationMessage(model, data) {
-            return model.analysisType === data.analysisType ?
-                '' :
-                'Model analysis type mismatch';
+        getList(state) {
+            return state.modelsList;
+        },
+        serverCreate: modelsListServerCreateModel,
+        serverUpdate: modelsListServerUpdateModel,
+        serverDelete: modelsListServerDeleteModel,
+        verb: {
+            filter: 'model',
+            filters: 'models',
+            Filter: 'Model',
+            Filters: 'Models',
+            getStrategyValidationMessage(/*model*/) {
+                return '';
+/* override method with something like
+                return model.analysisType === historyItem.type ?
+                    '' :
+                    'Model analysis type mismatch';
+*/
+            }
         }
     }
 };
+
 
 class FiltersModal extends Component {
 
@@ -52,7 +83,8 @@ class FiltersModal extends Component {
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
 
-        const verb = filterBuilderVerb[this.props.filterBuilder.filtersData] || {};
+        const strategy = filterBuilderStrategy[this.props.filterBuilder.filtersData];
+        const verb = strategy ? strategy.verb : {};
 
         const titleValidationMessage = editingFilter ? this.getValidationMessage(
             editingFilter,
