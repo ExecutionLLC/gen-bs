@@ -634,7 +634,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isModelDisabled(model) {
-        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo);
+        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo) || model.analysisType !== this.props.historyItem.type;
     }
 
     getModelOptions() {
