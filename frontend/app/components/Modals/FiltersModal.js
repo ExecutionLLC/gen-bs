@@ -13,29 +13,25 @@ import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 
 
-export const filterBuilderStrategy = {
+export const filterBuilderVerb = {
     'filter': {
-        verb: {
-            filter: 'filter',
-            filters: 'filters',
-            Filter: 'Filter',
-            Filters: 'Filters',
-            getStrategyValidationMessage(/*filter, strategyData*/) {
-                return '';
-            }
+        filter: 'filter',
+        filters: 'filters',
+        Filter: 'Filter',
+        Filters: 'Filters',
+        getStrategyValidationMessage(/*filter, strategyData*/) {
+            return '';
         }
     },
     'model': {
-        verb: {
-            filter: 'model',
-            filters: 'models',
-            Filter: 'Model',
-            Filters: 'Models',
-            getStrategyValidationMessage(model, strategyData) {
-                return model.analysisType === strategyData.analysisType ?
-                    '' :
-                    'Model analysis type mismatch';
-            }
+        filter: 'model',
+        filters: 'models',
+        Filter: 'Model',
+        Filters: 'Models',
+        getStrategyValidationMessage(model, strategyData) {
+            return model.analysisType === strategyData.analysisType ?
+                '' :
+                'Model analysis type mismatch';
         }
     }
 };
@@ -57,9 +53,7 @@ class FiltersModal extends Component {
         const isFilterEditable = editingFilter && entityTypeIsEditable(editingFilter.type);
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
-
-        const strategy = filterBuilderStrategy[this.props.filterBuilder.filtersData];
-        const verb = strategy ? strategy.verb : {};
+        const verb = filterBuilderVerb[this.props.filterBuilder.filtersData] || {};
 
         const titleValidationMessage = editingFilter ? this.getValidationMessage(
             editingFilter,
