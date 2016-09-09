@@ -36,7 +36,7 @@ export const filterBuilderStrategy = {
             filters: 'filters',
             Filter: 'Filter',
             Filters: 'Filters',
-            getStrategyValidationMessage(/*filter*/) {
+            getStrategyValidationMessage(/*filter, strategyData*/) {
                 return '';
             }
         }
@@ -53,13 +53,10 @@ export const filterBuilderStrategy = {
             filters: 'models',
             Filter: 'Model',
             Filters: 'Models',
-            getStrategyValidationMessage(/*model*/) {
-                return '';
-/* override method with something like
-                return model.analysisType === historyItem.type ?
+            getStrategyValidationMessage(model, strategyData) {
+                return model.analysisType === strategyData.analysisType ?
                     '' :
                     'Model analysis type mismatch';
-*/
             }
         }
     }
