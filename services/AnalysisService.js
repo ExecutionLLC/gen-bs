@@ -28,7 +28,7 @@ class AnalysisService extends UserEntityServiceBase {
         if (this.services.users.isDemoUserId(user.id)) {
             return callback(null, null);
         } else {
-            if ( name) {
+            if (name) {
                 const newAnalysis = {
                     creator: user.id,
                     name,
@@ -41,7 +41,7 @@ class AnalysisService extends UserEntityServiceBase {
                     samples
                 };
                 super.add(user, languageId, newAnalysis, callback)
-            }else {
+            } else {
                 return callback(new Error('Analysis name can not be empty'), null);
             }
         }
@@ -67,7 +67,7 @@ class AnalysisService extends UserEntityServiceBase {
                         }
                     ], callback
                 );
-            }else {
+            } else {
                 return callback(new Error('Analysis name can not be empty'), null);
             }
         }
