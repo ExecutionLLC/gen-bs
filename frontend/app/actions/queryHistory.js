@@ -83,10 +83,10 @@ export function clearQueryHistory() {
     };
 }
 
-export function prepareQueryHistoryToFilter(filter) {
+export function prepareQueryHistoryToFilter(filter) { // TODO rename function and argument
     return {
         type: PREPARE_QUERY_HISTORY_TO_FILTER,
-        filter
+        filter // TODO rename property
     };
 }
 
@@ -137,7 +137,7 @@ export function setEditedHistoryItem(newHistoryItem) {
     };
 }
 
-export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
+export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) { // TODO rename argument
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
         dispatch(requestQueryHistory());

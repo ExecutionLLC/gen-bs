@@ -20,7 +20,7 @@ class NavbarMain extends Component {
     render() {
         const {
             dispatch,
-            variantsTable: {selectedRowIndices,searchInResultsParams:{topSearch:{filter}}}
+            variantsTable: {selectedRowIndices,searchInResultsParams:{topSearch:{filter}}} // TODO rename property
         } = this.props;
         const changeGlobalSearchValue = (globalSearchString) => {
             dispatch(changeVariantsGlobalFilter(globalSearchString));
@@ -43,7 +43,7 @@ class NavbarMain extends Component {
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
                         onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }
-                        filter={filter}
+                        filter={filter} // TODO rename property
                     />
                     <ExportDropdown dispatch={this.props.dispatch}
                                     selectedRowIndices={selectedRowIndices}

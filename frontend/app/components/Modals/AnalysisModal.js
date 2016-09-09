@@ -61,7 +61,7 @@ function mapStateToProps(state) {
         historyList,
         initialHistoryList,
         fields,
-        historyListFilter: queryHistory.filter,
+        historyListFilter: queryHistory.filter, // TODO rename
         currentHistoryId: queryHistory.currentHistoryId,
         isHistoryReceivedAll: queryHistory.isReceivedAll,
         isHistoryRequesting: queryHistory.isRequesting,

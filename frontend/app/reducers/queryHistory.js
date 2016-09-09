@@ -19,7 +19,7 @@ function ensureHistoryId(history, id, hasNewHistoryItem) {
 const initialState = {
     initialHistory: [],
     history: [],
-    filter: '',
+    filter: '', // TODO rename
     isReceivedAll: false,
     newHistoryItem: null,
     currentHistoryId: null,
@@ -39,7 +39,7 @@ function reduceReceiveQueryHistory(state, action) {
     return Object.assign({}, state, {
         history: history,
         isReceivedAll: false,
-        filter: '',
+        filter: '', // TODO rename
         currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
     });
 }
@@ -50,7 +50,7 @@ function reduceReceiveInitialQueryHistory(state, action) {
         initialHistory: history,
         history: history,
         isReceivedAll: false,
-        filter: '',
+        filter: '', // TODO rename
         currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
     });
 }
@@ -58,7 +58,7 @@ function reduceReceiveInitialQueryHistory(state, action) {
 function reducePrepareQueryHistoryToFilter(state, action) {
     return {
         ...state,
-        filter: action.filter,
+        filter: action.filter, // TODO rename
         isReceivedAll: false,
         isRequesting: false,
         history: [],
@@ -158,7 +158,7 @@ function reduceSetEditedQueryHistory(state, action) {
 function reduceAppendQueryHistory(state, action) {
     // Check if data received for actual state
     // Seems like crutch, need to think about consistency
-    if (action.filter !== state.filter || action.requestFrom !== state.history.length) {
+    if (action.filter !== state.filter || action.requestFrom !== state.history.length) { // TODO rename
         return state;
     } else {
         return {

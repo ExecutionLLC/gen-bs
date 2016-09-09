@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+// TODO rename props 'filter'
 export default class AnalysisHistorySearch extends React.Component {
     render() {
         return (

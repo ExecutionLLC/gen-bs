@@ -5,13 +5,13 @@ class NavbarSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            filter: this.props.filter
+            filter: this.props.filter // TODO rename state and props 'filter'
         };
     }
 
     componentWillReceiveProps(newProps) {
         this.state = {
-            filter: newProps.filter
+            filter: newProps.filter // TODO rename
         };
     }
 
@@ -31,7 +31,7 @@ class NavbarSearch extends Component {
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={() => this.onGlobalSearchInputBlur()}
                      disabled={!isEnabled}
-                     value={this.state.filter}
+                     value={this.state.filter} // TODO rename
                     />
                 </div>
             </div>
@@ -40,21 +40,21 @@ class NavbarSearch extends Component {
 
     onGlobalSearchInputChanged(e) {
         this.setState({
-            filter: e.target.value
+            filter: e.target.value // TODO rename
         });
     }
 
     onGlobalSearchInputKeyPressed(e) {
         // user pressed "enter"
         if (e.charCode === 13) {
-            const { filter } = this.state;
+            const { filter } = this.state; // TODO rename
             const { onGlobalSearchRequested } = this.props;
             onGlobalSearchRequested(filter);
         }
     }
 
     onGlobalSearchInputBlur() {
-        const { filter } = this.state;
+        const { filter } = this.state; // TODO rename
         const { onGlobalSearchStringChanged } = this.props;
         onGlobalSearchStringChanged(filter);
     }
@@ -72,6 +72,7 @@ NavbarSearch.propTypes = {
     onGlobalSearchRequested: React.PropTypes.func.isRequired,
     // callback(globalSearchString)
     onGlobalSearchStringChanged: React.PropTypes.func.isRequired
+    // TODO add proptype 'filter' but rename immidiately
 };
 
 export default connect(mapStateToProps)(NavbarSearch);
