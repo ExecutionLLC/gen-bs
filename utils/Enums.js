@@ -35,6 +35,12 @@ const ANALYSIS_TYPES = createEnum({
     FAMILY: 'family'
 });
 
+const SAMPLE_UPLOAD_STATUS = createEnum({
+    IN_PROGRESS: 'in_progress',     // Currently active
+    READY: 'ready',                 // Successfully uploaded
+    ERROR: 'error'                  // Failed with error
+});
+
 /**
  * Types which default elements can have.
  * */
@@ -55,5 +61,6 @@ module.exports = {
     ENTITY_TYPES,
     WS_INSTANCE_MESSAGE_TYPES,
     MODEL_TYPES,
-    ANALYSIS_TYPES
+    ANALYSIS_TYPES,
+    SAMPLE_UPLOAD_STATUS
 };

@@ -50,18 +50,6 @@ class OperationsService extends ServiceBase {
         this._addOperation(session, operation, callback);
     }
     
-    findSystemOperationsForUser(user, callback) {
-        async.waterfall([
-            (callback) => this.services.sessions.findSystemSession(callback),
-            (systemSession, callback) => {
-                const activeUserOperations = _.filter(systemSession.operations,
-                    operation => ReflectionUtils.isSubclassOf(operation, UploadOperation)
-                    && operation.getUserId() === user.id);
-                callback(null, activeUserOperations);
-            }
-        ], callback);
-    }
-
     keepOperationsAlive(session, callback) {
         async.waterfall([
             (callback) => this.findAllByClass(session, SearchOperation, callback),
@@ -91,9 +79,15 @@ class OperationsService extends ServiceBase {
     find(session, operationId, callback) {
         const {operations} = session;
         if (!operations || !operations[operationId]) {
-            return this._onOperationNotFound(callback);
+            if (!this.services.sessions.isSystemSessionId(session.id)) {
+                this._onOperationNotFound(callback);
+            } else {
+                // For system sessions also check active uploads.
+                this._findInActiveUploads(operationId, callback);
+            }
+        } else {
+            callback(null, operations[operationId]);
         }
-        callback(null, operations[operationId]);
     }
 
     /**
@@ -132,6 +126,23 @@ class OperationsService extends ServiceBase {
                 result[operation.getId()] = operation;
                 return result;
             }, {});
+    }
+
+    _findInActiveUploads(operationId, callback) {
+        async.waterfall([
+            (callback) => this.services.sampleUploadHistory.findActiveForAllUsers(operationId, callback),
+            (historyEntry, systemSession, callback) => {
+                const {id, userId, sampleId, fileName} = historyEntry;
+                const operation = UploadOperation.recreate(id, systemSession.id, userId, sampleId, fileName);
+                callback(null, operation);
+            }
+        ], (error, operation) => {
+            if (error) {
+                this._onOperationNotFound(callback);
+            } else {
+                callback(null, operation);
+            }
+        });
     }
 
     _addOperation(session, operation, callback) {

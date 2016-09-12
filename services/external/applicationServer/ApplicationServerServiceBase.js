@@ -20,10 +20,23 @@ class ApplicationServerServiceBase extends ServiceBase {
         this.logger = this.services.logger;
         const {host, port, user, virtualHost, password, reconnectTimeout, requestExchangeName} = this.services.config.rabbitMq;
         /**
+         * @type RpcProxyParams
+         * */
+        const proxyParams = {
+            host,
+            port,
+            user,
+            password,
+            virtualHost,
+            logger: this.logger,
+            reconnectTimeout,
+            requestExchangeName,
+            replyCallback: this._rpcReply
+        };
+        /**
          * @type {RPCProxy}
          * */
-        this.rpcProxy = proxyProviderFunc(host, port, user, password, virtualHost, requestExchangeName, reconnectTimeout,
-            this.logger, this._rpcReply);
+        this.rpcProxy = proxyProviderFunc(proxyParams);
     }
 
     createAppServerSessionId(operation) {
@@ -35,13 +48,14 @@ class ApplicationServerServiceBase extends ServiceBase {
      * @param {OperationBase}operation
      * @param {string}method
      * @param {Object}params
+     * @param {(number|null)}priority
      * @param {function(Error, string=)}callback
      * */
-    _rpcSend(session, operation, method, params, callback) {
+    _rpcSend(session, operation, method, params, priority, callback) {
         const operationId = operation.getId();
         const queryNameOrNull = operation.getASQueryName();
         const messageId = this.createAppServerSessionId(operation);
-        this.rpcProxy.send(messageId, method, params, queryNameOrNull, (error) => {
+        this.rpcProxy.send(messageId, method, params, queryNameOrNull, priority, (error) => {
             if (error) {
                 callback(error);
             } else {

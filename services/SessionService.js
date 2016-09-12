@@ -8,6 +8,8 @@ const RedisStore = require('connect-redis')(session);
 
 const ServiceBase = require('./ServiceBase');
 
+const SYSTEM_SESSION_ID = 'eea1eefa-f8d6-4003-b2b7-c444dafcb092';
+
 const SESSION_TYPES = {
     USER: 'USER',
     DEMO: 'DEMO',
@@ -40,9 +42,11 @@ class SessionService extends ServiceBase {
         // System session is currently stored in memory, as it contains system-wide
         // operations, and, if being put in Redis, there will be race conditions
         // between different web server instances.
+        // System session should have static id common for all web server instances
+        // to be able to find and process system operations properly.
         this.systemSession = {
-            id: Uuid.v4(),
-            operations:{}
+            id: SYSTEM_SESSION_ID,
+            operations: {}
         };
 
         const {sessionCookieName, sessionSecret} = this.config.sessions;
@@ -75,6 +79,10 @@ class SessionService extends ServiceBase {
             && session.id
             && session.type
             && session.userId;
+    }
+
+    isSystemSessionId(sessionId) {
+        return sessionId === this.systemSession.id;
     }
 
     /**
