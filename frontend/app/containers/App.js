@@ -19,6 +19,7 @@ import AnalysisModal from '../components/Modals/AnalysisModal';
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
+import {samplesOnSave} from '../actions/samplesList';
 
 
 class App extends Component {
@@ -55,7 +56,13 @@ class App extends Component {
                 {<div>&nbsp;</div>}
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
-                    <NavbarMain openAnalysisModal={() => this.props.dispatch(openModal('analysis'))} />
+                    <NavbarMain
+                        openAnalysisModal={() => this.props.dispatch(openModal('analysis'))}
+                        openSamplesModal={() => {
+                            this.props.dispatch(samplesOnSave(null, null, null, null));
+                            this.props.dispatch(openModal('upload'));
+                        }}
+                    />
                      <div className={navbarQueryClass} id='subnav'>
                      </div>
                      <VariantsTableReact {...this.props} />

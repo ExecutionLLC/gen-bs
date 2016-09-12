@@ -39,7 +39,10 @@ class NavbarMain extends Component {
                         className='btn navbar-btn brand' data-toggle='modal' data-target='#info'><span
                         data-localize='brand.title'>AGx</span><sup>i</sup></a></div>
 
-                    <CreateQueryNavbarButton openAnalysisModal={() => this.props.openAnalysisModal()} />
+                    <CreateQueryNavbarButton
+                        openAnalysisModal={() => this.props.openAnalysisModal()}
+                        openSamplesModal={() => this.props.openSamplesModal()}
+                    />
                     <NavbarSearch
                         onGlobalSearchRequested={ (globalSearchString) => { sendSearchRequest(globalSearchString); } }
                         onGlobalSearchStringChanged={ (globalSearchString) => { changeGlobalSearchValue(globalSearchString); } }

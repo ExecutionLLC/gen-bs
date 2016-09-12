@@ -118,12 +118,18 @@ export function requestUpdateSampleFields(sampleId) {
 export function sampleSaveCurrent(sample) {
     return (dispatch, getState) => {
         const {onSaveAction, onSaveActionPropertyId} = getState().samplesList;
+        if (!onSaveAction) {
+            return;
+        }
         dispatch(immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sample));
     };
 }
 
 export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
     return (dispatch, getState) => {
+        if (!onSaveAction) {
+            return;
+        }
         const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
         const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
         if (selectedSampleIndex >= 0) {
