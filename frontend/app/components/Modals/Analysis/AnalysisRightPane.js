@@ -634,16 +634,18 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isModelDisabled(model) {
-        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo) || model.analysisType !== this.props.historyItem.type;
+        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo);
     }
 
     getModelOptions() {
         const models = this.props.modelsList.hashedArray.array;
-        return models.map((sampleItem) => {
-            const isDisabled = this.isModelDisabled(sampleItem);
-            const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
-            return {value: sampleItem.id, label, disabled: isDisabled};
-        });
+        return models
+            .filter((model) => model.analysisType === this.props.historyItem.type)
+            .map((sampleItem) => {
+                const isDisabled = this.isModelDisabled(sampleItem);
+                const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
+                return {value: sampleItem.id, label, disabled: isDisabled};
+            });
     }
 
     isSampleDisabled(sample) {
