@@ -8,13 +8,12 @@ import config from '../../config';
 export const WS_CREATE_CONNECTION = 'WS_CREATE_CONNECTION';
 export const WS_RECEIVE_ERROR = 'WS_RECEIVE_ERROR';
 export const WS_RECEIVE_AS_ERROR = 'WS_RECEIVE_AS_ERROR';
-export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_MESSAGE';
+export const WS_RECEIVE_CLOSE = 'WS_RECEIVE_CLOSE';
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
 export const WS_TABLE_MESSAGE = 'WS_TABLE_MESSAGE';
 export const WS_PROGRESS_MESSAGE = 'WS_PROGRESS_MESSAGE';
 export const WS_OTHER_MESSAGE = 'WS_OTHER_MESSAGE';
-export const PREPARE_ANALYZE = 'PREPARE_ANALYZE';
 export const REQUEST_ANALYZE = 'REQUEST_ANALYZE';
 
 export const WS_CLEAR_VARIANTS = 'WS_CLEAR_VARIANTS';
@@ -223,25 +222,19 @@ export function send(msg) {
     };
 }
 
-export function prepareAnalyze() {
+export function requestAnalyze() {
     return {
-        type: PREPARE_ANALYZE
+        type: REQUEST_ANALYZE
     };
 }
 
-export function requestAnalyze(searchParams) {
-    return {
-        type: REQUEST_ANALYZE,
-        searchParams
-    };
-}
-
-export function requestSetCurrentParams(view, filter, sample, sampleFields) {
+export function requestSetCurrentParams(view, filter, samples, model, analysis) {
     return {
         type: REQUEST_SET_CURRENT_PARAMS,
         view,
         filter,
-        sample,
-        sampleFields
+        samples,
+        model,
+        analysis
     };
 }

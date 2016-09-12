@@ -5,11 +5,11 @@ import UserEntityClientBase from './UserEntityClientBase';
 
 export default class QueryHistoryClient extends UserEntityClientBase {
     constructor(urls) {
-        super(urls);
+        super(urls, urls.queryHistoryUrls());
     }
 
-    getQueryHistory(languageId, limit, offset, callback) {
+    getQueryHistory(languageId, search, limit, offset, callback) {
         RequestWrapper.get(this.urls.history(),
-            this._makeHeaders({languageId}), {limit, offset}, null, callback);
+            this._makeHeaders({languageId}), {search, limit, offset}, null, callback);
     }
 }

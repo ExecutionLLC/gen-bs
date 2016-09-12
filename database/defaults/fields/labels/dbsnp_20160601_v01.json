@@ -4,14 +4,7 @@
       "name": "INFO_RS",
       "source_name": "dbsnp_20160601_v01"
     },
-    "label": "rs#"
-  },
-  {
-    "field": {
-      "name": "INFO_RV",
-      "source_name": "dbsnp_20160601_v01"
-    },
-    "label": "rs strand"
+    "label": "dbSNP"
   },
   {
     "field": {

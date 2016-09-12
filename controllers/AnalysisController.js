@@ -1,14 +1,10 @@
-'use strict';
-
-const _ = require('lodash');
-const Express = require('express');
 const async = require('async');
 
-const ControllerBase = require('./base/ControllerBase');
+const UserEntityControllerBase = require('./base/UserEntityControllerBase');
 
-class QueryHistoryController extends ControllerBase {
+class AnalysisController extends UserEntityControllerBase {
     constructor(services) {
-        super(services);
+        super(services, services.analysis)
     }
 
     findAll(request, response) {
@@ -18,10 +14,13 @@ class QueryHistoryController extends ControllerBase {
                 const user = request.user;
                 const limit = request.query.limit;
                 const offset = request.query.offset;
+                const search = request.query.search;
                 if (isNaN(limit) || isNaN(offset)) {
                     callback(new Error('Offset or limit are not specified or incorrect'));
                 } else {
-                    this.services.queryHistory.findAll(user, limit, offset, callback);
+                    this.services.analysis.findAll(
+                        user, limit, offset, search, search, callback
+                    );
                 }
             }
         ], (error, result) => {
@@ -29,13 +28,13 @@ class QueryHistoryController extends ControllerBase {
         });
     }
 
-    createRouter() {
-        const router = new Express();
+    find(request, response) {
+        this.sendInternalError(response, new Error('not supported'));
+    }
 
-        router.get('/', this.findAll.bind(this));
-
-        return router;
+    add(request, response) {
+        this.sendInternalError(response, new Error('not supported'));
     }
 }
 
-module.exports = QueryHistoryController;
+module.exports = AnalysisController;

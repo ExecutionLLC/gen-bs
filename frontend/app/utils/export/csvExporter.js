@@ -8,22 +8,40 @@ export default class CsvExporter extends ExporterBase {
         this.separator = ';';
     }
 
+    /**
+     * @param {string[]} columnsArray
+     * @returns {string}
+     */
     buildHeaderRow(columnsArray) {
-        const columnNames = _.map(columnsArray, col => col.name);
-        return this._createRow(columnNames);
+        return this._createRow(columnsArray);
     }
 
+    /**
+     * @param {string[]} columnsArray
+     * @param {string[]} rowValues
+     * @returns {string}
+     */
     buildRow(columnsArray, rowValues) {
         return this._createRow(rowValues);
     }
 
+    /**
+     * @param {string[]} rowValues
+     * @returns {string}
+     * @private
+     */
     _createRow(rowValues) {
         return _.map(rowValues, value => this._preprocessRowValue(value))
             .join(this.separator);
     }
 
+    /**
+     * @param {string} value
+     * @returns {string}
+     * @private
+     */
     _preprocessRowValue(value) {
-        value = (value || '').replace(/"/g, '""');
-        return `"${value}"`;
+        const escapedValue = (value || '').replace(/"/g, '""');
+        return `"${escapedValue}"`;
     }
 }

@@ -34,7 +34,6 @@ class SavedFileModel extends SecureModelBase {
             const fileIds = [fileId];
             async.waterfall([
                 (callback) => this._fetchSavedFiles(trx, fileIds, userId, false, callback),
-                (files, callback) => this._ensureAllItemsFound(files, fileIds, callback),
                 (files, callback) => callback(null, files[0])
             ], callback);
         }, callback);
@@ -88,8 +87,8 @@ class SavedFileModel extends SecureModelBase {
     _insertFileMetadata(userId, languId, fileMetadata, shouldGenerateId, trx, callback) {
         async.waterfall([
             (callback) => {
-                if (!fileMetadata.filterIds) {
-                    callback(new Error('No filters specified for the exported file.'));
+                if (!fileMetadata.analysisId) {
+                    callback(new Error('No analysis specified for the exported file.'));
                 } else {
                     callback(null);
                 }
@@ -99,23 +98,12 @@ class SavedFileModel extends SecureModelBase {
                 const dataToInsert = {
                     id: shouldGenerateId ? this._generateId() : fileMetadata.id,
                     creator: userId,
-                    viewId: fileMetadata.viewId,
-                    genotypeVersionId: fileMetadata.sampleId,
+                    analysisId: fileMetadata.analysisId,
                     name: fileMetadata.name,
                     url: fileMetadata.url,
                     totalResults: fileMetadata.totalResults
                 };
                 this._insert(dataToInsert, trx, callback);
-            },
-            (fileId, callback) => {
-                // Insert filters.
-                async.eachSeries(fileMetadata.filterIds, (filterId, callback) => {
-                    const dataToInsert = {
-                        savedFileId: fileId,
-                        filterId
-                    };
-                    this._unsafeInsert(SavedFileTables.Filters, dataToInsert, trx, callback);
-                }, (error) => callback(error, fileId));
             },
             (fileId, callback) => {
                 // Insert translated description.
@@ -152,49 +140,15 @@ class SavedFileModel extends SecureModelBase {
         if (shouldExcludeDeletedEntries) {
             baseQuery = baseQuery.andWhere('is_deleted', false);
         }
-
         async.waterfall([
-            (callback) => baseQuery.asCallback((error, files) => callback(error, files)),
+            callback => baseQuery.asCallback(callback),
             (files, callback) => this._toCamelCase(files, callback),
             (files, callback) => {
-                const fileIds = _.map(files, 'id');
-                this._findSavedFilesFilters(trx, fileIds,
-                    (error, fileIdToFilterIdsHash) => callback(error, files, fileIdToFilterIdsHash))
-            },
-            (files, fileIdToFilterIdsHash, callback) => {
-                // Transform objects loaded from database.
-                const mappedFiles = _.map(files, file => {
-                    const fileWithFilters = _.cloneDeep(file);
-
-                    // Will be using sample version as sample id in the services layer.
-                    fileWithFilters.sampleId = file.genotypeVersionId;
-                    delete fileWithFilters.genotypeVersionId;
-
-                    fileWithFilters.filterIds = fileIdToFilterIdsHash[file.id];
-                    return fileWithFilters;
-                });
-
-                callback(null, mappedFiles);
-            }
-        ], callback);
-    }
-
-    /**
-     * @param trx Knex transaction
-     * @param fileIds Ids of the saved files to find filters for.
-     * @param callback (error, hash[fileId] = [filterIds]).
-     * */
-    _findSavedFilesFilters(trx, fileIds, callback) {
-        async.waterfall([
-            (callback) => trx.select('saved_file_id', 'filter_id')
-                .from(SavedFileTables.Filters)
-                .whereIn('saved_file_id', fileIds)
-                .asCallback((error, rows) => callback(error, rows)),
-            (rows, callback) => this._toCamelCase(rows, callback),
-            (rows, callback) => {
-                const hash = CollectionUtils.createMultiValueHash(rows,
-                    (row) => row.savedFileId, (row) => row.filterId);
-                callback(null, hash);
+                if (fileIdsOrNull) {
+                    this._ensureAllItemsFound(files, fileIdsOrNull, callback);
+                } else {
+                    callback(null, files);
+                }
             }
         ], callback);
     }

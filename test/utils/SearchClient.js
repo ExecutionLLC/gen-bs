@@ -8,15 +8,13 @@ class SearchClient extends ClientBase {
         super(urls);
     }
 
-    sendSearchRequest(sessionId, languId, sampleId, viewId, filterId, limit, offset, callback) {
+    sendSearchRequest(sessionId, languId, analysis, limit, offset, callback) {
         RequestWrapper.post(
             this.urls.startSearch(),
             this._makeHeaders({sessionId, languId}),
             {
                 languId,
-                sampleId,
-                viewId,
-                filterId,
+                analysis,
                 limit,
                 offset
             },
@@ -25,15 +23,16 @@ class SearchClient extends ClientBase {
     }
 
     sendSearchInResultsRequest(sessionId, operationId, globalSearch,
-                               fieldIdToSearchObject, fieldIdToOrderAndDirection, callback) {
-        RequestWrapper.get(
+                               fieldIdToSearchObject, fieldIdToOrderAndDirection, limit, offset, callback) {
+        RequestWrapper.post(
             this.urls.startSearchInResults(operationId),
             this._makeHeaders({sessionId}),
-            null,
             {
                 topSearch: globalSearch,
                 search: fieldIdToSearchObject,
-                sort: fieldIdToOrderAndDirection
+                sort: fieldIdToOrderAndDirection,
+                limit,
+                offset
             },
             callback
         );

@@ -12,11 +12,6 @@ export default function ui(state = {
 
     switch (action.type) {
 
-        case ActionTypes.TOGGLE_QUERY_NAVBAR:
-            return Object.assign({}, state, {
-                queryNavbarClosed: !state.queryNavbarClosed
-            });
-
         case ActionTypes.REQUEST_TABLE_SCROLL_POSITION_RESET:
             return Object.assign({}, state, {
                 shouldResetTableScrollPosition: true

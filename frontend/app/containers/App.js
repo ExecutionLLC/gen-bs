@@ -7,20 +7,19 @@ import config from '../../config';
 
 import VariantsTableReact from '../components/VariantsTable/VariantsTableReact';
 import NavbarMain from '../components/Header/NavbarMain';
-import NavbarCreateQuery from '../components/Header/NavbarCreateQuery';
 
 import AutoLogoutModal from '../components/Modals/AutoLogoutModal';
 import ErrorModal from '../components/Modals/ErrorModal';
 import FiltersModal from '../components/Modals/FiltersModal';
 import FileUploadModal from '../components/Modals/FileUploadModal';
-import QueryHistoryModal from '../components/Modals/QueryHistoryModal';
 import ViewsModal from '../components/Modals/ViewsModal';
 import SavedFilesModal from '../components/Modals/SavedFilesModal';
+import AnalysisModal from '../components/Modals/AnalysisModal';
 
 import { KeepAliveTask, login, startAutoLogoutTimer, stopAutoLogoutTimer } from '../actions/auth';
 import { openModal, closeModal } from '../actions/modalWindows';
 import { lastErrorResolved } from '../actions/errorHandler';
-import { closeQueryHistoryModal } from '../actions/queryHistory';
+import {samplesOnSave} from '../actions/samplesList';
 
 
 class App extends Component {
@@ -57,12 +56,14 @@ class App extends Component {
                 {<div>&nbsp;</div>}
                 {samplesArray.length > 0 &&
                  <div className='container-fluid'>
-                    <NavbarMain />
+                    <NavbarMain
+                        openAnalysisModal={() => this.props.dispatch(openModal('analysis'))}
+                        openSamplesModal={() => {
+                            this.props.dispatch(samplesOnSave(null, null, null, null));
+                            this.props.dispatch(openModal('upload'));
+                        }}
+                    />
                      <div className={navbarQueryClass} id='subnav'>
-                         <NavbarCreateQuery
-                          {...this.props}
-                          openModal={ (modalName) => { this.props.dispatch(openModal(modalName)); } }
-                         />
                      </div>
                      <VariantsTableReact {...this.props} />
                      <div id='fav-message' className='hidden'>
@@ -70,6 +71,11 @@ class App extends Component {
                      </div>
                  </div>
                 }
+                <AnalysisModal
+                    showModal={this.props.modalWindows.analysis.showModal}
+                    closeModal={ () => { this.props.dispatch(closeModal('analysis')); } }
+                    dispatch={this.props.dispatch}
+                />
                 <ErrorModal
                     showModal={this.props.showErrorWindow}
                     closeModal={ () => { this.props.dispatch(lastErrorResolved()); } }
@@ -93,10 +99,6 @@ class App extends Component {
                     closeModal={ (modalName) => { this.props.dispatch(closeModal(modalName)); } }
                 />
                 <SavedFilesModal showModal={this.props.savedFiles.showSavedFilesModal} />
-                <QueryHistoryModal
-                    showModal={this.props.showQueryHistoryModal}
-                    closeModal={ () => { this.props.dispatch(closeQueryHistoryModal()); } }
-                />
             </div>
         );
     }
@@ -112,8 +114,8 @@ function mapStateToProps(state) {
             samplesList,
             filtersList,
             viewsList,
-            errorHandler: { showErrorWindow },
-            queryHistory: { showQueryHistoryModal } } = state;
+            modelsList,
+            errorHandler: { showErrorWindow } } = state;
 
     return {
         auth,
@@ -125,8 +127,8 @@ function mapStateToProps(state) {
         samplesList,
         filtersList,
         viewsList,
-        showErrorWindow,
-        showQueryHistoryModal
+        modelsList,
+        showErrorWindow
     };
 }
 

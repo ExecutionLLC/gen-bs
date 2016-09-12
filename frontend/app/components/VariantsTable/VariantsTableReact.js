@@ -23,7 +23,7 @@ class VariantsTableReact extends Component {
 
     render() {
         const {auth, fields} = this.props;
-        const {variants, isVariantsLoading, isVariantsEmpty, isVariantsValid, error} = this.props.ws;
+        const {variants, variantsHeader, isVariantsLoading, isVariantsEmpty, isVariantsValid, error, variantsAnalysis, variantsSamples} = this.props.ws;
 
         return (
 
@@ -44,12 +44,12 @@ class VariantsTableReact extends Component {
                     }
                     <table className='table table-striped table-variants header-fixed' id='variants_table'
                            ref='variantsTable'>
-                        <VariantsTableHead variants={variants} fields={fields} {...this.props} ref='variantsTableHead'
+                        <VariantsTableHead fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} variantsSamples={variantsSamples} {...this.props} ref='variantsTableHead'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableRows)); } }
                                            onRendered={() => this.onTablePartRendered(true)}
                         />
                         { !isVariantsEmpty &&
-                        <VariantsTableRows variants={variants} fields={fields} {...this.props} ref='variantsTableRows'
+                        <VariantsTableRows variants={variants} fields={fields} variantsHeader={variantsHeader} variantsAnalysis={variantsAnalysis} {...this.props} ref='variantsTableRows'
                                            xScrollListener={ (scrollLeft) => { this.elementXScrollListener(scrollLeft, ReactDOM.findDOMNode(this.refs.variantsTableHead)); } }
                                            onRendered={() => this.onTablePartRendered(false)}
                         />
@@ -95,14 +95,12 @@ class VariantsTableReact extends Component {
 
 function mapStateToProps(state) {
     const {auth, websocket, ui, variantsTable} = state;
-    const {searchParams} = state.websocket;
 
     return {
         auth,
         ws: websocket,
         ui,
-        variantsTable,
-        searchParams
+        variantsTable
     };
 }
 

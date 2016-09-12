@@ -13,9 +13,10 @@ const ITEM_NOT_FOUND = 'Item not found.';
 
 class ModelBase {
     /**
-     * @param models Reference to the models facade
-     * @param baseTableName Name of the main (or the only) table of the corresponding model.
-     * @param mappedColumns List of column names that will be allowed to extract from the table(s) (@see ModelBase._mapColumns() method).
+     * @param {ModelsFacade}models Reference to the models facade
+     * @param {string}baseTableName Name of the main (or the only) table of the corresponding model.
+     * @param {Array<string>}mappedColumns List of column names that will be allowed to extract
+     * from the table(s) (@see ModelBase._mapColumns() method).
      * */
     constructor(models, baseTableName, mappedColumns) {
         this.models = models;
@@ -69,7 +70,6 @@ class ModelBase {
     }
 
     _generateId() {
-        // Generate random UUID
         return Uuid.v4();
     }
 

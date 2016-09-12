@@ -116,6 +116,10 @@ class Urls {
         return new CollectionUrls('/filters', this.host, this.port);
     }
 
+    modelsUrls() {
+        return new CollectionUrls('/models', this.host, this.port);
+    }
+
     samplesUrls() {
         return new SamplesUrls('/samples', this.host, this.port);
     }

@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import SampleEditableFieldsPanel from './SampleEditableFieldsPanel';
 import {getItemLabelByNameAndType} from '../../../utils/stringUtils';
-import {changeSample} from '../../../actions/samplesList';
+import {sampleSaveCurrent} from '../../../actions/samplesList';
 import {entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 
 
@@ -17,7 +17,7 @@ export default class FileUploadSamplesRow extends Component {
     onSelectForAnalysisClick(e, sampleId) {
         e.preventDefault();
         const {dispatch, closeModal} = this.props;
-        dispatch(changeSample(sampleId));
+        dispatch(sampleSaveCurrent(sampleId));
         closeModal('upload');
     }
 
@@ -33,9 +33,10 @@ export default class FileUploadSamplesRow extends Component {
     }
 
     makeFieldIdToValuesHash(sample) {
-        return _.reduce(sample.values, (result, value) => {
-            return {...result, [value.fieldId]: value.values};
-        }, {});
+        return _(sample.values)
+            .keyBy((value) => value.fieldId)
+            .mapValues((values) => values.values) // yes, values.values, we need all samples.values.values'es
+            .value();
     }
 
     render() {

@@ -7,10 +7,11 @@ export default function websocket(state = {
     error: null,
     closed: true,
     variants: null,
-    variantsSample: null,
+    variantsSamples: null,
     variantsView: null,
     variantsFilter: null,
-    variantsSampleFieldsList: [],
+    variantsModel: null,
+    variantsAnalysis: null,
     currentVariants: null,
     isVariantsEmpty: false,
     isVariantsValid: true,
@@ -79,16 +80,12 @@ export default function websocket(state = {
                 error: null
             });
         case ActionTypes.WS_TABLE_MESSAGE: {
-            const resultData = _.map(action.wsData.result.data, row => {
-                return Object.assign({}, row, {
-                    fieldsHash: _.reduce(row.fields, (result, fieldValue) => {
-                        result[fieldValue.fieldId] = fieldValue.value;
-                        return result;
-                    }, {})
-                });
-            });
+            const resultData = action.wsData.result.data;
             return Object.assign({}, state, {
-                variants: state.variants === null ? resultData : [...state.variants, ...(resultData || [])],
+                variants: state.variants === null ?
+                    resultData :
+                    [...state.variants, ...(resultData || [])],
+                variantsHeader: action.wsData.result.header,
                 currentVariants: resultData,
                 isVariantsEmpty: (resultData && resultData.length === 0),
                 isVariantsLoading: false,
@@ -115,22 +112,18 @@ export default function websocket(state = {
             return Object.assign({}, state, {
                 closed: true
             });
-        case ActionTypes.PREPARE_ANALYZE:
-            return Object.assign({}, state, {
-                isVariantsLoading: true
-            });
         case ActionTypes.REQUEST_ANALYZE:
             return Object.assign({}, state, {
                 variants: null,
-                isVariantsLoading: true,
-                searchParams: action.searchParams
+                isVariantsLoading: true
             });
         case ActionTypes.REQUEST_SET_CURRENT_PARAMS: {
             return Object.assign({}, state, {
-                variantsView: action.view,
-                variantsSample: action.sample,
-                variantsFilter: action.filter,
-                variantsSampleFieldsList: action.sampleFields
+                variantsView: action.view, // unused
+                variantsSamples: action.samples, // used variantsSample.fileName at exportToFile and at renderFieldHeader
+                variantsFilter: action.filter, // unused
+                variantsModel: action.model, // unused
+                variantsAnalysis: action.analysis // used variantsAnalysis.id and .samples at saveExportedFileToServer, used !!variantsAnalysis and .samples in variants table
             });
         }
 

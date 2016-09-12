@@ -7,7 +7,8 @@ import Select from '../../shared/Select';
 import ComponentBase from '../../shared/ComponentBase';
 import {
     updateSampleValue, resetSampleInList,
-    requestUpdateSampleFields
+    requestUpdateSampleFields,
+    sampleSaveCurrentIfSelected
 } from '../../../actions/samplesList';
 
 export default class SampleEditableFieldsPanel extends ComponentBase {
@@ -24,7 +25,10 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
         e.preventDefault();
 
         const {dispatch} = this.props;
-        dispatch(requestUpdateSampleFields(sampleId));
+        dispatch(requestUpdateSampleFields(sampleId))
+            .then((newSample) => {
+                dispatch(sampleSaveCurrentIfSelected(sampleId, newSample.id));
+            });
     }
 
     onResetSampleClick(e, sampleId) {

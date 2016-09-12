@@ -96,6 +96,16 @@ class FieldsMetadataModel extends ModelBase {
         ], callback);
     }
 
+    findByUserAndSampleIds(userId, sampleIds, callback) {
+        async.waterfall([
+            (callback) => this.models.samples.findMany(userId, sampleIds, callback),
+            (samples, callback) => {
+                const fieldIds =_.uniq([].concat.apply([],_.map(samples, sample => _.map(sample.values,'fieldId'))));
+                this.findMany(fieldIds, callback);
+            }
+        ], callback);
+    }
+
     findSourcesMetadata(callback) {
         async.waterfall([
             (callback) => this._fetchSourcesMetadata(callback),

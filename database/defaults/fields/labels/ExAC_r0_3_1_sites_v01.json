@@ -1,0 +1,709 @@
+[
+  {
+    "field": {
+      "name": "INFO_AC",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_AFR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "African allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_AMR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "American allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_Adj",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Adjusted allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_EAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "East Asian allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_FIN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Finnish allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_Hemi",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Hemizygous individuals"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_Het",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Heterozygous individuals"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_Hom",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Homozygous individuals"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_NFE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "European allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_OTH",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Other allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_SAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "South Asian allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AF",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Number of chromosomes tested"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_AFR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "African allele frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_AMR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "American allele frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_Adj",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Adjusted allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_EAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "East Asian chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_FIN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Finnish chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_NFE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "European chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_OTH",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Other chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_SAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "South Asian chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_EAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "East Asian allele frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_FIN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Finnish allele frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_NFE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "European allele frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_OTH",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Other allele frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_SAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "South Asian allele frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_Hemi",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Hemizygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_Het",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Heterozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_Hom",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Homozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_CCC",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Chromosomes called"
+  },
+  {
+    "field": {
+      "name": "INFO_DB",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "In dbSNP"
+  },
+  {
+    "field": {
+      "name": "INFO_DP",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Read depth after filtering"
+  },
+  {
+    "field": {
+      "name": "INFO_DS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Downsampled samples"
+  },
+  {
+    "field": {
+      "name": "INFO_END",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Stop position"
+  },
+  {
+    "field": {
+      "name": "INFO_FS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Strand bias phred(p-value)"
+  },
+  {
+    "field": {
+      "name": "INFO_GQ_MEAN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Mean genotype quality"
+  },
+  {
+    "field": {
+      "name": "INFO_GQ_STDDEV",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "St dev genotype quality"
+  },
+  {
+    "field": {
+      "name": "INFO_HWP",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Hardy Weinberg Equilibrium test"
+  },
+  {
+    "field": {
+      "name": "INFO_HaplotypeScore",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Haplotype consistency"
+  },
+  {
+    "field": {
+      "name": "INFO_Het_AFR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "African heterozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Het_AMR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "American heterozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Het_EAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "East Asian heterozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Het_FIN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Finnish heterozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Het_NFE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "European heterozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Het_OTH",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Other heterozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Het_SAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "South Asian heterozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hom_AFR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "African homozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hom_AMR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "American homozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hom_EAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "East Asian homozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hom_FIN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Finnish homozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hom_NFE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "European homozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hom_OTH",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Other homozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hom_SAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "South Asian homozygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hemi_AFR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "African hemizygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hemi_AMR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "American hemizygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hemi_EAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "East Asian hemizygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hemi_FIN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Finnish hemizygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hemi_NFE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "European hemizygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hemi_OTH",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Other hemizygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_Hemi_SAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "South Asian hemizygous individuals adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HetF_AFR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "African heterozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HetF_AMR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "American heterozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HetF_EAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "East Asian heterozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HetF_FIN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Finnish heterozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HetF_NFE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "European heterozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HetF_OTH",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Other heterozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HetF_SAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "South Asian heterozygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HomF_AFR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "African homo+hemizygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HomF_AMR",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "American homo+hemizygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HomF_EAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "East Asian homo+hemizygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HomF_FIN",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Finnish homo+hemizygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HomF_NFE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "European homo+hemizygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HomF_OTH",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Other homo+hemizygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_HomF_SAS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "South Asian homo+hemizygous frequency adjusted"
+  },
+  {
+    "field": {
+      "name": "INFO_InbreedingCoeff",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Inbreeding coefficient"
+  },
+  {
+    "field": {
+      "name": "INFO_MLEAC",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Allele count maximum likelihood expectation"
+  },
+  {
+    "field": {
+      "name": "INFO_MLEAF",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Allele frequency maximum likelihood expectation"
+  },
+  {
+    "field": {
+      "name": "INFO_MQ",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "RMS mapping quality"
+  },
+  {
+    "field": {
+      "name": "INFO_MQ0",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Total mapping quality 0 reads"
+  },
+  {
+    "field": {
+      "name": "INFO_NCC",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "No call samples"
+  },
+  {
+    "field": {
+      "name": "INFO_QD",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Quality by depth"
+  },
+  {
+    "field": {
+      "name": "INFO_ReadPosRankSum",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Position bias"
+  },
+  {
+    "field": {
+      "name": "INFO_VQSLOD",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Odds ratio true variant"
+  },
+  {
+    "field": {
+      "name": "INFO_culprit",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Why filtered out"
+  },
+  {
+    "field": {
+      "name": "INFO_DP_HIST",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Read depth histogram"
+  },
+  {
+    "field": {
+      "name": "INFO_GQ_HIST",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Genotype quality phred histogram"
+  },
+  {
+    "field": {
+      "name": "INFO_DOUBLETON_DIST",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Distance of doubleton carriers"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_CONSANGUINEOUS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Consanguineous allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_CONSANGUINEOUS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Consanguineous chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_CONSANGUINEOUS",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Consanguineous allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_MALE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Male allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_MALE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Male chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_MALE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Male allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_FEMALE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Male allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_FEMALE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Male chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_FEMALE",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "Male allele frequency"
+  },
+  {
+    "field": {
+      "name": "INFO_POPMAX",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "PopMax"
+  },
+  {
+    "field": {
+      "name": "INFO_AC_POPMAX",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "PopMax allele count"
+  },
+  {
+    "field": {
+      "name": "INFO_AN_POPMAX",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "PopMax chromosomes count"
+  },
+  {
+    "field": {
+      "name": "INFO_AF_POPMAX",
+      "source_name": "ExAC_r0_3_1_sites_v01"
+    },
+    "label": "PopMax allele frequency"
+  }
+]

@@ -1,32 +1,38 @@
 import _ from 'lodash';
 
+import SamplesUtils from './samplesUtils';
+
 export default class FieldUtils {
     static find(fieldId, fields) {
-        return _.find(fields.totalFieldsList, (field) => field.id === fieldId);
+        return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
     /**
      * Make field structure usable for filters dialog purposes
-     * @param {{id: string, label: string, sourceName: string, valueType: string}} f
+     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
      * @param {string=} sourceName
      * @returns {{id: string, label: string, type: string}}
      */
     static makeFieldSelectItemValue(f, sourceName) {
+
+        var label;
+
+        if (f.sampleType) {
+            label = `(${SamplesUtils.typeLabels[f.sampleType]}) ${f.label}`;
+        } else {
+            if (sourceName) {
+                label = `${f.label} -- ${sourceName}`;
+            } else {
+                label = `${f.label} -- ${f.sourceName}`;
+            }
+        }
+
         return {
             id: f.id,
-            label: `${f.label} -- ${(sourceName == null ? f.sourceName : sourceName)}`,
+            label,
+            sampleType: f.sampleType,
             type: f.valueType === 'float' ? 'double' : f.valueType
         };
-    }
-
-    /**
-     * Make fields array for filters
-     * @param {{sourceFieldsList: Object[], totalFieldsList: Object[], sampleFieldsList: Object[]}} fields
-     * @returns {{id: string, label: string, type: string}[]}
-     */
-    static makeFieldsListForFiltersSelect(fields) {
-        const allAvailableFields = _.filter(fields.sampleFieldsList.concat(fields.sourceFieldsList), field => !field.isEditable);
-        return allAvailableFields.map((f) => this.makeFieldSelectItemValue(f));
     }
 
     /**
@@ -89,4 +95,79 @@ export default class FieldUtils {
         return null;
     }
 
+    /**
+     * Return all fields as array from sample.values.
+     * @template {TField}
+     * @param {{values: {filedId: string}[]}} sample
+     * @param {Object.<string, TField>} totalFieldsHash
+     * @returns {Object.<string, TField>}
+     */
+    static getSampleFields(sample, totalFieldsHash) {
+        const sampleValues = sample.values;
+        const sampleFields = sampleValues.map(({fieldId}) => totalFieldsHash[fieldId]);
+        return sampleFields;
+    }
+
+    static ridOfVepFields(fields) {
+        return _.filter(fields, (field) => !field.name.startsWith('VEP_'));
+    }
+
+    static sortAndAddLabels(fields) {
+        // Patch field label because it may not exist
+        function updateFieldLabelIfNeeded(field) {
+            return Object.assign({}, field, {
+                label: field.label ? field.label : field.name
+            });
+        }
+
+        return fields.map(updateFieldLabelIfNeeded)
+            .sort((a, b) => {
+                if (a.label > b.label) {return 1;}
+                if (a.label < b.label) {return -1;}
+                return 0;
+            });
+    }
+
+    static makeViewAllowedFields(samples, totalFieldsHash, sourceFieldsList) {
+        const samplesFields = samples.map((sample) => FieldUtils.getSampleFields(sample, totalFieldsHash));
+        return FieldUtils.makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList);
+    }
+
+    static makeAllowedFieldsForSamplesFields(samplesFields, sourceFieldsList) {
+        const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
+        const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
+        return [
+            ..._.filter(sortedLabelledFields, ['isEditable', false]),
+            ...sourceFieldsList
+        ];
+    }
+
+    /**
+     * @param {{id: string, values: {fieldId: string}[]}[]} samples
+     * @param {Object.<string, string>} samplesTypes hash {sampleId: sampleType}
+     * @param {Object} totalFieldsHash hash {fieldId: field}
+     * @returns {Array}
+     */
+    static makeModelAllowedFields(samples, samplesTypes, totalFieldsHash) {
+
+        function addSampleTypeFields(fields, sampleType) {
+            return _.map(fields, (field) => ({
+                ...field,
+                sampleType
+            }));
+        }
+
+        const samplesFields = samples.map((sample, index) => {
+            const sampleType = samplesTypes[sample.id];
+            const sampleFields = FieldUtils.getSampleFields(sample, totalFieldsHash);
+            if (index) {
+                return addSampleTypeFields(sampleFields, sampleType);
+            } else {
+                return addSampleTypeFields(FieldUtils.ridOfVepFields(sampleFields), sampleType);
+            }
+        });
+        const allSamplesFields = _.concat.apply(_, samplesFields);
+        const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
+        return _.filter(sortedLabelledFields, ['isEditable', false]);
+    }
 }

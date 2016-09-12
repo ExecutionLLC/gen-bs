@@ -77,13 +77,14 @@ class SavedFilesModal extends DialogBase {
     }
 
     renderSavedFileRow(savedFile) {
-        const {filter, view, sample, timestamp} = savedFile;
+        const {filter, view, model, samples, timestamp} = savedFile;
         return (
             <tr key={savedFile.id}>
                 <td>{Moment(timestamp).format('DD MM YYYY HH:mm:ss')}</td>
-                <td>{sample.fileName}</td>
+                <td>{_.map(samples, (sample) => sample.fileName).join(', ')}</td>
                 <td>{filter.name}</td>
                 <td>{view.name}</td>
+                <td>{model ? model.name : ''}</td>
                 <td>
                     <button
                         onClick={() => this.onDownloadClick(savedFile)}

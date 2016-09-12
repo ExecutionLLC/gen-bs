@@ -3,36 +3,49 @@ import _ from 'lodash';
 
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
-import {changeHistoryData} from './userData';
-import {analyze} from './ui';
-import {
-    changeSamples,
-    changeSample
-} from './samplesList';
-import {fetchFields} from './fields';
-import {prepareAnalyze} from './websocket';
-import {
-    filtersListSelectFilter,
-    filtersListReceive
-} from './filtersList';
-import {
-    viewsListSelectView,
-    viewsListReceive
-} from './viewsList';
-import {entityType} from '../utils/entityTypes';
+import {viewsListSetHistoryView} from './viewsList';
+import {filtersListSetHistoryFilter} from './filtersList';
+import {modelsListSetHistoryModel} from './modelsList';
+import {samplesListSetHistorySamples} from './samplesList';
 
+export const SET_CURRENT_QUERY_HISTORY_ID = 'SET_CURRENT_QUERY_HISTORY_ID';
 export const RECEIVE_QUERY_HISTORY = 'RECEIVE_QUERY_HISTORY';
-export const SHOW_QUERY_HISTORY_MODAL = 'SHOW_QUERY_HISTORY_MODAL';
-export const CLOSE_QUERY_HISTORY_MODAL = 'CLOSE_QUERY_HISTORY_MODAL';
+export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
+export const SET_EDITED_QUERY_HISTORY = 'SET_EDITED_QUERY_HISTORY';
+export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
+export const REQUEST_QUERY_HISTORY = 'REQUEST_QUERY_HISTORY';
+export const PREPARE_QUERY_HISTORY_TO_SEARCH = 'PREPARE_QUERY_HISTORY_TO_SEARCH';
+export const DUPLICATE_QUERY_HISTORY_ITEM = 'DUPLICATE_QUERY_HISTORY_ITEM';
+export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
+export const DELETE_QUERY_HISTORY_ITEM = 'DELETE_QUERY_HISTORY_ITEM';
+export const EDIT_EXISTENT_HISTORY_ITEM = 'EDIT_EXISTENT_HISTORY_ITEM';
+export const CANCEL_QUERY_HISTORY_EDIT = 'CANCEL_QUERY_HISTORY_EDIT';
+export const TOGGLE_LOADING_HISTORY_DATA = 'TOGGLE_LOADING_HISTORY_DATA';
+export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 
-const HISTORY_NETWORK_ERROR = 'Cannot update "query history" (network error).';
-const HISTORY_SERVER_ERROR = 'Cannot update "query history" (server error).';
-const UNKNOWN_HISTORY_ID_ERROR = 'Cannot find history item.';
+const HISTORY_NETWORK_ERROR = 'Cannot update "analyses history" (network error).';
+const HISTORY_SERVER_ERROR = 'Cannot update "analyses history" (server error).';
 
 const queryHistoryClient = apiFacade.queryHistoryClient;
 
 const DEFAULT_OFFSET = 0;
 const DEFAULT_LIMIT = 10;
+
+export function setCurrentQueryHistoryId(id) {
+    return {
+        type: SET_CURRENT_QUERY_HISTORY_ID,
+        id
+    };
+}
+
+export function createNewHistoryItem(sample, filter, view) {
+    return {
+        type: CREATE_NEW_HISTORY_ITEM,
+        sample,
+        filter,
+        view
+    };
+}
 
 export function receiveQueryHistory(history) {
     return {
@@ -41,15 +54,26 @@ export function receiveQueryHistory(history) {
     };
 }
 
-export function showQueryHistoryModal() {
+export function receiveInitialQueryHistory(history) {
     return {
-        type: SHOW_QUERY_HISTORY_MODAL
+        type: RECEIVE_INITIAL_QUERY_HISTORY,
+        history
     };
 }
 
-export function closeQueryHistoryModal() {
+export function requestQueryHistory() {
     return {
-        type: CLOSE_QUERY_HISTORY_MODAL
+        type: REQUEST_QUERY_HISTORY
+    };
+}
+
+export function appendQueryHistory(search, requestFrom, items, isReceivedAll) {
+    return {
+        type: APPEND_QUERY_HISTORY,
+        search,
+        requestFrom,
+        history: items,
+        isReceivedAll
     };
 }
 
@@ -59,138 +83,217 @@ export function clearQueryHistory() {
     };
 }
 
-export function updateQueryHistory(limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
+export function prepareQueryHistoryToSearch(search) {
+    return {
+        type: PREPARE_QUERY_HISTORY_TO_SEARCH,
+        search
+    };
+}
+
+export function duplicateQueryHistoryItem(historyItem) {
+    return {
+        type: DUPLICATE_QUERY_HISTORY_ITEM,
+        historyItem
+    };
+}
+
+export function editQueryHistoryItem(samplesList, filtersList, viewsList, modelsList, isDemo, changeItem) {
+    return {
+        type: EDIT_QUERY_HISTORY_ITEM,
+        samplesList,
+        filtersList,
+        viewsList,
+        modelsList,
+        isDemo,
+        changeItem
+    };
+}
+
+export function deleteQueryHistoryItem(historyItemId) {
+    return {
+        type: DELETE_QUERY_HISTORY_ITEM,
+        historyItemId
+    };
+}
+
+export function editExistentQueryHistoryItem(historyItem) {
+    return {
+        type: EDIT_EXISTENT_HISTORY_ITEM,
+        historyItem
+    };
+}
+
+export function cancelQueryHistoryEdit(historyItemId) {
+    return {
+        type: CANCEL_QUERY_HISTORY_EDIT,
+        historyItemId
+    };
+}
+
+export function setEditedHistoryItem(newHistoryItem) {
+    return {
+        type: SET_EDITED_QUERY_HISTORY,
+        newHistoryItem
+    };
+}
+
+export function requestAppendQueryHistory(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
-        queryHistoryClient.getQueryHistory(language, limit, offset, (error, response) => {
+        dispatch(requestQueryHistory());
+        queryHistoryClient.getQueryHistory(language, search, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, HISTORY_SERVER_ERROR));
             } else {
-                dispatch(receiveQueryHistory(response.body.result));
+                dispatch(appendQueryHistory(search, offset, response.body.result, limit > response.body.result.length));
             }
         });
     };
 }
 
-export function renewHistoryItem(historyItemId) {
+export function updateQueryHistoryItem(historyItemId) {
     return (dispatch, getState) => {
         const {history} = getState().queryHistory;
         const historyItem = _.find(history, (historyItem) => {
             return historyItem.id === historyItemId;
-        }) || null;
-        if (historyItem === null) {
-            dispatch(handleError(null, UNKNOWN_HISTORY_ID_ERROR));
+        });
+        queryHistoryClient.update(historyItem, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, HISTORY_SERVER_ERROR));
+            }
+        });
+    };
+}
+
+export function deleteServerQueryHistoryItem(historyItemId) {
+    return (dispatch) => {
+        queryHistoryClient.remove(historyItemId, (error, response) => {
+            if (error) {
+                dispatch(handleError(null, HISTORY_NETWORK_ERROR));
+            } else if (response.status !== HttpStatus.OK) {
+                dispatch(handleError(null, HISTORY_SERVER_ERROR));
+            } else {
+                dispatch(deleteQueryHistoryItem(historyItemId));
+            }
+        });
+    };
+}
+
+export function toggleLoadingHistoryData(isLoading) {
+    return {
+        type: TOGGLE_LOADING_HISTORY_DATA,
+        isLoading
+    };
+}
+
+// TODO REFACTOR make parallel loading of history samples
+function getSamples(samplesIds, samplesHash, callback) {
+
+    function getSample(sampleId, callback) {
+        const existentSample = samplesHash[sampleId];
+        if (existentSample) {
+            callback(existentSample);
         } else {
-            // copy history item and update names of sample, view and filter. All items from history
-            // should be marked as '(from history)'.
-            const clonedHistoryItem = _.cloneDeep(historyItem);
-            clonedHistoryItem.sample.type = entityType.HISTORY;
-            clonedHistoryItem.filters[0].type = entityType.HISTORY;
-            clonedHistoryItem.view.type = entityType.HISTORY;
-            dispatch([
-                attachHistory(clonedHistoryItem),
-                changeSample(clonedHistoryItem.sample.id),
-                prepareAnalyze()
-            ]);
-            dispatch(fetchFields(clonedHistoryItem.sample.id))
-                .then(() => {
-                    dispatch([
-                        filtersListSelectFilter(clonedHistoryItem.filters[0].id),
-                        viewsListSelectView(clonedHistoryItem.view.id),
-                        analyze(clonedHistoryItem.sample.id, clonedHistoryItem.view.id, clonedHistoryItem.filters[0].id)
-                    ]);
-                });
+            apiFacade.samplesClient.get(sampleId, (error, response) => {
+                callback(response.body);
+            });
         }
-    };
-}
+    }
 
-export function attachHistory(historyItem) {
-    return (dispatch, getState)=> {
-        const {userData:{attachedHistoryData: {sampleId, filterId, viewId}}} = getState();
-        const {collection: samples, historyItemId: newSampleId} = changeHistoryItem(
-            getState().samplesList.hashedArray.array, sampleId, historyItem.sample
-        );
-        const {collection: filters, historyItemId: newFilterId} = changeHistoryItem(
-            getState().filtersList.hashedArray.array, filterId, historyItem.filters[0]
-        );
-        const {collection: views, historyItemId: newViewId} = changeHistoryItem(
-            getState().viewsList.hashedArray.array, viewId, historyItem.view
-        );
-        dispatch([
-            changeHistoryData(newSampleId, newFilterId, newViewId),
-            filtersListReceive(filters),
-            viewsListReceive(views),
-            changeSamples(samples)
-        ]);
-    };
-
-}
-
-
-export function detachHistory(detachSample, detachFilter, detachView) {
-    return (dispatch, getState) => {
-        if (!detachSample && !detachFilter && !detachView) {
+    function getNextSample(samplesIds, index, samples) {
+        if (index >= samplesIds.length) {
+            callback(samples);
             return;
         }
-        const {userData, samplesList, filtersList, viewsList} = getState();
-        const attachedHistoryData = userData.attachedHistoryData;
-        const {
-            collection: samples,
-            historyItemId: sampleId
-        } = detachHistoryItemIfNeedIt(detachSample, samplesList.hashedArray.array, attachedHistoryData.sampleId);
-        const {
-            collection: filters,
-            historyItemId: filterId
-        } = detachHistoryItemIfNeedIt(detachFilter, filtersList.hashedArray.array, attachedHistoryData.filterId);
-        const {
-            collection: views,
-            historyItemId: viewId
-        } = detachHistoryItemIfNeedIt(detachView, viewsList.hashedArray.array, attachedHistoryData.viewId);
-
-        dispatch([
-            changeHistoryData(sampleId, filterId, viewId),
-            filtersListReceive(filters),
-            viewsListReceive(views),
-            changeSamples(samples)
-        ]);
-    };
-}
-
-function detachHistoryItemIfNeedIt(needDetach, collection, historyItemId) {
-    if (needDetach) {
-        return changeHistoryItem(collection, historyItemId, null);
-    }
-    return {collection, historyItemId};
-}
-
-function changeHistoryItem(collection, oldHistoryItemId, newHistoryItem) {
-    const newHistoryItemId = newHistoryItem ? newHistoryItem.id : null;
-    if (oldHistoryItemId === newHistoryItemId) {
-        // nothing to be changed
-        return {collection, historyItemId: oldHistoryItemId};
+        getSample(samplesIds[index], (sample) => {
+            const newSamples = [...samples, sample];
+            getNextSample(samplesIds, index + 1, newSamples);
+        });
     }
 
-    const collectionWOOldHistoryItem = oldHistoryItemId ?
-        _.filter(collection, (item) => {
-            return item.id !== oldHistoryItemId;
-        }) :
-        collection;
+    getNextSample(samplesIds, 0, []);
+}
 
-    if (newHistoryItemId) {
-        const hasNewHistoryItem = _.some(collectionWOOldHistoryItem, {id: newHistoryItemId});
-        if (!hasNewHistoryItem) {
-            // if collection do not contain such item, we should insert it
-            const collectionWithNewItem = [...collectionWOOldHistoryItem, newHistoryItem];
-            return {collection: collectionWithNewItem, historyItemId: newHistoryItemId};
-        } else {
-            // reset history id, because we already have this item in collection (so it is not from history, it is
-            // common item)
-            return {collection: collectionWOOldHistoryItem, historyItemId: null};
+// TODO REFACTOR make parallel loading of history data
+// Each promise gets existing or loads absent filter/view/model and then it inserts to the according list.
+// Samples inserts one-by-one by 'getSamples' function call
+export function setCurrentQueryHistoryIdLoadData(id) {
+
+    return (dispatch, getState) => {
+
+        const {
+            viewsList: {hashedArray: {hash: viewsHash}},
+            filtersList: {hashedArray: {hash: filtersHash}},
+            modelsList: {hashedArray: {hash: modelsHash}},
+            samplesList: {hashedArray: {hash: samplesHash}},
+            queryHistory: {newHistoryItem, history: historyList}
+        } = getState();
+
+        const historyItem = id ? _.find(historyList, {id}) : newHistoryItem;
+
+        function getUsedSamplesIds(samples) {
+            return _(samples).map((sample) => sample.id).uniq().value();
         }
-    }
-    else {
-        return {collection: collectionWOOldHistoryItem, historyItemId: newHistoryItemId};
-    }
+
+        const {viewId, filterId, modelId, samples} = historyItem;
+        const samplesIds = getUsedSamplesIds(samples);
+
+        dispatch(toggleLoadingHistoryData(true));
+        return Promise.resolve(
+        ).then(() => {
+            const existentView = viewsHash[viewId];
+            if (existentView) {
+                return existentView;
+            } else {
+                return new Promise((resolve) => {
+                    apiFacade.viewsClient.get(viewId, (error, response) => {
+                        resolve(response.body);
+                    });
+                });
+            }
+        }).then((view) => {
+            // TODO it is unclear that ...SetHistoryView can receive non-history item,
+            // in that case it is not adding it but this call is necessary because
+            // it removes old history items
+            dispatch(viewsListSetHistoryView(view));
+            const existentFilter = filtersHash[filterId];
+            if (existentFilter) {
+                return existentFilter;
+            } else {
+                return new Promise((resolve) => {
+                    apiFacade.filtersClient.get(filterId, (error, response) => {
+                        resolve(response.body);
+                    });
+                });
+            }
+        }).then((filter) => {
+            dispatch(filtersListSetHistoryFilter(filter));
+            if (modelId == null) {
+                return null;
+            }
+            const existentModel = modelsHash[modelId];
+            if (existentModel) {
+                return existentModel;
+            } else {
+                return new Promise((resolve) => {
+                    apiFacade.modelsClient.get(modelId, (error, response) => {
+                        resolve(response.body);
+                    });
+                });
+            }
+        }).then((model) => {
+            dispatch(modelsListSetHistoryModel(model));
+            return new Promise((resolve) => {
+                getSamples(samplesIds, samplesHash, resolve);
+            });
+        }).then((samples) => {
+            dispatch(samplesListSetHistorySamples(samples));
+            dispatch(setCurrentQueryHistoryId(id));
+            dispatch(toggleLoadingHistoryData(false));
+        });
+    };
 }

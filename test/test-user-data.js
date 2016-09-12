@@ -51,13 +51,8 @@ const checkUserData = (userData, isDemoUser, callback) => {
     const totalFields = userData.totalFields;
     CollectionUtils.checkCollectionIsValid(totalFields, null, false, false);
 
-    const lastSampleId = userData.lastSampleId;
-    assert.ok(lastSampleId);
-    assert.ok(_.find(samples, sample => sample.id === lastSampleId));
-
-    const lastSampleFields = userData.lastSampleFields;
-    assert.ok(lastSampleFields);
-    assert.ok(!_.isEmpty(lastSampleFields));
+    const models = userData.models;
+    CollectionUtils.checkCollectionIsValid(models, null, false, true);
 
     _.each(samples, sample => SamplesClient.verifySampleFormat(sample, false));
 

@@ -63,7 +63,6 @@ class FiltersModel extends SecureModelBase {
                     const dataToInsert = {
                         id: shouldGenerateId ? this._generateId() : filter.id,
                         creator: userId,
-                        name: filter.name,
                         rules: filter.rules,
                         type: filter.type || ENTITY_TYPES.USER
                     };
@@ -73,6 +72,7 @@ class FiltersModel extends SecureModelBase {
                     const dataToInsert = {
                         filterId: filterId,
                         languId: languId,
+                        name: filter.name,
                         description: filter.description
                     };
                     this._unsafeInsert('filter_text', dataToInsert, trx, (error) => {
@@ -91,7 +91,6 @@ class FiltersModel extends SecureModelBase {
                     const dataToInsert = {
                         id: this._generateId(),
                         creator: userId,
-                        name: filterToUpdate.name,
                         rules: filterToUpdate.rules,
                         type: filter.type,
                         originalFilterId: filter.originalFilterId || filter.id
@@ -102,6 +101,7 @@ class FiltersModel extends SecureModelBase {
                     const dataToInsert = {
                         filterId: filterId,
                         languId: filter.languId,
+                        name: filterToUpdate.name,
                         description: filterToUpdate.description
                     };
                     this._unsafeInsert('filter_text', dataToInsert, trx, (error) => {
@@ -164,7 +164,8 @@ class FiltersModel extends SecureModelBase {
                 const textsHash = CollectionUtils.createHashByKey(filterTexts, 'filterId');
                 const filtersWithDescription = _.map(filters, filter => {
                     return Object.assign({}, filter, {
-                        description: textsHash[filter.id].description
+                        description: textsHash[filter.id].description,
+                        name: textsHash[filter.id].name
                     });
                 });
                 callback(null, filtersWithDescription);

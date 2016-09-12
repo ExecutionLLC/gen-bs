@@ -128,7 +128,7 @@ class SessionService extends ServiceBase {
     findById(sessionId, callback) {
         if (sessionId !== this.systemSession.id) {
             async.waterfall([
-                (callback) => this.redisStore.get(sessionId, callback),
+                (callback) => this.redisStore.get(sessionId, (error, result) => callback(error, result || null)),
                 (rawSession, callback) => {
                     const session = Object.assign({}, rawSession, {
                         id: sessionId,

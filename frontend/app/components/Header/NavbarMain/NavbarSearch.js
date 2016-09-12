@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-export default class NavbarSearch extends Component {
+class NavbarSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            filter: this.props.filter
+            search: this.props.search
         };
     }
 
     componentWillReceiveProps(newProps) {
         this.state = {
-            filter: newProps.filter
+            search: newProps.search
         };
     }
 
@@ -31,7 +31,7 @@ export default class NavbarSearch extends Component {
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={() => this.onGlobalSearchInputBlur()}
                      disabled={!isEnabled}
-                     value={this.state.filter}
+                     value={this.state.search}
                     />
                 </div>
             </div>
@@ -40,23 +40,23 @@ export default class NavbarSearch extends Component {
 
     onGlobalSearchInputChanged(e) {
         this.setState({
-            filter: e.target.value
+            search: e.target.value
         });
     }
 
     onGlobalSearchInputKeyPressed(e) {
         // user pressed "enter"
         if (e.charCode === 13) {
-            const { filter } = this.state;
+            const { search } = this.state;
             const { onGlobalSearchRequested } = this.props;
-            onGlobalSearchRequested(filter);
+            onGlobalSearchRequested(search);
         }
     }
 
     onGlobalSearchInputBlur() {
-        const { filter } = this.state;
+        const { search } = this.state;
         const { onGlobalSearchStringChanged } = this.props;
-        onGlobalSearchStringChanged(filter);
+        onGlobalSearchStringChanged(search);
     }
 }
 
@@ -65,13 +65,14 @@ function mapStateToProps(state) {
     return { isVariantsLoading, isVariantsValid };
 }
 
-export default connect(mapStateToProps)(NavbarSearch);
-
 NavbarSearch.propTypes = {
     isVariantsLoading: React.PropTypes.bool.isRequired,
     isVariantsValid: React.PropTypes.bool.isRequired,
     // callback(globalSearchString)
     onGlobalSearchRequested: React.PropTypes.func.isRequired,
     // callback(globalSearchString)
-    onGlobalSearchStringChanged: React.PropTypes.func.isRequired
+    onGlobalSearchStringChanged: React.PropTypes.func.isRequired,
+    search: React.PropTypes.string.isRequired
 };
+
+export default connect(mapStateToProps)(NavbarSearch);

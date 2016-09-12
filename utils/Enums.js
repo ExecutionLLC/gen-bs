@@ -24,6 +24,17 @@ const ENTITY_TYPES = createEnum({
     DEFAULT: 'default'
 });
 
+const MODEL_TYPES = createEnum({
+    FILTER: 'filter',
+    COMPLEX: 'complex'
+});
+
+const ANALYSIS_TYPES = createEnum({
+    ALL: 'all',
+    TUMOR: 'tumor',
+    FAMILY: 'family'
+});
+
 const SAMPLE_UPLOAD_STATUS = createEnum({
     IN_PROGRESS: 'in_progress',     // Currently active
     READY: 'ready',                 // Successfully uploaded
@@ -49,5 +60,7 @@ module.exports = {
     SEARCH_SERVICE_EVENTS,
     ENTITY_TYPES,
     WS_INSTANCE_MESSAGE_TYPES,
+    MODEL_TYPES,
+    ANALYSIS_TYPES,
     SAMPLE_UPLOAD_STATUS
 };

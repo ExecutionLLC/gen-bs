@@ -15,19 +15,33 @@
     },
     "params": {
       "type": "object",
-      "sample": {
-        "type": "string",
-        "description": "File name for default samples or sample id for the default samples."
+      "samples": {
+        "type": "array",
+        "description": "list of sample",
+        "items": {
+          "type": "string",
+          "description": "File name for default samples or sample id for the default samples.First element is main sample"
+        }
       },
       "view_structure": {
-        "$ref": "./base_json/view.json#",
-        "description": "view for loading"
+        "type": "array",
+        "description": "view for loading",
+        "items": {
+          "$ref": "./base_json/view_columns.json#"
+        }
       },
       "view_filter": {
         "type": "object",
         "params": {
           "type": "object",
           "description": "filter for loading (should be similar to the fronted filter, but has addition field 'source_name')"
+        }
+      },
+      "view_model": {
+        "type": "object",
+        "params": {
+          "type": "object",
+          "description": "model (using like filter)"
         }
       },
       "view_sort_order": {

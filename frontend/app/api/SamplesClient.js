@@ -52,27 +52,4 @@ export default class SamplesClient extends UserEntityClientBase {
 
         return true;
     }
-
-    static isValidSampleMetadata(fieldsMetadata, sampleOrNull) {
-        if (!fieldsMetadata || !fieldsMetadata.length) {
-            return false;
-        }
-        // Should contain editable fields.
-        if (!_.filter(fieldsMetadata, ['isEditable', true]).length) {
-            return false;
-        }
-        // Should contain mandatory fields.
-        if (!_.filter(fieldsMetadata, ['isMandatory', true]).length) {
-            return false;
-        }
-
-        if (sampleOrNull) {
-            const values = sampleOrNull.values;
-            return !!_.filter(
-                values,
-                value => !_.any(fieldsMetadata, fieldMetadata => fieldMetadata.id === value.fieldId)
-            );
-        }
-        return true;
-    }
 }

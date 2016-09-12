@@ -1,16 +1,18 @@
+import _ from 'lodash';
 import HttpStatus from 'http-status';
 
 import {handleError} from './errorHandler';
 import apiFacade from '../api/ApiFacade';
+import {immutableSetPathProperty} from '../utils/immutable';
 
 
 export const REQUEST_SAMPLES = 'REQUEST_SAMPLES';
 export const RECEIVE_SAMPLES_LIST = 'RECEIVE_SAMPLES_LIST';
-export const CHANGE_SAMPLE = 'CHANGE_SAMPLE';
 export const UPDATE_SAMPLE_VALUE = 'UPDATE_SAMPLE_VALUE';
 export const RESET_SAMPLE_IN_LIST = 'RESET_SAMPLE_IN_LIST';
 export const RECEIVE_UPDATED_SAMPLE = 'RECEIVE_UPDATED_SAMPLE';
-export const CHANGE_SAMPLES = 'CHANGE_SAMPLES';
+export const SAMPLE_ON_SAVE = 'SAMPLE_ON_SAVE';
+export const SAMPLES_LIST_SET_HISTORY_SAMPLES = 'SAMPLES_LIST_SET_HISTORY_SAMPLES';
 
 const samplesClient = apiFacade.samplesClient;
 const NETWORK_ERROR = 'Network error. You can reload page and try again.';
@@ -24,16 +26,19 @@ const FETCH_SAMPLES_SERVER_ERROR = 'Cannot update samples data (server error). Y
  * Action Creators
  */
 
-function requestSamples() {
+export function samplesOnSave(selectedSamplesIds, onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId) {
     return {
-        type: REQUEST_SAMPLES
+        type: SAMPLE_ON_SAVE,
+        selectedSamplesIds,
+        onSaveAction,
+        onSaveActionPropertyIndex,
+        onSaveActionPropertyId
     };
 }
 
-export function changeSample(sampleId) {
+function requestSamples() {
     return {
-        type: CHANGE_SAMPLE,
-        sampleId
+        type: REQUEST_SAMPLES
     };
 }
 
@@ -48,7 +53,7 @@ export function updateSampleValue(sampleId, valueFieldId, value) {
 
 export function fetchSamples() {
 
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(requestSamples());
 
         samplesClient.getAll((error, response) => {
@@ -57,21 +62,8 @@ export function fetchSamples() {
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, FETCH_SAMPLES_SERVER_ERROR));
             } else {
-                const {
-                    samplesList: {
-                        selectedSampleId,
-                        hashedArray: {hash: samplesHash}
-                    }
-                } = getState();
                 const samples = response.body;
-
                 dispatch(receiveSamplesList(samples));
-
-                if (samplesHash[selectedSampleId]) {
-                    dispatch(changeSample(selectedSampleId));
-                } else if (samples && samples.length) {
-                    dispatch(changeSample(samples[0].id));
-                }
             }
         });
     };
@@ -101,31 +93,60 @@ export function receiveUpdatedSample(sampleId, updatedSample) {
 
 export function requestUpdateSampleFields(sampleId) {
     return (dispatch, getState) => {
-        const {samplesList: {editedSamplesHash, selectedSampleId}} = getState();
+        const {samplesList: {editedSamplesHash}} = getState();
         const sampleToUpdate = editedSamplesHash[sampleId];
-        samplesClient.update(sampleToUpdate, (error, response) => {
-            if (error) {
-                dispatch(handleError(null, NETWORK_ERROR));
-            } else {
-                if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, SERVER_ERROR));
+        return new Promise((resolve, reject) => {
+            samplesClient.update(sampleToUpdate, (error, response) => {
+                if (error) {
+                    dispatch(handleError(null, NETWORK_ERROR));
+                    reject();
                 } else {
-                    const updatedSample = response.body;
-                    dispatch(receiveUpdatedSample(sampleId, updatedSample));
-                    // If updating current sample, remember the sample id is changed during update
-                    // so select new version of the sample.
-                    if (selectedSampleId === sampleId) {
-                        dispatch(changeSample(updatedSample.id));
+                    if (response.status !== HttpStatus.OK) {
+                        dispatch(handleError(null, SERVER_ERROR));
+                        reject();
+                    } else {
+                        const updatedSample = response.body;
+                        dispatch(receiveUpdatedSample(sampleId, updatedSample));
+                        resolve(updatedSample);
                     }
                 }
-            }
+            });
         });
     };
 }
 
-export function changeSamples(samples) {
+export function sampleSaveCurrent(sample) {
+    return (dispatch, getState) => {
+        const {onSaveAction, onSaveActionPropertyId} = getState().samplesList;
+        if (!onSaveAction) {
+            return;
+        }
+        dispatch(immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, sample));
+    };
+}
+
+export function sampleSaveCurrentIfSelected(oldSampleId, newSampleId) {
+    return (dispatch, getState) => {
+        if (!onSaveAction) {
+            return;
+        }
+        const {onSaveAction, onSaveActionPropertyIndex, onSaveActionPropertyId, onSaveActionSelectedSamplesIds} = getState().samplesList;
+        const selectedSampleIndex = _.findIndex(onSaveActionSelectedSamplesIds, (id) => id === oldSampleId);
+        if (selectedSampleIndex >= 0) {
+            dispatch(
+                immutableSetPathProperty(
+                    immutableSetPathProperty(onSaveAction, onSaveActionPropertyId, newSampleId),
+                    onSaveActionPropertyIndex,
+                    selectedSampleIndex
+                )
+            );
+        }
+    };
+}
+
+export function samplesListSetHistorySamples(samples) {
     return {
-        type: CHANGE_SAMPLES,
+        type: SAMPLES_LIST_SET_HISTORY_SAMPLES,
         samples
     };
 }
