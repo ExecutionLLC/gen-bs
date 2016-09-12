@@ -3,35 +3,45 @@ import classNames from 'classnames';
 import {requestAppendQueryHistory} from '../../../actions/queryHistory';
 
 
+const PAGINATION = {
+    TIMEOUT_MS: 1000,
+    COUNT: 10
+};
+const REFS = {
+    CONTAINER: 'analysisHistoryListContainer',
+    LOADING: 'analysisHistoryListLoading'
+};
+
 export default class AnalysisHistoryList extends React.Component {
     render() {
         const {currentItemId, historyList, newHistoryItem} = this.props;
         return (
-            <div className='split-scroll' ref='analysisHistoryListContainer'>
+            <div className='split-scroll' ref={REFS.CONTAINER}>
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
                     {newHistoryItem && this.renderNewListItem(!currentItemId, newHistoryItem)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
-                    {!this.props.isHistoryReceivedAll && this.renderLoadingListItem(this.props.isHistoryRequesting)}
+                    {!this.props.isHistoryReceivedAll && this.renderLoadingListItem()}
                 </ul>
             </div>
         );
     }
 
-    componentDidMount() {
-        const containerElement = this.refs.analysisHistoryListContainer;
-        const loadingElement = this.refs.analysisHistoryListLoading;
+    checkAndLoadNext() {
+        const {dispatch, isHistoryReceivedAll, isHistoryRequesting, historyList, historyListSearch} = this.props;
 
-        const self = this;
+        const containerElement = this.refs[REFS.CONTAINER];
+        const loadingElement = this.refs[REFS.LOADING];
 
-        function f() {
-            if (!self.props.isHistoryReceivedAll && !self.props.isHistoryRequesting) {
-                if (loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
-                    self.props.dispatch(requestAppendQueryHistory(self.props.historyListSearch, 2, self.props.historyList.length));
-                }
+        if (!isHistoryReceivedAll && !isHistoryRequesting) {
+            if (loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
+                dispatch(requestAppendQueryHistory(historyListSearch, PAGINATION.COUNT, historyList.length));
             }
-            setTimeout(f, 1000);
         }
-        f();
+        setTimeout(() => this.checkAndLoadNext(), PAGINATION.TIMEOUT_MS);
+    }
+
+    componentDidMount() {
+        this.checkAndLoadNext();
     }
 
     renderNewListItem(isActive, item) {
@@ -70,10 +80,10 @@ export default class AnalysisHistoryList extends React.Component {
         );
     }
 
-    renderLoadingListItem(isRequesting) {
+    renderLoadingListItem() {
         return (
-            <li className='loading' ref='analysisHistoryListLoading'>
-                Loading...{isRequesting ? '( requesting)' : ''}
+            <li className='loading' ref={REFS.LOADING}>
+                <span className='md-i'>autorenew</span>
             </li>
         );
     }
