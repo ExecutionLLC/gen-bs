@@ -5,7 +5,7 @@ const async = require('async');
 
 const UserEntityServiceBase = require('./UserEntityServiceBase');
 
-const modelObjectKeys = ['field', 'operator', 'value', 'sample_type'];
+const modelObjectKeys = ['field', 'operator', 'value', 'sampleType'];
 
 class ModelsService extends UserEntityServiceBase {
     constructor(services, models) {
