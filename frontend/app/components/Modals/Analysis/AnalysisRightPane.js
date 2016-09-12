@@ -24,6 +24,7 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import SamplesUtils from '../../../utils/samplesUtils';
 import AnalyseUtils from '../../../utils/analyseUtils';
+import {ImmutableHashedArray} from '../../../utils/immutable';
 
 
 const {sampleType, sampleTypeForAnalysisType} = SamplesUtils;
@@ -767,7 +768,11 @@ export default class AnalysisRightPane extends React.Component {
         );
         const allowedFields = FieldUtils.makeModelAllowedFields(samples, samplesTypes, fields.totalFieldsHashedArray.hash);
         const modelFiltersStrategy = {name: 'model', analysisType: historyItem.type};
-        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, modelsList));
+        const analysisTypeModelsList = {
+            ...modelsList,
+            hashedArray: ImmutableHashedArray.makeFromArray(modelsList.hashedArray.array.filter((model) => model.analysisType === this.props.historyItem.type))
+        };
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         dispatch(openModal('filters'));
