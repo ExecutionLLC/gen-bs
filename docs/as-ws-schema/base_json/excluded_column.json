@@ -5,7 +5,7 @@
   "properties": {
     "source_name": {
       "type": "string",
-      "description": "Column source name. ('sample' for sample columns)"
+      "description": "name of the sample or source"
     },
     "column_name": {
       "type": "string",

@@ -73,7 +73,7 @@ export default class QueryBuilder extends Component {
             handlers
         } = this.props;
 
-        return (
+        return (rules &&
             <div>
                 <div className='query-builder'>
                     <RulesGroupContainer

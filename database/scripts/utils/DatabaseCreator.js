@@ -112,7 +112,7 @@ class DatabaseCreator {
 
         return databaseKnex.schema
 
-            // Language
+        // Language
             .createTable('langu', (table) => {
                 table.string('id', 2)
                     .primary();

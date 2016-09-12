@@ -4,7 +4,6 @@ import HttpStatus from 'http-status';
 import apiFacade from '../api/ApiFacade';
 import {handleError} from './errorHandler';
 import {clearVariants, addComment, changeComment, deleteComment} from './websocket';
-import {updateQueryHistory} from './queryHistory';
 import {requestTableScrollPositionReset} from './ui';
 
 /*
@@ -16,7 +15,6 @@ export const SET_FIELD_FILTER = 'SET_FIELD_FILTER';
 export const CHANGE_VARIANTS_SORT = 'CHANGE_VARIANTS_SORT';
 export const SET_VARIANTS_SORT = 'SET_VARIANTS_SORT';
 export const CLEAR_SEARCH_PARAMS = 'CLEAR_SEARCH_PARAMS';
-export const SET_EXCLUDED_FIELDS = 'SET_EXCLUDED_FIELDS';
 
 export const SELECT_VARIANTS_ROW = 'SELECT_VARIANTS_ROW';
 export const CLEAR_VARIANTS_ROWS_SELECTION = 'CLEAR_VARIANTS_ROWS_SELECTION';
@@ -77,37 +75,18 @@ export function clearSearchParams() {
     };
 }
 
-export function changeExcludedFields(viewId) {
-    return (dispatch, getState) => {
-        const {fields:{sampleFieldsHashedArray: {array: sampleFieldsList}}, viewsList:{hashedArray: {hash: viewIdToViewHash}}} = getState();
-        const view = viewIdToViewHash[viewId];
-        const mandatoryFields = _.filter(sampleFieldsList, sampleField =>sampleField.isMandatory);
-        const mandatoryFieldIds = _.map(mandatoryFields, sampleField =>sampleField.id);
-        const viewFieldIds = _.map(view.viewListItems, viewItem =>viewItem.fieldId);
-
-        const excludedMandatoryFields = _.difference(mandatoryFieldIds, viewFieldIds);
-        dispatch(setExcludedFields(excludedMandatoryFields));
-    };
-}
-
-export function setExcludedFields(excludedFields) {
-    return {
-        type: SET_EXCLUDED_FIELDS,
-        excludedFields
-    };
-}
-
-export function setFieldFilter(fieldId, filterValue) {
+export function setFieldFilter(fieldId, sampleId, filterValue) {
     return {
         type: SET_FIELD_FILTER,
         fieldId,
+        sampleId,
         filterValue
     };
 }
 
-export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
+export function sortVariants(fieldId, sampleId, sortDirection, ctrlKeyPressed) {
     return (dispatch, getState) => {
-        dispatch(changeVariantsSort(fieldId, ctrlKeyPressed ? 2 : 1, sortDirection));
+        dispatch(changeVariantsSort(fieldId, sampleId, ctrlKeyPressed ? 2 : 1, sortDirection));
         if (getState().variantsTable.needUpdate) {
             dispatch(clearVariants());
             dispatch(searchInResults({isNextDataLoading: false, isFilteringOrSorting: true}));
@@ -115,23 +94,31 @@ export function sortVariants(fieldId, sortDirection, ctrlKeyPressed) {
     };
 }
 
-export function setViewVariantsSort(view) {
+export function setViewVariantsSort(view, samplesInfos) {
     return (dispatch, getState) => {
 
-        const {fields:{sampleFieldsHashedArray: {hash: sampleFieldsHash}}} = getState();
+        const {samplesList: {hashedArray: {hash: samplesHash}}} = getState();
+        const samples = _.map(samplesInfos, (sample) => samplesHash[sample.id]);
+        const samplesFieldsHashes = _.map(samples, (sample) => _.keyBy(sample.values, (value) => value.fieldId));
         const sortOrder = _(view.viewListItems)
             .filter(viewListItem => {
                 return viewListItem.sortDirection != null && viewListItem.sortOrder != null;
             })
-            .filter(viewListItem => {
-                return sampleFieldsHash[viewListItem.fieldId];
-            })
             .map(viewListItem => {
+                const sampleIndex = _.findIndex(samplesFieldsHashes, (sampleFieldsHash) => sampleFieldsHash[viewListItem.fieldId]);
+                if (sampleIndex < 0) {
+                    return null;
+                }
+                const sampleId = samplesInfos[sampleIndex].id;
                 return {
                     direction: viewListItem.sortDirection,
                     fieldId: viewListItem.fieldId,
+                    sampleId,
                     order: viewListItem.sortOrder
                 };
+            })
+            .filter(sort => {
+                return !!sort;
             })
             .orderBy(['order'], true)
             .value();
@@ -150,10 +137,11 @@ export function setVariantsSort(sortOrder) {
     };
 }
 
-export function changeVariantsSort(fieldId, sortOrder, sortDirection) {
+export function changeVariantsSort(fieldId, sampleId, sortOrder, sortDirection) {
     return {
         type: CHANGE_VARIANTS_SORT,
         fieldId,
+        sampleId,
         sortOrder,
         sortDirection
     };
@@ -262,30 +250,31 @@ export function fetchVariants(searchParams) {
         dispatch(clearTableRowsSelection());
 
         const {ui: {languageId}} = getState();
-        searchClient.sendSearchRequest(
-            languageId,
-            searchParams.sampleId,
-            searchParams.viewId,
-            searchParams.filterId,
-            searchParams.limit,
-            searchParams.offset,
-            (error, response) => {
-                if (error) {
-                    dispatch(handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR));
-                } else if (response.status !== HttpStatus.OK) {
-                    dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
-                } else {
-                    const {operationId} = response.body;
-                    dispatch(receiveAnalysisOperationId(operationId));
-                    const state = getState();
-                    dispatch(changeExcludedFields(state.websocket.variantsView.id));
-                    const isDemo = state.auth.isDemo;
-                    if (!isDemo) {
-                        dispatch(updateQueryHistory());
+
+        const sendAPI = searchParams.analyze.id ?
+            searchClient.sendSearchAgainRequest.bind(searchClient, languageId, searchParams.analyze.id) :
+            searchClient.sendSearchRequest.bind(searchClient, languageId, searchParams.analyze);
+
+        return new Promise((resolve, reject) => {
+            sendAPI(
+                searchParams.limit,
+                searchParams.offset,
+                (error, response) => {
+                    if (error) {
+                        dispatch(handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR));
+                        reject();
+                    } else if (response.status !== HttpStatus.OK) {
+                        dispatch(handleError(null, ANALYZE_SAMPLE_SERVER_ERROR));
+                        reject();
+                    } else {
+                        const result = response.body;
+                        const {operationId} = result;
+                        dispatch(receiveAnalysisOperationId(operationId));
+                        resolve(result);
                     }
                 }
-            }
-        );
+            );
+        });
     };
 }
 

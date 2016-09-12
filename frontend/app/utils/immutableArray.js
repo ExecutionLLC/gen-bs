@@ -45,4 +45,17 @@ export default class immutableArray {
             data
         ];
     }
+
+    /**
+     * @template {T}
+     * @param {T[]} arr
+     * @param {T[]} arr2
+     * @returns {T[]}
+     */
+    static concat(arr, arr2) {
+        return [
+            ...arr,
+            ...arr2
+        ];
+    }
 }

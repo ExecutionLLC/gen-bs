@@ -1,10 +1,12 @@
 'use strict';
 
+const _ = require('lodash');
 const assert = require('assert');
 const async = require('async');
 
 const HandlerBase = require('./HandlerBase');
 const mockData = require('./data/redis-data.json');
+
 
 const STATUSES = {
     sample_loading: 'sample_loading',
@@ -25,8 +27,8 @@ class SearchHandler extends HandlerBase {
     }
 
     handleCall(id, method, params, sendResultCallback, callback) {
-        const {sample, view_structure, view_filter, view_sort_order} = params;
-        [sample, view_structure, view_filter, view_sort_order].forEach(item => assert.ok(item));
+        const {samples, view_structure, view_filter, view_sort_order} = params;
+        [samples, view_structure, view_filter, view_sort_order].forEach(item => assert.ok(item));
 
         const openSessionProgress = {
             id,
@@ -55,13 +57,19 @@ class SearchHandler extends HandlerBase {
             }
         }));
 
+        const testData = _.map(mockData, data => _.map(data, columnData => {
+            return Object.assign({}, columnData, {
+                sourceName: samples[0]
+            })
+        }));
+
         async.waterfall([
             (callback) => {
                 sendResultCallback(Object.assign({}, openSessionProgress, {
                     sessionState: {
                         progress: 100,
                         status: STATUSES.ready,
-                        data: mockData
+                        data: testData
                     }
                 }));
                 callback(null);

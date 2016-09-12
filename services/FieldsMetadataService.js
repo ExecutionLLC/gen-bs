@@ -21,6 +21,14 @@ class FieldsMetadataService extends ServiceBase {
         }
     }
 
+    findByUserAndSampleIds(user, sampleIds, callback) {
+        if (user) {
+            this.models.fields.findByUserAndSampleIds(user.id, sampleIds, callback);
+        } else {
+            callback(new Error('User is undefined'));
+        }
+    }
+
     find(fieldId, callback) {
         this.models.fields.find(fieldId, callback);
     }

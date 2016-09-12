@@ -9,6 +9,7 @@ const sampleBuilder = require('./SampleAndSourceBuilder');
 const keywordsBuilder = require('./KeywordsBuilder');
 const viewsBuilder = require('./ViewBuilder');
 const filtersBuilder = require('./FilterBuilder');
+const modelsBuilder = require('./ModelsBuilder');
 
 function displayErrorAndExitProcess(error) {
     if (error) {

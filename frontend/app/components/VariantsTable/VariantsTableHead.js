@@ -1,22 +1,19 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import React, {Component} from 'react';
 
 import FieldHeader from './FieldHeader';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
+import SamplesUtils from '../../utils/samplesUtils';
 
 export default class VariantsTableHead extends Component {
 
     render() {
-        const {dispatch, fields, ws} = this.props;
-        const {sort} = this.props.variantsTable.searchInResultsParams;
-        const {isFetching} = this.props.variantsTable;
-        const {
-            variantsView: currentView,
-            variantsSampleFieldsList: currentSampleFields
-        } = ws;
+        const {dispatch, fields, variantsHeader, variantsTable, variantsAnalysis, variantsSamples} = this.props;
+        const {sort} = variantsTable.searchInResultsParams;
+        const {isFetching} = variantsTable;
 
-        if (!currentView) {
+        if (!variantsAnalysis) {
             return (
                 <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
                 <tr />
@@ -24,10 +21,11 @@ export default class VariantsTableHead extends Component {
             );
         }
 
-        const fieldIds = _.map(currentView.viewListItems, item => item.fieldId);
-        const expectedFields = [...fields.sourceFieldsList, ...currentSampleFields];
-        const expectedFieldsHash = _.keyBy(expectedFields, (field) => field.id);
-
+        const samplesTypesHash = _(variantsAnalysis.samples).map((sampleInfo) =>
+            variantsAnalysis.samples.length > 1 ?
+                ({id: sampleInfo.id, type: SamplesUtils.typeLabels[sampleInfo.type]}) :
+                ({id: sampleInfo.id, type: ''})
+        ).keyBy(sampleInfo => sampleInfo.id).value();
         return (
             <tbody className='table-variants-head' id='variants_table_head' ref='variantsTableHead'>
             <tr>
@@ -60,26 +58,34 @@ export default class VariantsTableHead extends Component {
                         />
                     </div>
                 </td>
-                {_.map(fieldIds, (fieldId) => this.renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sort, dispatch))}
+                {_.map(variantsHeader, (fieldSampleExist) =>
+                    this.renderFieldHeader(fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
+                )}
             </tr>
             </tbody>
         );
     }
 
-    renderFieldHeader(fieldId, fields, expectedFieldsHash, isFetching, sortState, dispatch) {
+    renderFieldHeader(fieldId, sampleId, isExist, samplesTypesHash, variantsSamples, fields, isFetching, sortState, dispatch) {
         const {totalFieldsHashedArray: {hash: totalFieldsHash}} = fields;
         const fieldMetadata = totalFieldsHash[fieldId];
-        const areControlsEnabled = !!expectedFieldsHash[fieldId];
+        const areControlsEnabled = !!isExist;
         const sendSortRequestedAction = (fieldId, direction, isControlKeyPressed) =>
-            dispatch(sortVariants(fieldId, direction, isControlKeyPressed));
+            dispatch(sortVariants(fieldId, sampleId, direction, isControlKeyPressed));
         const sendSearchRequest = (fieldId, searchValue) => {
-            dispatch(setFieldFilter(fieldId, searchValue));
+            dispatch(setFieldFilter(fieldId, sampleId, searchValue));
             dispatch(searchInResultsSortFilter());
         };
-        const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, searchValue));
+        const onSearchValueChanged = (fieldId, searchValue) => dispatch(setFieldFilter(fieldId, sampleId, searchValue));
+        const sampleName = sampleId ?
+            _.keyBy(variantsSamples, sample => sample.id)[sampleId].fileName :
+            null;
         return (
-            <FieldHeader key={fieldId}
+            <FieldHeader key={fieldId + (sampleId ? '-' + sampleId : '')}
                          fieldMetadata={fieldMetadata}
+                         sampleName={sampleName}
+                         sampleType={sampleId ? samplesTypesHash[sampleId].type : ''}
+                         sampleId={sampleId}
                          areControlsEnabled={areControlsEnabled}
                          sortState={sortState}
                          onSortRequested={sendSortRequestedAction}

@@ -1,6 +1,7 @@
 import * as ActionTypes from '../actions/modalWindows';
 
 export default function modalWindows(state = {
+    analysis: {showModal: false},
     views: {showModal: false},
     filters: {showModal: false},
     upload: {showModal: false}

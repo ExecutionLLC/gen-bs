@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import FileUploadSamplesRow from './FileUploadSamplesRow';
+import {entityType} from '../../../utils/entityTypes';
 
 export default class FileUploadSamples extends Component {
     constructor(...args) {
@@ -34,7 +35,7 @@ export default class FileUploadSamples extends Component {
                 <div className='panel-group panel-group-scroll'>
                     {filteredSamples.map(
                         sample => (
-                            <FileUploadSamplesRow
+                            sample.type !== entityType.HISTORY && <FileUploadSamplesRow
                                 sampleId={sample.id}
                                 isDemoSession={this.props.auth.isDemo}
                                 fields={this.props.editableFieldsList}

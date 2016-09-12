@@ -5,6 +5,7 @@ import _ from 'lodash';
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleError} from './errorHandler';
+import SamplesUtils from '../utils/samplesUtils';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';
@@ -33,17 +34,12 @@ function saveExportedFileToServer(fileBlob, fileName, totalResults) {
                 language
             },
             websocket: {
-                variantsView,
-                variantsSample,
-                variantsFilter
+                variantsAnalysis
             }
         } = getState();
         const fileMetadata = {
-            sampleId: variantsSample.id,
-            viewId: variantsView.id,
-            filterIds: [variantsFilter.id],
+            analysisId: variantsAnalysis.id,
             name: fileName,
-            url: null,
             totalResults
         };
         savedFilesClient.add(language, fileMetadata, fileBlob, (error, response) => {
@@ -116,8 +112,9 @@ export function exportToFile(exportType) {
             },
             websocket: {
                 variants,
-                variantsView,
-                variantsSample
+                variantsHeader,
+                variantsSamples,
+                variantsAnalysis
             },
             variantsTable: {
                 selectedRowIndices
@@ -127,39 +124,24 @@ export function exportToFile(exportType) {
             }
         } = getState();
 
+        const variantsAnalysisSamplesHash = _.keyBy(variantsAnalysis.samples, (sample) => sample.id);
         // Take fields in order they appear in the view
         // and add comments as a separate field values.
-        const columns = _.map(variantsView.viewListItems, listItem => {
+        const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
-            return {
-                id: listItem.fieldId,
-                name: field.label
-            };
+            const sampleType = variantsAnalysisSamplesHash[listItem.sampleId] && SamplesUtils.typeLabels[variantsAnalysisSamplesHash[listItem.sampleId].type];
+            return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
         })
-        .concat([{
-            id: 'comment',
-            name: 'Comment'
-        }]);
+        .concat(['Comment']);
 
-        // The export data should be array of objects in {field_id -> field_value} format.
-        const dataToExport = _(selectedRowIndices.sort())
-            .map(rowIndex => Object.assign({}, rowIndex, {
-                rowIndex,
-                row: variants[rowIndex]
-            }))
-            .map(item => {
-                // Add first comment.
-                const comment = _.isEmpty(item.row.comments) ? '' : item.row.comments[0].comment;
-                return Object.assign({}, item.row.fieldsHash, {
-                    comment
-                });
-            })
+        const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
+            .map(rowIndex => [...variants[rowIndex].fields, ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]])
             .value();
 
         const exporter = ExportUtils.createExporter(exportType);
         const fileBlob = exporter.buildBlob(columns, dataToExport);
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
-        const fileName = `${variantsSample.fileName}_chunk_${createdDate}.${exportType}`;
+        const fileName = `${_.map(variantsSamples, (variantsSample) => variantsSample.fileName).join('-')}_chunk_${createdDate}.${exportType}`;
         const count = selectedRowIndices.length;
 
         dispatch(createUserDownload(fileBlob, fileName));

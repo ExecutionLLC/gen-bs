@@ -4,7 +4,7 @@ import Perf from 'react-addons-perf';
 
 const ENABLE_PERFORMANCE_CONTROLS = false;
 
-export default class CreateQeuryNavbarButton extends Component {
+export default class CreateQueryNavbarButton extends Component {
 
     onStop() {
         Perf.stop();
@@ -19,15 +19,29 @@ export default class CreateQeuryNavbarButton extends Component {
 
     render() {
         return (
-            <div>
+            <div className='samples-analysis-wrapper'>
                 <div>
-                    <a onClick={this.props.toggleQueryNavbar} type='button' href='#' className='btn navbar-btn'
-                       id='btnToggle'>
-                        <span className='hidden-xxs' data-localize='query.help' data-toggle='tooltip'
-                              data-placement='right' title='Open navbar and create new analises query'
-                              data-container='body' data-trigger='hover'>Analyze</span>
-                        <span className='visible-xxs'><i className='md-i'>settings</i></span>
-                    </a>
+                    <a
+                        href='#'
+                        className='btn navbar-btn'
+                        type='button'
+                        onClick={() => this.props.openSamplesModal()}
+                    ><span
+                        className='hidden-xxs'
+                        data-localize='samples.title'
+                    >Samples</span><span className='visible-xxs'><i className='md-i'>file_upload</i></span>{/*<span class='badge badge-inverse'>2</span>*/}</a>
+                </div>
+                <div>
+                    <a
+                        type='button'
+                        href='#'
+                        className='btn navbar-btn'
+                        id='btnToggle'
+                        data-target='#analysis'
+                        data-toggle='modal'
+                        onClick={() => this.props.openAnalysisModal()}
+                    ><span className='hidden-xxs' data-localize='query.title'>Analysis</span><span
+                        className='visible-xxs'><i className='md-i'>settings</i></span></a>
                     {ENABLE_PERFORMANCE_CONTROLS &&
                     <div>
                         <button onClick={() => Perf.start()}>B</button>

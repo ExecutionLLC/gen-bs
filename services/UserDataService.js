@@ -10,7 +10,7 @@ const {ENTITY_TYPES} = require('../utils/Enums');
 class UserDataService extends ServiceBase {
     constructor(services, models) {
         super(services, models);
-        this.defaultLimit = 100;
+        this.defaultLimit = 10;
     }
 
     /**
@@ -21,19 +21,7 @@ class UserDataService extends ServiceBase {
      * */
     getUserData(user, callback) {
         async.waterfall([
-            (callback) => this._findGeneralData(user, callback),
-            (results, callback) => {
-                this.services.queryHistory.findLastEntryOrNull(user,
-                    (error, lastEntry) => callback(error, results, lastEntry));
-            },
-            (results, lastEntry, callback) => {
-                this._findLastSampleInfo(user, results.samples, (error, lastSampleId, lastSampleFields) => {
-                    callback(error, Object.assign({}, results, {
-                        lastSampleId,
-                        lastSampleFields
-                    }));
-                });
-            }
+            (callback) => this._findGeneralData(user, callback)
         ], (error, results) => {
             callback(error, results);
         });
@@ -76,8 +64,11 @@ class UserDataService extends ServiceBase {
                     samples: (callback) => {
                         this.services.samples.findAll(user, callback);
                     },
-                    queryHistory: (callback) => {
-                        this.services.queryHistory.findAll(user, this.defaultLimit, 0, callback);
+                    analyses: (callback) => {
+                        this.services.analysis.findAll(user, this.defaultLimit, 0, undefined, undefined, callback);
+                    },
+                    models: (callback)=> {
+                        this.services.models.findAll(user, callback)
                     },
                     savedFiles: (callback) => {
                         this.services.savedFiles.findAll(user, callback);
