@@ -42,7 +42,7 @@ export default function variantsTable(state = initialState, action) {
                 })
             });
         }
-        case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: { // TODO rename
+        case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
             const currentGlobalSearchString = state.searchInResultsParams.topSearch.search;
             if (currentGlobalSearchString === action.globalSearchString) {
                 return state;
