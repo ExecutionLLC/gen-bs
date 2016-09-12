@@ -124,7 +124,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 operation.setOffset(params.offset);
                 callback(null, operation);
             },
-            (operation, callback)=> {
+            (operation, callback) => {
                 const {
                     samples,
                     fieldsMetadata,
@@ -134,7 +134,8 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                     fieldSearchValues,
                     sortValues,
                     offset,
-                    limit} = params;
+                    limit
+                } = params;
                 const setFilterRequest = this._createSearchInResultsParams(
                     samples, fieldsMetadata, filter, fieldSearchValues, sortValues, offset, limit
                 );
@@ -160,9 +161,6 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     }
 
     //TODO: move data methods to another class
-
-
-
     _fetch(searchData, userId, sampleIds, viewId, callback) {
         const mainSampleId = sampleIds[0];
         async.waterfall([
@@ -183,18 +181,18 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                                 sampleIds,
                                 (error, samples) => {
                                     const resultSamples = _.map(
-                                        sampleIds, sampleId => _.find(samples, sample => sample.id == sampleId )
+                                        sampleIds, sampleId => _.find(samples, sample => sample.id == sampleId)
                                     );
                                     callback(error, resultSamples)
                                 }
                             ),
                             viewFields: (callback) => this.services.fieldsMetadata.findMany(
-                                _.map(view.viewListItems,item => item.fieldId),
+                                _.map(view.viewListItems, item => item.fieldId),
                                 callback
                             ),
                             samplesFields: (callback) => this.services.fieldsMetadata.findByUserAndSampleIds(user, sampleIds, callback),
                         },
-                        (error, {samples, viewFields, samplesFields})=> callback(error, {
+                        (error, {samples, viewFields, samplesFields}) => callback(error, {
                             rowData,
                             user,
                             samples,
@@ -207,11 +205,11 @@ class AppServerSearchService extends ApplicationServerServiceBase {
             ),
             ({rowData, user, samples, view, viewFields, samplesFields}, callback) => {
                 const searchKeyFields = _.filter(samplesFields, samplesField => {
-                    return _.includes(AppServerUtils.getSearchKeyFieldsColumnNames(),samplesField.name)
+                    return _.includes(AppServerUtils.getSearchKeyFieldsColumnNames(), samplesField.name)
                 });
                 const mainSample = _.find(samples, sample => sample.id == mainSampleId);
                 async.parallel({
-                    data: (callback) => this._convertFields(rowData, user, samples ,mainSample, viewFields, searchKeyFields, callback),
+                    data: (callback) => this._convertFields(rowData, user, samples, mainSample, viewFields, searchKeyFields, callback),
                     header: (callback) => this._createDataHeader(view, viewFields, samples, callback),
                 }, callback)
             }
@@ -220,29 +218,29 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         });
     }
 
-    _createDataHeader(view, viewFields, samples , callback) {
+    _createDataHeader(view, viewFields, samples, callback) {
         const viewListItems = view.viewListItems;
         const viewFieldsOrdered = _.map(viewListItems, viewListItem => _.find(
-                viewFields, fieldIdToMetadata =>fieldIdToMetadata.id == viewListItem.fieldId
+            viewFields, fieldIdToMetadata =>fieldIdToMetadata.id == viewListItem.fieldId
             )
         );
         const notDuplicatedColumnNames = AppServerUtils.getNotDuplicatedColumnNames(viewFields);
         const resultHeader = [];
         _.forEach(viewFieldsOrdered, viewField => {
-            if ( viewField.sourceName !== 'sample'){
+            if (viewField.sourceName !== 'sample') {
                 resultHeader.push({
                     fieldId: viewField.id,
-                    exist:true
+                    exist: true
                 });
-            }else {
-                if (_.some(notDuplicatedColumnNames,notDuplicatedColumnName => notDuplicatedColumnName === viewField.name)){
+            } else {
+                if (_.some(notDuplicatedColumnNames, notDuplicatedColumnName => notDuplicatedColumnName === viewField.name)) {
                     const exist = _.some(samples[0].values, field => field.fieldId == viewField.id);
                     resultHeader.push({
                         fieldId: viewField.id,
                         sampleId: samples[0].id,
                         exist
                     });
-                }else {
+                } else {
                     _.forEach(samples, sample => {
                         const exist = _.some(sample.values, field => field.fieldId == viewField.id);
                         resultHeader.push({
@@ -261,7 +259,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
     _convertFields(asData, user, samples, mainSample, viewFields, searchKeyFields, callback) {
         async.waterfall([
             (callback) => {
-                const totalFields =  _.union(viewFields, searchKeyFields);
+                const totalFields = _.union(viewFields, searchKeyFields);
                 const sourcesFields = _.filter(totalFields, totalField => totalField.sourceName != 'sample');
                 const samplesFields = _.filter(totalFields, totalField => totalField.sourceName == 'sample');
                 const sourceFieldsMapArray = _.map(
@@ -353,7 +351,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                         mandatoryFields[searchKeyField.name] = fieldRowObj.fieldValue;
                     });
                     return {
-                        viewData:existingFieldsRowObject,
+                        viewData: existingFieldsRowObject,
                         mandatoryFields
                     };
                 });
@@ -412,7 +410,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
 
     _createAppServerViewSortOrder(view, fieldIdToMetadata, sample) {
         const mainSampleMetadata = _.map(sample.values, field => fieldIdToMetadata[field.fieldId]);
-        const sourceMetadata = _.filter(fieldIdToMetadata,metaData => metaData.sourceName!='sample');
+        const sourceMetadata = _.filter(fieldIdToMetadata, metaData => metaData.sourceName != 'sample');
         const availableMetadata = mainSampleMetadata.concat(sourceMetadata);
         const availableFieldIdToMetadata = CollectionUtils.createHash(availableMetadata, fieldMetadata => fieldMetadata.id);
         const viewListItems = _.filter(view.viewListItems, listItem => availableFieldIdToMetadata[listItem.fieldId]);
