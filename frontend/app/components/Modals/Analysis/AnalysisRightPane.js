@@ -24,6 +24,7 @@ import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import SamplesUtils from '../../../utils/samplesUtils';
 import AnalyseUtils from '../../../utils/analyseUtils';
+import {ImmutableHashedArray} from '../../../utils/immutable';
 
 
 const {sampleType, sampleTypeForAnalysisType} = SamplesUtils;
@@ -634,16 +635,18 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isModelDisabled(model) {
-        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo) || model.analysisType !== this.props.historyItem.type;
+        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo);
     }
 
     getModelOptions() {
         const models = this.props.modelsList.hashedArray.array;
-        return models.map((sampleItem) => {
-            const isDisabled = this.isModelDisabled(sampleItem);
-            const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
-            return {value: sampleItem.id, label, disabled: isDisabled};
-        });
+        return models
+            .filter((model) => model.analysisType === this.props.historyItem.type)
+            .map((sampleItem) => {
+                const isDisabled = this.isModelDisabled(sampleItem);
+                const label = getItemLabelByNameAndType(sampleItem.name, sampleItem.type);
+                return {value: sampleItem.id, label, disabled: isDisabled};
+            });
     }
 
     isSampleDisabled(sample) {
@@ -765,7 +768,11 @@ export default class AnalysisRightPane extends React.Component {
         );
         const allowedFields = FieldUtils.makeModelAllowedFields(samples, samplesTypes, fields.totalFieldsHashedArray.hash);
         const modelFiltersStrategy = {name: 'model', analysisType: historyItem.type};
-        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, modelsList));
+        const analysisTypeModelsList = {
+            ...modelsList,
+            hashedArray: ImmutableHashedArray.makeFromArray(modelsList.hashedArray.array.filter((model) => model.analysisType === this.props.historyItem.type))
+        };
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, analysisTypeModelsList));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         dispatch(openModal('filters'));
