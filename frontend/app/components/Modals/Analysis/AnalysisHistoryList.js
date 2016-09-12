@@ -26,7 +26,7 @@ export default class AnalysisHistoryList extends React.Component {
         function f() {
             if (!self.props.isHistoryReceivedAll && !self.props.isHistoryRequesting) {
                 if (loadingElement.offsetTop < containerElement.scrollTop + containerElement.clientHeight) {
-                    self.props.dispatch(requestAppendQueryHistory(self.props.historyListFilter, 2, self.props.historyList.length));
+                    self.props.dispatch(requestAppendQueryHistory(self.props.historyListSearch, 2, self.props.historyList.length));
                 }
             }
             setTimeout(f, 1000);

@@ -12,19 +12,19 @@ export default class AnalysisLeftPane extends React.Component {
 
     render() {
 
-        const {historyList, initialHistoryList, historyListFilter, isHistoryReceivedAll, isHistoryRequesting, newHistoryItem} = this.props; // TODO rename historyListFilter
-        // TODO rename 'filter'
+        const {historyList, initialHistoryList, historyListSearch, isHistoryReceivedAll, isHistoryRequesting, newHistoryItem} = this.props;
+
         return (
             <div>
                 <AnalysisHistorySearch
-                    filter={historyListFilter}
+                    search={historyListSearch}
                     onFilter={(str) => this.onFilterChange(str)}
                 />
                 <AnalysisHistoryList
                     dispatch={this.props.dispatch}
                     historyList={historyList}
                     initialHistoryList={initialHistoryList}
-                    historyListFilter={historyListFilter}
+                    historyListSearch={historyListSearch}
                     newHistoryItem={newHistoryItem}
                     isHistoryReceivedAll={isHistoryReceivedAll}
                     isHistoryRequesting={isHistoryRequesting}
