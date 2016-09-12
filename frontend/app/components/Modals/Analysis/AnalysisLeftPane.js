@@ -18,7 +18,7 @@ export default class AnalysisLeftPane extends React.Component {
             <div>
                 <AnalysisHistorySearch
                     search={historyListSearch}
-                    onFilter={(str) => this.onFilterChange(str)}
+                    onSearch={(str) => this.onSearchChange(str)}
                 />
                 <AnalysisHistoryList
                     dispatch={this.props.dispatch}
@@ -37,7 +37,7 @@ export default class AnalysisLeftPane extends React.Component {
         );
     }
 
-    onFilterChange(str) {
+    onSearchChange(str) {
         this.props.dispatch(prepareQueryHistoryToSearch(str));
         if (!str) {
             this.props.dispatch(requestQueryHistory());
