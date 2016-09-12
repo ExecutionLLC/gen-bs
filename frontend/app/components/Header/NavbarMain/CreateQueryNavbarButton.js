@@ -19,7 +19,7 @@ export default class CreateQueryNavbarButton extends Component {
 
     render() {
         return (
-            <div>
+            <div className='samples-analysis-wrapper'>
                 <div>
                     <a
                         href='#'
