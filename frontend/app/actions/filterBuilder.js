@@ -107,9 +107,8 @@ export function fireOnSaveAction(filter) {
 function filterBuilderCreateFilter() {
 
     return (dispatch, getState) => {
-        const editingFilter = getState().filterBuilder.editingFilter.filter;
-        const {ui: {languageId} } = getState();
-        dispatch(filterBuilderStrategyActions[getState().filterBuilder.filtersStrategy.name].serverCreate(editingFilter, languageId))
+        const {filterBuilder: {editingFilter: {filter: editingFilter}, filtersStrategy}, ui: {languageId}} = getState();
+        dispatch(filterBuilderStrategyActions[filtersStrategy.name].serverCreate(editingFilter, languageId))
             .then( (filter) => {
                 dispatch(fireOnSaveAction(filter));
                 dispatch(closeModal('filters'));
