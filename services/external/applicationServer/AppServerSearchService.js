@@ -255,13 +255,19 @@ class AppServerSearchService extends ApplicationServerServiceBase {
         callback(null, resultHeader);
     }
 
-    //todo: Check more carefully
+    // TODO: Check more carefully
     _convertFields(asData, user, samples, mainSample, viewFields, searchKeyFields, callback) {
         async.waterfall([
             (callback) => {
+                // Get all fields we will need
                 const totalFields = _.union(viewFields, searchKeyFields);
+                // Split them by source.
+                // TODO: It is better to create hashes here instead of arrays for fields here,
+                // to avoid re-filtering and hashing of the arrays below.
                 const sourcesFields = _.filter(totalFields, totalField => totalField.sourceName != 'sample');
                 const samplesFields = _.filter(totalFields, totalField => totalField.sourceName == 'sample');
+                // Create array of objects containing sources' info and their fields, make them look like samples
+                // with sampleId = 'source'.
                 const sourceFieldsMapArray = _.map(
                     _.groupBy(sourcesFields, 'sourceName'),
                     (sourceFields, sourceName) => ({
@@ -270,6 +276,7 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                         fields: sourceFields
                     })
                 );
+                // Create array of objects containing samples' info and it's fields.
                 const sampleFieldMapArray = _.map(samples, sample => {
                     const sampleFieldIds = _.map(sample.values, fieldValue => fieldValue.fieldId);
                     const sampleFields = _.filter(samplesFields, sampleField => {
@@ -277,21 +284,26 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                             return sampleFieldId === sampleField.id
                         })
                     });
+                    // TODO: It would be better to keep genotypeName as genotypeName here,
+                    // instead of making the reader to remember that sampleName is equal
+                    // to genotypeName for samples.
                     return {
                         sampleId: sample.id,
                         sampleName: sample.genotypeName,
                         fields: sampleFields
                     }
                 });
+                // Join all the data about fields.
+                // TODO: here we have created a custom rule for sources (source <==> sampleId == 'source')
+                // using the existing rule (sourceName !== 'sample'). It would be better to keep the old one.
                 const samplesData = _.union(sourceFieldsMapArray, sampleFieldMapArray);
-                callback(null,
-                    {
-                        samplesData,
-                        samples
-                    }
-                );
+                callback(null, {
+                    samplesData,
+                    samples
+                });
             },
             ({samplesData, samples}, callback) => {
+                // TODO: It seems we can create the right structure at the previous step.
                 const samplesFieldHashArray = _.map(samplesData, sampleData => {
                     const sampleFieldHash = CollectionUtils.createHash(sampleData.fields,
                         ({name}) => AppServerUtils.createColumnName(name, sampleData.sampleName)
@@ -327,17 +339,16 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                                     fieldId: fieldMetadata.id,
                                     fieldValue: this._mapFieldValue(rowField.fieldValue),
                                     sampleId: currentSampleFieldHash.sampleId == 'source' ? null : currentSampleFieldHash.sampleId
-                                }
-                            }
-                            else {
+                                };
+                            } else {
                                 missingFieldsSet.add(rowField.fieldName);
-                                return null
+                                return null;
                             }
                         } else {
                             return {
                                 fieldId: rowField.fieldName,
                                 fieldValue: rowField.fieldValue
-                            }
+                            };
                         }
                     });
                     const existingFieldsRowObject = _.filter(mappedRowObject, rowFields => {
