@@ -226,15 +226,16 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 viewFields, fieldIdToMetadata =>fieldIdToMetadata.id == viewListItem.fieldId
             )
         );
-        const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(viewFields);
+        const notDuplicatedColumnNames = AppServerUtils.getNotDuplicatedColumnNames(viewFields);
         const resultHeader = [];
         _.forEach(viewFieldsOrdered, viewField => {
             if ( viewField.sourceName !== 'sample'){
                 resultHeader.push({
-                    fieldId: viewField.id
+                    fieldId: viewField.id,
+                    exist:true
                 });
             }else {
-                if (_.some(noneDuplicatedColumnNames,noneDuplicatedColumnName => noneDuplicatedColumnName === viewField.name)){
+                if (_.some(notDuplicatedColumnNames,notDuplicatedColumnName => notDuplicatedColumnName === viewField.name)){
                     const exist = _.some(samples[0].values, field => field.fieldId == viewField.id);
                     resultHeader.push({
                         fieldId: viewField.id,
@@ -265,13 +266,11 @@ class AppServerSearchService extends ApplicationServerServiceBase {
                 const samplesFields = _.filter(totalFields, totalField => totalField.sourceName == 'sample');
                 const sourceFieldsMapArray = _.map(
                     _.groupBy(sourcesFields, 'sourceName'),
-                    (sourceFields, sourceName)=> {
-                        return {
-                            sampleId: 'source',
-                            sampleName: sourceName,
-                            fields: sourceFields,
-                        }
-                    }
+                    (sourceFields, sourceName) => ({
+                        sampleId: 'source',
+                        sampleName: sourceName,
+                        fields: sourceFields
+                    })
                 );
                 const sampleFieldMapArray = _.map(samples, sample => {
                     const sampleFieldIds = _.map(sample.values, fieldValue => fieldValue.fieldId);

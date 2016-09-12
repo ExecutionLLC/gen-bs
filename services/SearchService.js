@@ -39,12 +39,9 @@ class SearchService extends ServiceBase {
 
     sendSearchRequest(user, session, languageId, analysis, limit, offset, callback) {
         const {id, name, description, type, samples, modelId, viewId, filterId} = analysis;
-        if (_.isUndefined(id) || _.isNull(id)) {
-            // this._sendSearchRequest(
-            //     languageId, viewId, filterId, name, description, type, samples, limit, offset, callback, user, session
-            // );
+        if (_.isEmpty(id)) {
             const hasUndefOrNullParam = _.some([languageId, viewId, filterId, name, description, type, samples, limit, offset], (param) => {
-                return _.isUndefined(param) || _.isNull(param);
+                return _.isEmpty(param);
             });
             if (hasUndefOrNullParam) {
                 callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
@@ -59,22 +56,22 @@ class SearchService extends ServiceBase {
                         offset: _.isNumber(offset) ? offset : 'undefined'
                     }, null, 2)));
             } else {
-                async.waterfall(
-                    [
-                        (callback) => {
-                            this.services.analysis.add(
-                                user, languageId, name, description, type, viewId, filterId, modelId, samples, callback
-                            );
-                        },
-                        (analysis, callback) => {
-                            this._sendSearchRequest(
-                                user, session, languageId, viewId, filterId, modelId, samples, limit, offset,
-                                (error, operationId) => callback(error , {operationId, analysis})
-                            );
-                        }
-                    ],
-                    callback
-                );
+                async.waterfall([
+                    (callback) => {
+                        this.services.analysis.add(
+                            user, languageId, name, description, type, viewId, filterId, modelId, samples, callback
+                        );
+                    },
+                    (analysis, callback) => {
+                        this._sendSearchRequest(
+                            user, session, languageId, viewId, filterId, modelId, samples, limit, offset,
+                            (error, operationId) => callback(error, {
+                                operationId,
+                                analysis
+                            })
+                        );
+                    }
+                ], callback);
             }
         }
         else {
@@ -162,12 +159,7 @@ class SearchService extends ServiceBase {
                         return fieldWithId ? fieldWithId.fieldValue: null
                     });
                     const searchKey = searchKeyObject.fieldValue;
-                    const comments = _.map(searchKeyToCommentsArrayHash[searchKey], comment => {
-                        return {
-                            id: comment.id,
-                            comment: comment.comment
-                        };
-                    });
+                    const comments = _.map(searchKeyToCommentsArrayHash[searchKey], ({id, comment}) => ({id, comment}));
 
                     return {
                         searchKey,
@@ -213,9 +205,9 @@ class SearchService extends ServiceBase {
         // Extract search keys from all rows.
         const searchKeys = _.map(redisRows, row => {
             const searchField = _.find(row, field => {
-                return field.fieldId == this.searchKeyFieldName
+                return field.fieldId == this.searchKeyFieldName;
             });
-            return searchField.fieldValue
+            return searchField.fieldValue;
         });
 
         async.waterfall([
@@ -224,8 +216,9 @@ class SearchService extends ServiceBase {
 
             // Group comments by search key.
             (comments, callback) => {
-                const searchKeyToCommentHash = CollectionUtils.createMultiValueHash(comments,
-                    (comment) => comment.searchKey);
+                const searchKeyToCommentHash = CollectionUtils.createMultiValueHash(
+                    comments, (comment) => comment.searchKey
+                );
                 callback(null, searchKeyToCommentHash);
             }
         ], callback);

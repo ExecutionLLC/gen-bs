@@ -79,8 +79,7 @@ class AnalysisModel extends SecureModelBase {
 
     _updateInTransaction(analysisId, analysisToUpdate, trx, callback) {
         const {name, description, languId, lastQueryDate} = analysisToUpdate;
-        async.waterfall(
-            [
+        async.waterfall([
                 (callback) => {
                     const updateAnalysisData = {
                         lastQueryDate
@@ -147,48 +146,47 @@ class AnalysisModel extends SecureModelBase {
             name, description, samples
         } = analysis;
         async.waterfall([
-                (callback) => {
-                    const {
-                        id, viewId, filterId, modelId, type
-                    } = analysis;
-                    const analysisDataToInsert =  {
-                        id: shouldGenerateId ? this._generateId() : id,
-                        creator: userId,
-                        viewId,
-                        filterId,
-                        modelId,
-                        type,
-                        lastQueryDate: new Date()
-                    };
-                    this._insert(analysisDataToInsert, trx, callback);
-                },
-                (analysisId, callback) => {
-                    const analysisTextDataToInsert = {
-                        analysisId: analysisId,
-                        languId,
-                        name,
-                        description
-                    };
-                    this._unsafeInsert(
-                        TableNames.AnalysisText,
-                        analysisTextDataToInsert,
-                        trx,
-                        (error) => {
-                            callback(error, analysisId)
-                        }
-                    );
-                },
-                (analysisId, callback) => {
-                    _.forEach(samples, (sample, index) => {
-                            this._addNewAnalysisSample(
-                                analysisId, sample, index, trx, callback
-                            );
-                        }
-                    );
-                    callback(null, analysisId);
-                },
-            ], callback
-        );
+            (callback) => {
+                const {
+                    id, viewId, filterId, modelId, type
+                } = analysis;
+                const analysisDataToInsert = {
+                    id: shouldGenerateId ? this._generateId() : id,
+                    creator: userId,
+                    viewId,
+                    filterId,
+                    modelId,
+                    type,
+                    lastQueryDate: new Date()
+                };
+                this._insert(analysisDataToInsert, trx, callback);
+            },
+            (analysisId, callback) => {
+                const analysisTextDataToInsert = {
+                    analysisId: analysisId,
+                    languId,
+                    name,
+                    description
+                };
+                this._unsafeInsert(
+                    TableNames.AnalysisText,
+                    analysisTextDataToInsert,
+                    trx,
+                    (error) => {
+                        callback(error, analysisId)
+                    }
+                );
+            },
+            (analysisId, callback) => {
+                _.forEach(samples, (sample, index) => {
+                        this._addNewAnalysisSample(
+                            analysisId, sample, index, trx, callback
+                        );
+                    }
+                );
+                callback(null, analysisId);
+            },
+        ], callback);
     }
 
     _addNewAnalysisSample(analysisId, sample, order, trx, callback) {
@@ -205,7 +203,6 @@ class AnalysisModel extends SecureModelBase {
     }
 
     _findAnalysisIds(trx, userId, limit, offset, nameFilter, descriptionFilter, callback) {
-
         trx.select('id', 'timestamp')
             .from(this.baseTableName)
             .innerJoin(
@@ -217,20 +214,17 @@ class AnalysisModel extends SecureModelBase {
             .andWhere(function () {
                 this.where(
                     trx.raw('LOWER("name") like ?', `%${nameFilter.toLowerCase()}%`)
+                ).orWhere(
+                    trx.raw('LOWER("description") like ?', `%${descriptionFilter.toLowerCase()}%`)
                 )
-                    .orWhere(
-                        trx.raw('LOWER("description") like ?', `%${descriptionFilter.toLowerCase()}%`)
-                    )
             })
             .andWhere('is_deleted', false)
             .orderBy('timestamp', 'desc')
             .offset(offset)
             .limit(limit)
-            .asCallback(
-                (error, result) => {
-                    callback(error, _.map(result, resultItem => resultItem.id));
-                }
-            );
+            .asCallback((error, result) => {
+                callback(error, _.map(result, resultItem => resultItem.id));
+            });
     }
 
     _findAnalysisByIds(trx, userId, analysisIds, callback) {
@@ -259,9 +253,9 @@ class AnalysisModel extends SecureModelBase {
             );
     }
 
-    _findAnalysisById(trx ,userId, analysisId, callback) {
+    _findAnalysisById(trx, userId, analysisId, callback) {
         async.waterfall([
-            (callback) =>  this._findAnalysisByIds( trx, userId, [analysisId], callback),
+            (callback) => this._findAnalysisByIds(trx, userId, [analysisId], callback),
             (analyses, callback) => {
                 if (analyses && analyses.length) {
                     callback(null, analyses[0])
@@ -324,7 +318,7 @@ class AnalysisModel extends SecureModelBase {
             type,
             samples,
             languId
-        }
+        };
     }
 }
 

@@ -72,7 +72,7 @@ class ModelsService extends UserEntityServiceBase {
     _checkModelFilterRulesRecursively(modelRulesObject, callback) {
         const operator = modelRulesObject['condition'] || null;
         if (operator) {
-            const operands = modelRulesObject[operator];
+            const operands = modelRulesObject['rules'];
             const mappedOperands = _.map(operands, (operand) => this._checkModelFilterRulesRecursively(operand, callback));
             const result = {};
             result[operator] = mappedOperands;

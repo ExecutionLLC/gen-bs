@@ -63,7 +63,7 @@ class AppServerViewUtils {
                 };
             })
             .value();
-        const noneDuplicatedColumnNames = AppServerUtils.getNoneDuplicatedColumnNames(fieldIdToMetadata);
+        const noneDuplicatedColumnNames = AppServerUtils.getNotDuplicatedColumnNames(fieldIdToMetadata);
         const sampleDuplicatedItems = _(listItems)
             .filter(listItem => {
                 return listItem.sourceName === 'sample' && !_.some(noneDuplicatedColumnNames, (columnName) => {
