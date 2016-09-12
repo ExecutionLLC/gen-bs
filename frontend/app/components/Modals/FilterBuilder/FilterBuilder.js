@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import Select from '../../shared/Select';
 import Input from '../../shared/Input';
@@ -50,11 +51,12 @@ class FilterQueryBuilder extends React.Component {
     }
 
 
-    static getFieldFilterItemRestrictions(field, fields) {
+    static getFieldFilterItemRestrictions(item, field, fields) {
         const fieldJSType = FieldUtils.getFieldJSType(field);
         const allowedOpsTypes = FilterQueryBuilder.getValidOperatorsTypesForJSType(fieldJSType);
         const fieldValidationRegexp = FieldUtils.getFieldInputValidationRegex(field);
         return {
+            item,
             fieldJSType,
             allowedOpsTypes,
             allowedFields: fields,
@@ -62,12 +64,13 @@ class FilterQueryBuilder extends React.Component {
         };
     }
 
-    static getDisabledFieldFilterItemRestrictions(field, operator) {
+    static getDisabledFieldFilterItemRestrictions(item, field) {
         const fieldJSType = FieldUtils.getFieldJSType(field);
-        const allowedOpsTypes = [operator];
+        const allowedOpsTypes = [item.operator];
         const allowedFields = [field];
         const fieldValidationRegexp = FieldUtils.getFieldInputValidationRegex(field);
         return {
+            item: _.omit(item, 'sampleType'),
             fieldJSType,
             allowedOpsTypes,
             allowedFields,
@@ -76,7 +79,7 @@ class FilterQueryBuilder extends React.Component {
     }
 
     static onChangeItem(item, indexPath, allowedFields, dispatch) {
-        if (indexPath.length < 1) {
+        if (!item || indexPath.length < 1) {
             return;
         }
         const ruleIndex = indexPath[indexPath.length - 1];
@@ -90,7 +93,7 @@ class FilterQueryBuilder extends React.Component {
         if (isOperatorAllowed) {
             dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item, fieldJSType: selectedFieldJSType, ruleIndex}}));
         } else {
-            dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item: { field: item.field, operator: 'equal', value: item.value}, fieldJSType: selectedFieldJSType, ruleIndex}}));
+            dispatch(filterBuilderChangeFilter(parentIndexPath, {onEdit: {item: { field: item.field, sampleType: item.sampleType, operator: 'equal', value: item.value}, fieldJSType: selectedFieldJSType, ruleIndex}}));
         }
     }
 
@@ -100,19 +103,22 @@ class FilterQueryBuilder extends React.Component {
      * @param {{id: string, label: string, type: string}[]} totalFields
      * @param {function(Object)} dispatch
      * @param {number[]} indexPath
-     * @param {{field: string, operator: string, value: *}} item
+     * @param {{field: string, sampleType: string=, operator: string, value: *}} item
      * @param {boolean} disabled
      * @returns {React.Component}
      */
     static makeFilterItem(allowedFields, totalFields, dispatch, indexPath, item, disabled) {
-        const fieldFromSample = FieldUtils.getFieldById(allowedFields, item.field);
+        const fieldFromSample = item.sampleType ?
+            _.find(allowedFields, {id: item.field, sampleType: item.sampleType}) :
+            _.find(allowedFields, {id: item.field});
+        console.log(fieldFromSample);
         const itemRestrictions = fieldFromSample ?
-            FilterQueryBuilder.getFieldFilterItemRestrictions(fieldFromSample, allowedFields) :
-            FilterQueryBuilder.getDisabledFieldFilterItemRestrictions(FieldUtils.getFieldById(totalFields, item.field), item.operator);
+            FilterQueryBuilder.getFieldFilterItemRestrictions(item, fieldFromSample, allowedFields) :
+            FilterQueryBuilder.getDisabledFieldFilterItemRestrictions(item, FieldUtils.getFieldById(totalFields, item.field));
         return (
             <FieldFilterItem
                 indexPath={indexPath}
-                item={item}
+                item={itemRestrictions.item}
                 fields={itemRestrictions.allowedFields}
                 allowedOpsTypes={itemRestrictions.allowedOpsTypes}
                 valueType={itemRestrictions.fieldJSType}
@@ -327,49 +333,87 @@ class FieldFilterItem extends React.Component {
     }
 
     /**
-     * @param {{field: string, operator: string, value: *}} item
-     * @param {string} fieldId
-     * @returns {{field: string, operator: string, value: *}}
+     * @param {{field: string, sampleType: string=, operator: string, value: *}} item
+     * @param {{fieldId: string, sampleType: string=}} fieldIdSampleType
+     * @returns {{field: string, sampleType: string=, operator: string, value: *}}
      */
-    static itemChangeField(item, fieldId) {
+    static itemChangeField(item, fieldIdSampleType) {
+        const {fieldId, sampleType} = fieldIdSampleType;
         return {
             field: fieldId,
+            sampleType: sampleType,
             operator: item.operator,
             value: item.value
         };
     }
 
     /**
-     * @param {{field: string, operator: string, value: *}} item
+     * @param {{field: string, sampleType: string=, operator: string, value: *}} item
      * @param {string} operatorType
-     * @returns {{field: string, operator: string, value: *}}
+     * @returns {{field: string, sampleType: string=, operator: string, value: *}}
      */
     static itemChangeOperatorType(item, operatorType) {
         return {
             field: item.field,
+            sampleType: item.sampleType,
             operator: operatorType,
             value: item.value
         };
     }
 
     /**
-     * @param {{field: string, operator: string, value: *}} item
+     * @param {{field: string, sampleType: string=, operator: string, value: *}} item
      * @param {*} value
-     * @returns {{field: string, operator: string, value: *}}
+     * @returns {{field: string, sampleType: string=, operator: string, value: *}}
      */
     static itemChangeValue(item, value) {
         return {
             field: item.field,
+            sampleType: item.sampleType,
             operator: item.operator,
             value: value
         };
     }
 
-    render() {
+    /**
+     * @param {string} fieldId
+     * @param {string=} sampleType
+     * @returns {string}
+     */
+    makeFieldIdWithSampleType(fieldId, sampleType) {
+        return `${fieldId}${sampleType ? `_${sampleType}` : ''}`;
+    }
+
+    /**
+     * @param {string} fieldIdSampleType
+     * @returns {?{fieldId: string, sampleType: string=}}
+     */
+    parseFieldIdWithSampleType(fieldIdSampleType) {
+        const match = fieldIdSampleType.match(/^([^_]*)(?:_(.*))?$/);
+        if (!match) {
+            return null;
+        } else {
+            return {
+                fieldId: match[1],
+                sampleType: match[2]
+            };
+        }
+    }
+
+    onItemChangeField(fieldSampleId) {
+        const {item, onChange} = this.props;
+
+        const parsedFieldSampleId = this.parseFieldIdWithSampleType(fieldSampleId);
+        if (parsedFieldSampleId) {
+            onChange(FieldFilterItem.itemChangeField(item, parsedFieldSampleId));
+        }
+    }
+
+    render() { // TODO fields with sampleType?
         const {
-            /** @type {{field: string, operator: string, value: *}} */
+            /** @type {{field: string, sampleType: string=, operator: string, value: *}} */
             item,
-            /** @type {{id: string, label: string, type: string}[]} */
+            /** @type {{id: string, sampleType: string=, label: string, type: string}[]} */
             fields,
             /** @type {string[]} */
             allowedOpsTypes,
@@ -377,7 +421,7 @@ class FieldFilterItem extends React.Component {
             valueType,
             /** @type {boolean} */
             disabled,
-            /** @type {function({field: string, operator: string, value: *})} */
+            /** @type {function(?{field: string, sampleType: string=, operator: string, value: *})} */
             onChange,
             /** @type {string} */
             validationRegex
@@ -385,11 +429,15 @@ class FieldFilterItem extends React.Component {
 
         /** @type {{value: string, label: string}[]} */
         const selectFieldList = fields.map((field) => {
-            return {value: field.id, label: field.label};
+            return {
+                value: this.makeFieldIdWithSampleType(field.id, field.sampleType),
+                fieldId: field.id,
+                sampleType: field.sampleType,
+                label: field.label
+            };
         });
         /** @type {string} */
-        const selectFieldValue = item.field;
-
+        const selectFieldValue = this.makeFieldIdWithSampleType(item.field, item.sampleType);
         /** @type {{value: string, label: string}[]} */
         const selectOperatorList = allowedOpsTypes.map((opname) => {
             return {value: opname, label: opsUtils.genomicsRuleOperatorsLabels[opname]};
@@ -403,7 +451,7 @@ class FieldFilterItem extends React.Component {
                     selectFieldList,
                     selectFieldValue,
                     disabled,
-                    (fieldId) => onChange(FieldFilterItem.itemChangeField(item, fieldId))
+                    (fieldSampleId) => this.onItemChangeField(fieldSampleId)
                 )}
                 {FieldFilterItem.renderOperatorSelect(
                     selectOperatorList,

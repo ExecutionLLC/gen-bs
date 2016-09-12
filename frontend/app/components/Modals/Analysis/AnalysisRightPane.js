@@ -26,7 +26,7 @@ import SamplesUtils from '../../../utils/samplesUtils';
 import AnalyseUtils from '../../../utils/analyseUtils';
 
 
-const {sampleType} = SamplesUtils;
+const {sampleType, sampleTypeForAnalysisType} = SamplesUtils;
 const {analysisType} = AnalyseUtils;
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -755,7 +755,15 @@ export default class AnalysisRightPane extends React.Component {
     onModelClick() {
         const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
-        const allowedFields = FieldUtils.makeModelAllowedFields(samples, fields.totalFieldsHashedArray.hash);
+        const samplesTypes = _.reduce(
+            sampleTypeForAnalysisType[historyItem.type],
+            (hash, sampleType, index) => ({
+                ...hash,
+                [historyItem.samples[index].id]: sampleType
+            }),
+            {}
+        );
+        const allowedFields = FieldUtils.makeModelAllowedFields(samples, samplesTypes, fields.totalFieldsHashedArray.hash);
         const modelFiltersStrategy = {name: 'model', analysisType: historyItem.type};
         dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, modelsList));
         const action = this.actionEdit({modelId: null});

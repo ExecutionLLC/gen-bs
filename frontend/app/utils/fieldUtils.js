@@ -95,6 +95,13 @@ export default class FieldUtils {
         return null;
     }
 
+    /**
+     * Return all fields as array from sample.values.
+     * @template {TField}
+     * @param {{values: {filedId: string}[]}} sample
+     * @param {Object.<string, TField>} totalFieldsHash
+     * @returns {Object.<string, TField>}
+     */
     static getSampleFields(sample, totalFieldsHash) {
         const sampleValues = sample.values;
         const sampleFields = sampleValues.map(({fieldId}) => totalFieldsHash[fieldId]);
@@ -135,16 +142,31 @@ export default class FieldUtils {
         ];
     }
 
-    static makeModelAllowedFields(samples, totalFieldsHash) {
+    /**
+     * @param {{id: string, values: {fieldId: string}[]}[]} samples
+     * @param {Object.<string, string>} samplesTypes hash {sampleId: sampleType}
+     * @param {Object} totalFieldsHash hash {fieldId: field}
+     * @returns {Array}
+     */
+    static makeModelAllowedFields(samples, samplesTypes, totalFieldsHash) {
+
+        function addSampleTypeFields(fields, sampleType) {
+            return _.map(fields, (field) => ({
+                ...field,
+                sampleType
+            }));
+        }
+
         const samplesFields = samples.map((sample, index) => {
+            const sampleType = samplesTypes[sample.id];
             const sampleFields = FieldUtils.getSampleFields(sample, totalFieldsHash);
             if (index) {
-                return sampleFields;
+                return addSampleTypeFields(sampleFields, sampleType);
             } else {
-                return FieldUtils.ridOfVepFields(sampleFields);
+                return addSampleTypeFields(FieldUtils.ridOfVepFields(sampleFields), sampleType);
             }
         });
-        const allSamplesFields = _.unionBy.apply(_, [...samplesFields, ...[(sample) => sample.id]]);
+        const allSamplesFields = _.concat.apply(_, samplesFields);
         const sortedLabelledFields = FieldUtils.sortAndAddLabels(allSamplesFields);
         return _.filter(sortedLabelledFields, ['isEditable', false]);
     }
