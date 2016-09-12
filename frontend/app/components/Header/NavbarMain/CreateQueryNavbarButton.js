@@ -19,17 +19,17 @@ export default class CreateQueryNavbarButton extends Component {
 
     render() {
         return (
-            <div>
+            <div className='samples-analysis-wrapper'>
                 <div>
                     <a
-                        href="#"
-                        className="btn navbar-btn"
-                        type="button"
+                        href='#'
+                        className='btn navbar-btn'
+                        type='button'
                         onClick={() => this.props.openSamplesModal()}
                     ><span
-                        className="hidden-xxs"
-                        data-localize="samples.title"
-                    >Samples</span><span className="visible-xxs"><i className="md-i">file_upload</i></span>{/*<span class="badge badge-inverse">2</span>*/}</a>
+                        className='hidden-xxs'
+                        data-localize='samples.title'
+                    >Samples</span><span className='visible-xxs'><i className='md-i'>file_upload</i></span>{/*<span class="badge badge-inverse">2</span>*/}</a>
                 </div>
                 <div>
                     <a
