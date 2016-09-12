@@ -42,7 +42,9 @@ export default class SearchClient extends ClientBase {
             this.urls.startSearchInResults(operationId),
             null,
             {
-                topSearch: globalSearch,
+                topSearch: {
+                    filter: globalSearch.search
+                },
                 search: fieldIdToSearchObject,
                 sort: fieldIdToOrderAndDirection,
                 limit,

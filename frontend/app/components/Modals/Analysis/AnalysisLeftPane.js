@@ -2,7 +2,7 @@ import React from 'react';
 import AnalysisHistorySearch from './AnalysisHistorySearch';
 import AnalysisHistoryList from './AnalysisHistoryList';
 import {
-    prepareQueryHistoryToFilter,
+    prepareQueryHistoryToSearch,
     requestQueryHistory,
     appendQueryHistory
 } from '../../../actions/queryHistory';
@@ -12,19 +12,19 @@ export default class AnalysisLeftPane extends React.Component {
 
     render() {
 
-        const {historyList, initialHistoryList, historyListFilter, isHistoryReceivedAll, isHistoryRequesting, newHistoryItem} = this.props;
+        const {historyList, initialHistoryList, historyListSearch, isHistoryReceivedAll, isHistoryRequesting, newHistoryItem} = this.props;
 
         return (
             <div>
                 <AnalysisHistorySearch
-                    filter={historyListFilter}
+                    search={historyListSearch}
                     onFilter={(str) => this.onFilterChange(str)}
                 />
                 <AnalysisHistoryList
                     dispatch={this.props.dispatch}
                     historyList={historyList}
                     initialHistoryList={initialHistoryList}
-                    historyListFilter={historyListFilter}
+                    historyListSearch={historyListSearch}
                     newHistoryItem={newHistoryItem}
                     isHistoryReceivedAll={isHistoryReceivedAll}
                     isHistoryRequesting={isHistoryRequesting}
@@ -38,7 +38,7 @@ export default class AnalysisLeftPane extends React.Component {
     }
 
     onFilterChange(str) {
-        this.props.dispatch(prepareQueryHistoryToFilter(str));
+        this.props.dispatch(prepareQueryHistoryToSearch(str));
         if (!str) {
             this.props.dispatch(requestQueryHistory());
             this.props.dispatch(appendQueryHistory('', 0, this.props.initialHistoryList, false));

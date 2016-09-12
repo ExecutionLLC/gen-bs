@@ -23,7 +23,7 @@ export default class AnalysisBody extends React.Component {
                                 dispatch={this.props.dispatch}
                                 historyList={this.props.historyList}
                                 initialHistoryList={this.props.initialHistoryList}
-                                historyListFilter={this.props.historyListFilter}
+                                historyListSearch={this.props.historyListSearch}
                                 newHistoryItem={this.props.newHistoryItem}
                                 isHistoryReceivedAll={this.props.isHistoryReceivedAll}
                                 isHistoryRequesting={this.props.isHistoryRequesting}

@@ -12,7 +12,7 @@ const DEFAULT_SEARCH_PARAMS = {
     search: [],
     sort: [],
     topSearch: {
-        filter: ''
+        search: ''
     }
 };
 
@@ -43,14 +43,14 @@ export default function variantsTable(state = initialState, action) {
             });
         }
         case ActionTypes.CHANGE_VARIANTS_GLOBAL_FILTER: {
-            const currentGlobalSearchString = state.searchInResultsParams.topSearch.filter;
+            const currentGlobalSearchString = state.searchInResultsParams.topSearch.search;
             if (currentGlobalSearchString === action.globalSearchString) {
                 return state;
             }
             return Object.assign({}, state, {
                 searchInResultsParams: Object.assign({}, state.searchInResultsParams, {
                     topSearch: {
-                        filter: action.globalSearchString
+                        search: action.globalSearchString
                     },
                     ...DEFAULT_SEARCH_PARAMS_LIMIT_OFFSET
                 }),

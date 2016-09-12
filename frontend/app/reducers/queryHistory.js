@@ -19,7 +19,7 @@ function ensureHistoryId(history, id, hasNewHistoryItem) {
 const initialState = {
     initialHistory: [],
     history: [],
-    filter: '',
+    search: '',
     isReceivedAll: false,
     newHistoryItem: null,
     currentHistoryId: null,
@@ -39,7 +39,7 @@ function reduceReceiveQueryHistory(state, action) {
     return Object.assign({}, state, {
         history: history,
         isReceivedAll: false,
-        filter: '',
+        search: '',
         currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
     });
 }
@@ -50,15 +50,15 @@ function reduceReceiveInitialQueryHistory(state, action) {
         initialHistory: history,
         history: history,
         isReceivedAll: false,
-        filter: '',
+        search: '',
         currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
     });
 }
 
-function reducePrepareQueryHistoryToFilter(state, action) {
+function reducePrepareQueryHistoryToSearch(state, action) {
     return {
         ...state,
-        filter: action.filter,
+        search: action.search,
         isReceivedAll: false,
         isRequesting: false,
         history: [],
@@ -158,7 +158,7 @@ function reduceSetEditedQueryHistory(state, action) {
 function reduceAppendQueryHistory(state, action) {
     // Check if data received for actual state
     // Seems like crutch, need to think about consistency
-    if (action.filter !== state.filter || action.requestFrom !== state.history.length) {
+    if (action.search !== state.search || action.requestFrom !== state.history.length) {
         return state;
     } else {
         return {
@@ -199,8 +199,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceSetEditedQueryHistory(state, action);
         case ActionTypes.APPEND_QUERY_HISTORY:
             return reduceAppendQueryHistory(state, action);
-        case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:
-            return reducePrepareQueryHistoryToFilter(state, action);
+        case ActionTypes.PREPARE_QUERY_HISTORY_TO_SEARCH:
+            return reducePrepareQueryHistoryToSearch(state, action);
         case ActionTypes.DUPLICATE_QUERY_HISTORY_ITEM:
             return reduceDuplicateQueryHistoryItem(state, action);
         case ActionTypes.EDIT_QUERY_HISTORY_ITEM:

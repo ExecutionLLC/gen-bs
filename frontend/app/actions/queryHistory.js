@@ -14,7 +14,7 @@ export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
 export const SET_EDITED_QUERY_HISTORY = 'SET_EDITED_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
 export const REQUEST_QUERY_HISTORY = 'REQUEST_QUERY_HISTORY';
-export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
+export const PREPARE_QUERY_HISTORY_TO_SEARCH = 'PREPARE_QUERY_HISTORY_TO_SEARCH';
 export const DUPLICATE_QUERY_HISTORY_ITEM = 'DUPLICATE_QUERY_HISTORY_ITEM';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
 export const DELETE_QUERY_HISTORY_ITEM = 'DELETE_QUERY_HISTORY_ITEM';
@@ -67,10 +67,10 @@ export function requestQueryHistory() {
     };
 }
 
-export function appendQueryHistory(filter, requestFrom, items, isReceivedAll) {
+export function appendQueryHistory(search, requestFrom, items, isReceivedAll) {
     return {
         type: APPEND_QUERY_HISTORY,
-        filter,
+        search,
         requestFrom,
         history: items,
         isReceivedAll
@@ -83,10 +83,10 @@ export function clearQueryHistory() {
     };
 }
 
-export function prepareQueryHistoryToFilter(filter) {
+export function prepareQueryHistoryToSearch(search) {
     return {
-        type: PREPARE_QUERY_HISTORY_TO_FILTER,
-        filter
+        type: PREPARE_QUERY_HISTORY_TO_SEARCH,
+        search
     };
 }
 
@@ -137,17 +137,17 @@ export function setEditedHistoryItem(newHistoryItem) {
     };
 }
 
-export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
+export function requestAppendQueryHistory(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
         dispatch(requestQueryHistory());
-        queryHistoryClient.getQueryHistory(language, filter, limit, offset, (error, response) => {
+        queryHistoryClient.getQueryHistory(language, search, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, HISTORY_SERVER_ERROR));
             } else {
-                dispatch(appendQueryHistory(filter, offset, response.body.result, limit > response.body.result.length));
+                dispatch(appendQueryHistory(search, offset, response.body.result, limit > response.body.result.length));
             }
         });
     };
