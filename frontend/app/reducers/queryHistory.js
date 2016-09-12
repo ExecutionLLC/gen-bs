@@ -28,30 +28,33 @@ const initialState = {
 };
 
 function reduceSetCurrentQueryHistoryId(state, action) {
+    const {history, newHistoryItem} = state;
     return {
         ...state,
-        currentHistoryId: ensureHistoryId(state.history, action.id, !!state.newHistoryItem)
+        currentHistoryId: ensureHistoryId(history, action.id, !!newHistoryItem)
     };
 }
 
 function reduceReceiveQueryHistory(state, action) {
     const history = action.history || initialState.history;
+    const {currentHistoryId, newHistoryItem} = state;
     return Object.assign({}, state, {
         history: history,
         isReceivedAll: false,
         search: '',
-        currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
+        currentHistoryId: ensureHistoryId(history, currentHistoryId, !!newHistoryItem)
     });
 }
 
 function reduceReceiveInitialQueryHistory(state, action) {
     const history = action.history || initialState.history;
+    const {currentHistoryId, newHistoryItem} = state;
     return Object.assign({}, state, {
         initialHistory: history,
         history: history,
         isReceivedAll: false,
         search: '',
-        currentHistoryId: ensureHistoryId(history, state.currentHistoryId, !!state.newHistoryItem)
+        currentHistoryId: ensureHistoryId(history, currentHistoryId, !!newHistoryItem)
     });
 }
 
@@ -76,13 +79,14 @@ function reduceDuplicateQueryHistoryItem(state, action) {
 }
 
 function reduceCancelQueryHistoryEdit(state) {
-    if (!state.history.length) {
+    const {history, currentHistoryId} = state;
+    if (!history.length) {
         return state;
     } else {
         return {
             ...state,
             newHistoryItem: null,
-            currentHistoryId: ensureHistoryId(state.history, state.currentHistoryId, false)
+            currentHistoryId: ensureHistoryId(history, currentHistoryId, false)
         };
     }
 }
@@ -156,14 +160,15 @@ function reduceSetEditedQueryHistory(state, action) {
 }
 
 function reduceAppendQueryHistory(state, action) {
+    const {history, search} = state;
     // Check if data received for actual state
     // Seems like crutch, need to think about consistency
-    if (action.search !== state.search || action.requestFrom !== state.history.length) {
+    if (action.search !== search || action.requestFrom !== history.length) {
         return state;
     } else {
         return {
             ...state,
-            history: immutableArray.concat(state.history, action.history),
+            history: immutableArray.concat(history, action.history),
             isReceivedAll: action.isReceivedAll,
             isRequesting: false
         };

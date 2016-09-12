@@ -140,8 +140,8 @@ export default class ExistentViewSelect extends React.Component {
     }
 
     onDuplicateViewClick() {
-        const {dispatch} = this.props;
-        const editingView = this.props.viewBuilder.editingView;
+        const {dispatch, viewBuilder} = this.props;
+        const editingView = viewBuilder.editingView;
         dispatch(viewBuilderRestartEdit(true, editingView));
     }
 

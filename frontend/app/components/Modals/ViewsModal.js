@@ -14,9 +14,8 @@ import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../
 class ViewsModal extends React.Component {
 
     render() {
-        const {auth: {isDemo}} = this.props;
-        const views = this.props.viewsList.hashedArray.array;
-        const {showModal, viewBuilder} = this.props;
+        const {auth: {isDemo}, showModal, viewBuilder, viewsList} = this.props;
+        const views = viewsList.hashedArray.array;
         const editingView = viewBuilder.editingView;
         const isNew = editingView ? editingView.id === null : false;
         const isViewEditable = editingView && entityTypeIsEditable(editingView.type);
@@ -91,8 +90,9 @@ class ViewsModal extends React.Component {
     }
 
     onClose() {
-        this.props.closeModal('views');
-        this.props.dispatch(viewBuilderEndEdit());
+        const {dispatch, closeModal} = this.props;
+        closeModal('views');
+        dispatch(viewBuilderEndEdit());
     }
 
     /**

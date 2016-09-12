@@ -59,7 +59,9 @@ export default class VariantsTableHead extends Component {
                     </div>
                 </td>
                 {_.map(variantsHeader, (fieldSampleExist) =>
-                    this.renderFieldHeader(fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
+                    this.renderFieldHeader(
+                        fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist,
+                        samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
                 )}
             </tr>
             </tbody>

@@ -147,7 +147,8 @@ export function requestAppendQueryHistory(search = '', limit = DEFAULT_LIMIT, of
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, HISTORY_SERVER_ERROR));
             } else {
-                dispatch(appendQueryHistory(search, offset, response.body.result, limit > response.body.result.length));
+                const result = response.body.result;
+                dispatch(appendQueryHistory(search, offset, result, limit > result.length));
             }
         });
     };

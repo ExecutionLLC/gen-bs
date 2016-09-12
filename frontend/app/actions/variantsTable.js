@@ -250,15 +250,16 @@ export function fetchVariants(searchParams) {
         dispatch(clearTableRowsSelection());
 
         const {ui: {languageId}} = getState();
+        const {analyze, limit, offset} = searchParams;
 
-        const sendAPI = searchParams.analyze.id ?
-            searchClient.sendSearchAgainRequest.bind(searchClient, languageId, searchParams.analyze.id) :
-            searchClient.sendSearchRequest.bind(searchClient, languageId, searchParams.analyze);
+        const sendAPI = analyze.id ?
+            searchClient.sendSearchAgainRequest.bind(searchClient, languageId, analyze.id) :
+            searchClient.sendSearchRequest.bind(searchClient, languageId, analyze);
 
         return new Promise((resolve, reject) => {
             sendAPI(
-                searchParams.limit,
-                searchParams.offset,
+                limit,
+                offset,
                 (error, response) => {
                     if (error) {
                         dispatch(handleError(null, ANALYZE_SAMPLE_NETWORK_ERROR));

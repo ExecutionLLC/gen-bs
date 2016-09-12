@@ -40,20 +40,21 @@ export const filterBuilderVerb = {
 class FiltersModal extends Component {
 
     onClose() {
-        this.props.closeModal('filters');
-        this.props.dispatch(filterBuilderEndEdit());
+        const {dispatch, closeModal} = this.props;
+        closeModal('filters');
+        dispatch(filterBuilderEndEdit());
     }
 
     render() {
-        const {auth: {isDemo}} = this.props;
-        const filters = this.props.filterBuilder.filtersList && this.props.filterBuilder.filtersList.hashedArray.array;
-        const editingFilterObject = this.props.filterBuilder.editingFilter;
+        const {dispatch, auth: {isDemo}, filterBuilder, showModal} = this.props;
+        const filters = filterBuilder.filtersList && filterBuilder.filtersList.hashedArray.array;
+        const editingFilterObject = filterBuilder.editingFilter;
         const editingFilterIsNew = editingFilterObject ? editingFilterObject.isNew : false;
         const editingFilter = editingFilterObject && editingFilterObject.filter;
         const isFilterEditable = editingFilter && entityTypeIsEditable(editingFilter.type);
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
-        const verb = this.props.filterBuilder.filtersStrategy ? filterBuilderVerb[this.props.filterBuilder.filtersStrategy.name] : {};
+        const verb = filterBuilder.filtersStrategy ? filterBuilderVerb[filterBuilder.filtersStrategy.name] : {};
 
         const titleValidationMessage = editingFilter ? this.getValidationMessage(
             editingFilter,
@@ -64,7 +65,7 @@ class FiltersModal extends Component {
         ) : '';
 
         const strategyValidationMessage = verb.getStrategyValidationMessage ?
-            verb.getStrategyValidationMessage(editingFilter, this.props.filterBuilder.filtersStrategy) :
+            verb.getStrategyValidationMessage(editingFilter, filterBuilder.filtersStrategy) :
             '';
 
         const title = isLoginRequired ?
@@ -82,7 +83,7 @@ class FiltersModal extends Component {
             <Modal
                 dialogClassName='modal-dialog-primary'
                 bsSize='lg'
-                show={this.props.showModal}
+                show={showModal}
                 onHide={() => this.onClose()}
             >
                 { (!editingFilter) &&
@@ -124,7 +125,7 @@ class FiltersModal extends Component {
                             </div>
                         </Modal.Body>
                         <FilterBuilderFooter
-                            dispatch={this.props.dispatch}
+                            dispatch={dispatch}
                             confirmButtonParams={confirmButtonParams}
                             closeModal={() => this.onClose()}
                         />

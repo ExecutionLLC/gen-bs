@@ -129,7 +129,8 @@ export function exportToFile(exportType) {
         // and add comments as a separate field values.
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
-            const sampleType = variantsAnalysisSamplesHash[listItem.sampleId] && SamplesUtils.typeLabels[variantsAnalysisSamplesHash[listItem.sampleId].type];
+            const sample = variantsAnalysisSamplesHash[listItem.sampleId];
+            const sampleType = sample && SamplesUtils.typeLabels[sample.type];
             return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
         })
         .concat(['Comment']);

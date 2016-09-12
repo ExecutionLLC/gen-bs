@@ -84,6 +84,7 @@ function changeSampleId(oldSamples, sampleIndex, newSampleId) {
 }
 
 function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
+    const samplesListArray = samplesList.hashedArray.array;
     const usedSamplesIds = {};
     return newSamplesTypes.map(
         (type, index) => {
@@ -94,10 +95,10 @@ function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
                 return {id: oldSampleId, type: type};
             } else {
                 const unusedSample = _.find(
-                        samplesList.hashedArray.array,
+                        samplesListArray,
                         (sample) => !usedSamplesIds[sample.id] && !entityTypeIsDemoDisabled(sample.type, isDemo)
                     ) ||
-                    samplesList.hashedArray.array[0];
+                    samplesListArray[0];
                 const unusedSampleId = unusedSample.id;
                 usedSamplesIds[unusedSampleId] = true;
                 return {id: unusedSampleId, type: type};
@@ -106,7 +107,7 @@ function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
     );
 }
 
-function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, targetType) {
+function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, targetType) { // TODO remove unused args
 
     function getAvailableModel(type) {
         const model = _.find(
@@ -155,7 +156,10 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
         editingHistoryItem = changeType(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, isDemo, change.type);
     }
     if (change.sample != null) {
-        editingHistoryItem = {...editingHistoryItem, samples: changeSampleId(editingHistoryItem.samples, change.sample.index, change.sample.id)};
+        editingHistoryItem = {
+            ...editingHistoryItem,
+            samples: changeSampleId(editingHistoryItem.samples, change.sample.index, change.sample.id)
+        };
     }
     if (change.samples != null) {
         editingHistoryItem = {...editingHistoryItem, samples: change.samples};

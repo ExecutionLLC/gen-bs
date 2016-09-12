@@ -58,24 +58,27 @@ export default class NewFilterInputs extends Component {
     }
 
     onNameChange(name) {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderChangeAttr({
+        const {dispatch, filterBuilder} = this.props;
+        const editingFilter = filterBuilder.editingFilter.filter;
+        dispatch(filterBuilderChangeAttr({
             name,
             description: editingFilter.description
         }));
     }
 
     onDescriptionChange(description) {
-        const editingFilter = this.props.filterBuilder.editingFilter.filter;
-        this.props.dispatch(filterBuilderChangeAttr({
+        const {dispatch, filterBuilder} = this.props;
+        const editingFilter = filterBuilder.editingFilter.filter;
+        dispatch(filterBuilderChangeAttr({
             name: editingFilter.name,
             description
         }));
     }
 
     onCancelClick() {
-        const parentFilter = this.props.filterBuilder.filtersList.hashedArray.hash[this.props.filterBuilder.editingFilter.parentFilterId];
-        this.props.dispatch(filterBuilderRestartEdit(false, parentFilter));
+        const {dispatch, filterBuilder} = this.props;
+        const parentFilter = filterBuilder.filtersList.hashedArray.hash[filterBuilder.editingFilter.parentFilterId];
+        dispatch(filterBuilderRestartEdit(false, parentFilter));
     }
 
 }

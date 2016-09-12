@@ -67,7 +67,10 @@ export function filterBuilderStartEdit(makeNew, filter, fields, allowedFields, f
 
 export function filterBuilderRestartEdit(makeNew, filter) {
     return (dispatch, getState) => {
-        dispatch(filterBuilderStartEdit(makeNew, filter, getState().fields, getState().filterBuilder.allowedFields, getState().filterBuilder.filtersStrategy, filterBuilderStrategyActions[getState().filterBuilder.filtersStrategy.name].getList(getState())));
+        const state = getState();
+        const {filterBuilder: {allowedFields, filtersStrategy}, fields} = state;
+        const strategyActions = filterBuilderStrategyActions[filtersStrategy.name];
+        dispatch(filterBuilderStartEdit(makeNew, filter, fields, allowedFields, filtersStrategy, strategyActions.getList(state)));
     };
 }
 
@@ -115,19 +118,17 @@ function filterBuilderCreateFilter() {
 function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
-        const state = getState();
-        const editingFilter = state.filterBuilder.editingFilter;
-        const originalFilter = state.filterBuilder.originalFilter;
+        const {filterBuilder: {editingFilter, originalFilter, filtersStrategy}, auth} = getState();
         const isNotEdited = !entityTypeIsEditable(editingFilter.filter.type)
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
-        if (state.auth.isDemo || isNotEdited) {
+        if (auth.isDemo || isNotEdited) {
             dispatch(fireOnSaveAction(editingFilter.filter));
             dispatch(closeModal('filters'));
             dispatch(filterBuilderEndEdit());
         } else {
             const resultEditingFilter = editingFilter.filter;
-            dispatch(filterBuilderStrategyActions[state.filterBuilder.filtersStrategy.name].serverUpdate(resultEditingFilter))
+            dispatch(filterBuilderStrategyActions[filtersStrategy.name].serverUpdate(resultEditingFilter))
                 .then( (filter) => {
                     dispatch(fireOnSaveAction(filter));
                     dispatch(closeModal('filters'));
@@ -162,11 +163,11 @@ export function filterBuilderDeleteFilter(filterId) {
             const {filterBuilder} = getState();
             dispatch(filterBuilderStrategyActions[filterBuilder.filtersStrategy.name].serverDelete(filterId))
                 .then(() => {
-                    const state = getState();
-                    const editingFilterId = state.filterBuilder.editingFilter.filter.id;
-                    const filtersList = state.filterBuilder.filtersList;
-                    const newFilterId = (filterId == editingFilterId) ? filtersList.hashedArray.array[0].id : editingFilterId;
-                    const newFilter = filtersList.hashedArray.hash[newFilterId];
+                    const {filterBuilder} = getState();
+                    const editingFilterId = filterBuilder.editingFilter.filter.id;
+                    const {filtersHashedArray} = filterBuilder.filtersList;
+                    const newFilterId = (filterId == editingFilterId) ? filtersHashedArray.array[0].id : editingFilterId;
+                    const newFilter = filtersHashedArray.hash[newFilterId];
                     dispatch(filterBuilderRestartEdit(false, newFilter));
                     resolve(newFilter);
                 });

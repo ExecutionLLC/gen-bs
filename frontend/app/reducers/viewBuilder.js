@@ -63,7 +63,7 @@ export default function viewBuilder(state = {
     isFetching: false
 }, action) {
 
-    switch (action.type) {
+    switch (action.type) { // TODO extract reducers
         case ActionTypes.VBUILDER_START_EDIT:
             return reduceVBuilderStartEdit(state, action);
         case ActionTypes.VBUILDER_SAVE_EDIT:

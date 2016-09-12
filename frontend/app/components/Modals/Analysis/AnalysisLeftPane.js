@@ -12,7 +12,8 @@ export default class AnalysisLeftPane extends React.Component {
 
     render() {
 
-        const {historyList, initialHistoryList, historyListSearch, isHistoryReceivedAll, isHistoryRequesting, newHistoryItem} = this.props;
+        const {dispatch,
+            historyList, initialHistoryList, historyListSearch, isHistoryReceivedAll, isHistoryRequesting, newHistoryItem} = this.props;
 
         return (
             <div>
@@ -21,7 +22,7 @@ export default class AnalysisLeftPane extends React.Component {
                     onSearch={(str) => this.onSearchChange(str)}
                 />
                 <AnalysisHistoryList
-                    dispatch={this.props.dispatch}
+                    dispatch={dispatch}
                     historyList={historyList}
                     initialHistoryList={initialHistoryList}
                     historyListSearch={historyListSearch}
@@ -38,10 +39,11 @@ export default class AnalysisLeftPane extends React.Component {
     }
 
     onSearchChange(str) {
-        this.props.dispatch(prepareQueryHistoryToSearch(str));
+        const {dispatch, initialHistoryList} = this.props;
+        dispatch(prepareQueryHistoryToSearch(str));
         if (!str) {
-            this.props.dispatch(requestQueryHistory());
-            this.props.dispatch(appendQueryHistory('', 0, this.props.initialHistoryList, false));
+            dispatch(requestQueryHistory());
+            dispatch(appendQueryHistory('', 0, initialHistoryList, false));
         }
     }
 }

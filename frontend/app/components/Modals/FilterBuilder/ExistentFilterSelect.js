@@ -18,12 +18,12 @@ import {entityTypeIsEditable} from '../../../utils/entityTypes';
 export default class ExistentFilterSelect extends Component {
 
     render() {
-        const {auth, verb} = this.props;
-        const selectedFilter = this.props.filterBuilder.editingFilter.filter;
-        const filters = this.props.filterBuilder.filtersList.hashedArray.array;
+        const {auth, verb, filterBuilder} = this.props;
+        const selectedFilter = filterBuilder.editingFilter.filter;
+        const filters = filterBuilder.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
         const isFilterEditable = entityTypeIsEditable(selectedFilter.type);
-        const isFilterDuplicable = !!this.props.filterBuilder.editingFilter.parsedFilter;
+        const isFilterDuplicable = !!filterBuilder.editingFilter.parsedFilter;
 
         return (
             <div className='in'>
@@ -155,9 +155,10 @@ export default class ExistentFilterSelect extends Component {
     }
 
     onDeleteFilterClick() {
+        const {dispatch} = this.props;
         const filterId = this.getSelectedFilter().id;
-        this.props.dispatch(filterBuilderDeleteFilter(filterId)).then((newFilter) => {
-            this.props.dispatch(fireOnSaveAction(newFilter));
+        dispatch(filterBuilderDeleteFilter(filterId)).then((newFilter) => {
+            dispatch(fireOnSaveAction(newFilter));
         });
     }
 

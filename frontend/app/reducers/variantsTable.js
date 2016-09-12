@@ -27,7 +27,7 @@ const initialState = {
 };
 
 export default function variantsTable(state = initialState, action) {
-    switch (action.type) {
+    switch (action.type) { // TODO extract reducers
 
         case ActionTypes.CLEAR_SEARCH_PARAMS: {
             return Object.assign({}, state, {
