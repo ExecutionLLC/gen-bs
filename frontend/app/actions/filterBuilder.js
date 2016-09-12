@@ -120,11 +120,11 @@ function filterBuilderCreateFilter() {
 function filterBuilderUpdateFilter() {
 
     return (dispatch, getState) => {
-        const {filterBuilder: {editingFilter, originalFilter, filtersStrategy}, auth} = getState();
+        const {filterBuilder: {editingFilter, originalFilter, filtersStrategy}} = getState();
         const isNotEdited = !entityTypeIsEditable(editingFilter.filter.type)
             || originalFilter.parsedFilter === editingFilter.parsedFilter;
 
-        if (auth.isDemo || isNotEdited) {
+        if (isNotEdited) {
             dispatch(fireOnSaveAction(editingFilter.filter));
             dispatch(closeModal('filters'));
             dispatch(filterBuilderEndEdit());
