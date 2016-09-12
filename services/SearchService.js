@@ -41,7 +41,7 @@ class SearchService extends ServiceBase {
         const {id, name, description, type, samples, modelId, viewId, filterId} = analysis;
         if (_.isEmpty(id)) {
             const hasUndefOrNullParam = _.some([languageId, viewId, filterId, name, description, type, samples, limit, offset], (param) => {
-                return _.isEmpty(param);
+                return  _.isUndefined(param) || _.isNull(param);
             });
             if (hasUndefOrNullParam) {
                 callback(new Error('One of required params is not set. Params: ' + JSON.stringify({
