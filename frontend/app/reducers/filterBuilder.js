@@ -11,11 +11,13 @@ import {entityType} from '../utils/entityTypes';
  * @param {{rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}} filterToEdit
  * @param {{id: string, label: string, type: string}[]} fields
  * @param {string} parentFilterId
- * @param {{id: string, label: string, type: string}[]} allowedFields
- * @returns {{filter: {rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}, isNew: boolean, parsedFilter: {condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, fieldDefaultId: string}}
+ * @param {{id: string, label: string, type: string, sampleType: string=}[]} allowedFields
+ * @returns {{filter: {rules: {$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }}, isNew: boolean, parsedFilter: {condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, fieldDefaultId: string, sampleDefaultType: string=}}
  */
 function parseFilterForEditing(isNew, filterToEdit, parentFilterId, fields, allowedFields) {
     const fieldDefaultId = FieldUtils.getDefaultId(allowedFields);
+    const fieldDefault = _.find(allowedFields, {id: fieldDefaultId});
+    const sampleDefaultType = fieldDefault.sampleType;
     /** @type {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */
     const parsedRawRules = filterUtils.getRulesFromGenomics(filterToEdit.rules);
     const validateRulesResult = parsedRawRules && genomicsParsedRulesValidate.validateGemonicsParsedRules(fields, parsedRawRules);
@@ -27,18 +29,19 @@ function parseFilterForEditing(isNew, filterToEdit, parentFilterId, fields, allo
         console.error(JSON.stringify(validateRulesResult.report, null, 4));
     }
     const parsedFilter = parsedRawRules ?
-        validateRulesResult.validRules || filterUtils.genomicsParsedRulesModification.makeDefaultGroup(fieldDefaultId) :
+        validateRulesResult.validRules || filterUtils.genomicsParsedRulesModification.makeDefaultGroup(fieldDefaultId, sampleDefaultType) :
         null;
     return {
         filter: filterToEdit,
         isNew,
         parentFilterId,
         parsedFilter,
-        fieldDefaultId
+        fieldDefaultId,
+        sampleDefaultType
     };
 }
 
-function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
+function applyFilterChange(parsedFilter, fieldDefaultId, sampleDefaultType, index, change) {
     const modification = filterUtils.genomicsParsedRulesModification;
     const changeFunctions = {
         onSwitch(isAnd) {
@@ -57,13 +60,13 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
                 opWant.single ?
                     (_.isArray(value)) ? genomicsParsedRulesValidate.jsTypeCastValue(value[0], fieldJSType) : genomicsParsedRulesValidate.jsTypeCastValue(value, fieldJSType) :
                     genomicsParsedRulesValidate.jsTypeCastArray(value, fieldJSType, opWant.arraySize || 0);
-            return modification.setRule(parsedFilter, index, ruleIndex, {field: item.field, operator: item.operator, value: castedValue});
+            return modification.setRule(parsedFilter, index, ruleIndex, {field: item.field, sampleType: item.sampleType, operator: item.operator, value: castedValue});
         },
         onDelete(itemIndex) {
             return modification.removeRuleOrGroup(parsedFilter, index, itemIndex);
         },
         onAdd(isGroup) {
-            return modification.appendDefault(parsedFilter, index, isGroup, fieldDefaultId);
+            return modification.appendDefault(parsedFilter, index, isGroup, fieldDefaultId, sampleDefaultType);
         }
     };
     var changeName;
@@ -80,7 +83,7 @@ function applyFilterChange(parsedFilter, fieldDefaultId, index, change) {
 }
 
 function reduceFBuilderStartEdit(state, action) {
-    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, makeNew, filtersData, filtersList} = action;
+    const {fields: {totalFieldsHashedArray: {array: totalFieldsList}}, allowedFields, filter, makeNew, filtersStrategy, filtersList} = action;
     const editingFilter = parseFilterForEditing(
         makeNew,
         makeNew ?
@@ -91,11 +94,11 @@ function reduceFBuilderStartEdit(state, action) {
             }) :
             filter,
         filter.id,
-        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)),
+        totalFieldsList.map((f) => FieldUtils.makeFieldSelectItemValue(f)), // need for type convert from 'valueType' to 'type'
         allowedFields
     );
     return Object.assign({}, state, {
-        filtersData,
+        filtersStrategy,
         filtersList,
         editingFilter: editingFilter,
         originalFilter: editingFilter,
@@ -117,7 +120,7 @@ function reduceFBuilderSaveEdit(state) {
     
 function reduceFBuilderEndEdit(state) {
     return Object.assign({} ,state, {
-        filtersData: null,
+        filtersStrategy: null,
         filtersList: null,
         editingFilter: null,
         originalFilter: null,
@@ -126,7 +129,14 @@ function reduceFBuilderEndEdit(state) {
 }
 
 function reduceFBuilderChangeFilter(state, action) {
-    const newParsedRules = applyFilterChange(state.editingFilter.parsedFilter, state.editingFilter.fieldDefaultId, action.index, action.change);
+    const {editingFilter} = state;
+    const newParsedRules = applyFilterChange(
+        editingFilter.parsedFilter,
+        editingFilter.fieldDefaultId,
+        editingFilter.sampleDefaultType,
+        action.index,
+        action.change
+    );
     if (!newParsedRules) {
         return Object.assign({}, state, {});
     } else {
@@ -162,7 +172,7 @@ function reduceFBuilderOnSave(state, action) {
 }
 
 export default function filterBuilder(state = {
-    filtersData: null,
+    filtersStrategy: null,
     filtersList: null,
     /** @type {?{filter: Object, parsedFilter: Object, isNew: boolean, filedDefaultId: string}} */
     editingFilter: null,

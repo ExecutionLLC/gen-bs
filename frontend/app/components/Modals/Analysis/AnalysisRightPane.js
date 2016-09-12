@@ -26,7 +26,7 @@ import SamplesUtils from '../../../utils/samplesUtils';
 import AnalyseUtils from '../../../utils/analyseUtils';
 
 
-const {sampleType} = SamplesUtils;
+const {sampleType, sampleTypeForAnalysisType} = SamplesUtils;
 const {analysisType} = AnalyseUtils;
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -634,7 +634,7 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     isModelDisabled(model) {
-        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo);
+        return entityTypeIsDemoDisabled(model.type, this.props.auth.isDemo) || model.analysisType !== this.props.historyItem.type;
     }
 
     getModelOptions() {
@@ -741,7 +741,8 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem, filtersList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const mainSample = samplesHash[historyItem.samples[0].id];
         const allowedFields = FieldUtils.makeViewAllowedFields([mainSample], fields.totalFieldsHashedArray.hash, fields.sourceFieldsList);
-        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, 'filter', filtersList));
+        const filterFiltersStrategy = {name: 'filter'};
+        dispatch(filterBuilderStartEdit(false, filtersList.hashedArray.hash[historyItem.filterId], fields, allowedFields, filterFiltersStrategy, filtersList));
         const action = this.actionEdit({filterId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.filterId'));
         dispatch(openModal('filters'));
@@ -754,8 +755,17 @@ export default class AnalysisRightPane extends React.Component {
     onModelClick() {
         const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
-        const allowedFields = FieldUtils.makeModelAllowedFields(samples, fields.totalFieldsHashedArray.hash);
-        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, 'model', modelsList));
+        const samplesTypes = _.reduce(
+            sampleTypeForAnalysisType[historyItem.type],
+            (hash, sampleType, index) => ({
+                ...hash,
+                [historyItem.samples[index].id]: sampleType
+            }),
+            {}
+        );
+        const allowedFields = FieldUtils.makeModelAllowedFields(samples, samplesTypes, fields.totalFieldsHashedArray.hash);
+        const modelFiltersStrategy = {name: 'model', analysisType: historyItem.type};
+        dispatch(filterBuilderStartEdit(false, modelsList.hashedArray.hash[historyItem.modelId], fields, allowedFields, modelFiltersStrategy, modelsList));
         const action = this.actionEdit({modelId: null});
         dispatch(filterBuilderOnSave(action, 'changeItem.modelId'));
         dispatch(openModal('filters'));

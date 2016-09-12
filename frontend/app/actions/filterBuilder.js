@@ -13,7 +13,7 @@ import {entityTypeIsEditable} from '../utils/entityTypes';
 import {immutableSetPathProperty} from '../utils/immutable';
 
 
-export const filterBuilderData = {
+export const filterBuilderStrategyActions = {
     'filter': {
         getList(state) {
             return state.filtersList;
@@ -53,12 +53,12 @@ export function filterBuilderOnSave(onSaveAction, onSaveActionProperty) {
     };
 }
 
-export function filterBuilderStartEdit(makeNew, filter, fields, allowedFields, filtersData, filtersList) {
+export function filterBuilderStartEdit(makeNew, filter, fields, allowedFields, filtersStrategy, filtersList) {
     return {
         type: FBUILDER_START_EDIT,
         makeNew,
         filter,
-        filtersData,
+        filtersStrategy,
         filtersList,
         fields,
         allowedFields
@@ -67,7 +67,7 @@ export function filterBuilderStartEdit(makeNew, filter, fields, allowedFields, f
 
 export function filterBuilderRestartEdit(makeNew, filter) {
     return (dispatch, getState) => {
-        dispatch(filterBuilderStartEdit(makeNew, filter, getState().fields, getState().filterBuilder.allowedFields, getState().filterBuilder.filtersData, filterBuilderData[getState().filterBuilder.filtersData].getList(getState())));
+        dispatch(filterBuilderStartEdit(makeNew, filter, getState().fields, getState().filterBuilder.allowedFields, getState().filterBuilder.filtersStrategy, filterBuilderStrategyActions[getState().filterBuilder.filtersStrategy.name].getList(getState())));
     };
 }
 
@@ -103,7 +103,7 @@ function filterBuilderCreateFilter() {
     return (dispatch, getState) => {
         const editingFilter = getState().filterBuilder.editingFilter.filter;
         const {ui: {languageId} } = getState();
-        dispatch(filterBuilderData[getState().filterBuilder.filtersData].serverCreate(editingFilter, languageId))
+        dispatch(filterBuilderStrategyActions[getState().filterBuilder.filtersStrategy.name].serverCreate(editingFilter, languageId))
             .then( (filter) => {
                 dispatch(fireOnSaveAction(filter));
                 dispatch(closeModal('filters'));
@@ -127,7 +127,7 @@ function filterBuilderUpdateFilter() {
             dispatch(filterBuilderEndEdit());
         } else {
             const resultEditingFilter = editingFilter.filter;
-            dispatch(filterBuilderData[state.filterBuilder.filtersData].serverUpdate(resultEditingFilter))
+            dispatch(filterBuilderStrategyActions[state.filterBuilder.filtersStrategy.name].serverUpdate(resultEditingFilter))
                 .then( (filter) => {
                     dispatch(fireOnSaveAction(filter));
                     dispatch(closeModal('filters'));
@@ -160,7 +160,7 @@ export function filterBuilderDeleteFilter(filterId) {
     return (dispatch, getState) => {
         return new Promise((resolve) => {
             const {filterBuilder} = getState();
-            dispatch(filterBuilderData[filterBuilder.filtersData].serverDelete(filterId))
+            dispatch(filterBuilderStrategyActions[filterBuilder.filtersStrategy.name].serverDelete(filterId))
                 .then(() => {
                     const state = getState();
                     const editingFilterId = state.filterBuilder.editingFilter.filter.id;

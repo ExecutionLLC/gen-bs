@@ -40,31 +40,31 @@ function makeNewHistoryItem(sample, filter, view) {
 /* can make other types like this:
         // tumor
         type: analysisType.TUMOR,
-        model: historyItem.filters[0]
+        model: historyItem.filters[0] // select approptiate
         samples: [
             {
-                id: sample.id,
+                id: sample.id, // select approptiate
                 type: sampleType.TUMOR
             },
             {
-                id: sample.id,
+                id: sample.id, // select approptiate
                 type: sampleType.NORMAL
             }
         ]
         // family
         type: analysisType.FAMILY,
-        model: historyItem.filters[0]
+        model: historyItem.filters[0] // select approptiate
         samples: [
             {
-                id: sample.id,
+                id: sample.id, // select approptiate
                 type: sampleType.PROBAND
             },
             {
-                id: sample.id,
+                id: sample.id, // select approptiate
                 type: sampleType.MOTHER
             },
             {
-                id: historyItem.sample.id,
+                id: historyItem.sample.id, // select approptiate
                 type: sampleType.FATHER
             }
         ]
@@ -108,17 +108,23 @@ function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
 
 function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, targetType) {
 
-    function getUserAvailableEntityId(entityArray, isDemo) {
-        const entity = _.find(entityArray, (entity) => !entityTypeIsDemoDisabled(entity.type, isDemo));
-        return entity && entity.id;
+    function getAvailableModel(type) {
+        const model = _.find(
+            modelsList.hashedArray.array,
+            (model) => !entityTypeIsDemoDisabled(model.type, isDemo) && model.analysisType === type
+        );
+        return model && model.id;
     }
 
     function typeConvert(historyItem, newType) {
         const {modelId} = historyItem;
 
+        const model = modelId && modelsList.hashedArray.hash[modelId];
         const newModelId = newType === analysisType.SINGLE ?
             null :
-            modelId || getUserAvailableEntityId(modelsList.hashedArray.array, isDemo);
+            model && model.analysisType === newType ?
+                modelId :
+                getAvailableModel(newType);
         const newSamples = changeSamplesArray(
             historyItem.samples,
             samplesList,

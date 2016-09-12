@@ -12,20 +12,30 @@ import ExistentFilterSelect from './FilterBuilder/ExistentFilterSelect';
 import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 
+
 export const filterBuilderVerb = {
     'filter': {
         filter: 'filter',
         filters: 'filters',
         Filter: 'Filter',
-        Filters: 'Filters'
+        Filters: 'Filters',
+        getStrategyValidationMessage(/*filter, strategyData*/) {
+            return '';
+        }
     },
     'model': {
         filter: 'model',
         filters: 'models',
         Filter: 'Model',
-        Filters: 'Models'
+        Filters: 'Models',
+        getStrategyValidationMessage(model, strategyData) {
+            return model.analysisType === strategyData.analysisType ?
+                '' :
+                'Model analysis type mismatch';
+        }
     }
 };
+
 
 class FiltersModal extends Component {
 
@@ -43,8 +53,7 @@ class FiltersModal extends Component {
         const isFilterEditable = editingFilter && entityTypeIsEditable(editingFilter.type);
         const isLoginRequired = editingFilter && entityTypeIsDemoDisabled(editingFilter.type, isDemo);
         const editingFilterNameTrimmed = editingFilter && editingFilter.name.trim();
-
-        const verb = filterBuilderVerb[this.props.filterBuilder.filtersData] || {};
+        const verb = this.props.filterBuilder.filtersStrategy ? filterBuilderVerb[this.props.filterBuilder.filtersStrategy.name] : {};
 
         const titleValidationMessage = editingFilter ? this.getValidationMessage(
             editingFilter,
@@ -54,10 +63,18 @@ class FiltersModal extends Component {
             verb
         ) : '';
 
+        const strategyValidationMessage = verb.getStrategyValidationMessage ?
+            verb.getStrategyValidationMessage(editingFilter, this.props.filterBuilder.filtersStrategy) :
+            '';
+
+        const title = isLoginRequired ?
+            `Login or register to select advanced ${verb.filters}` :
+            strategyValidationMessage;
+
         const confirmButtonParams = {
             caption: isFilterEditable ? 'Save and Select': 'Select',
-            title: isLoginRequired ? `Login or register to select advanced ${verb.filters}` : '',
-            disabled: isLoginRequired || !!titleValidationMessage
+            title: title,
+            disabled: !!title || !!titleValidationMessage
         };
 
         return (

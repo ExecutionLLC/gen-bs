@@ -205,7 +205,7 @@ export const filterUtils = {
     },
 
     /**
-     * @typedef {{field: string, operator: string, value: *}} genomicsParsedDataRule
+     * @typedef {{field: string, sampleType: string=, operator: string, value: *}} genomicsParsedDataRule
      * @typedef {{condition: string, rules: Array.<genomicsParsedDataGroup|genomicsParsedDataRule>}} genomicsParsedDataGroup
      * @typedef {genomicsParsedDataGroup} genomicsParsedData
      */
@@ -326,25 +326,28 @@ export const filterUtils = {
         },
         /**
          * @param {string} defaultFieldId
-         * @returns {{id: string, field: string, operator: string, value: *}}
+         * @param {string=} defaultSampleType
+         * @returns {{id: string, field: string, sampleType: string=, operator: string, value: *}}
          */
-        makeDefaultRule(defaultFieldId) {
+        makeDefaultRule(defaultFieldId, defaultSampleType) {
             return {
                 id: defaultFieldId,
                 field: defaultFieldId,
+                sampleType: defaultSampleType,
                 operator: 'is_null',
                 value: null
             };
         },
         /**
          * @param {string} defaultFieldId
+         * @param {string=} defaultSampleType
          * @returns {genomicsParsedDataGroup}
          */
-        makeDefaultGroup(defaultFieldId) {
+        makeDefaultGroup(defaultFieldId, defaultSampleType) {
             return {
                 condition: filterUtils.settings.default_condition,
                 rules: [
-                    this.makeDefaultRule(defaultFieldId)
+                    this.makeDefaultRule(defaultFieldId, defaultSampleType)
                 ]
             };
         },
@@ -353,11 +356,12 @@ export const filterUtils = {
          * @param {number[]} indexPath
          * @param {boolean} isGroup
          * @param {string} defaultFieldId
+         * @param {string=} defaultSampleType
          */
-        appendDefault(data, indexPath, isGroup, defaultFieldId) {
+        appendDefault(data, indexPath, isGroup, defaultFieldId, defaultSampleType) {
             const itemToAppend = isGroup ?
-                this.makeDefaultGroup(defaultFieldId) :
-                this.makeDefaultRule(defaultFieldId);
+                this.makeDefaultGroup(defaultFieldId, defaultSampleType) :
+                this.makeDefaultRule(defaultFieldId, defaultSampleType);
             return this.appendRuleOrGroup(data, indexPath, itemToAppend);
         },
         /**
@@ -435,7 +439,8 @@ export const filterUtils = {
 
                     var part = {
                         ...genomicsOp.call(self, values),
-                        field: rule.field
+                        field: rule.field,
+                        sampleType: rule.sampleType
                     };
                     parts.push(part);
                 }
@@ -453,7 +458,7 @@ export const filterUtils = {
      * Convert Genomics object to rules
      * @throws GenomicsParseError, UndefinedGenomicsConditionError, UndefinedGenomicsOperatorError
      * @param {{$and: ({id, label, type}|Object)[]=, $or: ({id, label, type}|Object)[]= }} data query object
-     * @return {?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}}
+     * @return {?{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}}
      */
     getRulesFromGenomics: function (data) {
         if (data == null) {
@@ -482,6 +487,7 @@ export const filterUtils = {
                     parts.push(parse(rule));
                 } else {
                     var field = rule.field;
+                    var sampleType = rule.sampleType;
                     var value = rule.value;
                     var operator = rule.operator;
                     var genomicsRule = self.settings.genomicsRuleOperators[operator];
@@ -493,6 +499,7 @@ export const filterUtils = {
                     parts.push({
                         id: field,
                         field: field,
+                        sampleType: sampleType,
                         operator: opVal.op,
                         value: opVal.val
                     });
@@ -605,12 +612,12 @@ export const genomicsParsedRulesValidate = {
         }
     },
     /**
-     * Validate rule item (field, operator, value), return valid rule,
+     * Validate rule item (field, sampleType, operator, value), return valid rule,
      * rules group flag (groups are not validating here) or error message
      * Result value is type casted for field type
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {?{condition: *=, field: string=, operator: string=, value: *=}} rule
-     * @returns {{errorMessage: string=, isGroup: boolean=, validRule: {field: string, operator: string, value:*}=}}
+     * @param {?{condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}} rule
+     * @returns {{errorMessage: string=, isGroup: boolean=, validRule: {field: string, sampleType: string=, operator: string, value:*}=}}
      */
     validateRule(fields, rule) {
         if (!rule) {
@@ -650,6 +657,7 @@ export const genomicsParsedRulesValidate = {
         return {
             validRule: {
                 field: rule.field,
+                sampleType: rule.sampleType,
                 operator: rule.operator,
                 value: castedValue
             }
@@ -660,9 +668,9 @@ export const genomicsParsedRulesValidate = {
      * Return valid rules
      * Append validation report
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{condition: *=, field: string=, operator: string=, value: *=}[]} rules
+     * @param {{condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]} rules
      * @param {number[]} indexPath current rules group position, [] for root rules group, [1, 2] for 2nd group in 1st group in root
-     * @returns {{validRules: {field: string, operator: string, value:*}[], report: {indexPath: number[], message: string}[]}}
+     * @returns {{validRules: {field: string, sampleType: string=, operator: string, value:*}[], report: {indexPath: number[], message: string}[]}}
      */
     validateRules(fields, rules, indexPath) {
         var report = [];
@@ -675,7 +683,7 @@ export const genomicsParsedRulesValidate = {
             }
             const ruleIndexPath = indexPath.concat([i]);
             if (validateRuleResult.isGroup) {
-                const group = /** @type {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} */rule;
+                const group = /** @type {{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}} */rule;
                 const validSubGroupResult = this.validateGroup(fields, group, ruleIndexPath);
                 report = report.concat(validSubGroupResult.report);
                 if (!validSubGroupResult.validGroup) {
@@ -694,9 +702,9 @@ export const genomicsParsedRulesValidate = {
      * Return valid group or null
      * Append validation report
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} group
+     * @param {{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}} group
      * @param {number[]} indexPath
-     * @returns {{validGroup: ?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, report: {indexPath: number[], message: string}[]}}
+     * @returns {{validGroup: ?{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}, report: {indexPath: number[], message: string}[]}}
      */
     validateGroup(fields, group, indexPath) {
         var reportGroup = [];
@@ -726,8 +734,8 @@ export const genomicsParsedRulesValidate = {
      * Validate parsed rules, return rules with valid items only (can be null) and validation report
      * Report is an array of object with message and index path (nested group indexes, [] is root) in source rules
      * @param {{id: string, label: string, type: string}[]} fields
-     * @param {{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}} rules
-     * @returns {{validRules: ?{condition: string, rules: {condition: *=, field: string=, operator: string=, value: *=}[]}, report: {indexPath: number[], message: string}[]}}
+     * @param {{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}} rules
+     * @returns {{validRules: ?{condition: string, rules: {condition: *=, field: string=, sampleType: string=, operator: string=, value: *=}[]}, report: {indexPath: number[], message: string}[]}}
      */
     validateGemonicsParsedRules(fields, rules) {
         const validateGroupResult = this.validateGroup(fields, rules, []);
