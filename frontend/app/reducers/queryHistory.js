@@ -55,10 +55,10 @@ function reduceReceiveInitialQueryHistory(state, action) {
     });
 }
 
-function reducePrepareQueryHistoryToFilter(state, action) {
+function reducePrepareQueryHistoryToSearch(state, action) {
     return {
         ...state,
-        search: action.filter, // TODO rename // TODO filter2
+        search: action.search,
         isReceivedAll: false,
         isRequesting: false,
         history: [],
@@ -199,8 +199,8 @@ export default function queryHistory(state = initialState, action) {
             return reduceSetEditedQueryHistory(state, action);
         case ActionTypes.APPEND_QUERY_HISTORY:
             return reduceAppendQueryHistory(state, action);
-        case ActionTypes.PREPARE_QUERY_HISTORY_TO_FILTER:
-            return reducePrepareQueryHistoryToFilter(state, action);
+        case ActionTypes.PREPARE_QUERY_HISTORY_TO_SEARCH:
+            return reducePrepareQueryHistoryToSearch(state, action);
         case ActionTypes.DUPLICATE_QUERY_HISTORY_ITEM:
             return reduceDuplicateQueryHistoryItem(state, action);
         case ActionTypes.EDIT_QUERY_HISTORY_ITEM:

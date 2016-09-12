@@ -14,7 +14,7 @@ export const RECEIVE_INITIAL_QUERY_HISTORY = 'RECEIVE_INITIAL_QUERY_HISTORY';
 export const SET_EDITED_QUERY_HISTORY = 'SET_EDITED_QUERY_HISTORY';
 export const APPEND_QUERY_HISTORY = 'APPEND_QUERY_HISTORY';
 export const REQUEST_QUERY_HISTORY = 'REQUEST_QUERY_HISTORY';
-export const PREPARE_QUERY_HISTORY_TO_FILTER = 'PREPARE_QUERY_HISTORY_TO_FILTER';
+export const PREPARE_QUERY_HISTORY_TO_SEARCH = 'PREPARE_QUERY_HISTORY_TO_SEARCH';
 export const DUPLICATE_QUERY_HISTORY_ITEM = 'DUPLICATE_QUERY_HISTORY_ITEM';
 export const EDIT_QUERY_HISTORY_ITEM = 'EDIT_QUERY_HISTORY_ITEM';
 export const DELETE_QUERY_HISTORY_ITEM = 'DELETE_QUERY_HISTORY_ITEM';
@@ -83,10 +83,10 @@ export function clearQueryHistory() {
     };
 }
 
-export function prepareQueryHistoryToFilter(filter) { // TODO rename function and argument
+export function prepareQueryHistoryToSearch(search) {
     return {
-        type: PREPARE_QUERY_HISTORY_TO_FILTER,
-        filter // TODO rename property
+        type: PREPARE_QUERY_HISTORY_TO_SEARCH,
+        search
     };
 }
 
