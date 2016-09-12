@@ -16,7 +16,7 @@ const AppServerFilterUtils = require('../../../utils/AppServerFilterUtils');
 const CollectionUtils = require('../../../utils/CollectionUtils');
 const AppServerUtils = require('../../../utils/AppServerUtils');
 const AppServerModelUtils = require('../../../utils/AppServerModelUtils');
-const AppSearchInResultUtils = require('../../../utils/AppSearchInResultUtils');
+const AppSearchInResultUtils = require('../../../utils/AppServerSearchInResultUtils');
 
 const SESSION_STATUS = {
     LOADING: 'loading',
