@@ -149,13 +149,15 @@ class SearchService extends ServiceBase {
                 // Transform fields to the client representation.
                 const rows = _.map(data, rowData => {
                     const {viewData, mandatoryFields} = rowData;
+                    const fieldValueHash = CollectionUtils.createHash(viewData,
+                        (fieldData) => `${fieldData.fieldId}_${fieldData.sampleId}`
+                    );
                     const searchKeyObject = _.find(viewData, fieldWithId => {
                         return fieldWithId.fieldId === this.searchKeyFieldName
                     });
+                    
                     const fieldValueObjects = _.map(header, headerObject => {
-                        const fieldWithId = _.find(viewData,fieldData => {
-                            return fieldData.fieldId == headerObject.fieldId && fieldData.sampleId == headerObject.sampleId
-                        });
+                        const fieldWithId = fieldValueHash[`${headerObject.fieldId}_${headerObject.sampleId}`];
                         return fieldWithId ? fieldWithId.fieldValue: null
                     });
                     const searchKey = searchKeyObject.fieldValue;

@@ -15,7 +15,7 @@ class AppServerUtils {
     }
 
     static getSearchKeyFieldsColumnNames(){
-        return ['ALT', 'CHROM', 'POS', 'REF']
+        return ['ALT', 'CHROM', 'POS', 'REF'];
     }
 
     static getNotDuplicatedColumnNames(fieldIdToMetadata) {
