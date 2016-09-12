@@ -13,6 +13,9 @@ import {entityTypeIsEditable} from '../utils/entityTypes';
 import {immutableSetPathProperty} from '../utils/immutable';
 
 
+// Model builder and filter builder slightly differs.
+// We cannot pass callback through the store,
+// so we pass strategy name ('filter' or 'model') and get actions from this object.
 export const filterBuilderStrategyActions = {
     'filter': {
         getList(state) {
