@@ -5,13 +5,13 @@ class NavbarSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            filter: this.props.filter // TODO rename state and props 'filter'
+            search: this.props.search
         };
     }
 
     componentWillReceiveProps(newProps) {
         this.state = {
-            filter: newProps.filter // TODO rename
+            search: newProps.search
         };
     }
 
@@ -31,7 +31,7 @@ class NavbarSearch extends Component {
                      onKeyPress={(e) => this.onGlobalSearchInputKeyPressed(e)}
                      onBlur={() => this.onGlobalSearchInputBlur()}
                      disabled={!isEnabled}
-                     value={this.state.filter} // TODO rename
+                     value={this.state.search}
                     />
                 </div>
             </div>
@@ -40,23 +40,23 @@ class NavbarSearch extends Component {
 
     onGlobalSearchInputChanged(e) {
         this.setState({
-            filter: e.target.value // TODO rename
+            search: e.target.value
         });
     }
 
     onGlobalSearchInputKeyPressed(e) {
         // user pressed "enter"
         if (e.charCode === 13) {
-            const { filter } = this.state; // TODO rename
+            const { search } = this.state;
             const { onGlobalSearchRequested } = this.props;
-            onGlobalSearchRequested(filter);
+            onGlobalSearchRequested(search);
         }
     }
 
     onGlobalSearchInputBlur() {
-        const { filter } = this.state; // TODO rename
+        const { search } = this.state;
         const { onGlobalSearchStringChanged } = this.props;
-        onGlobalSearchStringChanged(filter);
+        onGlobalSearchStringChanged(search);
     }
 }
 
@@ -71,8 +71,8 @@ NavbarSearch.propTypes = {
     // callback(globalSearchString)
     onGlobalSearchRequested: React.PropTypes.func.isRequired,
     // callback(globalSearchString)
-    onGlobalSearchStringChanged: React.PropTypes.func.isRequired
-    // TODO add proptype 'filter' but rename immidiately
+    onGlobalSearchStringChanged: React.PropTypes.func.isRequired,
+    search: React.PropTypes.string.isRequired
 };
 
 export default connect(mapStateToProps)(NavbarSearch);
