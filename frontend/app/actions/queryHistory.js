@@ -67,10 +67,10 @@ export function requestQueryHistory() {
     };
 }
 
-export function appendQueryHistory(filter, requestFrom, items, isReceivedAll) {
+export function appendQueryHistory(search, requestFrom, items, isReceivedAll) {
     return {
         type: APPEND_QUERY_HISTORY,
-        filter,
+        search,
         requestFrom,
         history: items,
         isReceivedAll
@@ -137,17 +137,17 @@ export function setEditedHistoryItem(newHistoryItem) {
     };
 }
 
-export function requestAppendQueryHistory(filter = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) { // TODO rename argument
+export function requestAppendQueryHistory(search = '', limit = DEFAULT_LIMIT, offset = DEFAULT_OFFSET) {
     return (dispatch, getState) => {
         const {ui: {language}} = getState();
         dispatch(requestQueryHistory());
-        queryHistoryClient.getQueryHistory(language, filter, limit, offset, (error, response) => {
+        queryHistoryClient.getQueryHistory(language, search, limit, offset, (error, response) => {
             if (error) {
                 dispatch(handleError(null, HISTORY_NETWORK_ERROR));
             } else if (response.status !== HttpStatus.OK) {
                 dispatch(handleError(null, HISTORY_SERVER_ERROR));
             } else {
-                dispatch(appendQueryHistory(filter, offset, response.body.result, limit > response.body.result.length));
+                dispatch(appendQueryHistory(search, offset, response.body.result, limit > response.body.result.length));
             }
         });
     };

@@ -158,7 +158,7 @@ function reduceSetEditedQueryHistory(state, action) {
 function reduceAppendQueryHistory(state, action) {
     // Check if data received for actual state
     // Seems like crutch, need to think about consistency
-    if (action.filter !== state.filter || action.requestFrom !== state.history.length) { // TODO rename
+    if (action.search !== state.filter || action.requestFrom !== state.history.length) { // TODO rename state.filter
         return state;
     } else {
         return {
