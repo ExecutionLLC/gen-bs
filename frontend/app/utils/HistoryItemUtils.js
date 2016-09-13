@@ -72,13 +72,26 @@ function makeNewHistoryItem(sample, filter, view) {
     };
 }
 
+/**
+ * Change sample id in array of samples info, make result array contain no duplicate ids.
+ * @param {{id: string, ...}[]} oldSamples samples info including id
+ * @param {number} sampleIndex sample id to replace
+ * @param {string} newSampleId new sample id to set to oldSamples[sampleIndex].id
+ * @returns {{id: string, ...}[]}
+ */
 function changeSampleId(oldSamples, sampleIndex, newSampleId) {
+    // If we found new sample id in array at other place then we swap these ids so there will not be duplicates.
+    /** @type {number} sample index with newSampleId if any */
     const sampleExistIndex = _.findIndex(oldSamples, (sample, index) => index !== sampleIndex && sample.id === newSampleId);
+    /** @type {{id: string, [...]}} sample info where to set new id */
     const replacedSample = oldSamples[sampleIndex];
+    /** @type {{id: string, [...]}[]} array of samples infos with new id at desired place */
     const newSamplesWithNewSample = immutableArray.replace(oldSamples, sampleIndex, {...replacedSample, id: newSampleId});
     if (sampleExistIndex < 0) {
+        // inserted id is unique, just return the result
         return newSamplesWithNewSample;
     } else {
+        // inserted id is at sampleExistIndex, place there replaced id
         return immutableArray.replace(newSamplesWithNewSample, sampleExistIndex, {...newSamplesWithNewSample[sampleExistIndex], id: replacedSample.id});
     }
 }
