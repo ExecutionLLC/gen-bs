@@ -132,11 +132,11 @@ function viewBuilderCreateView() {
 function viewBuilderUpdateView() {
 
     return (dispatch, getState) => {
-        const {viewBuilder: {editingView, originalView}, auth} = getState();
+        const {viewBuilder: {editingView, originalView}} = getState();
         const isNotEdited = !entityTypeIsEditable(editingView.type)
             || originalView === editingView;
 
-        if (auth.isDemo || isNotEdited) {
+        if (isNotEdited) {
             dispatch(fireOnSaveAction(editingView));
             dispatch(closeModal('views'));
             dispatch(viewBuilderEndEdit());
