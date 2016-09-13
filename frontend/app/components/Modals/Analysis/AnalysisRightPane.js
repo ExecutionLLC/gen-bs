@@ -798,11 +798,9 @@ export default class AnalysisRightPane extends React.Component {
     }
 
     actionEdit(change) {
-        const {samplesList, filtersList, viewsList, modelsList, auth: {isDemo}} = this.props;
+        const {samplesList, modelsList, auth: {isDemo}} = this.props;
         return editQueryHistoryItem(
             samplesList,
-            filtersList,
-            viewsList,
             modelsList,
             isDemo,
             change

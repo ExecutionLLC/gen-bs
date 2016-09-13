@@ -120,7 +120,7 @@ function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
     );
 }
 
-function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, targetType) { // TODO remove unused args
+function changeType(historyItem, samplesList, modelsList, isDemo, targetType) {
 
     function getAvailableModel(type) {
         const model = _.find(
@@ -157,7 +157,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
     return typeConvert(historyItem, targetType);
 }
 
-export function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, change) {
+export function changeHistoryItem(historyItem, samplesList, modelsList, isDemo, change) {
     var editingHistoryItem = historyItem;
     if (change.name != null) {
         editingHistoryItem = {...editingHistoryItem, name: change.name};
@@ -166,7 +166,7 @@ export function changeHistoryItem(historyItem, samplesList, filtersList, viewsLi
         editingHistoryItem = {...editingHistoryItem, description: change.description};
     }
     if (change.type != null) {
-        editingHistoryItem = changeType(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, isDemo, change.type);
+        editingHistoryItem = changeType(editingHistoryItem, samplesList, modelsList, isDemo, change.type);
     }
     if (change.sample != null) {
         editingHistoryItem = {

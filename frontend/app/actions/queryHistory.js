@@ -109,12 +109,10 @@ export function duplicateQueryHistoryItem(historyItem) {
     };
 }
 
-export function editQueryHistoryItem(samplesList, filtersList, viewsList, modelsList, isDemo, changeItem) {
+export function editQueryHistoryItem(samplesList, modelsList, isDemo, changeItem) {
     return {
         type: EDIT_QUERY_HISTORY_ITEM,
         samplesList,
-        filtersList,
-        viewsList,
         modelsList,
         isDemo,
         changeItem
