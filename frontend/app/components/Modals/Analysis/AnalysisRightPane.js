@@ -56,7 +56,6 @@ export default class AnalysisRightPane extends React.Component {
                 <button
                     type='button'
                     className='btn navbar-btn pull-right'
-                    onClick={() => this.onNewAnalysisCancelClick()}
                 >
                     <i className='md-i'>close</i>
                 </button>
@@ -486,7 +485,6 @@ export default class AnalysisRightPane extends React.Component {
                     id='openAnalisis'
                     type='button'
                     className='btn btn-link-default navbar-btn'
-                    onClick={() => this.onSelectAnalysisClick()}
                 >
                     <i className='md-i'>menu</i>
                     <span data-localize='query.select_analysis'>Select analysis</span>
@@ -664,14 +662,6 @@ export default class AnalysisRightPane extends React.Component {
             const label = getItemLabelByNameAndType(sampleName, sampleType);
             return {value: sampleId, label, disabled: isDisabled};
         });
-    }
-
-    onNewAnalysisCancelClick() {
-
-    }
-
-    onSelectAnalysisClick() {
-
     }
 
     onDeleteAnalysisClick() {
