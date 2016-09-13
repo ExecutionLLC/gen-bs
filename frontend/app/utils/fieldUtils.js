@@ -27,6 +27,10 @@ export default class FieldUtils {
         return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
     }
 
+    static makeFieldViewsCaption(field) {
+        return `${field.label} -- ${field.sourceName}`;
+    }
+
     /**
      * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
