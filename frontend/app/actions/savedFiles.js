@@ -131,18 +131,29 @@ export function exportToFile(exportType) {
             const field = totalFieldsHash[listItem.fieldId];
             const sample = variantsAnalysisSamplesHash[listItem.sampleId];
             const sampleType = sample && SamplesUtils.typeLabels[sample.type];
-            return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
+            return field.label +
+                (
+                    field.sourceName && field.sourceName !== 'sample' ?
+                        ` - ${field.sourceName}` :
+                        sampleType ? ` - ${sampleType}` : ''
+                );
         })
         .concat(['Comment']);
 
         const dataToExport = _(selectedRowIndices.sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2))
-            .map(rowIndex => [...variants[rowIndex].fields, ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]])
+            .map(rowIndex => [
+                ...variants[rowIndex].fields,
+                ...[_.isEmpty(variants[rowIndex].comments) ? '' : variants[rowIndex].comments[0].comment]
+            ])
             .value();
 
         const exporter = ExportUtils.createExporter(exportType);
         const fileBlob = exporter.buildBlob(columns, dataToExport);
         const createdDate = Moment().format('YYYY-MM-DD-HH-mm-ss');
-        const fileName = `${_.map(variantsSamples, (variantsSample) => variantsSample.fileName).join('-')}_chunk_${createdDate}.${exportType}`;
+        const fileName = `${
+            _.map(variantsSamples, (variantsSample) =>
+                variantsSample.fileName
+            ).join('-')}_chunk_${createdDate}.${exportType}`;
         const count = selectedRowIndices.length;
 
         dispatch(createUserDownload(fileBlob, fileName));
