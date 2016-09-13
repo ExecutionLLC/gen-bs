@@ -26,6 +26,18 @@ export const CREATE_NEW_HISTORY_ITEM = 'CREATE_NEW_HISTORY_ITEM';
 const HISTORY_NETWORK_ERROR = 'Cannot update "analyses history" (network error).';
 const HISTORY_SERVER_ERROR = 'Cannot update "analyses history" (server error).';
 
+const GET_SAMPLE_NETWORK_ERROR = 'Cannot get sample (network error). Please try again.';
+const GET_SAMPLE_SERVER_ERROR = 'Cannot get sample (server error). Please try again.';
+
+const GET_VIEW_NETWORK_ERROR = 'Cannot get view (network error). Please try again.';
+const GET_VIEW_SERVER_ERROR = 'Cannot get view (server error). Please try again.';
+
+const GET_FILTER_NETWORK_ERROR = 'Cannot get filter (network error). Please try again.';
+const GET_FILTER_SERVER_ERROR = 'Cannot get filter (server error). Please try again.';
+
+const GET_MODEL_NETWORK_ERROR = 'Cannot get model (network error). Please try again.';
+const GET_MODEL_SERVER_ERROR = 'Cannot get model (server error). Please try again.';
+
 const queryHistoryClient = apiFacade.queryHistoryClient;
 
 const DEFAULT_OFFSET = 0;
@@ -197,20 +209,30 @@ function getSamples(samplesIds, samplesHash, callback) {
     function getSample(sampleId, callback) {
         const existentSample = samplesHash[sampleId];
         if (existentSample) {
-            callback(existentSample);
+            callback(null, existentSample);
         } else {
             apiFacade.samplesClient.get(sampleId, (error, response) => {
-                callback(response.body);
+                if (error) {
+                    callback(GET_SAMPLE_NETWORK_ERROR);
+                } else if (response.status !== HttpStatus.OK) {
+                    callback(GET_SAMPLE_SERVER_ERROR);
+                } else {
+                    callback(null, response.body);
+                }
             });
         }
     }
 
     function getNextSample(samplesIds, index, samples) {
         if (index >= samplesIds.length) {
-            callback(samples);
+            callback(null, samples);
             return;
         }
-        getSample(samplesIds[index], (sample) => {
+        getSample(samplesIds[index], (error, sample) => {
+            if (error) {
+                callback(error);
+                return;
+            }
             const newSamples = [...samples, sample];
             getNextSample(samplesIds, index + 1, newSamples);
         });
@@ -250,9 +272,17 @@ export function setCurrentQueryHistoryIdLoadData(id) {
             if (existentView) {
                 return existentView;
             } else {
-                return new Promise((resolve) => {
+                return new Promise((resolve, reject) => {
                     apiFacade.viewsClient.get(viewId, (error, response) => {
-                        resolve(response.body);
+                        if (error) {
+                            dispatch(handleError(null, GET_VIEW_NETWORK_ERROR));
+                            reject();
+                        } else if (response.status !== HttpStatus.OK) {
+                            dispatch(handleError(null, GET_VIEW_SERVER_ERROR));
+                            reject();
+                        } else {
+                            resolve(response.body);
+                        }
                     });
                 });
             }
@@ -265,9 +295,17 @@ export function setCurrentQueryHistoryIdLoadData(id) {
             if (existentFilter) {
                 return existentFilter;
             } else {
-                return new Promise((resolve) => {
+                return new Promise((resolve, reject) => {
                     apiFacade.filtersClient.get(filterId, (error, response) => {
-                        resolve(response.body);
+                        if (error) {
+                            dispatch(handleError(null, GET_FILTER_NETWORK_ERROR));
+                            reject();
+                        } else if (response.status !== HttpStatus.OK) {
+                            dispatch(handleError(null, GET_FILTER_SERVER_ERROR));
+                            reject();
+                        } else {
+                            resolve(response.body);
+                        }
                     });
                 });
             }
@@ -280,16 +318,31 @@ export function setCurrentQueryHistoryIdLoadData(id) {
             if (existentModel) {
                 return existentModel;
             } else {
-                return new Promise((resolve) => {
+                return new Promise((resolve, reject) => {
                     apiFacade.modelsClient.get(modelId, (error, response) => {
-                        resolve(response.body);
+                        if (error) {
+                            dispatch(handleError(null, GET_MODEL_NETWORK_ERROR));
+                            reject();
+                        } else if (response.status !== HttpStatus.OK) {
+                            dispatch(handleError(null, GET_MODEL_SERVER_ERROR));
+                            reject();
+                        } else {
+                            resolve(response.body);
+                        }
                     });
                 });
             }
         }).then((model) => {
             dispatch(modelsListSetHistoryModel(model));
-            return new Promise((resolve) => {
-                getSamples(samplesIds, samplesHash, resolve);
+            return new Promise((resolve, reject) => {
+                getSamples(samplesIds, samplesHash, (error, samples) => {
+                    if (error) {
+                        dispatch(handleError(null, error));
+                        reject();
+                    } else {
+                        resolve(samples);
+                    }
+                });
             });
         }).then((samples) => {
             dispatch(samplesListSetHistorySamples(samples));
