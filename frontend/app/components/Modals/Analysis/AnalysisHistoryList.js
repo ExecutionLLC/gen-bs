@@ -18,7 +18,7 @@ export default class AnalysisHistoryList extends React.Component {
         return (
             <div className='split-scroll' ref={REFS.CONTAINER}>
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
-                    {newHistoryItem && this.renderNewListItem(!currentItemId, newHistoryItem)}
+                    {newHistoryItem && this.renderListItem(!currentItemId, newHistoryItem)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
                     {!isHistoryReceivedAll && this.renderLoadingListItem()}
                 </ul>
@@ -42,10 +42,6 @@ export default class AnalysisHistoryList extends React.Component {
 
     componentDidMount() {
         this.checkAndLoadNext();
-    }
-
-    renderNewListItem(isActive, item) {
-        return this.renderListItem(isActive, item);
     }
 
     renderListItem(isActive,historyItem) {
