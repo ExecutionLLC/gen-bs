@@ -23,11 +23,9 @@ import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
 import {sampleType, sampleTypeForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
-import AnalyseUtils from '../../../utils/analyseUtils';
+import {analysisType} from '../../../utils/analyseUtils';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 
-
-const {analysisType} = AnalyseUtils;
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
 

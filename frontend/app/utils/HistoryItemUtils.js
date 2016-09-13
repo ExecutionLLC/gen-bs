@@ -3,10 +3,8 @@ import _ from 'lodash';
 import immutableArray from './immutableArray';
 import {entityTypeIsDemoDisabled} from './entityTypes';
 import {sampleType, sampleTypeForAnalysisType} from './samplesUtils';
-import AnalyseUtils from './analyseUtils';
+import {analysisType} from './analyseUtils';
 
-
-const {analysisType} = AnalyseUtils;
 
 export function makeHistoryItem(historyItem) {
     return {

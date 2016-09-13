@@ -1,7 +1,5 @@
-import AnalyseUtils from './analyseUtils';
+import {analysisType} from './analyseUtils';
 
-
-const {analysisType} = AnalyseUtils;
 
 export const sampleType = {
     SINGLE: 'single',
