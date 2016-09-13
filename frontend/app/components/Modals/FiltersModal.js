@@ -13,6 +13,7 @@ import NewFilterInputs from './FilterBuilder/NewFilterInputs';
 import {entityType, entityTypeIsEditable, entityTypeIsDemoDisabled} from '../../utils/entityTypes';
 
 
+// Texts that differs filter builder from model builder
 export const filterBuilderVerb = {
     'filter': {
         filter: 'filter',
