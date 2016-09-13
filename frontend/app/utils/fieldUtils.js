@@ -8,7 +8,7 @@ export default class FieldUtils {
         return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
-    makeFieldSourceCaption(field, sourceName) {
+    static makeFieldSourceCaption(field, sourceName) {
         var label;
 
         if (field.sampleType) {
