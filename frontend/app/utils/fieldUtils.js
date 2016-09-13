@@ -8,6 +8,10 @@ export default class FieldUtils {
         return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
+    static isSourceField(field) {
+        return field.sourceName !== 'sample';
+    }
+
     static makeFieldSourceCaption(field, sourceName) {
         var label;
 
@@ -25,7 +29,7 @@ export default class FieldUtils {
     }
 
     static makeFieldSavedCaption(field, sampleType) {
-        return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
+        return field.label + (field.sourceName && this.isSourceField(field) ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
     }
 
     static makeFieldViewsCaption(field) {
@@ -34,8 +38,7 @@ export default class FieldUtils {
 
     static makeFieldVariantsLabelTitle(field, sampleName, sampleType) {
         const {sourceName, label} = field;
-        const isSource = sourceName && sourceName !== 'sample';
-        // TODO extract 'sample' to the constant
+        const isSource = sourceName && this.isSourceField(field);
         return {
             label: (!isSource && sampleType ? `(${sampleType})` : '') + firstCharToUpperCase(label),
             title: isSource ? sourceName : sampleName
