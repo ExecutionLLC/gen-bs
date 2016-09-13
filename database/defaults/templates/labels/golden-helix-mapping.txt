@@ -1,0 +1,56 @@
+// Mapping to Golden Helix "CMA_Normal_ 21" is sample name from Exome Test - CMA_Normal_ 21.xlsx https://exge.slack.com/files/laurali/F22E592SW/exome_test_-_cma_normal__21.xlsx that contains GH results for TSVC_variants_IonXpress_021.vcf.gz https://exge.slack.com/files/laurali/F22RATUKU/tsvc_variants_ionxpress_021.vcf.gz
+
+// use case insetcitive comparison
+
+"Variant Sites"->"Chr:Pos" mapping VCF->"CHROM" + ":" + VCF->"POS"
+"Variant Sites"->"Ref/Alt" mapping VCF->"REF" + "/" + VCF->"ALT"
+"Variant Sites"->"Identifier" mapping VCF->"ID"
+"Variant Sites"->"Identifier" mapping VCF->"ID"
+
+"CMA_Normal_ 21"->"Zygosity" mapping VEP->"Zygosity"
+// our system should show indel/indel as homozygous as agreed, while in GH it might be heterozygous for indel/indel
+
+"CMA_Normal_ 21"->"Zygosity" mapping VEP->"ZYG"
+"CMA_Normal_ 21"->"Read Depths (DP)" mapping VCF->"DP"
+"CMA_Normal_ 21"->"Filter" mapping VCF->"FILTER"
+
+"RefSeq Genes 105v2, NCBI"->"Gene names" mapping VEP->"SYMBOL"
+// print out VEP->"SYMBOL_SOURCE" as we might have additional names from additional databases here
+
+"RefSeq Genes 105v2, NCBI"->"Gene names" mapping VEP->"Gene"
+// for refseq only as in Golden Helix
+
+"RefSeq Genes 105v2, NCBI"->"Sequence Ontology (Combined)" mapping VEP->"Consequence"
+// here we might be using different ontologies, so this has to be compared in details we do not need to have exactly the same results
+
+// "RefSeq Genes 105v2, NCBI"->"Gene Region (Combined)" can be mapped to VEP->"Consequence" parsed in a special way. We will add such field and will write parser only if such info is needed (it might be needed)
+
+// "RefSeq Genes 105v2, NCBI"->"Effect (Combined)" can be mapped to VEP->"Consequence" parsed in a special way. We will add such field and will write parser only if such info is needed (it might be needed)
+
+"RefSeq Genes 105v2, NCBI"->"Transcript Name (Clinically Relevant)" mapping (VEP->"HGVSc").split(":")[0]
+"RefSeq Genes 105v2, NCBI"->"HGVS c. (Clinically Relevant)" mapping VEP->"HGVSc"
+"RefSeq Genes 105v2, NCBI"->"HGVS p. (Clinically Relevant)" mapping VEP->"HGVSp"
+// we have updated HGVSp, so compare (VEP->"HGVSp").split(":")[0] и (VEP->"HGVSp").split(":")[1] separately
+
+"Aux Fields RefSeq Genes 105v2, NCBI"->"Transcript Name" mapping (VEP->"HGVSc").split(":")[0]
+
+"Aux Fields RefSeq Genes 105v2, NCBI"->"Transcript Type" mapping replace( VEP."BIOTYPE" , "protein_coding" , "mRNA" )
+
+"Aux Fields RefSeq Genes 105v2, NCBI"->"Protein ID" mapping (VEP->"HGVSp").split(":")[1]
+"Aux Fields RefSeq Genes 105v2, NCBI"->"HGNC" mapping VEP->"HGNC_ID"
+
+// "Aux Fields RefSeq Genes 105v2, NCBI"->"Summary of Product" can be mapped only if we add new db that associates gene names with their metadata (these are databases to search genes names in "in list" populate module
+
+"NHLBI ESP6500SI-V2-SSA137 Exomes Variant Frequencies 0.0.30, GHI"->"All MAF" mapping (ESP6500->"MAF").spli(",")[2]/100
+// we might have to add new column with allele frequency here calculated from MAF and TAC fields cause MAF is not that easy to use on its own
+
+"ClinVar 2016-02-04, NCBI"->"Accession" mapping ClinVar->"CLNACC"
+"ClinVar 2016-02-04, NCBI"->"Clinical Significance" mapping ClinVar->"CLNSIG"
+"ClinVar 2016-02-04, NCBI"->"Disease Name" mapping ClinVar->"CLNDBN"
+"ClinVar 2016-02-04, NCBI"->"ClinVar Review Status" mapping ClinVar->"CLNREVSTAT"
+// we might want to add stars {"single submitter":"1" , "multiple submitters":"2" , "expert panel":"3" , "practice guideline":"4" , else:"0" } . See more http://www.ncbi.nlm.nih.gov/clinvar/docs/variation_report/#review_status
+
+"ExAC Variant Frequencies 0.3, BROAD"->"Alt Allele Freq (AF)" mapping ExAC->"AF"
+"ExAC Variant Frequencies 0.3, BROAD"->"Adjusted Alt Allele Freq (AF_Adj)" mapping ExAC->"AF_Adj"
+
+"SIFT Prediction for SNVs 2011-01-10, JCVI"->"Score" mapping VEP->"SIFT"

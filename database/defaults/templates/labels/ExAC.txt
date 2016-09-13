@@ -1,0 +1,527 @@
+Fail was annotated with VEP. Unfortunately I can not find vcf of that data source that was not annotated with VEP. We do not need all these data from VEP.
+
+At ALT column you may find "NON_REF" instead of A, C, TG and so on. This designation represents any possible alternative allele at this location. We need to create 1 or 4 lines in such situation with the same data in them (or you may think about other way to store and index such situations). Namely, if you had length(REF)>1 for example REF=AT you need to create only one line that represents all indels at this position by making ALT=C for example. If length(REF)==1 then you need to create all possible alternative alleles including an indel (4 lines alltogether). For example if REF=A, you make lines with ALT=T,C,G,TT (for an indel).
+
+There are columns with number of fields equal (k^2+k)/2 like AC_het and Het_*. This columns contain data about all possible heterozygous genotypes. For example if REF=A, ALT=T there is only (1^2+1)/2=1 genotype that is heterozygous, namely A/T. For REF=A and ALT=T,C there are 3 possibilities A/T, A/C and T/C. The first k fields in that column describe all k genotypes where one allele is reference and another one is alternative. I do not know the correct order of the other (k^2-k)/2 fields in that column and what we should do with genotypes where both alleles are alternative, like T/C in the example above. We might change how we parse such columns later, but at the moment I will call them Number=RA. When you see Number=RA, you select only first k (k = number of alt alleles) fields from that column and apply Number=A to them
+
+
+Source: "ExAC" {
+keyAssembly: "GRCh37"
+updated: ["manualy"]
+level: "mutation"
+access: "public"
+name: "ExAC"
+readme: ftp://ftp.broadinstitute.org/pub/ExAC_release/release0.3.1/README.release0.3.1
+source: ftp://ftp.broadinstitute.org/pub/ExAC_release/release0.3.1/ExAC.r0.3.1.sites.vep.vcf.gz
+sourcesymlink: ftp://ftp.broadinstitute.org/pub/ExAC_release/release0.3.1/ExAC.r0.3.1.sites.vep.vcf.gz
+Glossary ftp://ftp.broadinstitute.org/pub/ExAC_release/release0.3.1/README.population_annotations
+FAQ http://exac.broadinstitute.org/
+format: vcf
+Add columns {
+Generate new column {
+name: "ExAC"
+type: flag
+comment : "allele called in ExAC"
+flag=true
+}
+        }
+parsing {
+column name: "CHROM" {
+name: "Chromosome"
+keyChrom
+}
+column name: "POS" {
+name: "Position"
+keyPos
+}
+column name: "ID" {
+name: "rs#"
+}
+column name: "REF" {
+name: "Reference allele"
+keyRef
+}
+column name: "ALT" {
+name: "Alternative allele"
+keyAlt
+}
+column name: "QUAL" {
+name: "Phred call quality"
+comment: "phred=-10log(P[erroneous call])"
+hidden
+}
+column name: "FILTER" {
+name: "Filter status"
+rule: replace ID with Description {
+##FILTER=<ID=InbreedingCoeff_Filter,Description="InbreedingCoeff <= -0.2">
+##FILTER=<ID=AC_Adj0_Filter,Description="AC_Adj == 0">
+##FILTER=<ID=LowQual,Description="Low quality">
+##FILTER=<ID=NewCut_Filter,Description="VQSLOD > -2.632 && InbreedingCoeff >-0.8">
+##FILTER=<ID=VQSRTrancheINDEL95.00to96.00,Description="Truth sensitivity tranche level for INDEL model at VQS Lod: 0.9503 <= x < 1.2168">
+##FILTER=<ID=VQSRTrancheINDEL96.00to97.00,Description="Truth sensitivity tranche level for INDEL model at VQS Lod: 0.7622 <= x < 0.9503">
+##FILTER=<ID=VQSRTrancheINDEL97.00to99.00,Description="Truth sensitivity tranche level for INDEL model at VQS Lod: 0.0426 <= x < 0.7622">
+##FILTER=<ID=VQSRTrancheINDEL99.00to99.50,Description="Truth sensitivity tranche level for INDEL model at VQS Lod: -0.8363 <= x < 0.0426">
+##FILTER=<ID=VQSRTrancheINDEL99.50to99.90,Description="Truth sensitivity tranche level for INDEL model at VQS Lod: -8.5421 <= x < -0.8363">
+##FILTER=<ID=VQSRTrancheINDEL99.90to99.95,Description="Truth sensitivity tranche level for INDEL model at VQS Lod: -18.4482 <= x < -8.5421">
+##FILTER=<ID=VQSRTrancheINDEL99.95to100.00+,Description="Truth sensitivity tranche level for INDEL model at VQS Lod < -37254.4742">
+##FILTER=<ID=VQSRTrancheINDEL99.95to100.00,Description="Truth sensitivity tranche level for INDEL model at VQS Lod: -37254.4742 <= x < -18.4482">
+##FILTER=<ID=VQSRTrancheSNP99.60to99.80,Description="Truth sensitivity tranche level for SNP model at VQS Lod: -4.9627 <= x < -1.8251">
+##FILTER=<ID=VQSRTrancheSNP99.80to99.90,Description="Truth sensitivity tranche level for SNP model at VQS Lod: -31.4709 <= x < -4.9627">
+##FILTER=<ID=VQSRTrancheSNP99.90to99.95,Description="Truth sensitivity tranche level for SNP model at VQS Lod: -170.3725 <= x < -31.4709">
+##FILTER=<ID=VQSRTrancheSNP99.95to100.00+,Description="Truth sensitivity tranche level for SNP model at VQS Lod < -39645.8352">
+##FILTER=<ID=VQSRTrancheSNP99.95to100.00,Description="Truth sensitivity tranche level for SNP model at VQS Lod: -39645.8352 <= x < -170.3725">
+}
+hidden
+}
+column name: "INFO" {
+column name: "AC" {
+name: "Allele count"
+    }
+column name: "AC_AFR" {
+name: "African allele count"
+description: "African and African American allele count"
+    }
+column name: "AC_AMR" {
+name: "American allele count"
+    }
+column name: "AC_Adj" {
+name: "Adjusted allele count"
+    }
+column name: "AC_EAS" {
+name: "East Asian allele count"
+    }
+column name: "AC_FIN" {
+name: "Finnish allele count"
+    }
+column name: "AC_Hemi" {
+name: "Hemizygous individuals"
+    }
+column name: "AC_Het" {
+Number=RA
+name: "Heterozygous individuals"
+    }
+column name: "AC_Hom" {
+name: "Homozygous individuals"
+    }
+column name: "AC_NFE" {
+name: "European allele count"
+description: "excluding Finnish"
+    }
+column name: "AC_OTH" {
+name: "Other allele count"
+    }
+column name: "AC_SAS" {
+name: "South Asian allele count"
+    }
+column name: "AF" {
+name: "Allele frequency"
+    }
+column name: "AN" {
+name: "Number of chromosomes tested"
+    }
+column name: "AN_AFR" {
+name: "African chromosomes count"
+description: "African and African American chromosomes count"
+new column "AF_AFR" {
+name: "African allele frequency adjusted"
+description: "African and African American allele frequency adjusted"
+data=AC_AFR/AN_AFR
+type: float
+}
+    }
+column name: "AN_AMR" {
+name: "American chromosomes count"
+new column: "AF_AMR" {
+name: "American allele frequency adjusted"
+data=AC_AMR/AN_AMR
+type: float
+}
+    }
+column name: "AN_Adj" {
+name: "Adjusted chromosomes count"
+new column: "AF_Adj" {
+name: "Adjusted allele frequency"
+data=AC_Adj/AN_Adj
+type: float
+}
+    }
+column name: "AN_EAS" {
+name: "East Asian chromosomes count"
+    }
+column name: "AN_FIN" {
+name: "Finnish chromosomes count"
+    }
+column name: "AN_NFE" {
+name: "European chromosomes count"
+description: "excluding Finnish"
+    }
+column name: "AN_OTH" {
+name: "Other chromosomes count"
+    }
+column name: "AN_SAS" {
+name: "South Asian chromosomes count"
+                }
+Generate new column "AF_EAS" {
+name: "East Asian allele frequency adjusted"
+data=AC_EAS/AN_EAS
+type: float
+}
+Generate new column "AF_FIN" {
+name: "Finnish allele frequency adjusted"
+data=AC_FIN/AN_FIN
+type: float
+}
+Generate new column "AF_NFE" {
+name: "European allele frequency adjusted"
+description: "non Finnish"
+data=AC_NFE/AN_NFE
+type: float
+}
+Generate new column "AF_OTH" {
+name: "Other allele frequency adjusted"
+data=AC_OTH/AN_OTH
+type: float
+}
+Generate new column "AF_SAS" {
+name: "South Asian allele frequency adjusted"
+data=AC_SAS/AN_SAS
+type: float
+}
+Generate new column "AF_Hemi" {
+name: "Hemizygous frequency adjusted"
+data=AC_Hemi/AN_Adj
+type: float
+}
+Generate new column "AF_Het" {
+name: "Heterozygous frequency adjusted"
+data=AC_Het/AN_Adj if AC_Het
+type: float
+}
+Generate new column "AF_Hom" {
+name: "Homozygous frequency adjusted"
+data=AC_Hom/AN_Adj if AC_Hom
+type: float
+}
+column name: "BaseQRankSum" {
+skip
+    }
+column name: "CCC" {
+name: "Chromosomes called"
+    }
+column name: "ClippingRankSum" {
+skip
+    }
+column name: "DB" {
+name: "In dbSNP"
+    }
+column name: "DP" {
+name: "Read depth after filtering"
+    }
+column name: "DS" {
+name: "Downsampled samples"
+    }
+column name: "END" {
+name: "Stop position"
+    }
+column name: "FS" {
+name: "Strand bias phred(p-value)"
+    }
+column name: "GQ_MEAN" {
+name: "Mean genotype quality"
+    }
+column name: "GQ_STDDEV" {
+name: "St dev genotype quality"
+    }
+column name: "HWP" {
+name: "Hardy Weinberg Equilibrium test"
+description: "allele and genotype frequency between generations"
+    }
+column name: "HaplotypeScore" {
+name: "Haplotype consistency"
+description: "Consistency score of the site with at most two segregating haplotypes"
+    }
+column name: "Het_AFR" {
+Number=RA
+name: "African heterozygous individuals adjusted"
+description: "African and African American heterozygous individuals adjusted"
+    }
+column name: "Het_AMR" {
+Number=RA
+name: "American heterozygous individuals adjusted"
+    }
+column name: "Het_EAS" {
+Number=RA
+name: "East Asian heterozygous individuals adjusted"
+    }
+column name: "Het_FIN" {
+Number=RA
+name: "Finnish heterozygous individuals adjusted"
+    }
+column name: "Het_NFE" {
+Number=RA
+name: "European heterozygous individuals adjusted"
+description: "excluding Finnish"
+    }
+column name: "Het_OTH" {
+Number=RA
+name: "Other heterozygous individuals adjusted"
+    }
+column name: "Het_SAS" {
+Number=RA
+name: "South Asian heterozygous individuals adjusted"
+    }
+column name: "Hom_AFR" {
+name: "African homozygous individuals adjusted"
+description: "African and African American homozygous individuals adjusted"
+    }
+column name: "Hom_AMR" {
+name: "American homozygous individuals adjusted"
+    }
+column name: "Hom_EAS" {
+name: "East Asian homozygous individuals adjusted"
+    }
+column name: "Hom_FIN" {
+name: "Finnish homozygous individuals adjusted"
+    }
+column name: "Hom_NFE" {
+name: "European homozygous individuals adjusted"
+description: "excluding Finnish"
+    }
+column name: "Hom_OTH" {
+name: "Other homozygous individuals adjusted"
+    }
+column name: "Hom_SAS" {
+name: "South Asian homozygous individuals adjusted"
+    }
+column name: "Hemi_AFR" {
+name: "African hemizygous individuals adjusted"
+description: "African and African American hemizygous individuals adjusted"
+    }
+column name: "Hemi_AMR" {
+name: "American hemizygous individuals adjusted"
+    }
+column name: "Hemi_EAS" {
+name: "East Asian hemizygous individuals adjusted"
+    }
+column name: "Hemi_FIN" {
+name: "Finnish hemizygous individuals adjusted"
+    }
+column name: "Hemi_NFE" {
+name: "European hemizygous individuals adjusted"
+description: "excluding Finnish"
+    }
+column name: "Hemi_OTH" {
+name: "Other hemizygous individuals adjusted"
+    }
+column name: "Hemi_SAS" {
+name: "South Asian hemizygous individuals adjusted"
+    }
+Generate new column "HetF_AFR" {
+Number=RA
+name: "African heterozygous frequency adjusted"
+description: "African and African American heterozygous frequency adjusted for chromosomes 1-22"
+data=Het_AFR*2/AN_AFR
+type: float
+}
+Generate new column "HetF_AMR" {
+Number=RA
+name: "American heterozygous frequency adjusted"
+description: "for chromosomes 1-22"
+data=Het_AMR*2/AN_AMR
+type: float
+}
+Generate new column "HetF_EAS" {
+Number=RA
+name: "East Asian heterozygous frequency adjusted"
+description: "for chromosomes 1-22"
+data=Het_EAS*2/AN_EAS
+type: float
+}
+Generate new column "HetF_FIN" {
+Number=RA
+name: "Finnish heterozygous frequency adjusted"
+description: "for chromosomes 1-22"
+data=Het_FIN*2/AN_FIN
+type: float
+}
+Generate new column "HetF_NFE" {
+Number=RA
+name: "European heterozygous frequency adjusted"
+description: "for chromosomes 1-22"
+description: "non Finnish"
+data=Het_NFE*2/AN_NFE
+type: float
+}
+Generate new column "HetF_OTH" {
+Number=RA
+name: "Other heterozygous frequency adjusted"
+description: "for chromosomes 1-22"
+data=Het_OTH*2/AN_OTH
+type: float
+}
+Generate new column "HetF_SAS" {
+Number=RA
+name: "South Asian heterozygous frequency adjusted"
+description: "for chromosomes 1-22"
+data=Het_SAS*2/AN_SAS
+type: float
+}
+Generate new column "HomF_AFR" {
+name: "African homo+hemizygous frequency adjusted"
+description: "African and African American heterozygous frequency adjusted"
+data=(Hom_AFR*2+Hemi_AFR)/AN_AFR
+type: float
+}
+Generate new column "HomF_AMR" {
+name: "American homo+hemizygous frequency adjusted"
+data=(Hom_AMR*2+Hemi_AMR)/AN_AMR
+type: float
+}
+Generate new column "HomF_EAS" {
+name: "East Asian homo+hemizygous frequency adjusted"
+data=(Hom_EAS*2+Hemi_EAS)/AN_EAS
+type: float
+}
+Generate new column "HomF_FIN" {
+name: "Finnish homo+hemizygous frequency adjusted"
+data=(Hom_FIN*2+Hemi_FIN)/AN_FIN
+type: float
+}
+Generate new column "HomF_NFE" {
+name: "European homo+hemizygous frequency adjusted"
+description: "non Finnish"
+data=(Hom_NFE*2+Hemi_NFE)/AN_NFE
+type: float
+}
+Generate new column "HomF_OTH" {
+name: "Other homo+hemizygous frequency adjusted"
+data=(Hom_OTH*2+Hemi_OTH)/AN_OTH
+type: float
+}
+Generate new column "HomF_SAS" {
+name: "South Asian homo+hemizygous frequency adjusted"
+data=(Hom_SAS*2+Hemi_SAS)/AN_SAS
+type: float
+}
+column name: "InbreedingCoeff" {
+name: "Inbreeding coefficient"
+description: "estimated from the genotype likelihoods per-sample when compared against the Hardy-Weinberg expectation"
+    }
+column name: "MLEAC" {
+name: "Allele count maximum likelihood expectation"
+    }
+column name: "MLEAF" {
+name: "Allele frequency maximum likelihood expectation"
+    }
+column name: "MQ" {
+name: "RMS mapping quality"
+hidden
+    }
+column name: "MQ0" {
+name: "Total mapping quality 0 reads"
+hidden
+    }
+column name: "MQRankSum" {
+skip
+    }
+column name: "NCC" {
+name: "No call samples"
+    }
+column name: "NEGATIVE_TRAIN_SITE" {
+skip
+    }
+column name: "POSITIVE_TRAIN_SITE" {
+skip
+    }
+column name: "QD" {
+name: "Quality by depth"
+    }
+column name: "ReadPosRankSum" {
+name: "Position bias"
+description: "Z-score from Wilcoxon rank sum test of Alt vs. Ref read position bias"
+    }
+column name: "VQSLOD" {
+name: "Odds ratio true variant"
+description: "Log odds ratio of being a true variant versus being false under the trained gaussian mixture model"
+    }
+column name: "culprit" {
+name: "Why filtered out"
+description: "The annotation which was the worst performing in the Gaussian mixture model, likely the reason why the variant was filtered out"
+hidden
+    }
+column name: "DP_HIST" {
+name: "Read depth histogram"
+mids: 2.5|7.5|12.5|17.5|22.5|27.5|32.5|37.5|42.5|47.5|52.5|57.5|62.5|67.5|72.5|77.5|82.5|87.5|92.5|97.5
+float array for histogram
+hide
+    }
+column name: "GQ_HIST" {
+name: "Genotype quality phred histogram"
+mids: 2.5|7.5|12.5|17.5|22.5|27.5|32.5|37.5|42.5|47.5|52.5|57.5|62.5|67.5|72.5|77.5|82.5|87.5|92.5|97.5
+type: float array for histogram
+hide
+    }
+column name: "CSQ" {
+skip
+    }
+
+column name: "DOUBLETON_DIST" {
+name: "Distance of doubleton carriers"
+    }
+column name: "AC_CONSANGUINEOUS" {
+name: "Consanguineous allele count"
+description: "Allele count among individuals with inbreeding coefficient F > 0.05"
+    }
+column name: "AN_CONSANGUINEOUS" {
+name: "Consanguineous chromosomes count"
+description: "Chromosome count among individuals with inbreeding coefficient F > 0.05"
+Generate new column "AF_CONSANGUINEOUS" {
+name: "Consanguineous allele frequency"
+description: "Allele frequency among individuals with inbreeding coefficient F > 0.05"
+data=AC_CONSANGUINEOUS/AN_CONSANGUINEOUS
+type: float
+}
+    }
+column name: "AC_MALE" {
+name: "Male allele count"
+    }
+column name: "AN_MALE" {
+name: "Male chromosomes count"
+Generate new column "AF_MALE" {
+name: "Male allele frequency"
+data=AC_MALE/AN_MALE
+type: float
+}
+    }
+column name: "AC_FEMALE" {
+name: "Male allele count"
+    }
+column name: "AN_FEMALE" {
+name: "Male chromosomes count"
+Generate new column "AF_FEMALE" {
+name: "Male allele frequency"
+data=AC_FEMALE/AN_FEMALE
+type: float
+}
+    }
+column name: "POPMAX" {
+name: "PopMax"
+description: "Population with maximum allele frequency"
+    }
+column name: "AC_POPMAX" {
+name: "PopMax allele count"
+    }
+column name: "AN_POPMAX" {
+name: "PopMax chromosomes count"
+Generate new column "AF_POPMAX" {
+name: "PopMax allele frequency"
+data=AC_POPMAX/AN_POPMAX
+type: float
+}
+    }
+
+
+
+}
+        }
+    };

@@ -1,0 +1,416 @@
+ClinVar. Встроить в качестве источника, с которым сравнивается семпл в фильтрах и вью. Сделать доступным для всех пользователей. Название источника, видимое для пользователей в фильтрах и вью на английском и других языках - "ClinVar". Описание источника для нашего внутреннего пользования находиться вот тут http://www.ncbi.nlm.nih.gov/variation/docs/human_variation_vcf/
+Glossary http://www.ncbi.nlm.nih.gov/variation/docs/glossary/#clinical_channel
+FAQ http://www.ncbi.nlm.nih.gov/variation/docs/faq/
+Парсить ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar_20160705.vcf.gz
+
+Парсить колонки в VCF следующим образом:
+Поле CHROM использовать для формирования ключа источника
+Полe POS использовать для формирования ключа источника
+Поле REF использовать для формирования ключа источника
+Поле ALT разбить вместе с INFO по "," и использовать для формирования ключа источника
+Поле INFO разбить по ";" на колонки и затем по "," в строки вместе с ALT как указано в хедере ("Number=." и "Number=A")
+И тд
+
+Correct split by "," for CLN* fields in INFO using from description:
+When multiple alleles are present, the following organizational rule applies to the clinvar.vcf.gz file only:
+If a variant's INFO tag has no data available for a particular allele, the data will be omitted. Data order is maintained in the clinvar.vcf.gz file by the CLNALLE tag since CLNALLE provides an ordered list of the alleles described by the clinical (CLN*) INFO tags that follow it.  A user can match the ordered list of alleles in the CLINALLE tag to their corresponding clinical data in the other clinical (CLN*) INFO tags because these clinical data are listed in the same order that the CLINALLE tag lists the alleles. See the example in variation FAQ number 8 for more details about how the CLINALLE tag allows for data matching.
+number: "CLN"
+
+CLNALLE - Variant alleles from REF or ALT columns.  0 is REF, 1 is the first ALT allele, etc.  This is used to match alleles with other corresponding clinical CLN* INFO fields separated with ",".  A value of -1 indicates that no allele was found to match a corresponding HGVS allele name. Skip -1 for now and think what to do with them later. Most likely manualy can be corrected. Other CLN* fields (except CLNHGVS CLNSRC CLNORIGIN CLNSRCID) fields can also be separated by "|" and if so, then each "|" creates a set of corresponding data in each column. Do not split into rows by "|" in CLN* columns, instead replace it with "/".
+
+В INFO могут встречаться символы в юникод кодировке \x2c вместо запятой, например. Особенно в CNL*
+
+
+Было бы удобнее это формализовать. Например, вот так (hidden = for internal use only right now):
+*/
+
+If currently "Number=1" from header matches correct parsing rule, then in the description there will be ‘number: "1"’. If parsing rule must different from the one in header I put exclamation mark in front of the rule like this ‘!number: "G"’. Same for "type:" field. Use "!type:" to overwrite rule from the header.
+
+Source: "ClinVar" {
+keyAssembly: "GRCh37"
+updated: ["weekly"]
+level: "mutation"
+access: "public"
+name: "ClinVar"
+readme: http://www.ncbi.nlm.nih.gov/variation/docs/human_variation_vcf/
+source: ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar_20160705.vcf.gz
+sourcesymlink: ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar.vcf.gz
+Glossary: http://www.ncbi.nlm.nih.gov/variation/docs/glossary/#clinical_channel
+FAQ: http://www.ncbi.nlm.nih.gov/variation/docs/faq/
+format: vcf
+parsing {
+column name: "CLINVAR" {
+name: "ClinVar"
+!type: flag
+!number: "1"
+comment : "submitted to ClinVar through ‘clinical channels’ and contains pathogenic as well as non-pathogenic mutations"
+data: true
+}
+column name: "CHROM" {
+name: "Chromosome"
+type: string
+keyChrom
+}
+column name: "POS" {
+name: "Position"
+type: integer
+keyPos
+}
+column name: "ID" {
+skip
+}
+column name: "REF" {
+name: "Reference allele"
+type: string
+keyRef
+}
+column name: "ALT" {
+name: "Alternative allele"
+type: string
+keyAlt
+}
+column name: "QUAL" {
+skip
+}
+column name: "FILTER" {
+name: "ClinVar consistency"
+ref: filter
+data: replace( filter , { ".":"Consistent" , "NC":"Inconsistent genotype submission for at least one sample" , else:error} )
+hidden
+}
+column name: "INFO" {
+column name: "RS" {
+name: "dbSNP"
+number: "1"
+type: integer
+hidden
+    }
+column name: "RSPOS" {
+skip
+}
+column name: "RV" {
+skip
+    }
+column name: "VP" {
+skip
+}
+column name: "GENEINFO" {
+begin: replace( GENEINFO , "|" , "," )
+!number: "."
+split: ":"
+ref: "geneinfo"
+hidden
+columns: [{
+    ref: "GENEINFO_NAME"
+    name: "Gene name"
+    !type: string
+    data: geneinfo[0]
+    hidden
+    },{
+    ref: "GENEINFO_HYPERLINK"
+                    name: "NCBI Gene ID"
+                    !type: hyperlink
+                    data: hyperlink( "http://www.ncbi.nlm.nih.gov/gene/" + geneifo[1] , geneinfo )
+                    hidden
+                    }]
+                }
+column name: "dbSNPBuildID" {
+skip
+}
+column name: "SAO" {
+name: "Allele origin"
+ref: "sao"
+number: "1"
+!type: string
+data: replace( sao , { ‘0’:‘unspecified’ , ‘1’:’germline’ , ‘2’:’somatic’ , ’3’:’both’ } )
+comment : "unspecified, germline, somatic, both"
+    }
+column name: "SSR" {
+name: "Artifact"
+ref: "ssr"
+number: "1"
+!type: string
+data: replace( to_string( to_binary( to_int(ssr) ) ) , { ‘00000’:’not an artifact’ , ‘*1’:’paralog’ , ‘*1.’:’by EST&’ , ‘*1..’:’old alignment&’ , ‘*1...’:’paralog EST&’ , ‘*1([0,1]{4})’:’1000 genomes failed&’ , ‘*1([0,1]{5})’:’other&’} ) [-1] ?= ’&’ : this.trim_end(1)
+comment: "reasons to suspect the variant to be false positive: paralog, EST, paralog EST, old alignment, 1000 genomes failed, other or not an artifact"
+}
+column name: "WGT" {
+skip
+    }
+column name: "VC" {
+name: "Variant Class"
+ref: "vc"
+number: "1"
+type: string
+data: replace( vc , { ‘INS’:’insertion’ , ‘DEL’:’deletion’ , ‘DIV’:’indel’ , ‘INDEL’:’indel’ , ‘DUP’:’duplication’ , ‘VAR’:’sequence alteration’ , ‘INV’:’inversion’ , ‘STR’:’microsatellite’ , ‘MON’:’monomeric repeat’ , ‘CMPX’:’complex’ , ‘TDM’:’tandem duplication’ , ‘TRM’:’translocation’ , ‘NOVAR’:’no variation’, else:error } )
+comment: "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+}
+column name: "PM" {
+name: "Clinical & Cited"
+number: "0"
+type: flag
+    }
+column name: "TPA" {
+name: "Provisional"
+number: "0"
+type: flag
+}
+column name: "PMC" {
+skip
+    }
+column name: "S3D" {
+name: "3D structure"
+number: "0"
+type: flag
+hidden
+}
+column name: "SLO" {
+skip
+    }
+column name: "NSF" {
+name: "Frameshift"
+number: "0"
+type: flag
+discription: "non-synonymous frameshift, new open reading frame"
+hidden
+}
+column name: "NSM" {
+name: "Missense"
+number: "0"
+type: flag
+hidden
+    }
+column name: "NSN" {
+name: "Nonsense"
+number: "0"
+type: flag
+hidden
+    }
+column name: "REF" {
+name: "Has reference"
+number: "0"
+type: flag
+comment : "coding region variation where one allele in the set is identical to the reference sequence"
+}
+column name: "SYN" {
+name: "Has synonymous"
+number: "0"
+type: flag
+comment: "coding region variation where one allele in the set does not change the encoded amino acid"
+    }
+column name: "U3" {
+name: "3’ UTR"
+number: "0"
+type: flag
+hidden
+    }
+column name: "U5" {
+name: "5’ UTR"
+number: "0"
+type: flag
+hidden
+}
+column name: "ASS" {
+name: "Acceptor"
+number: "0"
+type: flag
+comment: "splice site"
+hidden
+    }
+column name: "DSS" {
+name: "Donor"
+number: "0"
+type: flag
+comment: "splice site"
+hidden
+    }
+column name: "INT" {
+name: "Intron variant"
+number: "0"
+type: flag
+hidden
+}
+column name: "R3" {
+name: "3’ gene part"
+number: "0"
+type: flag
+hidden
+    }
+column name: "R5" {
+name: "5’ gene part"
+number: "0"
+type: flag
+hidden
+    }
+column name: "OTH" {
+skip
+}
+column name: "CFL" {
+name: "Assembly conflict"
+number: "0"
+type: flag
+    }
+column name: "ASP" {
+name: "Assembly specific"
+number: "0"
+type: flag
+    }
+column name: "MUT" {
+name: "Known mutation"
+number: "0"
+type: flag
+}
+column name: "VLD" {
+name: "Validated"
+type: flag
+    }
+column name: "G5A" {
+name: "MAF>5% in all"
+number: "0"
+type: flag
+comment: "MAF>5% in all 26 populations in 1000 genomes project"
+    hidden
+}
+column name: "G5" {
+name: "MAF>5% in 1+"
+number: "0"
+type: flag
+comment: "MAF>5% in 1+ out of 26 populations in 1000 genomes project"
+hidden
+}
+column name: "HD" {
+name: "Marker on kit"
+number: "0"
+type: flag
+comment: "with density >50k"
+hidden
+    }
+column name: "GNO" {
+skip
+    }
+column name: "KGPhase1" {
+skip
+}
+column name: "KGPhase3" {
+name: "1000 genomes"
+number: "0"
+type: flag
+comment: "variant found in 1000 genomes project phase 3 data"
+    hidden
+}
+column name: "CDA" {
+name: "Clinical assay"
+number: "0"
+type: flag
+comment: "variant studied in clinical assay"
+    }
+column name: "LSD" {
+name: "Locus specific"
+number: "0"
+type: flag
+comment: "Locus specific database was used to submit the variant"
+}
+column name: "MTP" {
+skip
+    }
+column name: "OM" {
+name: "OMIM"
+number: "0"
+type: flag
+hidden
+    }
+column name: "NOC" {
+skip
+}
+column name: "WTD" {
+name: "Withdrawn"
+number: "0"
+type: flag
+comment: "Withdrawn by submitter"
+    }
+column name: "NOV" {
+skip
+    }
+column name: "CAF" {
+name: "Allele frequency"
+!number: "R"
+!type: float
+comment: "Allele frequency based on 1000 genomes project"
+hidden
+}
+column name: "COMMON" {
+name: "Common"
+number: "1"
+!type: string
+comment: "Common variant based on 1000 genomes project, MAF>=1% for >=1 population"
+    }
+column name: "CLNHGVS" {
+skip
+    }
+column name: "CLNALLE" {
+name: "ClinVar Allele"
+number: "CLN"?
+type: integer
+hidden
+comment : "Variant alleles from REF or ALT columns.  0 is REF, 1 is the first ALT allele, etc.  This is used to match alleles with other corresponding clinical CLN* INFO fields separated with ",".  A value of -1 indicates that no allele was found to match a corresponding HGVS allele name. Skip -1 for now and think what to do with them later. Most likely manualy can be corrected. Other CLN* fields (except CLNHGVS CLNSRC CLNORIGIN CLNSRCID) fields can also be separated by "|". Form logical sets of data in the future. Currently replace | with /"
+}
+column name: "CLNSRC" {
+name: "Clinical Chanel"
+number: "CLN"
+ref: "clnsrc"
+type: string
+data: replace( clnsrc ,  "_" , " " )
+    }
+column name: "CLNORIGIN" {
+name: "Allele origin detailed"
+number: "CLN"
+ref: "clnorigin"
+type: string
+data: replace( to_string( to_binary( to_int(clnorigin) ) ) , { ‘00000000000’:’unknown’ , ‘*1’:’germline’ , ‘*1.’:’somatic&’ , ‘*1..’:’inherited&’ , ‘*1...’:’paternal&’ , ‘*1([0,1]{4})’:’maternal&’ , ‘*1([0,1]{5})’:’de-novo&’ , ‘*1([0,1]{6})’:’biparental&’ , ‘*1([0,1]{7})’:’uniparental&’ , ‘..1([0,1]{8})’:’not-tested&’ , ‘.1([0,1]{9})’:’tested-inconclusive&’ , ‘1([0,1]{10})’:’other&’ } ) [-1] ?= ’&’ : this.trim_end(1)
+comment: "unknown, germline, somatic, inherited, parental, maternal, de-novo, biparental, uniparental, not-tested, tested-inconclusive, other"
+    }
+column name: "CLNSRCID" {
+skip
+}
+column name: "CLNSIG" {
+name: "Clinical significance"
+type: string
+number: "CLN"
+ref: "clnsig"
+rule: replace( clnsig , { ‘0’:’uncertain’ , ‘1’:’not provided’ , ‘^2$’:’benign’ , ‘3’:’likely benign’ , ‘4’:’likely pathogenic’ , ‘^5$’:’pathogenic’ , ‘6’:’drug response’
+ , ‘7’:’histocompatibility’ , ‘255’:’other’ } )
+comment: "uncertain, not provided, benign, likely benign, likely pathogenic, pathogenic, drug response, histocompatibility or other"
+    }
+column name: "CLNDSDB" {
+name: "disease database"
+number: "CLN"
+type: string
+    }
+column name: "CLNDSDBID" {
+name: "disease DB ID"
+number: "CLN"
+type: string
+}
+column name: "CLNDBN" {
+name: "Disease"
+number: "CLN"
+ref: "clndbn"
+type: string
+data: replace( clndbn , "_" , " " )
+}
+column name: "CLNREVSTAT" {
+name: "Criteria"
+number: "CLN"
+ref: "clnrevstat"
+type: string
+data: replace( clnrevstat , { ‘_’:’ ‘ , ‘single’:’single submitter’ , ‘mult’:’multiple submitters’ , ‘conf’:’conflicting submissions’ , ‘exp’:’expert panel’ , ‘guideline’:’practice guideline’ } )
+    }
+column name: "CLNACC" {
+name: "ClinVar ID"
+number: "CLN"
+ref: "clnacc"
+!type: hyperlink
+data: hyperlink( "http://www.ncbi.nlm.nih.gov/clinvar/" + clnacc , clnacc )
+    }
+            }
+        }
+};

@@ -1,0 +1,485 @@
+How to rename and parse VEP
+
+Using RefSeq transcripts with --refseq and cash from ftp://ftp.ensembl.org/pub/release-84/variation/VEP/homo_sapiens_refseq_vep_84_GRCh37.tar.gz. Add Ensemble transcripts back with --merge_all.
+
+Use --fields ALLELE_NUM
+Fields are put into INFO field after VEPkey, delimited with ","(between Allekes as in ALLELE_NUM and "|" between different fields for the same allele).
+
+ALLELE_NUM is used to match VEP predictions with REF and ALT. ALLELE_NUM=0 corresponds to reference allele. ALLELE_NUM=1 corresponds to first ALT allele.  ALLELE_NUM=2 corresponds to second ALT allele, etc.
+
+We need to try more --fields in vep in particular: --fields ALLELE_NUM,SWISSPROT,VARIANT_CLASS,TREMBL,MOTIF_NAME,MOTIF_POS,HIGH_INF_POS,MOTIF_SCORE_CHANGE,CELL_TYPE,CANONICAL,DOMAINS,ZYG,SV,TSL,PUBMED,SOMATIC,PHENO,GENE_PHENO, HGMD, GMAF, AFR_MAF, AMR_MAF, ASN_MAF, EUR_MAF, EAS_MAF, SAS_MAF, AA_MAF, EA_MAF, ExAC_MAF, ExAC_Adj_MAF, ExAC_AFR_MAF, ExAC_AMR_MAF, ExAC_EAS_MAF, ExAC_FIN_MAF, ExAC_NFE_MAF, ExAC_OTH_MAF, ExAC_SAS_MAF, CLIN_SIG
+
+I will add SWISSPROT and other fields to the description as a preliminary draft in the end of the description
+
+We need to try more plugins and think what we can calculate and how, begining with https://github.com/Ensembl/VEP_plugins specificaly Blossum62.pm, GO.pm, LD.pm, Conservation.pm, miRNA.pm, and Phenotypes.pm
+
+Statistic and quality (Ti/Tv, Exonic/Genic/Intragenic, Quality distribution, Read deapth distribution, Linkage disequilibrium, etc) can be calculated around VEP step, as well as sex, ethnicity, family relationships, common traits like height, fat, eye color, hair color and type, facial forms. See --stats_text and -stats_file [file]. Also new plugins will be needed.
+
+Later we will build our own cash, because refseq is updated monthly, while vep cash updates are usually several months behind.
+
+Commas in VEP part of INFO field are replaced with ampersands (&) to preserve VCF format. ‘=’ replaced with %3D and other hexadecimals are used as in URLs.
+
+
+
+Source: "VEP" {
+keyAssembly: "GRCh37"
+updated: ["monthly"]
+level: "mutation"
+access: "public"
+name: "Predicted"
+readme: http://www.ensembl.org/info/docs/tools/vep/script/index.html#contents
+source: http://www.ensembl.org/info/docs/tools/vep/script/index.html
+sourcesymlink: http://www.ensembl.org/info/docs/tools/vep/script/vep_download.html#installer
+glossary http://www.ncbi.nlm.nih.gov/variation/docs/glossary/#clinical_channel
+FAQ http://www.ensembl.org/info/docs/tools/vep/vep_faq.html
+format: script
+version: "84: March 2016"
+parsing {
+column name: "PREDICTED" {
+name: "Predicted"
+type: flag
+comment: "Predicted information available for variant"
+data: true
+}
+column name: "INFO" {
+column name: VEPkey {
+split "|"
+column name: "Allele" {
+name: "Allele"
+type: string
+hidden
+        }
+column name: "Consequence" {
+name: "Consequence"
+type: string
+ref: consequence
+data: replace( consequence.split("&") , "_" , " " )).capitalize().join(", ")
+comment: "Consequences separated with ‘,’ for the same allele. Transcript ablation, Splice acceptor variant, Splice donor variant, Stop gained, Frameshift variant, Stop lost, Start lost, Transcript amplification, Inframe insertion, Inframe deletion, Missense variant, Protein altering variant, Regulatory region ablation, Splice region variant, Incomplete terminal codon variant, Stop retained variant, Synonymous variant, Coding sequence variant, Mature miRNA variant, 5 prime UTR variant, 3 prime UTR variant, Non coding transcript exon variant, Intron variant, NMD transcript variant, Non coding transcript variant, Upstream gene variant, Downstream gene variant, TFBS ablation, TFBS amplification, TF binding site variant, Regulatory region amplification, Feature elongation, Feature truncation, Regulatory region variant, Intergenic variant"
+        }
+column name: "IMPACT" {
+name: "Variant impact"
+type: string
+ref: variant_impact
+data: replace( variant_impact , { "HIGH":"high impact" , "MODERATE":"changed protein effectiveness" , "LOW":"no change" , "MODIFIER":"no evidence or difficult to predict" } )
+comment: "high impact, changed protein effectiveness, no change, no evidence or difficult to predict"
+        }
+column name: "SYMBOL" {
+name: "Gene ID"
+type: string
+comment: "Gene ID in database from ‘Gene DB’ column"
+        }
+column name: "Gene" {
+name: "RefSeq gene ID"
+type: string
+        }
+column name: "Feature_type" {
+name: "Element type"
+type: string
+ref: element_type
+data: replace( element_type , "Feature" , "").lower()
+comment: "transcript, regulatory, motif"
+        }
+column name: "Feature" {
+name: "Element ID"
+ref: element_id
+type: hyperlink
+hyperlink: hyperlink( if(VEP uses RefSeq cash only) {"http://www.ncbi.nlm.nih.gov/nuccore/"+element_id } else {"http://www.ensembl.org/Homo_sapiens/Transcript/Summary?g="+element_id } , element_id)
+        }
+column name: "BIOTYPE" {
+name: "Gene type"
+type: string
+comment: "Gene type in Havana DB. Protein coding: IGC gene, IGD gene, IG gene, IGJ gene, IGLV gene, IGM gene, IGV gene, IGZ gene, nonsense mediated decay, nontranslating CDS, non stop decay, polymorphic pseudogene, TRC gene, TRD gene, TRJ gene. Pseudogene: disrupted domain, IGC pseudogene, IGJ pseudogene, IG pseudogene, IGV pseudogene, processed pseudogene, transcribed processed pseudogene, transcribed unitary pseudogene, transcribed unprocessed pseudogene, translated processed pseudogene, TRJ pseudogene, unprocessed pseudogene. Long noncoding: 3prime overlapping ncrna, ambiguous orf, antisense, antisense RNA, lincRNA, ncrna host, processed transcript, sense intronic, sense overlapping. Short noncoding: miRNA, miRNA_pseudogene, miscRNA, miscRNA pseudogene, Mt rRNA, Mt tRNA, rRNA, scRNA, snlRNA, snoRNA, snRNA, tRNA, tRNA_pseudogene"
+        }
+column name: "EXON" {
+name: "Exon"
+type: integer
+hidden
+        }
+column name: "INTRON" {
+name: "Intron"
+type: integer
+hidden
+        }
+column name: "HGVSc" {
+name: "HGVSc"
+type: string
+hidden
+        }
+column name: "HGVSp" {
+name: "HGVSp"
+type: string
+hidden
+        }
+column name: "cDNA_position" {
+split: "-"
+ref: cdna_position
+columns: [{
+    ref: "CDNA_POSITION_START"
+name: "cDNA position start"
+data: cdna_position[0]
+type: integer
+},{
+ref: "CDNA_POSITION_STOP"
+name: "cDNA position stop"
+data: cdna_position[1]
+type: integer
+}]
+        }
+column name: "CDS_position" {
+split: "-"
+    ref: cds_position
+columns: [{
+    ref: "CDS_POSITION_START"
+name: "CDS position start"
+data: cds_position[0]
+type: integer
+},{
+ref: "CDS_POSITION_STOP"
+name: "CDS position stop"
+data: cds_position[1]
+type: integer
+}]
+        }
+column name: "Protein_position" {
+split: "-"
+    ref: protein_position
+columns: [{
+    ref: "PROTEIN_POSITION_START"
+name: "Protein position start"
+data: protein_position[0]
+type: integer
+},{
+ref: "PROTEIN_POSITION_STOP"
+name: "Protein position stop"
+data: protein_position[1]
+type: integer
+}]
+
+        }
+column name: "Amino_acids" {
+name: "Amino acid change"
+type: string
+        }
+column name: "Codons" {
+name: "Codon change"
+type: string
+        }
+column name: "Existing_variation" {
+name: "Existing variation"
+type: string
+        }
+column name: "ALLELE_NUM" {
+name: "ALLELE_NUM"
+type: integer
+hidden
+        }
+column name: "DISTANCE" {
+name: "Distance"
+type: integer
+comment: "Distance to nearest transcript"
+        }
+column name: "STRAND" {
+name: "Element strand"
+type: string
+ref: strand
+data: replace( strand , { "1":"forward" , "-1":"reverse" } )
+        }
+column name: "SYMBOL_SOURCE" {
+name: "Gene DB"
+type: string
+comment: "database for ‘Gene ID’ column"
+        }
+column name: "HGNC_ID" {
+split: ":"
+ref: hgnc_id
+columns: [{
+    ref: "HGNC_NAME"
+name: "HGNC name"
+type: string
+data: hgnc_id[0]
+},{
+ref: "HGNC_ID"
+name: "HGNC ID"
+type: hyperlink
+data: hyperlink( "http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=" + hgnc_id[1] , hgnc_id[1] )
+},{
+ref: "GENE_CARDS"
+name: "GeneCards"
+type: hyperlink
+data: hyperlink( "http://www.genecards.org/cgi-bin/carddisp.pl?id_type=hgnc&id=" + hgnc_id[1] , hgnc_id[0] )
+}]
+        }
+column name: "CCDS" {
+name: "CCDS"
+type: string
+hidden
+        }
+column name: "SIFT" {
+name: "SIFT"
+type: float
+comment: "SIFT v5.2.2. Lower score is more likely deleterious. Common threshold is <0.05"
+        }
+column name: "PolyPhen" {
+name: "PolyPhen-2"
+type: float
+comment: "PolyPhen-2 v2.2.2. Probability(variation is deleterious). Common threshold is >0.95"
+        }
+column name: "HGVS_OFFSET" {
+name: "HGVS shift"
+type: integer
+comment: "HGVS was calculated after ambiguous repeat shift. Column shows shift size"
+        }
+column name: "Genotype" {
+name: "Genotype"
+type: string
+comment: "Capital case is for alternative alleles and lowercase is for reference allele"
+        }
+column name: "Zygosity" {
+name: "Zygosity adjusted"
+type: string
+comment: "Heterozygous, Homozygous, Hemizygous, Unknown. Indels on both chromosomes considered homozygous"
+        }
+column name: "ExonNumber" {
+name: "Exon number"
+type: integer
+comment: "first exon has number 1"
+        }
+column name: "HGVSc_nucleotide_changes" {
+name: "HGVSc transcript change"
+type: string
+comment: "in HGVSc transcript coordinates"
+        }
+column name: "HGVSc_transcript" {
+name: "HGVSc transcript"
+type: string
+comment: "including transcript version after dot"
+        }
+column name: "HGVSc_version" {
+name: "HGVSc version"
+type: integer
+hidden
+        }
+column name: "HGVSp_nucleotide_changes" {
+name: "HGVSp protein change"
+type: string
+comment: "in HGVSp protein coordinates"
+        }
+column name: "HGVSp_transcript" {
+name: "HGVSp protein"
+type: string
+comment: "including protein version after dot"
+        }
+column name: "HGVSp_version" {
+name: "HGVSp version"
+type: number
+hidden
+        }
+column name: "IntronNumber" {
+name: "Intron number"
+type: integer
+        }
+column name: "NumberOfExons" {
+name: "Number of exons"
+type: integer
+        }
+column name: "NumberOfIntrons" {
+name: "Number of introns"
+type: integer
+        }
+column name: "SWISSPROT" {
+name: "Swiss-Prot"
+type: string
+comment: "best match"
+        }
+column name: "VARIANT_CLASS" {
+name: "Variant Ontology"
+type: string
+ref: "variant_ontology"
+data: replace( variant_ontology , { "INS":"insertion" , "DEL":"deletion" , "INDEL":"indel" , "DUP":"duplication" , "VAR":"sequence alteration" , "INV":"inversion" , "STR":"microsatellite" , "MON":"monomeric repeat" , "CMPX":"complex" , "TDM":"tandem duplication" , "TRM::"translocation" , "NOVAR":"no variation" } )
+comment: "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+        }
+column name: "TREMBL" {
+name: "TReMBL"
+type: string
+comment: "best match"
+        }
+column name: "MOTIF_NAME" {
+split "|" ?
+name: "TFBS"
+type: string
+        }
+column name: "MOTIF_POS" {
+name: "TFBS  position"
+type: integer
+        }
+column name: "HIGH_INF_POS" {
+name: "TFBS important position"
+type: flag
+        }
+column name: "MOTIF_SCORE_CHANGE" {
+name: "TFBS score change"
+type: integer
+        }
+column name: "CELL_TYPE" {
+name: "Cell type"
+type: string
+        }
+column name: "CANONICAL" {
+name: "If canonical gene"
+Type: float
+        }
+column name: "DOMAINS" {
+name: "Domains"
+type: string
+        }
+column name: "ZYG" {
+name: "Zygosity-2"
+type: string
+comment: "If different indels on both chromosomes at the same position than it is heterozygous, compared to Zygosity column, which is homozygous in that case"
+        }
+column name: "SV" {
+name: "Overlapping structural variant analysis"
+type: string
+        }
+column name: "TSL" {
+name: "Transcripts "
+type: string
+        }
+column name: "PUBMED" {
+                split: "&"
+                number: "."
+ref: "pubmed"
+name: "PubMed"
+type: hyperlink
+data: hyperlink( "http://www.ncbi.nlm.nih.gov/pubmed/" + pubmed , pubmed )
+        }
+column name: "SOMATIC" {
+name: "Somatic mutation"
+type: flag
+        }
+column name: "PHENO" {
+    split: "&"
+    number: "."
+name: "Phenotype"
+type: flag
+ref: pheno
+data: replace( pheno , { "0":"true" , "1":"false" } )
+description: "Indicates if existing variant is associated with a phenotype, disease or trait"
+        }
+column name: "GENE_PHENO" {
+split: "&"
+number: "."
+name: "Gene phenotype"
+type: flag
+ref: gene_pheno
+data: replace( gene_pheno , { "0":"true" , "1":"false" } )
+description: "Indicates if gene is associated with a phenotype, disease or trait"
+        }
+column name: "HGMD" {
+name: "HGMD"
+type: string
+        }
+column name: "GMAF" {
+split: ":"
+name: ["Allele_GMAF","1KG MAF"]
+type: [hidden, float]
+        }
+column name: "AFR_MAF" {
+split: ":"
+name: ["Allele_AFR_MAF","1KG African MAF"]
+type: [hidden, float]
+        }
+column name: "AMR_MAF" {
+split: ":"
+name: ["Allele_AMR_MAF","1KG American MAF"]
+type: [hidden, float]
+        }
+column name: "ASN_MAF" {
+split: ":"
+name: ["Allele_ASN_MAF","1KG Asian MAF"]
+type: [hidden, float]
+        }
+column name: "EUR_MAF" {
+split: ":"
+name: ["Allele_EUR_MAF","1KG European MAF"]
+type: [hidden, float]
+        }
+column name: "EAS_MAF" {
+split: ":"
+name: ["Allele_EAS_MAF","1KG East Asian MAF"]
+type: [hidden, float]
+        }
+column name: "SAS_MAF" {
+split: ":"
+name: ["Allele_SAS_MAF","1KG South Asian MAF"]
+type: [hidden, float]
+        }
+column name: "AA_MAF" {
+split: ":"
+name: ["Allele_AA_MAF","ESP African American MAF"]
+type: [hidden, float]
+        }
+column name: "EA_MAF" {
+split: ":"
+name: ["Allele_EA_MAF","ESP European American MAF"]
+type: [hidden, float]
+        }
+column name: "ExAC_MAF" {
+split: ":"
+name: ["Allele_ExAC_MAF","ExAC MAF"]
+type: [hidden, float]
+        }
+column name: "ExAC_Adj_MAF" {
+split: ":"
+name: ["Allele_ExAC_Adj_MAF","ExAC adjusted MAF"]
+type: [hidden, float]
+        }
+column name: "ExAC_AFR_MAF" {
+split: ":"
+name: ["Allele_ExAC_AFR_MAF","ExAC African MAF"]
+type: [hidden, float]
+        }
+column name: "ExAC_AMR_MAF" {
+split: ":"
+name: ["Allele_ExAC_AMR_MAF","ExAC American MAF"]
+type: [hidden, float]
+        }
+column name: "ExAC_EAS_MAF" {
+split: ":"
+name: ["Allele_ExAC_EAS_MAF","ExAC East Asian MAF"]
+type: [hidden, float]
+        }
+column name: "ExAC_FIN_MAF" {
+split: ":"
+name: ["Allele_ExAC_FIN_MAF","ExAC Finnish MAF"]
+type: [hidden, float]
+        }
+column name: "ExAC_NFE_MAF" {
+split: ":"
+name: ["Allele_ExAC_NFE_MAF","ExAC non-Finnish Europeans MAF"]
+type: [hidden, float]
+        }
+column name: "ExAC_OTH_MAF" {
+split: ":"
+name: ["Allele_ExAC_OTH_MAF","ExAC other pops MAF"]
+type: [hidden, float]
+comment: ["","Other than African, American, Asian and European"]
+        }
+column name: "ExAC_SAS_MAF" {
+split: ":"
+name: ["Allele_ExAC_SAS_MAF","ExAC South Asian MAF"]
+type: [hidden, float]
+        }
+column name: "CLIN_SIG" {
+    split: "&"
+    number: "."
+name: "Clinicaly significant"
+type: flag
+        }
+column name: "PICK" {
+name: "Longest transcript"
+                    }
+}
+            }
+        }
+};

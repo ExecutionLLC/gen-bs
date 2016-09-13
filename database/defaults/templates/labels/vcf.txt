@@ -1,0 +1,382 @@
+Common fields in samples’ VCF files that need to be renamed, comments added, etc. Do not add columns if missing.
+
+Maybe we need vcf 4.0, 4.1, 4.2 and 4.3 each separately and during parsing first check vcf format version? Also I have a question about
+
+Source: "VCF" {
+keyAssembly: "GRCh37"
+updated: ["irregular"]
+level: "mutation"
+access: "public"
+name: "VCF"
+readme: https://samtools.github.io/hts-specs/VCFv4.3.pdf
+format: Variant Format File
+version: "4.3"
+parsing {
+column name: "CHROM" {
+name: "Chromosome"
+type: string
+keyChrom
+}
+column name: "POS" {
+name: "Position"
+type: integer
+keyPos
+}
+column name: "ID" {
+name: "ID"
+type: string
+}
+column name: "REF" {
+name: "Reference allele"
+type: string
+keyRef
+}
+column name: "ALT" {
+name: "Alternative allele"
+type: string
+keyAlt
+}
+column name: "QUAL" {
+name: "Phred call quality"
+type: float
+comment: "phred=-10log(P[erroneous call])"
+}
+column name: "FILTER" {
+name: "Filter status"
+type: string
+comment: "PASS reserved for calls that passed all quality filters in VCF format"
+}
+column name: "INFO" {
+column name: "AA" {
+name: "Ancestral allele"
+type: string
+    }
+column name: "AC" {
+name: "Allele counts"
+type: integer
+    }
+column name: "AD" {
+name: "Read depth"
+type: integer
+    }
+column name: "ADF" {
+name: "Read depth forward"
+type: integer
+    }
+column name: "ADR" {
+name: "Read depth reverse"
+type: integer
+    }
+column name: "AF" {
+name: "Allele frequency"
+type: float
+comment: "VCF format specification defines AF as allele frequency in primary NGS data (not in called genotypes)"
+    }
+column name: "AN" {
+name: "Allele number"
+type: integer
+comment: "total number of alleles in called genotypes"
+    }
+column name: "BQ" {
+name: "RMS base quality at this position"
+type: float
+    }
+column name: "CIGAR" {
+name: "CIGAR"
+type: string
+comment: "cigar string describing how to align an alternate allele to the reference allele"
+    }
+column name: "DB" {
+name: "in dbSNP"
+type: flag
+    }
+column name: "DP" {
+name: "Total depth"
+type: integer
+comment: "combined read depth across samples"
+    }
+column name: "END" {
+name: "Var end position"
+type: integer
+comment: "end position of the variant described in this record (for use with symbolic alleles <*>)"
+    }
+column name: "H2" {
+name: "in HapMap2"
+type: flag
+    }
+column name: "H3" {
+name: "in HapMap3"
+type: flag
+    }
+column name: "MQ" {
+name: "Mapping Quality"
+type: integer
+comment: "RMS mapping quality (phred)"
+    }
+column name: "MQ0" {
+name: "0 quality reads"
+type: integer
+comment: "Number of MAPQ == 0 reads covering this record"
+    }
+column name: "NS" {
+name: "Samples with data"
+type: integer
+comment: "Number of samples with data in original multisample vcf file"
+    }
+column name: "SB" {
+name: "Strand bias"
+type: integer
+comment: "strand bias at this position (usually in phred, usually p-value from Fisher's exact test)"
+    }
+column name: "SOMATIC" {
+name: "Somatic variant"
+type: flag
+comment: "indicates that the record is a somatic mutation, for cancer genomics"
+    }
+column name: "VALIDATED" {
+name: "Experimental validation"
+type: flag
+comment: "validated by follow-up experiment"
+    }
+column name: "1000G" {
+name: "in 1000 genomes"
+type: flag
+    }
+column name: "IMPRECISE" {
+name: "Imprecise variant"
+type: flag
+    }
+column name: "NOVEL" {
+name: "Novel structural variant"
+type: flag
+    }
+column name: "END" {
+name: "End position"
+type: integer
+    }
+column name: "SVTYPE" {
+name: "Structural variant type"
+type: string
+comment: "DEL, INS, DUP, INV, CNV, BND"
+    }
+column name: "SVLEN" {
+name: "Structural variant length"
+Number=A
+type: integer
+comment: "Length is positive for insertions and negative for deletions"
+    }
+column name: "CIEND" {
+name: "End confidence"
+Number=1
+type: string
+comment: "Confidence interval near the end of imprecise variant"
+    }
+column name: "CIPOS" {
+name: "Start confidence"
+Number=1
+type: string
+comment: "Confidence interval near the start of imprecise variant"
+    }
+column name: "HOMLEN" {
+name: "Homology length"
+Number=A
+type: integer
+comment: "Length of base pair identical micro-homology at event breakpoints"
+    }
+column name: "HOMSEQ" {
+name: "Homology sequence"
+Number=A
+type: string
+comment: "Sequence of base pair identical micro-homology at event breakpoints"
+    }
+column name: "BKPTID" {
+name: "Structure variant ID"
+Number=A
+type: string
+comment: "ID of the assembled alternate allele in the assembly file"
+    }
+column name: "MEINFO" {
+name: "Mobile Element"
+Number=1
+type: string
+comment: "Mobile element info format NAME,START,END,POLARITY"
+    }
+column name: "METRANS" {
+name: "Mobile Element transduction"
+Number=1
+type: string
+comment: "Mobile element transduction info format CHR,START,END,POLARITY"
+    }
+column name: "DGVID" {
+name: "DGV ID"
+type: string
+comment: "ID in Database of Genomic Variants"
+    }
+column name: "DBVARID" {
+name: "DGV ID"
+type: string
+comment: "ID in dbVar"
+    }
+column name: "DBRIPVID" {
+name: "DGV ID"
+type: string
+comment: "ID in dbRIP"
+    }
+column name: "MATEID" {
+name: "Mate ID"
+type: string
+comment: "ID of mate breakend"
+    }
+column name: "RAPID" {
+name: "Partner ID"
+type: string
+comment: "ID of partner breakend"
+    }
+column name: "EVENT" {
+name: "Event ID"
+type: string
+comment: "ID of event associated to breakend"
+    }
+column name: "CILEN" {
+name: "Confidence interval"
+Number=1
+type: string
+comment: "Confidence interval around the inserted material between breakends"
+    }
+column name: "DPADJ" {
+name: "Adjacency read depth"
+type: string
+comment: "Read Depth of adjacency"
+    }
+column name: "CN" {
+name: "Segment copy number"
+type: integer
+comment: "Copy number of segment containing breakend"
+    }
+column name: "CNADJ" {
+name: "Adjacency copy number"
+Number=1
+type: string
+comment: "Copy number of adjacency"
+    }
+column name: "CICN" {
+name: "Copy number confidence interval"
+Number=1
+type: string
+comment: "Confidence interval around copy number for the segment"
+    }
+column name: "CICNADJ" {
+name: "Adjacency confidence interval"
+type: string
+comment: "Confidence interval around copy number for the adjacency"
+    }
+}
+column name: "FORMAT" {
+column name: "AD" {
+name: "Read depth"
+type: integer
+    }
+column name: "ADF" {
+name: "Read depth forward"
+type: integer
+    }
+column name: "ADR" {
+name: "Read depth reverse"
+type: integer
+    }
+column name: "DP" {
+name: "Total depth"
+type: integer
+comment: "combined read depth across samples"
+    }
+column name: "EC" {
+name: "Expected allele counts"
+type: integer
+comment: " expected alternate allele counts"
+    }
+column name: "FT" {
+name: "Genotype quality filter"
+type: flag
+comment: "PASS reserved in VCF format to indicate that variant passed all filters"
+    }
+column name: "GQ" {
+name: "Genotype score"
+type: integer
+comment: "conditional genotype quality, phred"
+    }
+column name: "GP" {
+name: "Genotype probabilty"
+type: float
+comment: "genotype posterior probabilities"
+    }
+column name: "GT" {
+name: "Genotype"
+type: string
+comment: "0 is for reference allele, 1 is for alterative allele. ‘/’ is for unphased genotype calls and  ‘|’ is for phased"
+    }
+column name: "GL" {
+name: "Genotype likelihoods"
+type: integer
+    }
+column name: "HQ" {
+name: "Haplotype qualities"
+type: integer
+}
+column name: "MQ" {
+name: "Mapping Quality"
+type: integer
+comment: "RMS mapping quality (phred)"
+    }
+column name: "PL" {
+name: "phred Genotype likelihood"
+type: integer
+comment: "phred-scaled genotype likelihoods rounded to the closest integer"
+    }
+column name: "PQ" {
+name: "phasing quality"
+type: integer
+comment: "phred, -log(P[erroneous allele order])"
+    }
+column name: "PS" {
+name: "Phase set"
+type: integer
+comment: "set is defined as a set of phased genotypes to which this genotype belongs"
+    }
+column name: "CN" {
+name: "Genotype copy number"
+type: integer
+comment: "Copy number genotype for imprecise events"
+    }
+column name: "CNQ" {
+name: "Copy number quality"
+type: float
+comment: "Copy number genotype phred quality for imprecise events"
+    }
+column name: "CNL" {
+name: "Copy number likelihood"
+type: float
+comment: "Copy number genotype log10-likelihoods for imprecise events"
+    }
+column name: "CNP" {
+name: "Genotype copy number"
+type: float
+comment: "Copy number posterior probabilities"
+    }
+column name: "NQ" {
+name: "Novel variant probability"
+type: integer
+comment: "Phred style probability score that the variant is novel"
+    }
+column name: "HAP" {
+name: "Unique haplotype"
+type: integer
+comment: "Unique haplotype identifier"
+    }
+column name: "AHAP" {
+name: "Unique ancestral heplotyper"
+type: integer
+comment: "Unique identifier of ancestral haplotype"
+}
+}
+        }
+    };

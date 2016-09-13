@@ -1,0 +1,69 @@
+// This is format that must be used to describe parsing of data sources. Any deviation from it must be agreed on upfront and put in here:
+
+column name: "AA" {
+split: "|"
+ref: "aa"
+columns: [{
+ref: "AA_0"
+name: "Ancestral allele"
+data: aa[0]
+type: string
+comment: "Inferred using multiple alignment with Ortheus. For SNPs only"
+}, {
+         name: "Ancestral REF"
+         ref: "AA_1"
+         data: aa[1]
+         type: string
+         comment: "Ancestral reference as in vcf format. For InDels only"
+}, {
+         name: "Ancestral ALT"
+         ref: "AA_2"
+         data: aa[2]
+         type: string
+         comment: "Ancestral alternative allele as in vcf format. For InDels only"
+}, {
+         …
+}]
+}
+column name: "MY_NEW_COLUMN_NAME" {
+     name: "My new column name"
+     data: CHROM + ALT
+     type: string
+}
+
+// New datatypes and functions must be described here
+
+// hyperlink function takes url and text as arguments
+Hyperlink hyperlink ( string url , string str ) {
+    hyperlink = url
+hyperlinktext = str
+return [ hyperlink , hyperlinktext ]
+}
+
+// function to replace regexp_in with regexp_out in string
+String replace ( string str , string regexp_in , string regexp_out ) {
+retrurn str.replace( regexp_in , regexp_out )
+}
+// function replace using mapping array of regexp_in:regexp_out pairs
+String replace ( string str , array mapping ) {
+str_out = str
+    for in, out in mapping.iteritems() :
+        str_out = str_out.replace( in , out )
+    return str_out
+    }
+// function replace using mapping array of regexp_in:regexp_out pairs with last pair in array like else:regexp
+String replace ( string str , array mapping ) {
+str_out = str
+    for in, out in mapping.iteritems() :
+        // check that regexp_in is not reserved word ‘else’ (see usage in GENINFO in ClinVar)
+        if ( in.is_not_else?) str_out = str_out.replace( in , out )
+        // check if not else:error that is reserved for errors
+// when field can have only one of values listed in "in" part of mapping
+elseif ( out.is_not_error?)  str_out = out
+else return error(str)    
+    return str_out
+    }
+
+
+// translate to english below later
+/*

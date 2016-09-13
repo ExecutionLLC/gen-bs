@@ -1,0 +1,200 @@
+Untar. Parse each vcf file
+
+‘Number=RR’ orders data with last filed for reference allele. For example REF=A, ALT=G,T. INFO=1,2,3 means for G=1, for T=2 and for A=3.
+
+Source: "1000 genomes" {
+keyAssembly: "GRCh37"
+updated: ["manualy"]
+level: "mutation"
+access: "public"
+name: "ESP6500"
+readme: http://evs.gs.washington.edu/EVS/
+source: http://evs.gs.washington.edu/evs_bulk_data/ESP6500SI-V2-SSA137.GRCh38-liftover.snps_indels.vcf.tar.gz
+sourcesymlink: http://evs.gs.washington.edu/evs_bulk_data/ESP6500SI-V2-SSA137.GRCh38-liftover.snps_indels.vcf.tar.gz
+Glossary http://evs.gs.washington.edu/EVS/
+FAQ http://evs.gs.washington.edu/EVS/
+format: vcf
+Add columns {
+Generate new column {
+name: "ESP6500"
+type: flag
+comment : "allele called in ESP6500"
+flag=true
+}
+        }
+parsing {
+column name: "CHROM" {
+name: "Chromosome"
+type: string
+keyChrom
+}
+column name: "POS" {
+name: "Position"
+type: integer
+keyPos
+}
+column name: "ID" {
+name: "rs#"
+comment: "indels mapping predicted with SeattleSeqAnnotation137 on dbSNP v137"
+type: string
+}
+column name: "REF" {
+name: "Reference allele"
+type: string
+keyRef
+}
+column name: "ALT" {
+name: "Alternative allele"
+type: string
+keyAlt
+}
+column name: "QUAL" {
+name: "Phred call quality"
+type: float
+comment: "phred=-10log(P[erroneous call])"
+hidden
+}
+column name: "FILTER" {
+name: "Filter status"
+type: string
+comment: "SVM - failed SVM-based filter at 0.3 threshold; INDEL5 - indels within 5bp in 1000 genomes pilot"
+}
+column name: "INFO" {
+column name: "DBSNP" {
+name: "dbSNP v137"
+type: string
+hidden
+    }
+column name: "EA_AC" {
+Number=RR
+name: "European American Allele Count"
+type: integer
+    }
+column name: "AA_AC" {
+Number=RR
+name: "African American Allele Count"
+type: integer
+    }
+column name: "TAC" {
+Number=RR
+name: "ESP6500 Allele Count"
+type: integer
+    }
+column name: "MAF" {
+maf=split(",")
+name: "MAF European American"
+data=maf[0]/100
+type: float
+Generate new column "MAF African American" {
+data=maf[1]/100
+type: float
+}
+Generate new column "MAF ESP6500" {
+data=maf[2]/100
+type: float
+}
+    }
+column name: "GTS" {
+name: "Observed Genotypes"
+rule: insert "/" between each letter in two-letter words containing A,T,C or G after separating words by "," then for words longer 2 letter or containing letter R you first insert "/" between An and R, where n is a positive integer, after that you replace An with n-th alternative allele and R with reference allele. For example "GTS=AA,AT,TT" you replace with "A/A,A/T,T/T" and  if "REF=AA", "ALT=T" and "GTS=A1R,RR" you replace with "T/AA,AA/AA"
+type: string
+    }
+column name: "EA_GTC" {
+name: "European American Genotype Counts as in Observed Genotypes"
+type: string
+    }
+column name: "AA_GTC" {
+name: "European American Genotype Counts as in Observed Genotypes"
+type: string
+    }
+column name: "GTC" {
+name: "ESP6500 Genotype Counts as in Observed Genotypes"
+type: string
+    }
+column name: "DP" {
+name: "Average Sample Read Depth"
+type: integer
+    }
+column name: "AA" {
+name: "Chimp Allele"
+type: string
+    }
+column name: "FG" {
+name: "HGVS function"
+type: string
+hidden
+    }
+column name: "HGVS_CDNA_VAR" {
+name: "HGVS transcript change"
+type: string
+hidden
+    }
+column name: "HGVS_PROTEIN_VAR" {
+name: "HGVS protein change"
+type: string
+hidden
+    }
+column name: "CDS_SIZES" {
+name: "HGVS transcript length"
+type: string
+hidden
+    }
+column name: "PH" {
+name: "PolyPhen2"
+type: string
+hidden
+    }
+column name: "CP" {
+name: "PhastCons"
+type: Float
+hidden
+    }
+column name: "CG" {
+name: "Conservation score GERP"
+type: Float
+hidden
+    }
+column name: "GL" {
+name: "Gene List"
+type: string
+hidden
+    }
+column name: "GS" {
+name: "Grantham Score"
+type: string
+hidden
+    }
+column name: "CA" {
+name: "Clinical Association"
+type: string
+hidden
+    }
+column name: "EXOME_CHIP" {
+name: "HumanExome chip"
+type: string
+hidden
+    }
+column name: "GWAS_PUBMED" {
+name: "GWAS PubMed"
+type: string
+hidden
+    }
+column name: "EA_AGE" {
+name: "Estimated Variant Age in European Americans"
+type: string
+    }
+column name: "AA_AGE" {
+name: "Estimated Variant Age in African Americans"
+type: string
+    }
+column name: "GRCh38_POSITION" {
+name: "GRCh38 position"
+g=split(":")
+data=g[1]
+type: integer
+test: chr=g[0] (test if chromosome matches first field in GRCh38_POSITION before ":" sign
+rule: if g[1]==-1 then it means GRCh37 position can not be mapped to GRCh38. This is not unknown. This is inability to convert from one assembly to another and it is normal
+    }
+}
+        }
+    };

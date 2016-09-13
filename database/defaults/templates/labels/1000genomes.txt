@@ -1,0 +1,214 @@
+Do not parse FORMAT and GENOTYPE columns in this version.
+
+Source: "1000 genomes" {
+keyAssembly: "GRCh37"
+updated: ["manualy"]
+level: "mutation"
+access: "public"
+name: "1000 genomes"
+readme: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/README_vcf_info_annotation.20141104
+source: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.*.20130502.genotypes.vcf.gz
+sourcesymlink: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.*.20130502.genotypes.vcf.gz
+Glossary ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v2.20130502.ALL.ped
+FAQ ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/README_phase3_callset_20150220
+format: vcf
+parsing {
+    column name: "1KG" {
+        Name: "1000 genomes"
+        !type: flag
+        !data: "true"
+        comment : "allele was called in 1000 genomes project phase 3"
+        }
+column name: "CHROM" {
+name: "Chromosome"
+type: string
+keyChrom
+}
+column name: "POS" {
+name: "Position"
+type: integer
+keyPos
+}
+column name: "ID" {
+name: "ID"
+type: string
+hidden
+}
+column name: "REF" {
+name: "Reference allele"
+type: string
+keyRef
+}
+column name: "ALT" {
+name: "Alternative allele"
+type: string
+keyAlt
+}
+column name: "QUAL" {
+name: "Quality"
+type: float
+hidden
+}
+column name: "FILTER" {
+name: "Filter"
+type: string
+hidden
+}
+column name: "INFO" {
+column name: "CIEND" {
+name: "End confidence"
+number: "2"
+type: integer
+comment: "Confidence interval near the end of imprecise variant: from, to"
+    }
+column name: "CIPOS" {
+name: "Start confidence"
+number: "2"
+type: integer
+comment: "Confidence interval near the start of imprecise variant: from, to"
+    }
+column name: "CS" {
+name: "Source call set"
+number: "1"
+type: string
+    }
+column name: "END" {
+name: "End position"
+number: "1"
+type: integer
+}
+column name: "IMPRECISE" {
+name: "Imprecise variant"
+number: "0"
+type: flag
+    }
+column name: "MC" {
+name: "Merged calls"
+number: "."
+type: string
+    }
+column name: "MEINFO" {
+name: "Mobile element"
+!number: "1"
+type: string
+comment: "NAME,START,END<POLARITY; If there is only 5' OR 3' support for this call, will be NULL NULL for START and END"
+    }
+column name: "MEND" {
+name: "MT insert end"
+number: "1"
+type: integer
+comment: "Mitochondrial end coordinate of inserted sequence"
+}
+            column name: "MLEN" {
+name: "MT insert length"
+type: integer
+comment: "Estimated length of mitochondrial insert"
+    }
+column name: "MSTART" {
+name: "MT insert start"
+type: integer
+comment: "Mitochondrial start coordinate of inserted sequence"
+    }
+column name: "SVLEN" {
+name: "Structural variant length"
+Number=A
+type: integer
+comment: "positive for insertions and negative for deletions"
+    }
+column name: "SVTYPE" {
+name: "Structural variant type"
+type: string
+comment: "CNV, DEL, DUP, ALU, LINE1, SVA, MT, INV"
+}
+            column name: "TSD" {
+name: "Duplication bases"
+type: string
+comment: "Precise Target Site Duplication for bases, if unknown, value will be NULL"
+}
+            column name: "AC" {
+name: "Alternate alleles count"
+type: integer
+comment: "total number of alternate alleles in called genotypes"
+    }
+column name: "AF" {
+name: "Allele frequency"
+type: float
+comment: "in all unrelated samples with genotypes called (column "Samples tested"). Allele frequency=(Alternate allele count)/(All alleles count)"
+    }
+column name: "NS" {
+name: "Samples tested"
+type: integer
+    }
+column name: "AN" {
+name: "All alleles count"
+type: integer
+comment: "Total number of alleles in called genotypes. Allele frequency=(Alternate allele count)/(All alleles count)"
+}
+column name: "EAS_AF" {
+name: "East Asian allele frequency"
+type: float
+}
+column name: "EUR_AF" {
+name: "European allele frequency"
+type: float
+}
+column name: "AFR_AF" {
+name: "African allele frequency"
+type: float
+}
+column name: "AMR_AF" {
+name: "Native american allele frequency"
+type: float
+}
+column name: "SAS_AF" {
+name: "South Asian allele frequency"
+type: float
+}
+column name: "DP" {
+name: "Total read depth"
+type: integer
+comment: "only low coverage data were counted towards the DP, exome data were not used"
+}
+column name: "AA" {
+aa=split("|")
+name: "Ancestral allele"
+data=aa[0]
+type: string
+comment: "Inferred using multiple alignment with Ortheus. For SNPs only"
+Generate new column: "AREF" {
+name: "Ancestral REF"
+data=aa[1]
+type: string
+comment: "Ancestral reference as in vcf format. For InDels only"
+            }
+Generate new column: "AALT" {
+name: "Ancestral ALT"
+data=aa[2]
+type: string
+comment: "Ancestral alternative allele as in vcf format. For InDels only"
+            }
+Generate new column: "AINDEL" {
+name: "Ancestral InDel type"
+data=aa[1]
+type: string
+comment: "Ancestral indel type"
+            }
+}
+column name: "VT" {
+name: "Variant type"
+type: string
+comment: "SNP, INDEL, SV"
+}
+column name: "EX_TARGET" {
+name: "Exon pull down"
+type: flag
+comment: "Variant in exon pull down target boundaries"
+}
+column name: "MULTI_ALLELIC" {
+name: "Multi-allelic"
+type: flag
+comment: "Position/site is multi-allelic in 1000 genomes results (phase 3)"
+}
+            }
+        }
+    };

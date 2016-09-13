@@ -1,0 +1,321 @@
+Source: "dbSNP" {
+keyAssembly: "GRCh37"
+updated: ["June", "November"]
+level: "mutation"
+access: "public"
+name: "dbSNP"
+readme: http://www.ncbi.nlm.nih.gov/variation/docs/human_variation_vcf/
+source: ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b147_GRCh37p13/VCF/All_20160601.vcf.gz
+sourcesymlink: ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b147_GRCh37p13/VCF/00-All.vcf.gz
+glossary http://www.ncbi.nlm.nih.gov/variation/docs/glossary/#clinical_channel
+FAQ http://www.ncbi.nlm.nih.gov/variation/docs/faq/
+format: vcf
+version: "b147: June 2016"
+parsing {
+        column name: "DBSNP" {
+name: "dbSNP"
+!type: flag
+!number: "1"
+comment : "submitted to NCBI database of short genetic variations"
+data: true
+}
+        column name: "CHROM" {
+name: "Chromosome"
+type: string
+keyChrom
+}
+column name: "POS" {
+name: "Position"
+type: integer
+keyPos
+}
+column name: "ID" {
+skip
+}
+column name: "REF" {
+name: "Reference allele"
+type: string
+keyRef
+}
+column name: "ALT" {
+name: "Alternative allele"
+type: string
+keyAlt
+}
+column name: "QUAL" {
+skip
+}
+column name: "FILTER" {
+name: "ClinVar consistency"
+ref: filter
+data: replace( filter , { ".":"Consistent" , "NC":"Inconsistent genotype submission for at least one sample" , else:error} )
+hidden
+}
+column name: "INFO" {
+column name: "RS" {
+name: "dbSNP"
+number: "1"
+type: integer
+hidden
+    }
+column name: "RSPOS" {
+skip
+}
+column name: "RV" {
+skip
+    }
+column name: "VP" {
+skip
+}
+column name: "GENEINFO" {
+begin: replace( GENEINFO , "|" , "," )
+!number: "."
+split: ":"
+ref: "geneinfo"
+hidden
+columns: [{
+    ref: "GENEINFO_NAME"
+    name: "Gene name"
+    !type: string
+    data: geneinfo[0]
+    hidden
+    },{
+    ref: "GENEINFO_HYPERLINK"
+                    name: "NCBI Gene ID"
+                    !type: hyperlink
+                    data: hyperlink( "http://www.ncbi.nlm.nih.gov/gene/" + geneifo[1] , geneinfo )
+                    hidden
+                    }]
+                }
+column name: "dbSNPBuildID" {
+skip
+}
+column name: "SAO" {
+name: "Allele origin"
+ref: "sao"
+number: "1"
+!type: string
+data: replace( sao , { ‘0’:‘unspecified’ , ‘1’:’germline’ , ‘2’:’somatic’ , ’3’:’both’ } )
+comment : "unspecified, germline, somatic, both"
+    }
+column name: "SSR" {
+name: "Artifact"
+ref: "ssr"
+number: "1"
+!type: string
+data: replace( to_string( to_binary( to_int(ssr) ) ) , { ‘00000’:’not an artifact’ , ‘*1’:’paralog’ , ‘*1.’:’by EST&’ , ‘*1..’:’old alignment&’ , ‘*1...’:’paralog EST&’ , ‘*1([0,1]{4})’:’1000 genomes failed&’ , ‘*1([0,1]{5})’:’other&’} ) [-1] ?= ’&’ : this.trim_end(1)
+comment: "reasons to suspect the variant to be false positive: paralog, EST, paralog EST, old alignment, 1000 genomes failed, other or not an artifact"
+}
+column name: "WGT" {
+skip
+    }
+column name: "VC" {
+name: "Variant Class"
+ref: "vc"
+number: "1"
+type: string
+data: replace( vc , { ‘INS’:’insertion’ , ‘DEL’:’deletion’ , ‘DIV’:’indel’ , ‘INDEL’:’indel’ , ‘DUP’:’duplication’ , ‘VAR’:’sequence alteration’ , ‘INV’:’inversion’ , ‘STR’:’microsatellite’ , ‘MON’:’monomeric repeat’ , ‘CMPX’:’complex’ , ‘TDM’:’tandem duplication’ , ‘TRM’:’translocation’ , ‘NOVAR’:’no variation’, else:error } )
+comment: "SNV (single nucleotide variant), insertion, deletion, indel, MNP (multiple nucleotide polymorphism), MNV (multiple nucleotide variant), duplication, sequence alteration, inversion, microsatellite, monomeric repeat, CNL (copy number loss), CNG (copy number gain), CNV (copy number variation), MEI (mobile element insertion), NSI (novel sequence insertion), complex, tandem duplication, translocation, no variation"
+}
+column name: "PM" {
+name: "Clinical & Cited"
+number: "0"
+type: flag
+    }
+column name: "TPA" {
+name: "Provisional"
+number: "0"
+type: flag
+}
+column name: "PMC" {
+skip
+    }
+column name: "S3D" {
+name: "3D structure"
+number: "0"
+type: flag
+hidden
+}
+column name: "SLO" {
+skip
+    }
+column name: "NSF" {
+name: "Frameshift"
+number: "0"
+type: flag
+discription: "non-synonymous frameshift, new open reading frame"
+hidden
+}
+column name: "NSM" {
+name: "Missense"
+number: "0"
+type: flag
+hidden
+    }
+column name: "NSN" {
+name: "Nonsense"
+number: "0"
+type: flag
+hidden
+    }
+column name: "REF" {
+name: "Has reference"
+number: "0"
+type: flag
+comment : "coding region variation where one allele in the set is identical to the reference sequence"
+}
+column name: "SYN" {
+name: "Has synonymous"
+number: "0"
+type: flag
+comment: "coding region variation where one allele in the set does not change the encoded amino acid"
+    }
+column name: "U3" {
+name: "3’ UTR"
+number: "0"
+type: flag
+hidden
+    }
+column name: "U5" {
+name: "5’ UTR"
+number: "0"
+type: flag
+hidden
+}
+column name: "ASS" {
+name: "Acceptor"
+number: "0"
+type: flag
+comment: "splice site"
+hidden
+    }
+column name: "DSS" {
+name: "Donor"
+number: "0"
+type: flag
+comment: "splice site"
+hidden
+    }
+column name: "INT" {
+name: "Intron variant"
+number: "0"
+type: flag
+hidden
+}
+column name: "R3" {
+name: "3’ gene part"
+number: "0"
+type: flag
+hidden
+    }
+column name: "R5" {
+name: "5’ gene part"
+number: "0"
+type: flag
+hidden
+    }
+column name: "OTH" {
+skip
+}
+column name: "CFL" {
+name: "Assembly conflict"
+number: "0"
+type: flag
+    }
+column name: "ASP" {
+name: "Assembly specific"
+number: "0"
+type: flag
+    }
+column name: "MUT" {
+name: "Known mutation"
+number: "0"
+type: flag
+}
+column name: "VLD" {
+name: "Validated"
+type: flag
+    }
+column name: "G5A" {
+name: "MAF>5% in all"
+number: "0"
+type: flag
+comment: "MAF>5% in all 26 populations in 1000 genomes project"
+    hidden
+}
+column name: "G5" {
+name: "MAF>5% in 1+"
+number: "0"
+type: flag
+comment: "MAF>5% in 1+ out of 26 populations in 1000 genomes project"
+hidden
+}
+column name: "HD" {
+name: "Marker on kit"
+number: "0"
+type: flag
+comment: "with density >50k"
+hidden
+    }
+column name: "GNO" {
+skip
+    }
+column name: "KGPhase1" {
+skip
+}
+column name: "KGPhase3" {
+name: "1000 genomes"
+number: "0"
+type: flag
+comment: "variant found in 1000 genomes project phase 3 data"
+    hidden
+}
+column name: "CDA" {
+name: "Clinical assay"
+number: "0"
+type: flag
+comment: "variant studied in clinical assay"
+    }
+column name: "LSD" {
+name: "Locus specific"
+number: "0"
+type: flag
+comment: "Locus specific database was used to submit the variant"
+}
+column name: "MTP" {
+skip
+    }
+column name: "OM" {
+name: "OMIM"
+number: "0"
+type: flag
+hidden
+    }
+column name: "NOC" {
+skip
+}
+column name: "WTD" {
+name: "Withdrawn"
+number: "0"
+type: flag
+comment: "Withdrawn by submitter"
+    }
+column name: "NOV" {
+skip
+    }
+column name: "CAF" {
+name: "Allele frequency"
+!number: "R"
+!type: float
+comment: "Allele frequency based on 1000 genomes project"
+hidden
+}
+column name: "COMMON" {
+name: "Common"
+number: "1"
+type: string
+comment: "Common variant based on 1000 genomes project, MAF>=1% for >=1 population"
+    }
+            }
+        }
+};
