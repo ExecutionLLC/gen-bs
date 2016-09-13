@@ -7,6 +7,22 @@ export default class FieldUtils {
         return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
+    makeFieldSourceCaption(field, sourceName) {
+        var label;
+
+        if (field.sampleType) {
+            label = `(${SamplesUtils.typeLabels[field.sampleType]}) ${field.label}`;
+        } else {
+            if (sourceName) {
+                label = `${field.label} -- ${sourceName}`;
+            } else {
+                label = `${field.label} -- ${field.sourceName}`;
+            }
+        }
+
+        return label;
+    }
+
     /**
      * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
@@ -15,17 +31,7 @@ export default class FieldUtils {
      */
     static makeFieldSelectItemValue(f, sourceName) {
 
-        var label;
-
-        if (f.sampleType) {
-            label = `(${SamplesUtils.typeLabels[f.sampleType]}) ${f.label}`;
-        } else {
-            if (sourceName) {
-                label = `${f.label} -- ${sourceName}`;
-            } else {
-                label = `${f.label} -- ${f.sourceName}`;
-            }
-        }
+        var label = this.makeFieldSourceCaption(f, sourceName);
 
         return {
             id: f.id,
