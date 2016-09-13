@@ -39,11 +39,11 @@ export default class SampleEditableFieldsPanel extends ComponentBase {
     }
 
     render() {
-        const {sampleId, fieldIdToValuesHash} = this.props;
+        const {sampleId, fieldIdToValuesHash, fields} = this.props;
         return (
             <Panel className='samples-values'>
                 <div className='flex'>
-                    {this.props.fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
+                    {fields.map(field => this.renderEditableField(sampleId, field, fieldIdToValuesHash))}
                     {this.renderRowButtons()}
                 </div>
             </Panel>

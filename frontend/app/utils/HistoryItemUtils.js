@@ -2,14 +2,11 @@ import _ from 'lodash';
 
 import immutableArray from './immutableArray';
 import {entityTypeIsDemoDisabled} from './entityTypes';
-import SamplesUtils from './samplesUtils';
-import AnalyseUtils from './analyseUtils';
+import {sampleType, sampleTypesForAnalysisType} from './samplesUtils';
+import {analysisType} from './analyseUtils';
 
 
-const {sampleType, sampleTypeForAnalysisType} = SamplesUtils;
-const {analysisType} = AnalyseUtils;
-
-function makeHistoryItem(historyItem) {
+export function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
         name: `Copy of ${historyItem.name}`.slice(0, 50),
@@ -19,7 +16,7 @@ function makeHistoryItem(historyItem) {
     };
 }
 
-function makeNewHistoryItem(sample, filter, view) {
+export function makeNewHistoryItem(sample, filter, view) {
     const name = (new Date() + '_' + (sample ? sample.fileName : '') + '_' + (filter ? filter.name : '') + '_' + (view ? view.name : '')).slice(0, 50);
     return {
         id: null,
@@ -72,18 +69,32 @@ function makeNewHistoryItem(sample, filter, view) {
     };
 }
 
+/**
+ * Change sample id in array of samples info, make result array contain no duplicate ids.
+ * @param {{id: string, ...}[]} oldSamples samples info including id
+ * @param {number} sampleIndex sample id to replace
+ * @param {string} newSampleId new sample id to set to oldSamples[sampleIndex].id
+ * @returns {{id: string, ...}[]}
+ */
 function changeSampleId(oldSamples, sampleIndex, newSampleId) {
-    const sampleExistIndex = _.findIndex(oldSamples, (model, index) => index !== sampleIndex && model.id === newSampleId);
+    // If we found new sample id in array at other place then we swap these ids so there will not be duplicates.
+    /** @type {number} sample index with newSampleId if any */
+    const sampleExistIndex = _.findIndex(oldSamples, (sample, index) => index !== sampleIndex && sample.id === newSampleId);
+    /** @type {{id: string, [...]}} sample info where to set new id */
     const replacedSample = oldSamples[sampleIndex];
+    /** @type {{id: string, [...]}[]} array of samples infos with new id at desired place */
     const newSamplesWithNewSample = immutableArray.replace(oldSamples, sampleIndex, {...replacedSample, id: newSampleId});
     if (sampleExistIndex < 0) {
+        // inserted id is unique, just return the result
         return newSamplesWithNewSample;
     } else {
+        // inserted id is at sampleExistIndex, place there replaced id
         return immutableArray.replace(newSamplesWithNewSample, sampleExistIndex, {...newSamplesWithNewSample[sampleExistIndex], id: replacedSample.id});
     }
 }
 
 function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
+    const samplesListArray = samplesList.hashedArray.array;
     const usedSamplesIds = {};
     return newSamplesTypes.map(
         (type, index) => {
@@ -94,10 +105,10 @@ function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
                 return {id: oldSampleId, type: type};
             } else {
                 const unusedSample = _.find(
-                        samplesList.hashedArray.array,
+                        samplesListArray,
                         (sample) => !usedSamplesIds[sample.id] && !entityTypeIsDemoDisabled(sample.type, isDemo)
                     ) ||
-                    samplesList.hashedArray.array[0];
+                    samplesListArray[0];
                 const unusedSampleId = unusedSample.id;
                 usedSamplesIds[unusedSampleId] = true;
                 return {id: unusedSampleId, type: type};
@@ -106,7 +117,7 @@ function changeSamplesArray(oldSamples, samplesList, isDemo, newSamplesTypes) {
     );
 }
 
-function changeType(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, targetType) {
+function changeType(historyItem, samplesList, modelsList, isDemo, targetType) {
 
     function getAvailableModel(type) {
         const model = _.find(
@@ -129,7 +140,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
             historyItem.samples,
             samplesList,
             isDemo,
-            sampleTypeForAnalysisType[newType]
+            sampleTypesForAnalysisType[newType]
         );
 
         return {
@@ -143,7 +154,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
     return typeConvert(historyItem, targetType);
 }
 
-function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, change) {
+export function changeHistoryItem(historyItem, samplesList, modelsList, isDemo, change) {
     var editingHistoryItem = historyItem;
     if (change.name != null) {
         editingHistoryItem = {...editingHistoryItem, name: change.name};
@@ -152,10 +163,13 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
         editingHistoryItem = {...editingHistoryItem, description: change.description};
     }
     if (change.type != null) {
-        editingHistoryItem = changeType(editingHistoryItem, samplesList, filtersList, viewsList, modelsList, isDemo, change.type);
+        editingHistoryItem = changeType(editingHistoryItem, samplesList, modelsList, isDemo, change.type);
     }
     if (change.sample != null) {
-        editingHistoryItem = {...editingHistoryItem, samples: changeSampleId(editingHistoryItem.samples, change.sample.index, change.sample.id)};
+        editingHistoryItem = {
+            ...editingHistoryItem,
+            samples: changeSampleId(editingHistoryItem.samples, change.sample.index, change.sample.id)
+        };
     }
     if (change.samples != null) {
         editingHistoryItem = {...editingHistoryItem, samples: change.samples};
@@ -171,11 +185,3 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
     }
     return editingHistoryItem;
 }
-
-const HistoryItemUtils = {
-    makeHistoryItem,
-    makeNewHistoryItem,
-    changeHistoryItem
-};
-
-export default HistoryItemUtils;

@@ -51,8 +51,9 @@ export default class FieldHeaderControls extends Component {
         const label = firstCharToUpperCase(
             !fieldMetadata ? 'Unknown' : fieldMetadata.label
         );
-        const labelPrefix = fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? '' : sampleType ? `(${sampleType})` : null;
-        const title = fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? fieldMetadata.sourceName : sampleName;
+        const sourceName = fieldMetadata.sourceName;
+        const labelPrefix = sourceName && sourceName !== 'sample' ? '' : sampleType ? `(${sampleType})` : null;
+        const title = sourceName && sourceName !== 'sample' ? sourceName : sampleName;
 
         return (
             <td>

@@ -14,13 +14,13 @@ const REFS = {
 
 export default class AnalysisHistoryList extends React.Component {
     render() {
-        const {currentItemId, historyList, newHistoryItem} = this.props;
+        const {currentItemId, historyList, newHistoryItem, isHistoryReceivedAll} = this.props;
         return (
             <div className='split-scroll' ref={REFS.CONTAINER}>
                 <ul id='analysisTabs' className='nav nav-componets nav-controls nav-radios'>
-                    {newHistoryItem && this.renderNewListItem(!currentItemId, newHistoryItem)}
+                    {newHistoryItem && this.renderListItem(!currentItemId, newHistoryItem)}
                     {historyList.map((historyItem) => this.renderListItem(historyItem.id === currentItemId, historyItem))}
-                    {!this.props.isHistoryReceivedAll && this.renderLoadingListItem()}
+                    {!isHistoryReceivedAll && this.renderLoadingListItem()}
                 </ul>
             </div>
         );
@@ -42,10 +42,6 @@ export default class AnalysisHistoryList extends React.Component {
 
     componentDidMount() {
         this.checkAndLoadNext();
-    }
-
-    renderNewListItem(isActive, item) {
-        return this.renderListItem(isActive, item);
     }
 
     renderListItem(isActive,historyItem) {

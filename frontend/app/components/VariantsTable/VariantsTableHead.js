@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import FieldHeader from './FieldHeader';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
-import SamplesUtils from '../../utils/samplesUtils';
+import * as SamplesUtils from '../../utils/samplesUtils';
 
 export default class VariantsTableHead extends Component {
 
@@ -59,7 +59,9 @@ export default class VariantsTableHead extends Component {
                     </div>
                 </td>
                 {_.map(variantsHeader, (fieldSampleExist) =>
-                    this.renderFieldHeader(fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist, samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
+                    this.renderFieldHeader(
+                        fieldSampleExist.fieldId, fieldSampleExist.sampleId, fieldSampleExist.exist,
+                        samplesTypesHash, variantsSamples, fields, isFetching, sort, dispatch)
                 )}
             </tr>
             </tbody>

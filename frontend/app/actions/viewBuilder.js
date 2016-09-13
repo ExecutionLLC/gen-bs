@@ -132,13 +132,11 @@ function viewBuilderCreateView() {
 function viewBuilderUpdateView() {
 
     return (dispatch, getState) => {
-        const state = getState();
-        const editingView = state.viewBuilder.editingView;
-        const originalView = state.viewBuilder.originalView;
+        const {viewBuilder: {editingView, originalView}} = getState();
         const isNotEdited = !entityTypeIsEditable(editingView.type)
             || originalView === editingView;
 
-        if (state.auth.isDemo || isNotEdited) {
+        if (isNotEdited) {
             dispatch(fireOnSaveAction(editingView));
             dispatch(closeModal('views'));
             dispatch(viewBuilderEndEdit());
@@ -170,10 +168,10 @@ export function viewBuilderDeleteView(viewId) {
         return new Promise((resolve) => {
             dispatch(viewsListServerDeleteView(viewId))
                 .then(() => {
-                    const state = getState();
-                    const views = state.viewsList.hashedArray.array;
-                    const viewIdToViewHash = state.viewsList.hashedArray.hash;
-                    const editingViewId = state.viewBuilder.editingView.id;
+                    const {
+                        viewsList: {hashedArray: {array: views, hash: viewIdToViewHash}},
+                        viewBuilder: {editingView: {id: editingViewId}}
+                    } = getState();
                     const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
                     const newView = viewIdToViewHash[newViewId];
                     dispatch(viewBuilderRestartEdit(false, newView));

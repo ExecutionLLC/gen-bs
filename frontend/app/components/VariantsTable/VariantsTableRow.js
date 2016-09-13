@@ -10,6 +10,7 @@ import VariantsTableComment from './VariantsTableComment';
 export default class VariantsTableRow extends ComponentBase {
     render() {
         const {
+            dispatch,
             row,
             auth,
             rowIndex,
@@ -54,7 +55,7 @@ export default class VariantsTableRow extends ComponentBase {
                                       reference={ref}
                                       chrom={chrom}
                                       searchKey={searchKey}
-                                      dispatch={this.props.dispatch}
+                                      dispatch={dispatch}
                                       auth={auth}
                                       comments={comments}
                 />

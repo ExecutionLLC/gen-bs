@@ -67,8 +67,9 @@ class VariantsTableReact extends Component {
     }
 
     elementXScrollListener(scrollLeft, DOMNode) {
+        const {scrollTarget} = this.state;
         // ignore if we want to scroll to already desired place
-        if (this.state.scrollTarget !== null && scrollLeft == this.state.scrollTarget) {
+        if (scrollTarget !== null && scrollLeft == scrollTarget) {
             return;
         }
         if (DOMNode) {
@@ -84,12 +85,13 @@ class VariantsTableReact extends Component {
     }
 
     onTablePartRendered(isHeader) {
-        if (this.state.scrollTarget == null) {
+        const {scrollTarget} = this.state;
+        if (scrollTarget == null) {
             return;
         }
         const tablePartRef = isHeader ? this.refs.variantsTableHead : this.refs.variantsTableRows;
         const tablePartElement = ReactDOM.findDOMNode(tablePartRef);
-        tablePartElement.scrollLeft = this.state.scrollTarget;
+        tablePartElement.scrollLeft = scrollTarget;
     }
 }
 

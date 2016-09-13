@@ -54,7 +54,7 @@ export function analyze(searchParams) {
             }
         } = getState();
 
-        const searchParamsLO = {
+        const searchParamsWithLimitsOffset = {
             analyze: searchParams,
             limit: 100,
             offset: 0
@@ -64,7 +64,7 @@ export function analyze(searchParams) {
         dispatch(clearSearchParams());
         dispatch(requestAnalyze());
         return new Promise((resolve, reject) => {
-            dispatch(fetchVariants(searchParamsLO)).then((result) => {
+            dispatch(fetchVariants(searchParamsWithLimitsOffset)).then((result) => {
                 const searchView = viewIdToViewHash[searchParams.viewId];
                 const searchSamples = _.map(searchParams.samples, (sample) => sampleIdToSampleHash[sample.id]);
                 const searchFilter = filterIdToFilterHash[searchParams.filterId];

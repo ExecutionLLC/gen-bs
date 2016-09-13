@@ -8,11 +8,14 @@ import {setCurrentQueryHistoryIdLoadData} from '../../../actions/queryHistory';
 export default class AnalysisBody extends React.Component {
 
     render() {
+        const {
+            dispatch,
+            currentHistoryId, newHistoryItem, isLoadingHistoryData
+        } = this.props;
         const selectedHistoryItem =
-            this.props.currentHistoryId ?
-                this.findHistoryItemForId(this.props.currentHistoryId) :
-                this.props.newHistoryItem;
-        const isLoadingHistoryData = this.props.isLoadingHistoryData;
+            currentHistoryId ?
+                this.findHistoryItemForId(currentHistoryId) :
+                newHistoryItem;
 
         return (
             <Modal.Body>
@@ -20,14 +23,14 @@ export default class AnalysisBody extends React.Component {
                     <div className='split-left'>
                         <div className='split-wrap'>
                             <AnalysisLeftPane
-                                dispatch={this.props.dispatch}
+                                dispatch={dispatch}
                                 historyList={this.props.historyList}
                                 initialHistoryList={this.props.initialHistoryList}
                                 historyListSearch={this.props.historyListSearch}
-                                newHistoryItem={this.props.newHistoryItem}
+                                newHistoryItem={newHistoryItem}
                                 isHistoryReceivedAll={this.props.isHistoryReceivedAll}
                                 isHistoryRequesting={this.props.isHistoryRequesting}
-                                currentItemId={this.props.currentHistoryId}
+                                currentItemId={currentHistoryId}
                                 onSelectHistory={(id) => this.onSelectHistoryId(id)}
                                 viewsList={this.props.viewsList}
                                 filtersList={this.props.filtersList}
@@ -39,11 +42,11 @@ export default class AnalysisBody extends React.Component {
                     <div className='split-right tab-content'>
                         <div className='split-wrap tab-pane active'>
                             {!isLoadingHistoryData && <AnalysisRightPane
-                                dispatch={this.props.dispatch}
-                                disabled={!!this.props.currentHistoryId}
+                                dispatch={dispatch}
+                                disabled={!!currentHistoryId}
                                 auth={this.props.auth}
                                 historyItem={selectedHistoryItem}
-                                currentItemId={this.props.currentHistoryId}
+                                currentItemId={currentHistoryId}
                                 viewsList={this.props.viewsList}
                                 filtersList={this.props.filtersList}
                                 samplesList={this.props.samplesList}
@@ -59,10 +62,12 @@ export default class AnalysisBody extends React.Component {
     }
 
     findHistoryItemForId(id) {
-        return this.props.historyList.find((historyItem) => historyItem.id === id);
+        const {historyList} = this.props;
+        return historyList.find((historyItem) => historyItem.id === id);
     }
 
     onSelectHistoryId(id) {
-        this.props.dispatch(setCurrentQueryHistoryIdLoadData(id));
+        const {dispatch} = this.props;
+        dispatch(setCurrentQueryHistoryIdLoadData(id));
     }
 }
