@@ -10,7 +10,7 @@ export const sampleType = {
     FATHER: 'father'
 };
 
-export const sampleTypeForAnalysisType = {
+export const sampleTypesForAnalysisType = {
     [analysisType.SINGLE]: [sampleType.SINGLE],
     [analysisType.TUMOR]: [sampleType.TUMOR, sampleType.NORMAL],
     [analysisType.FAMILY]: [sampleType.PROBAND, sampleType.MOTHER, sampleType.FATHER]

@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import immutableArray from './immutableArray';
 import {entityTypeIsDemoDisabled} from './entityTypes';
-import {sampleType, sampleTypeForAnalysisType} from './samplesUtils';
+import {sampleType, sampleTypesForAnalysisType} from './samplesUtils';
 import {analysisType} from './analyseUtils';
 
 
@@ -140,7 +140,7 @@ function changeType(historyItem, samplesList, modelsList, isDemo, targetType) {
             historyItem.samples,
             samplesList,
             isDemo,
-            sampleTypeForAnalysisType[newType]
+            sampleTypesForAnalysisType[newType]
         );
 
         return {

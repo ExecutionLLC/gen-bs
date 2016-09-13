@@ -22,7 +22,7 @@ import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
-import {sampleType, sampleTypeForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
+import {sampleType, sampleTypesForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import {analysisType} from '../../../utils/analyseUtils';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 
@@ -757,7 +757,7 @@ export default class AnalysisRightPane extends React.Component {
         const {dispatch, historyItem, modelsList, samplesList: {hashedArray: {hash: samplesHash}}, fields} = this.props;
         const samples = _.map(historyItem.samples, (sampleInfo) => samplesHash[sampleInfo.id]);
         const samplesTypes = _.reduce(
-            sampleTypeForAnalysisType[historyItem.type],
+            sampleTypesForAnalysisType[historyItem.type],
             (hash, sampleType, index) => ({
                 ...hash,
                 [historyItem.samples[index].id]: sampleType
