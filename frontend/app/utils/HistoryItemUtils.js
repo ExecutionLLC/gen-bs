@@ -9,7 +9,7 @@ import AnalyseUtils from './analyseUtils';
 const {sampleType, sampleTypeForAnalysisType} = SamplesUtils;
 const {analysisType} = AnalyseUtils;
 
-function makeHistoryItem(historyItem) {
+export function makeHistoryItem(historyItem) {
     return {
         ...historyItem,
         name: `Copy of ${historyItem.name}`.slice(0, 50),
@@ -19,7 +19,7 @@ function makeHistoryItem(historyItem) {
     };
 }
 
-function makeNewHistoryItem(sample, filter, view) {
+export function makeNewHistoryItem(sample, filter, view) {
     const name = (new Date() + '_' + (sample ? sample.fileName : '') + '_' + (filter ? filter.name : '') + '_' + (view ? view.name : '')).slice(0, 50);
     return {
         id: null,
@@ -157,7 +157,7 @@ function changeType(historyItem, samplesList, filtersList, viewsList, modelsList
     return typeConvert(historyItem, targetType);
 }
 
-function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, change) {
+export function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, modelsList, isDemo, change) {
     var editingHistoryItem = historyItem;
     if (change.name != null) {
         editingHistoryItem = {...editingHistoryItem, name: change.name};
@@ -188,11 +188,3 @@ function changeHistoryItem(historyItem, samplesList, filtersList, viewsList, mod
     }
     return editingHistoryItem;
 }
-
-const HistoryItemUtils = {
-    makeHistoryItem,
-    makeNewHistoryItem,
-    changeHistoryItem
-};
-
-export default HistoryItemUtils;

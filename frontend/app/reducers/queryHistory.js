@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import  * as ActionTypes from '../actions/queryHistory';
 import immutableArray from '../utils/immutableArray';
-import HistoryItemUtils from '../utils/HistoryItemUtils';
+import * as HistoryItemUtils from '../utils/HistoryItemUtils';
 
 
 function ensureHistoryId(history, id, hasNewHistoryItem) {
