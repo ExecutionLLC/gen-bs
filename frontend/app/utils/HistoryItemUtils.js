@@ -73,7 +73,7 @@ function makeNewHistoryItem(sample, filter, view) {
 }
 
 function changeSampleId(oldSamples, sampleIndex, newSampleId) {
-    const sampleExistIndex = _.findIndex(oldSamples, (model, index) => index !== sampleIndex && model.id === newSampleId);
+    const sampleExistIndex = _.findIndex(oldSamples, (sample, index) => index !== sampleIndex && sample.id === newSampleId);
     const replacedSample = oldSamples[sampleIndex];
     const newSamplesWithNewSample = immutableArray.replace(oldSamples, sampleIndex, {...replacedSample, id: newSampleId});
     if (sampleExistIndex < 0) {
