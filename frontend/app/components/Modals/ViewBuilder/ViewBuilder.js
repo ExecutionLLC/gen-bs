@@ -50,7 +50,7 @@ export default class ViewBuilder extends React.Component {
             const selectOptions = [
 
                 ...fieldsForSelection.map((f) => {
-                    return {value: f.id, label: FieldUtils.makeFieldViewsCaption(label)}; // TODO extract to function
+                    return {value: f.id, label: FieldUtils.makeFieldViewsCaption(label)};
                 })
             ];
             const {sortOrder, sortDirection, fieldId} = viewItem;
