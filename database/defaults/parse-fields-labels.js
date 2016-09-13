@@ -19,13 +19,16 @@ const columnStrings = fs.readFileSync(__dirname + '/columns.txt')
 // '"CAF" {,name: "Allele frequency",Number=R,type: flag,comment: "based on 1000 genomes project",hidden,}'
 const columns = columnStrings
     .map(col => {
-        const fieldName = col.substr(1, col.indexOf('"', 1) - 1);
-        // Search trimmed string in {} as colDescriptionMatch[1]
-        const colDescriptionMatch = col.match(/{\s*([^}]*?)\s*}/);
-        if (!colDescriptionMatch) {
-            throw new Error(`Field ${fieldName}: cannot find { or }.`);
+        const fieldName = (col.match(/^"([^"]*?)"/) || [])[1];
+        if (!fieldName) {
+            throw new Error(`Failed to find field name in the string ${col}`);
         }
-        const params = colDescriptionMatch[1]
+        // Search string inside {} as column body
+        const columnBody = (col.match(/{([\s\S]*)}/) || [])[1];
+        if (!columnBody) {
+            throw new Error(`Field ${fieldName}: cannot find column body.`);
+        }
+        const params = columnBody
             // Each param is on it's own line.
             .split('\n')
             // Parse params to objects.
