@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import SamplesUtils from './samplesUtils';
+import  {firstCharToUpperCase} from './stringUtils';
 
 export default class FieldUtils {
     static find(fieldId, fields) {
@@ -29,6 +30,14 @@ export default class FieldUtils {
 
     static makeFieldViewsCaption(field) {
         return `${field.label} -- ${field.sourceName}`;
+    }
+
+    static makeFieldVariantsLabelTitle(fieldMetadata, sampleName, sampleType) {
+        // TODO extract 'sample' to the constant
+        return {
+            label: (fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? '' : sampleType ? `(${sampleType})` : '') + firstCharToUpperCase(fieldMetadata.label),
+            title: fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? fieldMetadata.sourceName : sampleName
+        };
     }
 
     /**
