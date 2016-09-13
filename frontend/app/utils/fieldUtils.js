@@ -32,11 +32,13 @@ export default class FieldUtils {
         return `${field.label} -- ${field.sourceName}`;
     }
 
-    static makeFieldVariantsLabelTitle(fieldMetadata, sampleName, sampleType) {
+    static makeFieldVariantsLabelTitle(field, sampleName, sampleType) {
+        const {sourceName, label} = field;
+        const isSource = sourceName && sourceName !== 'sample';
         // TODO extract 'sample' to the constant
         return {
-            label: (fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? '' : sampleType ? `(${sampleType})` : '') + firstCharToUpperCase(fieldMetadata.label),
-            title: fieldMetadata.sourceName && fieldMetadata.sourceName !== 'sample' ? fieldMetadata.sourceName : sampleName
+            label: (!isSource && sampleType ? `(${sampleType})` : '') + firstCharToUpperCase(label),
+            title: isSource ? sourceName : sampleName
         };
     }
 
