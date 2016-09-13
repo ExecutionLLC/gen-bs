@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import FieldHeader from './FieldHeader';
 
 import {setFieldFilter, sortVariants, searchInResultsSortFilter} from '../../actions/variantsTable';
-import SamplesUtils from '../../utils/samplesUtils';
+import * as SamplesUtils from '../../utils/samplesUtils';
 
 export default class VariantsTableHead extends Component {
 

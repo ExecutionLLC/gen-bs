@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import SamplesUtils from './samplesUtils';
+import * as SamplesUtils from './samplesUtils';
 
 export default class FieldUtils {
     static find(fieldId, fields) {

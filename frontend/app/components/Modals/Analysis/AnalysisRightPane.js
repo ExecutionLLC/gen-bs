@@ -22,12 +22,11 @@ import {analyze} from '../../../actions/ui';
 import {samplesOnSave} from '../../../actions/samplesList';
 import {entityTypeIsDemoDisabled} from '../../../utils/entityTypes';
 import FieldUtils from '../../../utils/fieldUtils';
-import SamplesUtils from '../../../utils/samplesUtils';
+import {sampleType, sampleTypeForAnalysisType, typeLabels} from '../../../utils/samplesUtils';
 import AnalyseUtils from '../../../utils/analyseUtils';
 import {ImmutableHashedArray} from '../../../utils/immutable';
 
 
-const {sampleType, sampleTypeForAnalysisType} = SamplesUtils;
 const {analysisType} = AnalyseUtils;
 
 // TODO class contains many similar and unused functions, refactor there with updated layout
@@ -422,7 +421,7 @@ export default class AnalysisRightPane extends React.Component {
                     </div>
                     <div className='btn-group btn-group-left'>
                         <label className='label label-default label-fix-width  label-left'>
-                            <span data-localize='query.family.mother.short'>{sample ? SamplesUtils.typeLabels[sample.type] : ''}</span>
+                            <span data-localize='query.family.mother.short'>{sample ? typeLabels[sample.type] : ''}</span>
                         </label>
                     </div>
                     <div className='btn-group btn-group-select2-max btn-group-right'>

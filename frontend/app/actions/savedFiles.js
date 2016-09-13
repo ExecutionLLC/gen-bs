@@ -5,7 +5,7 @@ import _ from 'lodash';
 import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleError} from './errorHandler';
-import SamplesUtils from '../utils/samplesUtils';
+import * as SamplesUtils from '../utils/samplesUtils';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';
