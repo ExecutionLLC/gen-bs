@@ -10,7 +10,8 @@ export default class AnalysisBody extends React.Component {
     render() {
         const {
             dispatch,
-            currentHistoryId, newHistoryItem, isLoadingHistoryData} = this.props;
+            currentHistoryId, newHistoryItem, isLoadingHistoryData
+        } = this.props;
         const selectedHistoryItem =
             currentHistoryId ?
                 this.findHistoryItemForId(currentHistoryId) :

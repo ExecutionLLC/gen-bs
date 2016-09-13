@@ -12,8 +12,10 @@ export default class AnalysisLeftPane extends React.Component {
 
     render() {
 
-        const {dispatch,
-            historyList, initialHistoryList, historyListSearch, isHistoryReceivedAll, isHistoryRequesting, newHistoryItem} = this.props;
+        const {
+            dispatch, historyList, initialHistoryList, historyListSearch,
+            isHistoryReceivedAll, isHistoryRequesting, newHistoryItem
+        } = this.props;
 
         return (
             <div>

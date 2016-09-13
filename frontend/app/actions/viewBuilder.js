@@ -170,7 +170,8 @@ export function viewBuilderDeleteView(viewId) {
                 .then(() => {
                     const {
                         viewsList: {hashedArray: {array: views, hash: viewIdToViewHash}},
-                        viewBuilder: {editingView: {id: editingViewId}}} = getState();
+                        viewBuilder: {editingView: {id: editingViewId}}
+                    } = getState();
                     const newViewId = (viewId == editingViewId) ? views[0].id : editingViewId;
                     const newView = viewIdToViewHash[newViewId];
                     dispatch(viewBuilderRestartEdit(false, newView));
