@@ -6,6 +6,7 @@ import apiFacade from '../api/ApiFacade';
 import ExportUtils from '../utils/exportUtils';
 import {handleError} from './errorHandler';
 import SamplesUtils from '../utils/samplesUtils';
+import FieldUtils from '../utils/fieldUtils';
 
 export const RECEIVE_SAVED_FILES_LIST = 'RECEIVE_SAVED_FILES_LIST';
 export const CREATE_EXPORT_DOWNLOAD = 'CREATE_EXPORT_DOWNLOAD';
@@ -130,7 +131,7 @@ export function exportToFile(exportType) {
         const columns = _.map(variantsHeader, listItem => {
             const field = totalFieldsHash[listItem.fieldId];
             const sampleType = variantsAnalysisSamplesHash[listItem.sampleId] && SamplesUtils.typeLabels[variantsAnalysisSamplesHash[listItem.sampleId].type];
-            return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
+            return FieldUtils.makeFieldSavedCaption(field, sampleType);
         })
         .concat(['Comment']);
 

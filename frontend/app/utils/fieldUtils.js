@@ -23,6 +23,10 @@ export default class FieldUtils {
         return label;
     }
 
+    static makeFieldSavedCaption(field, sampleType) {
+        return field.label + (field.sourceName && field.sourceName !== 'sample' ? ` - ${field.sourceName}` : sampleType ? ` - ${sampleType}` : '');
+    }
+
     /**
      * Make field structure usable for filters dialog purposes
      * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
