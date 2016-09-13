@@ -18,7 +18,7 @@ import {entityTypeIsEditable} from '../../../utils/entityTypes';
 export default class ExistentFilterSelect extends Component {
 
     render() {
-        const {auth, verb, filterBuilder} = this.props;
+        const {auth, texts, filterBuilder} = this.props;
         const selectedFilter = filterBuilder.editingFilter.filter;
         const filters = filterBuilder.filtersList.hashedArray.array;
         const isDemoSession = auth.isDemo;
@@ -28,27 +28,27 @@ export default class ExistentFilterSelect extends Component {
         return (
             <div className='in'>
                 <div className='row grid-toolbar'>
-                    {this.renderTitle(verb)}
+                    {this.renderTitle(texts)}
                 </div>
-                {this.renderWarning(isDemoSession, selectedFilter.type, verb)}
+                {this.renderWarning(isDemoSession, selectedFilter.type, texts)}
                 <div className='row grid-toolbar row-head-selector'>
                     {this.renderFiltersSelector(filters)}
-                    {this.renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, verb)}
+                    {this.renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts)}
                 </div>
             </div>
         );
     }
 
-    renderTitle(verb) {
+    renderTitle(texts) {
         return (
             <div className='col-sm-6'>
-                <label data-localize='filters.setup.selector.label'>Available {verb.Filters}</label>
+                <label data-localize='filters.setup.selector.label'>Available {texts.Filters}</label>
             </div>
         );
     }
 
-    renderWarning(isDemoSession, selectedFilterType, verb) {
-        const warningText = getReadonlyReasonForSessionAndType(verb.filter, isDemoSession, selectedFilterType);
+    renderWarning(isDemoSession, selectedFilterType, texts) {
+        const warningText = getReadonlyReasonForSessionAndType(texts.filter, isDemoSession, selectedFilterType);
 
         if (!warningText) {
             return null;
@@ -79,21 +79,21 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, verb) {
+    renderButtonGroup(isDemoSession, isFilterEditable, isFilterDuplicable, texts) {
         return (
             <div className='col-sm-6'>
                 <div className='btn-group' data-localize='actions.duplicate.help' data-toggle='tooltip'
                      data-placement='bottom' data-container='body'>
-                    {isFilterDuplicable && this.renderDuplicateFilterButton(isDemoSession, verb)}
-                    {isFilterEditable && this.renderResetFilterButton(verb)}
-                    {isFilterEditable && this.renderDeleteFilterButton(verb)}
+                    {isFilterDuplicable && this.renderDuplicateFilterButton(isDemoSession, texts)}
+                    {isFilterEditable && this.renderResetFilterButton(texts)}
+                    {isFilterEditable && this.renderDeleteFilterButton(texts)}
                 </div>
             </div>
         );
     }
 
-    renderDuplicateFilterButton(isDemoSession, verb) {
-        const title = isDemoSession ? `Login or register to work with ${verb.filter}` : 'Make a copy for editing';
+    renderDuplicateFilterButton(isDemoSession, texts) {
+        const title = isDemoSession ? `Login or register to work with ${texts.filter}` : 'Make a copy for editing';
         return (
             <button type='button'
                     className='btn btn-default in'
@@ -108,25 +108,25 @@ export default class ExistentFilterSelect extends Component {
         );
     }
 
-    renderResetFilterButton(verb) {
+    renderResetFilterButton(texts) {
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onResetFilterClick()}
             >
-                <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset {verb.Filter}</span>
+                <span data-localize='filters.setup.reset.title' className='hidden-xs'>Reset {texts.Filter}</span>
                 <span className='visible-xs'><i className='md-i'>settings_backup_restore</i></span>
             </button>
         );
     }
 
-    renderDeleteFilterButton(verb) {
+    renderDeleteFilterButton(texts) {
         return (
             <button type='button'
                     className='btn btn-default'
                     onClick={() => this.onDeleteFilterClick()}
             >
-                <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete {verb.Filter}</span>
+                <span data-localize='filters.setup.delete.title' className='hidden-xs'>Delete {texts.Filter}</span>
                 <span className='visible-xs'><i className='md-i'>close</i></span>
             </button>
         );
