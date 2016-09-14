@@ -47,19 +47,19 @@ export default class FieldUtils {
 
     /**
      * Make field structure usable for filters dialog purposes
-     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} f
+     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
      * @param {string=} sourceName
      * @returns {{id: string, label: string, type: string}}
      */
-    static makeFieldSelectItemValue(f, sourceName) {
+    static makeFieldSelectItemValue(field, sourceName) {
 
-        var label = this.makeFieldSourceCaption(f, sourceName);
+        var label = this.makeFieldSourceCaption(field, sourceName);
 
         return {
-            id: f.id,
+            id: field.id,
             label,
-            sampleType: f.sampleType,
-            type: f.valueType === 'float' ? 'double' : f.valueType
+            sampleType: field.sampleType,
+            type: field.valueType === 'float' ? 'double' : field.valueType
         };
     }
 
