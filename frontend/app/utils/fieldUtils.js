@@ -8,10 +8,20 @@ export default class FieldUtils {
         return fields.totalFieldsHashedArray.hash[fieldId];
     }
 
+    static getDefaultLinkIdentity(){
+        return '###DATA###';
+    }
+
     static isSourceField(field) {
         return field.sourceName !== 'sample';
     }
 
+    /**
+     * Make field structure usable for filters dialog purposes
+     * @param {{id: string, label: string, sampleType: string=, sourceName: string, valueType: string}} field
+     * @param {string=} sourceName
+     * @returns {{id: string, label: string, type: string}}
+     */
     static makeFieldSourceCaption(field, sourceName) {
         var label;
 

@@ -19,7 +19,9 @@ const mappedColumns = [
     'languId',
     'description',
     'label',
-    'availableValues'
+    'availableValues',
+    'is_hyperlink',
+    'hyperlink_template'
 ];
 
 class FieldsMetadataModel extends ModelBase {
@@ -240,7 +242,9 @@ class FieldsMetadataModel extends ModelBase {
                     isMandatory: metadata.isMandatory,
                     isEditable: metadata.isEditable,
                     isInvisible: metadata.isInvisible,
-                    dimension: metadata.dimension
+                    dimension: metadata.dimension,
+                    isHyperlink: metadata.isHyperlink || false,
+                    hyperlinkTemplate: metadata.hyperlinkTemplate || null
                 };
                 this._insert(dataToInsert, trx, callback);
             },
