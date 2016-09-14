@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import AnalysisLeftPane from './AnalysisLeftPane';
 import AnalysisRightPane from './AnalysisRightPane';
-import {setCurrentQueryHistoryIdLoadData} from '../../../actions/queryHistory';
+import {setCurrentQueryHistoryIdLoadData} from '../../../actions/analysesHistory';
 
 
 export default class AnalysisBody extends React.Component {

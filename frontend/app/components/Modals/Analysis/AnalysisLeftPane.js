@@ -5,7 +5,7 @@ import {
     prepareQueryHistoryToSearch,
     requestQueryHistory,
     appendQueryHistory
-} from '../../../actions/queryHistory';
+} from '../../../actions/analysesHistory';
 
 
 export default class AnalysisLeftPane extends React.Component {

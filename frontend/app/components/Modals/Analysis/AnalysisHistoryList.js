@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import {requestAppendQueryHistory} from '../../../actions/queryHistory';
+import {requestAppendQueryHistory} from '../../../actions/analysesHistory';
 
 
 const PAGINATION = {

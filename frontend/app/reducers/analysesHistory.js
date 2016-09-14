@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import  * as ActionTypes from '../actions/queryHistory';
+import  * as ActionTypes from '../actions/analysesHistory';
 import immutableArray from '../utils/immutableArray';
 import * as HistoryItemUtils from '../utils/HistoryItemUtils';
 

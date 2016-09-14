@@ -13,7 +13,7 @@ import samplesList from './samplesList';
 import websocket from './websocket';
 import fileUpload from './fileUpload';
 import errorHandler from './errorHandler';
-import queryHistory from './queryHistory';
+import queryHistory from './analysesHistory';
 import filtersList from './filtersList';
 import viewsList from './viewsList';
 import modelsList from './modelsList';

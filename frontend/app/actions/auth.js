@@ -7,7 +7,7 @@ import {getUrlParameterByName} from '../utils/stringUtils';
 import {fetchUserdata} from './userData';
 import {initWSConnection} from './websocket';
 import {handleError} from './errorHandler';
-import {clearQueryHistory} from './queryHistory';
+import {clearQueryHistory} from './analysesHistory';
 
 import apiFacade from '../api/ApiFacade';
 import SessionsClient from '../api/SessionsClient';

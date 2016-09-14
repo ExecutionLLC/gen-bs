@@ -11,7 +11,7 @@ import {
     updateQueryHistoryItem,
     setEditedHistoryItem,
     deleteServerQueryHistoryItem
-} from '../../../actions/queryHistory';
+} from '../../../actions/analysesHistory';
 import {viewBuilderStartEdit, viewBuilderOnSave} from '../../../actions/viewBuilder';
 import {filterBuilderStartEdit, filterBuilderOnSave} from '../../../actions/filterBuilder';
 import {

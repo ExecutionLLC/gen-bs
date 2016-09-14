@@ -11,7 +11,7 @@ import {
     receiveInitialQueryHistory,
     setCurrentQueryHistoryIdLoadData,
     createNewHistoryItem
-} from './queryHistory';
+} from './analysesHistory';
 import {receiveSamplesList} from './samplesList';
 import {
     filtersListReceive
