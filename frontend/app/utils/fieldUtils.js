@@ -8,7 +8,7 @@ export default class FieldUtils {
     }
 
     static getDefaultLinkIdentity(){
-        return '###DATA###'
+        return '###DATA###';
     }
 
     /**
